@@ -1,16 +1,19 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Area Chart - Stacked Expanded" />
-        <z-card-description zDescription="Showing the share of each device over the last 6 months" />
+        <z-card-description zDescription="Showing total visitors for the last 6 months" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -20,40 +23,46 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
           [zSeries]="series"
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
-          [zYAxisFormatter]="percent"
           zStacked
           zStackOffset="expand"
-          zYAxis
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="dot" />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">January - June 2024</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartAreaStackedExpandComponent {
   protected readonly chartConfig: ZardChartConfig = {
     desktop: { label: 'Desktop', color: 'var(--chart-1)' },
     mobile: { label: 'Mobile', color: 'var(--chart-2)' },
+    other: { label: 'Other', color: 'var(--chart-3)' },
   };
 
   protected readonly chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
+    { month: 'January', desktop: 186, mobile: 80, other: 45 },
+    { month: 'February', desktop: 305, mobile: 200, other: 100 },
+    { month: 'March', desktop: 237, mobile: 120, other: 150 },
+    { month: 'April', desktop: 73, mobile: 190, other: 50 },
+    { month: 'May', desktop: 209, mobile: 130, other: 100 },
+    { month: 'June', desktop: 214, mobile: 140, other: 160 },
   ];
 
   protected readonly series: ZardChartSeries[] = [
+    { dataKey: 'other', smooth: true, fillOpacity: 0.1 },
     { dataKey: 'mobile', smooth: true },
     { dataKey: 'desktop', smooth: true },
   ];
 
   protected readonly shortMonth = (value: string) => value.slice(0, 3);
-
-  protected readonly percent = (value: number) => `${Math.round(value * 100)}%`;
 }

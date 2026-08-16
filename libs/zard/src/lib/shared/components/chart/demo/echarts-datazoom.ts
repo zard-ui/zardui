@@ -22,7 +22,7 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
           [zXAxisFormatter]="shortDate"
           zDataZoom
           zToolbox
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="dot" />
         </z-chart>

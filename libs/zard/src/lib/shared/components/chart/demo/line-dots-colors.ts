@@ -1,16 +1,19 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Line Chart - Dots Colors" />
-        <z-card-description zDescription="Visitors by browser over the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -19,18 +22,27 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
           [zData]="chartData"
           [zSeries]="series"
           zXAxisKey="browser"
-          class="h-[250px] w-full"
+          [zXAxis]="false"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="line" zHideLabel />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartLineDotsColorsComponent {
   protected readonly chartConfig: ZardChartConfig = {
-    visitors: { label: 'Visitors' },
+    visitors: { label: 'Visitors', color: 'var(--chart-2)' },
     chrome: { label: 'Chrome', color: 'var(--chart-1)' },
     safari: { label: 'Safari', color: 'var(--chart-2)' },
     firefox: { label: 'Firefox', color: 'var(--chart-3)' },
@@ -46,5 +58,7 @@ export class ZardDemoChartLineDotsColorsComponent {
     { browser: 'other', visitors: 90, fill: 'var(--chart-5)' },
   ];
 
-  protected readonly series: ZardChartSeries[] = [{ dataKey: 'visitors', showSymbol: true, symbolSize: 12 }];
+  protected readonly series: ZardChartSeries[] = [
+    { dataKey: 'visitors', smooth: true, showSymbol: true, symbolSize: 10 },
+  ];
 }

@@ -10,7 +10,7 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Pie Chart - Legend" />
-        <z-card-description zDescription="Visitors by browser over the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart

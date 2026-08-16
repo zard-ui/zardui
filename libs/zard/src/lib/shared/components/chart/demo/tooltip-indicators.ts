@@ -15,17 +15,20 @@ import type { ZardChartConfig, ZardChartTooltipIndicator } from '@/shared/compon
       <z-card-content>
         <div class="grid gap-6 md:grid-cols-3">
           @for (indicator of indicators; track indicator) {
-            <z-chart
-              zType="bar"
-              [zConfig]="chartConfig"
-              [zData]="chartData"
-              [zSeries]="series"
-              zXAxisKey="month"
-              [zXAxisFormatter]="shortMonth"
-              class="h-[180px] w-full"
-            >
-              <z-chart-tooltip [zIndicator]="indicator" />
-            </z-chart>
+            <div class="flex flex-col gap-2">
+              <p class="text-muted-foreground text-xs">zIndicator="{{ indicator }}"</p>
+              <z-chart
+                zType="bar"
+                [zConfig]="chartConfig"
+                [zData]="chartData"
+                [zSeries]="series"
+                zXAxisKey="month"
+                [zXAxisFormatter]="shortMonth"
+                class="h-[180px] w-full"
+              >
+                <z-chart-tooltip [zIndicator]="indicator" [zDefaultIndex]="1" />
+              </z-chart>
+            </div>
           }
         </div>
       </z-card-content>

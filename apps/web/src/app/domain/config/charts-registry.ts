@@ -46,6 +46,9 @@ import { CHART_DEMO_RADAR_DEFAULT } from '@generated/components/chart/demo/radar
 import { CHART_DEMO_RADAR_DOTS } from '@generated/components/chart/demo/radar-dots';
 import { CHART_DEMO_RADAR_GRID_CIRCLE } from '@generated/components/chart/demo/radar-grid-circle';
 import { CHART_DEMO_RADAR_GRID_CIRCLE_FILLED } from '@generated/components/chart/demo/radar-grid-circle-filled';
+import { CHART_DEMO_RADAR_GRID_CIRCLE_NO_LINES } from '@generated/components/chart/demo/radar-grid-circle-no-lines';
+import { CHART_DEMO_RADAR_GRID_CUSTOM } from '@generated/components/chart/demo/radar-grid-custom';
+import { CHART_DEMO_RADAR_GRID_FILL } from '@generated/components/chart/demo/radar-grid-fill';
 import { CHART_DEMO_RADAR_GRID_NONE } from '@generated/components/chart/demo/radar-grid-none';
 import { CHART_DEMO_RADAR_LABEL_CUSTOM } from '@generated/components/chart/demo/radar-label-custom';
 import { CHART_DEMO_RADAR_LEGEND } from '@generated/components/chart/demo/radar-legend';
@@ -58,6 +61,15 @@ import { CHART_DEMO_RADIAL_SHAPE } from '@generated/components/chart/demo/radial
 import { CHART_DEMO_RADIAL_SIMPLE } from '@generated/components/chart/demo/radial-simple';
 import { CHART_DEMO_RADIAL_STACKED } from '@generated/components/chart/demo/radial-stacked';
 import { CHART_DEMO_RADIAL_TEXT } from '@generated/components/chart/demo/radial-text';
+import { CHART_DEMO_TOOLTIP_ADVANCED } from '@generated/components/chart/demo/tooltip-advanced';
+import { CHART_DEMO_TOOLTIP_DEFAULT } from '@generated/components/chart/demo/tooltip-default';
+import { CHART_DEMO_TOOLTIP_FORMATTER } from '@generated/components/chart/demo/tooltip-formatter';
+import { CHART_DEMO_TOOLTIP_ICONS } from '@generated/components/chart/demo/tooltip-icons';
+import { CHART_DEMO_TOOLTIP_INDICATOR_LINE } from '@generated/components/chart/demo/tooltip-indicator-line';
+import { CHART_DEMO_TOOLTIP_INDICATOR_NONE } from '@generated/components/chart/demo/tooltip-indicator-none';
+import { CHART_DEMO_TOOLTIP_LABEL_CUSTOM } from '@generated/components/chart/demo/tooltip-label-custom';
+import { CHART_DEMO_TOOLTIP_LABEL_FORMATTER } from '@generated/components/chart/demo/tooltip-label-formatter';
+import { CHART_DEMO_TOOLTIP_LABEL_NONE } from '@generated/components/chart/demo/tooltip-label-none';
 import type { CodeBlockData } from '@highlight/types';
 
 import { ZardDemoChartAreaAxesComponent } from '@zard/components/chart/demo/area-axes';
@@ -106,6 +118,9 @@ import { ZardDemoChartRadarDefaultComponent } from '@zard/components/chart/demo/
 import { ZardDemoChartRadarDotsComponent } from '@zard/components/chart/demo/radar-dots';
 import { ZardDemoChartRadarGridCircleComponent } from '@zard/components/chart/demo/radar-grid-circle';
 import { ZardDemoChartRadarGridCircleFilledComponent } from '@zard/components/chart/demo/radar-grid-circle-filled';
+import { ZardDemoChartRadarGridCircleNoLinesComponent } from '@zard/components/chart/demo/radar-grid-circle-no-lines';
+import { ZardDemoChartRadarGridCustomComponent } from '@zard/components/chart/demo/radar-grid-custom';
+import { ZardDemoChartRadarGridFillComponent } from '@zard/components/chart/demo/radar-grid-fill';
 import { ZardDemoChartRadarGridNoneComponent } from '@zard/components/chart/demo/radar-grid-none';
 import { ZardDemoChartRadarLabelCustomComponent } from '@zard/components/chart/demo/radar-label-custom';
 import { ZardDemoChartRadarLegendComponent } from '@zard/components/chart/demo/radar-legend';
@@ -118,6 +133,15 @@ import { ZardDemoChartRadialShapeComponent } from '@zard/components/chart/demo/r
 import { ZardDemoChartRadialSimpleComponent } from '@zard/components/chart/demo/radial-simple';
 import { ZardDemoChartRadialStackedComponent } from '@zard/components/chart/demo/radial-stacked';
 import { ZardDemoChartRadialTextComponent } from '@zard/components/chart/demo/radial-text';
+import { ZardDemoChartTooltipAdvancedComponent } from '@zard/components/chart/demo/tooltip-advanced';
+import { ZardDemoChartTooltipDefaultComponent } from '@zard/components/chart/demo/tooltip-default';
+import { ZardDemoChartTooltipFormatterComponent } from '@zard/components/chart/demo/tooltip-formatter';
+import { ZardDemoChartTooltipIconsComponent } from '@zard/components/chart/demo/tooltip-icons';
+import { ZardDemoChartTooltipIndicatorLineComponent } from '@zard/components/chart/demo/tooltip-indicator-line';
+import { ZardDemoChartTooltipIndicatorNoneComponent } from '@zard/components/chart/demo/tooltip-indicator-none';
+import { ZardDemoChartTooltipLabelCustomComponent } from '@zard/components/chart/demo/tooltip-label-custom';
+import { ZardDemoChartTooltipLabelFormatterComponent } from '@zard/components/chart/demo/tooltip-label-formatter';
+import { ZardDemoChartTooltipLabelNoneComponent } from '@zard/components/chart/demo/tooltip-label-none';
 
 import type { ChartCategory } from '../services/charts.service';
 
@@ -128,6 +152,8 @@ export interface ChartExample {
   title: string;
   component: Type<unknown>;
   codeData: CodeBlockData;
+  /** Spans every grid column, the way shadcn leads a category with its interactive chart. */
+  fullWidth?: boolean;
 }
 
 /**
@@ -137,6 +163,13 @@ export interface ChartExample {
  */
 export const CHARTS_REGISTRY: Record<ChartCategory, ChartExample[]> = {
   area: [
+    {
+      id: 'area-interactive',
+      title: 'Interactive',
+      component: ZardDemoChartAreaInteractiveComponent,
+      codeData: CHART_DEMO_AREA_INTERACTIVE,
+      fullWidth: true,
+    },
     {
       id: 'area-default',
       title: 'Default',
@@ -151,6 +184,12 @@ export const CHARTS_REGISTRY: Record<ChartCategory, ChartExample[]> = {
     },
     { id: 'area-step', title: 'Step', component: ZardDemoChartAreaStepComponent, codeData: CHART_DEMO_AREA_STEP },
     {
+      id: 'area-legend',
+      title: 'Legend',
+      component: ZardDemoChartAreaLegendComponent,
+      codeData: CHART_DEMO_AREA_LEGEND,
+    },
+    {
       id: 'area-stacked',
       title: 'Stacked',
       component: ZardDemoChartAreaStackedComponent,
@@ -162,28 +201,23 @@ export const CHARTS_REGISTRY: Record<ChartCategory, ChartExample[]> = {
       component: ZardDemoChartAreaStackedExpandComponent,
       codeData: CHART_DEMO_AREA_STACKED_EXPAND,
     },
-    {
-      id: 'area-legend',
-      title: 'Legend',
-      component: ZardDemoChartAreaLegendComponent,
-      codeData: CHART_DEMO_AREA_LEGEND,
-    },
-    { id: 'area-axes', title: 'Axes', component: ZardDemoChartAreaAxesComponent, codeData: CHART_DEMO_AREA_AXES },
+    { id: 'area-icons', title: 'Icons', component: ZardDemoChartAreaIconsComponent, codeData: CHART_DEMO_AREA_ICONS },
     {
       id: 'area-gradient',
       title: 'Gradient',
       component: ZardDemoChartAreaGradientComponent,
       codeData: CHART_DEMO_AREA_GRADIENT,
     },
-    { id: 'area-icons', title: 'Icons', component: ZardDemoChartAreaIconsComponent, codeData: CHART_DEMO_AREA_ICONS },
-    {
-      id: 'area-interactive',
-      title: 'Interactive',
-      component: ZardDemoChartAreaInteractiveComponent,
-      codeData: CHART_DEMO_AREA_INTERACTIVE,
-    },
+    { id: 'area-axes', title: 'Axes', component: ZardDemoChartAreaAxesComponent, codeData: CHART_DEMO_AREA_AXES },
   ],
   bar: [
+    {
+      id: 'bar-interactive',
+      title: 'Interactive',
+      component: ZardDemoChartBarInteractiveComponent,
+      codeData: CHART_DEMO_BAR_INTERACTIVE,
+      fullWidth: true,
+    },
     {
       id: 'bar-default',
       title: 'Default',
@@ -201,12 +235,6 @@ export const CHARTS_REGISTRY: Record<ChartCategory, ChartExample[]> = {
       title: 'Multiple',
       component: ZardDemoChartBarMultipleComponent,
       codeData: CHART_DEMO_BAR_MULTIPLE,
-    },
-    {
-      id: 'bar-stacked',
-      title: 'Stacked',
-      component: ZardDemoChartBarStackedComponent,
-      codeData: CHART_DEMO_BAR_STACKED,
     },
     {
       id: 'bar-stacked-legend',
@@ -230,13 +258,20 @@ export const CHARTS_REGISTRY: Record<ChartCategory, ChartExample[]> = {
       codeData: CHART_DEMO_BAR_NEGATIVE,
     },
     {
-      id: 'bar-interactive',
-      title: 'Interactive',
-      component: ZardDemoChartBarInteractiveComponent,
-      codeData: CHART_DEMO_BAR_INTERACTIVE,
+      id: 'bar-stacked',
+      title: 'Stacked',
+      component: ZardDemoChartBarStackedComponent,
+      codeData: CHART_DEMO_BAR_STACKED,
     },
   ],
   line: [
+    {
+      id: 'line-interactive',
+      title: 'Interactive',
+      component: ZardDemoChartLineInteractiveComponent,
+      codeData: CHART_DEMO_LINE_INTERACTIVE,
+      fullWidth: true,
+    },
     {
       id: 'line-default',
       title: 'Default',
@@ -275,12 +310,6 @@ export const CHARTS_REGISTRY: Record<ChartCategory, ChartExample[]> = {
       title: 'Label Custom',
       component: ZardDemoChartLineLabelCustomComponent,
       codeData: CHART_DEMO_LINE_LABEL_CUSTOM,
-    },
-    {
-      id: 'line-interactive',
-      title: 'Interactive',
-      component: ZardDemoChartLineInteractiveComponent,
-      codeData: CHART_DEMO_LINE_INTERACTIVE,
     },
   ],
   pie: [
@@ -340,12 +369,6 @@ export const CHARTS_REGISTRY: Record<ChartCategory, ChartExample[]> = {
     },
     { id: 'radar-dots', title: 'Dots', component: ZardDemoChartRadarDotsComponent, codeData: CHART_DEMO_RADAR_DOTS },
     {
-      id: 'radar-multiple',
-      title: 'Multiple',
-      component: ZardDemoChartRadarMultipleComponent,
-      codeData: CHART_DEMO_RADAR_MULTIPLE,
-    },
-    {
       id: 'radar-lines-only',
       title: 'Lines Only',
       component: ZardDemoChartRadarLinesOnlyComponent,
@@ -358,10 +381,10 @@ export const CHARTS_REGISTRY: Record<ChartCategory, ChartExample[]> = {
       codeData: CHART_DEMO_RADAR_LABEL_CUSTOM,
     },
     {
-      id: 'radar-radius-axis',
-      title: 'Radius Axis',
-      component: ZardDemoChartRadarRadiusAxisComponent,
-      codeData: CHART_DEMO_RADAR_RADIUS_AXIS,
+      id: 'radar-grid-custom',
+      title: 'Grid Custom',
+      component: ZardDemoChartRadarGridCustomComponent,
+      codeData: CHART_DEMO_RADAR_GRID_CUSTOM,
     },
     {
       id: 'radar-grid-none',
@@ -376,16 +399,40 @@ export const CHARTS_REGISTRY: Record<ChartCategory, ChartExample[]> = {
       codeData: CHART_DEMO_RADAR_GRID_CIRCLE,
     },
     {
+      id: 'radar-grid-circle-no-lines',
+      title: 'Grid Circle No Lines',
+      component: ZardDemoChartRadarGridCircleNoLinesComponent,
+      codeData: CHART_DEMO_RADAR_GRID_CIRCLE_NO_LINES,
+    },
+    {
       id: 'radar-grid-circle-filled',
       title: 'Grid Circle Filled',
       component: ZardDemoChartRadarGridCircleFilledComponent,
       codeData: CHART_DEMO_RADAR_GRID_CIRCLE_FILLED,
     },
     {
+      id: 'radar-grid-fill',
+      title: 'Grid Filled',
+      component: ZardDemoChartRadarGridFillComponent,
+      codeData: CHART_DEMO_RADAR_GRID_FILL,
+    },
+    {
+      id: 'radar-multiple',
+      title: 'Multiple',
+      component: ZardDemoChartRadarMultipleComponent,
+      codeData: CHART_DEMO_RADAR_MULTIPLE,
+    },
+    {
       id: 'radar-legend',
       title: 'Legend',
       component: ZardDemoChartRadarLegendComponent,
       codeData: CHART_DEMO_RADAR_LEGEND,
+    },
+    {
+      id: 'radar-radius-axis',
+      title: 'Radius Axis',
+      component: ZardDemoChartRadarRadiusAxisComponent,
+      codeData: CHART_DEMO_RADAR_RADIUS_AXIS,
     },
   ],
   radial: [
@@ -414,6 +461,62 @@ export const CHARTS_REGISTRY: Record<ChartCategory, ChartExample[]> = {
       title: 'Stacked',
       component: ZardDemoChartRadialStackedComponent,
       codeData: CHART_DEMO_RADIAL_STACKED,
+    },
+  ],
+  tooltip: [
+    {
+      id: 'tooltip-default',
+      title: 'Default',
+      component: ZardDemoChartTooltipDefaultComponent,
+      codeData: CHART_DEMO_TOOLTIP_DEFAULT,
+    },
+    {
+      id: 'tooltip-indicator-line',
+      title: 'Line Indicator',
+      component: ZardDemoChartTooltipIndicatorLineComponent,
+      codeData: CHART_DEMO_TOOLTIP_INDICATOR_LINE,
+    },
+    {
+      id: 'tooltip-indicator-none',
+      title: 'No Indicator',
+      component: ZardDemoChartTooltipIndicatorNoneComponent,
+      codeData: CHART_DEMO_TOOLTIP_INDICATOR_NONE,
+    },
+    {
+      id: 'tooltip-label-custom',
+      title: 'Custom Label',
+      component: ZardDemoChartTooltipLabelCustomComponent,
+      codeData: CHART_DEMO_TOOLTIP_LABEL_CUSTOM,
+    },
+    {
+      id: 'tooltip-label-formatter',
+      title: 'Label Formatter',
+      component: ZardDemoChartTooltipLabelFormatterComponent,
+      codeData: CHART_DEMO_TOOLTIP_LABEL_FORMATTER,
+    },
+    {
+      id: 'tooltip-label-none',
+      title: 'No Label',
+      component: ZardDemoChartTooltipLabelNoneComponent,
+      codeData: CHART_DEMO_TOOLTIP_LABEL_NONE,
+    },
+    {
+      id: 'tooltip-formatter',
+      title: 'Formatter',
+      component: ZardDemoChartTooltipFormatterComponent,
+      codeData: CHART_DEMO_TOOLTIP_FORMATTER,
+    },
+    {
+      id: 'tooltip-icons',
+      title: 'Icons',
+      component: ZardDemoChartTooltipIconsComponent,
+      codeData: CHART_DEMO_TOOLTIP_ICONS,
+    },
+    {
+      id: 'tooltip-advanced',
+      title: 'Advanced',
+      component: ZardDemoChartTooltipAdvancedComponent,
+      codeData: CHART_DEMO_TOOLTIP_ADVANCED,
     },
   ],
 };

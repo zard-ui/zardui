@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { CHARTS_REGISTRY, type ChartExample } from '../config/charts-registry';
 
-export type ChartCategory = 'area' | 'bar' | 'line' | 'pie' | 'radar' | 'radial';
+export type ChartCategory = 'area' | 'bar' | 'line' | 'pie' | 'radar' | 'radial' | 'tooltip';
 
-export const CHART_CATEGORIES: ChartCategory[] = ['area', 'bar', 'line', 'pie', 'radar', 'radial'];
+export const CHART_CATEGORIES: ChartCategory[] = ['area', 'bar', 'line', 'pie', 'radar', 'radial', 'tooltip'];
 
 @Injectable({
   providedIn: 'root',

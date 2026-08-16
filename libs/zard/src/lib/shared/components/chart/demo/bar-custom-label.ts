@@ -1,16 +1,19 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartOptionOverride, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Bar Chart - Custom Label" />
-        <z-card-description zDescription="Showing total visitors for the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -21,20 +24,28 @@ import type { ZardChartConfig, ZardChartOptionOverride, ZardChartSeries } from '
           zXAxisKey="month"
           zHorizontal
           [zXAxis]="false"
-          [zGrid]="false"
+          zGrid="vertical"
           [zOption]="insideLabel"
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="line" />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartBarCustomLabelComponent {
   protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
+    desktop: { label: 'Desktop', color: 'var(--chart-2)' },
   };
 
   protected readonly chartData = [
@@ -46,10 +57,30 @@ export class ZardDemoChartBarCustomLabelComponent {
     { month: 'June', desktop: 214, mobile: 140 },
   ];
 
-  protected readonly series: ZardChartSeries[] = [{ dataKey: 'desktop', label: true }];
+  protected readonly series: ZardChartSeries[] = [{ dataKey: 'desktop', label: true, radius: 4 }];
 
-  /** ECharts escape hatch: move the value label inside the bar and print the month next to it. */
-  protected readonly insideLabel: ZardChartOptionOverride = {
-    series: [{ label: { position: 'insideLeft', color: '#fff', formatter: '{b}' } }],
-  };
+  /**
+   * Two readings per bar — the month inside, the value outside — and ECharts allows one label per
+   * series, so the month rides a second, invisible bar laid exactly over the first.
+   */
+  protected readonly insideLabel = {
+    series: [
+      { label: { position: 'right', distance: 8, color: 'var(--foreground)', fontSize: 12, formatter: '{c}' } },
+      {
+        type: 'bar',
+        barGap: '-100%',
+        silent: true,
+        itemStyle: { color: 'transparent' },
+        data: this.chartData.map(row => row.desktop),
+        label: {
+          show: true,
+          position: 'insideLeft',
+          distance: 8,
+          color: 'var(--background)',
+          fontSize: 12,
+          formatter: (params: { dataIndex: number }) => this.chartData[params.dataIndex].month,
+        },
+      },
+    ],
+  } as unknown as ZardChartOptionOverride;
 }

@@ -20,7 +20,7 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           [zSeries]="series"
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="dashed" />
           <z-chart-legend />

@@ -1,16 +1,19 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Pie Chart - Donut with Text" />
-        <z-card-description zDescription="Visitors by browser over the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -19,7 +22,7 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           [zData]="chartData"
           [zSeries]="series"
           zNameKey="browser"
-          zInnerRadius="60%"
+          zInnerRadius="48%"
           zCenterValue="925"
           zCenterLabel="Visitors"
           class="mx-auto aspect-square h-[250px]"
@@ -27,9 +30,17 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           <z-chart-tooltip zTrigger="item" zIndicator="dot" zHideLabel />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartPieDonutTextComponent {
   protected readonly chartConfig: ZardChartConfig = {
