@@ -113,6 +113,18 @@ export default [
     },
   },
   {
+    // Código vendorizado do terminal-engine: manipula bytes ANSI e mocks de TTY,
+    // então convive mal com regras pensadas para código de aplicação. A formatação
+    // continua garantida pelo Prettier.
+    files: ['packages/cli/src/ui/engine/**/*.ts'],
+    rules: {
+      '@stylistic/indent': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      'no-control-regex': 'off',
+    },
+  },
+  {
     files: ['**/*.html'],
     languageOptions: {
       parser: (await import('@angular-eslint/template-parser')).default,

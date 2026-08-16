@@ -6,8 +6,12 @@ import { promises as fs } from 'node:fs';
 import * as path from 'node:path';
 
 export function validateTargetPath(targetDir: string, projectRoot: string): void {
-  const resolved = path.resolve(targetDir);
-  if (!resolved.startsWith(projectRoot)) {
+  // Comparar prefixo de string deixava passar o diretório vizinho: `/proj-evil`
+  // começa com `/proj` sem estar dentro dele. O caminho relativo responde a
+  // pergunta certa — está contido? — e ainda normaliza os `..` do meio.
+  const relative = path.relative(path.resolve(projectRoot), path.resolve(targetDir));
+
+  if (relative.startsWith('..') || path.isAbsolute(relative)) {
     throw new CliError('Target path must be within the project directory', 'INVALID_PATH');
   }
 }
@@ -16,8 +20,11 @@ export async function installComponent(
   componentName: string,
   targetDir: string,
   config: Config & { resolvedPaths: any },
+  options: { customPath?: boolean } = {},
 ): Promise<void> {
-  const component = await fetchComponent(componentName, config);
+  const component = await fetchComponent(componentName, config, undefined, {
+    siblingComponents: options.customPath,
+  });
 
   await fs.mkdir(targetDir, { recursive: true });
 

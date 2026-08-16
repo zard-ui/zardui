@@ -26,7 +26,7 @@ export class DynamicInstallationService {
 
     const step: Step = {
       title: 'Run the CLI',
-      subtitle: 'Use the CLI to add the component to your project.',
+      subtitle: `Use the CLI to add ${componentName} to your project.`,
     };
     if (cliAddData) {
       step.codeTabData = cliAddData;

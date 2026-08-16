@@ -81,6 +81,21 @@ import type { CodeBlockData } from '@highlight/types';
           </tr>
           <tr class="hover:bg-muted/50 border-b transition-colors">
             <td class="p-4 align-middle">
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">schemaVersion</code>
+            </td>
+            <td class="p-4 align-middle">
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">number</code>
+            </td>
+            <td class="text-muted-foreground p-4 align-middle">
+              The shape of the file — not the version of the package, which is the field below. It rises when a change
+              breaks readers, so a client that only understands an older format can refuse the registry and say so
+              instead of misreading it. A new optional field does not raise it. Absent means
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">1</code>
+              , from before the field existed.
+            </td>
+          </tr>
+          <tr class="hover:bg-muted/50 border-b transition-colors">
+            <td class="p-4 align-middle">
               <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">version</code>
             </td>
             <td class="p-4 align-middle">
@@ -89,7 +104,9 @@ import type { CodeBlockData } from '@highlight/types';
             <td class="text-muted-foreground p-4 align-middle">
               Version of the
               <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli</code>
-              package at the moment the registry was built.
+              package at the moment the registry was built. Informational — use
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">schemaVersion</code>
+              to decide whether you can read it.
             </td>
           </tr>
           <tr class="hover:bg-muted/50 border-b transition-colors">

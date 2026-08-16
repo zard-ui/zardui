@@ -1,5 +1,6 @@
 {
   "$schema": "https://zardui.com/schema/registry.json",
+  "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
   "version": "1.0.0-beta.102",
@@ -7,6 +8,11 @@
     {
       "name": "core",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "directives/string-template-outlet/string-template-outlet.directive.ts",
         "directives/id.directive.ts",
@@ -21,6 +27,11 @@
       "name": "dark-mode",
       "type": "registry:component",
       "basePath": "services",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "index.ts",
         "dark-mode.ts"
@@ -34,6 +45,11 @@
         "tailwind-merge",
         "clsx"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "index.ts",
         "merge-classes.ts",
@@ -43,6 +59,17 @@
     {
       "name": "layout",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronLeft",
+          "lucideChevronRight"
+        ],
+        "tokens": [
+          "chevron-left",
+          "chevron-right"
+        ]
+      },
       "files": [
         "layout.component.ts",
         "layout.variants.ts",
@@ -57,6 +84,15 @@
     {
       "name": "button",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideLoaderCircle"
+        ],
+        "tokens": [
+          "loader-circle"
+        ]
+      },
       "files": [
         "button.component.ts",
         "button.variants.ts",
@@ -69,6 +105,15 @@
       "registryDependencies": [
         "button"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideX"
+        ],
+        "tokens": [
+          "x"
+        ]
+      },
       "files": [
         "sheet.component.ts",
         "sheet.variants.ts",
@@ -84,6 +129,11 @@
       "registryDependencies": [
         "button"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "card.component.ts",
         "card.variants.ts",
@@ -93,6 +143,11 @@
     {
       "name": "empty",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "empty.component.ts",
         "empty.variants.ts",
@@ -102,6 +157,11 @@
     {
       "name": "field",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "field.component.ts",
         "field.variants.ts",
@@ -112,6 +172,11 @@
     {
       "name": "badge",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "badge.component.ts",
         "badge.variants.ts",
@@ -121,6 +186,15 @@
     {
       "name": "accordion",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronDown"
+        ],
+        "tokens": [
+          "chevron-down"
+        ]
+      },
       "files": [
         "accordion.component.ts",
         "accordion-item.component.ts",
@@ -132,6 +206,15 @@
     {
       "name": "alert",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideCircleAlert"
+        ],
+        "tokens": [
+          "circle-alert"
+        ]
+      },
       "files": [
         "alert.component.ts",
         "alert.variants.ts",
@@ -144,6 +227,11 @@
       "registryDependencies": [
         "button"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "alert-dialog.component.ts",
         "alert-dialog.service.ts",
@@ -155,6 +243,11 @@
     {
       "name": "avatar",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "avatar.component.ts",
         "avatar-group.component.ts",
@@ -165,6 +258,15 @@
     {
       "name": "checkbox",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideCheck"
+        ],
+        "tokens": [
+          "check"
+        ]
+      },
       "files": [
         "checkbox.component.ts",
         "checkbox.variants.ts",
@@ -177,6 +279,15 @@
       "registryDependencies": [
         "button"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideX"
+        ],
+        "tokens": [
+          "x"
+        ]
+      },
       "files": [
         "dialog.component.ts",
         "dialog.service.ts",
@@ -189,6 +300,14 @@
     {
       "name": "dropdown",
       "type": "registry:component",
+      "registryDependencies": [
+        "menu"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "dropdown.component.ts",
         "dropdown-item.component.ts",
@@ -204,6 +323,14 @@
     {
       "name": "input",
       "type": "registry:component",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "input.component.ts",
         "input.variants.ts",
@@ -213,6 +340,14 @@
     {
       "name": "textarea",
       "type": "registry:component",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "textarea.component.ts",
         "textarea.variants.ts",
@@ -222,6 +357,11 @@
     {
       "name": "input-group",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "input-group.component.ts",
         "input-group.imports.ts",
@@ -232,6 +372,11 @@
     {
       "name": "input-otp",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "input-otp.component.ts",
         "input-otp-signal.component.ts",
@@ -248,6 +393,11 @@
     {
       "name": "item",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "item.component.ts",
         "item.imports.ts",
@@ -261,6 +411,19 @@
       "registryDependencies": [
         "badge"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideCheck",
+          "lucideChevronDown",
+          "lucideChevronUp"
+        ],
+        "tokens": [
+          "check",
+          "chevron-down",
+          "chevron-up"
+        ]
+      },
       "files": [
         "select.component.ts",
         "select-item.component.ts",
@@ -273,6 +436,11 @@
     {
       "name": "switch",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "switch.component.ts",
         "switch.variants.ts",
@@ -285,6 +453,11 @@
       "registryDependencies": [
         "button"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "tabs.component.ts",
         "tabs.variants.ts",
@@ -294,6 +467,11 @@
     {
       "name": "toggle",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "toggle.component.ts",
         "toggle.variants.ts",
@@ -303,6 +481,11 @@
     {
       "name": "tooltip",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "tooltip.ts",
         "tooltip-positions.ts",
@@ -314,6 +497,17 @@
     {
       "name": "breadcrumb",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronRight",
+          "lucideEllipsis"
+        ],
+        "tokens": [
+          "chevron-right",
+          "ellipsis"
+        ]
+      },
       "files": [
         "breadcrumb.component.ts",
         "breadcrumb.imports.ts",
@@ -324,6 +518,11 @@
     {
       "name": "separator",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "separator.component.ts",
         "separator.variants.ts",
@@ -333,6 +532,11 @@
     {
       "name": "spinner",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "spinner.component.ts",
         "index.ts"
@@ -341,6 +545,11 @@
     {
       "name": "progress",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "progress.component.ts",
         "progress.variants.ts",
@@ -350,6 +559,11 @@
     {
       "name": "radio-group",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "radio-group.component.ts",
         "radio-group.variants.ts",
@@ -360,6 +574,11 @@
     {
       "name": "slider",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "slider.component.ts",
         "slider.variants.ts",
@@ -372,6 +591,19 @@
       "registryDependencies": [
         "button"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronDown",
+          "lucideChevronLeft",
+          "lucideChevronRight"
+        ],
+        "tokens": [
+          "chevron-down",
+          "chevron-left",
+          "chevron-right"
+        ]
+      },
       "files": [
         "calendar.component.ts",
         "calendar-grid.component.ts",
@@ -392,6 +624,11 @@
         "empty",
         "input"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "combobox.component.ts",
         "combobox.variants.ts",
@@ -401,6 +638,18 @@
     {
       "name": "command",
       "type": "registry:component",
+      "registryDependencies": [
+        "input"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideSearch"
+        ],
+        "tokens": [
+          "search"
+        ]
+      },
       "files": [
         "command.component.ts",
         "command-input.component.ts",
@@ -422,6 +671,17 @@
         "popover",
         "input"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideCalendar",
+          "lucideChevronDown"
+        ],
+        "tokens": [
+          "calendar",
+          "chevron-down"
+        ]
+      },
       "files": [
         "date-picker.component.ts",
         "date-picker.variants.ts",
@@ -434,6 +694,19 @@
       "registryDependencies": [
         "button"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronLeft",
+          "lucideChevronRight",
+          "lucideEllipsis"
+        ],
+        "tokens": [
+          "chevron-left",
+          "chevron-right",
+          "ellipsis"
+        ]
+      },
       "files": [
         "pagination.component.ts",
         "pagination.imports.ts",
@@ -444,6 +717,11 @@
     {
       "name": "popover",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "popover.component.ts",
         "popover.variants.ts",
@@ -454,6 +732,11 @@
     {
       "name": "resizable",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "resizable.component.ts",
         "resizable-panel.component.ts",
@@ -466,6 +749,11 @@
     {
       "name": "skeleton",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "skeleton.component.ts",
         "skeleton.variants.ts",
@@ -475,6 +763,11 @@
     {
       "name": "table",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "table.component.ts",
         "table.imports.ts",
@@ -488,6 +781,23 @@
       "dependencies": [
         "ngx-sonner"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideCircleCheck",
+          "lucideInfo",
+          "lucideLoader2",
+          "lucideOctagonX",
+          "lucideTriangleAlert"
+        ],
+        "tokens": [
+          "circle-check",
+          "info",
+          "loader-2",
+          "octagon-x",
+          "triangle-alert"
+        ]
+      },
       "files": [
         "sonner.component.ts",
         "sonner.service.ts",
@@ -501,6 +811,11 @@
       "registryDependencies": [
         "toggle"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "toggle-group.component.ts",
         "toggle-group.variants.ts",
@@ -510,6 +825,15 @@
     {
       "name": "navigation-menu",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronDown"
+        ],
+        "tokens": [
+          "chevron-down"
+        ]
+      },
       "files": [
         "navigation-menu.component.ts",
         "navigation-menu.service.ts",
@@ -536,6 +860,11 @@
       "registryDependencies": [
         "separator"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "button-group.component.ts",
         "button-group.variants.ts",
@@ -545,6 +874,11 @@
     {
       "name": "kbd",
       "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
       "files": [
         "kbd.component.ts",
         "kbd-group.component.ts",
@@ -556,6 +890,7 @@
       "name": "carousel",
       "type": "registry:component",
       "dependencies": [
+        "embla-carousel",
         "embla-carousel-angular",
         "embla-carousel-autoplay",
         "embla-carousel-class-names",
@@ -564,6 +899,19 @@
       "registryDependencies": [
         "button"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronLeft",
+          "lucideChevronRight",
+          "lucideCircleSmall"
+        ],
+        "tokens": [
+          "chevron-left",
+          "chevron-right",
+          "circle-small"
+        ]
+      },
       "files": [
         "carousel.component.ts",
         "carousel.variants.ts",
@@ -580,6 +928,15 @@
       "registryDependencies": [
         "checkbox"
       ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronRight"
+        ],
+        "tokens": [
+          "chevron-right"
+        ]
+      },
       "files": [
         "tree.component.ts",
         "tree-node.component.ts",

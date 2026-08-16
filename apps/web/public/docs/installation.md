@@ -12,11 +12,7 @@ How to install dependencies and structure your app.
 Start by selecting your environment of choice. Then, follow the instructions to install the dependencies and structure your app. zard/ui is designed to work seamlessly with Angular projects.
 
 - [angular](/docs/installation/angular)
-
-nx
-
-Coming Soon
-
-analog.js
-
-Coming Soon
+- [angular library](/docs/installation/angular-library)
+- [nx](/docs/installation/nx)
+- [nx library](/docs/installation/nx-library)
+- [analog.js](/docs/installation/analog)

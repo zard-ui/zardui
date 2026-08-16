@@ -376,6 +376,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'dropdown',
+    registryDependencies: ['menu'],
     files: [
       {
         name: 'dropdown.component.ts',
@@ -417,6 +418,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'input',
+    registryDependencies: ['input-group'],
     files: [
       {
         name: 'input.component.ts',
@@ -434,6 +436,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'textarea',
+    registryDependencies: ['input-group'],
     files: [
       {
         name: 'textarea.component.ts',
@@ -803,6 +806,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'command',
+    registryDependencies: ['input'],
     files: [
       {
         name: 'command.component.ts',
@@ -1125,6 +1129,10 @@ export const registry: ComponentRegistry[] = [
   {
     name: 'carousel',
     dependencies: [
+      // O wrapper Angular re-exportava os tipos do pacote base na v21 e parou na
+      // v22 — e é a v22 que um projeto Angular 22 recebe. Sem declarar o base,
+      // só compila onde o node_modules é plano; no pnpm o build quebra.
+      'embla-carousel',
       'embla-carousel-angular',
       'embla-carousel-autoplay',
       'embla-carousel-class-names',

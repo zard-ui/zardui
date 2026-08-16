@@ -39,7 +39,7 @@ export const SECTIONS: NavSection = {
     {
       name: 'MCP Server',
       path: '/docs/mcp',
-      available: false,
+      available: true,
     },
     {
       name: 'Roadmap',

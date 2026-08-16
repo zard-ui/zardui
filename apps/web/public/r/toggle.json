@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "toggle",
   "type": "registry:component",
   "files": [
@@ -15,30 +16,25 @@
       "content": "export * from './toggle.component';\nexport * from './toggle.variants';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideBookmark } from '@ng-icons/lucide';\n\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-default',\n  imports: [ZardToggleComponent, NgIcon],\n  template: `\n    <z-toggle zAriaLabel=\"Toggle bookmark\" zSize=\"sm\" zType=\"outline\">\n      <ng-icon name=\"lucideBookmark\" class=\"group-data-[state=on]/toggle:[&_path]:fill-foreground\" />\n      Bookmark\n    </z-toggle>\n  `,\n  viewProviders: [provideIcons({ lucideBookmark })],\n})\nexport class ZardDemoToggleDefaultComponent {}\n"
-    },
-    {
-      "name": "disabled.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-disabled',\n  imports: [ZardToggleComponent],\n  template: `\n    <div class=\"flex items-center gap-2\">\n      <z-toggle zAriaLabel=\"Toggle disabled\" zDisabled>Disabled</z-toggle>\n      <z-toggle zAriaLabel=\"Toggle disabled outline\" zType=\"outline\" zDisabled>Disabled</z-toggle>\n    </div>\n  `,\n})\nexport class ZardDemoToggleDisabledComponent {}\n"
-    },
-    {
-      "name": "outline.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideBold, lucideItalic } from '@ng-icons/lucide';\n\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-outline',\n  imports: [ZardToggleComponent, NgIcon],\n  template: `\n    <div class=\"flex items-center gap-2\">\n      <z-toggle zAriaLabel=\"Toggle italic\" zType=\"outline\">\n        <ng-icon name=\"lucideItalic\" />\n        Italic\n      </z-toggle>\n      <z-toggle zAriaLabel=\"Toggle bold\" zType=\"outline\">\n        <ng-icon name=\"lucideBold\" />\n        Bold\n      </z-toggle>\n    </div>\n  `,\n  viewProviders: [provideIcons({ lucideBold, lucideItalic })],\n})\nexport class ZardDemoToggleOutlineComponent {}\n"
-    },
-    {
-      "name": "size.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-size',\n  imports: [ZardToggleComponent],\n  template: `\n    <div class=\"flex items-center gap-2\">\n      <z-toggle zAriaLabel=\"Toggle small\" zSize=\"sm\" zType=\"outline\">Small</z-toggle>\n      <z-toggle zAriaLabel=\"Toggle default\" zSize=\"default\" zType=\"outline\">Default</z-toggle>\n      <z-toggle zAriaLabel=\"Toggle large\" zSize=\"lg\" zType=\"outline\">Large</z-toggle>\n    </div>\n  `,\n})\nexport class ZardDemoToggleSizeComponent {}\n"
-    },
-    {
-      "name": "with-bindings.ts",
-      "content": "import { Component, computed, signal } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideLightbulb, lucideLightbulbOff } from '@ng-icons/lucide';\n\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-with-bindings',\n  imports: [ZardToggleComponent, NgIcon],\n  template: `\n    <div class=\"flex flex-col items-center gap-8\">\n      <z-toggle zAriaLabel=\"Turn on the light\" [(zValue)]=\"lightOn\" zType=\"outline\">\n        <ng-icon [name]=\"bulb()\" />\n      </z-toggle>\n      <span>Light is {{ state() }}.</span>\n    </div>\n  `,\n  viewProviders: [provideIcons({ lucideLightbulb, lucideLightbulbOff })],\n})\nexport class ZardDemoToggleWithBindingsComponent {\n  protected readonly lightOn = signal(false);\n  protected readonly bulb = computed(() => (this.lightOn() ? 'lucideLightbulb' : 'lucideLightbulbOff'));\n  protected readonly state = computed(() => (this.lightOn() ? 'on' : 'off'));\n}\n"
-    },
-    {
-      "name": "with-text.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideItalic } from '@ng-icons/lucide';\n\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-with-text',\n  imports: [ZardToggleComponent, NgIcon],\n  template: `\n    <z-toggle zAriaLabel=\"Toggle italic\">\n      <ng-icon name=\"lucideItalic\" />\n      Italic\n    </z-toggle>\n  `,\n  viewProviders: [provideIcons({ lucideItalic })],\n})\nexport class ZardDemoToggleWithTextComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [
+        "lucideBold",
+        "lucideBookmark",
+        "lucideItalic",
+        "lucideLightbulb",
+        "lucideLightbulbOff"
+      ],
+      "tokens": [
+        "bold",
+        "bookmark",
+        "italic",
+        "lightbulb",
+        "lightbulb-off"
+      ]
     }
-  ]
+  }
 }

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "switch",
   "type": "registry:component",
   "files": [
@@ -15,30 +16,13 @@
       "content": "export * from './switch.component';\nexport * from './switch.variants';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "choice-card.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field/field.imports';\nimport { ZardSwitchComponent } from '@/shared/components/switch/switch.component';\n\n@Component({\n  selector: 'z-demo-switch-choice-card',\n  imports: [...ZardFieldImports, ZardSwitchComponent],\n  template: `\n    <div z-field-group class=\"w-full min-w-sm\">\n      <label z-field-label for=\"switch-share\">\n        <div z-field zOrientation=\"horizontal\">\n          <div z-field-content>\n            <div z-field-title>Share across devices</div>\n            <p z-field-description>Focus is shared across devices, and turns off when you leave the app.</p>\n          </div>\n          <z-switch zId=\"switch-share\" />\n        </div>\n      </label>\n      <label z-field-label for=\"switch-notifications\">\n        <div z-field zOrientation=\"horizontal\">\n          <div z-field-content>\n            <div z-field-title>Enable notifications</div>\n            <p z-field-description>Receive notifications when focus mode is enabled or disabled.</p>\n          </div>\n          <z-switch zId=\"switch-notifications\" [zChecked]=\"true\" />\n        </div>\n      </label>\n    </div>\n  `,\n})\nexport class ZardDemoSwitchChoiceCardComponent {}\n"
-    },
-    {
-      "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSwitchComponent } from '@/shared/components/switch/switch.component';\n\n@Component({\n  selector: 'zard-demo-switch',\n  imports: [ZardSwitchComponent],\n  template: `\n    <z-switch zId=\"airplane-mode\">Airplane Mode</z-switch>\n  `,\n})\nexport class ZardDemoSwitchDefaultComponent {}\n"
-    },
-    {
-      "name": "description.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field/field.imports';\nimport { ZardSwitchComponent } from '@/shared/components/switch/switch.component';\n\n@Component({\n  selector: 'z-demo-switch-description',\n  imports: [...ZardFieldImports, ZardSwitchComponent],\n  template: `\n    <div z-field zOrientation=\"horizontal\" class=\"max-w-sm\">\n      <div z-field-content>\n        <label z-field-label for=\"switch-focus-mode\">Share across devices</label>\n        <p z-field-description>Focus is shared across devices, and turns off when you leave the app.</p>\n      </div>\n      <z-switch zId=\"switch-focus-mode\" />\n    </div>\n  `,\n})\nexport class ZardDemoSwitchDescriptionComponent {}\n"
-    },
-    {
-      "name": "disabled.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field/field.imports';\nimport { ZardSwitchComponent } from '@/shared/components/switch/switch.component';\n\n@Component({\n  selector: 'z-demo-switch-disabled',\n  imports: [...ZardFieldImports, ZardSwitchComponent],\n  template: `\n    <div z-field zOrientation=\"horizontal\" data-disabled=\"true\" class=\"w-fit\">\n      <z-switch zId=\"switch-disabled-unchecked\" zDisabled />\n      <label z-field-label for=\"switch-disabled-unchecked\">Disabled</label>\n    </div>\n  `,\n})\nexport class ZardDemoSwitchDisabledComponent {}\n"
-    },
-    {
-      "name": "invalid.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field/field.imports';\nimport { ZardSwitchComponent } from '@/shared/components/switch/switch.component';\n\n@Component({\n  selector: 'z-demo-switch-invalid',\n  imports: [...ZardFieldImports, ZardSwitchComponent],\n  template: `\n    <div z-field zOrientation=\"horizontal\" data-invalid=\"true\" class=\"max-w-sm\">\n      <div z-field-content>\n        <label z-field-label for=\"switch-terms\">Accept terms and conditions</label>\n        <p z-field-description>You must accept the terms and conditions to continue.</p>\n      </div>\n      <z-switch zId=\"switch-terms\" zInvalid />\n    </div>\n  `,\n})\nexport class ZardDemoSwitchInvalidComponent {}\n"
-    },
-    {
-      "name": "size.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSwitchComponent } from '@/shared/components/switch/switch.component';\n\n@Component({\n  selector: 'z-demo-switch-size',\n  imports: [ZardSwitchComponent],\n  template: `\n    <div class=\"grid w-full min-w-sm items-center justify-center gap-6\">\n      <z-switch zSize=\"sm\">Small</z-switch>\n      <z-switch>Default</z-switch>\n    </div>\n  `,\n})\nexport class ZardDemoSwitchSizeComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
     }
-  ]
+  }
 }

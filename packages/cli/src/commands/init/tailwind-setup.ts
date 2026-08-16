@@ -1,6 +1,6 @@
-import { type Config } from '@cli/utils/config.js';
+import { resolveAliasToPath, type Config } from '@cli/utils/config.js';
 import { getThemeContent } from '@cli/utils/theme-selector.js';
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import * as path from 'path';
 
 const POSTCSS_CONFIG = `{
@@ -10,23 +10,46 @@ const POSTCSS_CONFIG = `{
 }
 `;
 
-export async function setupTailwind(cwd: string, config: Config): Promise<void> {
-  await createPostCssConfig(cwd);
-  await applyThemeToStyles(cwd, config);
+/**
+ * Escreve o `.postcssrc.json` na raiz do projeto que vai usá-lo.
+ *
+ * O build do Angular procura o arquivo a partir do CSS que está processando e
+ * sobe até a raiz do workspace, então o projeto é o lugar mais específico que
+ * funciona — e num monorepo com vários apps é o único que não configura todos
+ * eles de uma vez. `projectRoot` é `.` no app único.
+ */
+export async function createPostCssConfig(cwd: string, projectRoot = '.'): Promise<void> {
+  const targetDir = path.resolve(cwd, projectRoot);
+
+  await mkdir(targetDir, { recursive: true });
+  await writeFile(path.join(targetDir, '.postcssrc.json'), POSTCSS_CONFIG, 'utf8');
 }
 
-export async function createPostCssConfig(cwd: string): Promise<void> {
-  const postcssConfigPath = path.join(cwd, '.postcssrc.json');
-  await writeFile(postcssConfigPath, POSTCSS_CONFIG, 'utf8');
+/**
+ * O `@import` do CSS é resolvido pelo bundler a partir do arquivo que o contém,
+ * então precisa ser um caminho relativo de verdade — não dá para montá-lo
+ * fatiando o alias.
+ *
+ * A versão anterior pegava o segundo segmento do baseUrl e colava o alias sem o
+ * primeiro caractere. Só acertava no layout `src/app` + `@/...`: com baseUrl
+ * `projects/admin/src/app` mirava `./admin/...`, e com um alias `@app/core`
+ * gerava `./appapp/core`.
+ */
+function coreImportPath(cwd: string, config: Config): string {
+  const cssDir = path.dirname(path.resolve(cwd, config.tailwind.css));
+  const coreDir = path.resolve(cwd, resolveAliasToPath(config.aliases.core, config.baseUrl));
+
+  const relative = path.relative(cssDir, coreDir).split(path.sep).join('/');
+
+  return relative.startsWith('.') ? relative : `./${relative}`;
 }
 
 export async function applyThemeToStyles(cwd: string, config: Config): Promise<void> {
   const stylesPath = path.join(cwd, config.tailwind.css);
-  const selectedTheme = config.tailwind.baseColor;
-  const parts = config.baseUrl.split('/');
-  const base = parts.length > 1 ? parts[1] : parts[0];
-  const corePath = './' + base + config.aliases.core.substring(1);
-  const themeContent = getThemeContent(selectedTheme, corePath);
+  const themeContent = getThemeContent(config.tailwind.baseColor, coreImportPath(cwd, config));
 
+  // Numa biblioteca esse arquivo normalmente não existe — é o init que o cria,
+  // para a lib expor os tokens a quem a consome.
+  await mkdir(path.dirname(stylesPath), { recursive: true });
   await writeFile(stylesPath, themeContent, 'utf8');
 }

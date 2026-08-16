@@ -346,9 +346,6 @@ z-table
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
-import { provideIcons } from '@ng-icons/core';
-import { lucideCopy, lucideEye } from '@ng-icons/lucide';
-
 import { ZardTableImports } from '@/shared/components/table/table.imports';
 
 export interface Invoice {
@@ -401,7 +398,6 @@ export interface Invoice {
     </table>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideCopy, lucideEye })],
   host: {
     class: 'block w-full overflow-x-auto',
   },
@@ -443,10 +439,16 @@ export class ZardDemoTableFooterComponent {
 
 ### Actions
 
-```angular-ts
-import { Component } from '@angular/core';
+A table showing actions for each row using a `<Dropdown />` component.
 
-import { ZardTableImports } from '../table.imports';
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideEllipsis } from '@ng-icons/lucide';
+
+import { ZardDropdownImports } from '@/shared/components/dropdown';
+import { ZardTableImports } from '@/shared/components/table/table.imports';
 
 interface Product {
   id: number;
@@ -456,14 +458,14 @@ interface Product {
 
 @Component({
   selector: 'z-demo-table-actions',
-  imports: [ZardTableImports],
+  imports: [ZardTableImports, ZardDropdownImports, NgIcon],
   template: `
     <table z-table>
       <thead z-table-header>
         <tr z-table-row>
           <th z-table-head>Product</th>
           <th z-table-head>Price</th>
-          <th z-table-head>Actions</th>
+          <th z-table-head class="text-right">Actions</th>
         </tr>
       </thead>
       <tbody z-table-body>
@@ -471,12 +473,41 @@ interface Product {
           <tr z-table-row>
             <td z-table-cell class="font-medium">{{ product.name }}</td>
             <td z-table-cell>{{ product.price }}</td>
-            <td z-table-cell></td>
+            <td z-table-cell class="text-right">
+              <button
+                z-button
+                z-dropdown
+                zType="ghost"
+                zSize="icon"
+                zAlign="end"
+                type="button"
+                aria-label="Open actions"
+                [zDropdownMenu]="menu"
+              >
+                <ng-icon name="lucideEllipsis" aria-hidden="true" />
+              </button>
+              <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-30 -translate-x-[calc(100%-1.5rem)]">
+                <z-dropdown-menu-item>Edit</z-dropdown-menu-item>
+                <z-dropdown-menu-item>Duplicate</z-dropdown-menu-item>
+                <z-dropdown-menu-separator class="block" />
+                <z-dropdown-menu-item
+                  variant="destructive"
+                  class="hover:text-destructive focus:text-destructive focus-visible:text-destructive data-highlighted:text-destructive"
+                >
+                  Delete
+                </z-dropdown-menu-item>
+              </z-dropdown-menu-content>
+            </td>
           </tr>
         }
       </tbody>
     </table>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideEllipsis })],
+  host: {
+    class: 'block w-full overflow-x-auto',
+  },
 })
 export class ZardDemoTableActionsComponent {
   products: Product[] = [

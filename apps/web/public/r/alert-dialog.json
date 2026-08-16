@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "alert-dialog",
   "type": "registry:component",
   "files": [
@@ -26,26 +27,21 @@
   "registryDependencies": [
     "button"
   ],
-  "demos": [
-    {
-      "name": "default.ts",
-      "content": "import { ChangeDetectionStrategy, Component, inject } from '@angular/core';\n\nimport { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\n\n@Component({\n  selector: 'zard-demo-alert-dialog-default',\n  imports: [ZardButtonComponent],\n  template: `\n    <button z-button zType=\"outline\" (click)=\"open()\">Show Dialog</button>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoAlertDialogDefaultComponent {\n  private readonly alertDialogService = inject(ZardAlertDialogService);\n\n  open() {\n    this.alertDialogService.create({\n      zTitle: 'Are you absolutely sure?',\n      zDescription: 'This action cannot be undone. This will permanently delete your account from our servers.',\n      zOkText: 'Continue',\n      zCancelText: 'Cancel',\n    });\n  }\n}\n"
-    },
-    {
-      "name": "destructive.ts",
-      "content": "import { ChangeDetectionStrategy, Component, inject, type TemplateRef } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideTrash2 } from '@ng-icons/lucide';\n\nimport { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\n\n@Component({\n  selector: 'zard-demo-alert-dialog-destructive',\n  imports: [ZardButtonComponent, NgIcon],\n  template: `\n    <ng-template #mediaIcon>\n      <ng-icon name=\"lucideTrash2\" />\n    </ng-template>\n    <button z-button zType=\"destructive\" (click)=\"open(mediaIcon)\">Delete Chat</button>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [provideIcons({ lucideTrash2 })],\n})\nexport class ZardDemoAlertDialogDestructiveComponent {\n  private readonly alertDialogService = inject(ZardAlertDialogService);\n\n  open(media: TemplateRef<void>) {\n    this.alertDialogService.create({\n      zSize: 'sm',\n      zMedia: media,\n      zMediaClass: 'bg-destructive/10 text-destructive dark:bg-destructive/20',\n      zTitle: 'Delete chat?',\n      zDescription:\n        'This will permanently delete this chat conversation. View <a href=\"#\">Settings</a> delete any memories saved during this chat.',\n      zOkText: 'Delete',\n      zCancelText: 'Cancel',\n      zOkDestructive: true,\n    });\n  }\n}\n"
-    },
-    {
-      "name": "media.ts",
-      "content": "import { ChangeDetectionStrategy, Component, inject, type TemplateRef } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideCircleFadingPlus } from '@ng-icons/lucide';\n\nimport { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\n\n@Component({\n  selector: 'zard-demo-alert-dialog-media',\n  imports: [ZardButtonComponent, NgIcon],\n  template: `\n    <ng-template #mediaIcon>\n      <ng-icon name=\"lucideCircleFadingPlus\" />\n    </ng-template>\n    <button z-button zType=\"outline\" (click)=\"open(mediaIcon)\">Share Project</button>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [provideIcons({ lucideCircleFadingPlus })],\n})\nexport class ZardDemoAlertDialogMediaComponent {\n  private readonly alertDialogService = inject(ZardAlertDialogService);\n\n  open(media: TemplateRef<void>) {\n    this.alertDialogService.create({\n      zMedia: media,\n      zTitle: 'Share this project?',\n      zDescription: 'Anyone with the link will be able to view and edit this project.',\n      zOkText: 'Share',\n      zCancelText: 'Cancel',\n    });\n  }\n}\n"
-    },
-    {
-      "name": "small-with-media.ts",
-      "content": "import { ChangeDetectionStrategy, Component, inject, type TemplateRef } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideBluetooth } from '@ng-icons/lucide';\n\nimport { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\n\n@Component({\n  selector: 'zard-demo-alert-dialog-small-with-media',\n  imports: [ZardButtonComponent, NgIcon],\n  template: `\n    <ng-template #mediaIcon>\n      <ng-icon name=\"lucideBluetooth\" />\n    </ng-template>\n    <button z-button zType=\"outline\" (click)=\"open(mediaIcon)\">Show Dialog</button>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [provideIcons({ lucideBluetooth })],\n})\nexport class ZardDemoAlertDialogSmallWithMediaComponent {\n  private readonly alertDialogService = inject(ZardAlertDialogService);\n\n  open(media: TemplateRef<void>) {\n    this.alertDialogService.create({\n      zSize: 'sm',\n      zMedia: media,\n      zTitle: 'Allow accessory to connect?',\n      zDescription: 'Do you want to allow the USB accessory to connect to this device?',\n      zOkText: 'Allow',\n      zCancelText: \"Don't allow\",\n    });\n  }\n}\n"
-    },
-    {
-      "name": "small.ts",
-      "content": "import { ChangeDetectionStrategy, Component, inject } from '@angular/core';\n\nimport { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\n\n@Component({\n  selector: 'zard-demo-alert-dialog-small',\n  imports: [ZardButtonComponent],\n  template: `\n    <button z-button zType=\"outline\" (click)=\"open()\">Show Dialog</button>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoAlertDialogSmallComponent {\n  private readonly alertDialogService = inject(ZardAlertDialogService);\n\n  open() {\n    this.alertDialogService.create({\n      zSize: 'sm',\n      zTitle: 'Allow accessory to connect?',\n      zDescription: 'Do you want to allow the USB accessory to connect to this device?',\n      zOkText: 'Allow',\n      zCancelText: \"Don't allow\",\n    });\n  }\n}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [
+        "lucideBluetooth",
+        "lucideCircleFadingPlus",
+        "lucideTrash2"
+      ],
+      "tokens": [
+        "bluetooth",
+        "circle-fading-plus",
+        "trash-2"
+      ]
     }
-  ]
+  }
 }

@@ -20,6 +20,7 @@ import { getConfig, resolveAliasToPath, resolveConfigPaths } from '@cli/utils/co
 import { ConfigError } from '@cli/utils/errors.js';
 import { validateRegistryUrl } from '@cli/utils/registry.js';
 import { access, readFile } from 'node:fs/promises';
+import * as path from 'node:path';
 
 const mockAccess = access as jest.MockedFunction<typeof access>;
 const mockReadFile = readFile as jest.MockedFunction<typeof readFile>;
@@ -131,12 +132,16 @@ describe('resolveConfigPaths', () => {
 
     const result = await resolveConfigPaths('/project', config);
 
-    expect(result.resolvedPaths.tailwindCss).toBe('/project/src/styles.css');
-    expect(result.resolvedPaths.baseUrl).toBe('/project/src/app');
-    expect(result.resolvedPaths.components).toBe('/project/src/app/shared/components');
-    expect(result.resolvedPaths.utils).toBe('/project/src/app/shared/utils');
-    expect(result.resolvedPaths.core).toBe('/project/src/app/shared/core');
-    expect(result.resolvedPaths.services).toBe('/project/src/app/shared/services');
+    // Resolvidos com o separador da plataforma; comparar com `/` cru só
+    // passaria em POSIX.
+    const at = (...segments: string[]): string => path.resolve('/project', ...segments);
+
+    expect(result.resolvedPaths.tailwindCss).toBe(at('src/styles.css'));
+    expect(result.resolvedPaths.baseUrl).toBe(at('src/app'));
+    expect(result.resolvedPaths.components).toBe(at('src/app/shared/components'));
+    expect(result.resolvedPaths.utils).toBe(at('src/app/shared/utils'));
+    expect(result.resolvedPaths.core).toBe(at('src/app/shared/core'));
+    expect(result.resolvedPaths.services).toBe(at('src/app/shared/services'));
   });
 
   it('should preserve the original config properties', async () => {
@@ -175,9 +180,10 @@ describe('resolveAliasToPath', () => {
     expect(result).toBe('app/lib/utils');
   });
 
-  it('should not modify paths without @/ prefix', () => {
-    const result = resolveAliasToPath('some/path', 'src/app');
-
-    expect(result).toBe('some/path');
+  // O prefixo do alias é só um apelido para baseUrl — `@` não tem nada de
+  // especial. Ver a matriz completa em custom-paths.spec.ts.
+  it('should resolve any alias prefix against baseUrl', () => {
+    expect(resolveAliasToPath('some/path', 'src/app')).toBe('src/app/path');
+    expect(resolveAliasToPath('@app/components', 'src/app')).toBe('src/app/components');
   });
 });

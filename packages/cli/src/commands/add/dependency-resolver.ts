@@ -1,9 +1,16 @@
 import { existsSync, readdirSync } from 'fs';
 import * as path from 'path';
 
+import { iconPackagesFor } from '../../core/icons/index.js';
 import { Config } from '../../utils/config.js';
+import { iconCatalog } from '../../utils/icon-catalog.js';
 import { logger } from '../../utils/logger.js';
-import { fetchRegistryIndex, invalidateRegistryCache, type RegistryIndex } from '../../utils/registry.js';
+import {
+  fetchRegistryIndex,
+  invalidateRegistryCache,
+  type RegistryIcons,
+  type RegistryIndex,
+} from '../../utils/registry.js';
 
 function isComponentInstalled(dir: string): boolean {
   if (!existsSync(dir)) return false;
@@ -49,6 +56,7 @@ export interface ComponentMeta {
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
+  icons?: RegistryIcons;
 }
 
 export interface ResolvedDependencies {
@@ -74,6 +82,7 @@ export async function getComponentMeta(name: string): Promise<ComponentMeta | un
     dependencies: item.dependencies,
     devDependencies: item.devDependencies,
     registryDependencies: item.registryDependencies,
+    icons: item.icons,
   };
 }
 
@@ -113,7 +122,7 @@ export async function resolveDependencies(
     }
 
     componentsToInstall.push(component);
-    addComponentDependencies(component, dependenciesToInstall);
+    addComponentDependencies(component, dependenciesToInstall, resolvedConfig.icons);
 
     if (component.registryDependencies && !options.all) {
       await resolveRegistryDependencies(
@@ -133,8 +142,25 @@ export async function resolveDependencies(
   };
 }
 
-function addComponentDependencies(component: ComponentMeta, dependenciesToInstall: Set<string>): void {
+/**
+ * As dependências npm que o componente exige.
+ *
+ * Além das declaradas, quem desenha ícones precisa do ng-icons e do pacote da
+ * família configurada. Isso não vem do registry: o registry publica QUAIS
+ * ícones o componente usa, e de que família eles saem é decisão do projeto que
+ * está instalando. Instalar dentro do `add` também cobre quem escolheu outra
+ * família depois do init.
+ */
+function addComponentDependencies(
+  component: ComponentMeta,
+  dependenciesToInstall: Set<string>,
+  iconFamily: Config['icons'],
+): void {
   component.dependencies?.forEach(dep => dependenciesToInstall.add(dep));
+
+  if (component.icons?.symbols?.length) {
+    iconPackagesFor(iconFamily, iconCatalog()).forEach(pkg => dependenciesToInstall.add(pkg));
+  }
 }
 
 async function resolveRegistryDependencies(
@@ -157,7 +183,7 @@ async function resolveRegistryDependencies(
 
     if (!isComponentInstalled(depTargetDir) || options.overwrite) {
       componentsToInstall.push(depComponent);
-      addComponentDependencies(depComponent, dependenciesToInstall);
+      addComponentDependencies(depComponent, dependenciesToInstall, resolvedConfig.icons);
 
       if (depComponent.registryDependencies) {
         await resolveRegistryDependencies(

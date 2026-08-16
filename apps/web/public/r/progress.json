@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "progress",
   "type": "registry:component",
   "files": [
@@ -15,18 +16,13 @@
       "content": "export * from './progress.component';\nexport * from './progress.variants';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "controlled.ts",
-      "content": "import { ChangeDetectionStrategy, Component, signal } from '@angular/core';\n\nimport { ZardProgressComponent } from '@/shared/components/progress/progress.component';\nimport { ZardSliderComponent } from '@/shared/components/slider/slider.component';\n\n@Component({\n  selector: 'z-demo-progress-controlled',\n  imports: [ZardProgressComponent, ZardSliderComponent],\n  template: `\n    <div class=\"flex w-full min-w-sm flex-col gap-4\">\n      <z-progress [value]=\"value()[0]\" />\n      <z-slider [zDefault]=\"value()\" zMin=\"0\" zMax=\"100\" zStep=\"1\" (zSlideIndexChange)=\"value.set($event)\" />\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressControlledComponent {\n  protected readonly value = signal([50]);\n}\n"
-    },
-    {
-      "name": "label.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field/field.imports';\nimport { ZardProgressComponent } from '@/shared/components/progress/progress.component';\n\n@Component({\n  selector: 'z-demo-progress-label',\n  imports: [ZardProgressComponent, ...ZardFieldImports],\n  template: `\n    <z-field class=\"w-full min-w-sm\">\n      <z-field-label for=\"progress-upload\">\n        <span>Upload progress</span>\n        <span class=\"ml-auto\">66%</span>\n      </z-field-label>\n      <z-progress id=\"progress-upload\" [value]=\"66\" />\n    </z-field>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressLabelComponent {}\n"
-    },
-    {
-      "name": "preview.ts",
-      "content": "import { afterNextRender, ChangeDetectionStrategy, Component, signal } from '@angular/core';\n\nimport { ZardProgressComponent } from '@/shared/components/progress/progress.component';\n\n@Component({\n  selector: 'z-demo-progress-preview',\n  imports: [ZardProgressComponent],\n  template: `\n    <z-progress class=\"w-60\" [value]=\"value()\" />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressPreviewComponent {\n  protected readonly value = signal(13);\n\n  constructor() {\n    afterNextRender(() => {\n      setTimeout(() => this.value.set(66), 500);\n    });\n  }\n}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
     }
-  ]
+  }
 }

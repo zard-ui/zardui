@@ -6,6 +6,7 @@
 /docs/introduction
 /docs/components
 /docs/registry
+/docs/mcp
 /docs/roadmap
 /docs/changelog
 /docs/installation
@@ -82,3 +83,7 @@
 /docs/contribute/release
 /docs/contribute/faq
 /docs/installation/angular
+/docs/installation/angular-library
+/docs/installation/nx
+/docs/installation/nx-library
+/docs/installation/analog

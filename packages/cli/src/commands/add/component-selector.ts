@@ -1,38 +1,12 @@
-import { logger } from '@cli/utils/logger.js';
-import prompts from 'prompts';
+import { getAllComponentNames } from '@cli/commands/add/dependency-resolver.js';
 
-import { getAllComponentNames } from './dependency-resolver.js';
-
+/**
+ * Resolve quais componentes o comando deve instalar a partir dos argumentos.
+ *
+ * Devolve uma lista vazia quando não há nada informado: nesse caso quem escolhe
+ * é o wizard (ou, sem terminal interativo, o comando falha pedindo os nomes).
+ */
 export async function selectComponents(components: string[], allFlag: boolean): Promise<string[]> {
-  if (allFlag) {
-    return getAllComponentNames();
-  }
-
-  if (!components?.length) {
-    return await promptForComponents();
-  }
-
-  return components;
-}
-
-async function promptForComponents(): Promise<string[]> {
-  const allNames = await getAllComponentNames();
-
-  const { components: selected } = await prompts({
-    type: 'multiselect',
-    name: 'components',
-    message: 'Which components would you like to add?',
-    hint: 'Space to select. A to toggle all. Enter to submit.',
-    choices: allNames.map(name => ({
-      title: name,
-      value: name,
-    })),
-  });
-
-  if (!selected?.length) {
-    logger.warn('No components selected. Exiting.');
-    process.exit(0);
-  }
-
-  return selected;
+  if (allFlag) return getAllComponentNames();
+  return components ?? [];
 }

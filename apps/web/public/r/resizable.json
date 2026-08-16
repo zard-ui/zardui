@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "resizable",
   "type": "registry:component",
   "files": [
@@ -27,18 +28,13 @@
       "content": "export * from '@/shared/components/resizable/resizable.component';\nexport * from '@/shared/components/resizable/resizable-panel.component';\nexport * from '@/shared/components/resizable/resizable-handle.component';\nexport * from '@/shared/components/resizable/resizable.imports';\nexport * from '@/shared/components/resizable/resizable.variants';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "preview.ts",
-      "content": "import { Component, ViewEncapsulation } from '@angular/core';\n\nimport { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';\n\n@Component({\n  selector: 'z-demo-resizable-preview',\n  imports: [...ZardResizableImports],\n  template: `\n    <z-resizable class=\"h-60 w-80 rounded-lg border sm:w-96\">\n      <z-resizable-panel>\n        <div class=\"flex h-full items-center justify-center p-6\">\n          <span class=\"font-semibold\">One</span>\n        </div>\n      </z-resizable-panel>\n      <z-resizable-handle zWithHandle />\n      <z-resizable-panel>\n        <z-resizable zLayout=\"vertical\">\n          <z-resizable-panel zDefaultSize=\"25\">\n            <div class=\"flex h-full items-center justify-center p-6\">\n              <span class=\"font-semibold\">Two</span>\n            </div>\n          </z-resizable-panel>\n          <z-resizable-handle zWithHandle />\n          <z-resizable-panel zDefaultSize=\"75\">\n            <div class=\"flex h-full items-center justify-center p-6\">\n              <span class=\"font-semibold\">Three</span>\n            </div>\n          </z-resizable-panel>\n        </z-resizable>\n      </z-resizable-panel>\n    </z-resizable>\n  `,\n  encapsulation: ViewEncapsulation.None,\n})\nexport class ZardDemoResizablePreviewComponent {}\n"
-    },
-    {
-      "name": "vertical.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';\n\n@Component({\n  selector: 'z-demo-resizable-vertical',\n  imports: [...ZardResizableImports],\n  template: `\n    <z-resizable zLayout=\"vertical\" class=\"h-60 w-80 rounded-lg border sm:w-96\">\n      <z-resizable-panel [zDefaultSize]=\"30\">\n        <div class=\"flex h-full items-center justify-center p-6\">\n          <span class=\"font-semibold\">Header</span>\n        </div>\n      </z-resizable-panel>\n      <z-resizable-handle />\n      <z-resizable-panel [zDefaultSize]=\"70\">\n        <div class=\"flex h-full items-center justify-center p-6\">\n          <span class=\"font-semibold\">Content</span>\n        </div>\n      </z-resizable-panel>\n    </z-resizable>\n  `,\n})\nexport class ZardDemoResizableVerticalComponent {}\n"
-    },
-    {
-      "name": "with-handle.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';\n\n@Component({\n  selector: 'z-demo-resizable-with-handle',\n  imports: [...ZardResizableImports],\n  template: `\n    <div class=\"space-y-4\">\n      <z-resizable class=\"h-60 w-80 rounded-lg border sm:w-96\">\n        <z-resizable-panel [zDefaultSize]=\"25\">\n          <div class=\"flex h-full items-center justify-center p-6\">\n            <span class=\"font-semibold\">Sidebar</span>\n          </div>\n        </z-resizable-panel>\n        <z-resizable-handle zWithHandle />\n        <z-resizable-panel [zDefaultSize]=\"75\">\n          <div class=\"flex h-full items-center justify-center p-6\">\n            <span class=\"font-semibold\">Content</span>\n          </div>\n        </z-resizable-panel>\n      </z-resizable>\n    </div>\n  `,\n})\nexport class ZardDemoResizableWithHandleComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
     }
-  ]
+  }
 }

@@ -97,5 +97,6 @@ No paywalls or "premium" features
 
 Love what we're building? Support ZardUI through contributions, sponsorships, or simply spreading the word. Every bit helps us maintain our commitment to the community.
 
-- [Star on GitHub](https://github.com/zard-ui/zardui)
-- [Be a Sponsor](https://github.com/sponsors/zard-ui)
+[Star on GitHub](https://github.com/zard-ui/zardui)
+
+[Be a Sponsor](https://github.com/sponsors/zard-ui)

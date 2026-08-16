@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "tree",
   "type": "registry:component",
   "files": [
@@ -42,22 +43,31 @@
   "registryDependencies": [
     "checkbox"
   ],
-  "demos": [
-    {
-      "name": "basic.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { provideIcons } from '@ng-icons/core';\nimport { lucideFile, lucideFolder } from '@ng-icons/lucide';\n\nimport { ZardTreeImports } from '@/shared/components/tree/tree.imports';\nimport type { TreeNode } from '@/shared/components/tree/tree.types';\n\n@Component({\n  selector: 'z-demo-tree-basic',\n  imports: [ZardTreeImports],\n  template: `\n    <z-tree [zData]=\"fileSystem\" class=\"w-full max-w-sm\" />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [provideIcons({ lucideFolder, lucideFile })],\n})\nexport class ZardDemoTreeBasicComponent {\n  readonly fileSystem: TreeNode<unknown>[] = [\n    {\n      key: 'src',\n      label: 'src',\n      icon: 'lucideFolder',\n      children: [\n        {\n          key: 'app',\n          label: 'app',\n          icon: 'lucideFolder',\n          children: [\n            { key: 'app.component.ts', label: 'app.component.ts', icon: 'lucideFile', leaf: true },\n            { key: 'app.component.html', label: 'app.component.html', icon: 'lucideFile', leaf: true },\n            { key: 'app.module.ts', label: 'app.module.ts', icon: 'lucideFile', leaf: true },\n          ],\n        },\n        {\n          key: 'assets',\n          label: 'assets',\n          icon: 'lucideFolder',\n          children: [{ key: 'logo.svg', label: 'logo.svg', icon: 'lucideFile', leaf: true }],\n        },\n        { key: 'main.ts', label: 'main.ts', icon: 'lucideFile', leaf: true },\n        { key: 'index.html', label: 'index.html', icon: 'lucideFile', leaf: true },\n      ],\n    },\n    {\n      key: 'package.json',\n      label: 'package.json',\n      icon: 'lucideFile',\n      leaf: true,\n    },\n    {\n      key: 'tsconfig.json',\n      label: 'tsconfig.json',\n      icon: 'lucideFile',\n      leaf: true,\n    },\n    {\n      key: 'README.md',\n      label: 'README.md',\n      icon: 'lucideFile',\n      leaf: true,\n    },\n  ];\n}\n"
-    },
-    {
-      "name": "checkable.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardTreeImports } from '@/shared/components/tree/tree.imports';\nimport type { TreeNode } from '@/shared/components/tree/tree.types';\n\n@Component({\n  selector: 'z-demo-tree-checkable',\n  imports: [ZardTreeImports],\n  template: `\n    <z-tree [zData]=\"permissions\" zCheckable (zCheckChange)=\"onCheckChange($event)\" class=\"w-full max-w-sm\" />\n    <p class=\"text-muted-foreground mt-4 text-sm\">Checked: {{ checkedLabels }}</p>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoTreeCheckableComponent {\n  checkedLabels = 'None';\n\n  readonly permissions: TreeNode<unknown>[] = [\n    {\n      key: 'admin',\n      label: 'Administration',\n      children: [\n        {\n          key: 'users',\n          label: 'User Management',\n          children: [\n            { key: 'users-create', label: 'Create Users', leaf: true },\n            { key: 'users-edit', label: 'Edit Users', leaf: true },\n            { key: 'users-delete', label: 'Delete Users', leaf: true },\n          ],\n        },\n        {\n          key: 'roles',\n          label: 'Role Management',\n          children: [\n            { key: 'roles-create', label: 'Create Roles', leaf: true },\n            { key: 'roles-edit', label: 'Edit Roles', leaf: true },\n          ],\n        },\n      ],\n    },\n    {\n      key: 'content',\n      label: 'Content',\n      children: [\n        { key: 'content-view', label: 'View Content', leaf: true },\n        { key: 'content-edit', label: 'Edit Content', leaf: true },\n        { key: 'content-publish', label: 'Publish Content', leaf: true },\n      ],\n    },\n  ];\n\n  onCheckChange(nodes: TreeNode<unknown>[]) {\n    const labels = nodes.filter(n => n.leaf).map(n => n.label);\n    this.checkedLabels = labels.length ? labels.join(', ') : 'None';\n  }\n}\n"
-    },
-    {
-      "name": "selection.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { provideIcons } from '@ng-icons/core';\nimport { lucideMonitor, lucideSmartphone, lucideTablet, lucideTag } from '@ng-icons/lucide';\n\nimport { ZardTreeImports } from '@/shared/components/tree/tree.imports';\nimport type { TreeNode } from '@/shared/components/tree/tree.types';\n\n@Component({\n  selector: 'z-demo-tree-selection',\n  imports: [ZardTreeImports],\n  template: `\n    <z-tree\n      [zData]=\"categories\"\n      zSelectable\n      (zSelectionChange)=\"onSelect($event)\"\n      (zNodeClick)=\"onNodeClick($event)\"\n      class=\"w-full max-w-sm\"\n    />\n    <p class=\"text-muted-foreground mt-4 text-sm\">Selected: {{ selectedLabel }}</p>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [\n    provideIcons({\n      lucideMonitor,\n      lucideSmartphone,\n      lucideTablet,\n      lucideTag,\n    }),\n  ],\n})\nexport class ZardDemoTreeSelectionComponent {\n  selectedLabel = 'None';\n\n  readonly categories: TreeNode<unknown>[] = [\n    {\n      key: 'electronics',\n      label: 'Electronics',\n      icon: 'lucideMonitor',\n      children: [\n        {\n          key: 'phones',\n          label: 'Phones',\n          icon: 'lucideSmartphone',\n          children: [\n            { key: 'iphone', label: 'iPhone', leaf: true },\n            { key: 'samsung', label: 'Samsung Galaxy', leaf: true },\n            { key: 'pixel', label: 'Google Pixel', leaf: true },\n          ],\n        },\n        {\n          key: 'laptops',\n          label: 'Laptops',\n          icon: 'lucideTablet',\n          children: [\n            { key: 'macbook', label: 'MacBook Pro', leaf: true },\n            { key: 'thinkpad', label: 'ThinkPad', leaf: true },\n          ],\n        },\n      ],\n    },\n    {\n      key: 'clothing',\n      label: 'Clothing',\n      icon: 'lucideTag',\n      children: [\n        { key: 'mens', label: \"Men's\", leaf: true },\n        { key: 'womens', label: \"Women's\", leaf: true },\n      ],\n    },\n  ];\n\n  onSelect(nodes: TreeNode<unknown>[]) {\n    this.selectedLabel = nodes.map(n => n.label).join(', ') || 'None';\n  }\n\n  onNodeClick(_node: TreeNode<unknown>) {\n    // Handle node click\n  }\n}\n"
-    },
-    {
-      "name": "virtual-scroll.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { provideIcons } from '@ng-icons/core';\nimport { lucideFile, lucideFolder } from '@ng-icons/lucide';\n\nimport { ZardTreeImports } from '@/shared/components/tree/tree.imports';\nimport type { TreeNode } from '@/shared/components/tree/tree.types';\n\n@Component({\n  selector: 'z-demo-tree-virtual-scroll',\n  imports: [ZardTreeImports],\n  template: `\n    <z-tree\n      [zData]=\"largeTree\"\n      zVirtualScroll\n      [zVirtualItemSize]=\"32\"\n      zExpandAll\n      class=\"h-[400px] w-full max-w-md rounded-md border\"\n    />\n    <p class=\"text-muted-foreground mt-4 text-sm\">{{ nodeCount }} total nodes with virtual scrolling</p>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [provideIcons({ folder: lucideFolder, file: lucideFile })],\n})\nexport class ZardDemoTreeVirtualScrollComponent {\n  readonly largeTree: TreeNode<unknown>[];\n  readonly nodeCount: number;\n\n  constructor() {\n    this.largeTree = this.generateTree(100, 3);\n    this.nodeCount = this.countNodes(this.largeTree);\n  }\n\n  private generateTree(breadth: number, depth: number, prefix = '', level = 0): TreeNode<unknown>[] {\n    if (depth === 0) {\n      return [];\n    }\n    return Array.from({ length: breadth }, (_, i) => {\n      const key = prefix ? `${prefix}-${i}` : `${i}`;\n      const children = depth > 1 ? this.generateTree(Math.min(breadth, 5), depth - 1, key, level + 1) : [];\n      return {\n        key,\n        label: children.length > 0 ? `Folder ${key}` : `File ${key}`,\n        icon: children.length > 0 ? 'lucideFolder' : 'lucideFile',\n        leaf: children.length === 0,\n        children: children.length > 0 ? children : undefined,\n      };\n    });\n  }\n\n  private countNodes(nodes: TreeNode<unknown>[]): number {\n    let count = 0;\n    for (const node of nodes) {\n      count++;\n      if (node.children) {\n        count += this.countNodes(node.children);\n      }\n    }\n    return count;\n  }\n}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [
+      "lucideChevronRight"
+    ],
+    "tokens": [
+      "chevron-right"
+    ],
+    "demos": {
+      "symbols": [
+        "lucideFile",
+        "lucideFolder",
+        "lucideMonitor",
+        "lucideSmartphone",
+        "lucideTablet",
+        "lucideTag"
+      ],
+      "tokens": [
+        "file",
+        "folder",
+        "monitor",
+        "smartphone",
+        "tablet",
+        "tag"
+      ]
     }
-  ]
+  }
 }

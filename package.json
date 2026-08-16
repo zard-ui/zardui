@@ -160,6 +160,7 @@
     "tailwindcss-animate": "^1.0.7",
     "ts-jest": "^29.4.10",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16",
     "tslib": "^2.8.1",
     "tsup": "^8.5.1",
     "tsx": "^4.22.3",

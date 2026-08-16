@@ -76,6 +76,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/registry/registry.page').then(c => c.RegistryPage),
       },
       {
+        path: 'mcp',
+        loadComponent: () => import('./domain/pages/mcp/mcp.page').then(c => c.McpPage),
+      },
+      {
         path: 'components',
         loadChildren: async () => (await import('./domain/pages/component/component.routes')).COMPONENTS_ROUTES,
       },

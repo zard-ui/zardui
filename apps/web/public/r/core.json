@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "core",
   "type": "registry:component",
   "files": [
@@ -30,5 +31,14 @@
       "name": "index.ts",
       "content": "export * from './directives/string-template-outlet/string-template-outlet.directive';\nexport * from './directives/id.directive';\nexport * from './provider/providezard';\nexport * from './provider/event-manager-plugins/zard-debounce-event-manager-plugin';\nexport * from './provider/event-manager-plugins/zard-event-manager-plugin';\n"
     }
-  ]
+  ],
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
+    }
+  }
 }

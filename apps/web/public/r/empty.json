@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "empty",
   "type": "registry:component",
   "files": [
@@ -15,30 +16,29 @@
       "content": "export * from './empty.component';\nexport * from './empty.variants';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "advanced.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucidePlus } from '@ng-icons/lucide';\n\nimport { ZardAvatarComponent, ZardAvatarGroupComponent } from '@/shared/components/avatar';\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardEmptyComponent } from '@/shared/components/empty';\n\n@Component({\n  selector: 'z-demo-empty-advanced-customization',\n  imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, NgIcon, ZardEmptyComponent],\n  template: `\n    <z-empty\n      [zImage]=\"customImage\"\n      [zTitle]=\"customTitle\"\n      zDescription=\"Invite your team to collaborate on this project.\"\n      [zActions]=\"[actionInvite]\"\n    />\n\n    <ng-template #customImage>\n      <z-avatar-group>\n        <z-avatar zSize=\"lg\" zSrc=\"https://github.com/srizzon.png\" class=\"grayscale\" />\n        <z-avatar zSize=\"lg\" zSrc=\"https://github.com/Luizgomess.png\" class=\"grayscale\" />\n        <z-avatar zSize=\"lg\" zSrc=\"https://github.com/ribeiromatheuss.png\" class=\"grayscale\" />\n        <z-avatar zSize=\"lg\" zSrc=\"https://github.com/mikij.png\" class=\"grayscale\" />\n      </z-avatar-group>\n    </ng-template>\n\n    <ng-template #customTitle>\n      <span>\n        No Team\n        <strong>members</strong>\n      </span>\n    </ng-template>\n\n    <ng-template #actionInvite>\n      <button type=\"button\" z-button zSize=\"sm\">\n        <ng-icon name=\"lucidePlus\" />\n        Invite Members\n      </button>\n    </ng-template>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [provideIcons({ lucidePlus })],\n})\nexport class ZardDemoEmptyAdvancedComponent {}\n"
-    },
-    {
-      "name": "background.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideBell, lucideRefreshCcw } from '@ng-icons/lucide';\n\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardEmptyComponent } from '@/shared/components/empty';\n\n@Component({\n  selector: 'z-demo-empty-background',\n  imports: [ZardButtonComponent, ZardEmptyComponent, NgIcon],\n  template: `\n    <z-empty\n      class=\"bg-muted/30 [&_[data-slot=empty-description]]:max-w-xs [&_[data-slot=empty-description]]:text-pretty\"\n      zIcon=\"lucideBell\"\n      zTitle=\"No Notifications\"\n      zDescription=\"You're all caught up. New notifications will appear here.\"\n      [zActions]=\"[actionPrimary]\"\n    >\n      <ng-template #actionPrimary>\n        <button type=\"button\" z-button zType=\"outline\">\n          <ng-icon name=\"lucideRefreshCcw\" />\n          Refresh\n        </button>\n      </ng-template>\n    </z-empty>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [provideIcons({ lucideBell, lucideRefreshCcw })],\n})\nexport class ZardDemoEmptyBackgroundComponent {}\n"
-    },
-    {
-      "name": "custom-image.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardAvatarComponent } from '@/shared/components/avatar';\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardEmptyComponent } from '@/shared/components/empty';\n\n@Component({\n  selector: 'z-demo-empty-custom-image',\n  imports: [ZardAvatarComponent, ZardButtonComponent, ZardEmptyComponent],\n  template: `\n    <z-empty\n      [zImage]=\"customImage\"\n      zTitle=\"User Offline\"\n      zDescription=\"This user is currently offline. You can leave a message to notify them or try again later.\"\n      [zActions]=\"[actionPrimary]\"\n    />\n\n    <ng-template #customImage>\n      <z-avatar\n        zSize=\"lg\"\n        zSrc=\"images/avatar/imgs/avatar_image.jpg\"\n        zFallback=\"CN\"\n        zAlt=\"User avatar\"\n        class=\"grayscale\"\n      />\n    </ng-template>\n\n    <ng-template #actionPrimary>\n      <button type=\"button\" z-button>Leave Message</button>\n    </ng-template>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoEmptyCustomImageComponent {}\n"
-    },
-    {
-      "name": "input-group.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideSearch } from '@ng-icons/lucide';\n\nimport { ZardEmptyComponent } from '@/shared/components/empty';\nimport { ZardInputComponent } from '@/shared/components/input/input.component';\nimport { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';\nimport { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';\n\n@Component({\n  selector: 'z-demo-empty-input-group',\n  imports: [ZardEmptyComponent, ZardInputComponent, ZardKbdComponent, NgIcon, ...ZardInputGroupImports],\n  template: `\n    <z-empty\n      class=\"[&_[data-slot=empty-content]]:flex-col\"\n      zTitle=\"404 - Not Found\"\n      zDescription=\"The page you're looking for doesn't exist. Try searching for what you need below.\"\n      [zActions]=\"[searchInput, supportLink]\"\n    >\n      <ng-template #searchInput>\n        <z-input-group class=\"sm:w-3/4\">\n          <input z-input placeholder=\"Try searching for pages...\" />\n          <z-input-group-addon>\n            <ng-icon name=\"lucideSearch\" class=\"text-muted-foreground\" />\n          </z-input-group-addon>\n          <z-input-group-addon zAlign=\"inline-end\">\n            <z-kbd>/</z-kbd>\n          </z-input-group-addon>\n        </z-input-group>\n      </ng-template>\n\n      <ng-template #supportLink>\n        <p\n          class=\"text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4\"\n        >\n          Need help?\n          <a href=\"#\">Contact support</a>\n        </p>\n      </ng-template>\n    </z-empty>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [provideIcons({ lucideSearch })],\n})\nexport class ZardDemoEmptyInputGroupComponent {}\n"
-    },
-    {
-      "name": "outline.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { provideIcons } from '@ng-icons/core';\nimport { lucideCloud } from '@ng-icons/lucide';\n\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardEmptyComponent } from '@/shared/components/empty';\n\n@Component({\n  selector: 'z-demo-empty-outline',\n  imports: [ZardButtonComponent, ZardEmptyComponent],\n  template: `\n    <z-empty\n      class=\"border border-dashed\"\n      zIcon=\"lucideCloud\"\n      zTitle=\"Cloud Storage Empty\"\n      zDescription=\"Upload files to your cloud storage to access them anywhere.\"\n      [zActions]=\"[actionPrimary]\"\n    >\n      <ng-template #actionPrimary>\n        <button type=\"button\" z-button zType=\"outline\" zSize=\"sm\">Upload Files</button>\n      </ng-template>\n    </z-empty>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [provideIcons({ lucideCloud })],\n})\nexport class ZardDemoEmptyOutlineComponent {}\n"
-    },
-    {
-      "name": "preview.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideArrowUpRight, lucideFolderCode } from '@ng-icons/lucide';\n\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardEmptyComponent } from '@/shared/components/empty';\n\n@Component({\n  selector: 'z-demo-empty-preview',\n  imports: [ZardButtonComponent, ZardEmptyComponent, NgIcon],\n  template: `\n    <z-empty\n      zIcon=\"lucideFolderCode\"\n      zTitle=\"No Projects Yet\"\n      zDescription=\"You haven't created any projects yet. Get started by creating your first project.\"\n      [zActions]=\"[actionPrimary, actionSecondary]\"\n    >\n      <ng-template #actionPrimary>\n        <button type=\"button\" z-button>Create Project</button>\n      </ng-template>\n\n      <ng-template #actionSecondary>\n        <button type=\"button\" z-button zType=\"outline\">Import Project</button>\n      </ng-template>\n\n      <a z-button zType=\"link\" zSize=\"sm\" class=\"text-muted-foreground\" href=\"#\">\n        Learn More\n        <ng-icon name=\"lucideArrowUpRight\" />\n      </a>\n    </z-empty>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  viewProviders: [\n    provideIcons({\n      lucideArrowUpRight,\n      lucideFolderCode,\n    }),\n  ],\n})\nexport class ZardDemoEmptyPreviewComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [
+        "lucideArrowUpRight",
+        "lucideBell",
+        "lucideCloud",
+        "lucideFolderCode",
+        "lucidePlus",
+        "lucideRefreshCcw",
+        "lucideSearch"
+      ],
+      "tokens": [
+        "arrow-up-right",
+        "bell",
+        "cloud",
+        "folder-code",
+        "plus",
+        "refresh-ccw",
+        "search"
+      ]
     }
-  ]
+  }
 }
