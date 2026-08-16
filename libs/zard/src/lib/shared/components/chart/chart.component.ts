@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
+  afterRenderEffect,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
@@ -16,6 +17,7 @@ import {
   PendingTasks,
   PLATFORM_ID,
   signal,
+  untracked,
   ViewEncapsulation,
 } from '@angular/core';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
@@ -193,6 +195,7 @@ export class ZardChartComponent implements ZardChartHost {
     this.watchCanvasSize();
     this.watchVisibility();
     this.renderOnServer();
+    this.restoreHiddenSeries();
 
     if (this.isBrowser) {
       effect(() => {
@@ -206,7 +209,9 @@ export class ZardChartComponent implements ZardChartHost {
 
   /** The chart inherits the page's typeface, so the arc labels have to measure with it too. */
   private hostFontFamily(): string {
-    if (!this.isBrowser || typeof globalThis.getComputedStyle !== 'function') return 'sans-serif';
+    if (!this.isBrowser || typeof globalThis.getComputedStyle !== 'function') {
+      return 'sans-serif';
+    }
 
     try {
       return globalThis.getComputedStyle(this.elementRef.nativeElement as HTMLElement).fontFamily || 'sans-serif';
@@ -216,7 +221,9 @@ export class ZardChartComponent implements ZardChartHost {
   }
 
   private watchCanvasSize(): void {
-    if (!this.isBrowser || typeof globalThis.ResizeObserver !== 'function') return;
+    if (!this.isBrowser || typeof globalThis.ResizeObserver !== 'function') {
+      return;
+    }
 
     const host = this.elementRef.nativeElement as HTMLElement;
     const observer = new globalThis.ResizeObserver(() =>
@@ -240,7 +247,9 @@ export class ZardChartComponent implements ZardChartHost {
 
     const observer = new globalThis.IntersectionObserver(
       entries => {
-        if (!entries.some(entry => entry.isIntersecting)) return;
+        if (!entries.some(entry => entry.isIntersecting)) {
+          return;
+        }
         this.seen.set(true);
         observer.disconnect();
       },
@@ -261,7 +270,9 @@ export class ZardChartComponent implements ZardChartHost {
   }
 
   private watchMedia(query: string, apply: (matches: boolean) => void): void {
-    if (!this.isBrowser || typeof globalThis.matchMedia !== 'function') return;
+    if (!this.isBrowser || typeof globalThis.matchMedia !== 'function') {
+      return;
+    }
 
     const media = globalThis.matchMedia(query);
     apply(media.matches);
@@ -285,7 +296,9 @@ export class ZardChartComponent implements ZardChartHost {
   /** Flattens the declarative `z-chart-tooltip` child into plain data for the builder. */
   private readonly tooltipContext = computed<ZardChartBuildContext['tooltip']>(() => {
     const tooltip = this.tooltipRef();
-    if (!tooltip) return null;
+    if (!tooltip) {
+      return null;
+    }
 
     return {
       indicator: tooltip.zIndicator(),
@@ -375,7 +388,9 @@ export class ZardChartComponent implements ZardChartHost {
    * Angular waits on the pending task before serialising the page.
    */
   private renderOnServer(): void {
-    if (this.isBrowser) return;
+    if (this.isBrowser) {
+      return;
+    }
 
     this.pendingTasks.run(async () => {
       const { zardEcharts } = await import('./chart-echarts.registry');
@@ -388,7 +403,9 @@ export class ZardChartComponent implements ZardChartHost {
   protected readonly hostRole = computed(() => (this.zAccessibility() ? 'img' : null));
 
   protected readonly ariaLabel = computed(() => {
-    if (!this.zAccessibility()) return null;
+    if (!this.zAccessibility()) {
+      return null;
+    }
 
     const config = this.zConfig();
     const labels = normalizeSeries(this.zSeries())
@@ -409,10 +426,37 @@ export class ZardChartComponent implements ZardChartHost {
     this.zChartInit.emit(instance);
   }
 
+  /**
+   * Puts the toggled-off series back after a fresh option is applied.
+   *
+   * `ngx-echarts` hands every `[options]` change to `setOption(option, true)`, and a `notMerge`
+   * update drops the legend selection — a theme switch would bring a hidden series back on screen
+   * while its legend entry still reads `aria-pressed="false"`. This runs after the DOM is written,
+   * so the directive has already applied the option, and it only tracks `option()`: the toggle
+   * itself is dispatched by `toggleSeries`, and re-running here would be a second, wasted redraw.
+   */
+  private restoreHiddenSeries(): void {
+    afterRenderEffect(() => {
+      this.option();
+
+      const instance = untracked(() => this.chartInstance());
+      const hidden = untracked(() => this.hiddenSeries());
+      if (!instance || hidden.size === 0) {
+        return;
+      }
+
+      for (const name of hidden) {
+        instance.dispatchAction({ type: 'legendUnSelect', name });
+      }
+    });
+  }
+
   /** `z-chart-tooltip[zDefaultIndex]` opens the tooltip on that point without a pointer. */
   private showDefaultTooltip(instance: EChartsType): void {
     const dataIndex = this.tooltipRef()?.zDefaultIndex();
-    if (dataIndex === undefined || Number.isNaN(dataIndex)) return;
+    if (dataIndex === undefined || Number.isNaN(dataIndex)) {
+      return;
+    }
 
     // Cleared on destroy: the chart can be torn down in the same tick it was created — a route
     // change, a category switch — and ECharts throws when an action reaches a disposed instance.

@@ -34,14 +34,14 @@ import type { ZardChartConfig, ZardChartOptionOverride, ZardChartSeries } from '
       <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
         <div class="flex items-center gap-2 leading-none font-medium">
           Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+          <ng-icon name="lucideTrendingUp" class="size-4" />
         </div>
         <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
       </z-card-footer>
     </z-card>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideIcons({ lucideTrendingUp })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoChartBarCustomLabelComponent {
   protected readonly chartConfig: ZardChartConfig = {

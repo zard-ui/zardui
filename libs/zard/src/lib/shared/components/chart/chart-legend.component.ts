@@ -31,7 +31,7 @@ import {
         (click)="toggle(entry.name)"
       >
         @if (entry.icon) {
-          <ng-icon [name]="entry.icon" class="h-3 w-3" />
+          <ng-icon [name]="entry.icon" class="size-3" />
         } @else {
           <span [class]="swatchClasses()" [style.background-color]="entry.color"></span>
         }

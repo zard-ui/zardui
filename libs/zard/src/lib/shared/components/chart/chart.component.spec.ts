@@ -142,7 +142,7 @@ function optionOf(chart: ZardChartComponent): EChartsOption {
 @Component({
   imports: [ZardChartComponent, ZardChartTooltipComponent, ZardChartLegendComponent],
   template: `
-    <z-chart [zConfig]="config" [zData]="data" [zType]="'bar'" [zSeries]="series" zXAxisKey="month" class="h-[250px]">
+    <z-chart [zConfig]="config" [zData]="data" zType="bar" [zSeries]="series" zXAxisKey="month" class="h-[250px]">
       <z-chart-tooltip zIndicator="dot" />
       <z-chart-legend />
     </z-chart>

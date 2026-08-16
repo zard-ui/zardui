@@ -64,7 +64,9 @@ export function escapeHtml(value: unknown): string {
 }
 
 function toNumber(value: unknown): number | null {
-  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : null;
+  }
   if (typeof value === 'string' && value.trim() !== '') {
     const parsed = Number(value);
     return Number.isFinite(parsed) ? parsed : null;
@@ -78,7 +80,9 @@ function readValue(param: ZardChartTooltipParam): number | null {
   if (Array.isArray(value)) {
     for (let index = value.length - 1; index >= 0; index--) {
       const parsed = toNumber(value[index]);
-      if (parsed !== null) return parsed;
+      if (parsed !== null) {
+        return parsed;
+      }
     }
     return null;
   }
@@ -89,8 +93,12 @@ function readValue(param: ZardChartTooltipParam): number | null {
 }
 
 function formatValue(value: number | null, name: string, ctx: ZardChartTooltipContext): string {
-  if (value === null) return '';
-  if (ctx.valueFormatter) return ctx.valueFormatter(value, name);
+  if (value === null) {
+    return '';
+  }
+  if (ctx.valueFormatter) {
+    return ctx.valueFormatter(value, name);
+  }
   return value.toLocaleString();
 }
 
@@ -123,7 +131,9 @@ function radarRows(items: ZardChartTooltipParam[], ctx: ZardChartTooltipContext)
 
     return values.flatMap((raw, index) => {
       const parsed = toNumber(raw);
-      if (parsed === null) return [];
+      if (parsed === null) {
+        return [];
+      }
 
       const name = indicators[index] ?? '';
       const label = ctx.config[name]?.label ?? name;
@@ -145,7 +155,9 @@ function itemLabel(param: ZardChartTooltipParam, ctx: ZardChartTooltipContext): 
 
 function headerLabel(params: ZardChartTooltipParam[], ctx: ZardChartTooltipContext): string {
   const [first] = params;
-  if (!first) return '';
+  if (!first) {
+    return '';
+  }
 
   const raw =
     ctx.labelKey && ctx.config[ctx.labelKey]?.label
@@ -159,16 +171,20 @@ function headerLabel(params: ZardChartTooltipParam[], ctx: ZardChartTooltipConte
 }
 
 function indicatorHtml(color: string, ctx: ZardChartTooltipContext, nestLabel: boolean): string {
-  if (ctx.hideIndicator) return '';
+  if (ctx.hideIndicator) {
+    return '';
+  }
 
   const classes = mergeClasses(
     'shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)',
     INDICATOR_CLASSES[ctx.indicator],
     nestLabel && ctx.indicator === 'dashed' ? 'my-0.5' : '',
   );
-  const style = `--color-bg: ${escapeHtml(color)}; --color-border: ${escapeHtml(color)};`;
+  // The two custom properties the classes above read the swatch color from.
+  const swatch = escapeHtml(color);
+  const declarations = [`--color-bg: ${swatch}`, `--color-border: ${swatch}`].join('; ');
 
-  return `<div class="${classes}" style="${style}"></div>`;
+  return `<div class="${classes}" style="${declarations};"></div>`;
 }
 
 /**
@@ -181,34 +197,40 @@ export function buildTooltipHtml(
   ctx: ZardChartTooltipContext,
 ): string {
   const items = (Array.isArray(params) ? params : [params]).filter(Boolean);
-  if (items.length === 0) return '';
+  if (items.length === 0) {
+    return '';
+  }
 
   const radar = isRadar(items, ctx);
   const entries: TooltipRow[] = radar ? radarRows(items, ctx) : items.map(param => rowOf(param, ctx));
 
-  if (entries.length === 0) return '';
+  if (entries.length === 0) {
+    return '';
+  }
 
   // A radar is headed by the series it belongs to; everything else by its category.
   const label = radar ? (items[0]?.seriesName ?? '') : headerLabel(items, ctx);
   const nestLabel = entries.length === 1 && ctx.indicator !== 'dot';
   const showHeader = !ctx.hideLabel && !nestLabel && label !== '';
 
+  // Resolved once: the heading reads the same whether it sits above the rows or inside one, and
+  // a class carrying a quote would otherwise close the attribute and corrupt the markup.
+  const labelClasses = escapeHtml(mergeClasses('font-medium', ctx.labelClass));
+
   const rows = entries
     .map(({ name, color, value }) => {
       const rowClasses = mergeClasses(ROW_CLASSES, ctx.indicator === 'dot' ? 'items-center' : '');
       const innerAlign = nestLabel ? 'items-end' : 'items-center';
       const nestedLabel =
-        nestLabel && !ctx.hideLabel && label !== ''
-          ? `<div class="font-medium ${ctx.labelClass}">${escapeHtml(label)}</div>`
-          : '';
+        nestLabel && !ctx.hideLabel && label !== '' ? `<div class="${labelClasses}">${escapeHtml(label)}</div>` : '';
 
       return `<div class="${rowClasses}">${indicatorHtml(color, ctx, nestLabel)}<div class="flex flex-1 justify-between leading-none ${innerAlign}"><div class="grid gap-1.5">${nestedLabel}<span class="text-muted-foreground">${escapeHtml(name)}</span></div><span class="font-mono font-medium tabular-nums text-foreground">${escapeHtml(value)}</span></div></div>`;
     })
     .join('');
 
-  const header = showHeader
-    ? `<div class="${mergeClasses('font-medium', ctx.labelClass)}">${escapeHtml(label)}</div>`
-    : '';
+  const header = showHeader ? `<div class="${labelClasses}">${escapeHtml(label)}</div>` : '';
+  const containerClasses = escapeHtml(mergeClasses(CONTAINER_CLASSES, ctx.class));
 
-  return `<div class="${mergeClasses(CONTAINER_CLASSES, ctx.class)}">${header}<div class="grid gap-1.5">${rows}</div></div>`;
+  // `role="tooltip"` is what a screen reader — and a test — recognises this box by.
+  return `<div role="tooltip" class="${containerClasses}">${header}<div class="grid gap-1.5">${rows}</div></div>`;
 }

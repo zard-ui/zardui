@@ -52,7 +52,7 @@ const CATEGORY_CHROME: Record<ChartCategory, { icon: string; label: string }> = 
             [code]="example.codeData.code"
             class="text-foreground hover:bg-muted focus-visible:ring-ring flex h-6 w-6 cursor-pointer items-center justify-center rounded-[6px] bg-transparent transition-colors focus-visible:ring-2 focus-visible:outline-none [&_img]:size-3"
           />
-          <z-separator zOrientation="vertical" class="mx-0 hidden !h-4 md:flex" />
+          <z-separator zOrientation="vertical" class="mx-0 hidden h-4! md:flex" />
           <button z-button zType="outline" zSize="sm" type="button" (click)="viewCode()">View Code</button>
         </div>
       </div>

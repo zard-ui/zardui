@@ -39,11 +39,15 @@ let normalizer: CanvasRenderingContext2D | null | undefined;
 const normalizedColors = new Map<string, string>();
 
 function normalizerContext(): CanvasRenderingContext2D | null {
-  if (normalizer !== undefined) return normalizer;
+  if (normalizer !== undefined) {
+    return normalizer;
+  }
 
   try {
     const canvas = globalThis.document?.createElement('canvas');
-    if (canvas) canvas.width = canvas.height = 1;
+    if (canvas) {
+      canvas.width = canvas.height = 1;
+    }
     normalizer = canvas?.getContext('2d', { willReadFrequently: true }) ?? null;
   } catch {
     normalizer = null;
@@ -63,13 +67,19 @@ function normalizerContext(): CanvasRenderingContext2D | null {
  */
 export function toCanvasColor(value: string): string {
   const raw = (value ?? '').trim();
-  if (!raw || raw.startsWith('#') || raw.startsWith('rgb')) return raw;
+  if (!raw || raw.startsWith('#') || raw.startsWith('rgb')) {
+    return raw;
+  }
 
   const cached = normalizedColors.get(raw);
-  if (cached !== undefined) return cached;
+  if (cached !== undefined) {
+    return cached;
+  }
 
   const context = normalizerContext();
-  if (!context) return raw;
+  if (!context) {
+    return raw;
+  }
 
   context.clearRect(0, 0, 1, 1);
   // An unparseable colour leaves `fillStyle` on the transparent sentinel, painting nothing.
@@ -103,15 +113,23 @@ function readCssVariable(host: HTMLElement | null | undefined, token: string): s
 
 function readCssColor(host: HTMLElement | null | undefined, value: string, depth: number): string {
   const raw = (value ?? '').trim();
-  if (!raw || depth >= MAX_VAR_DEPTH) return raw;
+  if (!raw || depth >= MAX_VAR_DEPTH) {
+    return raw;
+  }
 
   const match = VAR_PATTERN.exec(raw);
-  if (!match) return raw;
+  if (!match) {
+    return raw;
+  }
 
   const [, token, fallback] = match;
   const computed = readCssVariable(host, token);
-  if (computed) return readCssColor(host, computed, depth + 1);
-  if (fallback) return readCssColor(host, fallback, depth + 1);
+  if (computed) {
+    return readCssColor(host, computed, depth + 1);
+  }
+  if (fallback) {
+    return readCssColor(host, fallback, depth + 1);
+  }
 
   return raw;
 }
@@ -140,12 +158,16 @@ export function withAlpha(color: string, alpha: number): string {
 
 function applyAlpha(color: string, alpha: number): string {
   const raw = (color ?? '').trim();
-  if (!raw) return raw;
+  if (!raw) {
+    return raw;
+  }
 
   const clamped = Math.min(1, Math.max(0, alpha));
 
   const hex = HEX_PATTERN.exec(raw);
-  if (hex) return hexWithAlpha(hex[1], clamped);
+  if (hex) {
+    return hexWithAlpha(hex[1], clamped);
+  }
 
   const fn = FUNCTION_PATTERN.exec(raw);
   if (fn) {
@@ -191,7 +213,9 @@ export function resolveChartColors(
   for (const [key, item] of Object.entries(config ?? {})) {
     const themed = isDark ? item?.theme?.dark : item?.theme?.light;
     const declared = themed ?? item?.color;
-    if (!declared) continue;
+    if (!declared) {
+      continue;
+    }
 
     resolved[key] = resolveCssColor(host, declared);
   }

@@ -10,6 +10,7 @@
     "@angular/router": "^21.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "echarts": "^6.1.0",
     "embla-carousel": "^8.6.0",
     "embla-carousel-angular": "^21.0.0",
     "embla-carousel-autoplay": "^8.6.0",
@@ -17,6 +18,7 @@
     "embla-carousel-wheel-gestures": "^8.1.0",
     "@ng-icons/core": "^33.1.0",
     "@ng-icons/lucide": "^33.1.0",
+    "ngx-echarts": "^21.0.0",
     "ngx-sonner": "^3.1.0",
     "rxjs": "^7.8.2",
     "tailwind-merge": "^3.4.0"

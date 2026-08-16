@@ -8,8 +8,8 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
   imports: [ZardCardImports, ZardChartImports],
   template: `
     <z-card class="w-full py-0">
-      <z-card-header class="flex flex-col items-stretch border-b !p-0 sm:flex-row">
-        <div class="flex flex-1 flex-col justify-center gap-1 px-6 pt-4 pb-3 sm:!py-0">
+      <z-card-header class="flex flex-col items-stretch border-b p-0! sm:flex-row">
+        <div class="flex flex-1 flex-col justify-center gap-1 px-6 pt-4 pb-3 sm:py-0!">
           <z-card-title zTitle="Bar Chart - Interactive" />
           <z-card-description zDescription="Showing total visitors for the last 3 months" />
         </div>
@@ -18,6 +18,7 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
             <button
               type="button"
               [attr.data-active]="active() === option.key"
+              [attr.aria-pressed]="active() === option.key"
               class="data-[active=true]:bg-muted/50 relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6"
               (click)="select(option.key)"
             >
@@ -160,10 +161,10 @@ export class ZardDemoChartBarInteractiveComponent {
   protected readonly series = computed<ZardChartSeries[]>(() => [{ dataKey: this.active() }]);
 
   protected readonly shortDate = (value: string) =>
-    new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    new Date(`${value}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
   protected readonly longDate = (value: string) =>
-    new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    new Date(`${value}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
   protected select(key: string): void {
     this.active.set(key);

@@ -30,7 +30,9 @@ type TextElement = Record<string, unknown>;
 let ruler: CanvasRenderingContext2D | null | undefined;
 
 function measureContext(): CanvasRenderingContext2D | null {
-  if (ruler !== undefined) return ruler;
+  if (ruler !== undefined) {
+    return ruler;
+  }
 
   try {
     ruler = globalThis.document?.createElement('canvas').getContext('2d') ?? null;
@@ -44,7 +46,9 @@ function measureContext(): CanvasRenderingContext2D | null {
 /** Lays one label along one ring, a glyph at a time. */
 function glyphsOf(text: string, radius: number, geometry: ZardArcLabelGeometry): TextElement[] {
   const context = measureContext();
-  if (!context || radius <= 0) return [];
+  if (!context || radius <= 0) {
+    return [];
+  }
 
   context.font = geometry.font;
   const sign = geometry.ascending ? 1 : -1;
@@ -53,7 +57,7 @@ function glyphsOf(text: string, radius: number, geometry: ZardArcLabelGeometry):
   let travelled = (START_OFFSET_DEGREES * Math.PI * radius) / 180;
 
   return characters.map(character => {
-    const width = context.measureText(character).width;
+    const { width } = context.measureText(character);
     const angle = geometry.startAngle + ((sign * (travelled + width / 2)) / radius) * (180 / Math.PI);
     const radians = (angle * Math.PI) / 180;
     travelled += width;
@@ -87,7 +91,9 @@ export function buildArcLabels(texts: readonly string[], geometry: ZardArcLabelG
 
 /** ECharts sizes a polar radius against half the shorter side; percentages resolve the same way. */
 export function resolveRadius(value: string | number | undefined, base: number, fallback: number): number {
-  if (typeof value === 'number') return value;
+  if (typeof value === 'number') {
+    return value;
+  }
   if (typeof value === 'string' && value.endsWith('%')) {
     const percent = Number.parseFloat(value);
     return Number.isFinite(percent) ? (percent / 100) * base : fallback;

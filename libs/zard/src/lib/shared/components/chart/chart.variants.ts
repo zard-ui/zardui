@@ -52,4 +52,4 @@ export const chartLegendItemVariants = cva(
   },
 );
 
-export const chartLegendSwatchVariants = cva('h-2 w-2 shrink-0 rounded-[2px]');
+export const chartLegendSwatchVariants = cva('size-2 shrink-0 rounded-[2px]');

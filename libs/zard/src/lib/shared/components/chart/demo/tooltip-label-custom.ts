@@ -51,5 +51,6 @@ export class ZardDemoChartTooltipLabelCustomComponent {
     { dataKey: 'swimming', radius: [4, 4, 0, 0] },
   ];
 
-  protected readonly weekday = (value: string) => new Date(value).toLocaleDateString('en-US', { weekday: 'short' });
+  protected readonly weekday = (value: string) =>
+    new Date(`${value}T00:00:00`).toLocaleDateString('en-US', { weekday: 'short' });
 }

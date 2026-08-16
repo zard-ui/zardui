@@ -32,8 +32,8 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
       </z-card-content>
     </z-card>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideIcons({ lucideFootprints, lucideWaves })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoChartTooltipIconsComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -55,5 +55,6 @@ export class ZardDemoChartTooltipIconsComponent {
     { dataKey: 'swimming', radius: [4, 4, 0, 0] },
   ];
 
-  protected readonly weekday = (value: string) => new Date(value).toLocaleDateString('en-US', { weekday: 'short' });
+  protected readonly weekday = (value: string) =>
+    new Date(`${value}T00:00:00`).toLocaleDateString('en-US', { weekday: 'short' });
 }

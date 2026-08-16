@@ -18,7 +18,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
           @for (row of chartData; track row.month) {
             <z-select-item [zValue]="row.month" class="rounded-lg">
               <span class="flex items-center gap-2 text-xs">
-                <span class="flex h-3 w-3 shrink-0 rounded-xs" [style.background-color]="row.fill"></span>
+                <span class="flex size-3 shrink-0 rounded-xs" [style.background-color]="row.fill"></span>
                 {{ chartConfig[row.month].label }}
               </span>
             </z-select-item>

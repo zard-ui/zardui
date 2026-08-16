@@ -28,7 +28,7 @@ test.describe('Chart component', () => {
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
 
     // ECharts appends its tooltip container to the chart element once it is shown.
-    const tooltip = chart.locator('.tabular-nums').first();
+    const tooltip = chart.getByRole('tooltip').first();
     await expect(tooltip).toBeVisible({ timeout: 10_000 });
   });
 

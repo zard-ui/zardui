@@ -39,7 +39,9 @@ export function renderChartToSvg(
   width: number,
   height: number,
 ): string | null {
-  if (!api || typeof api.init !== 'function') return null;
+  if (!api || typeof api.init !== 'function') {
+    return null;
+  }
 
   let instance: ZardEchartsSsrInstance | undefined;
 
