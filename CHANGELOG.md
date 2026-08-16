@@ -1,3 +1,13 @@
+## 1.0.0-beta.106 (2026-08-16)
+
+### 🐛 Bug Fixes
+
+- **og:** restore dynamic og image generation ([#696](https://github.com/zard-ui/zardui/pull/696))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.105 (2026-08-16)
 
 ### ✨ Features

@@ -30,12 +30,18 @@ function createOgMarkup(title: string, description: string): any {
             children: [
               {
                 type: 'div',
-                props: { style: { width: '8%', height: '100%', borderRight: '1px solid #333333' }, children: [] },
+                props: {
+                  style: { display: 'flex', width: '8%', height: '100%', borderRight: '1px solid #333333' },
+                  children: [],
+                },
               },
-              { type: 'div', props: { style: { flex: 1, height: '100%' }, children: [] } },
+              { type: 'div', props: { style: { display: 'flex', flex: 1, height: '100%' }, children: [] } },
               {
                 type: 'div',
-                props: { style: { width: '8%', height: '100%', borderLeft: '1px solid #333333' }, children: [] },
+                props: {
+                  style: { display: 'flex', width: '8%', height: '100%', borderLeft: '1px solid #333333' },
+                  children: [],
+                },
               },
             ],
           },
@@ -52,7 +58,10 @@ function createOgMarkup(title: string, description: string): any {
             children: [
               {
                 type: 'div',
-                props: { style: { width: '8%', height: '100%', borderRight: '1px solid #333333' }, children: [] },
+                props: {
+                  style: { display: 'flex', width: '8%', height: '100%', borderRight: '1px solid #333333' },
+                  children: [],
+                },
               },
               {
                 type: 'div',
@@ -92,7 +101,7 @@ function createOgMarkup(title: string, description: string): any {
                                 color: '#a3a3a3',
                                 marginTop: 40,
                                 lineHeight: 1.4,
-                                maxWidth: '42ch',
+                                maxWidth: 700,
                               },
                               children: description,
                             },
@@ -137,7 +146,10 @@ function createOgMarkup(title: string, description: string): any {
               },
               {
                 type: 'div',
-                props: { style: { width: '8%', height: '100%', borderLeft: '1px solid #333333' }, children: [] },
+                props: {
+                  style: { display: 'flex', width: '8%', height: '100%', borderLeft: '1px solid #333333' },
+                  children: [],
+                },
               },
             ],
           },
@@ -155,12 +167,18 @@ function createOgMarkup(title: string, description: string): any {
             children: [
               {
                 type: 'div',
-                props: { style: { width: '8%', height: '100%', borderRight: '1px solid #333333' }, children: [] },
+                props: {
+                  style: { display: 'flex', width: '8%', height: '100%', borderRight: '1px solid #333333' },
+                  children: [],
+                },
               },
-              { type: 'div', props: { style: { flex: 1, height: '100%' }, children: [] } },
+              { type: 'div', props: { style: { display: 'flex', flex: 1, height: '100%' }, children: [] } },
               {
                 type: 'div',
-                props: { style: { width: '8%', height: '100%', borderLeft: '1px solid #333333' }, children: [] },
+                props: {
+                  style: { display: 'flex', width: '8%', height: '100%', borderLeft: '1px solid #333333' },
+                  children: [],
+                },
               },
             ],
           },
@@ -176,10 +194,10 @@ export default async function handler(request: Request) {
     const title = searchParams.get('title') || 'Zard UI';
     const description = searchParams.get('description') || 'The @shadcn/ui alternative for Angular';
 
-    const fontUrl = new URL('/fonts/GeistMono-SemiBold.woff', request.url);
+    const fontUrl = new URL('/fonts/GeistMono-SemiBold.ttf', request.url);
     const fontData = await fetch(fontUrl).then(res => res.arrayBuffer());
 
-    return new ImageResponse(createOgMarkup(title, description), {
+    const image = new ImageResponse(createOgMarkup(title, description), {
       width: 1200,
       height: 630,
       fonts: [
@@ -190,7 +208,15 @@ export default async function handler(request: Request) {
           weight: 600,
         },
       ],
+    });
+
+    // Buffer the stream: rendering errors happen while it is consumed, so streaming
+    // the response straight back would answer 200 with an empty body and cache it.
+    const png = await image.arrayBuffer();
+
+    return new Response(png, {
       headers: {
+        'Content-Type': 'image/png',
         'Cache-Control': 'public, s-maxage=2592000, max-age=604800',
       },
     });
