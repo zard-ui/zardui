@@ -51,12 +51,36 @@ class DocsService {
       if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
 
       const text = await response.text();
+
+      // O site é uma SPA: um caminho que não existe volta 200 com o HTML do
+      // próprio site, não 404. Sem esta checagem, pedir a documentação de um
+      // componente inexistente entregava cinquenta kB de markup ao modelo, que
+      // é pior do que não responder — ele gasta contexto e não diz o que houve.
+      if (!isMarkdown(response, text)) return null;
+
       this.cache.set(name, { text, timestamp: Date.now() });
       return text;
     } finally {
       clearTimeout(timeout);
     }
   }
+}
+
+/**
+ * Se a resposta é mesmo a página em markdown.
+ *
+ * O content-type decide quando existe — o site serve `text/markdown` para os
+ * `.md` e `text/html` para a SPA. Quando não vem, o começo do corpo desempata:
+ * a página gerada abre com o front matter ou com um cabeçalho, nunca com uma
+ * tag.
+ */
+function isMarkdown(response: Response, body: string): boolean {
+  const type = response.headers.get('content-type') ?? '';
+
+  if (type.includes('text/markdown') || type.includes('text/plain')) return true;
+  if (type.includes('text/html')) return false;
+
+  return !/^\s*<(!doctype|html)/i.test(body);
 }
 
 /**
