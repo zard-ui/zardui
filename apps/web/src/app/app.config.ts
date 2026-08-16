@@ -8,6 +8,7 @@ import {
 } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
+import { provideZardCharts } from '@zard/components/chart/chart-echarts.provider';
 import { provideZard } from '@zard/core/provider/providezard';
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
@@ -27,6 +28,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(withFetch()),
     provideZard(),
+    provideZardCharts(),
     provideAppInitializer(() => {
       inject(ZardDarkMode).init();
       return inject(GithubService).init();

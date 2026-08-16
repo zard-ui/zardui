@@ -27,6 +27,19 @@ interface RegisterConfig {
 }
 
 const REGISTER_CONFIGS: Record<string, RegisterConfig> = {
+  chart: {
+    title: 'app.config.ts',
+    language: 'angular-ts',
+    highlightLines: [2, 6],
+    code: `import { ApplicationConfig } from '@angular/core';
+import { provideZardCharts } from '@/shared/components/chart/chart-echarts.provider';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZardCharts(),
+  ],
+};`,
+  },
   sonner: {
     title: 'app.component.ts',
     language: 'angular-ts',
@@ -285,6 +298,10 @@ function analyzeComponentDependencies(componentDir: string, componentName: strin
       npmPackage: 'embla-carousel-angular',
       type: 'external',
     },
+    // `'echarts'` is a substring of `'ngx-echarts'`, so both checks match the chart component.
+    // That is intentional: the chart needs the wrapper and the engine.
+    { pattern: 'ngx-echarts', name: 'ngx-echarts', npmPackage: 'ngx-echarts', type: 'external' },
+    { pattern: 'echarts', name: 'echarts', npmPackage: 'echarts', type: 'external' },
   ];
 
   for (const check of checks) {

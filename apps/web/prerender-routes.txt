@@ -2,6 +2,7 @@
 /docs
 /docs/components
 /blocks
+/charts
 /themes
 /docs/introduction
 /docs/components
@@ -36,6 +37,7 @@
 /docs/components/calendar
 /docs/components/card
 /docs/components/carousel
+/docs/components/chart
 /docs/components/checkbox
 /docs/components/combobox
 /docs/components/command

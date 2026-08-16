@@ -157,6 +157,9 @@
     "folder-plus": {
       "lucide": "lucideFolderPlus"
     },
+    "footprints": {
+      "lucide": "lucideFootprints"
+    },
     "git-branch": {
       "lucide": "lucideGitBranch"
     },
@@ -289,6 +292,9 @@
     "trash-2": {
       "lucide": "lucideTrash2"
     },
+    "trending-up": {
+      "lucide": "lucideTrendingUp"
+    },
     "triangle-alert": {
       "lucide": "lucideTriangleAlert"
     },
@@ -306,6 +312,9 @@
     },
     "volume-off": {
       "lucide": "lucideVolumeOff"
+    },
+    "waves": {
+      "lucide": "lucideWaves"
     },
     "x": {
       "lucide": "lucideX"

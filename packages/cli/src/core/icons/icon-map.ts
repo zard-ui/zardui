@@ -1,22 +1,24 @@
 /**
- * A tabela de tradução entre famílias de ícones.
+ * The translation table between icon sets.
  *
- * Cada linha é um ícone pelo que ele SIGNIFICA — `check`, `chevron-down` — e
- * o valor é o símbolo que cada família exporta para ele. Hoje só existe a coluna
- * `lucide`, a única família que a biblioteca suporta; suportar outra é
- * preencher a coluna dela, e nada mais no caminho de instalação muda.
+ * Each row is an icon by what it MEANS — `check`, `chevron-down` — and the
+ * value is the symbol each set exports for it. Only the `lucide` column exists
+ * today, the one set the library supports; supporting another one means filling
+ * in its column, and nothing else along the install path changes.
  *
- * Esta é a cópia embutida na CLI. Ela é publicada em `<registry>/icons.json` e é
- * de lá que a CLI lê em execução — o arquivo aqui é o que vale quando o registry
- * não responde, e o piso a partir do qual a tabela publicada é gerada.
+ * This is the copy bundled with the CLI. It is published at
+ * `<registry>/icons.json`, and that is where the CLI reads it from at run time
+ * — the file here is what holds when the registry does not answer, and the
+ * floor the published table is generated from.
  *
- * A lista cobre todos os ícones que os componentes e os demos usam hoje. Um
- * ícone novo no código sem linha aqui é erro: `icons.spec.ts` compara esta
- * tabela com o que `libs/zard` de fato importa.
+ * The list covers every icon the components and demos use today. A new icon in
+ * the code with no row here is an error: `icons.spec.ts` compares this table
+ * against what `libs/zard` actually imports.
  *
- * Os tokens saem do nome lucide em kebab-case porque ele já é o nome semântico
- * do ícone (`lucideChevronDown` → `chevron-down`) — a chave é da tabela, não
- * da família, e continua valendo quando o lucide deixar de ser a única coluna.
+ * The tokens come from the lucide name in kebab-case because that already is
+ * the icon's semantic name (`lucideChevronDown` → `chevron-down`) — the key
+ * belongs to the table, not to the set, and stays valid once lucide is no
+ * longer the only column.
  */
 
 export const ICON_MAP: Record<string, Record<string, string>> = {
@@ -69,6 +71,7 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
   folder: { lucide: 'lucideFolder' },
   'folder-code': { lucide: 'lucideFolderCode' },
   'folder-plus': { lucide: 'lucideFolderPlus' },
+  footprints: { lucide: 'lucideFootprints' },
   'git-branch': { lucide: 'lucideGitBranch' },
   globe: { lucide: 'lucideGlobe' },
   house: { lucide: 'lucideHouse' },
@@ -113,12 +116,14 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
   terminal: { lucide: 'lucideTerminal' },
   trash: { lucide: 'lucideTrash' },
   'trash-2': { lucide: 'lucideTrash2' },
+  'trending-up': { lucide: 'lucideTrendingUp' },
   'triangle-alert': { lucide: 'lucideTriangleAlert' },
   underline: { lucide: 'lucideUnderline' },
   user: { lucide: 'lucideUser' },
   'user-round-x': { lucide: 'lucideUserRoundX' },
   users: { lucide: 'lucideUsers' },
   'volume-off': { lucide: 'lucideVolumeOff' },
+  waves: { lucide: 'lucideWaves' },
   x: { lucide: 'lucideX' },
   'zoom-in': { lucide: 'lucideZoomIn' },
   'zoom-out': { lucide: 'lucideZoomOut' },

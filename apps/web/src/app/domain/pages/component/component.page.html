@@ -22,7 +22,7 @@
           [column]="data.preview.column || false"
           [codeHeight]="data.preview.codeHeight"
           [previewHeight]="data.preview.previewHeight"
-          [fillContainer]="data.componentName === 'slider'"
+          [fillContainer]="fillsContainer(data.componentName)"
         ></z-code-box>
       } @else {
         <z-code-box
@@ -32,7 +32,7 @@
           [column]="data.examples[0].column || false"
           [codeHeight]="data.examples[0].codeHeight"
           [previewHeight]="data.examples[0].previewHeight"
-          [fillContainer]="data.componentName === 'slider'"
+          [fillContainer]="fillsContainer(data.componentName)"
         ></z-code-box>
       }
     </div>
@@ -182,7 +182,7 @@
             [fullScreen]="item.fullScreen"
             [onlyDemo]="item.onlyDemo"
             [column]="item.column"
-            [fillContainer]="data.componentName === 'slider'"
+            [fillContainer]="fillsContainer(data.componentName)"
           ></z-code-box>
         }
       </section>
