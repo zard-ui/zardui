@@ -5,7 +5,6 @@ import { CodeDisplayComponent } from '@highlight/components/code-display/code-di
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
 import type { CodeBlockData } from '@highlight/types';
 
-import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
 import { Step } from '@doc/shared/constants/install.constant';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
@@ -49,8 +48,6 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
               } @else {
                 <z-code-display [data]="asCodeBlock(stepProps()!.codeBlockData!)" />
               }
-            } @else if (stepProps()?.file?.path) {
-              <z-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></z-markdown-renderer>
             }
           </section>
         </main>
@@ -58,7 +55,7 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardButtonComponent, MarkdownRendererComponent, RouterLink, CodeDisplayComponent, CodeTabsComponent],
+  imports: [ZardButtonComponent, RouterLink, CodeDisplayComponent, CodeTabsComponent],
 })
 export class StepComponent {
   readonly stepProps = input<Step>();

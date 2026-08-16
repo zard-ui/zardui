@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "sonner",
   "type": "registry:component",
   "files": [
@@ -22,22 +23,25 @@
   "dependencies": [
     "ngx-sonner"
   ],
-  "demos": [
-    {
-      "name": "default.ts",
-      "content": "import { ChangeDetectionStrategy, Component, inject } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\nimport { ZardSonnerService } from '@/shared/components/sonner/sonner.service';\n\n@Component({\n  selector: 'zard-demo-sonner-default',\n  imports: [ZardButtonComponent],\n  template: `\n    <button type=\"button\" z-button zType=\"outline\" (click)=\"show()\">Show Toast</button>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoSonnerDefaultComponent {\n  private readonly sonner = inject(ZardSonnerService);\n\n  show() {\n    this.sonner.show('Event has been created', {\n      description: 'Sunday, December 03, 2023 at 9:00 AM',\n      action: {\n        label: 'Undo',\n        onClick: () => console.log('Undo'),\n      },\n    });\n  }\n}\n"
-    },
-    {
-      "name": "description.ts",
-      "content": "import { ChangeDetectionStrategy, Component, inject } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\nimport { ZardSonnerService } from '@/shared/components/sonner/sonner.service';\n\n@Component({\n  selector: 'zard-demo-sonner-description',\n  imports: [ZardButtonComponent],\n  template: `\n    <button type=\"button\" z-button zType=\"outline\" class=\"w-fit\" (click)=\"show()\">Show Toast</button>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoSonnerDescriptionComponent {\n  private readonly sonner = inject(ZardSonnerService);\n\n  show() {\n    this.sonner.show('Event has been created', {\n      description: 'Monday, January 3rd at 6:00pm',\n    });\n  }\n}\n"
-    },
-    {
-      "name": "position.ts",
-      "content": "import { ChangeDetectionStrategy, Component, inject } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\nimport { type ZardSonnerPosition } from '@/shared/components/sonner/sonner.component';\nimport { ZardSonnerService } from '@/shared/components/sonner/sonner.service';\n\n@Component({\n  selector: 'zard-demo-sonner-position',\n  imports: [ZardButtonComponent],\n  template: `\n    <div class=\"flex flex-wrap justify-center gap-2\">\n      <button type=\"button\" z-button zType=\"outline\" (click)=\"show('top-left')\">Top Left</button>\n      <button type=\"button\" z-button zType=\"outline\" (click)=\"show('top-center')\">Top Center</button>\n      <button type=\"button\" z-button zType=\"outline\" (click)=\"show('top-right')\">Top Right</button>\n      <button type=\"button\" z-button zType=\"outline\" (click)=\"show('bottom-left')\">Bottom Left</button>\n      <button type=\"button\" z-button zType=\"outline\" (click)=\"show('bottom-center')\">Bottom Center</button>\n      <button type=\"button\" z-button zType=\"outline\" (click)=\"show('bottom-right')\">Bottom Right</button>\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoSonnerPositionComponent {\n  private readonly sonner = inject(ZardSonnerService);\n\n  show(position: ZardSonnerPosition) {\n    this.sonner.show('Event has been created', { position });\n  }\n}\n"
-    },
-    {
-      "name": "types.ts",
-      "content": "import { ChangeDetectionStrategy, Component, inject } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\nimport { ZardSonnerService } from '@/shared/components/sonner/sonner.service';\n\n@Component({\n  selector: 'zard-demo-sonner-types',\n  imports: [ZardButtonComponent],\n  template: `\n    <div class=\"flex flex-wrap gap-2\">\n      <button type=\"button\" z-button zType=\"outline\" (click)=\"sonner.show('Event has been created')\">Default</button>\n      <button type=\"button\" z-button zType=\"outline\" (click)=\"sonner.success('Event has been created')\">Success</button>\n      <button\n        type=\"button\"\n        z-button\n        zType=\"outline\"\n        (click)=\"sonner.info('Be at the area 10 minutes before the event time')\"\n      >\n        Info\n      </button>\n      <button\n        type=\"button\"\n        z-button\n        zType=\"outline\"\n        (click)=\"sonner.warning('Event start time cannot be earlier than 8am')\"\n      >\n        Warning\n      </button>\n      <button type=\"button\" z-button zType=\"outline\" (click)=\"sonner.error('Event has not been created')\">Error</button>\n      <button type=\"button\" z-button zType=\"outline\" (click)=\"showPromise()\">Promise</button>\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoSonnerTypesComponent {\n  protected readonly sonner = inject(ZardSonnerService);\n\n  showPromise() {\n    this.sonner.promise<{ name: string }>(\n      () => new Promise(resolve => setTimeout(() => resolve({ name: 'Event' }), 2000)),\n      {\n        loading: 'Loading...',\n        success: data => `${data.name} has been created`,\n        error: 'Error',\n      },\n    );\n  }\n}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [
+      "lucideCircleCheck",
+      "lucideInfo",
+      "lucideLoader2",
+      "lucideOctagonX",
+      "lucideTriangleAlert"
+    ],
+    "tokens": [
+      "circle-check",
+      "info",
+      "loader-2",
+      "octagon-x",
+      "triangle-alert"
+    ],
+    "demos": {
+      "symbols": [],
+      "tokens": []
     }
-  ]
+  }
 }

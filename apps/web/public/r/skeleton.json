@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "skeleton",
   "type": "registry:component",
   "files": [
@@ -15,30 +16,13 @@
       "content": "export * from './skeleton.component';\nexport * from './skeleton.variants';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "avatar.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-avatar',\n  imports: [ZardSkeletonComponent],\n  template: `\n    <div class=\"flex w-fit items-center gap-4\">\n      <z-skeleton class=\"size-10 shrink-0 rounded-full\" />\n      <div class=\"grid gap-2\">\n        <z-skeleton class=\"h-4 w-[150px]\" />\n        <z-skeleton class=\"h-4 w-[100px]\" />\n      </div>\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoSkeletonAvatarComponent {}\n"
-    },
-    {
-      "name": "card.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardCardImports } from '@/shared/components/card/card.imports';\nimport { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-card',\n  imports: [ZardCardImports, ZardSkeletonComponent],\n  template: `\n    <z-card class=\"w-full min-w-xs\">\n      <z-card-header>\n        <z-card-title [zTitle]=\"titleSkeleton\" />\n        <z-card-description [zDescription]=\"descriptionSkeleton\" />\n      </z-card-header>\n      <z-card-content>\n        <z-skeleton class=\"aspect-video w-full\" />\n      </z-card-content>\n    </z-card>\n\n    <ng-template #titleSkeleton>\n      <z-skeleton class=\"h-4 w-2/3\" />\n    </ng-template>\n\n    <ng-template #descriptionSkeleton>\n      <z-skeleton class=\"h-4 w-1/2\" />\n    </ng-template>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoSkeletonCardComponent {}\n"
-    },
-    {
-      "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '../skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-default',\n  imports: [ZardSkeletonComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex items-center space-x-4\">\n      <z-skeleton class=\"size-12 rounded-full\" />\n      <div class=\"space-y-2\">\n        <z-skeleton class=\"h-4 w-[250px]\" />\n        <z-skeleton class=\"h-4 w-[200px]\" />\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoSkeletonDefaultComponent {}\n"
-    },
-    {
-      "name": "form.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-form',\n  imports: [ZardSkeletonComponent],\n  template: `\n    <div class=\"flex w-full min-w-xs flex-col gap-7\">\n      <div class=\"flex flex-col gap-3\">\n        <z-skeleton class=\"h-4 w-20\" />\n        <z-skeleton class=\"h-8 w-full\" />\n      </div>\n      <div class=\"flex flex-col gap-3\">\n        <z-skeleton class=\"h-4 w-24\" />\n        <z-skeleton class=\"h-8 w-full\" />\n      </div>\n      <z-skeleton class=\"h-8 w-24\" />\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoSkeletonFormComponent {}\n"
-    },
-    {
-      "name": "table.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-table',\n  imports: [ZardSkeletonComponent],\n  template: `\n    <div class=\"flex w-full min-w-sm flex-col gap-2\">\n      @for (row of rows; track row) {\n        <div class=\"flex gap-4\">\n          <z-skeleton class=\"h-4 flex-1\" />\n          <z-skeleton class=\"h-4 w-24\" />\n          <z-skeleton class=\"h-4 w-20\" />\n        </div>\n      }\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoSkeletonTableComponent {\n  protected readonly rows = [0, 1, 2, 3, 4];\n}\n"
-    },
-    {
-      "name": "text.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-text',\n  imports: [ZardSkeletonComponent],\n  template: `\n    <div class=\"flex w-full min-w-xs flex-col gap-2\">\n      <z-skeleton class=\"h-4 w-full\" />\n      <z-skeleton class=\"h-4 w-full\" />\n      <z-skeleton class=\"h-4 w-3/4\" />\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoSkeletonTextComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
     }
-  ]
+  }
 }

@@ -1,13 +1,30 @@
 import type { Config } from '@cli/utils/config.js';
 import { logger } from '@cli/utils/logger.js';
+import { arrayRange, lineEndingOf, withImport, type ArrayRange } from '@cli/utils/source-file.js';
 import { existsSync } from 'fs';
 import * as fsPromises from 'fs/promises';
 import * as path from 'path';
 
-const ZARD_PROVIDER_IMPORT = (corePath: string) => `
-import { provideZard } from '${corePath}/provider/providezard';
-`;
-const ZARD_PROVIDER_ENTRY = 'provideZard(),';
+const ZARD_PROVIDER_IMPORT = (corePath: string) => `import { provideZard } from '${corePath}/provider/providezard';`;
+const ZARD_PROVIDER_ENTRY = 'provideZard()';
+
+/**
+ * Acrescenta o provider ao fim da lista.
+ *
+ * O `]` fica na própria linha: a lista é código que o usuário vai ler e editar
+ * depois, e emendar o fechamento no último provider deixa o arquivo torto assim
+ * que o Prettier do projeto não roda em seguida.
+ */
+function withProvider(content: string, providers: ArrayRange, eol: string): string {
+  const body = providers.body.replace(/\s+$/, '');
+  const entries = body.trim() === '' ? '' : `${body.endsWith(',') ? body : `${body},`}`;
+
+  return (
+    content.slice(0, providers.open) +
+    `[${entries}${eol}    ${ZARD_PROVIDER_ENTRY},${eol}  ]` +
+    content.slice(providers.close + 1)
+  );
+}
 
 /**
  * Asynchronously reads, modifies, and writes the Angular application configuration file.
@@ -23,63 +40,26 @@ export async function updateAngularConfig(cwd: string, config: Config): Promise<
 
   try {
     await fsPromises.access(appConfigPath);
-    let content: string = await fsPromises.readFile(appConfigPath, 'utf8');
+    const original: string = await fsPromises.readFile(appConfigPath, 'utf8');
+    const eol = lineEndingOf(original);
 
-    // Add new import at the top
-    if (!content.includes(ZARD_PROVIDER_IMPORT(config.aliases.core).trim())) {
-      const importRegex = /^import .* from '.*';\n?/gm;
-      let lastImportMatch: RegExpMatchArray | null = null;
-      let match: RegExpMatchArray | null;
+    const content = withImport(original, ZARD_PROVIDER_IMPORT(config.aliases.core));
+    const providers = arrayRange(content, 'providers');
 
-      while ((match = importRegex.exec(content)) !== null) {
-        lastImportMatch = match;
-      }
-
-      if (lastImportMatch && lastImportMatch.index) {
-        const insertionIndex = lastImportMatch.index + lastImportMatch[0].length;
-        content =
-          content.slice(0, insertionIndex) + ZARD_PROVIDER_IMPORT(config.aliases.core) + content.slice(insertionIndex);
-      } else {
-        content = ZARD_PROVIDER_IMPORT(config.aliases.core) + content;
-      }
-    } else {
-      logger.warn('Import statement already exists. Skipping.');
-    }
-
-    // Add the provider to the providers array
-    const providersRegex = /providers:\s*\[([^\]]*?)\]/s;
-
-    if (providersRegex.test(content)) {
-      content = content.replace(providersRegex, (match: string, providersContent: string): string => {
-        const entryToCheck = ZARD_PROVIDER_ENTRY.replace(/,$/, '').trim();
-        if (providersContent.includes(entryToCheck)) {
-          logger.warn('Provider already exists in the list. Skipping.');
-          return match;
-        }
-
-        let newProvidersContent: string;
-        const trimmedContent = providersContent.trim();
-
-        if (trimmedContent === '') {
-          newProvidersContent = `\n    ${ZARD_PROVIDER_ENTRY.trim().replace(/,$/, '')}\n  `;
-        } else {
-          const contentWithTrailingComma = trimmedContent.endsWith(',')
-            ? providersContent
-            : providersContent.trimEnd() + ',';
-
-          newProvidersContent = `${contentWithTrailingComma}\n    ${ZARD_PROVIDER_ENTRY}`;
-        }
-
-        return `providers: [${newProvidersContent.replace(/,\s*$/, ',')}]`;
-      });
-    } else {
+    if (!providers) {
       logger.error(
         'Could not find the "providers: [...]" array in app.config.ts. The file structure may be unsupported.',
       );
       return;
     }
 
-    await fsPromises.writeFile(appConfigPath, content, 'utf8');
+    if (providers.body.includes(ZARD_PROVIDER_ENTRY)) {
+      logger.warn('Provider already exists in the list. Skipping.');
+      await fsPromises.writeFile(appConfigPath, content, 'utf8');
+      return;
+    }
+
+    await fsPromises.writeFile(appConfigPath, withProvider(content, providers, eol), 'utf8');
   } catch (e) {
     if (e && typeof e === 'object' && 'code' in e && e.code === 'ENOENT') {
       logger.error(`Error: Configuration file not found at ${appConfigPath}`);

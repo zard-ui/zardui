@@ -282,7 +282,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
         const nextIndex = this.findEnabledIndex(currentIndex, 1, filteredOptions);
         if (nextIndex >= 0) {
           this.selectedIndex.set(nextIndex);
-          filteredOptions[nextIndex].focus();
+          filteredOptions[nextIndex].scrollIntoView();
         }
         break;
       }
@@ -290,7 +290,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
         const prevIndex = this.findEnabledIndex(currentIndex, -1, filteredOptions);
         if (prevIndex >= 0) {
           this.selectedIndex.set(prevIndex);
-          filteredOptions[prevIndex].focus();
+          filteredOptions[prevIndex].scrollIntoView();
         }
         break;
       }
@@ -436,7 +436,7 @@ export class ZardCommandDividerComponent {
 import {
   ChangeDetectionStrategy,
   Component,
-  type ElementRef,
+  ElementRef,
   forwardRef,
   inject,
   input,
@@ -501,7 +501,8 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
-  readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
+  // `#searchInput` sits on an `input[z-input]` component, so read the element explicitly.
+  readonly searchInput = viewChild<unknown, ElementRef<HTMLInputElement>>('searchInput', { read: ElementRef });
 
   readonly placeholder = input<string>('Type a command or search...');
 
@@ -811,10 +812,12 @@ export class ZardCommandOptionComponent {
     this.isSelected.set(selected);
   }
 
-  focus() {
-    const element = this.elementRef.nativeElement;
-    element.focus();
-    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  /**
+   * Brings this option into view. Focus intentionally stays on the search
+   * input while navigating, so typing keeps filtering the list.
+   */
+  scrollIntoView() {
+    this.elementRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
 ```

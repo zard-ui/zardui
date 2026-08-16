@@ -1,5 +1,6 @@
 import { type Config } from '@cli/utils/config.js';
 import { logger } from '@cli/utils/logger.js';
+import { withImport } from '@cli/utils/source-file.js';
 import { existsSync } from 'fs';
 import * as fsPromises from 'fs/promises';
 import * as path from 'path';
@@ -42,19 +43,7 @@ export async function updateProvideZardWithDarkMode(
     );
   }
 
-  const importRegex = /^import .* from '.*';\n?/gm;
-  let lastImportMatch: RegExpMatchArray | null = null;
-  let match: RegExpMatchArray | null;
-
-  while ((match = importRegex.exec(content)) !== null) {
-    lastImportMatch = match;
-  }
-
-  if (lastImportMatch) {
-    const insertionIndex = lastImportMatch.index + lastImportMatch[0].length;
-    const darkModeImport = getDarkModeImport(resolvedConfig.aliases?.services);
-    content = content.slice(0, insertionIndex) + darkModeImport + '\n' + content.slice(insertionIndex);
-  }
+  content = withImport(content, getDarkModeImport(resolvedConfig.aliases?.services));
 
   content = content.replace(/return makeEnvironmentProviders\(\[(.*?)\]\);/s, (match, providers) => {
     const trimmedProviders = providers.trim();

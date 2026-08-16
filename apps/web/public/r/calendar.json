@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "calendar",
   "type": "registry:component",
   "files": [
@@ -34,46 +35,25 @@
   "registryDependencies": [
     "button"
   ],
-  "demos": [
-    {
-      "name": "basic.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardCalendarComponent } from '../calendar.component';\n\n@Component({\n  selector: 'z-demo-calendar-basic',\n  imports: [ZardCalendarComponent],\n  standalone: true,\n  template: `\n    <z-calendar zMode=\"single\" class=\"rounded-lg border\" />\n  `,\n})\nexport class ZardDemoCalendarBasicComponent {}\n"
-    },
-    {
-      "name": "booked-dates.ts",
-      "content": "import { Component, signal } from '@angular/core';\n\nimport { ZardCalendarComponent } from '../calendar.component';\n\nconst FIRST_BOOKED_DAY = 8;\nconst BOOKED_DAYS_COUNT = 12;\n\nfunction bookedDatesOfCurrentMonth(): Date[] {\n  const today = new Date();\n\n  return Array.from(\n    { length: BOOKED_DAYS_COUNT },\n    (_, index) => new Date(today.getFullYear(), today.getMonth(), FIRST_BOOKED_DAY + index),\n  );\n}\n\n@Component({\n  selector: 'z-demo-calendar-booked-dates',\n  imports: [ZardCalendarComponent],\n  standalone: true,\n  template: `\n    <z-calendar\n      zMode=\"single\"\n      class=\"rounded-lg border shadow-sm [&_[data-disabled=true]_button]:line-through [&_[data-disabled=true]_button]:opacity-100\"\n      [zDisabledDates]=\"bookedDates\"\n      [(value)]=\"selectedDate\"\n    />\n  `,\n})\nexport class ZardDemoCalendarBookedDatesComponent {\n  readonly bookedDates = bookedDatesOfCurrentMonth();\n  readonly selectedDate = signal<Date | null>(null);\n}\n"
-    },
-    {
-      "name": "custom-cell-size.ts",
-      "content": "import { Component, signal } from '@angular/core';\n\nimport { ZardCardImports } from '@/shared/components/card/card.imports';\n\nimport { ZardCalendarComponent } from '../calendar.component';\n\n@Component({\n  selector: 'z-demo-calendar-custom-cell-size',\n  imports: [ZardCalendarComponent, ZardCardImports],\n  standalone: true,\n  template: `\n    <z-card zSize=\"sm\" class=\"mx-auto w-fit\">\n      <z-card-content>\n        <z-calendar\n          zMode=\"range\"\n          zCaptionLayout=\"dropdown\"\n          class=\"p-0 [--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]\"\n          [(value)]=\"dateRange\"\n        />\n      </z-card-content>\n    </z-card>\n  `,\n})\nexport class ZardDemoCalendarCustomCellSizeComponent {\n  readonly dateRange = signal<Date[] | null>(null);\n}\n"
-    },
-    {
-      "name": "expand-year-selection-range.ts",
-      "content": "import { Component, signal } from '@angular/core';\n\nimport { ZardCalendarComponent } from '../calendar.component';\n\nconst BIRTH_YEAR_FLOOR = 1950;\n\n@Component({\n  selector: 'z-demo-calendar-expand-year-selection-range',\n  imports: [ZardCalendarComponent],\n  standalone: true,\n  template: `\n    <z-calendar\n      zMode=\"single\"\n      zCaptionLayout=\"dropdown\"\n      class=\"rounded-lg border\"\n      [minDate]=\"minDate\"\n      [maxDate]=\"maxDate\"\n      [(value)]=\"dateOfBirth\"\n    />\n  `,\n})\nexport class ZardDemoCalendarExpandYearSelectionRangeComponent {\n  readonly minDate = new Date(BIRTH_YEAR_FLOOR, 0, 1);\n  readonly maxDate = new Date();\n  readonly dateOfBirth = signal<Date | null>(null);\n}\n"
-    },
-    {
-      "name": "multiple.ts",
-      "content": "import { Component, signal } from '@angular/core';\n\nimport { ZardCalendarComponent } from '../calendar.component';\n\n@Component({\n  selector: 'z-demo-calendar-multiple',\n  imports: [ZardCalendarComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-col gap-4\">\n      <z-calendar zMode=\"multiple\" class=\"rounded-lg border\" [(value)]=\"selectedDates\" />\n\n      <p class=\"text-muted-foreground text-sm font-medium\">Selected ({{ selectedDates()?.length ?? 0 }}) date(s).</p>\n    </div>\n  `,\n})\nexport class ZardDemoCalendarMultipleComponent {\n  readonly selectedDates = signal<Date[] | null>(null);\n}\n"
-    },
-    {
-      "name": "presets.ts",
-      "content": "import { Component, signal } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\nimport { ZardCardImports } from '@/shared/components/card/card.imports';\n\nimport { ZardCalendarComponent } from '../calendar.component';\n\ninterface CalendarPreset {\n  label: string;\n  days: number;\n}\n\nconst PRESETS: CalendarPreset[] = [\n  { label: 'Today', days: 0 },\n  { label: 'Tomorrow', days: 1 },\n  { label: 'In 3 days', days: 3 },\n  { label: 'In a week', days: 7 },\n  { label: 'In 2 weeks', days: 14 },\n];\n\n@Component({\n  selector: 'z-demo-calendar-presets',\n  imports: [ZardCalendarComponent, ZardButtonComponent, ZardCardImports],\n  standalone: true,\n  template: `\n    <z-card zSize=\"sm\" class=\"mx-auto w-fit max-w-[300px]\">\n      <z-card-content>\n        <z-calendar zMode=\"single\" class=\"p-0 [--cell-size:--spacing(9.5)]\" [(value)]=\"selectedDate\" />\n      </z-card-content>\n      <z-card-footer zFooterBorder class=\"flex flex-wrap gap-2\">\n        @for (preset of presets; track preset.days) {\n          <button z-button type=\"button\" zType=\"outline\" zSize=\"sm\" class=\"flex-1\" (click)=\"selectPreset(preset)\">\n            {{ preset.label }}\n          </button>\n        }\n      </z-card-footer>\n    </z-card>\n  `,\n})\nexport class ZardDemoCalendarPresetsComponent {\n  readonly presets = PRESETS;\n  readonly selectedDate = signal<Date | null>(new Date());\n\n  selectPreset(preset: CalendarPreset): void {\n    const date = new Date();\n    date.setDate(date.getDate() + preset.days);\n    this.selectedDate.set(date);\n  }\n}\n"
-    },
-    {
-      "name": "preview.ts",
-      "content": "import { Component, signal } from '@angular/core';\n\nimport { ZardCalendarComponent } from '../calendar.component';\n\n@Component({\n  selector: 'z-demo-calendar-preview',\n  imports: [ZardCalendarComponent],\n  standalone: true,\n  template: `\n    <z-calendar zMode=\"single\" zCaptionLayout=\"dropdown\" class=\"rounded-lg border\" [(value)]=\"selectedDate\" />\n  `,\n})\nexport class ZardDemoCalendarPreviewComponent {\n  readonly selectedDate = signal<Date | null>(new Date());\n}\n"
-    },
-    {
-      "name": "range.ts",
-      "content": "import { Component, signal } from '@angular/core';\n\nimport { ZardCalendarComponent } from '../calendar.component';\n\nconst RANGE_LENGTH_IN_DAYS = 30;\n\nfunction startOfRange(): Date {\n  return new Date(new Date().getFullYear(), 0, 12);\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\n@Component({\n  selector: 'z-demo-calendar-range',\n  imports: [ZardCalendarComponent],\n  standalone: true,\n  template: `\n    <z-calendar zMode=\"range\" zNumberOfMonths=\"2\" class=\"rounded-lg border\" [(value)]=\"dateRange\" />\n  `,\n})\nexport class ZardDemoCalendarRangeComponent {\n  readonly dateRange = signal<Date[] | null>([startOfRange(), addDays(startOfRange(), RANGE_LENGTH_IN_DAYS)]);\n}\n"
-    },
-    {
-      "name": "with-constraints.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardCalendarComponent } from '../calendar.component';\n\nconst DAYS_IN_FUTURE = 30;\nconst MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;\n\n@Component({\n  selector: 'z-demo-calendar-with-constraints',\n  imports: [ZardCalendarComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-wrap items-start justify-center gap-6\">\n      <z-calendar zMode=\"single\" class=\"rounded-lg border\" [minDate]=\"minDate\" [maxDate]=\"maxDate\" />\n\n      <z-calendar zMode=\"single\" class=\"rounded-lg border\" [disabled]=\"true\" />\n    </div>\n  `,\n})\nexport class ZardDemoCalendarWithConstraintsComponent {\n  readonly minDate = new Date();\n  readonly maxDate = new Date(Date.now() + DAYS_IN_FUTURE * MILLISECONDS_PER_DAY);\n\n  constructor() {\n    this.minDate.setHours(0, 0, 0, 0);\n    this.maxDate.setHours(23, 59, 59, 999);\n  }\n}\n"
-    },
-    {
-      "name": "with-time.ts",
-      "content": "import { Component, signal } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideClock2 } from '@ng-icons/lucide';\n\nimport { ZardCardImports } from '@/shared/components/card/card.imports';\nimport { ZardFieldImports } from '@/shared/components/field/field.imports';\nimport { ZardInputComponent } from '@/shared/components/input/input.component';\nimport { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';\n\nimport { ZardCalendarComponent } from '../calendar.component';\n\n@Component({\n  selector: 'z-demo-calendar-with-time',\n  imports: [\n    ZardCalendarComponent,\n    ZardCardImports,\n    ZardFieldImports,\n    ZardInputGroupImports,\n    ZardInputComponent,\n    NgIcon,\n  ],\n  standalone: true,\n  template: `\n    <z-card zSize=\"sm\" class=\"mx-auto w-fit\">\n      <z-card-content>\n        <z-calendar zMode=\"single\" class=\"p-0\" [(value)]=\"selectedDate\" />\n      </z-card-content>\n      <z-card-footer zFooterBorder>\n        <div z-field-group>\n          <div z-field>\n            <label z-field-label for=\"calendar-time-from\">Start Time</label>\n            <z-input-group>\n              <input\n                z-input\n                id=\"calendar-time-from\"\n                type=\"time\"\n                step=\"1\"\n                value=\"10:30:00\"\n                class=\"appearance-none [&::-webkit-calendar-picker-indicator]:hidden\"\n              />\n              <z-input-group-addon>\n                <ng-icon name=\"lucideClock2\" class=\"text-muted-foreground\" />\n              </z-input-group-addon>\n            </z-input-group>\n          </div>\n\n          <div z-field>\n            <label z-field-label for=\"calendar-time-to\">End Time</label>\n            <z-input-group>\n              <input\n                z-input\n                id=\"calendar-time-to\"\n                type=\"time\"\n                step=\"1\"\n                value=\"12:30:00\"\n                class=\"appearance-none [&::-webkit-calendar-picker-indicator]:hidden\"\n              />\n              <z-input-group-addon>\n                <ng-icon name=\"lucideClock2\" class=\"text-muted-foreground\" />\n              </z-input-group-addon>\n            </z-input-group>\n          </div>\n        </div>\n      </z-card-footer>\n    </z-card>\n  `,\n  viewProviders: [provideIcons({ lucideClock2 })],\n})\nexport class ZardDemoCalendarWithTimeComponent {\n  readonly selectedDate = signal<Date | null>(new Date());\n}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [
+      "lucideChevronDown",
+      "lucideChevronLeft",
+      "lucideChevronRight"
+    ],
+    "tokens": [
+      "chevron-down",
+      "chevron-left",
+      "chevron-right"
+    ],
+    "demos": {
+      "symbols": [
+        "lucideClock2"
+      ],
+      "tokens": [
+        "clock-2"
+      ]
     }
-  ]
+  }
 }

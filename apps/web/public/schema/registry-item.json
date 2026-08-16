@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zardui.com/schema/registry-item.json",
+  "title": "zard/ui registry item",
+  "description": "One item of a registry, published at /r/<name>.json. This is the file with the source code in it; the index at /r/registry.json lists the same items without their contents.",
+  "type": "object",
+  "required": ["name", "type", "files"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": { "type": "string" },
+    "type": { "type": "string", "examples": ["registry:component"] },
+    "basePath": {
+      "type": "string",
+      "description": "The directory the files are written into, when it differs from the item's name."
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "npm packages the item needs at runtime."
+    },
+    "devDependencies": { "type": "array", "items": { "type": "string" } },
+    "registryDependencies": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Other items of this registry that must be installed alongside."
+    },
+    "icons": { "$ref": "#/definitions/icons" },
+    "files": {
+      "type": "array",
+      "description": "The files to write, with their contents. Paths are relative to the item's directory in the target project.",
+      "items": {
+        "type": "object",
+        "required": ["name", "content"],
+        "properties": {
+          "name": { "type": "string" },
+          "content": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "icons": {
+      "type": "object",
+      "required": ["family", "symbols", "tokens", "demos"],
+      "description": "The icons the component draws, and the set they are written in. Present on every item; the lists come back empty for a component that draws none, which is how 'uses no icons' is told apart from 'published before this field existed'.",
+      "properties": {
+        "family": {
+          "type": "string",
+          "description": "The icon set the published files are written in. A client installing with another set translates the symbols using /r/icons.json."
+        },
+        "symbols": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "The identifiers as they appear in the code (lucideCheck). These are the ones that get installed, and what decides whether the ng-icons packages are needed."
+        },
+        "tokens": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "The same icons by the set-neutral key of the translation table (check)."
+        },
+        "demos": {
+          "type": "object",
+          "description": "The icons that only appear in the documentation examples. Half the components that use an icon only use it there, so they are mapped too — but they install nothing and are left out of the index.",
+          "required": ["symbols", "tokens"],
+          "properties": {
+            "symbols": { "type": "array", "items": { "type": "string" } },
+            "tokens": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -108,27 +108,36 @@ import type { CodeBlockData } from '@highlight/types';
           </tr>
           <tr class="hover:bg-muted/50 border-b transition-colors">
             <td class="p-4 align-middle">
-              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">docs</code>
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">icons</code>
             </td>
             <td class="p-4 align-middle">
-              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#123; overview, api &#125;?</code>
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">
+                &#123; family, symbols, tokens, demos &#125;
+              </code>
             </td>
             <td class="text-muted-foreground p-4 align-middle">
-              Markdown documentation of the component, consumed by the MCP server.
-            </td>
-          </tr>
-          <tr class="hover:bg-muted/50 border-b transition-colors">
-            <td class="p-4 align-middle">
+              The icons the component draws and the set they are written in.
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">symbols</code>
+              are the identifiers as the code writes them,
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">tokens</code>
+              the same icons by the set-neutral key of
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">icons.json</code>
+              , and
               <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">demos</code>
+              the ones that only appear in the examples. Present on every item, with empty lists for a component that
+              draws none.
             </td>
-            <td class="p-4 align-middle">
-              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#123; name, content &#125;[]?</code>
-            </td>
-            <td class="text-muted-foreground p-4 align-middle">Demo components, also consumed by the MCP server.</td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Documentation and examples are not in the item. They live in the page of each component, served as markdown at
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">/docs/components/&lt;name&gt;.md</code>
+      — one document with installation, usage, examples and API reference, which is what the MCP server reads. Keeping
+      them out of the item is also what makes installing one download the code and nothing else.
+    </p>
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Where the files land</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">

@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zardui.com/schema/icons.json",
+  "title": "zard/ui icon catalogue",
+  "description": "The icon sets a registry supports and the table that translates between them, published at /r/icons.json. A client reads it at run time instead of relying on the copy it was built with, so a set added here works for CLIs that are already installed.",
+  "type": "object",
+  "required": ["families", "icons"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "The shape of this file. See registry.json for the rule on when it rises."
+    },
+    "families": {
+      "type": "object",
+      "description": "The supported sets, keyed by the value that goes in components.json.",
+      "additionalProperties": { "$ref": "#/definitions/family" }
+    },
+    "icons": {
+      "type": "object",
+      "description": "The translation table: one row per icon, keyed by what it means (check, chevron-down), and inside it the symbol each set exports for it. A row without an entry for a given set means that set has no equivalent — a client must leave the symbol alone and say so, rather than guess.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "family": {
+      "type": "object",
+      "required": ["value", "label", "package", "prefix"],
+      "properties": {
+        "value": { "type": "string", "description": "What goes in components.json." },
+        "label": { "type": "string", "description": "Display name, for prompts and reports." },
+        "package": {
+          "type": "string",
+          "description": "The npm package the project needs, alongside @ng-icons/core.",
+          "examples": ["@ng-icons/lucide"]
+        },
+        "prefix": {
+          "type": "string",
+          "description": "The prefix the symbols of this package carry (lucide, for lucideCheck).",
+          "examples": ["lucide"]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

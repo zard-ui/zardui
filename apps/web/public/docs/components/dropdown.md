@@ -1450,7 +1450,13 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu';
       <z-dropdown-menu-item (click)="log('Forward')">Forward</z-dropdown-menu-item>
       <z-dropdown-menu-item (click)="log('Reload')">Reload</z-dropdown-menu-item>
       <z-dropdown-menu-separator />
-      <button type="button" z-navigation-menu-link z-navigation-menu-trigger [zNavigationMenuTriggerFor]="moreToolsMenu" zPlacement="rightTop">
+      <button
+        type="button"
+        z-navigation-menu-link
+        z-navigation-menu-trigger
+        [zNavigationMenuTriggerFor]="moreToolsMenu"
+        zPlacement="rightTop"
+      >
         More Tools
         <ng-icon name="lucideChevronRight" class="ml-auto size-4" />
       </button>

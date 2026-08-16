@@ -1,12 +1,18 @@
-import { Config } from '@cli/utils/config.js';
-import { ProjectInfo } from '@cli/utils/get-project-info';
-import { logger } from '@cli/utils/logger.js';
-import { getAvailableThemes, getThemeDisplayName } from '@cli/utils/theme-selector.js';
-import chalk from 'chalk';
+import {
+  candidateProjects,
+  detectProjectKind,
+  fallbackRootFor,
+  isLibraryKind,
+  libraryBaseUrl,
+  libraryStylesPath,
+  type ProjectKind,
+} from '@cli/commands/init/project-kind.js';
+import { SOURCE_ICON_FAMILY } from '@cli/core/icons/index.js';
+import { type Config } from '@cli/utils/config.js';
+import { type ProjectInfo, type WorkspaceProject } from '@cli/utils/get-project-info.js';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import * as path from 'node:path';
-import prompts from 'prompts';
 import { z } from 'zod';
 
 export const SCHEMA_URL = 'https://zardui.com/schema.json';
@@ -14,6 +20,9 @@ export const SCHEMA_URL = 'https://zardui.com/schema.json';
 export const configSchema = z.object({
   $schema: z.string(),
   style: z.enum(['css']),
+  icons: z.string(),
+  rtl: z.boolean(),
+  projectType: z.enum(['angular', 'angular-library', 'nx', 'nx-library', 'analog']),
   appConfigFile: z.string(),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']),
   tailwind: z.object({
@@ -29,99 +38,134 @@ export const configSchema = z.object({
   }),
 });
 
-export async function promptForConfig(
-  cwd: string,
+/** As respostas do wizard, antes de virarem um `components.json`. */
+export interface InitAnswers {
+  kind: ProjectKind;
+  /** Raiz do projeto escolhido, relativa ao workspace; vazia no app único. */
+  projectRoot: string;
+  appConfig: string;
+  theme: string;
+  globalCss: string;
+  componentsAlias: string;
+  utilsAlias: string;
+}
+
+/**
+ * O projeto que o tipo escolhido sugere como alvo.
+ *
+ * Havendo mais de um compatível, o wizard pergunta — mas alguém precisa abrir a
+ * lista escolhido, e o primeiro declarado é a resposta menos surpreendente.
+ */
+function targetProject(
   projectInfo: ProjectInfo,
-  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
-): Promise<Config> {
-  const highlight = (text: string) => chalk.cyan(text);
+  kind: ProjectKind,
+  projectRoot?: string,
+): WorkspaceProject | undefined {
+  const candidates = candidateProjects(kind, projectInfo);
 
-  const options = await prompts([
-    {
-      type: 'text',
-      name: 'app.config',
-      message: `Where is your ${highlight('app.config.ts')} file?`,
-      initial: projectInfo.hasNx ? 'apps/[app]/src/app/app.config.ts' : 'src/app/app.config.ts',
-    },
-    {
-      type: 'select',
-      name: 'theme',
-      message: `Choose a ${highlight('theme')} for your components:`,
-      choices: getAvailableThemes().map(theme => ({
-        title: getThemeDisplayName(theme),
-        value: theme,
-      })),
-      initial: 0,
-    },
-    {
-      type: 'text',
-      name: 'tailwindCss',
-      message: `Where is your ${highlight('global CSS')} file?`,
-      initial: projectInfo.hasNx ? 'apps/[app]/src/styles.css' : 'src/styles.css',
-    },
-    {
-      type: 'text',
-      name: 'components',
-      message: `Configure the import alias for ${highlight('components')}:`,
-      initial: '@/shared/components',
-    },
-    {
-      type: 'text',
-      name: 'utils',
-      message: `Configure the import alias for ${highlight('utils')}:`,
-      initial: '@/shared/utils',
-    },
-  ]);
+  return candidates.find(project => project.root === projectRoot) ?? candidates[0];
+}
 
-  await validateCssFile(cwd, options.tailwindCss);
+/**
+ * Os caminhos sugeridos para o tipo que o usuário escolheu.
+ *
+ * Vêm do projeto declarado no workspace sempre que ele existe — o `styles` do
+ * target de build é onde o CSS global realmente está, e adivinhá-lo era o que
+ * fazia o init sugerir caminhos que não existiam em layouts de monorepo.
+ */
+export function defaultAnswers(
+  projectInfo: ProjectInfo,
+  kind = detectProjectKind(projectInfo),
+  projectRoot?: string,
+): InitAnswers {
+  const project = targetProject(projectInfo, kind, projectRoot);
+  const root = project?.root ?? fallbackRootFor(kind);
 
-  const componentsAlias = options.components;
-  const utilsAlias = options.utils;
-  const sharedBase = path.dirname(componentsAlias);
+  const shared = {
+    kind,
+    projectRoot: root,
+    theme: 'neutral',
+    componentsAlias: '@/shared/components',
+    utilsAlias: '@/shared/utils',
+  };
 
-  const config = configSchema.parse({
+  if (isLibraryKind(kind)) {
+    return {
+      ...shared,
+      // Não há app.config numa biblioteca; o campo fica vazio no components.json.
+      appConfig: '',
+      globalCss: libraryStylesPath(root),
+    };
+  }
+
+  const sourceRoot = project?.sourceRoot ?? (root ? `${root}/src` : 'src');
+
+  return {
+    ...shared,
+    appConfig: `${sourceRoot}/app/app.config.ts`,
+    globalCss: project?.styles[0] ?? `${sourceRoot}/styles.css`,
+  };
+}
+
+/**
+ * De onde os componentes são escritos, deduzido do `app.config.ts`.
+ *
+ * Fixar `src/app` quebrava todo layout que não fosse app único na raiz: num
+ * workspace o app.config vive em `apps/<app>/src/app`, e os componentes
+ * acabavam num `src/app` na raiz que não pertence a projeto nenhum. O diretório
+ * do app.config é exatamente a raiz do código do app.
+ */
+export function deriveBaseUrl(appConfigFile: string): string {
+  const dir = path.dirname(appConfigFile).replace(/\\/g, '/');
+  return dir === '.' ? 'src/app' : dir;
+}
+
+/** Numa biblioteca o app.config não existe, então quem manda é a raiz da lib. */
+function baseUrlFor(answers: InitAnswers): string {
+  return isLibraryKind(answers.kind) ? libraryBaseUrl(answers.projectRoot) : deriveBaseUrl(answers.appConfig);
+}
+
+export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun'): Config {
+  const sharedBase = path.dirname(answers.componentsAlias).replace(/\\/g, '/');
+
+  return configSchema.parse({
     $schema: SCHEMA_URL,
     style: 'css',
-    appConfigFile: options['app.config'],
+    // Nenhuma das duas é perguntada no wizard: hoje só existe uma família de
+    // ícones, e o RTL não altera o que o init escreve. Ficam no arquivo com o
+    // padrão para serem editadas depois, que é o que as torna configuráveis.
+    icons: SOURCE_ICON_FAMILY,
+    rtl: false,
+    projectType: answers.kind,
+    appConfigFile: answers.appConfig,
     packageManager,
     tailwind: {
-      css: options.tailwindCss,
-      baseColor: options.theme,
+      css: answers.globalCss,
+      baseColor: answers.theme,
     },
-    baseUrl: 'src/app',
+    baseUrl: baseUrlFor(answers),
     aliases: {
-      components: componentsAlias,
-      utils: utilsAlias,
+      components: answers.componentsAlias,
+      utils: answers.utilsAlias,
       core: `${sharedBase}/core`,
       services: `${sharedBase}/services`,
     },
   });
-
-  return config;
 }
 
-async function validateCssFile(cwd: string, tailwindCss: string): Promise<void> {
-  const cssPath = path.join(cwd, tailwindCss);
+/**
+ * Estado do CSS global informado pelo usuário.
+ *
+ * O init sobrescreve esse arquivo com os tokens do tema, então o wizard precisa
+ * saber, antes de avançar, se ele existe e se há conteúdo a perder.
+ */
+export type CssFileState = 'missing' | 'empty' | 'has-content';
 
-  if (!existsSync(cssPath)) {
-    logger.error(`CSS file not found at: ${tailwindCss}`);
-    logger.error('Please ensure your CSS file exists before continuing.');
-    process.exit(1);
-  }
+export async function inspectCssFile(cwd: string, relativePath: string): Promise<CssFileState> {
+  const cssPath = path.join(cwd, relativePath);
 
-  const existingContent = await readFile(cssPath, 'utf8');
+  if (!existsSync(cssPath)) return 'missing';
 
-  if (existingContent.trim().length > 0) {
-    const { overwrite } = await prompts({
-      type: 'confirm',
-      name: 'overwrite',
-      message: `Your CSS file already has content. This will overwrite everything with ZardUI theme configuration. Continue?`,
-      initial: true,
-    });
-
-    if (!overwrite) {
-      logger.info('Installation cancelled.');
-      process.exit(0);
-    }
-  }
+  const content = await readFile(cssPath, 'utf8');
+  return content.trim().length > 0 ? 'has-content' : 'empty';
 }
