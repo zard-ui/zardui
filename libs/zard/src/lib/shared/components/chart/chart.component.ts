@@ -5,6 +5,7 @@ import {
   Component,
   computed,
   contentChild,
+  DestroyRef,
   effect,
   ElementRef,
   forwardRef,
@@ -28,7 +29,6 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { resolveChartChrome, resolveChartColors, resolveCssColor } from './chart-colors.util';
 import { ZARD_CHART, type ZardChartHost } from './chart-context';
-import { zardEcharts } from './chart-echarts.registry';
 import { ZardChartLegendComponent } from './chart-legend.component';
 import {
   buildChartOption,
@@ -55,13 +55,33 @@ import type {
 } from './chart.types';
 import { chartCanvasVariants, chartVariants } from './chart.variants';
 
+/**
+ * `numberAttribute` answers `NaN` for anything it cannot read — `undefined`, `null`, or a
+ * valueless attribute — and ECharts draws nothing at all once a `NaN` reaches an angle. An
+ * unreadable value means "not set", which is what the builder already has a default for.
+ */
+function optionalNumberAttribute(value: unknown): number | undefined {
+  const parsed = numberAttribute(value);
+  return Number.isNaN(parsed) ? undefined : parsed;
+}
+
+/** Same guard, for the inputs that must always end up with a number. */
+function numberAttributeOr(fallback: number): (value: unknown) => number {
+  return value => numberAttribute(value, fallback);
+}
+
+/** The canvas is measured on every resize; only a real change should redraw the chart. */
+function sameSize(a: { width: number; height: number }, b: { width: number; height: number }): boolean {
+  return a.width === b.width && a.height === b.height;
+}
+
 @Component({
   selector: 'z-chart',
   imports: [NgxEchartsDirective],
   template: `
     @if (ssrSvg(); as svg) {
       <div [class]="canvasClasses()" [attr.role]="hostRole()" [attr.aria-label]="ariaLabel()" [innerHTML]="svg"></div>
-    } @else {
+    } @else if (onScreen()) {
       <div
         echarts
         [class]="canvasClasses()"
@@ -92,6 +112,8 @@ export class ZardChartComponent implements ZardChartHost {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly darkMode = inject(ZardDarkMode);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly pendingTasks = inject(PendingTasks);
 
   readonly class = input<ClassValue>('');
   readonly zConfig = input<ZardChartConfig>({});
@@ -111,10 +133,19 @@ export class ZardChartComponent implements ZardChartHost {
   readonly zInnerRadius = input<string | number>();
   readonly zOuterRadius = input<string | number>();
   readonly zRadialVariant = input<ZardChartRadialVariant>('bar');
+  readonly zTrack = input(true, { transform: booleanAttribute });
+  /** Radial only: writes each category's name along its own ring, like Recharts' `<LabelList>`. */
+  readonly zRadialLabel = input(false, { transform: booleanAttribute });
+  /**
+   * Waits for the chart to scroll into view before drawing it, so its entry animation plays
+   * where someone can see it. Turn off to draw as soon as the component is created.
+   */
+  readonly zLazyRender = input(true, { transform: booleanAttribute });
   readonly zRadarShape = input<ZardChartRadarShape>('polygon');
-  readonly zStartAngle = input<number | undefined>(undefined, { transform: numberAttribute });
-  readonly zEndAngle = input<number | undefined>(undefined, { transform: numberAttribute });
-  readonly zPadAngle = input(0, { transform: numberAttribute });
+  readonly zRadarRadialLines = input(true, { transform: booleanAttribute });
+  readonly zStartAngle = input<number | undefined>(undefined, { transform: optionalNumberAttribute });
+  readonly zEndAngle = input<number | undefined>(undefined, { transform: optionalNumberAttribute });
+  readonly zPadAngle = input(0, { transform: numberAttributeOr(0) });
   readonly zGradient = input(false, { transform: booleanAttribute });
   readonly zLabel = input(false, { transform: booleanAttribute });
   readonly zCenterValue = input<string>();
@@ -125,8 +156,8 @@ export class ZardChartComponent implements ZardChartHost {
   readonly zBrush = input(false, { transform: booleanAttribute });
   readonly zToolbox = input(false, { transform: booleanAttribute });
   readonly zRenderer = input<ZardChartRenderer>('canvas');
-  readonly zSsrWidth = input(600, { transform: numberAttribute });
-  readonly zSsrHeight = input(300, { transform: numberAttribute });
+  readonly zSsrWidth = input(600, { transform: numberAttributeOr(600) });
+  readonly zSsrHeight = input(300, { transform: numberAttributeOr(300) });
   readonly zOption = input<ZardChartOptionOverride>({});
 
   readonly zChartInit = output<EChartsType>();
@@ -138,12 +169,29 @@ export class ZardChartComponent implements ZardChartHost {
   private readonly legendRef = contentChild(ZardChartLegendComponent);
 
   private readonly chartInstance = signal<EChartsType | null>(null);
+  /** Bars growing out of the axis is movement; someone who asked for less of it gets none. */
+  private readonly reducedMotion = signal(false);
+  /**
+   * The drawing surface, watched so anything positioned in pixels follows a resize. Compared by
+   * value: a new object on every observer callback would rebuild the option, and ngx-echarts
+   * re-applies it with `notMerge`, which replays the entry animation and clears the legend
+   * selection the HTML legend is holding.
+   */
+  private readonly canvasSize = signal({ width: 0, height: 0 }, { equal: sameSize });
+  private readonly coarsePointer = signal(false);
+  /** Flips once, the first time the chart is scrolled into view. */
+  private readonly seen = signal(false);
   /** Bumped one frame after a theme switch, once the `.dark` class is on the document. */
   private readonly colorRevision = signal(0);
 
   readonly hiddenSeries = signal<ReadonlySet<string>>(new Set<string>());
 
   constructor() {
+    this.watchMotionPreference();
+    this.watchPointerType();
+    this.watchCanvasSize();
+    this.watchVisibility();
+
     if (this.isBrowser) {
       effect(() => {
         this.darkMode.themeMode();
@@ -152,6 +200,68 @@ export class ZardChartComponent implements ZardChartHost {
         this.scheduleColorRefresh();
       });
     }
+  }
+
+  /** The chart inherits the page's typeface, so the arc labels have to measure with it too. */
+  private hostFontFamily(): string {
+    if (!this.isBrowser || typeof globalThis.getComputedStyle !== 'function') return 'sans-serif';
+
+    try {
+      return globalThis.getComputedStyle(this.elementRef.nativeElement as HTMLElement).fontFamily || 'sans-serif';
+    } catch {
+      return 'sans-serif';
+    }
+  }
+
+  private watchCanvasSize(): void {
+    if (!this.isBrowser || typeof globalThis.ResizeObserver !== 'function') return;
+
+    const host = this.elementRef.nativeElement as HTMLElement;
+    const observer = new globalThis.ResizeObserver(() =>
+      this.canvasSize.set({ width: host.clientWidth, height: host.clientHeight }),
+    );
+    observer.observe(host);
+    this.destroyRef.onDestroy(() => observer.disconnect());
+  }
+
+  protected readonly onScreen = computed(() => this.seen() || !this.zLazyRender());
+
+  private watchVisibility(): void {
+    const host = this.elementRef.nativeElement as HTMLElement;
+
+    if (!this.isBrowser || typeof globalThis.IntersectionObserver !== 'function') {
+      this.seen.set(true);
+      return;
+    }
+
+    const observer = new globalThis.IntersectionObserver(
+      entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        this.seen.set(true);
+        observer.disconnect();
+      },
+      // A sliver on screen is enough: the chart should be drawing as it comes up, not after.
+      { threshold: 0.1 },
+    );
+
+    observer.observe(host);
+    this.destroyRef.onDestroy(() => observer.disconnect());
+  }
+
+  private watchPointerType(): void {
+    this.watchMedia('(pointer: coarse)', matches => this.coarsePointer.set(matches));
+  }
+
+  private watchMotionPreference(): void {
+    this.watchMedia('(prefers-reduced-motion: reduce)', matches => this.reducedMotion.set(matches));
+  }
+
+  private watchMedia(query: string, apply: (matches: boolean) => void): void {
+    if (!this.isBrowser || typeof globalThis.matchMedia !== 'function') return;
+
+    const media = globalThis.matchMedia(query);
+    apply(media.matches);
+    media.addEventListener('change', event => apply(event.matches));
   }
 
   private scheduleColorRefresh(): void {
@@ -181,6 +291,7 @@ export class ZardChartComponent implements ZardChartHost {
       valueFormatter: tooltip.zValueFormatter(),
       class: mergeClasses(tooltip.class()),
       labelClass: mergeClasses(tooltip.zLabelClass()),
+      cursor: tooltip.zCursor(),
     };
   });
 
@@ -209,7 +320,13 @@ export class ZardChartComponent implements ZardChartHost {
       innerRadius: this.zInnerRadius(),
       outerRadius: this.zOuterRadius(),
       radialVariant: this.zRadialVariant(),
+      track: this.zTrack(),
+      radialLabel: this.zRadialLabel(),
+      size: this.canvasSize(),
+      fontFamily: this.hostFontFamily(),
+      coarsePointer: this.coarsePointer(),
       radarShape: this.zRadarShape(),
+      radarRadialLines: this.zRadarRadialLines(),
       startAngle: this.zStartAngle(),
       endAngle: this.zEndAngle(),
       padAngle: this.zPadAngle(),
@@ -218,7 +335,7 @@ export class ZardChartComponent implements ZardChartHost {
       centerValue: this.zCenterValue(),
       centerLabel: this.zCenterLabel(),
       accessibility: this.zAccessibility(),
-      animation: this.zAnimation(),
+      animation: this.zAnimation() && !this.reducedMotion(),
       dataZoom: this.zDataZoom(),
       brush: this.zBrush(),
       toolbox: this.zToolbox(),
@@ -268,7 +385,16 @@ export class ZardChartComponent implements ZardChartHost {
   protected onChartInit(instance: EChartsType): void {
     this.chartInstance.set(instance);
     this.hiddenSeries.set(new Set<string>());
+    this.showDefaultTooltip(instance);
     this.zChartInit.emit(instance);
+  }
+
+  /** `z-chart-tooltip[zDefaultIndex]` opens the tooltip on that point without a pointer. */
+  private showDefaultTooltip(instance: EChartsType): void {
+    const dataIndex = this.tooltipRef()?.zDefaultIndex();
+    if (dataIndex === undefined || Number.isNaN(dataIndex)) return;
+
+    setTimeout(() => instance.dispatchAction({ type: 'showTip', seriesIndex: 0, dataIndex }));
   }
 
   toggleSeries(name: string): void {

@@ -83,7 +83,13 @@ function context(overrides: Partial<ZardChartBuildContext> = {}): ZardChartBuild
     xAxis: true,
     yAxis: false,
     radialVariant: 'bar',
+    track: true,
+    radialLabel: false,
+    size: { width: 0, height: 0 },
+    fontFamily: 'sans-serif',
+    coarsePointer: false,
     radarShape: 'polygon',
+    radarRadialLines: true,
     padAngle: 0,
     gradient: false,
     label: false,
@@ -321,6 +327,25 @@ describe('chart-option.builder', () => {
     ]);
   });
 
+  it('binds the tooltip to the click alone on a touch pointer', () => {
+    const tooltip = {
+      indicator: 'dot',
+      trigger: 'axis',
+      hideLabel: false,
+      hideIndicator: false,
+      class: '',
+      labelClass: '',
+      cursor: false,
+    } as ZardChartBuildContext['tooltip'];
+
+    const withMouse = buildChartOption(context({ tooltip })) as OptionRecord;
+    const withTouch = buildChartOption(context({ tooltip, coarsePointer: true })) as OptionRecord;
+
+    expect(withMouse['tooltip'].triggerOn).toBe('mousemove|click');
+    // A tap is a hover that ends at once, so hover would show the tooltip and hide it again.
+    expect(withTouch['tooltip'].triggerOn).toBe('click');
+  });
+
   it('builds a pie series with one slice per row', () => {
     const option = buildChartOption(
       context({
@@ -338,9 +363,10 @@ describe('chart-option.builder', () => {
     const [series] = seriesOf(option);
 
     expect(series['type']).toBe('pie');
+    // Slices are named by their configured label, so labels read "Chrome", not "chrome".
     expect(series['data']).toEqual([
-      { name: 'chrome', value: 275, itemStyle: { color: '#111111' } },
-      { name: 'safari', value: 200, itemStyle: { color: '#222222' } },
+      { name: 'Chrome', value: 275, itemStyle: { color: '#111111' } },
+      { name: 'Safari', value: 200, itemStyle: { color: '#222222' } },
     ]);
   });
 

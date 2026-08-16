@@ -1,5 +1,6 @@
 import type { EChartsOption } from 'echarts';
 
+import { buildArcLabels, resolveRadius } from './chart-arc-label.util';
 import { paletteColor, withAlpha } from './chart-colors.util';
 import { buildTooltipHtml, type ZardChartTooltipContext, type ZardChartTooltipParam } from './chart-tooltip.formatter';
 import type {
@@ -19,9 +20,29 @@ import type {
 /** Bars keep shadcn's default corner radius unless a series overrides it. */
 const DEFAULT_BAR_RADIUS = 4;
 const DEFAULT_SYMBOL_SIZE = 8;
+/**
+ * Horizontal breathing room for the plot area, in pixels. Lines and areas sit flush against the
+ * axis ends (`boundaryGap: false`), so without it the first and last point are drawn half outside
+ * the canvas — the same reason every shadcn area/line chart passes `margin={{ left: 12, right: 12 }}`.
+ */
+const CURVE_GRID_INSET = 12;
+/** Keeps the donut's centre reading above anything a chart paints behind its ring. */
+const CENTER_TEXT_Z = 100;
 const DEFAULT_AREA_OPACITY = 0.4;
 const DEFAULT_RADAR_OPACITY = 0.6;
+const DEFAULT_RADAR_STROKE = 1;
+const DEFAULT_RADAR_RADIUS = '72%';
 const IMPLICIT_STACK_ID = 'zard-stack';
+
+/**
+ * Entry motion. A chart is watched once, when it appears, so it can afford to be explanatory —
+ * but Recharts' 1.5s `ease` reads as sluggish across a grid of them. This is the same gesture,
+ * shortened, on a strong ease-out: fast off the mark, settling at the end, where the eye is.
+ */
+const ENTRY_DURATION = 700;
+const ENTRY_EASING = 'quinticOut';
+/** Re-drawing after a toggle is movement on screen, not an entrance: quicker, and eased both ends. */
+const UPDATE_DURATION = 250;
 
 /** Everything the builder needs. Pure data plus one color resolver, so it stays testable. */
 export interface ZardChartBuildContext {
@@ -42,7 +63,16 @@ export interface ZardChartBuildContext {
   innerRadius?: string | number;
   outerRadius?: string | number;
   radialVariant: ZardChartRadialVariant;
+  /** Radial only: the muted ring drawn behind each bar. */
+  track: boolean;
+  /** Radial only: writes each category's name along its own ring. */
+  radialLabel: boolean;
+  /** The canvas, in pixels. Zero until the chart has been laid out. */
+  size: { width: number; height: number };
+  fontFamily: string;
   radarShape: ZardChartRadarShape;
+  /** Radar only: the spokes running from the centre to each indicator. */
+  radarRadialLines: boolean;
   startAngle?: number;
   endAngle?: number;
   padAngle: number;
@@ -58,8 +88,10 @@ export interface ZardChartBuildContext {
   /** Series colors already resolved from `zConfig` for the active theme, keyed by data key. */
   colors: Record<string, string>;
   chrome: ZardChartChromeColors;
-  tooltip: Omit<ZardChartTooltipContext, 'colors' | 'config'> | null;
+  tooltip: (Omit<ZardChartTooltipContext, 'colors' | 'config'> & { cursor: boolean }) | null;
   hasLegend: boolean;
+  /** True on touch, where a tooltip has to survive the finger lifting. */
+  coarsePointer: boolean;
   /** Turns `var(--token)` into a literal ECharts can paint with. */
   resolveColor: (value: string) => string;
 }
@@ -111,8 +143,27 @@ function expandRow(row: ZardChartDatum, keys: string[]): Record<string, number |
   return normalized;
 }
 
-/** A cartesian data point: a bare number, or an object when the row carries its own `fill`. */
-type CartesianPoint = number | null | { value: number | null; itemStyle: { color: string } };
+/** A cartesian data point: a bare number, or an object when the row styles itself. */
+type CartesianPoint = number | null | OptionRecord;
+
+/**
+ * Per-point overrides a row may carry, mirroring what Recharts expresses with `<Cell>`:
+ * `fill` for the color, plus `itemStyle` and `label` for anything else about that one point.
+ */
+function pointStyleOf(ctx: ZardChartBuildContext, row: ZardChartDatum): OptionRecord | undefined {
+  const fill = typeof row['fill'] === 'string' ? ctx.resolveColor(row['fill'] as string) : undefined;
+  const declared = isPlainObject(row['itemStyle']) ? row['itemStyle'] : undefined;
+  const label = isPlainObject(row['label']) ? row['label'] : undefined;
+
+  if (!fill && !declared && !label) return undefined;
+
+  const itemStyle = { ...(fill ? { color: fill } : {}), ...(declared ?? {}) };
+
+  return {
+    ...(Object.keys(itemStyle).length > 0 ? { itemStyle } : {}),
+    ...(label ? { label } : {}),
+  };
+}
 
 function seriesValues(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]): Map<string, CartesianPoint[]> {
   const keys = definitions.map(definition => definition.dataKey);
@@ -120,12 +171,11 @@ function seriesValues(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]
 
   for (const row of ctx.data) {
     const source = ctx.stackOffset === 'expand' ? expandRow(row, keys) : row;
-    // shadcn drives per-point colors from a `fill` field on the row; honour it here too.
-    const fill = typeof row['fill'] === 'string' ? ctx.resolveColor(row['fill'] as string) : undefined;
+    const style = pointStyleOf(ctx, row);
 
     for (const key of keys) {
       const value = toNumber(source[key]);
-      values.get(key)?.push(fill ? { value, itemStyle: { color: fill } } : value);
+      values.get(key)?.push(style ? { value, ...style } : value);
     }
   }
 
@@ -199,7 +249,9 @@ function buildAxes(ctx: ZardChartBuildContext, definitions: ZardChartSeries[], c
     boundaryGap: hasBars,
     axisLine: { show: false },
     axisTick: { show: false },
-    splitLine: { show: false, lineStyle: { color: ctx.chrome.border } },
+    // `border/50`, like shadcn's `[&_.recharts-cartesian-grid_line]:stroke-border/50`. `opacity`
+    // multiplies the token's own alpha instead of replacing it, which `--border` already carries.
+    splitLine: { show: false, lineStyle: { color: ctx.chrome.border, opacity: 0.5 } },
     axisLabel: {
       show: ctx.horizontal ? ctx.yAxis : ctx.xAxis,
       margin: 8,
@@ -214,7 +266,9 @@ function buildAxes(ctx: ZardChartBuildContext, definitions: ZardChartSeries[], c
     type: 'value',
     axisLine: { show: false },
     axisTick: { show: false },
-    splitLine: { show: false, lineStyle: { color: ctx.chrome.border } },
+    // `border/50`, like shadcn's `[&_.recharts-cartesian-grid_line]:stroke-border/50`. `opacity`
+    // multiplies the token's own alpha instead of replacing it, which `--border` already carries.
+    splitLine: { show: false, lineStyle: { color: ctx.chrome.border, opacity: 0.5 } },
     axisLabel: {
       show: ctx.horizontal ? ctx.xAxis : ctx.yAxis,
       margin: 8,
@@ -260,6 +314,8 @@ function buildCartesianSeries(ctx: ZardChartBuildContext, definitions: ZardChart
       type: isBar ? 'bar' : 'line',
       data: values.get(definition.dataKey) ?? [],
       itemStyle: { color, ...(isBar ? { borderRadius: barRadius(ctx, definition, isStackTop) } : {}) },
+      // Recharts sets a hair of space between the bars of a group; ECharts leaves a third of a bar.
+      ...(isBar ? { emphasis: { disabled: true }, barGap: '5%' } : {}),
       label: seriesLabelOption(ctx, definition),
       animation: ctx.animation,
       ...(stack ? { stack } : {}),
@@ -267,24 +323,43 @@ function buildCartesianSeries(ctx: ZardChartBuildContext, definitions: ZardChart
     };
 
     if (!isBar) {
-      series['lineStyle'] = { color, width: 2 };
+      const area = isArea ? areaFill(ctx, color, definition) : undefined;
+
+      series['lineStyle'] = { color, width: definition.strokeWidth ?? 2 };
       series['smooth'] = definition.smooth ?? false;
       series['showSymbol'] = definition.showSymbol ?? false;
       series['symbol'] = 'circle';
       series['symbolSize'] = definition.symbolSize ?? DEFAULT_SYMBOL_SIZE;
       series['emphasis'] = { focus: 'none' };
+      // An axis tooltip highlights one point, which fades the rest of the line to nothing.
+      // Recharts only adds an active dot, so pin the blur state to the normal one.
+      series['blur'] = {
+        lineStyle: { opacity: 1 },
+        itemStyle: { opacity: 1 },
+        ...(area ? { areaStyle: { opacity: (area['opacity'] as number) ?? 1 } } : {}),
+      };
       if (definition.step) series['step'] = definition.step;
-      if (isArea) series['areaStyle'] = areaFill(ctx, color, definition);
+      if (area) series['areaStyle'] = area;
     }
 
     return series;
   });
 }
 
+/**
+ * ECharts lays radar indicators out counter-clockwise from the top; Recharts goes clockwise.
+ * Keeping the first row at twelve o'clock and reversing the rest flips the direction without
+ * moving the starting point.
+ */
+function clockwise<T>(items: readonly T[]): T[] {
+  const [first, ...rest] = items;
+  return first === undefined ? [] : [first, ...rest.reverse()];
+}
+
 function buildRadar(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]): OptionRecord {
   const lines = gridVisibility(ctx.grid);
   const gridVisible = lines.horizontal || lines.vertical;
-  const indicators = ctx.data.map(row => ({ name: categoryOf(ctx, row) }));
+  const indicators = clockwise(ctx.data.map(row => ({ name: categoryOf(ctx, row) })));
 
   const data = definitions.map((definition, index) => {
     const color = colorFor(ctx, definition.dataKey, index, definition.color);
@@ -292,9 +367,9 @@ function buildRadar(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]):
 
     return {
       name: labelFor(ctx.config, definition.dataKey),
-      value: ctx.data.map(row => toNumber(row[definition.dataKey])),
+      value: clockwise(ctx.data.map(row => toNumber(row[definition.dataKey]))),
       itemStyle: { color },
-      lineStyle: { color, width: 2 },
+      lineStyle: { color, width: definition.strokeWidth ?? DEFAULT_RADAR_STROKE },
       symbol: (definition.showSymbol ?? false) ? 'circle' : 'none',
       symbolSize: definition.symbolSize ?? DEFAULT_SYMBOL_SIZE,
       ...(opacity > 0 ? { areaStyle: { color, opacity } } : {}),
@@ -307,10 +382,11 @@ function buildRadar(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]):
       indicator: indicators,
       shape: ctx.radarShape,
       axisName: { color: ctx.chrome.mutedForeground, fontSize: 12 },
-      axisLine: { show: gridVisible, lineStyle: { color: ctx.chrome.border } },
+      axisLine: { show: gridVisible && ctx.radarRadialLines, lineStyle: { color: ctx.chrome.border } },
       splitLine: { show: gridVisible, lineStyle: { color: ctx.chrome.border } },
       splitArea: { show: false },
-      ...(ctx.outerRadius === undefined ? {} : { radius: ctx.outerRadius }),
+      // Recharts sizes the web off the container, not off however much room the names leave.
+      radius: ctx.outerRadius ?? DEFAULT_RADAR_RADIUS,
     },
     series: [{ type: 'radar', data, animation: ctx.animation }],
   };
@@ -325,7 +401,7 @@ function buildPie(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]): O
     const declared = typeof row['fill'] === 'string' ? (row['fill'] as string) : undefined;
 
     return {
-      name,
+      name: labelFor(ctx.config, name),
       value: toNumber(row[valueKey]) ?? 0,
       itemStyle: { color: colorFor(ctx, name, index, declared ?? definition?.color) },
     };
@@ -338,21 +414,48 @@ function buildPie(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]): O
         radius: [ctx.innerRadius ?? 0, ctx.outerRadius ?? '80%'],
         center: ['50%', '50%'],
         padAngle: ctx.padAngle,
+        // Recharts walks a pie counter-clockwise from twelve o'clock; ECharts goes the other way.
+        clockwise: ctx.startAngle !== undefined && ctx.endAngle !== undefined ? ctx.endAngle < ctx.startAngle : false,
         avoidLabelOverlap: true,
         animation: ctx.animation,
-        itemStyle: { borderColor: ctx.chrome.background, borderWidth: 2 },
+        itemStyle: { borderColor: ctx.chrome.background, borderWidth: definitions[0]?.strokeWidth ?? 0 },
         label: {
           show: ctx.label,
           color: ctx.chrome.foreground,
           fontSize: 12,
+          formatter: '{c}',
         },
         labelLine: { show: ctx.label, lineStyle: { color: ctx.chrome.border } },
         data,
-        ...(ctx.startAngle === undefined ? {} : { startAngle: ctx.startAngle }),
+        // Recharts starts a pie at three o'clock, not twelve.
+        startAngle: ctx.startAngle ?? 0,
         ...(ctx.endAngle === undefined ? {} : { endAngle: ctx.endAngle }),
       },
     ],
   };
+}
+
+/** Reproduces the polar layout ECharts is about to compute, so the labels can ride the rings. */
+function arcLabels(ctx: ZardChartBuildContext, names: string[]): OptionRecord[] {
+  const { width, height } = ctx.size;
+  if (width <= 0 || height <= 0 || names.length === 0) return [];
+
+  const base = Math.min(width, height) / 2;
+  const inner = resolveRadius(ctx.innerRadius, base, base * 0.3);
+  const outer = resolveRadius(ctx.outerRadius, base, base * 0.9);
+  const band = (outer - inner) / names.length;
+  const fontSize = 11;
+
+  return buildArcLabels(names, {
+    cx: width / 2,
+    cy: height / 2,
+    radii: names.map((_, index) => inner + band * (index + 0.5)),
+    startAngle: ctx.startAngle ?? 90,
+    ascending: (ctx.endAngle ?? 360) >= (ctx.startAngle ?? 90),
+    font: `${fontSize}px ${ctx.fontFamily}`,
+    fontSize,
+    fill: '#fff',
+  });
 }
 
 function buildRadialBar(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]): OptionRecord {
@@ -360,7 +463,7 @@ function buildRadialBar(ctx: ZardChartBuildContext, definitions: ZardChartSeries
   const stacked = definitions.length > 1;
   const names = stacked
     ? definitions.map(item => labelFor(ctx.config, item.dataKey))
-    : ctx.data.map(row => categoryOf(ctx, row));
+    : ctx.data.map(row => labelFor(ctx.config, categoryOf(ctx, row)));
 
   const rowValues = stacked
     ? definitions.map(item => toNumber(ctx.data[0]?.[item.dataKey]) ?? 0)
@@ -401,7 +504,9 @@ function buildRadialBar(ctx: ZardChartBuildContext, definitions: ZardChartSeries
       coordinateSystem: 'polar',
       name: labelFor(ctx.config, definition?.dataKey ?? ''),
       roundCap: true,
-      showBackground: true,
+      // Recharts leaves barely a hair between the rings; ECharts' default gap is four times that.
+      barCategoryGap: '10%',
+      showBackground: ctx.track,
       backgroundStyle: { color: track },
       animation: ctx.animation,
       data,
@@ -409,6 +514,7 @@ function buildRadialBar(ctx: ZardChartBuildContext, definitions: ZardChartSeries
   }
 
   return {
+    ...(ctx.radialLabel && !stacked ? { graphic: arcLabels(ctx, names) } : {}),
     polar: {
       radius: [ctx.innerRadius ?? '30%', ctx.outerRadius ?? '90%'],
       center: ['50%', '50%'],
@@ -418,6 +524,11 @@ function buildRadialBar(ctx: ZardChartBuildContext, definitions: ZardChartSeries
       min: 0,
       max: stacked ? rowValues.reduce((sum, value) => sum + value, 0) || 1 : max,
       show: false,
+      // Recharts reads the two angles as a direction: 180 → 0 sweeps clockwise, -90 → 380
+      // counter-clockwise. ECharts needs that spelled out.
+      ...(ctx.startAngle === undefined || ctx.endAngle === undefined
+        ? {}
+        : { clockwise: ctx.endAngle < ctx.startAngle }),
       ...(ctx.startAngle === undefined ? {} : { startAngle: ctx.startAngle }),
       ...(ctx.endAngle === undefined ? {} : { endAngle: ctx.endAngle }),
     },
@@ -481,11 +592,12 @@ function buildCenterText(ctx: ZardChartBuildContext): OptionRecord[] {
     children.push({
       type: 'text',
       x: 0,
-      y: hasBoth ? -12 : 0,
+      y: 0,
+      z: CENTER_TEXT_Z,
       style: {
         text: ctx.centerValue,
         fill: ctx.chrome.foreground,
-        fontSize: 28,
+        fontSize: 36,
         fontWeight: 700,
         align: 'center',
         verticalAlign: 'middle',
@@ -499,7 +611,8 @@ function buildCenterText(ctx: ZardChartBuildContext): OptionRecord[] {
     children.push({
       type: 'text',
       x: 0,
-      y: hasBoth ? 14 : 0,
+      y: hasBoth ? 24 : 0,
+      z: CENTER_TEXT_Z,
       style: {
         text: ctx.centerLabel,
         fill: ctx.chrome.mutedForeground,
@@ -525,12 +638,25 @@ function buildTooltip(ctx: ZardChartBuildContext, legendEntries: ZardChartLegend
 
   const context: ZardChartTooltipContext = { ...ctx.tooltip, config: ctx.config, colors };
 
+  const hasBars = normalizeSeries(ctx.series).some(definition => (definition.type ?? ctx.type) === 'bar');
+  const cursor = ctx.tooltip.cursor
+    ? hasBars
+      ? { type: 'shadow', shadowStyle: { color: withAlpha(ctx.chrome.mutedForeground, 0.15) } }
+      : { type: 'line', lineStyle: { color: ctx.chrome.border, width: 1 } }
+    : { type: 'none' };
+
   return {
     trigger: ctx.tooltip.trigger,
-    axisPointer: { type: 'line', lineStyle: { color: ctx.chrome.border, width: 1 } },
+    // A tap is a hover that ends immediately, so on touch the tooltip would flash and vanish.
+    // Binding it to the click alone keeps it up until the next tap, the way Recharts behaves.
+    triggerOn: ctx.coarsePointer ? 'click' : 'mousemove|click',
+    axisPointer: cursor,
     backgroundColor: 'transparent',
     borderWidth: 0,
     padding: 0,
+    // Recharts keeps its tooltip inside the responsive container; ECharts would let it
+    // spill over whatever sits next to the chart.
+    confine: true,
     extraCssText: 'box-shadow:none;',
     appendToBody: false,
     formatter: (params: ZardChartTooltipParam | ZardChartTooltipParam[]) => buildTooltipHtml(params, context),
@@ -548,7 +674,7 @@ export function buildLegendEntries(ctx: ZardChartBuildContext): ZardChartLegendE
       const declared = typeof row['fill'] === 'string' ? (row['fill'] as string) : undefined;
 
       return {
-        name,
+        name: labelFor(ctx.config, name),
         dataKey: name,
         label: labelFor(ctx.config, name),
         color: colorFor(ctx, name, index, declared),
@@ -631,6 +757,10 @@ export function buildChartOption(ctx: ZardChartBuildContext): EChartsOption {
 
   const option: OptionRecord = {
     animation: ctx.animation,
+    animationDuration: ENTRY_DURATION,
+    animationEasing: ENTRY_EASING,
+    animationDurationUpdate: UPDATE_DURATION,
+    animationEasingUpdate: 'cubicInOut',
     aria: { enabled: ctx.accessibility },
     color: legendEntries.map(entry => entry.color),
     textStyle: { fontFamily: 'inherit' },
@@ -639,9 +769,11 @@ export function buildChartOption(ctx: ZardChartBuildContext): EChartsOption {
   if (isCartesian) {
     const categories = ctx.data.map(row => String(row[ctx.xAxisKey ?? ''] ?? ''));
     Object.assign(option, buildAxes(ctx, definitions, categories));
+    const inset =
+      ctx.horizontal || definitions.some(definition => (definition.type ?? ctx.type) === 'bar') ? 0 : CURVE_GRID_INSET;
     option['grid'] = {
-      left: 0,
-      right: 0,
+      left: inset,
+      right: inset,
       top: 12,
       bottom: 0,
       outerBoundsMode: 'same',

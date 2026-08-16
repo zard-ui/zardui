@@ -43,6 +43,8 @@ export interface ZardChartSeries {
   step?: 'start' | 'middle' | 'end';
   radius?: number | number[];
   showSymbol?: boolean;
+  /** Stroke width of the line, or of a radar web's outline. */
+  strokeWidth?: number;
   symbolSize?: number;
   yAxisIndex?: number;
   color?: string;
