@@ -69,7 +69,9 @@ export class ZardDrawerRef<T = unknown, R = unknown, U = unknown> {
       .pipe(takeUntil(detached$))
       .subscribe(() => this.trigger(eTriggerAction.OK));
 
-    if ((config.zMaskClosable ?? true) && (config.zDismissible ?? true)) {
+    // A non-modal drawer has no mask, so a press outside it is a press on the page the
+    // drawer deliberately left usable — it must not dismiss.
+    if ((config.zMask ?? true) && (config.zMaskClosable ?? true) && (config.zDismissible ?? true)) {
       this.overlayRef
         .outsidePointerEvents()
         .pipe(takeUntil(detached$))
