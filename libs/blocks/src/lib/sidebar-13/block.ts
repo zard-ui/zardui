@@ -154,8 +154,8 @@ export class Sidebar13SettingsDialogComponent {
       zDescription: 'Customize your settings here.',
       zContent: this.settingsTemplate(),
       zHideFooter: true,
-      zWidth: '800px',
-      zCustomClasses: 'overflow-hidden p-0 md:max-h-[500px]',
+      // The Zard dialog caps itself at \`sm:max-w-sm\`; the sidebar layout needs shadcn's wider frame.
+      zCustomClasses: 'overflow-hidden md:max-h-[500px] sm:max-w-[700px] lg:max-w-[800px]',
     });
   }
 }
