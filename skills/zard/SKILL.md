@@ -139,7 +139,7 @@ protected readonly classes = computed(() => mergeClasses(cardVariants(), this.cl
 | Dates           | `z-calendar`, `z-date-picker`                                                                                                |
 | Form structure  | `z-field-group`, `z-field`, `z-field-label`, `z-field-description`, `z-field-error`                                          |
 | Data display    | `z-table`, `z-card`, `z-item`, `z-badge`, `z-avatar`, `z-chart`                                                              |
-| Navigation      | `z-navigation-menu`, `z-breadcrumb`, `z-tabs`, `z-pagination`, `z-tree`                                                      |
+| Navigation      | `z-navigation-menu`, `z-breadcrumb`, `z-tab-group`, `z-pagination`, `z-tree`                                                 |
 | Layout          | `z-layout`, `z-separator`, `z-resizable`, `z-accordion`, `z-carousel`                                                        |
 | Overlays        | `ZardDialogService` (modal), `z-sheet` (side panel), `z-alert-dialog` (confirmation), `z-popover`, `z-tooltip`, `z-dropdown` |
 | Command palette | `z-command`                                                                                                                  |

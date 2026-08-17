@@ -57,7 +57,7 @@ What follows from it:
 
 - **TypeScript paths.** Nx types write to `tsconfig.base.json` — the root `tsconfig.json` is not inherited by any project, so a mapping written there never reaches the compiler even though the editor resolves it. Everything else writes to the project's own `tsconfig.json`, unless the workspace already keeps a base config.
 - **Tailwind.** `analog` gets the Vite plugin. Everything else gets a `.postcssrc.json` written **inside the project**, not at the workspace root — the root would configure every app at once.
-- **Libraries.** No `app.config.ts` and no global CSS to overwrite, so those steps do not run. The theme CSS is created inside the library and declared as an asset in `ng-package.json` so it reaches the published package. `provideZard()` and the Tailwind setup are then the consuming application's responsibility — `init` says so before it finishes.
+- **Libraries.** No `app.config.ts` and no global CSS to overwrite, so those steps do not run. The theme CSS is created inside the library and declared as an asset in `ng-package.json` so it reaches the published package. `provideZard()` and the Tailwind setup are then the consuming application's responsibility — `init` says so before it finishes. It does **not** touch the library's public entry point: `core` (and every component `add` writes) lands under `baseUrl`, and re-exporting it from `src/index.ts` is a manual step. Skip it and the consuming app has nothing to import.
 - **`index.html`.** Analog keeps it at the project root; the Angular build keeps it in `src/`. This is what `add dark-mode` needs.
 
 ### Choosing the project

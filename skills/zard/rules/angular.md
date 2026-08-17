@@ -117,7 +117,7 @@ Two-way state that persists (form values) uses `model()`. A mandatory value uses
 
 ## Boolean inputs are coerced
 
-Without the transform, `<z-thing zDisabled>` passes the string `""`, which is falsy — the attribute silently does nothing.
+Without the transform, `<button z-button zDisabled>` passes the string `""`, which is falsy — the attribute silently does nothing.
 
 **Incorrect:**
 
