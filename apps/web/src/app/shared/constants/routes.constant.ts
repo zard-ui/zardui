@@ -116,7 +116,6 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Input Group', path: '/docs/components/input-group', available: true },
     { name: 'Input OTP', path: '/docs/components/input-otp', available: true },
     { name: 'Item', path: '/docs/components/item', available: true },
-    { name: 'Layout', path: '/docs/components/layout', available: true },
     { name: 'Dialog', path: '/docs/components/dialog', available: true },
     { name: 'Pagination', path: '/docs/components/pagination', available: true },
     { name: 'Progress', path: '/docs/components/progress', available: true },
@@ -141,6 +140,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Popover', path: '/docs/components/popover', available: true },
     { name: 'Kbd', path: '/docs/components/kbd', available: true },
     { name: 'Collapsible', path: '/docs/components/collapsible', available: true },
+    { name: 'Sidebar', path: '/docs/components/sidebar', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 

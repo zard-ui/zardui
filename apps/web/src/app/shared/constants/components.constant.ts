@@ -204,11 +204,6 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/kbd/demo/kbd').then(m => m.KBD),
   },
   {
-    componentName: 'layout',
-    description: 'Layout components for building page structures.',
-    loadData: () => import('@zard/components/layout/demo/layout').then(m => m.LAYOUT),
-  },
-  {
     componentName: 'spinner',
     description: 'Displays a loading spinner.',
     loadData: () => import('@zard/components/spinner/demo/spinner').then(m => m.SPINNER),
@@ -310,5 +305,10 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     componentName: 'collapsible',
     description: 'An interactive component which expands and collapses a panel.',
     loadData: () => import('@zard/components/collapsible/demo/collapsible').then(m => m.COLLAPSIBLE),
+  },
+  {
+    componentName: 'sidebar',
+    description: 'A composable, themeable and customizable sidebar component.',
+    loadData: () => import('@zard/components/sidebar/demo/sidebar').then(m => m.SIDEBAR),
   },
 ];

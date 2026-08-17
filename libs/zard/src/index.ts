@@ -25,7 +25,7 @@ export * from './lib/shared/components/input-group';
 export * from './lib/shared/components/input-otp';
 export * from './lib/shared/components/item';
 export * from './lib/shared/components/kbd';
-export * from './lib/shared/components/layout';
+export * from './lib/shared/components/sidebar';
 export * from './lib/shared/components/spinner';
 export * from './lib/shared/components/navigation-menu';
 export * from './lib/shared/components/pagination';
