@@ -18,6 +18,7 @@
 /docs/theming
 /docs/dark-mode
 /docs/cli
+/docs/monorepo
 /docs/mcp
 /docs/figma
 /docs/pre-processors

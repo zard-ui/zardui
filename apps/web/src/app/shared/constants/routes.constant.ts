@@ -52,6 +52,7 @@ export const DOCS_PATH: NavSection = {
     { name: 'Typeset', path: '/docs/typeset', available: false },
     { name: 'Dark Mode', path: '/docs/dark-mode', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
+    { name: 'Monorepo', path: '/docs/monorepo', available: true },
     { name: 'MCP Server', path: '/docs/mcp', available: true },
     { name: 'Figma', path: '/docs/figma', available: true },
     { name: 'llms.txt', path: '/llms.txt', available: true, external: true },

@@ -85,6 +85,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/mcp/mcp.page').then(c => c.McpPage),
       },
       {
+        path: 'monorepo',
+        loadComponent: () => import('./domain/pages/monorepo/monorepo.page').then(c => c.MonorepoPage),
+      },
+      {
         path: 'components',
         loadChildren: async () => (await import('./domain/pages/component/component.routes')).COMPONENTS_ROUTES,
       },
