@@ -78,34 +78,35 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'layout',
+    name: 'sidebar',
+    registryDependencies: ['button', 'tooltip', 'skeleton', 'separator', 'input', 'collapsible'],
     files: [
       {
-        name: 'layout.component.ts',
-        content: '',
-      },
-      {
-        name: 'layout.variants.ts',
-        content: '',
-      },
-      {
-        name: 'content.component.ts',
-        content: '',
-      },
-      {
-        name: 'footer.component.ts',
-        content: '',
-      },
-      {
-        name: 'header.component.ts',
-        content: '',
-      },
-      {
-        name: 'layout.imports.ts',
-        content: '',
-      },
-      {
         name: 'sidebar.component.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar-primitives.component.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar-menu.component.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.constants.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.service.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.variants.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.imports.ts',
         content: '',
       },
       {

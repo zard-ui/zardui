@@ -49,7 +49,6 @@
 /docs/components/input-group
 /docs/components/input-otp
 /docs/components/item
-/docs/components/layout
 /docs/components/dialog
 /docs/components/pagination
 /docs/components/progress
@@ -73,6 +72,8 @@
 /docs/components/dropdown
 /docs/components/popover
 /docs/components/kbd
+/docs/components/collapsible
+/docs/components/sidebar
 /docs/contribute
 /docs/contribute/setup
 /docs/contribute/architecture
