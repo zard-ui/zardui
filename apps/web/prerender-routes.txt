@@ -9,6 +9,7 @@
 /docs/installation
 /docs/theming
 /docs/cli
+/docs/skills
 /docs/registry
 /docs/mcp
 /docs/roadmap
@@ -19,6 +20,7 @@
 /docs/dark-mode
 /docs/cli
 /docs/monorepo
+/docs/skills
 /docs/mcp
 /docs/figma
 /docs/pre-processors

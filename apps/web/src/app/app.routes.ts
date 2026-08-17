@@ -89,6 +89,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/monorepo/monorepo.page').then(c => c.MonorepoPage),
       },
       {
+        path: 'skills',
+        loadComponent: () => import('./domain/pages/skills/skills.page').then(c => c.SkillsPage),
+      },
+      {
         path: 'components',
         loadChildren: async () => (await import('./domain/pages/component/component.routes')).COMPONENTS_ROUTES,
       },
