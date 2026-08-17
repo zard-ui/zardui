@@ -10,7 +10,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-footer',
   imports: [ZardSidebarImports, ZardDropdownImports, ZardAvatarComponent, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronsUpDown, lucideLogOut, lucideSettings, lucideUser })],
   template: `
     <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -26,7 +25,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
               <button z-sidebar-menu-button zSize="lg" z-dropdown [zDropdownMenu]="account">
                 <z-avatar class="size-8 rounded-lg" zSrc="https://github.com/shadcn.png" zAlt="shadcn" zFallback="CN" />
 
-                <div class="grid flex-1 text-left text-sm leading-tight">
+                <div class="grid flex-1 text-left text-sm/tight">
                   <span class="truncate font-medium">shadcn</span>
                   <span class="text-muted-foreground truncate text-xs">m&#64;example.com</span>
                 </div>
@@ -63,6 +62,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronsUpDown, lucideLogOut, lucideSettings, lucideUser })],
 })
 export class ZardDemoSidebarFooterComponent {
   readonly lastAction = signal('none');

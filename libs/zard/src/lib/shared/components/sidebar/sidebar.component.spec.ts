@@ -36,11 +36,11 @@ const breakpointObserverMock = {
           </div>
         </z-sidebar-content>
 
-        <button z-sidebar-rail></button>
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
       </z-sidebar>
 
       <main z-sidebar-inset>
-        <button z-sidebar-trigger></button>
+        <button z-sidebar-trigger aria-label="Toggle Sidebar"></button>
       </main>
     </z-sidebar-provider>
   `,

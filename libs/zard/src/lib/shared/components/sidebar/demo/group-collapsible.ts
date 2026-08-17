@@ -9,7 +9,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-group-collapsible',
   imports: [ZardSidebarImports, ZardCollapsibleImports, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronDown })],
   template: `
     <z-sidebar-provider class="relative h-80 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -50,6 +49,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronDown })],
 })
 export class ZardDemoSidebarGroupCollapsibleComponent {
   readonly groups = [

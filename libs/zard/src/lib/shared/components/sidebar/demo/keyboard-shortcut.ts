@@ -30,11 +30,11 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
           </div>
         </z-sidebar-content>
 
-        <button z-sidebar-rail></button>
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
       </z-sidebar>
 
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
 
         <p class="flex flex-wrap items-center gap-2 text-sm">
           Press

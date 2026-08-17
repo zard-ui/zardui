@@ -10,7 +10,6 @@ import { ZardSidebarService } from '@/shared/components/sidebar/sidebar.service'
 @Component({
   selector: 'z-demo-sidebar-custom-trigger-button',
   imports: [ZardButtonComponent, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronsLeft, lucideChevronsRight })],
   template: `
     <button z-button zType="outline" zSize="sm" (click)="sidebar.toggleSidebar()">
       <ng-icon [name]="sidebar.open() ? 'lucideChevronsLeft' : 'lucideChevronsRight'" />
@@ -18,6 +17,7 @@ import { ZardSidebarService } from '@/shared/components/sidebar/sidebar.service'
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronsLeft, lucideChevronsRight })],
 })
 export class ZardDemoSidebarCustomTriggerButtonComponent {
   protected readonly sidebar = inject(ZardSidebarService);

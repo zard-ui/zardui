@@ -27,7 +27,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
       </z-sidebar>
 
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
         <p class="text-muted-foreground text-sm">
           The wrapper paints itself with the sidebar colour and the inset floats above it.
         </p>

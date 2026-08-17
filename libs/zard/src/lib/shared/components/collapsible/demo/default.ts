@@ -9,7 +9,6 @@ import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsi
 @Component({
   selector: 'z-demo-collapsible-default',
   imports: [ZardCollapsibleImports, ZardButtonComponent, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronsUpDown })],
   template: `
     <z-collapsible class="flex w-[350px] flex-col gap-2">
       <div class="flex items-center justify-between gap-4 px-4">
@@ -31,5 +30,6 @@ import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsi
     </z-collapsible>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronsUpDown })],
 })
 export class ZardDemoCollapsibleDefaultComponent {}

@@ -37,27 +37,13 @@ interface NavItem {
     ZardAvatarComponent,
     NgIcon,
   ],
-  viewProviders: [
-    provideIcons({
-      lucideCalendar,
-      lucideChevronDown,
-      lucideChevronsUpDown,
-      lucideGalleryVerticalEnd,
-      lucideHouse,
-      lucideInbox,
-      lucideLogOut,
-      lucideSearch,
-      lucideSettings,
-      lucideUser,
-    }),
-  ],
   template: `
     <!--
       In a real app the provider is the page shell and needs no extra classes. Here transform-gpu
       turns it into the containing block for the sidebar's fixed panel, so the demo stays inside the
       documentation page instead of covering the viewport.
     -->
-    <z-sidebar-provider class="relative h-[32rem] min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider class="relative h-128 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="icon" class="h-full">
         <div z-sidebar-header>
           <ul z-sidebar-menu>
@@ -69,7 +55,7 @@ interface NavItem {
                   <ng-icon name="lucideGalleryVerticalEnd" class="size-4" />
                 </div>
 
-                <div class="grid flex-1 text-left text-sm leading-tight">
+                <div class="grid flex-1 text-left text-sm/tight">
                   <span class="truncate font-medium">{{ workspace() }}</span>
                   <span class="text-muted-foreground truncate text-xs">Enterprise</span>
                 </div>
@@ -116,7 +102,7 @@ interface NavItem {
               <button z-sidebar-menu-button zSize="lg" z-dropdown [zDropdownMenu]="account">
                 <z-avatar class="size-8 rounded-lg" zSrc="https://github.com/shadcn.png" zAlt="shadcn" zFallback="CN" />
 
-                <div class="grid flex-1 text-left text-sm leading-tight">
+                <div class="grid flex-1 text-left text-sm/tight">
                   <span class="truncate font-medium">shadcn</span>
                   <span class="text-muted-foreground truncate text-xs">m&#64;example.com</span>
                 </div>
@@ -143,12 +129,12 @@ interface NavItem {
           </ul>
         </div>
 
-        <button z-sidebar-rail></button>
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
       </z-sidebar>
 
       <main z-sidebar-inset class="overflow-auto">
         <header class="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          <button z-sidebar-trigger class="-ml-1"></button>
+          <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
 
           <z-separator zOrientation="vertical" class="mr-2 h-4" />
 
@@ -175,6 +161,20 @@ interface NavItem {
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideCalendar,
+      lucideChevronDown,
+      lucideChevronsUpDown,
+      lucideGalleryVerticalEnd,
+      lucideHouse,
+      lucideInbox,
+      lucideLogOut,
+      lucideSearch,
+      lucideSettings,
+      lucideUser,
+    }),
+  ],
 })
 export class ZardDemoSidebarPreviewComponent {
   readonly workspaceNames = ['Acme Inc', 'Acme Corp.', 'Evil Corp.'] as const;

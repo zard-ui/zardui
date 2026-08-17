@@ -9,7 +9,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-menu-action',
   imports: [ZardSidebarImports, ZardDropdownImports, NgIcon],
-  viewProviders: [provideIcons({ lucideMoreHorizontal })],
   template: `
     <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -50,6 +49,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideMoreHorizontal })],
 })
 export class ZardDemoSidebarMenuActionComponent {
   readonly projects = ['Design Engineering', 'Sales & Marketing', 'Travel'];

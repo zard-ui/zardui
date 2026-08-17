@@ -9,7 +9,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-menu-sub',
   imports: [ZardSidebarImports, ZardCollapsibleImports, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronRight })],
   template: `
     <z-sidebar-provider class="relative h-80 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -54,6 +53,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronRight })],
 })
 export class ZardDemoSidebarMenuSubComponent {
   readonly navItems = [

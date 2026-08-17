@@ -47,9 +47,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   template: `
     <ng-content />
   `,
+  providers: [ZardSidebarService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  providers: [ZardSidebarService],
   host: {
     'data-slot': 'sidebar-wrapper',
     '[class]': 'classes()',
@@ -112,11 +112,16 @@ export class ZardSidebarProviderComponent implements OnInit {
       <ng-container [ngTemplateOutlet]="projected" />
     } @else if (sidebarService.isMobile()) {
       @if (sidebarService.openMobile()) {
-        <div
+        <!-- A button rather than a div: the backdrop is a real dismiss control, so it has to be
+             reachable by keyboard. Escape closes the drawer too. -->
+        <button
+          type="button"
           data-slot="sidebar-backdrop"
+          tabindex="-1"
+          aria-label="Close Sidebar"
           [class]="backdropClasses()"
           (click)="sidebarService.setOpenMobile(false)"
-        ></div>
+        ></button>
 
         <div
           data-sidebar="sidebar"
@@ -130,7 +135,7 @@ export class ZardSidebarProviderComponent implements OnInit {
           [class]="mobileClasses()"
           [style]="mobileStyle"
         >
-          <div class="flex h-full w-full flex-col">
+          <div class="flex size-full flex-col">
             <ng-container [ngTemplateOutlet]="projected" />
           </div>
         </div>

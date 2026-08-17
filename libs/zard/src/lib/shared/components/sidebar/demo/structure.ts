@@ -6,7 +6,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-structure',
   imports: [ZardSidebarImports],
   template: `
-    <z-sidebar-provider class="relative h-[26rem] min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider class="relative h-104 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none" class="border-r">
         <div z-sidebar-header class="border-b border-dashed">
           <span class="text-muted-foreground text-xs font-medium tracking-wide uppercase">SidebarHeader</span>

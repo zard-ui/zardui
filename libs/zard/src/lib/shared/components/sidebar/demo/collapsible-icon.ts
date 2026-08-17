@@ -8,7 +8,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-collapsible-icon',
   imports: [ZardSidebarImports, NgIcon],
-  viewProviders: [provideIcons({ lucideCalendar, lucideHouse, lucideInbox, lucideSettings })],
   template: `
     <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="icon" class="h-full">
@@ -33,7 +32,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
       </z-sidebar>
 
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
         <p class="text-muted-foreground text-sm">
           Collapse the sidebar and hover an icon — the label comes back as a tooltip.
         </p>
@@ -41,6 +40,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCalendar, lucideHouse, lucideInbox, lucideSettings })],
 })
 export class ZardDemoSidebarCollapsibleIconComponent {
   readonly navItems = [

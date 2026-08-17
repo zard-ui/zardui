@@ -233,12 +233,12 @@ export class ZardSidebarMenuBadgeComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  hostDirectives: [ZardIdDirective],
   host: {
     'data-slot': 'sidebar-menu-skeleton',
     'data-sidebar': 'menu-skeleton',
     '[class]': 'classes()',
   },
+  hostDirectives: [ZardIdDirective],
   exportAs: 'zSidebarMenuSkeleton',
 })
 export class ZardSidebarMenuSkeletonComponent {

@@ -9,7 +9,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-header',
   imports: [ZardSidebarImports, ZardDropdownImports, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronDown, lucideGalleryVerticalEnd })],
   template: `
     <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -23,7 +22,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
                   <ng-icon name="lucideGalleryVerticalEnd" class="size-4" />
                 </div>
 
-                <div class="grid flex-1 text-left text-sm leading-tight">
+                <div class="grid flex-1 text-left text-sm/tight">
                   <span class="truncate font-medium">{{ workspace().name }}</span>
                   <span class="text-muted-foreground truncate text-xs">{{ workspace().plan }}</span>
                 </div>
@@ -57,6 +56,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronDown, lucideGalleryVerticalEnd })],
 })
 export class ZardDemoSidebarHeaderComponent {
   readonly workspaces_ = [

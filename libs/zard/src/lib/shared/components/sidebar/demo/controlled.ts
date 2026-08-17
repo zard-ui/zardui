@@ -36,7 +36,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
         </z-sidebar>
 
         <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-          <button z-sidebar-trigger class="self-start"></button>
+          <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
           <p class="text-muted-foreground text-sm">
             The host owns the state: the trigger only reports through zOpenChange, and the switch stays in sync.
           </p>

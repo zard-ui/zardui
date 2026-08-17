@@ -8,7 +8,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-rtl',
   imports: [ZardSidebarImports, NgIcon],
-  viewProviders: [provideIcons({ lucideHouse, lucideInbox, lucideSettings })],
   template: `
     <!--
       In RTL the flex row is already mirrored, so the sidebar has to be declared first for the gap it
@@ -37,16 +36,17 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
           </div>
         </z-sidebar-content>
 
-        <button z-sidebar-rail></button>
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
       </z-sidebar>
 
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
         <p class="text-muted-foreground text-sm">الشريط الجانبي على اليمين، والأيقونة معكوسة.</p>
       </main>
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideHouse, lucideInbox, lucideSettings })],
 })
 export class ZardDemoSidebarRtlComponent {
   readonly navItems = [

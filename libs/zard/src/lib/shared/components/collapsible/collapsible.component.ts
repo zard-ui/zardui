@@ -27,13 +27,13 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
  */
 @Directive({
   selector: 'z-collapsible, [z-collapsible]',
-  hostDirectives: [ZardIdDirective],
   host: {
     'data-slot': 'collapsible',
     '[class]': 'classes()',
     '[attr.data-state]': "open() ? 'open' : 'closed'",
     '[attr.data-disabled]': "zDisabled() ? '' : null",
   },
+  hostDirectives: [ZardIdDirective],
   exportAs: 'zCollapsible',
 })
 export class ZardCollapsibleDirective {

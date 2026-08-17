@@ -31,8 +31,8 @@ export const sidebarContainerVariants = cva(
   {
     variants: {
       zSide: {
-        left: 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]',
-        right: 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
+        left: 'left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)',
+        right: 'right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)',
       },
       zVariant: {
         sidebar:
@@ -49,7 +49,7 @@ export const sidebarContainerVariants = cva(
 );
 
 export const sidebarInnerVariants = cva(
-  'flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm',
+  'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm',
 );
 
 /** Mobile drawer — replaces shadcn's `Sheet`, which is imperative in Zard. */

@@ -8,7 +8,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   template: `
     <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
         <p class="text-muted-foreground text-sm">The inset comes first, so the sidebar docks on the right.</p>
       </main>
 
@@ -35,7 +35,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
           </div>
         </z-sidebar-content>
 
-        <button z-sidebar-rail></button>
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
       </z-sidebar>
     </z-sidebar-provider>
   `,
