@@ -6,6 +6,9 @@
 /themes
 /docs/introduction
 /docs/components
+/docs/installation
+/docs/theming
+/docs/cli
 /docs/registry
 /docs/mcp
 /docs/roadmap
@@ -15,9 +18,10 @@
 /docs/theming
 /docs/dark-mode
 /docs/cli
-/docs/blocks
-/docs/pre-processors
+/docs/mcp
 /docs/figma
+/docs/pre-processors
+/docs/roadmap
 /docs/version-support
 /docs/about
 /docs/forms

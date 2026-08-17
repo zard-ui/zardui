@@ -65,11 +65,6 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/theming/theming.page').then(c => c.ThemingPage),
       },
       {
-        path: 'blocks',
-        loadComponent: () =>
-          import('./domain/pages/blocks/block-instructions/block-instructions.page').then(c => c.BlocksInstructionPage),
-      },
-      {
         path: 'forms',
         loadChildren: async () => (await import('./domain/pages/forms/forms.routes')).FORMS_ROUTES,
       },
