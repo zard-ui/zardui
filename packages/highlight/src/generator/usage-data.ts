@@ -368,4 +368,13 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
   </z-drawer-footer>
 </z-drawer>`,
   },
+  bubble: {
+    importCode: `import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';`,
+    templateCode: `<z-bubble>
+  <z-bubble-content>I checked the registry output and removed the stale route.</z-bubble-content>
+  <z-bubble-reactions>
+    <span>👍</span>
+  </z-bubble-reactions>
+</z-bubble>`,
+  },
 };

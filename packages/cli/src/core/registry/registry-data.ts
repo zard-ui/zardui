@@ -590,6 +590,27 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'bubble',
+    files: [
+      {
+        name: 'bubble.component.ts',
+        content: '',
+      },
+      {
+        name: 'bubble.imports.ts',
+        content: '',
+      },
+      {
+        name: 'bubble.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'select',
     registryDependencies: ['badge'],
     files: [

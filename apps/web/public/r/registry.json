@@ -435,6 +435,21 @@
       ]
     },
     {
+      "name": "bubble",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "bubble.component.ts",
+        "bubble.imports.ts",
+        "bubble.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "select",
       "type": "registry:component",
       "registryDependencies": [

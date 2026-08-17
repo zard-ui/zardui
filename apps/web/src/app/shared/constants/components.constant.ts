@@ -311,4 +311,10 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'A draggable panel that slides in from an edge of the screen.',
     loadData: () => import('@zard/components/drawer/demo/drawer').then(m => m.DRAWER),
   },
+  {
+    componentName: 'bubble',
+    description:
+      'Displays conversational content in a message bubble. Supports variants, alignment, grouping, reactions, and collapsible content.',
+    loadData: () => import('@zard/components/bubble/demo/bubble').then(m => m.BUBBLE),
+  },
 ];

@@ -13,6 +13,7 @@ Here you can find all the components available in the library. We are working on
 - [Avatar](/docs/components/avatar)
 - [Badge](/docs/components/badge)
 - [Breadcrumb](/docs/components/breadcrumb)
+- [Bubble](/docs/components/bubble)
 - [Button](/docs/components/button)
 - [Button Group](/docs/components/button-group)
 - [Calendar](/docs/components/calendar)

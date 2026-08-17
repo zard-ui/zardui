@@ -4,6 +4,7 @@ export * from './lib/shared/components/alert-dialog';
 export * from './lib/shared/components/avatar';
 export * from './lib/shared/components/badge';
 export * from './lib/shared/components/breadcrumb';
+export * from './lib/shared/components/bubble';
 export * from './lib/shared/components/button';
 export * from './lib/shared/components/button-group';
 export * from './lib/shared/components/calendar';
