@@ -1,0 +1,32 @@
+{
+  "id": "sidebar-13",
+  "title": "Sidebar 13",
+  "description": "A sidebar in a dialog.",
+  "category": "Sidebar",
+  "files": [
+    {
+      "name": "sidebar-13-settings-dialog.component.html",
+      "path": "src/components/sidebar-13/sidebar-13-settings-dialog.component.html",
+      "content": "<button z-button zSize=\"sm\" (click)=\"openSettings()\">Open Dialog</button>\n\n<ng-template #settings>\n  <z-sidebar-provider class=\"min-h-0 items-start\">\n    <z-sidebar zCollapsible=\"none\" class=\"hidden md:flex\">\n      <z-sidebar-content>\n        <div z-sidebar-group>\n          <div z-sidebar-group-content>\n            <ul z-sidebar-menu>\n              @for (item of nav; track item.name) {\n                <li z-sidebar-menu-item>\n                  <a z-sidebar-menu-button href=\"#\" [zActive]=\"item.name === 'Messages &amp; media'\">\n                    <ng-icon [name]=\"item.icon\" />\n                    <span>{{ item.name }}</span>\n                  </a>\n                </li>\n              }\n            </ul>\n          </div>\n        </div>\n      </z-sidebar-content>\n    </z-sidebar>\n\n    <main class=\"flex h-[480px] flex-1 flex-col overflow-hidden\">\n      <header\n        class=\"flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12\"\n      >\n        <div class=\"flex items-center gap-2 px-4\">\n          <z-breadcrumb>\n            <z-breadcrumb-item class=\"hidden md:block\">\n              <a z-breadcrumb-link href=\"#\">Settings</a>\n            </z-breadcrumb-item>\n            <z-breadcrumb-separator class=\"hidden md:block\" />\n            <z-breadcrumb-item>\n              <span z-breadcrumb-page>Messages &amp; media</span>\n            </z-breadcrumb-item>\n          </z-breadcrumb>\n        </div>\n      </header>\n\n      <div class=\"flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0\">\n        @for (item of placeholders; track item) {\n          <div class=\"bg-muted/50 aspect-video max-w-3xl rounded-xl\"></div>\n        }\n      </div>\n    </main>\n  </z-sidebar-provider>\n</ng-template>\n",
+      "language": "html"
+    },
+    {
+      "name": "sidebar-13-settings-dialog.component.ts",
+      "path": "src/components/sidebar-13/sidebar-13-settings-dialog.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, inject, type TemplateRef, viewChild } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport {\n  lucideBell,\n  lucideCheck,\n  lucideGlobe,\n  lucideKeyboard,\n  lucideLink,\n  lucideLock,\n  lucideMenu,\n  lucideMessageCircle,\n  lucidePaintbrush,\n  lucideSettings,\n  lucideVideo,\n} from '@ng-icons/lucide';\n\nimport { ZardBreadcrumbImports } from '@zard/components/breadcrumb/breadcrumb.imports';\nimport { ZardButtonComponent } from '@zard/components/button/button.component';\nimport { ZardDialogService } from '@zard/components/dialog/dialog.service';\nimport { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';\n\ninterface NavItem {\n  readonly name: string;\n  readonly icon: string;\n}\n\n/**\n * shadcn drives this with a declarative `<Dialog>`. The Zard dialog is imperative\n * (`ZardDialogService`), so the settings layout lives in a `<ng-template>` that is handed to the\n * service as the dialog content.\n */\n@Component({\n  selector: 'lib-sidebar-13-settings-dialog',\n  standalone: true,\n  imports: [...ZardSidebarImports, ...ZardBreadcrumbImports, ZardButtonComponent, NgIcon],\n  viewProviders: [\n    provideIcons({\n      lucideBell,\n      lucideCheck,\n      lucideGlobe,\n      lucideKeyboard,\n      lucideLink,\n      lucideLock,\n      lucideMenu,\n      lucideMessageCircle,\n      lucidePaintbrush,\n      lucideSettings,\n      lucideVideo,\n    }),\n  ],\n  templateUrl: './sidebar-13-settings-dialog.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class Sidebar13SettingsDialogComponent {\n  private readonly dialogService = inject(ZardDialogService);\n\n  private readonly settingsTemplate = viewChild.required<TemplateRef<unknown>>('settings');\n\n  // This is sample data.\n  protected readonly nav: readonly NavItem[] = [\n    { name: 'Notifications', icon: 'lucideBell' },\n    { name: 'Navigation', icon: 'lucideMenu' },\n    { name: 'Home', icon: 'lucideSettings' },\n    { name: 'Appearance', icon: 'lucidePaintbrush' },\n    { name: 'Messages & media', icon: 'lucideMessageCircle' },\n    { name: 'Language & region', icon: 'lucideGlobe' },\n    { name: 'Accessibility', icon: 'lucideKeyboard' },\n    { name: 'Mark as read', icon: 'lucideCheck' },\n    { name: 'Audio & video', icon: 'lucideVideo' },\n    { name: 'Connected accounts', icon: 'lucideLink' },\n    { name: 'Privacy & visibility', icon: 'lucideLock' },\n    { name: 'Advanced', icon: 'lucideSettings' },\n  ];\n\n  protected readonly placeholders = Array.from({ length: 10 }, (_, index) => index);\n\n  protected openSettings(): void {\n    this.dialogService.create({\n      zTitle: 'Settings',\n      zDescription: 'Customize your settings here.',\n      zContent: this.settingsTemplate(),\n      zHideFooter: true,\n      // The Zard dialog caps itself at `sm:max-w-sm`; the sidebar layout needs shadcn's wider frame.\n      zCustomClasses: 'overflow-hidden md:max-h-[500px] sm:max-w-[700px] lg:max-w-[800px]',\n    });\n  }\n}\n",
+      "language": "typescript"
+    },
+    {
+      "name": "sidebar-13.component.html",
+      "path": "src/components/sidebar-13/sidebar-13.component.html",
+      "content": "<div class=\"flex h-svh items-center justify-center\">\n  <lib-sidebar-13-settings-dialog />\n</div>\n",
+      "language": "html"
+    },
+    {
+      "name": "sidebar-13.component.ts",
+      "path": "src/components/sidebar-13/sidebar-13.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { Sidebar13SettingsDialogComponent } from './sidebar-13-settings-dialog.component';\n\n@Component({\n  selector: 'lib-sidebar-13',\n  standalone: true,\n  imports: [Sidebar13SettingsDialogComponent],\n  templateUrl: './sidebar-13.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class Sidebar13Component {}\n",
+      "language": "typescript"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://zardui.com/schema/registry-item.json",
+  "name": "collapsible",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "collapsible.component.ts",
+      "content": "import {\n  booleanAttribute,\n  ChangeDetectionStrategy,\n  Component,\n  computed,\n  Directive,\n  effect,\n  ElementRef,\n  inject,\n  input,\n  output,\n  signal,\n  ViewEncapsulation,\n} from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { collapsibleContentVariants, collapsibleVariants } from '@/shared/components/collapsible/collapsible.variants';\nimport { ZardIdDirective } from '@/shared/core';\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\n/**\n * A directive rather than a component: it renders no markup of its own, and being a directive is\n * what lets it share an element with a component — `<li z-sidebar-menu-item z-collapsible>` is the\n * idiomatic translation of shadcn's `asChild`. Two components on one node is an Angular error\n * (NG0300).\n */\n@Directive({\n  selector: 'z-collapsible, [z-collapsible]',\n  hostDirectives: [ZardIdDirective],\n  host: {\n    'data-slot': 'collapsible',\n    '[class]': 'classes()',\n    '[attr.data-state]': \"open() ? 'open' : 'closed'\",\n    '[attr.data-disabled]': \"zDisabled() ? '' : null\",\n  },\n  exportAs: 'zCollapsible',\n})\nexport class ZardCollapsibleDirective {\n  private readonly uniqueId = inject(ZardIdDirective);\n  private readonly isElement = inject(ElementRef<HTMLElement>).nativeElement.tagName.toLowerCase() === 'z-collapsible';\n\n  readonly zOpen = input(false, { transform: booleanAttribute });\n  readonly zDisabled = input(false, { transform: booleanAttribute });\n  readonly class = input<ClassValue>('');\n\n  readonly zOpenChange = output<boolean>();\n\n  private readonly internalOpen = signal(false);\n\n  /** Current state of the panel. Readonly for consumers — drive it through `zOpen` or `toggle()`. */\n  readonly open = this.internalOpen.asReadonly();\n\n  /** Stable id of the projected content, wired into the trigger's `aria-controls`. */\n  readonly contentId = computed(() => `${this.uniqueId.id()}-content`);\n\n  protected readonly classes = computed(() =>\n    mergeClasses(collapsibleVariants({ isElement: this.isElement }), this.class()),\n  );\n\n  constructor() {\n    effect(() => {\n      this.internalOpen.set(this.zOpen());\n    });\n  }\n\n  toggle(): void {\n    this.setOpen(!this.internalOpen());\n  }\n\n  setOpen(open: boolean): void {\n    if (this.zDisabled() || this.internalOpen() === open) {\n      return;\n    }\n\n    this.internalOpen.set(open);\n    this.zOpenChange.emit(open);\n  }\n}\n\n@Directive({\n  selector: '[z-collapsible-trigger]',\n  host: {\n    'data-slot': 'collapsible-trigger',\n    type: 'button',\n    '[attr.aria-controls]': 'collapsible.contentId()',\n    '[attr.aria-expanded]': 'collapsible.open()',\n    '[attr.data-state]': \"collapsible.open() ? 'open' : 'closed'\",\n    '[attr.data-disabled]': \"collapsible.zDisabled() ? '' : null\",\n    '[attr.disabled]': 'collapsible.zDisabled() ? true : null',\n    '(click)': 'collapsible.toggle()',\n  },\n  exportAs: 'zCollapsibleTrigger',\n})\nexport class ZardCollapsibleTriggerDirective {\n  protected readonly collapsible = inject(ZardCollapsibleDirective);\n}\n\n@Component({\n  selector: 'z-collapsible-content',\n  template: `\n    <div class=\"overflow-hidden\">\n      <ng-content />\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    'data-slot': 'collapsible-content',\n    '[class]': 'classes()',\n    '[id]': 'collapsible.contentId()',\n    '[attr.data-state]': \"collapsible.open() ? 'open' : 'closed'\",\n  },\n  exportAs: 'zCollapsibleContent',\n})\nexport class ZardCollapsibleContentComponent {\n  protected readonly collapsible = inject(ZardCollapsibleDirective);\n\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() =>\n    mergeClasses(collapsibleContentVariants({ isOpen: this.collapsible.open() }), this.class()),\n  );\n}\n"
+    },
+    {
+      "name": "collapsible.variants.ts",
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const collapsibleVariants = cva('', {\n  variants: {\n    // `z-collapsible` is a custom element and would default to `display: inline`. As an attribute on\n    // an existing element (the `asChild` case) the host's own display has to win instead.\n    isElement: {\n      true: 'block',\n      false: '',\n    },\n  },\n  defaultVariants: {\n    isElement: false,\n  },\n});\n\nexport const collapsibleContentVariants = cva('grid transition-[grid-template-rows,visibility] duration-200 ease-out', {\n  variants: {\n    isOpen: {\n      true: 'visible grid-rows-[1fr]',\n      false: 'invisible grid-rows-[0fr]',\n    },\n  },\n  defaultVariants: {\n    isOpen: false,\n  },\n});\n\nexport type ZardCollapsibleVariants = VariantProps<typeof collapsibleVariants>;\nexport type ZardCollapsibleContentVariants = VariantProps<typeof collapsibleContentVariants>;\n"
+    },
+    {
+      "name": "collapsible.imports.ts",
+      "content": "import {\n  ZardCollapsibleDirective,\n  ZardCollapsibleContentComponent,\n  ZardCollapsibleTriggerDirective,\n} from '@/shared/components/collapsible/collapsible.component';\n\nexport const ZardCollapsibleImports = [\n  ZardCollapsibleDirective,\n  ZardCollapsibleTriggerDirective,\n  ZardCollapsibleContentComponent,\n] as const;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from '@/shared/components/collapsible/collapsible.component';\nexport * from '@/shared/components/collapsible/collapsible.variants';\nexport * from '@/shared/components/collapsible/collapsible.imports';\n"
+    }
+  ],
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [
+        "lucideChevronsUpDown"
+      ],
+      "tokens": [
+        "chevrons-up-down"
+      ]
+    }
+  }
+}

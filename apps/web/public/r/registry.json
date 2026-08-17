@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.106",
+  "version": "1.0.0-beta.107",
   "items": [
     {
       "name": "core",
@@ -57,27 +57,33 @@
       ]
     },
     {
-      "name": "layout",
+      "name": "sidebar",
       "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "tooltip",
+        "skeleton",
+        "separator",
+        "input",
+        "collapsible"
+      ],
       "icons": {
         "family": "lucide",
         "symbols": [
-          "lucideChevronLeft",
-          "lucideChevronRight"
+          "lucidePanelLeft"
         ],
         "tokens": [
-          "chevron-left",
-          "chevron-right"
+          "panel-left"
         ]
       },
       "files": [
-        "layout.component.ts",
-        "layout.variants.ts",
-        "content.component.ts",
-        "footer.component.ts",
-        "header.component.ts",
-        "layout.imports.ts",
         "sidebar.component.ts",
+        "sidebar-primitives.component.ts",
+        "sidebar-menu.component.ts",
+        "sidebar.constants.ts",
+        "sidebar.service.ts",
+        "sidebar.variants.ts",
+        "sidebar.imports.ts",
         "index.ts"
       ]
     },
@@ -270,6 +276,21 @@
       "files": [
         "checkbox.component.ts",
         "checkbox.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "collapsible.component.ts",
+        "collapsible.variants.ts",
+        "collapsible.imports.ts",
         "index.ts"
       ]
     },
