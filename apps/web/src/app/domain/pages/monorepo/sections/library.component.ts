@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { TABS_0, BLOCK_1, BLOCK_2, BLOCK_3, BLOCK_4 } from '@generated/pages/monorepo/library';
+import { TABS_0, BLOCK_1, BLOCK_2, BLOCK_3, BLOCK_4, BLOCK_5 } from '@generated/pages/monorepo/library';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
@@ -65,10 +65,22 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">init</code>
       says so before it finishes.
     </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      One step is the library's, and it is easy to miss:
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">provideZard()</code>
+      is installed with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">core</code>
+      inside the library, and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">init</code>
+      does not touch the public entry point. Re-export it from
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/index.ts</code>
+      , or the import below has nothing to resolve to.
+    </p>
+    <z-code-block [data]="entryPoint" />
     <z-code-block [data]="appConfig" />
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      The import resolves to the asset published at the package root. Tailwind is the application's to configure too:
-      the library has no build of its own to run it in.
+      The stylesheet import resolves to the asset published at the package root. Tailwind is the application's to
+      configure too: the library has no build of its own to run it in.
     </p>
     <z-code-block [data]="styles" />
   `,
@@ -77,6 +89,7 @@ export class MonorepoLibrarySection {
   readonly initTabs: CodeTabData = TABS_0;
   readonly componentsJson: CodeBlockData = BLOCK_1;
   readonly ngPackage: CodeBlockData = BLOCK_2;
-  readonly appConfig: CodeBlockData = BLOCK_3;
-  readonly styles: CodeBlockData = BLOCK_4;
+  readonly entryPoint: CodeBlockData = BLOCK_3;
+  readonly appConfig: CodeBlockData = BLOCK_4;
+  readonly styles: CodeBlockData = BLOCK_5;
 }

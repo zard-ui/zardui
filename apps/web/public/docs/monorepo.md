@@ -132,6 +132,15 @@ An Nx library only gets an `ng-package.json` when it is publishable. Without one
 
 Two things belong to the application, and the library cannot do either on its behalf: registering the providers, and importing the tokens. Skip them and the components render unstyled, which reads like a broken install rather than a missing step — so `init` says so before it finishes.
 
+One step is the library's, and it is easy to miss: `provideZard()` is installed with `core` inside the library, and `init` does not touch the public entry point. Re-export it from `src/index.ts` , or the import below has nothing to resolve to.
+
+libs/ui/src/index.ts
+
+```
+export * from './lib/shared/core';
+export * from './lib/shared/components/button';
+```
+
 apps/web/src/app/app.config.ts
 
 ```
@@ -144,7 +153,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-The import resolves to the asset published at the package root. Tailwind is the application's to configure too: the library has no build of its own to run it in.
+The stylesheet import resolves to the asset published at the package root. Tailwind is the application's to configure too: the library has no build of its own to run it in.
 
 apps/web/src/styles.css
 
@@ -179,7 +188,7 @@ With a single compatible project there is nothing to choose, so the question is 
 Terminal
 
 ```
-# Answer both questions up front — required in CI, where nothing can be asked.
+# Both answers up front — required in CI, where nobody can be asked.
 npx zard-cli@latest init --type nx --project admin --yes
 ```
 

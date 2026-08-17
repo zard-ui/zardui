@@ -47,6 +47,11 @@ bunx zard-cli@latest init --type nx-library --project ui
 }
 ```
 
+```ts title="libs/ui/src/index.ts" copyButton
+export * from './lib/shared/core';
+export * from './lib/shared/components/button';
+```
+
 ```angular-ts title="apps/web/src/app/app.config.ts" copyButton showLineNumbers
 import { ApplicationConfig } from '@angular/core';
 

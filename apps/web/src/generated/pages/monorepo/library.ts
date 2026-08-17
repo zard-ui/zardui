@@ -50,6 +50,16 @@ export const BLOCK_2: CodeBlockData = {
 };
 
 export const BLOCK_3: CodeBlockData = {
+  "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">export</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> *</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\"> from</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> './lib/shared/core'</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">;</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">export</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> *</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\"> from</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> './lib/shared/components/button'</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">;</span></span></code></pre>",
+  "code": "export * from './lib/shared/core';\nexport * from './lib/shared/components/button';",
+  "language": "ts",
+  "title": "libs/ui/src/index.ts",
+  "showLineNumbers": false,
+  "copyButton": true,
+  "expandable": false
+};
+
+export const BLOCK_4: CodeBlockData = {
   "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">import</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> { ApplicationConfig } </span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">from</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> '@angular/core'</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">;</span></span>\n<span class=\"line\"></span>\n<span class=\"line\"><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">import</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> { provideZard } </span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">from</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> '@acme/ui'</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">;</span></span>\n<span class=\"line\"></span>\n<span class=\"line\"><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">export</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\"> const</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> appConfig</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">:</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> ApplicationConfig</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\"> =</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> {</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">  providers: [</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">provideZard</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">()],</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">};</span></span></code></pre>",
   "code": "import { ApplicationConfig } from '@angular/core';\n\nimport { provideZard } from '@acme/ui';\n\nexport const appConfig: ApplicationConfig = {\n  providers: [provideZard()],\n};",
   "language": "angular-ts",
@@ -59,7 +69,7 @@ export const BLOCK_3: CodeBlockData = {
   "expandable": false
 };
 
-export const BLOCK_4: CodeBlockData = {
+export const BLOCK_5: CodeBlockData = {
   "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">@import</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> '@acme/ui/styles.css'</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">;</span></span></code></pre>",
   "code": "@import '@acme/ui/styles.css';",
   "language": "css",
