@@ -11,6 +11,6 @@
 ```
 
 ```bash title="Terminal" copyButton
-# Answer both questions up front — required in CI, where nothing can be asked.
+# Both answers up front — required in CI, where nobody can be asked.
 npx zard-cli@latest init --type nx --project admin --yes
 ```
