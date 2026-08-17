@@ -24,6 +24,7 @@ Here you can find all the components available in the library. We are working on
 - [Command](/docs/components/command)
 - [Date Picker](/docs/components/date-picker)
 - [Dialog](/docs/components/dialog)
+- [Drawer](/docs/components/drawer)
 - [Dropdown](/docs/components/dropdown)
 - [Empty](/docs/components/empty)
 - [Field](/docs/components/field)

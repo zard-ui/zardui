@@ -350,4 +350,22 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
     importCode: `import { ZardTreeImports } from '@/shared/components/tree/tree.imports';`,
     templateCode: `<z-tree [data]="treeData"></z-tree>`,
   },
+  drawer: {
+    importCode: `import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';`,
+    templateCode: `<button type="button" z-button zType="outline" (click)="visible.set(true)">Open</button>
+
+<z-drawer [(zVisible)]="visible">
+  <z-drawer-header>
+    <z-drawer-title>Are you absolutely sure?</z-drawer-title>
+    <z-drawer-description>This action cannot be undone.</z-drawer-description>
+  </z-drawer-header>
+
+  <div class="p-4"><!-- Content here --></div>
+
+  <z-drawer-footer>
+    <button type="button" z-button>Submit</button>
+    <button type="button" z-button zType="outline" z-drawer-close>Cancel</button>
+  </z-drawer-footer>
+</z-drawer>`,
+  },
 };
