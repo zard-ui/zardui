@@ -11,7 +11,7 @@ Our journey to building the best Angular component library. See our progress and
 
 From zero to production ready - 4 major milestones
 
-61%
+99%
 
 Complete
 
@@ -70,13 +70,13 @@ Documentation
 - components.json configuration
 - Community feedback integration
 
-In Progress
+Completed
 
 ### Release Candidate - Quality & DX
 
-45%
+100%
 
-Current focus: CLI with private registry, improved DX, accessibility, performance, MCP server for AI integration, and comprehensive testing
+A registry the CLI installs from without touching GitHub, an MCP server so assistants read the real components, and a test suite behind both
 
 #### Goals
 
@@ -90,22 +90,24 @@ MCP Server
 
 Testing
 
-#### Deliverables (3/6)
+#### Deliverables (6/6)
 
 - CLI with private registry (no GitHub fetch)
 - Component improvements (DX, accessibility, performance)
-- MCP Server for AI integration (Claude, ChatGPT)
-- Enhanced unit tests for all components
-- E2E testing implementation
-- Blocks library (auth, dashboard, landing)
+- MCP Server for AI integration (Claude, Cursor, VS Code)
+- Unit tests with Jest and Testing Library
+- E2E testing with Playwright, including a11y checks
+- Blocks library (login, signup)
 
-Planned
+In Progress
+
+August 20, 2026
 
 ### V1.0 - Production Ready
 
-0%
+95%
 
-Official stable release with enterprise-ready features and full community support
+Everything the release needs is published and in use — what is left is the pass over quality before the version number changes
 
 #### Goals
 
@@ -113,18 +115,22 @@ Stable release
 
 Component registry
 
-Enterprise features
+AI integration
 
-Community hub
+Accessibility
 
-#### Deliverables (0/6)
+#### Deliverables (6/10)
 
-- V1.0 stable release
-- Public component registry
-- 100% test coverage (unit + e2e)
-- Theme generator
-- Registry MCP integration
-- Advanced components (Charts, Carousel, Table)
+- 47 components, including Chart (Apache ECharts)
+- 10 ready-made blocks
+- Public registry with a versioned format and JSON Schemas
+- Icon catalog served by the registry, family set in components.json
+- zard-mcp published on npm, with 9 tools
+- Full-screen CLI with five project types, icons and rtl
+- Final test pass (unit + e2e)
+- Accessibility review
+- Bug validation and fixes
+- V1.0 published on npm
 
 ### Help Us Reach V1.0
 
