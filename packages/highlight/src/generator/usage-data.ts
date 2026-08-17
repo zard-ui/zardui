@@ -350,4 +350,11 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
     importCode: `import { ZardTreeImports } from '@/shared/components/tree/tree.imports';`,
     templateCode: `<z-tree [data]="treeData"></z-tree>`,
   },
+  collapsible: {
+    importCode: `import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsible.imports';`,
+    templateCode: `<z-collapsible>
+  <button z-collapsible-trigger>Toggle</button>
+  <z-collapsible-content>Content</z-collapsible-content>
+</z-collapsible>`,
+  },
 };

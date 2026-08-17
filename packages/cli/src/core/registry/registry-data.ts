@@ -345,6 +345,27 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'collapsible',
+    files: [
+      {
+        name: 'collapsible.component.ts',
+        content: '',
+      },
+      {
+        name: 'collapsible.variants.ts',
+        content: '',
+      },
+      {
+        name: 'collapsible.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'dialog',
     registryDependencies: ['button'],
     files: [
