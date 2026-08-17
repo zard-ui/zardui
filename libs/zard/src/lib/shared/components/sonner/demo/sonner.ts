@@ -2,6 +2,7 @@ import { SONNER_DEMO_DEFAULT } from '@generated/components/sonner/demo/default';
 import { SONNER_DEMO_DESCRIPTION } from '@generated/components/sonner/demo/description';
 import { SONNER_DEMO_POSITION } from '@generated/components/sonner/demo/position';
 import { SONNER_DEMO_TYPES } from '@generated/components/sonner/demo/types';
+import { SONNER_DEMO_WITH_DIALOG } from '@generated/components/sonner/demo/with-dialog';
 import { SONNER_CLI_ADD } from '@generated/installation/cli/add-sonner';
 import { SONNER_MANUAL_INSTALL_DEPS } from '@generated/installation/manual/install-deps-sonner';
 import { SONNER_MANUAL_CODE } from '@generated/installation/manual/sonner';
@@ -12,6 +13,7 @@ import { ZardDemoSonnerDefaultComponent } from './default';
 import { ZardDemoSonnerDescriptionComponent } from './description';
 import { ZardDemoSonnerPositionComponent } from './position';
 import { ZardDemoSonnerTypesComponent } from './types';
+import { ZardDemoSonnerWithDialogComponent } from './with-dialog';
 import { SONNER_API } from '../doc/api';
 
 export const SONNER = {
@@ -48,6 +50,12 @@ export const SONNER = {
       description: 'Use the `position` option to change the position of the toast.',
       component: ZardDemoSonnerPositionComponent,
       codeData: SONNER_DEMO_POSITION,
+    },
+    {
+      name: 'with-dialog',
+      description: 'Toasts are rendered in the top layer, so they stay above dialogs, drawers and sheets.',
+      component: ZardDemoSonnerWithDialogComponent,
+      codeData: SONNER_DEMO_WITH_DIALOG,
     },
   ],
 };

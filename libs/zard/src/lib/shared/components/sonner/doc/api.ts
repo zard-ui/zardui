@@ -50,6 +50,13 @@ export const SONNER_API: ApiSection[] = [
         default: "'auto'",
       },
       {
+        name: '[topLayer]',
+        description:
+          'Renders the toaster in the native top layer so toasts stay above dialogs, drawers and sheets. Disable it only if the app opts out of the CDK top layer.',
+        type: 'boolean',
+        default: 'true',
+      },
+      {
         name: '[class]',
         description: 'Additional Tailwind / utility classes merged into the host.',
         type: 'ClassValue',
