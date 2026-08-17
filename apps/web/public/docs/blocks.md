@@ -13,7 +13,7 @@ Building blocks for your apps. Blocks are pre-built components that you can use 
 
 [Browse all blocks](/blocks)
 
-10
+26
 
 Available Blocks
 
@@ -31,6 +31,7 @@ Hand-picked collection of our best blocks
 
 - [Login form](/blocks#login-01)
 - [Signup form](/blocks#signup-01)
+- [Sidebar 07](/blocks#sidebar-07)
 
 ## All Blocks
 
@@ -38,10 +39,32 @@ Browse blocks by category
 
 ### Featured
 
-2
+3
 
 - [Login form](/blocks#login-01)
 - [Signup form](/blocks#signup-01)
+- [Sidebar 07](/blocks#sidebar-07)
+
+### Sidebar
+
+16
+
+- [Sidebar 01](/blocks#sidebar-01)
+- [Sidebar 02](/blocks#sidebar-02)
+- [Sidebar 03](/blocks#sidebar-03)
+- [Sidebar 04](/blocks#sidebar-04)
+- [Sidebar 05](/blocks#sidebar-05)
+- [Sidebar 06](/blocks#sidebar-06)
+- [Sidebar 07](/blocks#sidebar-07)
+- [Sidebar 08](/blocks#sidebar-08)
+- [Sidebar 09](/blocks#sidebar-09)
+- [Sidebar 10](/blocks#sidebar-10)
+- [Sidebar 11](/blocks#sidebar-11)
+- [Sidebar 12](/blocks#sidebar-12)
+- [Sidebar 13](/blocks#sidebar-13)
+- [Sidebar 14](/blocks#sidebar-14)
+- [Sidebar 15](/blocks#sidebar-15)
+- [Sidebar 16](/blocks#sidebar-16)
 
 ### Login
 

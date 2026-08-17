@@ -197,9 +197,7 @@ export interface Sidebar15Favorite {
   selector: 'lib-sidebar-15-nav-favorites',
   standalone: true,
   imports: [...ZardSidebarImports, ...ZardDropdownImports, NgIcon],
-  viewProviders: [
-    provideIcons({ lucideArrowUpRight, lucideLink, lucideMoreHorizontal, lucideStarOff, lucideTrash2 }),
-  ],
+  viewProviders: [provideIcons({ lucideArrowUpRight, lucideLink, lucideMoreHorizontal, lucideStarOff, lucideTrash2 })],
   templateUrl: './sidebar-15-nav-favorites.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
@@ -288,7 +286,13 @@ export class Sidebar15NavMainComponent {
       content: `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideBlocks, lucideCalendar, lucideMessageCircleQuestion, lucideSettings2, lucideTrash2 } from '@ng-icons/lucide';
+import {
+  lucideBlocks,
+  lucideCalendar,
+  lucideMessageCircleQuestion,
+  lucideSettings2,
+  lucideTrash2,
+} from '@ng-icons/lucide';
 
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
 
@@ -303,7 +307,9 @@ export interface Sidebar15SecondaryItem {
   selector: 'lib-sidebar-15-nav-secondary',
   standalone: true,
   imports: [...ZardSidebarImports, NgIcon],
-  viewProviders: [provideIcons({ lucideBlocks, lucideCalendar, lucideMessageCircleQuestion, lucideSettings2, lucideTrash2 })],
+  viewProviders: [
+    provideIcons({ lucideBlocks, lucideCalendar, lucideMessageCircleQuestion, lucideSettings2, lucideTrash2 }),
+  ],
   templateUrl: './sidebar-15-nav-secondary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },

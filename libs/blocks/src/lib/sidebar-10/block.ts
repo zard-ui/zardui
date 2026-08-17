@@ -152,11 +152,12 @@ export class Sidebar10AppSidebarComponent {
 
   <button
     z-button
+    zPopover
     zType="ghost"
     zSize="icon"
     class="data-[state=open]:bg-accent h-7 w-7"
     aria-label="More actions"
-    [zPopover]="actions"
+    [zContent]="actions"
     zAlign="end"
   >
     <ng-icon name="lucideMoreHorizontal" />
@@ -352,9 +353,7 @@ export interface Sidebar10Favorite {
   selector: 'lib-sidebar-10-nav-favorites',
   standalone: true,
   imports: [...ZardSidebarImports, ...ZardDropdownImports, NgIcon],
-  viewProviders: [
-    provideIcons({ lucideArrowUpRight, lucideLink, lucideMoreHorizontal, lucideStarOff, lucideTrash2 }),
-  ],
+  viewProviders: [provideIcons({ lucideArrowUpRight, lucideLink, lucideMoreHorizontal, lucideStarOff, lucideTrash2 })],
   templateUrl: './sidebar-10-nav-favorites.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
@@ -443,7 +442,13 @@ export class Sidebar10NavMainComponent {
       content: `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideBlocks, lucideCalendar, lucideMessageCircleQuestion, lucideSettings2, lucideTrash2 } from '@ng-icons/lucide';
+import {
+  lucideBlocks,
+  lucideCalendar,
+  lucideMessageCircleQuestion,
+  lucideSettings2,
+  lucideTrash2,
+} from '@ng-icons/lucide';
 
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
 
@@ -458,7 +463,9 @@ export interface Sidebar10SecondaryItem {
   selector: 'lib-sidebar-10-nav-secondary',
   standalone: true,
   imports: [...ZardSidebarImports, NgIcon],
-  viewProviders: [provideIcons({ lucideBlocks, lucideCalendar, lucideMessageCircleQuestion, lucideSettings2, lucideTrash2 })],
+  viewProviders: [
+    provideIcons({ lucideBlocks, lucideCalendar, lucideMessageCircleQuestion, lucideSettings2, lucideTrash2 }),
+  ],
   templateUrl: './sidebar-10-nav-secondary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
