@@ -6,7 +6,6 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
   selector: 'z-demo-bubble-reactions',
-  host: { class: 'contents' },
   imports: [ZardButtonComponent, ...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-12 py-12">
@@ -41,6 +40,7 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleReactionsComponent {
   private readonly sonner = inject(ZardSonnerService);

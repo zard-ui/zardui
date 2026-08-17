@@ -4,7 +4,6 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
 @Component({
   selector: 'z-demo-bubble-default',
-  host: { class: 'contents' },
   imports: [...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -40,5 +39,6 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleDefaultComponent {}

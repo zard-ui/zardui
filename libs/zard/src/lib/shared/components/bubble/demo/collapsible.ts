@@ -18,7 +18,6 @@ const PREVIEW_LENGTH = 180;
 
 @Component({
   selector: 'z-demo-bubble-collapsible',
-  host: { class: 'contents' },
   imports: [NgIcon, ZardButtonComponent, ...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -54,6 +53,7 @@ const PREVIEW_LENGTH = 180;
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideChevronDown })],
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleCollapsibleComponent {
   protected readonly open = signal(false);

@@ -9,7 +9,6 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
 
 @Component({
   selector: 'z-demo-bubble-tooltip',
-  host: { class: 'contents' },
   imports: [NgIcon, ZardButtonComponent, ZardTooltipImports, ...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-4 py-12">
@@ -34,5 +33,6 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
     </div>
   `,
   viewProviders: [provideIcons({ lucideCheck })],
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleTooltipComponent {}

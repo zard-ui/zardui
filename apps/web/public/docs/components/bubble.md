@@ -281,7 +281,6 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
 @Component({
   selector: 'z-demo-bubble-default',
-  host: { class: 'contents' },
   imports: [...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -317,6 +316,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleDefaultComponent {}
 ```
@@ -330,7 +330,6 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
 @Component({
   selector: 'z-demo-bubble-variants',
-  host: { class: 'contents' },
   imports: [...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-12 py-12">
@@ -371,6 +370,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleVariantsComponent {}
 ```
@@ -384,7 +384,6 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
 @Component({
   selector: 'z-demo-bubble-alignment',
-  host: { class: 'contents' },
   imports: [...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -396,6 +395,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleAlignmentComponent {}
 ```
@@ -409,7 +409,6 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
 @Component({
   selector: 'z-demo-bubble-group',
-  host: { class: 'contents' },
   imports: [...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -437,6 +436,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleGroupComponent {}
 ```
@@ -451,7 +451,6 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
   selector: 'z-demo-bubble-link-button',
-  host: { class: 'contents' },
   imports: [...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -478,6 +477,7 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleLinkButtonComponent {
   private readonly sonner = inject(ZardSonnerService);
@@ -499,7 +499,6 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
   selector: 'z-demo-bubble-reactions',
-  host: { class: 'contents' },
   imports: [ZardButtonComponent, ...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-12 py-12">
@@ -534,6 +533,7 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleReactionsComponent {
   private readonly sonner = inject(ZardSonnerService);
@@ -567,7 +567,6 @@ const PREVIEW_LENGTH = 180;
 
 @Component({
   selector: 'z-demo-bubble-collapsible',
-  host: { class: 'contents' },
   imports: [NgIcon, ZardButtonComponent, ...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -603,6 +602,7 @@ const PREVIEW_LENGTH = 180;
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideChevronDown })],
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleCollapsibleComponent {
   protected readonly open = signal(false);
@@ -627,7 +627,6 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
 
 @Component({
   selector: 'z-demo-bubble-tooltip',
-  host: { class: 'contents' },
   imports: [NgIcon, ZardButtonComponent, ZardTooltipImports, ...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-4 py-12">
@@ -652,6 +651,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
     </div>
   `,
   viewProviders: [provideIcons({ lucideCheck })],
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleTooltipComponent {}
 ```
@@ -670,7 +670,6 @@ import { ZardPopoverImports } from '@/shared/components/popover/popover.imports'
 
 @Component({
   selector: 'z-demo-bubble-popover',
-  host: { class: 'contents' },
   imports: [NgIcon, ZardButtonComponent, ...ZardPopoverImports, ...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-4 py-12">
@@ -706,6 +705,7 @@ import { ZardPopoverImports } from '@/shared/components/popover/popover.imports'
     </ng-template>
   `,
   viewProviders: [provideIcons({ lucideInfo })],
+  host: { class: 'contents' },
 })
 export class ZardDemoBubblePopoverComponent {}
 ```
@@ -719,7 +719,6 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
 @Component({
   selector: 'z-demo-bubble-shorthand',
-  host: { class: 'contents' },
   imports: [...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -732,6 +731,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  host: { class: 'contents' },
 })
 export class ZardDemoBubbleShorthandComponent {}
 ```

@@ -9,7 +9,6 @@ import { ZardPopoverImports } from '@/shared/components/popover/popover.imports'
 
 @Component({
   selector: 'z-demo-bubble-popover',
-  host: { class: 'contents' },
   imports: [NgIcon, ZardButtonComponent, ...ZardPopoverImports, ...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-4 py-12">
@@ -45,5 +44,6 @@ import { ZardPopoverImports } from '@/shared/components/popover/popover.imports'
     </ng-template>
   `,
   viewProviders: [provideIcons({ lucideInfo })],
+  host: { class: 'contents' },
 })
 export class ZardDemoBubblePopoverComponent {}
