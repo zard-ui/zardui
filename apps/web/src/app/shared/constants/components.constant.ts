@@ -306,4 +306,10 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
       'A hierarchical tree view for displaying nested data structures with expand/collapse, selection, and checkboxes.',
     loadData: () => import('@zard/components/tree/demo/tree').then(m => m.TREE),
   },
+  {
+    componentName: 'bubble',
+    description:
+      'Displays conversational content in a message bubble. Supports variants, alignment, grouping, reactions, and collapsible content.',
+    loadData: () => import('@zard/components/bubble/demo/bubble').then(m => m.BUBBLE),
+  },
 ];

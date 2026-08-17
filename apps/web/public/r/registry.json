@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.106",
+  "version": "1.0.0-beta.107",
   "items": [
     {
       "name": "core",
@@ -402,6 +402,21 @@
         "item.component.ts",
         "item.imports.ts",
         "item.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "bubble",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "bubble.component.ts",
+        "bubble.imports.ts",
+        "bubble.variants.ts",
         "index.ts"
       ]
     },
