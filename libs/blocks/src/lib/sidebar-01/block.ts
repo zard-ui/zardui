@@ -42,7 +42,7 @@ export const sidebar01Block: Block = {
     }
   </z-sidebar-content>
 
-  <button z-sidebar-rail></button>
+  <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
 </z-sidebar>
 `,
       language: 'html',
@@ -259,7 +259,7 @@ export class Sidebar01VersionSwitcherComponent {
 
   <main z-sidebar-inset>
     <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-      <button z-sidebar-trigger class="-ml-1"></button>
+      <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
 
       <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
 

@@ -1,0 +1,28 @@
+<header class="bg-background sticky top-0 z-50 flex w-full items-center border-b">
+  <div class="flex h-(--header-height) w-full items-center gap-2 px-4">
+    <button
+      z-button
+      zType="ghost"
+      zSize="icon"
+      class="h-8 w-8"
+      aria-label="Toggle Sidebar"
+      (click)="sidebar.toggleSidebar()"
+    >
+      <ng-icon name="lucidePanelLeft" />
+    </button>
+
+    <z-separator zOrientation="vertical" class="mr-2 h-4" />
+
+    <z-breadcrumb class="hidden sm:block">
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link href="#">Build Your Application</a>
+      </z-breadcrumb-item>
+      <z-breadcrumb-separator />
+      <z-breadcrumb-item>
+        <span z-breadcrumb-page>Data Fetching</span>
+      </z-breadcrumb-item>
+    </z-breadcrumb>
+
+    <lib-sidebar-16-search-form class="w-full sm:ml-auto sm:w-auto" />
+  </div>
+</header>

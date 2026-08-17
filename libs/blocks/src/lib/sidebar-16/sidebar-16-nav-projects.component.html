@@ -1,0 +1,42 @@
+<div z-sidebar-group class="group-data-[collapsible=icon]:hidden">
+  <div z-sidebar-group-label>Projects</div>
+
+  <ul z-sidebar-menu>
+    @for (item of projects(); track item.name) {
+      <li z-sidebar-menu-item>
+        <a z-sidebar-menu-button [href]="item.url">
+          <ng-icon [name]="item.icon" />
+          <span>{{ item.name }}</span>
+        </a>
+
+        <button z-sidebar-menu-action zShowOnHover z-dropdown [zDropdownMenu]="projectMenu">
+          <ng-icon name="lucideMoreHorizontal" />
+          <span class="sr-only">More</span>
+        </button>
+
+        <z-dropdown-menu-content #projectMenu="zDropdownMenuContent" class="w-48 rounded-lg">
+          <z-dropdown-menu-item>
+            <ng-icon name="lucideFolder" class="text-muted-foreground" />
+            <span>View Project</span>
+          </z-dropdown-menu-item>
+          <z-dropdown-menu-item>
+            <ng-icon name="lucideForward" class="text-muted-foreground" />
+            <span>Share Project</span>
+          </z-dropdown-menu-item>
+          <z-dropdown-menu-separator />
+          <z-dropdown-menu-item>
+            <ng-icon name="lucideTrash2" class="text-muted-foreground" />
+            <span>Delete Project</span>
+          </z-dropdown-menu-item>
+        </z-dropdown-menu-content>
+      </li>
+    }
+
+    <li z-sidebar-menu-item>
+      <button z-sidebar-menu-button class="text-sidebar-foreground/70">
+        <ng-icon name="lucideMoreHorizontal" class="text-sidebar-foreground/70" />
+        <span>More</span>
+      </button>
+    </li>
+  </ul>
+</div>

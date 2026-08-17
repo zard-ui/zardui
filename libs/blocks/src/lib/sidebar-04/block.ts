@@ -162,7 +162,7 @@ export class Sidebar04AppSidebarComponent {
 
   <main z-sidebar-inset>
     <header class="flex h-16 shrink-0 items-center gap-2 px-4">
-      <button z-sidebar-trigger class="-ml-1"></button>
+      <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
 
       <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
 

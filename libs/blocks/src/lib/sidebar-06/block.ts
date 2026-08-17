@@ -147,15 +147,15 @@ export class Sidebar06AppSidebarComponent {
           <ng-icon name="lucideMoreHorizontal" class="ml-auto" />
         </button>
 
-        @if (group.items.length) {
-          <z-dropdown-menu-content #groupMenu="zDropdownMenuContent" class="min-w-56 rounded-lg">
-            @for (item of group.items; track item.title) {
-              <z-dropdown-menu-item>
-                <a [href]="item.url">{{ item.title }}</a>
-              </z-dropdown-menu-item>
-            }
-          </z-dropdown-menu-content>
-        }
+        <!-- Kept outside an @if: a template reference declared inside a control-flow block is not
+             visible to the trigger above it. -->
+        <z-dropdown-menu-content #groupMenu="zDropdownMenuContent" class="min-w-56 rounded-lg">
+          @for (item of group.items; track item.title) {
+            <z-dropdown-menu-item>
+              <a [href]="item.url">{{ item.title }}</a>
+            </z-dropdown-menu-item>
+          }
+        </z-dropdown-menu-content>
       </li>
     }
   </ul>

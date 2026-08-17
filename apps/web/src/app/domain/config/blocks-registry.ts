@@ -34,26 +34,9 @@ import type { BlockCategory } from '../services/blocks.service';
  * Import new blocks here and add them to their respective category
  */
 export const BLOCKS_REGISTRY: Record<BlockCategory, any[]> = {
-  featured: [
-    login01Block,
-    signup01Block,
-    sidebar01Block,
-    sidebar02Block,
-    sidebar03Block,
-    sidebar04Block,
-    sidebar05Block,
-    sidebar06Block,
-    sidebar07Block,
-    sidebar08Block,
-    sidebar09Block,
-    sidebar10Block,
-    sidebar11Block,
-    sidebar12Block,
-    sidebar13Block,
-    sidebar14Block,
-    sidebar15Block,
-    sidebar16Block,
-  ],
+  // The block generator adds every new block to `featured`. With 16 sidebars that would bury the
+  // landing page, so only the most representative one stays here — all 16 live under `sidebar`.
+  featured: [login01Block, signup01Block, sidebar07Block],
   sidebar: [
     sidebar01Block,
     sidebar02Block,

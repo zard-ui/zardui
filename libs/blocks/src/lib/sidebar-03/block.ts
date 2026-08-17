@@ -58,7 +58,7 @@ export const sidebar03Block: Block = {
     </div>
   </z-sidebar-content>
 
-  <button z-sidebar-rail></button>
+  <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
 </z-sidebar>
 `,
       language: 'html',
@@ -165,7 +165,7 @@ export class Sidebar03AppSidebarComponent {
   <main z-sidebar-inset>
     <header class="flex h-16 shrink-0 items-center gap-2 border-b">
       <div class="flex items-center gap-2 px-3">
-        <button z-sidebar-trigger></button>
+        <button z-sidebar-trigger aria-label="Toggle Sidebar"></button>
 
         <z-separator zOrientation="vertical" class="mr-2 h-4" />
 

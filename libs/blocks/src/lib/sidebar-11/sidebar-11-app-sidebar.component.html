@@ -1,0 +1,67 @@
+<z-sidebar>
+  <z-sidebar-content>
+    <div z-sidebar-group>
+      <div z-sidebar-group-label>Changes</div>
+
+      <div z-sidebar-group-content>
+        <ul z-sidebar-menu>
+          @for (item of changes; track item.file) {
+            <li z-sidebar-menu-item>
+              <button z-sidebar-menu-button>
+                <ng-icon name="lucideFile" />
+                {{ item.file }}
+              </button>
+              <div z-sidebar-menu-badge>{{ item.state }}</div>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div z-sidebar-group>
+      <div z-sidebar-group-label>Files</div>
+
+      <div z-sidebar-group-content>
+        <ul z-sidebar-menu>
+          @for (node of tree; track node.name) {
+            <ng-container [ngTemplateOutlet]="treeNode" [ngTemplateOutletContext]="{ $implicit: node }" />
+          }
+        </ul>
+      </div>
+    </div>
+  </z-sidebar-content>
+
+  <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
+</z-sidebar>
+
+<!-- Recursive template: Angular's answer to shadcn's self-referencing <Tree /> component. -->
+<ng-template #treeNode let-node>
+  @if (!node.children) {
+    <button z-sidebar-menu-button class="data-[active=true]:bg-transparent" [zActive]="node.name === 'button.tsx'">
+      <ng-icon name="lucideFile" />
+      {{ node.name }}
+    </button>
+  } @else {
+    <li z-sidebar-menu-item>
+      <div
+        z-collapsible
+        class="group/collapsible [&[data-state=open]>button>ng-icon:first-child]:rotate-90"
+        [zOpen]="isOpenByDefault(node)"
+      >
+        <button z-collapsible-trigger z-sidebar-menu-button>
+          <ng-icon name="lucideChevronRight" class="transition-transform" />
+          <ng-icon name="lucideFolder" />
+          {{ node.name }}
+        </button>
+
+        <z-collapsible-content>
+          <ul z-sidebar-menu-sub>
+            @for (child of node.children; track child.name) {
+              <ng-container [ngTemplateOutlet]="treeNode" [ngTemplateOutletContext]="{ $implicit: child }" />
+            }
+          </ul>
+        </z-collapsible-content>
+      </div>
+    </li>
+  }
+</ng-template>
