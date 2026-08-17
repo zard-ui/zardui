@@ -1,3 +1,13 @@
+## 1.0.0-beta.110 (2026-08-17)
+
+### 🐛 Bug Fixes
+
+- **sonner:** render toasts in the native top layer ([#711](https://github.com/zard-ui/zardui/pull/711))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.109 (2026-08-17)
 
 ### ✨ Features
