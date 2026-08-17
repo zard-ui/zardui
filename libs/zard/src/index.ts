@@ -16,6 +16,7 @@ export * from './lib/shared/components/combobox';
 export * from './lib/shared/components/command';
 export * from './lib/shared/components/date-picker';
 export * from './lib/shared/components/dialog';
+export * from './lib/shared/components/drawer';
 export * from './lib/shared/components/separator';
 export * from './lib/shared/components/dropdown';
 export * from './lib/shared/components/empty';

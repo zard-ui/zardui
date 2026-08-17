@@ -73,6 +73,7 @@
 /docs/components/dropdown
 /docs/components/popover
 /docs/components/kbd
+/docs/components/drawer
 /docs/components/bubble
 /docs/contribute
 /docs/contribute/setup

@@ -345,6 +345,56 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'drawer',
+    registryDependencies: ['button'],
+    files: [
+      {
+        name: 'drawer.component.ts',
+        content: '',
+      },
+      {
+        name: 'drawer-panel.component.ts',
+        content: '',
+      },
+      {
+        name: 'drawer-container.component.ts',
+        content: '',
+      },
+      {
+        name: 'drawer-host.ts',
+        content: '',
+      },
+      {
+        name: 'drawer-stack.ts',
+        content: '',
+      },
+      {
+        name: 'drawer-ref.ts',
+        content: '',
+      },
+      {
+        name: 'drawer.service.ts',
+        content: '',
+      },
+      {
+        name: 'drawer.utils.ts',
+        content: '',
+      },
+      {
+        name: 'drawer.variants.ts',
+        content: '',
+      },
+      {
+        name: 'drawer.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'dialog',
     registryDependencies: ['button'],
     files: [
