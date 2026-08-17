@@ -18,9 +18,7 @@ const VIEWPORT = { width: 1440, height: 900 };
 const THEMES = ['light', 'dark'] as const;
 const OUTPUT_ROOT = join(process.cwd(), 'apps', 'web', 'public', 'blocks');
 
-const ALL_BLOCKS = [
-  ...Array.from({ length: 16 }, (_, index) => `sidebar-${String(index + 1).padStart(2, '0')}`),
-];
+const ALL_BLOCKS = [...Array.from({ length: 16 }, (_, index) => `sidebar-${String(index + 1).padStart(2, '0')}`)];
 
 async function capture(browser: Browser, blockId: string, theme: (typeof THEMES)[number]): Promise<void> {
   const context = await browser.newContext({ viewport: VIEWPORT, colorScheme: theme });
