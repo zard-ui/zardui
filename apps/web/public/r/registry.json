@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.106",
+  "version": "1.0.0-beta.107",
   "items": [
     {
       "name": "core",
@@ -270,6 +270,35 @@
       "files": [
         "checkbox.component.ts",
         "checkbox.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "drawer",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideX"
+        ],
+        "tokens": [
+          "x"
+        ]
+      },
+      "files": [
+        "drawer.component.ts",
+        "drawer-panel.component.ts",
+        "drawer-container.component.ts",
+        "drawer-host.ts",
+        "drawer-stack.ts",
+        "drawer-ref.ts",
+        "drawer.service.ts",
+        "drawer.utils.ts",
+        "drawer.variants.ts",
+        "drawer.imports.ts",
         "index.ts"
       ]
     },

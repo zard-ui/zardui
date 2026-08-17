@@ -306,4 +306,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
       'A hierarchical tree view for displaying nested data structures with expand/collapse, selection, and checkboxes.',
     loadData: () => import('@zard/components/tree/demo/tree').then(m => m.TREE),
   },
+  {
+    componentName: 'drawer',
+    description: 'A draggable panel that slides in from an edge of the screen.',
+    loadData: () => import('@zard/components/drawer/demo/drawer').then(m => m.DRAWER),
+  },
 ];
