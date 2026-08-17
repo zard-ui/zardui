@@ -1,11 +1,11 @@
 import {
-  ZardCollapsibleComponent,
+  ZardCollapsibleDirective,
   ZardCollapsibleContentComponent,
   ZardCollapsibleTriggerDirective,
 } from '@/shared/components/collapsible/collapsible.component';
 
 export const ZardCollapsibleImports = [
-  ZardCollapsibleComponent,
+  ZardCollapsibleDirective,
   ZardCollapsibleTriggerDirective,
   ZardCollapsibleContentComponent,
 ] as const;

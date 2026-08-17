@@ -52,8 +52,13 @@ interface NavItem {
     }),
   ],
   template: `
-    <z-sidebar-provider>
-      <z-sidebar zCollapsible="icon">
+    <!--
+      In a real app the provider is the page shell and needs no extra classes. Here transform-gpu
+      turns it into the containing block for the sidebar's fixed panel, so the demo stays inside the
+      documentation page instead of covering the viewport.
+    -->
+    <z-sidebar-provider class="relative h-[32rem] min-h-0 transform-gpu overflow-hidden rounded-xl border">
+      <z-sidebar zCollapsible="icon" class="h-full">
         <div z-sidebar-header>
           <ul z-sidebar-menu>
             <li z-sidebar-menu-item>
@@ -89,16 +94,15 @@ interface NavItem {
               <ul z-sidebar-menu>
                 @for (item of navItems; track item.title) {
                   <li z-sidebar-menu-item>
-                    <a
+                    <button
                       z-sidebar-menu-button
-                      href="#"
                       [zActive]="item.title === active()"
                       [zTooltip]="item.title"
                       (click)="active.set(item.title)"
                     >
                       <ng-icon [name]="item.icon" />
                       <span>{{ item.title }}</span>
-                    </a>
+                    </button>
                   </li>
                 }
               </ul>
@@ -142,15 +146,15 @@ interface NavItem {
         <button z-sidebar-rail></button>
       </z-sidebar>
 
-      <main z-sidebar-inset>
-        <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+      <main z-sidebar-inset class="overflow-auto">
+        <header class="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <button z-sidebar-trigger class="-ml-1"></button>
 
-          <z-separator zOrientation="vertical" class="mr-2 h-4" [zDecorative]="true" />
+          <z-separator zOrientation="vertical" class="mr-2 h-4" />
 
           <z-breadcrumb zLabel="Breadcrumb">
             <z-breadcrumb-item class="hidden md:block">
-              <a z-breadcrumb-link href="#">Building Your Application</a>
+              <span z-breadcrumb-page class="text-muted-foreground">Building Your Application</span>
             </z-breadcrumb-item>
             <z-breadcrumb-item>
               <span z-breadcrumb-page>{{ active() }}</span>
@@ -160,12 +164,12 @@ interface NavItem {
 
         <div class="flex flex-1 flex-col gap-4 p-4">
           <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            @for (tile of [1, 2, 3]; track tile) {
+            @for (tile of tiles; track tile) {
               <z-skeleton class="bg-muted/50 aspect-video rounded-xl" />
             }
           </div>
 
-          <z-skeleton class="bg-muted/50 min-h-[40vh] flex-1 rounded-xl md:min-h-min" />
+          <z-skeleton class="bg-muted/50 min-h-64 flex-1 rounded-xl" />
         </div>
       </main>
     </z-sidebar-provider>
@@ -176,6 +180,7 @@ export class ZardDemoSidebarPreviewComponent {
   readonly workspaceNames = ['Acme Inc', 'Acme Corp.', 'Evil Corp.'] as const;
   readonly workspace = signal<string>(this.workspaceNames[0]);
   readonly active = signal('Home');
+  readonly tiles = [1, 2, 3];
 
   readonly navItems: readonly NavItem[] = [
     { title: 'Home', icon: 'lucideHouse' },

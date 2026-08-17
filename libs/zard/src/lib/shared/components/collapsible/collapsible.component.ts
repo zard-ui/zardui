@@ -5,6 +5,7 @@ import {
   computed,
   Directive,
   effect,
+  ElementRef,
   inject,
   input,
   output,
@@ -18,13 +19,14 @@ import { collapsibleContentVariants, collapsibleVariants } from '@/shared/compon
 import { ZardIdDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-@Component({
+/**
+ * A directive rather than a component: it renders no markup of its own, and being a directive is
+ * what lets it share an element with a component — `<li z-sidebar-menu-item z-collapsible>` is the
+ * idiomatic translation of shadcn's `asChild`. Two components on one node is an Angular error
+ * (NG0300).
+ */
+@Directive({
   selector: 'z-collapsible, [z-collapsible]',
-  template: `
-    <ng-content />
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   hostDirectives: [ZardIdDirective],
   host: {
     'data-slot': 'collapsible',
@@ -34,8 +36,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   },
   exportAs: 'zCollapsible',
 })
-export class ZardCollapsibleComponent {
+export class ZardCollapsibleDirective {
   private readonly uniqueId = inject(ZardIdDirective);
+  private readonly isElement = inject(ElementRef<HTMLElement>).nativeElement.tagName.toLowerCase() === 'z-collapsible';
 
   readonly zOpen = input(false, { transform: booleanAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
@@ -51,7 +54,9 @@ export class ZardCollapsibleComponent {
   /** Stable id of the projected content, wired into the trigger's `aria-controls`. */
   readonly contentId = computed(() => `${this.uniqueId.id()}-content`);
 
-  protected readonly classes = computed(() => mergeClasses(collapsibleVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(collapsibleVariants({ isElement: this.isElement }), this.class()),
+  );
 
   constructor() {
     effect(() => {
@@ -88,7 +93,7 @@ export class ZardCollapsibleComponent {
   exportAs: 'zCollapsibleTrigger',
 })
 export class ZardCollapsibleTriggerDirective {
-  protected readonly collapsible = inject(ZardCollapsibleComponent);
+  protected readonly collapsible = inject(ZardCollapsibleDirective);
 }
 
 @Component({
@@ -109,7 +114,7 @@ export class ZardCollapsibleTriggerDirective {
   exportAs: 'zCollapsibleContent',
 })
 export class ZardCollapsibleContentComponent {
-  protected readonly collapsible = inject(ZardCollapsibleComponent);
+  protected readonly collapsible = inject(ZardCollapsibleDirective);
 
   readonly class = input<ClassValue>('');
 

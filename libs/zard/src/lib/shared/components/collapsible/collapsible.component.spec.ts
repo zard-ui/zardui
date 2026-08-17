@@ -39,7 +39,7 @@ const setup = async () => {
   return { ...view, trigger, content: content as HTMLElement, root: root as HTMLElement };
 };
 
-describe('ZardCollapsibleComponent', () => {
+describe('ZardCollapsibleDirective', () => {
   it('creates successfully and starts closed', async () => {
     const { root, content, trigger } = await setup();
 

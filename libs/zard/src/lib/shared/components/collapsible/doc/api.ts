@@ -2,8 +2,9 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 
 export const COLLAPSIBLE_API: ApiSection[] = [
   {
-    selector: 'z-collapsible',
-    description: 'An interactive component which expands and collapses a panel.',
+    selector: 'z-collapsible, [z-collapsible]',
+    description:
+      'An interactive component which expands and collapses a panel. It renders no markup of its own, so it can also be applied as an attribute to an element that is already a component — for example li[z-sidebar-menu-item].',
     props: [
       {
         name: 'zOpen',
