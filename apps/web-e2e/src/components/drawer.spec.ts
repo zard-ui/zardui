@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 import { checkA11y } from '../utils/axe-helper';
 import { ComponentDemoPage } from '../utils/component-page';
 
-const PANEL = '.cdk-overlay-container z-drawer-panel';
+const PANEL = '.cdk-overlay-container [data-slot="drawer-popup"]';
 
 test.describe('Drawer component', () => {
   let demoPage: ComponentDemoPage;
@@ -18,12 +18,13 @@ test.describe('Drawer component', () => {
   });
 
   test('opens the drawer on trigger click', async ({ page }) => {
+    // The first demo picks its side from the viewport, so pin one before asserting.
+    await page.setViewportSize({ width: 1280, height: 900 });
     await demoPage.firstDemoBox.locator('button[z-button]').first().click();
 
     const panel = page.locator(PANEL);
     await expect(panel).toBeVisible({ timeout: 5000 });
     await expect(panel).toHaveAttribute('role', 'dialog');
-    // The first demo is a side panel where there is room and a bottom sheet where there is not.
     await expect(panel).toHaveAttribute('data-placement', 'right');
     await expect(panel).toHaveAttribute('data-axis', 'x');
   });
@@ -36,7 +37,7 @@ test.describe('Drawer component', () => {
 
     const labelledBy = await panel.getAttribute('aria-labelledby');
     expect(labelledBy).toBeTruthy();
-    await expect(page.locator(`#${labelledBy}`)).toBeVisible();
+    await expect(page.locator(`[id="${labelledBy}"]`)).toBeVisible();
   });
 
   test('closes on Escape', async ({ page }) => {

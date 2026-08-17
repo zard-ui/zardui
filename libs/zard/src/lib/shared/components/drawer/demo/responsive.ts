@@ -11,7 +11,7 @@ import { injectIsMobile } from './is-mobile';
   selector: 'zard-demo-drawer-profile-form',
   imports: [ZardButtonComponent, ZardInputComponent],
   template: `
-    <form class="grid items-start gap-6">
+    <form class="grid items-start gap-6" (submit)="$event.preventDefault()">
       <div class="grid gap-3">
         <label for="drawer-demo-email" class="text-sm leading-none font-medium select-none">Email</label>
         <input z-input id="drawer-demo-email" type="email" value="shadcn@example.com" />

@@ -345,9 +345,11 @@ export class ZardDrawerPanelComponent {
     pushDrawerPanel(this);
 
     // Leave the stack as soon as the exit animation starts, so the drawer behind this one
-    // un-stacks while both are still moving.
+    // un-stacks while both are still moving — and re-join it if the drawer is re-opened
+    // mid-exit, which reuses this same panel.
     effect(() => {
-      if (this.zState() === 'closed') untracked(() => popDrawerPanel(this));
+      const closing = this.zState() === 'closed';
+      untracked(() => (closing ? popDrawerPanel(this) : pushDrawerPanel(this)));
     });
 
     afterNextRender(() => {
@@ -356,7 +358,10 @@ export class ZardDrawerPanelComponent {
       this.trapFocus();
     });
 
-    this.destroyRef.onDestroy(() => popDrawerPanel(this));
+    this.destroyRef.onDestroy(() => {
+      popDrawerPanel(this);
+      this.endGesture();
+    });
   }
 
   private readViewport(): void {
@@ -368,9 +373,11 @@ export class ZardDrawerPanelComponent {
   }
 
   private measure(): void {
-    const rect = this.host.nativeElement.getBoundingClientRect();
+    // offsetWidth/Height, not getBoundingClientRect: the panel is scaled while stacked, and
+    // the swipe maths needs its layout size, not the size it happens to be painted at.
+    const element = this.host.nativeElement;
 
-    this.measuredSize.set(isVerticalPlacement(this.zPlacement()) ? rect.height : rect.width);
+    this.measuredSize.set(isVerticalPlacement(this.zPlacement()) ? element.offsetHeight : element.offsetWidth);
     // The panel is `position: fixed`, so it is the offsetParent of its own children.
     this.bodyOffset.set(this.body().nativeElement.offsetTop);
     this.readViewport();
@@ -384,8 +391,12 @@ export class ZardDrawerPanelComponent {
     this.destroyRef.onDestroy(() => observer.disconnect());
   }
 
+  /**
+   * Only a modal drawer traps focus. A non-modal one deliberately leaves the page usable,
+   * so tabbing out of it has to reach that page.
+   */
   private trapFocus(): void {
-    const trap = this.focusTrapFactory.create(this.host.nativeElement);
+    const trap = this.focusTrapFactory.create(this.host.nativeElement, !this.zModal());
     void trap.focusInitialElementWhenReady();
     this.destroyRef.onDestroy(() => trap.destroy());
   }

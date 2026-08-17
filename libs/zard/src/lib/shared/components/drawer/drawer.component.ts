@@ -129,6 +129,7 @@ export class ZardDrawerComponent extends ZardDrawerHost {
   private overlayRef: OverlayRef | null = null;
   private disposeTimer: ReturnType<typeof setTimeout> | null = null;
   private previouslyFocused: HTMLElement | null = null;
+  private destroyed = false;
 
   constructor() {
     super();
@@ -138,7 +139,10 @@ export class ZardDrawerComponent extends ZardDrawerHost {
       untracked(() => (visible ? this.open() : this.startClose()));
     });
 
-    this.destroyRef.onDestroy(() => this.dispose());
+    this.destroyRef.onDestroy(() => {
+      this.destroyed = true;
+      this.dispose();
+    });
   }
 
   requestClose(): void {
@@ -207,7 +211,8 @@ export class ZardDrawerComponent extends ZardDrawerHost {
     if (this.previouslyFocused?.isConnected) this.previouslyFocused.focus();
     this.previouslyFocused = null;
 
-    this.zAfterClose.emit();
+    // Teardown disposes the overlay too, but the output is already gone by then.
+    if (!this.destroyed) this.zAfterClose.emit();
   }
 
   private clearDisposeTimer(): void {

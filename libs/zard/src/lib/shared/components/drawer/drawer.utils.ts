@@ -105,8 +105,15 @@ export function isScrollableAway(
   return false;
 }
 
-/** Interactive descendants must keep their own pointer behaviour (sliders, inputs, links…). */
+/**
+ * Controls that own the pointer themselves — dragging one must not swipe the drawer.
+ * Buttons are deliberately absent: a press on one still starts a swipe, and a tap that
+ * never crosses the threshold still fires its click.
+ */
 export function isInteractiveTarget(target: EventTarget | null): boolean {
   if (!(target instanceof Element)) return false;
-  return !!target.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"], [data-no-drag]');
+
+  return !!target.closest(
+    'input, textarea, select, a[href], [role="slider"], [contenteditable=""], [contenteditable="true"], [data-no-drag]',
+  );
 }
