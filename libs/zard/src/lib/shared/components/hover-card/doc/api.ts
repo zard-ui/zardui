@@ -36,6 +36,8 @@ export const HOVER_CARD_API: ApiSection[] = [
         type: 'boolean',
         default: 'false',
       },
+    ],
+    outputs: [
       {
         name: 'zVisibleChange',
         description: 'Emits when visibility changes',

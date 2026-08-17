@@ -232,7 +232,7 @@ describe('ZardHoverCardDirective', () => {
     await hoverTrigger(0);
     expect(screen.getByText(CARD_CONTENT)).toBeVisible();
 
-    fireEvent.keyDown(document, { key: 'Escape' });
+    fireEvent.keyDown(trigger(), { key: 'Escape' });
 
     expect(screen.queryByText(CARD_CONTENT)).not.toBeInTheDocument();
   });
