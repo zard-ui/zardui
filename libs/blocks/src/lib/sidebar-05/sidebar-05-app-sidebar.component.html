@@ -1,0 +1,51 @@
+<z-sidebar>
+  <div z-sidebar-header>
+    <ul z-sidebar-menu>
+      <li z-sidebar-menu-item>
+        <a z-sidebar-menu-button zSize="lg" href="#">
+          <div
+            class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
+          >
+            <ng-icon name="lucideGalleryVerticalEnd" class="size-4" />
+          </div>
+          <div class="flex flex-col gap-0.5 leading-none">
+            <span class="font-medium">Documentation</span>
+            <span>v1.0.0</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+
+    <lib-sidebar-05-search-form />
+  </div>
+
+  <z-sidebar-content>
+    <div z-sidebar-group>
+      <ul z-sidebar-menu>
+        @for (group of navMain; track group.title; let index = $index) {
+          <li z-sidebar-menu-item z-collapsible class="group/collapsible" [zOpen]="index === 1">
+            <button z-collapsible-trigger z-sidebar-menu-button>
+              {{ group.title }}
+              <ng-icon name="lucidePlus" class="ml-auto group-data-[state=open]/collapsible:hidden" />
+              <ng-icon name="lucideMinus" class="ml-auto group-data-[state=closed]/collapsible:hidden" />
+            </button>
+
+            @if (group.items.length) {
+              <z-collapsible-content>
+                <ul z-sidebar-menu-sub>
+                  @for (item of group.items; track item.title) {
+                    <li z-sidebar-menu-sub-item>
+                      <a z-sidebar-menu-sub-button [href]="item.url" [zActive]="!!item.isActive">{{ item.title }}</a>
+                    </li>
+                  }
+                </ul>
+              </z-collapsible-content>
+            }
+          </li>
+        }
+      </ul>
+    </div>
+  </z-sidebar-content>
+
+  <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
+</z-sidebar>
