@@ -1,3 +1,13 @@
+## 1.0.0-beta.109 (2026-08-17)
+
+### ✨ Features
+
+- **bubble:** add bubble component ([#708](https://github.com/zard-ui/zardui/pull/708))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.108 (2026-08-17)
 
 ### ✨ Features
