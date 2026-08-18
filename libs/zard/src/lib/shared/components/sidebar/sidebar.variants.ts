@@ -76,7 +76,12 @@ export const sidebarMobileVariants = cva(
   },
 );
 
-export const sidebarTriggerVariants = cva('size-7');
+/**
+ * `buttonVariants` already carries `[&_svg:not([class*='size-'])]:size-4`, but @ng-icons styles the
+ * svg it renders with higher specificity, so the icon fell back to the 14px font size — 2px short of
+ * shadcn. Targeting `ng-icon` with `!` is the same escape hatch the menu button needs.
+ */
+export const sidebarTriggerVariants = cva("size-7 [&_ng-icon:not([class*='size-'])]:size-4!");
 
 export const sidebarRailVariants = cva([
   'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex',
