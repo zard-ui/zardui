@@ -52,16 +52,22 @@ export const sidebarInnerVariants = cva(
   'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm',
 );
 
-/** Mobile drawer — replaces shadcn's `Sheet`, which is imperative in Zard. */
-export const sidebarMobileBackdropVariants = cva('fixed inset-0 z-50 animate-in bg-black/50 duration-200 fade-in-0');
+/**
+ * Mobile drawer — replaces shadcn's `Sheet`, which is imperative in Zard. Both parts stay mounted
+ * and animate off `data-state`, so the drawer slides out as well as in; `inert` keeps the closed
+ * drawer out of the tab order and the accessibility tree.
+ */
+export const sidebarMobileBackdropVariants = cva(
+  'fixed inset-0 z-50 bg-black/50 transition-opacity duration-150 ease-in-out data-closed:pointer-events-none data-closed:opacity-0 data-open:opacity-100',
+);
 
 export const sidebarMobileVariants = cva(
-  'fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) animate-in flex-col bg-sidebar p-0 text-sidebar-foreground shadow-lg duration-200',
+  'fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) flex-col bg-sidebar p-0 text-sidebar-foreground shadow-lg transition-transform ease-in-out data-closed:duration-300 data-open:duration-500',
   {
     variants: {
       zSide: {
-        left: 'left-0 slide-in-from-left',
-        right: 'right-0 slide-in-from-right',
+        left: 'left-0 data-closed:-translate-x-full',
+        right: 'right-0 data-closed:translate-x-full',
       },
     },
     defaultVariants: {

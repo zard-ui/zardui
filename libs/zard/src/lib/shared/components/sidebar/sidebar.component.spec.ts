@@ -185,16 +185,19 @@ describe('ZardSidebarComponent', () => {
 
     const { fixture, query, trigger } = await setup();
 
-    expect(query('[data-mobile="true"]')).toBeNull();
+    // The drawer stays mounted so it can animate out; `inert` is what closes it off.
+    const drawer = query('[data-mobile="true"]');
+    expect(drawer).toHaveAttribute('data-state', 'closed');
+    expect(drawer).toHaveAttribute('inert', '');
 
     await userEvent.click(trigger);
     fixture.detectChanges();
 
-    const drawer = query('[data-mobile="true"]');
-    expect(drawer).toBeInTheDocument();
+    expect(drawer).toHaveAttribute('data-state', 'open');
+    expect(drawer).not.toHaveAttribute('inert');
     expect(drawer).toHaveAttribute('role', 'dialog');
     expect(drawer).toHaveAttribute('aria-modal', 'true');
-    expect(query('[data-slot="sidebar-backdrop"]')).toBeInTheDocument();
+    expect(query('[data-slot="sidebar-backdrop"]')).toHaveAttribute('data-state', 'open');
   });
 
   it('closes the mobile drawer on Escape', async () => {
@@ -204,12 +207,12 @@ describe('ZardSidebarComponent', () => {
 
     await userEvent.click(trigger);
     fixture.detectChanges();
-    expect(query('[data-mobile="true"]')).toBeInTheDocument();
+    expect(query('[data-mobile="true"]')).toHaveAttribute('data-state', 'open');
 
     await userEvent.keyboard('{Escape}');
     fixture.detectChanges();
 
-    expect(query('[data-mobile="true"]')).toBeNull();
+    expect(query('[data-mobile="true"]')).toHaveAttribute('data-state', 'closed');
   });
 });
 
