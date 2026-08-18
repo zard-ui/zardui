@@ -73,9 +73,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   template: `
     <ng-content />
   `,
+  providers: [ZardSidebarService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  providers: [ZardSidebarService],
   host: {
     'data-slot': 'sidebar-wrapper',
     '[class]': 'classes()',
@@ -88,7 +88,14 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 export class ZardSidebarProviderComponent implements OnInit {
   readonly sidebarService = inject(ZardSidebarService);
 
-  readonly zDefaultOpen = input(true, { transform: booleanAttribute });
+  /**
+   * Initial open state. Left unset, the persisted cookie decides, falling back to open.
+   * Set explicitly, it wins over the cookie — the demos rely on that to stay deterministic.
+   */
+  readonly zDefaultOpen = input<boolean | undefined, unknown>(undefined, {
+    transform: value => (value === undefined ? undefined : booleanAttribute(value)),
+  });
+
   /** When set, the provider is controlled: `setOpen` only reports through `zOpenChange`. */
   readonly zOpen = input<boolean | undefined>(undefined);
   readonly class = input<ClassValue>('');
@@ -137,30 +144,38 @@ export class ZardSidebarProviderComponent implements OnInit {
     @if (zCollapsible() === 'none') {
       <ng-container [ngTemplateOutlet]="projected" />
     } @else if (sidebarService.isMobile()) {
-      @if (sidebarService.openMobile()) {
-        <div
-          data-slot="sidebar-backdrop"
-          [class]="backdropClasses()"
-          (click)="sidebarService.setOpenMobile(false)"
-        ></div>
+      <!-- Both parts stay mounted so the drawer animates out as well as in. The inert attribute
+           takes the closed drawer out of the tab order and the accessibility tree, which removing it
+           from the DOM used to do. A button rather than a div: the backdrop is a dismiss control. -->
+      <button
+        type="button"
+        data-slot="sidebar-backdrop"
+        tabindex="-1"
+        aria-label="Close Sidebar"
+        [class]="backdropClasses()"
+        [attr.data-state]="mobileState()"
+        [attr.inert]="sidebarService.openMobile() ? null : ''"
+        (click)="sidebarService.setOpenMobile(false)"
+      ></button>
 
-        <div
-          data-sidebar="sidebar"
-          data-mobile="true"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Sidebar"
-          cdkTrapFocus
-          cdkTrapFocusAutoCapture
-          [attr.data-side]="zSide()"
-          [class]="mobileClasses()"
-          [style]="mobileStyle"
-        >
-          <div class="flex h-full w-full flex-col">
-            <ng-container [ngTemplateOutlet]="projected" />
-          </div>
+      <div
+        data-sidebar="sidebar"
+        data-mobile="true"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Sidebar"
+        cdkTrapFocusAutoCapture
+        [cdkTrapFocus]="sidebarService.openMobile()"
+        [attr.data-state]="mobileState()"
+        [attr.data-side]="zSide()"
+        [attr.inert]="sidebarService.openMobile() ? null : ''"
+        [class]="mobileClasses()"
+        [style]="mobileStyle"
+      >
+        <div class="flex size-full flex-col">
+          <ng-container [ngTemplateOutlet]="projected" />
         </div>
-      }
+      </div>
     } @else {
       <div data-slot="sidebar-gap" [class]="gapClasses()"></div>
 
@@ -176,7 +191,6 @@ export class ZardSidebarProviderComponent implements OnInit {
   host: {
     'data-slot': 'sidebar',
     '[class]': 'hostClasses()',
-    '[attr.dir]': 'dir() ?? null',
     '[attr.data-state]': 'isDesktop() ? sidebarService.state() : null',
     '[attr.data-collapsible]': 'isDesktop() ? desktopCollapsible() : null',
     '[attr.data-variant]': 'isDesktop() ? zVariant() : null',
@@ -192,7 +206,6 @@ export class ZardSidebarComponent {
   readonly zVariant = input<ZardSidebarVariantVariants>('sidebar');
   readonly zCollapsible = input<ZardSidebarCollapsibleVariants>('offcanvas');
   readonly class = input<ClassValue>('');
-  readonly dir = input<'ltr' | 'rtl' | undefined>(undefined);
 
   protected readonly mobileStyle = `--sidebar-width: ${ZARD_SIDEBAR_WIDTH_MOBILE}`;
 
@@ -211,6 +224,8 @@ export class ZardSidebarComponent {
     // The mobile drawer is positioned fixed, so the host must not introduce a box of its own.
     return this.sidebarService.isMobile() ? 'contents' : sidebarRootVariants();
   });
+
+  protected readonly mobileState = computed(() => (this.sidebarService.openMobile() ? 'open' : 'closed'));
 
   protected readonly backdropClasses = computed(() => sidebarMobileBackdropVariants());
 
@@ -237,7 +252,7 @@ export class ZardSidebarComponent {
   selector: 'button[z-sidebar-trigger]',
   imports: [NgIcon],
   template: `
-    <ng-icon name="lucidePanelLeft" class="rtl:rotate-180" />
+    <ng-icon name="lucidePanelLeft" />
     <span class="sr-only">Toggle Sidebar</span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -341,8 +356,8 @@ export const sidebarContainerVariants = cva(
   {
     variants: {
       zSide: {
-        left: 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]',
-        right: 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
+        left: 'left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)',
+        right: 'right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)',
       },
       zVariant: {
         sidebar:
@@ -359,19 +374,25 @@ export const sidebarContainerVariants = cva(
 );
 
 export const sidebarInnerVariants = cva(
-  'flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm',
+  'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm',
 );
 
-/** Mobile drawer — replaces shadcn's `Sheet`, which is imperative in Zard. */
-export const sidebarMobileBackdropVariants = cva('fixed inset-0 z-50 animate-in bg-black/50 duration-200 fade-in-0');
+/**
+ * Mobile drawer — replaces shadcn's `Sheet`, which is imperative in Zard. Both parts stay mounted
+ * and animate off `data-state`, so the drawer slides out as well as in; `inert` keeps the closed
+ * drawer out of the tab order and the accessibility tree.
+ */
+export const sidebarMobileBackdropVariants = cva(
+  'fixed inset-0 z-50 bg-black/50 transition-opacity duration-150 ease-in-out data-closed:pointer-events-none data-closed:opacity-0 data-open:opacity-100',
+);
 
 export const sidebarMobileVariants = cva(
-  'fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) animate-in flex-col bg-sidebar p-0 text-sidebar-foreground shadow-lg duration-200',
+  'fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) flex-col bg-sidebar p-0 text-sidebar-foreground shadow-lg transition-transform ease-in-out data-closed:duration-300 data-open:duration-500',
   {
     variants: {
       zSide: {
-        left: 'left-0 slide-in-from-left',
-        right: 'right-0 slide-in-from-right',
+        left: 'left-0 data-closed:-translate-x-full',
+        right: 'right-0 data-closed:translate-x-full',
       },
     },
     defaultVariants: {
@@ -380,7 +401,12 @@ export const sidebarMobileVariants = cva(
   },
 );
 
-export const sidebarTriggerVariants = cva('size-7');
+/**
+ * `buttonVariants` already carries `[&_svg:not([class*='size-'])]:size-4`, but @ng-icons styles the
+ * svg it renders with higher specificity, so the icon fell back to the 14px font size — 2px short of
+ * shadcn. Targeting `ng-icon` with `!` is the same escape hatch the menu button needs.
+ */
+export const sidebarTriggerVariants = cva("size-7 [&_ng-icon:not([class*='size-'])]:size-4!");
 
 export const sidebarRailVariants = cva([
   'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex',
@@ -411,12 +437,12 @@ export const sidebarContentVariants = cva(
 export const sidebarGroupVariants = cva('relative flex w-full min-w-0 flex-col p-2');
 
 export const sidebarGroupLabelVariants = cva([
-  'flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0',
+  "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&_svg]:size-4 [&_svg]:shrink-0 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4!",
   'group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0',
 ]);
 
 export const sidebarGroupActionVariants = cva([
-  'absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0',
+  "absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&_svg]:size-4 [&_svg]:shrink-0 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4!",
   // Increases the hit area of the button on mobile.
   'after:absolute after:-inset-2 md:after:hidden',
   'group-data-[collapsible=icon]:hidden',
@@ -429,7 +455,7 @@ export const sidebarMenuVariants = cva('flex w-full min-w-0 flex-col gap-1');
 export const sidebarMenuItemVariants = cva('group/menu-item relative');
 
 export const sidebarMenuButtonVariants = cva(
-  'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
+  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&_svg]:size-4 [&_svg]:shrink-0 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4!",
   {
     variants: {
       zType: {
@@ -452,7 +478,7 @@ export const sidebarMenuButtonVariants = cva(
 
 export const sidebarMenuActionVariants = cva(
   [
-    'absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform peer-hover/menu-button:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0',
+    "absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform peer-hover/menu-button:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&_svg]:size-4 [&_svg]:shrink-0 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4!",
     // Increases the hit area of the button on mobile.
     'after:absolute after:-inset-2 md:after:hidden',
     'peer-data-[size=sm]/menu-button:top-1',
@@ -493,7 +519,7 @@ export const sidebarMenuSubItemVariants = cva('group/menu-sub-item relative');
 
 export const sidebarMenuSubButtonVariants = cva(
   [
-    'flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground ring-sidebar-ring outline-hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground',
+    "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground ring-sidebar-ring outline-hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&_svg]:size-4 [&_svg]:shrink-0 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:text-sidebar-accent-foreground",
     'data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground',
     'group-data-[collapsible=icon]:hidden',
   ],
@@ -692,7 +718,7 @@ export class ZardSidebarMenuButtonComponent {
     });
 
     this.tooltipRef = this.overlayRef.attach(new ComponentPortal(ZardTooltipComponent));
-    this.tooltipRef.instance.state.set('opened');
+    this.tooltipRef.instance.state.set('open');
     this.tooltipRef.instance.setProps(this.resolvedTooltip(), 'right');
   }
 
@@ -766,12 +792,12 @@ export class ZardSidebarMenuBadgeComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  hostDirectives: [ZardIdDirective],
   host: {
     'data-slot': 'sidebar-menu-skeleton',
     'data-sidebar': 'menu-skeleton',
     '[class]': 'classes()',
   },
+  hostDirectives: [ZardIdDirective],
   exportAs: 'zSidebarMenuSkeleton',
 })
 export class ZardSidebarMenuSkeletonComponent {
@@ -1202,10 +1228,22 @@ export class ZardSidebarService {
     }
   }
 
-  /** Applies the provider's `zDefaultOpen`. A persisted cookie always wins over it. */
-  applyDefaultOpen(defaultOpen: boolean): void {
-    if (this.persistedOpen === undefined) {
+  /**
+   * Applies the provider's `zDefaultOpen`.
+   *
+   * shadcn's provider only ever writes the cookie: the app reads it server-side and feeds it back in
+   * as `defaultOpen`. Angular has no server component to do that, so the service reads it too — but
+   * only as the fallback. An explicit `zDefaultOpen` still wins, which keeps that input meaningful
+   * and stops one provider's persisted state from deciding for every other provider on the page.
+   */
+  applyDefaultOpen(defaultOpen: boolean | undefined): void {
+    if (defaultOpen !== undefined) {
       this.internalOpen.set(defaultOpen);
+      return;
+    }
+
+    if (this.persistedOpen === undefined) {
+      this.internalOpen.set(true);
     }
   }
 
@@ -1296,10 +1334,10 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-structure',
   imports: [ZardSidebarImports],
   template: `
-    <z-sidebar-provider class="relative h-[26rem] min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider class="relative h-104 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none" class="border-r">
         <div z-sidebar-header class="border-b border-dashed">
-          <span class="text-muted-foreground text-xs font-medium tracking-wide uppercase">SidebarHeader</span>
+          <span class="text-muted-foreground text-xs font-medium">SidebarHeader</span>
         </div>
 
         <z-sidebar-content>
@@ -1332,13 +1370,13 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
         </z-sidebar-content>
 
         <div z-sidebar-footer class="border-t border-dashed">
-          <span class="text-muted-foreground text-xs font-medium tracking-wide uppercase">SidebarFooter</span>
+          <span class="text-muted-foreground text-xs font-medium">SidebarFooter</span>
         </div>
       </z-sidebar>
 
       <main z-sidebar-inset class="p-4">
         <div class="flex h-full items-center justify-center rounded-xl border border-dashed">
-          <span class="text-muted-foreground text-xs font-medium tracking-wide uppercase">SidebarInset</span>
+          <span class="text-muted-foreground text-xs font-medium">SidebarInset</span>
         </div>
       </main>
     </z-sidebar-provider>
@@ -1361,8 +1399,8 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-custom-width',
   imports: [ZardSidebarImports],
   template: `
-    <div class="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-      <z-sidebar-provider class="relative h-64 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <div class="flex w-full flex-col gap-4">
+      <z-sidebar-provider class="relative h-40 min-h-0 transform-gpu overflow-hidden rounded-xl border">
         <z-sidebar zCollapsible="none">
           <div z-sidebar-header class="font-medium">Default</div>
 
@@ -1377,7 +1415,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
       </z-sidebar-provider>
 
       <z-sidebar-provider
-        class="relative h-64 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+        class="relative h-40 min-h-0 transform-gpu overflow-hidden rounded-xl border"
         style="--sidebar-width: 20rem; --sidebar-width-icon: 4rem"
       >
         <z-sidebar zCollapsible="none">
@@ -1431,6 +1469,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   imports: [ZardSidebarImports, ZardKbdComponent, ZardKbdGroupComponent],
   template: `
     <z-sidebar-provider
+      zDefaultOpen="true"
       #provider="zSidebarProvider"
       class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
     >
@@ -1452,11 +1491,11 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
           </div>
         </z-sidebar-content>
 
-        <button z-sidebar-rail></button>
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
       </z-sidebar>
 
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
 
         <p class="flex flex-wrap items-center gap-2 text-sm">
           Press
@@ -1499,9 +1538,12 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-side-right',
   imports: [ZardSidebarImports],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
         <p class="text-muted-foreground text-sm">The inset comes first, so the sidebar docks on the right.</p>
       </main>
 
@@ -1528,7 +1570,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
           </div>
         </z-sidebar-content>
 
-        <button z-sidebar-rail></button>
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
       </z-sidebar>
     </z-sidebar-provider>
   `,
@@ -1550,7 +1592,10 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-variant-floating',
   imports: [ZardSidebarImports],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar zVariant="floating" zCollapsible="icon" class="h-full">
         <div z-sidebar-header class="font-medium">Floating</div>
 
@@ -1571,7 +1616,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
       </z-sidebar>
 
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
         <p class="text-muted-foreground text-sm">The panel is inset by 2 and gets its own border and shadow.</p>
       </main>
     </z-sidebar-provider>
@@ -1594,7 +1639,10 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-variant-inset',
   imports: [ZardSidebarImports],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar zVariant="inset" zCollapsible="icon" class="h-full">
         <div z-sidebar-header class="font-medium">Inset</div>
 
@@ -1615,7 +1663,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
       </z-sidebar>
 
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
         <p class="text-muted-foreground text-sm">
           The wrapper paints itself with the sidebar colour and the inset floats above it.
         </p>
@@ -1642,9 +1690,11 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-collapsible-icon',
   imports: [ZardSidebarImports, NgIcon],
-  viewProviders: [provideIcons({ lucideCalendar, lucideHouse, lucideInbox, lucideSettings })],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar zCollapsible="icon" class="h-full">
         <z-sidebar-content>
           <div z-sidebar-group>
@@ -1667,7 +1717,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
       </z-sidebar>
 
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
         <p class="text-muted-foreground text-sm">
           Collapse the sidebar and hover an icon — the label comes back as a tooltip.
         </p>
@@ -1675,6 +1725,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCalendar, lucideHouse, lucideInbox, lucideSettings })],
 })
 export class ZardDemoSidebarCollapsibleIconComponent {
   readonly navItems = [
@@ -1699,7 +1750,10 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-collapsible-offcanvas',
   imports: [ZardSidebarImports],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar zCollapsible="offcanvas" class="h-full">
         <div z-sidebar-header class="font-medium">Offcanvas</div>
 
@@ -1721,11 +1775,11 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
           </div>
         </z-sidebar-content>
 
-        <button z-sidebar-rail></button>
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
       </z-sidebar>
 
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
+        <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
         <p class="text-muted-foreground text-sm">
           The default. The whole panel slides out of view, and the rail stays behind as a thin handle to bring it back.
         </p>
@@ -1841,7 +1895,10 @@ export class ZardDemoSidebarDebugPanelComponent {
   selector: 'z-demo-sidebar-use-sidebar',
   imports: [ZardSidebarImports, ZardDemoSidebarDebugPanelComponent],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar zCollapsible="icon" class="h-full">
         <z-sidebar-content>
           <div z-sidebar-group>
@@ -1885,7 +1942,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-header',
   imports: [ZardSidebarImports, ZardDropdownImports, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronDown, lucideGalleryVerticalEnd })],
   template: `
     <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -1899,7 +1955,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
                   <ng-icon name="lucideGalleryVerticalEnd" class="size-4" />
                 </div>
 
-                <div class="grid flex-1 text-left text-sm leading-tight">
+                <div class="grid flex-1 text-left text-sm/tight">
                   <span class="truncate font-medium">{{ workspace().name }}</span>
                   <span class="text-muted-foreground truncate text-xs">{{ workspace().plan }}</span>
                 </div>
@@ -1933,6 +1989,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronDown, lucideGalleryVerticalEnd })],
 })
 export class ZardDemoSidebarHeaderComponent {
   readonly workspaces_ = [
@@ -1962,7 +2019,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-footer',
   imports: [ZardSidebarImports, ZardDropdownImports, ZardAvatarComponent, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronsUpDown, lucideLogOut, lucideSettings, lucideUser })],
   template: `
     <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -1978,7 +2034,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
               <button z-sidebar-menu-button zSize="lg" z-dropdown [zDropdownMenu]="account">
                 <z-avatar class="size-8 rounded-lg" zSrc="https://github.com/shadcn.png" zAlt="shadcn" zFallback="CN" />
 
-                <div class="grid flex-1 text-left text-sm leading-tight">
+                <div class="grid flex-1 text-left text-sm/tight">
                   <span class="truncate font-medium">shadcn</span>
                   <span class="text-muted-foreground truncate text-xs">m&#64;example.com</span>
                 </div>
@@ -2015,6 +2071,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronsUpDown, lucideLogOut, lucideSettings, lucideUser })],
 })
 export class ZardDemoSidebarFooterComponent {
   readonly lastAction = signal('none');
@@ -2037,7 +2094,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-group-collapsible',
   imports: [ZardSidebarImports, ZardCollapsibleImports, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronDown })],
   template: `
     <z-sidebar-provider class="relative h-80 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -2078,6 +2134,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronDown })],
 })
 export class ZardDemoSidebarGroupCollapsibleComponent {
   readonly groups = [
@@ -2103,7 +2160,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-group-action',
   imports: [ZardSidebarImports, NgIcon],
-  viewProviders: [provideIcons({ lucidePlus })],
   template: `
     <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -2137,6 +2193,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoSidebarGroupActionComponent {
   readonly projects = signal(['Design Engineering', 'Sales & Marketing']);
@@ -2163,7 +2220,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-menu-action',
   imports: [ZardSidebarImports, ZardDropdownImports, NgIcon],
-  viewProviders: [provideIcons({ lucideMoreHorizontal })],
   template: `
     <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -2204,6 +2260,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideMoreHorizontal })],
 })
 export class ZardDemoSidebarMenuActionComponent {
   readonly projects = ['Design Engineering', 'Sales & Marketing', 'Travel'];
@@ -2227,7 +2284,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 @Component({
   selector: 'z-demo-sidebar-menu-sub',
   imports: [ZardSidebarImports, ZardCollapsibleImports, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronRight })],
   template: `
     <z-sidebar-provider class="relative h-80 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none">
@@ -2272,6 +2328,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     </z-sidebar-provider>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronRight })],
 })
 export class ZardDemoSidebarMenuSubComponent {
   readonly navItems = [
@@ -2398,7 +2455,6 @@ import { ZardSidebarService } from '@/shared/components/sidebar/sidebar.service'
 @Component({
   selector: 'z-demo-sidebar-custom-trigger-button',
   imports: [ZardButtonComponent, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronsLeft, lucideChevronsRight })],
   template: `
     <button z-button zType="outline" zSize="sm" (click)="sidebar.toggleSidebar()">
       <ng-icon [name]="sidebar.open() ? 'lucideChevronsLeft' : 'lucideChevronsRight'" />
@@ -2406,6 +2462,7 @@ import { ZardSidebarService } from '@/shared/components/sidebar/sidebar.service'
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronsLeft, lucideChevronsRight })],
 })
 export class ZardDemoSidebarCustomTriggerButtonComponent {
   protected readonly sidebar = inject(ZardSidebarService);
@@ -2415,7 +2472,10 @@ export class ZardDemoSidebarCustomTriggerButtonComponent {
   selector: 'z-demo-sidebar-custom-trigger',
   imports: [ZardSidebarImports, ZardDemoSidebarCustomTriggerButtonComponent],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar zCollapsible="icon" class="h-full">
         <z-sidebar-content>
           <div z-sidebar-group>
@@ -2460,7 +2520,10 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-rail',
   imports: [ZardSidebarImports],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar class="h-full">
         <div z-sidebar-header class="font-medium">Drag the edge</div>
 
@@ -2479,7 +2542,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
           </div>
         </z-sidebar-content>
 
-        <button z-sidebar-rail></button>
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
       </z-sidebar>
 
       <main z-sidebar-inset class="p-4">
@@ -2538,7 +2601,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
         </z-sidebar>
 
         <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-          <button z-sidebar-trigger class="self-start"></button>
+          <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
           <p class="text-muted-foreground text-sm">
             The host owns the state: the trigger only reports through zOpenChange, and the switch stays in sync.
           </p>
@@ -2550,70 +2613,6 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
 })
 export class ZardDemoSidebarControlledComponent {
   readonly open = signal(true);
-}
-```
-
-### Rtl
-
-Set `dir="rtl"` and `zSide="right"`. The rail cursor and the trigger icon mirror.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideHouse, lucideInbox, lucideSettings } from '@ng-icons/lucide';
-
-import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports';
-
-@Component({
-  selector: 'z-demo-sidebar-rtl',
-  imports: [ZardSidebarImports, NgIcon],
-  viewProviders: [provideIcons({ lucideHouse, lucideInbox, lucideSettings })],
-  template: `
-    <!--
-      In RTL the flex row is already mirrored, so the sidebar has to be declared first for the gap it
-      reserves to land under the panel. In LTR with zSide="right" it is the other way around.
-    -->
-    <z-sidebar-provider dir="rtl" class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
-      <z-sidebar zSide="right" class="h-full">
-        <div z-sidebar-header class="font-medium">لوحة التحكم</div>
-
-        <z-sidebar-content>
-          <div z-sidebar-group>
-            <div z-sidebar-group-label>التنقل</div>
-
-            <div z-sidebar-group-content>
-              <ul z-sidebar-menu>
-                @for (item of navItems; track item.title) {
-                  <li z-sidebar-menu-item>
-                    <button z-sidebar-menu-button [zTooltip]="item.title">
-                      <ng-icon [name]="item.icon" />
-                      <span>{{ item.title }}</span>
-                    </button>
-                  </li>
-                }
-              </ul>
-            </div>
-          </div>
-        </z-sidebar-content>
-
-        <button z-sidebar-rail></button>
-      </z-sidebar>
-
-      <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-        <button z-sidebar-trigger class="self-start"></button>
-        <p class="text-muted-foreground text-sm">الشريط الجانبي على اليمين، والأيقونة معكوسة.</p>
-      </main>
-    </z-sidebar-provider>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoSidebarRtlComponent {
-  readonly navItems = [
-    { title: 'الرئيسية', icon: 'lucideHouse' },
-    { title: 'البريد', icon: 'lucideInbox' },
-    { title: 'الإعدادات', icon: 'lucideSettings' },
-  ];
 }
 ```
 
@@ -2704,7 +2703,8 @@ const cookies = isBrowser ? document.cookie : request?.headers?.get('cookie');
 const match = /(?:^|;\s*)sidebar_state=(true|false)/.exec(cookies ?? '');
 const persistedOpen = match ? match[1] === 'true' : undefined;
 
-// `undefined` means "nothing persisted yet", and the provider's zDefaultOpen decides instead.
+// `undefined` means "nothing persisted yet", so the provider falls back to open.
+// An explicit zDefaultOpen wins over this either way — shadcn feeds the cookie in through it.
 ```
 
 ## API Reference
@@ -2715,7 +2715,7 @@ Wraps the sidebar and the page, provides ZardSidebarService and registers the ke
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zDefaultOpen` | Initial open state. A persisted sidebar_state cookie always wins over it | `boolean` | `true` |
+| `zDefaultOpen` | Initial open state. Left unset, the persisted sidebar_state cookie decides, falling back to true; set explicitly, it wins over the cookie | `boolean \| undefined` | `undefined` |
 | `zOpen` | When set, the provider is controlled: the state is owned by the consumer | `boolean \| undefined` | `undefined` |
 | `style` | Extra inline style, applied after --sidebar-width and --sidebar-width-icon so it can override them | `string` | `''` |
 | `class` | Additional CSS classes | `ClassValue` | `''` |
@@ -2730,7 +2730,6 @@ The sidebar itself. Renders as a fixed panel on desktop, as a drawer on mobile.
 | `zSide` | Which edge the sidebar docks to | `'left' \| 'right'` | `'left'` |
 | `zVariant` | Visual treatment of the panel | `'sidebar' \| 'floating' \| 'inset'` | `'sidebar'` |
 | `zCollapsible` | How the sidebar collapses. "none" renders a plain, always-visible column | `'offcanvas' \| 'icon' \| 'none'` | `'offcanvas'` |
-| `dir` | Writing direction. Mirrors the rail and the trigger icon when set to rtl | `'ltr' \| 'rtl' \| undefined` | `undefined` |
 | `class` | Additional CSS classes | `ClassValue` | `''` |
 
 ### button[z-sidebar-trigger]
