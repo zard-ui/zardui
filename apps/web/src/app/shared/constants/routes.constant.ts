@@ -133,6 +133,8 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Dropdown', path: '/docs/components/dropdown', available: true },
     { name: 'Popover', path: '/docs/components/popover', available: true },
     { name: 'Kbd', path: '/docs/components/kbd', available: true },
+    { name: 'Drawer', path: '/docs/components/drawer', available: true },
+    { name: 'Bubble', path: '/docs/components/bubble', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 

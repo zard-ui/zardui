@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.106",
+  "version": "1.0.0-beta.109",
   "items": [
     {
       "name": "core",
@@ -274,6 +274,35 @@
       ]
     },
     {
+      "name": "drawer",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideX"
+        ],
+        "tokens": [
+          "x"
+        ]
+      },
+      "files": [
+        "drawer.component.ts",
+        "drawer-panel.component.ts",
+        "drawer-container.component.ts",
+        "drawer-host.ts",
+        "drawer-stack.ts",
+        "drawer-ref.ts",
+        "drawer.service.ts",
+        "drawer.utils.ts",
+        "drawer.variants.ts",
+        "drawer.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "dialog",
       "type": "registry:component",
       "registryDependencies": [
@@ -402,6 +431,21 @@
         "item.component.ts",
         "item.imports.ts",
         "item.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "bubble",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "bubble.component.ts",
+        "bubble.imports.ts",
+        "bubble.variants.ts",
         "index.ts"
       ]
     },

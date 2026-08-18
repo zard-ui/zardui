@@ -1,3 +1,33 @@
+## 1.0.0-beta.110 (2026-08-17)
+
+### 🐛 Bug Fixes
+
+- **sonner:** render toasts in the native top layer ([#711](https://github.com/zard-ui/zardui/pull/711))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
+## 1.0.0-beta.109 (2026-08-17)
+
+### ✨ Features
+
+- **bubble:** add bubble component ([#708](https://github.com/zard-ui/zardui/pull/708))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
+## 1.0.0-beta.108 (2026-08-17)
+
+### ✨ Features
+
+- **drawer:** add drawer component with swipe and snap points ([#709](https://github.com/zard-ui/zardui/pull/709))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.107 (2026-08-16)
 
 This was a version bump only, there were no code changes.
