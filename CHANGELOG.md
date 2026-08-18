@@ -1,3 +1,13 @@
+## 1.0.0-beta.111 (2026-08-18)
+
+### ✨ Features
+
+- **web:** sidebar sections, the zard skill, and two new pages ([#712](https://github.com/zard-ui/zardui/pull/712))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.110 (2026-08-17)
 
 ### 🐛 Bug Fixes
