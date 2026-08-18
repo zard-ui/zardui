@@ -53,12 +53,6 @@ export const SIDEBAR_API: ApiSection[] = [
         type: "'offcanvas' | 'icon' | 'none'",
         default: "'offcanvas'",
       },
-      {
-        name: 'dir',
-        description: 'Writing direction. Mirrors the rail and the trigger icon when set to rtl',
-        type: "'ltr' | 'rtl' | undefined",
-        default: 'undefined',
-      },
       CLASS_PROP,
     ],
   },

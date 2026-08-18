@@ -15,7 +15,6 @@ import { SIDEBAR_DEMO_MENU_SKELETON } from '@generated/components/sidebar/demo/m
 import { SIDEBAR_DEMO_MENU_SUB } from '@generated/components/sidebar/demo/menu-sub';
 import { SIDEBAR_DEMO_PREVIEW } from '@generated/components/sidebar/demo/preview';
 import { SIDEBAR_DEMO_RAIL } from '@generated/components/sidebar/demo/rail';
-import { SIDEBAR_DEMO_RTL } from '@generated/components/sidebar/demo/rtl';
 import { SIDEBAR_DEMO_SIDE_RIGHT } from '@generated/components/sidebar/demo/side-right';
 import { SIDEBAR_DEMO_STRUCTURE } from '@generated/components/sidebar/demo/structure';
 import { SIDEBAR_DEMO_USE_SIDEBAR } from '@generated/components/sidebar/demo/use-sidebar';
@@ -49,7 +48,6 @@ import { ZardDemoSidebarMenuSkeletonComponent } from './menu-skeleton';
 import { ZardDemoSidebarMenuSubComponent } from './menu-sub';
 import { ZardDemoSidebarPreviewComponent } from './preview';
 import { ZardDemoSidebarRailComponent } from './rail';
-import { ZardDemoSidebarRtlComponent } from './rtl';
 import { ZardDemoSidebarSideRightComponent } from './side-right';
 import { ZardDemoSidebarStructureComponent } from './structure';
 import { ZardDemoSidebarUseSidebarComponent } from './use-sidebar';
@@ -265,12 +263,6 @@ export const SIDEBAR = {
       description: 'Pass `zOpen` and listen to `zOpenChange` to own the state yourself.',
       component: ZardDemoSidebarControlledComponent,
       codeData: SIDEBAR_DEMO_CONTROLLED,
-    },
-    {
-      name: 'rtl',
-      description: 'Set `dir="rtl"` and `zSide="right"`. The rail cursor and the trigger icon mirror.',
-      component: ZardDemoSidebarRtlComponent,
-      codeData: SIDEBAR_DEMO_RTL,
     },
     {
       name: 'theming',
