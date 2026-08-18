@@ -159,7 +159,7 @@ export class ZardSidebarMenuButtonComponent {
     });
 
     this.tooltipRef = this.overlayRef.attach(new ComponentPortal(ZardTooltipComponent));
-    this.tooltipRef.instance.state.set('opened');
+    this.tooltipRef.instance.state.set('open');
     this.tooltipRef.instance.setProps(this.resolvedTooltip(), 'right');
   }
 
