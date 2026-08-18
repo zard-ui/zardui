@@ -65,11 +65,6 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/theming/theming.page').then(c => c.ThemingPage),
       },
       {
-        path: 'blocks',
-        loadComponent: () =>
-          import('./domain/pages/blocks/block-instructions/block-instructions.page').then(c => c.BlocksInstructionPage),
-      },
-      {
         path: 'forms',
         loadChildren: async () => (await import('./domain/pages/forms/forms.routes')).FORMS_ROUTES,
       },
@@ -88,6 +83,14 @@ export const appRoutes: Route[] = [
       {
         path: 'mcp',
         loadComponent: () => import('./domain/pages/mcp/mcp.page').then(c => c.McpPage),
+      },
+      {
+        path: 'monorepo',
+        loadComponent: () => import('./domain/pages/monorepo/monorepo.page').then(c => c.MonorepoPage),
+      },
+      {
+        path: 'skills',
+        loadComponent: () => import('./domain/pages/skills/skills.page').then(c => c.SkillsPage),
       },
       {
         path: 'components',
