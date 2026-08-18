@@ -167,7 +167,7 @@ export class Sidebar03AppSidebarComponent {
       <div class="flex items-center gap-2 px-3">
         <button z-sidebar-trigger aria-label="Toggle Sidebar"></button>
 
-        <z-separator zOrientation="vertical" class="mr-2 h-4" />
+        <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center" />
 
         <z-breadcrumb>
           <z-breadcrumb-item class="hidden md:block">
