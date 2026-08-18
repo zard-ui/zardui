@@ -48,7 +48,6 @@ import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
                           [routerLink]="path.path"
                           class="ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground 3xl:fixed:w-full 3xl:fixed:max-w-48 relative flex h-7.5 w-fit items-center gap-2 overflow-hidden rounded-md border border-transparent px-2 text-left text-[0.8rem] font-medium outline-hidden transition-[width,height,padding] after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50"
                           routerLinkActive="bg-accent text-accent-foreground border-accent overflow-visible hover:bg-accent"
-                          [routerLinkActiveOptions]="{ exact: true }"
                         >
                           <span class="absolute inset-0 flex w-(--sidebar-width) bg-transparent"></span>
                           {{ path.name }}
