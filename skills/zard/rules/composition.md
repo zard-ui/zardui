@@ -147,6 +147,8 @@ export class ProfilePage {
 
 The content component reads what was passed with `inject(Z_MODAL_DATA)`. `z-sheet` and `z-alert-dialog` follow the same shape, through `ZardSheetService` and `ZardAlertDialogService`.
 
+`z-drawer` is the exception: it takes **both**. `ZardDrawerService.create()` works like the others, and `<z-drawer [(zVisible)]="open">` with projected content is equally valid — so the boolean-flag form is not a mistake there. Pick the service when the content is its own component, the template when the drawer belongs to the page it lives in.
+
 Read the component's documentation page before writing the options object — the option names are specific and inventing one fails silently.
 
 ---

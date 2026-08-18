@@ -94,7 +94,7 @@ export class RoadmapPage implements OnInit {
         'Everything the release needs is published and in use — what is left is the pass over quality before the version number changes',
       goals: ['Stable release', 'Component registry', 'AI integration', 'Accessibility'],
       deliverables: [
-        { text: '47 components, including Chart (Apache ECharts)', completed: true },
+        { text: '49 components, including Chart (Apache ECharts)', completed: true },
         { text: '10 ready-made blocks', completed: true },
         { text: 'Public registry with a versioned format and JSON Schemas', completed: true },
         { text: 'Icon catalog served by the registry, family set in components.json', completed: true },

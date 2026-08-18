@@ -130,22 +130,23 @@ protected readonly classes = computed(() => mergeClasses(cardVariants(), this.cl
 
 ## Component Selection
 
-| Need            | Use                                                                                                                          |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Action          | `z-button` (`zType`: default, destructive, outline, secondary, ghost, link)                                                  |
-| Grouped actions | `z-button-group`, `z-toggle`, `z-toggle-group`                                                                               |
-| Text input      | `input[z-input]`, `textarea[z-textarea]`, `z-input-group`, `z-input-otp`                                                     |
-| Choice          | `z-select`, `z-combobox`, `z-radio-group`, `z-checkbox`, `z-switch`, `z-slider`                                              |
-| Dates           | `z-calendar`, `z-date-picker`                                                                                                |
-| Form structure  | `z-field-group`, `z-field`, `z-field-label`, `z-field-description`, `z-field-error`                                          |
-| Data display    | `z-table`, `z-card`, `z-item`, `z-badge`, `z-avatar`, `z-chart`                                                              |
-| Navigation      | `z-navigation-menu`, `z-breadcrumb`, `z-tab-group`, `z-pagination`, `z-tree`                                                 |
-| Layout          | `z-layout`, `z-separator`, `z-resizable`, `z-accordion`, `z-carousel`                                                        |
-| Overlays        | `ZardDialogService` (modal), `z-sheet` (side panel), `z-alert-dialog` (confirmation), `z-popover`, `z-tooltip`, `z-dropdown` |
-| Command palette | `z-command`                                                                                                                  |
-| Feedback        | `ZardSonnerService` (toast), `z-alert`, `z-progress`, `z-skeleton`, `z-spinner`                                              |
-| Empty states    | `z-empty`                                                                                                                    |
-| Keyboard hints  | `z-kbd`                                                                                                                      |
+| Need            | Use                                                                                                                                                          |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Action          | `z-button` (`zType`: default, destructive, outline, secondary, ghost, link)                                                                                  |
+| Grouped actions | `z-button-group`, `z-toggle`, `z-toggle-group`                                                                                                               |
+| Text input      | `input[z-input]`, `textarea[z-textarea]`, `z-input-group`, `z-input-otp`                                                                                     |
+| Choice          | `z-select`, `z-combobox`, `z-radio-group`, `z-checkbox`, `z-switch`, `z-slider`                                                                              |
+| Dates           | `z-calendar`, `z-date-picker`                                                                                                                                |
+| Form structure  | `z-field-group`, `z-field`, `z-field-label`, `z-field-description`, `z-field-error`                                                                          |
+| Data display    | `z-table`, `z-card`, `z-item`, `z-badge`, `z-avatar`, `z-chart`                                                                                              |
+| Navigation      | `z-navigation-menu`, `z-breadcrumb`, `z-tab-group`, `z-pagination`, `z-tree`                                                                                 |
+| Layout          | `z-layout`, `z-separator`, `z-resizable`, `z-accordion`, `z-carousel`                                                                                        |
+| Overlays        | `ZardDialogService` (modal), `z-drawer` (bottom/side sheet), `z-sheet` (side panel), `z-alert-dialog` (confirmation), `z-popover`, `z-tooltip`, `z-dropdown` |
+| Command palette | `z-command`                                                                                                                                                  |
+| Feedback        | `ZardSonnerService` (toast), `z-alert`, `z-progress`, `z-skeleton`, `z-spinner`                                                                              |
+| Empty states    | `z-empty`                                                                                                                                                    |
+| Chat / messages | `z-bubble`, `z-bubble-group`, `z-bubble-content`, `z-bubble-reactions`                                                                                       |
+| Keyboard hints  | `z-kbd`                                                                                                                                                      |
 
 Names are the registry names — the same string `zard-cli add` takes.
 
