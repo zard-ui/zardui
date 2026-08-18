@@ -165,6 +165,7 @@ export class ZardSidebarProviderComponent implements OnInit {
   host: {
     'data-slot': 'sidebar',
     '[class]': 'hostClasses()',
+    '[attr.dir]': 'dir() ?? null',
     '[attr.data-state]': 'isDesktop() ? sidebarService.state() : null',
     '[attr.data-collapsible]': 'isDesktop() ? desktopCollapsible() : null',
     '[attr.data-variant]': 'isDesktop() ? zVariant() : null',
@@ -180,6 +181,7 @@ export class ZardSidebarComponent {
   readonly zVariant = input<ZardSidebarVariantVariants>('sidebar');
   readonly zCollapsible = input<ZardSidebarCollapsibleVariants>('offcanvas');
   readonly class = input<ClassValue>('');
+  readonly dir = input<'ltr' | 'rtl' | undefined>(undefined);
 
   protected readonly mobileStyle = `--sidebar-width: ${ZARD_SIDEBAR_WIDTH_MOBILE}`;
 
@@ -226,7 +228,7 @@ export class ZardSidebarComponent {
   selector: 'button[z-sidebar-trigger]',
   imports: [NgIcon],
   template: `
-    <ng-icon name="lucidePanelLeft" />
+    <ng-icon name="lucidePanelLeft" class="rtl:rotate-180" />
     <span class="sr-only">Toggle Sidebar</span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

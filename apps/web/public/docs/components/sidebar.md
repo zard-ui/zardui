@@ -191,6 +191,7 @@ export class ZardSidebarProviderComponent implements OnInit {
   host: {
     'data-slot': 'sidebar',
     '[class]': 'hostClasses()',
+    '[attr.dir]': 'dir() ?? null',
     '[attr.data-state]': 'isDesktop() ? sidebarService.state() : null',
     '[attr.data-collapsible]': 'isDesktop() ? desktopCollapsible() : null',
     '[attr.data-variant]': 'isDesktop() ? zVariant() : null',
@@ -206,6 +207,7 @@ export class ZardSidebarComponent {
   readonly zVariant = input<ZardSidebarVariantVariants>('sidebar');
   readonly zCollapsible = input<ZardSidebarCollapsibleVariants>('offcanvas');
   readonly class = input<ClassValue>('');
+  readonly dir = input<'ltr' | 'rtl' | undefined>(undefined);
 
   protected readonly mobileStyle = `--sidebar-width: ${ZARD_SIDEBAR_WIDTH_MOBILE}`;
 
@@ -252,7 +254,7 @@ export class ZardSidebarComponent {
   selector: 'button[z-sidebar-trigger]',
   imports: [NgIcon],
   template: `
-    <ng-icon name="lucidePanelLeft" />
+    <ng-icon name="lucidePanelLeft" class="rtl:rotate-180" />
     <span class="sr-only">Toggle Sidebar</span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -2730,6 +2732,7 @@ The sidebar itself. Renders as a fixed panel on desktop, as a drawer on mobile.
 | `zSide` | Which edge the sidebar docks to | `'left' \| 'right'` | `'left'` |
 | `zVariant` | Visual treatment of the panel | `'sidebar' \| 'floating' \| 'inset'` | `'sidebar'` |
 | `zCollapsible` | How the sidebar collapses. "none" renders a plain, always-visible column | `'offcanvas' \| 'icon' \| 'none'` | `'offcanvas'` |
+| `dir` | Writing direction. Mirrors the rail and the trigger icon when set to rtl | `'ltr' \| 'rtl' \| undefined` | `undefined` |
 | `class` | Additional CSS classes | `ClassValue` | `''` |
 
 ### button[z-sidebar-trigger]
