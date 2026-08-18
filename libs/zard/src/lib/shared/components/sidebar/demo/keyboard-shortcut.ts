@@ -9,6 +9,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   imports: [ZardSidebarImports, ZardKbdComponent, ZardKbdGroupComponent],
   template: `
     <z-sidebar-provider
+      zDefaultOpen="true"
       #provider="zSidebarProvider"
       class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
     >

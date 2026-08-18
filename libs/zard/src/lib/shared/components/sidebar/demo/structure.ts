@@ -9,7 +9,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
     <z-sidebar-provider class="relative h-104 min-h-0 transform-gpu overflow-hidden rounded-xl border">
       <z-sidebar zCollapsible="none" class="border-r">
         <div z-sidebar-header class="border-b border-dashed">
-          <span class="text-muted-foreground text-xs font-medium tracking-wide uppercase">SidebarHeader</span>
+          <span class="text-muted-foreground text-xs font-medium">SidebarHeader</span>
         </div>
 
         <z-sidebar-content>
@@ -42,13 +42,13 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
         </z-sidebar-content>
 
         <div z-sidebar-footer class="border-t border-dashed">
-          <span class="text-muted-foreground text-xs font-medium tracking-wide uppercase">SidebarFooter</span>
+          <span class="text-muted-foreground text-xs font-medium">SidebarFooter</span>
         </div>
       </z-sidebar>
 
       <main z-sidebar-inset class="p-4">
         <div class="flex h-full items-center justify-center rounded-xl border border-dashed">
-          <span class="text-muted-foreground text-xs font-medium tracking-wide uppercase">SidebarInset</span>
+          <span class="text-muted-foreground text-xs font-medium">SidebarInset</span>
         </div>
       </main>
     </z-sidebar-provider>

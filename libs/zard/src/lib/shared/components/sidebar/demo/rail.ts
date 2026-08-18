@@ -6,7 +6,10 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-rail',
   imports: [ZardSidebarImports],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar class="h-full">
         <div z-sidebar-header class="font-medium">Drag the edge</div>
 

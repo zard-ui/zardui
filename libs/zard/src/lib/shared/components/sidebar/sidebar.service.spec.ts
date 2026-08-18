@@ -64,12 +64,28 @@ describe('ZardSidebarService', () => {
     expect(service.state()).toBe('collapsed');
   });
 
-  it('lets the cookie win over zDefaultOpen', () => {
+  it('lets an explicit zDefaultOpen win over the cookie', () => {
     const { service } = setup({ cookie: `${ZARD_SIDEBAR_COOKIE_NAME}=false` });
 
     service.applyDefaultOpen(true);
 
+    expect(service.open()).toBe(true);
+  });
+
+  it('keeps the cookie when zDefaultOpen is left unset', () => {
+    const { service } = setup({ cookie: `${ZARD_SIDEBAR_COOKIE_NAME}=false` });
+
+    service.applyDefaultOpen(undefined);
+
     expect(service.open()).toBe(false);
+  });
+
+  it('falls back to open when there is neither a cookie nor a zDefaultOpen', () => {
+    const { service } = setup();
+
+    service.applyDefaultOpen(undefined);
+
+    expect(service.open()).toBe(true);
   });
 
   it('applies zDefaultOpen when there is no cookie', () => {

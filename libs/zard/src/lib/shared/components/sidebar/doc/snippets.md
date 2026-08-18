@@ -92,5 +92,6 @@ const cookies = isBrowser ? document.cookie : request?.headers?.get('cookie');
 const match = /(?:^|;\s*)sidebar_state=(true|false)/.exec(cookies ?? '');
 const persistedOpen = match ? match[1] === 'true' : undefined;
 
-// `undefined` means "nothing persisted yet", and the provider's zDefaultOpen decides instead.
+// `undefined` means "nothing persisted yet", so the provider falls back to open.
+// An explicit zDefaultOpen wins over this either way — shadcn feeds the cookie in through it.
 ```

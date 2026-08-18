@@ -9,9 +9,10 @@ export const SIDEBAR_API: ApiSection[] = [
     props: [
       {
         name: 'zDefaultOpen',
-        description: 'Initial open state. A persisted sidebar_state cookie always wins over it',
-        type: 'boolean',
-        default: 'true',
+        description:
+          'Initial open state. Left unset, the persisted sidebar_state cookie decides, falling back to true; set explicitly, it wins over the cookie',
+        type: 'boolean | undefined',
+        default: 'undefined',
       },
       {
         name: 'zOpen',

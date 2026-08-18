@@ -73,10 +73,22 @@ export class ZardSidebarService {
     }
   }
 
-  /** Applies the provider's `zDefaultOpen`. A persisted cookie always wins over it. */
-  applyDefaultOpen(defaultOpen: boolean): void {
-    if (this.persistedOpen === undefined) {
+  /**
+   * Applies the provider's `zDefaultOpen`.
+   *
+   * shadcn's provider only ever writes the cookie: the app reads it server-side and feeds it back in
+   * as `defaultOpen`. Angular has no server component to do that, so the service reads it too — but
+   * only as the fallback. An explicit `zDefaultOpen` still wins, which keeps that input meaningful
+   * and stops one provider's persisted state from deciding for every other provider on the page.
+   */
+  applyDefaultOpen(defaultOpen: boolean | undefined): void {
+    if (defaultOpen !== undefined) {
       this.internalOpen.set(defaultOpen);
+      return;
+    }
+
+    if (this.persistedOpen === undefined) {
+      this.internalOpen.set(true);
     }
   }
 

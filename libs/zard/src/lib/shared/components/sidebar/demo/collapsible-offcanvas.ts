@@ -6,7 +6,10 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-collapsible-offcanvas',
   imports: [ZardSidebarImports],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar zCollapsible="offcanvas" class="h-full">
         <div z-sidebar-header class="font-medium">Offcanvas</div>
 

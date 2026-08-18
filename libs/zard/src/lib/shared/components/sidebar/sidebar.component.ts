@@ -62,7 +62,14 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 export class ZardSidebarProviderComponent implements OnInit {
   readonly sidebarService = inject(ZardSidebarService);
 
-  readonly zDefaultOpen = input(true, { transform: booleanAttribute });
+  /**
+   * Initial open state. Left unset, the persisted cookie decides, falling back to open.
+   * Set explicitly, it wins over the cookie — the demos rely on that to stay deterministic.
+   */
+  readonly zDefaultOpen = input<boolean | undefined, unknown>(undefined, {
+    transform: value => (value === undefined ? undefined : booleanAttribute(value)),
+  });
+
   /** When set, the provider is controlled: `setOpen` only reports through `zOpenChange`. */
   readonly zOpen = input<boolean | undefined>(undefined);
   readonly class = input<ClassValue>('');
@@ -111,35 +118,38 @@ export class ZardSidebarProviderComponent implements OnInit {
     @if (zCollapsible() === 'none') {
       <ng-container [ngTemplateOutlet]="projected" />
     } @else if (sidebarService.isMobile()) {
-      @if (sidebarService.openMobile()) {
-        <!-- A button rather than a div: the backdrop is a real dismiss control, so it has to be
-             reachable by keyboard. Escape closes the drawer too. -->
-        <button
-          type="button"
-          data-slot="sidebar-backdrop"
-          tabindex="-1"
-          aria-label="Close Sidebar"
-          [class]="backdropClasses()"
-          (click)="sidebarService.setOpenMobile(false)"
-        ></button>
+      <!-- Both parts stay mounted so the drawer animates out as well as in. The inert attribute
+           takes the closed drawer out of the tab order and the accessibility tree, which removing it
+           from the DOM used to do. A button rather than a div: the backdrop is a dismiss control. -->
+      <button
+        type="button"
+        data-slot="sidebar-backdrop"
+        tabindex="-1"
+        aria-label="Close Sidebar"
+        [class]="backdropClasses()"
+        [attr.data-state]="mobileState()"
+        [attr.inert]="sidebarService.openMobile() ? null : ''"
+        (click)="sidebarService.setOpenMobile(false)"
+      ></button>
 
-        <div
-          data-sidebar="sidebar"
-          data-mobile="true"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Sidebar"
-          cdkTrapFocus
-          cdkTrapFocusAutoCapture
-          [attr.data-side]="zSide()"
-          [class]="mobileClasses()"
-          [style]="mobileStyle"
-        >
-          <div class="flex size-full flex-col">
-            <ng-container [ngTemplateOutlet]="projected" />
-          </div>
+      <div
+        data-sidebar="sidebar"
+        data-mobile="true"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Sidebar"
+        cdkTrapFocusAutoCapture
+        [cdkTrapFocus]="sidebarService.openMobile()"
+        [attr.data-state]="mobileState()"
+        [attr.data-side]="zSide()"
+        [attr.inert]="sidebarService.openMobile() ? null : ''"
+        [class]="mobileClasses()"
+        [style]="mobileStyle"
+      >
+        <div class="flex size-full flex-col">
+          <ng-container [ngTemplateOutlet]="projected" />
         </div>
-      }
+      </div>
     } @else {
       <div data-slot="sidebar-gap" [class]="gapClasses()"></div>
 
@@ -190,6 +200,8 @@ export class ZardSidebarComponent {
     // The mobile drawer is positioned fixed, so the host must not introduce a box of its own.
     return this.sidebarService.isMobile() ? 'contents' : sidebarRootVariants();
   });
+
+  protected readonly mobileState = computed(() => (this.sidebarService.openMobile() ? 'open' : 'closed'));
 
   protected readonly backdropClasses = computed(() => sidebarMobileBackdropVariants());
 

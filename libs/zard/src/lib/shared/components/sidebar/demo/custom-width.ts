@@ -6,8 +6,8 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-custom-width',
   imports: [ZardSidebarImports],
   template: `
-    <div class="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-      <z-sidebar-provider class="relative h-64 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <div class="flex w-full flex-col gap-4">
+      <z-sidebar-provider class="relative h-40 min-h-0 transform-gpu overflow-hidden rounded-xl border">
         <z-sidebar zCollapsible="none">
           <div z-sidebar-header class="font-medium">Default</div>
 
@@ -22,7 +22,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
       </z-sidebar-provider>
 
       <z-sidebar-provider
-        class="relative h-64 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+        class="relative h-40 min-h-0 transform-gpu overflow-hidden rounded-xl border"
         style="--sidebar-width: 20rem; --sidebar-width-icon: 4rem"
       >
         <z-sidebar zCollapsible="none">

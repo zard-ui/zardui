@@ -13,7 +13,11 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
       In RTL the flex row is already mirrored, so the sidebar has to be declared first for the gap it
       reserves to land under the panel. In LTR with zSide="right" it is the other way around.
     -->
-    <z-sidebar-provider dir="rtl" class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      dir="rtl"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar zSide="right" class="h-full">
         <div z-sidebar-header class="font-medium">لوحة التحكم</div>
 

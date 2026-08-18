@@ -6,7 +6,10 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-side-right',
   imports: [ZardSidebarImports],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <main z-sidebar-inset class="flex flex-col gap-4 p-4">
         <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
         <p class="text-muted-foreground text-sm">The inset comes first, so the sidebar docks on the right.</p>

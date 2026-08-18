@@ -49,7 +49,7 @@ test.describe('Sidebar component', () => {
     await expect(sidebar).toHaveAttribute('data-state', 'expanded');
   });
 
-  test('the open state survives a reload through the cookie', async ({ page }) => {
+  test('an explicit zDefaultOpen wins over the persisted cookie', async ({ page }) => {
     const sidebar = demoPage.firstDemoBox.locator('[data-slot="sidebar"]');
 
     await demoPage.firstDemoBox.locator('[data-slot="sidebar-trigger"]').click();
@@ -58,8 +58,24 @@ test.describe('Sidebar component', () => {
     await page.reload();
     await page.waitForSelector('#overview', { state: 'visible' });
 
+    // The demos pass zDefaultOpen so each example is deterministic; otherwise collapsing any one of
+    // them would decide the initial state for all 24 providers on the page.
+    await expect(demoPage.firstDemoBox.locator('[data-slot="sidebar"]')).toHaveAttribute('data-state', 'expanded');
+  });
+
+  test('the open state survives a reload through the cookie when zDefaultOpen is unset', async ({ page }) => {
+    // A block is the realistic case: an app shell that leaves the initial state to the cookie.
+    await page.goto('/blocks/preview/sidebar-07');
+    const sidebar = page.locator('[data-slot="sidebar"]').first();
+    await expect(sidebar).toHaveAttribute('data-state', 'expanded');
+
+    await page.locator('[data-slot="sidebar-trigger"]').first().click();
+    await expect(sidebar).toHaveAttribute('data-state', 'collapsed');
+
+    await page.reload();
+
     // Already collapsed in the server-rendered markup, so there is no layout flash.
-    await expect(demoPage.firstDemoBox.locator('[data-slot="sidebar"]')).toHaveAttribute('data-state', 'collapsed');
+    await expect(page.locator('[data-slot="sidebar"]').first()).toHaveAttribute('data-state', 'collapsed');
   });
 
   test('the rail toggles the sidebar too', async () => {
@@ -74,17 +90,24 @@ test.describe('Sidebar component', () => {
     await page.setViewportSize({ width: 640, height: 800 });
 
     const demo = demoPage.firstDemoBox;
-    await expect(demo.locator('[data-mobile="true"]')).toHaveCount(0);
+    const drawer = demo.locator('[data-mobile="true"]');
+    const backdrop = demo.locator('[data-slot="sidebar-backdrop"]');
+
+    // The drawer stays mounted so it can animate out; `data-state` and `inert` carry the open state.
+    await expect(drawer).toHaveAttribute('data-state', 'closed');
+    await expect(drawer).toHaveAttribute('inert', '');
 
     await demo.locator('[data-slot="sidebar-trigger"]').click();
 
-    const drawer = demo.locator('[data-mobile="true"]');
-    await expect(drawer).toBeVisible();
+    await expect(drawer).toHaveAttribute('data-state', 'open');
+    await expect(drawer).not.toHaveAttribute('inert', '');
     await expect(drawer).toHaveAttribute('role', 'dialog');
-    await expect(demo.locator('[data-slot="sidebar-backdrop"]')).toBeVisible();
+    await expect(backdrop).toHaveAttribute('data-state', 'open');
 
     await page.keyboard.press('Escape');
-    await expect(drawer).toHaveCount(0);
+
+    await expect(drawer).toHaveAttribute('data-state', 'closed');
+    await expect(drawer).toHaveAttribute('inert', '');
   });
 
   test('passes accessibility checks', async ({ page }) => {

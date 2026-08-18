@@ -43,7 +43,10 @@ interface NavItem {
       turns it into the containing block for the sidebar's fixed panel, so the demo stays inside the
       documentation page instead of covering the viewport.
     -->
-    <z-sidebar-provider class="relative h-128 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-128 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar zCollapsible="icon" class="h-full">
         <div z-sidebar-header>
           <ul z-sidebar-menu>
@@ -136,11 +139,14 @@ interface NavItem {
         <header class="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
 
-          <z-separator zOrientation="vertical" class="mr-2 h-4" />
+          <z-separator
+            zOrientation="vertical"
+            class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+          />
 
           <z-breadcrumb zLabel="Breadcrumb">
-            <z-breadcrumb-item class="hidden md:block">
-              <span z-breadcrumb-page class="text-muted-foreground">Building Your Application</span>
+            <z-breadcrumb-item>
+              <span z-breadcrumb-page class="text-muted-foreground">Platform</span>
             </z-breadcrumb-item>
             <z-breadcrumb-item>
               <span z-breadcrumb-page>{{ active() }}</span>
@@ -149,7 +155,7 @@ interface NavItem {
         </header>
 
         <div class="flex flex-1 flex-col gap-4 p-4">
-          <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+          <div class="grid auto-rows-min grid-cols-2 gap-4">
             @for (tile of tiles; track tile) {
               <z-skeleton class="bg-muted/50 aspect-video rounded-xl" />
             }
@@ -180,7 +186,7 @@ export class ZardDemoSidebarPreviewComponent {
   readonly workspaceNames = ['Acme Inc', 'Acme Corp.', 'Evil Corp.'] as const;
   readonly workspace = signal<string>(this.workspaceNames[0]);
   readonly active = signal('Home');
-  readonly tiles = [1, 2, 3];
+  readonly tiles = [1, 2];
 
   readonly navItems: readonly NavItem[] = [
     { title: 'Home', icon: 'lucideHouse' },

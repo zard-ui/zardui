@@ -9,7 +9,10 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   selector: 'z-demo-sidebar-collapsible-icon',
   imports: [ZardSidebarImports, NgIcon],
   template: `
-    <z-sidebar-provider class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
       <z-sidebar zCollapsible="icon" class="h-full">
         <z-sidebar-content>
           <div z-sidebar-group>
