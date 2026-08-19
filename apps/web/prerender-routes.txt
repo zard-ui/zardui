@@ -10,6 +10,7 @@
 /docs/theming
 /docs/cli
 /docs/skills
+/docs/utils
 /docs/registry
 /docs/mcp
 /docs/roadmap
@@ -31,6 +32,9 @@
 /docs/forms/signal-forms
 /docs/forms/reactive-forms
 /docs/forms/template-driven-forms
+/docs/utils
+/docs/utils/scroll-fade
+/docs/utils/shimmer
 /docs/featured/youtube
 /docs/featured/articles
 /docs/components/accordion

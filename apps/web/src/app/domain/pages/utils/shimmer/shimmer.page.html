@@ -1,0 +1,165 @@
+<z-content
+  [navigationConfig]="navigationConfig"
+  [activeAnchor]="activeAnchor"
+  scrollSpy
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Shimmer"
+    description="A sweeping highlight across text, for the seconds where something is being generated."
+    scrollSpyItem="overview"
+    id="overview"
+  ></z-doc-heading>
+
+  <p class="leading-relaxed">
+    A spinner tells you the app is busy. A shimmering line tells you
+    <em>this text</em>
+    is what you are waiting for. Because the effect is built out of
+    <code class="bg-muted rounded px-1.5 py-0.5 text-sm">currentColor</code>
+    , it adapts to whatever colour the element already has — for the common case there is nothing to configure.
+  </p>
+
+  <z-utils-section
+    scrollSpyItem="installation"
+    id="installation"
+    heading="Installation"
+    lead="The utility ships in the library's global stylesheet, which is the core registry item. Refresh it and the classes are there."
+  >
+    <z-code-tabs [data]="blocks.installTabs" />
+    <p class="text-muted-foreground leading-relaxed">
+      The classes are available as soon as that stylesheet is imported after Tailwind.
+    </p>
+    <z-code-block [data]="blocks.installImport" />
+  </z-utils-section>
+
+  <z-utils-section
+    scrollSpyItem="usage"
+    id="usage"
+    heading="Usage"
+    lead="One class, on the element that holds the text."
+  >
+    <z-code-block [data]="blocks.usage" />
+    <z-code-box [codeData]="demos.basic.code" [dynamicComponent]="demos.basic.component" />
+  </z-utils-section>
+
+  <z-utils-section scrollSpyItem="how-it-works" id="how-it-works" heading="How it works">
+    <p class="text-muted-foreground leading-relaxed">
+      The element gets a
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">linear-gradient</code>
+      background clipped to its glyphs —
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">background-clip: text</code>
+      plus a transparent
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">-webkit-text-fill-color</code>
+      — and the
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">tw-shimmer</code>
+      keyframes slide that background across. The gradient's base stop is
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">currentColor</code>
+      , so the text keeps its own colour everywhere the highlight is not.
+    </p>
+    <p class="text-muted-foreground leading-relaxed">
+      Dark mode brightens the highlight through a
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">&#64;variant dark</code>
+      override, rather than dimming it the way a fixed colour would.
+    </p>
+    <z-code-block [data]="blocks.internals" />
+    <p class="text-muted-foreground leading-relaxed">
+      The defaults are a 2s duration, a
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">calc(3ch + 40px)</code>
+      spread and a
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">20deg</code>
+      angle.
+    </p>
+    <p class="text-muted-foreground leading-relaxed">
+      The gradient relies on relative colour syntax and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">color-mix()</code>
+      . For older browsers, gate the class behind a feature query so the text simply keeps its own colour.
+    </p>
+    <z-code-block [data]="blocks.guard" />
+  </z-utils-section>
+
+  <z-utils-section
+    scrollSpyItem="color"
+    id="color"
+    heading="Color"
+    lead="shimmer-color-* takes a theme colour or an arbitrary one, and accepts the slash-opacity modifier through color-mix()."
+  >
+    <z-code-block [data]="blocks.color" />
+    <z-code-box [codeData]="demos.color.code" [dynamicComponent]="demos.color.component" />
+  </z-utils-section>
+
+  <z-utils-section scrollSpyItem="duration" id="duration" heading="Duration">
+    <p class="text-muted-foreground leading-relaxed">
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">shimmer-duration-*</code>
+      is in
+      <strong>milliseconds</strong>
+      , unlike the
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">2s</code>
+      default —
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">shimmer-duration-1000</code>
+      is one second. It is the easiest thing here to get wrong.
+    </p>
+    <z-code-block [data]="blocks.duration" />
+    <z-code-box [codeData]="demos.duration.code" [dynamicComponent]="demos.duration.component" />
+  </z-utils-section>
+
+  <z-utils-section
+    scrollSpyItem="spread-and-angle"
+    id="spread-and-angle"
+    heading="Spread and angle"
+    lead="Spread is how wide the band is; angle is how far it tilts off vertical."
+  >
+    <z-code-block [data]="blocks.spreadAngle" />
+    <z-code-box [codeData]="demos.spreadAngle.code" [dynamicComponent]="demos.spreadAngle.component" />
+  </z-utils-section>
+
+  <z-utils-section scrollSpyItem="once-and-direction" id="once-and-direction" heading="Once and direction">
+    <p class="text-muted-foreground leading-relaxed">
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">shimmer-once</code>
+      runs a single sweep — the right shape for the moment a result lands, rather than the wait before it. Under
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">dir="rtl"</code>
+      the sweep already follows the reading direction;
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">shimmer-reverse</code>
+      overrides that.
+    </p>
+    <z-code-block [data]="blocks.once" />
+    <z-code-box [codeData]="demos.once.code" [dynamicComponent]="demos.once.component" />
+
+    <p class="text-muted-foreground leading-relaxed">
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">shimmer-none</code>
+      disables the effect and restores normal text rendering, which is what makes it composable with variants.
+    </p>
+    <z-code-block [data]="blocks.none" />
+  </z-utils-section>
+
+  <z-utils-section scrollSpyItem="composition" id="composition" heading="Composition">
+    <p class="text-muted-foreground leading-relaxed">
+      The effect is text-only. Applying it to a container clips
+      <em>that container's</em>
+      background to its text, and everything inside it looks broken — put the class on the element that holds the words,
+      never on the row that wraps them.
+    </p>
+    <p class="text-muted-foreground leading-relaxed">
+      Next to a badge or a spinner is where it earns its place: the chrome says something is running, the shimmer says
+      which line is still being written.
+    </p>
+    <z-code-box [codeData]="demos.status.code" [dynamicComponent]="demos.status.component" />
+  </z-utils-section>
+
+  <z-utils-section scrollSpyItem="reduced-motion" id="reduced-motion" heading="Reduced motion">
+    <p class="text-muted-foreground leading-relaxed">
+      Under
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">prefers-reduced-motion: reduce</code>
+      the animation and the gradient are both switched off and the text renders in
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">currentColor</code>
+      . That is built into the utility — there is nothing to add at the call site, and no configuration that can turn
+      the guarantee off.
+    </p>
+  </z-utils-section>
+
+  <z-utils-section scrollSpyItem="class-reference" id="class-reference" heading="Class reference">
+    <z-utils-class-table [rows]="classRows" />
+
+    <h3 class="font-heading mt-4 scroll-m-28 text-lg font-medium tracking-tight">Custom properties</h3>
+    <z-utils-class-table [rows]="propertyRows" nameLabel="Property" defaultLabel="Default" />
+  </z-utils-section>
+</z-content>

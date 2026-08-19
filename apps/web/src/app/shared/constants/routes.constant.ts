@@ -37,6 +37,7 @@ export const SECTIONS: NavSection = {
     { name: 'CLI', path: '/docs/cli', available: true },
     { name: 'Typeset', path: '/docs/typeset', available: false },
     { name: 'Skills', path: '/docs/skills', available: true },
+    { name: 'Utilities', path: '/docs/utils', available: true },
     { name: 'Registry', path: '/docs/registry', available: true },
     { name: 'MCP Server', path: '/docs/mcp', available: true },
     { name: 'Roadmap', path: '/docs/roadmap', available: true },
@@ -72,6 +73,15 @@ export const FORMS_PATH: NavSection = {
     { name: 'Signal Forms', path: '/docs/forms/signal-forms', available: true },
     { name: 'Reactive Forms', path: '/docs/forms/reactive-forms', available: true },
     { name: 'Template-driven Forms', path: '/docs/forms/template-driven-forms', available: true },
+  ],
+};
+
+export const UTILITIES_PATH: NavSection = {
+  title: 'Utilities',
+  data: [
+    { name: 'Overview', path: '/docs/utils', available: true },
+    { name: 'Scroll Fade', path: '/docs/utils/scroll-fade', available: true },
+    { name: 'Shimmer', path: '/docs/utils/shimmer', available: true },
   ],
 };
 
@@ -160,6 +170,7 @@ export const SIDEBAR_PATHS: NavSection[] = [
   COMPONENTS_PATH,
   DOCS_PATH,
   FORMS_PATH,
+  UTILITIES_PATH,
   FEATURED_PATH,
   CONTRIBUTE_PATH,
 ];

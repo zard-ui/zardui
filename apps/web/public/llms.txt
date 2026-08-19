@@ -30,6 +30,12 @@
 - [Reactive Forms](https://zardui.com/docs/forms/reactive-forms): Building forms with `FormGroup`/`FormControl`/`FormArray` — typed models, validators, errors, field types and array fields.
 - [Template-driven Forms](https://zardui.com/docs/forms/template-driven-forms): Building forms with `ngModel` and validation attributes — the simplest approach, plus its limits.
 
+## Utilities
+
+- [Utilities](https://zardui.com/docs/utils): CSS utilities that ship with Zard UI for effects Tailwind has no primitive for.
+- [Scroll Fade](https://zardui.com/docs/utils/scroll-fade): Fading the edges of a scroll container in sync with the scroll position, with no JavaScript.
+- [Shimmer](https://zardui.com/docs/utils/shimmer): A sweeping highlight across text, for the seconds where something is being generated.
+
 ## Components
 
 ### Form & Input

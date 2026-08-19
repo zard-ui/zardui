@@ -1,0 +1,169 @@
+<z-content
+  [navigationConfig]="navigationConfig"
+  [activeAnchor]="activeAnchor"
+  scrollSpy
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Scroll Fade"
+    description="Fade the edges of a scroll container, in sync with the scroll position."
+    scrollSpyItem="overview"
+    id="overview"
+  ></z-doc-heading>
+
+  <p class="leading-relaxed">
+    A scroll container that overflows tells you nothing about where you are in it.
+    <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade</code>
+    softens the edges that still have content behind them and sharpens the ones that do not, so the container reads as a
+    window onto a longer list. It is a
+    <code class="bg-muted rounded px-1.5 py-0.5 text-sm">mask-image</code>
+    driven by scroll-linked animations — there is no JavaScript and no scroll listener.
+  </p>
+
+  <z-utils-section
+    scrollSpyItem="installation"
+    id="installation"
+    heading="Installation"
+    lead="The utility ships in the library's global stylesheet, which is the core registry item. Refresh it and the classes are there."
+  >
+    <z-code-tabs [data]="blocks.installTabs" />
+    <p class="text-muted-foreground leading-relaxed">
+      The classes are available as soon as that stylesheet is imported after Tailwind.
+    </p>
+    <z-code-block [data]="blocks.installImport" />
+  </z-utils-section>
+
+  <z-utils-section
+    scrollSpyItem="usage"
+    id="usage"
+    heading="Usage"
+    lead="The utility only paints a mask — it does not make the container scrollable. Pair it with overflow-y-auto and a height."
+  >
+    <z-code-block [data]="blocks.usage" />
+    <z-code-box [codeData]="demos.basic.code" [dynamicComponent]="demos.basic.component" previewHeight="26rem" />
+
+    <p class="text-muted-foreground leading-relaxed">
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-x</code>
+      is the horizontal pair. Same rule: it needs
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">overflow-x-auto</code>
+      and content wide enough to overflow.
+    </p>
+    <z-code-box [codeData]="demos.horizontal.code" [dynamicComponent]="demos.horizontal.component" />
+  </z-utils-section>
+
+  <z-utils-section scrollSpyItem="how-it-works" id="how-it-works" heading="How it works">
+    <p class="text-muted-foreground leading-relaxed">
+      The element gets a
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">mask-image</code>
+      linear gradient whose stops are custom properties, and those properties are animated by
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">animation-timeline: scroll(self y)</code>
+      — a scroll-driven animation, so the browser advances it from the container's own scroll position.
+    </p>
+    <p class="text-muted-foreground leading-relaxed">That makes the effect scroll-aware rather than decorative:</p>
+    <ul class="ml-6 list-disc space-y-2 leading-relaxed">
+      <li>At rest, the leading edge is sharp and the trailing edge is faded.</li>
+      <li>Mid-scroll, both edges fade — there is content in both directions.</li>
+      <li>At the end, the trailing edge sharpens again.</li>
+    </ul>
+    <p class="text-muted-foreground leading-relaxed">
+      The default fade depth is
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">min(12%, calc(var(--spacing) * 10))</code>
+      — 12% of the container, capped at 40px — and the default reveal distance, how far you scroll before an edge is
+      fully faded, is
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">calc(var(--spacing) * 24)</code>
+      , or 96px.
+    </p>
+  </z-utils-section>
+
+  <z-utils-section
+    scrollSpyItem="edges"
+    id="edges"
+    heading="Edges"
+    lead="scroll-fade and scroll-fade-y are the same utility. The rest fade a single edge."
+  >
+    <z-code-block [data]="blocks.edges" />
+    <p class="text-muted-foreground leading-relaxed">
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">-l</code>
+      and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">-r</code>
+      are physical and always mean left and right.
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">-s</code>
+      and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">-e</code>
+      are logical: they follow the reading direction, so they swap under
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">dir="rtl"</code>
+      .
+    </p>
+    <z-code-box [codeData]="demos.edges.code" [dynamicComponent]="demos.edges.component" />
+  </z-utils-section>
+
+  <z-utils-section
+    scrollSpyItem="size"
+    id="size"
+    heading="Size"
+    lead="The sizing classes carry a value, not a mask — keep the mask utility next to them."
+  >
+    <z-code-block [data]="blocks.size" />
+    <z-code-box [codeData]="demos.size.code" [dynamicComponent]="demos.size.component" />
+
+    <p class="text-muted-foreground leading-relaxed">
+      The per-edge classes size one edge and leave the others on the shared default, which is how you get an asymmetric
+      fade out of a single container.
+    </p>
+    <z-code-box [codeData]="demos.perEdge.code" [dynamicComponent]="demos.perEdge.component" previewHeight="24rem" />
+
+    <p class="text-muted-foreground leading-relaxed">
+      Every class writes one of these custom properties, so a stylesheet can set them directly instead.
+    </p>
+    <z-code-block [data]="blocks.properties" />
+  </z-utils-section>
+
+  <z-utils-section
+    scrollSpyItem="reveal"
+    id="reveal"
+    heading="Reveal"
+    lead="How far you scroll before an edge reaches its full depth. Shorter feels snappier; longer feels like the list is drifting into view."
+  >
+    <z-code-block [data]="blocks.reveal" />
+    <z-code-box [codeData]="demos.reveal.code" [dynamicComponent]="demos.reveal.component" />
+  </z-utils-section>
+
+  <z-utils-section
+    scrollSpyItem="rtl"
+    id="rtl"
+    heading="RTL"
+    lead="The inline utilities read the direction from the document, so one class covers both scripts."
+  >
+    <z-code-block [data]="blocks.rtl" />
+    <p class="text-muted-foreground leading-relaxed">
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-x</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-s</code>
+      and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-e</code>
+      mirror. Reach for
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-l</code>
+      or
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-r</code>
+      only when you mean the physical side regardless of direction.
+    </p>
+  </z-utils-section>
+
+  <z-utils-section scrollSpyItem="browser-support" id="browser-support" heading="Browser support">
+    <p class="text-muted-foreground leading-relaxed">
+      The scroll-aware behaviour needs scroll-driven animations. Where they are missing, the
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">&#64;supports not</code>
+      branch pins both edges to their full size: you get a static double fade instead of a scroll-aware one. It is a
+      plain fallback, not a polyfill — the fade no longer tracks the scroll position, and the leading edge stays faded
+      at rest.
+    </p>
+    <z-code-block [data]="blocks.fallback" />
+  </z-utils-section>
+
+  <z-utils-section scrollSpyItem="class-reference" id="class-reference" heading="Class reference">
+    <z-utils-class-table [rows]="classRows" />
+
+    <h3 class="font-heading mt-4 scroll-m-28 text-lg font-medium tracking-tight">Custom properties</h3>
+    <z-utils-class-table [rows]="propertyRows" nameLabel="Property" defaultLabel="Default" />
+  </z-utils-section>
+</z-content>

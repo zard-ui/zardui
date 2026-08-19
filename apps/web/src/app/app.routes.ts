@@ -69,6 +69,10 @@ export const appRoutes: Route[] = [
         loadChildren: async () => (await import('./domain/pages/forms/forms.routes')).FORMS_ROUTES,
       },
       {
+        path: 'utils',
+        loadChildren: async () => (await import('./domain/pages/utils/utils.routes')).UTILS_ROUTES,
+      },
+      {
         path: 'dark-mode',
         loadComponent: () => import('./domain/pages/dark-mode/dark-mode.page').then(c => c.DarkmodePage),
       },
