@@ -1,0 +1,66 @@
+/*
+ * O catálogo de fontes do builder.
+ *
+ * Vive aqui, e não em `styles.css`, porque entra no chunk da rota `/typeset` —
+ * as outras páginas do site não pagam por ele. Os `.woff2` em si só são baixados
+ * quando alguma família é de fato usada por texto renderizado, que é o
+ * comportamento desejado numa prévia com 23 opções.
+ *
+ * Geist e Geist Mono não aparecem nos imports: já são carregados globalmente
+ * pelo `styles.css`. As variáveis dos dois ficam mesmo assim, para que este
+ * arquivo declare o catálogo inteiro — é o mesmo bloco `:root` que o painel de
+ * código entrega para quem instala.
+ */
+
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/noto-sans';
+@import '@fontsource-variable/nunito-sans';
+@import '@fontsource-variable/figtree';
+@import '@fontsource-variable/roboto';
+@import '@fontsource-variable/raleway';
+@import '@fontsource-variable/dm-sans';
+@import '@fontsource-variable/public-sans';
+@import '@fontsource-variable/outfit';
+@import '@fontsource-variable/oxanium';
+@import '@fontsource-variable/manrope';
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/montserrat';
+@import '@fontsource-variable/ibm-plex-sans';
+@import '@fontsource-variable/source-sans-3';
+@import '@fontsource-variable/instrument-sans';
+@import '@fontsource-variable/jetbrains-mono';
+@import '@fontsource-variable/noto-serif';
+@import '@fontsource-variable/roboto-slab';
+@import '@fontsource-variable/merriweather';
+@import '@fontsource-variable/lora';
+
+:root {
+  /* Sans */
+  --font-geist: 'Geist Variable', sans-serif;
+  --font-inter: 'Inter Variable', sans-serif;
+  --font-noto-sans: 'Noto Sans Variable', sans-serif;
+  --font-nunito-sans: 'Nunito Sans Variable', sans-serif;
+  --font-figtree: 'Figtree Variable', sans-serif;
+  --font-roboto: 'Roboto Variable', sans-serif;
+  --font-raleway: 'Raleway Variable', sans-serif;
+  --font-dm-sans: 'DM Sans Variable', sans-serif;
+  --font-public-sans: 'Public Sans Variable', sans-serif;
+  --font-outfit: 'Outfit Variable', sans-serif;
+  --font-oxanium: 'Oxanium Variable', sans-serif;
+  --font-manrope: 'Manrope Variable', sans-serif;
+  --font-space-grotesk: 'Space Grotesk Variable', sans-serif;
+  --font-montserrat: 'Montserrat Variable', sans-serif;
+  --font-ibm-plex-sans: 'IBM Plex Sans Variable', sans-serif;
+  --font-source-sans-3: 'Source Sans 3 Variable', sans-serif;
+  --font-instrument-sans: 'Instrument Sans Variable', sans-serif;
+
+  /* Mono */
+  --font-jetbrains-mono: 'JetBrains Mono Variable', monospace;
+  --font-geist-mono: 'Geist Mono Variable', monospace;
+
+  /* Serif */
+  --font-noto-serif: 'Noto Serif Variable', serif;
+  --font-roboto-slab: 'Roboto Slab Variable', serif;
+  --font-merriweather: 'Merriweather Variable', serif;
+  --font-lora: 'Lora Variable', serif;
+}

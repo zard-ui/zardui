@@ -37,6 +37,7 @@ import { TypesetGeneratorService } from './services/typeset-generator.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   templateUrl: './typeset.page.html',
+  styleUrl: './typeset.page.css',
 })
 export class TypesetPage implements OnInit {
   private readonly seoService = inject(SeoService);
