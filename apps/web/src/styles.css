@@ -10,7 +10,7 @@
 @custom-variant fixed (&:is(.layout-fixed *));
 
 :root {
-  --header-height: calc(var(--spacing) * 14);
+  --header-height: calc(var(--spacing) * 16);
   --footer-height: calc(var(--spacing) * 14);
   --sidebar-width: calc(var(--spacing) * 72);
   --font-geist-sans: 'Geist Variable', sans-serif;

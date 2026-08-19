@@ -2,7 +2,7 @@ import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/
 import { RouterModule } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideGalleryHorizontal } from '@ng-icons/lucide';
+import { lucideGalleryHorizontal, lucidePlus } from '@ng-icons/lucide';
 
 import { DocResearcherComponent } from '@doc/domain/components/doc-researcher/doc-researcher.component';
 import { MobileMenuComponent } from '@doc/domain/components/mobile-nav/mobile-nav.component';
@@ -47,6 +47,7 @@ const DarkModeSvg = `
   viewProviders: [
     provideIcons({
       lucideGalleryHorizontal,
+      lucidePlus,
       darkMode: DarkModeSvg,
     }),
   ],
