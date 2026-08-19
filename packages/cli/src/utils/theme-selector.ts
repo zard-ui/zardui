@@ -1,36 +1,30 @@
-import * as themes from '@cli/core/themes/theme-definitions.js';
+/**
+ * Os tons neutros que o `init` oferece e o CSS que ele grava.
+ *
+ * A casca ficou; o conteúdo mudou de dono. Os tokens eram cinco funções que
+ * devolviam CSS em string aqui na CLI, e uma segunda cópia em dados na página
+ * `/themes` — duas verdades sobre a mesma cor, sem nada garantindo que
+ * concordassem. Agora as duas leem `@zardui/preset`, e o que o preview mostra é
+ * literalmente o que o comando grava.
+ */
+
+import { BASE_COLORS, DEFAULT_PRESET, renderThemeCss, resolvePreset, selectable } from '@zardui/preset';
 
 export function getAvailableThemes(): string[] {
-  return themes.availableThemes;
+  return selectable(BASE_COLORS).map(entry => entry.id);
 }
 
 export function getThemeContent(themeName: string, corePath: string): string {
-  const content = (() => {
-    switch (themeName) {
-      case 'stone':
-        return themes.stone(corePath);
-      case 'zinc':
-        return themes.zinc(corePath);
-      case 'gray':
-        return themes.gray(corePath);
-      case 'slate':
-        return themes.slate(corePath);
-      case 'neutral':
-      default:
-        return themes.neutral(corePath);
-    }
-  })();
+  // Um tom desconhecido cai no default em vez de parar o comando: quem valida a
+  // escolha é o wizard, e o `init` sempre gravou um arquivo válido.
+  const baseColor = BASE_COLORS.some(entry => entry.id === themeName) ? themeName : DEFAULT_PRESET.baseColor;
 
-  return content.trim();
+  return renderThemeCss(resolvePreset({ ...DEFAULT_PRESET, baseColor }), { corePath });
 }
 
 export function getThemeDisplayName(themeName: string): string {
-  const names: Record<string, string> = {
-    neutral: 'Neutral (Default)',
-    stone: 'Stone',
-    zinc: 'Zinc',
-    gray: 'Gray',
-    slate: 'Slate',
-  };
-  return names[themeName] ?? themeName;
+  const entry = BASE_COLORS.find(item => item.id === themeName);
+  if (!entry) return themeName;
+
+  return entry.id === DEFAULT_PRESET.baseColor ? `${entry.label} (Default)` : entry.label;
 }

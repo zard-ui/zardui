@@ -12,6 +12,8 @@ export default {
   moduleNameMapper: {
     '^@cli/(.*)\\.js$': '<rootDir>/src/$1',
     '^@cli/(.*)$': '<rootDir>/src/$1',
+    '^@zardui/preset$': '<rootDir>/../preset/src/index.ts',
+    '^@zardui/preset/(.*)$': '<rootDir>/../preset/src/$1',
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   coverageDirectory: '../../coverage/packages/cli',

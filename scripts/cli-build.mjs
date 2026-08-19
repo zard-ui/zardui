@@ -26,6 +26,18 @@ const CLI = join(ROOT, 'packages', 'cli');
 const DIST = join(CLI, 'dist');
 const TSCONFIG = 'packages/cli/tsconfig.build.json';
 
+/**
+ * Onde o entrypoint da CLI cai dentro do `dist`.
+ *
+ * A CLI compila junto com `packages/preset`, que é a fonte única dos tokens de
+ * tema. Como os dois fontes vivem em pastas irmãs, o diretório-raiz comum passou
+ * a ser `packages/`, e o tsc espelha isso na saída: `dist/cli/src` e
+ * `dist/preset/src`. Publicar assim é mais barato do que achatar — mover as
+ * pastas depois invalidaria os caminhos relativos entre elas, e `main`/`bin` do
+ * package.json apontam para cá justamente para que ninguém precise.
+ */
+const ENTRY_DIR = join(DIST, 'cli', 'src');
+
 const require = createRequire(import.meta.url);
 
 function parseArgs(argv) {
@@ -110,11 +122,11 @@ runTool('typescript', 'tsc', ['-p', TSCONFIG]);
 runTool('tsc-alias', 'tsc-alias', ['-p', TSCONFIG]);
 
 // 3. injeta a URL do registry no lugar do placeholder.
-const registryConfig = join(DIST, 'config', 'registry-config.js');
+const registryConfig = join(ENTRY_DIR, 'config', 'registry-config.js');
 writeFileSync(registryConfig, readFileSync(registryConfig, 'utf8').replaceAll('__REGISTRY_URL__', args.registry));
 
 // 4. shebang + bit de execução: sem isso o binário não roda direto.
-const entry = join(DIST, 'index.js');
+const entry = join(ENTRY_DIR, 'index.js');
 writeFileSync(entry, `#!/usr/bin/env node\n${readFileSync(entry, 'utf8')}`);
 chmodSync(entry, 0o755);
 

@@ -8,12 +8,8 @@
     "moduleResolution": "bundler",
     "module": "ESNext",
     "target": "ES2022",
-    "paths": {
-      "@cli/*": ["./src/*"],
-      "@zardui/preset": ["../preset/src/index.ts"],
-      "@zardui/preset/*": ["../preset/src/*"]
-    }
+    "strict": true
   },
   "include": ["./src/**/*.ts"],
-  "exclude": ["./jest.config.ts", "./src/**/*.spec.ts", "./src/**/*.test.ts"]
+  "exclude": ["./jest.config.ts", "./src/**/*.spec.ts"]
 }

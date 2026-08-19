@@ -1,5 +1,6 @@
-import { resolveAliasToPath, type Config } from '@cli/utils/config.js';
-import { getThemeContent } from '@cli/utils/theme-selector.js';
+import { presetOf, resolveAliasToPath, type Config } from '@cli/utils/config.js';
+import { presetCatalog } from '@cli/utils/preset-catalog.js';
+import { normalizePreset, renderThemeCss, resolvePreset } from '@zardui/preset';
 import { mkdir, writeFile } from 'node:fs/promises';
 import * as path from 'path';
 
@@ -35,7 +36,7 @@ export async function createPostCssConfig(cwd: string, projectRoot = '.'): Promi
  * `projects/admin/src/app` mirava `./admin/...`, e com um alias `@app/core`
  * gerava `./appapp/core`.
  */
-function coreImportPath(cwd: string, config: Config): string {
+export function coreImportPath(cwd: string, config: Config): string {
   const cssDir = path.dirname(path.resolve(cwd, config.tailwind.css));
   const coreDir = path.resolve(cwd, resolveAliasToPath(config.aliases.core, config.baseUrl));
 
@@ -44,9 +45,22 @@ function coreImportPath(cwd: string, config: Config): string {
   return relative.startsWith('.') ? relative : `./${relative}`;
 }
 
+/**
+ * O CSS de tema que este `components.json` descreve.
+ *
+ * Sai do preset, e não mais do tom neutro sozinho — mas para um arquivo escrito
+ * antes do campo `preset` o resultado é byte a byte o mesmo, porque `presetOf`
+ * deriva dele exatamente o que ele já dizia.
+ */
+export function themeCssFor(cwd: string, config: Config): string {
+  const preset = normalizePreset(presetOf(config));
+
+  return renderThemeCss(resolvePreset(preset, presetCatalog()), { corePath: coreImportPath(cwd, config) });
+}
+
 export async function applyThemeToStyles(cwd: string, config: Config): Promise<void> {
   const stylesPath = path.join(cwd, config.tailwind.css);
-  const themeContent = getThemeContent(config.tailwind.baseColor, coreImportPath(cwd, config));
+  const themeContent = themeCssFor(cwd, config);
 
   // Numa biblioteca esse arquivo normalmente não existe — é o init que o cria,
   // para a lib expor os tokens a quem a consome.

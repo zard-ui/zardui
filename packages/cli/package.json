@@ -3,9 +3,9 @@
   "version": "1.0.0-beta.111",
   "description": "An alternative to shadcn/ui for angular",
   "type": "module",
-  "main": "index.js",
+  "main": "cli/src/index.js",
   "bin": {
-    "zard-cli": "./index.js"
+    "zard-cli": "./cli/src/index.js"
   },
   "keywords": [
     "ngzard",

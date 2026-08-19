@@ -1,3 +1,13 @@
+/**
+ * O CSS que a CLI gravava antes de `@zardui/preset` existir — congelado.
+ *
+ * É cópia literal do que era `packages/cli/src/core/themes/theme-definitions.ts`
+ * na v1.0.0-beta.111, e não código de produção: existe só para `css.spec.ts`
+ * provar que a migração dos tokens para dados não mudou um byte do arquivo que
+ * quem roda `init` recebe. Não editar — um ajuste aqui não corrige nada, só
+ * apaga a evidência.
+ */
+
 export const availableThemes: string[] = ['neutral', 'stone', 'zinc', 'gray', 'slate'];
 
 const getTailwindConfiguration = (corePath: string): string => {

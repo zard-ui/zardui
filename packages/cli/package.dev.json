@@ -3,9 +3,9 @@
   "version": "0.0.0-dev",
   "description": "Development version of zard-cli",
   "type": "module",
-  "main": "index.js",
+  "main": "cli/src/index.js",
   "bin": {
-    "zardev": "./index.js"
+    "zardev": "./cli/src/index.js"
   },
   "private": true
 }

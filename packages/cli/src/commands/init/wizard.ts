@@ -33,7 +33,9 @@ import {
 } from '@cli/ui/index.js';
 import { type Config } from '@cli/utils/config.js';
 import { type ProjectInfo, type WorkspaceProject } from '@cli/utils/get-project-info.js';
+import { presetCatalog } from '@cli/utils/preset-catalog.js';
 import { getAvailableThemes, getThemeDisplayName } from '@cli/utils/theme-selector.js';
+import { encodePreset, entryById, type Preset } from '@zardui/preset';
 
 type StepKind = 'text' | 'select' | 'confirm';
 
@@ -139,15 +141,24 @@ function projectStep(projects: WorkspaceProject[], kind: ProjectKind): Step {
   };
 }
 
-function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind): Step[] {
+/**
+ * As perguntas, na ordem.
+ *
+ * Com um preset em mãos, a do tema sai: ela já foi respondida em `/create` ou
+ * na linha de comando, e perguntá-la de novo daria ao usuário a chance de
+ * contradizer, sem perceber, o design system que ele mesmo escolheu. O que o
+ * preset decidiu aparece no transcript, marcado como vindo dele.
+ */
+function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind, hasPreset = false): Step[] {
   const candidates = candidateProjects(kind, projectInfo);
   const chooseProject = candidates.length > 1 ? [projectStep(candidates, kind)] : [];
+  const chooseTheme = hasPreset ? [] : [themeStep()];
 
   if (isLibraryKind(kind)) {
     return [
       kindStep(),
       ...chooseProject,
-      themeStep(),
+      ...chooseTheme,
       {
         id: 'globalCss',
         kind: 'text',
@@ -182,7 +193,7 @@ function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind): Step[] {
       label: 'app.config.ts',
       detail: 'zard/ui registers its global providers in this file.',
     },
-    themeStep(),
+    ...chooseTheme,
     {
       id: 'globalCss',
       kind: 'text',
@@ -247,6 +258,8 @@ export interface InitWizardOptions {
   readonly presetKind?: ProjectKind;
   /** O projeto pedido em `--project`, pelo mesmo motivo. */
   readonly presetProjectRoot?: string;
+  /** O design system já escolhido. Presente, as perguntas que ele responde não são feitas. */
+  readonly preset?: Preset;
   /** Etapas de execução, montadas só quando o config está pronto. */
   buildSteps(config: Config): InitStep[];
 }
@@ -266,7 +279,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     // Reinicializar sobrescreve configuração já existente: a confirmação vem
     // antes de qualquer pergunta e não é pulada por --yes.
     phase: options.isReInitializing ? 'reinit' : 'prompting',
-    steps: baseSteps(options.projectInfo, firstKind),
+    steps: baseSteps(options.projectInfo, firstKind, Boolean(options.preset)),
     stepIndex: 0,
     answers,
     kindChosen: false,
@@ -309,7 +322,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
   enterStep();
 
   const startExecution = (ctx: WizardContext<Config>): void => {
-    const resolved = buildConfig(state.answers, options.packageManager);
+    const resolved = buildConfig(state.answers, options.packageManager, options.preset);
     config = resolved;
 
     const steps = options.buildSteps(resolved);
@@ -394,7 +407,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     if (step.id === 'kind') {
       const kind = value as ProjectKind;
       state.answers = { ...defaultAnswers(options.projectInfo, kind), theme: state.answers.theme };
-      state.steps = baseSteps(options.projectInfo, kind);
+      state.steps = baseSteps(options.projectInfo, kind, Boolean(options.preset));
       state.kindChosen = true;
       advance(ctx);
       return;
@@ -535,11 +548,17 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
 
     if (state.phase === 'prompting' || state.phase === 'confirming' || state.phase === 'aborted') {
       const answered = state.phase === 'confirming' ? state.steps.length : state.stepIndex;
+
+      // O que veio do preset entra no transcript como resposta já dada: sem
+      // isso, o tema simplesmente não apareceria em lugar nenhum, e a instalação
+      // pareceria ter escolhido a cor sozinha.
+      if (options.preset) body.push(answeredLine('preset', presetSummary(options.preset)));
+
       for (let index = 0; index < answered; index++) {
         const step = state.steps[index] as Step;
         body.push(answeredLine(step.label, displayValue(step, state)));
       }
-      if (answered > 0) body.push(text(''));
+      if (answered > 0 || options.preset) body.push(text(''));
     }
 
     if (state.phase === 'reinit') {
@@ -686,4 +705,27 @@ function abortBlock(): Node[] {
     text('   Nothing was changed. Run init again and accept that step, or move', { color: 'muted', dim: true }),
     text('   your existing styles elsewhere first.', { color: 'muted', dim: true }),
   ];
+}
+
+/**
+ * O preset em uma linha, para o transcript.
+ *
+ * Mostra o código quando existe um — é ele que quem leu a instalação vai colar
+ * no próximo projeto. Um preset com cores editadas à mão não tem código, e aí
+ * ficam só os nomes, que é o que há para mostrar.
+ */
+function presetSummary(preset: Preset): string {
+  const catalog = presetCatalog();
+  const baseColor = entryById(catalog.baseColors, preset.baseColor)?.label ?? preset.baseColor;
+  const theme = entryById(catalog.themes, preset.theme)?.label ?? preset.theme;
+  const radius = entryById(catalog.radii, preset.radius)?.label ?? preset.radius;
+
+  const description = `${baseColor} · ${theme} · radius ${radius.toLowerCase()}`;
+
+  try {
+    const code = encodePreset(preset, catalog);
+    return code ? `${code} — ${description}` : description;
+  } catch {
+    return description;
+  }
 }

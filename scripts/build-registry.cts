@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { ICON_FAMILIES, ICON_MAP, collectIcons, type ComponentIcons } from '../packages/cli/src/core/icons/index';
+import { LOCAL_PRESET_CATALOG, duplicateCodes, serializeCatalog } from '../packages/preset/src/index';
 import { registry, type ComponentRegistry } from '../packages/cli/src/core/registry/registry-data';
 
 /**
@@ -202,6 +203,28 @@ function buildIconCatalog(): { $schema: string; schemaVersion: number; families:
   };
 }
 
+/**
+ * `presets.json` — o catálogo do design system.
+ *
+ * Sai de `@zardui/preset` e nunca é escrito à mão: o mesmo módulo que a CLI usa
+ * para gravar o CSS e que o `/create` usa para desenhar o preview é o que define
+ * o que este arquivo contém. Publicá-lo é o que faz uma cor de destaque nova
+ * valer para quem já tem a CLI instalada.
+ *
+ * `code` repetido derruba o build. Dois itens com o mesmo número fazem um código
+ * de preset já compartilhado significar duas coisas, e a que vence depende da
+ * ordem do array — ou seja, muda sozinha na próxima edição do catálogo.
+ */
+function buildPresetCatalog() {
+  const problems = duplicateCodes(LOCAL_PRESET_CATALOG);
+
+  if (problems.length > 0) {
+    throw new Error(['Preset catalog has duplicate codes:', ...problems].join('\n  '));
+  }
+
+  return serializeCatalog(LOCAL_PRESET_CATALOG, SCHEMA_VERSION);
+}
+
 function buildRegistryIndex(items: RegistryItem[]): RegistryIndex {
   return {
     $schema: 'https://zardui.com/schema/registry.json',
@@ -265,6 +288,13 @@ async function main() {
   fs.writeJsonSync(iconsFile, buildIconCatalog(), { spaces: 2 });
   console.log(
     `   🎨 Icon catalog: ${Object.keys(ICON_FAMILIES).length} family(ies), ${Object.keys(ICON_MAP).length} icons`,
+  );
+
+  const presetsFile = path.join(OUTPUT_PATH, 'presets.json');
+  fs.writeJsonSync(presetsFile, buildPresetCatalog(), { spaces: 2 });
+  console.log(
+    `   🎨 Preset catalog: ${LOCAL_PRESET_CATALOG.baseColors.length} base colors, ` +
+      `${LOCAL_PRESET_CATALOG.themes.length} themes, ${LOCAL_PRESET_CATALOG.radii.length} radii`,
   );
 
   console.log('\n' + '='.repeat(50));

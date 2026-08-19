@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zardui.com/preset.schema.json",
+  "title": "zard.preset.json",
+  "description": "A zard/ui design system preset. Use it wherever --preset is accepted, in place of a short code, when the theme carries hand-edited colours that a short code cannot represent.",
+  "type": "object",
+  "required": ["version"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "This file's schema. Keeping it lets your editor validate and complete the fields below."
+    },
+    "version": {
+      "const": 1,
+      "description": "The preset format. Bumped only when a field changes meaning."
+    },
+    "name": {
+      "type": "string",
+      "description": "A label for this preset. Shown in reports; never affects what is written."
+    },
+    "baseColor": {
+      "type": "string",
+      "default": "neutral",
+      "examples": ["neutral", "stone", "zinc", "gray", "slate"],
+      "description": "The neutral tone the theme is built on. The valid values are the ones the registry publishes in presets.json."
+    },
+    "theme": {
+      "type": "string",
+      "default": "neutral",
+      "examples": ["neutral", "blue", "indigo", "emerald", "amber", "rose"],
+      "description": "The accent colour. `neutral` means no accent — the primary stays the base tone. Its tokens are derived over the base tone, so the same accent works on every one of them."
+    },
+    "chart": {
+      "type": "string",
+      "default": "default",
+      "examples": ["default", "vivid", "mono"],
+      "description": "The --chart-1..5 palette."
+    },
+    "radius": {
+      "type": "string",
+      "default": "default",
+      "examples": ["none", "small", "medium", "default", "large"],
+      "description": "The corner radius step, which becomes the value of --radius."
+    },
+    "icons": {
+      "type": "string",
+      "default": "lucide",
+      "examples": ["lucide"],
+      "description": "The icon set the components are written against. Validated against the registry's icons.json."
+    },
+    "darkMode": {
+      "type": "string",
+      "enum": ["class", "off"],
+      "default": "class",
+      "description": "`class` installs the theme script and provider; `off` ships light mode only."
+    },
+    "rtl": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the project reads right to left."
+    },
+    "colors": {
+      "type": "object",
+      "description": "Token overrides, applied last. This is the reason a preset file exists: hand-edited colours do not fit a short code.",
+      "properties": {
+        "light": { "$ref": "#/definitions/tokens" },
+        "dark": { "$ref": "#/definitions/tokens" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "tokens": {
+      "type": "object",
+      "description": "CSS custom properties without the leading --, e.g. `primary`, `sidebar-ring`.",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

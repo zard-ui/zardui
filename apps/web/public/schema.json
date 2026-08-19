@@ -65,6 +65,44 @@
       },
       "additionalProperties": false
     },
+    "preset": {
+      "type": "object",
+      "description": "The design system this project was set up with. Written by init, create and apply; read by `zard-cli preset resolve` so the CLI can hand you back the short code for what you have. Editing it by hand changes nothing on its own — run `zard-cli apply` to rewrite the tokens.",
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[0-9A-Za-z]{3,16}$",
+          "description": "The short preset code, as it appears on zardui.com/create. Absent when the preset came from a file with hand-edited colours, which a short code cannot represent."
+        },
+        "baseColor": {
+          "type": "string",
+          "default": "neutral",
+          "description": "The neutral tone the theme is built on."
+        },
+        "theme": {
+          "type": "string",
+          "default": "neutral",
+          "description": "The accent colour. `neutral` means no accent — the primary stays the base tone."
+        },
+        "chart": {
+          "type": "string",
+          "default": "default",
+          "description": "The --chart-1..5 palette."
+        },
+        "radius": {
+          "type": "string",
+          "default": "default",
+          "description": "The corner radius step: none, small, medium, default or large."
+        },
+        "darkMode": {
+          "type": "string",
+          "enum": ["class", "off"],
+          "default": "class",
+          "description": "`class` installs the theme script and provider; `off` ships light mode only."
+        }
+      },
+      "additionalProperties": false
+    },
     "baseUrl": {
       "type": "string",
       "default": "src/app",

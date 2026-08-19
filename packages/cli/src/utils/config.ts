@@ -18,8 +18,32 @@ async function readJson(filePath: string): Promise<any> {
   return JSON.parse(content);
 }
 
+/**
+ * O design system que este projeto usa.
+ *
+ * Ausente em todo `components.json` escrito antes de `create`/`apply` existirem
+ * — e é `presetOf` quem responde por eles, derivando o preset do que o arquivo
+ * já dizia. Fechar os ids num enum seria o mesmo erro que `icons` evita: as
+ * escolhas válidas são as que o registry publica em `presets.json` no momento da
+ * execução, e não as que existiam quando esta CLI foi compilada.
+ */
+const presetConfigSchema = z.object({
+  // Ausente quando o preset veio de arquivo com cores editadas à mão: essas não
+  // cabem num código curto, e gravar um código que as ignora seria mentir sobre
+  // o que o projeto tem.
+  code: z.string().optional(),
+  baseColor: z.string().default('neutral'),
+  theme: z.string().default('neutral'),
+  chart: z.string().default('default'),
+  radius: z.string().default('default'),
+  darkMode: z.enum(['class', 'off']).default('class'),
+});
+
+export type PresetConfig = z.infer<typeof presetConfigSchema>;
+
 const configSchema = z.object({
   $schema: z.string().optional(),
+  preset: presetConfigSchema.optional(),
   appConfigFile: z.string().default('src/app/app.config.ts'),
   style: z.enum(['css']).default('css'),
   // A família de ícones em que os componentes são gravados. Ausente nos
@@ -63,8 +87,35 @@ const configSchema = z.object({
 
 export type Config = z.infer<typeof configSchema>;
 
+/**
+ * O preset do projeto, inclusive quando o arquivo é anterior ao campo.
+ *
+ * Um `components.json` sem `preset` não é um projeto sem design system: é um
+ * projeto cujo design system está descrito no que existia antes — o tom neutro
+ * em `tailwind.baseColor`, sem destaque, no raio padrão. Derivar isso aqui é o
+ * que faz `preset resolve` devolver um código para quem nunca rodou `apply`.
+ */
+export function presetOf(config: Config): PresetConfig {
+  return (
+    config.preset ?? {
+      baseColor: config.tailwind.baseColor,
+      theme: 'neutral',
+      chart: 'default',
+      radius: 'default',
+      darkMode: 'class',
+    }
+  );
+}
+
 export const DEFAULT_CONFIG: Config = {
   style: 'css',
+  preset: {
+    baseColor: 'neutral',
+    theme: 'neutral',
+    chart: 'default',
+    radius: 'default',
+    darkMode: 'class',
+  },
   icons: SOURCE_ICON_FAMILY,
   rtl: false,
   projectType: 'angular',

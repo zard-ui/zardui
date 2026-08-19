@@ -10,6 +10,8 @@ import {
 import { SOURCE_ICON_FAMILY } from '@cli/core/icons/index.js';
 import { type Config } from '@cli/utils/config.js';
 import { type ProjectInfo, type WorkspaceProject } from '@cli/utils/get-project-info.js';
+import { presetCatalog } from '@cli/utils/preset-catalog.js';
+import { DEFAULT_PRESET, encodePreset, type Preset } from '@zardui/preset';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import * as path from 'node:path';
@@ -19,6 +21,14 @@ export const SCHEMA_URL = 'https://zardui.com/schema.json';
 
 export const configSchema = z.object({
   $schema: z.string(),
+  preset: z.object({
+    code: z.string().optional(),
+    baseColor: z.string(),
+    theme: z.string(),
+    chart: z.string(),
+    radius: z.string(),
+    darkMode: z.enum(['class', 'off']),
+  }),
   style: z.enum(['css']),
   icons: z.string(),
   rtl: z.boolean(),
@@ -125,23 +135,45 @@ function baseUrlFor(answers: InitAnswers): string {
   return isLibraryKind(answers.kind) ? libraryBaseUrl(answers.projectRoot) : deriveBaseUrl(answers.appConfig);
 }
 
-export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun'): Config {
+/**
+ * O `components.json`, a partir das respostas.
+ *
+ * `preset.baseColor` e `tailwind.baseColor` dizem a mesma coisa, de propósito: o
+ * campo antigo continua existindo porque todo `components.json` já escrito o
+ * tem, e removê-lo obrigaria quem já usa a CLI a editar o arquivo à mão. O
+ * preset é quem manda daqui em diante; o outro é mantido em sincronia.
+ */
+export function buildConfig(
+  answers: InitAnswers,
+  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
+  preset: Preset = { ...DEFAULT_PRESET, baseColor: answers.theme },
+): Config {
   const sharedBase = path.dirname(answers.componentsAlias).replace(/\\/g, '/');
+
+  const code = presetCode(preset);
 
   return configSchema.parse({
     $schema: SCHEMA_URL,
+    preset: {
+      ...(code ? { code } : {}),
+      baseColor: preset.baseColor,
+      theme: preset.theme,
+      chart: preset.chart,
+      radius: preset.radius,
+      darkMode: preset.darkMode,
+    },
     style: 'css',
     // Nenhuma das duas é perguntada no wizard: hoje só existe uma família de
     // ícones, e o RTL não altera o que o init escreve. Ficam no arquivo com o
     // padrão para serem editadas depois, que é o que as torna configuráveis.
-    icons: SOURCE_ICON_FAMILY,
-    rtl: false,
+    icons: preset.icons || SOURCE_ICON_FAMILY,
+    rtl: preset.rtl,
     projectType: answers.kind,
     appConfigFile: answers.appConfig,
     packageManager,
     tailwind: {
       css: answers.globalCss,
-      baseColor: answers.theme,
+      baseColor: preset.baseColor,
     },
     baseUrl: baseUrlFor(answers),
     aliases: {
@@ -168,4 +200,22 @@ export async function inspectCssFile(cwd: string, relativePath: string): Promise
 
   const content = await readFile(cssPath, 'utf8');
   return content.trim().length > 0 ? 'has-content' : 'empty';
+}
+
+/**
+ * O código curto do preset, quando ele tiver um.
+ *
+ * Cor editada à mão não cabe em oito caracteres, e gravar um código que as
+ * ignore diria que o projeto tem um design system que ele não tem. Nesses casos
+ * o campo simplesmente não é escrito, e quem quiser o preset de volta usa o
+ * arquivo.
+ */
+function presetCode(preset: Preset): string | undefined {
+  try {
+    return encodePreset(preset, presetCatalog()) ?? undefined;
+  } catch {
+    // Um id que o catálogo em mãos não conhece não impede o init de gravar o
+    // resto: o preset já foi aplicado, e o código é só a forma curta dele.
+    return undefined;
+  }
 }

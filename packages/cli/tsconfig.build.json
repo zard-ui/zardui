@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "..",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -15,9 +15,18 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@cli/*": ["./src/*"]
+      "@cli/*": ["./src/*"],
+      "@zardui/preset": ["../preset/src/index.ts"],
+      "@zardui/preset/*": ["../preset/src/*"]
     }
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": ["./src/**/*.spec.ts", "./src/**/*.test.ts", "../../node_modules", "../../dist"]
+  "include": ["./src/**/*.ts", "../preset/src/**/*.ts"],
+  "exclude": [
+    "./src/**/*.spec.ts",
+    "./src/**/*.test.ts",
+    "../preset/src/**/*.spec.ts",
+    "../preset/src/__fixtures__/**",
+    "../../node_modules",
+    "../../dist"
+  ]
 }

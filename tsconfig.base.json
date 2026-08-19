@@ -14,7 +14,9 @@
     "skipDefaultLibCheck": true,
     "esModuleInterop": true,
     "paths": {
-      "@zardui/generators": ["./tools/generators/component/index.ts"]
+      "@zardui/generators": ["./tools/generators/component/index.ts"],
+      "@zardui/preset": ["./packages/preset/src/index.ts"],
+      "@zardui/preset/*": ["./packages/preset/src/*"]
     }
   },
   "exclude": ["./node_modules", "./tmp"]

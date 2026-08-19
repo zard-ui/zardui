@@ -9,6 +9,8 @@
     "paths": {
       "@blocks": ["libs/blocks/src/index.ts"],
       "@cli/*": ["packages/cli/src/*"],
+      "@zardui/preset": ["packages/preset/src/index.ts"],
+      "@zardui/preset/*": ["packages/preset/src/*"],
       "@zard/*": ["libs/zard/src/lib/*"],
       "@zard/domain/*": ["apps/web/src/app/domain/*"],
       "@zard/env/*": ["apps/web/src/environments/*"],
