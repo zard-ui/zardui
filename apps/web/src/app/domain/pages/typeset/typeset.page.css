@@ -1,38 +1,233 @@
 /*
- * O catálogo de fontes do builder.
+ * O catálogo de fontes do builder, subset latino.
  *
  * Vive aqui, e não em `styles.css`, porque entra no chunk da rota `/typeset` —
- * as outras páginas do site não pagam por ele. Os `.woff2` em si só são baixados
+ * as outras páginas do site não pagam por ele. Os `.woff2` só são baixados
  * quando alguma família é de fato usada por texto renderizado, que é o
  * comportamento desejado numa prévia com 23 opções.
  *
- * Geist e Geist Mono não aparecem nos imports: já são carregados globalmente
- * pelo `styles.css`. As variáveis dos dois ficam mesmo assim, para que este
- * arquivo declare o catálogo inteiro — é o mesmo bloco `:root` que o painel de
- * código entrega para quem instala.
+ * As regras são escritas à mão em vez de `@import '@fontsource-variable/x'`:
+ * o import traz um `@font-face` por subset — cirílico, grego, vietnamita —
+ * e 23 famílias assim somam 38 kB, quatro vezes o orçamento de estilo de
+ * componente. Os fixtures da prévia são todos em latim, então os outros
+ * subsets seriam peso morto. O peso vem do `index.css` de cada pacote; ao
+ * subir a versão de `@fontsource-variable`, confira se ainda bate. A
+ * `unicode-range` é estreitada para o que os fixtures renderizam — ASCII mais
+ * travessão e meia-risca — porque a do pacote, repetida 23 vezes, sozinha
+ * estoura o orçamento.
+ *
+ * O código que o painel entrega para quem instala continua importando o pacote
+ * inteiro: quem escreve em cirílico precisa do subset que a prévia não usa.
  */
 
-@import '@fontsource-variable/inter';
-@import '@fontsource-variable/noto-sans';
-@import '@fontsource-variable/nunito-sans';
-@import '@fontsource-variable/figtree';
-@import '@fontsource-variable/roboto';
-@import '@fontsource-variable/raleway';
-@import '@fontsource-variable/dm-sans';
-@import '@fontsource-variable/public-sans';
-@import '@fontsource-variable/outfit';
-@import '@fontsource-variable/oxanium';
-@import '@fontsource-variable/manrope';
-@import '@fontsource-variable/space-grotesk';
-@import '@fontsource-variable/montserrat';
-@import '@fontsource-variable/ibm-plex-sans';
-@import '@fontsource-variable/source-sans-3';
-@import '@fontsource-variable/instrument-sans';
-@import '@fontsource-variable/jetbrains-mono';
-@import '@fontsource-variable/noto-serif';
-@import '@fontsource-variable/roboto-slab';
-@import '@fontsource-variable/merriweather';
-@import '@fontsource-variable/lora';
+@font-face {
+  font-family: 'Geist Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/geist/files/geist-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Noto Sans Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/noto-sans/files/noto-sans-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Nunito Sans Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 1000;
+  src: url('@fontsource-variable/nunito-sans/files/nunito-sans-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Figtree Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url('@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Roboto Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/roboto/files/roboto-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Raleway Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/raleway/files/raleway-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'DM Sans Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 1000;
+  src: url('@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Public Sans Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/public-sans/files/public-sans-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Outfit Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxanium Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url('@fontsource-variable/oxanium/files/oxanium-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Manrope Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url('@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Space Grotesk Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url('@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Montserrat Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Sans Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url('@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Source Sans 3 Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url('@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Instrument Sans Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 700;
+  src: url('@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2')
+    format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url('@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2')
+    format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Geist Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Noto Serif Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/noto-serif/files/noto-serif-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Roboto Slab Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/roboto-slab/files/roboto-slab-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Merriweather Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url('@fontsource-variable/merriweather/files/merriweather-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 700;
+  src: url('@fontsource-variable/lora/files/lora-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
 
 :root {
   /* Sans */
