@@ -270,6 +270,15 @@ code[data-line-numbers-max-digits='4'] > [data-line]::before {
   width: 2.25rem;
 }
 
+/* The site's own typeset: the rhythm the documentation prose is written to.
+   The three values are ones the builder at /typeset can reproduce, so anyone
+   reading the docs can land on this exact preset by picking them there. */
+.typeset-docs {
+  --typeset-size: 16px;
+  --typeset-leading: 1.6;
+  --typeset-flow: 1.25em;
+}
+
 /* Shiki code block styling for z-code-block / z-code-tabs */
 pre.shiki {
   padding: 16px;

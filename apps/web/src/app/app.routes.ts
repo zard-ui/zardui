@@ -65,6 +65,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/theming/theming.page').then(c => c.ThemingPage),
       },
       {
+        path: 'typeset',
+        loadComponent: () => import('./domain/pages/typeset-docs/typeset-docs.page').then(c => c.TypesetDocsPage),
+      },
+      {
         path: 'forms',
         loadChildren: async () => (await import('./domain/pages/forms/forms.routes')).FORMS_ROUTES,
       },
