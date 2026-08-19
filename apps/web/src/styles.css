@@ -272,11 +272,16 @@ code[data-line-numbers-max-digits='4'] > [data-line]::before {
 
 /* The site's own typeset: the rhythm the documentation prose is written to.
    The three values are ones the builder at /typeset can reproduce, so anyone
-   reading the docs can land on this exact preset by picking them there. */
+   reading the docs can land on this exact preset by picking them there.
+
+   They are also the values that land on what the pages already measured, so
+   adopting typeset moved no text: 16px matches `sm:text-base`, 1.6 lands
+   within half a pixel of `leading-relaxed`, and a 1em flow reproduces the
+   `gap-4` these sections used to carry between blocks. */
 .typeset-docs {
   --typeset-size: 16px;
   --typeset-leading: 1.6;
-  --typeset-flow: 1.25em;
+  --typeset-flow: 1em;
 }
 
 /* Shiki code block styling for z-code-block / z-code-tabs */
