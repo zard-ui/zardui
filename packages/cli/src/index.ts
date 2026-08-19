@@ -1,5 +1,8 @@
 import { add } from '@cli/commands/add/index.js';
+import { apply } from '@cli/commands/apply/index.js';
+import { create } from '@cli/commands/create/index.js';
 import { init } from '@cli/commands/init/index.js';
+import { preset } from '@cli/commands/preset/index.js';
 import { APP_VERSION } from '@cli/constants/app.constants.js';
 import { style } from '@cli/ui/style.js';
 import { CliError } from '@cli/utils/errors.js';
@@ -30,7 +33,7 @@ async function main() {
       }
     });
 
-  program.addCommand(init).addCommand(add);
+  program.addCommand(create).addCommand(init).addCommand(add).addCommand(apply).addCommand(preset);
 
   // parseAsync, e não parse: as ações são assíncronas, e só assim uma falha
   // dentro delas chega ao tratamento abaixo em vez de virar unhandled rejection.
