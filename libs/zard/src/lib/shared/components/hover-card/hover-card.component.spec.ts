@@ -1,5 +1,5 @@
 import { type FlexibleConnectedPositionStrategy, OverlayModule, type OverlayRef } from '@angular/cdk/overlay';
-import { PLATFORM_ID, signal, type WritableSignal } from '@angular/core';
+import { type AfterViewInit, Component, PLATFORM_ID, signal, type WritableSignal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { fireEvent, render, screen } from '@testing-library/angular';
@@ -8,6 +8,24 @@ import userEvent from '@testing-library/user-event';
 import { ZardHoverCardComponent, ZardHoverCardDirective } from './hover-card.component';
 
 const CARD_CONTENT = 'The React Framework - created and maintained by @vercel.';
+
+@Component({
+  imports: [OverlayModule, ZardHoverCardDirective, ZardHoverCardComponent],
+  template: `
+    <button type="button" [zHoverCard]="content" [zVisible]="visible()">Hover Here</button>
+
+    <ng-template #content>
+      <z-hover-card>${CARD_CONTENT}</z-hover-card>
+    </ng-template>
+  `,
+})
+class AfterViewInitVisibleHost implements AfterViewInit {
+  readonly visible = signal(false);
+
+  ngAfterViewInit(): void {
+    this.visible.set(true);
+  }
+}
 
 interface SetupOptions {
   closeDelay?: number;
@@ -250,6 +268,12 @@ describe('ZardHoverCardDirective', () => {
     fixture.detectChanges();
 
     expect(screen.queryByText(CARD_CONTENT)).not.toBeInTheDocument();
+  });
+
+  it('opens when visibility changes during the parent after-view-init lifecycle', async () => {
+    await render(AfterViewInitVisibleHost);
+
+    expect(screen.getByText(CARD_CONTENT)).toBeVisible();
   });
 
   it('stays open on mouseleave when visibility is controlled as open', async () => {
