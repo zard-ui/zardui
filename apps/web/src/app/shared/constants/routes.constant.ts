@@ -20,6 +20,7 @@ export const HEADER_PATHS: NavItem[] = [
   { name: 'Blocks', path: '/blocks', available: true },
   { name: 'Charts', path: '/charts', available: true },
   { name: 'Themes', path: '/themes', available: true },
+  { name: 'Create', path: '/create', available: true },
 ];
 
 /**

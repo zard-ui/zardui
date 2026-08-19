@@ -17,7 +17,9 @@
       "@doc/shared/*": ["./src/app/shared/*"],
       "@doc/widget/*": ["./src/app/widget/*"],
       "@highlight/*": ["../../packages/highlight/src/*"],
-      "@generated/*": ["./src/generated/*"]
+      "@generated/*": ["./src/generated/*"],
+      "@zardui/preset": ["../../packages/preset/src/index.ts"],
+      "@zardui/preset/*": ["../../packages/preset/src/*"]
     },
     "module": "preserve",
     "moduleResolution": "bundler"

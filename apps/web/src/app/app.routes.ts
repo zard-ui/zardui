@@ -133,6 +133,16 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'create',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadChildren: async () => (await import('./domain/pages/create/create.routes')).CREATE_ROUTES,
+      },
+    ],
+  },
+  {
     path: 'themes',
     component: ShellLayout,
     children: [
