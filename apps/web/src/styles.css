@@ -1,6 +1,7 @@
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
 @import '../../../libs/zard/src/lib/shared/core/css/tailwind.css';
+@import '../../../libs/zard/src/lib/shared/core/css/typeset.css';
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource-variable/geist';
 
