@@ -1,4 +1,4 @@
-import { existsSync, readdirSync } from 'fs';
+import { existsSync } from 'fs';
 import * as path from 'path';
 
 import { iconPackagesFor } from '../../core/icons/index.js';
@@ -12,15 +12,19 @@ import {
   type RegistryIndex,
 } from '../../utils/registry.js';
 
-function isComponentInstalled(dir: string): boolean {
+/*
+ * Um item está instalado quando todos os arquivos que ele declara já existem.
+ *
+ * A pergunta antiga era "o diretório tem algum arquivo?", o que só funciona
+ * para item que mora sozinho. O typeset é gravado junto do CSS global do
+ * projeto, um diretório que nunca está vazio — ele seria pulado sempre. Pelo
+ * caminho, item instalado pela metade passa a ser completado em vez de pulado.
+ */
+export function isItemInstalled(dir: string, files: readonly string[]): boolean {
   if (!existsSync(dir)) return false;
+  if (!files.length) return false;
 
-  try {
-    const files = readdirSync(dir);
-    return files.length > 0;
-  } catch {
-    return false;
-  }
+  return files.every(file => existsSync(path.join(dir, file)));
 }
 
 export function getTargetDir(
@@ -47,12 +51,22 @@ export function getTargetDir(
     return resolvedConfig.resolvedPaths.utils;
   }
 
+  /*
+   * Folha de estilo vai para junto do CSS global declarado em components.json,
+   * e não para dentro de components/. É o que faz o `@import './typeset.css'`
+   * que o setup injeta resolver sem caminho relativo frágil.
+   */
+  if (basePath === 'styles') {
+    return path.dirname(resolvedConfig.resolvedPaths.tailwindCss);
+  }
+
   return path.resolve(resolvedConfig.resolvedPaths.components, basePath);
 }
 
 export interface ComponentMeta {
   name: string;
   basePath?: string;
+  files?: string[];
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
@@ -79,6 +93,7 @@ export async function getComponentMeta(name: string): Promise<ComponentMeta | un
   return {
     name: item.name,
     basePath: item.basePath,
+    files: item.files,
     dependencies: item.dependencies,
     devDependencies: item.devDependencies,
     registryDependencies: item.registryDependencies,
@@ -117,7 +132,7 @@ export async function resolveDependencies(
   for (const component of componentMetas) {
     const targetDir = getTargetDir(component, resolvedConfig, cwd, options.path);
 
-    if (isComponentInstalled(targetDir) && !options.overwrite) {
+    if (isItemInstalled(targetDir, component.files ?? []) && !options.overwrite) {
       continue;
     }
 
@@ -181,7 +196,7 @@ async function resolveRegistryDependencies(
 
     const depTargetDir = getTargetDir(depComponent, resolvedConfig, cwd, options.path);
 
-    if (!isComponentInstalled(depTargetDir) || options.overwrite) {
+    if (!isItemInstalled(depTargetDir, depComponent.files ?? []) || options.overwrite) {
       componentsToInstall.push(depComponent);
       addComponentDependencies(depComponent, dependenciesToInstall, resolvedConfig.icons);
 

@@ -7,6 +7,7 @@ import {
   resolveDependencies,
   type ComponentMeta,
 } from '@cli/commands/add/dependency-resolver.js';
+import { setupTypeset } from '@cli/commands/add/typeset-setup.js';
 import { runAddWizard } from '@cli/commands/add/wizard.js';
 import { indexHtmlFor } from '@cli/commands/init/project-kind.js';
 import { injectThemeScript } from '@cli/commands/init/theme-loader.js';
@@ -86,6 +87,7 @@ export const add = new Command()
         await injectThemeScript(cwd, indexHtml);
         await updateProvideZardWithDarkMode(cwd, resolvedConfig);
       },
+      setupTypeset: () => setupTypeset(resolvedConfig.resolvedPaths.tailwindCss),
       defaultIndexHtml: indexHtmlFor(config.projectType, config.baseUrl),
     };
 
@@ -123,6 +125,7 @@ type AddActions = {
   installDependencies(packages: string[]): Promise<void>;
   installComponent(component: ComponentMeta): Promise<void>;
   setupDarkMode(indexHtml: string): Promise<void>;
+  setupTypeset(): Promise<void>;
   defaultIndexHtml: string;
 };
 
@@ -169,6 +172,10 @@ async function runHeadless(preselected: string[], options: AddOptions, actions: 
       componentSpinner.fail(component.name);
       logger.debug(`Failed to install ${component.name}: ${error instanceof Error ? error.message : error}`);
     }
+  }
+
+  if (installed.includes('typeset')) {
+    await actions.setupTypeset();
   }
 
   if (components.some(component => component.name === 'dark-mode')) {

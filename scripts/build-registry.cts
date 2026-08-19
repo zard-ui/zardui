@@ -61,10 +61,25 @@ function getCliVersion(): string {
   }
 }
 
+/*
+ * Onde mora, no repositório, a fonte de um item que não é componente.
+ *
+ * A chave é o `basePath` que o registry publica — o destino na instalação — e
+ * o valor é o diretório de origem. Os três primeiros coincidem; o typeset não:
+ * ele é distribuído para junto do CSS global de quem instala, mas nasce ao
+ * lado do tailwind.css do core, que é onde ele é editado e testado.
+ */
+const NON_COMPONENT_PATHS: Record<string, string> = {
+  core: 'core',
+  services: 'services',
+  utils: 'utils',
+  styles: 'core/css',
+};
+
 function getSourcePath(componentName: string, basePath: string): string {
-  const nonComponentPaths = ['core', 'services', 'utils'];
-  if (nonComponentPaths.includes(basePath)) {
-    return path.join(LIB_PATH, basePath);
+  const nonComponentPath = NON_COMPONENT_PATHS[basePath];
+  if (nonComponentPath) {
+    return path.join(LIB_PATH, nonComponentPath);
   }
   return path.join(LIB_PATH, 'components', basePath);
 }
