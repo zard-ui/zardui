@@ -146,5 +146,15 @@ export const appRoutes: Route[] = [
       },
     ],
   },
+  {
+    path: 'typeset',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./domain/pages/typeset/typeset.page').then(c => c.TypesetPage),
+      },
+    ],
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

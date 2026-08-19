@@ -1,0 +1,45 @@
+<section class="container flex flex-col items-center gap-2 py-8 text-center md:py-16 lg:py-20 xl:gap-4">
+  <h1
+    class="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter"
+  >
+    Set Your
+    <span class="text-primary">Prose</span>
+  </h1>
+  <p class="text-foreground max-w-3xl text-base text-balance sm:text-lg">
+    Pick the fonts and the rhythm, watch them land on real content, and take away the CSS. One stylesheet, six
+    variables, no plugin.
+  </p>
+  <section class="flex w-full items-center justify-center gap-2 pt-2 **:data-[slot=button]:shadow-none">
+    <a z-button href="/typeset#builder">start customize</a>
+    <a z-button zType="ghost" routerLink="/docs/typeset">Documentation</a>
+  </section>
+</section>
+
+<section id="builder">
+  <div class="container py-8">
+    <div class="bg-background flex h-[164vh] max-h-278.25 overflow-hidden rounded-xl border shadow-lg">
+      <aside class="bg-muted/20 hidden w-80 shrink-0 border-r lg:block">
+        <app-typeset-customizer (getCode)="openCode()" />
+      </aside>
+
+      <main class="flex min-w-0 flex-1 flex-col">
+        <div class="flex items-center justify-between gap-2 border-b px-4 py-2 lg:hidden">
+          <button z-button zType="outline" zSize="sm" (click)="openCustomizer()">Customize</button>
+          <button z-button zSize="sm" (click)="openCode()">Get code</button>
+        </div>
+
+        <app-typeset-preview class="flex-1" />
+      </main>
+    </div>
+  </div>
+</section>
+
+<ng-template #codeTemplate>
+  <app-typeset-code-panel />
+</ng-template>
+
+<ng-template #customizerTemplate>
+  <div class="h-[70vh]">
+    <app-typeset-customizer (getCode)="openCode()" />
+  </div>
+</ng-template>

@@ -1,0 +1,153 @@
+<z-tab-group>
+  <z-tab label="Docs">
+    <div class="flex flex-col gap-8 py-4">
+      <section class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1">
+          <h3 class="text-sm font-semibold">1. Create typeset.css</h3>
+          <p class="text-muted-foreground text-sm">
+            Run the CLI, or copy the stylesheet next to your global CSS and import it after Tailwind.
+          </p>
+        </div>
+
+        <div class="bg-muted/50 relative rounded-md border">
+          <pre class="overflow-x-auto p-3 text-xs"><code>npx zard-cli@latest add typeset</code></pre>
+          <button
+            z-button
+            zType="ghost"
+            zSize="sm"
+            class="absolute top-1.5 right-1.5 h-7 text-xs"
+            (click)="copy('cli', 'npx zard-cli@latest add typeset')"
+          >
+            {{ copied() === 'cli' ? 'Copied' : 'Copy' }}
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button z-button zType="outline" zSize="sm" (click)="copyStylesheet()">
+            {{ copied() === 'stylesheet' ? 'Copied the stylesheet' : 'Copy typeset.css' }}
+          </button>
+          <a class="text-muted-foreground text-xs underline underline-offset-4" href="/r/typeset.json">
+            or open the registry item
+          </a>
+        </div>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1">
+          <h3 class="text-sm font-semibold">2. Install the fonts</h3>
+          <p class="text-muted-foreground text-sm">
+            The faces are self-hosted through &#64;fontsource — no request to a third-party CDN.
+          </p>
+        </div>
+
+        <div class="bg-muted/50 flex w-fit gap-0.5 rounded-md p-0.5">
+          @for (manager of packageManagers; track manager) {
+            <button
+              type="button"
+              class="rounded-sm px-2.5 py-1 text-xs font-medium transition-colors"
+              [class.bg-background]="manager === packageManager()"
+              [class.shadow-sm]="manager === packageManager()"
+              [class.text-muted-foreground]="manager !== packageManager()"
+              (click)="setPackageManager(manager)"
+            >
+              {{ manager }}
+            </button>
+          }
+        </div>
+
+        <div class="bg-muted/50 relative rounded-md border">
+          <pre class="overflow-x-auto p-3 text-xs"><code>{{ installCommand() }}</code></pre>
+          <button
+            z-button
+            zType="ghost"
+            zSize="sm"
+            class="absolute top-1.5 right-1.5 h-7 text-xs"
+            (click)="copy('install', installCommand())"
+          >
+            {{ copied() === 'install' ? 'Copied' : 'Copy' }}
+          </button>
+        </div>
+
+        <div class="bg-muted/50 relative rounded-md border">
+          <pre class="overflow-x-auto p-3 text-xs"><code>{{ fontCss() }}</code></pre>
+          <button
+            z-button
+            zType="ghost"
+            zSize="sm"
+            class="absolute top-1.5 right-1.5 h-7 text-xs"
+            (click)="copy('font-css', fontCss())"
+          >
+            {{ copied() === 'font-css' ? 'Copied' : 'Copy' }}
+          </button>
+        </div>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1">
+          <h3 class="text-sm font-semibold">3. Add the preset</h3>
+          <p class="text-muted-foreground text-sm">Six variables, in your global stylesheet.</p>
+        </div>
+
+        <div class="bg-muted/50 relative rounded-md border">
+          <pre class="overflow-x-auto p-3 text-xs"><code>{{ presetCss() }}</code></pre>
+          <button
+            z-button
+            zType="ghost"
+            zSize="sm"
+            class="absolute top-1.5 right-1.5 h-7 text-xs"
+            (click)="copy('preset', presetCss())"
+          >
+            {{ copied() === 'preset' ? 'Copied' : 'Copy' }}
+          </button>
+        </div>
+      </section>
+
+      <section class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1">
+          <h3 class="text-sm font-semibold">4. Wrap your content</h3>
+          <p class="text-muted-foreground text-sm">
+            <code class="bg-muted rounded px-1 py-0.5 text-xs">typeset</code>
+            turns the styles on;
+            <code class="bg-muted rounded px-1 py-0.5 text-xs">{{ service.presetName() }}</code>
+            carries your choices.
+          </p>
+        </div>
+
+        <div class="bg-muted/50 relative rounded-md border">
+          <pre class="overflow-x-auto p-3 text-xs"><code>{{ usage() }}</code></pre>
+          <button
+            z-button
+            zType="ghost"
+            zSize="sm"
+            class="absolute top-1.5 right-1.5 h-7 text-xs"
+            (click)="copy('usage', usage())"
+          >
+            {{ copied() === 'usage' ? 'Copied' : 'Copy' }}
+          </button>
+        </div>
+      </section>
+    </div>
+  </z-tab>
+
+  <z-tab label="Prompt">
+    <div class="flex flex-col gap-3 py-4">
+      <p class="text-muted-foreground text-sm">
+        Paste this into a coding agent. It carries your choices, and it ends by telling the agent to ask before applying
+        the class to anything.
+      </p>
+
+      <div class="bg-muted/50 relative rounded-md border">
+        <pre class="max-h-[28rem] overflow-auto p-3 text-xs whitespace-pre-wrap"><code>{{ prompt() }}</code></pre>
+        <button
+          z-button
+          zType="ghost"
+          zSize="sm"
+          class="absolute top-1.5 right-1.5 h-7 text-xs"
+          (click)="copy('prompt', prompt())"
+        >
+          {{ copied() === 'prompt' ? 'Copied' : 'Copy' }}
+        </button>
+      </div>
+    </div>
+  </z-tab>
+</z-tab-group>

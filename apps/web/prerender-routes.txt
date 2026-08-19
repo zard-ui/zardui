@@ -4,6 +4,7 @@
 /blocks
 /charts
 /themes
+/typeset
 /docs/introduction
 /docs/components
 /docs/installation
