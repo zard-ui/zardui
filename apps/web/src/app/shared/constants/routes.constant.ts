@@ -37,7 +37,6 @@ export const SECTIONS: NavSection = {
     { name: 'CLI', path: '/docs/cli', available: true },
     { name: 'Typeset', path: '/docs/typeset', available: false },
     { name: 'Skills', path: '/docs/skills', available: true },
-    { name: 'Utilities', path: '/docs/utils', available: true },
     { name: 'Registry', path: '/docs/registry', available: true },
     { name: 'MCP Server', path: '/docs/mcp', available: true },
     { name: 'Roadmap', path: '/docs/roadmap', available: true },
@@ -79,7 +78,6 @@ export const FORMS_PATH: NavSection = {
 export const UTILITIES_PATH: NavSection = {
   title: 'Utilities',
   data: [
-    { name: 'Overview', path: '/docs/utils', available: true },
     { name: 'Scroll Fade', path: '/docs/utils/scroll-fade', available: true },
     { name: 'Shimmer', path: '/docs/utils/shimmer', available: true },
   ],
