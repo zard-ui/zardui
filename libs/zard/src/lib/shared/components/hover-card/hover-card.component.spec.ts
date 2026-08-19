@@ -252,6 +252,16 @@ describe('ZardHoverCardDirective', () => {
     expect(screen.queryByText(CARD_CONTENT)).not.toBeInTheDocument();
   });
 
+  it('stays open on mouseleave when visibility is controlled as open', async () => {
+    const visible = signal(true);
+    await setup({ closeDelay: 300, visible });
+
+    fireEvent.mouseLeave(trigger());
+    jest.advanceTimersByTime(300);
+
+    expect(screen.getByText(CARD_CONTENT)).toBeVisible();
+  });
+
   it('emits visibility changes once per actual transition', async () => {
     const visibleChange = jest.fn<void, [boolean]>();
     await setup({ openDelay: 0, closeDelay: 0, visibleChange });

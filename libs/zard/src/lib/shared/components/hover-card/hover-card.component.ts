@@ -372,6 +372,11 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   private scheduleClose(): void {
+    if (this.zVisible()) {
+      this.cancelClose();
+      return;
+    }
+
     if (this.pointerOverTrigger || this.pointerOverOverlay || this.focusWithinTrigger || this.focusWithinOverlay) {
       this.cancelClose();
       return;
