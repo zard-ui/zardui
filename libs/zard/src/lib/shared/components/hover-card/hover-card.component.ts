@@ -142,7 +142,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   private pointerOverOverlay = false;
   private focusWithinTrigger = false;
   private focusWithinOverlay = false;
-  private hasObservedInitialVisible = false;
+  private lastVisible = false;
 
   constructor() {
     effect(() => {
@@ -164,10 +164,11 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     effect(() => {
       const visible = this.zVisible();
 
-      if (!this.hasObservedInitialVisible) {
-        this.hasObservedInitialVisible = true;
+      if (visible === this.lastVisible) {
         return;
       }
+
+      this.lastVisible = visible;
 
       if (!this.overlayReady()) {
         return;
@@ -236,17 +237,6 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
       }),
       this.renderer.listen(overlayElement, 'keydown', (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
-          this.onEscape();
-        }
-      }),
-      this.renderer.listen('document', 'keydown', (event: KeyboardEvent) => {
-        if (
-          event.key === 'Escape' &&
-          this.isOpen() &&
-          event.target instanceof Node &&
-          (this.elementRef.nativeElement.contains(event.target) ||
-            this.overlayRef?.overlayElement.contains(event.target))
-        ) {
           this.onEscape();
         }
       }),
