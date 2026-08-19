@@ -15,11 +15,12 @@ const CARD_CONTENT = 'The React Framework - created and maintained by @vercel.';
     <button type="button" [zHoverCard]="content" [zVisible]="visible()">Hover Here</button>
 
     <ng-template #content>
-      <z-hover-card>${CARD_CONTENT}</z-hover-card>
+      <z-hover-card>{{ cardContent }}</z-hover-card>
     </ng-template>
   `,
 })
 class AfterViewInitVisibleHost implements AfterViewInit {
+  protected readonly cardContent = CARD_CONTENT;
   readonly visible = signal(false);
 
   ngAfterViewInit(): void {
