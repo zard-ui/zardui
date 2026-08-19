@@ -9,4 +9,5 @@ export interface ApiSection {
   selector: string;
   description: string;
   props: ApiProp[];
+  outputs?: ApiProp[];
 }

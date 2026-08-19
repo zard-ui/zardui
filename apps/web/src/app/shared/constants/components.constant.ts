@@ -317,4 +317,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
       'Displays conversational content in a message bubble. Supports variants, alignment, grouping, reactions, and collapsible content.',
     loadData: () => import('@zard/components/bubble/demo/bubble').then(m => m.BUBBLE),
   },
+  {
+    componentName: 'hover-card',
+    description: 'For sighted users to preview content available behind the link.',
+    loadData: () => import('@zard/components/hover-card/demo/hover-card').then(m => m.HOVER_CARD),
+  },
 ];
