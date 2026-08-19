@@ -20,6 +20,15 @@ const PARAM_KEYS: Record<keyof TypesetState, string> = {
   item: 'item',
 };
 
+/*
+ * Os defaults, resolvidos uma vez. Resolvê-los a cada leitura devolveria
+ * `TypesetFont | undefined`, e o único jeito de convencer o compilador seria
+ * uma asserção não-nula em cada `computed`; a primeira posição da lista é um
+ * fallback de verdade e sempre existe.
+ */
+const DEFAULT_BODY_FONT = findFont(DEFAULT_STATE.body) ?? TEXT_FONTS[0];
+const DEFAULT_MONO_FONT = findFont(DEFAULT_STATE.mono) ?? MONO_FONTS[0];
+
 @Injectable()
 export class TypesetGeneratorService {
   private readonly router = inject(Router);
@@ -52,7 +61,7 @@ export class TypesetGeneratorService {
   readonly monoFonts = MONO_FONTS;
   readonly fixtures = TYPESET_FIXTURES;
 
-  readonly bodyFont = computed(() => findFont(this._state().body) ?? findFont(DEFAULT_STATE.body)!);
+  readonly bodyFont = computed(() => findFont(this._state().body) ?? DEFAULT_BODY_FONT);
 
   /** `inherit` means "whatever body is" — the preset repeats the family rather than omitting it. */
   readonly headingFont = computed(() => {
@@ -60,7 +69,7 @@ export class TypesetGeneratorService {
     return heading === INHERIT_HEADING ? this.bodyFont() : (findFont(heading) ?? this.bodyFont());
   });
 
-  readonly monoFont = computed(() => findFont(this._state().mono) ?? findFont(DEFAULT_STATE.mono)!);
+  readonly monoFont = computed(() => findFont(this._state().mono) ?? DEFAULT_MONO_FONT);
 
   readonly fixture = computed(() => findFixture(this._state().item) ?? TYPESET_FIXTURES[0]);
 
