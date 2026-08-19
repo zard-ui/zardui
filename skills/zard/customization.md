@@ -18,7 +18,7 @@ Order of preference:
 2. An `@theme inline` block maps them to Tailwind utilities: `--color-primary: var(--primary)` makes `bg-primary` work.
 3. Components use those utilities. Change the variable, and everything referencing it changes.
 
-Presets, chosen at `init` and recorded as `tailwind.baseColor`: `neutral`, `stone`, `zinc`, `gray`, `slate`.
+The five neutral tones — `neutral`, `stone`, `zinc`, `gray`, `slate` — are the base. On top of one of them a preset can add an accent colour, a chart palette and a radius step. All of it is recorded in the `preset` object of `components.json`.
 
 ### Tokens
 
@@ -65,6 +65,43 @@ Add it to the file at `tailwind.css` — never a new one — in both `:root` and
 ```
 
 There is no `tailwind.config.js` — this is TailwindCSS v4, and the theme lives in CSS.
+
+---
+
+## Presets
+
+A preset describes the design system, not the project: which neutral tone, which accent, which chart palette, which radius, which icon library. That is what lets the same code apply to an Angular app, an Nx workspace or an Analog project.
+
+It travels as a short code — `a000301e` — which is not a database key. The code **is** the state, so a link keeps working with no server behind it. Build one at [zardui.com/create](https://zardui.com/create) and the page hands back the command:
+
+```bash
+npx zard-cli create my-app --template angular --preset a000301e   # new project
+npx zard-cli init --preset a000301e                               # existing, first setup
+npx zard-cli apply a000301e                                       # existing, already set up
+```
+
+`apply` is the one to reach for on a live project: it replaces the contents of `:root`, `.dark` and `--radius` and leaves the rest of the stylesheet alone. Re-running `init` would overwrite the whole file.
+
+### The accent
+
+Choosing an accent does not swap a table of tokens — the accent's `primary`, `primary-foreground`, `ring` and `sidebar-*` are **derived** over the neutral tone, with the lightness adjusted until the contrast with the text on top clears AA and the chroma trimmed to what sRGB can show. That is why the same accent works on all five tones, and why none of the combinations is unreadable.
+
+### Hand-edited colours
+
+A short code cannot carry 31 tokens in two modes. When the colours are edited by hand, the preset becomes a file instead:
+
+```jsonc
+// zard.preset.json
+{
+  "$schema": "https://zardui.com/preset.schema.json",
+  "version": 1,
+  "baseColor": "slate",
+  "theme": "blue",
+  "colors": { "light": { "primary": "oklch(0.45 0.19 264)" } }
+}
+```
+
+Anywhere `--preset` is accepted takes a code, a path to this file, or a URL.
 
 ---
 

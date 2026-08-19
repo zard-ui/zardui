@@ -1,9 +1,21 @@
 ```bash title="Terminal" copyButton
+npx zard-cli create [name]
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli create my-app --template angular --preset a000301e
+```
+
+```bash title="Terminal" copyButton
 npx zard-cli init
 ```
 
 ```bash title="Terminal" copyButton
 npx zard-cli init --yes --type nx --project web
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli init --preset a4B0301t
 ```
 
 ```bash title="Terminal" copyButton
@@ -40,6 +52,25 @@ npx zard-cli add
 
 ```bash title="Terminal" copyButton
 npx zard-cli add dark-mode
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli apply <preset>
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli apply a4B0301t
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli apply ./zard.preset.json --only theme
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli preset decode a4B0301t
+npx zard-cli preset resolve
+npx zard-cli preset url a4B0301t
+npx zard-cli preset open
 ```
 
 ```bash title="Terminal" copyButton

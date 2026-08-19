@@ -1,6 +1,6 @@
 # zard-cli
 
-Two commands: `init` sets a project up, `add` installs components into it. Both draw a full-screen wizard when there is a terminal to draw on, and fall back to a plain sequential run when there is not.
+`create` scaffolds a new project, `init` sets up an existing one, `add` installs components, `apply` swaps the design system, and `preset` inspects one. The first three draw a full-screen wizard when there is a terminal to draw on, and fall back to a plain sequential run when there is not.
 
 The package is `zard-cli`. Run it with the project's own runner:
 
@@ -24,6 +24,31 @@ bunx zard-cli <command>
 
 ---
 
+## `create`
+
+Scaffolds a new project with zard/ui already set up: runs the generator for the chosen template, then initialises zard/ui inside it **in process** — not by shelling out to `npx zard-cli init` — and installs an example component on the home page.
+
+```bash
+npx zard-cli create my-app --template angular --preset a000301e
+```
+
+| Flag                        | Default           | Purpose                                                                                 |
+| --------------------------- | ----------------- | --------------------------------------------------------------------------------------- |
+| `-t, --template <template>` | asked             | `angular`, `angular-library`, `nx`, `nx-library`, `analog`.                             |
+| `-p, --preset <preset>`     | asked             | A preset code, a path to a `zard.preset.json`, or a URL.                                 |
+| `--pm <manager>`            | detected          | `npm`, `pnpm`, `yarn`, `bun`.                                                            |
+| `--no-install`              | installs          | Scaffold without installing dependencies.                                                |
+| `--no-git`                  | initialises       | Do not initialise a git repository.                                                      |
+| `--no-example`              | installs it       | Skip the example component and leave the generator's home page.                          |
+| `-y, --yes`                 | `false`           | Answer every question with its default. Requires a name.                                 |
+| `-c, --cwd <dir>`           | current directory | Where the project directory is created.                                                  |
+
+Everything that can be refused is refused before the generator runs: an invalid name, an unknown template, a broken preset code, a directory with files in it. Discovering any of those afterwards would leave a half-created directory behind.
+
+Two things the generators impose, not us: Nx installs its dependencies regardless of `--no-install` (it needs them for its own generators), and the Analog generator has no non-interactive mode — without a terminal, `create` stops and prints the command to run by hand.
+
+---
+
 ## `init`
 
 Initialises the project: writes `components.json`, installs dependencies, configures Tailwind and the TypeScript aliases, applies the theme tokens, and installs the shared `core` and `utils` helpers every component needs.
@@ -38,6 +63,9 @@ npx zard-cli init
 | `-c, --cwd <cwd>`      | current directory | The working directory.                                                                                         |
 | `-t, --type <type>`    | asked             | The project type: `angular`, `angular-library`, `nx`, `nx-library`, `analog`.                                  |
 | `-p, --project <name>` | first compatible  | The workspace project to configure.                                                                            |
+| `--preset <preset>`    | asked             | The design system: a preset code, a path to a `zard.preset.json`, or a URL.                                    |
+
+With `--preset`, the questions it answers are not asked — the transcript shows the values marked as coming from it. Everything else is unchanged.
 
 Running `init` in a project that already has a `components.json` re-initialises it — the `.postcssrc.json` is rewritten on purpose, which is how a leftover configuration gets fixed.
 
@@ -107,6 +135,41 @@ Notes:
 
 ---
 
+## `apply`
+
+Swaps the design system of a project that is already initialised.
+
+```bash
+npx zard-cli apply a4B0301t
+```
+
+| Flag              | Default           | Purpose                                                                       |
+| ----------------- | ----------------- | ------------------------------------------------------------------------------- |
+| `--only <part>`   | all three         | `theme`, `icons` or `config`. Repeatable.                                       |
+| `--force`         | off               | Rewrite the whole global CSS when the surgical patch does not fit.              |
+| `-c, --cwd <dir>` | current directory | The working directory.                                                          |
+
+`apply` is not `init` with another theme. `init` overwrites the global stylesheet, which is fine in a project that is starting; `apply` runs in a project that has months of CSS in that file, so it replaces the contents of `:root`, `.dark` and `--radius` and leaves everything else byte for byte — including declarations inside those blocks that are not ours. A stylesheet it cannot recognise is left untouched, with `--force` offered as the way out.
+
+Changing the icon library rewrites the installed components and adjusts the npm dependencies together: doing one without the other would leave imports pointing at a package that is no longer there.
+
+---
+
+## `preset`
+
+Inspects a design system. Writes nothing.
+
+| Subcommand              | What it prints                                                        |
+| ----------------------- | ----------------------------------------------------------------------- |
+| `preset decode <code>`  | What the code contains. `--json` for clean output.                     |
+| `preset resolve`        | The code for the project you are in.                                    |
+| `preset url [code]`     | The `zardui.com/create` link.                                           |
+| `preset open [code]`    | Opens that link, or prints it when there is no browser to open.        |
+
+`resolve` answers for a `components.json` written before the `preset` field existed too: it derives the design system from what the file already said — the neutral tone in `tailwind.baseColor`, no accent, default radius.
+
+---
+
 ## What does not exist
 
-There is no `search`, `view`, `docs`, `diff`, `info`, `build`, `apply` or `preset` command. To find components, read the registry index or use the MCP server ([registry.md](./registry.md), [mcp.md](./mcp.md)). To read a component's documentation, fetch its published Markdown at `https://zardui.com/docs/components/<name>.md`.
+There is no `search`, `view`, `docs`, `diff`, `info` or `build` command. To find components, read the registry index or use the MCP server ([registry.md](./registry.md), [mcp.md](./mcp.md)). To read a component's documentation, fetch its published Markdown at `https://zardui.com/docs/components/<name>.md`.

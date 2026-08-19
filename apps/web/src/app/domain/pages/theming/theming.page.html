@@ -174,6 +174,48 @@
     <z-base-color-preview [codeBlocks]="baseColorBlocks" />
   </section>
 
+  <!-- Presets -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="presets" id="presets">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Presets</h2>
+      <p class="text-muted-foreground text-base leading-relaxed">
+        A preset is a base colour, an accent, a chart palette, a radius step and an icon library, together. It travels
+        as a short code — there is no database behind it, so the code itself is the state and a link keeps working.
+        Build one at
+        <a class="underline underline-offset-4" href="/create">zardui.com/create</a>
+        and the page hands back the command.
+      </p>
+      <p class="text-muted-foreground text-base leading-relaxed">
+        The accent is not a second table of tokens: its
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--primary</code>
+        ,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--ring</code>
+        and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--sidebar-*</code>
+        are derived over the base colour you picked, with the lightness adjusted until the contrast with the text on top
+        clears AA and the chroma trimmed to what sRGB can display. That is why every accent works on all five base
+        colours.
+      </p>
+      <p class="text-muted-foreground text-base leading-relaxed">
+        On a new project pass it to
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">create</code>
+        ; on a project that already exists, use
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">apply</code>
+        . Do not re-run
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">init</code>
+        to change the theme — it rewrites the whole stylesheet, while
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">apply</code>
+        replaces only
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">:root</code>
+        ,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">.dark</code>
+        and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--radius</code>
+        , leaving the rest of your CSS where it is.
+      </p>
+    </div>
+  </section>
+
   <!-- Dark mode -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="dark-mode" id="dark-mode">
     <div class="flex flex-col gap-4">

@@ -92,6 +92,7 @@ export class ThemingPage implements OnInit {
       { id: 'token-reference', label: 'Token reference', type: 'custom' },
       { id: 'radius', label: 'Radius & scale', type: 'custom' },
       { id: 'base-colors', label: 'Base colors', type: 'custom' },
+      { id: 'presets', label: 'Presets', type: 'custom' },
       { id: 'dark-mode', label: 'Dark mode', type: 'custom' },
       { id: 'customizing', label: 'Customizing', type: 'custom' },
       { id: 'troubleshooting', label: 'Troubleshooting', type: 'custom' },
