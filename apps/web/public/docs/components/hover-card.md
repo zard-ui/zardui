@@ -662,6 +662,10 @@ The directive that opens rich content when its trigger is hovered or focused.
 | `zCloseDelay` | Delay in milliseconds before closing | `number` | `300` |
 | `zVisible` | Controls visibility programmatically | `boolean` | `false` |
 
+| Output | Description | Type | Default |
+| --- | --- | --- | --- |
+| `zVisibleChange` | Emits when visibility changes | `output<boolean>` | `-` |
+
 ### z-hover-card
 
 The wrapper component that styles hover card content.
