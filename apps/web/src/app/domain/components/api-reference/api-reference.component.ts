@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ApiSection } from './api-reference.types';
 
@@ -8,7 +8,7 @@ import type { ApiSection } from './api-reference.types';
   encapsulation: ViewEncapsulation.None,
   template: `
     <div>
-      @for (section of sections(); track section.selector) {
+      @for (section of sectionsWithGroups(); track section.selector) {
         <p class="text-muted-foreground api-component flex gap-2 text-base leading-7">
           <span class="component-selector">{{ section.selector }}</span>
           <span class="component-badge component-badge--component">Component</span>
@@ -17,13 +17,7 @@ import type { ApiSection } from './api-reference.types';
           {{ section.description }}
         </p>
 
-        @for (
-          group of [
-            { label: 'Property', entries: section.props },
-            { label: 'Output', entries: section.outputs ?? [] },
-          ];
-          track group.label
-        ) {
+        @for (group of section.groups; track group.label) {
           @if (group.entries.length) {
             <div
               class="api-table-wrapper--component my-4 overflow-auto rounded-md border [&>table]:overflow-hidden [&>table]:rounded-md"
@@ -85,4 +79,13 @@ import type { ApiSection } from './api-reference.types';
 })
 export class ApiReferenceComponent {
   readonly sections = input.required<ApiSection[]>();
+  protected readonly sectionsWithGroups = computed(() =>
+    this.sections().map(section => ({
+      ...section,
+      groups: [
+        { label: 'Property', entries: section.props },
+        { label: 'Output', entries: section.outputs ?? [] },
+      ],
+    })),
+  );
 }
