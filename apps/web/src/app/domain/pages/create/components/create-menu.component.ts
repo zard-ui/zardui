@@ -23,7 +23,7 @@ import { CreateBuilderService, type ControlId } from '../services/create-builder
   viewProviders: [provideIcons({ lucideChevronLeft, lucideCopy, lucideDices, lucideFolderOpen, lucideCheck })],
   template: `
     <div
-      class="flex w-[224px] flex-col gap-3 rounded-[18px] bg-[oklch(0.205_0_0)]/90 p-3 ring-1 ring-white/10 backdrop-blur-md"
+      class="flex w-[224px] flex-col gap-3 rounded-[18px] bg-[oklch(0.205_0_0)]/90 p-3 shadow-2xl ring-1 ring-white/15 backdrop-blur-md"
       [class.h-auto]="collapsed()"
     >
       <header class="flex items-center justify-between px-1">
