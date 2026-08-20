@@ -14,7 +14,6 @@ export interface BenefitFeature {
 
 @Component({
   selector: 'z-benefits',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardBadgeComponent, NgIcon],
   template: `

@@ -5,8 +5,7 @@ import { CodeBlockComponent } from '@highlight/components/code-block/code-block.
 import type { CodeBlockData } from '@highlight/types';
 
 @Component({
-  selector: 'registry-local-development-section',
-  standalone: true,
+  selector: 'z-registry-local-development-section',
   imports: [CodeBlockComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -65,7 +64,7 @@ import type { CodeBlockData } from '@highlight/types';
     </p>
   `,
 })
-export class RegistryLocalDevelopmentSection {
+export class RegistryLocalDevelopmentSectionComponent {
   readonly scripts: CodeBlockData = BLOCK_0;
   readonly port: CodeBlockData = BLOCK_1;
   readonly publishedCli: CodeBlockData = BLOCK_2;

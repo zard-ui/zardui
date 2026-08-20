@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const ENVIRONMENTS_ROUTES: Routes = [
   {
     path: '',
-    loadComponent: () => import('./enviroments.page').then(m => m.EnviromentsPage),
+    loadComponent: () => import('./environments.page').then(m => m.EnvironmentsPage),
   },
   {
     path: ':envName',

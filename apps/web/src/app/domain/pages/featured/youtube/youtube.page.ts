@@ -32,7 +32,6 @@ const LANGUAGE_GROUPS: ReadonlyArray<{ id: string; label: string; language: Feat
 
 @Component({
   selector: 'z-youtube',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './youtube.page.html',
   imports: [DocContentComponent, DocHeadingComponent, ZardAlertComponent, ScrollSpyDirective, ScrollSpyItemDirective],

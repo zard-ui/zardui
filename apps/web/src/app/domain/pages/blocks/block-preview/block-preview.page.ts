@@ -9,7 +9,6 @@ import { BlocksService } from '../../../services/blocks.service';
 
 @Component({
   selector: 'z-block-preview-page',
-  standalone: true,
   imports: [NgComponentOutlet],
   template: `
     @if (block(); as b) {

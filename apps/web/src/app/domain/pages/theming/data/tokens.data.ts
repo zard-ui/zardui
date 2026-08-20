@@ -221,10 +221,9 @@ export const THEME_TOKENS: ThemeToken[] = [
   {
     name: 'destructive-foreground',
     group: 'base',
-    description:
-      'Text drawn on top of `--destructive`. The CLI maps it in `@theme inline` but does not define it — ZardUI docs do.',
+    description: 'Text drawn on top of a solid `--destructive` surface. Matches `--primary-foreground` in every theme.',
     utilities: ['text'],
-    usedBy: ['command'],
+    usedBy: [],
   },
 
   // ── Surfaces ──────────────────────────────────────────────────────────────

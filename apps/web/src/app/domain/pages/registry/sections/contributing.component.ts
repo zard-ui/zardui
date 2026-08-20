@@ -5,8 +5,7 @@ import { CodeBlockComponent } from '@highlight/components/code-block/code-block.
 import type { CodeBlockData } from '@highlight/types';
 
 @Component({
-  selector: 'registry-contributing-section',
-  standalone: true,
+  selector: 'z-registry-contributing-section',
   imports: [CodeBlockComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -61,7 +60,7 @@ import type { CodeBlockData } from '@highlight/types';
     </p>
   `,
 })
-export class RegistryContributingSection {
+export class RegistryContributingSectionComponent {
   readonly manifestEntry: CodeBlockData = BLOCK_0;
   readonly commands: CodeBlockData = BLOCK_1;
 }

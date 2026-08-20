@@ -19,7 +19,6 @@ import type { Block } from '../block-container/block-container.component';
 
 @Component({
   selector: 'z-block-preview',
-  standalone: true,
   templateUrl: './block-preview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

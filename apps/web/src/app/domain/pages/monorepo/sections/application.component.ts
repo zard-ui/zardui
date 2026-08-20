@@ -6,8 +6,7 @@ import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.com
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
 @Component({
-  selector: 'monorepo-application-section',
-  standalone: true,
+  selector: 'z-monorepo-application-section',
   imports: [CodeBlockComponent, CodeTabsComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -51,7 +50,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <z-code-block [data]="postcss" />
   `,
 })
-export class MonorepoApplicationSection {
+export class MonorepoApplicationSectionComponent {
   readonly initTabs: CodeTabData = TABS_0;
   readonly report: CodeBlockData = BLOCK_1;
   readonly tsconfig: CodeBlockData = BLOCK_2;

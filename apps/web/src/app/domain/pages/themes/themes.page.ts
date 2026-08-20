@@ -10,8 +10,7 @@ import { ThemePreviewComponent } from './components/theme-preview/theme-preview.
 import { ThemeSidebarComponent } from './components/theme-sidebar/theme-sidebar.component';
 
 @Component({
-  selector: 'app-themes-page',
-  standalone: true,
+  selector: 'z-themes',
   imports: [ThemeSidebarComponent, ThemePreviewComponent, ZardButtonComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -37,11 +36,11 @@ import { ThemeSidebarComponent } from './components/theme-sidebar/theme-sidebar.
       <div class="container py-8">
         <div class="bg-background flex h-[164vh] max-h-278.25 overflow-hidden rounded-xl border shadow-lg">
           <aside class="bg-muted/20 hidden w-80 shrink-0 border-r md:block">
-            <app-theme-sidebar />
+            <z-theme-sidebar />
           </aside>
 
           <main class="flex-1">
-            <app-theme-preview />
+            <z-theme-preview />
           </main>
         </div>
       </div>

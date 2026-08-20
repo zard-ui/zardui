@@ -13,7 +13,7 @@ interface AIFeatureCard {
 }
 
 @Component({
-  selector: 'ai-ready-section',
+  selector: 'z-introduction-ai-ready-section',
   imports: [ZardBadgeComponent, ZardCardImports, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
@@ -51,7 +51,7 @@ interface AIFeatureCard {
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSun, lucideBookOpenText })],
 })
-export class AIReadySection {
+export class IntroductionAIReadySectionComponent {
   readonly cards: AIFeatureCard[] = [
     {
       title: 'Predictable Patterns',

@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'skills-how-it-works-section',
-  standalone: true,
+  selector: 'z-skills-how-it-works-section',
   imports: [RouterLink],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -83,4 +82,4 @@ import { RouterLink } from '@angular/router';
     </ul>
   `,
 })
-export class SkillsHowItWorksSection {}
+export class SkillsHowItWorksSectionComponent {}
