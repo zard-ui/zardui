@@ -15,7 +15,13 @@ import {
 
 import { filter, type Subscription } from 'rxjs';
 
-import { noopFn } from '@/shared/utils/merge-classes';
+import { findMenuItemByChar, getMenuItems, highlightMenuItem, isTypeaheadKey, nextMenuIndex } from './menu-keyboard';
+
+/** A viewport coordinate a menu can be anchored to, instead of an element. */
+export interface ZardMenuOrigin {
+  x: number;
+  y: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -29,10 +35,23 @@ export class ZardDropdownService {
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
   private triggerElement?: ElementRef;
+  /**
+   * The element whose own clicks must not close the menu. It is the trigger for a dropdown — the
+   * click that toggles it would otherwise register as an outside click and close it right back —
+   * and nothing for a context menu, where a plain click anywhere, the trigger included, closes.
+   */
+  private outsideClickExempt?: ElementRef;
+  /**
+   * A right click ends in an `auxclick`, which the CDK reports as an outside pointer event — so the
+   * very gesture that opens a context menu would close it again on mouse up. Only the first one is
+   * dropped: every later right click is a real dismissal.
+   */
+  private skipFirstAuxClick = false;
   private renderer!: Renderer2;
   private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
-  private unlisten: () => void = noopFn;
+  private keydownSubscription?: Subscription;
+  private unlisten: Array<() => void> = [];
 
   readonly isOpen = signal(false);
 
@@ -54,8 +73,35 @@ export class ZardDropdownService {
     }
 
     this.triggerElement = triggerElement;
+    this.outsideClickExempt = triggerElement;
+    this.skipFirstAuxClick = false;
     this.createOverlay(triggerElement);
+    this.attach(template, viewContainerRef);
+  }
 
+  /**
+   * Opens the menu at a viewport coordinate instead of below an element — what a context menu
+   * needs, since it belongs to the pointer and not to an anchor. `focusOrigin` is where `Escape`
+   * and selecting an item hand the focus back to.
+   */
+  openAt(
+    origin: ZardMenuOrigin,
+    template: TemplateRef<unknown>,
+    viewContainerRef: ViewContainerRef,
+    focusOrigin?: ElementRef,
+  ) {
+    if (this.isOpen()) {
+      this.close();
+    }
+
+    this.triggerElement = focusOrigin;
+    this.outsideClickExempt = undefined;
+    this.skipFirstAuxClick = true;
+    this.createPointOverlay(origin);
+    this.attach(template, viewContainerRef);
+  }
+
+  private attach(template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
     if (!this.overlayRef) {
       return;
     }
@@ -68,14 +114,39 @@ export class ZardDropdownService {
       this.setupKeyboardNavigation();
     }, 0);
 
+    /**
+     * `Escape` is also taken at the overlay level, not only on the surface: the CDK routes it to
+     * the top-most overlay whatever holds the focus, so the menu still closes after a click that
+     * left the focus on the body. The dispatcher only ever feeds the top overlay, so an open
+     * submenu keeps its own `Escape` to itself.
+     */
+    this.keydownSubscription = this.overlayRef.keydownEvents().subscribe(event => {
+      if (event.key !== 'Escape' || !this.isOpen()) {
+        return;
+      }
+
+      event.preventDefault();
+      this.closeAndFocusTrigger();
+    });
+
     // Close on outside click
+    const exempt = this.outsideClickExempt;
     this.outsideClickSubscription = this.overlayRef
       .outsidePointerEvents()
-      .pipe(filter(event => !triggerElement.nativeElement.contains(event.target)))
+      .pipe(filter(event => this.closesOnOutsideEvent(event, exempt)))
       .subscribe(() => {
         this.close();
       });
     this.isOpen.set(true);
+  }
+
+  private closesOnOutsideEvent(event: MouseEvent, exempt: ElementRef | undefined): boolean {
+    if (this.skipFirstAuxClick && event.type === 'auxclick') {
+      this.skipFirstAuxClick = false;
+      return false;
+    }
+
+    return !exempt?.nativeElement.contains(event.target);
   }
 
   getTriggerElement(): ElementRef | undefined {
@@ -87,10 +158,12 @@ export class ZardDropdownService {
       this.overlayRef.detach();
     }
     this.focusedIndex.set(-1);
-    this.unlisten();
+    this.unlisten.forEach(unlisten => unlisten());
+    this.unlisten = [];
     this.destroyOverlay();
     this.isOpen.set(false);
     this.triggerElement = undefined;
+    this.outsideClickExempt = undefined;
   }
 
   closeAndReturnTrigger(): ElementRef | undefined {
@@ -138,10 +211,40 @@ export class ZardDropdownService {
     });
   }
 
+  /**
+   * Anchored to a zero-sized rect at the pointer. The four positions are the four quadrants it can
+   * grow into, so the menu flips instead of spilling out of the viewport, and `close()` as the
+   * scroll strategy matches every native context menu: scrolling dismisses it.
+   */
+  private createPointOverlay(origin: ZardMenuOrigin) {
+    if (this.overlayRef) {
+      this.destroyOverlay();
+    }
+
+    const positionStrategy = this.overlayPositionBuilder
+      .flexibleConnectedTo(origin)
+      .withPositions([
+        { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
+        { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top' },
+        { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom' },
+        { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom' },
+      ])
+      .withFlexibleDimensions(false)
+      .withPush(true);
+
+    this.overlayRef = this.overlay.create({
+      positionStrategy,
+      hasBackdrop: false,
+      scrollStrategy: this.overlay.scrollStrategies.close(),
+    });
+  }
+
   private destroyOverlay() {
     this.overlayRef?.dispose();
     this.overlayRef = undefined;
     this.outsideClickSubscription?.unsubscribe();
+    this.keydownSubscription?.unsubscribe();
+    this.keydownSubscription = undefined;
   }
 
   private setupKeyboardNavigation() {
@@ -154,36 +257,65 @@ export class ZardDropdownService {
       return;
     }
 
-    this.unlisten = this.renderer.listen(
-      dropdownElement,
-      'keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent',
-      (event: KeyboardEvent) => {
-        const items = this.getDropdownItems();
+    this.unlisten.push(
+      this.renderer.listen(
+        dropdownElement,
+        'keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent',
+        (event: KeyboardEvent) => {
+          const items = this.getDropdownItems();
 
-        switch (event.key) {
-          case 'ArrowDown':
-            this.navigateItems(1, items);
-            break;
-          case 'ArrowUp':
-            this.navigateItems(-1, items);
-            break;
-          case 'Enter':
-          case ' ':
-            this.selectFocusedItem(items);
-            break;
-          case 'Escape': {
-            const triggerToFocus = this.closeAndReturnTrigger();
-            triggerToFocus?.nativeElement.focus();
-            break;
+          switch (event.key) {
+            case 'ArrowDown':
+              this.navigateItems(1, items);
+              break;
+            case 'ArrowUp':
+              this.navigateItems(-1, items);
+              break;
+            case 'Enter':
+            case ' ':
+              this.selectFocusedItem(items);
+              break;
+            case 'Escape': {
+              const triggerToFocus = this.closeAndReturnTrigger();
+              triggerToFocus?.nativeElement.focus();
+              break;
+            }
+            case 'Home':
+              this.focusItemAtIndex(items, 0);
+              break;
+            case 'End':
+              this.focusItemAtIndex(items, items.length - 1);
+              break;
           }
-          case 'Home':
-            this.focusItemAtIndex(items, 0);
-            break;
-          case 'End':
-            this.focusItemAtIndex(items, items.length - 1);
-            break;
+        },
+      ),
+    );
+
+    // A right click inside the surface must not strand the keyboard: the press blurs the focused
+    // row, so the surface takes the focus back instead of leaving it on the body.
+    this.unlisten.push(
+      this.renderer.listen(dropdownElement, 'contextmenu', (event: MouseEvent) => {
+        event.preventDefault();
+        dropdownElement.focus();
+      }),
+    );
+
+    // Typeahead: a printable key jumps to the next row whose label starts with it.
+    this.unlisten.push(
+      this.renderer.listen(dropdownElement, 'keydown', (event: KeyboardEvent) => {
+        if (!isTypeaheadKey(event)) {
+          return;
         }
-      },
+
+        const items = this.getDropdownItems();
+        const match = findMenuItemByChar(items, event.key, this.focusedIndex());
+        if (match === -1) {
+          return;
+        }
+
+        event.preventDefault();
+        this.focusItemAtIndex(items, match);
+      }),
     );
 
     // Focus dropdown container
@@ -194,35 +326,12 @@ export class ZardDropdownService {
     if (!this.overlayRef?.hasAttached()) {
       return [];
     }
-    const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(
-      dropdownElement.querySelectorAll<HTMLElement>(
-        'z-dropdown-menu-item, [z-dropdown-menu-item], z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item], z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
-      ),
-    ).filter(item => item.dataset['disabled'] === undefined);
+
+    return getMenuItems(this.overlayRef.overlayElement);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
-    if (items.length === 0) {
-      return;
-    }
-
-    const currentIndex = this.focusedIndex();
-    let nextIndex: number;
-
-    if (currentIndex === -1) {
-      // No item focused yet — start from first or last depending on direction
-      nextIndex = direction > 0 ? 0 : items.length - 1;
-    } else {
-      nextIndex = currentIndex + direction;
-      if (nextIndex < 0) {
-        nextIndex = items.length - 1;
-      } else if (nextIndex >= items.length) {
-        nextIndex = 0;
-      }
-    }
-
-    this.focusItemAtIndex(items, nextIndex);
+    this.focusItemAtIndex(items, nextMenuIndex(items, this.focusedIndex(), direction));
   }
 
   private focusItemAtIndex(items: HTMLElement[], index: number) {
@@ -248,14 +357,6 @@ export class ZardDropdownService {
   }
 
   private updateItemFocus(items: HTMLElement[], focusedIndex: number) {
-    for (let index = 0; index < items.length; index++) {
-      const item = items[index];
-      if (index === focusedIndex) {
-        item.focus();
-        item.dataset['highlighted'] = '';
-      } else {
-        delete item.dataset['highlighted'];
-      }
-    }
+    highlightMenuItem(items, focusedIndex);
   }
 }

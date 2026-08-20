@@ -317,4 +317,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
       'Displays conversational content in a message bubble. Supports variants, alignment, grouping, reactions, and collapsible content.',
     loadData: () => import('@zard/components/bubble/demo/bubble').then(m => m.BUBBLE),
   },
+  {
+    componentName: 'context-menu',
+    description: 'Displays a menu of actions triggered by a right click.',
+    loadData: () => import('@zard/components/context-menu/demo/context-menu').then(m => m.CONTEXT_MENU),
+  },
 ];

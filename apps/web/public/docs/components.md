@@ -23,6 +23,7 @@ Here you can find all the components available in the library. We are working on
 - [Checkbox](/docs/components/checkbox)
 - [Combobox](/docs/components/combobox)
 - [Command](/docs/components/command)
+- [Context Menu](/docs/components/context-menu)
 - [Date Picker](/docs/components/date-picker)
 - [Dialog](/docs/components/dialog)
 - [Drawer](/docs/components/drawer)
