@@ -90,6 +90,7 @@ import { treeVariants } from './tree.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'tree',
     role: 'tree',
     '[class]': 'classes()',
     '(keydown)': 'onKeydown($event)',
@@ -330,14 +331,14 @@ export type ZardTreeNodeChildrenVariants = VariantProps<typeof treeNodeChildrenV
 ```
 
 ```angular-ts
-export * from '@/shared/components/tree/tree.component';
-export * from '@/shared/components/tree/tree-node.component';
-export * from '@/shared/components/tree/tree-node-toggle.directive';
-export * from '@/shared/components/tree/tree-node-content.component';
-export * from '@/shared/components/tree/tree.service';
-export * from '@/shared/components/tree/tree.types';
-export * from '@/shared/components/tree/tree.variants';
-export * from '@/shared/components/tree/tree.imports';
+export * from './tree.component';
+export * from './tree-node.component';
+export * from './tree-node-toggle.directive';
+export * from './tree-node-content.component';
+export * from './tree.service';
+export * from './tree.types';
+export * from './tree.variants';
+export * from './tree.imports';
 ```
 
 ```angular-ts
@@ -358,6 +359,7 @@ import { treeNodeContentVariants } from './tree.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'tree-node-content',
     '[class]': 'classes()',
   },
   exportAs: 'zTreeNodeContent',
@@ -387,6 +389,7 @@ import { treeNodeToggleVariants } from './tree.variants';
 @Directive({
   selector: '[z-tree-node-toggle]',
   host: {
+    'data-slot': 'tree-node-toggle',
     role: 'button',
     '[class]': 'classes()',
     '[attr.aria-label]': 'isExpanded() ? "Collapse" : "Expand"',
@@ -530,6 +533,7 @@ import {
     }),
   ],
   host: {
+    'data-slot': 'tree-node',
     '[class]': 'hostClasses()',
     '[attr.data-key]': 'node().key',
   },

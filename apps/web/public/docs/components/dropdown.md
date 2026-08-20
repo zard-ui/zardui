@@ -108,7 +108,6 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   readonly class = input<ClassValue>('');
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zDisabled',
     transform: value => (value === undefined ? undefined : booleanAttribute(value)),
   });
 
@@ -438,17 +437,15 @@ export class ZardDropdownMenuItemComponent {
   private readonly dropdownService = inject(ZardDropdownService);
 
   readonly variant = input<ZardDropdownItemTypeVariants>('default');
-  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zType' });
-  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zVariant' });
+  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined);
+  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined);
   readonly inset = input(false, { transform: booleanAttribute });
   readonly zInset = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zInset',
     transform: value => (value === undefined ? undefined : booleanAttribute(value)),
   });
 
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zDisabled',
     transform: value => (value === undefined ? undefined : booleanAttribute(value)),
   });
 
@@ -530,6 +527,7 @@ export class ZardDropdownMenuContentComponent {
 
 ```angular-ts
 import {
+  afterNextRender,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
@@ -537,6 +535,7 @@ import {
   forwardRef,
   inject,
   InjectionToken,
+  Injector,
   input,
   model,
   ViewEncapsulation,
@@ -671,18 +670,18 @@ export class ZardDropdownMenuShortcutComponent {
   exportAs: 'zDropdownMenuCheckboxItem',
 })
 export class ZardDropdownMenuCheckboxItemComponent {
+  private readonly injector = inject(Injector);
   private readonly dropdownService = inject(ZardDropdownService);
 
   readonly zChecked = model(false);
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zDisabled',
     transform: optionalBooleanAttribute,
   });
 
   readonly variant = input<ZardDropdownItemTypeVariants>('default');
-  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zType' });
-  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zVariant' });
+  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined);
+  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined);
   readonly class = input<ClassValue>('');
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
@@ -697,7 +696,7 @@ export class ZardDropdownMenuCheckboxItemComponent {
     }
 
     this.zChecked.set(!this.zChecked());
-    setTimeout(() => this.dropdownService.closeAndFocusTrigger(), 0);
+    afterNextRender(() => this.dropdownService.closeAndFocusTrigger(), { injector: this.injector });
   }
 }
 
@@ -753,21 +752,22 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
     '[attr.data-variant]': 'itemVariant()',
     '(click.prevent-with-stop)': 'onClick()',
   },
+  exportAs: 'zDropdownMenuRadioItem',
 })
 export class ZardDropdownMenuRadioItemComponent {
+  private readonly injector = inject(Injector);
   private readonly dropdownService = inject(ZardDropdownService);
   private readonly radioGroup = inject(ZARD_DROPDOWN_RADIO_GROUP, { optional: true });
 
   readonly zValue = input.required<string>();
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zDisabled',
     transform: optionalBooleanAttribute,
   });
 
   readonly variant = input<ZardDropdownItemTypeVariants>('default');
-  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zType' });
-  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zVariant' });
+  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined);
+  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined);
   readonly class = input<ClassValue>('');
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
@@ -783,7 +783,7 @@ export class ZardDropdownMenuRadioItemComponent {
     }
 
     this.radioGroup?.select(this.zValue());
-    setTimeout(() => this.dropdownService.closeAndFocusTrigger(), 0);
+    afterNextRender(() => this.dropdownService.closeAndFocusTrigger(), { injector: this.injector });
   }
 }
 ```
@@ -940,7 +940,7 @@ import {
 
 import { filter, type Subscription } from 'rxjs';
 
-import { noopFn } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 @Injectable({
   providedIn: 'root',
@@ -1218,13 +1218,13 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
 ### Basic
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-demo',
+  selector: 'z-demo-dropdown-default',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open menu</button>
@@ -1236,8 +1236,9 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       <z-dropdown-menu-item [disabled]="true">Subscription</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDropdownDemoComponent {
+export class ZardDemoDropdownDefaultComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -1247,13 +1248,13 @@ export class ZardDropdownDemoComponent {
 ### Shortcuts
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-shortcuts-demo',
+  selector: 'z-demo-dropdown-shortcuts',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Account</button>
@@ -1279,8 +1280,9 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDropdownShortcutsDemoComponent {
+export class ZardDemoDropdownShortcutsComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -1290,7 +1292,7 @@ export class ZardDropdownShortcutsDemoComponent {
 ### Icons
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCreditCard, lucideKeyboard, lucideSettings, lucideUser } from '@ng-icons/lucide';
@@ -1299,7 +1301,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-icons-demo',
+  selector: 'z-demo-dropdown-icons',
   imports: [ZardDropdownImports, ZardButtonComponent, NgIcon],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
@@ -1323,9 +1325,10 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideUser, lucideCreditCard, lucideSettings, lucideKeyboard })],
 })
-export class ZardDropdownIconsDemoComponent {
+export class ZardDemoDropdownIconsComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -1341,7 +1344,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-checkboxes-demo',
+  selector: 'z-demo-dropdown-checkboxes',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">View options</button>
@@ -1353,7 +1356,7 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
     </z-dropdown-menu-content>
   `,
 })
-export class ZardDropdownCheckboxesDemoComponent {
+export class ZardDemoDropdownCheckboxesComponent {
   statusBar = true;
   activityBar = false;
   panel = false;
@@ -1369,7 +1372,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-radio-group-demo',
+  selector: 'z-demo-dropdown-radio-group',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Panel position</button>
@@ -1386,7 +1389,7 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
     </z-dropdown-menu-content>
   `,
 })
-export class ZardDropdownRadioGroupDemoComponent {
+export class ZardDemoDropdownRadioGroupComponent {
   selected = 'bottom';
   positions = [
     { value: 'top', label: 'Top' },
@@ -1399,13 +1402,13 @@ export class ZardDropdownRadioGroupDemoComponent {
 ### Destructive
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-destructive-demo',
+  selector: 'z-demo-dropdown-destructive',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Project</button>
@@ -1417,8 +1420,9 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       <z-dropdown-menu-item zType="destructive" (click)="log('Delete')">Delete</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDropdownDestructiveDemoComponent {
+export class ZardDemoDropdownDestructiveComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -1430,7 +1434,7 @@ export class ZardDropdownDestructiveDemoComponent {
 Compose with `z-navigation-menu-trigger` for nested flyout behavior.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronRight } from '@ng-icons/lucide';
@@ -1440,7 +1444,7 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
 import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu';
 
 @Component({
-  selector: 'z-dropdown-submenu-demo',
+  selector: 'z-demo-dropdown-submenu',
   imports: [ZardDropdownImports, ZardButtonComponent, ZardNavigationMenuImports, NgIcon],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
@@ -1470,9 +1474,10 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu';
       </div>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideChevronRight })],
 })
-export class ZardDropdownSubmenuDemoComponent {
+export class ZardDemoDropdownSubmenuComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -1482,14 +1487,14 @@ export class ZardDropdownSubmenuDemoComponent {
 ### Avatar
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-avatar-demo',
+  selector: 'z-demo-dropdown-avatar',
   imports: [ZardDropdownImports, ZardButtonComponent, ZardAvatarComponent],
   template: `
     <button type="button" z-button zType="ghost" class="size-10 rounded-full p-0" z-dropdown [zDropdownMenu]="menu">
@@ -1511,8 +1516,9 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       <z-dropdown-menu-item (click)="log('Log out')">Log out</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDropdownAvatarDemoComponent {
+export class ZardDemoDropdownAvatarComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -1522,13 +1528,13 @@ export class ZardDropdownAvatarDemoComponent {
 ### Complex
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-complex-demo',
+  selector: 'z-demo-dropdown-complex',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
@@ -1568,8 +1574,9 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDropdownComplexDemoComponent {
+export class ZardDemoDropdownComplexComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -1581,13 +1588,13 @@ export class ZardDropdownComplexDemoComponent {
 Use `zTrigger="hover"` when the menu should open on pointer hover.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-hover-demo',
+  selector: 'z-demo-dropdown-hover',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" zTrigger="hover" z-dropdown [zDropdownMenu]="menu">Open</button>
@@ -1638,8 +1645,9 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDropdownHoverDemoComponent {
+export class ZardDemoDropdownHoverComponent {
   onProfile() {
     console.log('Profile clicked');
   }
@@ -1696,6 +1704,7 @@ Projected dropdown component with built-in trigger and overlay management.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `(openChange)` | Emitted when the menu opens or closes | `boolean` | `—` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 | `[disabled]` | Disables the dropdown | `boolean` | `false` |
 | `[zDisabled]` | Disables the dropdown using the Zard-prefixed API. | `boolean` | `false` |
@@ -1753,6 +1762,7 @@ Checkbox-style dropdown menu item with checked state and menuitemcheckbox semant
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[zChecked]` | Checked state, two-way bindable | `boolean` | `false` |
 | `[(zChecked)]` | Checked state for the checkbox item. | `boolean` | `false` |
 | `[zDisabled]` | Disables the checkbox item. | `boolean` | `false` |
 | `[zType]` | Visual type of the item. | `'default' \| 'destructive'` | `'default'` |
@@ -1764,6 +1774,7 @@ Radio group wrapper for dropdown menu radio items.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[zValue]` | Value of the selected radio item, two-way bindable | `string` | `undefined` |
 | `[(zValue)]` | Selected radio item value. | `string \| undefined` | `undefined` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 

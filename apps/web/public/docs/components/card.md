@@ -36,10 +36,10 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 import {
   cardActionVariants,
   cardContentVariants,
-  cardDescriptionVariant,
+  cardDescriptionVariants,
   cardFooterVariants,
   cardHeaderVariants,
-  cardTitleVariant,
+  cardTitleVariants,
   cardVariants,
   type ZardCardSizeType,
 } from './card.variants';
@@ -63,7 +63,7 @@ export class ZardCardTitleComponent {
   readonly class = input<ClassValue>('');
   readonly zTitle = input<string | TemplateRef<void>>();
 
-  protected readonly classes = computed(() => mergeClasses(cardTitleVariant(), this.class()));
+  protected readonly classes = computed(() => mergeClasses(cardTitleVariants(), this.class()));
 }
 
 @Component({
@@ -85,7 +85,7 @@ export class ZardCardDescriptionComponent {
   readonly class = input<ClassValue>('');
   readonly zDescription = input<string | TemplateRef<void>>();
 
-  protected readonly classes = computed(() => mergeClasses(cardDescriptionVariant(), this.class()));
+  protected readonly classes = computed(() => mergeClasses(cardDescriptionVariants(), this.class()));
 }
 
 @Component({
@@ -213,9 +213,9 @@ export const cardHeaderVariants = cva(
   'group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-4 group-data-[size=sm]/card:px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [&.border-b]:pb-4 group-data-[size=sm]/card:[&.border-b]:pb-3',
 );
 
-export const cardTitleVariant = cva('text-base/snug font-medium group-data-[size=sm]/card:text-sm');
+export const cardTitleVariants = cva('text-base/snug font-medium group-data-[size=sm]/card:text-sm');
 
-export const cardDescriptionVariant = cva('text-sm text-muted-foreground');
+export const cardDescriptionVariants = cva('text-sm text-muted-foreground');
 
 export const cardActionVariants = cva('col-start-2 row-span-2 row-start-1 self-start justify-self-end');
 

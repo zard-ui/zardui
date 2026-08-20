@@ -20,12 +20,14 @@ npx zard-cli@latest add select
 ```angular-ts
 import {
   type ConnectedPosition,
+  type FlexibleConnectedPositionStrategy,
   Overlay,
   OverlayModule,
   OverlayPositionBuilder,
   type OverlayRef,
 } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { ViewportRuler } from '@angular/cdk/scrolling';
 import { isPlatformBrowser } from '@angular/common';
 import {
   afterNextRender,
@@ -41,6 +43,7 @@ import {
   inject,
   Injector,
   input,
+  isDevMode,
   linkedSignal,
   model,
   numberAttribute,
@@ -80,6 +83,8 @@ type OnTouchedType = () => void;
 type OnChangeType = (value: string | string[]) => void;
 
 const COMPACT_MODE_WIDTH_THRESHOLD = 100;
+const MAX_CONTENT_HEIGHT = 384; // max-h-96 equivalent
+const VIEWPORT_MARGIN = 8;
 let nextSelectId = 0;
 
 @Component({
@@ -213,6 +218,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly viewportRuler = inject(ViewportRuler);
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<void>>('dropdownTemplate');
   readonly optionsViewport = viewChild<ElementRef<HTMLElement>>('optionsViewport');
@@ -404,7 +410,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     }
 
     if (value === undefined || value === null || value === '') {
-      console.warn('Attempted to select item with invalid value:', { value, label });
+      if (isDevMode()) {
+        console.warn('Attempted to select item with invalid value:', { value, label });
+      }
       return;
     }
 
@@ -486,6 +494,10 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       }
 
       this.stopScrollOptions();
+    }
+
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
     }
 
     this.scrollDirection = direction;
@@ -600,7 +612,10 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
 
     this.overlayRef.attach(this.portal);
-    this.overlayRef.updateSize(this.zPosition() === 'popper' ? { minWidth: hostWidth } : { width: hostWidth });
+    this.overlayRef.updateSize({
+      ...(this.zPosition() === 'popper' ? { minWidth: hostWidth } : { width: hostWidth }),
+      maxHeight: this.getAvailableContentHeight(),
+    });
     this.isOpen.set(true);
     this.updateFocusWhenNormalMode();
 
@@ -707,12 +722,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       return;
     }
 
-    const itemAlignedOffset = this.getItemAlignedOffset();
-    if (!itemAlignedOffset) {
-      return;
-    }
-
-    this.overlayRef.updatePositionStrategy(this.createPositionStrategy(itemAlignedOffset));
+    // A null offset means the selected item cannot sit over the trigger without pushing the
+    // dropdown off screen, so the anchored placement is used instead and flips above the trigger.
+    this.overlayRef.updatePositionStrategy(this.createPositionStrategy(this.getItemAlignedOffset() ?? undefined));
   }
 
   private getItemAlignedOffset(): { bottom: number; top: number } | null {
@@ -728,22 +740,53 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       return null;
     }
 
-    const triggerHeight = trigger.offsetHeight || trigger.getBoundingClientRect().height || this.triggerHeight();
+    const triggerRect = trigger.getBoundingClientRect();
+    const triggerHeight = trigger.offsetHeight || triggerRect.height || this.triggerHeight();
     const itemHeight = selectedItem.offsetHeight || selectedItem.getBoundingClientRect().height || triggerHeight;
     const contentHeight = content.offsetHeight || content.getBoundingClientRect().height;
     const selectedItemOffsetTop = selectedItem.offsetTop;
     const itemCenterOffset = (triggerHeight - itemHeight) / 2;
+
     const bottom = Math.round(-triggerHeight - selectedItemOffsetTop + itemCenterOffset);
     const top = Math.round(contentHeight - selectedItemOffsetTop + itemCenterOffset);
+
+    // Item alignment only holds while the whole dropdown stays on screen; otherwise it would
+    // cover the trigger against the viewport edge instead of opening next to it.
+    const viewportHeight = this.viewportRuler.getViewportSize().height;
+    const contentTop = triggerRect.bottom + bottom;
+    if (contentTop < VIEWPORT_MARGIN || contentTop + contentHeight > viewportHeight - VIEWPORT_MARGIN) {
+      return null;
+    }
 
     return { bottom, top };
   }
 
   private createPositionStrategy(itemAlignedOffset?: { bottom: number; top: number }) {
-    return this.overlayPositionBuilder
+    const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(this.elementRef)
       .withPositions(this.connectedPositions(itemAlignedOffset))
-      .withPush(false);
+      // Without this the CDK shrinks the dropdown to whatever space is left below the
+      // trigger instead of flipping it, collapsing it to a sliver near the viewport edge.
+      .withFlexibleDimensions(false)
+      .withViewportMargin(VIEWPORT_MARGIN)
+      // Last resort for viewports too short for either side: nudge on screen instead of clipping.
+      .withPush(true);
+
+    this.trackOverlaySide(positionStrategy);
+
+    return positionStrategy;
+  }
+
+  private trackOverlaySide(positionStrategy: FlexibleConnectedPositionStrategy): void {
+    positionStrategy.positionChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(change => {
+      this.overlaySide.set(change.connectionPair.overlayY === 'bottom' ? 'top' : 'bottom');
+    });
+  }
+
+  /** Height the dropdown may occupy without overflowing the viewport. */
+  private getAvailableContentHeight(): number {
+    const viewportHeight = this.viewportRuler.getViewportSize().height;
+    return Math.max(Math.min(MAX_CONTENT_HEIGHT, viewportHeight - VIEWPORT_MARGIN * 2), 0);
   }
 
   private connectedPositions(itemAlignedOffset?: { bottom: number; top: number }): ConnectedPosition[] {
@@ -783,7 +826,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
           positionStrategy,
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
-          maxHeight: 384, // max-h-96 equivalent
+          maxHeight: MAX_CONTENT_HEIGHT,
         });
         this.overlayRef
           .outsidePointerEvents()
@@ -843,7 +886,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       const label = item.textContent?.trim() ?? '';
 
       if (value === null || value === undefined) {
-        console.warn('No value attribute found on selected item:', item);
+        if (isDevMode()) {
+          console.warn('No value attribute found on selected item:', item);
+        }
         return;
       }
 
@@ -985,7 +1030,7 @@ export const selectTriggerVariants = cva(
   mergeClasses(
     'flex h-8 px-3 py-2 w-full items-center justify-between gap-2 rounded-lg border border-input bg-transparent',
     'text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none disabled:cursor-not-allowed',
-    'disabled:opacity-50 data-[placeholder]:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground',
+    'disabled:opacity-50 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground',
     'dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
     'aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
     '*:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2',
@@ -997,7 +1042,7 @@ export const selectTriggerVariants = cva(
 
 export const selectContentVariants = cva(
   mergeClasses(
-    'relative z-50 flex max-h-96 w-full min-w-[8rem] origin-(--z-select-content-transform-origin) flex-col overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md',
+    'relative z-50 flex max-h-96 w-full min-w-32 origin-(--z-select-content-transform-origin) flex-col overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md',
     'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
     'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
     'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
@@ -1094,11 +1139,11 @@ export type ZardSelectAlignVariants = 'start' | 'center' | 'end';
 ```
 
 ```angular-ts
-export * from '@/shared/components/select/select.component';
-export * from '@/shared/components/select/select-group.component';
-export * from '@/shared/components/select/select-item.component';
-export * from '@/shared/components/select/select.imports';
-export * from '@/shared/components/select/select.variants';
+export * from './select.component';
+export * from './select-group.component';
+export * from './select-item.component';
+export * from './select.imports';
+export * from './select.variants';
 ```
 
 ```angular-ts
@@ -1191,7 +1236,8 @@ import {
   selectItemVariants,
   type ZardSelectItemModeVariants,
 } from '@/shared/components/select/select.variants';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 // Interface to avoid circular dependency
 interface SelectHost {
@@ -1236,6 +1282,7 @@ interface SelectHost {
     '(mouseenter)': 'onMouseEnter()',
     '(keydown.{tab}.prevent)': 'noopFn',
   },
+  exportAs: 'zSelectItem',
 })
 export class ZardSelectItemComponent {
   readonly elementRef = inject(ElementRef<HTMLElement>);
@@ -1588,6 +1635,7 @@ A customizable select component that supports single and multiple value selectio
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[zValue]` | Selected value(s), two-way bindable | `string \| string[]` | `''` |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zAlign]` | Overlay alignment relative to the trigger | `'start' \| 'center' \| 'end'` | `'center'` |
 | `[zDisabled]` | Disables the select | `boolean` | `false` |

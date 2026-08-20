@@ -22,8 +22,8 @@ import { ChangeDetectionStrategy, Component, computed, contentChildren, input, V
 
 import type { ClassValue } from 'clsx';
 
-import { layoutVariants, type LayoutVariants } from '@/shared/components/layout/layout.variants';
-import { SidebarComponent } from '@/shared/components/layout/sidebar.component';
+import { layoutVariants, type ZardLayoutVariants } from '@/shared/components/layout/layout.variants';
+import { ZardSidebarComponent } from '@/shared/components/layout/sidebar.component';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -34,16 +34,17 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'layout',
     '[class]': 'classes()',
   },
   exportAs: 'zLayout',
 })
-export class LayoutComponent {
+export class ZardLayoutComponent {
   readonly class = input<ClassValue>('');
-  readonly zDirection = input<LayoutVariants>('auto');
+  readonly zDirection = input<ZardLayoutVariants>('auto');
 
   // Query for direct sidebar children to auto-detect layout direction
-  private readonly sidebars = contentChildren(SidebarComponent, { descendants: false });
+  private readonly sidebars = contentChildren(ZardSidebarComponent, { descendants: false });
 
   private readonly detectedDirection = computed(() => {
     if (this.zDirection() !== 'auto') {
@@ -82,7 +83,7 @@ export const layoutVariants = cva('flex w-full min-h-0', {
     zDirection: 'auto',
   },
 });
-export type LayoutVariants = NonNullable<VariantProps<typeof layoutVariants>['zDirection']>;
+export type ZardLayoutVariants = NonNullable<VariantProps<typeof layoutVariants>['zDirection']>;
 
 // Header Variants
 export const headerVariants = cva('flex items-center px-4 bg-background border-b border-border shrink-0', {
@@ -132,11 +133,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'content',
     '[class]': 'classes()',
   },
   exportAs: 'zContent',
 })
-export class ContentComponent {
+export class ZardContentComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(contentVariants(), this.class()));
@@ -160,9 +162,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'footer',
+  },
   exportAs: 'zFooter',
 })
-export class FooterComponent {
+export class ZardFooterComponent {
   readonly class = input<ClassValue>('');
   readonly zHeight = input<number>(64);
 
@@ -187,9 +192,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'header',
+  },
   exportAs: 'zHeader',
 })
-export class HeaderComponent {
+export class ZardHeaderComponent {
   readonly class = input<ClassValue>('');
   readonly zHeight = input<number>(64);
 
@@ -198,34 +206,34 @@ export class HeaderComponent {
 ```
 
 ```angular-ts
-export * from '@/shared/components/layout/layout.component';
-export * from '@/shared/components/layout/header.component';
-export * from '@/shared/components/layout/footer.component';
-export * from '@/shared/components/layout/content.component';
-export * from '@/shared/components/layout/sidebar.component';
-export * from '@/shared/components/layout/layout.variants';
-export * from '@/shared/components/layout/layout.imports';
+export * from './layout.component';
+export * from './header.component';
+export * from './footer.component';
+export * from './content.component';
+export * from './sidebar.component';
+export * from './layout.variants';
+export * from './layout.imports';
 ```
 
 ```angular-ts
-import { ContentComponent } from '@/shared/components/layout/content.component';
-import { FooterComponent } from '@/shared/components/layout/footer.component';
-import { HeaderComponent } from '@/shared/components/layout/header.component';
-import { LayoutComponent } from '@/shared/components/layout/layout.component';
+import { ZardContentComponent } from '@/shared/components/layout/content.component';
+import { ZardFooterComponent } from '@/shared/components/layout/footer.component';
+import { ZardHeaderComponent } from '@/shared/components/layout/header.component';
+import { ZardLayoutComponent } from '@/shared/components/layout/layout.component';
 import {
-  SidebarComponent,
-  SidebarGroupComponent,
-  SidebarGroupLabelComponent,
+  ZardSidebarComponent,
+  ZardSidebarGroupComponent,
+  ZardSidebarGroupLabelComponent,
 } from '@/shared/components/layout/sidebar.component';
 
-export const LayoutImports = [
-  LayoutComponent,
-  HeaderComponent,
-  FooterComponent,
-  ContentComponent,
-  SidebarComponent,
-  SidebarGroupComponent,
-  SidebarGroupLabelComponent,
+export const ZardLayoutImports = [
+  ZardLayoutComponent,
+  ZardHeaderComponent,
+  ZardFooterComponent,
+  ZardContentComponent,
+  ZardSidebarComponent,
+  ZardSidebarGroupComponent,
+  ZardSidebarGroupLabelComponent,
 ] as const;
 ```
 
@@ -287,9 +295,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronRight, lucideChevronLeft })],
+  host: {
+    'data-slot': 'sidebar',
+  },
   exportAs: 'zSidebar',
 })
-export class SidebarComponent {
+export class ZardSidebarComponent {
   readonly zWidth = input<string | number>(200);
   readonly zCollapsedWidth = input<number>(64);
   readonly zCollapsible = input(false, { transform: booleanAttribute });
@@ -349,9 +360,12 @@ export class SidebarComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'sidebar-group',
+  },
   exportAs: 'zSidebarGroup',
 })
-export class SidebarGroupComponent {
+export class ZardSidebarGroupComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(sidebarGroupVariants(), this.class()));
@@ -366,9 +380,12 @@ export class SidebarGroupComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'sidebar-group-label',
+  },
   exportAs: 'zSidebarGroupLabel',
 })
-export class SidebarGroupLabelComponent {
+export class ZardSidebarGroupLabelComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(sidebarGroupLabelVariants(), this.class()));
@@ -378,7 +395,7 @@ export class SidebarGroupLabelComponent {
 ## Usage
 
 ```angular-ts
-import { LayoutImports } from '@/shared/components/layout/layout.imports';
+import { ZardLayoutImports } from '@/shared/components/layout/layout.imports';
 ```
 
 ```angular-html
@@ -396,11 +413,11 @@ import { LayoutImports } from '@/shared/components/layout/layout.imports';
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { LayoutImports } from '@/shared/components/layout/layout.imports';
+import { ZardLayoutImports } from '@/shared/components/layout/layout.imports';
 
 @Component({
   selector: 'z-demo-layout-basic',
-  imports: [LayoutImports],
+  imports: [ZardLayoutImports],
   template: `
     <div class="flex flex-col gap-6 text-center">
       <z-layout class="overflow-hidden rounded-lg">
@@ -439,7 +456,7 @@ import { LayoutImports } from '@/shared/components/layout/layout.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LayoutDemoBasicComponent {}
+export class ZardDemoLayoutBasicComponent {}
 ```
 
 ### Sidebar
@@ -465,7 +482,7 @@ import {
 import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 import { ZardButtonComponent } from '@/shared/components/button';
-import { LayoutImports } from '@/shared/components/layout/layout.imports';
+import { ZardLayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/navigation-menu.imports';
 import { ZardSeparatorComponent } from '@/shared/components/separator';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
@@ -480,7 +497,7 @@ interface MenuItem {
 @Component({
   selector: 'z-demo-layout-collapsible',
   imports: [
-    LayoutImports,
+    ZardLayoutImports,
     ZardButtonComponent,
     ZardBreadcrumbImports,
     ZardNavigationMenuImports,
@@ -655,7 +672,7 @@ interface MenuItem {
     }),
   ],
 })
-export class LayoutDemoSidebarComponent {
+export class ZardDemoLayoutSidebarComponent {
   readonly sidebarCollapsed = signal(false);
 
   mainMenuItems: MenuItem[] = [
@@ -693,12 +710,12 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBell, lucideHouse, lucideLayers, lucideSearch, lucideUsers } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { LayoutImports } from '@/shared/components/layout/layout.imports';
+import { ZardLayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'z-demo-layout-full',
-  imports: [LayoutImports, ZardButtonComponent, ZardSkeletonComponent, NgOptimizedImage, NgIcon],
+  imports: [ZardLayoutImports, ZardButtonComponent, ZardSkeletonComponent, NgOptimizedImage, NgIcon],
   template: `
     <z-layout class="min-h-150 overflow-hidden rounded-md border">
       <z-header>
@@ -766,7 +783,7 @@ import { ZardSkeletonComponent } from '@/shared/components/skeleton';
     }),
   ],
 })
-export class LayoutDemoFullComponent {
+export class ZardDemoLayoutFullComponent {
   year = new Date().getFullYear();
 }
 ```
