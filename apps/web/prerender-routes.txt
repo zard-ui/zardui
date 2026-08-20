@@ -83,6 +83,7 @@
 /docs/components/drawer
 /docs/components/bubble
 /docs/components/context-menu
+/docs/components/message
 /docs/contribute
 /docs/contribute/setup
 /docs/contribute/architecture

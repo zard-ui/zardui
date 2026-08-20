@@ -57,4 +57,3 @@ Here you can find all the components available in the library. We are working on
 - [Toggle](/docs/components/toggle)
 - [Toggle Group](/docs/components/toggle-group)
 - [Tooltip](/docs/components/tooltip)
-- [Tree](/docs/components/tree)

@@ -1,3 +1,13 @@
+## 1.0.0-beta.113 (2026-08-20)
+
+### ✨ Features
+
+- **message:** add message component ([#714](https://github.com/zard-ui/zardui/pull/714))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.112 (2026-08-20)
 
 ### ✨ Features

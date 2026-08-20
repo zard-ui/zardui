@@ -667,6 +667,28 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'message',
+    registryDependencies: ['avatar', 'bubble'],
+    files: [
+      {
+        name: 'message.component.ts',
+        content: '',
+      },
+      {
+        name: 'message.imports.ts',
+        content: '',
+      },
+      {
+        name: 'message.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'select',
     registryDependencies: ['badge'],
     files: [
