@@ -136,6 +136,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Drawer', path: '/docs/components/drawer', available: true },
     { name: 'Bubble', path: '/docs/components/bubble', available: true },
     { name: 'Context Menu', path: '/docs/components/context-menu', available: true },
+    { name: 'Message', path: '/docs/components/message', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 

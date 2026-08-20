@@ -388,4 +388,10 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
   <z-dropdown-menu-item zType="destructive">Delete</z-dropdown-menu-item>
 </z-dropdown-menu-content>`,
   },
+  message: {
+    importCode: `import { ZardMessageImports } from '@/shared/components/message/message.imports';`,
+    templateCode: `<z-message zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zVariant="muted">
+  How can I help you today?
+</z-message>`,
+  },
 };
