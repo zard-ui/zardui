@@ -39,6 +39,7 @@ describe('ZardDropdownService', () => {
         }),
       }),
       overlayElement: document.createElement('div'),
+      hostElement: document.createElement('div'),
     } as unknown as jest.Mocked<OverlayRef & { overlayElement: HTMLElement }>;
 
     mockOverlayPositionBuilder = {
@@ -345,6 +346,7 @@ describe('ZardDropdownService - server platform behavior', () => {
         }),
       }),
       overlayElement: document.createElement('div'),
+      hostElement: document.createElement('div'),
     } as unknown as jest.Mocked<OverlayRef & { overlayElement: HTMLElement }>;
 
     mockOverlayPositionBuilder = {

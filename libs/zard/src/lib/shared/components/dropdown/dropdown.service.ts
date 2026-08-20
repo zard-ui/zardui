@@ -15,7 +15,19 @@ import {
 
 import { filter, type Subscription } from 'rxjs';
 
+import {
+  buildDropdownPositions,
+  type ZardDropdownAlign,
+  type ZardDropdownSide,
+} from '@/shared/components/dropdown/dropdown-positions';
 import { noopFn } from '@/shared/utils/merge-classes';
+
+/** Placement of the menu relative to its trigger, mirroring Radix's `side`/`align`/`sideOffset`. */
+export interface ZardDropdownPlacement {
+  side?: ZardDropdownSide;
+  align?: ZardDropdownAlign;
+  sideOffset?: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -40,21 +52,31 @@ export class ZardDropdownService {
     this.renderer = this.rendererFactory.createRenderer(null, null);
   }
 
-  toggle(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
+  toggle(
+    triggerElement: ElementRef,
+    template: TemplateRef<unknown>,
+    viewContainerRef: ViewContainerRef,
+    placement?: ZardDropdownPlacement,
+  ) {
     if (this.isOpen()) {
       this.close();
     } else {
-      this.open(triggerElement, template, viewContainerRef);
+      this.open(triggerElement, template, viewContainerRef, placement);
     }
   }
 
-  private open(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
+  private open(
+    triggerElement: ElementRef,
+    template: TemplateRef<unknown>,
+    viewContainerRef: ViewContainerRef,
+    placement?: ZardDropdownPlacement,
+  ) {
     if (this.isOpen()) {
       this.close();
     }
 
     this.triggerElement = triggerElement;
-    this.createOverlay(triggerElement);
+    this.createOverlay(triggerElement, placement);
 
     if (!this.overlayRef) {
       return;
@@ -104,29 +126,16 @@ export class ZardDropdownService {
     trigger?.nativeElement.focus();
   }
 
-  private createOverlay(triggerElement: ElementRef) {
+  private createOverlay(triggerElement: ElementRef, placement?: ZardDropdownPlacement) {
     if (this.overlayRef) {
       this.destroyOverlay();
     }
 
     const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(triggerElement)
-      .withPositions([
-        {
-          originX: 'start',
-          originY: 'bottom',
-          overlayX: 'start',
-          overlayY: 'top',
-          offsetY: 4,
-        },
-        {
-          originX: 'start',
-          originY: 'top',
-          overlayX: 'start',
-          overlayY: 'bottom',
-          offsetY: -4,
-        },
-      ])
+      .withPositions(
+        buildDropdownPositions(placement?.side ?? 'bottom', placement?.align ?? 'start', placement?.sideOffset ?? 4),
+      )
       .withPush(false);
 
     this.overlayRef = this.overlay.create({
@@ -136,6 +145,22 @@ export class ZardDropdownService {
       minWidth: 200,
       maxHeight: 400,
     });
+
+    this.publishTriggerWidth(triggerElement);
+  }
+
+  /**
+   * Radix exposes the trigger's width to the menu as `--radix-dropdown-menu-trigger-width`, which
+   * shadcn uses to make a menu exactly as wide as the button that opened it. This is the Zard
+   * equivalent, published on the overlay pane so `w-(--z-dropdown-menu-trigger-width)` works inside.
+   */
+  private publishTriggerWidth(triggerElement: ElementRef) {
+    if (!this.overlayRef || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const width = (triggerElement.nativeElement as HTMLElement).getBoundingClientRect().width;
+    this.overlayRef.hostElement.style.setProperty('--z-dropdown-menu-trigger-width', `${width}px`);
   }
 
   private destroyOverlay() {

@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
-import { ZardDropdownService } from './dropdown.service';
+import { ZardDropdownService, type ZardDropdownPlacement } from './dropdown.service';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
@@ -80,7 +80,12 @@ export class ZardDropdownDirective implements OnInit {
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
-      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
+      this.dropdownService.toggle(
+        this.elementRef,
+        menuContent.contentTemplate(),
+        this.viewContainerRef,
+        this.placementOf(menuContent),
+      );
     }
   }
 
@@ -91,8 +96,22 @@ export class ZardDropdownDirective implements OnInit {
 
     const menuContent = this.zDropdownMenu();
     if (menuContent && !this.dropdownService.isOpen()) {
-      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
+      this.dropdownService.toggle(
+        this.elementRef,
+        menuContent.contentTemplate(),
+        this.viewContainerRef,
+        this.placementOf(menuContent),
+      );
     }
+  }
+
+  /** The content owns `zSide`/`zAlign`/`zSideOffset`, exactly as `DropdownMenuContent` does in shadcn. */
+  private placementOf(menuContent: ZardDropdownMenuContentComponent): ZardDropdownPlacement {
+    return {
+      side: menuContent.zSide(),
+      align: menuContent.zAlign(),
+      sideOffset: menuContent.zSideOffset(),
+    };
   }
 
   protected closeDropdown() {
