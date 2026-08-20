@@ -36,6 +36,7 @@ Here you can find all the components available in the library. We are working on
 - [Input OTP](/docs/components/input-otp)
 - [Item](/docs/components/item)
 - [Kbd](/docs/components/kbd)
+- [Marker](/docs/components/marker)
 - [Navigation Menu](/docs/components/navigation-menu)
 - [Pagination](/docs/components/pagination)
 - [Popover](/docs/components/popover)

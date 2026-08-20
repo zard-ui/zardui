@@ -326,4 +326,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Displays a message in a conversation, with optional avatar, header, footer, and alignment.',
     loadData: () => import('@zard/components/message/demo/message').then(m => m.MESSAGE),
   },
+  {
+    componentName: 'marker',
+    description: 'Displays an inline status, system note, bordered row, or labeled separator in a conversation.',
+    loadData: () => import('@zard/components/marker/demo/marker').then(m => m.MARKER),
+  },
 ];
