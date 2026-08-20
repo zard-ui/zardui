@@ -1,3 +1,13 @@
+## 1.0.0-beta.112 (2026-08-20)
+
+### ✨ Features
+
+- **context-menu:** add context menu component ([#713](https://github.com/zard-ui/zardui/pull/713))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.111 (2026-08-18)
 
 ### ✨ Features
