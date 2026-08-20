@@ -1,7 +1,6 @@
 /**
- * animation — tweens independentes de FPS (usam dt real), easing e um clock
- * keyed que sobrevive ao re-render. Base de spinner/progress/fade/typing/pulse.
- * (Implementação real.)
+ * animation — FPS-independent tweens (they use real dt), easing, and a keyed
+ * clock that survives a re-render. The basis of spinner/progress/fade/typing/pulse.
  */
 
 export type Easing = (t: number) => number;
