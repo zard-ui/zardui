@@ -404,4 +404,8 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
   How can I help you today?
 </z-message>`,
   },
+  marker: {
+    importCode: `import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';`,
+    templateCode: `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>`,
+  },
 };

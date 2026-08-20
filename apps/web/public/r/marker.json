@@ -1,0 +1,47 @@
+{
+  "$schema": "https://zardui.com/schema/registry-item.json",
+  "name": "marker",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "marker.component.ts",
+      "content": "import {\n  ChangeDetectionStrategy,\n  Component,\n  computed,\n  contentChild,\n  input,\n  TemplateRef,\n  ViewEncapsulation,\n} from '@angular/core';\n\nimport { NgIcon } from '@ng-icons/core';\nimport type { ClassValue } from 'clsx';\n\nimport { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\nimport { markerContentVariants, markerIconVariants, markerVariants, type ZardMarkerVariants } from './marker.variants';\n\n@Component({\n  selector: 'z-marker-icon, [z-marker-icon]',\n  template: '<ng-content />',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    'data-slot': 'marker-icon',\n    'aria-hidden': 'true',\n    '[class]': 'classes()',\n  },\n  exportAs: 'zMarkerIcon',\n})\nexport class ZardMarkerIconComponent {\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() => mergeClasses(markerIconVariants(), this.class()));\n}\n\n@Component({\n  selector: 'z-marker-content, [z-marker-content]',\n  template: '<ng-content />',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    'data-slot': 'marker-content',\n    '[class]': 'classes()',\n  },\n  exportAs: 'zMarkerContent',\n})\nexport class ZardMarkerContentComponent {\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() => mergeClasses(markerContentVariants(), this.class()));\n}\n\n@Component({\n  selector: 'z-marker, [z-marker]',\n  imports: [NgIcon, ZardMarkerContentComponent, ZardMarkerIconComponent, ZardStringTemplateOutletDirective],\n  template: `\n    @let icon = zIcon();\n\n    <ng-content select=\"z-marker-icon, [z-marker-icon]\" />\n    @if (icon && !hasIcon()) {\n      <z-marker-icon>\n        <ng-container *zStringTemplateOutlet=\"icon\">\n          <ng-icon [name]=\"iconName()!\" class=\"size-4!\" />\n        </ng-container>\n      </z-marker-icon>\n    }\n\n    <ng-content select=\"z-marker-content, [z-marker-content]\" />\n    @if (!hasContent()) {\n      <z-marker-content>\n        <ng-content />\n      </z-marker-content>\n    }\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    'data-slot': 'marker',\n    '[attr.data-variant]': 'zVariant()',\n    '[class]': 'classes()',\n  },\n  exportAs: 'zMarker',\n})\nexport class ZardMarkerComponent {\n  readonly zVariant = input<ZardMarkerVariants>('default');\n  readonly zIcon = input<TemplateRef<void> | string>();\n  readonly class = input<ClassValue>('');\n\n  /**\n   * A marker with no projected `z-marker-content` builds the row itself, so\n   * `<z-marker zIcon=\"lucideSearch\">Explored 4 files</z-marker>` is one tag. Project a\n   * slot and it wins: that is what unlocks a `class` override such as `shimmer`, or an\n   * icon that is a whole component like `z-spinner`.\n   */\n  private readonly projectedIcon = contentChild(ZardMarkerIconComponent, { descendants: false });\n  private readonly projectedContent = contentChild(ZardMarkerContentComponent, { descendants: false });\n\n  protected readonly hasIcon = computed(() => !!this.projectedIcon());\n  protected readonly hasContent = computed(() => !!this.projectedContent());\n  protected readonly classes = computed(() =>\n    mergeClasses(markerVariants({ zVariant: this.zVariant() }), this.class()),\n  );\n\n  protected readonly iconName = computed((): string | undefined => {\n    const icon = this.zIcon();\n    return icon instanceof TemplateRef ? undefined : icon;\n  });\n}\n"
+    },
+    {
+      "name": "marker.imports.ts",
+      "content": "export { ZardMarkerComponent, ZardMarkerContentComponent, ZardMarkerIconComponent } from './marker.component';\n\nimport { ZardMarkerComponent, ZardMarkerContentComponent, ZardMarkerIconComponent } from './marker.component';\n\nexport const ZardMarkerImports = [ZardMarkerComponent, ZardMarkerIconComponent, ZardMarkerContentComponent] as const;\n"
+    },
+    {
+      "name": "marker.variants.ts",
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\nexport const markerVariants = cva(\n  mergeClasses(\n    'group/marker relative flex min-h-4 w-full items-center gap-2 text-left text-sm text-muted-foreground',\n    \"[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4\",\n    '[a]:underline [a]:underline-offset-3 [a]:hover:text-foreground',\n  ),\n  {\n    variants: {\n      zVariant: {\n        default: '',\n        border: 'border-b border-border pb-2',\n        separator:\n          'before:mr-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ml-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',\n      },\n    },\n    defaultVariants: {\n      zVariant: 'default',\n    },\n  },\n);\n\nexport const markerIconVariants = cva(\"size-4 shrink-0 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4\");\n\nexport const markerContentVariants = cva(\n  mergeClasses(\n    'min-w-0 wrap-break-word',\n    'group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center',\n    '*:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',\n  ),\n);\n\nexport type ZardMarkerVariants = NonNullable<VariantProps<typeof markerVariants>['zVariant']>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './marker.component';\nexport * from './marker.imports';\nexport * from './marker.variants';\n"
+    }
+  ],
+  "registryDependencies": [
+    "spinner"
+  ],
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [
+        "lucideBookOpenCheck",
+        "lucideFileText",
+        "lucideGitBranch",
+        "lucideRotateCcw",
+        "lucideSearch"
+      ],
+      "tokens": [
+        "book-open-check",
+        "file-text",
+        "git-branch",
+        "rotate-ccw",
+        "search"
+      ]
+    }
+  }
+}

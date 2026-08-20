@@ -19,6 +19,7 @@ export * from './lib/shared/components/context-menu';
 export * from './lib/shared/components/date-picker';
 export * from './lib/shared/components/dialog';
 export * from './lib/shared/components/drawer';
+export * from './lib/shared/components/marker';
 export * from './lib/shared/components/message';
 export * from './lib/shared/components/separator';
 export * from './lib/shared/components/dropdown';

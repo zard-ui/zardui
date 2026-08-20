@@ -646,6 +646,28 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'marker',
+    registryDependencies: ['spinner'],
+    files: [
+      {
+        name: 'marker.component.ts',
+        content: '',
+      },
+      {
+        name: 'marker.imports.ts',
+        content: '',
+      },
+      {
+        name: 'marker.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'bubble',
     files: [
       {

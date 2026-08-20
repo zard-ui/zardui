@@ -481,6 +481,24 @@
       ]
     },
     {
+      "name": "marker",
+      "type": "registry:component",
+      "registryDependencies": [
+        "spinner"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "marker.component.ts",
+        "marker.imports.ts",
+        "marker.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "bubble",
       "type": "registry:component",
       "icons": {

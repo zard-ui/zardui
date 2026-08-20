@@ -46,6 +46,9 @@
     "bold": {
       "lucide": "lucideBold"
     },
+    "book-open-check": {
+      "lucide": "lucideBookOpenCheck"
+    },
     "bookmark": {
       "lucide": "lucideBookmark"
     },
@@ -246,6 +249,9 @@
     },
     "refresh-cw": {
       "lucide": "lucideRefreshCw"
+    },
+    "rotate-ccw": {
+      "lucide": "lucideRotateCcw"
     },
     "save": {
       "lucide": "lucideSave"
