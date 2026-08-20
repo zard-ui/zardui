@@ -29,6 +29,26 @@ import { ZardMessageImports } from './message.imports';
 })
 class TestMessageHost {}
 
+@Component({
+  selector: 'z-test-message-templates',
+  imports: [...ZardMessageImports],
+  template: `
+    <ng-template #header><span data-testid="header-tpl">Olivia</span></ng-template>
+    <ng-template #footer><span data-testid="footer-tpl">Read Yesterday</span></ng-template>
+
+    <z-message [zHeader]="header" [zFooter]="footer">Shorthand turn</z-message>
+
+    <z-message>
+      <z-message-content>
+        <z-message-header [zHeader]="header" />
+        <div>Composed turn</div>
+        <z-message-footer [zFooter]="footer" />
+      </z-message-content>
+    </z-message>
+  `,
+})
+class TestMessageTemplatesHost {}
+
 describe('ZardMessageComponent', () => {
   it('renders the full slot composition with data-slot attributes', async () => {
     await render(TestMessageHost);
@@ -199,5 +219,19 @@ describe('ZardMessageComponent shorthand', () => {
 
     expect(document.querySelector('[data-slot="message-header"]')).toHaveTextContent('Olivia');
     expect(document.querySelector('[data-slot="message-footer"]')).toHaveTextContent('Delivered');
+  });
+
+  it('renders a TemplateRef header and footer on the root and on the slots', async () => {
+    await render(TestMessageTemplatesHost);
+
+    const headers = document.querySelectorAll('[data-slot="message-header"]');
+    const footers = document.querySelectorAll('[data-slot="message-footer"]');
+
+    expect(headers.length).toBe(2);
+    expect(footers.length).toBe(2);
+    expect(document.querySelectorAll('[data-testid="header-tpl"]').length).toBe(2);
+    expect(document.querySelectorAll('[data-testid="footer-tpl"]').length).toBe(2);
+    headers.forEach(header => expect(header).toHaveTextContent('Olivia'));
+    footers.forEach(footer => expect(footer).toHaveTextContent('Read Yesterday'));
   });
 });
