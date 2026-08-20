@@ -296,12 +296,6 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/tooltip/demo/tooltip').then(m => m.TOOLTIP),
   },
   {
-    componentName: 'tree',
-    description:
-      'A hierarchical tree view for displaying nested data structures with expand/collapse, selection, and checkboxes.',
-    loadData: () => import('@zard/components/tree/demo/tree').then(m => m.TREE),
-  },
-  {
     componentName: 'collapsible',
     description: 'An interactive component which expands and collapses a panel.',
     loadData: () => import('@zard/components/collapsible/demo/collapsible').then(m => m.COLLAPSIBLE),

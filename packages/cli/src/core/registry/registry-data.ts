@@ -413,6 +413,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'dropdown-positions.ts',
+        content: '',
+      },
+      {
         name: 'dropdown-primitives.component.ts',
         content: '',
       },
@@ -1250,48 +1254,6 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'chart.imports.ts',
-        content: '',
-      },
-      {
-        name: 'index.ts',
-        content: '',
-      },
-    ],
-  },
-  {
-    name: 'tree',
-    registryDependencies: ['checkbox'],
-    files: [
-      {
-        name: 'tree.component.ts',
-        content: '',
-      },
-      {
-        name: 'tree-node.component.ts',
-        content: '',
-      },
-      {
-        name: 'tree-node-toggle.directive.ts',
-        content: '',
-      },
-      {
-        name: 'tree-node-content.component.ts',
-        content: '',
-      },
-      {
-        name: 'tree.service.ts',
-        content: '',
-      },
-      {
-        name: 'tree.types.ts',
-        content: '',
-      },
-      {
-        name: 'tree.variants.ts',
-        content: '',
-      },
-      {
-        name: 'tree.imports.ts',
         content: '',
       },
       {
