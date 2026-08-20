@@ -1,3 +1,13 @@
+## 1.0.0-beta.115 (2026-08-20)
+
+### ✨ Features
+
+- **marker:** add marker component ([#716](https://github.com/zard-ui/zardui/pull/716))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.114 (2026-08-20)
 
 ### ✨ Features
