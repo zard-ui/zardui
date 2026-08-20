@@ -34,7 +34,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
         </z-sidebar-content>
       </z-sidebar>
 
-      <z-dropdown-menu-content #projectMenu="zDropdownMenuContent" class="w-40">
+      <z-dropdown-menu-content #projectMenu="zDropdownMenuContent" class="w-40 rounded-lg" zSide="right" zAlign="start">
         <z-dropdown-menu-item (click)="lastAction.set('Rename')">Rename</z-dropdown-menu-item>
         <z-dropdown-menu-item (click)="lastAction.set('Duplicate')">Duplicate</z-dropdown-menu-item>
         <z-dropdown-menu-item (click)="lastAction.set('Delete')">Delete</z-dropdown-menu-item>

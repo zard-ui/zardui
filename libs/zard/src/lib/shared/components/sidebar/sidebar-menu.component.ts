@@ -46,6 +46,13 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
  */
 const SKELETON_WIDTHS = ['72%', '58%', '85%', '64%', '78%', '51%', '90%', '67%'];
 
+/** Object form of `zTooltip`, the Zard counterpart of passing `TooltipContent` props in shadcn. */
+export interface ZardSidebarMenuButtonTooltip {
+  content: string | TemplateRef<void>;
+  /** Force the tooltip visible (`false`) or suppressed (`true`), regardless of the sidebar state. */
+  hidden?: boolean;
+}
+
 @Component({
   selector: 'ul[z-sidebar-menu]',
   template: `
@@ -119,15 +126,29 @@ export class ZardSidebarMenuButtonComponent {
   readonly zType = input<ZardSidebarMenuButtonTypeVariants>('default');
   readonly zSize = input<ZardSidebarMenuButtonSizeVariants>('default');
   readonly zActive = input(false, { transform: booleanAttribute });
-  /** Shown only while the sidebar is collapsed on desktop, mirroring shadcn's hidden TooltipContent. */
-  readonly zTooltip = input<string | TemplateRef<void> | null>(null);
+  /**
+   * Shown only while the sidebar is collapsed on desktop, mirroring shadcn's hidden TooltipContent.
+   * Pass the object form to override that rule — `{ content, hidden: false }` keeps the tooltip on
+   * an expanded sidebar, which is what shadcn's `tooltip={{ children, hidden: false }}` does.
+   */
+  readonly zTooltip = input<string | TemplateRef<void> | ZardSidebarMenuButtonTooltip | null>(null);
   readonly class = input<ClassValue>('');
 
   protected readonly resolvedTooltip = computed(() => {
     const tooltip = this.zTooltip();
-    const isCollapsed = this.sidebarService.state() === 'collapsed' && !this.sidebarService.isMobile();
+    if (!tooltip) {
+      return null;
+    }
 
-    return tooltip && isCollapsed ? tooltip : null;
+    const isCollapsed = this.sidebarService.state() === 'collapsed' && !this.sidebarService.isMobile();
+    const isTooltipObject = typeof tooltip === 'object' && 'content' in tooltip;
+    const hidden = isTooltipObject ? (tooltip.hidden ?? !isCollapsed) : !isCollapsed;
+
+    if (hidden) {
+      return null;
+    }
+
+    return isTooltipObject ? tooltip.content : tooltip;
   });
 
   protected readonly classes = computed(() =>

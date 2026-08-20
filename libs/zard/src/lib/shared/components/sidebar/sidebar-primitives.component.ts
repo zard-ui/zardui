@@ -102,16 +102,18 @@ export class ZardSidebarSeparatorComponent {
  * Adds the sidebar look to a Zard input. Used as `<input z-input z-sidebar-input />`.
  *
  * The classes are static host classes rather than a `[class]` binding so they cannot be dropped by
- * the `[class]` binding that `input[z-input]` owns on the same element. `bg-background!` is needed
- * because the input's own `dark:bg-input/30` would otherwise win in dark mode — shadcn gets this for
- * free through `cn()`, which Zard cannot do across two separate directives.
+ * the `[class]` binding that `input[z-input]` owns on the same element. Both backgrounds are
+ * `!important` because they share their utility group with the input's own `bg-transparent` /
+ * `dark:bg-input/30`, and across two separate directives there is no `cn()` to resolve the tie.
+ * The dark value repeats the input's own so the result matches shadcn, where `cn()` keeps
+ * `dark:bg-input/30` alongside `bg-background` and the dark variant wins in dark mode.
  */
 @Directive({
   selector: 'input[z-sidebar-input]',
   host: {
     'data-slot': 'sidebar-input',
     'data-sidebar': 'input',
-    class: 'h-8 w-full bg-background! shadow-none',
+    class: 'h-8 w-full bg-background! shadow-none dark:bg-input/30!',
   },
   exportAs: 'zSidebarInput',
 })

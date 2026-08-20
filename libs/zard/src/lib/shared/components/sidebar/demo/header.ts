@@ -30,7 +30,11 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
                 <ng-icon name="lucideChevronDown" class="ml-auto" />
               </button>
 
-              <z-dropdown-menu-content #workspaces="zDropdownMenuContent" class="w-56">
+              <z-dropdown-menu-content
+                #workspaces="zDropdownMenuContent"
+                class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                zAlign="start"
+              >
                 <z-dropdown-menu-label>Workspaces</z-dropdown-menu-label>
                 @for (option of workspaces_; track option.name) {
                   <z-dropdown-menu-item (click)="workspace.set(option)">{{ option.name }}</z-dropdown-menu-item>

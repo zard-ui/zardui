@@ -143,8 +143,9 @@ export const SIDEBAR_API: ApiSection[] = [
       { name: 'zActive', description: 'Marks the row as the current one', type: 'boolean', default: 'false' },
       {
         name: 'zTooltip',
-        description: 'Label shown as a tooltip, but only while the sidebar is collapsed on desktop',
-        type: 'string | TemplateRef<void> | null',
+        description:
+          'Label shown as a tooltip, but only while the sidebar is collapsed on desktop. The object form overrides that rule: `{ content, hidden: false }` keeps the tooltip on an expanded sidebar',
+        type: 'string | TemplateRef<void> | { content: string | TemplateRef<void>; hidden?: boolean } | null',
         default: 'null',
       },
       CLASS_PROP,
