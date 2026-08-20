@@ -13,6 +13,43 @@ export const MESSAGE_API: ApiSection[] = [
         default: 'start',
       },
       {
+        name: '[zSrc]',
+        description:
+          'Avatar image of the sender. Renders the avatar slot for you; a projected z-message-avatar wins over it.',
+        type: 'string | SafeUrl',
+        default: '-',
+      },
+      {
+        name: '[zAlt]',
+        description: 'Alternative text of the shorthand avatar image.',
+        type: 'string',
+        default: '-',
+      },
+      {
+        name: '[zFallback]',
+        description: 'Initials shown while the shorthand avatar has no image, or instead of one.',
+        type: 'string',
+        default: '-',
+      },
+      {
+        name: '[zHeader]',
+        description: 'Content above the turn, such as a sender name. Only applies to the shorthand.',
+        type: 'string | TemplateRef<void>',
+        default: '-',
+      },
+      {
+        name: '[zFooter]',
+        description: 'Content below the turn, such as a delivery status. Only applies to the shorthand.',
+        type: 'string | TemplateRef<void>',
+        default: '-',
+      },
+      {
+        name: '[zVariant]',
+        description: 'Variant of the bubble the shorthand renders. Ignored once the content is projected.',
+        type: 'default | secondary | muted | tinted | outline | ghost | destructive',
+        default: 'default',
+      },
+      {
         name: '[class]',
         description: 'Additional classes to apply to the row.',
         type: 'ClassValue',
@@ -51,6 +88,12 @@ export const MESSAGE_API: ApiSection[] = [
       'Displays content above the message, such as a sender name. Stays aligned to the start regardless of zAlign.',
     props: [
       {
+        name: '[zHeader]',
+        description: 'Header content, as an alternative to projecting it.',
+        type: 'string | TemplateRef<void>',
+        default: '-',
+      },
+      {
         name: '[class]',
         description: 'Additional classes to apply to the header.',
         type: 'ClassValue',
@@ -62,6 +105,12 @@ export const MESSAGE_API: ApiSection[] = [
     selector: 'z-message-footer',
     description: 'Displays content below the message, such as status or actions. Aligns to the message side.',
     props: [
+      {
+        name: '[zFooter]',
+        description: 'Footer content, as an alternative to projecting it.',
+        type: 'string | TemplateRef<void>',
+        default: '-',
+      },
       {
         name: '[class]',
         description: 'Additional classes to apply to the footer.',

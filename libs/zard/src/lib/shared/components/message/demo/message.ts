@@ -4,6 +4,7 @@ import { MESSAGE_DEMO_AVATAR } from '@generated/components/message/demo/avatar';
 import { MESSAGE_DEMO_DEFAULT } from '@generated/components/message/demo/default';
 import { MESSAGE_DEMO_GROUP } from '@generated/components/message/demo/group';
 import { MESSAGE_DEMO_HEADER_FOOTER } from '@generated/components/message/demo/header-footer';
+import { MESSAGE_DEMO_SHORTHAND } from '@generated/components/message/demo/shorthand';
 import { MESSAGE_CLI_ADD } from '@generated/installation/cli/add-message';
 import { MESSAGE_MANUAL_CODE } from '@generated/installation/manual/message';
 import { MESSAGE_USAGE_CODE, MESSAGE_USAGE_IMPORT } from '@generated/usage/message';
@@ -14,6 +15,7 @@ import { ZardDemoMessageAvatarComponent } from './avatar';
 import { ZardDemoMessageDefaultComponent } from './default';
 import { ZardDemoMessageGroupComponent } from './group';
 import { ZardDemoMessageHeaderFooterComponent } from './header-footer';
+import { ZardDemoMessageShorthandComponent } from './shorthand';
 import { MESSAGE_API } from '../doc/api';
 
 export const MESSAGE = {
@@ -37,5 +39,6 @@ export const MESSAGE = {
     },
     { name: 'actions', component: ZardDemoMessageActionsComponent, codeData: MESSAGE_DEMO_ACTIONS },
     { name: 'attachment', component: ZardDemoMessageAttachmentComponent, codeData: MESSAGE_DEMO_ATTACHMENT },
+    { name: 'shorthand', component: ZardDemoMessageShorthandComponent, codeData: MESSAGE_DEMO_SHORTHAND },
   ],
 };

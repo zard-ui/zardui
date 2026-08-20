@@ -390,15 +390,8 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
   },
   message: {
     importCode: `import { ZardMessageImports } from '@/shared/components/message/message.imports';`,
-    templateCode: `<z-message>
-  <z-message-avatar>
-    <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
-  </z-message-avatar>
-  <z-message-content>
-    <z-bubble>
-      <z-bubble-content>How can I help you today?</z-bubble-content>
-    </z-bubble>
-  </z-message-content>
+    templateCode: `<z-message zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zVariant="muted">
+  How can I help you today?
 </z-message>`,
   },
 };

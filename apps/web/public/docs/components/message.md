@@ -18,10 +18,23 @@ npx zard-cli@latest add message
 ### Manual
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChild,
+  input,
+  type TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
+import type { SafeUrl } from '@angular/platform-browser';
 
 import type { ClassValue } from 'clsx';
 
+import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
+import { ZardBubbleComponent } from '@/shared/components/bubble/bubble.component';
+import type { ZardBubbleVariantVariants } from '@/shared/components/bubble/bubble.variants';
+import { ZardStringTemplateOutletDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
@@ -70,7 +83,14 @@ export class ZardMessageAvatarComponent {
 
 @Component({
   selector: 'z-message-header, [z-message-header]',
-  template: '<ng-content />',
+  imports: [ZardStringTemplateOutletDirective],
+  template: `
+    @let header = zHeader();
+    @if (header) {
+      <ng-container *zStringTemplateOutlet="header">{{ header }}</ng-container>
+    }
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -81,13 +101,21 @@ export class ZardMessageAvatarComponent {
 })
 export class ZardMessageHeaderComponent {
   readonly class = input<ClassValue>('');
+  readonly zHeader = input<string | TemplateRef<void>>();
 
   protected readonly classes = computed(() => mergeClasses(messageHeaderVariants(), this.class()));
 }
 
 @Component({
   selector: 'z-message-footer, [z-message-footer]',
-  template: '<ng-content />',
+  imports: [ZardStringTemplateOutletDirective],
+  template: `
+    @let footer = zFooter();
+    @if (footer) {
+      <ng-container *zStringTemplateOutlet="footer">{{ footer }}</ng-container>
+    }
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -98,6 +126,7 @@ export class ZardMessageHeaderComponent {
 })
 export class ZardMessageFooterComponent {
   readonly class = input<ClassValue>('');
+  readonly zFooter = input<string | TemplateRef<void>>();
 
   protected readonly classes = computed(() => mergeClasses(messageFooterVariants(), this.class()));
 }
@@ -130,9 +159,36 @@ export class ZardMessageContentComponent {
 
 @Component({
   selector: 'z-message, [z-message]',
+  imports: [
+    ZardAvatarComponent,
+    ZardBubbleComponent,
+    ZardMessageAvatarComponent,
+    ZardMessageContentComponent,
+    ZardMessageFooterComponent,
+    ZardMessageHeaderComponent,
+  ],
   template: `
     <ng-content select="z-message-avatar, [z-message-avatar]" />
-    <ng-content />
+    @if (!hasAvatar() && (zSrc() || zFallback())) {
+      <z-message-avatar>
+        <z-avatar [zSrc]="zSrc()" [zAlt]="zAlt()" [zFallback]="zFallback()" />
+      </z-message-avatar>
+    }
+
+    <ng-content select="z-message-content, [z-message-content]" />
+    @if (!hasContent()) {
+      <z-message-content>
+        @if (zHeader()) {
+          <z-message-header [zHeader]="zHeader()" />
+        }
+        <z-bubble [zVariant]="zVariant()">
+          <ng-content />
+        </z-bubble>
+        @if (zFooter()) {
+          <z-message-footer [zFooter]="zFooter()" />
+        }
+      </z-message-content>
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -147,6 +203,28 @@ export class ZardMessageComponent {
   readonly class = input<ClassValue>('');
   readonly zAlign = input<ZardMessageAlignVariants>('start');
 
+  /**
+   * Shorthand inputs. A message with no projected `z-message-content` builds the
+   * whole turn itself — content wrapper, bubble, header and footer — so the common
+   * case is one tag. Project the content and the row goes back to being pure
+   * layout: `zVariant`, `zHeader` and `zFooter` belong to the surface it would
+   * have rendered, so they no longer apply.
+   *
+   * The avatar is a separate slot: `zSrc` / `zFallback` work either way, and a
+   * projected `z-message-avatar` always wins over them.
+   */
+  readonly zVariant = input<ZardBubbleVariantVariants>('default');
+  readonly zSrc = input<string | SafeUrl>('');
+  readonly zAlt = input<string>('');
+  readonly zFallback = input<string>('');
+  readonly zHeader = input<string | TemplateRef<void>>();
+  readonly zFooter = input<string | TemplateRef<void>>();
+
+  private readonly projectedAvatar = contentChild(ZardMessageAvatarComponent, { descendants: false });
+  private readonly projectedContent = contentChild(ZardMessageContentComponent, { descendants: false });
+
+  protected readonly hasAvatar = computed(() => !!this.projectedAvatar());
+  protected readonly hasContent = computed(() => !!this.projectedContent());
   protected readonly classes = computed(() => mergeClasses(messageVariants(), this.class()));
 }
 ```
@@ -239,15 +317,8 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
 ```
 
 ```angular-html
-<z-message>
-  <z-message-avatar>
-    <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
-  </z-message-avatar>
-  <z-message-content>
-    <z-bubble>
-      <z-bubble-content>How can I help you today?</z-bubble-content>
-    </z-bubble>
-  </z-message-content>
+<z-message zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zVariant="muted">
+  How can I help you today?
 </z-message>
 ```
 
@@ -603,6 +674,45 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
 export class ZardDemoMessageAttachmentComponent {}
 ```
 
+### Shorthand
+
+```angular-ts
+import { Component } from '@angular/core';
+
+import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
+import { ZardMessageImports } from '@/shared/components/message/message.imports';
+
+@Component({
+  selector: 'z-demo-message-shorthand',
+  imports: [...ZardBubbleImports, ...ZardMessageImports],
+  template: `
+    <div class="flex w-full max-w-sm flex-col gap-6 py-12">
+      <z-message zSrc="https://github.com/Luizgomess.png" zAlt="@luizgomess" zVariant="muted">
+        How can I help you today?
+      </z-message>
+
+      <z-message zAlign="end" zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFooter="Delivered">
+        Send me the release notes.
+      </z-message>
+
+      <z-message zFallback="OL" zVariant="muted" zHeader="Olivia" zFooter="Read Yesterday">
+        The notes are in the shared doc.
+      </z-message>
+
+      <z-message zAlign="end" zSrc="https://github.com/srizzon.png" zAlt="@srizzon">
+        <z-message-content>
+          <z-bubble zVariant="outline">
+            <z-bubble-content>Project the content when the turn needs more than a bubble.</z-bubble-content>
+          </z-bubble>
+        </z-message-content>
+      </z-message>
+    </div>
+  `,
+  host: { class: 'contents' },
+})
+export class ZardDemoMessageShorthandComponent {}
+```
+
 ## API Reference
 
 ### z-message
@@ -612,6 +722,12 @@ The message row wrapper. It owns the avatar, alignment, header and footer around
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zAlign]` | The alignment of the message in the conversation. | `start \| end` | `start` |
+| `[zSrc]` | Avatar image of the sender. Renders the avatar slot for you; a projected z-message-avatar wins over it. | `string \| SafeUrl` | `-` |
+| `[zAlt]` | Alternative text of the shorthand avatar image. | `string` | `-` |
+| `[zFallback]` | Initials shown while the shorthand avatar has no image, or instead of one. | `string` | `-` |
+| `[zHeader]` | Content above the turn, such as a sender name. Only applies to the shorthand. | `string \| TemplateRef<void>` | `-` |
+| `[zFooter]` | Content below the turn, such as a delivery status. Only applies to the shorthand. | `string \| TemplateRef<void>` | `-` |
+| `[zVariant]` | Variant of the bubble the shorthand renders. Ignored once the content is projected. | `default \| secondary \| muted \| tinted \| outline \| ghost \| destructive` | `default` |
 | `[class]` | Additional classes to apply to the row. | `ClassValue` | `-` |
 
 ### z-message-avatar
@@ -636,6 +752,7 @@ Displays content above the message, such as a sender name. Stays aligned to the 
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[zHeader]` | Header content, as an alternative to projecting it. | `string \| TemplateRef<void>` | `-` |
 | `[class]` | Additional classes to apply to the header. | `ClassValue` | `-` |
 
 ### z-message-footer
@@ -644,6 +761,7 @@ Displays content below the message, such as status or actions. Aligns to the mes
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[zFooter]` | Footer content, as an alternative to projecting it. | `string \| TemplateRef<void>` | `-` |
 | `[class]` | Additional classes to apply to the footer. | `ClassValue` | `-` |
 
 ### z-message-group

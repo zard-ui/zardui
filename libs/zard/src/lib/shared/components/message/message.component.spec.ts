@@ -119,3 +119,85 @@ describe('ZardMessageComponent', () => {
     expect(message?.className).not.toContain('gap-2');
   });
 });
+
+describe('ZardMessageComponent shorthand', () => {
+  it('builds the whole turn from inputs', async () => {
+    await render(
+      `<z-message zSrc="/avatar.png" zAlt="@olivia" zVariant="muted" zHeader="Olivia" zFooter="Delivered">
+         How can I help you today?
+       </z-message>`,
+      { imports: [...ZardMessageImports] },
+    );
+
+    expect(document.querySelector('[data-slot="message-avatar"] [data-slot="avatar"]')).toBeInTheDocument();
+    expect(document.querySelector('[data-slot="message-content"]')).toBeInTheDocument();
+    expect(document.querySelector('[data-slot="message-header"]')).toHaveTextContent('Olivia');
+    expect(document.querySelector('[data-slot="message-footer"]')).toHaveTextContent('Delivered');
+    expect(document.querySelector('[data-slot="bubble"]')?.getAttribute('data-variant')).toBe('muted');
+    expect(document.querySelector('[data-slot="bubble-content"]')).toHaveTextContent('How can I help you today?');
+  });
+
+  it('renders the shorthand avatar from initials alone', async () => {
+    await render('<z-message zFallback="OL">Turn</z-message>', { imports: [...ZardMessageImports] });
+
+    expect(document.querySelector('[data-slot="message-avatar"]')).toHaveTextContent('OL');
+  });
+
+  it('renders no avatar slot without an image or initials', async () => {
+    await render('<z-message>Turn</z-message>', { imports: [...ZardMessageImports] });
+
+    expect(document.querySelector('[data-slot="message-avatar"]')).not.toBeInTheDocument();
+  });
+
+  it('lets a projected avatar win over the shorthand', async () => {
+    await render('<z-message zFallback="OL"><z-message-avatar>AV</z-message-avatar>Turn</z-message>', {
+      imports: [...ZardMessageImports],
+    });
+
+    const avatars = document.querySelectorAll('[data-slot="message-avatar"]');
+    expect(avatars.length).toBe(1);
+    expect(avatars[0]).toHaveTextContent('AV');
+  });
+
+  it('drops the surface shorthand once the content is projected', async () => {
+    await render(
+      `<z-message zHeader="Olivia" zFooter="Delivered" zVariant="muted">
+         <z-message-content><div>Turn</div></z-message-content>
+       </z-message>`,
+      { imports: [...ZardMessageImports] },
+    );
+
+    expect(document.querySelectorAll('[data-slot="message-content"]').length).toBe(1);
+    expect(document.querySelector('[data-slot="bubble"]')).not.toBeInTheDocument();
+    expect(document.querySelector('[data-slot="message-header"]')).not.toBeInTheDocument();
+    expect(document.querySelector('[data-slot="message-footer"]')).not.toBeInTheDocument();
+  });
+
+  it('lifts the shorthand avatar off the footer line', async () => {
+    await render('<z-message zFallback="OL" zFooter="Delivered">Turn</z-message>', {
+      imports: [...ZardMessageImports],
+    });
+
+    const message = document.querySelector('[data-slot="message"]');
+    expect(message?.querySelector('[data-slot="message-footer"]')).toBeInTheDocument();
+    expect(message?.querySelector('[data-slot="message-avatar"]')?.className).toContain(
+      'group-has-data-[slot=message-footer]/message:-translate-y-8',
+    );
+  });
+
+  it('accepts header and footer content on the sub-components too', async () => {
+    await render(
+      `<z-message>
+         <z-message-content>
+           <z-message-header zHeader="Olivia" />
+           <div>Turn</div>
+           <z-message-footer zFooter="Delivered" />
+         </z-message-content>
+       </z-message>`,
+      { imports: [...ZardMessageImports] },
+    );
+
+    expect(document.querySelector('[data-slot="message-header"]')).toHaveTextContent('Olivia');
+    expect(document.querySelector('[data-slot="message-footer"]')).toHaveTextContent('Delivered');
+  });
+});
