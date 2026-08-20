@@ -4,6 +4,7 @@ import { MARKER_DEMO_ICON } from '@generated/components/marker/demo/icon';
 import { MARKER_DEMO_LINK } from '@generated/components/marker/demo/link';
 import { MARKER_DEMO_SEPARATOR } from '@generated/components/marker/demo/separator';
 import { MARKER_DEMO_SHIMMER } from '@generated/components/marker/demo/shimmer';
+import { MARKER_DEMO_SHORTHAND } from '@generated/components/marker/demo/shorthand';
 import { MARKER_DEMO_STATUS } from '@generated/components/marker/demo/status';
 import { MARKER_DEMO_VARIANT } from '@generated/components/marker/demo/variant';
 import { MARKER_CLI_ADD } from '@generated/installation/cli/add-marker';
@@ -16,6 +17,7 @@ import { ZardDemoMarkerIconComponent } from './icon';
 import { ZardDemoMarkerLinkComponent } from './link';
 import { ZardDemoMarkerSeparatorComponent } from './separator';
 import { ZardDemoMarkerShimmerComponent } from './shimmer';
+import { ZardDemoMarkerShorthandComponent } from './shorthand';
 import { ZardDemoMarkerStatusComponent } from './status';
 import { ZardDemoMarkerVariantComponent } from './variant';
 import { MARKER_API } from '../doc/api';
@@ -39,5 +41,6 @@ export const MARKER = {
     { name: 'border', component: ZardDemoMarkerBorderComponent, codeData: MARKER_DEMO_BORDER },
     { name: 'icon', component: ZardDemoMarkerIconComponent, codeData: MARKER_DEMO_ICON },
     { name: 'link', component: ZardDemoMarkerLinkComponent, codeData: MARKER_DEMO_LINK },
+    { name: 'shorthand', component: ZardDemoMarkerShorthandComponent, codeData: MARKER_DEMO_SHORTHAND },
   ],
 };

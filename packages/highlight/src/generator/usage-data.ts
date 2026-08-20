@@ -406,11 +406,6 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
   },
   marker: {
     importCode: `import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';`,
-    templateCode: `<z-marker>
-  <z-marker-icon>
-    <ng-icon name="lucideSearch" />
-  </z-marker-icon>
-  <z-marker-content>Explored 4 files</z-marker-content>
-</z-marker>`,
+    templateCode: `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>`,
   },
 };

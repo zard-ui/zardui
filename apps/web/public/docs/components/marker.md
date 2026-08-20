@@ -18,34 +18,23 @@ npx zard-cli@latest add marker
 ### Manual
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChild,
+  input,
+  TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
 
+import { NgIcon } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { markerContentVariants, markerIconVariants, markerVariants, type ZardMarkerVariants } from './marker.variants';
-
-@Component({
-  selector: 'z-marker, [z-marker]',
-  template: '<ng-content />',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  host: {
-    'data-slot': 'marker',
-    '[attr.data-variant]': 'zVariant()',
-    '[class]': 'classes()',
-  },
-  exportAs: 'zMarker',
-})
-export class ZardMarkerComponent {
-  readonly zVariant = input<ZardMarkerVariants>('default');
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() =>
-    mergeClasses(markerVariants({ zVariant: this.zVariant() }), this.class()),
-  );
-}
 
 @Component({
   selector: 'z-marker-icon, [z-marker-icon]',
@@ -80,6 +69,63 @@ export class ZardMarkerContentComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(markerContentVariants(), this.class()));
+}
+
+@Component({
+  selector: 'z-marker, [z-marker]',
+  imports: [NgIcon, ZardMarkerContentComponent, ZardMarkerIconComponent, ZardStringTemplateOutletDirective],
+  template: `
+    @let icon = zIcon();
+
+    <ng-content select="z-marker-icon, [z-marker-icon]" />
+    @if (icon && !hasIcon()) {
+      <z-marker-icon>
+        <ng-container *zStringTemplateOutlet="icon">
+          <ng-icon [name]="iconName()!" class="size-4!" />
+        </ng-container>
+      </z-marker-icon>
+    }
+
+    <ng-content select="z-marker-content, [z-marker-content]" />
+    @if (!hasContent()) {
+      <z-marker-content>
+        <ng-content />
+      </z-marker-content>
+    }
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'marker',
+    '[attr.data-variant]': 'zVariant()',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zMarker',
+})
+export class ZardMarkerComponent {
+  readonly zVariant = input<ZardMarkerVariants>('default');
+  readonly zIcon = input<TemplateRef<void> | string>();
+  readonly class = input<ClassValue>('');
+
+  /**
+   * A marker with no projected `z-marker-content` builds the row itself, so
+   * `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>` is one tag. Project a
+   * slot and it wins: that is what unlocks a `class` override such as `shimmer`, or an
+   * icon that is a whole component like `z-spinner`.
+   */
+  private readonly projectedIcon = contentChild(ZardMarkerIconComponent, { descendants: false });
+  private readonly projectedContent = contentChild(ZardMarkerContentComponent, { descendants: false });
+
+  protected readonly hasIcon = computed(() => !!this.projectedIcon());
+  protected readonly hasContent = computed(() => !!this.projectedContent());
+  protected readonly classes = computed(() =>
+    mergeClasses(markerVariants({ zVariant: this.zVariant() }), this.class()),
+  );
+
+  protected readonly iconName = computed((): string | undefined => {
+    const icon = this.zIcon();
+    return icon instanceof TemplateRef ? undefined : icon;
+  });
 }
 ```
 
@@ -143,12 +189,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 ```
 
 ```angular-html
-<z-marker>
-  <z-marker-icon>
-    <ng-icon name="lucideSearch" />
-  </z-marker-icon>
-  <z-marker-content>Explored 4 files</z-marker-content>
-</z-marker>
+<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>
 ```
 
 ## Examples
@@ -416,20 +457,56 @@ export class ZardDemoMarkerLinkComponent {
 }
 ```
 
+### Shorthand
+
+```angular-ts
+import { Component } from '@angular/core';
+
+import { provideIcons } from '@ng-icons/core';
+import { lucideGitBranch, lucideSearch } from '@ng-icons/lucide';
+
+import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
+import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
+
+@Component({
+  selector: 'z-demo-marker-shorthand',
+  imports: [ZardSpinnerComponent, ...ZardMarkerImports],
+  template: `
+    <div class="flex w-full max-w-sm min-w-sm flex-col gap-8">
+      <z-marker>Short rows do not need the content wrapper.</z-marker>
+
+      <z-marker zIcon="lucideSearch">Explored 4 files</z-marker>
+
+      <z-marker zVariant="border" zIcon="lucideGitBranch">Switched to release-candidate</z-marker>
+
+      <z-marker zVariant="separator">Today</z-marker>
+
+      <z-marker role="status">
+        <z-marker-icon><z-spinner /></z-marker-icon>
+        <z-marker-content class="shimmer">Project the slots when you need to style them.</z-marker-content>
+      </z-marker>
+    </div>
+  `,
+  viewProviders: [provideIcons({ lucideGitBranch, lucideSearch })],
+})
+export class ZardDemoMarkerShorthandComponent {}
+```
+
 ## API Reference
 
 ### z-marker, [z-marker]
 
-Root of an inline conversation marker. Use the attribute selector on an `a` or `button` to make the whole marker interactive, and set `role="status"` for streaming or in-progress markers.
+Root of an inline conversation marker. Content projected without a `z-marker-content` child gets the content surface for free, so `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>` is a complete row. Use the attribute selector on an `a` or `button` to make the whole marker interactive, and set `role="status"` for streaming or in-progress markers.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zVariant]` | Layout of the marker: inline row, bordered row, or a centered label with divider lines on each side. | `default \| border \| separator` | `default` |
+| `[zIcon]` | Icon rendered in the decorative icon slot. A string is the `@ng-icons` name to render — register it with `provideIcons` — and a template is rendered as is. Ignored when a `z-marker-icon` is projected. | `string \| TemplateRef<void>` | `-` |
 | `[class]` | Override or extend default classes. | `ClassValue` | `-` |
 
 ### z-marker-icon, [z-marker-icon]
 
-Decorative icon slot, hidden from assistive tech with `aria-hidden`.
+Decorative icon slot, hidden from assistive tech with `aria-hidden`. Project it when the icon is a component such as `z-spinner`; otherwise `zIcon` on the root is enough.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -437,7 +514,7 @@ Decorative icon slot, hidden from assistive tech with `aria-hidden`.
 
 ### z-marker-content, [z-marker-content]
 
-Text content of the marker. Add the `shimmer` class for an animated streaming-text effect, which is disabled automatically when the user prefers reduced motion.
+Text content of the marker. Optional — the root wraps bare projected content in this surface. Project it to add classes such as `shimmer`, an animated streaming-text effect that is disabled automatically when the user prefers reduced motion.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

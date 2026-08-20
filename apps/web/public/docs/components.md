@@ -37,6 +37,7 @@ Here you can find all the components available in the library. We are working on
 - [Item](/docs/components/item)
 - [Kbd](/docs/components/kbd)
 - [Marker](/docs/components/marker)
+- [Message](/docs/components/message)
 - [Navigation Menu](/docs/components/navigation-menu)
 - [Pagination](/docs/components/pagination)
 - [Popover](/docs/components/popover)

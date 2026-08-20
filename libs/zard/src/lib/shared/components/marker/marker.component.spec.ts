@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { provideIcons } from '@ng-icons/core';
+import { lucideSearch } from '@ng-icons/lucide';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
@@ -112,6 +114,65 @@ describe('ZardMarkerComponent', () => {
     const button = screen.getByRole('button', { name: 'Revert this change' });
     await userEvent.click(button);
     expect(fixture.componentInstance.clicks).toBe(1);
+  });
+
+  it('wraps bare projected content in the content surface', async () => {
+    const { container } = await render(`<z-marker>Ana joined the conversation</z-marker>`, {
+      imports: [...ZardMarkerImports],
+    });
+
+    const content = container.querySelector('[data-slot="marker-content"]');
+    expect(content).toBeInTheDocument();
+    expect(content).toHaveTextContent('Ana joined the conversation');
+    expect(container.querySelectorAll('[data-slot="marker-content"]').length).toBe(1);
+  });
+
+  it('does not double-wrap when the content slot is projected', async () => {
+    const { container } = await render(
+      `<z-marker><z-marker-content class="shimmer">Thinking...</z-marker-content></z-marker>`,
+      { imports: [...ZardMarkerImports] },
+    );
+
+    const contents = container.querySelectorAll('[data-slot="marker-content"]');
+    expect(contents.length).toBe(1);
+    expect(contents[0].className).toContain('shimmer');
+  });
+
+  it('renders zIcon by name into a decorative icon slot', async () => {
+    const { container } = await render(`<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>`, {
+      imports: [...ZardMarkerImports],
+      providers: [provideIcons({ lucideSearch })],
+    });
+
+    const icon = container.querySelector('[data-slot="marker-icon"]');
+    expect(icon).toBeInTheDocument();
+    expect(icon?.getAttribute('aria-hidden')).toBe('true');
+    expect(icon?.querySelector('ng-icon')).toBeInTheDocument();
+  });
+
+  it('renders zIcon given as a template', async () => {
+    const { container } = await render(
+      `<ng-template #icon><span data-testid="tpl-icon">*</span></ng-template>
+       <z-marker [zIcon]="icon">Synced</z-marker>`,
+      { imports: [...ZardMarkerImports] },
+    );
+
+    expect(screen.getByTestId('tpl-icon')).toBeInTheDocument();
+    expect(container.querySelectorAll('[data-slot="marker-icon"]').length).toBe(1);
+  });
+
+  it('lets a projected icon win over zIcon', async () => {
+    const { container } = await render(
+      `<z-marker zIcon="lucideSearch">
+         <z-marker-icon><span data-testid="projected">P</span></z-marker-icon>
+         Explored 4 files
+       </z-marker>`,
+      { imports: [...ZardMarkerImports], providers: [provideIcons({ lucideSearch })] },
+    );
+
+    expect(container.querySelectorAll('[data-slot="marker-icon"]').length).toBe(1);
+    expect(screen.getByTestId('projected')).toBeInTheDocument();
+    expect(container.querySelector('ng-icon')).not.toBeInTheDocument();
   });
 
   it('activates the button marker with the keyboard', async () => {

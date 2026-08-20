@@ -83,8 +83,8 @@
 /docs/components/drawer
 /docs/components/bubble
 /docs/components/context-menu
-/docs/components/marker
 /docs/components/message
+/docs/components/marker
 /docs/contribute
 /docs/contribute/setup
 /docs/contribute/architecture
