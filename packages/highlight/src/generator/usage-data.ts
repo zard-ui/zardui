@@ -338,10 +338,6 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
     importCode: `import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';`,
     templateCode: `<button z-button zType="outline" zTooltip="Add to library">Hover</button>`,
   },
-  tree: {
-    importCode: `import { ZardTreeImports } from '@/shared/components/tree/tree.imports';`,
-    templateCode: `<z-tree [data]="treeData"></z-tree>`,
-  },
   collapsible: {
     importCode: `import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsible.imports';`,
     templateCode: `<z-collapsible>
@@ -363,5 +359,43 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
     <button z-sidebar-trigger></button>
   </main>
 </z-sidebar-provider>`,
+  },
+  drawer: {
+    importCode: `import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';`,
+    templateCode: `<button type="button" z-button zType="outline" (click)="visible.set(true)">Open</button>
+
+<z-drawer [(zVisible)]="visible">
+  <z-drawer-header>
+    <z-drawer-title>Are you absolutely sure?</z-drawer-title>
+    <z-drawer-description>This action cannot be undone.</z-drawer-description>
+  </z-drawer-header>
+
+  <div class="p-4"><!-- Content here --></div>
+
+  <z-drawer-footer>
+    <button type="button" z-button>Submit</button>
+    <button type="button" z-button zType="outline" z-drawer-close>Cancel</button>
+  </z-drawer-footer>
+</z-drawer>`,
+  },
+  bubble: {
+    importCode: `import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';`,
+    templateCode: `<z-bubble>
+  <z-bubble-content>I checked the registry output and removed the stale route.</z-bubble-content>
+  <z-bubble-reactions>
+    <span>👍</span>
+  </z-bubble-reactions>
+</z-bubble>`,
+  },
+  'context-menu': {
+    importCode: `import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';`,
+    templateCode: `<div z-context-menu [zContextMenuTriggerFor]="menu">Right click here</div>
+
+<z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-48">
+  <z-dropdown-menu-item>Back</z-dropdown-menu-item>
+  <z-dropdown-menu-item>Reload</z-dropdown-menu-item>
+  <z-dropdown-menu-separator />
+  <z-dropdown-menu-item zType="destructive">Delete</z-dropdown-menu-item>
+</z-dropdown-menu-content>`,
   },
 };

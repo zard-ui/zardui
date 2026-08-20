@@ -1,0 +1,49 @@
+{
+  "$schema": "https://zardui.com/schema/registry-item.json",
+  "name": "context-menu",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "context-menu.directive.ts",
+      "content": "import {\n  booleanAttribute,\n  computed,\n  Directive,\n  effect,\n  ElementRef,\n  inject,\n  input,\n  output,\n  type TemplateRef,\n  ViewContainerRef,\n} from '@angular/core';\n\nimport { type ZardDropdownMenuContentComponent } from '@/shared/components/dropdown/dropdown-menu-content.component';\nimport { ZardDropdownService } from '@/shared/components/dropdown/dropdown.service';\n\nimport { ZardContextMenuService } from './context-menu.service';\n\n/**\n * Opens the menu bound to `[zContextMenuTriggerFor]` at the pointer, replacing the browser's own\n * menu over this element. The keyboard route is the same one native context menus answer to — the\n * `ContextMenu` key and `Shift + F10` — and opens the menu at the centre of the element.\n *\n * ```html\n * <div z-context-menu [zContextMenuTriggerFor]=\"menu\">Right click here</div>\n *\n * <z-dropdown-menu-content #menu=\"zDropdownMenuContent\" class=\"w-52\">\n *   <z-dropdown-menu-item>Back</z-dropdown-menu-item>\n * </z-dropdown-menu-content>\n * ```\n *\n * Set `[zDisabled]` to hand the native menu back to the browser.\n */\n@Directive({\n  selector: '[z-context-menu]',\n  host: {\n    'data-slot': 'context-menu-trigger',\n    class: 'select-none',\n    // The iOS long-press callout would race the menu for the same gesture.\n    '[style.-webkit-touch-callout]': '\"none\"',\n    /**\n     * Focusable so the keyboard route works, but carrying no ARIA of its own: `aria-haspopup` and\n     * `aria-expanded` are invalid on a generic element, and the menu announces itself — it is a\n     * `role=\"menu\"` that takes the focus when it opens. This is what shadcn renders too.\n     */\n    '[attr.tabindex]': 'zDisabled() ? null : \"0\"',\n    '[attr.data-state]': 'isOpen() ? \"open\" : \"closed\"',\n    '[attr.data-disabled]': 'zDisabled() || null',\n    '(contextmenu)': 'onContextMenu($event)',\n    '(keydown)': 'onKeydown($event)',\n  },\n  exportAs: 'zContextMenu',\n})\nexport class ZardContextMenuDirective {\n  private readonly contextMenuService = inject(ZardContextMenuService);\n  private readonly dropdownService = inject(ZardDropdownService);\n  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);\n  private readonly viewContainerRef = inject(ViewContainerRef);\n\n  readonly zContextMenuTriggerFor = input.required<ZardDropdownMenuContentComponent | TemplateRef<void>>();\n  readonly zDisabled = input(false, { transform: booleanAttribute });\n\n  readonly zVisibleChange = output<boolean>();\n\n  /** Open *and* owned by this trigger — several may share one page, only one may be open. */\n  readonly isOpen = computed(\n    () => this.dropdownService.isOpen() && this.dropdownService.getTriggerElement() === this.elementRef,\n  );\n\n  private lastEmitted = false;\n\n  constructor() {\n    effect(() => {\n      const visible = this.isOpen();\n      if (visible === this.lastEmitted) {\n        return;\n      }\n\n      this.lastEmitted = visible;\n      this.zVisibleChange.emit(visible);\n    });\n  }\n\n  open(origin?: MouseEvent): void {\n    if (this.zDisabled()) {\n      return;\n    }\n\n    this.contextMenuService.create(origin ?? this.elementCenter(), this.zContextMenuTriggerFor(), {\n      focusOrigin: this.elementRef,\n      viewContainerRef: this.viewContainerRef,\n    });\n  }\n\n  close(): void {\n    if (this.isOpen()) {\n      this.contextMenuService.close();\n    }\n  }\n\n  protected onContextMenu(event: MouseEvent): void {\n    if (this.zDisabled()) {\n      return;\n    }\n\n    // Owning `contextmenu` is the whole point of the component, and stopping it here is what lets\n    // a nested trigger win over the one wrapping it instead of both opening.\n    event.preventDefault();\n    event.stopPropagation();\n\n    this.open(event);\n  }\n\n  protected onKeydown(event: KeyboardEvent): void {\n    if (this.zDisabled()) {\n      return;\n    }\n\n    if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) {\n      event.preventDefault();\n      this.open();\n    }\n  }\n\n  /** Where a keyboard-opened menu is anchored, since there is no pointer to anchor it to. */\n  private elementCenter(): { x: number; y: number } {\n    const rect = this.elementRef.nativeElement.getBoundingClientRect();\n    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };\n  }\n}\n"
+    },
+    {
+      "name": "context-menu.service.ts",
+      "content": "import { type ElementRef, inject, Injectable, type TemplateRef, type ViewContainerRef } from '@angular/core';\n\nimport { ZardDropdownMenuContentComponent } from '@/shared/components/dropdown/dropdown-menu-content.component';\nimport { ZardDropdownService, type ZardMenuOrigin } from '@/shared/components/dropdown/dropdown.service';\n\nexport interface ZardContextMenuOptions {\n  /** Where the focus returns to once the menu closes. Defaults to whatever had it. */\n  focusOrigin?: ElementRef;\n  /**\n   * Required only when `menu` is a bare `TemplateRef` — a `z-dropdown-menu-content` carries its\n   * own, so the common call is just `create(event, menu)`.\n   */\n  viewContainerRef?: ViewContainerRef;\n}\n\n/**\n * Opens a menu at a pointer event or a coordinate, the way `NzContextMenuService.create()` does.\n * It exists for what the `[z-context-menu]` directive cannot express: one shared menu for many\n * rows, whose content depends on which row was clicked, or an anchor that is a point on a canvas\n * rather than an element.\n *\n * ```ts\n * private readonly contextMenu = inject(ZardContextMenuService);\n *\n * openMenu(event: MouseEvent, row: Row) {\n *   this.selected.set(row);\n *   this.contextMenu.create(event, this.rowMenu());\n * }\n * ```\n *\n * The overlay is the dropdown's, so a menu opened here closes on the same terms as any other:\n * selecting an item, clicking outside, scrolling or `Escape`.\n */\n@Injectable({ providedIn: 'root' })\nexport class ZardContextMenuService {\n  private readonly dropdownService = inject(ZardDropdownService);\n\n  /** True while a menu opened through this service — or any dropdown — is on screen. */\n  readonly isOpen = this.dropdownService.isOpen;\n\n  create(\n    origin: MouseEvent | ZardMenuOrigin,\n    menu: ZardDropdownMenuContentComponent | TemplateRef<void>,\n    options?: ZardContextMenuOptions,\n  ): void {\n    const template = menu instanceof ZardDropdownMenuContentComponent ? menu.contentTemplate() : menu;\n    const viewContainerRef =\n      menu instanceof ZardDropdownMenuContentComponent ? menu.viewContainerRef : options?.viewContainerRef;\n\n    if (!viewContainerRef) {\n      throw new Error(\n        'ZardContextMenuService.create() needs a viewContainerRef when the menu is a TemplateRef. ' +\n          'Pass one in the options, or hand it a z-dropdown-menu-content instead.',\n      );\n    }\n\n    this.dropdownService.openAt(toOrigin(origin), template, viewContainerRef, options?.focusOrigin);\n  }\n\n  close(): void {\n    this.dropdownService.close();\n  }\n}\n\n/**\n * A `MouseEvent` already carries the viewport coordinates the overlay anchors to. Duck-typed\n * rather than `instanceof`: `MouseEvent` is not defined on the server.\n */\nfunction toOrigin(origin: MouseEvent | ZardMenuOrigin): ZardMenuOrigin {\n  return 'clientX' in origin ? { x: origin.clientX, y: origin.clientY } : origin;\n}\n"
+    },
+    {
+      "name": "context-menu.imports.ts",
+      "content": "import { ZardContextMenuDirective } from '@/shared/components/context-menu/context-menu.directive';\nimport { ZardDropdownMenuItemComponent } from '@/shared/components/dropdown/dropdown-item.component';\nimport { ZardDropdownMenuContentComponent } from '@/shared/components/dropdown/dropdown-menu-content.component';\nimport {\n  ZardDropdownMenuCheckboxItemComponent,\n  ZardDropdownMenuGroupComponent,\n  ZardDropdownMenuLabelComponent,\n  ZardDropdownMenuRadioGroupComponent,\n  ZardDropdownMenuRadioItemComponent,\n  ZardDropdownMenuSeparatorComponent,\n  ZardDropdownMenuShortcutComponent,\n} from '@/shared/components/dropdown/dropdown-primitives.component';\nimport {\n  ZardDropdownMenuSubContentComponent,\n  ZardDropdownMenuSubTriggerComponent,\n} from '@/shared/components/dropdown/dropdown-submenu.component';\n\n/** The trigger plus every menu primitive the content is built from. */\nexport const ZardContextMenuImports = [\n  ZardContextMenuDirective,\n  ZardDropdownMenuContentComponent,\n  ZardDropdownMenuItemComponent,\n  ZardDropdownMenuGroupComponent,\n  ZardDropdownMenuLabelComponent,\n  ZardDropdownMenuSeparatorComponent,\n  ZardDropdownMenuShortcutComponent,\n  ZardDropdownMenuCheckboxItemComponent,\n  ZardDropdownMenuRadioGroupComponent,\n  ZardDropdownMenuRadioItemComponent,\n  ZardDropdownMenuSubTriggerComponent,\n  ZardDropdownMenuSubContentComponent,\n] as const;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './context-menu.directive';\nexport * from './context-menu.imports';\nexport * from './context-menu.service';\n"
+    }
+  ],
+  "registryDependencies": [
+    "dropdown"
+  ],
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [
+        "lucideClipboardPaste",
+        "lucideCopy",
+        "lucidePencil",
+        "lucideScissors",
+        "lucideShare",
+        "lucideTrash2"
+      ],
+      "tokens": [
+        "clipboard-paste",
+        "copy",
+        "pencil",
+        "scissors",
+        "share",
+        "trash-2"
+      ]
+    }
+  }
+}

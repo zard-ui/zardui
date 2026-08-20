@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.107",
+  "version": "1.0.0-beta.112",
   "items": [
     {
       "name": "core",
@@ -295,6 +295,35 @@
       ]
     },
     {
+      "name": "drawer",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideX"
+        ],
+        "tokens": [
+          "x"
+        ]
+      },
+      "files": [
+        "drawer.component.ts",
+        "drawer-panel.component.ts",
+        "drawer-container.component.ts",
+        "drawer-host.ts",
+        "drawer-stack.ts",
+        "drawer-ref.ts",
+        "drawer.service.ts",
+        "drawer.utils.ts",
+        "drawer.variants.ts",
+        "drawer.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "dialog",
       "type": "registry:component",
       "registryDependencies": [
@@ -319,10 +348,10 @@
       ]
     },
     {
-      "name": "dropdown",
+      "name": "context-menu",
       "type": "registry:component",
       "registryDependencies": [
-        "menu"
+        "dropdown"
       ],
       "icons": {
         "family": "lucide",
@@ -330,7 +359,31 @@
         "tokens": []
       },
       "files": [
+        "context-menu.directive.ts",
+        "context-menu.service.ts",
+        "context-menu.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "dropdown",
+      "type": "registry:component",
+      "registryDependencies": [
+        "menu"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronRight"
+        ],
+        "tokens": [
+          "chevron-right"
+        ]
+      },
+      "files": [
         "dropdown.component.ts",
+        "dropdown-submenu.component.ts",
+        "menu-keyboard.ts",
         "dropdown-item.component.ts",
         "dropdown-menu-content.component.ts",
         "dropdown-positions.ts",
@@ -424,6 +477,21 @@
         "item.component.ts",
         "item.imports.ts",
         "item.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "bubble",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "bubble.component.ts",
+        "bubble.imports.ts",
+        "bubble.variants.ts",
         "index.ts"
       ]
     },

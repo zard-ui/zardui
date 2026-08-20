@@ -367,6 +367,56 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'drawer',
+    registryDependencies: ['button'],
+    files: [
+      {
+        name: 'drawer.component.ts',
+        content: '',
+      },
+      {
+        name: 'drawer-panel.component.ts',
+        content: '',
+      },
+      {
+        name: 'drawer-container.component.ts',
+        content: '',
+      },
+      {
+        name: 'drawer-host.ts',
+        content: '',
+      },
+      {
+        name: 'drawer-stack.ts',
+        content: '',
+      },
+      {
+        name: 'drawer-ref.ts',
+        content: '',
+      },
+      {
+        name: 'drawer.service.ts',
+        content: '',
+      },
+      {
+        name: 'drawer.utils.ts',
+        content: '',
+      },
+      {
+        name: 'drawer.variants.ts',
+        content: '',
+      },
+      {
+        name: 'drawer.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'dialog',
     registryDependencies: ['button'],
     files: [
@@ -397,11 +447,41 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'context-menu',
+    registryDependencies: ['dropdown'],
+    files: [
+      {
+        name: 'context-menu.directive.ts',
+        content: '',
+      },
+      {
+        name: 'context-menu.service.ts',
+        content: '',
+      },
+      {
+        name: 'context-menu.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'dropdown',
     registryDependencies: ['menu'],
     files: [
       {
         name: 'dropdown.component.ts',
+        content: '',
+      },
+      {
+        name: 'dropdown-submenu.component.ts',
+        content: '',
+      },
+      {
+        name: 'menu-keyboard.ts',
         content: '',
       },
       {
@@ -557,6 +637,27 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'item.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'bubble',
+    files: [
+      {
+        name: 'bubble.component.ts',
+        content: '',
+      },
+      {
+        name: 'bubble.imports.ts',
+        content: '',
+      },
+      {
+        name: 'bubble.variants.ts',
         content: '',
       },
       {

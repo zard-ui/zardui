@@ -2,10 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   numberAttribute,
   type TemplateRef,
   viewChild,
+  ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
 
@@ -39,6 +41,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   exportAs: 'zDropdownMenuContent',
 })
 export class ZardDropdownMenuContentComponent {
+  /**
+   * Where the template is instantiated from when a service — rather than a trigger directive —
+   * opens this menu, so `ZardContextMenuService.create()` needs nothing but the menu itself.
+   */
+  readonly viewContainerRef = inject(ViewContainerRef);
+
   readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('contentTemplate');
 
   readonly class = input<ClassValue>('');

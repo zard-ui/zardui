@@ -22,35 +22,25 @@ export const HEADER_PATHS: NavItem[] = [
   { name: 'Themes', path: '/themes', available: true },
 ];
 
+/**
+ * Shortcuts to what people look for most, at the very top of the sidebar.
+ * Repeating entries that also live in "Get Started" is deliberate — the point is
+ * reaching them in one click, not listing each page exactly once.
+ */
 export const SECTIONS: NavSection = {
   title: 'Sections',
   data: [
-    { name: 'Get Started', path: '/docs/introduction', available: true },
-    {
-      name: 'Components',
-      path: '/docs/components',
-      available: true,
-    },
-    {
-      name: 'Registry',
-      path: '/docs/registry',
-      available: true,
-    },
-    {
-      name: 'MCP Server',
-      path: '/docs/mcp',
-      available: true,
-    },
-    {
-      name: 'Roadmap',
-      path: '/docs/roadmap',
-      available: true,
-    },
-    {
-      name: 'Changelog',
-      path: '/docs/changelog',
-      available: true,
-    },
+    { name: 'Introduction', path: '/docs/introduction', available: true },
+    { name: 'Components', path: '/docs/components', available: true },
+    { name: 'Installation', path: '/docs/installation', available: true },
+    { name: 'Theming', path: '/docs/theming', available: true },
+    { name: 'CLI', path: '/docs/cli', available: true },
+    { name: 'Typeset', path: '/docs/typeset', available: false },
+    { name: 'Skills', path: '/docs/skills', available: true },
+    { name: 'Registry', path: '/docs/registry', available: true },
+    { name: 'MCP Server', path: '/docs/mcp', available: true },
+    { name: 'Roadmap', path: '/docs/roadmap', available: true },
+    { name: 'Changelog', path: '/docs/changelog', available: true },
   ],
 };
 
@@ -60,13 +50,16 @@ export const DOCS_PATH: NavSection = {
     { name: 'Installation', path: '/docs/installation', available: true },
     { name: 'components.json', path: '/docs/components-json', available: true },
     { name: 'Theming', path: '/docs/theming', available: true },
+    { name: 'Typeset', path: '/docs/typeset', available: false },
     { name: 'Dark Mode', path: '/docs/dark-mode', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
-    { name: 'Blocks', path: '/docs/blocks', available: true },
-    { name: 'Pre processors', path: '/docs/pre-processors', available: true },
+    { name: 'Monorepo', path: '/docs/monorepo', available: true },
+    { name: 'Skills', path: '/docs/skills', available: true },
+    { name: 'MCP Server', path: '/docs/mcp', available: true },
     { name: 'Figma', path: '/docs/figma', available: true },
     { name: 'llms.txt', path: '/llms.txt', available: true, external: true },
-
+    { name: 'Pre processors', path: '/docs/pre-processors', available: true },
+    { name: 'Roadmap', path: '/docs/roadmap', available: true },
     { name: 'Version Support', path: '/docs/version-support', available: true },
     { name: 'About & Credits', path: '/docs/about', available: true },
   ],
@@ -140,6 +133,9 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Kbd', path: '/docs/components/kbd', available: true },
     { name: 'Collapsible', path: '/docs/components/collapsible', available: true },
     { name: 'Sidebar', path: '/docs/components/sidebar', available: true },
+    { name: 'Drawer', path: '/docs/components/drawer', available: true },
+    { name: 'Bubble', path: '/docs/components/bubble', available: true },
+    { name: 'Context Menu', path: '/docs/components/context-menu', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
@@ -162,9 +158,9 @@ export const CONTRIBUTE_PATH: NavSection = {
 
 export const SIDEBAR_PATHS: NavSection[] = [
   SECTIONS,
-  DOCS_PATH,
   COMPONENTS_PATH,
+  DOCS_PATH,
   FORMS_PATH,
-  CONTRIBUTE_PATH,
   FEATURED_PATH,
+  CONTRIBUTE_PATH,
 ];

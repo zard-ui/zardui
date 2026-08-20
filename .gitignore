@@ -57,6 +57,7 @@ memory-bank
 .opencode
 .nx
 .claude
+.agents
 .beads
 
 docs

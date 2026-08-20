@@ -1988,7 +1988,11 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
                 <ng-icon name="lucideChevronDown" class="ml-auto" />
               </button>
 
-              <z-dropdown-menu-content #workspaces="zDropdownMenuContent" class="w-56">
+              <z-dropdown-menu-content
+                #workspaces="zDropdownMenuContent"
+                class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                zAlign="start"
+              >
                 <z-dropdown-menu-label>Workspaces</z-dropdown-menu-label>
                 @for (option of workspaces_; track option.name) {
                   <z-dropdown-menu-item (click)="workspace.set(option)">{{ option.name }}</z-dropdown-menu-item>
@@ -2057,17 +2061,27 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
           <ul z-sidebar-menu>
             <li z-sidebar-menu-item>
               <button z-sidebar-menu-button zSize="lg" z-dropdown [zDropdownMenu]="account">
-                <z-avatar class="size-8 rounded-lg" zSrc="https://github.com/shadcn.png" zAlt="shadcn" zFallback="CN" />
+                <z-avatar
+                  class="size-8 rounded-lg"
+                  zSrc="https://github.com/zard-ui.png"
+                  zAlt="zard ui"
+                  zFallback="ZU"
+                />
 
                 <div class="grid flex-1 text-left text-sm/tight">
-                  <span class="truncate font-medium">shadcn</span>
+                  <span class="truncate font-medium">zard ui</span>
                   <span class="text-muted-foreground truncate text-xs">m&#64;example.com</span>
                 </div>
 
                 <ng-icon name="lucideChevronsUpDown" class="ml-auto" />
               </button>
 
-              <z-dropdown-menu-content #account="zDropdownMenuContent" class="w-56">
+              <z-dropdown-menu-content
+                #account="zDropdownMenuContent"
+                class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                zSide="right"
+                zAlign="end"
+              >
                 <z-dropdown-menu-item (click)="lastAction.set('Profile')">
                   <ng-icon name="lucideUser" />
                   Profile
@@ -2270,7 +2284,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
         </z-sidebar-content>
       </z-sidebar>
 
-      <z-dropdown-menu-content #projectMenu="zDropdownMenuContent" class="w-40">
+      <z-dropdown-menu-content #projectMenu="zDropdownMenuContent" class="w-40 rounded-lg" zSide="right" zAlign="start">
         <z-dropdown-menu-item (click)="lastAction.set('Rename')">Rename</z-dropdown-menu-item>
         <z-dropdown-menu-item (click)="lastAction.set('Duplicate')">Duplicate</z-dropdown-menu-item>
         <z-dropdown-menu-item (click)="lastAction.set('Delete')">Delete</z-dropdown-menu-item>

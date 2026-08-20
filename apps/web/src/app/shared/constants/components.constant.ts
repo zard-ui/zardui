@@ -305,4 +305,20 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'A composable, themeable and customizable sidebar component.',
     loadData: () => import('@zard/components/sidebar/demo/sidebar').then(m => m.SIDEBAR),
   },
+  {
+    componentName: 'drawer',
+    description: 'A draggable panel that slides in from an edge of the screen.',
+    loadData: () => import('@zard/components/drawer/demo/drawer').then(m => m.DRAWER),
+  },
+  {
+    componentName: 'bubble',
+    description:
+      'Displays conversational content in a message bubble. Supports variants, alignment, grouping, reactions, and collapsible content.',
+    loadData: () => import('@zard/components/bubble/demo/bubble').then(m => m.BUBBLE),
+  },
+  {
+    componentName: 'context-menu',
+    description: 'Displays a menu of actions triggered by a right click.',
+    loadData: () => import('@zard/components/context-menu/demo/context-menu').then(m => m.CONTEXT_MENU),
+  },
 ];

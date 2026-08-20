@@ -46,6 +46,9 @@ interface DelayConfig {
   delay: number;
 }
 
+/** Matches the `animate-out` duration applied by `tooltipVariants`. */
+const TOOLTIP_EXIT_DURATION = 150;
+
 const throttle = (callback: () => void, wait: number) => {
   let time = Date.now();
   return function () {
@@ -76,6 +79,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private ariaEffectRef?: ReturnType<typeof effect>;
   private componentRef?: ComponentRef<ZardTooltipComponent>;
   private delaySubject?: Subject<DelayConfig>;
+  private detachTimeoutId?: ReturnType<typeof setTimeout>;
   private listenersRefs: (() => void)[] = [];
   private overlayRef?: OverlayRef;
 
@@ -136,6 +140,11 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     if (this.ariaEffectRef) {
       this.ariaEffectRef.destroy();
       this.ariaEffectRef = undefined;
+    }
+
+    if (this.detachTimeoutId !== undefined) {
+      clearTimeout(this.detachTimeoutId);
+      this.detachTimeoutId = undefined;
     }
 
     this.delaySubject?.complete();
@@ -219,7 +228,18 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   }
 
   private show() {
-    if (this.componentRef || !this.tooltipText()) {
+    if (!this.tooltipText()) {
+      return;
+    }
+
+    // Re-entering the trigger while the exit animation is running: keep the
+    // same overlay and animate it back in instead of detaching it.
+    if (this.componentRef) {
+      if (this.detachTimeoutId !== undefined) {
+        clearTimeout(this.detachTimeoutId);
+        this.detachTimeoutId = undefined;
+        this.componentRef.instance.state.set('open');
+      }
       return;
     }
 
@@ -244,7 +264,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   }
 
   private hide() {
-    if (!this.componentRef) {
+    if (!this.componentRef || this.detachTimeoutId !== undefined) {
       return;
     }
 
@@ -257,7 +277,12 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.renderer.removeAttribute(this.elementRef.nativeElement, 'aria-describedby');
     this.componentRef.instance.state.set('closed');
     this.zHide.emit();
-    this.overlayRef?.detach();
+
+    // Detach only once the exit animation has played out.
+    this.detachTimeoutId = setTimeout(() => {
+      this.detachTimeoutId = undefined;
+      this.overlayRef?.detach();
+    }, TOOLTIP_EXIT_DURATION);
   }
 }
 
