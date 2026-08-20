@@ -1,4 +1,5 @@
 import {
+  dashboard01Block,
   login01Block,
   login02Block,
   login03Block,
@@ -34,9 +35,9 @@ import type { BlockCategory } from '../services/blocks.service';
  * Import new blocks here and add them to their respective category
  */
 export const BLOCKS_REGISTRY: Record<BlockCategory, any[]> = {
-  // The block generator adds every new block to `featured`. With 16 sidebars that would bury the
-  // landing page, so only the most representative one stays here — all 16 live under `sidebar`.
-  featured: [login01Block, signup01Block, sidebar07Block],
+  // The block generator adds every new block to `featured`. That tab is a hand-picked showcase, not
+  // a dump: it keeps one representative block per family, in the order they should be shown.
+  featured: [dashboard01Block, sidebar07Block, sidebar03Block, login03Block, login04Block],
   sidebar: [
     sidebar01Block,
     sidebar02Block,

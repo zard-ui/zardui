@@ -1,0 +1,53 @@
+<div z-sidebar-group class="group-data-[collapsible=icon]:hidden">
+  <div z-sidebar-group-label>Documents</div>
+
+  <ul z-sidebar-menu>
+    @for (item of items(); track item.name) {
+      <li z-sidebar-menu-item>
+        <a z-sidebar-menu-button [href]="item.url">
+          <ng-icon [name]="item.icon" />
+          <span>{{ item.name }}</span>
+        </a>
+
+        <button
+          z-sidebar-menu-action
+          zShowOnHover
+          z-dropdown
+          [zDropdownMenu]="documentMenu"
+          class="data-[state=open]:bg-accent rounded-sm"
+        >
+          <ng-icon name="lucideEllipsis" />
+          <span class="sr-only">More</span>
+        </button>
+
+        <z-dropdown-menu-content
+          #documentMenu="zDropdownMenuContent"
+          class="w-24 rounded-lg"
+          [zSide]="menuSide()"
+          [zAlign]="menuAlign()"
+        >
+          <z-dropdown-menu-item>
+            <ng-icon name="lucideFolder" />
+            <span>Open</span>
+          </z-dropdown-menu-item>
+          <z-dropdown-menu-item>
+            <ng-icon name="lucideShare2" />
+            <span>Share</span>
+          </z-dropdown-menu-item>
+          <z-dropdown-menu-separator />
+          <z-dropdown-menu-item zType="destructive">
+            <ng-icon name="lucideTrash2" />
+            <span>Delete</span>
+          </z-dropdown-menu-item>
+        </z-dropdown-menu-content>
+      </li>
+    }
+
+    <li z-sidebar-menu-item>
+      <button z-sidebar-menu-button class="text-sidebar-foreground/70">
+        <ng-icon name="lucideEllipsis" class="text-sidebar-foreground/70" />
+        <span>More</span>
+      </button>
+    </li>
+  </ul>
+</div>

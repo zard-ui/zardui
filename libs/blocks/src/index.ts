@@ -50,3 +50,5 @@ export * from './lib/sidebar-15/sidebar-15.component';
 export * from './lib/sidebar-15/block';
 export * from './lib/sidebar-16/sidebar-16.component';
 export * from './lib/sidebar-16/block';
+export * from './lib/dashboard-01/dashboard-01.component';
+export * from './lib/dashboard-01/block';
