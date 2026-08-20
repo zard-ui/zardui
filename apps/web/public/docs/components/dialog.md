@@ -72,6 +72,11 @@ export class ZardDialogOptions<T, U> {
   /** Animation duration (ms) used when closing. Defaults to 100 (matches CSS transition). */
   zDuration?: number;
   zHideFooter?: boolean;
+  /**
+   * Keeps the title and description in the accessibility tree but out of the layout (`sr-only`),
+   * the same trick shadcn uses when a dialog's content owns its own visual header.
+   */
+  zHideHeader?: boolean;
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
@@ -222,7 +227,10 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
   private readonly idRef = viewChild.required<ZardIdDirective>('idRef');
 
   protected readonly classes = computed(() => mergeClasses(dialogVariants(), this.config.zCustomClasses));
-  protected readonly headerClasses = computed(() => dialogHeaderVariants());
+  protected readonly headerClasses = computed(() =>
+    mergeClasses(dialogHeaderVariants(), this.config.zHideHeader && 'sr-only'),
+  );
+
   protected readonly titleClasses = computed(() => dialogTitleVariants());
   protected readonly descriptionClasses = computed(() => dialogDescriptionVariants());
   protected readonly footerClasses = computed(() => dialogFooterVariants());
@@ -838,6 +846,7 @@ Provides methods to open and close dialogs.
 | `zData` | Sets the data for the dialog. | `U` |  |
 | `zDescription` | Sets the dialog description. | `string` |  |
 | `zHideFooter` | Hides the footer. | `boolean` | `false` |
+| `zHideHeader` | Keeps the title and description available to screen readers only (`sr-only`). | `boolean` | `false` |
 | `zMaskClosable` | Enables closing the dialog by clicking on the mask. | `boolean` | `true` |
 | `zOkDestructive` | Marks the OK button as destructive. | `boolean` | `false` |
 | `zOkDisabled` | Disables the OK button. | `boolean` | `false` |

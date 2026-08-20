@@ -607,6 +607,13 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
  */
 const SKELETON_WIDTHS = ['72%', '58%', '85%', '64%', '78%', '51%', '90%', '67%'];
 
+/** Object form of `zTooltip`, the Zard counterpart of passing `TooltipContent` props in shadcn. */
+export interface ZardSidebarMenuButtonTooltip {
+  content: string | TemplateRef<void>;
+  /** Force the tooltip visible (`false`) or suppressed (`true`), regardless of the sidebar state. */
+  hidden?: boolean;
+}
+
 @Component({
   selector: 'ul[z-sidebar-menu]',
   template: `
@@ -680,15 +687,29 @@ export class ZardSidebarMenuButtonComponent {
   readonly zType = input<ZardSidebarMenuButtonTypeVariants>('default');
   readonly zSize = input<ZardSidebarMenuButtonSizeVariants>('default');
   readonly zActive = input(false, { transform: booleanAttribute });
-  /** Shown only while the sidebar is collapsed on desktop, mirroring shadcn's hidden TooltipContent. */
-  readonly zTooltip = input<string | TemplateRef<void> | null>(null);
+  /**
+   * Shown only while the sidebar is collapsed on desktop, mirroring shadcn's hidden TooltipContent.
+   * Pass the object form to override that rule — `{ content, hidden: false }` keeps the tooltip on
+   * an expanded sidebar, which is what shadcn's `tooltip={{ children, hidden: false }}` does.
+   */
+  readonly zTooltip = input<string | TemplateRef<void> | ZardSidebarMenuButtonTooltip | null>(null);
   readonly class = input<ClassValue>('');
 
   protected readonly resolvedTooltip = computed(() => {
     const tooltip = this.zTooltip();
-    const isCollapsed = this.sidebarService.state() === 'collapsed' && !this.sidebarService.isMobile();
+    if (!tooltip) {
+      return null;
+    }
 
-    return tooltip && isCollapsed ? tooltip : null;
+    const isCollapsed = this.sidebarService.state() === 'collapsed' && !this.sidebarService.isMobile();
+    const isTooltipObject = typeof tooltip === 'object' && 'content' in tooltip;
+    const hidden = isTooltipObject ? (tooltip.hidden ?? !isCollapsed) : !isCollapsed;
+
+    if (hidden) {
+      return null;
+    }
+
+    return isTooltipObject ? tooltip.content : tooltip;
   });
 
   protected readonly classes = computed(() =>
@@ -989,16 +1010,18 @@ export class ZardSidebarSeparatorComponent {
  * Adds the sidebar look to a Zard input. Used as `<input z-input z-sidebar-input />`.
  *
  * The classes are static host classes rather than a `[class]` binding so they cannot be dropped by
- * the `[class]` binding that `input[z-input]` owns on the same element. `bg-background!` is needed
- * because the input's own `dark:bg-input/30` would otherwise win in dark mode — shadcn gets this for
- * free through `cn()`, which Zard cannot do across two separate directives.
+ * the `[class]` binding that `input[z-input]` owns on the same element. Both backgrounds are
+ * `!important` because they share their utility group with the input's own `bg-transparent` /
+ * `dark:bg-input/30`, and across two separate directives there is no `cn()` to resolve the tie.
+ * The dark value repeats the input's own so the result matches shadcn, where `cn()` keeps
+ * `dark:bg-input/30` alongside `bg-background` and the dark variant wins in dark mode.
  */
 @Directive({
   selector: 'input[z-sidebar-input]',
   host: {
     'data-slot': 'sidebar-input',
     'data-sidebar': 'input',
-    class: 'h-8 w-full bg-background! shadow-none',
+    class: 'h-8 w-full bg-background! shadow-none dark:bg-input/30!',
   },
   exportAs: 'zSidebarInput',
 })
@@ -2852,7 +2875,7 @@ The clickable menu row. Use the anchor form with routerLink instead of shadcn's 
 | `zType` | Visual treatment | `'default' \| 'outline'` | `'default'` |
 | `zSize` | Row height | `'default' \| 'sm' \| 'lg'` | `'default'` |
 | `zActive` | Marks the row as the current one | `boolean` | `false` |
-| `zTooltip` | Label shown as a tooltip, but only while the sidebar is collapsed on desktop | `string \| TemplateRef<void> \| null` | `null` |
+| `zTooltip` | Label shown as a tooltip, but only while the sidebar is collapsed on desktop. The object form overrides that rule: `{ content, hidden: false }` keeps the tooltip on an expanded sidebar | `string \| TemplateRef<void> \| { content: string \| TemplateRef<void>; hidden?: boolean } \| null` | `null` |
 | `class` | Additional CSS classes | `ClassValue` | `''` |
 
 ### button[z-sidebar-menu-action], a[z-sidebar-menu-action]

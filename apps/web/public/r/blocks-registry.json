@@ -1,6 +1,12 @@
 {
   "blocks": [
     {
+      "id": "dashboard-01",
+      "title": "Dashboard 01",
+      "description": "A dashboard with sidebar, charts and data table.",
+      "category": "Dashboard"
+    },
+    {
       "id": "login-01",
       "title": "Login form",
       "description": "A simple login form.",

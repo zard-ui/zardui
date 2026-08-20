@@ -333,6 +333,7 @@
         "dropdown.component.ts",
         "dropdown-item.component.ts",
         "dropdown-menu-content.component.ts",
+        "dropdown-positions.ts",
         "dropdown-primitives.component.ts",
         "dropdown-trigger.directive.ts",
         "dropdown.imports.ts",
@@ -970,33 +971,6 @@
         "chart-tooltip.formatter.ts",
         "chart-legend.component.ts",
         "chart.imports.ts",
-        "index.ts"
-      ]
-    },
-    {
-      "name": "tree",
-      "type": "registry:component",
-      "registryDependencies": [
-        "checkbox"
-      ],
-      "icons": {
-        "family": "lucide",
-        "symbols": [
-          "lucideChevronRight"
-        ],
-        "tokens": [
-          "chevron-right"
-        ]
-      },
-      "files": [
-        "tree.component.ts",
-        "tree-node.component.ts",
-        "tree-node-toggle.directive.ts",
-        "tree-node-content.component.ts",
-        "tree.service.ts",
-        "tree.types.ts",
-        "tree.variants.ts",
-        "tree.imports.ts",
         "index.ts"
       ]
     }
