@@ -4,6 +4,7 @@ import {
   computed,
   inject,
   input,
+  numberAttribute,
   type TemplateRef,
   viewChild,
   ViewContainerRef,
@@ -12,6 +13,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import type { ZardDropdownAlign, ZardDropdownSide } from '@/shared/components/dropdown/dropdown-positions';
 import { dropdownContentVariants } from '@/shared/components/dropdown/dropdown.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -48,6 +50,13 @@ export class ZardDropdownMenuContentComponent {
   readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('contentTemplate');
 
   readonly class = input<ClassValue>('');
+
+  /** Edge of the trigger the menu opens from. Same meaning as Radix's `side`. */
+  readonly zSide = input<ZardDropdownSide>('bottom');
+  /** Alignment along that edge. Same meaning as Radix's `align`. */
+  readonly zAlign = input<ZardDropdownAlign>('start');
+  /** Gap between trigger and menu, in pixels. Same meaning as Radix's `sideOffset`. */
+  readonly zSideOffset = input(4, { transform: numberAttribute });
 
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
 }

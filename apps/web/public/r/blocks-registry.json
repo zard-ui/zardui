@@ -1,6 +1,12 @@
 {
   "blocks": [
     {
+      "id": "dashboard-01",
+      "title": "Dashboard 01",
+      "description": "A dashboard with sidebar, charts and data table.",
+      "category": "Dashboard"
+    },
+    {
       "id": "login-01",
       "title": "Login form",
       "description": "A simple login form.",
@@ -29,6 +35,102 @@
       "title": "Email-only login",
       "description": "A simple email-only login page.",
       "category": "Login"
+    },
+    {
+      "id": "sidebar-01",
+      "title": "Sidebar 01",
+      "description": "A simple sidebar with navigation grouped by section.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-02",
+      "title": "Sidebar 02",
+      "description": "A sidebar with collapsible sections.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-03",
+      "title": "Sidebar 03",
+      "description": "A sidebar with submenus.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-04",
+      "title": "Sidebar 04",
+      "description": "A floating sidebar with submenus.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-05",
+      "title": "Sidebar 05",
+      "description": "A sidebar with collapsible submenus.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-06",
+      "title": "Sidebar 06",
+      "description": "A sidebar with submenus as dropdowns.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-07",
+      "title": "Sidebar 07",
+      "description": "A sidebar that collapses to icons.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-08",
+      "title": "Sidebar 08",
+      "description": "An inset sidebar with secondary navigation.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-09",
+      "title": "Sidebar 09",
+      "description": "Collapsible nested sidebars.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-10",
+      "title": "Sidebar 10",
+      "description": "A sidebar in a popover.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-11",
+      "title": "Sidebar 11",
+      "description": "A sidebar with a collapsible file tree.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-12",
+      "title": "Sidebar 12",
+      "description": "A sidebar with a calendar.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-13",
+      "title": "Sidebar 13",
+      "description": "A sidebar in a dialog.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-14",
+      "title": "Sidebar 14",
+      "description": "A sidebar on the right.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-15",
+      "title": "Sidebar 15",
+      "description": "A left and right sidebar.",
+      "category": "Sidebar"
+    },
+    {
+      "id": "sidebar-16",
+      "title": "Sidebar 16",
+      "description": "A sidebar with a sticky site header.",
+      "category": "Sidebar"
     },
     {
       "id": "signup-01",

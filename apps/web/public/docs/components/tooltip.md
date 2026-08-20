@@ -268,7 +268,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.componentRef?.onDestroy(() => {
       this.componentRef = undefined;
     });
-    this.componentRef?.instance.state.set('opened');
+    this.componentRef?.instance.state.set('open');
     this.componentRef?.instance.setProps(this.tooltipText(), this.zPosition());
     runInInjectionContext(this.injector, () => {
       this.ariaEffectRef = effect(() => {
@@ -341,7 +341,7 @@ export class ZardTooltipComponent {
 
   protected readonly classes = computed(() => mergeClasses(tooltipVariants()));
   protected readonly position = signal<ZardTooltipPositionVariants>('top');
-  readonly state = signal<'closed' | 'opened'>('closed');
+  readonly state = signal<'closed' | 'open'>('closed');
   readonly uniqueId = viewChild<ZardIdDirective>('z');
   protected readonly tooltipText = signal<ZardTooltipType>(null);
   protected readonly tooltipId = computed(() => this.uniqueId()?.id() ?? 'tooltip');

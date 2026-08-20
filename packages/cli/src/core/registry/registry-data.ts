@@ -78,34 +78,35 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'layout',
+    name: 'sidebar',
+    registryDependencies: ['button', 'tooltip', 'skeleton', 'separator', 'input', 'collapsible'],
     files: [
       {
-        name: 'layout.component.ts',
-        content: '',
-      },
-      {
-        name: 'layout.variants.ts',
-        content: '',
-      },
-      {
-        name: 'content.component.ts',
-        content: '',
-      },
-      {
-        name: 'footer.component.ts',
-        content: '',
-      },
-      {
-        name: 'header.component.ts',
-        content: '',
-      },
-      {
-        name: 'layout.imports.ts',
-        content: '',
-      },
-      {
         name: 'sidebar.component.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar-primitives.component.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar-menu.component.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.constants.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.service.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.variants.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.imports.ts',
         content: '',
       },
       {
@@ -345,6 +346,27 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'collapsible',
+    files: [
+      {
+        name: 'collapsible.component.ts',
+        content: '',
+      },
+      {
+        name: 'collapsible.variants.ts',
+        content: '',
+      },
+      {
+        name: 'collapsible.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'drawer',
     registryDependencies: ['button'],
     files: [
@@ -468,6 +490,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'dropdown-menu-content.component.ts',
+        content: '',
+      },
+      {
+        name: 'dropdown-positions.ts',
         content: '',
       },
       {
@@ -1351,48 +1377,6 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'chart.imports.ts',
-        content: '',
-      },
-      {
-        name: 'index.ts',
-        content: '',
-      },
-    ],
-  },
-  {
-    name: 'tree',
-    registryDependencies: ['checkbox'],
-    files: [
-      {
-        name: 'tree.component.ts',
-        content: '',
-      },
-      {
-        name: 'tree-node.component.ts',
-        content: '',
-      },
-      {
-        name: 'tree-node-toggle.directive.ts',
-        content: '',
-      },
-      {
-        name: 'tree-node-content.component.ts',
-        content: '',
-      },
-      {
-        name: 'tree.service.ts',
-        content: '',
-      },
-      {
-        name: 'tree.types.ts',
-        content: '',
-      },
-      {
-        name: 'tree.variants.ts',
-        content: '',
-      },
-      {
-        name: 'tree.imports.ts',
         content: '',
       },
       {

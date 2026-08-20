@@ -222,6 +222,7 @@ describe('ZardDropdownDirective', () => {
         expect.any(ElementRef),
         expect.any(TemplateRef),
         expect.any(ViewContainerRef),
+        { side: 'bottom', align: 'start', sideOffset: 4 },
       );
     });
   });

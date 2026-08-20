@@ -53,11 +53,12 @@
 
 - [Accordion](https://zardui.com/docs/components/accordion): Accordion component for Angular applications.
 - [Breadcrumb](https://zardui.com/docs/components/breadcrumb): Breadcrumb component for Angular applications.
-- [Layout](https://zardui.com/docs/components/layout): Layout component for Angular applications.
+- [Collapsible](https://zardui.com/docs/components/collapsible): Collapsible component for Angular applications.
 - [Menu](https://zardui.com/docs/components/menu): Menu component for Angular applications.
 - [Pagination](https://zardui.com/docs/components/pagination): Pagination component for Angular applications.
 - [Resizable](https://zardui.com/docs/components/resizable): Resizable component for Angular applications.
 - [Separator](https://zardui.com/docs/components/separator): Separator component for Angular applications.
+- [Sidebar](https://zardui.com/docs/components/sidebar): Sidebar component for Angular applications.
 - [Tabs](https://zardui.com/docs/components/tabs): Tabs component for Angular applications.
 - [Tree](https://zardui.com/docs/components/tree): Tree component for Angular applications.
 

@@ -341,9 +341,9 @@ Canvas, text and the four action colors.
 | `--secondary`Low-emphasis action color for secondary buttons and badges.`bg-secondary` | `oklch(0.97 0 0)` | 3 components badge, button, input-group |
 | `--secondary-foreground`Text drawn on top of `--secondary`.`text-secondary-foreground` | `oklch(0.205 0 0)` | 3 components badge, button, input-group |
 | `--muted`Quiet surface — skeletons, separators, keyboard chips, table headers.`bg-muted` | `oklch(0.97 0 0)` | 20 components alert-dialog, avatar, button, button-group, calendar, card, command, dialog, empty, input-group, item, kbd, progress, skeleton, slider, spinner, table, tabs, toggle, toggle-group |
-| `--muted-foreground`Secondary text — descriptions, placeholders, helper copy. The most used token in the library.`text-muted-foreground` | `oklch(0.556 0 0)` | 33 components accordion, alert, alert-dialog, avatar, breadcrumb, button-group, calendar, card, combobox, command, date-picker, dialog, dropdown, empty, field, form, input, input-group, input-otp, item, kbd, layout, menu, popover, select, separator, sheet, slider, table, tabs, textarea, toggle-group, tree |
-| `--accent`Hover and active surface for list items — menus, selects, trees, calendars.`bg-accent` | `oklch(0.97 0 0)` | 7 components badge, calendar, dropdown, layout, menu, select, tree |
-| `--accent-foreground`Text drawn on top of `--accent`.`text-accent-foreground` | `oklch(0.205 0 0)` | 7 components badge, calendar, command, dropdown, menu, select, tree |
+| `--muted-foreground`Secondary text — descriptions, placeholders, helper copy. The most used token in the library.`text-muted-foreground` | `oklch(0.556 0 0)` | 32 components accordion, alert, alert-dialog, avatar, breadcrumb, button-group, calendar, card, combobox, command, date-picker, dialog, dropdown, empty, field, form, input, input-group, input-otp, item, kbd, layout, menu, popover, select, separator, sheet, slider, table, tabs, textarea, toggle-group |
+| `--accent`Hover and active surface for list items — menus, selects, trees, calendars.`bg-accent` | `oklch(0.97 0 0)` | 6 components badge, calendar, dropdown, layout, menu, select |
+| `--accent-foreground`Text drawn on top of `--accent`.`text-accent-foreground` | `oklch(0.205 0 0)` | 6 components badge, calendar, command, dropdown, menu, select |
 | `--destructive`Error and danger states — delete buttons, invalid fields, error rings.`bg-destructive``text-destructive``border-destructive``ring-destructive` | `oklch(0.577 0.245 27.325)` | 18 components alert, alert-dialog, badge, button, checkbox, command, dropdown, field, input, input-group, input-otp, menu, radio-group, select, sheet, switch, textarea, toggle |
 | `--destructive-foreground`Text drawn on top of `--destructive`. The CLI maps it in `@theme inline` but does not define it — ZardUI docs do.`text-destructive-foreground` | `oklch(0.985 0 0)` | 1 component command |
 
@@ -366,7 +366,7 @@ Borders, inputs and focus rings.
 | --- | --- | --- |
 | `--border`Default border color. `@layer base` applies `border-border` to every element.`border-border``bg-border``fill-border` | `oklch(0.922 0 0)` | 14 components avatar, badge, button, carousel, command, dropdown, field, input-group, item, layout, resizable, select, separator, table |
 | `--input`Border of form controls, and their fill at 30% opacity.`border-input``bg-input` | `oklch(0.922 0 0)` | 15 components button, button-group, card, checkbox, command, input, input-group, input-otp, radio-group, select, sheet, switch, tabs, textarea, toggle |
-| `--ring`Focus ring. `@layer base` sets `outline-ring/50` globally; components add `ring-ring/50`.`ring-ring``border-ring``outline-ring` | `oklch(0.708 0 0)` | 20 components accordion, badge, button, calendar, card, checkbox, input, input-group, input-otp, item, radio-group, resizable, select, sheet, slider, switch, tabs, textarea, toggle, tree |
+| `--ring`Focus ring. `@layer base` sets `outline-ring/50` globally; components add `ring-ring/50`.`ring-ring``border-ring``outline-ring` | `oklch(0.708 0 0)` | 19 components accordion, badge, button, calendar, card, checkbox, input, input-group, input-otp, item, radio-group, resizable, select, sheet, slider, switch, tabs, textarea, toggle |
 
 ### Charts
 

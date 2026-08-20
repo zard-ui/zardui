@@ -24,6 +24,12 @@ export const DIALOG_API: ApiSection[] = [
       { name: 'zDescription', description: 'Sets the dialog description.', type: 'string', default: '' },
       { name: 'zHideFooter', description: 'Hides the footer.', type: 'boolean', default: 'false' },
       {
+        name: 'zHideHeader',
+        description: 'Keeps the title and description available to screen readers only (`sr-only`).',
+        type: 'boolean',
+        default: 'false',
+      },
+      {
         name: 'zMaskClosable',
         description: 'Enables closing the dialog by clicking on the mask.',
         type: 'boolean',

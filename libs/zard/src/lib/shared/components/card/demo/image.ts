@@ -12,7 +12,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
     <z-card class="relative mx-auto w-full min-w-sm pt-0">
       <div class="absolute inset-0 z-30 aspect-video bg-black/35"></div>
       <img
-        ngSrc="https://avatar.vercel.sh/shadcn1"
+        ngSrc="https://avatar.vercel.sh/zardui"
         alt="Event cover"
         class="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
         width="120"

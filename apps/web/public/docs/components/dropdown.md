@@ -507,6 +507,7 @@ import {
   computed,
   inject,
   input,
+  numberAttribute,
   type TemplateRef,
   viewChild,
   ViewContainerRef,
@@ -515,6 +516,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import type { ZardDropdownAlign, ZardDropdownSide } from '@/shared/components/dropdown/dropdown-positions';
 import { dropdownContentVariants } from '@/shared/components/dropdown/dropdown.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -552,7 +554,87 @@ export class ZardDropdownMenuContentComponent {
 
   readonly class = input<ClassValue>('');
 
+  /** Edge of the trigger the menu opens from. Same meaning as Radix's `side`. */
+  readonly zSide = input<ZardDropdownSide>('bottom');
+  /** Alignment along that edge. Same meaning as Radix's `align`. */
+  readonly zAlign = input<ZardDropdownAlign>('start');
+  /** Gap between trigger and menu, in pixels. Same meaning as Radix's `sideOffset`. */
+  readonly zSideOffset = input(4, { transform: numberAttribute });
+
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
+}
+```
+
+```angular-ts
+import type { ConnectedPosition } from '@angular/cdk/overlay';
+
+/** Which edge of the trigger the menu is anchored to. Mirrors Radix's `side`. */
+export type ZardDropdownSide = 'top' | 'right' | 'bottom' | 'left';
+
+/** How the menu is aligned along that edge. Mirrors Radix's `align`. */
+export type ZardDropdownAlign = 'start' | 'center' | 'end';
+
+/** The side the menu flips to when the preferred one does not fit. */
+const OPPOSITE_SIDE: Record<ZardDropdownSide, ZardDropdownSide> = {
+  top: 'bottom',
+  bottom: 'top',
+  left: 'right',
+  right: 'left',
+};
+
+const isVertical = (side: ZardDropdownSide) => side === 'top' || side === 'bottom';
+
+/**
+ * Translates a Radix-style `side`/`align` pair into a CDK connected position.
+ *
+ * `side` decides the axis the menu is pushed along, `align` decides where it sits on the other axis
+ * — the same split Radix uses, so a shadcn snippet can be transcribed one to one.
+ */
+function toConnectedPosition(side: ZardDropdownSide, align: ZardDropdownAlign, offset: number): ConnectedPosition {
+  const alignPair = {
+    start: 'start',
+    center: 'center',
+    end: 'end',
+  } as const;
+
+  if (isVertical(side)) {
+    return {
+      originX: alignPair[align],
+      originY: side === 'bottom' ? 'bottom' : 'top',
+      overlayX: alignPair[align],
+      overlayY: side === 'bottom' ? 'top' : 'bottom',
+      offsetY: side === 'bottom' ? offset : -offset,
+    };
+  }
+
+  const verticalAlign = { start: 'top', center: 'center', end: 'bottom' } as const;
+
+  return {
+    originX: side === 'right' ? 'end' : 'start',
+    originY: verticalAlign[align],
+    overlayX: side === 'right' ? 'start' : 'end',
+    overlayY: verticalAlign[align],
+    offsetX: side === 'right' ? offset : -offset,
+  };
+}
+
+/**
+ * The preferred position followed by its fallbacks: the opposite side first (a flip keeps the menu
+ * attached to the trigger), then the remaining alignments on the preferred side.
+ */
+export function buildDropdownPositions(
+  side: ZardDropdownSide,
+  align: ZardDropdownAlign,
+  offset: number,
+): ConnectedPosition[] {
+  const fallbackAligns: ZardDropdownAlign[] = (['start', 'center', 'end'] as const).filter(value => value !== align);
+
+  return [
+    toConnectedPosition(side, align, offset),
+    toConnectedPosition(OPPOSITE_SIDE[side], align, offset),
+    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(side, fallbackAlign, offset)),
+    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(OPPOSITE_SIDE[side], fallbackAlign, offset)),
+  ];
 }
 ```
 
@@ -1209,7 +1291,7 @@ import {
 } from '@angular/core';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
-import { ZardDropdownService } from './dropdown.service';
+import { ZardDropdownService, type ZardDropdownPlacement } from './dropdown.service';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
@@ -1279,7 +1361,12 @@ export class ZardDropdownDirective implements OnInit {
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
-      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
+      this.dropdownService.toggle(
+        this.elementRef,
+        menuContent.contentTemplate(),
+        this.viewContainerRef,
+        this.placementOf(menuContent),
+      );
     }
   }
 
@@ -1290,8 +1377,22 @@ export class ZardDropdownDirective implements OnInit {
 
     const menuContent = this.zDropdownMenu();
     if (menuContent && !this.dropdownService.isOpen()) {
-      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
+      this.dropdownService.toggle(
+        this.elementRef,
+        menuContent.contentTemplate(),
+        this.viewContainerRef,
+        this.placementOf(menuContent),
+      );
     }
+  }
+
+  /** The content owns `zSide`/`zAlign`/`zSideOffset`, exactly as `DropdownMenuContent` does in shadcn. */
+  private placementOf(menuContent: ZardDropdownMenuContentComponent): ZardDropdownPlacement {
+    return {
+      side: menuContent.zSide(),
+      align: menuContent.zAlign(),
+      sideOffset: menuContent.zSideOffset(),
+    };
   }
 
   protected closeDropdown() {
@@ -1354,12 +1455,25 @@ import {
 
 import { filter, type Subscription } from 'rxjs';
 
+import {
+  buildDropdownPositions,
+  type ZardDropdownAlign,
+  type ZardDropdownSide,
+} from '@/shared/components/dropdown/dropdown-positions';
+
 import { findMenuItemByChar, getMenuItems, highlightMenuItem, isTypeaheadKey, nextMenuIndex } from './menu-keyboard';
 
 /** A viewport coordinate a menu can be anchored to, instead of an element. */
 export interface ZardMenuOrigin {
   x: number;
   y: number;
+}
+
+/** Placement of the menu relative to its trigger, mirroring Radix's `side`/`align`/`sideOffset`. */
+export interface ZardDropdownPlacement {
+  side?: ZardDropdownSide;
+  align?: ZardDropdownAlign;
+  sideOffset?: number;
 }
 
 @Injectable({
@@ -1398,15 +1512,25 @@ export class ZardDropdownService {
     this.renderer = this.rendererFactory.createRenderer(null, null);
   }
 
-  toggle(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
+  toggle(
+    triggerElement: ElementRef,
+    template: TemplateRef<unknown>,
+    viewContainerRef: ViewContainerRef,
+    placement?: ZardDropdownPlacement,
+  ) {
     if (this.isOpen()) {
       this.close();
     } else {
-      this.open(triggerElement, template, viewContainerRef);
+      this.open(triggerElement, template, viewContainerRef, placement);
     }
   }
 
-  private open(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
+  private open(
+    triggerElement: ElementRef,
+    template: TemplateRef<unknown>,
+    viewContainerRef: ViewContainerRef,
+    placement?: ZardDropdownPlacement,
+  ) {
     if (this.isOpen()) {
       this.close();
     }
@@ -1414,7 +1538,7 @@ export class ZardDropdownService {
     this.triggerElement = triggerElement;
     this.outsideClickExempt = triggerElement;
     this.skipFirstAuxClick = false;
-    this.createOverlay(triggerElement);
+    this.createOverlay(triggerElement, placement);
     this.attach(template, viewContainerRef);
   }
 
@@ -1516,29 +1640,16 @@ export class ZardDropdownService {
     trigger?.nativeElement.focus();
   }
 
-  private createOverlay(triggerElement: ElementRef) {
+  private createOverlay(triggerElement: ElementRef, placement?: ZardDropdownPlacement) {
     if (this.overlayRef) {
       this.destroyOverlay();
     }
 
     const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(triggerElement)
-      .withPositions([
-        {
-          originX: 'start',
-          originY: 'bottom',
-          overlayX: 'start',
-          overlayY: 'top',
-          offsetY: 4,
-        },
-        {
-          originX: 'start',
-          originY: 'top',
-          overlayX: 'start',
-          overlayY: 'bottom',
-          offsetY: -4,
-        },
-      ])
+      .withPositions(
+        buildDropdownPositions(placement?.side ?? 'bottom', placement?.align ?? 'start', placement?.sideOffset ?? 4),
+      )
       .withPush(false);
 
     this.overlayRef = this.overlay.create({
@@ -1548,6 +1659,22 @@ export class ZardDropdownService {
       minWidth: 200,
       maxHeight: 400,
     });
+
+    this.publishTriggerWidth(triggerElement);
+  }
+
+  /**
+   * Radix exposes the trigger's width to the menu as `--radix-dropdown-menu-trigger-width`, which
+   * shadcn uses to make a menu exactly as wide as the button that opened it. This is the Zard
+   * equivalent, published on the overlay pane so `w-(--z-dropdown-menu-trigger-width)` works inside.
+   */
+  private publishTriggerWidth(triggerElement: ElementRef) {
+    if (!this.overlayRef || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const width = (triggerElement.nativeElement as HTMLElement).getBoundingClientRect().width;
+    this.overlayRef.hostElement.style.setProperty('--z-dropdown-menu-trigger-width', `${width}px`);
   }
 
   /**
@@ -1705,6 +1832,7 @@ export class ZardDropdownService {
 export * from './dropdown.component';
 export * from './dropdown-item.component';
 export * from './dropdown-menu-content.component';
+export * from './dropdown-positions';
 export * from './dropdown-primitives.component';
 export * from './dropdown-submenu.component';
 export * from './dropdown-trigger.directive';
@@ -2304,6 +2432,9 @@ Reusable content template displayed by a `z-dropdown` trigger.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zSide]` | Edge of the trigger the menu opens from. | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
+| `[zAlign]` | Alignment of the menu along that edge. | `'start' \| 'center' \| 'end'` | `'start'` |
+| `[zSideOffset]` | Gap between trigger and menu, in pixels. | `number` | `4` |
 
 ### z-dropdown-menu-item
 

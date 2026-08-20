@@ -204,11 +204,6 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/kbd/demo/kbd').then(m => m.KBD),
   },
   {
-    componentName: 'layout',
-    description: 'Layout components for building page structures.',
-    loadData: () => import('@zard/components/layout/demo/layout').then(m => m.LAYOUT),
-  },
-  {
     componentName: 'spinner',
     description: 'Displays a loading spinner.',
     loadData: () => import('@zard/components/spinner/demo/spinner').then(m => m.SPINNER),
@@ -301,10 +296,14 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/tooltip/demo/tooltip').then(m => m.TOOLTIP),
   },
   {
-    componentName: 'tree',
-    description:
-      'A hierarchical tree view for displaying nested data structures with expand/collapse, selection, and checkboxes.',
-    loadData: () => import('@zard/components/tree/demo/tree').then(m => m.TREE),
+    componentName: 'collapsible',
+    description: 'An interactive component which expands and collapses a panel.',
+    loadData: () => import('@zard/components/collapsible/demo/collapsible').then(m => m.COLLAPSIBLE),
+  },
+  {
+    componentName: 'sidebar',
+    description: 'A composable, themeable and customizable sidebar component.',
+    loadData: () => import('@zard/components/sidebar/demo/sidebar').then(m => m.SIDEBAR),
   },
   {
     componentName: 'drawer',

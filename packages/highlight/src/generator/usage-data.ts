@@ -209,14 +209,6 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';`,
     templateCode: `<z-kbd>⌘ K</z-kbd>`,
   },
-  layout: {
-    importCode: `import { LayoutImports } from '@/shared/components/layout/layout.imports';`,
-    templateCode: `<z-layout>
-  <z-header>Header</z-header>
-  <z-content>Content</z-content>
-  <z-footer>Footer</z-footer>
-</z-layout>`,
-  },
   spinner: {
     importCode: `import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';`,
     templateCode: `<z-spinner></z-spinner>`,
@@ -346,9 +338,27 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
     importCode: `import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';`,
     templateCode: `<button z-button zType="outline" zTooltip="Add to library">Hover</button>`,
   },
-  tree: {
-    importCode: `import { ZardTreeImports } from '@/shared/components/tree/tree.imports';`,
-    templateCode: `<z-tree [data]="treeData"></z-tree>`,
+  collapsible: {
+    importCode: `import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsible.imports';`,
+    templateCode: `<z-collapsible>
+  <button z-collapsible-trigger>Toggle</button>
+  <z-collapsible-content>Content</z-collapsible-content>
+</z-collapsible>`,
+  },
+  sidebar: {
+    importCode: `import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports';`,
+    templateCode: `<z-sidebar-provider>
+  <z-sidebar>
+    <div z-sidebar-header></div>
+    <z-sidebar-content>
+      <div z-sidebar-group></div>
+    </z-sidebar-content>
+    <div z-sidebar-footer></div>
+  </z-sidebar>
+  <main z-sidebar-inset>
+    <button z-sidebar-trigger></button>
+  </main>
+</z-sidebar-provider>`,
   },
   drawer: {
     importCode: `import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';`,
