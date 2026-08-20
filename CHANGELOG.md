@@ -1,3 +1,13 @@
+## 1.0.0-beta.114 (2026-08-20)
+
+### ✨ Features
+
+- **sidebar:** align the sidebar blocks with shadcn, add dashboard-01 and rebuild the block viewer ([#715](https://github.com/zard-ui/zardui/pull/715))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.113 (2026-08-20)
 
 ### ✨ Features
