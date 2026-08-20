@@ -19,7 +19,7 @@
       <ng-icon name="lucideChevronsUpDown" class="ml-auto" />
     </button>
 
-    <z-dropdown-menu-content #versionMenu="zDropdownMenuContent" class="w-(--sidebar-width)">
+    <z-dropdown-menu-content #versionMenu="zDropdownMenuContent" class="w-(--z-dropdown-menu-trigger-width)">
       @for (version of versions(); track version) {
         <z-dropdown-menu-item (click)="selectedVersion.set(version)">
           v{{ version }}

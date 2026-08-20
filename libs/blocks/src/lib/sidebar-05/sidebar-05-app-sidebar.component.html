@@ -26,8 +26,10 @@
           <li z-sidebar-menu-item z-collapsible class="group/collapsible" [zOpen]="index === 1">
             <button z-collapsible-trigger z-sidebar-menu-button>
               {{ group.title }}
-              <ng-icon name="lucidePlus" class="ml-auto group-data-[state=open]/collapsible:hidden" />
-              <ng-icon name="lucideMinus" class="ml-auto group-data-[state=closed]/collapsible:hidden" />
+              <!-- `hidden!`: NgIcon sets `display: inline-block` on its host outside any cascade
+                   layer, so a plain `hidden` utility would never win. -->
+              <ng-icon name="lucidePlus" class="ml-auto group-data-[state=open]/collapsible:hidden!" />
+              <ng-icon name="lucideMinus" class="ml-auto group-data-[state=closed]/collapsible:hidden!" />
             </button>
 
             @if (group.items.length) {

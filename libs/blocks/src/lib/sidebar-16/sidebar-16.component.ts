@@ -30,9 +30,9 @@ import { Sidebar16SiteHeaderComponent } from './sidebar-16-site-header.component
 export class Sidebar16Component {
   // This is sample data.
   protected readonly user: Sidebar16User = {
-    name: 'shadcn',
+    name: 'zard ui',
     email: 'm@example.com',
-    avatar: 'https://github.com/shadcn.png',
+    avatar: 'https://github.com/zard-ui.png',
   };
 
   protected readonly navMain: readonly Sidebar16NavItem[] = [

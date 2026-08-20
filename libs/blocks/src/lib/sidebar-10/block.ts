@@ -298,7 +298,12 @@ export class Sidebar10NavActionsComponent {
           <span class="sr-only">More</span>
         </button>
 
-        <z-dropdown-menu-content #favoriteMenu="zDropdownMenuContent" class="w-56 rounded-lg">
+        <z-dropdown-menu-content
+          #favoriteMenu="zDropdownMenuContent"
+          class="w-56 rounded-lg"
+          [zSide]="menuSide()"
+          [zAlign]="menuAlign()"
+        >
           <z-dropdown-menu-item>
             <ng-icon name="lucideStarOff" class="text-muted-foreground" />
             <span>Remove from Favorites</span>
@@ -335,13 +340,15 @@ export class Sidebar10NavActionsComponent {
     {
       name: 'sidebar-10-nav-favorites.component.ts',
       path: 'src/components/sidebar-10/sidebar-10-nav-favorites.component.ts',
-      content: `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+      content: `import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowUpRight, lucideLink, lucideMoreHorizontal, lucideStarOff, lucideTrash2 } from '@ng-icons/lucide';
 
+import type { ZardDropdownAlign, ZardDropdownSide } from '@zard/components/dropdown/dropdown-positions';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 
 export interface Sidebar10Favorite {
   readonly name: string;
@@ -359,6 +366,11 @@ export interface Sidebar10Favorite {
   host: { class: 'contents' },
 })
 export class Sidebar10NavFavoritesComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+  /** shadcn opens these menus to the side of the sidebar on desktop and below the trigger on mobile. */
+  protected readonly menuSide = computed<ZardDropdownSide>(() => (this.sidebar.isMobile() ? 'bottom' : 'right'));
+  protected readonly menuAlign = computed<ZardDropdownAlign>(() => (this.sidebar.isMobile() ? 'end' : 'start'));
+
   readonly favorites = input<readonly Sidebar10Favorite[]>([]);
 }
 `,
@@ -661,7 +673,10 @@ export class Sidebar10TeamSwitcherComponent {
       <div class="flex flex-1 items-center gap-2 px-3">
         <button z-sidebar-trigger aria-label="Toggle Sidebar"></button>
 
-        <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center" />
+        <z-separator
+          zOrientation="vertical"
+          class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+        />
 
         <z-breadcrumb>
           <z-breadcrumb-item>

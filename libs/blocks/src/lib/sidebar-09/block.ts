@@ -45,12 +45,14 @@ export const sidebar09Block: Block = {
           <ul z-sidebar-menu>
             @for (item of navMain; track item.title) {
               <li z-sidebar-menu-item>
+                <!-- \`hidden: false\` mirrors shadcn's \`tooltip={{ children, hidden: false }}\`: this
+                     sidebar is always icon-width, so its tooltips stay on even when expanded. -->
                 <button
                   z-sidebar-menu-button
                   class="px-2.5 md:px-2"
-                  [zTooltip]="item.title"
+                  [zTooltip]="{ content: item.title, hidden: false }"
                   [zActive]="item.title === activeItem().title"
-                  (click)="activeItem.set(item)"
+                  (click)="selectItem(item)"
                 >
                   <ng-icon [name]="item.icon" />
                   <span>{{ item.title }}</span>
@@ -110,7 +112,7 @@ export const sidebar09Block: Block = {
     {
       name: 'sidebar-09-app-sidebar.component.ts',
       path: 'src/components/sidebar-09/sidebar-09-app-sidebar.component.ts',
-      content: `import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+      content: `import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArchiveX, lucideCommand, lucideFile, lucideInbox, lucideSend, lucideTrash2 } from '@ng-icons/lucide';
@@ -118,6 +120,7 @@ import { lucideArchiveX, lucideCommand, lucideFile, lucideInbox, lucideSend, luc
 import { ZardFieldImports } from '@zard/components/field/field.imports';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 
 import { Sidebar09NavUserComponent, type Sidebar09User } from './sidebar-09-nav-user.component';
@@ -153,11 +156,13 @@ interface Mail {
   host: { class: 'contents' },
 })
 export class Sidebar09AppSidebarComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+
   // This is sample data.
   protected readonly user: Sidebar09User = {
-    name: 'shadcn',
+    name: 'zard ui',
     email: 'm@example.com',
-    avatar: 'https://github.com/shadcn.png',
+    avatar: 'https://github.com/zard-ui.png',
   };
 
   protected readonly navMain: readonly NavItem[] = [
@@ -169,6 +174,12 @@ export class Sidebar09AppSidebarComponent {
   ];
 
   protected readonly activeItem = signal<NavItem>(this.navMain[0]);
+
+  /** Picking a mailbox also opens the outer sidebar, as it does in shadcn. */
+  protected selectItem(item: NavItem): void {
+    this.activeItem.set(item);
+    this.sidebar.setOpen(true);
+  }
 
   private readonly allMails: readonly Mail[] = [
     {
@@ -246,9 +257,9 @@ export class Sidebar09AppSidebarComponent {
       zSize="lg"
       z-dropdown
       [zDropdownMenu]="userMenu"
-      class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+      class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground md:h-8 md:p-0"
     >
-      <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="CN" />
+      <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="ZU" />
 
       <div class="grid flex-1 text-left text-sm leading-tight">
         <span class="truncate font-medium">{{ user().name }}</span>
@@ -258,10 +269,15 @@ export class Sidebar09AppSidebarComponent {
       <ng-icon name="lucideChevronsUpDown" class="ml-auto size-4" />
     </button>
 
-    <z-dropdown-menu-content #userMenu="zDropdownMenuContent" class="w-(--sidebar-width) min-w-56 rounded-lg">
+    <z-dropdown-menu-content
+      #userMenu="zDropdownMenuContent"
+      class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+      [zSide]="menuSide()"
+      zAlign="end"
+    >
       <z-dropdown-menu-label class="p-0 font-normal">
         <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-          <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="CN" />
+          <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="ZU" />
 
           <div class="grid flex-1 text-left text-sm leading-tight">
             <span class="truncate font-medium">{{ user().name }}</span>
@@ -311,7 +327,7 @@ export class Sidebar09AppSidebarComponent {
     {
       name: 'sidebar-09-nav-user.component.ts',
       path: 'src/components/sidebar-09/sidebar-09-nav-user.component.ts',
-      content: `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+      content: `import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -324,8 +340,10 @@ import {
 } from '@ng-icons/lucide';
 
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
+import type { ZardDropdownSide } from '@zard/components/dropdown/dropdown-positions';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 
 export interface Sidebar09User {
   readonly name: string;
@@ -351,6 +369,10 @@ export interface Sidebar09User {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Sidebar09NavUserComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+  /** shadcn opens these menus to the side of the sidebar on desktop and below the trigger on mobile. */
+  protected readonly menuSide = computed<ZardDropdownSide>(() => (this.sidebar.isMobile() ? 'bottom' : 'right'));
+
   readonly user = input.required<Sidebar09User>();
 }
 `,
@@ -366,7 +388,10 @@ export class Sidebar09NavUserComponent {
     <header class="bg-background sticky top-0 flex shrink-0 items-center gap-2 border-b p-4">
       <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
 
-      <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center" />
+      <z-separator
+        zOrientation="vertical"
+        class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+      />
 
       <z-breadcrumb>
         <z-breadcrumb-item class="hidden md:block">

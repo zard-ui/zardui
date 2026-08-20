@@ -26,9 +26,10 @@ export const sidebar11Block: Block = {
         <ul z-sidebar-menu>
           @for (item of changes; track item.file) {
             <li z-sidebar-menu-item>
-              <button z-sidebar-menu-button>
+              <!-- \`pr-8\` keeps the longer Angular paths clear of the absolutely positioned badge. -->
+              <button z-sidebar-menu-button class="pr-8" [title]="item.file">
                 <ng-icon name="lucideFile" />
-                {{ item.file }}
+                <span class="truncate">{{ item.file }}</span>
               </button>
               <div z-sidebar-menu-badge>{{ item.state }}</div>
             </li>
@@ -56,9 +57,14 @@ export const sidebar11Block: Block = {
 <!-- Recursive template: Angular's answer to shadcn's self-referencing <Tree /> component. -->
 <ng-template #treeNode let-node>
   @if (!node.children) {
-    <button z-sidebar-menu-button class="data-[active=true]:bg-transparent" [zActive]="node.name === 'button.tsx'">
+    <button
+      z-sidebar-menu-button
+      class="data-[active=true]:bg-transparent"
+      [zActive]="node.name === 'button.component.ts'"
+      [title]="node.name"
+    >
       <ng-icon name="lucideFile" />
-      {{ node.name }}
+      <span class="truncate">{{ node.name }}</span>
     </button>
   } @else {
     <li z-sidebar-menu-item>
@@ -70,7 +76,7 @@ export const sidebar11Block: Block = {
         <button z-collapsible-trigger z-sidebar-menu-button>
           <ng-icon name="lucideChevronRight" class="transition-transform" />
           <ng-icon name="lucideFolder" />
-          {{ node.name }}
+          <span class="truncate">{{ node.name }}</span>
         </button>
 
         <z-collapsible-content>
@@ -126,28 +132,28 @@ export class Sidebar11AppSidebarComponent {
   // This is sample data.
   protected readonly changes: readonly Change[] = [
     { file: 'README.md', state: 'M' },
-    { file: 'api/hello/route.ts', state: 'U' },
-    { file: 'app/layout.tsx', state: 'M' },
+    { file: 'core/services/hello.service.ts', state: 'U' },
+    { file: 'app/app.component.ts', state: 'M' },
   ];
 
   protected readonly tree: readonly TreeNode[] = [
     folder('app', [
-      folder('api', [folder('hello', [file('route.ts')])]),
-      file('page.tsx'),
-      file('layout.tsx'),
-      folder('blog', [file('page.tsx')]),
+      folder('core', [folder('services', [file('hello.service.ts')])]),
+      file('app.component.ts'),
+      file('app.config.ts'),
+      folder('blog', [file('blog.page.ts')]),
     ]),
     folder('components', [
-      folder('ui', [file('button.tsx'), file('card.tsx')]),
-      file('header.tsx'),
-      file('footer.tsx'),
+      folder('ui', [file('button.component.ts'), file('card.component.ts')]),
+      file('header.component.ts'),
+      file('footer.component.ts'),
     ]),
     folder('lib', [file('util.ts')]),
-    folder('public', [file('favicon.ico'), file('vercel.svg')]),
-    file('.eslintrc.json'),
+    folder('public', [file('favicon.ico'), file('angular.svg')]),
+    file('.editorconfig'),
     file('.gitignore'),
-    file('next.config.js'),
-    file('tailwind.config.js'),
+    file('angular.json'),
+    file('tsconfig.json'),
     file('package.json'),
     file('README.md'),
   ];
@@ -169,7 +175,10 @@ export class Sidebar11AppSidebarComponent {
     <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
       <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
 
-      <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center" />
+      <z-separator
+        zOrientation="vertical"
+        class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+      />
 
       <z-breadcrumb>
         <z-breadcrumb-item class="hidden md:block">
@@ -181,7 +190,7 @@ export class Sidebar11AppSidebarComponent {
         </z-breadcrumb-item>
         <z-breadcrumb-separator class="hidden md:block" />
         <z-breadcrumb-item>
-          <span z-breadcrumb-page>button.tsx</span>
+          <span z-breadcrumb-page>button.component.ts</span>
         </z-breadcrumb-item>
       </z-breadcrumb>
     </header>

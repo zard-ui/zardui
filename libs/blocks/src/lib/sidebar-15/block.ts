@@ -42,7 +42,9 @@ export const sidebar15Block: Block = {
                     [attr.data-active]="itemIndex < 2"
                     class="group/calendar-item border-sidebar-border text-sidebar-primary-foreground data-[active=true]:border-sidebar-primary data-[active=true]:bg-sidebar-primary flex aspect-square size-4 shrink-0 items-center justify-center rounded-sm border"
                   >
-                    <ng-icon name="lucideCheck" class="hidden size-3 group-data-[active=true]/calendar-item:block" />
+                    <!-- \`hidden!\`/\`block!\`: NgIcon's host \`display\` is declared outside any cascade
+                         layer, so unprefixed display utilities cannot override it. -->
+                    <ng-icon name="lucideCheck" class="hidden! size-3 group-data-[active=true]/calendar-item:block!" />
                   </div>
                   {{ item }}
                 </button>
@@ -95,8 +97,10 @@ export class Sidebar15CalendarsComponent {
       path: 'src/components/sidebar-15/sidebar-15-date-picker.component.html',
       content: `<div z-sidebar-group class="px-0">
   <div z-sidebar-group-content>
+    <!-- shadcn hooks the highlight onto react-day-picker's \`.bg-accent\` gridcell; the Zard calendar
+         marks the same cell with \`data-today\`, so the selector is retargeted, not redesigned. -->
     <z-calendar
-      class="[&_[role=gridcell].bg-accent]:bg-sidebar-primary [&_[role=gridcell].bg-accent]:text-sidebar-primary-foreground [&_[role=gridcell]]:w-[33px]"
+      class="[&_[role=gridcell][data-today]]:bg-sidebar-primary [&_[role=gridcell][data-today]]:text-sidebar-primary-foreground [&_[role=gridcell]]:w-[33px]"
     />
   </div>
 </div>
@@ -142,7 +146,12 @@ export class Sidebar15DatePickerComponent {}
           <span class="sr-only">More</span>
         </button>
 
-        <z-dropdown-menu-content #favoriteMenu="zDropdownMenuContent" class="w-56 rounded-lg">
+        <z-dropdown-menu-content
+          #favoriteMenu="zDropdownMenuContent"
+          class="w-56 rounded-lg"
+          [zSide]="menuSide()"
+          [zAlign]="menuAlign()"
+        >
           <z-dropdown-menu-item>
             <ng-icon name="lucideStarOff" class="text-muted-foreground" />
             <span>Remove from Favorites</span>
@@ -179,13 +188,15 @@ export class Sidebar15DatePickerComponent {}
     {
       name: 'sidebar-15-nav-favorites.component.ts',
       path: 'src/components/sidebar-15/sidebar-15-nav-favorites.component.ts',
-      content: `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+      content: `import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowUpRight, lucideLink, lucideMoreHorizontal, lucideStarOff, lucideTrash2 } from '@ng-icons/lucide';
 
+import type { ZardDropdownAlign, ZardDropdownSide } from '@zard/components/dropdown/dropdown-positions';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 
 export interface Sidebar15Favorite {
   readonly name: string;
@@ -203,6 +214,11 @@ export interface Sidebar15Favorite {
   host: { class: 'contents' },
 })
 export class Sidebar15NavFavoritesComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+  /** shadcn opens these menus to the side of the sidebar on desktop and below the trigger on mobile. */
+  protected readonly menuSide = computed<ZardDropdownSide>(() => (this.sidebar.isMobile() ? 'bottom' : 'right'));
+  protected readonly menuAlign = computed<ZardDropdownAlign>(() => (this.sidebar.isMobile() ? 'end' : 'start'));
+
   readonly favorites = input<readonly Sidebar15Favorite[]>([]);
 }
 `,
@@ -333,7 +349,7 @@ export class Sidebar15NavSecondaryComponent {
       [zDropdownMenu]="userMenu"
       class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
     >
-      <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="CN" />
+      <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="ZU" />
 
       <div class="grid flex-1 text-left text-sm leading-tight">
         <span class="truncate font-medium">{{ user().name }}</span>
@@ -343,10 +359,15 @@ export class Sidebar15NavSecondaryComponent {
       <ng-icon name="lucideChevronsUpDown" class="ml-auto size-4" />
     </button>
 
-    <z-dropdown-menu-content #userMenu="zDropdownMenuContent" class="w-(--sidebar-width) min-w-56 rounded-lg">
+    <z-dropdown-menu-content
+      #userMenu="zDropdownMenuContent"
+      class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+      [zSide]="menuSide()"
+      zAlign="end"
+    >
       <z-dropdown-menu-label class="p-0 font-normal">
         <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-          <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="CN" />
+          <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="ZU" />
 
           <div class="grid flex-1 text-left text-sm leading-tight">
             <span class="truncate font-medium">{{ user().name }}</span>
@@ -396,7 +417,7 @@ export class Sidebar15NavSecondaryComponent {
     {
       name: 'sidebar-15-nav-user.component.ts',
       path: 'src/components/sidebar-15/sidebar-15-nav-user.component.ts',
-      content: `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+      content: `import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -409,8 +430,10 @@ import {
 } from '@ng-icons/lucide';
 
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
+import type { ZardDropdownSide } from '@zard/components/dropdown/dropdown-positions';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 
 export interface Sidebar15User {
   readonly name: string;
@@ -436,6 +459,10 @@ export interface Sidebar15User {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Sidebar15NavUserComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+  /** shadcn opens these menus to the side of the sidebar on desktop and below the trigger on mobile. */
+  protected readonly menuSide = computed<ZardDropdownSide>(() => (this.sidebar.isMobile() ? 'bottom' : 'right'));
+
   readonly user = input.required<Sidebar15User>();
 }
 `,
@@ -721,9 +748,9 @@ import { Sidebar15NavUserComponent, type Sidebar15User } from './sidebar-15-nav-
 export class Sidebar15SidebarRightComponent {
   // This is sample data.
   protected readonly user: Sidebar15User = {
-    name: 'shadcn',
+    name: 'zard ui',
     email: 'm@example.com',
-    avatar: 'https://github.com/shadcn.png',
+    avatar: 'https://github.com/zard-ui.png',
   };
 
   protected readonly calendars: readonly Sidebar15Calendar[] = [
@@ -825,7 +852,10 @@ export class Sidebar15TeamSwitcherComponent {
       <div class="flex flex-1 items-center gap-2 px-3">
         <button z-sidebar-trigger aria-label="Toggle Sidebar"></button>
 
-        <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center" />
+        <z-separator
+          zOrientation="vertical"
+          class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+        />
 
         <z-breadcrumb>
           <z-breadcrumb-item>

@@ -19,7 +19,12 @@
       <ng-icon name="lucideChevronsUpDown" class="ml-auto" />
     </button>
 
-    <z-dropdown-menu-content #teamMenu="zDropdownMenuContent" class="w-(--sidebar-width) min-w-56 rounded-lg">
+    <z-dropdown-menu-content
+      #teamMenu="zDropdownMenuContent"
+      class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+      [zSide]="menuSide()"
+      zAlign="start"
+    >
       <z-dropdown-menu-label class="text-muted-foreground text-xs">Teams</z-dropdown-menu-label>
 
       @for (team of teams(); track team.name; let index = $index) {

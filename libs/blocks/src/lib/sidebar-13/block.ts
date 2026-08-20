@@ -78,6 +78,7 @@ import {
   lucideBell,
   lucideCheck,
   lucideGlobe,
+  lucideHouse,
   lucideKeyboard,
   lucideLink,
   lucideLock,
@@ -112,6 +113,7 @@ interface NavItem {
       lucideBell,
       lucideCheck,
       lucideGlobe,
+      lucideHouse,
       lucideKeyboard,
       lucideLink,
       lucideLock,
@@ -134,7 +136,7 @@ export class Sidebar13SettingsDialogComponent {
   protected readonly nav: readonly NavItem[] = [
     { name: 'Notifications', icon: 'lucideBell' },
     { name: 'Navigation', icon: 'lucideMenu' },
-    { name: 'Home', icon: 'lucideSettings' },
+    { name: 'Home', icon: 'lucideHouse' },
     { name: 'Appearance', icon: 'lucidePaintbrush' },
     { name: 'Messages & media', icon: 'lucideMessageCircle' },
     { name: 'Language & region', icon: 'lucideGlobe' },
@@ -154,8 +156,11 @@ export class Sidebar13SettingsDialogComponent {
       zDescription: 'Customize your settings here.',
       zContent: this.settingsTemplate(),
       zHideFooter: true,
-      // The Zard dialog caps itself at \`sm:max-w-sm\`; the sidebar layout needs shadcn's wider frame.
-      zCustomClasses: 'overflow-hidden md:max-h-[500px] sm:max-w-[700px] lg:max-w-[800px]',
+      // shadcn keeps both \`sr-only\` — the sidebar layout is the dialog's only visible chrome.
+      zHideHeader: true,
+      // The Zard dialog caps itself at \`sm:max-w-sm\` and pads its content; the sidebar layout needs
+      // shadcn's wider, edge-to-edge frame.
+      zCustomClasses: 'overflow-hidden p-0! gap-0! md:max-h-[500px] md:max-w-[700px] lg:max-w-[800px]',
     });
   }
 }

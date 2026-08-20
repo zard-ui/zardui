@@ -26,12 +26,14 @@
           <ul z-sidebar-menu>
             @for (item of navMain; track item.title) {
               <li z-sidebar-menu-item>
+                <!-- `hidden: false` mirrors shadcn's `tooltip={{ children, hidden: false }}`: this
+                     sidebar is always icon-width, so its tooltips stay on even when expanded. -->
                 <button
                   z-sidebar-menu-button
                   class="px-2.5 md:px-2"
-                  [zTooltip]="item.title"
+                  [zTooltip]="{ content: item.title, hidden: false }"
                   [zActive]="item.title === activeItem().title"
-                  (click)="activeItem.set(item)"
+                  (click)="selectItem(item)"
                 >
                   <ng-icon [name]="item.icon" />
                   <span>{{ item.title }}</span>

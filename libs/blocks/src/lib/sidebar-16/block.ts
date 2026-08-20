@@ -113,7 +113,12 @@ export class Sidebar16NavMainComponent {
           <span class="sr-only">More</span>
         </button>
 
-        <z-dropdown-menu-content #projectMenu="zDropdownMenuContent" class="w-48 rounded-lg">
+        <z-dropdown-menu-content
+          #projectMenu="zDropdownMenuContent"
+          class="w-48 rounded-lg"
+          [zSide]="menuSide()"
+          [zAlign]="menuAlign()"
+        >
           <z-dropdown-menu-item>
             <ng-icon name="lucideFolder" class="text-muted-foreground" />
             <span>View Project</span>
@@ -145,7 +150,7 @@ export class Sidebar16NavMainComponent {
     {
       name: 'sidebar-16-nav-projects.component.ts',
       path: 'src/components/sidebar-16/sidebar-16-nav-projects.component.ts',
-      content: `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+      content: `import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -158,8 +163,10 @@ import {
   lucideTrash2,
 } from '@ng-icons/lucide';
 
+import type { ZardDropdownAlign, ZardDropdownSide } from '@zard/components/dropdown/dropdown-positions';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 
 export interface Sidebar16Project {
   readonly name: string;
@@ -187,6 +194,11 @@ export interface Sidebar16Project {
   host: { class: 'contents' },
 })
 export class Sidebar16NavProjectsComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+  /** shadcn opens these menus to the side of the sidebar on desktop and below the trigger on mobile. */
+  protected readonly menuSide = computed<ZardDropdownSide>(() => (this.sidebar.isMobile() ? 'bottom' : 'right'));
+  protected readonly menuAlign = computed<ZardDropdownAlign>(() => (this.sidebar.isMobile() ? 'end' : 'start'));
+
   readonly projects = input<readonly Sidebar16Project[]>([]);
 }
 `,
@@ -256,7 +268,7 @@ export class Sidebar16NavSecondaryComponent {
       [zDropdownMenu]="userMenu"
       class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
     >
-      <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="CN" />
+      <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="ZU" />
 
       <div class="grid flex-1 text-left text-sm leading-tight">
         <span class="truncate font-medium">{{ user().name }}</span>
@@ -266,10 +278,15 @@ export class Sidebar16NavSecondaryComponent {
       <ng-icon name="lucideChevronsUpDown" class="ml-auto size-4" />
     </button>
 
-    <z-dropdown-menu-content #userMenu="zDropdownMenuContent" class="w-(--sidebar-width) min-w-56 rounded-lg">
+    <z-dropdown-menu-content
+      #userMenu="zDropdownMenuContent"
+      class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+      [zSide]="menuSide()"
+      zAlign="end"
+    >
       <z-dropdown-menu-label class="p-0 font-normal">
         <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-          <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="CN" />
+          <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="ZU" />
 
           <div class="grid flex-1 text-left text-sm leading-tight">
             <span class="truncate font-medium">{{ user().name }}</span>
@@ -319,7 +336,7 @@ export class Sidebar16NavSecondaryComponent {
     {
       name: 'sidebar-16-nav-user.component.ts',
       path: 'src/components/sidebar-16/sidebar-16-nav-user.component.ts',
-      content: `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+      content: `import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -332,8 +349,10 @@ import {
 } from '@ng-icons/lucide';
 
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
+import type { ZardDropdownSide } from '@zard/components/dropdown/dropdown-positions';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 
 export interface Sidebar16User {
   readonly name: string;
@@ -359,6 +378,10 @@ export interface Sidebar16User {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Sidebar16NavUserComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+  /** shadcn opens these menus to the side of the sidebar on desktop and below the trigger on mobile. */
+  protected readonly menuSide = computed<ZardDropdownSide>(() => (this.sidebar.isMobile() ? 'bottom' : 'right'));
+
   readonly user = input.required<Sidebar16User>();
 }
 `,
@@ -424,7 +447,10 @@ export class Sidebar16SearchFormComponent {
       <ng-icon name="lucidePanelLeft" />
     </button>
 
-    <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center" />
+    <z-separator
+      zOrientation="vertical"
+      class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+    />
 
     <z-breadcrumb class="hidden sm:block">
       <z-breadcrumb-item>
@@ -567,9 +593,9 @@ import { Sidebar16SiteHeaderComponent } from './sidebar-16-site-header.component
 export class Sidebar16Component {
   // This is sample data.
   protected readonly user: Sidebar16User = {
-    name: 'shadcn',
+    name: 'zard ui',
     email: 'm@example.com',
-    avatar: 'https://github.com/shadcn.png',
+    avatar: 'https://github.com/zard-ui.png',
   };
 
   protected readonly navMain: readonly Sidebar16NavItem[] = [

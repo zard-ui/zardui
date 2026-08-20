@@ -7,9 +7,10 @@
         <ul z-sidebar-menu>
           @for (item of changes; track item.file) {
             <li z-sidebar-menu-item>
-              <button z-sidebar-menu-button>
+              <!-- `pr-8` keeps the longer Angular paths clear of the absolutely positioned badge. -->
+              <button z-sidebar-menu-button class="pr-8" [title]="item.file">
                 <ng-icon name="lucideFile" />
-                {{ item.file }}
+                <span class="truncate">{{ item.file }}</span>
               </button>
               <div z-sidebar-menu-badge>{{ item.state }}</div>
             </li>
@@ -37,9 +38,14 @@
 <!-- Recursive template: Angular's answer to shadcn's self-referencing <Tree /> component. -->
 <ng-template #treeNode let-node>
   @if (!node.children) {
-    <button z-sidebar-menu-button class="data-[active=true]:bg-transparent" [zActive]="node.name === 'button.tsx'">
+    <button
+      z-sidebar-menu-button
+      class="data-[active=true]:bg-transparent"
+      [zActive]="node.name === 'button.component.ts'"
+      [title]="node.name"
+    >
       <ng-icon name="lucideFile" />
-      {{ node.name }}
+      <span class="truncate">{{ node.name }}</span>
     </button>
   } @else {
     <li z-sidebar-menu-item>
@@ -51,7 +57,7 @@
         <button z-collapsible-trigger z-sidebar-menu-button>
           <ng-icon name="lucideChevronRight" class="transition-transform" />
           <ng-icon name="lucideFolder" />
-          {{ node.name }}
+          <span class="truncate">{{ node.name }}</span>
         </button>
 
         <z-collapsible-content>

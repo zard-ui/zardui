@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -9,8 +9,10 @@ import {
   lucidePlus,
 } from '@ng-icons/lucide';
 
+import type { ZardDropdownSide } from '@zard/components/dropdown/dropdown-positions';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 
 export interface Sidebar07Team {
   readonly name: string;
@@ -29,6 +31,10 @@ export interface Sidebar07Team {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Sidebar07TeamSwitcherComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+  /** shadcn opens these menus to the side of the sidebar on desktop and below the trigger on mobile. */
+  protected readonly menuSide = computed<ZardDropdownSide>(() => (this.sidebar.isMobile() ? 'bottom' : 'right'));
+
   readonly teams = input<readonly Sidebar07Team[]>([]);
 
   protected readonly selectedTeam = signal<Sidebar07Team | null>(null);

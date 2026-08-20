@@ -14,7 +14,12 @@
           <span class="sr-only">More</span>
         </button>
 
-        <z-dropdown-menu-content #projectMenu="zDropdownMenuContent" class="w-48 rounded-lg">
+        <z-dropdown-menu-content
+          #projectMenu="zDropdownMenuContent"
+          class="w-48 rounded-lg"
+          [zSide]="menuSide()"
+          [zAlign]="menuAlign()"
+        >
           <z-dropdown-menu-item>
             <ng-icon name="lucideFolder" class="text-muted-foreground" />
             <span>View Project</span>

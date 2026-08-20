@@ -37,9 +37,9 @@ import { Sidebar08NavUserComponent, type Sidebar08User } from './sidebar-08-nav-
 export class Sidebar08Component {
   // This is sample data.
   protected readonly user: Sidebar08User = {
-    name: 'shadcn',
+    name: 'zard ui',
     email: 'm@example.com',
-    avatar: 'https://github.com/shadcn.png',
+    avatar: 'https://github.com/zard-ui.png',
   };
 
   protected readonly navMain: readonly Sidebar08NavItem[] = [

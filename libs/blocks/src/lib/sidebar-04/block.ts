@@ -126,11 +126,11 @@ export class Sidebar04AppSidebarComponent {
       url: '#',
       items: [
         { title: 'Components', url: '#' },
-        { title: 'File Conventions', url: '#' },
+        { title: 'Style Guide', url: '#' },
         { title: 'Functions', url: '#' },
-        { title: 'next.config.js Options', url: '#' },
+        { title: 'angular.json Options', url: '#' },
         { title: 'CLI', url: '#' },
-        { title: 'Edge Runtime', url: '#' },
+        { title: 'Hydration', url: '#' },
       ],
     },
     {
@@ -138,10 +138,10 @@ export class Sidebar04AppSidebarComponent {
       url: '#',
       items: [
         { title: 'Accessibility', url: '#' },
-        { title: 'Fast Refresh', url: '#' },
-        { title: 'Next.js Compiler', url: '#' },
+        { title: 'Hot Module Replacement', url: '#' },
+        { title: 'Angular Compiler', url: '#' },
         { title: 'Supported Browsers', url: '#' },
-        { title: 'Turbopack', url: '#' },
+        { title: 'esbuild', url: '#' },
       ],
     },
     {
@@ -164,7 +164,10 @@ export class Sidebar04AppSidebarComponent {
     <header class="flex h-16 shrink-0 items-center gap-2 px-4">
       <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
 
-      <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center" />
+      <z-separator
+        zOrientation="vertical"
+        class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+      />
 
       <z-breadcrumb>
         <z-breadcrumb-item class="hidden md:block">

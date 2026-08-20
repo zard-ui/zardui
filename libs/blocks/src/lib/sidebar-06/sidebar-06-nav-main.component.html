@@ -14,7 +14,12 @@
 
         <!-- Kept outside an @if: a template reference declared inside a control-flow block is not
              visible to the trigger above it. -->
-        <z-dropdown-menu-content #groupMenu="zDropdownMenuContent" class="min-w-56 rounded-lg">
+        <z-dropdown-menu-content
+          #groupMenu="zDropdownMenuContent"
+          class="min-w-56 rounded-lg"
+          zSide="right"
+          zAlign="start"
+        >
           @for (item of group.items; track item.title) {
             <z-dropdown-menu-item>
               <a [href]="item.url">{{ item.title }}</a>

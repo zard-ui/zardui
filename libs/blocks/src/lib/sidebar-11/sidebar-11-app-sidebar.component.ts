@@ -34,28 +34,28 @@ export class Sidebar11AppSidebarComponent {
   // This is sample data.
   protected readonly changes: readonly Change[] = [
     { file: 'README.md', state: 'M' },
-    { file: 'api/hello/route.ts', state: 'U' },
-    { file: 'app/layout.tsx', state: 'M' },
+    { file: 'core/services/hello.service.ts', state: 'U' },
+    { file: 'app/app.component.ts', state: 'M' },
   ];
 
   protected readonly tree: readonly TreeNode[] = [
     folder('app', [
-      folder('api', [folder('hello', [file('route.ts')])]),
-      file('page.tsx'),
-      file('layout.tsx'),
-      folder('blog', [file('page.tsx')]),
+      folder('core', [folder('services', [file('hello.service.ts')])]),
+      file('app.component.ts'),
+      file('app.config.ts'),
+      folder('blog', [file('blog.page.ts')]),
     ]),
     folder('components', [
-      folder('ui', [file('button.tsx'), file('card.tsx')]),
-      file('header.tsx'),
-      file('footer.tsx'),
+      folder('ui', [file('button.component.ts'), file('card.component.ts')]),
+      file('header.component.ts'),
+      file('footer.component.ts'),
     ]),
     folder('lib', [file('util.ts')]),
-    folder('public', [file('favicon.ico'), file('vercel.svg')]),
-    file('.eslintrc.json'),
+    folder('public', [file('favicon.ico'), file('angular.svg')]),
+    file('.editorconfig'),
     file('.gitignore'),
-    file('next.config.js'),
-    file('tailwind.config.js'),
+    file('angular.json'),
+    file('tsconfig.json'),
     file('package.json'),
     file('README.md'),
   ];

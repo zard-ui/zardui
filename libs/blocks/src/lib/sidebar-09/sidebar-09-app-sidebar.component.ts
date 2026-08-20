@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArchiveX, lucideCommand, lucideFile, lucideInbox, lucideSend, lucideTrash2 } from '@ng-icons/lucide';
@@ -6,6 +6,7 @@ import { lucideArchiveX, lucideCommand, lucideFile, lucideInbox, lucideSend, luc
 import { ZardFieldImports } from '@zard/components/field/field.imports';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 
 import { Sidebar09NavUserComponent, type Sidebar09User } from './sidebar-09-nav-user.component';
@@ -41,11 +42,13 @@ interface Mail {
   host: { class: 'contents' },
 })
 export class Sidebar09AppSidebarComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+
   // This is sample data.
   protected readonly user: Sidebar09User = {
-    name: 'shadcn',
+    name: 'zard ui',
     email: 'm@example.com',
-    avatar: 'https://github.com/shadcn.png',
+    avatar: 'https://github.com/zard-ui.png',
   };
 
   protected readonly navMain: readonly NavItem[] = [
@@ -57,6 +60,12 @@ export class Sidebar09AppSidebarComponent {
   ];
 
   protected readonly activeItem = signal<NavItem>(this.navMain[0]);
+
+  /** Picking a mailbox also opens the outer sidebar, as it does in shadcn. */
+  protected selectItem(item: NavItem): void {
+    this.activeItem.set(item);
+    this.sidebar.setOpen(true);
+  }
 
   private readonly allMails: readonly Mail[] = [
     {

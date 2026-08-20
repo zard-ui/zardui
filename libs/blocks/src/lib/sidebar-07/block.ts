@@ -65,9 +65,9 @@ import { Sidebar07TeamSwitcherComponent, type Sidebar07Team } from './sidebar-07
 export class Sidebar07AppSidebarComponent {
   // This is sample data.
   protected readonly user: Sidebar07User = {
-    name: 'shadcn',
+    name: 'zard ui',
     email: 'm@example.com',
-    avatar: 'https://github.com/shadcn.png',
+    avatar: 'https://github.com/zard-ui.png',
   };
 
   protected readonly teams: readonly Sidebar07Team[] = [
@@ -227,7 +227,12 @@ export class Sidebar07NavMainComponent {
           <span class="sr-only">More</span>
         </button>
 
-        <z-dropdown-menu-content #projectMenu="zDropdownMenuContent" class="w-48 rounded-lg">
+        <z-dropdown-menu-content
+          #projectMenu="zDropdownMenuContent"
+          class="w-48 rounded-lg"
+          [zSide]="menuSide()"
+          [zAlign]="menuAlign()"
+        >
           <z-dropdown-menu-item>
             <ng-icon name="lucideFolder" class="text-muted-foreground" />
             <span>View Project</span>
@@ -259,7 +264,7 @@ export class Sidebar07NavMainComponent {
     {
       name: 'sidebar-07-nav-projects.component.ts',
       path: 'src/components/sidebar-07/sidebar-07-nav-projects.component.ts',
-      content: `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+      content: `import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -272,8 +277,10 @@ import {
   lucideTrash2,
 } from '@ng-icons/lucide';
 
+import type { ZardDropdownAlign, ZardDropdownSide } from '@zard/components/dropdown/dropdown-positions';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 
 export interface Sidebar07Project {
   readonly name: string;
@@ -301,6 +308,11 @@ export interface Sidebar07Project {
   host: { class: 'contents' },
 })
 export class Sidebar07NavProjectsComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+  /** shadcn opens these menus to the side of the sidebar on desktop and below the trigger on mobile. */
+  protected readonly menuSide = computed<ZardDropdownSide>(() => (this.sidebar.isMobile() ? 'bottom' : 'right'));
+  protected readonly menuAlign = computed<ZardDropdownAlign>(() => (this.sidebar.isMobile() ? 'end' : 'start'));
+
   readonly projects = input<readonly Sidebar07Project[]>([]);
 }
 `,
@@ -318,7 +330,7 @@ export class Sidebar07NavProjectsComponent {
       [zDropdownMenu]="userMenu"
       class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
     >
-      <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="CN" />
+      <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="ZU" />
 
       <div class="grid flex-1 text-left text-sm leading-tight">
         <span class="truncate font-medium">{{ user().name }}</span>
@@ -328,10 +340,15 @@ export class Sidebar07NavProjectsComponent {
       <ng-icon name="lucideChevronsUpDown" class="ml-auto size-4" />
     </button>
 
-    <z-dropdown-menu-content #userMenu="zDropdownMenuContent" class="w-(--sidebar-width) min-w-56 rounded-lg">
+    <z-dropdown-menu-content
+      #userMenu="zDropdownMenuContent"
+      class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+      [zSide]="menuSide()"
+      zAlign="end"
+    >
       <z-dropdown-menu-label class="p-0 font-normal">
         <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-          <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="CN" />
+          <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="ZU" />
 
           <div class="grid flex-1 text-left text-sm leading-tight">
             <span class="truncate font-medium">{{ user().name }}</span>
@@ -381,7 +398,7 @@ export class Sidebar07NavProjectsComponent {
     {
       name: 'sidebar-07-nav-user.component.ts',
       path: 'src/components/sidebar-07/sidebar-07-nav-user.component.ts',
-      content: `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+      content: `import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -394,8 +411,10 @@ import {
 } from '@ng-icons/lucide';
 
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
+import type { ZardDropdownSide } from '@zard/components/dropdown/dropdown-positions';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 
 export interface Sidebar07User {
   readonly name: string;
@@ -421,6 +440,10 @@ export interface Sidebar07User {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Sidebar07NavUserComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+  /** shadcn opens these menus to the side of the sidebar on desktop and below the trigger on mobile. */
+  protected readonly menuSide = computed<ZardDropdownSide>(() => (this.sidebar.isMobile() ? 'bottom' : 'right'));
+
   readonly user = input.required<Sidebar07User>();
 }
 `,
@@ -450,7 +473,12 @@ export class Sidebar07NavUserComponent {
       <ng-icon name="lucideChevronsUpDown" class="ml-auto" />
     </button>
 
-    <z-dropdown-menu-content #teamMenu="zDropdownMenuContent" class="w-(--sidebar-width) min-w-56 rounded-lg">
+    <z-dropdown-menu-content
+      #teamMenu="zDropdownMenuContent"
+      class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+      [zSide]="menuSide()"
+      zAlign="start"
+    >
       <z-dropdown-menu-label class="text-muted-foreground text-xs">Teams</z-dropdown-menu-label>
 
       @for (team of teams(); track team.name; let index = $index) {
@@ -480,7 +508,7 @@ export class Sidebar07NavUserComponent {
     {
       name: 'sidebar-07-team-switcher.component.ts',
       path: 'src/components/sidebar-07/sidebar-07-team-switcher.component.ts',
-      content: `import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
+      content: `import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -491,8 +519,10 @@ import {
   lucidePlus,
 } from '@ng-icons/lucide';
 
+import type { ZardDropdownSide } from '@zard/components/dropdown/dropdown-positions';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';
 
 export interface Sidebar07Team {
   readonly name: string;
@@ -511,6 +541,10 @@ export interface Sidebar07Team {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Sidebar07TeamSwitcherComponent {
+  private readonly sidebar = inject(ZardSidebarService);
+  /** shadcn opens these menus to the side of the sidebar on desktop and below the trigger on mobile. */
+  protected readonly menuSide = computed<ZardDropdownSide>(() => (this.sidebar.isMobile() ? 'bottom' : 'right'));
+
   readonly teams = input<readonly Sidebar07Team[]>([]);
 
   protected readonly selectedTeam = signal<Sidebar07Team | null>(null);
@@ -535,7 +569,10 @@ export class Sidebar07TeamSwitcherComponent {
       <div class="flex items-center gap-2 px-4">
         <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
 
-        <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center" />
+        <z-separator
+          zOrientation="vertical"
+          class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+        />
 
         <z-breadcrumb>
           <z-breadcrumb-item class="hidden md:block">

@@ -24,9 +24,9 @@ import { Sidebar07TeamSwitcherComponent, type Sidebar07Team } from './sidebar-07
 export class Sidebar07AppSidebarComponent {
   // This is sample data.
   protected readonly user: Sidebar07User = {
-    name: 'shadcn',
+    name: 'zard ui',
     email: 'm@example.com',
-    avatar: 'https://github.com/shadcn.png',
+    avatar: 'https://github.com/zard-ui.png',
   };
 
   protected readonly teams: readonly Sidebar07Team[] = [

@@ -45,8 +45,10 @@ export const sidebar05Block: Block = {
           <li z-sidebar-menu-item z-collapsible class="group/collapsible" [zOpen]="index === 1">
             <button z-collapsible-trigger z-sidebar-menu-button>
               {{ group.title }}
-              <ng-icon name="lucidePlus" class="ml-auto group-data-[state=open]/collapsible:hidden" />
-              <ng-icon name="lucideMinus" class="ml-auto group-data-[state=closed]/collapsible:hidden" />
+              <!-- \`hidden!\`: NgIcon sets \`display: inline-block\` on its host outside any cascade
+                   layer, so a plain \`hidden\` utility would never win. -->
+              <ng-icon name="lucidePlus" class="ml-auto group-data-[state=open]/collapsible:hidden!" />
+              <ng-icon name="lucideMinus" class="ml-auto group-data-[state=closed]/collapsible:hidden!" />
             </button>
 
             @if (group.items.length) {
@@ -139,11 +141,11 @@ export class Sidebar05AppSidebarComponent {
       url: '#',
       items: [
         { title: 'Components', url: '#' },
-        { title: 'File Conventions', url: '#' },
+        { title: 'Style Guide', url: '#' },
         { title: 'Functions', url: '#' },
-        { title: 'next.config.js Options', url: '#' },
+        { title: 'angular.json Options', url: '#' },
         { title: 'CLI', url: '#' },
-        { title: 'Edge Runtime', url: '#' },
+        { title: 'Hydration', url: '#' },
       ],
     },
     {
@@ -151,10 +153,10 @@ export class Sidebar05AppSidebarComponent {
       url: '#',
       items: [
         { title: 'Accessibility', url: '#' },
-        { title: 'Fast Refresh', url: '#' },
-        { title: 'Next.js Compiler', url: '#' },
+        { title: 'Hot Module Replacement', url: '#' },
+        { title: 'Angular Compiler', url: '#' },
         { title: 'Supported Browsers', url: '#' },
-        { title: 'Turbopack', url: '#' },
+        { title: 'esbuild', url: '#' },
       ],
     },
     {
@@ -221,7 +223,10 @@ export class Sidebar05SearchFormComponent {}
     <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
       <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
 
-      <z-separator zOrientation="vertical" class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center" />
+      <z-separator
+        zOrientation="vertical"
+        class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+      />
 
       <z-breadcrumb>
         <z-breadcrumb-item class="hidden md:block">

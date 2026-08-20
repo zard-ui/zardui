@@ -14,7 +14,12 @@
           <span class="sr-only">More</span>
         </button>
 
-        <z-dropdown-menu-content #favoriteMenu="zDropdownMenuContent" class="w-56 rounded-lg">
+        <z-dropdown-menu-content
+          #favoriteMenu="zDropdownMenuContent"
+          class="w-56 rounded-lg"
+          [zSide]="menuSide()"
+          [zAlign]="menuAlign()"
+        >
           <z-dropdown-menu-item>
             <ng-icon name="lucideStarOff" class="text-muted-foreground" />
             <span>Remove from Favorites</span>

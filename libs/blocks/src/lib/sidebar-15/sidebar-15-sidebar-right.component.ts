@@ -27,9 +27,9 @@ import { Sidebar15NavUserComponent, type Sidebar15User } from './sidebar-15-nav-
 export class Sidebar15SidebarRightComponent {
   // This is sample data.
   protected readonly user: Sidebar15User = {
-    name: 'shadcn',
+    name: 'zard ui',
     email: 'm@example.com',
-    avatar: 'https://github.com/shadcn.png',
+    avatar: 'https://github.com/zard-ui.png',
   };
 
   protected readonly calendars: readonly Sidebar15Calendar[] = [
