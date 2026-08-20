@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideDownload, lucideFileText } from '@ng-icons/lucide';
@@ -65,6 +65,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
       </z-message>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideDownload, lucideFileText })],
   host: { class: 'contents' },
 })

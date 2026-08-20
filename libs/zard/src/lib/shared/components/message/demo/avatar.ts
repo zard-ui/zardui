@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
@@ -51,6 +51,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
       </z-message>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoMessageAvatarComponent {}

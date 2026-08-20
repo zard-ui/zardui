@@ -327,7 +327,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
 ### Default
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
@@ -392,6 +392,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
       </z-message>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoMessageDefaultComponent {}
@@ -400,7 +401,7 @@ export class ZardDemoMessageDefaultComponent {}
 ### Avatar
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
@@ -453,6 +454,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
       </z-message>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoMessageAvatarComponent {}
@@ -461,7 +463,7 @@ export class ZardDemoMessageAvatarComponent {}
 ### Group
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
@@ -494,6 +496,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
       </z-message-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoMessageGroupComponent {}
@@ -502,7 +505,7 @@ export class ZardDemoMessageGroupComponent {}
 ### Header Footer
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 import { ZardMessageImports } from '@/shared/components/message/message.imports';
@@ -536,6 +539,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
       </z-message>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoMessageHeaderFooterComponent {}
@@ -544,7 +548,7 @@ export class ZardDemoMessageHeaderFooterComponent {}
 ### Actions
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCopy, lucideRefreshCcw, lucideThumbsDown, lucideThumbsUp } from '@ng-icons/lucide';
@@ -592,6 +596,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
       </z-message>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCopy, lucideRefreshCcw, lucideThumbsDown, lucideThumbsUp })],
   host: { class: 'contents' },
 })
@@ -601,7 +606,7 @@ export class ZardDemoMessageActionsComponent {}
 ### Attachment
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideDownload, lucideFileText } from '@ng-icons/lucide';
@@ -668,6 +673,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
       </z-message>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideDownload, lucideFileText })],
   host: { class: 'contents' },
 })
@@ -677,7 +683,7 @@ export class ZardDemoMessageAttachmentComponent {}
 ### Shorthand
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 import { ZardMessageImports } from '@/shared/components/message/message.imports';
@@ -708,6 +714,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
       </z-message>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoMessageShorthandComponent {}
