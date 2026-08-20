@@ -39,7 +39,6 @@ const LANGUAGE_ICONS: Record<string, string> = {
 
 @Component({
   selector: 'z-code-block',
-  standalone: true,
   imports: [CopyButtonComponent, ExpandableCodeComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

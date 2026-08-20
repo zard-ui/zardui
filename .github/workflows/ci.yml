@@ -40,7 +40,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Lint
-        run: npx nx run-many --target=lint --p=zard,blocks --parallel
+        run: npx nx run-many --target=lint --all --parallel
+      - name: Check registry
+        run: npm run check:registry
+      - name: Check API docs
+        run: npm run check:api-docs
 
   build:
     runs-on: ubuntu-latest
@@ -56,6 +60,16 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+      # The registry and the docs markdown under apps/web/public are generated and
+      # committed. A build that changes them means the branch is shipping artifacts
+      # that no longer match its own source.
+      - name: Check generated artifacts are committed
+        run: |
+          if ! git diff --quiet -- apps/web/public apps/web/prerender-routes.txt; then
+            echo "::error::Generated artifacts are out of date. Run 'npm run build' and commit the result."
+            git --no-pager diff --stat -- apps/web/public apps/web/prerender-routes.txt
+            exit 1
+          fi
 
   test:
     runs-on: ubuntu-latest

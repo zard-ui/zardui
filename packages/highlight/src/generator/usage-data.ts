@@ -210,7 +210,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-kbd>⌘ K</z-kbd>`,
   },
   layout: {
-    importCode: `import { LayoutImports } from '@/shared/components/layout/layout.imports';`,
+    importCode: `import { ZardLayoutImports } from '@/shared/components/layout/layout.imports';`,
     templateCode: `<z-layout>
   <z-header>Header</z-header>
   <z-content>Content</z-content>
