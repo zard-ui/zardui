@@ -163,6 +163,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/checkbox/demo/checkbox').then(m => m.CHECKBOX),
   },
   {
+    componentName: 'collapsible',
+    description: 'An interactive component which expands and collapses a panel.',
+    category: 'Layout & Navigation',
+    loadData: () => import('@zard/components/collapsible/demo/collapsible').then(m => m.COLLAPSIBLE),
+  },
+  {
     componentName: 'combobox',
     description: 'Autocomplete input and command palette with a list of suggestions.',
     category: 'Form & Input',
@@ -173,6 +179,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Fast, composable, unstyled command menu.',
     category: 'Overlays & Dialogs',
     loadData: () => import('@zard/components/command/demo/command').then(m => m.COMMAND),
+  },
+  {
+    componentName: 'context-menu',
+    description: 'Displays a menu of actions triggered by a right click.',
+    category: 'Overlays & Dialogs',
+    loadData: () => import('@zard/components/context-menu/demo/context-menu').then(m => m.CONTEXT_MENU),
   },
   {
     componentName: 'date-picker',
@@ -242,10 +254,16 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/kbd/demo/kbd').then(m => m.KBD),
   },
   {
-    componentName: 'layout',
-    description: 'Layout components for building page structures.',
-    category: 'Layout & Navigation',
-    loadData: () => import('@zard/components/layout/demo/layout').then(m => m.LAYOUT),
+    componentName: 'marker',
+    description: 'Displays an inline status, system note, bordered row, or labeled separator in a conversation.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/marker/demo/marker').then(m => m.MARKER),
+  },
+  {
+    componentName: 'message',
+    description: 'Displays a message in a conversation, with optional avatar, header, footer, and alignment.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/message/demo/message').then(m => m.MESSAGE),
   },
   {
     componentName: 'navigation-menu',
@@ -301,6 +319,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Extends the Dialog component to display content that complements the main content of the screen.',
     category: 'Overlays & Dialogs',
     loadData: () => import('@zard/components/sheet/demo/sheet').then(m => m.SHEET),
+  },
+  {
+    componentName: 'sidebar',
+    description: 'A composable, themeable and customizable sidebar component.',
+    category: 'Layout & Navigation',
+    loadData: () => import('@zard/components/sidebar/demo/sidebar').then(m => m.SIDEBAR),
   },
   {
     componentName: 'skeleton',
@@ -368,12 +392,5 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
       'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
     category: 'Overlays & Dialogs',
     loadData: () => import('@zard/components/tooltip/demo/tooltip').then(m => m.TOOLTIP),
-  },
-  {
-    componentName: 'tree',
-    description:
-      'A hierarchical tree view for displaying nested data structures with expand/collapse, selection, and checkboxes.',
-    category: 'Layout & Navigation',
-    loadData: () => import('@zard/components/tree/demo/tree').then(m => m.TREE),
   },
 ];

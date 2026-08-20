@@ -173,7 +173,6 @@ export const THEME_TOKENS: ThemeToken[] = [
       'tabs',
       'textarea',
       'toggle-group',
-      'tree',
     ],
   },
   {
@@ -181,7 +180,7 @@ export const THEME_TOKENS: ThemeToken[] = [
     group: 'base',
     description: 'Hover and active surface for list items — menus, selects, trees, calendars.',
     utilities: ['bg'],
-    usedBy: ['badge', 'calendar', 'dropdown', 'layout', 'menu', 'select', 'tree'],
+    usedBy: ['badge', 'calendar', 'dropdown', 'layout', 'menu', 'select'],
     pairedWith: 'accent-foreground',
   },
   {
@@ -189,7 +188,7 @@ export const THEME_TOKENS: ThemeToken[] = [
     group: 'base',
     description: 'Text drawn on top of `--accent`.',
     utilities: ['text'],
-    usedBy: ['badge', 'calendar', 'command', 'dropdown', 'menu', 'select', 'tree'],
+    usedBy: ['badge', 'calendar', 'command', 'dropdown', 'menu', 'select'],
   },
   {
     name: 'destructive',
@@ -329,7 +328,6 @@ export const THEME_TOKENS: ThemeToken[] = [
       'tabs',
       'textarea',
       'toggle',
-      'tree',
     ],
   },
 

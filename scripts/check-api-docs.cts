@@ -104,9 +104,27 @@ function declarationsBySelector(dir: string): Map<string, Declared> {
   return bySelector;
 }
 
+/**
+ * The props a file declares once and reuses, by identifier.
+ *
+ * `class` is on every component, so a table that repeats the same row a dozen
+ * times usually hoists it into a `const`. Read as text, that row is just a bare
+ * identifier inside `props`, and without this it looks like nothing at all.
+ */
+function sharedProps(api: string): Map<string, string> {
+  const shared = new Map<string, string>();
+
+  for (const match of api.matchAll(/^const (\w+) = \{[^}]*name: '([^']+)'/gm)) {
+    shared.set(match[1], match[2]);
+  }
+
+  return shared;
+}
+
 /** The `{ selector, props }` pairs of a `doc/api.ts`, read as text. */
 function documentedSections(api: string): Array<{ selector: string; props: string[] }> {
   const sections: Array<{ selector: string; props: string[] }> = [];
+  const shared = sharedProps(api);
 
   for (const match of api.matchAll(/selector: '([^']+)',/g)) {
     const propsStart = api.indexOf('props: [', match.index);
@@ -121,10 +139,13 @@ function documentedSections(api: string): Array<{ selector: string; props: strin
     }
 
     const block = api.slice(open, index);
-    sections.push({
-      selector: match[1],
-      props: [...block.matchAll(/name: '([^']+)'/g)].map(prop => prop[1]),
-    });
+    const props = [...block.matchAll(/name: '([^']+)'/g)].map(prop => prop[1]);
+
+    for (const [identifier, name] of shared) {
+      if (new RegExp(`\\b${identifier}\\b`).test(block)) props.push(name);
+    }
+
+    sections.push({ selector: match[1], props });
   }
 
   return sections;

@@ -376,6 +376,26 @@ export const dropdownItemVariants = cva(
   },
 );
 
+export const dropdownSubContentVariants = cva([
+  'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground',
+  'shadow-lg outline-none animate-in fade-in-0 zoom-in-95',
+]);
+
+export const dropdownSubTriggerVariants = cva(
+  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  {
+    variants: {
+      inset: {
+        true: 'pl-8',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      inset: false,
+    },
+  },
+);
+
 export const dropdownLabelVariants = cva(
   'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
   {
@@ -482,14 +502,18 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
+  numberAttribute,
   type TemplateRef,
   viewChild,
+  ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import type { ZardDropdownAlign, ZardDropdownSide } from '@/shared/components/dropdown/dropdown-positions';
 import { dropdownContentVariants } from '@/shared/components/dropdown/dropdown.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -517,11 +541,97 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   exportAs: 'zDropdownMenuContent',
 })
 export class ZardDropdownMenuContentComponent {
+  /**
+   * Where the template is instantiated from when a service — rather than a trigger directive —
+   * opens this menu, so `ZardContextMenuService.create()` needs nothing but the menu itself.
+   */
+  readonly viewContainerRef = inject(ViewContainerRef);
+
   readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('contentTemplate');
 
   readonly class = input<ClassValue>('');
 
+  /** Edge of the trigger the menu opens from. Same meaning as Radix's `side`. */
+  readonly zSide = input<ZardDropdownSide>('bottom');
+  /** Alignment along that edge. Same meaning as Radix's `align`. */
+  readonly zAlign = input<ZardDropdownAlign>('start');
+  /** Gap between trigger and menu, in pixels. Same meaning as Radix's `sideOffset`. */
+  readonly zSideOffset = input(4, { transform: numberAttribute });
+
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
+}
+```
+
+```angular-ts
+import type { ConnectedPosition } from '@angular/cdk/overlay';
+
+/** Which edge of the trigger the menu is anchored to. Mirrors Radix's `side`. */
+export type ZardDropdownSide = 'top' | 'right' | 'bottom' | 'left';
+
+/** How the menu is aligned along that edge. Mirrors Radix's `align`. */
+export type ZardDropdownAlign = 'start' | 'center' | 'end';
+
+/** The side the menu flips to when the preferred one does not fit. */
+const OPPOSITE_SIDE: Record<ZardDropdownSide, ZardDropdownSide> = {
+  top: 'bottom',
+  bottom: 'top',
+  left: 'right',
+  right: 'left',
+};
+
+const isVertical = (side: ZardDropdownSide) => side === 'top' || side === 'bottom';
+
+/**
+ * Translates a Radix-style `side`/`align` pair into a CDK connected position.
+ *
+ * `side` decides the axis the menu is pushed along, `align` decides where it sits on the other axis
+ * — the same split Radix uses, so a shadcn snippet can be transcribed one to one.
+ */
+function toConnectedPosition(side: ZardDropdownSide, align: ZardDropdownAlign, offset: number): ConnectedPosition {
+  const alignPair = {
+    start: 'start',
+    center: 'center',
+    end: 'end',
+  } as const;
+
+  if (isVertical(side)) {
+    return {
+      originX: alignPair[align],
+      originY: side === 'bottom' ? 'bottom' : 'top',
+      overlayX: alignPair[align],
+      overlayY: side === 'bottom' ? 'top' : 'bottom',
+      offsetY: side === 'bottom' ? offset : -offset,
+    };
+  }
+
+  const verticalAlign = { start: 'top', center: 'center', end: 'bottom' } as const;
+
+  return {
+    originX: side === 'right' ? 'end' : 'start',
+    originY: verticalAlign[align],
+    overlayX: side === 'right' ? 'start' : 'end',
+    overlayY: verticalAlign[align],
+    offsetX: side === 'right' ? offset : -offset,
+  };
+}
+
+/**
+ * The preferred position followed by its fallbacks: the opposite side first (a flip keeps the menu
+ * attached to the trigger), then the remaining alignments on the preferred side.
+ */
+export function buildDropdownPositions(
+  side: ZardDropdownSide,
+  align: ZardDropdownAlign,
+  offset: number,
+): ConnectedPosition[] {
+  const fallbackAligns: ZardDropdownAlign[] = (['start', 'center', 'end'] as const).filter(value => value !== align);
+
+  return [
+    toConnectedPosition(side, align, offset),
+    toConnectedPosition(OPPOSITE_SIDE[side], align, offset),
+    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(side, fallbackAlign, offset)),
+    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(OPPOSITE_SIDE[side], fallbackAlign, offset)),
+  ];
 }
 ```
 
@@ -574,7 +684,7 @@ const optionalBooleanAttribute = (value: unknown) => (value === undefined ? unde
 export class ZardDropdownMenuGroupComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(this.class()));
+  protected readonly classes = computed(() => mergeClasses('block', this.class()));
 }
 
 @Component({
@@ -593,7 +703,10 @@ export class ZardDropdownMenuGroupComponent {
 export class ZardDropdownMenuSeparatorComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses('bg-border -mx-1 my-1 h-px', this.class()));
+  // `block` is not decoration: on the `z-dropdown-menu-separator` element form the default
+  // `display: inline` swallows `h-px` and the negative margins, and the divider renders as a gap
+  // with no line in it.
+  protected readonly classes = computed(() => mergeClasses('bg-border -mx-1 my-1 block h-px', this.class()));
 }
 
 @Component({
@@ -721,7 +834,7 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
   readonly zValue = model<string | undefined>(undefined);
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(this.class()));
+  protected readonly classes = computed(() => mergeClasses('block', this.class()));
 
   select(value: string) {
     this.zValue.set(value);
@@ -789,6 +902,383 @@ export class ZardDropdownMenuRadioItemComponent {
 ```
 
 ```angular-ts
+import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  type OnDestroy,
+  PLATFORM_ID,
+  signal,
+  type TemplateRef,
+  viewChild,
+  ViewContainerRef,
+  ViewEncapsulation,
+} from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronRight } from '@ng-icons/lucide';
+import type { ClassValue } from 'clsx';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { ZardDropdownService } from './dropdown.service';
+import { dropdownSubContentVariants, dropdownSubTriggerVariants } from './dropdown.variants';
+import { findMenuItemByChar, getMenuItems, highlightMenuItem, isTypeaheadKey, nextMenuIndex } from './menu-keyboard';
+
+/** How long the pointer may sit between the trigger and the popup before the submenu closes. */
+const CLOSE_DELAY = 120;
+
+/**
+ * Holds the rows of one submenu. Like `z-dropdown-menu-content` it renders nothing where it is
+ * declared — it hands a template to the sub-trigger, which opens it in its own overlay.
+ */
+@Component({
+  selector: 'z-dropdown-menu-sub-content, [z-dropdown-menu-sub-content]',
+  template: `
+    <ng-template #contentTemplate>
+      <div
+        [class]="contentClasses()"
+        role="menu"
+        data-slot="dropdown-menu-sub-content"
+        data-state="open"
+        tabindex="-1"
+        aria-orientation="vertical"
+      >
+        <ng-content />
+      </div>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[style.display]': '"none"',
+  },
+  exportAs: 'zDropdownMenuSubContent',
+})
+export class ZardDropdownMenuSubContentComponent {
+  readonly viewContainerRef = inject(ViewContainerRef);
+
+  readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('contentTemplate');
+
+  readonly class = input<ClassValue>('');
+
+  protected readonly contentClasses = computed(() => mergeClasses(dropdownSubContentVariants(), this.class()));
+}
+
+/**
+ * A menu row that opens a nested menu to its side. Positioned by the CDK so it flips to the other
+ * side near the viewport edge, and opened on hover, click, `Enter`, `Space` or `ArrowRight` —
+ * `ArrowLeft` and `Escape` close it and hand the focus back to this row.
+ */
+@Component({
+  selector: 'z-dropdown-menu-sub-trigger, [z-dropdown-menu-sub-trigger]',
+  imports: [NgIcon],
+  template: `
+    <ng-content />
+    <ng-icon name="lucideChevronRight" class="ml-auto size-4 shrink-0" aria-hidden="true" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideChevronRight })],
+  host: {
+    '[class]': 'classes()',
+    'data-slot': 'dropdown-menu-sub-trigger',
+    role: 'menuitem',
+    tabindex: '-1',
+    'aria-haspopup': 'menu',
+    '[attr.aria-expanded]': 'isOpen()',
+    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
+    '[attr.data-disabled]': 'zDisabled() || null',
+    '[attr.data-inset]': 'zInset() || null',
+    '[attr.aria-disabled]': 'zDisabled()',
+    '(click)': 'onClick($event)',
+    '(mouseenter)': 'onMouseEnter()',
+    '(mouseleave)': 'scheduleClose($event)',
+    '(keydown)': 'onKeydown($event)',
+  },
+  exportAs: 'zDropdownMenuSubTrigger',
+})
+export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
+  private readonly dropdownService = inject(ZardDropdownService);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly overlay = inject(Overlay);
+  private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly viewContainerRef = inject(ViewContainerRef);
+
+  private overlayRef?: OverlayRef;
+  private closeTimeout?: ReturnType<typeof setTimeout>;
+  private readonly cleanups: Array<() => void> = [];
+  private focusedIndex = -1;
+
+  readonly zSubMenu = input.required<ZardDropdownMenuSubContentComponent | TemplateRef<unknown>>();
+  readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zInset = input(false, { transform: booleanAttribute });
+  readonly class = input<ClassValue>('');
+
+  readonly isOpen = signal(false);
+
+  protected readonly classes = computed(() =>
+    mergeClasses(dropdownSubTriggerVariants({ inset: this.zInset() }), this.class()),
+  );
+
+  constructor() {
+    /**
+     * The rows of a menu are projected content, so they belong to the view that declared them and
+     * outlive the overlay they are shown in — closing the parent menu never destroys this trigger.
+     * Following the parent's state is therefore the only thing that keeps an open submenu from
+     * being left behind on screen.
+     */
+    effect(() => {
+      if (this.dropdownService.isOpen() || !this.isOpen()) {
+        return;
+      }
+
+      this.close();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.close();
+    this.overlayRef?.dispose();
+    this.overlayRef = undefined;
+  }
+
+  open(focusFirstItem = false): void {
+    if (this.zDisabled() || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    this.cancelScheduledClose();
+
+    if (this.isOpen()) {
+      if (focusFirstItem) {
+        this.focusItem(0);
+      }
+      return;
+    }
+
+    const template = this.resolveTemplate();
+    const viewContainerRef = this.resolveViewContainerRef();
+    if (!template) {
+      return;
+    }
+
+    this.createOverlay();
+    if (!this.overlayRef) {
+      return;
+    }
+
+    this.overlayRef.attach(new TemplatePortal(template, viewContainerRef));
+    this.isOpen.set(true);
+    this.focusedIndex = -1;
+    this.attachOverlayListeners();
+
+    if (focusFirstItem) {
+      setTimeout(() => this.focusItem(0));
+    }
+  }
+
+  close(returnFocus = false): void {
+    this.cancelScheduledClose();
+    this.runCleanups();
+
+    if (this.overlayRef?.hasAttached()) {
+      this.overlayRef.detach();
+    }
+
+    this.isOpen.set(false);
+    this.focusedIndex = -1;
+
+    if (returnFocus) {
+      this.elementRef.nativeElement.focus();
+    }
+  }
+
+  protected onClick(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.open();
+  }
+
+  protected onKeydown(event: KeyboardEvent): void {
+    if (event.key !== 'ArrowRight' && event.key !== 'Enter' && event.key !== ' ') return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    this.open(true);
+  }
+
+  protected onMouseEnter(): void {
+    // Hovering a row is also what highlights it, so the parent's roving focus follows the pointer.
+    this.elementRef.nativeElement.focus();
+    this.open();
+  }
+
+  protected scheduleClose(event?: MouseEvent): void {
+    if (this.isMovingInsideSubmenu(event)) {
+      return;
+    }
+
+    this.cancelScheduledClose();
+    this.closeTimeout = setTimeout(() => this.close(), CLOSE_DELAY);
+  }
+
+  private isMovingInsideSubmenu(event?: MouseEvent): boolean {
+    const target = event?.relatedTarget as Node | null;
+    if (!target) {
+      return false;
+    }
+
+    return (
+      this.elementRef.nativeElement.contains(target) || (this.overlayRef?.overlayElement.contains(target) ?? false)
+    );
+  }
+
+  private cancelScheduledClose(): void {
+    if (this.closeTimeout) {
+      clearTimeout(this.closeTimeout);
+      this.closeTimeout = undefined;
+    }
+  }
+
+  private resolveTemplate(): TemplateRef<unknown> | undefined {
+    const menu = this.zSubMenu();
+    return menu instanceof ZardDropdownMenuSubContentComponent ? menu.contentTemplate() : menu;
+  }
+
+  private resolveViewContainerRef(): ViewContainerRef {
+    const menu = this.zSubMenu();
+    return menu instanceof ZardDropdownMenuSubContentComponent ? menu.viewContainerRef : this.viewContainerRef;
+  }
+
+  private createOverlay(): void {
+    if (this.overlayRef) {
+      return;
+    }
+
+    const positionStrategy = this.overlayPositionBuilder
+      .flexibleConnectedTo(this.elementRef)
+      .withPositions([
+        { originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top', offsetY: -4 },
+        { originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'top', offsetY: -4 },
+        { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'bottom', offsetY: 4 },
+        { originX: 'start', originY: 'bottom', overlayX: 'end', overlayY: 'bottom', offsetY: 4 },
+      ])
+      .withFlexibleDimensions(false)
+      .withPush(true);
+
+    this.overlayRef = this.overlay.create({
+      positionStrategy,
+      hasBackdrop: false,
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
+    });
+  }
+
+  /**
+   * The popup lives in a sibling overlay pane, so it is outside this element's subtree: the
+   * pointer and keyboard listeners that keep it open have to be bound to the pane itself.
+   */
+  private attachOverlayListeners(): void {
+    const pane = this.overlayRef?.overlayElement;
+    if (!pane) {
+      return;
+    }
+
+    const onEnter = () => this.cancelScheduledClose();
+    const onLeave = (event: Event) => this.scheduleClose(event as MouseEvent);
+    const onKeydown = (event: Event) => this.onSubmenuKeydown(event as KeyboardEvent);
+
+    pane.addEventListener('mouseenter', onEnter);
+    pane.addEventListener('mouseleave', onLeave);
+    pane.addEventListener('keydown', onKeydown);
+
+    this.cleanups.push(
+      () => pane.removeEventListener('mouseenter', onEnter),
+      () => pane.removeEventListener('mouseleave', onLeave),
+      () => pane.removeEventListener('keydown', onKeydown),
+    );
+  }
+
+  private onSubmenuKeydown(event: KeyboardEvent): void {
+    const items = this.submenuItems();
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        this.focusItem(nextMenuIndex(items, this.focusedIndex, 1), items);
+        return;
+      case 'ArrowUp':
+        event.preventDefault();
+        this.focusItem(nextMenuIndex(items, this.focusedIndex, -1), items);
+        return;
+      case 'Home':
+        event.preventDefault();
+        this.focusItem(0, items);
+        return;
+      case 'End':
+        event.preventDefault();
+        this.focusItem(items.length - 1, items);
+        return;
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        items[this.focusedIndex]?.click();
+        return;
+      case 'ArrowLeft':
+      case 'Escape':
+        event.preventDefault();
+        event.stopPropagation();
+        this.close(true);
+        return;
+      case 'Tab':
+        this.dropdownService.close();
+        return;
+    }
+
+    if (!isTypeaheadKey(event)) {
+      return;
+    }
+
+    const match = findMenuItemByChar(items, event.key, this.focusedIndex);
+    if (match === -1) {
+      return;
+    }
+
+    event.preventDefault();
+    this.focusItem(match, items);
+  }
+
+  private submenuItems(): HTMLElement[] {
+    const pane = this.overlayRef?.overlayElement;
+    return pane ? getMenuItems(pane) : [];
+  }
+
+  private focusItem(index: number, items = this.submenuItems()): void {
+    if (index < 0 || index >= items.length) {
+      return;
+    }
+
+    this.focusedIndex = index;
+    highlightMenuItem(items, index);
+  }
+
+  private runCleanups(): void {
+    this.cleanups.forEach(cleanup => cleanup());
+    this.cleanups.length = 0;
+  }
+}
+```
+
+```angular-ts
 import {
   booleanAttribute,
   computed,
@@ -801,7 +1291,7 @@ import {
 } from '@angular/core';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
-import { ZardDropdownService } from './dropdown.service';
+import { ZardDropdownService, type ZardDropdownPlacement } from './dropdown.service';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
@@ -871,7 +1361,12 @@ export class ZardDropdownDirective implements OnInit {
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
-      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
+      this.dropdownService.toggle(
+        this.elementRef,
+        menuContent.contentTemplate(),
+        this.viewContainerRef,
+        this.placementOf(menuContent),
+      );
     }
   }
 
@@ -882,8 +1377,22 @@ export class ZardDropdownDirective implements OnInit {
 
     const menuContent = this.zDropdownMenu();
     if (menuContent && !this.dropdownService.isOpen()) {
-      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
+      this.dropdownService.toggle(
+        this.elementRef,
+        menuContent.contentTemplate(),
+        this.viewContainerRef,
+        this.placementOf(menuContent),
+      );
     }
+  }
+
+  /** The content owns `zSide`/`zAlign`/`zSideOffset`, exactly as `DropdownMenuContent` does in shadcn. */
+  private placementOf(menuContent: ZardDropdownMenuContentComponent): ZardDropdownPlacement {
+    return {
+      side: menuContent.zSide(),
+      align: menuContent.zAlign(),
+      sideOffset: menuContent.zSideOffset(),
+    };
   }
 
   protected closeDropdown() {
@@ -904,6 +1413,10 @@ import {
   ZardDropdownMenuSeparatorComponent,
   ZardDropdownMenuShortcutComponent,
 } from '@/shared/components/dropdown/dropdown-primitives.component';
+import {
+  ZardDropdownMenuSubContentComponent,
+  ZardDropdownMenuSubTriggerComponent,
+} from '@/shared/components/dropdown/dropdown-submenu.component';
 import { ZardDropdownDirective } from '@/shared/components/dropdown/dropdown-trigger.directive';
 import { ZardDropdownMenuComponent } from '@/shared/components/dropdown/dropdown.component';
 
@@ -918,6 +1431,8 @@ export const ZardDropdownImports = [
   ZardDropdownMenuRadioGroupComponent,
   ZardDropdownMenuRadioItemComponent,
   ZardDropdownMenuLabelComponent,
+  ZardDropdownMenuSubTriggerComponent,
+  ZardDropdownMenuSubContentComponent,
   ZardDropdownDirective,
 ] as const;
 ```
@@ -940,7 +1455,26 @@ import {
 
 import { filter, type Subscription } from 'rxjs';
 
-import { noopFn } from '@/shared/utils/noop';
+import {
+  buildDropdownPositions,
+  type ZardDropdownAlign,
+  type ZardDropdownSide,
+} from '@/shared/components/dropdown/dropdown-positions';
+
+import { findMenuItemByChar, getMenuItems, highlightMenuItem, isTypeaheadKey, nextMenuIndex } from './menu-keyboard';
+
+/** A viewport coordinate a menu can be anchored to, instead of an element. */
+export interface ZardMenuOrigin {
+  x: number;
+  y: number;
+}
+
+/** Placement of the menu relative to its trigger, mirroring Radix's `side`/`align`/`sideOffset`. */
+export interface ZardDropdownPlacement {
+  side?: ZardDropdownSide;
+  align?: ZardDropdownAlign;
+  sideOffset?: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -954,10 +1488,23 @@ export class ZardDropdownService {
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
   private triggerElement?: ElementRef;
+  /**
+   * The element whose own clicks must not close the menu. It is the trigger for a dropdown — the
+   * click that toggles it would otherwise register as an outside click and close it right back —
+   * and nothing for a context menu, where a plain click anywhere, the trigger included, closes.
+   */
+  private outsideClickExempt?: ElementRef;
+  /**
+   * A right click ends in an `auxclick`, which the CDK reports as an outside pointer event — so the
+   * very gesture that opens a context menu would close it again on mouse up. Only the first one is
+   * dropped: every later right click is a real dismissal.
+   */
+  private skipFirstAuxClick = false;
   private renderer!: Renderer2;
   private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
-  private unlisten: () => void = noopFn;
+  private keydownSubscription?: Subscription;
+  private unlisten: Array<() => void> = [];
 
   readonly isOpen = signal(false);
 
@@ -965,22 +1512,59 @@ export class ZardDropdownService {
     this.renderer = this.rendererFactory.createRenderer(null, null);
   }
 
-  toggle(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
+  toggle(
+    triggerElement: ElementRef,
+    template: TemplateRef<unknown>,
+    viewContainerRef: ViewContainerRef,
+    placement?: ZardDropdownPlacement,
+  ) {
     if (this.isOpen()) {
       this.close();
     } else {
-      this.open(triggerElement, template, viewContainerRef);
+      this.open(triggerElement, template, viewContainerRef, placement);
     }
   }
 
-  private open(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
+  private open(
+    triggerElement: ElementRef,
+    template: TemplateRef<unknown>,
+    viewContainerRef: ViewContainerRef,
+    placement?: ZardDropdownPlacement,
+  ) {
     if (this.isOpen()) {
       this.close();
     }
 
     this.triggerElement = triggerElement;
-    this.createOverlay(triggerElement);
+    this.outsideClickExempt = triggerElement;
+    this.skipFirstAuxClick = false;
+    this.createOverlay(triggerElement, placement);
+    this.attach(template, viewContainerRef);
+  }
 
+  /**
+   * Opens the menu at a viewport coordinate instead of below an element — what a context menu
+   * needs, since it belongs to the pointer and not to an anchor. `focusOrigin` is where `Escape`
+   * and selecting an item hand the focus back to.
+   */
+  openAt(
+    origin: ZardMenuOrigin,
+    template: TemplateRef<unknown>,
+    viewContainerRef: ViewContainerRef,
+    focusOrigin?: ElementRef,
+  ) {
+    if (this.isOpen()) {
+      this.close();
+    }
+
+    this.triggerElement = focusOrigin;
+    this.outsideClickExempt = undefined;
+    this.skipFirstAuxClick = true;
+    this.createPointOverlay(origin);
+    this.attach(template, viewContainerRef);
+  }
+
+  private attach(template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
     if (!this.overlayRef) {
       return;
     }
@@ -993,14 +1577,39 @@ export class ZardDropdownService {
       this.setupKeyboardNavigation();
     }, 0);
 
+    /**
+     * `Escape` is also taken at the overlay level, not only on the surface: the CDK routes it to
+     * the top-most overlay whatever holds the focus, so the menu still closes after a click that
+     * left the focus on the body. The dispatcher only ever feeds the top overlay, so an open
+     * submenu keeps its own `Escape` to itself.
+     */
+    this.keydownSubscription = this.overlayRef.keydownEvents().subscribe(event => {
+      if (event.key !== 'Escape' || !this.isOpen()) {
+        return;
+      }
+
+      event.preventDefault();
+      this.closeAndFocusTrigger();
+    });
+
     // Close on outside click
+    const exempt = this.outsideClickExempt;
     this.outsideClickSubscription = this.overlayRef
       .outsidePointerEvents()
-      .pipe(filter(event => !triggerElement.nativeElement.contains(event.target)))
+      .pipe(filter(event => this.closesOnOutsideEvent(event, exempt)))
       .subscribe(() => {
         this.close();
       });
     this.isOpen.set(true);
+  }
+
+  private closesOnOutsideEvent(event: MouseEvent, exempt: ElementRef | undefined): boolean {
+    if (this.skipFirstAuxClick && event.type === 'auxclick') {
+      this.skipFirstAuxClick = false;
+      return false;
+    }
+
+    return !exempt?.nativeElement.contains(event.target);
   }
 
   getTriggerElement(): ElementRef | undefined {
@@ -1012,10 +1621,12 @@ export class ZardDropdownService {
       this.overlayRef.detach();
     }
     this.focusedIndex.set(-1);
-    this.unlisten();
+    this.unlisten.forEach(unlisten => unlisten());
+    this.unlisten = [];
     this.destroyOverlay();
     this.isOpen.set(false);
     this.triggerElement = undefined;
+    this.outsideClickExempt = undefined;
   }
 
   closeAndReturnTrigger(): ElementRef | undefined {
@@ -1029,29 +1640,16 @@ export class ZardDropdownService {
     trigger?.nativeElement.focus();
   }
 
-  private createOverlay(triggerElement: ElementRef) {
+  private createOverlay(triggerElement: ElementRef, placement?: ZardDropdownPlacement) {
     if (this.overlayRef) {
       this.destroyOverlay();
     }
 
     const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(triggerElement)
-      .withPositions([
-        {
-          originX: 'start',
-          originY: 'bottom',
-          overlayX: 'start',
-          overlayY: 'top',
-          offsetY: 4,
-        },
-        {
-          originX: 'start',
-          originY: 'top',
-          overlayX: 'start',
-          overlayY: 'bottom',
-          offsetY: -4,
-        },
-      ])
+      .withPositions(
+        buildDropdownPositions(placement?.side ?? 'bottom', placement?.align ?? 'start', placement?.sideOffset ?? 4),
+      )
       .withPush(false);
 
     this.overlayRef = this.overlay.create({
@@ -1061,12 +1659,58 @@ export class ZardDropdownService {
       minWidth: 200,
       maxHeight: 400,
     });
+
+    this.publishTriggerWidth(triggerElement);
+  }
+
+  /**
+   * Radix exposes the trigger's width to the menu as `--radix-dropdown-menu-trigger-width`, which
+   * shadcn uses to make a menu exactly as wide as the button that opened it. This is the Zard
+   * equivalent, published on the overlay pane so `w-(--z-dropdown-menu-trigger-width)` works inside.
+   */
+  private publishTriggerWidth(triggerElement: ElementRef) {
+    if (!this.overlayRef || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const width = (triggerElement.nativeElement as HTMLElement).getBoundingClientRect().width;
+    this.overlayRef.hostElement.style.setProperty('--z-dropdown-menu-trigger-width', `${width}px`);
+  }
+
+  /**
+   * Anchored to a zero-sized rect at the pointer. The four positions are the four quadrants it can
+   * grow into, so the menu flips instead of spilling out of the viewport, and `close()` as the
+   * scroll strategy matches every native context menu: scrolling dismisses it.
+   */
+  private createPointOverlay(origin: ZardMenuOrigin) {
+    if (this.overlayRef) {
+      this.destroyOverlay();
+    }
+
+    const positionStrategy = this.overlayPositionBuilder
+      .flexibleConnectedTo(origin)
+      .withPositions([
+        { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
+        { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top' },
+        { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom' },
+        { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom' },
+      ])
+      .withFlexibleDimensions(false)
+      .withPush(true);
+
+    this.overlayRef = this.overlay.create({
+      positionStrategy,
+      hasBackdrop: false,
+      scrollStrategy: this.overlay.scrollStrategies.close(),
+    });
   }
 
   private destroyOverlay() {
     this.overlayRef?.dispose();
     this.overlayRef = undefined;
     this.outsideClickSubscription?.unsubscribe();
+    this.keydownSubscription?.unsubscribe();
+    this.keydownSubscription = undefined;
   }
 
   private setupKeyboardNavigation() {
@@ -1079,36 +1723,65 @@ export class ZardDropdownService {
       return;
     }
 
-    this.unlisten = this.renderer.listen(
-      dropdownElement,
-      'keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent',
-      (event: KeyboardEvent) => {
-        const items = this.getDropdownItems();
+    this.unlisten.push(
+      this.renderer.listen(
+        dropdownElement,
+        'keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent',
+        (event: KeyboardEvent) => {
+          const items = this.getDropdownItems();
 
-        switch (event.key) {
-          case 'ArrowDown':
-            this.navigateItems(1, items);
-            break;
-          case 'ArrowUp':
-            this.navigateItems(-1, items);
-            break;
-          case 'Enter':
-          case ' ':
-            this.selectFocusedItem(items);
-            break;
-          case 'Escape': {
-            const triggerToFocus = this.closeAndReturnTrigger();
-            triggerToFocus?.nativeElement.focus();
-            break;
+          switch (event.key) {
+            case 'ArrowDown':
+              this.navigateItems(1, items);
+              break;
+            case 'ArrowUp':
+              this.navigateItems(-1, items);
+              break;
+            case 'Enter':
+            case ' ':
+              this.selectFocusedItem(items);
+              break;
+            case 'Escape': {
+              const triggerToFocus = this.closeAndReturnTrigger();
+              triggerToFocus?.nativeElement.focus();
+              break;
+            }
+            case 'Home':
+              this.focusItemAtIndex(items, 0);
+              break;
+            case 'End':
+              this.focusItemAtIndex(items, items.length - 1);
+              break;
           }
-          case 'Home':
-            this.focusItemAtIndex(items, 0);
-            break;
-          case 'End':
-            this.focusItemAtIndex(items, items.length - 1);
-            break;
+        },
+      ),
+    );
+
+    // A right click inside the surface must not strand the keyboard: the press blurs the focused
+    // row, so the surface takes the focus back instead of leaving it on the body.
+    this.unlisten.push(
+      this.renderer.listen(dropdownElement, 'contextmenu', (event: MouseEvent) => {
+        event.preventDefault();
+        dropdownElement.focus();
+      }),
+    );
+
+    // Typeahead: a printable key jumps to the next row whose label starts with it.
+    this.unlisten.push(
+      this.renderer.listen(dropdownElement, 'keydown', (event: KeyboardEvent) => {
+        if (!isTypeaheadKey(event)) {
+          return;
         }
-      },
+
+        const items = this.getDropdownItems();
+        const match = findMenuItemByChar(items, event.key, this.focusedIndex());
+        if (match === -1) {
+          return;
+        }
+
+        event.preventDefault();
+        this.focusItemAtIndex(items, match);
+      }),
     );
 
     // Focus dropdown container
@@ -1119,35 +1792,12 @@ export class ZardDropdownService {
     if (!this.overlayRef?.hasAttached()) {
       return [];
     }
-    const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(
-      dropdownElement.querySelectorAll<HTMLElement>(
-        'z-dropdown-menu-item, [z-dropdown-menu-item], z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item], z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
-      ),
-    ).filter(item => item.dataset['disabled'] === undefined);
+
+    return getMenuItems(this.overlayRef.overlayElement);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
-    if (items.length === 0) {
-      return;
-    }
-
-    const currentIndex = this.focusedIndex();
-    let nextIndex: number;
-
-    if (currentIndex === -1) {
-      // No item focused yet — start from first or last depending on direction
-      nextIndex = direction > 0 ? 0 : items.length - 1;
-    } else {
-      nextIndex = currentIndex + direction;
-      if (nextIndex < 0) {
-        nextIndex = items.length - 1;
-      } else if (nextIndex >= items.length) {
-        nextIndex = 0;
-      }
-    }
-
-    this.focusItemAtIndex(items, nextIndex);
+    this.focusItemAtIndex(items, nextMenuIndex(items, this.focusedIndex(), direction));
   }
 
   private focusItemAtIndex(items: HTMLElement[], index: number) {
@@ -1173,15 +1823,7 @@ export class ZardDropdownService {
   }
 
   private updateItemFocus(items: HTMLElement[], focusedIndex: number) {
-    for (let index = 0; index < items.length; index++) {
-      const item = items[index];
-      if (index === focusedIndex) {
-        item.focus();
-        item.dataset['highlighted'] = '';
-      } else {
-        delete item.dataset['highlighted'];
-      }
-    }
+    highlightMenuItem(items, focusedIndex);
   }
 }
 ```
@@ -1190,11 +1832,94 @@ export class ZardDropdownService {
 export * from './dropdown.component';
 export * from './dropdown-item.component';
 export * from './dropdown-menu-content.component';
+export * from './dropdown-positions';
 export * from './dropdown-primitives.component';
+export * from './dropdown-submenu.component';
 export * from './dropdown-trigger.directive';
 export * from './dropdown.service';
 export * from './dropdown.imports';
 export * from './dropdown.variants';
+export * from './menu-keyboard';
+```
+
+```angular-ts
+/**
+ * Roving focus shared by every menu surface — the overlay the dropdown service owns and the
+ * submenu overlay a sub-trigger opens. Both navigate the same primitives, so the item lookup,
+ * the `data-highlighted` bookkeeping and the typeahead live here instead of in each of them.
+ */
+
+/** Every row of a menu surface that can take focus, in DOM order. */
+export const ZARD_MENU_ITEM_SELECTOR = [
+  'z-dropdown-menu-item',
+  '[z-dropdown-menu-item]',
+  'z-dropdown-menu-checkbox-item',
+  '[z-dropdown-menu-checkbox-item]',
+  'z-dropdown-menu-radio-item',
+  '[z-dropdown-menu-radio-item]',
+  'z-dropdown-menu-sub-trigger',
+  '[z-dropdown-menu-sub-trigger]',
+].join(', ');
+
+export function getMenuItems(root: HTMLElement): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>(ZARD_MENU_ITEM_SELECTOR)).filter(
+    item => item.dataset['disabled'] === undefined,
+  );
+}
+
+/** Moves the focus to `index` and keeps `data-highlighted` on that row alone. */
+export function highlightMenuItem(items: HTMLElement[], index: number): void {
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    if (i === index) {
+      item.focus();
+      item.dataset['highlighted'] = '';
+    } else {
+      delete item.dataset['highlighted'];
+    }
+  }
+}
+
+/** Wraps `from` by `direction`, starting at either end when nothing is focused yet. */
+export function nextMenuIndex(items: HTMLElement[], from: number, direction: number): number {
+  if (items.length === 0) {
+    return -1;
+  }
+  if (from === -1) {
+    return direction > 0 ? 0 : items.length - 1;
+  }
+
+  const next = from + direction;
+  if (next < 0) {
+    return items.length - 1;
+  }
+  if (next >= items.length) {
+    return 0;
+  }
+  return next;
+}
+
+/**
+ * Typeahead: the next row whose label starts with `char`, searched forward from the focused one
+ * so repeated presses cycle through the matches instead of sticking to the first.
+ */
+export function findMenuItemByChar(items: HTMLElement[], char: string, from: number): number {
+  const needle = char.toLowerCase();
+
+  for (let step = 1; step <= items.length; step++) {
+    const index = (Math.max(from, -1) + step) % items.length;
+    if (items[index].textContent?.trim().toLowerCase().startsWith(needle)) {
+      return index;
+    }
+  }
+
+  return -1;
+}
+
+/** True for a key that should drive typeahead rather than an action. */
+export function isTypeaheadKey(event: KeyboardEvent): boolean {
+  return event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey;
+}
 ```
 
 ## Usage
@@ -1716,6 +2441,9 @@ Reusable content template displayed by a `z-dropdown` trigger.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zSide]` | Edge of the trigger the menu opens from. | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
+| `[zAlign]` | Alignment of the menu along that edge. | `'start' \| 'center' \| 'end'` | `'start'` |
+| `[zSideOffset]` | Gap between trigger and menu, in pixels. | `number` | `4` |
 
 ### z-dropdown-menu-item
 

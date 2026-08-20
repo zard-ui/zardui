@@ -590,9 +590,9 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       <z-item zVariant="outline">
         <z-item-media>
           <z-avatar-group>
-            <z-avatar zSrc="https://github.com/shadcn.png" zAlt="@shadcn" zFallback="CN" class="grayscale" />
-            <z-avatar zSrc="https://github.com/maxleiter.png" zAlt="@maxleiter" zFallback="LR" class="grayscale" />
-            <z-avatar zSrc="https://github.com/evilrabbit.png" zAlt="@evilrabbit" zFallback="ER" class="grayscale" />
+            <z-avatar zSrc="https://github.com/zard-ui.png" zAlt="@zardui" zFallback="ZU" class="grayscale" />
+            <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" class="grayscale" />
+            <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@luizgomess" zFallback="LG" class="grayscale" />
           </z-avatar-group>
         </z-item-media>
         <z-item-content>
@@ -708,9 +708,9 @@ interface Person {
 })
 export class ZardDemoItemGroupComponent {
   protected readonly people: Person[] = [
-    { username: 'shadcn', avatar: 'https://github.com/shadcn.png', email: 'shadcn@vercel.com' },
-    { username: 'maxleiter', avatar: 'https://github.com/maxleiter.png', email: 'maxleiter@vercel.com' },
-    { username: 'evilrabbit', avatar: 'https://github.com/evilrabbit.png', email: 'evilrabbit@vercel.com' },
+    { username: 'zardui', avatar: 'https://github.com/zard-ui.png', email: 'zardui@example.com' },
+    { username: 'srizzon', avatar: 'https://github.com/srizzon.png', email: 'srizzon@example.com' },
+    { username: 'luizgomess', avatar: 'https://github.com/Luizgomess.png', email: 'luizgomess@example.com' },
   ];
 }
 ```
@@ -866,9 +866,9 @@ interface Person {
 })
 export class ZardDemoItemDropdownComponent {
   protected readonly people: Person[] = [
-    { username: 'shadcn', avatar: 'https://github.com/shadcn.png', email: 'shadcn@vercel.com' },
-    { username: 'maxleiter', avatar: 'https://github.com/maxleiter.png', email: 'maxleiter@vercel.com' },
-    { username: 'evilrabbit', avatar: 'https://github.com/evilrabbit.png', email: 'evilrabbit@vercel.com' },
+    { username: 'zardui', avatar: 'https://github.com/zard-ui.png', email: 'zardui@example.com' },
+    { username: 'srizzon', avatar: 'https://github.com/srizzon.png', email: 'srizzon@example.com' },
+    { username: 'luizgomess', avatar: 'https://github.com/Luizgomess.png', email: 'luizgomess@example.com' },
   ];
 }
 ```

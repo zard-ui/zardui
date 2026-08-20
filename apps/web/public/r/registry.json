@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.111",
+  "version": "1.0.0-beta.115",
   "items": [
     {
       "name": "core",
@@ -60,27 +60,31 @@
       ]
     },
     {
-      "name": "layout",
+      "name": "sidebar",
       "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "tooltip",
+        "skeleton",
+        "separator"
+      ],
       "icons": {
         "family": "lucide",
         "symbols": [
-          "lucideChevronLeft",
-          "lucideChevronRight"
+          "lucidePanelLeft"
         ],
         "tokens": [
-          "chevron-left",
-          "chevron-right"
+          "panel-left"
         ]
       },
       "files": [
-        "layout.component.ts",
-        "layout.variants.ts",
-        "content.component.ts",
-        "footer.component.ts",
-        "header.component.ts",
-        "layout.imports.ts",
         "sidebar.component.ts",
+        "sidebar-primitives.component.ts",
+        "sidebar-menu.component.ts",
+        "sidebar.constants.ts",
+        "sidebar.service.ts",
+        "sidebar.variants.ts",
+        "sidebar.imports.ts",
         "index.ts"
       ]
     },
@@ -276,6 +280,21 @@
       ]
     },
     {
+      "name": "collapsible",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "collapsible.component.ts",
+        "collapsible.variants.ts",
+        "collapsible.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "drawer",
       "type": "registry:component",
       "registryDependencies": [
@@ -329,17 +348,42 @@
       ]
     },
     {
-      "name": "dropdown",
+      "name": "context-menu",
       "type": "registry:component",
+      "registryDependencies": [
+        "dropdown"
+      ],
       "icons": {
         "family": "lucide",
         "symbols": [],
         "tokens": []
       },
       "files": [
+        "context-menu.directive.ts",
+        "context-menu.service.ts",
+        "context-menu.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "dropdown",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronRight"
+        ],
+        "tokens": [
+          "chevron-right"
+        ]
+      },
+      "files": [
         "dropdown.component.ts",
+        "dropdown-submenu.component.ts",
+        "menu-keyboard.ts",
         "dropdown-item.component.ts",
         "dropdown-menu-content.component.ts",
+        "dropdown-positions.ts",
         "dropdown-primitives.component.ts",
         "dropdown-trigger.directive.ts",
         "dropdown.imports.ts",
@@ -434,6 +478,21 @@
       ]
     },
     {
+      "name": "marker",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "marker.component.ts",
+        "marker.imports.ts",
+        "marker.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "bubble",
       "type": "registry:component",
       "icons": {
@@ -445,6 +504,25 @@
         "bubble.component.ts",
         "bubble.imports.ts",
         "bubble.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "message",
+      "type": "registry:component",
+      "registryDependencies": [
+        "avatar",
+        "bubble"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "message.component.ts",
+        "message.imports.ts",
+        "message.variants.ts",
         "index.ts"
       ]
     },
@@ -882,6 +960,9 @@
     {
       "name": "navigation-menu",
       "type": "registry:component",
+      "registryDependencies": [
+        "context-menu"
+      ],
       "icons": {
         "family": "lucide",
         "symbols": [
@@ -1011,33 +1092,6 @@
         "chart-tooltip.formatter.ts",
         "chart-legend.component.ts",
         "chart.imports.ts",
-        "index.ts"
-      ]
-    },
-    {
-      "name": "tree",
-      "type": "registry:component",
-      "registryDependencies": [
-        "checkbox"
-      ],
-      "icons": {
-        "family": "lucide",
-        "symbols": [
-          "lucideChevronRight"
-        ],
-        "tokens": [
-          "chevron-right"
-        ]
-      },
-      "files": [
-        "tree.component.ts",
-        "tree-node.component.ts",
-        "tree-node-toggle.directive.ts",
-        "tree-node-content.component.ts",
-        "tree.service.ts",
-        "tree.types.ts",
-        "tree.variants.ts",
-        "tree.imports.ts",
         "index.ts"
       ]
     }

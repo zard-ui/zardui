@@ -254,7 +254,7 @@ A simple item with title and description.
 Your profile has been verified.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBadgeCheck, lucideChevronRight } from '@ng-icons/lucide';
@@ -290,7 +290,6 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </a>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBadgeCheck, lucideChevronRight })],
 })
 export class ZardDemoItemDefaultComponent {}
@@ -309,7 +308,7 @@ npx zard-cli@latest add textarea
 Multi-line text input with the same variants, sizes, and validation states as the single-line input.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
 
@@ -319,7 +318,6 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
   template: `
     <textarea z-textarea placeholder="Type your message here." class="w-72"></textarea>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTextareaDefaultComponent {}
 ```
@@ -343,7 +341,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'z-demo-sonner-default',
+  selector: 'zard-demo-sonner-default',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="show()">Show Toast</button>
@@ -460,7 +458,7 @@ import { ZardCarouselImports } from '@/shared/components/carousel/carousel.impor
 @Component({
   imports: [ZardCarouselImports, ZardCardImports],
   template: `
-    <div class="w-full max-w-48 sm:max-w-xs">
+    <div class="w-full max-w-[12rem] sm:max-w-xs">
       <z-carousel>
         <z-carousel-content>
           @for (slide of slides; track slide) {
@@ -502,7 +500,7 @@ Ctrl
 B
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardKbdGroupComponent } from '@/shared/components/kbd/kbd-group.component';
 import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
@@ -525,7 +523,6 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
       </z-kbd-group>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoKbdDefaultComponent {}
 ```
@@ -558,7 +555,7 @@ import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
 import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
 
 @Component({
-  selector: 'z-demo-sheet-preview-form',
+  selector: 'zard-demo-sheet-preview-form',
   imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
   template: `
     <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
@@ -725,13 +722,14 @@ npx zard-cli@latest add skeleton
 Loading placeholder component for better perceived performance during content loading with pulse animation.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardSkeletonComponent } from '../skeleton.component';
 
 @Component({
   selector: 'z-demo-skeleton-default',
   imports: [ZardSkeletonComponent],
+  standalone: true,
   template: `
     <div class="flex items-center space-x-4">
       <z-skeleton class="size-12 rounded-full" />
@@ -741,7 +739,6 @@ import { ZardSkeletonComponent } from '../skeleton.component';
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSkeletonDefaultComponent {}
 ```
@@ -759,7 +756,7 @@ npx zard-cli@latest add spinner
 Animated loading spinner customizable via the [zIcon] template input for swapping the underlying icon.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
 
@@ -793,7 +790,6 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </svg>
     </ng-template>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSpinnerCustomizationComponent {}
 ```
@@ -817,7 +813,7 @@ npx zard-cli@latest add avatar
 User profile image component with automatic fallback to initials and multiple size variants.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
 
@@ -830,7 +826,6 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
       <z-avatar zSrc="error-image.png" zFallback="ZA" />
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoAvatarBasicComponent {}
 ```
@@ -854,13 +849,14 @@ The Next Level for Your Angular Projects
 A set of beautifully designed components that you can customize, extend, and build on.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardSeparatorComponent } from '../separator.component';
 
 @Component({
   selector: 'z-demo-separator-preview',
   imports: [ZardSeparatorComponent],
+  standalone: true,
   template: `
     <div class="flex max-w-sm flex-col gap-4 text-sm">
       <div class="flex flex-col gap-1.5">
@@ -871,7 +867,6 @@ import { ZardSeparatorComponent } from '../separator.component';
       <div>A set of beautifully designed components that you can customize, extend, and build on.</div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSeparatorPreviewComponent {}
 ```
@@ -889,7 +884,7 @@ npx zard-cli@latest add breadcrumb
 Navigation breadcrumb trail showing the current page location within a hierarchical structure.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardBreadcrumbImports } from '../breadcrumb.imports';
 
@@ -909,7 +904,6 @@ import { ZardBreadcrumbImports } from '../breadcrumb.imports';
       </z-breadcrumb-item>
     </z-breadcrumb>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoBreadcrumbDefaultComponent {}
 ```
@@ -957,7 +951,7 @@ Manage your account preferences and options. Customize your experience to fit yo
 Configure notifications, security, and themes.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 
@@ -1014,7 +1008,6 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
       </z-tab>
     </z-tab-group>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTabsDefaultComponent {}
 ```
@@ -1081,7 +1074,7 @@ npx zard-cli@latest add tooltip
 Contextual information overlay displayed on hover with customizable positioning and delay settings.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -1092,7 +1085,6 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
   template: `
     <button type="button" z-button zType="outline" zTooltip="Tooltip content">Hover</button>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTooltipHoverComponent {}
 ```
@@ -1130,7 +1122,7 @@ interface iDialogData {
 }
 
 @Component({
-  selector: 'z-demo-dialog-basic',
+  selector: 'zard-demo-dialog-basic',
   imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
   template: `
     <form [formGroup]="form" class="grid gap-4">
@@ -1211,7 +1203,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-demo-popover-preview',
+  selector: 'z-popover-preview-demo',
   imports: [ZardButtonComponent, ZardInputComponent, ...ZardPopoverImports],
   template: `
     <button type="button" z-button zPopover zType="outline" [zContent]="popoverContent">Open popover</button>
@@ -1272,10 +1264,10 @@ import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-d
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
 @Component({
-  selector: 'z-demo-alert-dialog-default',
+  selector: 'zard-demo-alert-dialog-default',
   imports: [ZardButtonComponent],
   template: `
-    <button type="button" z-button zType="outline" (click)="open()">Show Dialog</button>
+    <button z-button zType="outline" (click)="open()">Show Dialog</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -1306,13 +1298,13 @@ npx zard-cli@latest add dropdown
 Context menu with hierarchical actions, keyboard navigation, and support for nested submenus.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-demo-dropdown-default',
+  selector: 'z-dropdown-demo',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open menu</button>
@@ -1324,9 +1316,8 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       <z-dropdown-menu-item [disabled]="true">Subscription</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoDropdownDefaultComponent {
+export class ZardDropdownDemoComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -1507,17 +1498,16 @@ Toggle switch component for boolean settings with smooth animation transitions.
 Airplane Mode
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
 
 @Component({
-  selector: 'z-demo-switch',
+  selector: 'zard-demo-switch',
   imports: [ZardSwitchComponent],
   template: `
     <z-switch zId="airplane-mode">Airplane Mode</z-switch>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSwitchDefaultComponent {}
 ```
@@ -1535,7 +1525,7 @@ npx zard-cli@latest add slider
 Range slider for numeric value selection with min/max bounds, step support, and value display.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardSliderComponent } from '../slider.component';
 
@@ -1547,7 +1537,6 @@ import { ZardSliderComponent } from '../slider.component';
       <z-slider class="mx-auto w-full max-w-xs" [zDefault]="[75]" />
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSliderDefaultComponent {}
 ```
@@ -1575,7 +1564,7 @@ API Key
 Your API key is encrypted and stored securely.
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
@@ -1590,7 +1579,6 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <p z-field-description>Your API key is encrypted and stored securely.</p>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputDefaultComponent {}
 ```
@@ -1622,7 +1610,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-default',
   imports: [ZardButtonComponent],
   template: `
-    <button type="button" z-button>Button</button>
+    <button z-button>Button</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -1748,7 +1736,7 @@ Outline
 Ghost
 
 ```
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '../badge.component';
 
@@ -1766,7 +1754,6 @@ import { ZardBadgeComponent } from '../badge.component';
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoBadgeDefaultComponent {}
 ```

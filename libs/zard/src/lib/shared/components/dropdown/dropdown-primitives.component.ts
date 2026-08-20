@@ -46,7 +46,7 @@ const optionalBooleanAttribute = (value: unknown) => (value === undefined ? unde
 export class ZardDropdownMenuGroupComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(this.class()));
+  protected readonly classes = computed(() => mergeClasses('block', this.class()));
 }
 
 @Component({
@@ -65,7 +65,10 @@ export class ZardDropdownMenuGroupComponent {
 export class ZardDropdownMenuSeparatorComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses('bg-border -mx-1 my-1 h-px', this.class()));
+  // `block` is not decoration: on the `z-dropdown-menu-separator` element form the default
+  // `display: inline` swallows `h-px` and the negative margins, and the divider renders as a gap
+  // with no line in it.
+  protected readonly classes = computed(() => mergeClasses('bg-border -mx-1 my-1 block h-px', this.class()));
 }
 
 @Component({
@@ -193,7 +196,7 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
   readonly zValue = model<string | undefined>(undefined);
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(this.class()));
+  protected readonly classes = computed(() => mergeClasses('block', this.class()));
 
   select(value: string) {
     this.zValue.set(value);

@@ -1,0 +1,43 @@
+<z-card class="pt-0">
+  <z-card-header class="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+    <div class="grid flex-1 gap-1">
+      <z-card-title zTitle="Total Visitors" />
+      <z-card-description zDescription="Total for the last 3 months" />
+    </div>
+
+    <z-card-action class="flex items-center gap-2">
+      <z-toggle-group
+        zMode="single"
+        zType="outline"
+        zSize="sm"
+        [zItems]="ranges"
+        [zValue]="range()"
+        (valueChange)="onRangeChange($event)"
+        class="hidden lg:flex"
+        zItemClass="px-4!"
+      />
+
+      <z-select class="w-40 rounded-lg lg:hidden" [(zValue)]="range">
+        @for (option of ranges; track option.value) {
+          <z-select-item [zValue]="option.value">{{ option.label }}</z-select-item>
+        }
+      </z-select>
+    </z-card-action>
+  </z-card-header>
+
+  <z-card-content class="px-2 pt-4 sm:px-6 sm:pt-6">
+    <z-chart
+      zType="area"
+      [zConfig]="chartConfig"
+      [zData]="visibleData()"
+      [zSeries]="series"
+      zXAxisKey="date"
+      [zXAxisFormatter]="shortDate"
+      zStacked
+      zGradient
+      class="aspect-auto h-[250px] w-full"
+    >
+      <z-chart-tooltip zIndicator="dot" [zLabelFormatter]="longDate" />
+    </z-chart>
+  </z-card-content>
+</z-card>

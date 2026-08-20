@@ -1,0 +1,10 @@
+<ul z-sidebar-menu>
+  @for (item of items(); track item.title) {
+    <li z-sidebar-menu-item>
+      <a z-sidebar-menu-button [href]="item.url" [zActive]="!!item.isActive">
+        <ng-icon [name]="item.icon" />
+        <span>{{ item.title }}</span>
+      </a>
+    </li>
+  }
+</ul>

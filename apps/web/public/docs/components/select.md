@@ -138,6 +138,7 @@ let nextSelectId = 0;
         [style.--z-select-trigger-height]="triggerHeightStyle()"
         [style.--z-select-trigger-width]="triggerWidthStyle()"
         (keydown.{arrowdown,arrowup,enter,space,escape,home,end,pageup,pagedown}.prevent)="onDropdownKeydown($event)"
+        (mousemove)="onDropdownMouseMove($event)"
         (wheel)="stopScrollOptions()"
         (touchmove)="stopScrollOptions()"
         tabindex="-1"
@@ -362,6 +363,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     const { key } = e as KeyboardEvent;
     const items = this.getSelectItems();
 
+    this.hoverNavigationEnabled = false;
+
     switch (key) {
       case 'ArrowDown':
         this.navigateItems(1, items);
@@ -455,7 +458,59 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     }
   }
 
+  /**
+   * Whether a hover is allowed to take the highlight from the keyboard.
+   *
+   * An item receives `mouseenter` without anyone moving the pointer — scrolling the
+   * list, or the overlay settling into its final position, is enough to slide a new
+   * item under a resting cursor. That stole the highlight back mid-navigation:
+   * `ArrowDown` moved to the second option and the option under the pointer took it
+   * straight back, so the next `ArrowUp` stepped from the wrong place.
+   *
+   * So arrows suspend hover, and only a real `mousemove` over the list resumes it.
+   */
+  private hoverNavigationEnabled = true;
+  private lastPointer: { x: number; y: number } | null = null;
+
+  /**
+   * Hands the highlight back to the pointer, but only once it has really moved.
+   *
+   * It has to be `mousemove` and not `mouseenter` that decides: entering fires when
+   * the list slides under a resting cursor, which is exactly the case being guarded
+   * against. And since entering fires *before* the first move, this is also where a
+   * genuine hover is applied — by then `mouseenter` has already been turned away.
+   */
+  protected onDropdownMouseMove(event: MouseEvent): void {
+    const moved = !this.lastPointer || this.lastPointer.x !== event.clientX || this.lastPointer.y !== event.clientY;
+    this.lastPointer = { x: event.clientX, y: event.clientY };
+
+    if (!moved || this.hoverNavigationEnabled) {
+      return;
+    }
+
+    this.hoverNavigationEnabled = true;
+
+    const target = (event.target as HTMLElement | null)?.closest<HTMLElement>('z-select-item, [z-select-item]');
+    if (!target) {
+      return;
+    }
+
+    const items = this.getSelectItems(true);
+    const index = items.indexOf(target);
+    if (index !== -1 && target.dataset['disabled'] === undefined) {
+      this.highlightItem(index);
+    }
+  }
+
   private navigateTo(element: ZardSelectItemComponent, index: number): void {
+    if (!this.hoverNavigationEnabled) {
+      return;
+    }
+
+    this.highlightItem(index);
+  }
+
+  private highlightItem(index: number): void {
     this.focusedIndex.set(index);
     this.updateItemFocus(this.getSelectItems(true), index);
   }
@@ -617,6 +672,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       maxHeight: this.getAvailableContentHeight(),
     });
     this.isOpen.set(true);
+    this.claimInitialFocusIndex();
+    this.hoverNavigationEnabled = true;
+    this.lastPointer = null;
     this.updateFocusWhenNormalMode();
 
     this.determinePortalWidthOnOpen(hostWidth);
@@ -861,12 +919,53 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     );
   }
 
+  /**
+   * Marks the option the dropdown opens on, while it is opening.
+   *
+   * The DOM focus that goes with it has to wait for the overlay to be laid out, but
+   * the index cannot: the listbox is attached and taking keys before that frame, and
+   * an arrow arriving first found no active option and navigated from nowhere.
+   */
+  private claimInitialFocusIndex(): void {
+    const items = this.getSelectItems();
+    if (items.length === 0) {
+      return;
+    }
+
+    const selectedIndex = items.findIndex(item => item.getAttribute('value') === this.getPrimarySelectedValue());
+
+    this.focusedIndex.set(selectedIndex === -1 ? 0 : selectedIndex);
+  }
+
+  /**
+   * The item the arrows are stepping from.
+   *
+   * `focusedIndex` is only set a frame after the dropdown opens, but the listbox
+   * takes keys from the moment it attaches. In that window an item is already
+   * marked while the index still reads -1, and stepping from -1 sent `ArrowUp` to
+   * the last option instead of back one. The DOM breaks the tie: whatever is
+   * highlighted, and failing that whatever is selected.
+   */
+  private resolveCurrentIndex(items: HTMLElement[]): number {
+    const focusedIndex = this.focusedIndex();
+    if (focusedIndex >= 0) {
+      return focusedIndex;
+    }
+
+    const highlighted = items.findIndex(item => item.hasAttribute('data-highlighted'));
+    if (highlighted !== -1) {
+      return highlighted;
+    }
+
+    return items.findIndex(item => item.getAttribute('value') === this.getPrimarySelectedValue());
+  }
+
   private navigateItems(direction: number, items: HTMLElement[]) {
     if (items.length === 0) {
       return;
     }
 
-    const currentIndex = this.focusedIndex();
+    const currentIndex = this.resolveCurrentIndex(items);
     let nextIndex = currentIndex === -1 ? (direction > 0 ? 0 : items.length - 1) : currentIndex + direction;
 
     nextIndex %= items.length;
@@ -962,21 +1061,24 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     }
   }
 
+  /**
+   * Moves the DOM focus onto whichever item the index currently names.
+   *
+   * Deliberately not recomputing that index from the selected value: this runs a
+   * frame after the dropdown opened, and by then a keystroke may already have moved
+   * it — recomputing would silently undo the first arrow press.
+   */
   private focusSelectedItem() {
     const items = this.getSelectItems();
     if (items.length === 0) {
       return;
     }
 
-    let selectedIndex = items.findIndex(item => item.getAttribute('value') === this.getPrimarySelectedValue());
+    const resolved = this.resolveCurrentIndex(items);
+    const focusedIndex = Math.min(Math.max(resolved, 0), items.length - 1);
 
-    // If no item is selected, focus the first item
-    if (selectedIndex === -1) {
-      selectedIndex = 0;
-    }
-
-    this.focusedIndex.set(selectedIndex);
-    this.updateItemFocus(items, selectedIndex);
+    this.focusedIndex.set(focusedIndex);
+    this.updateItemFocus(items, focusedIndex);
   }
 
   private getPrimarySelectedValue(): string {

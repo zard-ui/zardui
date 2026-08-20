@@ -251,99 +251,14 @@ export type ZardNavigationMenuAlign = 'start' | 'center' | 'end';
 ```
 
 ```angular-ts
-import { CdkContextMenuTrigger } from '@angular/cdk/menu';
-import { DestroyRef, Directive, DOCUMENT, ElementRef, inject, input, type TemplateRef } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-import { noopFn } from '@/shared/utils/noop';
-
-@Directive({
-  selector: '[z-context-menu]',
-  host: {
-    'data-slot': 'context-menu-trigger',
-    '[attr.tabindex]': "'0'",
-    '[style.cursor]': "'context-menu'",
-    '[attr.aria-haspopup]': "'menu'",
-    '[attr.aria-expanded]': 'cdkTrigger.isOpen()',
-    '[attr.data-state]': "cdkTrigger.isOpen() ? 'open': 'closed'",
-    '(contextmenu)': 'noopFn()',
-    '(keydown)': 'handleKeyDown($event)',
-  },
-  hostDirectives: [
-    {
-      directive: CdkContextMenuTrigger,
-      inputs: ['cdkContextMenuTriggerFor: zContextMenuTriggerFor'],
-    },
-  ],
-})
-export class ZardContextMenuDirective {
-  protected readonly cdkTrigger = inject(CdkContextMenuTrigger, { host: true });
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly document = inject(DOCUMENT);
-  private readonly elementRef = inject(ElementRef);
-
-  readonly zContextMenuTriggerFor = input.required<TemplateRef<void>>();
-  noopFn = noopFn;
-
-  constructor() {
-    this.cdkTrigger.menuPosition = [
-      {
-        originX: 'start',
-        originY: 'top',
-        overlayX: 'start',
-        overlayY: 'top',
-      },
-    ];
-    this.cdkTrigger.opened.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.attachCloseListeners());
-  }
-
-  protected handleKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) {
-      event.preventDefault();
-      this.open();
-    }
-  }
-
-  private open(coordinates?: { x: number; y: number }): void {
-    const coords = coordinates || this.getDefaultCoordinates();
-    this.cdkTrigger.open(coords);
-  }
-
-  private getDefaultCoordinates(): { x: number; y: number } {
-    const rect = this.elementRef.nativeElement.getBoundingClientRect();
-    return {
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
-    };
-  }
-
-  private attachCloseListeners(): void {
-    const closeMenu = () => {
-      if (this.cdkTrigger.isOpen()) {
-        this.cdkTrigger.close();
-      }
-    };
-
-    const window = this.document.defaultView;
-    if (window) {
-      window.addEventListener('scroll', closeMenu, { passive: true });
-      window.addEventListener('resize', closeMenu);
-
-      const cleanup = () => {
-        window.removeEventListener('scroll', closeMenu);
-        window.removeEventListener('resize', closeMenu);
-      };
-
-      const unregisterFn = this.destroyRef.onDestroy(cleanup);
-
-      const menuClosed = this.cdkTrigger.closed.subscribe(() => {
-        unregisterFn();
-        cleanup();
-        menuClosed.unsubscribe();
-      });
-    }
-  }
-}
+/**
+ * The context menu lives in its own component folder — it is not navigation, and as long as it
+ * lived here it had no docs page, no demos and no install path. This file stays so the old import
+ * keeps resolving.
+ *
+ * @deprecated Import from `@/shared/components/context-menu` instead.
+ */
+export { ZardContextMenuDirective } from '@/shared/components/context-menu/context-menu.directive';
 ```
 
 ```angular-ts
@@ -1115,7 +1030,13 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     this.trackOverlayState();
 
     if (this.shouldRenderChevron()) {
-      this.renderChevron();
+      // Deferred, not called here: `renderChevron` appends a node the template does not
+      // declare, and on the server that node lands in the serialized HTML. Hydration then
+      // walks the host's children expecting only the declared ones, fails on the extra
+      // `<ng-icon>`, and gives up on the whole subtree — which leaves
+      // `zNavigationMenuTriggerFor` unset (NG0950) and the menu dead to hover.
+      // `afterNextRender` never runs on the server and runs after hydration in the browser.
+      afterNextRender(() => this.renderChevron(), { injector: this.injector });
     }
 
     if (this.resolvedTrigger() === 'hover' && !this.isMobileDevice()) {
@@ -1243,7 +1164,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
   /**
    * The trigger is a directive — it has no template of its own — so the chevron is instantiated
-   * imperatively and moved into the host element.
+   * imperatively and moved into the host element. Browser-only, after hydration: see `ngOnInit`.
    */
   private renderChevron(): void {
     // The injector is explicit so NgIcon resolves the icon against this directive's `provideIcons`.

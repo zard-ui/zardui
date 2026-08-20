@@ -38,7 +38,27 @@ export const DROPDOWN_API: ApiSection[] = [
   {
     selector: 'z-dropdown-menu-content',
     description: 'Reusable content template displayed by a `z-dropdown` trigger.',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    props: [
+      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      {
+        name: '[zSide]',
+        description: 'Edge of the trigger the menu opens from.',
+        type: "'top' | 'right' | 'bottom' | 'left'",
+        default: "'bottom'",
+      },
+      {
+        name: '[zAlign]',
+        description: 'Alignment of the menu along that edge.',
+        type: "'start' | 'center' | 'end'",
+        default: "'start'",
+      },
+      {
+        name: '[zSideOffset]',
+        description: 'Gap between trigger and menu, in pixels.',
+        type: 'number',
+        default: '4',
+      },
+    ],
   },
   {
     selector: 'z-dropdown-menu-item',

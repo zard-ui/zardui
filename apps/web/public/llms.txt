@@ -54,18 +54,19 @@
 
 - [Accordion](https://zardui.com/docs/components/accordion): A vertically stacked set of interactive headings that each reveal a section of content.
 - [Breadcrumb](https://zardui.com/docs/components/breadcrumb): Displays the path to the current resource using a hierarchy of links.
-- [Layout](https://zardui.com/docs/components/layout): Layout components for building page structures.
+- [Collapsible](https://zardui.com/docs/components/collapsible): An interactive component which expands and collapses a panel.
 - [Navigation Menu](https://zardui.com/docs/components/navigation-menu): A collection of links for navigating websites.
 - [Pagination](https://zardui.com/docs/components/pagination): Pagination with page navigation, next and previous links.
 - [Resizable](https://zardui.com/docs/components/resizable): Accessible resizable panel groups and layouts with keyboard support.
 - [Separator](https://zardui.com/docs/components/separator): Visually or semantically separates content.
+- [Sidebar](https://zardui.com/docs/components/sidebar): A composable, themeable and customizable sidebar component.
 - [Tabs](https://zardui.com/docs/components/tabs): A set of layered sections of content — known as tab panels — that are displayed one at a time.
-- [Tree](https://zardui.com/docs/components/tree): A hierarchical tree view for displaying nested data structures with expand/collapse, selection, and checkboxes.
 
 ### Overlays & Dialogs
 
 - [Alert Dialog](https://zardui.com/docs/components/alert-dialog): A modal dialog that interrupts the user with important content and expects a response.
 - [Command](https://zardui.com/docs/components/command): Fast, composable, unstyled command menu.
+- [Context Menu](https://zardui.com/docs/components/context-menu): Displays a menu of actions triggered by a right click.
 - [Dialog](https://zardui.com/docs/components/dialog): A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.
 - [Drawer](https://zardui.com/docs/components/drawer): A draggable panel that slides in from an edge of the screen.
 - [Dropdown](https://zardui.com/docs/components/dropdown): Displays a menu to the user — such as a set of actions or functions — triggered by a button.
@@ -90,6 +91,8 @@
 - [Card](https://zardui.com/docs/components/card): Displays a card with header, content, and footer.
 - [Carousel](https://zardui.com/docs/components/carousel): A carousel with motion and swipe built using Embla.
 - [Chart](https://zardui.com/docs/components/chart): Beautiful charts built with Apache ECharts. Copy and paste into your apps.
+- [Marker](https://zardui.com/docs/components/marker): Displays an inline status, system note, bordered row, or labeled separator in a conversation.
+- [Message](https://zardui.com/docs/components/message): Displays a message in a conversation, with optional avatar, header, footer, and alignment.
 - [Table](https://zardui.com/docs/components/table): A responsive table component.
 
 ### Misc
