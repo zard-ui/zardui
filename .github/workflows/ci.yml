@@ -60,14 +60,19 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      # The registry and the docs markdown under apps/web/public are generated and
-      # committed. A build that changes them means the branch is shipping artifacts
-      # that no longer match its own source.
+      # The registry and the component markdown under apps/web/public are generated
+      # and committed. A build that changes them means the branch is shipping
+      # artifacts that no longer match its own source.
+      #
+      # `about.md` and `changelog.md` are deliberately not checked: they are converted
+      # from pages that fetch sponsors, contributors and releases from GitHub while
+      # prerendering, so their content tracks the API and not the branch.
       - name: Check generated artifacts are committed
         run: |
-          if ! git diff --quiet -- apps/web/public apps/web/prerender-routes.txt; then
+          GENERATED="apps/web/public/r apps/web/public/docs/components apps/web/public/llms.txt apps/web/public/schema.json apps/web/prerender-routes.txt"
+          if ! git diff --quiet -- $GENERATED; then
             echo "::error::Generated artifacts are out of date. Run 'npm run build' and commit the result."
-            git --no-pager diff --stat -- apps/web/public apps/web/prerender-routes.txt
+            git --no-pager diff --stat -- $GENERATED
             exit 1
           fi
 
