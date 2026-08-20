@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBookOpenCheck, lucideGitBranch, lucideSearch } from '@ng-icons/lucide';
@@ -26,6 +26,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBookOpenCheck, lucideGitBranch, lucideSearch })],
 })
 export class ZardDemoMarkerIconComponent {}

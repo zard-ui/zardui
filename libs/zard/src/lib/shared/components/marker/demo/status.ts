@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
@@ -19,5 +19,6 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoMarkerStatusComponent {}

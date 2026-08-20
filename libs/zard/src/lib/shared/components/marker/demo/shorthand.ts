@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideGitBranch, lucideSearch } from '@ng-icons/lucide';
@@ -25,6 +25,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideGitBranch, lucideSearch })],
 })
 export class ZardDemoMarkerShorthandComponent {}
