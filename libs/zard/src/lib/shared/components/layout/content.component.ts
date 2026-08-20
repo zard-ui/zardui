@@ -15,11 +15,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'content',
     '[class]': 'classes()',
   },
   exportAs: 'zContent',
 })
-export class ContentComponent {
+export class ZardContentComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(contentVariants(), this.class()));

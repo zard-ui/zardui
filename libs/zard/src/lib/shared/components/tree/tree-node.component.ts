@@ -116,6 +116,7 @@ import {
     }),
   ],
   host: {
+    'data-slot': 'tree-node',
     '[class]': 'hostClasses()',
     '[attr.data-key]': 'node().key',
   },

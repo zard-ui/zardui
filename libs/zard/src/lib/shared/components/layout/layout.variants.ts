@@ -13,7 +13,7 @@ export const layoutVariants = cva('flex w-full min-h-0', {
     zDirection: 'auto',
   },
 });
-export type LayoutVariants = NonNullable<VariantProps<typeof layoutVariants>['zDirection']>;
+export type ZardLayoutVariants = NonNullable<VariantProps<typeof layoutVariants>['zDirection']>;
 
 // Header Variants
 export const headerVariants = cva('flex items-center px-4 bg-background border-b border-border shrink-0', {

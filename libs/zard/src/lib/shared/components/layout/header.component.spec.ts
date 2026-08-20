@@ -2,18 +2,18 @@ import { Component } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { HeaderComponent } from './header.component';
+import { ZardHeaderComponent } from './header.component';
 
-describe('HeaderComponent', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+describe('ZardHeaderComponent', () => {
+  let component: ZardHeaderComponent;
+  let fixture: ComponentFixture<ZardHeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent],
+      imports: [ZardHeaderComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(ZardHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -56,8 +56,7 @@ describe('HeaderComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      imports: [HeaderComponent],
-      standalone: true,
+      imports: [ZardHeaderComponent],
       template: `
         <z-header>Test Header Content</z-header>
       `,

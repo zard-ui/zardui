@@ -7,13 +7,13 @@ import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-d
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
 @Component({
-  selector: 'zard-demo-alert-dialog-destructive',
+  selector: 'z-demo-alert-dialog-destructive',
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <ng-template #mediaIcon>
       <ng-icon name="lucideTrash2" />
     </ng-template>
-    <button z-button zType="destructive" (click)="open(mediaIcon)">Delete Chat</button>
+    <button type="button" z-button zType="destructive" (click)="open(mediaIcon)">Delete Chat</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideTrash2 })],

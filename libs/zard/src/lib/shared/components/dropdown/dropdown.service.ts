@@ -15,7 +15,7 @@ import {
 
 import { filter, type Subscription } from 'rxjs';
 
-import { noopFn } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 @Injectable({
   providedIn: 'root',

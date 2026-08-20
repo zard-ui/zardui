@@ -14,9 +14,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'header',
+  },
   exportAs: 'zHeader',
 })
-export class HeaderComponent {
+export class ZardHeaderComponent {
   readonly class = input<ClassValue>('');
   readonly zHeight = input<number>(64);
 

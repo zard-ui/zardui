@@ -4,15 +4,15 @@ import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
-import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from './sidebar.component';
+import { ZardSidebarComponent, ZardSidebarGroupComponent, ZardSidebarGroupLabelComponent } from './sidebar.component';
 
-describe('SidebarComponent', () => {
-  let component: SidebarComponent;
-  let fixture: ComponentFixture<SidebarComponent>;
+describe('ZardSidebarComponent', () => {
+  let component: ZardSidebarComponent;
+  let fixture: ComponentFixture<ZardSidebarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SidebarComponent],
+      imports: [ZardSidebarComponent],
       providers: [
         {
           provide: EVENT_MANAGER_PLUGINS,
@@ -22,7 +22,7 @@ describe('SidebarComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SidebarComponent);
+    fixture = TestBed.createComponent(ZardSidebarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -187,8 +187,7 @@ describe('SidebarComponent', () => {
 
   it('should use custom trigger template when provided', () => {
     @Component({
-      imports: [SidebarComponent],
-      standalone: true,
+      imports: [ZardSidebarComponent],
       template: `
         <z-sidebar [zCollapsible]="true" [zTrigger]="customTrigger">
           <ng-template #customTrigger>
@@ -211,8 +210,7 @@ describe('SidebarComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      imports: [SidebarComponent],
-      standalone: true,
+      imports: [ZardSidebarComponent],
       template: `
         <z-sidebar>Test Sidebar Content</z-sidebar>
       `,
@@ -227,16 +225,16 @@ describe('SidebarComponent', () => {
   });
 });
 
-describe('SidebarGroupComponent', () => {
-  let component: SidebarGroupComponent;
-  let fixture: ComponentFixture<SidebarGroupComponent>;
+describe('ZardSidebarGroupComponent', () => {
+  let component: ZardSidebarGroupComponent;
+  let fixture: ComponentFixture<ZardSidebarGroupComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SidebarGroupComponent],
+      imports: [ZardSidebarGroupComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SidebarGroupComponent);
+    fixture = TestBed.createComponent(ZardSidebarGroupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -255,8 +253,7 @@ describe('SidebarGroupComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      imports: [SidebarGroupComponent],
-      standalone: true,
+      imports: [ZardSidebarGroupComponent],
       template: `
         <z-sidebar-group>Group Content</z-sidebar-group>
       `,
@@ -271,16 +268,16 @@ describe('SidebarGroupComponent', () => {
   });
 });
 
-describe('SidebarGroupLabelComponent', () => {
-  let component: SidebarGroupLabelComponent;
-  let fixture: ComponentFixture<SidebarGroupLabelComponent>;
+describe('ZardSidebarGroupLabelComponent', () => {
+  let component: ZardSidebarGroupLabelComponent;
+  let fixture: ComponentFixture<ZardSidebarGroupLabelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SidebarGroupLabelComponent],
+      imports: [ZardSidebarGroupLabelComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SidebarGroupLabelComponent);
+    fixture = TestBed.createComponent(ZardSidebarGroupLabelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -299,8 +296,7 @@ describe('SidebarGroupLabelComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      imports: [SidebarGroupLabelComponent],
-      standalone: true,
+      imports: [ZardSidebarGroupLabelComponent],
       template: `
         <z-sidebar-group-label>Label Text</z-sidebar-group-label>
       `,

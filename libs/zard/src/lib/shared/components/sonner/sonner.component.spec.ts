@@ -16,12 +16,16 @@ describe('ZardSonnerComponent', () => {
     // happy-dom does not implement the Popover API, so the top layer is
     // simulated by tracking the promotion order of the popovers.
     showPopover = jest.fn(function (this: Element) {
-      if (openedPopovers.includes(this)) throw new Error('InvalidStateError');
+      if (openedPopovers.includes(this)) {
+        throw new Error('InvalidStateError');
+      }
       openedPopovers.push(this);
     });
     hidePopover = jest.fn(function (this: Element) {
       const index = openedPopovers.indexOf(this);
-      if (index === -1) throw new Error('InvalidStateError');
+      if (index === -1) {
+        throw new Error('InvalidStateError');
+      }
       openedPopovers.splice(index, 1);
     });
 

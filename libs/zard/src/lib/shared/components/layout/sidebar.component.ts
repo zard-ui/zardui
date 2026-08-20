@@ -55,9 +55,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronRight, lucideChevronLeft })],
+  host: {
+    'data-slot': 'sidebar',
+  },
   exportAs: 'zSidebar',
 })
-export class SidebarComponent {
+export class ZardSidebarComponent {
   readonly zWidth = input<string | number>(200);
   readonly zCollapsedWidth = input<number>(64);
   readonly zCollapsible = input(false, { transform: booleanAttribute });
@@ -117,9 +120,12 @@ export class SidebarComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'sidebar-group',
+  },
   exportAs: 'zSidebarGroup',
 })
-export class SidebarGroupComponent {
+export class ZardSidebarGroupComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(sidebarGroupVariants(), this.class()));
@@ -134,9 +140,12 @@ export class SidebarGroupComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'sidebar-group-label',
+  },
   exportAs: 'zSidebarGroupLabel',
 })
-export class SidebarGroupLabelComponent {
+export class ZardSidebarGroupLabelComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(sidebarGroupLabelVariants(), this.class()));

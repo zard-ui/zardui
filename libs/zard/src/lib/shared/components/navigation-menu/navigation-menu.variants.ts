@@ -35,7 +35,7 @@ export const navigationMenuContentVariants = cva(
       viewport: {
         true: '',
         false: [
-          'relative z-50 min-w-32 rounded-lg bg-popover text-popover-foreground shadow ring-1 ring-foreground/10',
+          'relative z-50 min-w-32 rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10',
           // The overlay is offset by 8px from the trigger, and that gap belongs to no element: a
           // pointer crossing it slowly would schedule the close before reaching the popup. This
           // invisible collar covers the offset on every side, since submenus open sideways too.
@@ -66,7 +66,7 @@ export const navigationMenuViewportWrapperVariants = cva([
 
 export const navigationMenuViewportVariants = cva([
   'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width)',
-  'origin-top overflow-hidden rounded-lg bg-popover text-popover-foreground shadow ring-1 ring-foreground/10',
+  'origin-top overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10',
   'transition-[opacity,transform,width,height] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] outline-none',
   'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90',
   'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90',

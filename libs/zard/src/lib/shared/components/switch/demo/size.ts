@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
 
@@ -11,5 +11,6 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
       <z-switch>Default</z-switch>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSwitchSizeComponent {}

@@ -15,6 +15,7 @@ import { treeNodeContentVariants } from './tree.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'tree-node-content',
     '[class]': 'classes()',
   },
   exportAs: 'zTreeNodeContent',

@@ -1,19 +1,19 @@
-import { ContentComponent } from '@/shared/components/layout/content.component';
-import { FooterComponent } from '@/shared/components/layout/footer.component';
-import { HeaderComponent } from '@/shared/components/layout/header.component';
-import { LayoutComponent } from '@/shared/components/layout/layout.component';
+import { ZardContentComponent } from '@/shared/components/layout/content.component';
+import { ZardFooterComponent } from '@/shared/components/layout/footer.component';
+import { ZardHeaderComponent } from '@/shared/components/layout/header.component';
+import { ZardLayoutComponent } from '@/shared/components/layout/layout.component';
 import {
-  SidebarComponent,
-  SidebarGroupComponent,
-  SidebarGroupLabelComponent,
+  ZardSidebarComponent,
+  ZardSidebarGroupComponent,
+  ZardSidebarGroupLabelComponent,
 } from '@/shared/components/layout/sidebar.component';
 
-export const LayoutImports = [
-  LayoutComponent,
-  HeaderComponent,
-  FooterComponent,
-  ContentComponent,
-  SidebarComponent,
-  SidebarGroupComponent,
-  SidebarGroupLabelComponent,
+export const ZardLayoutImports = [
+  ZardLayoutComponent,
+  ZardHeaderComponent,
+  ZardFooterComponent,
+  ZardContentComponent,
+  ZardSidebarComponent,
+  ZardSidebarGroupComponent,
+  ZardSidebarGroupLabelComponent,
 ] as const;

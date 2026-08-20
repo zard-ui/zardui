@@ -18,7 +18,7 @@ import {
 import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 import { ZardButtonComponent } from '@/shared/components/button';
-import { LayoutImports } from '@/shared/components/layout/layout.imports';
+import { ZardLayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/navigation-menu.imports';
 import { ZardSeparatorComponent } from '@/shared/components/separator';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
@@ -33,7 +33,7 @@ interface MenuItem {
 @Component({
   selector: 'z-demo-layout-collapsible',
   imports: [
-    LayoutImports,
+    ZardLayoutImports,
     ZardButtonComponent,
     ZardBreadcrumbImports,
     ZardNavigationMenuImports,
@@ -208,7 +208,7 @@ interface MenuItem {
     }),
   ],
 })
-export class LayoutDemoSidebarComponent {
+export class ZardDemoLayoutSidebarComponent {
   readonly sidebarCollapsed = signal(false);
 
   mainMenuItems: MenuItem[] = [

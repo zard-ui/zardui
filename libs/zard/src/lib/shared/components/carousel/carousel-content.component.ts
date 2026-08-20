@@ -15,8 +15,10 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'carousel-content',
     '[class]': 'classes()',
   },
+  exportAs: 'zCarouselContent',
 })
 export class ZardCarouselContentComponent {
   readonly #parent = inject(ZardCarouselComponent);

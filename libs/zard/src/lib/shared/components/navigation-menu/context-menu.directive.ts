@@ -2,7 +2,7 @@ import { CdkContextMenuTrigger } from '@angular/cdk/menu';
 import { DestroyRef, Directive, DOCUMENT, ElementRef, inject, input, type TemplateRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { noopFn } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 @Directive({
   selector: '[z-context-menu]',

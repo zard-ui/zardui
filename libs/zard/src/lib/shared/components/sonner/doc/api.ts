@@ -6,6 +6,12 @@ export const SONNER_API: ApiSection[] = [
     description: 'Container that renders toast notifications. Place once at the root of your app.',
     props: [
       {
+        name: '[style]',
+        description: 'Inline styles applied to every toast',
+        type: 'Record<string, string>',
+        default: 'undefined',
+      },
+      {
         name: '[theme]',
         description: 'Theme used for the toasts.',
         type: "'light' | 'dark' | 'system'",

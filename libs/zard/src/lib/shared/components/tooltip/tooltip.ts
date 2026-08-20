@@ -1,6 +1,6 @@
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,6 +8,7 @@ import {
   computed,
   DestroyRef,
   Directive,
+  DOCUMENT,
   effect,
   ElementRef,
   inject,
@@ -23,6 +24,7 @@ import {
   signal,
   type TemplateRef,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
@@ -305,6 +307,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[attr.id]': 'tooltipId()',
@@ -313,6 +316,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     'data-slot': 'tooltip-content',
     role: 'tooltip',
   },
+  exportAs: 'zTooltip',
 })
 export class ZardTooltipComponent {
   protected readonly arrowClasses = computed(() =>

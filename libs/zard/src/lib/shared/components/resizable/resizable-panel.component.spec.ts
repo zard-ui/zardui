@@ -7,7 +7,6 @@ import { ZardResizablePanelComponent } from './resizable-panel.component';
 @Component({
   selector: 'test-panel-host',
   imports: [ZardResizablePanelComponent],
-  standalone: true,
   template: `
     <z-resizable-panel
       [zDefaultSize]="defaultSize"
@@ -266,7 +265,6 @@ describe('ZardResizablePanelComponent', () => {
 @Component({
   selector: 'test-complex-content-host',
   imports: [ZardResizablePanelComponent],
-  standalone: true,
   template: `
     <z-resizable-panel>
       <h2>Panel Title</h2>

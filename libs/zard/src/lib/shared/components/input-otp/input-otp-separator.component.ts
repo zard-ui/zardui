@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -25,11 +25,13 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     'aria-hidden': 'true',
     '[attr.data-slot]': '"input-otp-separator"',
     '[attr.data-input-otp-separator]': '""',
   },
+  exportAs: 'zInputOtpSeparator',
 })
 export class ZardInputOtpSeparatorComponent {
   private readonly inputOtp = inject(ZardInputOtpComponent, { optional: true });

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardCalendarComponent } from '../calendar.component';
 
@@ -8,7 +8,6 @@ const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
 @Component({
   selector: 'z-demo-calendar-with-constraints',
   imports: [ZardCalendarComponent],
-  standalone: true,
   template: `
     <div class="flex flex-wrap items-start justify-center gap-6">
       <z-calendar zMode="single" class="rounded-lg border" [minDate]="minDate" [maxDate]="maxDate" />
@@ -16,6 +15,7 @@ const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
       <z-calendar zMode="single" class="rounded-lg border" [disabled]="true" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCalendarWithConstraintsComponent {
   readonly minDate = new Date();

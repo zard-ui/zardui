@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { LayoutImports } from '@/shared/components/layout/layout.imports';
+import { ZardLayoutImports } from '@/shared/components/layout/layout.imports';
 
 @Component({
   selector: 'z-demo-layout-basic',
-  imports: [LayoutImports],
+  imports: [ZardLayoutImports],
   template: `
     <div class="flex flex-col gap-6 text-center">
       <z-layout class="overflow-hidden rounded-lg">
@@ -43,4 +43,4 @@ import { LayoutImports } from '@/shared/components/layout/layout.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LayoutDemoBasicComponent {}
+export class ZardDemoLayoutBasicComponent {}

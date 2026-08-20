@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
 
@@ -13,5 +13,6 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       <z-spinner class="size-8" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSpinnerSizeComponent {}

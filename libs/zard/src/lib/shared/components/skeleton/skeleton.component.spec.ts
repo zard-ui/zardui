@@ -6,7 +6,6 @@ import { ZardSkeletonComponent } from './skeleton.component';
 
 @Component({
   imports: [ZardSkeletonComponent],
-  standalone: true,
   template: `
     <z-skeleton class="size-4 rounded-sm" />
   `,

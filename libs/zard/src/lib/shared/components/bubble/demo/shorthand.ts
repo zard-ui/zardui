@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
@@ -16,6 +16,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoBubbleShorthandComponent {}

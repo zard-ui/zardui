@@ -8,6 +8,7 @@ import { treeNodeToggleVariants } from './tree.variants';
 @Directive({
   selector: '[z-tree-node-toggle]',
   host: {
+    'data-slot': 'tree-node-toggle',
     role: 'button',
     '[class]': 'classes()',
     '[attr.aria-label]': 'isExpanded() ? "Collapse" : "Expand"',

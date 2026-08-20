@@ -21,6 +21,7 @@ import {
   type Type,
   viewChild,
   type ViewContainerRef,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -28,7 +29,8 @@ import { lucideX } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import type { ZardDialogRef } from './dialog-ref';
 import {
@@ -181,6 +183,7 @@ export class ZardDialogOptions<T, U> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideX })],
   host: {
     '[class]': 'classes()',

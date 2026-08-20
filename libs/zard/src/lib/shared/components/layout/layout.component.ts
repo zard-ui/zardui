@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, contentChildren, input, V
 
 import type { ClassValue } from 'clsx';
 
-import { layoutVariants, type LayoutVariants } from '@/shared/components/layout/layout.variants';
-import { SidebarComponent } from '@/shared/components/layout/sidebar.component';
+import { layoutVariants, type ZardLayoutVariants } from '@/shared/components/layout/layout.variants';
+import { ZardSidebarComponent } from '@/shared/components/layout/sidebar.component';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -14,16 +14,17 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'layout',
     '[class]': 'classes()',
   },
   exportAs: 'zLayout',
 })
-export class LayoutComponent {
+export class ZardLayoutComponent {
   readonly class = input<ClassValue>('');
-  readonly zDirection = input<LayoutVariants>('auto');
+  readonly zDirection = input<ZardLayoutVariants>('auto');
 
   // Query for direct sidebar children to auto-detect layout direction
-  private readonly sidebars = contentChildren(SidebarComponent, { descendants: false });
+  private readonly sidebars = contentChildren(ZardSidebarComponent, { descendants: false });
 
   private readonly detectedDirection = computed(() => {
     if (this.zDirection() !== 'auto') {

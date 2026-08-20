@@ -11,7 +11,6 @@ import { ZardResizableComponent, type ZardResizeEvent } from './resizable.compon
 @Component({
   selector: 'test-resizable-host',
   imports: [ZardResizableComponent, ZardResizablePanelComponent, ZardResizableHandleComponent],
-  standalone: true,
   template: `
     <z-resizable
       [zLayout]="layout"
@@ -156,7 +155,6 @@ describe('ZardResizableComponent', () => {
       @Component({
         selector: 'test-percentage-host',
         imports: [ZardResizableComponent, ZardResizablePanelComponent, ZardResizableHandleComponent],
-        standalone: true,
         template: `
           <z-resizable>
             <z-resizable-panel zDefaultSize="60%">Panel 1</z-resizable-panel>
@@ -196,7 +194,6 @@ describe('ZardResizableComponent', () => {
       @Component({
         selector: 'test-pixel-host',
         imports: [ZardResizableComponent, ZardResizablePanelComponent, ZardResizableHandleComponent],
-        standalone: true,
         template: `
           <z-resizable>
             <z-resizable-panel zDefaultSize="300px">Panel 1</z-resizable-panel>

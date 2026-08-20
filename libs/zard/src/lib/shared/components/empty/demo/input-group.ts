@@ -13,7 +13,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
   imports: [ZardEmptyComponent, ZardInputComponent, ZardKbdComponent, NgIcon, ...ZardInputGroupImports],
   template: `
     <z-empty
-      class="[&_[data-slot=empty-content]]:flex-col"
+      class="**:data-[slot=empty-content]:flex-col"
       zTitle="404 - Not Found"
       zDescription="The page you're looking for doesn't exist. Try searching for what you need below."
       [zActions]="[searchInput, supportLink]"

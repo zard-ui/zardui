@@ -9,6 +9,7 @@ import { ZardNavigationMenuTriggerDirective } from './navigation-menu-trigger.di
   imports: [ZardNavigationMenuTriggerDirective],
   template: `
     <button
+      type="button"
       z-navigation-menu-trigger
       [zNavigationMenuTriggerFor]="menuPanel"
       [zDisabled]="disabled"

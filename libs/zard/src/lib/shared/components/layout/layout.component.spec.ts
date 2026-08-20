@@ -4,16 +4,16 @@ import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
-import { LayoutComponent } from './layout.component';
-import { SidebarComponent } from './sidebar.component';
+import { ZardLayoutComponent } from './layout.component';
+import { ZardSidebarComponent } from './sidebar.component';
 
-describe('LayoutComponent', () => {
-  let component: LayoutComponent;
-  let fixture: ComponentFixture<LayoutComponent>;
+describe('ZardLayoutComponent', () => {
+  let component: ZardLayoutComponent;
+  let fixture: ComponentFixture<ZardLayoutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LayoutComponent],
+      imports: [ZardLayoutComponent],
       providers: [
         {
           provide: EVENT_MANAGER_PLUGINS,
@@ -23,7 +23,7 @@ describe('LayoutComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LayoutComponent);
+    fixture = TestBed.createComponent(ZardLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -39,8 +39,7 @@ describe('LayoutComponent', () => {
 
   it('should auto-detect horizontal direction when sidebar is present', async () => {
     @Component({
-      imports: [LayoutComponent, SidebarComponent],
-      standalone: true,
+      imports: [ZardLayoutComponent, ZardSidebarComponent],
       template: `
         <z-layout>
           <z-sidebar />
@@ -75,8 +74,7 @@ describe('LayoutComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      imports: [LayoutComponent],
-      standalone: true,
+      imports: [ZardLayoutComponent],
       template: `
         <z-layout>Test Content</z-layout>
       `,

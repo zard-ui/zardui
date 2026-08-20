@@ -22,7 +22,7 @@ import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
       </div>
     </z-drawer>
 
-    <z-drawer [(zVisible)]="wideSide" zPlacement="right" class="sm:w-[32rem]">
+    <z-drawer [(zVisible)]="wideSide" zPlacement="right" class="sm:w-lg">
       <z-drawer-header>
         <z-drawer-title>Wide side</z-drawer-title>
         <z-drawer-description>A side drawer is 24rem wide until you widen it.</z-drawer-description>

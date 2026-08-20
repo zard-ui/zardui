@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +7,7 @@ import {
   forwardRef,
   inject,
   InjectionToken,
+  Injector,
   input,
   model,
   ViewEncapsulation,
@@ -140,18 +142,18 @@ export class ZardDropdownMenuShortcutComponent {
   exportAs: 'zDropdownMenuCheckboxItem',
 })
 export class ZardDropdownMenuCheckboxItemComponent {
+  private readonly injector = inject(Injector);
   private readonly dropdownService = inject(ZardDropdownService);
 
   readonly zChecked = model(false);
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zDisabled',
     transform: optionalBooleanAttribute,
   });
 
   readonly variant = input<ZardDropdownItemTypeVariants>('default');
-  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zType' });
-  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zVariant' });
+  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined);
+  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined);
   readonly class = input<ClassValue>('');
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
@@ -166,7 +168,7 @@ export class ZardDropdownMenuCheckboxItemComponent {
     }
 
     this.zChecked.set(!this.zChecked());
-    setTimeout(() => this.dropdownService.closeAndFocusTrigger(), 0);
+    afterNextRender(() => this.dropdownService.closeAndFocusTrigger(), { injector: this.injector });
   }
 }
 
@@ -222,21 +224,22 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
     '[attr.data-variant]': 'itemVariant()',
     '(click.prevent-with-stop)': 'onClick()',
   },
+  exportAs: 'zDropdownMenuRadioItem',
 })
 export class ZardDropdownMenuRadioItemComponent {
+  private readonly injector = inject(Injector);
   private readonly dropdownService = inject(ZardDropdownService);
   private readonly radioGroup = inject(ZARD_DROPDOWN_RADIO_GROUP, { optional: true });
 
   readonly zValue = input.required<string>();
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zDisabled',
     transform: optionalBooleanAttribute,
   });
 
   readonly variant = input<ZardDropdownItemTypeVariants>('default');
-  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zType' });
-  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zVariant' });
+  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined);
+  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined);
   readonly class = input<ClassValue>('');
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
@@ -252,6 +255,6 @@ export class ZardDropdownMenuRadioItemComponent {
     }
 
     this.radioGroup?.select(this.zValue());
-    setTimeout(() => this.dropdownService.closeAndFocusTrigger(), 0);
+    afterNextRender(() => this.dropdownService.closeAndFocusTrigger(), { injector: this.injector });
   }
 }

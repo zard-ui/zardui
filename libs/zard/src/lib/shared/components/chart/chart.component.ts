@@ -105,6 +105,7 @@ function sameSize(a: { width: number; height: number }, b: { width: number; heig
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'chart',
     ngSkipHydration: 'true',
     '[class]': 'classes()',
   },

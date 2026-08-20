@@ -2,18 +2,18 @@ import { Component } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { FooterComponent } from './footer.component';
+import { ZardFooterComponent } from './footer.component';
 
-describe('FooterComponent', () => {
-  let component: FooterComponent;
-  let fixture: ComponentFixture<FooterComponent>;
+describe('ZardFooterComponent', () => {
+  let component: ZardFooterComponent;
+  let fixture: ComponentFixture<ZardFooterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FooterComponent],
+      imports: [ZardFooterComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(ZardFooterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -56,8 +56,7 @@ describe('FooterComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      imports: [FooterComponent],
-      standalone: true,
+      imports: [ZardFooterComponent],
       template: `
         <z-footer>Test Footer Content</z-footer>
       `,

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 
-// Do pacote base, não do wrapper Angular: ele re-exportava esses tipos na v21 e
-// parou na v22. Por isso `embla-carousel` é dependência declarada do componente.
+// From the base package, not the Angular wrapper: the wrapper re-exported these
+// types in v21 and stopped in v22, which is why `embla-carousel` is a declared
+// dependency of the component.
 import type { EmblaPluginType } from 'embla-carousel';
 
 /**

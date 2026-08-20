@@ -14,9 +14,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'footer',
+  },
   exportAs: 'zFooter',
 })
-export class FooterComponent {
+export class ZardFooterComponent {
   readonly class = input<ClassValue>('');
   readonly zHeight = input<number>(64);
 

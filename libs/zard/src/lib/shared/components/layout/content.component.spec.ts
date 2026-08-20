@@ -2,18 +2,18 @@ import { Component } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { ContentComponent } from './content.component';
+import { ZardContentComponent } from './content.component';
 
-describe('ContentComponent', () => {
-  let component: ContentComponent;
-  let fixture: ComponentFixture<ContentComponent>;
+describe('ZardContentComponent', () => {
+  let component: ZardContentComponent;
+  let fixture: ComponentFixture<ZardContentComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContentComponent],
+      imports: [ZardContentComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ContentComponent);
+    fixture = TestBed.createComponent(ZardContentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -43,8 +43,7 @@ describe('ContentComponent', () => {
 
   it('should render ng-content inside main element', () => {
     @Component({
-      imports: [ContentComponent],
-      standalone: true,
+      imports: [ZardContentComponent],
       template: `
         <z-content>Test Content</z-content>
       `,

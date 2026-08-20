@@ -5,12 +5,12 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBell, lucideHouse, lucideLayers, lucideSearch, lucideUsers } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { LayoutImports } from '@/shared/components/layout/layout.imports';
+import { ZardLayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'z-demo-layout-full',
-  imports: [LayoutImports, ZardButtonComponent, ZardSkeletonComponent, NgOptimizedImage, NgIcon],
+  imports: [ZardLayoutImports, ZardButtonComponent, ZardSkeletonComponent, NgOptimizedImage, NgIcon],
   template: `
     <z-layout class="min-h-150 overflow-hidden rounded-md border">
       <z-header>
@@ -78,6 +78,6 @@ import { ZardSkeletonComponent } from '@/shared/components/skeleton';
     }),
   ],
 })
-export class LayoutDemoFullComponent {
+export class ZardDemoLayoutFullComponent {
   year = new Date().getFullYear();
 }

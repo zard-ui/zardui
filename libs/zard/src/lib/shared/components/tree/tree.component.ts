@@ -70,6 +70,7 @@ import { treeVariants } from './tree.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'tree',
     role: 'tree',
     '[class]': 'classes()',
     '(keydown)': 'onKeydown($event)',

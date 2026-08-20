@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardItemImports } from '@/shared/components/item/item.imports';
 
@@ -35,6 +35,7 @@ interface Song {
       </z-item-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoItemImageComponent {
   protected readonly music: Song[] = [

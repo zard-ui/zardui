@@ -5,6 +5,7 @@ export const TABS_API: ApiSection[] = [
     selector: 'z-tab-group',
     description: 'A set of layered sections of content — known as tab panels — displayed one at a time.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zVariant]',
         description: 'Visual variant of the tab navigation',
@@ -31,7 +32,7 @@ export const TABS_API: ApiSection[] = [
     selector: 'z-tab',
     description: 'An individual tab. Label is shown in the navigation; projected content becomes the tab panel.',
     props: [
-      { name: 'label', description: 'Label displayed in the tab button', type: 'string', default: '-' },
+      { name: '[label]', description: 'Label displayed in the tab button', type: 'string', default: '-' },
       {
         name: '[zIcon]',
         description: 'Optional ng-icons name shown before the label',
