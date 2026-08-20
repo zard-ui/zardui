@@ -322,4 +322,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Displays a menu of actions triggered by a right click.',
     loadData: () => import('@zard/components/context-menu/demo/context-menu').then(m => m.CONTEXT_MENU),
   },
+  {
+    componentName: 'message',
+    description: 'Displays a message in a conversation, with optional avatar, header, footer, and alignment.',
+    loadData: () => import('@zard/components/message/demo/message').then(m => m.MESSAGE),
+  },
 ];

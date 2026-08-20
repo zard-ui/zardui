@@ -474,6 +474,25 @@
       ]
     },
     {
+      "name": "message",
+      "type": "registry:component",
+      "registryDependencies": [
+        "avatar",
+        "bubble"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "message.component.ts",
+        "message.imports.ts",
+        "message.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "select",
       "type": "registry:component",
       "registryDependencies": [

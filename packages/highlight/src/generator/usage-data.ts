@@ -388,4 +388,17 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
   <z-dropdown-menu-item zType="destructive">Delete</z-dropdown-menu-item>
 </z-dropdown-menu-content>`,
   },
+  message: {
+    importCode: `import { ZardMessageImports } from '@/shared/components/message/message.imports';`,
+    templateCode: `<z-message>
+  <z-message-avatar>
+    <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
+  </z-message-avatar>
+  <z-message-content>
+    <z-bubble>
+      <z-bubble-content>How can I help you today?</z-bubble-content>
+    </z-bubble>
+  </z-message-content>
+</z-message>`,
+  },
 };
