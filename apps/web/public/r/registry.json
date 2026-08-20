@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.110",
+  "version": "1.0.0-beta.111",
   "items": [
     {
       "name": "core",
@@ -327,10 +327,10 @@
       ]
     },
     {
-      "name": "dropdown",
+      "name": "context-menu",
       "type": "registry:component",
       "registryDependencies": [
-        "menu"
+        "dropdown"
       ],
       "icons": {
         "family": "lucide",
@@ -338,7 +338,31 @@
         "tokens": []
       },
       "files": [
+        "context-menu.directive.ts",
+        "context-menu.service.ts",
+        "context-menu.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "dropdown",
+      "type": "registry:component",
+      "registryDependencies": [
+        "menu"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronRight"
+        ],
+        "tokens": [
+          "chevron-right"
+        ]
+      },
+      "files": [
         "dropdown.component.ts",
+        "dropdown-submenu.component.ts",
+        "menu-keyboard.ts",
         "dropdown-item.component.ts",
         "dropdown-menu-content.component.ts",
         "dropdown-primitives.component.ts",

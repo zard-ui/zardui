@@ -425,11 +425,41 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'context-menu',
+    registryDependencies: ['dropdown'],
+    files: [
+      {
+        name: 'context-menu.directive.ts',
+        content: '',
+      },
+      {
+        name: 'context-menu.service.ts',
+        content: '',
+      },
+      {
+        name: 'context-menu.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'dropdown',
     registryDependencies: ['menu'],
     files: [
       {
         name: 'dropdown.component.ts',
+        content: '',
+      },
+      {
+        name: 'dropdown-submenu.component.ts',
+        content: '',
+      },
+      {
+        name: 'menu-keyboard.ts',
         content: '',
       },
       {

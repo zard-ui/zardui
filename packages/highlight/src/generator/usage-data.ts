@@ -377,4 +377,15 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
   </z-bubble-reactions>
 </z-bubble>`,
   },
+  'context-menu': {
+    importCode: `import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';`,
+    templateCode: `<div z-context-menu [zContextMenuTriggerFor]="menu">Right click here</div>
+
+<z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-48">
+  <z-dropdown-menu-item>Back</z-dropdown-menu-item>
+  <z-dropdown-menu-item>Reload</z-dropdown-menu-item>
+  <z-dropdown-menu-separator />
+  <z-dropdown-menu-item zType="destructive">Delete</z-dropdown-menu-item>
+</z-dropdown-menu-content>`,
+  },
 };
