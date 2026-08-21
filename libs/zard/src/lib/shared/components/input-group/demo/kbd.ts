@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
@@ -21,6 +21,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
       </z-input-group-addon>
     </z-input-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSearch })],
 })
 export class ZardDemoInputGroupKbdComponent {}

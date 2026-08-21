@@ -290,10 +290,10 @@ An interactive component which expands and collapses a panel. It renders no mark
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zOpen` | Open state of the panel. Supports two-way binding through [(zOpen)] | `boolean` | `false` |
-| `zDisabled` | Blocks the trigger from toggling the panel | `boolean` | `false` |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
-| `zOpenChange` | Emits the new open state whenever the panel toggles | `boolean` |  |
+| `[zOpen]` | Open state of the panel. Supports two-way binding through [(zOpen)] | `boolean` | `false` |
+| `[zDisabled]` | Blocks the trigger from toggling the panel | `boolean` | `false` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `(zOpenChange)` | Emits the new open state whenever the panel toggles | `boolean` |  |
 
 ### [z-collapsible-trigger]
 
@@ -305,7 +305,7 @@ The panel revealed by the trigger. Animates its height with a CSS grid transitio
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ---
 

@@ -4,7 +4,7 @@ export const sheetVariants = cva(
   [
     'fixed z-50 flex flex-col gap-4',
     'bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg outline-none',
-  ].join(' '),
+  ],
   {
     variants: {
       zSide: {

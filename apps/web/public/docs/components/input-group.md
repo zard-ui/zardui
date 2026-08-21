@@ -149,7 +149,7 @@ export const inputGroupVariants = cva(
     'has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3',
     'has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5',
     // Input/textarea overrides when used as input-group-control
-    '[&>[data-slot=input-group-control]]:flex-1 [&>[data-slot=input-group-control]]:rounded-none [&>[data-slot=input-group-control]]:border-0! [&>[data-slot=input-group-control]]:bg-transparent! [&>[data-slot=input-group-control]]:shadow-none [&>[data-slot=input-group-control]]:ring-0!',
+    '*:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0!',
     '[&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0!',
     '[&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
   ),
@@ -273,7 +273,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 Use `zAlign="inline-start"` to position the addon at the start of the input. This is the default.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
@@ -297,6 +297,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       <p z-field-description>Icon positioned at the start.</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSearch })],
 })
 export class ZardDemoInputGroupInlineStartComponent {}
@@ -307,7 +308,7 @@ export class ZardDemoInputGroupInlineStartComponent {}
 Use `zAlign="inline-end"` to position the addon at the end of the input.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideEyeOff } from '@ng-icons/lucide';
@@ -331,6 +332,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       <p z-field-description>Icon positioned at the end.</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideEyeOff })],
 })
 export class ZardDemoInputGroupInlineEndComponent {}
@@ -341,7 +343,7 @@ export class ZardDemoInputGroupInlineEndComponent {}
 Use `zAlign="block-start"` to position the addon above the input.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCopy, lucideFileCode } from '@ng-icons/lucide';
@@ -388,6 +390,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCopy, lucideFileCode })],
 })
 export class ZardDemoInputGroupBlockStartComponent {}
@@ -398,7 +401,7 @@ export class ZardDemoInputGroupBlockStartComponent {}
 Use `zAlign="block-end"` to position the addon below the input.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
@@ -426,13 +429,14 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
           <textarea z-textarea id="block-end-textarea" placeholder="Write a comment..."></textarea>
           <z-input-group-addon zAlign="block-end">
             <span z-input-group-text>0/280</span>
-            <button z-input-group-button zVariant="default" zSize="sm" class="ml-auto">Post</button>
+            <button type="button" z-input-group-button zVariant="default" zSize="sm" class="ml-auto">Post</button>
           </z-input-group-addon>
         </z-input-group>
         <p z-field-description>Footer positioned below the textarea.</p>
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputGroupBlockEndComponent {}
 ```
@@ -440,7 +444,7 @@ export class ZardDemoInputGroupBlockEndComponent {}
 ### Icon
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucideCreditCard, lucideInfo, lucideMail, lucideSearch, lucideStar } from '@ng-icons/lucide';
@@ -483,6 +487,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSearch, lucideMail, lucideCreditCard, lucideCheck, lucideStar, lucideInfo })],
 })
 export class ZardDemoInputGroupIconComponent {}
@@ -491,7 +496,7 @@ export class ZardDemoInputGroupIconComponent {}
 ### Text
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
@@ -526,6 +531,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputGroupTextComponent {}
 ```
@@ -533,7 +539,7 @@ export class ZardDemoInputGroupTextComponent {}
 ### Button
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucideCopy, lucideInfo, lucideStar } from '@ng-icons/lucide';
@@ -604,6 +610,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
       </ng-template>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCopy, lucideCheck, lucideInfo, lucideStar })],
 })
 export class ZardDemoInputGroupButtonComponent {
@@ -625,7 +632,7 @@ export class ZardDemoInputGroupButtonComponent {
 ### Kbd
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
@@ -648,6 +655,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
       </z-input-group-addon>
     </z-input-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSearch })],
 })
 export class ZardDemoInputGroupKbdComponent {}
@@ -656,7 +664,7 @@ export class ZardDemoInputGroupKbdComponent {}
 ### Dropdown
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown, lucideEllipsis } from '@ng-icons/lucide';
@@ -707,6 +715,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideEllipsis, lucideChevronDown })],
 })
 export class ZardDemoInputGroupDropdownComponent {}
@@ -715,7 +724,7 @@ export class ZardDemoInputGroupDropdownComponent {}
 ### Spinner
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideLoader } from '@ng-icons/lucide';
@@ -759,6 +768,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideLoader })],
 })
 export class ZardDemoInputGroupSpinnerComponent {}
@@ -767,7 +777,7 @@ export class ZardDemoInputGroupSpinnerComponent {}
 ### Textarea
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCopy, lucideCornerDownLeft, lucideFileCode2, lucideRefreshCw } from '@ng-icons/lucide';
@@ -809,6 +819,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideFileCode2, lucideCopy, lucideCornerDownLeft, lucideRefreshCw })],
 })
 export class ZardDemoInputGroupTextareaComponent {}
@@ -819,7 +830,7 @@ export class ZardDemoInputGroupTextareaComponent {}
 Add the `data-slot="input-group-control"` attribute to your custom input for automatic focus state handling.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePencil } from '@ng-icons/lucide';
@@ -840,6 +851,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       />
     </z-input-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePencil })],
 })
 export class ZardDemoInputGroupCustomComponent {}

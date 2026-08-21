@@ -16,6 +16,16 @@
       "options": {
         "command": "npx tsx packages/highlight/src/generator/index.ts --watch"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/highlight/jest.config.ts"
+      }
     }
   }
 }

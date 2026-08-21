@@ -26,7 +26,9 @@ Licensed under the [MIT license](/LICENSE.md).
   <a href="https://chat.whatsapp.com/Dctdh6Huhvm24OX6js5XKT" target="_blank">
   <img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="whatsapp" />
 </a>
-<img src="https://dcbadge.limes.pink/api/server/https://discord.com/invite/yP8Uj9rAX9" alt="discord" />
+<a href="https://discord.com/invite/yP8Uj9rAX9" target="_blank">
+  <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="discord" />
+</a>
 
 <a href="https://x.com/zard_ui" target="_blank">
   <img src="https://img.shields.io/badge/X-%23000000.svg?style=for-the-badge&logo=X&logoColor=white" alt="Zard_ui" />

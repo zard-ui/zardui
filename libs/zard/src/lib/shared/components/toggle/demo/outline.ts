@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBold, lucideItalic } from '@ng-icons/lucide';
@@ -20,6 +20,7 @@ import { ZardToggleComponent } from '../toggle.component';
       </z-toggle>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBold, lucideItalic })],
 })
 export class ZardDemoToggleOutlineComponent {}

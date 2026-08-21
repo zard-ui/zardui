@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
@@ -9,8 +9,9 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
   template: `
     <div class="grid w-72 gap-2">
       <textarea z-textarea placeholder="Type your message here."></textarea>
-      <button z-button>Send message</button>
+      <button type="button" z-button>Send message</button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTextareaButtonComponent {}

@@ -1,9 +1,9 @@
 /**
- * A edição de uma linha num campo do wizard.
+ * Editing a single line in a wizard field.
  *
- * O campo só aceitava digitar no fim e apagar de trás para a frente: quem
- * quisesse trocar o meio de um alias apertava as setas, não via nada acontecer
- * e ficava sem saída a não ser apagar tudo e redigitar.
+ * The field only accepted typing at the end and deleting backwards: anyone who
+ * wanted to change the middle of an alias pressed the arrow keys, saw nothing
+ * happen, and was left with no option but to delete everything and retype it.
  */
 
 import type { KeyEvent } from '@cli/ui/engine/index.js';
@@ -18,7 +18,7 @@ const press = (key: string, modifiers: Partial<KeyEvent> = {}): KeyEvent => ({
   ...modifiers,
 });
 
-/** Aplica uma sequência de teclas, falhando se alguma não for de edição. */
+/** Applies a sequence of keys, failing if any of them is not an editing key. */
 function type(state: TextInput, keys: (string | KeyEvent)[]): TextInput {
   return keys.reduce<TextInput>((current, key) => {
     const event = typeof key === 'string' ? press(key) : key;
@@ -37,7 +37,7 @@ describe('startInput', () => {
 });
 
 describe('editInput', () => {
-  // Quem já sabe o que quer digita direto, sem apagar o que a CLI propôs.
+  // Someone who already knows what they want types straight over the CLI's suggestion.
   it('should replace the untouched suggestion on the first keystroke', () => {
     const result = type(startInput('@/shared/components'), ['@']);
 
@@ -51,8 +51,8 @@ describe('editInput', () => {
   });
 
   /**
-   * O caso que motivou tudo: trocar `@/shared/...` por `@app/shared/...` sem
-   * perder o resto do caminho.
+   * The case that prompted all of this: swapping `@/shared/...` for
+   * `@app/shared/...` without losing the rest of the path.
    */
   it('should let the caret walk back and edit the middle', () => {
     const start = startInput('@/shared/components');
@@ -82,7 +82,7 @@ describe('editInput', () => {
     expect(type(middle, [press('delete')]).value).toBe('abd');
   });
 
-  // Backspace assume o valor sugerido e passa a editá-lo, em vez de zerá-lo.
+  // Backspace adopts the suggested value and edits it, instead of clearing it.
   it('should edit the suggestion on backspace instead of clearing it', () => {
     const result = type(startInput('@/shared/components'), [press('backspace'), press('backspace')]);
 
@@ -117,7 +117,7 @@ describe('editInput', () => {
     });
   });
 
-  // enter e escape pertencem ao fluxo do wizard, não ao campo.
+  // enter and escape belong to the wizard's flow, not to the field.
   it('should refuse the keys the wizard owns', () => {
     expect(editInput(startInput('abc'), press('enter'))).toBeNull();
     expect(editInput(startInput('abc'), press('escape'))).toBeNull();

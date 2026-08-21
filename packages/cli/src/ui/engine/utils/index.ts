@@ -1,9 +1,9 @@
 /**
- * utils — helpers puros de string/Unicode. Sem I/O, sem dependências.
- * (Fatia vertical / PoC: implementação real, suficiente para ASCII + wide + emoji.)
+ * utils — pure string/Unicode helpers. No I/O, no dependencies.
+ * Enough for ASCII, wide characters and emoji.
  */
 
-// Intl.Segmenter (Node 20+) dá clusters de grapheme corretos; fallback p/ code points.
+// Intl.Segmenter (Node 20+) gives correct grapheme clusters; falls back to code points.
 type Seg = { segment(input: string): Iterable<{ segment: string }> };
 type SegCtor = { Segmenter: new (locale: string, opts: { granularity: string }) => Seg };
 const SEG: Seg | null =
@@ -37,7 +37,7 @@ function isWide(cp: number): boolean {
     (cp >= 0xfe30 && cp <= 0xfe6f) ||
     (cp >= 0xff00 && cp <= 0xff60) || // Fullwidth forms
     (cp >= 0xffe0 && cp <= 0xffe6) ||
-    (cp >= 0x1f300 && cp <= 0x1faff) || // emoji & símbolos
+    (cp >= 0x1f300 && cp <= 0x1faff) || // emoji & symbols
     (cp >= 0x20000 && cp <= 0x3fffd) // CJK Ext B+
   );
 }
@@ -111,7 +111,7 @@ export function wrapText(text: string, width: number): string[] {
 }
 
 function splitWords(line: string): string[] {
-  // mantém os espaços agregados à palavra seguinte para preservar recuos simples
+  // keeps spaces attached to the following word so simple indents survive
   return line.length ? (line.match(/\s*\S+\s*|\s+/g) ?? [line]) : [''];
 }
 

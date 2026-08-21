@@ -7,20 +7,20 @@ export const COLLAPSIBLE_API: ApiSection[] = [
       'An interactive component which expands and collapses a panel. It renders no markup of its own, so it can also be applied as an attribute to an element that is already a component — for example li[z-sidebar-menu-item].',
     props: [
       {
-        name: 'zOpen',
+        name: '[zOpen]',
         description: 'Open state of the panel. Supports two-way binding through [(zOpen)]',
         type: 'boolean',
         default: 'false',
       },
       {
-        name: 'zDisabled',
+        name: '[zDisabled]',
         description: 'Blocks the trigger from toggling the panel',
         type: 'boolean',
         default: 'false',
       },
-      { name: 'class', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       {
-        name: 'zOpenChange',
+        name: '(zOpenChange)',
         description: 'Emits the new open state whenever the panel toggles',
         type: 'boolean',
         default: '',
@@ -36,6 +36,6 @@ export const COLLAPSIBLE_API: ApiSection[] = [
   {
     selector: 'z-collapsible-content',
     description: 'The panel revealed by the trigger. Animates its height with a CSS grid transition.',
-    props: [{ name: 'class', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucideCopy, lucideInfo, lucideStar } from '@ng-icons/lucide';
@@ -69,6 +69,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
       </ng-template>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCopy, lucideCheck, lucideInfo, lucideStar })],
 })
 export class ZardDemoInputGroupButtonComponent {

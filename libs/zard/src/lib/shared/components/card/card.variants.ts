@@ -18,9 +18,9 @@ export const cardHeaderVariants = cva(
   'group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-4 group-data-[size=sm]/card:px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [&.border-b]:pb-4 group-data-[size=sm]/card:[&.border-b]:pb-3',
 );
 
-export const cardTitleVariant = cva('text-base/snug font-medium group-data-[size=sm]/card:text-sm');
+export const cardTitleVariants = cva('text-base/snug font-medium group-data-[size=sm]/card:text-sm');
 
-export const cardDescriptionVariant = cva('text-sm text-muted-foreground');
+export const cardDescriptionVariants = cva('text-sm text-muted-foreground');
 
 export const cardActionVariants = cva('col-start-2 row-span-2 row-start-1 self-start justify-self-end');
 

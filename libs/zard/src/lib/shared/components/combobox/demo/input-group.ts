@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideGlobe } from '@ng-icons/lucide';
@@ -7,9 +7,8 @@ import { ZardInputGroupAddonComponent } from '../../input-group/input-group.comp
 import { ZardComboboxImports } from '../combobox.imports';
 
 @Component({
-  selector: 'zard-demo-combobox-input-group',
+  selector: 'z-demo-combobox-input-group',
   imports: [NgIcon, ZardComboboxImports, ZardInputGroupAddonComponent],
-  standalone: true,
   template: `
     <z-combobox zWidth="md" [(zValue)]="value">
       <z-combobox-input placeholder="Select a timezone">
@@ -35,6 +34,7 @@ import { ZardComboboxImports } from '../combobox.imports';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideGlobe })],
 })
 export class ZardDemoComboboxInputGroupComponent {

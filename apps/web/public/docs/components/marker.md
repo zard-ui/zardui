@@ -197,7 +197,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 ### Default
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideGitBranch, lucideSearch } from '@ng-icons/lucide';
@@ -230,6 +230,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideGitBranch, lucideSearch })],
 })
 export class ZardDemoMarkerDefaultComponent {}
@@ -238,7 +239,7 @@ export class ZardDemoMarkerDefaultComponent {}
 ### Variant
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 
@@ -260,6 +261,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoMarkerVariantComponent {}
 ```
@@ -267,7 +269,7 @@ export class ZardDemoMarkerVariantComponent {}
 ### Status
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
@@ -288,6 +290,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoMarkerStatusComponent {}
 ```
@@ -295,7 +298,7 @@ export class ZardDemoMarkerStatusComponent {}
 ### Shimmer
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 
@@ -313,6 +316,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoMarkerShimmerComponent {}
 ```
@@ -320,7 +324,7 @@ export class ZardDemoMarkerShimmerComponent {}
 ### Separator
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 
@@ -342,6 +346,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoMarkerSeparatorComponent {}
 ```
@@ -349,7 +354,7 @@ export class ZardDemoMarkerSeparatorComponent {}
 ### Border
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideFileText, lucideGitBranch, lucideSearch } from '@ng-icons/lucide';
@@ -377,6 +382,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideFileText, lucideGitBranch, lucideSearch })],
 })
 export class ZardDemoMarkerBorderComponent {}
@@ -385,7 +391,7 @@ export class ZardDemoMarkerBorderComponent {}
 ### Icon
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBookOpenCheck, lucideGitBranch, lucideSearch } from '@ng-icons/lucide';
@@ -413,6 +419,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBookOpenCheck, lucideGitBranch, lucideSearch })],
 })
 export class ZardDemoMarkerIconComponent {}
@@ -460,7 +467,7 @@ export class ZardDemoMarkerLinkComponent {
 ### Shorthand
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideGitBranch, lucideSearch } from '@ng-icons/lucide';
@@ -487,6 +494,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </z-marker>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideGitBranch, lucideSearch })],
 })
 export class ZardDemoMarkerShorthandComponent {}

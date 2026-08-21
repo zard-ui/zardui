@@ -1,7 +1,6 @@
 /**
- * diff — compara dois Frames e emite o conjunto MÍNIMO de mudanças, como
- * runs (segmentos contíguos) por linha alterada. Função pura (ADR-0001).
- * (Fatia vertical / PoC: implementação real.)
+ * diff — compares two Frames and emits the MINIMAL set of changes, as runs
+ * (contiguous segments) per changed line. A pure function (ADR-0001).
  */
 
 import type { Cell, Frame, Size } from '../frame/index.js';
@@ -52,18 +51,18 @@ export function createDiffer(options: DifferOptions = {}): Differ {
         let x = 0;
 
         while (x < cols) {
-          // avança sobre células iguais
+          // skip over identical cells
           while (x < cols && cellEquals(a[x] as Cell, b[x] as Cell)) x++;
           if (x >= cols) break;
 
           const start = x;
           while (x < cols) {
             if (cellEquals(a[x] as Cell, b[x] as Cell)) {
-              // coalescing: só encerra o run se o trecho igual for >= minGap
+              // coalescing: only end the run when the identical stretch is >= minGap
               let k = x;
               while (k < cols && cellEquals(a[k] as Cell, b[k] as Cell)) k++;
               if (k >= cols || k - x >= minGap) break;
-              x = k; // funde o trecho igual curto dentro do run
+              x = k; // fold the short identical stretch into the run
             } else {
               x++;
             }

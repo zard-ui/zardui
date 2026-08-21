@@ -6,8 +6,7 @@ import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.com
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
 @Component({
-  selector: 'registry-consuming-section',
-  standalone: true,
+  selector: 'z-registry-consuming-section',
   imports: [CodeBlockComponent, CodeTabsComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -58,7 +57,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <z-code-block [data]="curlExample" />
   `,
 })
-export class RegistryConsumingSection {
+export class RegistryConsumingSectionComponent {
   readonly addTabs: CodeTabData = TABS_0;
   readonly curlExample: CodeBlockData = BLOCK_1;
 }

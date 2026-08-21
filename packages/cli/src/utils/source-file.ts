@@ -1,22 +1,22 @@
 /**
- * Edições de código-fonte que mais de um passo do init precisa fazer.
+ * Source edits that more than one init step needs to make.
  *
- * Inserir um import parece trivial até o arquivo estar em CRLF: um `\n` cru
- * gera terminações misturadas, faz o git marcar o arquivo inteiro como alterado
- * e — quando a expressão que procura os imports esquece o `\r` — emenda a linha
- * nova no fim da anterior.
+ * Inserting an import looks trivial until the file is in CRLF: a raw `\n`
+ * produces mixed endings, makes git mark the whole file as changed, and — when
+ * the expression that finds the imports forgets the `\r` — welds the new line
+ * onto the end of the previous one.
  */
 
-/** A quebra de linha que o arquivo já usa. */
+/** The line ending the file already uses. */
 export function lineEndingOf(content: string): string {
   return content.includes('\r\n') ? '\r\n' : '\n';
 }
 
-/** O último `import ... from '...'` do arquivo, ou null se não houver nenhum. */
+/** The file's last `import ... from '...'`, or null when there is none. */
 function lastImport(content: string): RegExpExecArray | null {
-  // `[\s\S]*?` em vez de `.*`: a lista de símbolos importados quebra em várias
-  // linhas com frequência, e um padrão preso a uma linha só não a alcançava —
-  // num arquivo assim o import novo era jogado para antes de todos os outros.
+  // `[\s\S]*?` rather than `.*`: the list of imported symbols often wraps across
+  // several lines, and a pattern anchored to a single line did not reach it — in
+  // such a file the new import was thrown in before all the others.
   const importRegex = /^import\s[\s\S]*?from\s+'[^']*';\r?\n?/gm;
 
   let last: RegExpExecArray | null = null;
@@ -27,10 +27,10 @@ function lastImport(content: string): RegExpExecArray | null {
 }
 
 /**
- * Insere uma linha de import logo depois do último import do arquivo.
+ * Inserts an import line just after the file's last import.
  *
- * Devolve o conteúdo intocado quando o import já está lá, para que chamar duas
- * vezes seja o mesmo que chamar uma.
+ * Returns the content untouched when the import is already there, so calling it
+ * twice is the same as calling it once.
  */
 export function withImport(content: string, importLine: string): string {
   if (content.includes(importLine)) return content;
@@ -46,27 +46,27 @@ export function withImport(content: string, importLine: string): string {
   return content.slice(0, end) + (alreadyBroken ? '' : eol) + importLine + eol + content.slice(end);
 }
 
-/** Onde um literal de array começa e termina, em índices do conteúdo. */
+/** Where an array literal starts and ends, as indices into the content. */
 export interface ArrayRange {
-  /** Índice do `[` que abre. */
+  /** Index of the opening `[`. */
   readonly open: number;
-  /** Índice do `]` que fecha. */
+  /** Index of the closing `]`. */
   readonly close: number;
-  /** O que está entre os dois, sem os colchetes. */
+  /** What sits between the two, without the brackets. */
   readonly body: string;
 }
 
 /**
- * O intervalo do array atribuído a `key`, achado contando colchetes.
+ * The range of the array assigned to `key`, found by counting brackets.
  *
- * Uma expressão regular para no primeiro `]` que aparece, e em código real esse
- * `]` costuma ser o de um array aninhado — `withInterceptors([...])` num
- * `providers`, um plugin com opções num `plugins`. O que fosse inserido ali
- * caía dentro do array errado, e o build quebrava com um erro de tipo que não
- * menciona ZardUI em lugar nenhum.
+ * A regular expression stops at the first `]` it sees, and in real code that `]`
+ * is usually a nested array's — `withInterceptors([...])` inside `providers`, a
+ * plugin with options inside `plugins`. Anything inserted there landed in the
+ * wrong array, and the build broke with a type error that mentions ZardUI
+ * nowhere.
  *
- * Strings e comentários são pulados, para que um `]` escrito dentro deles não
- * conte como fechamento.
+ * Strings and comments are skipped, so a `]` written inside one does not count
+ * as a closing bracket.
  */
 export function arrayRange(content: string, key: string): ArrayRange | null {
   const opening = new RegExp(`\\b${key}\\s*:\\s*\\[`).exec(content);
@@ -96,10 +96,10 @@ export function arrayRange(content: string, key: string): ArrayRange | null {
 }
 
 /**
- * O índice logo após a string ou o comentário que começa em `index`.
+ * The index just past the string or comment starting at `index`.
  *
- * Devolve o próprio `index` quando não há nenhum ali — quem chama usa isso para
- * saber que o caractere é código e deve ser considerado.
+ * Returns `index` itself when there is neither — the caller uses that to know
+ * the character is code and should be taken into account.
  */
 function skipStringOrComment(content: string, index: number): number {
   const char = content[index];

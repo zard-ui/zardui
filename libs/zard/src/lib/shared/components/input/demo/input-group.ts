@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInfo } from '@ng-icons/lucide';
@@ -24,6 +24,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideInfo })],
 })
 export class ZardDemoInputInputGroupComponent {}

@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
   selector: 'z-demo-tabs-vertical',
   imports: [ZardTabComponent, ZardTabGroupComponent],
-  standalone: true,
   template: `
     <div class="flex w-full max-w-md flex-col gap-6">
       <z-tab-group zOrientation="vertical">
@@ -21,5 +20,6 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
       </z-tab-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTabsVerticalComponent {}

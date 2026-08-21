@@ -44,7 +44,8 @@ import type { ClassValue } from 'clsx';
 
 import type { ZardButtonTypeVariants } from '@/shared/components/button';
 import { comboboxValueVariants, comboboxVariants } from '@/shared/components/combobox/combobox.variants';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import {
   ZardComboboxContentComponent,
@@ -734,7 +735,7 @@ export const comboboxItemVariants = cva(
 );
 
 export const comboboxItemIndicatorVariants = cva(
-  'pointer-events-none absolute end-2 flex size-4 items-center justify-center',
+  'pointer-events-none absolute inset-e-2 flex size-4 items-center justify-center',
 );
 
 export const comboboxGroupVariants = cva('block');
@@ -1991,9 +1992,8 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-default',
+  selector: 'z-demo-combobox-default',
   imports: [ZardComboboxImports],
-  standalone: true,
   template: `
     <z-combobox [(zValue)]="value">
       <z-combobox-input placeholder="Select a framework" />
@@ -2033,9 +2033,8 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-multiple',
+  selector: 'z-demo-combobox-multiple',
   imports: [ZardComboboxImports],
-  standalone: true,
   template: `
     <z-combobox zMultiple zAutoHighlight zWidth="full" [(zValue)]="value">
       <z-combobox-chips class="w-full max-w-xs">
@@ -2090,9 +2089,8 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-clear',
+  selector: 'z-demo-combobox-clear',
   imports: [ZardComboboxImports],
-  standalone: true,
   template: `
     <z-combobox [(zValue)]="value">
       <z-combobox-input zShowClear placeholder="Select a framework" />
@@ -2126,14 +2124,13 @@ export class ZardDemoComboboxClearComponent {
 ### Grouped
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardComboboxImports } from '../combobox.imports';
 
 @Component({
-  selector: 'zard-demo-combobox-grouped',
+  selector: 'z-demo-combobox-grouped',
   imports: [ZardComboboxImports],
-  standalone: true,
   template: `
     <z-combobox zWidth="md" [(zValue)]="value">
       <z-combobox-input placeholder="Select a timezone" />
@@ -2159,6 +2156,7 @@ import { ZardComboboxImports } from '../combobox.imports';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxGroupedComponent {
   readonly value = signal<string | string[] | null>(null);
@@ -2204,15 +2202,14 @@ export class ZardDemoComboboxGroupedComponent {
 ### Custom Items
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardItemImports } from '../../item/item.imports';
 import { ZardComboboxImports } from '../combobox.imports';
 
 @Component({
-  selector: 'zard-demo-combobox-custom-items',
+  selector: 'z-demo-combobox-custom-items',
   imports: [ZardComboboxImports, ZardItemImports],
-  standalone: true,
   template: `
     <z-combobox zWidth="md" [(zValue)]="value">
       <z-combobox-input placeholder="Search countries..." />
@@ -2235,6 +2232,7 @@ import { ZardComboboxImports } from '../combobox.imports';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxCustomItemsComponent {
   readonly value = signal<string | string[] | null>(null);
@@ -2273,9 +2271,8 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-invalid',
+  selector: 'z-demo-combobox-invalid',
   imports: [ZardComboboxImports, ZardFieldImports],
-  standalone: true,
   template: `
     <div z-field class="w-full min-w-48" data-invalid="true">
       <label z-field-label for="combobox-invalid">Framework</label>
@@ -2321,9 +2318,8 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-disabled',
+  selector: 'z-demo-combobox-disabled',
   imports: [ZardComboboxImports],
-  standalone: true,
   template: `
     <div class="flex flex-wrap gap-4">
       <z-combobox zDisabled>
@@ -2386,9 +2382,8 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-auto-highlight',
+  selector: 'z-demo-combobox-auto-highlight',
   imports: [ZardComboboxImports],
-  standalone: true,
   template: `
     <z-combobox zAutoHighlight [(zValue)]="value">
       <z-combobox-input placeholder="Select a framework" />
@@ -2422,15 +2417,14 @@ export class ZardDemoComboboxAutoHighlightComponent {
 ### Popup
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardComboboxImports } from '../combobox.imports';
 
 @Component({
-  selector: 'zard-demo-combobox-popup',
+  selector: 'z-demo-combobox-popup',
   imports: [ZardButtonComponent, ZardComboboxImports],
-  standalone: true,
   template: `
     <z-combobox zWidth="full" class="w-fit" [(zValue)]="value">
       <button type="button" z-button z-combobox-trigger zType="outline" class="w-64 justify-between font-normal">
@@ -2450,6 +2444,7 @@ import { ZardComboboxImports } from '../combobox.imports';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxPopupComponent {
   readonly value = signal<string | string[] | null>(null);
@@ -2481,7 +2476,7 @@ export class ZardDemoComboboxPopupComponent {
 ### Input Group
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideGlobe } from '@ng-icons/lucide';
@@ -2490,9 +2485,8 @@ import { ZardInputGroupAddonComponent } from '../../input-group/input-group.comp
 import { ZardComboboxImports } from '../combobox.imports';
 
 @Component({
-  selector: 'zard-demo-combobox-input-group',
+  selector: 'z-demo-combobox-input-group',
   imports: [NgIcon, ZardComboboxImports, ZardInputGroupAddonComponent],
-  standalone: true,
   template: `
     <z-combobox zWidth="md" [(zValue)]="value">
       <z-combobox-input placeholder="Select a timezone">
@@ -2518,6 +2512,7 @@ import { ZardComboboxImports } from '../combobox.imports';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideGlobe })],
 })
 export class ZardDemoComboboxInputGroupComponent {
@@ -2570,9 +2565,8 @@ import { ZardComboboxComponent } from '../combobox.component';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-shorthand',
+  selector: 'z-demo-combobox-shorthand',
   imports: [ZardComboboxComponent],
-  standalone: true,
   template: `
     <div class="flex flex-col gap-2">
       <z-combobox
@@ -2609,30 +2603,30 @@ Root of the combobox. Owns the value, the query, the open state and the keyboard
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
-| `zValue` | Selected value. `string` in single mode, `string[]` when `zMultiple` is set. Two-way bindable | `model<string \| string[] \| null>` | `null` |
-| `zOpen` | Open state of the popup. Two-way bindable | `model<boolean>` | `false` |
-| `zMultiple` | Enables multiple selection with chips | `boolean` | `false` |
-| `zFilter` | Built-in filter strategy applied to the item labels | `'contains' \| 'startsWith' \| 'none'` | `'contains'` |
-| `zFilterFn` | Custom filter predicate. Takes precedence over `zFilter` | `((label: string, query: string) => boolean) \| null` | `null` |
-| `zSide` | Preferred side of the popup | `'top' \| 'bottom'` | `'bottom'` |
-| `zAlign` | Alignment of the popup against the anchor | `'start' \| 'center' \| 'end'` | `'start'` |
-| `zSideOffset` | Distance in px between anchor and popup | `number` | `6` |
-| `zAlignOffset` | Offset in px along the alignment axis | `number` | `0` |
-| `zAutoHighlight` | Highlights the first selectable item while typing, so `Enter` selects it without navigating first | `boolean` | `false` |
-| `zInvalid` | Marks the combobox as invalid. Adds `data-invalid` to the host and `aria-invalid` to the input and the chips input | `boolean` | `false` |
-| `zWidth` | Width of the combobox | `'default' \| 'sm' \| 'md' \| 'lg' \| 'full'` | `'default'` |
-| `zDisabled` | Whether the combobox is disabled | `boolean` | `false` |
-| `searchable` | Whether the input filters the list while typing. When false the input is read-only | `boolean` | `true` |
-| `placeholder` | Placeholder shown when the popup is closed | `string` | `'Select...'` |
-| `searchPlaceholder` | Placeholder shown while the popup is open | `string` | `'Search...'` |
-| `emptyText` | Empty state text rendered by the shorthand mode | `string` | `'No results found.'` |
-| `options` | Shorthand mode only — flat list of options rendered by the root | `ZardComboboxOption[]` | `[]` |
-| `groups` | Shorthand mode only — grouped options rendered by the root | `ZardComboboxGroup[]` | `[]` |
-| `ariaLabel` | ARIA label forwarded to the input | `string` | `''` |
-| `ariaDescribedBy` | ARIA described-by forwarded to the input | `string` | `''` |
-| `value` | @deprecated Legacy value input, synchronised into `zValue`. Use `[(zValue)]` | `string \| null` | `null` |
-| `buttonVariant` | @deprecated The trigger is no longer a button, this input has no visual effect | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'outline'` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zValue]` | Selected value. `string` in single mode, `string[]` when `zMultiple` is set. Two-way bindable | `model<string \| string[] \| null>` | `null` |
+| `[zOpen]` | Open state of the popup. Two-way bindable | `model<boolean>` | `false` |
+| `[zMultiple]` | Enables multiple selection with chips | `boolean` | `false` |
+| `[zFilter]` | Built-in filter strategy applied to the item labels | `'contains' \| 'startsWith' \| 'none'` | `'contains'` |
+| `[zFilterFn]` | Custom filter predicate. Takes precedence over `zFilter` | `((label: string, query: string) => boolean) \| null` | `null` |
+| `[zSide]` | Preferred side of the popup | `'top' \| 'bottom'` | `'bottom'` |
+| `[zAlign]` | Alignment of the popup against the anchor | `'start' \| 'center' \| 'end'` | `'start'` |
+| `[zSideOffset]` | Distance in px between anchor and popup | `number` | `6` |
+| `[zAlignOffset]` | Offset in px along the alignment axis | `number` | `0` |
+| `[zAutoHighlight]` | Highlights the first selectable item while typing, so `Enter` selects it without navigating first | `boolean` | `false` |
+| `[zInvalid]` | Marks the combobox as invalid. Adds `data-invalid` to the host and `aria-invalid` to the input and the chips input | `boolean` | `false` |
+| `[zWidth]` | Width of the combobox | `'default' \| 'sm' \| 'md' \| 'lg' \| 'full'` | `'default'` |
+| `[zDisabled]` | Whether the combobox is disabled | `boolean` | `false` |
+| `[searchable]` | Whether the input filters the list while typing. When false the input is read-only | `boolean` | `true` |
+| `[placeholder]` | Placeholder shown when the popup is closed | `string` | `'Select...'` |
+| `[searchPlaceholder]` | Placeholder shown while the popup is open | `string` | `'Search...'` |
+| `[emptyText]` | Empty state text rendered by the shorthand mode | `string` | `'No results found.'` |
+| `[options]` | Shorthand mode only — flat list of options rendered by the root | `ZardComboboxOption[]` | `[]` |
+| `[groups]` | Shorthand mode only — grouped options rendered by the root | `ZardComboboxGroup[]` | `[]` |
+| `[ariaLabel]` | ARIA label forwarded to the input | `string` | `''` |
+| `[ariaDescribedBy]` | ARIA described-by forwarded to the input | `string` | `''` |
+| `[value]` | @deprecated Legacy value input, synchronised into `zValue`. Use `[(zValue)]` | `string \| null` | `null` |
+| `[buttonVariant]` | @deprecated The trigger is no longer a button, this input has no visual effect | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'outline'` |
 | `(zValueChange)` | Emitted whenever the selection changes | `output<string \| string[] \| null>` | `-` |
 | `(zOpenChange)` | Emitted when the popup opens or closes | `output<boolean>` | `-` |
 | `(zQueryChange)` | Emitted when the search query changes | `output<string>` | `-` |
@@ -2644,11 +2638,11 @@ Input group that hosts the editable combobox input, the trigger and the clear bu
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
-| `placeholder` | Overrides the placeholder inherited from the root | `string` | `''` |
-| `zShowTrigger` | Renders the chevron trigger button | `boolean` | `true` |
-| `zShowClear` | Renders the clear button whenever there is a value | `boolean` | `false` |
-| `zDisabled` | Forces the input to be disabled. Inherits from the root when false | `boolean` | `false` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[placeholder]` | Overrides the placeholder inherited from the root | `string` | `''` |
+| `[zShowTrigger]` | Renders the chevron trigger button | `boolean` | `true` |
+| `[zShowClear]` | Renders the clear button whenever there is a value | `boolean` | `false` |
+| `[zDisabled]` | Forces the input to be disabled. Inherits from the root when false | `boolean` | `false` |
 
 ### button[z-combobox-trigger]
 
@@ -2656,7 +2650,7 @@ Toggles the popup. Inside a `z-input-group` it stays out of the tab order (`tabi
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### button[z-combobox-clear]
 
@@ -2664,7 +2658,7 @@ Clears the current selection and the query.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-content
 
@@ -2672,12 +2666,12 @@ Popup rendered through the CDK overlay and positioned against the anchor.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
-| `zAnchor` | Element the popup is anchored to. Defaults to the input group (or the chips container) | `ElementRef<HTMLElement> \| HTMLElement \| null` | `null` |
-| `zSide` | Overrides the root `zSide` | `'top' \| 'bottom' \| null` | `null` |
-| `zAlign` | Overrides the root `zAlign` | `'start' \| 'center' \| 'end' \| null` | `null` |
-| `zSideOffset` | Overrides the root `zSideOffset` | `number \| null` | `null` |
-| `zAlignOffset` | Overrides the root `zAlignOffset` | `number \| null` | `null` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zAnchor]` | Element the popup is anchored to. Defaults to the input group (or the chips container) | `ElementRef<HTMLElement> \| HTMLElement \| null` | `null` |
+| `[zSide]` | Overrides the root `zSide` | `'top' \| 'bottom' \| null` | `null` |
+| `[zAlign]` | Overrides the root `zAlign` | `'start' \| 'center' \| 'end' \| null` | `null` |
+| `[zSideOffset]` | Overrides the root `zSideOffset` | `number \| null` | `null` |
+| `[zAlignOffset]` | Overrides the root `zAlignOffset` | `number \| null` | `null` |
 
 ### z-combobox-list
 
@@ -2685,7 +2679,7 @@ Scrollable listbox holding the items.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-item
 
@@ -2693,11 +2687,11 @@ Selectable option. Hidden automatically when it does not match the query.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
-| `zValue` | Value of the option (required) | `string` | `-` |
-| `zLabel` | Label used for filtering. Falls back to the projected text content | `string` | `''` |
-| `zDisabled` | Whether the option can be selected | `boolean` | `false` |
-| `zVariant` | Visual variant of the option | `'default' \| 'destructive'` | `'default'` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zValue]` | Value of the option (required) | `string` | `-` |
+| `[zLabel]` | Label used for filtering. Falls back to the projected text content | `string` | `''` |
+| `[zDisabled]` | Whether the option can be selected | `boolean` | `false` |
+| `[zVariant]` | Visual variant of the option | `'default' \| 'destructive'` | `'default'` |
 
 ### z-combobox-group
 
@@ -2705,7 +2699,7 @@ Groups related items. Hides itself when every child item is filtered out.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-label
 
@@ -2713,7 +2707,7 @@ Heading of a group.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-empty
 
@@ -2721,7 +2715,7 @@ Empty state, visible only when no item matches the query.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-separator
 
@@ -2729,7 +2723,7 @@ Horizontal rule between groups.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-chips
 
@@ -2737,7 +2731,7 @@ Container used in multiple mode. Becomes the popup anchor and focuses the chips 
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-chip
 
@@ -2745,9 +2739,9 @@ Single selected value rendered as a removable chip.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
-| `zValue` | Value represented by the chip (required) | `string` | `-` |
-| `zShowRemove` | Renders the remove button | `boolean` | `true` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zValue]` | Value represented by the chip (required) | `string` | `-` |
+| `[zShowRemove]` | Renders the remove button | `boolean` | `true` |
 
 ### button[z-combobox-chip-remove]
 
@@ -2755,8 +2749,8 @@ Removes a value from the selection.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
-| `zValue` | Value to remove | `string` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zValue]` | Value to remove | `string` | `''` |
 
 ### input[z-combobox-chips-input]
 
@@ -2764,7 +2758,7 @@ Editable input rendered inside the chips container. Backspace on an empty field 
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-value
 
@@ -2772,8 +2766,8 @@ Renders the label of the current selection, typically inside a standalone trigge
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
-| `placeholder` | Text rendered when there is no selection. Falls back to the root `placeholder` | `string` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[placeholder]` | Text rendered when there is no selection. Falls back to the root `placeholder` | `string` | `''` |
 
 ---
 

@@ -8,7 +8,6 @@ import { ColorCardComponent } from '../color-card/color-card.component';
 
 @Component({
   selector: 'z-color-palette',
-  standalone: true,
   imports: [ColorCardComponent, ColorFormatSelectorComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './color-palette.component.html',

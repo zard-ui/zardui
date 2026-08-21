@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBadgeCheck, lucideBookmark } from '@ng-icons/lucide';
@@ -20,6 +20,7 @@ import { ZardBadgeComponent } from '../badge.component';
       </z-badge>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBadgeCheck, lucideBookmark })],
 })
 export class ZardDemoBadgeWithIconsComponent {}

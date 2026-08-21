@@ -19,12 +19,17 @@ export const commandItemVariants = cva(
     'data-selected:bg-muted data-selected:text-accent-foreground',
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
     'data-selected:*:[svg]:text-accent-foreground',
-  ].join(' '),
+  ],
   {
     variants: {
       variant: {
         default: '',
-        destructive: 'data-selected:bg-destructive data-selected:text-destructive-foreground',
+        // Tinted background, destructive text — the same treatment as the
+        // destructive button and dropdown item. It used to be a solid
+        // `bg-destructive` with `text-destructive-foreground`, a token no theme
+        // ever defined, so the text stayed dark on red.
+        destructive:
+          'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
       },
     },
     defaultVariants: {

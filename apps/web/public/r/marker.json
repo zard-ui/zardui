@@ -20,9 +20,6 @@
       "content": "export * from './marker.component';\nexport * from './marker.imports';\nexport * from './marker.variants';\n"
     }
   ],
-  "registryDependencies": [
-    "spinner"
-  ],
   "icons": {
     "family": "lucide",
     "symbols": [],

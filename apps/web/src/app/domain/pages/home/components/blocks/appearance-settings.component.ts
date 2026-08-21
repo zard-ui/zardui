@@ -14,7 +14,6 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 
 @Component({
   selector: 'z-block-appearance-settings',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ZardButtonComponent,

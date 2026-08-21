@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
 
@@ -32,5 +32,6 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </svg>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSpinnerCustomizationComponent {}

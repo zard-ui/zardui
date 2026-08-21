@@ -9,7 +9,7 @@ import { POPOVER_CLI_ADD } from '@generated/installation/cli/add-popover';
 
 import { ZardDemoAlertDialogDefaultComponent } from '@zard/components/alert-dialog/demo/default';
 import { ZardDemoDialogBasicComponent } from '@zard/components/dialog/demo/basic';
-import { ZardDropdownDemoComponent } from '@zard/components/dropdown/demo/default';
+import { ZardDemoDropdownDefaultComponent } from '@zard/components/dropdown/demo/default';
 import { ZardDemoPopoverPreviewComponent } from '@zard/components/popover/demo/preview';
 
 import { type ChangelogExample } from '../changelog-entry.interface';
@@ -44,7 +44,7 @@ export const JUNE_2025_EXAMPLES: ChangelogExample[] = [
   {
     name: 'default',
     description: 'Context menu with hierarchical actions, keyboard navigation, and support for nested submenus.',
-    component: ZardDropdownDemoComponent,
+    component: ZardDemoDropdownDefaultComponent,
     componentName: 'dropdown',
     codeData: DROPDOWN_DEMO_DEFAULT,
     cliAdd: DROPDOWN_CLI_ADD,

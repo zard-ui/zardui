@@ -8,7 +8,7 @@ import { ZardInputComponent } from '@/shared/components/input';
 import { injectIsMobile } from './is-mobile';
 
 @Component({
-  selector: 'zard-demo-drawer-profile-form',
+  selector: 'z-demo-drawer-profile-form',
   imports: [ZardButtonComponent, ZardInputComponent],
   template: `
     <form class="grid items-start gap-6" (submit)="$event.preventDefault()">
@@ -41,7 +41,7 @@ export class ZardDemoDrawerProfileFormComponent {}
       </z-drawer-header>
 
       <div class="p-4">
-        <zard-demo-drawer-profile-form />
+        <z-demo-drawer-profile-form />
       </div>
     </z-drawer>
   `,

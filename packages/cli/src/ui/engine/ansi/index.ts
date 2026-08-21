@@ -1,13 +1,12 @@
 /**
- * ansi — geração de sequências de escape (CSI/SGR) e o vocabulário de cor.
- * Nível mais baixo que "conhece" o protocolo do terminal. Sem I/O.
- * (Fatia vertical / PoC: implementação real.)
+ * ansi — generates escape sequences (CSI/SGR) and defines the colour vocabulary.
+ * The lowest level that "knows" the terminal protocol. No I/O.
  */
 
-/** Nível de cor que o terminal suporta (ver TerminalCapabilities). */
+/** The colour depth the terminal supports (see TerminalCapabilities). */
 export type ColorLevel = 'truecolor' | 'ansi256' | 'ansi16' | 'none';
 
-/** Cor concreta já resolvida para um nível — pronta para virar bytes SGR. */
+/** A concrete colour already resolved for a depth — ready to become SGR bytes. */
 export type AnsiColor =
   | { readonly kind: 'rgb'; readonly r: number; readonly g: number; readonly b: number }
   | { readonly kind: 'ansi256'; readonly index: number }
@@ -15,8 +14,8 @@ export type AnsiColor =
   | { readonly kind: 'default' };
 
 /**
- * Atributos de texto como bitmask (comparável por valor, barato de diffar).
- * Objeto const (não `const enum`) para ser compatível com `isolatedModules`.
+ * Text attributes as a bitmask (comparable by value, cheap to diff).
+ * A const object, not a `const enum`, to stay compatible with `isolatedModules`.
  */
 export const Attr = {
   None: 0,
@@ -28,12 +27,12 @@ export const Attr = {
   Strike: 1 << 5,
   Blink: 1 << 6,
 } as const;
-/** Valor de bitmask de atributos (combinável com OR bit-a-bit). */
+/** An attribute bitmask value (combinable with bitwise OR). */
 export type Attr = number;
 
 export const ESC = '\x1b';
 
-/** Monta uma sequência CSI (`ESC [ … `). Ex.: csi("2J"), csi(`${y};${x}H`). */
+/** Builds a CSI sequence (`ESC [ … `). e.g. csi("2J"), csi(`${y};${x}H`). */
 export function csi(body: string): string {
   return ESC + '[' + body;
 }
@@ -75,8 +74,8 @@ function attrCodes(mask: number): number[] {
 }
 
 /**
- * Builder incremental de SGR que emite APENAS o delta em relação ao estado
- * corrente — chave para minimizar bytes no encoder (ARCHITECTURE §17).
+ * Incremental SGR builder that emits ONLY the delta against the current state —
+ * the key to minimizing bytes in the encoder (ARCHITECTURE §17).
  */
 export interface SgrBuilder {
   transition(fg: AnsiColor, bg: AnsiColor, attrs: Attr): string;
@@ -96,7 +95,7 @@ export function createSgrBuilder(): SgrBuilder {
       const bgToDefault = bg.kind === 'default' && curBg.kind !== 'default';
 
       if (removingAttr || fgToDefault || bgToDefault) {
-        // Não dá para "desligar" seletivamente de forma barata → reset e reconstrói.
+        // There is no cheap way to turn attributes off selectively → reset and rebuild.
         const codes = [0, ...attrCodes(attrs)];
         if (fg.kind !== 'default') codes.push(...colorCodes(fg, true));
         if (bg.kind !== 'default') codes.push(...colorCodes(bg, false));

@@ -59,7 +59,7 @@
         },
         "baseColor": {
           "type": "string",
-          "default": "slate",
+          "default": "neutral",
           "description": "The base colour of the generated theme."
         }
       },

@@ -11,7 +11,6 @@ import { ZardIdDirective } from '@zard/core';
 
 @Component({
   selector: 'z-block-input-group-secure',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ZardButtonComponent,

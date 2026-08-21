@@ -26,7 +26,7 @@ import {
   type OverlayRef,
 } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -34,6 +34,7 @@ import {
   contentChild,
   DestroyRef,
   Directive,
+  DOCUMENT,
   ElementRef,
   inject,
   input,
@@ -144,7 +145,6 @@ function transformOriginFor(side: ZardPopoverPlacement, align: ZardPopoverAlign)
 
 @Directive({
   selector: '[zPopover]',
-  standalone: true,
   host: {
     'data-slot': 'popover-trigger',
     '[attr.aria-haspopup]': '"dialog"',
@@ -504,7 +504,6 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 @Component({
   selector: 'z-popover-title, [z-popover-title]',
   imports: [ZardIdDirective],
-  standalone: true,
   template: `
     <ng-container zardId="popover-title" #uniqueId="zardId" />
     <ng-content />
@@ -531,7 +530,6 @@ export class ZardPopoverTitleComponent {
 @Component({
   selector: 'z-popover-description, [z-popover-description]',
   imports: [ZardIdDirective],
-  standalone: true,
   template: `
     <ng-container zardId="popover-description" #uniqueId="zardId" />
     <ng-content />
@@ -557,7 +555,6 @@ export class ZardPopoverDescriptionComponent {
 
 @Component({
   selector: 'z-popover-header, [z-popover-header]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -578,7 +575,6 @@ export class ZardPopoverHeaderComponent {
 @Component({
   selector: 'z-popover, [z-popover]',
   imports: [ZardIdDirective],
-  standalone: true,
   template: `
     <ng-container zardId="popover" #uniqueId="zardId" />
     <ng-content />
@@ -701,7 +697,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-basic-demo',
+  selector: 'z-demo-popover-basic',
   imports: [ZardButtonComponent, ...ZardPopoverImports],
   template: `
     <button type="button" z-button zPopover zAlign="start" zType="outline" class="w-fit" [zContent]="popoverContent">
@@ -733,7 +729,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-align-demo',
+  selector: 'z-demo-popover-align',
   imports: [ZardButtonComponent, ...ZardPopoverImports],
   template: `
     <div class="flex gap-6">
@@ -780,7 +776,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-form-demo',
+  selector: 'z-demo-popover-form',
   imports: [ZardButtonComponent, ZardInputComponent, ...ZardFieldImports, ...ZardPopoverImports],
   template: `
     <button type="button" z-button zPopover zAlign="start" zType="outline" [zContent]="popoverContent">
@@ -824,7 +820,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-placement-demo',
+  selector: 'z-demo-popover-placement',
   imports: [ZardButtonComponent, ...ZardPopoverImports],
   template: `
     <div class="flex flex-col space-y-2">
@@ -869,7 +865,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-hover-demo',
+  selector: 'z-demo-popover-hover',
   imports: [ZardButtonComponent, ...ZardPopoverImports],
   template: `
     <button type="button" z-button zPopover zTrigger="hover" zType="outline" [zContent]="popoverContent">
@@ -904,7 +900,7 @@ import { ZardPopoverDirective } from '@/shared/components/popover/popover.compon
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-interactive-demo',
+  selector: 'z-demo-popover-interactive',
   imports: [FormsModule, ZardButtonComponent, ZardInputComponent, ...ZardPopoverImports],
   template: `
     <button type="button" z-button zPopover zType="outline" [zContent]="interactiveContent" #popoverTrigger>
@@ -955,16 +951,16 @@ The directive that creates a popover when applied to a trigger element.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zTrigger` | How the popover is triggered | `'click' \| 'hover' \| null` | `'click'` |
-| `zContent` | Required. Template to display in the popover | `TemplateRef<unknown>` | `-` |
-| `zPlacement` | Side of the trigger the popover opens on. `inline-start` and `inline-end` follow the text direction | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
-| `zAlign` | Alignment of the popover along the side of the trigger | `'start' \| 'center' \| 'end'` | `'center'` |
-| `zSideOffset` | Distance in pixels between the popover and the trigger | `number` | `4` |
-| `zAlignOffset` | Offset in pixels along the alignment axis | `number` | `0` |
-| `zOrigin` | Custom anchor element | `ElementRef` | `-` |
-| `zVisible` | Control visibility programmatically | `boolean` | `false` |
-| `zOverlayClickable` | Close on outside click | `boolean` | `true` |
-| `zVisibleChange` | Emits when visibility changes. Fires immediately, before the exit animation ends | `EventEmitter<boolean>` |  |
+| `[zTrigger]` | How the popover is triggered | `'click' \| 'hover' \| null` | `'click'` |
+| `[zContent]` | Required. Template to display in the popover | `TemplateRef<unknown>` | `-` |
+| `[zPlacement]` | Side of the trigger the popover opens on. `inline-start` and `inline-end` follow the text direction | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
+| `[zAlign]` | Alignment of the popover along the side of the trigger | `'start' \| 'center' \| 'end'` | `'center'` |
+| `[zSideOffset]` | Distance in pixels between the popover and the trigger | `number` | `4` |
+| `[zAlignOffset]` | Offset in pixels along the alignment axis | `number` | `0` |
+| `[zOrigin]` | Custom anchor element | `ElementRef` | `-` |
+| `[zVisible]` | Control visibility programmatically | `boolean` | `false` |
+| `[zOverlayClickable]` | Close on outside click | `boolean` | `true` |
+| `(zVisibleChange)` | Emits when visibility changes. Fires immediately, before the exit animation ends | `EventEmitter<boolean>` |  |
 
 ### z-popover
 
@@ -972,7 +968,7 @@ The popover content. Exposes `data-side`, `data-align` and `data-open`/`data-clo
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-popover-header
 
@@ -980,7 +976,7 @@ Groups the title and the description at the top of the popover.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-popover-title
 
@@ -988,7 +984,7 @@ The popover title. Wired to the content through `aria-labelledby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-popover-description
 
@@ -996,7 +992,7 @@ The popover description. Wired to the content through `aria-describedby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ---
 

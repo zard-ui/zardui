@@ -39,8 +39,11 @@
       ],
       "tokens": [
         "copy",
+        "download",
         "file-text",
-        "refresh-ccw"
+        "refresh-ccw",
+        "thumbs-down",
+        "thumbs-up"
       ]
     }
   }

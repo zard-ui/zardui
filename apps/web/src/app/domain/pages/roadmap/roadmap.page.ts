@@ -21,7 +21,6 @@ interface RoadmapPhase {
 
 @Component({
   selector: 'z-roadmap',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DocContentComponent, DocHeadingComponent, ZardCardComponent, ZardBadgeComponent, ZardProgressComponent],
   templateUrl: './roadmap.page.html',

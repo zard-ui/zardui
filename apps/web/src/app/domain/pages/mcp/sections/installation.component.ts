@@ -6,8 +6,7 @@ import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.com
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
 @Component({
-  selector: 'mcp-installation-section',
-  standalone: true,
+  selector: 'z-mcp-installation-section',
   imports: [CodeBlockComponent, CodeTabsComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -44,7 +43,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <z-code-block [data]="prompt" />
   `,
 })
-export class McpInstallationSection {
+export class McpInstallationSectionComponent {
   readonly cliTabs: CodeTabData = TABS_0;
   readonly projectConfig: CodeBlockData = BLOCK_1;
   readonly cursorConfig: CodeBlockData = BLOCK_2;

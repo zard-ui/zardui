@@ -288,12 +288,12 @@ export const itemContentVariants = cva(
 );
 
 export const itemTitleVariants = cva(
-  'line-clamp-1 flex w-fit items-center gap-2 text-sm font-medium leading-snug underline-offset-4',
+  'line-clamp-1 flex w-fit items-center gap-2 text-sm/snug font-medium underline-offset-4',
 );
 
 export const itemDescriptionVariants = cva(
   mergeClasses(
-    'line-clamp-2 text-left text-sm font-normal leading-normal text-muted-foreground',
+    'line-clamp-2 text-left text-sm/normal font-normal text-muted-foreground',
     'group-data-[size=xs]/item:text-xs',
     '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
   ),
@@ -377,7 +377,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
 ### Default
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBadgeCheck, lucideChevronRight } from '@ng-icons/lucide';
@@ -413,6 +413,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </a>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBadgeCheck, lucideChevronRight })],
 })
 export class ZardDemoItemDefaultComponent {}
@@ -421,7 +422,7 @@ export class ZardDemoItemDefaultComponent {}
 ### Variant
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInbox } from '@ng-icons/lucide';
@@ -462,6 +463,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </z-item>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideInbox })],
 })
 export class ZardDemoItemVariantComponent {}
@@ -470,7 +472,7 @@ export class ZardDemoItemVariantComponent {}
 ### Size
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInbox } from '@ng-icons/lucide';
@@ -511,6 +513,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </z-item>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideInbox })],
 })
 export class ZardDemoItemSizeComponent {}
@@ -519,7 +522,7 @@ export class ZardDemoItemSizeComponent {}
 ### Icon
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideShieldAlert } from '@ng-icons/lucide';
@@ -546,6 +549,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </z-item>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideShieldAlert })],
 })
 export class ZardDemoItemIconComponent {}
@@ -554,7 +558,7 @@ export class ZardDemoItemIconComponent {}
 ### Avatar
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
@@ -601,6 +605,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </z-item>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoItemAvatarComponent {}
@@ -609,7 +614,7 @@ export class ZardDemoItemAvatarComponent {}
 ### Image
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardItemImports } from '@/shared/components/item/item.imports';
 
@@ -646,6 +651,7 @@ interface Song {
       </z-item-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoItemImageComponent {
   protected readonly music: Song[] = [
@@ -659,7 +665,7 @@ export class ZardDemoItemImageComponent {
 ### Group
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
@@ -697,6 +703,7 @@ interface Person {
       }
     </z-item-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoItemGroupComponent {
@@ -711,7 +718,7 @@ export class ZardDemoItemGroupComponent {
 ### Header
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardItemImports } from '@/shared/components/item/item.imports';
 
@@ -741,6 +748,7 @@ interface Model {
       </z-item-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoItemHeaderComponent {
   protected readonly models: Model[] = [
@@ -766,7 +774,7 @@ export class ZardDemoItemHeaderComponent {
 ### Link
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronRight, lucideExternalLink } from '@ng-icons/lucide';
@@ -799,6 +807,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </a>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideChevronRight, lucideExternalLink })],
 })
 export class ZardDemoItemLinkComponent {}
@@ -807,7 +816,7 @@ export class ZardDemoItemLinkComponent {}
 ### Dropdown
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
@@ -852,6 +861,7 @@ interface Person {
       }
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideChevronDown })],
 })
 export class ZardDemoItemDropdownComponent {

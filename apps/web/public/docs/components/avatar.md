@@ -228,8 +228,22 @@ export class ZardAvatarGroupComponent {
 ```
 
 ```angular-ts
-export * from './avatar.component';
+/*
+ * The alias, not a relative path: the Angular compiler re-emits these imports from
+ * whichever module spreads the array, and it can only do that for a specifier the
+ * consumer can resolve too. A relative path here fails with NG3004.
+ */
+import { ZardAvatarGroupComponent } from '@/shared/components/avatar/avatar-group.component';
+import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
+
+/** Every part of the avatar component, for a template that uses more than one. */
+export const ZardAvatarImports = [ZardAvatarComponent, ZardAvatarGroupComponent] as const;
+```
+
+```angular-ts
 export * from './avatar-group.component';
+export * from './avatar.component';
+export * from './avatar.imports';
 export * from './avatar.variants';
 ```
 
@@ -248,7 +262,7 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
 ### Basic
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
 
@@ -261,6 +275,7 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
       <z-avatar zSrc="error-image.png" zFallback="ZA" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoAvatarBasicComponent {}
 ```
@@ -268,7 +283,7 @@ export class ZardDemoAvatarBasicComponent {}
 ### Badge
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
@@ -295,6 +310,7 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
       />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoAvatarBadgeComponent {}
@@ -303,7 +319,7 @@ export class ZardDemoAvatarBadgeComponent {}
 ### Group
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarGroupComponent } from '@/shared/components/avatar/avatar-group.component';
 import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
@@ -326,6 +342,7 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
       </z-avatar-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoAvatarGroupComponent {}
 ```

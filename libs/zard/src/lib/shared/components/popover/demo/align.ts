@@ -4,7 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-align-demo',
+  selector: 'z-demo-popover-align',
   imports: [ZardButtonComponent, ...ZardPopoverImports],
   template: `
     <div class="flex gap-6">

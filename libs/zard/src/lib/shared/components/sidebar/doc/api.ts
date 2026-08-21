@@ -1,6 +1,6 @@
 import type { ApiSection } from '@doc/domain/components/api-reference/api-reference.types';
 
-const CLASS_PROP = { name: 'class', description: 'Additional CSS classes', type: 'ClassValue', default: "''" };
+const CLASS_PROP = { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" };
 
 export const SIDEBAR_API: ApiSection[] = [
   {
@@ -8,20 +8,20 @@ export const SIDEBAR_API: ApiSection[] = [
     description: 'Wraps the sidebar and the page, provides ZardSidebarService and registers the keyboard shortcut.',
     props: [
       {
-        name: 'zDefaultOpen',
+        name: '[zDefaultOpen]',
         description:
           'Initial open state. Left unset, the persisted sidebar_state cookie decides, falling back to true; set explicitly, it wins over the cookie',
         type: 'boolean | undefined',
         default: 'undefined',
       },
       {
-        name: 'zOpen',
+        name: '[zOpen]',
         description: 'When set, the provider is controlled: the state is owned by the consumer',
         type: 'boolean | undefined',
         default: 'undefined',
       },
       {
-        name: 'style',
+        name: '[style]',
         description:
           'Extra inline style, applied after --sidebar-width and --sidebar-width-icon so it can override them',
         type: 'string',
@@ -29,7 +29,7 @@ export const SIDEBAR_API: ApiSection[] = [
       },
       CLASS_PROP,
       {
-        name: 'zOpenChange',
+        name: '(zOpenChange)',
         description: 'Emits whenever the open state is requested, including in controlled mode',
         type: 'boolean',
         default: '',
@@ -40,21 +40,21 @@ export const SIDEBAR_API: ApiSection[] = [
     selector: 'z-sidebar',
     description: 'The sidebar itself. Renders as a fixed panel on desktop, as a drawer on mobile.',
     props: [
-      { name: 'zSide', description: 'Which edge the sidebar docks to', type: "'left' | 'right'", default: "'left'" },
+      { name: '[zSide]', description: 'Which edge the sidebar docks to', type: "'left' | 'right'", default: "'left'" },
       {
-        name: 'zVariant',
+        name: '[zVariant]',
         description: 'Visual treatment of the panel',
         type: "'sidebar' | 'floating' | 'inset'",
         default: "'sidebar'",
       },
       {
-        name: 'zCollapsible',
+        name: '[zCollapsible]',
         description: 'How the sidebar collapses. "none" renders a plain, always-visible column',
         type: "'offcanvas' | 'icon' | 'none'",
         default: "'offcanvas'",
       },
       {
-        name: 'dir',
+        name: '[dir]',
         description: 'Writing direction. Mirrors the rail and the trigger icon when set to rtl',
         type: "'ltr' | 'rtl' | undefined",
         default: 'undefined',
@@ -138,11 +138,11 @@ export const SIDEBAR_API: ApiSection[] = [
     description:
       "The clickable menu row. Use the anchor form with routerLink instead of shadcn's asChild. Carries peer/menu-button.",
     props: [
-      { name: 'zType', description: 'Visual treatment', type: "'default' | 'outline'", default: "'default'" },
-      { name: 'zSize', description: 'Row height', type: "'default' | 'sm' | 'lg'", default: "'default'" },
-      { name: 'zActive', description: 'Marks the row as the current one', type: 'boolean', default: 'false' },
+      { name: '[zType]', description: 'Visual treatment', type: "'default' | 'outline'", default: "'default'" },
+      { name: '[zSize]', description: 'Row height', type: "'default' | 'sm' | 'lg'", default: "'default'" },
+      { name: '[zActive]', description: 'Marks the row as the current one', type: 'boolean', default: 'false' },
       {
-        name: 'zTooltip',
+        name: '[zTooltip]',
         description:
           'Label shown as a tooltip, but only while the sidebar is collapsed on desktop. The object form overrides that rule: `{ content, hidden: false }` keeps the tooltip on an expanded sidebar',
         type: 'string | TemplateRef<void> | { content: string | TemplateRef<void>; hidden?: boolean } | null',
@@ -156,7 +156,7 @@ export const SIDEBAR_API: ApiSection[] = [
     description: 'Secondary action pinned to the right of a menu row.',
     props: [
       {
-        name: 'zShowOnHover',
+        name: '[zShowOnHover]',
         description: 'Reveal the action only on hover or keyboard focus',
         type: 'boolean',
         default: 'false',
@@ -174,7 +174,7 @@ export const SIDEBAR_API: ApiSection[] = [
     description:
       'Placeholder row. The text width is derived from the element id rather than Math.random(), so the server and the client agree during hydration.',
     props: [
-      { name: 'zShowIcon', description: 'Also render a square icon placeholder', type: 'boolean', default: 'false' },
+      { name: '[zShowIcon]', description: 'Also render a square icon placeholder', type: 'boolean', default: 'false' },
       CLASS_PROP,
     ],
   },
@@ -192,8 +192,8 @@ export const SIDEBAR_API: ApiSection[] = [
     selector: 'a[z-sidebar-menu-sub-button], button[z-sidebar-menu-sub-button]',
     description: 'The clickable row inside a submenu.',
     props: [
-      { name: 'zSize', description: 'Row text size', type: "'sm' | 'md'", default: "'md'" },
-      { name: 'zActive', description: 'Marks the row as the current one', type: 'boolean', default: 'false' },
+      { name: '[zSize]', description: 'Row text size', type: "'sm' | 'md'", default: "'md'" },
+      { name: '[zActive]', description: 'Marks the row as the current one', type: 'boolean', default: 'false' },
       CLASS_PROP,
     ],
   },

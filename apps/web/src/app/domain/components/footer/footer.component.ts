@@ -4,7 +4,6 @@ import { SOCIAL_MEDIAS } from '@doc/shared/constants/medias.constant';
 
 @Component({
   selector: 'z-footer',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="dark:bg-transparent">

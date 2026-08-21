@@ -2754,11 +2754,11 @@ Wraps the sidebar and the page, provides ZardSidebarService and registers the ke
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zDefaultOpen` | Initial open state. Left unset, the persisted sidebar_state cookie decides, falling back to true; set explicitly, it wins over the cookie | `boolean \| undefined` | `undefined` |
-| `zOpen` | When set, the provider is controlled: the state is owned by the consumer | `boolean \| undefined` | `undefined` |
-| `style` | Extra inline style, applied after --sidebar-width and --sidebar-width-icon so it can override them | `string` | `''` |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
-| `zOpenChange` | Emits whenever the open state is requested, including in controlled mode | `boolean` |  |
+| `[zDefaultOpen]` | Initial open state. Left unset, the persisted sidebar_state cookie decides, falling back to true; set explicitly, it wins over the cookie | `boolean \| undefined` | `undefined` |
+| `[zOpen]` | When set, the provider is controlled: the state is owned by the consumer | `boolean \| undefined` | `undefined` |
+| `[style]` | Extra inline style, applied after --sidebar-width and --sidebar-width-icon so it can override them | `string` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `(zOpenChange)` | Emits whenever the open state is requested, including in controlled mode | `boolean` |  |
 
 ### z-sidebar
 
@@ -2766,11 +2766,11 @@ The sidebar itself. Renders as a fixed panel on desktop, as a drawer on mobile.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zSide` | Which edge the sidebar docks to | `'left' \| 'right'` | `'left'` |
-| `zVariant` | Visual treatment of the panel | `'sidebar' \| 'floating' \| 'inset'` | `'sidebar'` |
-| `zCollapsible` | How the sidebar collapses. "none" renders a plain, always-visible column | `'offcanvas' \| 'icon' \| 'none'` | `'offcanvas'` |
-| `dir` | Writing direction. Mirrors the rail and the trigger icon when set to rtl | `'ltr' \| 'rtl' \| undefined` | `undefined` |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[zSide]` | Which edge the sidebar docks to | `'left' \| 'right'` | `'left'` |
+| `[zVariant]` | Visual treatment of the panel | `'sidebar' \| 'floating' \| 'inset'` | `'sidebar'` |
+| `[zCollapsible]` | How the sidebar collapses. "none" renders a plain, always-visible column | `'offcanvas' \| 'icon' \| 'none'` | `'offcanvas'` |
+| `[dir]` | Writing direction. Mirrors the rail and the trigger icon when set to rtl | `'ltr' \| 'rtl' \| undefined` | `undefined` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### button[z-sidebar-trigger]
 
@@ -2778,7 +2778,7 @@ Ghost icon button that toggles the sidebar. Renders the panel icon and an sr-onl
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### button[z-sidebar-rail]
 
@@ -2786,7 +2786,7 @@ The thin strip on the sidebar edge. Toggles the sidebar, shows a resize cursor a
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-sidebar-inset, main[z-sidebar-inset]
 
@@ -2794,7 +2794,7 @@ The page area next to the sidebar. Required when zVariant is "inset".
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### input[z-sidebar-input]
 
@@ -2806,7 +2806,7 @@ Sticky region at the top of the sidebar.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-sidebar-footer, [z-sidebar-footer]
 
@@ -2814,7 +2814,7 @@ Sticky region at the bottom of the sidebar.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-sidebar-separator
 
@@ -2822,7 +2822,7 @@ A separator inset to the sidebar padding, painted with --sidebar-border.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-sidebar-content, [z-sidebar-content]
 
@@ -2830,7 +2830,7 @@ Scrollable area between the header and the footer.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-sidebar-group, [z-sidebar-group]
 
@@ -2838,7 +2838,7 @@ A section inside the content. Wrap it in z-collapsible to make it collapsible.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-sidebar-group-label, [z-sidebar-group-label]
 
@@ -2846,7 +2846,7 @@ The group heading. Fades out when the sidebar collapses to icons.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### button[z-sidebar-group-action]
 
@@ -2854,7 +2854,7 @@ Action button pinned to the top-right corner of a group.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-sidebar-group-content, [z-sidebar-group-content]
 
@@ -2862,7 +2862,7 @@ Content wrapper inside a group.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### ul[z-sidebar-menu]
 
@@ -2870,7 +2870,7 @@ The list that holds the menu items.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### li[z-sidebar-menu-item]
 
@@ -2878,7 +2878,7 @@ A single menu row. Carries group/menu-item, which the action and badge react to.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### button[z-sidebar-menu-button], a[z-sidebar-menu-button]
 
@@ -2886,11 +2886,11 @@ The clickable menu row. Use the anchor form with routerLink instead of shadcn's 
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zType` | Visual treatment | `'default' \| 'outline'` | `'default'` |
-| `zSize` | Row height | `'default' \| 'sm' \| 'lg'` | `'default'` |
-| `zActive` | Marks the row as the current one | `boolean` | `false` |
-| `zTooltip` | Label shown as a tooltip, but only while the sidebar is collapsed on desktop. The object form overrides that rule: `{ content, hidden: false }` keeps the tooltip on an expanded sidebar | `string \| TemplateRef<void> \| { content: string \| TemplateRef<void>; hidden?: boolean } \| null` | `null` |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[zType]` | Visual treatment | `'default' \| 'outline'` | `'default'` |
+| `[zSize]` | Row height | `'default' \| 'sm' \| 'lg'` | `'default'` |
+| `[zActive]` | Marks the row as the current one | `boolean` | `false` |
+| `[zTooltip]` | Label shown as a tooltip, but only while the sidebar is collapsed on desktop. The object form overrides that rule: `{ content, hidden: false }` keeps the tooltip on an expanded sidebar | `string \| TemplateRef<void> \| { content: string \| TemplateRef<void>; hidden?: boolean } \| null` | `null` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### button[z-sidebar-menu-action], a[z-sidebar-menu-action]
 
@@ -2898,8 +2898,8 @@ Secondary action pinned to the right of a menu row.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zShowOnHover` | Reveal the action only on hover or keyboard focus | `boolean` | `false` |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[zShowOnHover]` | Reveal the action only on hover or keyboard focus | `boolean` | `false` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-sidebar-menu-badge, [z-sidebar-menu-badge]
 
@@ -2907,7 +2907,7 @@ A counter pinned to the right of a menu row. Not interactive.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-sidebar-menu-skeleton
 
@@ -2915,8 +2915,8 @@ Placeholder row. The text width is derived from the element id rather than Math.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zShowIcon` | Also render a square icon placeholder | `boolean` | `false` |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[zShowIcon]` | Also render a square icon placeholder | `boolean` | `false` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### ul[z-sidebar-menu-sub]
 
@@ -2924,7 +2924,7 @@ Nested list under a menu item. Hidden when the sidebar collapses to icons.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### li[z-sidebar-menu-sub-item]
 
@@ -2932,7 +2932,7 @@ A row inside a submenu.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### a[z-sidebar-menu-sub-button], button[z-sidebar-menu-sub-button]
 
@@ -2940,9 +2940,9 @@ The clickable row inside a submenu.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zSize` | Row text size | `'sm' \| 'md'` | `'md'` |
-| `zActive` | Marks the row as the current one | `boolean` | `false` |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[zSize]` | Row text size | `'sm' \| 'md'` | `'md'` |
+| `[zActive]` | Marks the row as the current one | `boolean` | `false` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### ZardSidebarService
 

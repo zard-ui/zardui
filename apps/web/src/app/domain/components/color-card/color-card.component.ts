@@ -10,7 +10,6 @@ import { ColorsService, ColorFormat } from '@doc/shared/services/colors.service'
 
 @Component({
   selector: 'button[z-color-card]',
-  standalone: true,
   imports: [NgIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './color-card.component.html',

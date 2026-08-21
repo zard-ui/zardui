@@ -19,7 +19,10 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
     <ng-content />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.Emulated,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'accordion',
+  },
   exportAs: 'zAccordion',
 })
 export class ZardAccordionComponent implements AfterContentInit {

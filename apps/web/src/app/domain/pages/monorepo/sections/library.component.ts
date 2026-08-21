@@ -6,8 +6,7 @@ import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.com
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
 @Component({
-  selector: 'monorepo-library-section',
-  standalone: true,
+  selector: 'z-monorepo-library-section',
   imports: [CodeBlockComponent, CodeTabsComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Nx library</h2>
@@ -85,7 +84,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <z-code-block [data]="styles" />
   `,
 })
-export class MonorepoLibrarySection {
+export class MonorepoLibrarySectionComponent {
   readonly initTabs: CodeTabData = TABS_0;
   readonly componentsJson: CodeBlockData = BLOCK_1;
   readonly ngPackage: CodeBlockData = BLOCK_2;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 
@@ -55,5 +55,6 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
       </z-tab>
     </z-tab-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTabsDefaultComponent {}

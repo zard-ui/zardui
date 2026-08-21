@@ -8,7 +8,6 @@ import { ThemingClipboardService } from '../../services/theming-clipboard.servic
 
 @Component({
   selector: 'z-radius-preview',
-  standalone: true,
   imports: [ZardButtonComponent, ZardCardImports],
   templateUrl: './radius-preview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

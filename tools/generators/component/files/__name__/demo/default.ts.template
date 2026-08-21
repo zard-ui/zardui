@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { Zard<%= className %>Component } from '../<%= name %>.component';
 
 @Component({
   selector: 'z-demo-<%= name %>-default',
-  standalone: true,
   imports: [Zard<%= className %>Component],
   template: `
     <<%= selector %>><%= className %></<%= selector %>>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemo<%= className %>DefaultComponent {}

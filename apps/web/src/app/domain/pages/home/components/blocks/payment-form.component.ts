@@ -10,7 +10,6 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
 
 @Component({
   selector: 'z-block-payment-form',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ZardButtonComponent,

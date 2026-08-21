@@ -8,7 +8,6 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 @Component({
   selector: 'z-demo-tabs-icons',
   imports: [ZardTabComponent, ZardTabGroupComponent],
-  standalone: true,
   template: `
     <div class="w-full max-w-md">
       <z-tab-group>

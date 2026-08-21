@@ -1,6 +1,6 @@
 /**
- * focus — gerenciamento de foco como ESTADO RETIDO, keyed por identidade
- * estável de componente. Ordem de tabulação e roteamento de teclado. (Real.)
+ * focus — focus management as RETAINED STATE, keyed by a stable component
+ * identity. Tab order and keyboard routing.
  */
 
 import { createEmitter, type Disposable } from '../events/index.js';

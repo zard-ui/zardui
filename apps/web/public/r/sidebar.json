@@ -40,9 +40,7 @@
     "button",
     "tooltip",
     "skeleton",
-    "separator",
-    "input",
-    "collapsible"
+    "separator"
   ],
   "icons": {
     "family": "lucide",
@@ -74,10 +72,14 @@
         "calendar",
         "chevron-down",
         "chevron-right",
+        "chevrons-left",
+        "chevrons-right",
         "chevrons-up-down",
+        "gallery-vertical-end",
         "house",
         "inbox",
         "log-out",
+        "more-horizontal",
         "plus",
         "search",
         "settings",

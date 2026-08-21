@@ -20,7 +20,7 @@ npx zard-cli@latest add tooltip
 ```angular-ts
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -28,6 +28,7 @@ import {
   computed,
   DestroyRef,
   Directive,
+  DOCUMENT,
   effect,
   ElementRef,
   inject,
@@ -43,6 +44,7 @@ import {
   signal,
   type TemplateRef,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
@@ -258,7 +260,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
       if (this.detachTimeoutId !== undefined) {
         clearTimeout(this.detachTimeoutId);
         this.detachTimeoutId = undefined;
-        this.componentRef.instance.state.set('opened');
+        this.componentRef.instance.state.set('open');
       }
       return;
     }
@@ -325,6 +327,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[attr.id]': 'tooltipId()',
@@ -333,6 +336,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     'data-slot': 'tooltip-content',
     role: 'tooltip',
   },
+  exportAs: 'zTooltip',
 })
 export class ZardTooltipComponent {
   protected readonly arrowClasses = computed(() =>
@@ -442,7 +446,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
 ### Hover
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -453,6 +457,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
   template: `
     <button type="button" z-button zType="outline" zTooltip="Tooltip content">Hover</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTooltipHoverComponent {}
 ```
@@ -460,7 +465,7 @@ export class ZardDemoTooltipHoverComponent {}
 ### Click
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -471,6 +476,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
   template: `
     <button type="button" z-button zType="outline" zTooltip="Tooltip content" zTrigger="click">Click</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTooltipClickComponent {}
 ```
@@ -478,7 +484,7 @@ export class ZardDemoTooltipClickComponent {}
 ### Position
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -498,6 +504,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
       <button type="button" z-button zType="outline" zTooltip="Tooltip content" zPosition="bottom">Bottom</button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTooltipPositionComponent {}
 ```
@@ -505,7 +512,7 @@ export class ZardDemoTooltipPositionComponent {}
 ### With Keyboard Shortcut
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSave } from '@ng-icons/lucide';
@@ -515,7 +522,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd';
 import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
 
 @Component({
-  selector: 'z-demo-kbd-tooltip',
+  selector: 'z-demo-tooltip-with-kbd',
   imports: [NgIcon, ZardButtonComponent, ZardTooltipDirective, ZardKbdComponent],
   template: `
     <button type="button" z-button [zTooltip]="shortcutTip" zType="outline" zSize="icon-sm">
@@ -527,6 +534,7 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
       <z-kbd>S</z-kbd>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSave })],
 })
 export class ZardDemoTooltipWithKbdComponent {}
@@ -535,7 +543,7 @@ export class ZardDemoTooltipWithKbdComponent {}
 ### Disabled Button
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -548,6 +556,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
       <button type="button" z-button zType="outline" [zDisabled]="true">Disabled</button>
     </span>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTooltipDisabledButtonComponent {}
 ```
@@ -594,12 +603,12 @@ A directive that shows a tooltip popup on hover or click.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zTooltip` | The text content of tooltip | `string` | `-` |
-| `zPosition` | The position of the tooltip | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
-| `zPositionOffset` | The position of the tooltip offset | `number` | `4` |
-| `zTrigger` | The tooltip trigger mode | `'hover' \| 'click'` | `'hover'` |
-| `zShowDelay` | Delay showing the tooltip after trigger in milliseconds | `number` | `150` |
-| `zHideDelay` | Delay hiding the tooltip after trigger in milliseconds | `number` | `100` |
+| `[zTooltip]` | The text content of tooltip | `string` | `-` |
+| `[zPosition]` | The position of the tooltip | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
+| `[zPositionOffset]` | The position of the tooltip offset | `number` | `4` |
+| `[zTrigger]` | The tooltip trigger mode | `'hover' \| 'click'` | `'hover'` |
+| `[zShowDelay]` | Delay showing the tooltip after trigger in milliseconds | `number` | `150` |
+| `[zHideDelay]` | Delay hiding the tooltip after trigger in milliseconds | `number` | `100` |
 | `(zShow)` | Emitted when the tooltip is shown | `output<void>` | `-` |
 | `(zHide)` | Emitted when the tooltip is hidden | `output<void>` | `-` |
 

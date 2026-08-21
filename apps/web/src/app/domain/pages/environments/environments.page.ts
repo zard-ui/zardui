@@ -12,7 +12,7 @@ import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directi
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
-  selector: 'z-enviroments',
+  selector: 'z-environments',
   template: `
     <z-content
       [navigationConfig]="navigationConfig"
@@ -59,7 +59,6 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
       </section>
     </z-content>
   `,
-  standalone: true,
   imports: [
     EnvCardComponent,
     DocContentComponent,
@@ -69,9 +68,9 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     ZardBadgeComponent,
   ],
 })
-export class EnviromentsPage implements OnInit {
-  // Mesma ordem do menu da CLI: cada ecossistema junto, com a aplicação antes
-  // da biblioteca, e Angular abrindo a lista porque é o default.
+export class EnvironmentsPage implements OnInit {
+  // The same order as the CLI's menu: each ecosystem together, with the
+  // application before the library, and Angular opening the list as the default.
   protected readonly environments = [
     { name: 'angular', icon: 'angular.svg', path: '/docs/installation/angular', available: true },
     { name: 'angular library', icon: 'angular.svg', path: '/docs/installation/angular-library', available: true },

@@ -12,7 +12,7 @@ interface iDialogData {
 }
 
 @Component({
-  selector: 'zard-demo-dialog-basic',
+  selector: 'z-demo-dialog-basic',
   imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
   template: `
     <form [formGroup]="form" class="grid gap-4">

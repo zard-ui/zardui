@@ -317,30 +317,26 @@ export const fieldVariants = cva('group/field flex w-full gap-2 data-[invalid=tr
 
 export const fieldContentVariants = cva('group/field-content flex flex-1 flex-col gap-0.5 leading-snug');
 
-export const fieldLabelVariants = cva(
-  [
-    'group/field-label peer/field-label flex w-fit gap-2 text-sm font-medium leading-snug',
-    'group-data-[disabled=true]/field:opacity-50',
-    'has-data-checked:border-primary/30 has-data-checked:bg-primary/5',
-    'has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5',
-    'dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10',
-    'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col',
-  ].join(' '),
-);
+export const fieldLabelVariants = cva([
+  'group/field-label peer/field-label flex w-fit gap-2 text-sm/snug font-medium',
+  'group-data-[disabled=true]/field:opacity-50',
+  'has-data-checked:border-primary/30 has-data-checked:bg-primary/5',
+  'has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5',
+  'dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10',
+  'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col',
+]);
 
 export const fieldTitleVariants = cva(
   'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
 );
 
-export const fieldDescriptionVariants = cva(
-  [
-    'text-left text-sm leading-normal font-normal text-muted-foreground',
-    'group-has-data-horizontal/field:text-balance',
-    '[[data-variant=legend]+&]:-mt-1.5',
-    'last:mt-0 nth-last-2:-mt-1',
-    '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
-  ].join(' '),
-);
+export const fieldDescriptionVariants = cva([
+  'text-left text-sm/normal font-normal text-muted-foreground',
+  'group-has-data-horizontal/field:text-balance',
+  '[[data-variant=legend]+&]:-mt-1.5',
+  'last:mt-0 nth-last-2:-mt-1',
+  '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
+]);
 
 export const fieldSeparatorVariants = cva(
   'relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2',
@@ -845,11 +841,16 @@ A field container that wraps a label, control and optional description / error.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zOrientation]` | Layout direction of the field | `'vertical' \| 'horizontal' \| 'responsive'` | `'vertical'` |
 
 ### z-field-set
 
 A semantic <fieldset> wrapper that vertically stacks fields with consistent spacing.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-field-legend
 
@@ -857,15 +858,24 @@ Legend element for a field-set. Use the label variant when grouping inline contr
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zVariant]` | Visual size of the legend | `'legend' \| 'label'` | `'legend'` |
 
 ### z-field-group
 
 Group of fields with consistent vertical spacing. Acts as a container query parent for responsive fields.
 
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+
 ### z-field-content
 
 Wrapper for the textual portion of a field (title + description) when used in horizontal layouts.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-field-label
 
@@ -873,15 +883,24 @@ Label for a form control. Use on <label> for proper semantics, or as <z-field-la
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[for]` | Associates the label with a form control by referencing the control's id. | `string` |  |
 
 ### z-field-title
 
 Non-interactive title for a field (e.g. when wrapping a checkbox/radio along with description).
 
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+
 ### z-field-description
 
 Helper text rendered below or beside a field control.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-field-separator
 
@@ -889,6 +908,7 @@ Horizontal separator with optional centered content.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zContent]` | Optional text or template displayed above the separator line | `string \| TemplateRef<void>` | `''` |
 
 ### z-field-error
@@ -897,6 +917,7 @@ Renders a single error message or a list of errors. Falls back to projected cont
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zErrors]` | Array of error objects with an optional `message` string. Duplicate messages are removed. | `Array<{ message?: string }>` | `[]` |
 
 ---

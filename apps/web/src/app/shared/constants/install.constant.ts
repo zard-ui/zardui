@@ -67,9 +67,9 @@ const COMPONENTS_NOTE = {
 /**
  * As etapas finais, iguais em todo ambiente.
  *
- * O que muda de um para outro é como o projeto é criado e como o Tailwind entra
- * no build; os utilitários compartilhados e o `components.json` são os mesmos —
- * só o caminho onde eles caem depende do tipo de projeto.
+ * What changes between them is how the project is created and how Tailwind
+ * enters the build; the shared utilities and `components.json` are the same —
+ * only the path they land in depends on the project type.
  */
 function sharedManualSteps(options: { corePath: string; utilsPath: string; config: CodeBlockData }): Step[] {
   return [
@@ -95,7 +95,7 @@ function sharedManualSteps(options: { corePath: string; utilsPath: string; confi
   ];
 }
 
-/** As três etapas do caminho assistido: criar, rodar o init e usar. */
+/** The three steps of the guided path: create, run init, use. */
 function cliSteps(options: { create: CodeBlockData; createSubtitle: string; initSubtitle: string }): Step[] {
   return [
     {
@@ -129,8 +129,8 @@ function stylesStep(path: string): Step {
 function tsconfigStep(file: string, block: CodeBlockData): Step {
   return {
     title: 'Configure path aliases',
-    // O baseUrl não entra: a opção virou erro no TypeScript 6, e desde a 4.1 os
-    // paths são resolvidos a partir do próprio tsconfig sem ela.
+    // baseUrl is left out: the option became an error in TypeScript 6, and since
+    // 4.1 paths are resolved relative to the tsconfig itself without it.
     subtitle: `Add these lines inside compilerOptions on your ${file}. Do not add baseUrl, it is an error from TypeScript 6 on.`,
     codeBlockData: block,
   };
@@ -206,7 +206,7 @@ export const installations: Installation[] = [
       },
       {
         title: 'Configure the Tailwind pipeline',
-        // Na raiz do repositório o arquivo valeria para todos os apps de uma vez.
+        // At the repository root the file would apply to every app at once.
         subtitle:
           'Create a .postcssrc.json inside the application, at apps/my-app/. The Angular build looks for it from the stylesheet upwards.',
         codeBlockData: SETUP_SHARED_POSTCSS,
@@ -239,7 +239,7 @@ export const installations: Installation[] = [
       },
       {
         title: 'Add dependencies',
-        // Analog compila com Vite, então o adaptador do Tailwind é outro.
+        // Analog compiles with Vite, so Tailwind's adapter is a different one.
         subtitle: 'Add the following dependencies to your project:',
         codeTabData: SETUP_ANALOG_DEPENDENCIES,
       },
@@ -276,7 +276,7 @@ export const installations: Installation[] = [
       },
       {
         title: 'Add dependencies',
-        // A lib não compila CSS: quem processa Tailwind é a aplicação que a consome.
+        // A library does not compile CSS: the consuming application processes Tailwind.
         subtitle: 'Add the following dependencies. There is no PostCSS setup here, the consuming app owns the build:',
         codeTabData: SETUP_ANGULAR_LIBRARY_DEPENDENCIES,
       },

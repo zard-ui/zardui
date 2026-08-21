@@ -24,7 +24,7 @@ test('focusNext/Prev com wrap-around por tabIndex', () => {
   assert.equal(fm.activeKey, 'c'); // wrap
 });
 
-test('routeKey entrega ao focado; tab navega; não-consumido borbulha', () => {
+test('routeKey delivers to the focused node; tab navigates; unconsumed keys bubble', () => {
   const fm = createFocusManager();
   let seen = '';
   fm.register({ key: 'a', tabIndex: 0, onKey: e => (e.key === 'x' ? ((seen = 'x'), true) : false) });
@@ -42,5 +42,5 @@ test('desabilitado e tabIndex negativo saem do anel', () => {
   fm.register({ key: 'b', tabIndex: 1, disabled: true });
   fm.register({ key: 'c', tabIndex: -1 });
   fm.focusNext();
-  assert.equal(fm.activeKey, 'a'); // só 'a' é elegível → permanece
+  assert.equal(fm.activeKey, 'a'); // only 'a' is eligible → it stays
 });

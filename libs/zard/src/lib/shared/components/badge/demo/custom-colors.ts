@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '../badge.component';
 
@@ -16,5 +16,6 @@ import { ZardBadgeComponent } from '../badge.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoBadgeCustomColorsComponent {}

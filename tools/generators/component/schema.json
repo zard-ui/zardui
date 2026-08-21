@@ -14,6 +14,31 @@
       "type": "string",
       "description": "Short description of the component",
       "x-prompt": "What does this component do?"
+    },
+    "category": {
+      "type": "string",
+      "description": "The group the component is listed under in the docs and llms.txt",
+      "default": "Misc",
+      "enum": [
+        "Form & Input",
+        "Layout & Navigation",
+        "Overlays & Dialogs",
+        "Feedback & Status",
+        "Display & Media",
+        "Misc"
+      ],
+      "x-prompt": {
+        "message": "Which group does it belong to?",
+        "type": "list",
+        "items": [
+          "Form & Input",
+          "Layout & Navigation",
+          "Overlays & Dialogs",
+          "Feedback & Status",
+          "Display & Media",
+          "Misc"
+        ]
+      }
     }
   },
   "required": ["name", "description"]

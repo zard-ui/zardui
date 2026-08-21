@@ -6,7 +6,7 @@ import {
   type OverlayRef,
 } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,6 +14,7 @@ import {
   contentChild,
   DestroyRef,
   Directive,
+  DOCUMENT,
   ElementRef,
   inject,
   input,
@@ -124,7 +125,6 @@ function transformOriginFor(side: ZardPopoverPlacement, align: ZardPopoverAlign)
 
 @Directive({
   selector: '[zPopover]',
-  standalone: true,
   host: {
     'data-slot': 'popover-trigger',
     '[attr.aria-haspopup]': '"dialog"',
@@ -484,7 +484,6 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 @Component({
   selector: 'z-popover-title, [z-popover-title]',
   imports: [ZardIdDirective],
-  standalone: true,
   template: `
     <ng-container zardId="popover-title" #uniqueId="zardId" />
     <ng-content />
@@ -511,7 +510,6 @@ export class ZardPopoverTitleComponent {
 @Component({
   selector: 'z-popover-description, [z-popover-description]',
   imports: [ZardIdDirective],
-  standalone: true,
   template: `
     <ng-container zardId="popover-description" #uniqueId="zardId" />
     <ng-content />
@@ -537,7 +535,6 @@ export class ZardPopoverDescriptionComponent {
 
 @Component({
   selector: 'z-popover-header, [z-popover-header]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -558,7 +555,6 @@ export class ZardPopoverHeaderComponent {
 @Component({
   selector: 'z-popover, [z-popover]',
   imports: [ZardIdDirective],
-  standalone: true,
   template: `
     <ng-container zardId="popover" #uniqueId="zardId" />
     <ng-content />
