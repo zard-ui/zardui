@@ -1,3 +1,13 @@
+## 1.0.0-beta.116 (2026-08-21)
+
+### 🐛 Bug Fixes
+
+- v1 audit — hydration, keyboard and CLI install bugs ([#717](https://github.com/zard-ui/zardui/pull/717))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.115 (2026-08-20)
 
 ### ✨ Features
