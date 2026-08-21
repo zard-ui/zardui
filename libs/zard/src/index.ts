@@ -1,6 +1,7 @@
 export * from './lib/shared/components/accordion';
 export * from './lib/shared/components/alert';
 export * from './lib/shared/components/alert-dialog';
+export * from './lib/shared/components/aspect-ratio';
 export * from './lib/shared/components/avatar';
 export * from './lib/shared/components/badge';
 export * from './lib/shared/components/breadcrumb';
