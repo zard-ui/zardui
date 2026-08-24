@@ -9,11 +9,11 @@ const ZARD_PROVIDER_IMPORT = (corePath: string) => `import { provideZard } from 
 const ZARD_PROVIDER_ENTRY = 'provideZard()';
 
 /**
- * Acrescenta o provider ao fim da lista.
+ * Appends the provider to the end of the list.
  *
- * O `]` fica na própria linha: a lista é código que o usuário vai ler e editar
- * depois, e emendar o fechamento no último provider deixa o arquivo torto assim
- * que o Prettier do projeto não roda em seguida.
+ * The `]` stays on its own line: the list is code the user will read and edit
+ * later, and welding the closing bracket onto the last provider leaves the file
+ * crooked the moment the project's Prettier does not run afterwards.
  */
 function withProvider(content: string, providers: ArrayRange, eol: string): string {
   const body = providers.body.replace(/\s+$/, '');

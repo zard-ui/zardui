@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCreditCard, lucideKeyboard, lucideSettings, lucideUser } from '@ng-icons/lucide';
@@ -7,7 +7,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-icons-demo',
+  selector: 'z-demo-dropdown-icons',
   imports: [ZardDropdownImports, ZardButtonComponent, NgIcon],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
@@ -31,9 +31,10 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideUser, lucideCreditCard, lucideSettings, lucideKeyboard })],
 })
-export class ZardDropdownIconsDemoComponent {
+export class ZardDemoDropdownIconsComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }

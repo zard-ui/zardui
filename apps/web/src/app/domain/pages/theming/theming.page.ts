@@ -37,7 +37,6 @@ import { ThemingClipboardService } from './services/theming-clipboard.service';
 
 @Component({
   selector: 'z-theming',
-  standalone: true,
   imports: [
     RouterModule,
     CalloutComponent,

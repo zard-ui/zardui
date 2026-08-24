@@ -69,7 +69,6 @@ const SAMPLE_DATA = {
 
 @Component({
   selector: 'z-block-notion-prompt-form',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ZardAvatarComponent,

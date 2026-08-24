@@ -1,0 +1,56 @@
+{
+  "id": "sidebar-06",
+  "title": "Sidebar 06",
+  "description": "A sidebar with submenus as dropdowns.",
+  "category": "Sidebar",
+  "files": [
+    {
+      "name": "sidebar-06-app-sidebar.component.html",
+      "path": "src/components/sidebar-06/sidebar-06-app-sidebar.component.html",
+      "content": "<z-sidebar>\n  <div z-sidebar-header>\n    <ul z-sidebar-menu>\n      <li z-sidebar-menu-item>\n        <a z-sidebar-menu-button zSize=\"lg\" href=\"#\">\n          <div\n            class=\"bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg\"\n          >\n            <ng-icon name=\"lucideGalleryVerticalEnd\" class=\"size-4\" />\n          </div>\n          <div class=\"flex flex-col gap-0.5 leading-none\">\n            <span class=\"font-medium\">Documentation</span>\n            <span>v1.0.0</span>\n          </div>\n        </a>\n      </li>\n    </ul>\n  </div>\n\n  <z-sidebar-content>\n    <lib-sidebar-06-nav-main [items]=\"navMain\" />\n  </z-sidebar-content>\n\n  <div z-sidebar-footer>\n    <div class=\"p-1\">\n      <lib-sidebar-06-sidebar-opt-in-form />\n    </div>\n  </div>\n\n  <button z-sidebar-rail aria-label=\"Toggle Sidebar\"></button>\n</z-sidebar>\n",
+      "language": "html"
+    },
+    {
+      "name": "sidebar-06-app-sidebar.component.ts",
+      "path": "src/components/sidebar-06/sidebar-06-app-sidebar.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideGalleryVerticalEnd } from '@ng-icons/lucide';\n\nimport { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';\n\nimport { Sidebar06NavMainComponent, type Sidebar06NavGroup } from './sidebar-06-nav-main.component';\nimport { Sidebar06SidebarOptInFormComponent } from './sidebar-06-sidebar-opt-in-form.component';\n\n@Component({\n  selector: 'lib-sidebar-06-app-sidebar',\n  standalone: true,\n  imports: [...ZardSidebarImports, Sidebar06NavMainComponent, Sidebar06SidebarOptInFormComponent, NgIcon],\n  viewProviders: [provideIcons({ lucideGalleryVerticalEnd })],\n  templateUrl: './sidebar-06-app-sidebar.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  host: { class: 'contents' },\n})\nexport class Sidebar06AppSidebarComponent {\n  // This is sample data.\n  protected readonly navMain: readonly Sidebar06NavGroup[] = [\n    {\n      title: 'Getting Started',\n      url: '#',\n      items: [\n        { title: 'Installation', url: '#' },\n        { title: 'Project Structure', url: '#' },\n      ],\n    },\n    {\n      title: 'Building Your Application',\n      url: '#',\n      items: [\n        { title: 'Routing', url: '#' },\n        { title: 'Data Fetching', url: '#', isActive: true },\n        { title: 'Rendering', url: '#' },\n        { title: 'Caching', url: '#' },\n        { title: 'Styling', url: '#' },\n        { title: 'Optimizing', url: '#' },\n        { title: 'Configuring', url: '#' },\n        { title: 'Testing', url: '#' },\n        { title: 'Authentication', url: '#' },\n        { title: 'Deploying', url: '#' },\n        { title: 'Upgrading', url: '#' },\n        { title: 'Examples', url: '#' },\n      ],\n    },\n    {\n      title: 'API Reference',\n      url: '#',\n      items: [\n        { title: 'Components', url: '#' },\n        { title: 'Style Guide', url: '#' },\n        { title: 'Functions', url: '#' },\n        { title: 'angular.json Options', url: '#' },\n        { title: 'CLI', url: '#' },\n        { title: 'Hydration', url: '#' },\n      ],\n    },\n    {\n      title: 'Architecture',\n      url: '#',\n      items: [\n        { title: 'Accessibility', url: '#' },\n        { title: 'Hot Module Replacement', url: '#' },\n        { title: 'Angular Compiler', url: '#' },\n        { title: 'Supported Browsers', url: '#' },\n        { title: 'esbuild', url: '#' },\n      ],\n    },\n  ];\n}\n",
+      "language": "typescript"
+    },
+    {
+      "name": "sidebar-06-nav-main.component.html",
+      "path": "src/components/sidebar-06/sidebar-06-nav-main.component.html",
+      "content": "<div z-sidebar-group>\n  <ul z-sidebar-menu>\n    @for (group of items(); track group.title) {\n      <li z-sidebar-menu-item>\n        <button\n          z-sidebar-menu-button\n          z-dropdown\n          [zDropdownMenu]=\"groupMenu\"\n          class=\"data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground\"\n        >\n          {{ group.title }}\n          <ng-icon name=\"lucideMoreHorizontal\" class=\"ml-auto\" />\n        </button>\n\n        <!-- Kept outside an @if: a template reference declared inside a control-flow block is not\n             visible to the trigger above it. -->\n        <z-dropdown-menu-content\n          #groupMenu=\"zDropdownMenuContent\"\n          class=\"min-w-56 rounded-lg\"\n          zSide=\"right\"\n          zAlign=\"start\"\n        >\n          @for (item of group.items; track item.title) {\n            <z-dropdown-menu-item>\n              <a [href]=\"item.url\">{{ item.title }}</a>\n            </z-dropdown-menu-item>\n          }\n        </z-dropdown-menu-content>\n      </li>\n    }\n  </ul>\n</div>\n",
+      "language": "html"
+    },
+    {
+      "name": "sidebar-06-nav-main.component.ts",
+      "path": "src/components/sidebar-06/sidebar-06-nav-main.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideMoreHorizontal } from '@ng-icons/lucide';\n\nimport { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';\nimport { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';\nimport { ZardSidebarService } from '@zard/components/sidebar/sidebar.service';\n\nexport interface Sidebar06NavItem {\n  readonly title: string;\n  readonly url: string;\n  readonly isActive?: boolean;\n}\n\nexport interface Sidebar06NavGroup {\n  readonly title: string;\n  readonly url: string;\n  readonly items: readonly Sidebar06NavItem[];\n}\n\n@Component({\n  selector: 'lib-sidebar-06-nav-main',\n  standalone: true,\n  imports: [...ZardSidebarImports, ...ZardDropdownImports, NgIcon],\n  viewProviders: [provideIcons({ lucideMoreHorizontal })],\n  templateUrl: './sidebar-06-nav-main.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  host: { class: 'contents' },\n})\nexport class Sidebar06NavMainComponent {\n  readonly items = input<readonly Sidebar06NavGroup[]>([]);\n\n  protected readonly sidebar = inject(ZardSidebarService);\n}\n",
+      "language": "typescript"
+    },
+    {
+      "name": "sidebar-06-sidebar-opt-in-form.component.html",
+      "path": "src/components/sidebar-06/sidebar-06-sidebar-opt-in-form.component.html",
+      "content": "<z-card class=\"gap-2 py-4 shadow-none\">\n  <div z-card-header class=\"px-4\">\n    <z-card-title zTitle=\"Subscribe to our newsletter\" class=\"text-sm\" />\n    <z-card-description zDescription=\"Opt-in to receive updates and news about the sidebar.\" />\n  </div>\n\n  <div z-card-content class=\"px-4\">\n    <form>\n      <div class=\"grid gap-2.5\">\n        <input z-input z-sidebar-input type=\"email\" placeholder=\"Email\" />\n\n        <button z-button zSize=\"sm\" class=\"bg-sidebar-primary text-sidebar-primary-foreground w-full shadow-none\">\n          Subscribe\n        </button>\n      </div>\n    </form>\n  </div>\n</z-card>\n",
+      "language": "html"
+    },
+    {
+      "name": "sidebar-06-sidebar-opt-in-form.component.ts",
+      "path": "src/components/sidebar-06/sidebar-06-sidebar-opt-in-form.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '@zard/components/button/button.component';\nimport { ZardCardImports } from '@zard/components/card/card.imports';\nimport { ZardInputComponent } from '@zard/components/input/input.component';\nimport { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';\n\n@Component({\n  selector: 'lib-sidebar-06-sidebar-opt-in-form',\n  standalone: true,\n  imports: [...ZardCardImports, ...ZardSidebarImports, ZardButtonComponent, ZardInputComponent],\n  templateUrl: './sidebar-06-sidebar-opt-in-form.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class Sidebar06SidebarOptInFormComponent {}\n",
+      "language": "typescript"
+    },
+    {
+      "name": "sidebar-06.component.html",
+      "path": "src/components/sidebar-06/sidebar-06.component.html",
+      "content": "<z-sidebar-provider>\n  <lib-sidebar-06-app-sidebar />\n\n  <main z-sidebar-inset>\n    <header class=\"flex h-16 shrink-0 items-center gap-2 border-b px-4\">\n      <button z-sidebar-trigger class=\"-ml-1\" aria-label=\"Toggle Sidebar\"></button>\n\n      <z-separator\n        zOrientation=\"vertical\"\n        class=\"mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center\"\n      />\n\n      <z-breadcrumb>\n        <z-breadcrumb-item class=\"hidden md:block\">\n          <a z-breadcrumb-link href=\"#\">Build Your Application</a>\n        </z-breadcrumb-item>\n        <z-breadcrumb-separator class=\"hidden md:block\" />\n        <z-breadcrumb-item>\n          <span z-breadcrumb-page>Data Fetching</span>\n        </z-breadcrumb-item>\n      </z-breadcrumb>\n    </header>\n\n    <div class=\"flex flex-1 flex-col gap-4 p-4\">\n      <div class=\"grid auto-rows-min gap-4 md:grid-cols-3\">\n        <div class=\"bg-muted/50 aspect-video rounded-xl\"></div>\n        <div class=\"bg-muted/50 aspect-video rounded-xl\"></div>\n        <div class=\"bg-muted/50 aspect-video rounded-xl\"></div>\n      </div>\n      <div class=\"bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min\"></div>\n    </div>\n  </main>\n</z-sidebar-provider>\n",
+      "language": "html"
+    },
+    {
+      "name": "sidebar-06.component.ts",
+      "path": "src/components/sidebar-06/sidebar-06.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardBreadcrumbImports } from '@zard/components/breadcrumb/breadcrumb.imports';\nimport { ZardSeparatorComponent } from '@zard/components/separator/separator.component';\nimport { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';\n\nimport { Sidebar06AppSidebarComponent } from './sidebar-06-app-sidebar.component';\n\n@Component({\n  selector: 'lib-sidebar-06',\n  standalone: true,\n  imports: [...ZardSidebarImports, ...ZardBreadcrumbImports, ZardSeparatorComponent, Sidebar06AppSidebarComponent],\n  templateUrl: './sidebar-06.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class Sidebar06Component {}\n",
+      "language": "typescript"
+    }
+  ]
+}

@@ -17,7 +17,6 @@ export interface FounderData {
 
 @Component({
   selector: 'z-founders',
-  standalone: true,
   imports: [ZardAvatarComponent, ZardBadgeComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

@@ -12,17 +12,17 @@ export const DEFAULT_REGISTRY_URL =
   (BUILD_REGISTRY_URL !== '__REGISTRY_URL__' ? BUILD_REGISTRY_URL : 'https://zardui.com/r');
 
 /**
- * Os ícones que um componente desenha, como o registry os publica.
+ * The icons a component draws, as the registry publishes them.
  *
- * `family` é a família em que os arquivos estão escritos — quem instala com
- * outra família em `components.json` sabe, por este campo, que precisa
- * reescrevê-los. Ausente nos itens publicados antes desta propriedade.
+ * `family` is the family the files are written in — anyone installing with a
+ * different family in `components.json` learns from this field that they need
+ * rewriting. Absent from items published before this property existed.
  */
 export interface RegistryIcons {
   family: string;
   symbols: string[];
   tokens: string[];
-  /** Os ícones que só aparecem nos demos. Ausente no índice, que não os carrega. */
+  /** The icons that only appear in the demos. Absent from the index, which does not carry them. */
   demos?: { symbols: string[]; tokens: string[] };
 }
 
@@ -42,7 +42,7 @@ export interface RegistryItem {
 
 export interface RegistryIndex {
   $schema: string;
-  /** A forma do arquivo. Ausente nos registries anteriores ao campo. */
+  /** The file's shape. Absent from registries older than the field. */
   schemaVersion?: number;
   name: string;
   homepage: string;
@@ -60,11 +60,11 @@ export interface RegistryIndex {
 }
 
 /**
- * A família em que os arquivos do item estão escritos.
+ * The family the item's files are written in.
  *
- * Um item sem `icons` — publicado antes da propriedade — está em lucide, que
- * era a única possibilidade. Um valor desconhecido também: preferir o palpite
- * certo a recusar a instalação por causa de um campo novo.
+ * An item with no `icons` — published before the property existed — is in
+ * lucide, which was the only possibility. So is an unknown value: better the
+ * right guess than refusing to install over an unfamiliar field.
  */
 export function sourceFamilyOf(item: Pick<RegistryItem, 'icons'>): IconFamily {
   const family = item.icons?.family;
@@ -91,13 +91,21 @@ export function validateRegistryUrl(url: string): void {
 }
 
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-let registryIndexCache: { data: RegistryIndex; timestamp: number } | null = null;
+
+/**
+ * Keyed by registry URL, not global.
+ *
+ * `registryUrl` is a `components.json` field, so two registries can be read in one
+ * run — and a single cache entry handed the second call the first registry's index.
+ */
+const registryIndexCache = new Map<string, { data: RegistryIndex; timestamp: number }>();
 
 export async function fetchRegistryIndex(registryUrl?: string): Promise<RegistryIndex> {
   const baseUrl = registryUrl || DEFAULT_REGISTRY_URL;
+  const cached = registryIndexCache.get(baseUrl);
 
-  if (registryIndexCache && Date.now() - registryIndexCache.timestamp < CACHE_TTL) {
-    return registryIndexCache.data;
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data;
   }
 
   const url = `${baseUrl}/registry.json`;
@@ -105,12 +113,12 @@ export async function fetchRegistryIndex(registryUrl?: string): Promise<Registry
 
   assertSupportedSchema(data.schemaVersion, 'registry.json');
 
-  registryIndexCache = { data, timestamp: Date.now() };
+  registryIndexCache.set(baseUrl, { data, timestamp: Date.now() });
   return data;
 }
 
 export function invalidateRegistryCache(): void {
-  registryIndexCache = null;
+  registryIndexCache.clear();
 }
 
 export async function fetchComponentFromRegistry(componentName: string, registryUrl?: string): Promise<RegistryItem> {
@@ -131,11 +139,11 @@ function trimSlashes(alias: string): string {
 
 export interface TransformOptions {
   /**
-   * O destino veio de `--path`, fora do alias configurado.
+   * The destination came from `--path`, outside the configured alias.
    *
-   * Nesse caso os componentes do lote viram vizinhos no disco, e é o caminho
-   * relativo que resolve — o alias apontaria para a pasta onde eles não estão.
-   * `utils` e `core` continuam no alias, porque quem os instalou foi o `init`.
+   * In that case the batch's components become neighbours on disk, and the
+   * relative path is what resolves — the alias would point at the folder they are
+   * not in. `utils` and `core` stay on the alias, because `init` installed them.
    */
   readonly siblingComponents?: boolean;
 }
@@ -149,17 +157,6 @@ export function transformContent(content: string, config: Config, options: Trans
     core: trimSlashes(config.aliases.core),
     services: trimSlashes(config.aliases.services),
   };
-
-  // Replace utils imports
-  transformed = transformed.replace(
-    /from ['"]\.\.\/\.\.\/shared\/utils\/utils['"]/g,
-    `from '${aliases.utils}/merge-classes'`,
-  );
-
-  transformed = transformed.replace(
-    /from ['"]\.\.\/\.\.\/shared\/utils\/number['"]/g,
-    `from '${aliases.utils}/number'`,
-  );
 
   // Replace relative component imports with aliased imports
   const componentImportRegex = /from ['"]\.\.\/([\w-/.]+)['"]/g;
@@ -181,10 +178,10 @@ export function transformContent(content: string, config: Config, options: Trans
       continue;
     }
 
-    // O subpath é opcional: `card.component.ts` importa o barrel direto
-    // (`from '@/shared/core'`). Exigindo `/algo` depois da chave, esse import
-    // escapava da substituição e o componente instalado continuava apontando
-    // para `@/shared/core` — uma pasta que não existe com alias customizado.
+    // The subpath is optional: `card.component.ts` imports the barrel directly
+    // (`from '@/shared/core'`). Requiring `/something` after the key let that
+    // import escape the substitution, and the installed component kept pointing
+    // at `@/shared/core` — a folder that does not exist under a custom alias.
     const regex = new RegExp(`(['"])@\\/shared\\/${key}(\\/[\\w\\-\\/.]+)?\\1`, 'g');
     transformed = transformed.replace(regex, (_match, quote: string, subpath?: string) => {
       return `${quote}${value}${subpath ?? ''}${quote}`;
@@ -221,9 +218,9 @@ export async function fetchComponent(
     return { name: file.name, content: retargeted.content };
   });
 
-  // Um ícone sem equivalente na família escolhida fica no símbolo original, e o
-  // import dele não resolve mais. Falhar a instalação inteira por causa disso
-  // seria pior: o resto do componente está correto e o conserto é uma linha.
+  // An icon with no equivalent in the chosen family keeps its original symbol,
+  // and its import no longer resolves. Failing the whole install over that would
+  // be worse: the rest of the component is correct and the fix is one line.
   if (missing.size > 0) {
     logger.warn(
       `"${componentName}" uses icons that ${config.icons} does not provide: ${[...missing].sort().join(', ')}. ` +

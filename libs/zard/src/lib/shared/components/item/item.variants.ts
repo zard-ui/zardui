@@ -61,12 +61,12 @@ export const itemContentVariants = cva(
 );
 
 export const itemTitleVariants = cva(
-  'line-clamp-1 flex w-fit items-center gap-2 text-sm font-medium leading-snug underline-offset-4',
+  'line-clamp-1 flex w-fit items-center gap-2 text-sm/snug font-medium underline-offset-4',
 );
 
 export const itemDescriptionVariants = cva(
   mergeClasses(
-    'line-clamp-2 text-left text-sm font-normal leading-normal text-muted-foreground',
+    'line-clamp-2 text-left text-sm/normal font-normal text-muted-foreground',
     'group-data-[size=xs]/item:text-xs',
     '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
   ),

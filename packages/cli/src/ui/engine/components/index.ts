@@ -1,7 +1,7 @@
 /**
- * components — fábricas puras que retornam `Node` imutável (immediate-mode
- * declarativo, ADR-0002). Sem JSX, sem classes, sem estado oculto.
- * (Fatia vertical / PoC: fábricas reais. A pintura de cada tipo vive no renderer.)
+ * components — pure factories returning an immutable `Node` (declarative
+ * immediate mode, ADR-0002). No JSX, no classes, no hidden state. Painting each
+ * type lives in the renderer.
  */
 
 import type { Attr } from '../ansi/index.js';
@@ -79,8 +79,8 @@ export interface SpinnerProps {
   readonly variant?: 'dots' | 'line' | 'arc' | 'bounce';
   readonly label?: string;
   readonly color?: ColorRef;
-  readonly frame?: number; // índice do quadro (fornecido pela animação)
-  readonly glyph?: string; // quadro explícito (usado na PoC até o AnimationClock)
+  readonly frame?: number; // frame index (supplied by the animation)
+  readonly glyph?: string; // explicit frame, when the caller drives it directly
   readonly key?: string;
 }
 export interface ProgressProps {
@@ -181,7 +181,7 @@ function node(type: string, props: object = {}, children: readonly Node[] = [], 
   return key === undefined ? { type, props: p, children } : { type, props: p, children, key };
 }
 
-// texto e contêineres
+// text and containers
 export function text(content: string, style: TextStyle = {}): Node {
   return node('text', { content, ...style });
 }

@@ -4,18 +4,18 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { createScheduler } from '../index.js';
 
 /**
- * Espera a condição em vez de apostar num prazo fixo.
+ * Waits for the condition instead of betting on a fixed delay.
  *
- * O agendamento é por setTimeout: sob carga — a suíte inteira rodando em
- * paralelo — o timer atrasa bem mais que o intervalo nominal, e um `delay`
- * fixo transforma o teste em moeda. Aqui o prazo só define quando desistir.
+ * Scheduling runs on setTimeout: under load — the whole suite running in
+ * parallel — the timer slips well past its nominal interval, and a fixed `delay`
+ * turns the test into a coin flip. Here the deadline only says when to give up.
  */
 async function waitUntil(condition: () => boolean, timeoutMs = 2000): Promise<void> {
   const deadline = performance.now() + timeoutMs;
   while (!condition() && performance.now() < deadline) await delay(5);
 }
 
-test('coalesce múltiplos requestRender em um só frame', async () => {
+test('coalesces several requestRender calls into one frame', async () => {
   let renders = 0;
   const s = createScheduler({ fps: 60, onRender: () => renders++ });
   s.start();
@@ -23,7 +23,7 @@ test('coalesce múltiplos requestRender em um só frame', async () => {
   s.requestRender();
   s.requestRender();
   await waitUntil(() => renders > 0);
-  // e continua em 1: os três pedidos couberam no mesmo frame
+  // and stays at 1: all three requests fitted into the same frame
   await delay(40);
   assert.equal(renders, 1, '3 pedidos → 1 render');
   s.stop();
@@ -37,7 +37,7 @@ test('renderSync desenha imediatamente', () => {
   s.stop();
 });
 
-test('ocioso não renderiza', async () => {
+test('idle does not render', async () => {
   let renders = 0;
   const s = createScheduler({ fps: 60, onRender: () => renders++ });
   s.start();

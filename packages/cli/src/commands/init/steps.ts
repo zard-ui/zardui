@@ -15,11 +15,10 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
 
 /**
- * Uma etapa da inicialização: o rótulo que a UI mostra e o trabalho que ela faz.
+ * One step of initialization: the label the UI shows and the work it does.
  *
- * A lista é montada uma vez e consumida tanto pelo wizard quanto pelo caminho
- * headless, para que os dois executem exatamente a mesma sequência — a UI só
- * decide como apresentá-la.
+ * The list is built once and consumed by both the wizard and the headless path,
+ * so the two run exactly the same sequence — the UI only decides how to present it.
  */
 export interface InitStep {
   readonly label: string;
@@ -53,8 +52,8 @@ export function buildInitSteps(
     },
   ];
 
-  // Providers de aplicação não são da biblioteca: quem os registra é o app que
-  // a consome, e numa lib não existe app.config.ts para escrever.
+  // Application providers do not belong to the library: the app consuming it
+  // registers them, and a library has no app.config.ts to write into.
   if (!isLibrary) {
     steps.push({
       label: config.appConfigFile,
@@ -96,13 +95,13 @@ export function buildInitSteps(
 }
 
 /**
- * Como o Tailwind entra no build da aplicação.
+ * How Tailwind enters the application build.
  *
- * No Analog quem compila é o Vite, e o Tailwind é um plugin dele — um
- * `.postcssrc.json` ali não seria lido por ninguém. Nos demais o build do
- * Angular carrega o PostCSS, e o arquivo vai para a raiz do projeto: num
- * workspace com vários apps, escrevê-lo na raiz do repositório configuraria
- * todos eles de uma vez.
+ * In Analog it is Vite that compiles, and Tailwind is one of its plugins — a
+ * `.postcssrc.json` there would be read by nobody. Everywhere else the Angular
+ * build loads PostCSS, and the file goes to the project root: in a workspace
+ * with several apps, writing it at the repository root would configure all of
+ * them at once.
  */
 function tailwindPipelineStep(
   cwd: string,
@@ -124,8 +123,8 @@ function tailwindPipelineStep(
   return {
     label: relative,
     note: 'Tailwind PostCSS plugin',
-    // Reinicializar reescreve o arquivo de propósito: é a chance de corrigir um
-    // `.postcssrc.json` que ficou de uma configuração anterior.
+    // Re-initializing rewrites the file on purpose: it is the chance to correct a
+    // `.postcssrc.json` left over from an earlier setup.
     run: () =>
       !projectInfo.hasTailwind || isReInitializing || !existsSync(path.resolve(cwd, relative))
         ? createPostCssConfig(cwd, projectRoot)
@@ -134,25 +133,26 @@ function tailwindPipelineStep(
 }
 
 /**
- * Declara o CSS de tema como asset da biblioteca.
+ * Declares the theme CSS as a library asset.
  *
- * O ng-packagr só publica o que o ponto de entrada alcança; um `.css` solto em
- * `src/` fica de fora do pacote. Sem esta entrada, o arquivo que a etapa
- * anterior escreveu existiria só no repositório e nunca chegaria a quem
- * instala a lib.
+ * ng-packagr only publishes what the entry point reaches; a loose `.css` in
+ * `src/` stays out of the package. Without this entry, the file the previous
+ * step wrote would exist only in the repository and never reach whoever
+ * installs the library.
  *
- * O asset é declarado com `output: '/'` para cair na raiz do pacote. Listá-lo
- * como caminho simples preserva a pasta de origem, e o consumidor acabaria
- * importando `<lib>/src/styles.css` — um `src/` que é detalhe do repositório da
- * lib, não algo que quem a instala deva conhecer.
+ * The asset is declared with `output: '/'` so it lands at the package root.
+ * Listing it as a plain path preserves the source folder, and the consumer would
+ * end up importing `<lib>/src/styles.css` — a `src/` that is a detail of the
+ * library's repository, not something whoever installs it should know.
  */
 async function registerStylesAsset(cwd: string, config: Config): Promise<void> {
   const libraryRoot = path.resolve(cwd, projectRootOf(config.baseUrl));
   const ngPackagePath = path.join(libraryRoot, 'ng-package.json');
 
   if (!existsSync(ngPackagePath)) {
-    // Uma lib Nx só ganha ng-package.json quando é publicável; nas demais não
-    // há pacote a montar, e o CSS é consumido direto do código-fonte.
+    // An Nx library only gets an ng-package.json when it is publishable; in the
+    // others there is no package to assemble and the CSS is consumed straight
+    // from the source.
     logger.warn(`ng-package.json not found in ${path.relative(cwd, libraryRoot)}; skipping the theme asset.`);
     return;
   }
@@ -165,8 +165,8 @@ async function registerStylesAsset(cwd: string, config: Config): Promise<void> {
   const ngPackage = JSON.parse(await readFile(ngPackagePath, 'utf8'));
   const assets: unknown[] = Array.isArray(ngPackage.assets) ? ngPackage.assets : [];
 
-  // Entradas antigas apontando para o mesmo arquivo são substituídas, e não
-  // acumuladas: um init repetido publicaria o CSS duas vezes, em dois lugares.
+  // Old entries pointing at the same file are replaced, not accumulated: a
+  // repeated init would otherwise publish the CSS twice, in two places.
   const others = assets.filter(asset => !describesSameFile(asset, relative, entry));
   const alreadyCorrect = assets.length === others.length + 1 && hasEntry(assets, entry);
 
@@ -176,7 +176,7 @@ async function registerStylesAsset(cwd: string, config: Config): Promise<void> {
   await writeFile(ngPackagePath, `${JSON.stringify(ngPackage, null, 2)}\n`, 'utf8');
 }
 
-/** Se um asset já declarado publica exatamente o mesmo arquivo. */
+/** Whether an already-declared asset publishes exactly the same file. */
 function describesSameFile(asset: unknown, relative: string, entry: { glob: string; input: string }): boolean {
   if (typeof asset === 'string') return asset.replace(/^\.\//, '') === relative;
 

@@ -4,7 +4,6 @@ import { ZardSkeletonComponent } from '@zard/components/skeleton/skeleton.compon
 
 @Component({
   selector: 'z-founders-loading',
-  standalone: true,
   imports: [ZardSkeletonComponent],
   template: `
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">

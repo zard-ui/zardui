@@ -26,6 +26,26 @@ export const dropdownItemVariants = cva(
   },
 );
 
+export const dropdownSubContentVariants = cva([
+  'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground',
+  'shadow-lg outline-none animate-in fade-in-0 zoom-in-95',
+]);
+
+export const dropdownSubTriggerVariants = cva(
+  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  {
+    variants: {
+      inset: {
+        true: 'pl-8',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      inset: false,
+    },
+  },
+);
+
 export const dropdownLabelVariants = cva(
   'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
   {

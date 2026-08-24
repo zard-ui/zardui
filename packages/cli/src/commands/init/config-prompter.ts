@@ -41,7 +41,7 @@ export const configSchema = z.object({
 /** As respostas do wizard, antes de virarem um `components.json`. */
 export interface InitAnswers {
   kind: ProjectKind;
-  /** Raiz do projeto escolhido, relativa ao workspace; vazia no app único. */
+  /** Root of the chosen project, relative to the workspace; empty for a single app. */
   projectRoot: string;
   appConfig: string;
   theme: string;
@@ -51,10 +51,11 @@ export interface InitAnswers {
 }
 
 /**
- * O projeto que o tipo escolhido sugere como alvo.
+ * The project the chosen type suggests as the target.
  *
- * Havendo mais de um compatível, o wizard pergunta — mas alguém precisa abrir a
- * lista escolhido, e o primeiro declarado é a resposta menos surpreendente.
+ * When more than one is compatible the wizard asks — but something has to be
+ * preselected when the list opens, and the first declared project is the least
+ * surprising answer.
  */
 function targetProject(
   projectInfo: ProjectInfo,
@@ -67,11 +68,12 @@ function targetProject(
 }
 
 /**
- * Os caminhos sugeridos para o tipo que o usuário escolheu.
+ * The paths suggested for the type the user chose.
  *
- * Vêm do projeto declarado no workspace sempre que ele existe — o `styles` do
- * target de build é onde o CSS global realmente está, e adivinhá-lo era o que
- * fazia o init sugerir caminhos que não existiam em layouts de monorepo.
+ * They come from the project declared in the workspace whenever there is one —
+ * the build target's `styles` is where the global CSS actually lives, and
+ * guessing it was what made init suggest paths that did not exist in monorepo
+ * layouts.
  */
 export function defaultAnswers(
   projectInfo: ProjectInfo,
@@ -92,7 +94,7 @@ export function defaultAnswers(
   if (isLibraryKind(kind)) {
     return {
       ...shared,
-      // Não há app.config numa biblioteca; o campo fica vazio no components.json.
+      // A library has no app.config; the field stays empty in components.json.
       appConfig: '',
       globalCss: libraryStylesPath(root),
     };
@@ -108,32 +110,36 @@ export function defaultAnswers(
 }
 
 /**
- * De onde os componentes são escritos, deduzido do `app.config.ts`.
+ * Where the components are written, derived from `app.config.ts`.
  *
- * Fixar `src/app` quebrava todo layout que não fosse app único na raiz: num
- * workspace o app.config vive em `apps/<app>/src/app`, e os componentes
- * acabavam num `src/app` na raiz que não pertence a projeto nenhum. O diretório
- * do app.config é exatamente a raiz do código do app.
+ * Hardcoding `src/app` broke every layout that was not a single app at the root:
+ * in a workspace the app.config lives in `apps/<app>/src/app`, and the components
+ * ended up in a root `src/app` that belongs to no project. The directory holding
+ * app.config is exactly the root of the app's code.
+ *
+ * Separators are normalized before `dirname`, not after: on POSIX `path.dirname`
+ * does not treat `\` as a separator, so a Windows-style path collapsed to `.`
+ * and silently fell back to `src/app`.
  */
 export function deriveBaseUrl(appConfigFile: string): string {
-  const dir = path.dirname(appConfigFile).replace(/\\/g, '/');
+  const dir = path.posix.dirname(appConfigFile.replace(/\\/g, '/'));
   return dir === '.' ? 'src/app' : dir;
 }
 
-/** Numa biblioteca o app.config não existe, então quem manda é a raiz da lib. */
+/** In a library there is no app.config, so the library root decides. */
 function baseUrlFor(answers: InitAnswers): string {
   return isLibraryKind(answers.kind) ? libraryBaseUrl(answers.projectRoot) : deriveBaseUrl(answers.appConfig);
 }
 
 export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun'): Config {
-  const sharedBase = path.dirname(answers.componentsAlias).replace(/\\/g, '/');
+  const sharedBase = path.posix.dirname(answers.componentsAlias.replace(/\\/g, '/'));
 
   return configSchema.parse({
     $schema: SCHEMA_URL,
     style: 'css',
-    // Nenhuma das duas é perguntada no wizard: hoje só existe uma família de
-    // ícones, e o RTL não altera o que o init escreve. Ficam no arquivo com o
-    // padrão para serem editadas depois, que é o que as torna configuráveis.
+    // Neither is asked in the wizard: today there is only one icon family, and
+    // RTL does not change what init writes. They go into the file with their
+    // default so they can be edited later, which is what makes them configurable.
     icons: SOURCE_ICON_FAMILY,
     rtl: false,
     projectType: answers.kind,
@@ -154,10 +160,10 @@ export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn'
 }
 
 /**
- * Estado do CSS global informado pelo usuário.
+ * State of the global CSS file the user pointed at.
  *
- * O init sobrescreve esse arquivo com os tokens do tema, então o wizard precisa
- * saber, antes de avançar, se ele existe e se há conteúdo a perder.
+ * init overwrites that file with the theme tokens, so the wizard has to know,
+ * before going on, whether it exists and whether there is content to lose.
  */
 export type CssFileState = 'missing' | 'empty' | 'has-content';
 

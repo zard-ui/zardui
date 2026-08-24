@@ -58,7 +58,6 @@
 /docs/components/input-group
 /docs/components/input-otp
 /docs/components/item
-/docs/components/layout
 /docs/components/dialog
 /docs/components/pagination
 /docs/components/progress
@@ -73,7 +72,6 @@
 /docs/components/toggle
 /docs/components/toggle-group
 /docs/components/tooltip
-/docs/components/tree
 /docs/components/navigation-menu
 /docs/components/resizable
 /docs/components/sheet
@@ -82,8 +80,13 @@
 /docs/components/dropdown
 /docs/components/popover
 /docs/components/kbd
+/docs/components/collapsible
+/docs/components/sidebar
 /docs/components/drawer
 /docs/components/bubble
+/docs/components/context-menu
+/docs/components/message
+/docs/components/marker
 /docs/contribute
 /docs/contribute/setup
 /docs/contribute/architecture

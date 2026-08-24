@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardButtonGroupComponent } from '@/shared/components/button-group';
@@ -34,5 +34,6 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip';
       </z-kbd-group>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoKbdTooltipComponent {}

@@ -10,12 +10,11 @@ const DOCS_PATH = path.resolve('apps/web/public/documentation');
 const OUTPUT_PATH = path.resolve('apps/web/src/generated/documentation');
 
 /**
- * Todo `.md` sob a raiz da documentação, em qualquer profundidade.
+ * Every `.md` under the documentation root, at any depth.
  *
- * A varredura era de um nível só, e por isso os guias de instalação — que se
- * organizam por ambiente e por modo (`setup/nx/manual/…`) — ficavam de fora e
- * tinham de ser buscados por HTTP em tempo de execução, com um spinner antes de
- * cada bloco de código.
+ * The scan used to be one level deep, which left the installation guides out —
+ * they are organised by environment and by mode (`setup/nx/manual/…`) — so they
+ * had to be fetched over HTTP at runtime, with a spinner before every code block.
  */
 function markdownFiles(dir: string): string[] {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
@@ -95,11 +94,10 @@ function toCodeBlock(
 }
 
 /**
- * O nome da constante exportada, derivado do caminho do arquivo.
+ * The exported constant's name, derived from the file path.
  *
- * `cli/installation.md` continua virando `CLI_INSTALLATION`; caminhos mais
- * fundos apenas acrescentam segmentos, então `setup/nx/manual/tsconfig.md` vira
- * `SETUP_NX_MANUAL_TSCONFIG`.
+ * `cli/installation.md` still becomes `CLI_INSTALLATION`; deeper paths simply add
+ * segments, so `setup/nx/manual/tsconfig.md` becomes `SETUP_NX_MANUAL_TSCONFIG`.
  */
 function toConstName(relativePath: string): string {
   return relativePath

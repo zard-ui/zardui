@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardCalendarComponent } from '../calendar.component';
 
@@ -17,7 +17,6 @@ function bookedDatesOfCurrentMonth(): Date[] {
 @Component({
   selector: 'z-demo-calendar-booked-dates',
   imports: [ZardCalendarComponent],
-  standalone: true,
   template: `
     <z-calendar
       zMode="single"
@@ -26,6 +25,7 @@ function bookedDatesOfCurrentMonth(): Date[] {
       [(value)]="selectedDate"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCalendarBookedDatesComponent {
   readonly bookedDates = bookedDatesOfCurrentMonth();

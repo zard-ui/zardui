@@ -58,7 +58,7 @@ describe('getConfig', () => {
     expect(result!.aliases.components).toBe('@/shared/components');
     expect(result!.aliases.utils).toBe('@/shared/utils');
     expect(result!.tailwind.css).toBe('src/styles.css');
-    expect(result!.tailwind.baseColor).toBe('slate');
+    expect(result!.tailwind.baseColor).toBe('neutral');
   });
 
   it('should throw ConfigError on invalid JSON', async () => {
@@ -132,8 +132,8 @@ describe('resolveConfigPaths', () => {
 
     const result = await resolveConfigPaths('/project', config);
 
-    // Resolvidos com o separador da plataforma; comparar com `/` cru só
-    // passaria em POSIX.
+    // Resolved with the platform separator; comparing against a raw `/` would
+    // only pass on POSIX.
     const at = (...segments: string[]): string => path.resolve('/project', ...segments);
 
     expect(result.resolvedPaths.tailwindCss).toBe(at('src/styles.css'));
@@ -180,8 +180,8 @@ describe('resolveAliasToPath', () => {
     expect(result).toBe('app/lib/utils');
   });
 
-  // O prefixo do alias é só um apelido para baseUrl — `@` não tem nada de
-  // especial. Ver a matriz completa em custom-paths.spec.ts.
+  // The alias prefix is just a nickname for baseUrl — there is nothing special
+  // about `@`. See the full matrix in custom-paths.spec.ts.
   it('should resolve any alias prefix against baseUrl', () => {
     expect(resolveAliasToPath('some/path', 'src/app')).toBe('src/app/path');
     expect(resolveAliasToPath('@app/components', 'src/app')).toBe('src/app/components');

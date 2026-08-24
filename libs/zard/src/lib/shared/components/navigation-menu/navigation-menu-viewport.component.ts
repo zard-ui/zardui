@@ -147,7 +147,9 @@ export class ZardNavigationMenuViewportComponent {
       this.align();
 
       untracked(() => {
-        if (this.isOpen()) this.scheduleMeasure(false);
+        if (this.isOpen()) {
+          this.scheduleMeasure(false);
+        }
       });
     });
   }
@@ -161,7 +163,9 @@ export class ZardNavigationMenuViewportComponent {
   }
 
   protected onOverlayKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Escape') return;
+    if (event.key !== 'Escape') {
+      return;
+    }
 
     // Captured before closing, since closing is what clears the active trigger.
     const trigger = this.service.active()?.element;
@@ -190,7 +194,9 @@ export class ZardNavigationMenuViewportComponent {
 
   private measure(): void {
     const element = this.content()?.nativeElement;
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     const size = { width: `${element.offsetWidth}px`, height: `${element.offsetHeight}px` };
     const current = this.measured();
@@ -209,7 +215,9 @@ export class ZardNavigationMenuViewportComponent {
     const root = this.service.rootElement();
     const view = this.document.defaultView;
 
-    if (!active || !root || !view || !isPlatformBrowser(this.platformId)) return;
+    if (!active || !root || !view || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     const trigger = active.element.getBoundingClientRect();
     const bar = root.getBoundingClientRect();
@@ -235,8 +243,12 @@ export class ZardNavigationMenuViewportComponent {
 
   /** Keeps the morph honest when the rendered content resizes after being mounted. */
   private observe(element: HTMLElement): void {
-    if (!isPlatformBrowser(this.platformId) || typeof ResizeObserver === 'undefined') return;
-    if (this.observedContent === element) return;
+    if (!isPlatformBrowser(this.platformId) || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+    if (this.observedContent === element) {
+      return;
+    }
 
     this.resizeObserver ??= new ResizeObserver(() => this.measure());
 
@@ -249,10 +261,14 @@ export class ZardNavigationMenuViewportComponent {
   }
 
   private watchWindowResize(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     const view = this.document.defaultView;
-    if (!view) return;
+    if (!view) {
+      return;
+    }
 
     const onResize = () => this.measure();
     view.addEventListener('resize', onResize);

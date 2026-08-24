@@ -1,0 +1,32 @@
+<div z-sidebar-group>
+  <div z-sidebar-group-content class="flex flex-col gap-2">
+    <ul z-sidebar-menu>
+      <li z-sidebar-menu-item class="flex items-center gap-2">
+        <button
+          z-sidebar-menu-button
+          zTooltip="Quick Create"
+          class="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+        >
+          <ng-icon name="lucideCirclePlus" />
+          <span>Quick Create</span>
+        </button>
+
+        <button z-button zType="outline" zSize="icon" class="size-8 group-data-[collapsible=icon]:opacity-0">
+          <ng-icon name="lucideMail" />
+          <span class="sr-only">Inbox</span>
+        </button>
+      </li>
+    </ul>
+
+    <ul z-sidebar-menu>
+      @for (item of items(); track item.title) {
+        <li z-sidebar-menu-item>
+          <button z-sidebar-menu-button [zTooltip]="item.title">
+            <ng-icon [name]="item.icon" />
+            <span>{{ item.title }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  </div>
+</div>

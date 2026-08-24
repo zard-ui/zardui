@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBookmark } from '@ng-icons/lucide';
@@ -14,6 +14,7 @@ import { ZardToggleComponent } from '../toggle.component';
       Bookmark
     </z-toggle>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBookmark })],
 })
 export class ZardDemoToggleDefaultComponent {}

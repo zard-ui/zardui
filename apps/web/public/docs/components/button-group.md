@@ -166,7 +166,28 @@ export const buttonGroupTextVariants = cva(
 ```
 
 ```angular-ts
+/*
+ * The alias, not a relative path: the Angular compiler re-emits these imports from
+ * whichever module spreads the array, and it can only do that for a specifier the
+ * consumer can resolve too. A relative path here fails with NG3004.
+ */
+import {
+  ZardButtonGroupComponent,
+  ZardButtonGroupDividerComponent,
+  ZardButtonGroupTextDirective,
+} from '@/shared/components/button-group/button-group.component';
+
+/** Every part of the button-group component, for a template that uses more than one. */
+export const ZardButtonGroupImports = [
+  ZardButtonGroupComponent,
+  ZardButtonGroupDividerComponent,
+  ZardButtonGroupTextDirective,
+] as const;
+```
+
+```angular-ts
 export * from './button-group.component';
+export * from './button-group.imports';
 export * from './button-group.variants';
 ```
 
@@ -191,7 +212,7 @@ import { ZardButtonGroupComponent } from '@/shared/components/button-group/butto
 Set the `zOrientation` prop to change the button group layout.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMinus, lucidePlus } from '@ng-icons/lucide';
@@ -212,6 +233,7 @@ import { ZardButtonGroupComponent } from '@/shared/components/button-group/butto
       </button>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus, lucideMinus })],
 })
 export class ZardDemoButtonGroupOrientationComponent {}
@@ -222,7 +244,7 @@ export class ZardDemoButtonGroupOrientationComponent {}
 Control the size of buttons using the `zSize` prop on individual buttons.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
@@ -261,6 +283,7 @@ import { ZardButtonGroupComponent } from '@/shared/components/button-group/butto
       </button>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus })],
   host: {
     class: 'flex flex-col items-start gap-8',
@@ -274,7 +297,7 @@ export class ZardDemoButtonGroupSizeComponent {}
 Nest `z-button-group` components to create button groups with spacing.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideAudioLines, lucidePlus } from '@ng-icons/lucide';
@@ -312,6 +335,7 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
       </z-button-group>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus, lucideAudioLines })],
 })
 export class ZardDemoButtonGroupNestedComponent {}
@@ -322,7 +346,7 @@ export class ZardDemoButtonGroupNestedComponent {}
 The `z-button-group-divider` component visually divides buttons within a group. Buttons with `zType="outline"` do not need a separator since they have a border.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardButtonGroupComponent, ZardButtonGroupDividerComponent } from '../button-group.component';
@@ -332,11 +356,12 @@ import { ZardButtonGroupComponent, ZardButtonGroupDividerComponent } from '../bu
   imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardButtonGroupDividerComponent],
   template: `
     <z-button-group>
-      <button z-button zSize="sm" zType="secondary">Copy</button>
+      <button type="button" z-button zSize="sm" zType="secondary">Copy</button>
       <z-button-group-divider />
-      <button z-button zSize="sm" zType="secondary">Paste</button>
+      <button type="button" z-button zSize="sm" zType="secondary">Paste</button>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoButtonGroupDividerComponent {}
 ```
@@ -346,7 +371,7 @@ export class ZardDemoButtonGroupDividerComponent {}
 Create a split button group by adding two buttons separated by a `z-button-group-divider`.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
@@ -369,6 +394,7 @@ import {
       </button>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoButtonGroupSplitComponent {}
@@ -379,7 +405,7 @@ export class ZardDemoButtonGroupSplitComponent {}
 Wrap an `Input` component with buttons.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
@@ -397,6 +423,7 @@ import { ZardInputComponent } from '@/shared/components/input';
       <button type="button" z-button zType="outline"><ng-icon name="lucideSearch" /></button>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSearch })],
 })
 export class ZardDemoButtonGroupInputComponent {}
@@ -407,7 +434,7 @@ export class ZardDemoButtonGroupInputComponent {}
 Wrap an `InputGroup` component to create complex input layouts.
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideAudioLines, lucidePlus } from '@ng-icons/lucide';
@@ -444,12 +471,13 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
           />
           <z-input-group-addon zAlign="inline-end">
             <button
+              type="button"
               z-input-group-button
               zTooltip="Voice Mode"
               aria-label="Voice Mode"
               [attr.aria-pressed]="voiceEnabled()"
               [attr.data-active]="voiceEnabled() ? '' : null"
-              class="data-[active]:bg-orange-100 data-[active]:text-orange-700 dark:data-[active]:bg-orange-800 dark:data-[active]:text-orange-100"
+              class="data-active:bg-orange-100 data-active:text-orange-700 dark:data-active:bg-orange-800 dark:data-active:text-orange-100"
               (click)="toggleVoice()"
             >
               <ng-icon name="lucideAudioLines" />
@@ -459,6 +487,7 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
       </z-button-group>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus, lucideAudioLines })],
 })
 export class ZardDemoButtonGroupInputGroupComponent {
@@ -475,7 +504,7 @@ export class ZardDemoButtonGroupInputGroupComponent {
 Create a split button group with a `Dropdown` component.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -544,6 +573,7 @@ import { ZardSeparatorComponent } from '@/shared/components/separator/separator.
       </z-dropdown-menu-content>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
       lucideChevronDown,
@@ -565,7 +595,7 @@ export class ZardDemoButtonGroupDropdownComponent {}
 Pair with a `Select` component.
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowRight } from '@ng-icons/lucide';
@@ -606,6 +636,7 @@ import { ZardSelectComponent } from '@/shared/components/select/select.component
       </z-button-group>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideArrowRight })],
 })
 export class ZardDemoButtonGroupSelectComponent {
@@ -624,7 +655,7 @@ export class ZardDemoButtonGroupSelectComponent {
 Use with a `Popover` component.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBot, lucideChevronDown } from '@ng-icons/lucide';
@@ -679,6 +710,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       </ng-template>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBot, lucideChevronDown })],
 })
 export class ZardDemoButtonGroupPopoverComponent {}
@@ -692,7 +724,8 @@ A container that groups related buttons together with consistent styling.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zOrientation` | Orientation of the button group | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zOrientation]` | Orientation of the button group | `'horizontal' \| 'vertical'` | `'horizontal'` |
 
 ### z-button-group-divider
 
@@ -700,7 +733,8 @@ A visual divider between buttons in a group.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zOrientation` | Override for divider orientation, by default it uses the parent's orientation | `'horizontal' \| 'vertical'` | `null` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zOrientation]` | Override for divider orientation, by default it uses the parent's orientation | `'horizontal' \| 'vertical'` | `null` |
 
 ### z-button-group-text
 

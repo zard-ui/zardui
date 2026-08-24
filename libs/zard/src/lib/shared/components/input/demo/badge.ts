@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
@@ -16,5 +16,6 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <input z-input id="input-badge" type="url" placeholder="https://api.example.com/webhook" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputBadgeComponent {}

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'registry-overview-section',
-  standalone: true,
+  selector: 'z-registry-overview-section',
   imports: [],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -55,4 +54,4 @@ import { Component } from '@angular/core';
     </ul>
   `,
 })
-export class RegistryOverviewSection {}
+export class RegistryOverviewSectionComponent {}

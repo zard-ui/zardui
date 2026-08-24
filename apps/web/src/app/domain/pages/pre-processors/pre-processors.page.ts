@@ -10,7 +10,6 @@ import { SeoService } from '@doc/shared/services/seo.service';
 @Component({
   selector: 'z-pre-processors',
   templateUrl: './pre-processors.page.html',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective],
 })

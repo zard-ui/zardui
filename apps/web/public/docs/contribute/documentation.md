@@ -54,7 +54,7 @@ import { CodeBlockComponent } from '@highlight/components/code-block/code-block.
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
-export class DarkmodePage {
+export class DarkModePage {
   readonly serviceInstallationTabs: CodeTabData = TABS_0;
   readonly headerComponentBlock: CodeBlockData = HEADER_BLOCK_0;
   readonly headerTemplateBlock: CodeBlockData = HEADER_BLOCK_1;

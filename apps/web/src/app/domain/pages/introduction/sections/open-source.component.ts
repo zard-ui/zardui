@@ -18,7 +18,7 @@ interface StandAgainstItem {
 }
 
 @Component({
-  selector: 'open-source-section',
+  selector: 'z-introduction-open-source-section',
   imports: [ZardBadgeComponent, ZardCardImports, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
@@ -85,7 +85,7 @@ interface StandAgainstItem {
     }),
   ],
 })
-export class OpenSourceSection {
+export class IntroductionOpenSourceSectionComponent {
   readonly features: OpenSourceFeature[] = [
     {
       title: 'Community Owned',

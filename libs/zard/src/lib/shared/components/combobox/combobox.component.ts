@@ -24,7 +24,8 @@ import type { ClassValue } from 'clsx';
 
 import type { ZardButtonTypeVariants } from '@/shared/components/button';
 import { comboboxValueVariants, comboboxVariants } from '@/shared/components/combobox/combobox.variants';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import {
   ZardComboboxContentComponent,

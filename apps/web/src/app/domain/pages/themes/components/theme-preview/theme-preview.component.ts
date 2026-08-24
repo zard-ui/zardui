@@ -32,7 +32,7 @@ import { ZardIdDirective } from '@zard/core';
 import { ThemeGeneratorService } from '../../services/theme-generator.service';
 
 @Component({
-  selector: 'app-theme-preview',
+  selector: 'z-theme-preview',
   imports: [
     FormsModule,
     NgIcon,

@@ -4,9 +4,8 @@ import { ZardComboboxComponent } from '../combobox.component';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-shorthand',
+  selector: 'z-demo-combobox-shorthand',
   imports: [ZardComboboxComponent],
-  standalone: true,
   template: `
     <div class="flex flex-col gap-2">
       <z-combobox

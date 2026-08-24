@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.111",
+  "version": "1.0.0-beta.116",
   "items": [
     {
       "name": "core",
@@ -16,6 +16,8 @@
       "files": [
         "directives/string-template-outlet/string-template-outlet.directive.ts",
         "directives/id.directive.ts",
+        "overlay/overlay-ref.ts",
+        "overlay/overlay-stack.ts",
         "provider/event-manager-plugins/zard-debounce-event-manager-plugin.ts",
         "provider/event-manager-plugins/zard-event-manager-plugin.ts",
         "provider/providezard.ts",
@@ -54,31 +56,36 @@
       "files": [
         "index.ts",
         "merge-classes.ts",
+        "noop.ts",
         "number.ts"
       ]
     },
     {
-      "name": "layout",
+      "name": "sidebar",
       "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "tooltip",
+        "skeleton",
+        "separator"
+      ],
       "icons": {
         "family": "lucide",
         "symbols": [
-          "lucideChevronLeft",
-          "lucideChevronRight"
+          "lucidePanelLeft"
         ],
         "tokens": [
-          "chevron-left",
-          "chevron-right"
+          "panel-left"
         ]
       },
       "files": [
-        "layout.component.ts",
-        "layout.variants.ts",
-        "content.component.ts",
-        "footer.component.ts",
-        "header.component.ts",
-        "layout.imports.ts",
         "sidebar.component.ts",
+        "sidebar-primitives.component.ts",
+        "sidebar-menu.component.ts",
+        "sidebar.constants.ts",
+        "sidebar.service.ts",
+        "sidebar.variants.ts",
+        "sidebar.imports.ts",
         "index.ts"
       ]
     },
@@ -127,9 +134,6 @@
     {
       "name": "card",
       "type": "registry:component",
-      "registryDependencies": [
-        "button"
-      ],
       "icons": {
         "family": "lucide",
         "symbols": [],
@@ -137,6 +141,7 @@
       },
       "files": [
         "card.component.ts",
+        "card.imports.ts",
         "card.variants.ts",
         "index.ts"
       ]
@@ -250,6 +255,7 @@
         "tokens": []
       },
       "files": [
+        "avatar.imports.ts",
         "avatar.component.ts",
         "avatar-group.component.ts",
         "avatar.variants.ts",
@@ -271,6 +277,21 @@
       "files": [
         "checkbox.component.ts",
         "checkbox.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "collapsible.component.ts",
+        "collapsible.variants.ts",
+        "collapsible.imports.ts",
         "index.ts"
       ]
     },
@@ -328,10 +349,10 @@
       ]
     },
     {
-      "name": "dropdown",
+      "name": "context-menu",
       "type": "registry:component",
       "registryDependencies": [
-        "menu"
+        "dropdown"
       ],
       "icons": {
         "family": "lucide",
@@ -339,9 +360,31 @@
         "tokens": []
       },
       "files": [
+        "context-menu.directive.ts",
+        "context-menu.service.ts",
+        "context-menu.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "dropdown",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronRight"
+        ],
+        "tokens": [
+          "chevron-right"
+        ]
+      },
+      "files": [
         "dropdown.component.ts",
+        "dropdown-submenu.component.ts",
+        "menu-keyboard.ts",
         "dropdown-item.component.ts",
         "dropdown-menu-content.component.ts",
+        "dropdown-positions.ts",
         "dropdown-primitives.component.ts",
         "dropdown-trigger.directive.ts",
         "dropdown.imports.ts",
@@ -436,6 +479,21 @@
       ]
     },
     {
+      "name": "marker",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "marker.component.ts",
+        "marker.imports.ts",
+        "marker.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "bubble",
       "type": "registry:component",
       "icons": {
@@ -447,6 +505,25 @@
         "bubble.component.ts",
         "bubble.imports.ts",
         "bubble.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "message",
+      "type": "registry:component",
+      "registryDependencies": [
+        "avatar",
+        "bubble"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "message.component.ts",
+        "message.imports.ts",
+        "message.variants.ts",
         "index.ts"
       ]
     },
@@ -495,15 +572,13 @@
     {
       "name": "tabs",
       "type": "registry:component",
-      "registryDependencies": [
-        "button"
-      ],
       "icons": {
         "family": "lucide",
         "symbols": [],
         "tokens": []
       },
       "files": [
+        "tabs.imports.ts",
         "tabs.component.ts",
         "tabs.variants.ts",
         "index.ts"
@@ -625,6 +700,7 @@
         "tokens": []
       },
       "files": [
+        "slider.imports.ts",
         "slider.component.ts",
         "slider.variants.ts",
         "index.ts"
@@ -650,6 +726,7 @@
         ]
       },
       "files": [
+        "calendar.imports.ts",
         "calendar.component.ts",
         "calendar-grid.component.ts",
         "calendar-navigation.component.ts",
@@ -664,18 +741,31 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "command",
-        "popover",
-        "empty",
-        "input"
+        "input",
+        "input-group"
       ],
       "icons": {
         "family": "lucide",
-        "symbols": [],
-        "tokens": []
+        "symbols": [
+          "lucideCheck",
+          "lucideChevronDown",
+          "lucideX"
+        ],
+        "tokens": [
+          "check",
+          "chevron-down",
+          "x"
+        ]
       },
       "files": [
+        "combobox-chips.component.ts",
+        "combobox-content.component.ts",
+        "combobox-group.component.ts",
+        "combobox-input.component.ts",
+        "combobox-item.component.ts",
         "combobox.component.ts",
+        "combobox.imports.ts",
+        "combobox.types.ts",
         "combobox.variants.ts",
         "index.ts"
       ]
@@ -684,7 +774,8 @@
       "name": "command",
       "type": "registry:component",
       "registryDependencies": [
-        "input"
+        "input",
+        "input-group"
       ],
       "icons": {
         "family": "lucide",
@@ -703,6 +794,7 @@
         "command-option-group.component.ts",
         "command-divider.component.ts",
         "command.imports.ts",
+        "command.tokens.ts",
         "command.variants.ts",
         "index.ts"
       ]
@@ -713,8 +805,7 @@
       "registryDependencies": [
         "button",
         "calendar",
-        "popover",
-        "input"
+        "popover"
       ],
       "icons": {
         "family": "lucide",
@@ -870,6 +961,9 @@
     {
       "name": "navigation-menu",
       "type": "registry:component",
+      "registryDependencies": [
+        "context-menu"
+      ],
       "icons": {
         "family": "lucide",
         "symbols": [
@@ -911,6 +1005,7 @@
         "tokens": []
       },
       "files": [
+        "button-group.imports.ts",
         "button-group.component.ts",
         "button-group.variants.ts",
         "index.ts"
@@ -925,6 +1020,7 @@
         "tokens": []
       },
       "files": [
+        "kbd.imports.ts",
         "kbd.component.ts",
         "kbd-group.component.ts",
         "kbd.variants.ts",
@@ -974,6 +1070,9 @@
         "ngx-echarts",
         "echarts"
       ],
+      "registryDependencies": [
+        "dark-mode"
+      ],
       "icons": {
         "family": "lucide",
         "symbols": [],
@@ -994,33 +1093,6 @@
         "chart-tooltip.formatter.ts",
         "chart-legend.component.ts",
         "chart.imports.ts",
-        "index.ts"
-      ]
-    },
-    {
-      "name": "tree",
-      "type": "registry:component",
-      "registryDependencies": [
-        "checkbox"
-      ],
-      "icons": {
-        "family": "lucide",
-        "symbols": [
-          "lucideChevronRight"
-        ],
-        "tokens": [
-          "chevron-right"
-        ]
-      },
-      "files": [
-        "tree.component.ts",
-        "tree-node.component.ts",
-        "tree-node-toggle.directive.ts",
-        "tree-node-content.component.ts",
-        "tree.service.ts",
-        "tree.types.ts",
-        "tree.variants.ts",
-        "tree.imports.ts",
         "index.ts"
       ]
     }

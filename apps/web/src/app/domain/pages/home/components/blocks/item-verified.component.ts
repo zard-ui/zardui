@@ -7,7 +7,6 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
 
 @Component({
   selector: 'z-block-item-verified',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgIcon, ...ZardItemImports],
   viewProviders: [provideIcons({ lucideBadgeCheck, lucideChevronRight })],

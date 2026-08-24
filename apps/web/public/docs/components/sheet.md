@@ -41,6 +41,7 @@ import {
   type Type,
   viewChild,
   type ViewContainerRef,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -49,7 +50,8 @@ import type { ClassValue } from 'clsx';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import type { ZardSheetRef } from './sheet-ref';
 import {
@@ -234,6 +236,7 @@ export class ZardSheetOptions<T, U> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideX })],
   host: {
     'data-slot': 'sheet-content',
@@ -333,7 +336,7 @@ export const sheetVariants = cva(
   [
     'fixed z-50 flex flex-col gap-4',
     'bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg outline-none',
-  ].join(' '),
+  ],
   {
     variants: {
       zSide: {
@@ -396,174 +399,52 @@ export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 ```
 
 ```angular-ts
-export { type OnClickCallback as SheetOnClickCallback } from '@/shared/components/sheet/sheet.component';
-export { ZardSheetComponent, ZardSheetOptions } from '@/shared/components/sheet/sheet.component';
-export * from '@/shared/components/sheet/sheet.service';
-export * from '@/shared/components/sheet/sheet-ref';
-export * from '@/shared/components/sheet/sheet.imports';
-export * from '@/shared/components/sheet/sheet.variants';
+export { type OnClickCallback as SheetOnClickCallback } from './sheet.component';
+export { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
+export * from './sheet.service';
+export * from './sheet-ref';
+export * from './sheet.imports';
+export * from './sheet.variants';
 ```
 
 ```angular-ts
 import type { OverlayRef } from '@angular/cdk/overlay';
-import { isPlatformBrowser } from '@angular/common';
-import { EventEmitter, signal } from '@angular/core';
-import { outputToObservable } from '@angular/core/rxjs-interop';
 
-import { filter, takeUntil } from 'rxjs';
+import { ZardOverlayRefBase } from '@/shared/core';
 
 import type { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
-const enum eTriggerAction {
-  CANCEL = 'cancel',
-  OK = 'ok',
-}
-
-const ESCAPE_KEYS = ['Escape', 'Esc'] as const;
+/** How long the leave transition runs, in ms. Mirrors the CSS. */
+const SHEET_DURATION = 200;
 
 /**
  * Reference to a sheet opened via {@link ZardSheetService}.
  *
- * Exposes signals for reactive consumption (`isClosing`, `result`,
- * `componentInstance`) and methods for closing the sheet.
- *
- * Multiple open sheets are tracked in a private stack so that pressing
- * Escape only closes the topmost one.
+ * The lifecycle lives in {@link ZardOverlayRefBase}, shared with dialog, drawer
+ * and alert-dialog; only the leave animation and the mask behaviour are the
+ * sheet's own.
  */
-export class ZardSheetRef<T = unknown, R = unknown, U = unknown> {
-  /** Stack of currently open sheets. The last entry is the topmost. */
-  private static readonly stack: ZardSheetRef[] = [];
-
-  /** Element focused before the sheet opened, used to restore focus on close. */
-  private readonly previouslyFocusedElement: HTMLElement | null;
-
-  /** Animation duration (ms) used when closing. Mirrors the CSS transition. */
-  private readonly animationDuration: number;
-
-  /** Pending dispose timer; cleared if dispose runs early or twice. */
-  private disposeTimer: ReturnType<typeof setTimeout> | null = null;
-  private disposed = false;
-
-  private readonly _isClosing = signal(false);
-  private readonly _result = signal<R | undefined>(undefined);
-  private readonly _componentInstance = signal<T | null>(null);
-
-  /** True from the moment {@link close} is called until the overlay is disposed. */
-  readonly isClosing = this._isClosing.asReadonly();
-  /** Result passed to {@link close}, available after it's called. */
-  readonly result = this._result.asReadonly();
-  /** Instance of the component projected as content, or null for templates / strings. */
-  readonly componentInstance = this._componentInstance.asReadonly();
-
+export class ZardSheetRef<T = unknown, R = unknown, U = unknown> extends ZardOverlayRefBase<T, R> {
   constructor(
-    private readonly overlayRef: OverlayRef | null,
+    overlayRef: OverlayRef | null,
     private readonly config: ZardSheetOptions<T, U>,
     private readonly containerInstance: ZardSheetComponent<T, U> | null,
-    private readonly platformId: object,
+    platformId: object,
   ) {
-    this.animationDuration = config.zDuration ?? 200;
-    this.previouslyFocusedElement = isPlatformBrowser(platformId)
-      ? (document.activeElement as HTMLElement | null)
-      : null;
-
-    if (!this.overlayRef || !this.containerInstance) return;
-
-    ZardSheetRef.stack.push(this as unknown as ZardSheetRef);
-
-    const detached$ = this.overlayRef.detachments();
-
-    // If the overlay is torn down externally (parent destroyed, app shutdown, etc.),
-    // ensure stack/focus state is cleaned up.
-    detached$.subscribe(() => this.dispose());
-
-    outputToObservable(this.containerInstance.cancelTriggered)
-      .pipe(takeUntil(detached$))
-      .subscribe(() => this.trigger(eTriggerAction.CANCEL));
-    outputToObservable(this.containerInstance.okTriggered)
-      .pipe(takeUntil(detached$))
-      .subscribe(() => this.trigger(eTriggerAction.OK));
-
-    if (config.zMaskClosable ?? true) {
-      this.overlayRef
-        .outsidePointerEvents()
-        .pipe(takeUntil(detached$))
-        .subscribe(() => this.close());
-    }
-
-    this.overlayRef
-      .keydownEvents()
-      .pipe(
-        filter(event => ESCAPE_KEYS.includes(event.key as (typeof ESCAPE_KEYS)[number])),
-        takeUntil(detached$),
-      )
-      .subscribe(event => {
-        if (this.isTopmost()) {
-          event.preventDefault();
-          this.close();
-        }
-      });
+    super(overlayRef, config, platformId);
+    this.attach(this.containerInstance ? ZardSheetRef.outputsOf(this.containerInstance) : null);
   }
 
-  /** Internal: set the component instance once attached. */
-  setComponentInstance(instance: T | null) {
-    this._componentInstance.set(instance);
+  protected override get defaultDuration(): number {
+    return SHEET_DURATION;
   }
 
-  close(result?: R) {
-    if (this._isClosing()) return;
-
-    this._isClosing.set(true);
-    this._result.set(result);
-
-    if (isPlatformBrowser(this.platformId) && this.containerInstance) {
-      const hostElement = this.containerInstance.getNativeElement();
-      hostElement.classList.add('sheet-leave');
-    }
-
-    this.disposeTimer = setTimeout(() => this.dispose(), this.animationDuration);
+  protected override playLeaveAnimation(): void {
+    this.containerInstance?.getNativeElement().classList.add('sheet-leave');
   }
 
-  private dispose() {
-    if (this.disposed) return;
-    this.disposed = true;
-
-    if (this.disposeTimer !== null) {
-      clearTimeout(this.disposeTimer);
-      this.disposeTimer = null;
-    }
-
-    if (this.overlayRef) {
-      if (this.overlayRef.hasAttached()) {
-        this.overlayRef.detachBackdrop();
-      }
-      this.overlayRef.dispose();
-    }
-
-    const idx = ZardSheetRef.stack.indexOf(this as unknown as ZardSheetRef);
-    if (idx >= 0) ZardSheetRef.stack.splice(idx, 1);
-
-    if (isPlatformBrowser(this.platformId) && this.previouslyFocusedElement?.isConnected) {
-      this.previouslyFocusedElement.focus();
-    }
-  }
-
-  private isTopmost(): boolean {
-    return ZardSheetRef.stack[ZardSheetRef.stack.length - 1] === (this as unknown as ZardSheetRef);
-  }
-
-  private trigger(action: eTriggerAction) {
-    const trigger = action === eTriggerAction.OK ? this.config.zOnOk : this.config.zOnCancel;
-
-    if (trigger instanceof EventEmitter) {
-      trigger.emit(this._componentInstance() as T);
-    } else if (typeof trigger === 'function') {
-      const result = trigger(this._componentInstance() as T) as R | false;
-      if (result !== false) {
-        this.close(result as R);
-      }
-    } else {
-      this.close();
-    }
+  protected override closesOnOutsidePointer(): boolean {
+    return this.config.zMaskClosable ?? true;
   }
 }
 ```
@@ -741,7 +622,7 @@ const PARAGRAPHS = Array.from({ length: 10 }).map(
 );
 
 @Component({
-  selector: 'zard-demo-sheet-side-content',
+  selector: 'z-demo-sheet-side-content',
   template: `
     @for (paragraph of paragraphs; track $index) {
       <p class="mb-2 leading-relaxed">{{ paragraph }}</p>
@@ -797,7 +678,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
 
 @Component({
-  selector: 'zard-demo-sheet-no-close-button',
+  selector: 'z-demo-sheet-no-close-button',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="openSheet()">Open Sheet</button>
@@ -826,28 +707,28 @@ Configuration options for creating and managing sheet overlays.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zTitle` | Sheet title text or template | `string \| TemplateRef<T>` | `-` |
-| `zDescription` | Sheet description/body text | `string` | `-` |
-| `zContent` | Custom content component, template, or HTML | `string \| TemplateRef<T> \| Type<T>` | `-` |
-| `zSide` | Edge of the screen where the sheet appears | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
-| `zSize` | Preset size for the sheet, relative to its side | `'default' \| 'sm' \| 'lg'` | `'default'` |
-| `zWidth` | Custom width (e.g., '400px', '50%') | `string` | `-` |
-| `zHeight` | Custom height (e.g., '80vh', '500px') | `string` | `-` |
-| `zDuration` | Exit animation duration in ms | `number` | `200` |
-| `zOkText` | OK button text, null to hide button | `string \| null` | `'OK'` |
-| `zCancelText` | Cancel button text, null to hide button | `string \| null` | `'Cancel'` |
-| `zOkIcon` | OK button icon — registered icon name or inline SVG string | `string` | `-` |
-| `zCancelIcon` | Cancel button icon — registered icon name or inline SVG string | `string` | `-` |
-| `zOkDestructive` | Whether OK button should have destructive styling | `boolean` | `false` |
-| `zOkDisabled` | Whether OK button should be disabled | `boolean` | `false` |
-| `zHideFooter` | Whether to hide the footer with action buttons | `boolean` | `false` |
-| `zMaskClosable` | Whether clicking outside closes the sheet | `boolean` | `true` |
-| `zClosable` | Whether to show the close button | `boolean` | `true` |
-| `zCustomClasses` | Additional CSS classes to apply | `ClassValue` | `-` |
-| `zOnOk` | OK button click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `zOnCancel` | Cancel button click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `zData` | Data to pass to custom content components | `object` | `-` |
-| `zViewContainerRef` | View container for rendering custom content | `ViewContainerRef` | `-` |
+| `[zTitle]` | Sheet title text or template | `string \| TemplateRef<T>` | `-` |
+| `[zDescription]` | Sheet description/body text | `string` | `-` |
+| `[zContent]` | Custom content component, template, or HTML | `string \| TemplateRef<T> \| Type<T>` | `-` |
+| `[zSide]` | Edge of the screen where the sheet appears | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
+| `[zSize]` | Preset size for the sheet, relative to its side | `'default' \| 'sm' \| 'lg'` | `'default'` |
+| `[zWidth]` | Custom width (e.g., '400px', '50%') | `string` | `-` |
+| `[zHeight]` | Custom height (e.g., '80vh', '500px') | `string` | `-` |
+| `[zDuration]` | Exit animation duration in ms | `number` | `200` |
+| `[zOkText]` | OK button text, null to hide button | `string \| null` | `'OK'` |
+| `[zCancelText]` | Cancel button text, null to hide button | `string \| null` | `'Cancel'` |
+| `[zOkIcon]` | OK button icon — registered icon name or inline SVG string | `string` | `-` |
+| `[zCancelIcon]` | Cancel button icon — registered icon name or inline SVG string | `string` | `-` |
+| `[zOkDestructive]` | Whether OK button should have destructive styling | `boolean` | `false` |
+| `[zOkDisabled]` | Whether OK button should be disabled | `boolean` | `false` |
+| `[zHideFooter]` | Whether to hide the footer with action buttons | `boolean` | `false` |
+| `[zMaskClosable]` | Whether clicking outside closes the sheet | `boolean` | `true` |
+| `[zClosable]` | Whether to show the close button | `boolean` | `true` |
+| `[zCustomClasses]` | Additional CSS classes to apply | `ClassValue` | `-` |
+| `[zOnOk]` | OK button click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zOnCancel]` | Cancel button click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zData]` | Data to pass to custom content components | `object` | `-` |
+| `[zViewContainerRef]` | View container for rendering custom content | `ViewContainerRef` | `-` |
 
 ### ZardSheetRef
 
@@ -855,10 +736,10 @@ Reference returned by `ZardSheetService.create()`, used to observe and close the
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `close` | Closes the sheet, optionally with a result | `(result?: R) => void` | `-` |
-| `isClosing` | Signal that turns true once the sheet starts closing | `Signal<boolean>` | `false` |
-| `result` | Signal holding the result passed to close() | `Signal<R \| undefined>` | `undefined` |
-| `componentInstance` | Signal with the instance of the component rendered as content | `Signal<T \| null>` | `null` |
+| `[close]` | Closes the sheet, optionally with a result | `(result?: R) => void` | `-` |
+| `[isClosing]` | Signal that turns true once the sheet starts closing | `Signal<boolean>` | `false` |
+| `[result]` | Signal holding the result passed to close() | `Signal<R \| undefined>` | `undefined` |
+| `[componentInstance]` | Signal with the instance of the component rendered as content | `Signal<T \| null>` | `null` |
 
 ### ZardSheetComponent
 
@@ -866,8 +747,8 @@ Sheet overlay component outputs.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `okTriggered` | Emitted when OK button is clicked | `EventEmitter<void>` | `-` |
-| `cancelTriggered` | Emitted when Cancel button is clicked | `EventEmitter<void>` | `-` |
+| `(okTriggered)` | Emitted when OK button is clicked | `EventEmitter<void>` | `-` |
+| `(cancelTriggered)` | Emitted when Cancel button is clicked | `EventEmitter<void>` | `-` |
 
 ---
 

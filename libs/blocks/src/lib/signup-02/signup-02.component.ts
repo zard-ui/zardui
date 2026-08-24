@@ -10,7 +10,6 @@ import { ZardInputComponent } from '@zard/components/input/input.component';
 
 @Component({
   selector: 'lib-signup-02',
-  standalone: true,
   imports: [ReactiveFormsModule, NgIcon, ZardButtonComponent, ZardInputComponent, ...ZardFieldImports],
   templateUrl: './signup-02.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

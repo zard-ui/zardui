@@ -193,7 +193,7 @@ export const bubbleVariants = cva(
 
 export const bubbleContentVariants = cva(
   mergeClasses(
-    'w-fit min-w-0 max-w-full overflow-hidden rounded-3xl border border-transparent px-3 py-2.5 text-sm leading-relaxed wrap-break-word',
+    'w-fit min-w-0 max-w-full overflow-hidden rounded-3xl border border-transparent px-3 py-2.5 text-sm/relaxed wrap-break-word',
     'group-data-[align=end]/bubble:self-end',
     '[button]:text-left [button,a]:transition-colors [button,a]:outline-none',
     '[button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-3 [button,a]:focus-visible:ring-ring/30',
@@ -275,7 +275,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 ### Default
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
@@ -316,6 +316,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoBubbleDefaultComponent {}
@@ -324,7 +325,7 @@ export class ZardDemoBubbleDefaultComponent {}
 ### Variants
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
@@ -364,12 +365,13 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
           <!-- prettier-ignore -->
           <p>Ghost bubbles work for assistant text, <strong class="font-semibold">markdown</strong>, and other content that should not be framed.</p>
           <!-- prettier-ignore -->
-          <p>This is perfect for assistant messages that should not have a frame and can take the full width of the container. You can also render <code class="bg-muted rounded px-1 py-0.5 font-mono text-[0.8rem]">code</code> in it.</p>
+          <p>This is perfect for assistant messages that should not have a frame and can take the full width of the container. You can also render <code class="bg-muted rounded-sm px-1 py-0.5 font-mono text-[0.8rem]">code</code> in it.</p>
           <p>Ghost bubbles are full width and can take the full width of the container.</p>
         </z-bubble-content>
       </z-bubble>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoBubbleVariantsComponent {}
@@ -378,7 +380,7 @@ export class ZardDemoBubbleVariantsComponent {}
 ### Alignment
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
@@ -395,6 +397,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoBubbleAlignmentComponent {}
@@ -403,7 +406,7 @@ export class ZardDemoBubbleAlignmentComponent {}
 ### Group
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
@@ -436,6 +439,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoBubbleGroupComponent {}
@@ -616,7 +620,7 @@ export class ZardDemoBubbleCollapsibleComponent {
 ### Tooltip
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck } from '@ng-icons/lucide';
@@ -650,6 +654,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
       </z-bubble>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCheck })],
   host: { class: 'contents' },
 })
@@ -659,7 +664,7 @@ export class ZardDemoBubbleTooltipComponent {}
 ### Popover
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInfo } from '@ng-icons/lucide';
@@ -704,6 +709,7 @@ import { ZardPopoverImports } from '@/shared/components/popover/popover.imports'
       </z-popover>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideInfo })],
   host: { class: 'contents' },
 })
@@ -713,7 +719,7 @@ export class ZardDemoBubblePopoverComponent {}
 ### Shorthand
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
@@ -731,6 +737,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
       </z-bubble>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoBubbleShorthandComponent {}

@@ -143,13 +143,13 @@ export async function resolveDependencies(
 }
 
 /**
- * As dependências npm que o componente exige.
+ * The npm dependencies the component requires.
  *
- * Além das declaradas, quem desenha ícones precisa do ng-icons e do pacote da
- * família configurada. Isso não vem do registry: o registry publica QUAIS
- * ícones o componente usa, e de que família eles saem é decisão do projeto que
- * está instalando. Instalar dentro do `add` também cobre quem escolheu outra
- * família depois do init.
+ * Beyond the declared ones, anything that draws icons needs ng-icons and the
+ * package of the configured family. That does not come from the registry: the
+ * registry publishes WHICH icons a component uses, and which family they come
+ * from is the installing project's decision. Installing inside `add` also
+ * covers anyone who switched family after init.
  */
 function addComponentDependencies(
   component: ComponentMeta,
@@ -176,7 +176,13 @@ async function resolveRegistryDependencies(
   for (const dep of component.registryDependencies) {
     const depComponent = await getComponentMeta(dep);
 
-    if (!depComponent) continue;
+    if (!depComponent) {
+      logger.warn(
+        `"${component.name}" depends on "${dep}", which the registry does not publish. ` +
+          'The component may not compile — please report it.',
+      );
+      continue;
+    }
     if (componentsToInstall.find(c => c.name === dep)) continue;
 
     const depTargetDir = getTargetDir(depComponent, resolvedConfig, cwd, options.path);

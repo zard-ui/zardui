@@ -1,6 +1,6 @@
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,6 +8,7 @@ import {
   computed,
   DestroyRef,
   Directive,
+  DOCUMENT,
   effect,
   ElementRef,
   inject,
@@ -23,6 +24,7 @@ import {
   signal,
   type TemplateRef,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
@@ -238,7 +240,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
       if (this.detachTimeoutId !== undefined) {
         clearTimeout(this.detachTimeoutId);
         this.detachTimeoutId = undefined;
-        this.componentRef.instance.state.set('opened');
+        this.componentRef.instance.state.set('open');
       }
       return;
     }
@@ -248,7 +250,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.componentRef?.onDestroy(() => {
       this.componentRef = undefined;
     });
-    this.componentRef?.instance.state.set('opened');
+    this.componentRef?.instance.state.set('open');
     this.componentRef?.instance.setProps(this.tooltipText(), this.zPosition());
     runInInjectionContext(this.injector, () => {
       this.ariaEffectRef = effect(() => {
@@ -305,6 +307,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[attr.id]': 'tooltipId()',
@@ -313,6 +316,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     'data-slot': 'tooltip-content',
     role: 'tooltip',
   },
+  exportAs: 'zTooltip',
 })
 export class ZardTooltipComponent {
   protected readonly arrowClasses = computed(() =>
@@ -321,7 +325,7 @@ export class ZardTooltipComponent {
 
   protected readonly classes = computed(() => mergeClasses(tooltipVariants()));
   protected readonly position = signal<ZardTooltipPositionVariants>('top');
-  readonly state = signal<'closed' | 'opened'>('closed');
+  readonly state = signal<'closed' | 'open'>('closed');
   readonly uniqueId = viewChild<ZardIdDirective>('z');
   protected readonly tooltipText = signal<ZardTooltipType>(null);
   protected readonly tooltipId = computed(() => this.uniqueId()?.id() ?? 'tooltip');

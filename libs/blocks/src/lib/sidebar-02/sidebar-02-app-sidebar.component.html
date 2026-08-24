@@ -1,0 +1,41 @@
+<z-sidebar>
+  <div z-sidebar-header>
+    <lib-sidebar-02-version-switcher [versions]="versions" [defaultVersion]="versions[0]" />
+    <lib-sidebar-02-search-form />
+  </div>
+
+  <z-sidebar-content class="gap-0">
+    <!-- We create a collapsible z-sidebar-group for each parent. -->
+    @for (group of navMain; track group.title) {
+      <z-collapsible class="group/collapsible" zOpen>
+        <div z-sidebar-group>
+          <button
+            z-collapsible-trigger
+            z-sidebar-group-label
+            class="group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-full text-sm"
+          >
+            {{ group.title }}
+            <ng-icon
+              name="lucideChevronRight"
+              class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90"
+            />
+          </button>
+
+          <z-collapsible-content>
+            <div z-sidebar-group-content>
+              <ul z-sidebar-menu>
+                @for (item of group.items; track item.title) {
+                  <li z-sidebar-menu-item>
+                    <a z-sidebar-menu-button [href]="item.url" [zActive]="!!item.isActive">{{ item.title }}</a>
+                  </li>
+                }
+              </ul>
+            </div>
+          </z-collapsible-content>
+        </div>
+      </z-collapsible>
+    }
+  </z-sidebar-content>
+
+  <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
+</z-sidebar>

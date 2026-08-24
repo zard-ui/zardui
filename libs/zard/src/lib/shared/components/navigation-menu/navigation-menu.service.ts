@@ -34,7 +34,9 @@ export class ZardNavigationMenuService {
     const current = this.activeTrigger();
     const previous = this.previousIndex();
 
-    if (!current || previous === null || previous === current.index) return null;
+    if (!current || previous === null || previous === current.index) {
+      return null;
+    }
 
     return previous < current.index ? 'from-end' : 'from-start';
   });
@@ -65,8 +67,12 @@ export class ZardNavigationMenuService {
     this.cancelScheduledClose();
 
     const current = this.activeTrigger();
-    if (!current) return;
-    if (index !== undefined && current.index !== index) return;
+    if (!current) {
+      return;
+    }
+    if (index !== undefined && current.index !== index) {
+      return;
+    }
 
     // Cleared so the next opening fades in instead of sliding from a stale position.
     this.previousIndex.set(null);
@@ -86,7 +92,9 @@ export class ZardNavigationMenuService {
   }
 
   cancelScheduledClose(): void {
-    if (this.closeTimeout === null) return;
+    if (this.closeTimeout === null) {
+      return;
+    }
 
     clearTimeout(this.closeTimeout);
     this.closeTimeout = null;

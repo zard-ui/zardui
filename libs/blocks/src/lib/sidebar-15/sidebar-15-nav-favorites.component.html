@@ -1,0 +1,52 @@
+<div z-sidebar-group class="group-data-[collapsible=icon]:hidden">
+  <div z-sidebar-group-label>Favorites</div>
+
+  <ul z-sidebar-menu>
+    @for (item of favorites(); track item.name) {
+      <li z-sidebar-menu-item>
+        <a z-sidebar-menu-button [href]="item.url" [title]="item.name">
+          <span>{{ item.emoji }}</span>
+          <span>{{ item.name }}</span>
+        </a>
+
+        <button z-sidebar-menu-action zShowOnHover z-dropdown [zDropdownMenu]="favoriteMenu">
+          <ng-icon name="lucideMoreHorizontal" />
+          <span class="sr-only">More</span>
+        </button>
+
+        <z-dropdown-menu-content
+          #favoriteMenu="zDropdownMenuContent"
+          class="w-56 rounded-lg"
+          [zSide]="menuSide()"
+          [zAlign]="menuAlign()"
+        >
+          <z-dropdown-menu-item>
+            <ng-icon name="lucideStarOff" class="text-muted-foreground" />
+            <span>Remove from Favorites</span>
+          </z-dropdown-menu-item>
+          <z-dropdown-menu-separator />
+          <z-dropdown-menu-item>
+            <ng-icon name="lucideLink" class="text-muted-foreground" />
+            <span>Copy Link</span>
+          </z-dropdown-menu-item>
+          <z-dropdown-menu-item>
+            <ng-icon name="lucideArrowUpRight" class="text-muted-foreground" />
+            <span>Open in New Tab</span>
+          </z-dropdown-menu-item>
+          <z-dropdown-menu-separator />
+          <z-dropdown-menu-item>
+            <ng-icon name="lucideTrash2" class="text-muted-foreground" />
+            <span>Delete</span>
+          </z-dropdown-menu-item>
+        </z-dropdown-menu-content>
+      </li>
+    }
+
+    <li z-sidebar-menu-item>
+      <button z-sidebar-menu-button class="text-sidebar-foreground/70">
+        <ng-icon name="lucideMoreHorizontal" />
+        <span>More</span>
+      </button>
+    </li>
+  </ul>
+</div>

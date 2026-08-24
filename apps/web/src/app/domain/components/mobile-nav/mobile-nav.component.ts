@@ -10,7 +10,6 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 @Component({
   selector: 'z-mobile-nav',
   templateUrl: './mobile-nav.component.html',
-  standalone: true,
   imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent],
 })
 export class MobileMenuComponent {

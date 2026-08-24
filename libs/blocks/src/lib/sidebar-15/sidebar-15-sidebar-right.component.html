@@ -1,0 +1,22 @@
+<z-sidebar zCollapsible="none" class="sticky top-0 hidden h-svh border-l lg:flex">
+  <div z-sidebar-header class="border-sidebar-border h-16 border-b">
+    <lib-sidebar-15-nav-user [user]="user" />
+  </div>
+
+  <z-sidebar-content>
+    <lib-sidebar-15-date-picker />
+    <z-sidebar-separator class="mx-0" />
+    <lib-sidebar-15-calendars [calendars]="calendars" />
+  </z-sidebar-content>
+
+  <div z-sidebar-footer>
+    <ul z-sidebar-menu>
+      <li z-sidebar-menu-item>
+        <button z-sidebar-menu-button>
+          <ng-icon name="lucidePlus" />
+          <span>New Calendar</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</z-sidebar>

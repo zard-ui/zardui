@@ -8,7 +8,6 @@ import { RouterModule } from '@angular/router';
       <router-outlet></router-outlet>
     </main>
   `,
-  standalone: true,
   imports: [RouterModule],
 })
 export class ShellLayout {}

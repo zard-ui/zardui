@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
@@ -30,9 +30,9 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       <z-item zVariant="outline">
         <z-item-media>
           <z-avatar-group>
-            <z-avatar zSrc="https://github.com/shadcn.png" zAlt="@shadcn" zFallback="CN" class="grayscale" />
-            <z-avatar zSrc="https://github.com/maxleiter.png" zAlt="@maxleiter" zFallback="LR" class="grayscale" />
-            <z-avatar zSrc="https://github.com/evilrabbit.png" zAlt="@evilrabbit" zFallback="ER" class="grayscale" />
+            <z-avatar zSrc="https://github.com/zard-ui.png" zAlt="@zardui" zFallback="ZU" class="grayscale" />
+            <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" class="grayscale" />
+            <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@luizgomess" zFallback="LG" class="grayscale" />
           </z-avatar-group>
         </z-item-media>
         <z-item-content>
@@ -45,6 +45,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </z-item>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoItemAvatarComponent {}

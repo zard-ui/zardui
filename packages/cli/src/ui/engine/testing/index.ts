@@ -1,6 +1,6 @@
 /**
- * testing — utilitários para teste/PoC. Um Terminal em memória que captura
- * writes de forma determinística (sem TTY) para snapshots e asserções de bytes.
+ * testing — test utilities. An in-memory Terminal that captures writes
+ * deterministically (no TTY) for snapshots and byte assertions.
  */
 
 import type { ColorLevel } from '../ansi/index.js';
@@ -10,9 +10,9 @@ import type { Terminal, TerminalCapabilities } from '../terminal/index.js';
 export interface MockTerminal extends Terminal {
   /** Todos os chunks escritos, na ordem. */
   readonly writes: readonly string[];
-  /** Último chunk escrito (o patch do frame). */
+  /** The last chunk written (the frame's patch). */
   readonly lastWrite: string;
-  /** Concatenação de tudo. */
+  /** Everything written so far, concatenated. */
   output(): string;
   reset(): void;
   /** Injeta bytes no stdin simulado (dispara onData). */

@@ -6,7 +6,7 @@ import { ZardDrawerService } from '@/shared/components/drawer/drawer.service';
 import { ZardInputComponent } from '@/shared/components/input';
 
 @Component({
-  selector: 'zard-demo-drawer-service-form',
+  selector: 'z-demo-drawer-service-form',
   imports: [ReactiveFormsModule, ZardInputComponent],
   template: `
     <form [formGroup]="form" class="grid gap-4 px-4">

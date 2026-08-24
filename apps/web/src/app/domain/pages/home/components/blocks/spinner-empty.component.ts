@@ -8,7 +8,6 @@ import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
 
 @Component({
   selector: 'z-block-spinner-empty',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardButtonComponent, ZardEmptyComponent, NgIcon],
   viewProviders: [provideIcons({ lucideLoaderCircle })],
