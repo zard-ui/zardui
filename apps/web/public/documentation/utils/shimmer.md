@@ -14,7 +14,7 @@ whatever colour the element already had.
 The highlight is a `linear-gradient` clipped to the glyphs and swept across them. Dark mode brightens
 it through a `@variant dark` override, so the effect reads as light on dark rather than dimmer.
 
-```css title="css/tailwind.css"
+```css title="css/utilities.css"
 @utility shimmer {
   --_highlight: var(--shimmer-color, oklch(from currentColor l c h / calc(alpha* 0.2)));
 

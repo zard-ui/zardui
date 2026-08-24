@@ -77,7 +77,7 @@ The logical utilities read the direction from the document, so a single class co
 Where scroll-driven animations are missing, the `@supports not` branch pins both edges to their full
 size. You get a static double fade instead of a scroll-aware one — never a broken container.
 
-```css title="css/tailwind.css"
+```css title="css/utilities.css"
 @supports not (animation-timeline: scroll()) {
   --scroll-fade-t: var(--_scroll-fade-size-t);
   --scroll-fade-b: var(--_scroll-fade-size-b);

@@ -11,13 +11,13 @@ A scroll container that overflows tells you nothing about where you are in it. `
 
 ## Installation
 
-The utility ships in the library's global stylesheet, which is the core registry item. Refresh it and the classes are there.
+The utility ships in its own utilities.css, next to the library's global stylesheet in the core registry item. Refresh it and the classes are there.
 
 ```
 npx zard-cli add core --overwrite
 ```
 
-The classes are available as soon as that stylesheet is imported after Tailwind.
+`tailwind.css` imports it on its first line, so the classes are available as soon as that stylesheet is imported after Tailwind.
 
 src/styles.css
 
@@ -639,7 +639,7 @@ The inline utilities read the direction from the document, so one class covers b
 
 The scroll-aware behaviour needs scroll-driven animations. Where they are missing, the `@supports not` branch pins both edges to their full size: you get a static double fade instead of a scroll-aware one. It is a plain fallback, not a polyfill — the fade no longer tracks the scroll position, and the leading edge stays faded at rest.
 
-css/tailwind.css
+css/utilities.css
 
 ```
 @supports not (animation-timeline: scroll()) {

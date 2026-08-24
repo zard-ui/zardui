@@ -11,13 +11,13 @@ A spinner tells you the app is busy. A shimmering line tells you *this text* is 
 
 ## Installation
 
-The utility ships in the library's global stylesheet, which is the core registry item. Refresh it and the classes are there.
+The utility ships in its own utilities.css, next to the library's global stylesheet in the core registry item. Refresh it and the classes are there.
 
 ```
 npx zard-cli add core --overwrite
 ```
 
-The classes are available as soon as that stylesheet is imported after Tailwind.
+`tailwind.css` imports it on its first line, so the classes are available as soon as that stylesheet is imported after Tailwind.
 
 src/styles.css
 
@@ -56,7 +56,7 @@ The element gets a `linear-gradient` background clipped to its glyphs — `backg
 
 Dark mode brightens the highlight through a `@variant dark` override, rather than dimming it the way a fixed colour would.
 
-css/tailwind.css
+css/utilities.css
 
 ```
 @utility shimmer {

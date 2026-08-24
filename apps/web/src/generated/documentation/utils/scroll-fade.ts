@@ -54,7 +54,7 @@ export const UTILS_SCROLL_FADE: CodeBlockData[] = [
     "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">@supports</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\"> not</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> (</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">animation-timeline</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">: </span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">scroll</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">()) {</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">  --scroll-fade-t: var(--_scroll-fade-size-t);</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">  --scroll-fade-b: var(--_scroll-fade-size-b);</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">}</span></span></code></pre>",
     "code": "@supports not (animation-timeline: scroll()) {\n  --scroll-fade-t: var(--_scroll-fade-size-t);\n  --scroll-fade-b: var(--_scroll-fade-size-b);\n}",
     "language": "css",
-    "title": "css/tailwind.css",
+    "title": "css/utilities.css",
     "showLineNumbers": false,
     "copyButton": false,
     "expandable": false

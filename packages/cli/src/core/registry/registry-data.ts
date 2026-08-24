@@ -39,6 +39,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'css/utilities.css',
+        content: '',
+      },
+      {
         name: 'index.ts',
         content: '',
       },
