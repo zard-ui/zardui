@@ -6,8 +6,7 @@ import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.com
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
 @Component({
-  selector: 'skills-installation-section',
-  standalone: true,
+  selector: 'z-skills-installation-section',
   imports: [CodeBlockComponent, CodeTabsComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -36,7 +35,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     </p>
   `,
 })
-export class SkillsInstallationSection {
+export class SkillsInstallationSectionComponent {
   readonly installTabs: CodeTabData = TABS_0;
   readonly tree: CodeBlockData = BLOCK_1;
 }

@@ -1,4 +1,4 @@
-import { type AfterViewInit, Component, inject, viewChild } from '@angular/core';
+import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import {
@@ -42,6 +42,7 @@ import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
       </z-command-list>
     </z-command>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({ lucideCalendar, lucideSmile, lucideCalculator, lucideUser, lucideCreditCard, lucideSettings }),
   ],
@@ -57,7 +58,7 @@ class ZardDemoCommandGroupsDialogComponent implements AfterViewInit {
   selector: 'z-demo-command-groups',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="outline" (click)="open()">Open Menu</button>
+    <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
 })
 export class ZardDemoCommandGroupsComponent {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardItemImports } from '@/shared/components/item/item.imports';
 
@@ -28,6 +28,7 @@ interface Model {
       </z-item-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoItemHeaderComponent {
   protected readonly models: Model[] = [

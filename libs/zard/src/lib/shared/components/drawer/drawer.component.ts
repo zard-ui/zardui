@@ -10,6 +10,7 @@ import {
   DestroyRef,
   Directive,
   effect,
+  forwardRef,
   inject,
   input,
   model,
@@ -57,7 +58,7 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
  *     <z-drawer-description>Description</z-drawer-description>
  *   </z-drawer-header>
  *   <z-drawer-footer>
- *     <button z-button z-drawer-close>Cancel</button>
+ *     <button type="button" z-button z-drawer-close>Cancel</button>
  *   </z-drawer-footer>
  * </z-drawer>
  * ```
@@ -86,8 +87,12 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
       </z-drawer-panel>
     </ng-template>
   `,
-  providers: [{ provide: ZardDrawerHost, useExisting: ZardDrawerComponent }],
+  // forwardRef: the decorator is evaluated before the class binding exists, so a bare
+  // reference to ZardDrawerComponent here throws "Cannot access before initialization"
+  // whenever the module is evaluated outside the AOT compiler.
+  providers: [{ provide: ZardDrawerHost, useExisting: forwardRef(() => ZardDrawerComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: { style: 'display: contents' },
   exportAs: 'zDrawer',
 })
@@ -146,12 +151,16 @@ export class ZardDrawerComponent extends ZardDrawerHost {
   }
 
   requestClose(): void {
-    if (!this.zDismissible()) return;
+    if (!this.zDismissible()) {
+      return;
+    }
     this.zVisible.set(false);
   }
 
   private open(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     // Re-opening mid-exit: keep the same overlay and reverse the animation.
     if (this.overlayRef) {
@@ -194,7 +203,9 @@ export class ZardDrawerComponent extends ZardDrawerHost {
   }
 
   private startClose(): void {
-    if (!this.overlayRef || this.disposeTimer !== null) return;
+    if (!this.overlayRef || this.disposeTimer !== null) {
+      return;
+    }
 
     this.state.set('closed');
     this.overlayRef.detachBackdrop();
@@ -203,20 +214,28 @@ export class ZardDrawerComponent extends ZardDrawerHost {
 
   private dispose(): void {
     this.clearDisposeTimer();
-    if (!this.overlayRef) return;
+    if (!this.overlayRef) {
+      return;
+    }
 
     this.overlayRef.dispose();
     this.overlayRef = null;
 
-    if (this.previouslyFocused?.isConnected) this.previouslyFocused.focus();
+    if (this.previouslyFocused?.isConnected) {
+      this.previouslyFocused.focus();
+    }
     this.previouslyFocused = null;
 
     // Teardown disposes the overlay too, but the output is already gone by then.
-    if (!this.destroyed) this.zAfterClose.emit();
+    if (!this.destroyed) {
+      this.zAfterClose.emit();
+    }
   }
 
   private clearDisposeTimer(): void {
-    if (this.disposeTimer === null) return;
+    if (this.disposeTimer === null) {
+      return;
+    }
 
     clearTimeout(this.disposeTimer);
     this.disposeTimer = null;
@@ -276,7 +295,9 @@ export class ZardDrawerTitleComponent {
     afterNextRender(() => this.drawer?.titleId.set(this.id));
 
     inject(DestroyRef).onDestroy(() => {
-      if (this.drawer?.titleId() === this.id) this.drawer.titleId.set(null);
+      if (this.drawer?.titleId() === this.id) {
+        this.drawer.titleId.set(null);
+      }
     });
   }
 }
@@ -313,7 +334,9 @@ export class ZardDrawerDescriptionComponent {
     afterNextRender(() => this.drawer?.descriptionId.set(this.id));
 
     inject(DestroyRef).onDestroy(() => {
-      if (this.drawer?.descriptionId() === this.id) this.drawer.descriptionId.set(null);
+      if (this.drawer?.descriptionId() === this.id) {
+        this.drawer.descriptionId.set(null);
+      }
     });
   }
 }

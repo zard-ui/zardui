@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSliderComponent } from '../slider.component';
 
@@ -13,5 +13,6 @@ import { ZardSliderComponent } from '../slider.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSliderVerticalComponent {}

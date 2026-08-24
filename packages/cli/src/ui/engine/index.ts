@@ -1,13 +1,13 @@
 /**
- * terminal-engine — superfície pública da engine de renderização do terminal.
+ * terminal-engine — the public surface of the terminal rendering engine.
  *
- * Engine orientada a diff sobre Node.js + ANSI puro: sem React, sem Ink, sem
- * Virtual DOM e sem dependências externas. A aplicação descreve o que aparece
- * a cada frame; a engine descobre o que mudou e escreve o mínimo de bytes.
+ * A diff-driven engine over Node.js and plain ANSI: no React, no Ink, no virtual
+ * DOM and no external dependencies. The application describes what appears each
+ * frame; the engine works out what changed and writes the fewest bytes it can.
  *
- * Este diretório é código vendorizado — a fonte original vive no pacote
- * `@zardui/terminal-engine`. Ajustes de comportamento devem ser feitos lá e
- * ressincronizados aqui, para que os dois lados não divirjam.
+ * This directory is vendored code — the original source lives in the
+ * `@zardui/terminal-engine` package. Behavioural changes belong there and should
+ * be resynced here, so the two sides cannot diverge.
  */
 
 export * from './utils/index.js';

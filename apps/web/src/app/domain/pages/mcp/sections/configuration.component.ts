@@ -6,8 +6,7 @@ import { CodeBlockComponent } from '@highlight/components/code-block/code-block.
 import type { CodeBlockData } from '@highlight/types';
 
 @Component({
-  selector: 'mcp-configuration-section',
-  standalone: true,
+  selector: 'z-mcp-configuration-section',
   imports: [CodeBlockComponent, RouterLink],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -60,6 +59,6 @@ import type { CodeBlockData } from '@highlight/types';
     <z-code-block [data]="envExample" />
   `,
 })
-export class McpConfigurationSection {
+export class McpConfigurationSectionComponent {
   readonly envExample: CodeBlockData = BLOCK_0;
 }

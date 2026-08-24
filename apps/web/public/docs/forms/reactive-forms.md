@@ -525,7 +525,13 @@ Every zard/ui form control implements a value accessor, so formControlName binds
 
 ### input
 
-For text inputs, bind `formControlName` and mirror the control's invalid state with `aria-invalid`.
+For text inputs, bind
+
+formControlName
+
+and mirror the control's invalid state with
+
+aria-invalid
 
 Username
 
@@ -627,7 +633,11 @@ export class ZardFormsReactiveInputComponent {
 
 ### textarea
 
-Textareas work exactly like inputs. Add `z-field-description` for the helper copy below the control.
+Textareas work exactly like inputs. Add
+
+z-field-description
+
+for the helper copy below the control.
 
 More about you
 
@@ -719,7 +729,17 @@ export class ZardFormsReactiveTextareaComponent {
 
 ### select
 
-`z-select` is a value accessor too. Use `zOrientation="responsive"` with `z-field-content` to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a custom validator — a value rule, not a presence one.
+z-select
+
+is a value accessor too. Use
+
+zOrientation="responsive"
+
+with
+
+z-field-content
+
+to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a custom validator — a value rule, not a presence one.
 
 Spoken Language
 
@@ -837,7 +857,21 @@ export class ZardFormsReactiveSelectComponent {
 
 ### checkbox
 
-A checkbox group maps cleanly to a `FormArray` of booleans: one control per option, plus a group-level validator for the 'pick at least one' rule. The first group holds a single disabled control that ships checked — `getRawValue()` is what reads it back. Remember `data-slot="checkbox-group"` on the `z-field-group`.
+A checkbox group maps cleanly to a
+
+FormArray
+
+of booleans: one control per option, plus a group-level validator for the 'pick at least one' rule. The first group holds a single disabled control that ships checked —
+
+getRawValue()
+
+is what reads it back. Remember
+
+data-slot="checkbox-group"
+
+on the
+
+z-field-group
 
 Responses
 
@@ -982,7 +1016,19 @@ export class ZardFormsReactiveCheckboxComponent {
 
 ### radio group
 
-Bind `formControlName` to `z-radio-group` — the individual `z-radio` items only carry their value.
+Bind
+
+formControlName
+
+to
+
+z-radio-group
+
+— the individual
+
+z-radio
+
+items only carry their value.
 
 Plan
 
@@ -1081,7 +1127,11 @@ export class ZardFormsReactiveRadioComponent {
 
 ### switch
 
-Switches bind to a boolean control. `Validators.requiredTrue` is the rule for "must be enabled".
+Switches bind to a boolean control.
+
+Validators.requiredTrue
+
+is the rule for "must be enabled".
 
 Multi-factor authentication
 

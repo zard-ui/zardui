@@ -17,7 +17,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export * from '@/shared/components/pagination/pagination.component';\nexport * from '@/shared/components/pagination/pagination.imports';\nexport * from '@/shared/components/pagination/pagination.variants';\n"
+      "content": "export * from './pagination.component';\nexport * from './pagination.imports';\nexport * from './pagination.variants';\n"
     }
   ],
   "registryDependencies": [

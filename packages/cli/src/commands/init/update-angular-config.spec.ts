@@ -1,9 +1,9 @@
 /**
- * O registro do `provideZard()` no app.config do usuário.
+ * Registering `provideZard()` in the user's app.config.
  *
- * É a única etapa do init que edita código que o usuário escreveu, e a forma
- * desse código varia mais do que parece: providers com arrays aninhados,
- * imports em várias linhas, arquivos em CRLF.
+ * It is the only step of init that edits code the user wrote, and the shape of
+ * that code varies more than it looks: providers with nested arrays, imports
+ * spread over several lines, files in CRLF.
  */
 
 import { updateAngularConfig } from '@cli/commands/init/update-angular-config.js';
@@ -41,9 +41,9 @@ describe('updateAngularConfig', () => {
   });
 
   /**
-   * O caso que quebrava o Analog: o `]` de `withInterceptors([...])` era lido
-   * como o fim da lista, e `provideZard()` entrava como um interceptor de HTTP
-   * — um erro de tipo no build que não menciona ZardUI em lugar nenhum.
+   * The case that broke Analog: the `]` of `withInterceptors([...])` was read as
+   * the end of the list, and `provideZard()` went in as an HTTP interceptor — a
+   * type error at build time that mentions ZardUI nowhere.
    */
   it('should not land inside a nested array', async () => {
     const result = await runOn(
@@ -60,7 +60,7 @@ describe('updateAngularConfig', () => {
 
     expect(result).toContain('withInterceptors([requestContextInterceptor])');
     expect(result).not.toContain('requestContextInterceptor,\n    provideZard()');
-    // O provider entra depois do último item da lista, já fora do aninhado.
+    // The provider goes in after the list's last item, outside the nested one.
     expect(result.indexOf('provideZard()')).toBeGreaterThan(result.indexOf('provideHttpClient'));
   });
 

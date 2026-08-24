@@ -20,7 +20,6 @@ import { ZardNavigationMenuImports } from '@zard/components/navigation-menu';
 
 @Component({
   selector: 'z-block-button-group-toolbar',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardButtonComponent, ZardButtonGroupComponent, ...ZardNavigationMenuImports, NgIcon],
   viewProviders: [

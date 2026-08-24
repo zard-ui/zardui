@@ -21,6 +21,8 @@ import { ZardCommandOptionComponent } from '@/shared/components/command/command-
 import { commandVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+import { ZardCommand } from './command.tokens';
+
 export interface ZardCommandOption {
   value: unknown;
   label: string;
@@ -45,11 +47,6 @@ export interface ZardCommandConfig {
   onSelect?: (option: ZardCommandOption) => void;
 }
 
-export abstract class ZardCommand {
-  abstract registerOption(option: ZardCommandOptionComponent): void;
-  abstract unregisterOption(option: ZardCommandOptionComponent): void;
-}
-
 @Component({
   selector: 'z-command',
   imports: [FormsModule],
@@ -69,6 +66,10 @@ export abstract class ZardCommand {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ZardCommandComponent),
       multi: true,
+    },
+    {
+      provide: ZardCommand,
+      useExisting: forwardRef(() => ZardCommandComponent),
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -103,16 +104,22 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
   private readonly resolvedIndex = computed(() => {
     const options = this.filteredOptions();
     const len = options.length;
-    if (len === 0) return -1;
+    if (len === 0) {
+      return -1;
+    }
 
     const raw = this.selectedIndex();
     const target = raw < 0 || raw >= len ? 0 : raw;
 
-    if (!options[target].zDisabled()) return target;
+    if (!options[target].zDisabled()) {
+      return target;
+    }
 
     for (let i = 1; i < len; i++) {
       const candidate = (target + i) % len;
-      if (!options[candidate].zDisabled()) return candidate;
+      if (!options[candidate].zDisabled()) {
+        return candidate;
+      }
     }
     return -1;
   });
@@ -123,11 +130,15 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
    */
   private findEnabledIndex(from: number, direction: 1 | -1, options: readonly ZardCommandOptionComponent[]): number {
     const len = options.length;
-    if (len === 0) return -1;
+    if (len === 0) {
+      return -1;
+    }
     let idx = from;
     for (let i = 0; i < len; i++) {
       idx = (idx + direction + len) % len;
-      if (!options[idx].zDisabled()) return idx;
+      if (!options[idx].zDisabled()) {
+        return idx;
+      }
     }
     return -1;
   }
@@ -177,7 +188,9 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
    */
   readonly isEmpty = computed(() => {
     const searchTerm = this.searchTerm().trim();
-    if (!searchTerm) return false;
+    if (!searchTerm) {
+      return false;
+    }
     return this.filteredOptions().length === 0;
   });
 
@@ -252,7 +265,9 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
   // in @Component host: '(keydown)': 'onKeyDown($event)'
   onKeyDown(event: Event) {
     const filteredOptions = this.filteredOptions();
-    if (filteredOptions.length === 0) return;
+    if (filteredOptions.length === 0) {
+      return;
+    }
 
     const { key } = event as KeyboardEvent;
     const currentIndex = this.resolvedIndex();

@@ -5,7 +5,6 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
 
 @Component({
   selector: 'z-block-item-two-factor',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardButtonComponent, ...ZardItemImports],
   template: `

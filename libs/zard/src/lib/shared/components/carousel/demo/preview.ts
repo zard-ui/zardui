@@ -6,7 +6,7 @@ import { ZardCarouselImports } from '@/shared/components/carousel/carousel.impor
 @Component({
   imports: [ZardCarouselImports, ZardCardImports],
   template: `
-    <div class="w-full max-w-[12rem] sm:max-w-xs">
+    <div class="w-full max-w-48 sm:max-w-xs">
       <z-carousel>
         <z-carousel-content>
           @for (slide of slides; track slide) {

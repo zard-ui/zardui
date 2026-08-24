@@ -14,10 +14,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'carousel-item',
     '[class]': 'classes()',
     role: 'group',
     'aria-roledescription': 'slide',
   },
+  exportAs: 'zCarouselItem',
 })
 export class ZardCarouselItemComponent {
   readonly #parent = inject(ZardCarouselComponent);

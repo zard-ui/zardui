@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, input, signal, ViewEncapsulation } 
 
 @Component({
   selector: 'z-copy-button',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {

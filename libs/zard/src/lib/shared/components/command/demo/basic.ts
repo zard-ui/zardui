@@ -1,4 +1,4 @@
-import { type AfterViewInit, Component, inject, viewChild } from '@angular/core';
+import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
@@ -23,6 +23,7 @@ import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
       </z-command-list>
     </z-command>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 class ZardDemoCommandBasicDialogComponent implements AfterViewInit {
   private readonly cmd = viewChild.required(ZardCommandComponent);
@@ -35,7 +36,7 @@ class ZardDemoCommandBasicDialogComponent implements AfterViewInit {
   selector: 'z-demo-command-basic',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="outline" (click)="open()">Open Menu</button>
+    <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
 })
 export class ZardDemoCommandBasicComponent {

@@ -1,9 +1,9 @@
 /**
- * Tema da CLI — tokens semânticos consumidos por toda a UI do terminal.
+ * The CLI's theme — semantic tokens consumed by the whole terminal UI.
  *
- * A paleta segue a base neutra do ZardUI (zinc) para texto e bordas, com os
- * acentos reservados para estado: primary marca o passo ativo e o cursor,
- * success/warning/danger comunicam o resultado de cada etapa.
+ * The palette follows ZardUI's neutral base (zinc) for text and borders, with
+ * the accents reserved for state: primary marks the active step and the cursor,
+ * while success/warning/danger communicate each step's outcome.
  */
 
 import { createTheme, type Theme } from './engine/index.js';

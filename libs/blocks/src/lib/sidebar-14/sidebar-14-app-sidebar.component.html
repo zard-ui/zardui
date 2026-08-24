@@ -1,0 +1,29 @@
+<z-sidebar zSide="right">
+  <z-sidebar-content>
+    <div z-sidebar-group>
+      <div z-sidebar-group-label>Table of Contents</div>
+
+      <div z-sidebar-group-content>
+        <ul z-sidebar-menu>
+          @for (group of navMain; track group.title) {
+            <li z-sidebar-menu-item>
+              <a z-sidebar-menu-button [href]="group.url" class="font-medium">{{ group.title }}</a>
+
+              @if (group.items.length) {
+                <ul z-sidebar-menu-sub>
+                  @for (item of group.items; track item.title) {
+                    <li z-sidebar-menu-sub-item>
+                      <a z-sidebar-menu-sub-button [href]="item.url" [zActive]="!!item.isActive">{{ item.title }}</a>
+                    </li>
+                  }
+                </ul>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </z-sidebar-content>
+
+  <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
+</z-sidebar>

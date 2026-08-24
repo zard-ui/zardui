@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';
 
@@ -20,5 +20,6 @@ import { ZardResizableImports } from '@/shared/components/resizable/resizable.im
       </z-resizable-panel>
     </z-resizable>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoResizableVerticalComponent {}

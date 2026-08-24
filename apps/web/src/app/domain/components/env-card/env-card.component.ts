@@ -9,7 +9,6 @@ import { RouterModule } from '@angular/router';
       <p class="mt-2 font-medium first-letter:uppercase">{{ name() }}</p>
     </a>
   `,
-  standalone: true,
   imports: [RouterModule],
 })
 export class EnvCardComponent {
@@ -19,7 +18,8 @@ export class EnvCardComponent {
   readonly disabled = input(false);
 
   protected cardClasses() {
-    const baseClasses = 'flex w-full flex-col items-center rounded-xl border bg-card p-6 text-card-foreground shadow transition-colors sm:p-10';
+    const baseClasses =
+      'flex w-full flex-col items-center rounded-xl border bg-card p-6 text-card-foreground shadow transition-colors sm:p-10';
 
     if (this.disabled()) {
       return `${baseClasses} cursor-not-allowed`;

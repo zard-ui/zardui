@@ -15,7 +15,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import { radioGroupVariants, radioVariants } from './radio-group.variants';
 
@@ -56,7 +57,9 @@ export class ZardRadioGroupComponent implements ControlValueAccessor {
   private onTouched: OnTouchedType = noopFn;
 
   select(value: unknown): void {
-    if (this.isDisabled()) return;
+    if (this.isDisabled()) {
+      return;
+    }
     this.value.set(value);
     this.onChange(value);
     this.onTouched();
@@ -103,9 +106,7 @@ export class ZardRadioGroupComponent implements ControlValueAccessor {
     >
       @if (checked()) {
         <span data-slot="radio-group-indicator" class="flex size-4 items-center justify-center">
-          <span
-            class="bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-          ></span>
+          <span class="bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full"></span>
         </span>
       }
     </button>
@@ -134,7 +135,9 @@ export class ZardRadioComponent {
   }
 
   onSelect(): void {
-    if (this.disabledState()) return;
+    if (this.disabledState()) {
+      return;
+    }
     this.group!.select(this.value());
   }
 }

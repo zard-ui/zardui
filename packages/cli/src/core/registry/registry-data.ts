@@ -23,6 +23,14 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'overlay/overlay-ref.ts',
+        content: '',
+      },
+      {
+        name: 'overlay/overlay-stack.ts',
+        content: '',
+      },
+      {
         name: 'provider/event-manager-plugins/zard-debounce-event-manager-plugin.ts',
         content: '',
       },
@@ -82,40 +90,45 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'noop.ts',
+        content: '',
+      },
+      {
         name: 'number.ts',
         content: '',
       },
     ],
   },
   {
-    name: 'layout',
+    name: 'sidebar',
+    registryDependencies: ['button', 'tooltip', 'skeleton', 'separator'],
     files: [
       {
-        name: 'layout.component.ts',
-        content: '',
-      },
-      {
-        name: 'layout.variants.ts',
-        content: '',
-      },
-      {
-        name: 'content.component.ts',
-        content: '',
-      },
-      {
-        name: 'footer.component.ts',
-        content: '',
-      },
-      {
-        name: 'header.component.ts',
-        content: '',
-      },
-      {
-        name: 'layout.imports.ts',
-        content: '',
-      },
-      {
         name: 'sidebar.component.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar-primitives.component.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar-menu.component.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.constants.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.service.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.variants.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.imports.ts',
         content: '',
       },
       {
@@ -173,10 +186,13 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'card',
-    registryDependencies: ['button'],
     files: [
       {
         name: 'card.component.ts',
+        content: '',
+      },
+      {
+        name: 'card.imports.ts',
         content: '',
       },
       {
@@ -295,10 +311,6 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'alert-dialog.component.html',
-        content: '',
-      },
-      {
         name: 'alert-dialog.service.ts',
         content: '',
       },
@@ -319,6 +331,10 @@ export const registry: ComponentRegistry[] = [
   {
     name: 'avatar',
     files: [
+      {
+        name: 'avatar.imports.ts',
+        content: '',
+      },
       {
         name: 'avatar.component.ts',
         content: '',
@@ -346,6 +362,27 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'checkbox.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'collapsible',
+    files: [
+      {
+        name: 'collapsible.component.ts',
+        content: '',
+      },
+      {
+        name: 'collapsible.variants.ts',
+        content: '',
+      },
+      {
+        name: 'collapsible.imports.ts',
         content: '',
       },
       {
@@ -435,11 +472,40 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'context-menu',
+    registryDependencies: ['dropdown'],
+    files: [
+      {
+        name: 'context-menu.directive.ts',
+        content: '',
+      },
+      {
+        name: 'context-menu.service.ts',
+        content: '',
+      },
+      {
+        name: 'context-menu.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'dropdown',
-    registryDependencies: ['menu'],
     files: [
       {
         name: 'dropdown.component.ts',
+        content: '',
+      },
+      {
+        name: 'dropdown-submenu.component.ts',
+        content: '',
+      },
+      {
+        name: 'menu-keyboard.ts',
         content: '',
       },
       {
@@ -448,6 +514,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'dropdown-menu-content.component.ts',
+        content: '',
+      },
+      {
+        name: 'dropdown-positions.ts',
         content: '',
       },
       {
@@ -600,6 +670,27 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'marker',
+    files: [
+      {
+        name: 'marker.component.ts',
+        content: '',
+      },
+      {
+        name: 'marker.imports.ts',
+        content: '',
+      },
+      {
+        name: 'marker.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'bubble',
     files: [
       {
@@ -612,6 +703,28 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'bubble.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'message',
+    registryDependencies: ['avatar', 'bubble'],
+    files: [
+      {
+        name: 'message.component.ts',
+        content: '',
+      },
+      {
+        name: 'message.imports.ts',
+        content: '',
+      },
+      {
+        name: 'message.variants.ts',
         content: '',
       },
       {
@@ -669,8 +782,11 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tabs',
-    registryDependencies: ['button'],
     files: [
+      {
+        name: 'tabs.imports.ts',
+        content: '',
+      },
       {
         name: 'tabs.component.ts',
         content: '',
@@ -820,6 +936,10 @@ export const registry: ComponentRegistry[] = [
     name: 'slider',
     files: [
       {
+        name: 'slider.imports.ts',
+        content: '',
+      },
+      {
         name: 'slider.component.ts',
         content: '',
       },
@@ -837,6 +957,10 @@ export const registry: ComponentRegistry[] = [
     name: 'calendar',
     registryDependencies: ['button'],
     files: [
+      {
+        name: 'calendar.imports.ts',
+        content: '',
+      },
       {
         name: 'calendar.component.ts',
         content: '',
@@ -869,10 +993,38 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'combobox',
-    registryDependencies: ['button', 'command', 'popover', 'empty', 'input'],
+    registryDependencies: ['button', 'input', 'input-group'],
     files: [
       {
+        name: 'combobox-chips.component.ts',
+        content: '',
+      },
+      {
+        name: 'combobox-content.component.ts',
+        content: '',
+      },
+      {
+        name: 'combobox-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'combobox-input.component.ts',
+        content: '',
+      },
+      {
+        name: 'combobox-item.component.ts',
+        content: '',
+      },
+      {
         name: 'combobox.component.ts',
+        content: '',
+      },
+      {
+        name: 'combobox.imports.ts',
+        content: '',
+      },
+      {
+        name: 'combobox.types.ts',
         content: '',
       },
       {
@@ -887,7 +1039,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'command',
-    registryDependencies: ['input'],
+    registryDependencies: ['input', 'input-group'],
     files: [
       {
         name: 'command.component.ts',
@@ -918,6 +1070,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'command.tokens.ts',
+        content: '',
+      },
+      {
         name: 'command.variants.ts',
         content: '',
       },
@@ -929,7 +1085,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'date-picker',
-    registryDependencies: ['button', 'calendar', 'popover', 'input'],
+    registryDependencies: ['button', 'calendar', 'popover'],
     files: [
       {
         name: 'date-picker.component.ts',
@@ -1097,6 +1253,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'navigation-menu',
+    registryDependencies: ['context-menu'],
     files: [
       {
         name: 'navigation-menu.component.ts',
@@ -1173,6 +1330,10 @@ export const registry: ComponentRegistry[] = [
     registryDependencies: ['separator'],
     files: [
       {
+        name: 'button-group.imports.ts',
+        content: '',
+      },
+      {
         name: 'button-group.component.ts',
         content: '',
       },
@@ -1189,6 +1350,10 @@ export const registry: ComponentRegistry[] = [
   {
     name: 'kbd',
     files: [
+      {
+        name: 'kbd.imports.ts',
+        content: '',
+      },
       {
         name: 'kbd.component.ts',
         content: '',
@@ -1210,9 +1375,10 @@ export const registry: ComponentRegistry[] = [
   {
     name: 'carousel',
     dependencies: [
-      // O wrapper Angular re-exportava os tipos do pacote base na v21 e parou na
-      // v22 — e é a v22 que um projeto Angular 22 recebe. Sem declarar o base,
-      // só compila onde o node_modules é plano; no pnpm o build quebra.
+      // The Angular wrapper re-exported the base package's types in v21 and
+      // stopped in v22 — and v22 is what an Angular 22 project gets. Without
+      // declaring the base package it only compiles where node_modules is flat;
+      // under pnpm the build breaks.
       'embla-carousel',
       'embla-carousel-angular',
       'embla-carousel-autoplay',
@@ -1254,6 +1420,7 @@ export const registry: ComponentRegistry[] = [
   {
     name: 'chart',
     dependencies: ['ngx-echarts', 'echarts'],
+    registryDependencies: ['dark-mode'],
     files: [
       {
         name: 'chart.component.ts',
@@ -1309,48 +1476,6 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'chart.imports.ts',
-        content: '',
-      },
-      {
-        name: 'index.ts',
-        content: '',
-      },
-    ],
-  },
-  {
-    name: 'tree',
-    registryDependencies: ['checkbox'],
-    files: [
-      {
-        name: 'tree.component.ts',
-        content: '',
-      },
-      {
-        name: 'tree-node.component.ts',
-        content: '',
-      },
-      {
-        name: 'tree-node-toggle.directive.ts',
-        content: '',
-      },
-      {
-        name: 'tree-node-content.component.ts',
-        content: '',
-      },
-      {
-        name: 'tree.service.ts',
-        content: '',
-      },
-      {
-        name: 'tree.types.ts',
-        content: '',
-      },
-      {
-        name: 'tree.variants.ts',
-        content: '',
-      },
-      {
-        name: 'tree.imports.ts',
         content: '',
       },
       {

@@ -1,7 +1,7 @@
 /**
- * Testes de integração da fatia vertical: components → layout → frame → diff
- * → renderer → terminal. Usa MockTerminal (sem TTY) para asserções de bytes e
- * snapshots — ver ARCHITECTURE §18.
+ * Integration tests across the whole path: components → layout → frame → diff →
+ * renderer → terminal. Uses MockTerminal (no TTY) for byte assertions and
+ * snapshots — see ARCHITECTURE §18.
  */
 
 import assert from 'node:assert/strict';
@@ -29,21 +29,21 @@ test('primeiro render pinta o painel e escreve bytes', () => {
   const st = render(view('count: 0'));
   assert.ok(st.bytesWritten > 0, 'deve escrever no primeiro frame');
   const snap = debug();
-  assert.match(snap, /╭─ Box/u, 'borda arredondada + título');
-  assert.match(snap, /count: 0/u, 'conteúdo presente');
+  assert.match(snap, /╭─ Box/u, 'rounded border + title');
+  assert.match(snap, /count: 0/u, 'content present');
 });
 
-test('mudar 1 caractere gera patch mínimo (poucas células)', () => {
+test('changing 1 character produces a minimal patch (few cells)', () => {
   const { render } = make();
   render(view('count: 0'));
-  const st = render(view('count: 9')); // só o '0' → '9' muda
+  const st = render(view('count: 9')); // only the '0' → '9' changes
   assert.equal(st.changedLines, 1, 'apenas 1 linha alterada');
-  assert.equal(st.changedCells, 1, 'apenas 1 célula alterada');
-  // 1 célula: envelope sync + move + SGR truecolor + glifo + reset (~47 bytes).
+  assert.equal(st.changedCells, 1, 'exactly 1 cell changed');
+  // 1 cell: sync envelope + move + truecolor SGR + glyph + reset (~47 bytes).
   assert.ok(st.bytesWritten < 80, `patch pequeno, foi ${st.bytesWritten} bytes`);
 });
 
-test('re-render idêntico não escreve nada (idempotência)', () => {
+test('an identical re-render writes nothing (idempotence)', () => {
   const { render, term } = make();
   render(view('stable'));
   const before = term.writes.length;
@@ -53,7 +53,7 @@ test('re-render idêntico não escreve nada (idempotência)', () => {
   assert.equal(term.writes.length, before, 'nenhum write novo');
 });
 
-test('diff escreve fração ínfima de um redesenho total', () => {
+test('diff writes a tiny fraction of a full redraw', () => {
   const r = make();
   r.render(view('a'));
   const incr = r.render(view('b'));

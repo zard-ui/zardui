@@ -73,14 +73,10 @@ export type JsonLdSchema = JsonLdWebSite | JsonLdSoftwareApplication | JsonLdArt
 export class JsonLdService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
-  private readonly renderer: Renderer2;
+  private readonly renderer: Renderer2 = inject(RendererFactory2).createRenderer(null, null);
   private currentScripts: HTMLScriptElement[] = [];
   private readonly baseUrl = 'https://zardui.com';
   private readonly authorName = 'Luiz Gomes';
-
-  constructor(rendererFactory: RendererFactory2) {
-    this.renderer = rendererFactory.createRenderer(null, null);
-  }
 
   setJsonLd(schema: JsonLdSchema): void {
     if (!this.isBrowser) {

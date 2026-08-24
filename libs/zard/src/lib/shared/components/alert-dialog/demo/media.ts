@@ -7,13 +7,13 @@ import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-d
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
 @Component({
-  selector: 'zard-demo-alert-dialog-media',
+  selector: 'z-demo-alert-dialog-media',
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <ng-template #mediaIcon>
       <ng-icon name="lucideCircleFadingPlus" />
     </ng-template>
-    <button z-button zType="outline" (click)="open(mediaIcon)">Share Project</button>
+    <button type="button" z-button zType="outline" (click)="open(mediaIcon)">Share Project</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCircleFadingPlus })],

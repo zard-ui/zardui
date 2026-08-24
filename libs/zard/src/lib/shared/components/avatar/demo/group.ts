@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarGroupComponent } from '@/shared/components/avatar/avatar-group.component';
 import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
@@ -21,5 +21,6 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
       </z-avatar-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoAvatarGroupComponent {}

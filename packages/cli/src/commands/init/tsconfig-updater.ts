@@ -6,11 +6,11 @@ import { writeFile, readFile } from 'node:fs/promises';
 import * as path from 'path';
 
 /**
- * Escreve o alias no tsconfig que os projetos realmente estendem.
+ * Writes the alias into the tsconfig the projects actually extend.
  *
- * Num workspace Nx isso é o `tsconfig.base.json`: o `tsconfig.json` da raiz não
- * é herdado por projeto nenhum, e o mapeamento escrito nele nunca chegaria ao
- * compilador — o alias resolvia no editor e quebrava no build.
+ * In an Nx workspace that is `tsconfig.base.json`: the root `tsconfig.json` is
+ * inherited by no project, and a mapping written there would never reach the
+ * compiler — the alias resolved in the editor and broke in the build.
  */
 export async function updateTsConfig(cwd: string, config: Config, tsconfigFile = 'tsconfig.json'): Promise<void> {
   const tsconfigPath = path.join(cwd, tsconfigFile);
@@ -44,9 +44,9 @@ function updatePaths(tsconfig: any, config: Config): any {
     tsconfig.compilerOptions.paths = {};
   }
 
-  // A chave vem do alias escolhido, não de um `@/*` fixo: quem configurou
-  // `@app/components` gera imports com esse prefixo, e mapear outro deixaria
-  // todo import do projeto sem resolver.
+  // The key comes from the chosen alias, not from a fixed `@/*`: someone who
+  // configured `@app/components` generates imports with that prefix, and mapping
+  // a different one would leave every import in the project unresolved.
   tsconfig.compilerOptions.paths = {
     ...tsconfig.compilerOptions.paths,
     [aliasPattern(config.aliases.components)]: [`${pathMappingBase(tsconfig, config)}/*`],
@@ -56,12 +56,12 @@ function updatePaths(tsconfig: any, config: Config): any {
 }
 
 /**
- * Escreve o mapeamento sem introduzir `baseUrl`.
+ * Writes the mapping without introducing `baseUrl`.
  *
- * Declarar `baseUrl` quebra o build em TypeScript 6 — a opção virou erro e some
- * no 7 —, e desde o 4.1 ela não é mais necessária: sem ela, os caminhos são
- * resolvidos a partir do próprio tsconfig. Projetos que já declaram a opção
- * continuam sendo respeitados, com o mapeamento escrito em relação a ela.
+ * Declaring `baseUrl` breaks the build on TypeScript 6 — the option became an
+ * error and disappears in 7 — and since 4.1 it is no longer necessary: without
+ * it, paths are resolved relative to the tsconfig itself. Projects that already
+ * declare the option are still honoured, with the mapping written relative to it.
  */
 function pathMappingBase(tsconfig: any, config: Config): string {
   const baseUrl = tsconfig.compilerOptions.baseUrl;

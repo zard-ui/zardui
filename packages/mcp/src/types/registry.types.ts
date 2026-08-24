@@ -12,7 +12,7 @@ export interface RegistryIndex {
 }
 
 /**
- * Os ícones que o componente desenha e a família em que eles estão escritos.
+ * The icons the component draws, and the family they are written in.
  *
  * `symbols`/`tokens` are the component's own; `demos` are the ones that only
  * appear in the examples. The lists come back empty when there are no icons at
@@ -42,7 +42,7 @@ export interface ComponentFile {
 }
 
 /**
- * O item completo do registry: o que o componente instala.
+ * The complete registry item: what the component installs.
  *
  * Documentation and examples are not here — they come from the page markdown,
  * through `docs.service`. See the note in that file on why they left.

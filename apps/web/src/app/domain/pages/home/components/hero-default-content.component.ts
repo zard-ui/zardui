@@ -23,7 +23,6 @@ import {
 
 @Component({
   selector: 'z-hero-default-content',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     BlockPaymentFormComponent,

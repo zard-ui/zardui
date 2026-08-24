@@ -1,0 +1,45 @@
+<div class="flex items-center gap-2 text-sm">
+  <div class="text-muted-foreground hidden font-medium md:inline-block">Edit Oct 08</div>
+
+  <button z-button zType="ghost" zSize="icon" class="h-7 w-7" aria-label="Favorite">
+    <ng-icon name="lucideStar" />
+  </button>
+
+  <button
+    z-button
+    zPopover
+    zType="ghost"
+    zSize="icon"
+    class="data-[state=open]:bg-accent h-7 w-7"
+    aria-label="More actions"
+    [zContent]="actions"
+    zAlign="end"
+  >
+    <ng-icon name="lucideMoreHorizontal" />
+  </button>
+
+  <ng-template #actions>
+    <div class="w-56 overflow-hidden rounded-lg p-0">
+      <z-sidebar zCollapsible="none" class="bg-transparent">
+        <z-sidebar-content>
+          @for (group of groups; track $index) {
+            <div z-sidebar-group class="border-b last:border-none">
+              <div z-sidebar-group-content class="gap-0">
+                <ul z-sidebar-menu>
+                  @for (item of group; track item.label) {
+                    <li z-sidebar-menu-item>
+                      <button z-sidebar-menu-button>
+                        <ng-icon [name]="item.icon" />
+                        <span>{{ item.label }}</span>
+                      </button>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </div>
+          }
+        </z-sidebar-content>
+      </z-sidebar>
+    </div>
+  </ng-template>
+</div>

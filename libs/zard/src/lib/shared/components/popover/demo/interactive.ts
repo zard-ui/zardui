@@ -7,7 +7,7 @@ import { ZardPopoverDirective } from '@/shared/components/popover/popover.compon
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-interactive-demo',
+  selector: 'z-demo-popover-interactive',
   imports: [FormsModule, ZardButtonComponent, ZardInputComponent, ...ZardPopoverImports],
   template: `
     <button type="button" z-button zPopover zType="outline" [zContent]="interactiveContent" #popoverTrigger>

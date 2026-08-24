@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
 
@@ -11,5 +11,6 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
       <z-avatar zSrc="error-image.png" zFallback="ZA" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoAvatarBasicComponent {}

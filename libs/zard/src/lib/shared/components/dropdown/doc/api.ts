@@ -24,6 +24,7 @@ export const DROPDOWN_API: ApiSection[] = [
     selector: 'z-dropdown-menu',
     description: 'Projected dropdown component with built-in trigger and overlay management.',
     props: [
+      { name: '(openChange)', description: 'Emitted when the menu opens or closes', type: 'boolean', default: '—' },
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       { name: '[disabled]', description: 'Disables the dropdown', type: 'boolean', default: 'false' },
       {
@@ -37,7 +38,27 @@ export const DROPDOWN_API: ApiSection[] = [
   {
     selector: 'z-dropdown-menu-content',
     description: 'Reusable content template displayed by a `z-dropdown` trigger.',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    props: [
+      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      {
+        name: '[zSide]',
+        description: 'Edge of the trigger the menu opens from.',
+        type: "'top' | 'right' | 'bottom' | 'left'",
+        default: "'bottom'",
+      },
+      {
+        name: '[zAlign]',
+        description: 'Alignment of the menu along that edge.',
+        type: "'start' | 'center' | 'end'",
+        default: "'start'",
+      },
+      {
+        name: '[zSideOffset]',
+        description: 'Gap between trigger and menu, in pixels.',
+        type: 'number',
+        default: '4',
+      },
+    ],
   },
   {
     selector: 'z-dropdown-menu-item',
@@ -84,6 +105,7 @@ export const DROPDOWN_API: ApiSection[] = [
     selector: 'z-dropdown-menu-checkbox-item',
     description: 'Checkbox-style dropdown menu item with checked state and menuitemcheckbox semantics.',
     props: [
+      { name: '[zChecked]', description: 'Checked state, two-way bindable', type: 'boolean', default: 'false' },
       { name: '[(zChecked)]', description: 'Checked state for the checkbox item.', type: 'boolean', default: 'false' },
       { name: '[zDisabled]', description: 'Disables the checkbox item.', type: 'boolean', default: 'false' },
       {
@@ -99,6 +121,12 @@ export const DROPDOWN_API: ApiSection[] = [
     selector: 'z-dropdown-menu-radio-group',
     description: 'Radio group wrapper for dropdown menu radio items.',
     props: [
+      {
+        name: '[zValue]',
+        description: 'Value of the selected radio item, two-way bindable',
+        type: 'string',
+        default: 'undefined',
+      },
       {
         name: '[(zValue)]',
         description: 'Selected radio item value.',

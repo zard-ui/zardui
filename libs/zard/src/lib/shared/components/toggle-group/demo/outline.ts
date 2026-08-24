@@ -6,7 +6,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-outline',
+  selector: 'z-demo-toggle-group-outline',
   imports: [ZardToggleGroupComponent],
   template: `
     <z-toggle-group
@@ -18,7 +18,7 @@ import {
     />
   `,
 })
-export default class ToggleGroupOutlineComponent {
+export class ZardDemoToggleGroupOutlineComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'all',

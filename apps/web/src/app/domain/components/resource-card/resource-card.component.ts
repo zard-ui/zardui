@@ -16,7 +16,6 @@ export interface ResourceBadge {
 
 @Component({
   selector: 'z-resource-card',
-  standalone: true,
   imports: [ZardBadgeComponent],
   template: `
     <div class="bg-card text-card-foreground rounded-lg border p-6 shadow-sm sm:p-8">
@@ -25,7 +24,8 @@ export interface ResourceBadge {
           <div class="flex flex-col gap-2">
             <h3 class="text-lg font-semibold">{{ title() }}</h3>
             <p class="text-muted-foreground text-sm">
-              by <strong>{{ author() }}</strong>
+              by
+              <strong>{{ author() }}</strong>
             </p>
           </div>
           @if (badges(); as badgeList) {
@@ -55,7 +55,12 @@ export interface ResourceBadge {
                   }
                   @case ('external') {
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
                     </svg>
                   }
                   @case ('twitter') {
@@ -84,7 +89,9 @@ export class ResourceCardComponent {
 
   protected getLinkClasses(type: 'primary' | 'secondary'): string {
     const baseClasses = 'inline-flex items-center gap-2 text-sm';
-    return type === 'primary' ? `${baseClasses} text-primary hover:underline` : `${baseClasses} text-muted-foreground hover:text-foreground`;
+    return type === 'primary'
+      ? `${baseClasses} text-primary hover:underline`
+      : `${baseClasses} text-muted-foreground hover:text-foreground`;
   }
 
   protected getBadgeClasses(variant: 'premium' | 'free' | 'license'): string {

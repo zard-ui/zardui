@@ -4,7 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
 
 @Component({
-  selector: 'zard-demo-dialog-no-close-button',
+  selector: 'z-demo-dialog-no-close-button',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="open()">No Close Button</button>

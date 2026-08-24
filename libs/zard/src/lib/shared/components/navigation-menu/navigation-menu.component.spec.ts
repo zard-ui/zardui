@@ -171,7 +171,13 @@ describe('ZardNavigationMenuComponent', () => {
     expect(content?.getAttribute('data-motion')).toBe('from-end');
   });
 
-  it('should render the built-in chevron inside a root', () => {
+  // `await whenStable`: the chevron is created in `afterNextRender`, which is what keeps
+  // the extra node out of the server-rendered HTML — see the trigger's `ngOnInit`.
+  it('should render the built-in chevron inside a root', async () => {
+    await fixture.whenStable();
+    // A second pass: the first one creates the icon component, this one renders its svg.
+    fixture.detectChanges();
+
     const triggerElement = fixture.debugElement.query(By.directive(ZardNavigationMenuTriggerDirective)).nativeElement;
     const icon = triggerElement.querySelector('ng-icon');
 

@@ -35,7 +35,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardInputGroupComponent } from '@/shared/components/input-group';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import { inputGroupInputVariants, inputVariants } from './input.variants';
 
@@ -188,7 +189,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 ### Basic
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 
@@ -198,6 +199,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
   template: `
     <input z-input placeholder="Enter text" class="w-72" />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputBasicComponent {}
 ```
@@ -207,7 +209,7 @@ export class ZardDemoInputBasicComponent {}
 Use `Field`, `FieldLabel`, and `FieldDescription` to create an input with a label and description.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
@@ -222,6 +224,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <p z-field-description>Choose a unique username for your account.</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputFieldComponent {}
 ```
@@ -231,7 +234,7 @@ export class ZardDemoInputFieldComponent {}
 Use `FieldGroup` to show multiple `Field` blocks and to build forms.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
@@ -257,6 +260,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputFieldGroupComponent {}
 ```
@@ -266,7 +270,7 @@ export class ZardDemoInputFieldGroupComponent {}
 Use the `disabled` prop to disable the input. To style the disabled state, add the `data-disabled` attribute to the `Field` component.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
@@ -281,6 +285,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <p z-field-description>This field is currently disabled.</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputDisabledComponent {}
 ```
@@ -290,7 +295,7 @@ export class ZardDemoInputDisabledComponent {}
 Use the `aria-invalid` prop to mark the input as invalid. To style the invalid state, add the `data-invalid` attribute to the `Field` component.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
@@ -305,6 +310,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <p z-field-description>This field contains validation errors.</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputInvalidComponent {}
 ```
@@ -314,7 +320,7 @@ export class ZardDemoInputInvalidComponent {}
 Use the `type="file"` prop to create a file input.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
@@ -329,6 +335,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <p z-field-description>Select a picture to upload.</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputFileComponent {}
 ```
@@ -338,7 +345,7 @@ export class ZardDemoInputFileComponent {}
 Use `Field` with `orientation="horizontal"` to create an inline input. Pair with `Button` to create a search input with a button.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
@@ -353,6 +360,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <button type="button" z-button>Search</button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputInlineComponent {}
 ```
@@ -362,7 +370,7 @@ export class ZardDemoInputInlineComponent {}
 Use a grid layout to place multiple inputs side by side.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
@@ -382,6 +390,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputGridComponent {}
 ```
@@ -391,7 +400,7 @@ export class ZardDemoInputGridComponent {}
 Use the `required` attribute to indicate required inputs.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
@@ -409,6 +418,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <p z-field-description>This field must be filled out.</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputRequiredComponent {}
 ```
@@ -418,7 +428,7 @@ export class ZardDemoInputRequiredComponent {}
 Use `Badge` in the label to highlight a recommended field.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
@@ -436,6 +446,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <input z-input id="input-badge" type="url" placeholder="https://api.example.com/webhook" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputBadgeComponent {}
 ```
@@ -445,7 +456,7 @@ export class ZardDemoInputBadgeComponent {}
 To add icons, text, or buttons inside an input, use the `InputGroup` component. See the Input Group component for more examples.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInfo } from '@ng-icons/lucide';
@@ -471,6 +482,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideInfo })],
 })
 export class ZardDemoInputInputGroupComponent {}
@@ -481,7 +493,7 @@ export class ZardDemoInputInputGroupComponent {}
 To add buttons to an input, use the `ButtonGroup` component. See the Button Group component for more examples.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
@@ -496,10 +508,11 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <label z-field-label for="input-button-group">Search</label>
       <z-button-group>
         <input z-input id="input-button-group" placeholder="Type to search..." />
-        <button z-button zType="outline">Search</button>
+        <button type="button" z-button zType="outline">Search</button>
       </z-button-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputButtonGroupComponent {}
 ```

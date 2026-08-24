@@ -1,9 +1,9 @@
 /**
- * Estilo para saída em linha — o que a CLI escreve fora da tela interativa.
+ * Styling for line output — what the CLI writes outside the interactive screen.
  *
- * Substitui o chalk usando o vocabulário ANSI da própria engine, o que mantém
- * uma única fonte de verdade de cor: os mesmos tokens do tema valem para o
- * wizard em alt-screen e para o texto que sobra no histórico do terminal.
+ * Replaces chalk using the engine's own ANSI vocabulary, which keeps a single
+ * source of truth for colour: the same theme tokens apply to the wizard in the
+ * alt-screen and to the text left behind in the terminal's history.
  */
 
 import { Attr, createSgrBuilder, createTerminal, type ColorLevel } from './engine/index.js';
@@ -11,13 +11,13 @@ import { zardTheme } from './theme.js';
 
 let cachedLevel: ColorLevel | null = null;
 
-/** Nível de cor do terminal atual, resolvido uma única vez por processo. */
+/** The current terminal's colour depth, resolved once per process. */
 function colorLevel(): ColorLevel {
   cachedLevel ??= createTerminal().caps.colors;
   return cachedLevel;
 }
 
-/** Reavalia a capacidade de cor — usado em teste, quando o stdout é trocado. */
+/** Re-evaluates the colour capability — used in tests, when stdout is swapped. */
 export function resetColorLevel(): void {
   cachedLevel = null;
 }
@@ -40,11 +40,11 @@ export const style = {
   foreground: (text: string) => paint(text, 'foreground'),
   bold: (text: string) => paint(text, undefined, Attr.Bold),
   dim: (text: string) => paint(text, undefined, Attr.Dim),
-  /** Destaque de nome de arquivo, comando ou caminho dentro de uma frase. */
+  /** Highlights a file name, command or path inside a sentence. */
   code: (text: string) => paint(text, 'primary', Attr.Bold),
 };
 
-/** true quando o terminal aceita as caixas e glifos Unicode da UI. */
+/** True when the terminal accepts the UI's Unicode boxes and glyphs. */
 export function supportsUnicode(): boolean {
   return createTerminal().caps.unicode;
 }

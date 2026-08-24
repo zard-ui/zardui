@@ -10,7 +10,6 @@ export interface CategoryTab {
 
 @Component({
   selector: 'z-category-tabs',
-  standalone: true,
   imports: [RouterLink, RouterLinkActive, ZardButtonComponent],
   templateUrl: './category-tabs.component.html',
 })

@@ -34,7 +34,6 @@ const LANGUAGE_GROUPS: ReadonlyArray<{ id: string; label: string; language: Feat
 
 @Component({
   selector: 'z-articles',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './articles.page.html',
   imports: [

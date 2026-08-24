@@ -72,7 +72,6 @@ function parseDate(value: string): Date | null {
     ZardPopoverComponent,
     ZardPopoverDirective,
   ],
-  standalone: true,
   template: `
     <div z-field class="mx-auto w-52">
       <label z-field-label for="date-picker-with-input">Subscription date</label>
@@ -87,6 +86,7 @@ function parseDate(value: string): Date | null {
         />
         <z-input-group-addon zAlign="inline-end">
           <button
+            type="button"
             z-input-group-button
             aria-label="Select date"
             zPopover

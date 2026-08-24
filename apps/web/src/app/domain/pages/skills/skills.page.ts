@@ -5,25 +5,24 @@ import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-head
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { SkillsHowItWorksSection } from './sections/how-it-works.component';
-import { SkillsIncludedSection } from './sections/included.component';
-import { SkillsInstallationSection } from './sections/installation.component';
-import { SkillsOverviewSection } from './sections/overview.component';
+import { SkillsHowItWorksSectionComponent } from './sections/how-it-works.component';
+import { SkillsIncludedSectionComponent } from './sections/included.component';
+import { SkillsInstallationSectionComponent } from './sections/installation.component';
+import { SkillsOverviewSectionComponent } from './sections/overview.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-skills',
-  standalone: true,
   imports: [
     DocContentComponent,
     DocHeadingComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
-    SkillsOverviewSection,
-    SkillsInstallationSection,
-    SkillsIncludedSection,
-    SkillsHowItWorksSection,
+    SkillsOverviewSectionComponent,
+    SkillsInstallationSectionComponent,
+    SkillsIncludedSectionComponent,
+    SkillsHowItWorksSectionComponent,
   ],
   template: `
     <z-content
@@ -39,10 +38,10 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
         id="overview"
       ></z-doc-heading>
 
-      <skills-overview-section scrollSpyItem="what-it-changes" id="what-it-changes"></skills-overview-section>
-      <skills-installation-section scrollSpyItem="installation" id="installation"></skills-installation-section>
-      <skills-included-section scrollSpyItem="whats-included" id="whats-included"></skills-included-section>
-      <skills-how-it-works-section scrollSpyItem="how-it-works" id="how-it-works"></skills-how-it-works-section>
+      <z-skills-overview-section scrollSpyItem="what-it-changes" id="what-it-changes"></z-skills-overview-section>
+      <z-skills-installation-section scrollSpyItem="installation" id="installation"></z-skills-installation-section>
+      <z-skills-included-section scrollSpyItem="whats-included" id="whats-included"></z-skills-included-section>
+      <z-skills-how-it-works-section scrollSpyItem="how-it-works" id="how-it-works"></z-skills-how-it-works-section>
     </z-content>
   `,
 })

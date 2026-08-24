@@ -1,15 +1,16 @@
 /**
- * O catálogo de ícones em uso, buscado no registry.
+ * The icon catalog in use, fetched from the registry.
  *
- * A CLI carrega uma cópia da tabela, mas quem manda é o registry: é assim que
- * uma família nova chega a quem já tem a CLI instalada, sem esperar um release
- * dela. A cópia local é o piso — vale offline, em registry antigo que não
- * publica o arquivo, e em qualquer falha de rede.
+ * The CLI carries a copy of the table, but the registry is what counts: that is
+ * how a new family reaches someone who already has the CLI installed, without
+ * waiting for a release of it. The local copy is the floor — it applies offline,
+ * against an old registry that does not publish the file, and on any network
+ * failure.
  *
- * É carregado uma vez por comando e lido de forma síncrona depois disso. A
- * alternativa seria passar o catálogo por parâmetro da ação até o instalador de
- * arquivos, quatro camadas abaixo, sem que nenhuma delas tivesse o que decidir
- * sobre ele.
+ * It is loaded once per command and read synchronously after that. The
+ * alternative would be threading the catalog through the action's parameters
+ * down to the file installer, four layers below, with none of them having
+ * anything to decide about it.
  */
 
 import { LOCAL_ICON_CATALOG, type IconCatalog, type IconFamily } from '@cli/core/icons/index.js';
@@ -26,12 +27,12 @@ export interface IconCatalogDocument extends IconCatalog {
 
 let current: IconCatalog = LOCAL_ICON_CATALOG;
 
-/** O catálogo carregado, ou a cópia local enquanto ninguém o carregou. */
+/** The loaded catalog, or the local copy while nobody has loaded one. */
 export function iconCatalog(): IconCatalog {
   return current;
 }
 
-/** Volta ao estado inicial. Existe para os testes não vazarem um no outro. */
+/** Returns to the initial state. Exists so tests do not leak into one another. */
 export function resetIconCatalog(): void {
   current = LOCAL_ICON_CATALOG;
 }
@@ -46,11 +47,11 @@ export async function loadIconCatalog(registryUrl: string): Promise<IconCatalog>
     current = { families: document.families, icons: document.icons };
     logger.debug(`Icon catalog loaded: ${Object.keys(current.families).join(', ')}`);
   } catch (error) {
-    // Só a incompatibilidade de formato interrompe. Todo o resto — 404, HTML da
-    // SPA no lugar do JSON, timeout, JSON quebrado — é registry sem o catálogo,
-    // que é o estado de todos eles até o primeiro deploy com o arquivo. Tratar
-    // isso como falha derrubaria o `add` no mundo inteiro por causa de um
-    // arquivo que só importa para quem trocou de família.
+    // Only a format incompatibility stops us. Everything else — a 404, the SPA's
+    // HTML instead of JSON, a timeout, broken JSON — is a registry without the
+    // catalog, which is the state of all of them until the first deploy with the
+    // file. Treating that as a failure would take `add` down worldwide over a
+    // file that only matters to someone who switched family.
     if (error instanceof SchemaVersionError) throw error;
     logger.debug(`Falling back to the bundled icon catalog: ${error instanceof Error ? error.message : error}`);
     current = LOCAL_ICON_CATALOG;
@@ -60,11 +61,11 @@ export async function loadIconCatalog(registryUrl: string): Promise<IconCatalog>
 }
 
 /**
- * Recusa uma família que o catálogo não conhece, dizendo quais existem.
+ * Rejects a family the catalog does not know, naming the ones that exist.
  *
- * "Invalid configuration file: components.json" era tudo o que um `"icons":
- * "materia"` produzia — sem o campo, sem os valores aceitos, e com o arquivo
- * inteiro sob suspeita.
+ * "Invalid configuration file: components.json" was all an `"icons": "materia"`
+ * produced — no field named, no accepted values, and the whole file under
+ * suspicion.
  */
 export function assertIconFamily(family: IconFamily, catalog: IconCatalog = iconCatalog()): void {
   if (Object.prototype.hasOwnProperty.call(catalog.families, family)) return;

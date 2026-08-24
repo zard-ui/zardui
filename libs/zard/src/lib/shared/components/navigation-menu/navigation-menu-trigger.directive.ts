@@ -135,7 +135,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     // Keep the shared viewport pointed at this trigger's template while it owns it.
     effect(() => {
       const template = this.zNavigationMenuTriggerFor();
-      if (!this.isViewportMode() || !this.service?.isActive(this.index)) return;
+      if (!this.isViewportMode() || !this.service?.isActive(this.index)) {
+        return;
+      }
 
       untracked(() => this.openInViewport(template));
     });
@@ -147,7 +149,13 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     this.trackOverlayState();
 
     if (this.shouldRenderChevron()) {
-      this.renderChevron();
+      // Deferred, not called here: `renderChevron` appends a node the template does not
+      // declare, and on the server that node lands in the serialized HTML. Hydration then
+      // walks the host's children expecting only the declared ones, fails on the extra
+      // `<ng-icon>`, and gives up on the whole subtree — which leaves
+      // `zNavigationMenuTriggerFor` unset (NG0950) and the menu dead to hover.
+      // `afterNextRender` never runs on the server and runs after hydration in the browser.
+      afterNextRender(() => this.renderChevron(), { injector: this.injector });
     }
 
     if (this.resolvedTrigger() === 'hover' && !this.isMobileDevice()) {
@@ -175,7 +183,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   }
 
   open(): void {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
 
     if (this.isViewportMode()) {
       this.openInViewport(this.zNavigationMenuTriggerFor());
@@ -205,7 +215,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.isViewportMode()) return;
+    if (!this.isViewportMode()) {
+      return;
+    }
 
     // The CDK trigger is inert here, so the viewport toggle is ours to drive.
     event.preventDefault();
@@ -222,7 +234,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (!this.isViewportMode() || this.zDisabled()) return;
+    if (!this.isViewportMode() || this.zDisabled()) {
+      return;
+    }
 
     switch (event.key) {
       case 'Enter':
@@ -236,7 +250,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
         this.focusFirstLink();
         break;
       case 'Escape':
-        if (!this.service?.isActive(this.index)) return;
+        if (!this.service?.isActive(this.index)) {
+          return;
+        }
         event.preventDefault();
         this.close();
         this.elementRef.nativeElement.focus({ preventScroll: true });
@@ -245,15 +261,20 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   }
 
   private focusFirstLink(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     // Waits for the viewport to render the freshly activated template.
-    setTimeout(() => {
-      const link = this.document.querySelector<HTMLElement>(
-        '[data-slot="navigation-menu-viewport"] [z-navigation-menu-link]',
-      );
-      link?.focus({ preventScroll: true });
-    });
+    afterNextRender(
+      () => {
+        const link = this.document.querySelector<HTMLElement>(
+          '[data-slot="navigation-menu-viewport"] [z-navigation-menu-link]',
+        );
+        link?.focus({ preventScroll: true });
+      },
+      { injector: this.injector },
+    );
   }
 
   private getPositionsByPlacement(placement: ZardNavigationMenuPlacement): ConnectedPosition[] {
@@ -262,7 +283,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
   /**
    * The trigger is a directive — it has no template of its own — so the chevron is instantiated
-   * imperatively and moved into the host element.
+   * imperatively and moved into the host element. Browser-only, after hydration: see `ngOnInit`.
    */
   private renderChevron(): void {
     // The injector is explicit so NgIcon resolves the icon against this directive's `provideIcons`.
@@ -334,12 +355,16 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
    * focus is elsewhere — closing on hover-out must not pull it in.
    */
   private returnFocusFromMenu(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     const menu = this.menuElement;
     const focused = this.document.activeElement;
 
-    if (!menu || !focused || !menu.contains(focused)) return;
+    if (!menu || !focused || !menu.contains(focused)) {
+      return;
+    }
 
     // Deferred: the CDK moves the focus itself while tearing the overlay down.
     setTimeout(() => this.elementRef.nativeElement.focus({ preventScroll: true }));

@@ -1,2 +1,2 @@
-export * from '@/shared/components/breadcrumb/breadcrumb.component';
-export * from '@/shared/components/breadcrumb/breadcrumb.variants';
+export * from './breadcrumb.component';
+export * from './breadcrumb.variants';

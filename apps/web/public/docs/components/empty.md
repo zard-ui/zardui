@@ -233,7 +233,7 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
   imports: [ZardButtonComponent, ZardEmptyComponent, NgIcon],
   template: `
     <z-empty
-      class="bg-muted/30 [&_[data-slot=empty-description]]:max-w-xs [&_[data-slot=empty-description]]:text-pretty"
+      class="bg-muted/30 **:data-[slot=empty-description]:max-w-xs **:data-[slot=empty-description]:text-pretty"
       zIcon="lucideBell"
       zTitle="No Notifications"
       zDescription="You're all caught up. New notifications will appear here."
@@ -366,7 +366,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
   imports: [ZardEmptyComponent, ZardInputComponent, ZardKbdComponent, NgIcon, ...ZardInputGroupImports],
   template: `
     <z-empty
-      class="[&_[data-slot=empty-content]]:flex-col"
+      class="**:data-[slot=empty-content]:flex-col"
       zTitle="404 - Not Found"
       zDescription="The page you're looking for doesn't exist. Try searching for what you need below."
       [zActions]="[searchInput, supportLink]"
@@ -407,12 +407,12 @@ Displays a placeholder when no data is available, commonly used in tables, lists
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zIcon` | Icon to display | `ZardIcon` | `-` |
-| `zImage` | Image URL or custom template | `string \| TemplateRef<void>` | `-` |
-| `zDescription` | Description text or custom template | `string \| TemplateRef<void>` | `-` |
-| `zTitle` | Title text or custom template | `string \| TemplateRef<void>` | `-` |
-| `zActions` | Array of action templates | `TemplateRef<void>[]` | `[]` |
-| `class` | Custom CSS classes | `ClassValue` | `''` |
+| `[zIcon]` | Icon to display | `ZardIcon` | `-` |
+| `[zImage]` | Image URL or custom template | `string \| TemplateRef<void>` | `-` |
+| `[zDescription]` | Description text or custom template | `string \| TemplateRef<void>` | `-` |
+| `[zTitle]` | Title text or custom template | `string \| TemplateRef<void>` | `-` |
+| `[zActions]` | Array of action templates | `TemplateRef<void>[]` | `[]` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-avatar-demo',
+  selector: 'z-demo-dropdown-avatar',
   imports: [ZardDropdownImports, ZardButtonComponent, ZardAvatarComponent],
   template: `
     <button type="button" z-button zType="ghost" class="size-10 rounded-full p-0" z-dropdown [zDropdownMenu]="menu">
@@ -27,8 +27,9 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       <z-dropdown-menu-item (click)="log('Log out')">Log out</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDropdownAvatarDemoComponent {
+export class ZardDemoDropdownAvatarComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }

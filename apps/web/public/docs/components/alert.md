@@ -296,6 +296,7 @@ Displays a callout for user attention.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zAction]` | Alert action | `TemplateRef<void>` | `-` |
 | `[zDescription]` | Alert description | `string \| TemplateRef<void>` | `-` |
 | `[zIcon]` | Alert icon. If not specified, default icon will be lucideCircleAlert | `TemplateRef<void> \| string` | `-` |

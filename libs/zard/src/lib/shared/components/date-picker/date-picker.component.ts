@@ -35,7 +35,8 @@ import {
   type ZardDatePickerSizeVariants,
 } from '@/shared/components/date-picker/date-picker.variants';
 import { ZardPopoverComponent, ZardPopoverDirective, type ZardPopoverAlign } from '@/shared/components/popover';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 /** Separates the two ends of a range in the trigger label. */
 const RANGE_SEPARATOR = ' - ';

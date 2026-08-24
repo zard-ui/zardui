@@ -4,7 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-radio-group-demo',
+  selector: 'z-demo-dropdown-radio-group',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Panel position</button>
@@ -21,7 +21,7 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
     </z-dropdown-menu-content>
   `,
 })
-export class ZardDropdownRadioGroupDemoComponent {
+export class ZardDemoDropdownRadioGroupComponent {
   selected = 'bottom';
   positions = [
     { value: 'top', label: 'Top' },

@@ -6,12 +6,12 @@ export const BADGE_API: ApiSection[] = [
     description: 'Displays a badge or a component that looks like a badge.',
     props: [
       {
-        name: 'zType',
+        name: '[zType]',
         description: 'Badge type',
         type: "'default' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'link'",
         default: "'default'",
       },
-      { name: 'class', description: 'Additional CSS classes', type: 'string', default: "''" },
+      { name: '[class]', description: 'Additional CSS classes', type: 'string', default: "''" },
     ],
   },
 ];
