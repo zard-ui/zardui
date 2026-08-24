@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { findFixture, TYPESET_FIXTURES } from '../data/fixtures';
 import { findFont, MONO_FONTS, TEXT_FONTS } from '../data/fonts.data';
 import { DEFAULT_STATE, FLOW_CHOICES, LEADING_CHOICES, MEASURE_CHOICES, SCALE_CHOICES } from '../data/options.data';
-import { INHERIT_HEADING, type TypesetFont, type TypesetState } from '../models/typeset.model';
+import { INHERIT_HEADING, type TypesetFont, type TypesetSlot, type TypesetState } from '../models/typeset.model';
 
 /** The query param each piece of state travels in. */
 const PARAM_KEYS: Record<keyof TypesetState, string> = {
@@ -20,11 +20,14 @@ const PARAM_KEYS: Record<keyof TypesetState, string> = {
   item: 'item',
 };
 
+/** How many steps the menu's Undo walks back. Fifty is well past what anyone undoes. */
+const HISTORY_LIMIT = 50;
+
 /*
- * Os defaults, resolvidos uma vez. Resolvê-los a cada leitura devolveria
- * `TypesetFont | undefined`, e o único jeito de convencer o compilador seria
- * uma asserção não-nula em cada `computed`; a primeira posição da lista é um
- * fallback de verdade e sempre existe.
+ * The defaults, resolved once. Resolving them on every read would return
+ * `TypesetFont | undefined`, and the only way to satisfy the compiler would be a
+ * non-null assertion in every `computed`; the first entry of the list is a real
+ * fallback and always exists.
  */
 const DEFAULT_BODY_FONT = findFont(DEFAULT_STATE.body) ?? TEXT_FONTS[0];
 const DEFAULT_MONO_FONT = findFont(DEFAULT_STATE.mono) ?? MONO_FONTS[0];
@@ -39,10 +42,18 @@ export class TypesetGeneratorService {
 
   private readonly _state = signal<TypesetState>({ ...DEFAULT_STATE });
 
+  /*
+   * The history is the builder's, not the browser's: every choice rewrites the
+   * URL with `replaceUrl`, precisely so the back button is not filled with
+   * intermediate steps. Undoing a choice needs this stack instead.
+   */
+  private readonly past = signal<readonly TypesetState[]>([]);
+  private readonly future = signal<readonly TypesetState[]>([]);
+
   constructor() {
-    // A URL é a entrada; o sinal é a verdade. Ler de volta o que acabamos de
-    // escrever encontra o mesmo estado e não faz nada, então isto cobre o
-    // primeiro carregamento, o recarregar e o voltar do navegador sem laço.
+    // The URL is the input; the signal is the truth. Reading back what we just
+    // wrote finds the same state and does nothing, so this covers the first load,
+    // a reload and the browser's back button without looping.
     effect(() => {
       const params = this.queryParams();
       if (!params) return;
@@ -97,8 +108,19 @@ export class TypesetGeneratorService {
     ].join('; ');
   });
 
+  /** The state as a query string, `?` included, for a link that has to carry it. */
+  readonly queryString = computed(() => {
+    const params = new URLSearchParams(this.nonDefaultParams());
+    const query = params.toString();
+    return query ? `?${query}` : '';
+  });
+
   /** The preset class name the exported CSS declares. */
   readonly presetName = computed(() => `typeset-${this._state().item}`);
+
+  /** Whether the menu's Undo and Redo have anywhere to go. */
+  readonly canUndo = computed(() => this.past().length > 0);
+  readonly canRedo = computed(() => this.future().length > 0);
 
   /** The packages the chosen families need, deduplicated and ordered. */
   readonly dependencies = computed(() => {
@@ -141,7 +163,27 @@ export class TypesetGeneratorService {
   }
 
   reset(): void {
-    this._state.set({ ...DEFAULT_STATE });
+    this.commit({ ...DEFAULT_STATE });
+  }
+
+  undo(): void {
+    const past = this.past();
+    const previous = past.at(-1);
+    if (!previous) return;
+
+    this.future.update(stack => [this._state(), ...stack]);
+    this.past.set(past.slice(0, -1));
+    this._state.set(previous);
+    this.syncUrl();
+  }
+
+  redo(): void {
+    const [next, ...rest] = this.future();
+    if (!next) return;
+
+    this.past.update(stack => [...stack, this._state()]);
+    this.future.set(rest);
+    this._state.set(next);
     this.syncUrl();
   }
 
@@ -150,21 +192,44 @@ export class TypesetGeneratorService {
    *
    * Each slot draws from its own list — mono only ever gets a mono face — and
    * the measure is left alone, because it belongs to the layout, not the type.
+   * A slot the customizer reports as locked keeps what it holds: shuffling is
+   * how you explore around the one choice you have already made.
    */
-  randomize(): void {
-    const heading = randomOf([INHERIT_HEADING, ...TEXT_FONTS.map(font => font.id)]);
+  randomize(locked: ReadonlySet<TypesetSlot> = new Set()): void {
+    const state = this._state();
 
-    this._state.update(state => ({
+    const draw = <T extends string | number>(slot: TypesetSlot, values: readonly T[], current: T): T =>
+      locked.has(slot) ? current : randomOf(values);
+
+    this.commit({
       ...state,
-      body: randomOf(TEXT_FONTS.map(font => font.id)),
-      heading,
-      mono: randomOf(MONO_FONTS.map(font => font.id)),
-      scale: randomOf(SCALE_CHOICES.map(choice => choice.value)),
-      leading: randomOf(LEADING_CHOICES.map(choice => choice.value)),
-      flow: randomOf(FLOW_CHOICES.map(choice => choice.value)),
-    }));
-
-    this.syncUrl();
+      body: draw(
+        'body',
+        TEXT_FONTS.map(font => font.id),
+        state.body,
+      ),
+      heading: draw('heading', [INHERIT_HEADING, ...TEXT_FONTS.map(font => font.id)], state.heading),
+      mono: draw(
+        'mono',
+        MONO_FONTS.map(font => font.id),
+        state.mono,
+      ),
+      scale: draw(
+        'scale',
+        SCALE_CHOICES.map(choice => choice.value),
+        state.scale,
+      ),
+      leading: draw(
+        'leading',
+        LEADING_CHOICES.map(choice => choice.value),
+        state.leading,
+      ),
+      flow: draw(
+        'flow',
+        FLOW_CHOICES.map(choice => choice.value),
+        state.flow,
+      ),
+    });
   }
 
   /** The preset, as it goes into the consumer's global stylesheet. */
@@ -209,17 +274,24 @@ export class TypesetGeneratorService {
     }
   }
 
-  /** The wrapper the reader puts around their rendered markdown. */
+  /**
+   * The wrapper the reader puts around their rendered markdown.
+   *
+   * The measure rides on the wrapper, never in the preset: typeset declares no
+   * `max-width` on purpose, so a snippet without one hands over a rhythm that
+   * runs the full width of whatever container it lands in.
+   */
   exportUsage(): string {
-    return `<div class="typeset ${this.presetName()}">\n  <!-- rendered markdown -->\n</div>`;
+    return `<div class="typeset ${this.presetName()} max-w-[${this.measureWidth()}]">\n  <!-- rendered markdown -->\n</div>`;
   }
 
   /**
    * The whole job, written out for a coding agent.
    *
-   * The last instruction is the important one: the agent must not pick a
-   * surface on its own. Applying a prose class to the wrong container is the
-   * kind of change that looks harmless in a diff and is obvious in production.
+   * It reads as one instruction per step, in the order the work happens, and
+   * the fifth is the important one: the agent must not pick a surface on its
+   * own. Applying a prose class to the wrong container is the kind of change
+   * that looks harmless in a diff and is obvious in production.
    */
   exportPrompt(): string {
     const state = this._state();
@@ -227,19 +299,31 @@ export class TypesetGeneratorService {
     const fontList = fonts.map(font => `- ${font.label} (\`${font.dependency}\`, exposed as \`${font.cssVariable}\`)`);
 
     return [
-      'Add the zard/ui typeset to this Angular project, with the preset below.',
+      'Install the zard/ui typeset in this project.',
       '',
-      '1. Install the stylesheet:',
+      'Typeset is a single stylesheet that styles rendered markdown: wrap the output in a',
+      '`typeset` container and everything inside (headings, lists, tables, code, blockquotes,',
+      'math) is styled. Everything outside is untouched.',
+      '',
+      '1. Add the stylesheet:',
       '',
       '   ```bash',
       '   npx zard-cli@latest add typeset',
       '   ```',
       '',
-      "   This writes `typeset.css` next to the project's global stylesheet and adds the",
-      '   `@import` for it. If the project does not use the zard CLI, copy the file from',
-      '   https://zardui.com/r/typeset.json instead and import it after Tailwind.',
+      "   This writes `typeset.css` next to the project's global stylesheet. If the project",
+      '   does not use the zard CLI, download https://zardui.com/r/typeset.json and save its',
+      '   `typeset.css` file there by hand. If the file already exists, replace it.',
       '',
-      '2. Install these font packages:',
+      '2. Import it in the global stylesheet, after the Tailwind import:',
+      '',
+      '   ```css',
+      "   @import 'tailwindcss';",
+      "   @import './typeset.css';",
+      '   ```',
+      '',
+      '3. Install the fonts. They are self-hosted through @fontsource — no request to a',
+      '   third-party CDN:',
       '',
       ...fontList.map(line => `   ${line}`),
       '',
@@ -247,38 +331,63 @@ export class TypesetGeneratorService {
       `   ${this.exportInstallCommand('npm')}`,
       '   ```',
       '',
-      '3. Import the faces and declare their variables in the global stylesheet:',
+      '   Then import the faces and declare their variables in the global stylesheet:',
       '',
       '   ```css',
-      ...this.exportFontCss()
-        .split('\n')
-        .map(line => `   ${line}`),
+      ...indent(this.exportFontCss()),
       '   ```',
       '',
-      `4. Add the preset, also in the global stylesheet:`,
+      '4. Add this preset to the global stylesheet, after the typeset import. If a class named',
+      `   \`.${this.presetName()}\` already exists, update its values in place. Leave any other`,
+      '   `typeset-*` preset untouched: they are separate surfaces.',
       '',
       '   ```css',
-      ...this.exportCss()
-        .split('\n')
-        .map(line => `   ${line}`),
+      ...indent(this.exportCss()),
       '   ```',
       '',
       `   It is ${state.scale}px on a ${state.leading} line height, with ${state.flow} between blocks.`,
       '',
-      '5. Do not apply the class anywhere yet. First list every surface that renders HTML or',
-      '   markdown prose in this project — article bodies, docs pages, chat message bodies,',
-      '   changelog entries — and report them. Ask which ones should use the preset before',
-      '   touching a single template.',
+      '5. Do not apply the class anywhere yet. Search the project for surfaces that render',
+      '   markdown or rich content: ngx-markdown, marked or markdown-it output, `[innerHTML]`',
+      '   with parsed markdown, `prose` classes, CMS content renderers. Present the candidates',
+      '   you find as a short list and ask which surface should use typeset. Then wrap only the',
+      '   one picked:',
+      '',
+      '   ```html',
+      ...indent(this.exportUsage()),
+      '   ```',
+      '',
+      '   If that surface already has its own typography — a `prose` class, styled markdown',
+      '   components — list those styles and let the user decide what to remove before wrapping.',
       '',
       'Notes:',
       '- Typeset only styles what is inside a `typeset` container. Nothing else changes.',
-      '- Put `not-typeset` on any component embedded in the prose that should keep its own styles.',
-      '- Typeset sets no `max-width`. The measure belongs to the layout around it.',
+      '- To exclude an embedded component, put the `not-typeset` class or the `data-not-typeset`',
+      '  attribute on it: the opt-out covers the element and everything under it.',
+      '- Typeset declares no `max-width`. The measure belongs to the layout around it, which is',
+      `  what the \`max-w-[${this.measureWidth()}]\` on the wrapper is for.`,
+      '- Verify on the surface that was picked: headings, lists, tables and code inside the',
+      '  container should be styled with no classes on the content itself.',
+      '- Docs: https://zardui.com/docs/typeset',
     ].join('\n');
   }
 
   private patch(changes: Partial<TypesetState>): void {
-    this._state.update(state => ({ ...state, ...changes }));
+    this.commit({ ...this._state(), ...changes });
+  }
+
+  /**
+   * Applies a new state, remembering the one it replaces.
+   *
+   * A choice that changes nothing is dropped here: re-picking the value a row
+   * already holds would otherwise cost an undo step that undoes nothing.
+   */
+  private commit(next: TypesetState): void {
+    if (statesMatch(next, this._state())) return;
+
+    this.past.update(stack => [...stack, this._state()].slice(-HISTORY_LIMIT));
+    this.future.set([]);
+    this._state.set(next);
     this.syncUrl();
   }
 
@@ -291,12 +400,11 @@ export class TypesetGeneratorService {
   private syncUrl(): void {
     if (!this.isBrowser) return;
 
-    const state = this._state();
+    const present = this.nonDefaultParams();
     const queryParams: Record<string, string | null> = {};
 
-    for (const key of Object.keys(PARAM_KEYS) as (keyof TypesetState)[]) {
-      const value = state[key];
-      queryParams[PARAM_KEYS[key]] = value === DEFAULT_STATE[key] ? null : String(value);
+    for (const key of Object.values(PARAM_KEYS)) {
+      queryParams[key] = present[key] ?? null;
     }
 
     void this.router.navigate([], {
@@ -305,6 +413,19 @@ export class TypesetGeneratorService {
       queryParamsHandling: 'merge',
       replaceUrl: true,
     });
+  }
+
+  /** The params that are not at their default, keyed the way the URL spells them. */
+  private nonDefaultParams(): Record<string, string> {
+    const state = this._state();
+    const params: Record<string, string> = {};
+
+    for (const key of Object.keys(PARAM_KEYS) as (keyof TypesetState)[]) {
+      const value = state[key];
+      if (value !== DEFAULT_STATE[key]) params[PARAM_KEYS[key]] = String(value);
+    }
+
+    return params;
   }
 
   /**
@@ -338,6 +459,11 @@ export class TypesetGeneratorService {
 
 function pick<T extends string | number>(choices: readonly { readonly value: T }[], value: unknown, fallback: T): T {
   return choices.some(choice => choice.value === value) ? (value as T) : fallback;
+}
+
+/** A generated block, moved under the numbered step that introduces it. */
+function indent(block: string): string[] {
+  return block.split('\n').map(line => `   ${line}`);
 }
 
 function randomOf<T>(values: readonly T[]): T {

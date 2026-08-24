@@ -5,8 +5,9 @@ import { BehaviorSubject } from 'rxjs';
 
 import { TypesetGeneratorService } from './typeset-generator.service';
 import { DEFAULT_STATE } from '../data/options.data';
+import type { TypesetSlot } from '../models/typeset.model';
 
-/** Um `ParamMap` construído a partir de um objeto simples. */
+/** A `ParamMap` built from a plain object. */
 function paramMap(params: Record<string, string>) {
   return {
     get: (key: string) => params[key] ?? null,
@@ -234,8 +235,8 @@ describe('TypesetGeneratorService', () => {
       });
     });
 
-    // Query param é entrada não confiável: qualquer coisa fora da lista tem de
-    // cair no default antes de chegar a um binding de `style`.
+    // A query param is untrusted input: anything off the list has to fall back to
+    // the default before it reaches a `style` binding.
     it('falls back to the default for an unknown font', () => {
       const service = createService({ body: 'comic-sans' });
 
@@ -338,6 +339,90 @@ describe('TypesetGeneratorService', () => {
       service.randomize();
 
       expect(service.state().measure).toBe(60);
+    });
+
+    // Twenty attempts: a single one could draw the same value back and pass with
+    // the padlock broken.
+    it('holds a locked slot through every shuffle', () => {
+      const service = createService();
+      service.setBody('lora');
+      service.setScale(18);
+
+      for (let attempt = 0; attempt < 20; attempt++) {
+        service.randomize(new Set<TypesetSlot>(['body', 'scale']));
+      }
+
+      expect(service.state().body).toBe('lora');
+      expect(service.state().scale).toBe(18);
+    });
+
+    it('changes nothing when every slot is locked', () => {
+      const service = createService();
+      const before = service.state();
+
+      service.randomize(new Set<TypesetSlot>(['body', 'heading', 'mono', 'scale', 'leading', 'flow']));
+
+      expect(service.state()).toEqual(before);
+    });
+  });
+
+  describe('undo and redo', () => {
+    it('has nowhere to go before the first choice', () => {
+      const service = createService();
+
+      expect(service.canUndo()).toBe(false);
+      expect(service.canRedo()).toBe(false);
+    });
+
+    it('walks back one choice at a time and forward again', () => {
+      const service = createService();
+      service.setScale(16);
+      service.setScale(18);
+
+      service.undo();
+      expect(service.state().scale).toBe(16);
+
+      service.undo();
+      expect(service.state().scale).toBe(DEFAULT_STATE.scale);
+      expect(service.canUndo()).toBe(false);
+
+      service.redo();
+      expect(service.state().scale).toBe(16);
+      service.redo();
+      expect(service.state().scale).toBe(18);
+      expect(service.canRedo()).toBe(false);
+    });
+
+    it('drops the forward steps once a new choice is made', () => {
+      const service = createService();
+      service.setScale(18);
+      service.undo();
+      expect(service.canRedo()).toBe(true);
+
+      service.setLeading(1.9);
+
+      expect(service.canRedo()).toBe(false);
+    });
+
+    // Re-picking the value a row already holds is not a step: the next Undo has to
+    // undo the change before it, not a non-event.
+    it('does not record a choice that changes nothing', () => {
+      const service = createService();
+      service.setScale(18);
+      service.setScale(18);
+
+      service.undo();
+
+      expect(service.state().scale).toBe(DEFAULT_STATE.scale);
+    });
+
+    it('undoes a shuffle in one step', () => {
+      const service = createService();
+      service.randomize();
+
+      service.undo();
+
+      expect(service.state()).toEqual({ ...DEFAULT_STATE });
     });
   });
 

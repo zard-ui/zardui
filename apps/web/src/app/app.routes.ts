@@ -147,6 +147,10 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'typeset/preview',
+    loadComponent: () => import('./domain/pages/typeset/preview/typeset-preview.page').then(c => c.TypesetPreviewPage),
+  },
+  {
     path: 'typeset',
     component: ShellLayout,
     children: [

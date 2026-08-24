@@ -40,6 +40,9 @@ export interface TypesetState {
   readonly item: string;
 }
 
+/** The slots a shuffle may redraw. The measure is not one: it belongs to the layout. */
+export type TypesetSlot = 'body' | 'heading' | 'mono' | 'scale' | 'leading' | 'flow';
+
 export interface TypesetFixture {
   readonly id: string;
   readonly label: string;

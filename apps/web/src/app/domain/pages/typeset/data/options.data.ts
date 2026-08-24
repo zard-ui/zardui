@@ -2,22 +2,22 @@ import type { TypesetChoice, TypesetMeasure } from '../models/typeset.model';
 
 /** Base body size, in px. Everything else in the preset derives from it. */
 export const SCALE_CHOICES: readonly TypesetChoice<number>[] = [
-  { value: 14, label: '14' },
-  { value: 15, label: '15' },
-  { value: 16, label: '16' },
-  { value: 18, label: '18' },
+  { value: 14, label: '14px' },
+  { value: 15, label: '15px' },
+  { value: 16, label: '16px' },
+  { value: 18, label: '18px' },
 ];
 
 export const LEADING_CHOICES: readonly TypesetChoice<number>[] = [
-  { value: 1.6, label: 'Tight' },
-  { value: 1.75, label: 'Regular' },
-  { value: 1.9, label: 'Loose' },
+  { value: 1.6, label: 'Tight (1.6)' },
+  { value: 1.75, label: 'Regular (1.75)' },
+  { value: 1.9, label: 'Loose (1.9)' },
 ];
 
 export const FLOW_CHOICES: readonly TypesetChoice<string>[] = [
-  { value: '1em', label: 'Compact' },
-  { value: '1.25em', label: 'Regular' },
-  { value: '2em', label: 'Airy' },
+  { value: '1em', label: 'Compact (1em)' },
+  { value: '1.25em', label: 'Regular (1.25em)' },
+  { value: '2em', label: 'Airy (2em)' },
 ];
 
 /**

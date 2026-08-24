@@ -1,7 +1,47 @@
-<z-tab-group>
-  <z-tab label="Docs">
-    <div class="flex max-h-[60vh] flex-col gap-8 overflow-y-auto py-4">
-      <section class="flex flex-col gap-3">
+<div class="bg-background ring-foreground/10 relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl ring-1">
+  <header class="flex shrink-0 items-center justify-between gap-2 p-4">
+    <div
+      class="bg-muted text-muted-foreground inline-flex h-8 w-fit items-center justify-center rounded-lg p-[3px]"
+      role="tablist"
+      aria-label="Install instructions"
+    >
+      @for (panel of panels; track panel) {
+        <button
+          type="button"
+          role="tab"
+          class="data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 focus-visible:ring-ring text-foreground/60 hover:text-foreground inline-flex h-[calc(100%-1px)] items-center justify-center rounded-md border border-transparent px-2.5 text-sm font-medium whitespace-nowrap transition-all focus-visible:ring-2 focus-visible:outline-none data-active:shadow-sm"
+          [attr.data-active]="panel === activePanel() ? '' : null"
+          [attr.aria-selected]="panel === activePanel()"
+          [attr.aria-controls]="panel + '-panel'"
+          [id]="panel + '-tab'"
+          (click)="activePanel.set(panel)"
+        >
+          {{ panel === 'docs' ? 'Docs' : 'Prompt' }}
+        </button>
+      }
+    </div>
+
+    <z-select
+      class="w-28"
+      zPlaceholder="Package manager"
+      [zValue]="packageManager()"
+      (zSelectionChange)="onPackageManager($event)"
+    >
+      @for (manager of packageManagers; track manager) {
+        <z-select-item [zValue]="manager">{{ manager }}</z-select-item>
+      }
+    </z-select>
+  </header>
+
+  @if (activePanel() === 'docs') {
+    <div
+      class="min-h-0 flex-1 overflow-y-auto px-4 pb-4"
+      role="tabpanel"
+      id="docs-panel"
+      aria-labelledby="docs-tab"
+      tabindex="0"
+    >
+      <section class="flex flex-col gap-3 pb-6">
         <div class="flex flex-col gap-1">
           <h3 class="text-sm font-semibold">1. Create typeset.css</h3>
           <p class="text-muted-foreground text-sm">
@@ -9,97 +49,42 @@
           </p>
         </div>
 
-        <div class="bg-muted/50 relative rounded-md border">
-          <pre class="overflow-x-auto p-3 text-xs"><code>npx zard-cli@latest add typeset</code></pre>
-          <button
-            z-button
-            zType="ghost"
-            zSize="sm"
-            class="absolute top-1.5 right-1.5 h-7 text-xs"
-            (click)="copy('cli', 'npx zard-cli@latest add typeset')"
-          >
-            {{ copied() === 'cli' ? 'Copied' : 'Copy' }}
-          </button>
-        </div>
-
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
           <button z-button zType="outline" zSize="sm" (click)="copyStylesheet()">
-            {{ copied() === 'stylesheet' ? 'Copied the stylesheet' : 'Copy typeset.css' }}
+            <ng-icon name="lucideCopy" class="size-3.5" />
+            {{ copied() === 'stylesheet' ? 'Copied typeset.css' : 'Copy typeset.css' }}
           </button>
           <a class="text-muted-foreground text-xs underline underline-offset-4" href="/r/typeset.json">
             or open the registry item
           </a>
         </div>
+
+        <ng-container [ngTemplateOutlet]="codeBlock" [ngTemplateOutletContext]="{ key: 'cli', code: cliCommand }" />
+        <ng-container [ngTemplateOutlet]="codeBlock" [ngTemplateOutletContext]="{ key: 'import', code: importCss }" />
       </section>
 
-      <section class="flex flex-col gap-3">
+      <section class="flex flex-col gap-3 pb-6">
         <div class="flex flex-col gap-1">
-          <h3 class="text-sm font-semibold">2. Install the fonts</h3>
+          <h3 class="text-sm font-semibold">2. Add the fonts</h3>
           <p class="text-muted-foreground text-sm">
             The faces are self-hosted through &#64;fontsource — no request to a third-party CDN.
           </p>
         </div>
 
-        <div class="bg-muted/50 flex w-fit gap-0.5 rounded-md p-0.5">
-          @for (manager of packageManagers; track manager) {
-            <button
-              type="button"
-              class="rounded-sm px-2.5 py-1 text-xs font-medium transition-colors"
-              [class.bg-background]="manager === packageManager()"
-              [class.shadow-sm]="manager === packageManager()"
-              [class.text-muted-foreground]="manager !== packageManager()"
-              (click)="setPackageManager(manager)"
-            >
-              {{ manager }}
-            </button>
-          }
-        </div>
-
-        <div class="bg-muted/50 relative rounded-md border">
-          <pre class="overflow-x-auto p-3 text-xs"><code>{{ installCommand() }}</code></pre>
-          <button
-            z-button
-            zType="ghost"
-            zSize="sm"
-            class="absolute top-1.5 right-1.5 h-7 text-xs"
-            (click)="copy('install', installCommand())"
-          >
-            {{ copied() === 'install' ? 'Copied' : 'Copy' }}
-          </button>
-        </div>
-
-        <div class="bg-muted/50 relative rounded-md border">
-          <pre class="overflow-x-auto p-3 text-xs"><code>{{ fontCss() }}</code></pre>
-          <button
-            z-button
-            zType="ghost"
-            zSize="sm"
-            class="absolute top-1.5 right-1.5 h-7 text-xs"
-            (click)="copy('font-css', fontCss())"
-          >
-            {{ copied() === 'font-css' ? 'Copied' : 'Copy' }}
-          </button>
-        </div>
+        <ng-container
+          [ngTemplateOutlet]="codeBlock"
+          [ngTemplateOutletContext]="{ key: 'install', code: installCommand() }"
+        />
+        <ng-container [ngTemplateOutlet]="codeBlock" [ngTemplateOutletContext]="{ key: 'font-css', code: fontCss() }" />
       </section>
 
-      <section class="flex flex-col gap-3">
+      <section class="flex flex-col gap-3 pb-6">
         <div class="flex flex-col gap-1">
           <h3 class="text-sm font-semibold">3. Add the preset</h3>
           <p class="text-muted-foreground text-sm">Six variables, in your global stylesheet.</p>
         </div>
 
-        <div class="bg-muted/50 relative rounded-md border">
-          <pre class="overflow-x-auto p-3 text-xs"><code>{{ presetCss() }}</code></pre>
-          <button
-            z-button
-            zType="ghost"
-            zSize="sm"
-            class="absolute top-1.5 right-1.5 h-7 text-xs"
-            (click)="copy('preset', presetCss())"
-          >
-            {{ copied() === 'preset' ? 'Copied' : 'Copy' }}
-          </button>
-        </div>
+        <ng-container [ngTemplateOutlet]="codeBlock" [ngTemplateOutletContext]="{ key: 'preset', code: presetCss() }" />
       </section>
 
       <section class="flex flex-col gap-3">
@@ -113,41 +98,58 @@
           </p>
         </div>
 
-        <div class="bg-muted/50 relative rounded-md border">
-          <pre class="overflow-x-auto p-3 text-xs"><code>{{ usage() }}</code></pre>
-          <button
-            z-button
-            zType="ghost"
-            zSize="sm"
-            class="absolute top-1.5 right-1.5 h-7 text-xs"
-            (click)="copy('usage', usage())"
-          >
-            {{ copied() === 'usage' ? 'Copied' : 'Copy' }}
-          </button>
-        </div>
+        <ng-container [ngTemplateOutlet]="codeBlock" [ngTemplateOutletContext]="{ key: 'usage', code: usage() }" />
       </section>
     </div>
-  </z-tab>
 
-  <z-tab label="Prompt">
-    <div class="flex max-h-[60vh] flex-col gap-3 overflow-y-auto py-4">
-      <p class="text-muted-foreground text-sm">
-        Paste this into a coding agent. It carries your choices, and it ends by telling the agent to ask before applying
-        the class to anything.
+    <!-- The panel cuts off mid-step; the fade says there is more below. -->
+    <div
+      class="from-background pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t to-transparent"
+    ></div>
+  } @else {
+    <div
+      class="flex min-h-0 flex-1 flex-col gap-3 px-4 pb-4"
+      role="tabpanel"
+      id="prompt-panel"
+      aria-labelledby="prompt-tab"
+      tabindex="0"
+    >
+      <p class="text-muted-foreground shrink-0 text-sm">
+        One prompt with your picks baked in. Copy it and paste it into your coding agent.
       </p>
 
-      <div class="bg-muted/50 relative rounded-md border">
-        <pre class="max-h-[28rem] overflow-auto p-3 text-xs whitespace-pre-wrap"><code>{{ prompt() }}</code></pre>
-        <button
-          z-button
-          zType="ghost"
-          zSize="sm"
-          class="absolute top-1.5 right-1.5 h-7 text-xs"
-          (click)="copy('prompt', prompt())"
-        >
-          {{ copied() === 'prompt' ? 'Copied' : 'Copy' }}
-        </button>
-      </div>
+      <pre
+        class="bg-muted/50 min-h-0 flex-1 overflow-auto rounded-lg border p-3 font-mono text-xs whitespace-pre-wrap"
+        tabindex="0"
+      ><code>{{ prompt() }}</code></pre>
+
+      <button z-button zType="outline" zSize="sm" class="w-fit shrink-0" (click)="copy('prompt', prompt())">
+        <ng-icon name="lucideCopy" class="size-3.5" />
+        {{ copied() === 'prompt' ? 'Copied prompt' : 'Copy prompt' }}
+      </button>
     </div>
-  </z-tab>
-</z-tab-group>
+  }
+</div>
+
+<a
+  class="text-muted-foreground hover:text-foreground shrink-0 px-1 text-sm transition-colors"
+  routerLink="/docs/typeset"
+>
+  Read the docs
+</a>
+
+<ng-template #codeBlock let-key="key" let-code="code">
+  <div class="bg-muted/50 group relative rounded-lg border">
+    <pre class="overflow-x-auto p-3 font-mono text-xs" tabindex="0"><code>{{ code }}</code></pre>
+    <button
+      z-button
+      zType="ghost"
+      zSize="icon-xs"
+      class="absolute top-1.5 right-1.5 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+      [attr.aria-label]="copied() === key ? 'Copied' : 'Copy'"
+      (click)="copy(key, code)"
+    >
+      <ng-icon [name]="copied() === key ? 'lucideCheck' : 'lucideCopy'" class="size-3" />
+    </button>
+  </div>
+</ng-template>

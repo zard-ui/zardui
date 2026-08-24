@@ -1,20 +1,7 @@
 import { ViewportScroller } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  TemplateRef,
-  ViewContainerRef,
-  ViewEncapsulation,
-  viewChild,
-  type OnInit,
-} from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, ViewEncapsulation, type OnInit } from '@angular/core';
 
 import { SeoService } from '@doc/shared/services/seo.service';
-
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardDialogService } from '@zard/components/dialog/dialog.service';
 
 import { TypesetCodePanelComponent } from './components/typeset-code-panel/typeset-code-panel.component';
 import { TypesetCustomizerComponent } from './components/typeset-customizer/typeset-customizer.component';
@@ -24,29 +11,18 @@ import { TypesetGeneratorService } from './services/typeset-generator.service';
 @Component({
   selector: 'app-typeset-page',
   standalone: true,
-  imports: [
-    RouterLink,
-    ZardButtonComponent,
-    TypesetCustomizerComponent,
-    TypesetPreviewComponent,
-    TypesetCodePanelComponent,
-  ],
-  // O service guarda o estado que vive na URL desta rota; escopá-lo à página
-  // evita que ele sobreviva à navegação e reapareça com escolhas de antes.
+  imports: [TypesetCustomizerComponent, TypesetPreviewComponent, TypesetCodePanelComponent],
+  // The service holds the state that lives in this route's URL; scoping it to the
+  // page keeps it from outliving a navigation and coming back with old choices.
   providers: [TypesetGeneratorService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   templateUrl: './typeset.page.html',
-  styleUrl: './typeset.page.css',
+  styleUrl: './typeset-fonts.css',
 })
 export class TypesetPage implements OnInit {
   private readonly seoService = inject(SeoService);
   private readonly viewportScroller = inject(ViewportScroller);
-  private readonly dialogService = inject(ZardDialogService);
-  private readonly viewContainerRef = inject(ViewContainerRef);
-
-  private readonly codeTemplate = viewChild.required<TemplateRef<unknown>>('codeTemplate');
-  private readonly customizerTemplate = viewChild.required<TemplateRef<unknown>>('customizerTemplate');
 
   ngOnInit(): void {
     this.viewportScroller.scrollToPosition([0, 0]);
@@ -56,26 +32,5 @@ export class TypesetPage implements OnInit {
       '/typeset',
       'og-typeset-generator.jpg',
     );
-  }
-
-  protected openCode(): void {
-    this.dialogService.create({
-      zTitle: 'Get code',
-      zDescription: 'Everything you need to put this typeset in your project.',
-      zContent: this.codeTemplate(),
-      zViewContainerRef: this.viewContainerRef,
-      zHideFooter: true,
-      zWidth: '48rem',
-    });
-  }
-
-  protected openCustomizer(): void {
-    this.dialogService.create({
-      zTitle: 'Customize',
-      zContent: this.customizerTemplate(),
-      zViewContainerRef: this.viewContainerRef,
-      zHideFooter: true,
-      zWidth: '26rem',
-    });
   }
 }

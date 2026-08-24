@@ -1,23 +1,23 @@
 /*
- * O catálogo de fontes do builder, subset latino.
+ * The builder's font catalog, latin subset.
  *
- * Vive aqui, e não em `styles.css`, porque entra no chunk da rota `/typeset` —
- * as outras páginas do site não pagam por ele. Os `.woff2` só são baixados
- * quando alguma família é de fato usada por texto renderizado, que é o
- * comportamento desejado numa prévia com 23 opções.
+ * It lives here rather than in `styles.css` because it belongs to the
+ * `/typeset` route chunk — the rest of the site does not pay for it. The
+ * `.woff2` files are only fetched once a family is actually used by rendered
+ * text, which is the behaviour a preview with 23 options wants.
  *
- * As regras são escritas à mão em vez de `@import '@fontsource-variable/x'`:
- * o import traz um `@font-face` por subset — cirílico, grego, vietnamita —
- * e 23 famílias assim somam 38 kB, quatro vezes o orçamento de estilo de
- * componente. Os fixtures da prévia são todos em latim, então os outros
- * subsets seriam peso morto. O peso vem do `index.css` de cada pacote; ao
- * subir a versão de `@fontsource-variable`, confira se ainda bate. A
- * `unicode-range` é estreitada para o que os fixtures renderizam — ASCII mais
- * travessão e meia-risca — porque a do pacote, repetida 23 vezes, sozinha
- * estoura o orçamento.
+ * The rules are hand-written instead of `@import '@fontsource-variable/x'`:
+ * the import brings one `@font-face` per subset — cyrillic, greek, vietnamese —
+ * and 23 families that way add up to 38 kB, four times the component style
+ * budget. The preview fixtures are all latin, so the other subsets would be dead
+ * weight. The weight range comes from each package's `index.css`; when bumping
+ * a `@fontsource-variable` version, check that it still matches. The
+ * `unicode-range` is narrowed to what the fixtures render — ASCII plus the em
+ * and en dashes — because the package's own range, repeated 23 times, blows the
+ * budget on its own.
  *
- * O código que o painel entrega para quem instala continua importando o pacote
- * inteiro: quem escreve em cirílico precisa do subset que a prévia não usa.
+ * The code the panel hands to whoever installs it still imports the whole
+ * package: someone writing in cyrillic needs the subset the preview does not.
  */
 
 @font-face {

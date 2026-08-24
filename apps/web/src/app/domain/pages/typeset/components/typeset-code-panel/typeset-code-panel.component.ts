@@ -1,15 +1,19 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck, lucideCopy } from '@ng-icons/lucide';
 import { firstValueFrom } from 'rxjs';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardTabComponent, ZardTabGroupComponent } from '@zard/components/tabs/tabs.component';
+import { ZardSelectImports } from '@zard/components/select/select.imports';
 
 import { TypesetGeneratorService } from '../../services/typeset-generator.service';
 
 type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun';
+type CodePanel = 'docs' | 'prompt';
 
 /** The item as the registry publishes it — only the file content is needed here. */
 interface RegistryItemResponse {
@@ -18,11 +22,16 @@ interface RegistryItemResponse {
 
 const PACKAGE_MANAGERS: readonly PackageManager[] = ['npm', 'pnpm', 'yarn', 'bun'];
 
+const CLI_COMMAND = 'npx zard-cli@latest add typeset';
+const IMPORT_CSS = `@import 'tailwindcss';\n@import './typeset.css';`;
+
 @Component({
   selector: 'app-typeset-code-panel',
   standalone: true,
-  imports: [ZardButtonComponent, ZardTabComponent, ZardTabGroupComponent],
+  imports: [NgIcon, NgTemplateOutlet, RouterLink, ZardButtonComponent, ZardSelectImports],
+  providers: [provideIcons({ lucideCheck, lucideCopy })],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'flex h-full min-h-0 flex-col gap-2' },
   templateUrl: './typeset-code-panel.component.html',
 })
 export class TypesetCodePanelComponent {
@@ -30,8 +39,14 @@ export class TypesetCodePanelComponent {
   private readonly http = inject(HttpClient);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
+  protected readonly panels: readonly CodePanel[] = ['docs', 'prompt'];
+  protected readonly activePanel = signal<CodePanel>('docs');
+
   protected readonly packageManagers = PACKAGE_MANAGERS;
   protected readonly packageManager = signal<PackageManager>('npm');
+
+  protected readonly cliCommand = CLI_COMMAND;
+  protected readonly importCss = IMPORT_CSS;
 
   /** Which button last reported a successful copy, so only that one says so. */
   protected readonly copied = signal<string | null>(null);
@@ -42,8 +57,11 @@ export class TypesetCodePanelComponent {
   protected readonly usage = computed(() => this.service.exportUsage());
   protected readonly prompt = computed(() => this.service.exportPrompt());
 
-  protected setPackageManager(manager: PackageManager): void {
-    this.packageManager.set(manager);
+  protected onPackageManager(value: string | string[]): void {
+    const manager = Array.isArray(value) ? value[0] : value;
+    if (PACKAGE_MANAGERS.includes(manager as PackageManager)) {
+      this.packageManager.set(manager as PackageManager);
+    }
   }
 
   protected async copy(key: string, text: string): Promise<void> {
@@ -67,7 +85,7 @@ export class TypesetCodePanelComponent {
       const css = item.files.find(file => file.name === 'typeset.css')?.content;
       if (css) await this.copy('stylesheet', css);
     } catch {
-      // Sem rede, o link para o arquivo continua ao lado do botão.
+      // With no network, the link to the file is still next to the button.
     }
   }
 }

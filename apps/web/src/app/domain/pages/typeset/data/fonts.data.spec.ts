@@ -28,8 +28,8 @@ describe('the typeset font catalog', () => {
     }
   });
 
-  // Faces de display leem mal em texto corrido; o builder não pode oferecê-las
-  // para corpo, e um catálogo que as inclua produz preset ruim por descuido.
+  // Display faces read badly at body size; the builder must not offer them for
+  // body text, and a catalog that includes them produces bad presets by accident.
   it.each(['playfair-display', 'eb-garamond', 'instrument-serif'])('leaves out the display face %s', id => {
     expect(TYPESET_FONTS.find(font => font.id === id)).toBeUndefined();
   });
