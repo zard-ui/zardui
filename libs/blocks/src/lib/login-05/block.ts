@@ -90,7 +90,6 @@ import { ZardInputComponent } from '@zard/components/input/input.component';
 
 @Component({
   selector: 'lib-login-05',
-  standalone: true,
   imports: [ReactiveFormsModule, NgIcon, ZardButtonComponent, ZardInputComponent, ...ZardFieldImports],
   templateUrl: './login-05.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -24,7 +24,7 @@ import { ZardInputComponent } from '../input/input.component';
       </z-input-group-addon>
       <input z-input placeholder="example.com" />
       <z-input-group-addon zAlign="inline-end">
-        <button z-input-group-button>Go</button>
+        <button type="button" z-input-group-button>Go</button>
       </z-input-group-addon>
     </z-input-group>
   `,

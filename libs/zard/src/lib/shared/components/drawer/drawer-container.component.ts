@@ -13,6 +13,7 @@ import {
   ElementRef,
   type EmbeddedViewRef,
   type EventEmitter,
+  forwardRef,
   inject,
   output,
   signal,
@@ -20,6 +21,7 @@ import {
   type Type,
   viewChild,
   type ViewContainerRef,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -27,7 +29,7 @@ import { lucideX } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { noopFn } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import { ZardDrawerHost } from './drawer-host';
 import { ZardDrawerPanelComponent } from './drawer-panel.component';
@@ -194,8 +196,12 @@ export class ZardDrawerOptions<T, U> {
       </div>
     </z-drawer-panel>
   `,
-  providers: [{ provide: ZardDrawerHost, useExisting: ZardDrawerContainerComponent }],
+  // forwardRef: the decorator is evaluated before the class binding exists, so a bare
+  // reference to ZardDrawerContainerComponent here throws "Cannot access before initialization"
+  // whenever the module is evaluated outside the AOT compiler.
+  providers: [{ provide: ZardDrawerHost, useExisting: forwardRef(() => ZardDrawerContainerComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideX })],
   host: { style: 'display: contents' },
   exportAs: 'zDrawerContainer',
@@ -227,7 +233,9 @@ export class ZardDrawerContainerComponent<T, U> extends BasePortalOutlet impleme
   }
 
   requestClose(): void {
-    if (!this.dismissible()) return;
+    if (!this.dismissible()) {
+      return;
+    }
     this.cancelTriggered.emit();
   }
 

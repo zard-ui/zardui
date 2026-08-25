@@ -5,8 +5,7 @@ import { CodeBlockComponent } from '@highlight/components/code-block/code-block.
 import type { CodeBlockData } from '@highlight/types';
 
 @Component({
-  selector: 'registry-custom-registry-section',
-  standalone: true,
+  selector: 'z-registry-custom-registry-section',
   imports: [CodeBlockComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -76,7 +75,7 @@ import type { CodeBlockData } from '@highlight/types';
     </ul>
   `,
 })
-export class RegistryCustomRegistrySection {
+export class RegistryCustomRegistrySectionComponent {
   readonly envVariable: CodeBlockData = BLOCK_0;
   readonly componentsJson: CodeBlockData = BLOCK_1;
 }

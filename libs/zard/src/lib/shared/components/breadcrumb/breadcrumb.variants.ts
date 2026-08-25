@@ -15,7 +15,7 @@ export const breadcrumbVariants = cva('w-full', {
 export type ZardBreadcrumbSizeVariants = NonNullable<VariantProps<typeof breadcrumbVariants>['zSize']>;
 
 export const breadcrumbListVariants = cva(
-  'text-muted-foreground flex flex-wrap items-center gap-1.5 break-words sm:gap-2.5',
+  'text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word sm:gap-2.5',
   {
     variants: {
       zAlign: {

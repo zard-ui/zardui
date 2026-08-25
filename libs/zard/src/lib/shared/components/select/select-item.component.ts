@@ -21,7 +21,8 @@ import {
   selectItemVariants,
   type ZardSelectItemModeVariants,
 } from '@/shared/components/select/select.variants';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 // Interface to avoid circular dependency
 interface SelectHost {
@@ -66,6 +67,7 @@ interface SelectHost {
     '(mouseenter)': 'onMouseEnter()',
     '(keydown.{tab}.prevent)': 'noopFn',
   },
+  exportAs: 'zSelectItem',
 })
 export class ZardSelectItemComponent {
   readonly elementRef = inject(ElementRef<HTMLElement>);

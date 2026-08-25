@@ -315,7 +315,15 @@ After scaffolding you must:
 1. Build the screen from existing Zard components.
 2. Run `npm run sync:blocks` — it rewrites `files[]` from every `.ts`/`.html` in the folder except `block.ts`.
 3. Add `light.png` and `dark.png` under `apps/web/public/blocks/<name>/`. **Nothing generates them for you**; without
-   them the block card renders a broken image.
+   them the block card renders a broken image. `scripts/capture-blocks.mts` shoots them at 1440×900 against a running
+   dev server:
+
+   ```bash
+   npx nx serve web --configuration=local --port=4222   # in another terminal
+   npx tsx scripts/capture-blocks.mts                   # every sidebar block
+   npx tsx scripts/capture-blocks.mts login-01          # or just the ones you name
+   ```
+
 4. Run `npm run build:registry` so the CLI can install the block.
 
 📖 More detail: [Blocks](https://zardui.com/docs/contribute/blocks)

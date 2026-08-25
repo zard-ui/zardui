@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 
 import { Easing, tween, createAnimationClock, spinnerFrames } from '../index.js';
 
-test('tween linear avança e termina', () => {
+test('a linear tween advances and finishes', () => {
   const tw = tween({ from: 0, to: 10, duration: 100, easing: Easing.linear });
   assert.equal(tw.value, 0);
   tw.update(50);

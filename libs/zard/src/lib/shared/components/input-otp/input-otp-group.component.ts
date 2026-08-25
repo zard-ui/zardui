@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -14,10 +14,12 @@ import { inputOtpGroupVariants } from './input-otp.variants';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.data-slot]': '"input-otp-group"',
     '[attr.data-input-otp-group]': '""',
   },
+  exportAs: 'zInputOtpGroup',
 })
 export class ZardInputOtpGroupComponent {
   readonly class = input<ClassValue>('');

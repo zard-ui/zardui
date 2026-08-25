@@ -15,7 +15,6 @@ export interface MaintainerData {
 
 @Component({
   selector: 'z-maintainers',
-  standalone: true,
   imports: [ZardAvatarComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

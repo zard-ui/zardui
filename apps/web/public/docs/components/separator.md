@@ -99,14 +99,13 @@ import { ZardSeparatorComponent } from '@/shared/components/separator/separator.
 ### Vertical
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSeparatorComponent } from '../separator.component';
 
 @Component({
   selector: 'z-demo-separator-vertical',
   imports: [ZardSeparatorComponent],
-  standalone: true,
   template: `
     <div class="flex h-5 items-center gap-4 text-sm">
       <div>Blog</div>
@@ -116,6 +115,7 @@ import { ZardSeparatorComponent } from '../separator.component';
       <div>Source</div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSeparatorVerticalComponent {}
 ```
@@ -123,14 +123,13 @@ export class ZardDemoSeparatorVerticalComponent {}
 ### Menu
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSeparatorComponent } from '../separator.component';
 
 @Component({
   selector: 'z-demo-separator-menu',
   imports: [ZardSeparatorComponent],
-  standalone: true,
   template: `
     <div class="flex items-center gap-2 text-sm md:gap-4">
       <div class="flex flex-col gap-1">
@@ -149,6 +148,7 @@ import { ZardSeparatorComponent } from '../separator.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSeparatorMenuComponent {}
 ```
@@ -156,14 +156,13 @@ export class ZardDemoSeparatorMenuComponent {}
 ### List
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSeparatorComponent } from '../separator.component';
 
 @Component({
   selector: 'z-demo-separator-list',
   imports: [ZardSeparatorComponent],
-  standalone: true,
   template: `
     <div class="flex w-full min-w-sm flex-col gap-2 text-sm">
       <dl class="flex items-center justify-between">
@@ -182,6 +181,7 @@ import { ZardSeparatorComponent } from '../separator.component';
       </dl>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSeparatorListComponent {}
 ```

@@ -151,7 +151,7 @@ export const navigationMenuContentVariants = cva(
       viewport: {
         true: '',
         false: [
-          'relative z-50 min-w-32 rounded-lg bg-popover text-popover-foreground shadow ring-1 ring-foreground/10',
+          'relative z-50 min-w-32 rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10',
           // The overlay is offset by 8px from the trigger, and that gap belongs to no element: a
           // pointer crossing it slowly would schedule the close before reaching the popup. This
           // invisible collar covers the offset on every side, since submenus open sideways too.
@@ -182,7 +182,7 @@ export const navigationMenuViewportWrapperVariants = cva([
 
 export const navigationMenuViewportVariants = cva([
   'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width)',
-  'origin-top overflow-hidden rounded-lg bg-popover text-popover-foreground shadow ring-1 ring-foreground/10',
+  'origin-top overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10',
   'transition-[opacity,transform,width,height] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] outline-none',
   'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90',
   'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90',
@@ -251,118 +251,33 @@ export type ZardNavigationMenuAlign = 'start' | 'center' | 'end';
 ```
 
 ```angular-ts
-import { CdkContextMenuTrigger } from '@angular/cdk/menu';
-import { DestroyRef, Directive, DOCUMENT, ElementRef, inject, input, type TemplateRef } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-import { noopFn } from '@/shared/utils/merge-classes';
-
-@Directive({
-  selector: '[z-context-menu]',
-  host: {
-    'data-slot': 'context-menu-trigger',
-    '[attr.tabindex]': "'0'",
-    '[style.cursor]': "'context-menu'",
-    '[attr.aria-haspopup]': "'menu'",
-    '[attr.aria-expanded]': 'cdkTrigger.isOpen()',
-    '[attr.data-state]': "cdkTrigger.isOpen() ? 'open': 'closed'",
-    '(contextmenu)': 'noopFn()',
-    '(keydown)': 'handleKeyDown($event)',
-  },
-  hostDirectives: [
-    {
-      directive: CdkContextMenuTrigger,
-      inputs: ['cdkContextMenuTriggerFor: zContextMenuTriggerFor'],
-    },
-  ],
-})
-export class ZardContextMenuDirective {
-  protected readonly cdkTrigger = inject(CdkContextMenuTrigger, { host: true });
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly document = inject(DOCUMENT);
-  private readonly elementRef = inject(ElementRef);
-
-  readonly zContextMenuTriggerFor = input.required<TemplateRef<void>>();
-  noopFn = noopFn;
-
-  constructor() {
-    this.cdkTrigger.menuPosition = [
-      {
-        originX: 'start',
-        originY: 'top',
-        overlayX: 'start',
-        overlayY: 'top',
-      },
-    ];
-    this.cdkTrigger.opened.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.attachCloseListeners());
-  }
-
-  protected handleKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) {
-      event.preventDefault();
-      this.open();
-    }
-  }
-
-  private open(coordinates?: { x: number; y: number }): void {
-    const coords = coordinates || this.getDefaultCoordinates();
-    this.cdkTrigger.open(coords);
-  }
-
-  private getDefaultCoordinates(): { x: number; y: number } {
-    const rect = this.elementRef.nativeElement.getBoundingClientRect();
-    return {
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
-    };
-  }
-
-  private attachCloseListeners(): void {
-    const closeMenu = () => {
-      if (this.cdkTrigger.isOpen()) {
-        this.cdkTrigger.close();
-      }
-    };
-
-    const window = this.document.defaultView;
-    if (window) {
-      window.addEventListener('scroll', closeMenu, { passive: true });
-      window.addEventListener('resize', closeMenu);
-
-      const cleanup = () => {
-        window.removeEventListener('scroll', closeMenu);
-        window.removeEventListener('resize', closeMenu);
-      };
-
-      const unregisterFn = this.destroyRef.onDestroy(cleanup);
-
-      const menuClosed = this.cdkTrigger.closed.subscribe(() => {
-        unregisterFn();
-        cleanup();
-        menuClosed.unsubscribe();
-      });
-    }
-  }
-}
+/**
+ * The context menu lives in its own component folder — it is not navigation, and as long as it
+ * lived here it had no docs page, no demos and no install path. This file stays so the old import
+ * keeps resolving.
+ *
+ * @deprecated Import from `@/shared/components/context-menu` instead.
+ */
+export { ZardContextMenuDirective } from '@/shared/components/context-menu/context-menu.directive';
 ```
 
 ```angular-ts
-export * from '@/shared/components/navigation-menu/context-menu.directive';
-export * from '@/shared/components/navigation-menu/navigation-menu-content.directive';
-export * from '@/shared/components/navigation-menu/navigation-menu-indicator.component';
-export * from '@/shared/components/navigation-menu/navigation-menu-item.directive';
-export * from '@/shared/components/navigation-menu/navigation-menu-label.component';
-export * from '@/shared/components/navigation-menu/navigation-menu-link.directive';
-export * from '@/shared/components/navigation-menu/navigation-menu-list.directive';
-export * from '@/shared/components/navigation-menu/navigation-menu-manager.service';
-export * from '@/shared/components/navigation-menu/navigation-menu-positions';
-export * from '@/shared/components/navigation-menu/navigation-menu-shortcut.component';
-export * from '@/shared/components/navigation-menu/navigation-menu-trigger.directive';
-export * from '@/shared/components/navigation-menu/navigation-menu-viewport.component';
-export * from '@/shared/components/navigation-menu/navigation-menu.component';
-export * from '@/shared/components/navigation-menu/navigation-menu.imports';
-export * from '@/shared/components/navigation-menu/navigation-menu.service';
-export * from '@/shared/components/navigation-menu/navigation-menu.variants';
+export * from './context-menu.directive';
+export * from './navigation-menu-content.directive';
+export * from './navigation-menu-indicator.component';
+export * from './navigation-menu-item.directive';
+export * from './navigation-menu-label.component';
+export * from './navigation-menu-link.directive';
+export * from './navigation-menu-list.directive';
+export * from './navigation-menu-manager.service';
+export * from './navigation-menu-positions';
+export * from './navigation-menu-shortcut.component';
+export * from './navigation-menu-trigger.directive';
+export * from './navigation-menu-viewport.component';
+export * from './navigation-menu.component';
+export * from './navigation-menu.imports';
+export * from './navigation-menu.service';
+export * from './navigation-menu.variants';
 ```
 
 ```angular-ts
@@ -437,7 +352,7 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
 @Component({
   selector: 'z-navigation-menu-indicator, [z-navigation-menu-indicator]',
   template: `
-    <div class="bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-md"></div>
+    <div class="bg-border relative top-[60%] size-2 rotate-45 rounded-tl-sm shadow-md"></div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -470,7 +385,9 @@ export class ZardNavigationMenuIndicatorComponent {
       const active = this.service.active();
       const root = this.service.rootElement();
 
-      if (!active || !root || !isPlatformBrowser(this.platformId)) return;
+      if (!active || !root || !isPlatformBrowser(this.platformId)) {
+        return;
+      }
 
       const trigger = active.element.getBoundingClientRect();
       const bar = root.getBoundingClientRect();
@@ -1099,7 +1016,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     // Keep the shared viewport pointed at this trigger's template while it owns it.
     effect(() => {
       const template = this.zNavigationMenuTriggerFor();
-      if (!this.isViewportMode() || !this.service?.isActive(this.index)) return;
+      if (!this.isViewportMode() || !this.service?.isActive(this.index)) {
+        return;
+      }
 
       untracked(() => this.openInViewport(template));
     });
@@ -1111,7 +1030,13 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     this.trackOverlayState();
 
     if (this.shouldRenderChevron()) {
-      this.renderChevron();
+      // Deferred, not called here: `renderChevron` appends a node the template does not
+      // declare, and on the server that node lands in the serialized HTML. Hydration then
+      // walks the host's children expecting only the declared ones, fails on the extra
+      // `<ng-icon>`, and gives up on the whole subtree — which leaves
+      // `zNavigationMenuTriggerFor` unset (NG0950) and the menu dead to hover.
+      // `afterNextRender` never runs on the server and runs after hydration in the browser.
+      afterNextRender(() => this.renderChevron(), { injector: this.injector });
     }
 
     if (this.resolvedTrigger() === 'hover' && !this.isMobileDevice()) {
@@ -1139,7 +1064,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   }
 
   open(): void {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
 
     if (this.isViewportMode()) {
       this.openInViewport(this.zNavigationMenuTriggerFor());
@@ -1169,7 +1096,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.isViewportMode()) return;
+    if (!this.isViewportMode()) {
+      return;
+    }
 
     // The CDK trigger is inert here, so the viewport toggle is ours to drive.
     event.preventDefault();
@@ -1186,7 +1115,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (!this.isViewportMode() || this.zDisabled()) return;
+    if (!this.isViewportMode() || this.zDisabled()) {
+      return;
+    }
 
     switch (event.key) {
       case 'Enter':
@@ -1200,7 +1131,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
         this.focusFirstLink();
         break;
       case 'Escape':
-        if (!this.service?.isActive(this.index)) return;
+        if (!this.service?.isActive(this.index)) {
+          return;
+        }
         event.preventDefault();
         this.close();
         this.elementRef.nativeElement.focus({ preventScroll: true });
@@ -1209,15 +1142,20 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   }
 
   private focusFirstLink(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     // Waits for the viewport to render the freshly activated template.
-    setTimeout(() => {
-      const link = this.document.querySelector<HTMLElement>(
-        '[data-slot="navigation-menu-viewport"] [z-navigation-menu-link]',
-      );
-      link?.focus({ preventScroll: true });
-    });
+    afterNextRender(
+      () => {
+        const link = this.document.querySelector<HTMLElement>(
+          '[data-slot="navigation-menu-viewport"] [z-navigation-menu-link]',
+        );
+        link?.focus({ preventScroll: true });
+      },
+      { injector: this.injector },
+    );
   }
 
   private getPositionsByPlacement(placement: ZardNavigationMenuPlacement): ConnectedPosition[] {
@@ -1226,7 +1164,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
   /**
    * The trigger is a directive — it has no template of its own — so the chevron is instantiated
-   * imperatively and moved into the host element.
+   * imperatively and moved into the host element. Browser-only, after hydration: see `ngOnInit`.
    */
   private renderChevron(): void {
     // The injector is explicit so NgIcon resolves the icon against this directive's `provideIcons`.
@@ -1298,12 +1236,16 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
    * focus is elsewhere — closing on hover-out must not pull it in.
    */
   private returnFocusFromMenu(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     const menu = this.menuElement;
     const focused = this.document.activeElement;
 
-    if (!menu || !focused || !menu.contains(focused)) return;
+    if (!menu || !focused || !menu.contains(focused)) {
+      return;
+    }
 
     // Deferred: the CDK moves the focus itself while tearing the overlay down.
     setTimeout(() => this.elementRef.nativeElement.focus({ preventScroll: true }));
@@ -1579,7 +1521,9 @@ export class ZardNavigationMenuViewportComponent {
       this.align();
 
       untracked(() => {
-        if (this.isOpen()) this.scheduleMeasure(false);
+        if (this.isOpen()) {
+          this.scheduleMeasure(false);
+        }
       });
     });
   }
@@ -1593,7 +1537,9 @@ export class ZardNavigationMenuViewportComponent {
   }
 
   protected onOverlayKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Escape') return;
+    if (event.key !== 'Escape') {
+      return;
+    }
 
     // Captured before closing, since closing is what clears the active trigger.
     const trigger = this.service.active()?.element;
@@ -1622,7 +1568,9 @@ export class ZardNavigationMenuViewportComponent {
 
   private measure(): void {
     const element = this.content()?.nativeElement;
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     const size = { width: `${element.offsetWidth}px`, height: `${element.offsetHeight}px` };
     const current = this.measured();
@@ -1641,7 +1589,9 @@ export class ZardNavigationMenuViewportComponent {
     const root = this.service.rootElement();
     const view = this.document.defaultView;
 
-    if (!active || !root || !view || !isPlatformBrowser(this.platformId)) return;
+    if (!active || !root || !view || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     const trigger = active.element.getBoundingClientRect();
     const bar = root.getBoundingClientRect();
@@ -1667,8 +1617,12 @@ export class ZardNavigationMenuViewportComponent {
 
   /** Keeps the morph honest when the rendered content resizes after being mounted. */
   private observe(element: HTMLElement): void {
-    if (!isPlatformBrowser(this.platformId) || typeof ResizeObserver === 'undefined') return;
-    if (this.observedContent === element) return;
+    if (!isPlatformBrowser(this.platformId) || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+    if (this.observedContent === element) {
+      return;
+    }
 
     this.resizeObserver ??= new ResizeObserver(() => this.measure());
 
@@ -1681,10 +1635,14 @@ export class ZardNavigationMenuViewportComponent {
   }
 
   private watchWindowResize(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     const view = this.document.defaultView;
-    if (!view) return;
+    if (!view) {
+      return;
+    }
 
     const onResize = () => this.measure();
     view.addEventListener('resize', onResize);
@@ -1764,7 +1722,9 @@ export class ZardNavigationMenuService {
     const current = this.activeTrigger();
     const previous = this.previousIndex();
 
-    if (!current || previous === null || previous === current.index) return null;
+    if (!current || previous === null || previous === current.index) {
+      return null;
+    }
 
     return previous < current.index ? 'from-end' : 'from-start';
   });
@@ -1795,8 +1755,12 @@ export class ZardNavigationMenuService {
     this.cancelScheduledClose();
 
     const current = this.activeTrigger();
-    if (!current) return;
-    if (index !== undefined && current.index !== index) return;
+    if (!current) {
+      return;
+    }
+    if (index !== undefined && current.index !== index) {
+      return;
+    }
 
     // Cleared so the next opening fades in instead of sliding from a stale position.
     this.previousIndex.set(null);
@@ -1816,7 +1780,9 @@ export class ZardNavigationMenuService {
   }
 
   cancelScheduledClose(): void {
-    if (this.closeTimeout === null) return;
+    if (this.closeTimeout === null) {
+      return;
+    }
 
     clearTimeout(this.closeTimeout);
     this.closeTimeout = null;

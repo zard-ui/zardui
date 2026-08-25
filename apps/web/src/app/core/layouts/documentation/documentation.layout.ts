@@ -22,7 +22,6 @@ import { DarkModeOptions, ZardDarkMode } from '@zard/services/dark-mode';
     </main>
     <z-sonner [theme]="currentTheme()" />
   `,
-  standalone: true,
   imports: [RouterModule, SidebarComponent, ZardSonnerComponent],
 })
 export class DocumentationLayout {

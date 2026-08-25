@@ -29,7 +29,6 @@ const PREVIEW_TOKENS = [
 
 @Component({
   selector: 'z-base-color-preview',
-  standalone: true,
   imports: [
     RouterLink,
     CodeBlockComponent,

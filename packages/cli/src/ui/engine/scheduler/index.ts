@@ -1,7 +1,7 @@
 /**
- * scheduler — game loop que separa "algo mudou" de "desenhe agora" (ADR-0006).
- * Coalesce pedidos, limita FPS, dorme quando ocioso, permite render síncrono.
- * (Implementação real.)
+ * scheduler — the game loop that separates "something changed" from "draw now"
+ * (ADR-0006). Coalesces requests, caps FPS, sleeps when idle, and allows a
+ * synchronous render.
  */
 
 import { performance } from 'node:perf_hooks';
@@ -45,14 +45,14 @@ export function createScheduler(options: SchedulerOptions): Scheduler {
     const dt = now - last;
     last = now;
 
-    // hook de animação: pode chamar requestRender() para se manter vivo
+    // animation hook: it may call requestRender() to keep itself alive
     for (const cb of [...onFrameCbs]) cb(dt);
 
     if (dirty) {
       dirty = false;
       options.onRender();
     }
-    // se algo pediu render (animação/input) durante o tick, continua; senão dorme
+    // if anything asked for a render (animation/input) during the tick, carry on; else sleep
     if (dirty) scheduleTick();
   }
 

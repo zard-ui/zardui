@@ -1,0 +1,33 @@
+<div z-sidebar-group>
+  <div z-sidebar-group-label>Platform</div>
+
+  <ul z-sidebar-menu>
+    @for (item of items(); track item.title) {
+      <li z-sidebar-menu-item z-collapsible [zOpen]="!!item.isActive">
+        <a z-sidebar-menu-button [href]="item.url" [zTooltip]="item.title">
+          <ng-icon [name]="item.icon" />
+          <span>{{ item.title }}</span>
+        </a>
+
+        @if (item.items.length) {
+          <button z-collapsible-trigger z-sidebar-menu-action class="data-[state=open]:rotate-90">
+            <ng-icon name="lucideChevronRight" />
+            <span class="sr-only">Toggle</span>
+          </button>
+
+          <z-collapsible-content>
+            <ul z-sidebar-menu-sub>
+              @for (subItem of item.items; track subItem.title) {
+                <li z-sidebar-menu-sub-item>
+                  <a z-sidebar-menu-sub-button [href]="subItem.url">
+                    <span>{{ subItem.title }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </z-collapsible-content>
+        }
+      </li>
+    }
+  </ul>
+</div>

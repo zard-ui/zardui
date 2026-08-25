@@ -5,7 +5,6 @@ import { ZardSpinnerComponent } from '@zard/components/spinner/spinner.component
 
 @Component({
   selector: 'z-block-spinner-badges',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardBadgeComponent, ZardSpinnerComponent],
   template: `

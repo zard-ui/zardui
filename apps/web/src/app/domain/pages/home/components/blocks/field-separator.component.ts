@@ -4,7 +4,6 @@ import { ZardSeparatorComponent } from '@zard/components/separator/separator.com
 
 @Component({
   selector: 'z-block-field-separator',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardSeparatorComponent],
   template: `

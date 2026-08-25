@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -67,6 +67,7 @@ const SLOT_CLASSES =
       </z-card>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideRefreshCw })],
 })
 export class ZardDemoInputOtpFormComponent {

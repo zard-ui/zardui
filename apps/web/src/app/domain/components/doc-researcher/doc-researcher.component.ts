@@ -7,7 +7,6 @@ import { CommandDocComponent } from '../doc-command/doc-command.component';
 
 @Component({
   selector: 'z-doc-researcher',
-  standalone: true,
   imports: [ZardButtonComponent],
   template: `
     <button

@@ -10,7 +10,6 @@ export interface CreditItem {
 
 @Component({
   selector: 'z-credit-card',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div [class]="cardClasses()">

@@ -1,18 +1,18 @@
 /**
- * Runner — a ponte entre o loop de frames da engine e o fluxo async da CLI.
+ * Runner — the bridge between the engine's frame loop and the CLI's async flow.
  *
- * Os comandos são sequenciais (`const config = await promptForConfig(...)`),
- * enquanto a engine é um laço de render dirigido por eventos. O runner concilia
- * os dois: monta a tela, entrega o controle ao `onKey`/`run` e resolve uma
- * Promise quando o fluxo chama `done()`.
+ * Commands are sequential (`const config = await promptForConfig(...)`), while
+ * the engine is an event-driven render loop. The runner reconciles the two: it
+ * mounts the screen, hands control to `onKey`/`run`, and resolves a Promise when
+ * the flow calls `done()`.
  *
- * Três invariantes valem para qualquer wizard:
- *   1. o terminal é restaurado em todos os caminhos de saída — inclusive erro,
- *      SIGINT e crash do processo;
- *   2. sem TTY a tela nunca é montada: quem chamou recebe NonInteractiveError e
- *      segue pelo caminho headless;
- *   3. o que o logger escreveria durante a montagem fica retido no sink e é
- *      reemitido depois, para não rasgar o frame.
+ * Three invariants hold for every wizard:
+ *   1. the terminal is restored on every exit path — errors, SIGINT and a
+ *      process crash included;
+ *   2. with no TTY the screen is never mounted: the caller gets a
+ *      NonInteractiveError and follows the headless path;
+ *   3. whatever the logger would write during the mount is held in the sink and
+ *      re-emitted afterwards, so the frame is not torn.
  */
 
 import {
@@ -28,7 +28,7 @@ import { beginCapture, endCapture, type LogRecord } from './log-sink.js';
 import { flushRecords } from './output.js';
 import { zardTheme } from './theme.js';
 
-/** Sinaliza que o comando precisa seguir sem UI interativa (CI, pipe, --yes). */
+/** Signals that the command has to carry on without an interactive UI (CI, pipe, --yes). */
 export class NonInteractiveError extends Error {
   constructor(message = 'This terminal is not interactive.') {
     super(message);
@@ -36,7 +36,7 @@ export class NonInteractiveError extends Error {
   }
 }
 
-/** O usuário abandonou o wizard (Ctrl+C ou um passo que cancela o fluxo). */
+/** The user abandoned the wizard (Ctrl+C, or a step that cancels the flow). */
 export class WizardCancelledError extends Error {
   constructor(message = 'Operation cancelled.') {
     super(message);
@@ -51,22 +51,22 @@ export interface WizardContext<T> {
   cancel(message?: string): void;
   /** Agenda um novo frame depois de alterar o estado. */
   refresh(): void;
-  /** Acesso à tela para casos que precisam do scheduler ou das capacidades. */
+  /** Access to the screen, for cases that need the scheduler or the capabilities. */
   readonly screen: Screen;
 }
 
 export interface WizardOptions<T> {
-  /** View pura reconstruída a cada frame. */
+  /** Pure view, rebuilt every frame. */
   view: () => Node;
-  /** Teclas que a view trata por conta própria. */
+  /** Keys the view handles on its own. */
   onKey?: (event: KeyEvent, ctx: WizardContext<T>) => void;
   /**
-   * Trabalho assíncrono executado com a tela viva — instalar pacotes, escrever
-   * arquivos. A UI continua animando enquanto a promise não resolve.
+   * Async work run with the screen alive — installing packages, writing files.
+   * The UI keeps animating until the promise resolves.
    */
   run?: (ctx: WizardContext<T>) => Promise<void> | void;
   fps?: number;
-  /** Como achar o terminal. Injetável para teste; o padrão resolve sozinho. */
+  /** How to find the terminal. Injectable for tests; the default resolves it itself. */
   resolveStreams?: () => TerminalStreams | null;
 }
 
@@ -77,12 +77,12 @@ export interface WizardResult<T> {
 }
 
 /**
- * true quando existe um terminal onde montar a tela.
+ * True when there is a terminal to mount the screen on.
  *
- * Não basta olhar `process.stdout.isTTY && process.stdin.isTTY`: era isso que
- * fazia `npx zard-cli init` sair em modo texto no macOS e no Linux, onde o npm
- * executa o binário por um shell e entrega o stdin como pipe. O terminal de
- * controle continua alcançável, e é ele que decide.
+ * Looking at `process.stdout.isTTY && process.stdin.isTTY` is not enough: that
+ * is what made `npx zard-cli init` fall back to text mode on macOS and Linux,
+ * where npm runs the binary through a shell and hands over stdin as a pipe. The
+ * controlling terminal is still reachable, and it is what decides.
  */
 export function isInteractive(resolve: () => TerminalStreams | null = resolveTerminalStreams): boolean {
   const streams = resolve();
@@ -100,8 +100,8 @@ export async function runWizard<T>(options: WizardOptions<T>): Promise<WizardRes
     theme: zardTheme,
     fps: options.fps ?? 30,
     terminal: createTerminal({ stdin: streams.input, stdout: streams.output }),
-    // O teardown é nosso: interceptamos Ctrl+C para encerrar o wizard com uma
-    // mensagem, em vez de matar o processo direto de dentro da engine.
+    // Teardown is ours: we intercept Ctrl+C to end the wizard with a message,
+    // instead of killing the process from inside the engine.
     handleExitSignals: false,
   });
 
@@ -112,16 +112,16 @@ export async function runWizard<T>(options: WizardOptions<T>): Promise<WizardRes
     if (teardownDone) return;
     teardownDone = true;
     screen.unmount();
-    // Depois do unmount: é ele que devolve o terminal ao estado normal, e
-    // fechar os streams antes deixaria o alt-screen e o raw mode ligados.
+    // After the unmount: that is what returns the terminal to its normal state,
+    // and closing the streams first would leave the alt-screen and raw mode on.
     streams.close();
     process.off('exit', teardown);
     process.off('SIGINT', onSignal);
     process.off('SIGTERM', onSignal);
   };
 
-  // Rede de segurança: se o processo morrer com a tela montada, o terminal
-  // ainda volta ao normal (cursor visível, sem raw mode, fora do alt-screen).
+  // Safety net: if the process dies with the screen mounted, the terminal still
+  // returns to normal (cursor visible, no raw mode, out of the alt-screen).
   function onSignal(): void {
     teardown();
     process.exit(130);
@@ -173,8 +173,8 @@ export async function runWizard<T>(options: WizardOptions<T>): Promise<WizardRes
 
     return { value, logs: endCapture() };
   } catch (error) {
-    // Última chance de mostrar o que foi retido: a tela já caiu e quem trata o
-    // erro acima só verá a mensagem da exceção.
+    // Last chance to show what was held: the screen is already down and whoever
+    // handles the error above will only see the exception's message.
     flushRecords(endCapture());
     throw error;
   } finally {

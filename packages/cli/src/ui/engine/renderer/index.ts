@@ -1,7 +1,7 @@
 /**
- * renderer — orquestra o caminho quente: layout → paint (Frame) → diff →
- * encode (ANSI) → um único write. Mantém UM frame retido, com pool de 2 buffers.
- * Pintores de todos os componentes (inclusive interativos com foco). (Real.)
+ * renderer — orchestrates the hot path: layout → paint (Frame) → diff → encode
+ * (ANSI) → a single write. Keeps ONE retained frame, with a pool of 2 buffers.
+ * Holds the painters for every component, focusable ones included.
  */
 
 import { performance } from 'node:perf_hooks';
@@ -20,7 +20,7 @@ import type { Theme } from '../theme/index.js';
 import { defaultTheme } from '../theme/index.js';
 import { charWidth, graphemes, stringWidth, truncate, wrapText as wrap } from '../utils/index.js';
 
-/** Contexto por-frame consultado pelos pintores (foco, animação, caret). */
+/** Per-frame context the painters read (focus, animation, caret). */
 export interface RenderContext {
   readonly focusKey?: string;
   readonly tick?: number;

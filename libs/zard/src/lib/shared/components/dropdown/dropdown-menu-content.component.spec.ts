@@ -5,7 +5,6 @@ import { ZardDropdownMenuContentComponent } from './dropdown-menu-content.compon
 
 @Component({
   imports: [ZardDropdownMenuContentComponent],
-  standalone: true,
   template: `
     <z-dropdown-menu-content [class]="customClass">
       <div>Menu Content</div>

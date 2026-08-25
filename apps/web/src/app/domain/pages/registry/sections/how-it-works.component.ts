@@ -27,8 +27,7 @@ interface CacheRule {
 }
 
 @Component({
-  selector: 'registry-how-it-works-section',
-  standalone: true,
+  selector: 'z-registry-how-it-works-section',
   imports: [NgIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -103,7 +102,7 @@ interface CacheRule {
     provideIcons({ lucideFolderTree, lucideList, lucideCog, lucideGlobe, lucideInfinity, lucideRefreshCw }),
   ],
 })
-export class RegistryHowItWorksSection {
+export class RegistryHowItWorksSectionComponent {
   readonly stages: PipelineStage[] = [
     {
       step: '01',

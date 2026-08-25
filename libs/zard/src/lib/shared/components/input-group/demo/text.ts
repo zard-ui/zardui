@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
@@ -33,5 +33,6 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputGroupTextComponent {}

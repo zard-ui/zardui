@@ -40,13 +40,15 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   host: {
     class: 'inline-flex',
     role: 'status',
-    'aria-label': 'Loading',
+    '[attr.aria-label]': 'zAriaLabel()',
   },
   exportAs: 'zSpinner',
 })
 export class ZardSpinnerComponent {
   readonly class = input<ClassValue>('');
   readonly zIcon = input<TemplateRef<{ $implicit: string }> | undefined>(undefined);
+  /** Announced by screen readers. An input because the library ships no translations. */
+  readonly zAriaLabel = input('Loading');
 
   protected readonly classes = computed(() => mergeClasses('size-4 animate-spin', this.class()));
   protected readonly iconContext = computed(() => ({ $implicit: this.classes() }));

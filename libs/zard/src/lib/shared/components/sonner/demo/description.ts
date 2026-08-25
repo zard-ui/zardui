@@ -4,7 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'zard-demo-sonner-description',
+  selector: 'z-demo-sonner-description',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" class="w-fit" (click)="show()">Show Toast</button>

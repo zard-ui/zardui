@@ -88,6 +88,31 @@ test.describe('Select component', () => {
     await expect(secondOption).not.toHaveAttribute('data-highlighted');
   });
 
+  /**
+   * The pointer rests wherever it clicked the trigger, so an option sits under it the
+   * whole time the arrows are being used. Nothing it does — the list settling into
+   * position, an option scrolling beneath it — may take the highlight back.
+   */
+  test('keeps the keyboard highlight while the pointer rests on an option', async ({ page }) => {
+    const { listbox } = await openSelect(page, demoPage);
+
+    await listbox.locator('z-select-item[value="apple"]').hover();
+    await listbox.press('ArrowDown');
+    await listbox.press('ArrowDown');
+
+    await expect(listbox.locator('z-select-item[value="blueberry"]')).toHaveAttribute('data-highlighted', '');
+    await expect(listbox.locator('z-select-item[value="apple"]')).not.toHaveAttribute('data-highlighted');
+  });
+
+  test('hands the highlight back once the pointer moves again', async ({ page }) => {
+    const { listbox } = await openSelect(page, demoPage);
+
+    await listbox.press('ArrowDown');
+    await listbox.locator('z-select-item[value="grapes"]').hover();
+
+    await expect(listbox.locator('z-select-item[value="grapes"]')).toHaveAttribute('data-highlighted', '');
+  });
+
   test('passes accessibility checks when open', async ({ page }) => {
     await openSelect(page, demoPage);
     await checkA11y(page, undefined, ['button-name', 'color-contrast', 'scrollable-region-focusable']);

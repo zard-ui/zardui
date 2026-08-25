@@ -23,10 +23,10 @@ function toMessage(args: unknown[]): string {
 }
 
 /**
- * Escreve uma mensagem — ou a retém, quando a tela interativa está montada.
+ * Writes a message — or holds it, while the interactive screen is mounted.
  *
- * Sem esse desvio, um `logger.warn` disparado no meio de uma instalação
- * escreveria por cima do frame que a engine acabou de pintar.
+ * Without that diversion, a `logger.warn` fired mid-install would write over the
+ * frame the engine just painted.
  */
 function emit(level: LogLevel, args: unknown[]): void {
   const message = toMessage(args);
@@ -69,9 +69,9 @@ const FRAMES = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '
 const FRAME_MS = 80;
 
 /**
- * Indicador de progresso para os caminhos que rodam fora da tela interativa
- * (headless, --yes, CI). Dentro de um wizard quem anima é a engine, e aqui as
- * transições viram apenas registros no sink.
+ * Progress indicator for the paths that run outside the interactive screen
+ * (headless, --yes, CI). Inside a wizard the engine does the animating, and here
+ * the transitions become nothing but records in the sink.
  */
 export function spinner(text: string): Spinner {
   const animated = Boolean(process.stdout.isTTY) && !isCapturing();
@@ -83,8 +83,8 @@ export function spinner(text: string): Spinner {
   };
 
   const paint = (): void => {
-    // A captura pode começar depois que o spinner já estava rodando; nesse caso
-    // a tela é dona do terminal e nada mais pode escrever direto nele.
+    // Capture can start after the spinner was already running; in that case the
+    // screen owns the terminal and nothing else may write to it directly.
     if (isCapturing()) return;
     clearLine();
     process.stdout.write(`${style.primary(FRAMES[frame] ?? FRAMES[0] ?? '')} ${style.dim(instance.text)}`);
@@ -107,7 +107,7 @@ export function spinner(text: string): Spinner {
       if (timer) return instance;
       paint();
       timer = setInterval(paint, FRAME_MS);
-      // Um spinner ativo não deve segurar o processo vivo por si só.
+      // An active spinner must not keep the process alive on its own.
       timer.unref?.();
       return instance;
     },

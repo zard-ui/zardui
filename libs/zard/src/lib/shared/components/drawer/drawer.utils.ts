@@ -35,10 +35,16 @@ export function resolveSnapPoint(point: ZardDrawerSnapPoint, viewportSize: numbe
   }
 
   const value = Number.parseFloat(point);
-  if (Number.isNaN(value)) return 0;
+  if (Number.isNaN(value)) {
+    return 0;
+  }
 
-  if (point.endsWith('rem') || point.endsWith('em')) return value * rootFontSize;
-  if (point.endsWith('%') || point.endsWith('vh') || point.endsWith('vw')) return (value / 100) * viewportSize;
+  if (point.endsWith('rem') || point.endsWith('em')) {
+    return value * rootFontSize;
+  }
+  if (point.endsWith('%') || point.endsWith('vh') || point.endsWith('vw')) {
+    return (value / 100) * viewportSize;
+  }
 
   return value;
 }
@@ -57,11 +63,15 @@ export function resolveSnapPoints(
 
 /** Index of the snap point closest to `size`. Returns -1 for an empty list. */
 export function nearestSnapIndex(size: number, resolvedPoints: readonly number[]): number {
-  if (!resolvedPoints.length) return -1;
+  if (!resolvedPoints.length) {
+    return -1;
+  }
 
   let best = 0;
   for (let i = 1; i < resolvedPoints.length; i++) {
-    if (Math.abs(resolvedPoints[i] - size) < Math.abs(resolvedPoints[best] - size)) best = i;
+    if (Math.abs(resolvedPoints[i] - size) < Math.abs(resolvedPoints[best] - size)) {
+      best = i;
+    }
   }
   return best;
 }
@@ -71,7 +81,9 @@ export function nearestSnapIndex(size: number, resolvedPoints: readonly number[]
  * with progressively more resistance, so it never detaches from the edge.
  */
 export function rubberband(distance: number, dimension: number): number {
-  if (dimension <= 0) return 0;
+  if (dimension <= 0) {
+    return 0;
+  }
   return (1 - 1 / ((distance * 0.55) / dimension + 1)) * dimension;
 }
 
@@ -96,7 +108,9 @@ export function isScrollableAway(
       const position = vertical ? node.scrollTop : node.scrollLeft;
       const max = vertical ? node.scrollHeight - node.clientHeight : node.scrollWidth - node.clientWidth;
 
-      if (max > 0 && ((delta > 0 && position > 0) || (delta < 0 && position < max))) return true;
+      if (max > 0 && ((delta > 0 && position > 0) || (delta < 0 && position < max))) {
+        return true;
+      }
     }
 
     node = node.parentElement;
@@ -111,7 +125,9 @@ export function isScrollableAway(
  * never crosses the threshold still fires its click.
  */
 export function isInteractiveTarget(target: EventTarget | null): boolean {
-  if (!(target instanceof Element)) return false;
+  if (!(target instanceof Element)) {
+    return false;
+  }
 
   return !!target.closest(
     'input, textarea, select, a[href], [role="slider"], [contenteditable=""], [contenteditable="true"], [data-no-drag]',

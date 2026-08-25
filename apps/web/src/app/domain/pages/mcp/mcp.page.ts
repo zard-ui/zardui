@@ -5,25 +5,24 @@ import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-head
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { McpConfigurationSection } from './sections/configuration.component';
-import { McpInstallationSection } from './sections/installation.component';
-import { McpOverviewSection } from './sections/overview.component';
-import { McpToolsSection } from './sections/tools.component';
+import { McpConfigurationSectionComponent } from './sections/configuration.component';
+import { McpInstallationSectionComponent } from './sections/installation.component';
+import { McpOverviewSectionComponent } from './sections/overview.component';
+import { McpToolsSectionComponent } from './sections/tools.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-mcp',
-  standalone: true,
   imports: [
     DocContentComponent,
     DocHeadingComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
-    McpOverviewSection,
-    McpInstallationSection,
-    McpToolsSection,
-    McpConfigurationSection,
+    McpOverviewSectionComponent,
+    McpInstallationSectionComponent,
+    McpToolsSectionComponent,
+    McpConfigurationSectionComponent,
   ],
   template: `
     <z-content
@@ -39,10 +38,10 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
         id="overview"
       ></z-doc-heading>
 
-      <mcp-overview-section scrollSpyItem="what-is-it" id="what-is-it"></mcp-overview-section>
-      <mcp-installation-section scrollSpyItem="installation" id="installation"></mcp-installation-section>
-      <mcp-tools-section scrollSpyItem="tools" id="tools"></mcp-tools-section>
-      <mcp-configuration-section scrollSpyItem="configuration" id="configuration"></mcp-configuration-section>
+      <z-mcp-overview-section scrollSpyItem="what-is-it" id="what-is-it"></z-mcp-overview-section>
+      <z-mcp-installation-section scrollSpyItem="installation" id="installation"></z-mcp-installation-section>
+      <z-mcp-tools-section scrollSpyItem="tools" id="tools"></z-mcp-tools-section>
+      <z-mcp-configuration-section scrollSpyItem="configuration" id="configuration"></z-mcp-configuration-section>
     </z-content>
   `,
 })

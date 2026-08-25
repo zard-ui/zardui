@@ -5,7 +5,7 @@ import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'zard-demo-sonner-with-dialog',
+  selector: 'z-demo-sonner-with-dialog',
   imports: [ZardDialogImports],
   template: `
     <button type="button" z-button zType="outline" (click)="openDialog()">Open dialog</button>

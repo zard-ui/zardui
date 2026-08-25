@@ -21,6 +21,7 @@ import {
   type Type,
   viewChild,
   type ViewContainerRef,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -28,7 +29,8 @@ import { lucideX } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import type { ZardDialogRef } from './dialog-ref';
 import {
@@ -52,6 +54,11 @@ export class ZardDialogOptions<T, U> {
   /** Animation duration (ms) used when closing. Defaults to 100 (matches CSS transition). */
   zDuration?: number;
   zHideFooter?: boolean;
+  /**
+   * Keeps the title and description in the accessibility tree but out of the layout (`sr-only`),
+   * the same trick shadcn uses when a dialog's content owns its own visual header.
+   */
+  zHideHeader?: boolean;
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
@@ -181,6 +188,7 @@ export class ZardDialogOptions<T, U> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideX })],
   host: {
     '[class]': 'classes()',
@@ -202,7 +210,10 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
   private readonly idRef = viewChild.required<ZardIdDirective>('idRef');
 
   protected readonly classes = computed(() => mergeClasses(dialogVariants(), this.config.zCustomClasses));
-  protected readonly headerClasses = computed(() => dialogHeaderVariants());
+  protected readonly headerClasses = computed(() =>
+    mergeClasses(dialogHeaderVariants(), this.config.zHideHeader && 'sr-only'),
+  );
+
   protected readonly titleClasses = computed(() => dialogTitleVariants());
   protected readonly descriptionClasses = computed(() => dialogDescriptionVariants());
   protected readonly footerClasses = computed(() => dialogFooterVariants());

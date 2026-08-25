@@ -34,67 +34,73 @@
 
 ### Form & Input
 
-- [Button](https://zardui.com/docs/components/button): Button component for Angular applications.
-- [Button Group](https://zardui.com/docs/components/button-group): Button Group component for Angular applications.
-- [Calendar](https://zardui.com/docs/components/calendar): Calendar component for Angular applications.
-- [Checkbox](https://zardui.com/docs/components/checkbox): Checkbox component for Angular applications.
-- [Combobox](https://zardui.com/docs/components/combobox): Combobox component for Angular applications.
-- [Date Picker](https://zardui.com/docs/components/date-picker): Date Picker component for Angular applications.
-- [Field](https://zardui.com/docs/components/field): Field component for Angular applications.
-- [Input](https://zardui.com/docs/components/input): Input component for Angular applications.
-- [Input Group](https://zardui.com/docs/components/input-group): Input Group component for Angular applications.
-- [Radio Group](https://zardui.com/docs/components/radio-group): Radio Group component for Angular applications.
-- [Select](https://zardui.com/docs/components/select): Select component for Angular applications.
-- [Slider](https://zardui.com/docs/components/slider): Slider component for Angular applications.
-- [Switch](https://zardui.com/docs/components/switch): Switch component for Angular applications.
-- [Textarea](https://zardui.com/docs/components/textarea): Textarea component for Angular applications.
+- [Button](https://zardui.com/docs/components/button): Displays a button or a component that looks like a button.
+- [Button Group](https://zardui.com/docs/components/button-group): Groups buttons together.
+- [Calendar](https://zardui.com/docs/components/calendar): A calendar component that allows users to select a date or a range of dates.
+- [Checkbox](https://zardui.com/docs/components/checkbox): A control that allows the user to toggle between checked and not checked.
+- [Combobox](https://zardui.com/docs/components/combobox): Autocomplete input and command palette with a list of suggestions.
+- [Date Picker](https://zardui.com/docs/components/date-picker): A button that opens a calendar in a popover to pick one date, several dates, or a date range.
+- [Field](https://zardui.com/docs/components/field): Composable building blocks for accessible form layouts with labels, descriptions and errors.
+- [Input](https://zardui.com/docs/components/input): Displays a form input field or a component that looks like an input field.
+- [Input Group](https://zardui.com/docs/components/input-group): Groups input elements together with addons.
+- [Input OTP](https://zardui.com/docs/components/input-otp): Accessible one-time password component with copy-paste functionality.
+- [Radio Group](https://zardui.com/docs/components/radio-group): A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked at a time.
+- [Select](https://zardui.com/docs/components/select): Displays a list of options for the user to pick from — triggered by a button.
+- [Slider](https://zardui.com/docs/components/slider): An input where the user selects a value from within a given range.
+- [Switch](https://zardui.com/docs/components/switch): A control that allows the user to toggle between checked and not checked.
+- [Textarea](https://zardui.com/docs/components/textarea): Displays a multi-line text input field.
 
 ### Layout & Navigation
 
-- [Accordion](https://zardui.com/docs/components/accordion): Accordion component for Angular applications.
-- [Breadcrumb](https://zardui.com/docs/components/breadcrumb): Breadcrumb component for Angular applications.
-- [Layout](https://zardui.com/docs/components/layout): Layout component for Angular applications.
-- [Menu](https://zardui.com/docs/components/menu): Menu component for Angular applications.
-- [Pagination](https://zardui.com/docs/components/pagination): Pagination component for Angular applications.
-- [Resizable](https://zardui.com/docs/components/resizable): Resizable component for Angular applications.
-- [Separator](https://zardui.com/docs/components/separator): Separator component for Angular applications.
-- [Tabs](https://zardui.com/docs/components/tabs): Tabs component for Angular applications.
-- [Tree](https://zardui.com/docs/components/tree): Tree component for Angular applications.
+- [Accordion](https://zardui.com/docs/components/accordion): A vertically stacked set of interactive headings that each reveal a section of content.
+- [Breadcrumb](https://zardui.com/docs/components/breadcrumb): Displays the path to the current resource using a hierarchy of links.
+- [Collapsible](https://zardui.com/docs/components/collapsible): An interactive component which expands and collapses a panel.
+- [Navigation Menu](https://zardui.com/docs/components/navigation-menu): A collection of links for navigating websites.
+- [Pagination](https://zardui.com/docs/components/pagination): Pagination with page navigation, next and previous links.
+- [Resizable](https://zardui.com/docs/components/resizable): Accessible resizable panel groups and layouts with keyboard support.
+- [Separator](https://zardui.com/docs/components/separator): Visually or semantically separates content.
+- [Sidebar](https://zardui.com/docs/components/sidebar): A composable, themeable and customizable sidebar component.
+- [Tabs](https://zardui.com/docs/components/tabs): A set of layered sections of content — known as tab panels — that are displayed one at a time.
 
 ### Overlays & Dialogs
 
-- [Alert Dialog](https://zardui.com/docs/components/alert-dialog): Alert Dialog component for Angular applications.
-- [Command](https://zardui.com/docs/components/command): Command component for Angular applications.
-- [Dialog](https://zardui.com/docs/components/dialog): Dialog component for Angular applications.
-- [Dropdown](https://zardui.com/docs/components/dropdown): Dropdown component for Angular applications.
-- [Popover](https://zardui.com/docs/components/popover): Popover component for Angular applications.
-- [Sheet](https://zardui.com/docs/components/sheet): Sheet component for Angular applications.
-- [Tooltip](https://zardui.com/docs/components/tooltip): Tooltip component for Angular applications.
+- [Alert Dialog](https://zardui.com/docs/components/alert-dialog): A modal dialog that interrupts the user with important content and expects a response.
+- [Command](https://zardui.com/docs/components/command): Fast, composable, unstyled command menu.
+- [Context Menu](https://zardui.com/docs/components/context-menu): Displays a menu of actions triggered by a right click.
+- [Dialog](https://zardui.com/docs/components/dialog): A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.
+- [Drawer](https://zardui.com/docs/components/drawer): A draggable panel that slides in from an edge of the screen.
+- [Dropdown](https://zardui.com/docs/components/dropdown): Displays a menu to the user — such as a set of actions or functions — triggered by a button.
+- [Popover](https://zardui.com/docs/components/popover): Displays rich content in a portal, triggered by a button.
+- [Sheet](https://zardui.com/docs/components/sheet): Extends the Dialog component to display content that complements the main content of the screen.
+- [Tooltip](https://zardui.com/docs/components/tooltip): A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.
 
 ### Feedback & Status
 
-- [Alert](https://zardui.com/docs/components/alert): Alert component for Angular applications.
-- [Badge](https://zardui.com/docs/components/badge): Badge component for Angular applications.
-- [Empty](https://zardui.com/docs/components/empty): Empty component for Angular applications.
-- [Progress](https://zardui.com/docs/components/progress): Progress component for Angular applications.
-- [Skeleton](https://zardui.com/docs/components/skeleton): Skeleton component for Angular applications.
-- [Sonner](https://zardui.com/docs/components/sonner): Sonner component for Angular applications.
-- [Spinner](https://zardui.com/docs/components/spinner): Spinner component for Angular applications.
+- [Alert](https://zardui.com/docs/components/alert): Displays a callout for user attention.
+- [Badge](https://zardui.com/docs/components/badge): Displays a badge or a component that looks like a badge.
+- [Empty](https://zardui.com/docs/components/empty): Empty state placeholder when there is no data.
+- [Progress](https://zardui.com/docs/components/progress): Displays an indicator showing the completion progress of a task.
+- [Skeleton](https://zardui.com/docs/components/skeleton): Use to show a placeholder while content is loading.
+- [Sonner](https://zardui.com/docs/components/sonner): An opinionated toast component for Angular.
+- [Spinner](https://zardui.com/docs/components/spinner): Displays a loading spinner.
 
 ### Display & Media
 
-- [Avatar](https://zardui.com/docs/components/avatar): Avatar component for Angular applications.
-- [Card](https://zardui.com/docs/components/card): Card component for Angular applications.
-- [Carousel](https://zardui.com/docs/components/carousel): Carousel component for Angular applications.
-- [Table](https://zardui.com/docs/components/table): Table component for Angular applications.
+- [Avatar](https://zardui.com/docs/components/avatar): An image element with a fallback for representing the user.
+- [Bubble](https://zardui.com/docs/components/bubble): Displays conversational content in a message bubble. Supports variants, alignment, grouping, reactions, and collapsible content.
+- [Card](https://zardui.com/docs/components/card): Displays a card with header, content, and footer.
+- [Carousel](https://zardui.com/docs/components/carousel): A carousel with motion and swipe built using Embla.
+- [Chart](https://zardui.com/docs/components/chart): Beautiful charts built with Apache ECharts. Copy and paste into your apps.
+- [Marker](https://zardui.com/docs/components/marker): Displays an inline status, system note, bordered row, or labeled separator in a conversation.
+- [Message](https://zardui.com/docs/components/message): Displays a message in a conversation, with optional avatar, header, footer, and alignment.
+- [Table](https://zardui.com/docs/components/table): A responsive table component.
 
 ### Misc
 
-- [Item](https://zardui.com/docs/components/item): Item component for Angular applications.
-- [Kbd](https://zardui.com/docs/components/kbd): Kbd component for Angular applications.
-- [Toggle](https://zardui.com/docs/components/toggle): Toggle component for Angular applications.
-- [Toggle Group](https://zardui.com/docs/components/toggle-group): Toggle Group component for Angular applications.
-
+- [Item](https://zardui.com/docs/components/item): A versatile component for displaying content with media, title, description, and actions.
+- [Kbd](https://zardui.com/docs/components/kbd): Displays a keyboard key or shortcut.
+- [Toggle](https://zardui.com/docs/components/toggle): A two-state button that can be either on or off.
+- [Toggle Group](https://zardui.com/docs/components/toggle-group): A set of two-state buttons that can be toggled on or off.
 ## Contribute
 
 - [Overview](https://zardui.com/docs/contribute): Why and how to contribute to Zard UI, with a quick start and a map of the guide.

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
@@ -38,12 +38,13 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
           <!-- prettier-ignore -->
           <p>Ghost bubbles work for assistant text, <strong class="font-semibold">markdown</strong>, and other content that should not be framed.</p>
           <!-- prettier-ignore -->
-          <p>This is perfect for assistant messages that should not have a frame and can take the full width of the container. You can also render <code class="bg-muted rounded px-1 py-0.5 font-mono text-[0.8rem]">code</code> in it.</p>
+          <p>This is perfect for assistant messages that should not have a frame and can take the full width of the container. You can also render <code class="bg-muted rounded-sm px-1 py-0.5 font-mono text-[0.8rem]">code</code> in it.</p>
           <p>Ghost bubbles are full width and can take the full width of the container.</p>
         </z-bubble-content>
       </z-bubble>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoBubbleVariantsComponent {}

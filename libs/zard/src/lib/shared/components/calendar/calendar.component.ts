@@ -1,10 +1,14 @@
 import {
+  afterNextRender,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
   forwardRef,
+  inject,
+  Injector,
   input,
+  isDevMode,
   linkedSignal,
   model,
   numberAttribute,
@@ -36,7 +40,8 @@ import {
   calendarMonthVariants,
   calendarVariants,
 } from '@/shared/components/calendar/calendar.variants';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import type { ZardButtonTypeVariants } from '../button/button.variants';
 
@@ -94,6 +99,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
   exportAs: 'zCalendar',
 })
 export class ZardCalendarComponent implements ControlValueAccessor {
+  private readonly injector = inject(Injector);
   private readonly gridRefs = viewChildren(ZardCalendarGridComponent);
 
   /** The grid that owns the roving focus — always the first rendered month. */
@@ -222,13 +228,17 @@ export class ZardCalendarComponent implements ControlValueAccessor {
    */
   protected onMonthChange(monthIndex: string, monthOffset = 0): void {
     if (!monthIndex?.trim()) {
-      console.warn('Invalid month index received:', monthIndex);
+      if (isDevMode()) {
+        console.warn('Invalid month index received:', monthIndex);
+      }
       return;
     }
 
     const parsedMonth = Number.parseInt(monthIndex, 10);
     if (Number.isNaN(parsedMonth) || parsedMonth < 0 || parsedMonth > 11) {
-      console.warn('Invalid month value:', monthIndex, 'parsed as:', parsedMonth);
+      if (isDevMode()) {
+        console.warn('Invalid month value:', monthIndex, 'parsed as:', parsedMonth);
+      }
       return;
     }
 
@@ -238,13 +248,17 @@ export class ZardCalendarComponent implements ControlValueAccessor {
 
   protected onYearChange(year: string, monthOffset = 0): void {
     if (!year?.trim()) {
-      console.warn('Invalid year received:', year);
+      if (isDevMode()) {
+        console.warn('Invalid year received:', year);
+      }
       return;
     }
 
     const parsedYear = Number.parseInt(year, 10);
     if (Number.isNaN(parsedYear) || parsedYear < 1900 || parsedYear > 2100) {
-      console.warn('Invalid year value:', year, 'parsed as:', parsedYear);
+      if (isDevMode()) {
+        console.warn('Invalid year value:', year, 'parsed as:', parsedYear);
+      }
       return;
     }
 
@@ -301,17 +315,21 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     const baseMonth = Number.isNaN(month) ? current.getMonth() : month;
     const newDate = makeSafeDate(baseYear + direction, baseMonth, 1);
     this.currentYearValue.set(newDate.getFullYear().toString());
-    setTimeout(() => this.gridRef()?.resetFocus(), 0);
+    afterNextRender(() => this.gridRef()?.resetFocus(), { injector: this.injector });
   }
 
   protected onGridPreviousMonth(event: { position: string; dayOfWeek: number }): void {
     this.previousMonth();
-    setTimeout(() => this.resetFocusAfterNavigation(event.position, event.dayOfWeek), 0);
+    afterNextRender(() => this.resetFocusAfterNavigation(event.position, event.dayOfWeek), {
+      injector: this.injector,
+    });
   }
 
   protected onGridNextMonth(event: { position: string; dayOfWeek: number }): void {
     this.nextMonth();
-    setTimeout(() => this.resetFocusAfterNavigation(event.position, event.dayOfWeek), 0);
+    afterNextRender(() => this.resetFocusAfterNavigation(event.position, event.dayOfWeek), {
+      injector: this.injector,
+    });
   }
 
   protected onDateSelect(event: { date: Date; index: number }): void {

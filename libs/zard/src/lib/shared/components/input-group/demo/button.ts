@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucideCopy, lucideInfo, lucideStar } from '@ng-icons/lucide';
@@ -13,7 +13,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
   template: `
     <div class="grid w-full min-w-sm gap-6">
       <z-input-group>
-        <input z-input placeholder="https://x.com/shadcn" readonly />
+        <input z-input placeholder="https://x.com/zard_ui" readonly />
         <z-input-group-addon zAlign="inline-end">
           <button
             type="button"
@@ -21,7 +21,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
             zSize="icon-xs"
             aria-label="Copy"
             title="Copy"
-            (click)="copy('https://x.com/shadcn')"
+            (click)="copy('https://x.com/zard_ui')"
           >
             <ng-icon [name]="isCopied() ? 'lucideCheck' : 'lucideCopy'" />
           </button>
@@ -69,6 +69,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
       </ng-template>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCopy, lucideCheck, lucideInfo, lucideStar })],
 })
 export class ZardDemoInputGroupButtonComponent {

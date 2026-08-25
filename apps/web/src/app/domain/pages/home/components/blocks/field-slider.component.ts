@@ -6,7 +6,6 @@ import { ZardSliderComponent } from '@zard/components/slider/slider.component';
 
 @Component({
   selector: 'z-block-field-slider',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardFieldImports, ZardSliderComponent, FormsModule],
   template: `

@@ -1,5 +1,5 @@
 import { FocusTrapFactory } from '@angular/cdk/a11y';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   afterNextRender,
   booleanAttribute,
@@ -7,6 +7,7 @@ import {
   Component,
   computed,
   DestroyRef,
+  DOCUMENT,
   effect,
   ElementRef,
   inject,
@@ -17,6 +18,7 @@ import {
   signal,
   untracked,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
@@ -174,6 +176,7 @@ const SWIPE_START_THRESHOLD = 3;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     'data-slot': 'drawer-popup',
     role: 'dialog',
@@ -262,14 +265,18 @@ export class ZardDrawerPanelComponent {
 
   private readonly resolvedSnapPoints = computed(() => {
     const points = this.zSnapPoints();
-    if (!points?.length) return [];
+    if (!points?.length) {
+      return [];
+    }
     return resolveSnapPoints(points, this.viewportSize(), this.rootFontSize());
   });
 
   /** Index of the active snap point, or -1 when the drawer has none. */
   private readonly activeIndex = computed(() => {
     const points = this.zSnapPoints();
-    if (!points?.length) return -1;
+    if (!points?.length) {
+      return -1;
+    }
 
     const index = points.indexOf(this.zSnapPoint() as ZardDrawerSnapPoint);
     return index >= 0 ? index : 0;
@@ -285,7 +292,9 @@ export class ZardDrawerPanelComponent {
   private readonly restOffset = computed(() => {
     const index = this.activeIndex();
     const size = this.panelSize();
-    if (index < 0 || !size) return 0;
+    if (index < 0 || !size) {
+      return 0;
+    }
 
     return Math.max(0, size - this.resolvedSnapPoints()[index]);
   });
@@ -314,7 +323,9 @@ export class ZardDrawerPanelComponent {
   protected readonly transform = computed(() => {
     const depth = this.depth();
     const offset = this.offset();
-    if (!depth && !offset) return null;
+    if (!depth && !offset) {
+      return null;
+    }
 
     const scale = Math.max(0, 1 - depth * DRAWER_STACK_STEP);
     // The panel scales towards its own edge, so a stacked one has to travel the width it
@@ -340,7 +351,9 @@ export class ZardDrawerPanelComponent {
   constructor() {
     // Seeded before the first render so a snapping drawer opens straight at its snap point
     // instead of rendering fully open for a frame and then sliding down to it.
-    if (isPlatformBrowser(this.platformId)) this.readViewport();
+    if (isPlatformBrowser(this.platformId)) {
+      this.readViewport();
+    }
 
     pushDrawerPanel(this);
 
@@ -369,7 +382,9 @@ export class ZardDrawerPanelComponent {
     this.viewportHeight.set(window.innerHeight);
 
     const fontSize = Number.parseFloat(getComputedStyle(this.document.documentElement).fontSize);
-    if (!Number.isNaN(fontSize)) this.rootFontSize.set(fontSize);
+    if (!Number.isNaN(fontSize)) {
+      this.rootFontSize.set(fontSize);
+    }
   }
 
   private measure(): void {
@@ -384,7 +399,9 @@ export class ZardDrawerPanelComponent {
   }
 
   private observeResize(): void {
-    if (typeof ResizeObserver === 'undefined') return;
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
 
     const observer = new ResizeObserver(() => this.measure());
     observer.observe(this.host.nativeElement);
@@ -402,9 +419,15 @@ export class ZardDrawerPanelComponent {
   }
 
   protected onPointerDown(event: PointerEvent): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    if (!this.swipeable() || this.pointerId !== null) return;
-    if (event.button !== 0 || isInteractiveTarget(event.target)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (!this.swipeable() || this.pointerId !== null) {
+      return;
+    }
+    if (event.button !== 0 || isInteractiveTarget(event.target)) {
+      return;
+    }
 
     this.measure();
 
@@ -422,13 +445,17 @@ export class ZardDrawerPanelComponent {
   }
 
   private readonly onPointerMove = (event: PointerEvent): void => {
-    if (event.pointerId !== this.pointerId || this.gestureCancelled) return;
+    if (event.pointerId !== this.pointerId || this.gestureCancelled) {
+      return;
+    }
 
     const position = this.axisPosition(event);
     const delta = (position - this.startPosition) * closingDirection(this.zPlacement());
 
     if (!this.isSwiping()) {
-      if (Math.abs(delta) < SWIPE_START_THRESHOLD) return;
+      if (Math.abs(delta) < SWIPE_START_THRESHOLD) {
+        return;
+      }
 
       // A gesture that starts inside a scrollable area belongs to that area first.
       if (isScrollableAway(this.startTarget, this.host.nativeElement, this.zPlacement(), delta)) {
@@ -441,21 +468,27 @@ export class ZardDrawerPanelComponent {
       this.host.nativeElement.setPointerCapture(event.pointerId);
     }
 
-    if (event.cancelable) event.preventDefault();
+    if (event.cancelable) {
+      event.preventDefault();
+    }
 
     this.lastPosition = position;
     this.swipeOffset.set(this.clampOffset(this.startOffset + delta));
   };
 
   private readonly onPointerUp = (event: PointerEvent): void => {
-    if (event.pointerId !== this.pointerId) return;
+    if (event.pointerId !== this.pointerId) {
+      return;
+    }
 
     const wasSwiping = this.isSwiping();
     const elapsed = Math.max(1, event.timeStamp - this.startTime);
     const velocity = ((this.lastPosition - this.startPosition) * closingDirection(this.zPlacement())) / elapsed;
 
     this.endGesture();
-    if (!wasSwiping) return;
+    if (!wasSwiping) {
+      return;
+    }
 
     if (this.hasSnapPoints()) {
       this.settleOnSnapPoint(velocity);
@@ -481,12 +514,16 @@ export class ZardDrawerPanelComponent {
   private clampOffset(offset: number): number {
     const size = this.panelSize();
 
-    if (offset < 0) return -rubberband(-offset, size);
+    if (offset < 0) {
+      return -rubberband(-offset, size);
+    }
 
     if (!this.zDismissible()) {
       const points = this.resolvedSnapPoints();
       const maxOffset = points.length ? Math.max(0, size - Math.min(...points)) : 0;
-      if (offset > maxOffset) return maxOffset + rubberband(offset - maxOffset, size);
+      if (offset > maxOffset) {
+        return maxOffset + rubberband(offset - maxOffset, size);
+      }
     }
 
     return offset;
@@ -500,7 +537,9 @@ export class ZardDrawerPanelComponent {
         (velocity > -DRAWER_VELOCITY_THRESHOLD && this.offset() > this.panelSize() * DRAWER_CLOSE_THRESHOLD));
 
     this.swipeOffset.set(null);
-    if (dismiss) this.closeRequested.emit();
+    if (dismiss) {
+      this.closeRequested.emit();
+    }
   }
 
   /** With snap points: a flick moves one stop, a slow release lands on the closest one. */
@@ -511,8 +550,11 @@ export class ZardDrawerPanelComponent {
 
     let index = nearestSnapIndex(visible, resolved);
 
-    if (velocity > DRAWER_VELOCITY_THRESHOLD) index -= 1;
-    else if (velocity < -DRAWER_VELOCITY_THRESHOLD) index = Math.min(resolved.length - 1, index + 1);
+    if (velocity > DRAWER_VELOCITY_THRESHOLD) {
+      index -= 1;
+    } else if (velocity < -DRAWER_VELOCITY_THRESHOLD) {
+      index = Math.min(resolved.length - 1, index + 1);
+    }
 
     this.swipeOffset.set(null);
 

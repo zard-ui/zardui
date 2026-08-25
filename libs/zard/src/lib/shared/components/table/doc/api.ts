@@ -6,8 +6,13 @@ export const TABLE_API: ApiSection[] = [
     description:
       'A directive that accepts all properties supported by a native table. It automatically styles all nested table elements without requiring additional directives.',
     props: [
-      { name: 'zType', description: 'Table type', type: "'default' | 'striped' | 'bordered'", default: "'default'" },
-      { name: 'zSize', description: 'Table size', type: "'default' | 'compact' | 'comfortable'", default: "'default'" },
+      { name: '[zType]', description: 'Table type', type: "'default' | 'striped' | 'bordered'", default: "'default'" },
+      {
+        name: '[zSize]',
+        description: 'Table size',
+        type: "'default' | 'compact' | 'comfortable'",
+        default: "'default'",
+      },
     ],
   },
   {

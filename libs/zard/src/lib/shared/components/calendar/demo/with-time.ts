@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideClock2 } from '@ng-icons/lucide';
@@ -20,7 +20,6 @@ import { ZardCalendarComponent } from '../calendar.component';
     ZardInputComponent,
     NgIcon,
   ],
-  standalone: true,
   template: `
     <z-card zSize="sm" class="mx-auto w-fit">
       <z-card-content>
@@ -65,6 +64,7 @@ import { ZardCalendarComponent } from '../calendar.component';
       </z-card-footer>
     </z-card>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideClock2 })],
 })
 export class ZardDemoCalendarWithTimeComponent {
