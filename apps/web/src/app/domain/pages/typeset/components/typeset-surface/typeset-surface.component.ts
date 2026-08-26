@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 
+import { CHAT_QUESTION } from '../../data/fixtures/chat.fixture';
 import { TypesetGeneratorService } from '../../services/typeset-generator.service';
 
 /**
@@ -17,12 +18,22 @@ import { TypesetGeneratorService } from '../../services/typeset-generator.servic
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
-    <div class="mx-auto" [style.max-width]="service.measureWidth()">
+    <div class="mx-auto flex flex-col gap-10" [style.max-width]="service.measureWidth()">
+      <!--
+        The chat sample is an answer, and an answer alone reads as an article.
+        The question restores the turn it belongs to — outside the container,
+        because it is chrome: nothing in it is styled by the preset under test.
+      -->
+      @if (service.fixture().id === 'chat') {
+        <div class="bg-muted ml-auto w-fit max-w-[65%] rounded-3xl px-4 py-2.5">{{ question }}</div>
+      }
+
       <div class="typeset" [style]="service.previewStyles()" [innerHTML]="html()"></div>
     </div>
   `,
 })
 export class TypesetSurfaceComponent {
+  protected readonly question = CHAT_QUESTION;
   protected readonly service = inject(TypesetGeneratorService);
   private readonly sanitizer = inject(DomSanitizer);
 

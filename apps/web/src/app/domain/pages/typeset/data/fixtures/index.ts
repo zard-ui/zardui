@@ -6,42 +6,50 @@ import { ELEMENTS_FIXTURE } from './elements.fixture';
 import { NOTES_FIXTURE } from './notes.fixture';
 import type { TypesetFixture } from '../../models/typeset.model';
 
+/**
+ * The samples, in the order the switcher offers them.
+ *
+ * The first five are the genres a typeset actually has to survive, and their
+ * markup is the upstream shadcn fixture verbatim — the preset that reads well
+ * here reads well on the page it was copied from. `elements` closes the list:
+ * it is the visual test, not a genre.
+ */
 export const TYPESET_FIXTURES: readonly TypesetFixture[] = [
   {
     id: 'docs',
     label: 'Docs',
-    description: 'Reference prose: steps, options and the occasional warning.',
+    description: 'A technical page: prose, code blocks, a reference table and math.',
     html: DOCS_FIXTURE,
   },
   {
     id: 'chat',
     label: 'Chat',
-    description: 'A single assistant turn, the way it arrives in a bubble.',
+    description: 'An assistant answer, the way it arrives after a question.',
     html: CHAT_FIXTURE,
   },
   {
     id: 'article',
     label: 'Article',
-    description: 'Long-form reading, where the measure and the leading matter most.',
+    description: 'Long-form reading with images, where the measure and the leading matter most.',
     html: ARTICLE_FIXTURE,
   },
   {
     id: 'changelog',
     label: 'Changelog',
-    description: 'Dense nested lists under repeated headings.',
+    description: 'Dated releases and dense one-line entries under repeated headings.',
     html: CHANGELOG_FIXTURE,
+  },
+  {
+    id: 'notes',
+    label: 'Notes',
+    description: 'Meeting notes: decisions, a task list and lists nested three deep.',
+    html: NOTES_FIXTURE,
   },
   {
     id: 'elements',
     label: 'Elements',
     description: 'Every element the stylesheet touches, on one page.',
     html: ELEMENTS_FIXTURE,
-  },
-  {
-    id: 'notes',
-    label: 'Notes',
-    description: 'Short sections, task lists and a disclosure.',
-    html: NOTES_FIXTURE,
   },
 ];
 

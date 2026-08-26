@@ -1,63 +1,45 @@
+/**
+ * Editorial long-form: an image-forward post at two aspect ratios, a pull
+ * quote, lists and links.
+ *
+ * No code in it on purpose; the docs sample owns that. What this one tests is
+ * the measure and the leading over a run of uninterrupted reading.
+ */
 export const ARTICLE_FIXTURE = `
-<h1>The measure is not yours to keep</h1>
-<p>
-  Every typography system eventually has to answer one question: who decides how wide a
-  line of text may be? The answer most systems give is <em>the stylesheet</em>, and that
-  answer is wrong often enough to be worth revisiting.
-</p>
-
-<p>
-  A paragraph does not know whether it sits in a sidebar, a chat bubble or a printed page.
-  The layout knows. When a typography system bakes in a <code>max-width</code>, it takes a
-  decision away from the only place that has the context to make it, and every consumer
-  spends the rest of its life overriding that decision.
-</p>
-
-<h2>What a rhythm actually is</h2>
-<p>
-  The vertical rhythm of a page is not a grid you draw once. It is the relationship between
-  three numbers: how big the text is, how far apart its lines sit, and how much air separates
-  one block from the next. Fix those three and everything else — heading sizes, list indents,
-  the space around a rule — can be derived.
-</p>
-
-<blockquote>
-  <p>
-    Typography is the craft of endowing human language with a durable visual form.
-  </p>
-  <p>— Robert Bringhurst</p>
-</blockquote>
-
-<h2>Deriving, not declaring</h2>
-<p>
-  Consider the space above a second-level heading. Declared, it is a magic number that has to
-  be re-tuned every time the base size changes. Derived from the block spacing, it moves on
-  its own:
-</p>
-
-<pre><code>h2 {
-  margin-block-start: calc(var(--typeset-flow) * 1.4);
-}</code></pre>
-
-<p>
-  The multiplier encodes a judgement — a section break deserves more air than a paragraph
-  break — and that judgement holds at every size.<sup><a href="#">1</a></sup>
-</p>
-
-<h2>Where this leaves the layout</h2>
-<p>
-  The layout keeps the measure. The typography system keeps the rhythm. Neither has to know
-  much about the other, which is the whole point.
-</p>
-
+<h1>A Morning at the Letterpress Museum</h1>
+<p>The first thing you notice is the smell: machine oil, paper dust, and a century of ink that never fully dries. The second thing is the sound. A working letterpress shop is not quiet, and the museum on Greer Street keeps three presses working, because, as the docent told me within a minute of my arrival, <em>a silent press is just furniture</em>.</p>
+<p>I went because I write software that arranges text on screens, and I had started to suspect that everything hard about my job had been solved a hundred years ago by people with steel tools and no undo. I left four hours later with ink on my sleeve and a notebook full of confirmations.</p>
 <figure>
-  <img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20200%22%3E%3Crect%20width%3D%22640%22%20height%3D%22200%22%20fill%3D%22%23e5e5e5%22%2F%3E%3Cg%20fill%3D%22%23a3a3a3%22%3E%3Crect%20x%3D%2260%22%20y%3D%2250%22%20width%3D%22200%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2280%22%20width%3D%22320%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%22110%22%20width%3D%22280%22%20height%3D%2210%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%22140%22%20width%3D%22160%22%20height%3D%2210%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E" alt="Four lines of text of decreasing width, illustrating a measure" />
-  <figcaption>A measure is a count of characters, not a count of pixels.</figcaption>
+  <img class="grayscale dark:brightness-50" src="https://images.unsplash.com/photo-1629968417841-d87296c4205b?q=80&amp;w=1200&amp;h=675&amp;fit=crop" alt="Textured surface, worn by use." width="1200" height="675">
+  <figcaption>Ink before it becomes language.</figcaption>
 </figure>
-
-<hr />
-
-<p>
-  <small>Filed under typography, CSS and things that should have been settled by now.</small>
-</p>
+<h2>The composing room</h2>
+<p>Type lives in shallow wooden drawers called cases, and the layout of a case is itself a piece of interface design: the letters you reach for most sit nearest your hand, in the biggest compartments. Nobody alphabetized them. The arrangement was settled by frequency, argued over for a generation, and then never changed again, which is roughly the story of every good default I have ever shipped.</p>
+<p>A compositor working at full speed sets about two thousand characters an hour, reading the manuscript with one eye while the other confirms each pick. The docent, a retired compositor named <strong>Ruth Okafor</strong>, demonstrated without looking down once. When I asked how long that took to learn she said, "The hands take a year. Knowing when a line is wrong takes ten."</p>
+<blockquote>
+  <p>Every em of space in this room is a physical object. You want more air between two lines, you go get the lead and you carry it back. It keeps your opinions about spacing very honest.</p>
+</blockquote>
+<p>That line rearranged something in my head. The strips of lead that printers wedged between lines of type are why we still say <a href="#">leading</a>. On my screen, spacing is a number I can change in a keystroke, and so I change it constantly, carelessly. Ruth's shop had exactly four widths of lead, and the whole trade agreed on them, and a hundred years of books came out beautiful anyway. Constraint was not the obstacle to the craft. It was the craft.</p>
+<h2>What the metal knows</h2>
+<figure>
+  <img class="grayscale dark:brightness-50" src="https://images.unsplash.com/photo-1637325258040-d2f09636ecf6?q=80&amp;w=900&amp;h=1200&amp;fit=crop" alt="Recycled paper, up close." width="900" height="1200">
+  <figcaption>Space is material.</figcaption>
+</figure>
+<p>Three things the metal insists on, which screens let us forget:</p>
+<ul>
+  <li><strong>Space is material.</strong> Word spaces, line leads, and margins are objects with widths. Nothing is "auto." Someone chose everything.</li>
+  <li><strong>Hierarchy is expensive.</strong> Changing size means walking to a different case. Printers built emphasis from weight and space first because size was the costly move, and their pages read better for it.</li>
+  <li><strong>The page is finished before it is printed.</strong> A locked-up chase either holds together or it doesn't. There is a satisfying finality to it that no deploy has ever given me.</li>
+</ul>
+<p>None of this is nostalgia, or not only. The constraints were real costs, and digital type was right to remove them. But removal has a second-order effect: when nothing is expensive, nothing forces a decision, and unforced decisions drift. The printers' defaults survived because changing them was work. Ours have to survive on discipline, which is a weaker material.</p>
+<hr>
+<h2>Field notes</h2>
+<p>Practical things I wrote down, in the order I wrote them:</p>
+<ol>
+  <li>Ruth sets solid (no leading) only for lines shorter than the alphabet. Anything longer gets air. Our line-length rules agree, which pleased me more than it should have.</li>
+  <li>The shop's "house style" fits on an index card taped inside a cabinet door. Four leads, two faces, three sizes. An entire design system, physically enumerable.</li>
+  <li>Apprentices learn distribution (putting type away) before composition. You learn a system by returning things to it.</li>
+</ol>
+<p>The museum runs open studio on the first Saturday of every month, and they will let you set your own name if you ask. Mine came out crooked. Ruth looked at it for a moment and said it was a common beginner's error: I had been so careful choosing the letters that I forgot to check the spaces. I have been thinking about that all week.</p>
+<p><em>The Greer Street Press Museum is open Thursday through Sunday. If you go, bring a jacket; the composing room is kept cold for the metal.</em></p>
 `;

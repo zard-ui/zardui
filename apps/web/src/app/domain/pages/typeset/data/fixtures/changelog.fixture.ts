@@ -1,50 +1,35 @@
+/**
+ * Release notes: dated versions, dense lists of one-line entries and a diff.
+ *
+ * Every heading here repeats at the same level, which is the case that
+ * exposes spacing above a heading better than any hand-made sample would.
+ */
 export const CHANGELOG_FIXTURE = `
 <h1>Changelog</h1>
-<p>Everything that shipped, newest first.</p>
-
-<h2>1.4.0</h2>
-<h3>Added</h3>
+<h2>v2.4.0</h2>
+<p><em>June 18, 2026</em></p>
 <ul>
-  <li>
-    <strong>Typeset.</strong> A styling system for rendered markdown, published in the
-    registry as a single CSS file.
-  </li>
-  <li>A <code>--path</code> flag on <code>add</code>, for workspaces that keep components
-    outside the configured directory.</li>
+  <li><strong>Added:</strong> <code>store.batch(fn)</code> groups multiple writes into a single notification. Listeners observe only the final state.</li>
+  <li><strong>Added:</strong> a <code>name</code> option for devtools traces; anonymous stores now display as <code>store#3</code> instead of <code>undefined</code>.</li>
+  <li><strong>Changed:</strong> selectors are memoized per subscriber, cutting re-render counts roughly in half on wide stores.</li>
+  <li><strong>Fixed:</strong> subscribing during a notification no longer skips the next update.</li>
+  <li><strong>Fixed:</strong> <code>equals</code> is respected for the initial <code>injectStore</code> read, matching the documented behavior.</li>
 </ul>
-
-<h3>Fixed</h3>
+<h3>Breaking changes</h3>
+<p>The deprecated <code>store.update()</code> alias is removed. Replace it with <code>store.set()</code>; the signature is identical:</p>
+<pre><code>- store.update((s) =&gt; ({ count: s.count + 1 }))
++ store.set((s) =&gt; ({ count: s.count + 1 }))</code></pre>
+<h2>v2.3.1</h2>
+<p><em>May 30, 2026</em></p>
 <ul>
-  <li>
-    <code>add</code> no longer skips an item whose directory already holds unrelated files.
-    It now checks the files the item declares.
-  </li>
-  <li>The dialog no longer traps focus when opened from inside a drawer.</li>
+  <li><strong>Fixed:</strong> a race where two synchronous writes in the same tick could notify in reverse order under zoneless change detection.</li>
+  <li><strong>Docs:</strong> clarified that stores must be hoisted out of components, with a lint rule to catch it.</li>
 </ul>
-
-<h3>Changed</h3>
+<h2>v2.3.0</h2>
+<p><em>May 12, 2026</em></p>
 <ul>
-  <li>
-    <del>Icons resolved at build time.</del> They are resolved from the configured family
-    at install time, so switching families no longer means reinstalling everything.
-  </li>
+  <li><strong>Added:</strong> server-side rendering support; <code>injectStore</code> no longer touches <code>window</code>.</li>
+  <li><strong>Deprecated:</strong> <code>store.update()</code>, removed in v2.4.0. A console warning links to the migration note.</li>
+  <li><strong>Performance:</strong> subscription bookkeeping moved from an array to a Set; unsubscribe is now O(1).</li>
 </ul>
-
-<h2>1.3.2</h2>
-<h3>Fixed</h3>
-<ul>
-  <li>Server-side rendering no longer throws on <code>navigator</code> in the theme loader.</li>
-  <li>Tabs keep their selection across a route change.</li>
-</ul>
-
-<h4>Notes for upgraders</h4>
-<p>
-  No action required. If you patched the theme loader locally, revert the patch before
-  upgrading.
-</p>
-
-<hr />
-
-<h2>1.3.1</h2>
-<p>Documentation only. No published code changed.</p>
 `;

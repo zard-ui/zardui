@@ -2,208 +2,127 @@
  * Every element the stylesheet touches, on one page.
  *
  * This is the visual test: a rule that regresses shows up here, and nowhere
- * else does a heading level 6, a definition list and a table footer sit close
- * enough to compare.
+ * else does a heading level 6, a definition list, a table footer and a
+ * footnote section sit close enough to compare.
  */
 export const ELEMENTS_FIXTURE = `
-<h1>Heading level 1</h1>
-<p>
-  A paragraph directly under a heading takes the heading's own spacing, not the block flow.
-  This one carries <strong>bold text</strong>, <em>italic text</em>, a
-  <a href="#">link</a>, <code>inline code</code>, <mark>highlighted text</mark>,
-  <del>struck-out text</del>, an <abbr title="Abbreviation">abbr</abbr>, a
-  superscript<sup>1</sup> and a subscript<sub>2</sub>.
-</p>
+<h1>Streaming markdown to a million sessions</h1>
+<p>Six months ago we rewrote how assistant messages render, and this is the retrospective we wish we could have read first. The short version: the parser was never the problem, the <em>typography</em> was, and the fixes that mattered were <strong>boring, measurable, and CSS-shaped</strong>. We <del>estimated two weeks</del> spent six, and the difference was all edge cases.</p>
+<p>Everything below comes from production traffic against our completions endpoint (<a href="#">https://api.example.com/v1/organizations/org_2f8a91c/deployments/dep_09xkq/streaming-completions?include_usage=true&amp;format=sse</a>), rendered by the same stylesheet you’re reading now.<sup><a href="#fn1" id="ref1">1</a></sup></p>
+<h2>The setup</h2>
+<p>Messages arrive as <abbr title="Server-Sent Events">SSE</abbr> and render token by token. The renderer repairs unterminated markdown; the stylesheet’s only job is to keep already-painted content perfectly still while new content arrives below it. The whole contract fits in one method:</p>
+<pre><code>readonly messages = signal&lt;Message[]&gt;([])
 
-<h2>Heading level 2</h2>
-<p>Second-level headings take more space above them than any other block.</p>
-
-<h3>Heading level 3</h3>
-<p>Third level, back to the standard flow.</p>
-
-<h4>Heading level 4</h4>
-<p>Fourth level is body size, distinguished only by weight.</p>
-
-<h5>Heading level 5</h5>
-<p>Fifth level drops below body size and goes muted.</p>
-
-<h6>Heading level 6</h6>
-<p>Sixth level is uppercase, tracked out, and quieter still.</p>
-
-<hr />
-
-<h2>Lists</h2>
-<ul>
-  <li>An unordered item.</li>
-  <li>
-    An item with a nested list:
-    <ul>
-      <li>Second level uses a hollow marker.</li>
-      <li>
-        And a third:
-        <ul>
-          <li>Square, at this depth.</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>An item whose content is a paragraph.</p>
-    <p>And a second one, on the list's tighter rhythm.</p>
-  </li>
-</ul>
-
-<ol>
-  <li>First.</li>
-  <li>Second.</li>
-  <li>Third.</li>
-</ol>
-
-<ol type="a">
-  <li>Lower alpha.</li>
-  <li>Second.</li>
-</ol>
-
-<ol type="I">
-  <li>Upper roman.</li>
-  <li>Second.</li>
-</ol>
-
-<ul class="contains-task-list">
-  <li class="task-list-item"><input type="checkbox" checked disabled /> A finished task.</li>
-  <li class="task-list-item"><input type="checkbox" disabled /> An unfinished one.</li>
-</ul>
-
-<h2>Definition list</h2>
-<dl>
-  <dt>--typeset-size</dt>
-  <dd>The base body size. Everything else derives from it.</dd>
-  <dt>--typeset-leading</dt>
-  <dt>--typeset-flow</dt>
-  <dd>Two terms can share one definition.</dd>
-</dl>
-
-<h2>Quotation</h2>
-<blockquote>
-  <p>A quotation carries its own rule on the inline start edge.</p>
-  <p>A second paragraph inside it keeps the block flow.</p>
-</blockquote>
-
-<h2>Code</h2>
-<p>Inline <code>--typeset-flow</code> against a block:</p>
-<pre><code>.typeset-reading {
-  --typeset-font-body: var(--font-lora);
-  --typeset-size: 18px;
-  --typeset-leading: 1.9;
-  --typeset-flow: 2em;
+async send(text: string) {
+  for await (const part of this.transport.stream(text)) {
+    this.messages.update((all) =&gt; append(all, part))
+  }
 }</code></pre>
-
-<h2>Keys</h2>
-<p>Press <kbd>Cmd</kbd> + <kbd>K</kbd> to open the palette, then <kbd>Esc</kbd> to close it.</p>
-
-<h2>Disclosure</h2>
-<details>
-  <summary>A closed disclosure</summary>
-  <p>Whose content takes the block flow when it opens.</p>
-</details>
-
-<h2>Table</h2>
+<p>Every block above the insertion point must keep its computed styles byte-for-byte identical across appends. We test exactly that, and press <kbd>⌘</kbd> <kbd>K</kbd> in the playground to replay any captured stream against the assertion.</p>
+<h2>What the data said</h2>
+<p>We captured 40,000 assistant replies and counted what models actually emit. The distribution surprised us; <mark>deep headings and tables are not rare events</mark>, they’re Tuesday.</p>
 <table>
-  <caption>Sizes, and where each one is meant to be read</caption>
   <thead>
     <tr>
-      <th>Preset</th>
-      <th align="center">Size</th>
-      <th align="right">Leading</th>
+      <th>Element</th>
+      <th align="right">Percentage</th>
+      <th>Notes</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th scope="row">Compact</th>
-      <td align="center">14px</td>
-      <td align="right">1.6</td>
+      <th scope="row">Lists</th>
+      <td align="right">78.4</td>
+      <td>Nesting to three levels is common</td>
     </tr>
     <tr>
-      <th scope="row">Docs</th>
-      <td align="center">15px</td>
-      <td align="right">1.75</td>
+      <th scope="row">Code blocks</th>
+      <td align="right">41.2</td>
+      <td>Half specify no language tag at all</td>
     </tr>
     <tr>
-      <th scope="row">Reading</th>
-      <td align="center">18px</td>
-      <td align="right">1.9</td>
+      <th scope="row">Tables</th>
+      <td align="right">17.9</td>
+      <td>Comparison questions produce 40-column monsters</td>
+    </tr>
+    <tr>
+      <th scope="row">Headings</th>
+      <td align="right">12.6</td>
+      <td>Models outline far deeper than humans do</td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
-      <th scope="row">Range</th>
-      <td align="center">14–18px</td>
-      <td align="right">1.6–1.9</td>
+      <th scope="row">Any block element</th>
+      <td align="right">94.1</td>
+      <td>Plain-paragraph-only replies are the rare case</td>
     </tr>
   </tfoot>
 </table>
-
-<h2>Wide table, wrapped to scroll</h2>
-<div class="typeset-scroll">
-  <table>
-    <thead>
-      <tr>
-        <th>Variable</th>
-        <th>Default</th>
-        <th>Controls</th>
-        <th>Derived from it</th>
-        <th>Set on</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>--typeset-size</code></td>
-        <td><code>1em</code></td>
-        <td>Base body size</td>
-        <td>Every heading size, every code block size</td>
-        <td>The preset class</td>
-      </tr>
-      <tr>
-        <td><code>--typeset-leading</code></td>
-        <td><code>1.75</code></td>
-        <td>Line height</td>
-        <td>Nothing — it stands alone</td>
-        <td>The preset class</td>
-      </tr>
-      <tr>
-        <td><code>--typeset-flow</code></td>
-        <td><code>1.25em</code></td>
-        <td>Space between blocks</td>
-        <td>Heading spacing, rule margins, list gaps</td>
-        <td>The preset class</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<h2>Media</h2>
+<p>That last row is why the bottom of the heading scale exists at all.<sup><a href="#fn2" id="ref2">2</a></sup> Nobody designs h6 for people; you design it for machines that never learned restraint.</p>
 <figure>
-  <img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20180%22%3E%3Crect%20width%3D%22640%22%20height%3D%22180%22%20fill%3D%22%23d4d4d4%22%2F%3E%3Ccircle%20cx%3D%22320%22%20cy%3D%2290%22%20r%3D%2244%22%20fill%3D%22%23a3a3a3%22%2F%3E%3C%2Fsvg%3E" alt="A grey placeholder with a circle at its centre" />
-  <figcaption>A figure caption sits centred and quiet under its image.</figcaption>
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'%3E%3Crect width='1200' height='630' fill='%23EAEAEA' rx='6'/%3E%3Cpath d='M80 470 L280 380 L480 420 L680 260 L880 300 L1120 160' stroke='%23BDBDBD' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Latency dashboard the morning after rollout" width="1200" height="630">
+  <figcaption>Figure 1. The morning after rollout: style recalculation cost per token, before and after the append-stable rules landed.</figcaption>
 </figure>
+<h2>Three mistakes we made</h2>
+<h3>We trusted margin collapsing</h3>
+<p>Our first spacing model used symmetric margins and let the browser deduplicate them. Then a designer wrapped messages in a flex column and every paragraph gap silently doubled. Single-direction margins fixed it everywhere at once:</p>
+<ol>
+  <li>Space belongs above blocks, and only above.</li>
+  <li>Headings own the gap beneath them, so following content never negotiates.</li>
+  <li>Nothing, anywhere, sets a bottom margin.</li>
+</ol>
+<h3>We styled the last row</h3>
+<p>Tables drew their border under the final row, which meant every streamed row restyled the previous one on arrival. Users reported it as “the table flickers while it types.” The fix was embarrassingly small:</p>
+<ul>
+  <li>Borders go <em>between</em> rows (<code>tr + tr</code>), never after the last one
+    <ul>
+      <li>The same rule saved us again on blockquote citations and list dividers</li>
+    </ul>
+  </li>
+  <li>Selectors may look backward at earlier siblings, never forward</li>
+</ul>
+<h3>We ignored the quiet feedback</h3>
+<blockquote>
+  <p>The new answers feel calmer, and I can’t tell you why. I just stopped noticing the formatting.</p>
+  <p>That was the entire review. It’s still the best QA signal we’ve ever received, because typography you notice is typography that failed.</p>
+</blockquote>
+<h2>The checklist we run now</h2>
+<p>Before any typography change ships, a release candidate has to clear the same four gates, in order:</p>
+<ul class="contains-task-list">
+  <li class="task-list-item"><input type="checkbox" checked disabled> Append-stability suite passes on all captured streams</li>
+  <li class="task-list-item"><input type="checkbox" checked disabled> Reads correctly at <code>text-sm</code> inside a bubble and at 16px full width</li>
+  <li class="task-list-item"><input type="checkbox" checked disabled> Squint test shows even gray, no hotspots</li>
+  <li class="task-list-item"><input type="checkbox" disabled> Sixty seconds of sustained reading by someone who didn’t write it</li>
+</ul>
+<details>
+  <summary>How we capture the streams for the suite</summary>
+  <p>Every failed render in production writes its raw token sequence to a bucket. The suite replays each capture twice, once all at once and once token by token, and diffs the computed styles of everything that was on screen before the last token arrived.</p>
+  <pre><code>replay: captures
+	npm run suite -- --replay captures/ --diff computed
 
-<h2>Opting out</h2>
-<div class="not-typeset" style="border: 1px dashed currentColor; padding: 12px; border-radius: 8px; opacity: 0.7">
-  <p style="margin: 0">
-    This box carries <code>not-typeset</code>. Nothing inside it is styled by typeset —
-    not this paragraph, not this <code>code</code>.
-  </p>
-</div>
-
-<hr />
-
-<p>
-  A footnote reference<sup><a href="#fn1">1</a></sup> points into the section below.
-</p>
-
-<div class="footnotes">
+captures:
+	npm run capture -- --since yesterday --failures-only</code></pre>
+</details>
+<hr>
+<h2>Appendix</h2>
+<h4>Glossary</h4>
+<dl>
+  <dt>flow</dt>
+  <dd>The rhythm unit: one em-based value that spaces every block from the one before it.</dd>
+  <dt>measure</dt>
+  <dd>Line length in average characters. Not the CSS <code>ch</code> unit, which overcounts by roughly a third.</dd>
+</dl>
+<h4>Reference notes</h4>
+<h5>On the numbers in this post</h5>
+<p>Percentages are per-reply presence, not token share. A reply containing one table and one list counts once in each row.</p>
+<h6>Revision history</h6>
+<p>Corrected the p95 code-block count<sup><a href="#fn3" id="ref3">3</a></sup> and added the flex-column incident after two readers asked whether “boring, measurable, and CSS-shaped” was a typo. It wasn’t.</p>
+<section data-footnotes class="footnotes">
   <ol>
-    <li id="fn1">Footnotes come out smaller and muted, above a rule of their own.</li>
+    <li id="fn1"><p>Endpoint anonymized. The path structure is real; the org is not. <a href="#ref1">↩</a></p></li>
+    <li id="fn2"><p>Specifically the reply that contained fourteen h6 elements and zero h1–h3. <a href="#ref2">↩</a></p></li>
+    <li id="fn3"><p>The original draft said nine; the correct p95 is seven. <a href="#ref3">↩</a></p></li>
   </ol>
-</div>
+</section>
 `;

@@ -1,47 +1,46 @@
+/**
+ * Meeting notes: decisions, a task list and discussion nested three levels
+ * deep.
+ *
+ * The nesting is the point — list indents are derived, so this is where a
+ * wrong derivation stops looking like a list.
+ */
 export const NOTES_FIXTURE = `
-<h2>Reading notes — week 12</h2>
-
-<p>
-  Three things worth keeping from this week, plus one I want to come back to.
-</p>
-
-<h3>On specificity</h3>
-<p>
-  <code>:where()</code> costs nothing. That is the whole trick behind a stylesheet you can
-  override with a plain utility class. Everything inside it contributes zero to the
-  specificity of the selector, so <code>.text-lg</code> on the element wins on its own.
-</p>
-
-<ul class="contains-task-list">
-  <li class="task-list-item"><input type="checkbox" checked disabled /> Read the cascade layers spec.</li>
-  <li class="task-list-item"><input type="checkbox" checked disabled /> Try <code>@layer</code> ordering in a real project.</li>
-  <li class="task-list-item"><input type="checkbox" disabled /> Write up why unlayered CSS wins over layered CSS.</li>
+<h1>Platform sync: week 27</h1>
+<p><em>July 3, 2026 · 25 min · recording available</em></p>
+<h2>Decisions</h2>
+<ul>
+  <li>Ship the streaming endpoint behind a flag on Tuesday; full rollout gated on the p95 latency holding under 800ms for 48 hours.</li>
+  <li>Adopt cursor pagination for the activity feed. Offset stays on the admin tables only, capped at page 500.</li>
+  <li>Postpone the queue migration to Q3. Nobody could name a current failure it fixes.</li>
 </ul>
-
-<h3>On streaming</h3>
-<p>
-  A selector that looks forward — <code>:last-child</code>, <code>:has()</code> — is a
-  selector whose match changes when content is appended. In a chat UI that means the
-  paragraph you already read moves while you are reading it.
-</p>
-
-<details>
-  <summary>The one-way rule, stated precisely</summary>
-  <p>
-    Spacing between blocks belongs to the block below, never the block above. Then a new
-    block brings its own space and nothing above it is touched.
-  </p>
-</details>
-
-<h3>To come back to</h3>
-<p>
-  <mark>Optical sizing</mark> in variable fonts. Every reference I found either assumes you
-  already know what <code>opsz</code> does, or explains it with a diagram that assumes the
-  same. Worth an afternoon.
-</p>
-
-<p>
-  <abbr title="Terms of reference">TOR</abbr> for next week: pick one system, read its CSS
-  end to end, write down every decision I would have made differently.
-</p>
+<h2>Action items</h2>
+<ul class="contains-task-list">
+  <li class="task-list-item"><input type="checkbox" checked disabled> <strong>Mia:</strong> flag config + kill switch for the streaming endpoint</li>
+  <li class="task-list-item"><input type="checkbox" disabled> <strong>Devon:</strong> latency dashboard with the 800ms line drawn on it</li>
+  <li class="task-list-item"><input type="checkbox" disabled> <strong>Sam:</strong> write the cursor encoding RFC, one page max</li>
+  <li class="task-list-item"><input type="checkbox" disabled> <strong>Priya:</strong> close out the three stale runbook pages before Friday</li>
+</ul>
+<h2>Discussion</h2>
+<ul>
+  <li>Streaming rollout
+    <ul>
+      <li>Retry behavior on disconnect is still client-defined; server sends <code>retry-after</code> but nobody reads it.</li>
+      <li>Agreement: the SDK should honor it, apps that hand-roll fetch are on their own.
+        <ul>
+          <li>Devon volunteered to add it to the SDK changelog as a “behavior change” callout.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>On-call load
+    <ul>
+      <li>Pages are down 40% since the alert dedup work. Two of the remaining alerts are known-noisy and owned by nobody.</li>
+      <li>Priya takes both; if they can’t be fixed in an hour each, they get deleted.</li>
+    </ul>
+  </li>
+</ul>
+<blockquote>
+  <p>“If an alert has fired twelve times and been actioned zero times, it isn’t an alert, it’s a screensaver.”</p>
+</blockquote>
 `;
