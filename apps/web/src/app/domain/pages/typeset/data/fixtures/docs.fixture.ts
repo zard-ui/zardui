@@ -22,7 +22,7 @@ export const DOCS_FIXTURE = `
 <li>Your transport calls the provider and returns a UI message stream.</li>
 <li>The chat appends chunks to the last message as they arrive, re-rendering as it goes.</li>
 </ol>
-<pre><code>import { ChangeDetectionStrategy, Component } from '@angular/core';
+<pre tabindex="0"><code>import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { injectChat } from '@acme/chat';
 
@@ -43,7 +43,7 @@ import { injectChat } from '@acme/chat';
 export class ChatComponent {
   protected readonly chat = injectChat();
 }</code></pre>
-<pre><code>import { Injectable } from '@angular/core';
+<pre tabindex="0"><code>import { Injectable } from '@angular/core';
 import { readUIMessageStream } from '@acme/chat';
 
 @Injectable({ providedIn: 'root' })
@@ -70,7 +70,7 @@ export class ChatTransport {
 <li><code>ready</code>: The full response has been received and processed; a new user message can be submitted.</li>
 <li><code>error</code>: An error occurred during the request, preventing successful completion.</li>
 </ul>
-<pre><code>protected readonly chat = injectChat({
+<pre tabindex="0"><code>protected readonly chat = injectChat({
   transport: new DefaultChatTransport({ api: '/api/chat' }),
 });
 
@@ -87,7 +87,7 @@ export class ChatTransport {
 <h3>Error State</h3>
 <p>Similarly, the <code>error</code> signal holds the error thrown during the request. It can be used to display an error message, disable the submit button, or show a retry button:</p>
 <blockquote><p>We recommend showing a generic error message to the user, such as "Something went wrong." This is a good practice to avoid leaking information from the server.</p></blockquote>
-<pre><code>protected readonly chat = injectChat({
+<pre tabindex="0"><code>protected readonly chat = injectChat({
   transport: new DefaultChatTransport({ api: '/api/chat' }),
 });
 
@@ -99,7 +99,7 @@ export class ChatTransport {
 }</code></pre>
 <h3>Cancellation and regeneration</h3>
 <p>It's also a common use case to abort the response message while it's still streaming back from the AI provider. You can do this by calling the <code>stop</code> method returned by <code>injectChat</code>.</p>
-<pre><code>&lt;button
+<pre tabindex="0"><code>&lt;button
   [disabled]="chat.status() !== 'streaming' &amp;&amp; chat.status() !== 'submitted'"
   (click)="chat.stop()"
 &gt;
@@ -129,7 +129,7 @@ export class ChatTransport {
 <li><code>onData</code>: Called whenever a data part is received.</li>
 </ul>
 <p>These callbacks can be used to trigger additional actions, such as logging, analytics, or custom UI updates.</p>
-<pre><code>protected readonly chat = injectChat({
+<pre tabindex="0"><code>protected readonly chat = injectChat({
   onFinish: ({ message }) =&gt; this.history.save(message),
   onError: error =&gt; console.error(error),
 });</code></pre>

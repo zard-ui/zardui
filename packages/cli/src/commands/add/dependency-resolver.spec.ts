@@ -23,7 +23,7 @@ import {
   resolveDependencies,
 } from '@cli/commands/add/dependency-resolver.js';
 import { Config } from '@cli/utils/config.js';
-import { existsSync } from 'fs';
+import { existsSync, type PathLike } from 'fs';
 import * as path from 'path';
 
 import { fetchRegistryIndex, invalidateRegistryCache } from '../../utils/registry.js';
@@ -138,8 +138,8 @@ describe('resolveDependencies', () => {
   });
 
   it('should skip already installed components when overwrite is false', async () => {
-    // O diretório e todos os arquivos declarados pelo item já existem.
-    mockExistsSync.mockImplementation((target: any) => String(target).includes('button'));
+    // The directory and every file the item declares are already there.
+    mockExistsSync.mockImplementation((target: PathLike) => String(target).includes('button'));
 
     const result = await resolveDependencies(['button'], fakeResolvedConfig, '/project', { overwrite: false });
 
@@ -148,9 +148,11 @@ describe('resolveDependencies', () => {
   });
 
   it('should reinstall a component whose declared files are missing', async () => {
-    // O diretório existe, mas o arquivo que o item declara não: instalação
-    // interrompida pela metade, que agora é completada em vez de pulada.
-    mockExistsSync.mockImplementation((target: any) => String(target) === '/project/src/app/shared/components/button');
+    // The directory exists but the file the item declares does not: an install
+    // cut in half, which is now completed rather than skipped.
+    mockExistsSync.mockImplementation(
+      (target: PathLike) => String(target) === '/project/src/app/shared/components/button',
+    );
 
     const result = await resolveDependencies(['button'], fakeResolvedConfig, '/project', { overwrite: false });
 
@@ -179,13 +181,13 @@ describe('isItemInstalled', () => {
   });
 
   it('should report not installed when no declared file exists', () => {
-    mockExistsSync.mockImplementation((target: any) => String(target) === '/project/components/button');
+    mockExistsSync.mockImplementation((target: PathLike) => String(target) === '/project/components/button');
 
     expect(isItemInstalled('/project/components/button', ['button.component.ts', 'index.ts'])).toBe(false);
   });
 
   it('should report not installed when only some declared files exist', () => {
-    mockExistsSync.mockImplementation((target: any) => !String(target).endsWith('index.ts'));
+    mockExistsSync.mockImplementation((target: PathLike) => !String(target).endsWith('index.ts'));
 
     expect(isItemInstalled('/project/components/button', ['button.component.ts', 'index.ts'])).toBe(false);
   });
@@ -220,5 +222,20 @@ describe('getTargetDir', () => {
     const target = getTargetDir({ name: 'button', basePath: 'button' }, fakeResolvedConfig, '/project');
 
     expect(target).toBe(path.resolve('/project/src/app/shared/components', 'button'));
+  });
+
+  it('should keep a styles item next to the global stylesheet even under --path', () => {
+    // --path moves components. A stylesheet that moved with them would still be
+    // imported as `./typeset.css` from beside the global CSS, and resolve to
+    // nothing — the install would report success and style nothing.
+    const target = getTargetDir({ name: 'typeset', basePath: 'styles' }, fakeResolvedConfig, '/project', 'src/ui');
+
+    expect(target).toBe(path.dirname('/project/src/styles.css'));
+  });
+
+  it('should honour --path for a component', () => {
+    const target = getTargetDir({ name: 'button', basePath: 'button' }, fakeResolvedConfig, '/project', 'src/ui');
+
+    expect(target).toBe(path.resolve('/project', 'src/ui', 'button'));
   });
 });

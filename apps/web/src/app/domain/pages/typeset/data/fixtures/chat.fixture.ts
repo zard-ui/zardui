@@ -15,7 +15,7 @@ export const CHAT_FIXTURE = `
 <p>Slow dev startup in Angular almost always comes down to one of three things: module count, heavy work before the first build, or something outside the compiler entirely. Here's how to narrow it down fast.</p>
 <h3>1. Get a baseline</h3>
 <p>Start the server with the build profiler on and note the two numbers it prints:</p>
-<pre><code>NG_BUILD_DEBUG_PERF=1 ng serve</code></pre>
+<pre tabindex="0"><code>NG_BUILD_DEBUG_PERF=1 ng serve</code></pre>
 <ul>
 <li><strong>Startup time</strong>: everything before the local URL appears. Config parsing, dependency prebundling, stylesheet setup.</li>
 <li><strong>First build</strong>: the time until the app is served. Module graph size lives here.</li>
@@ -32,14 +32,14 @@ export const CHAT_FIXTURE = `
 </tbody>
 </table>
 <p>The barrel-file one is the classic. A single <code>import { ZardButtonComponent } from '@acme/ui'</code> through a barrel can pull thousands of modules into the graph. Fix it by importing the entry point you actually render:</p>
-<pre><code>// Pulls every component in the package into the dev graph
+<pre tabindex="0"><code>// Pulls every component in the package into the dev graph
 import { ZardButtonComponent } from '@acme/ui';
 
 // Pulls the one on screen
 import { ZardButtonComponent } from '@acme/ui/button';</code></pre>
 <h3>3. Measure, don't guess</h3>
 <p>If neither jumps out, emit the build metafile and look at what actually landed:</p>
-<pre><code>ng build --stats-json
+<pre tabindex="0"><code>ng build --stats-json
 # then open the metafile in a bundle analyzer:
 npx esbuild-visualizer --metadata dist/app/stats.json</code></pre>
 <blockquote><p>Compare against a bare <code>ng new</code> app on the same machine first. If that's also slow, the problem is your machine or antivirus scanning <code>node_modules</code>, not your app.</p></blockquote>

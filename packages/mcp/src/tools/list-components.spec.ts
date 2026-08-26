@@ -34,7 +34,8 @@ describe('list-components', () => {
     getItems.mockResolvedValue([
       { name: 'button', type: 'registry:component', basePath: 'button', files: ['button.component.ts'] },
       { name: 'typeset', type: 'registry:component', basePath: 'styles', files: ['typeset.css'] },
-      { name: 'core', type: 'registry:component', basePath: 'core', files: ['index.ts'] },
+      // The registry publishes core with no basePath — see registry-data.ts.
+      { name: 'core', type: 'registry:component', files: ['index.ts'] },
       { name: 'dark-mode', type: 'registry:component', basePath: 'services', files: ['dark-mode.ts'] },
       { name: 'utils', type: 'registry:component', basePath: 'utils', files: ['index.ts'] },
     ]);
@@ -44,8 +45,9 @@ describe('list-components', () => {
     expect((await listed()).map(item => item.name)).toEqual(['button', 'typeset', 'core', 'dark-mode', 'utils']);
   });
 
-  // O registry chama todo item de `registry:component`. Sem o rótulo, um agente
-  // pede `get-component typeset` esperando um componente Angular e recebe CSS.
+  // The registry calls every item `registry:component`. Without the label, an
+  // agent asks for `get-component typeset` expecting an Angular component and
+  // gets CSS back.
   it('calls a UI component a component', async () => {
     const button = (await listed()).find(item => item.name === 'button');
 

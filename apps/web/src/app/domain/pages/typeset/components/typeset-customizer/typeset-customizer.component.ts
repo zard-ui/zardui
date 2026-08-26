@@ -91,8 +91,8 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
           Menu
 
           <!--
-            Duas barras que ocupam a largura da caixa. O lucideEqual tem as
-            mesmas duas barras, mas curtas: fica 3px mais estreito que o original.
+            Two bars that span the width of the box. lucideEqual has the same two
+            bars, but short: it comes out 3px narrower than the original.
           -->
           <svg
             class="size-5 shrink-0"
@@ -224,10 +224,10 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
       </div>
 
       <!--
-        Os dois botões saem transparentes: o outline do zard pinta um fundo no
-        escuro, e sobre a faixa do rodapé ele viraria um degrau de cor que o
-        original não tem. O Shuffle também não leva ícone — o original é só a
-        palavra, centralizada.
+        Both buttons stay transparent: zard's outline paints a background in the
+        dark, and over the footer strip that would become a step in colour the
+        original does not have. Shuffle carries no icon either — the original is
+        just the word, centred.
       -->
       <div class="bg-muted/50 flex shrink-0 flex-row-reverse gap-2 border-t px-2.5 py-3 md:flex-col">
         <button
@@ -254,14 +254,17 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
     <ng-template #menu>
       <z-popover class="w-52 gap-0 rounded-xl p-1.5">
         <!--
-          The tabindex is what lets the open menu hold focus itself, and that
-          is what keeps the list quiet on open — see onMenuVisible below.
+          The tabindex is what lets the open menu hold focus itself, and that is
+          what keeps the list quiet on open — see onMenuVisible below. The data
+          attribute is how that lookup finds THIS menu: the overlay container is
+          shared, and a dropdown left open elsewhere is a `[(role = 'menu')]` too.
         -->
         <div
           role="menu"
           aria-label="Typeset options"
           tabindex="-1"
           class="outline-none"
+          data-typeset-menu
           (keydown)="onMenuKeydown($event)"
         >
           <button type="button" role="menuitem" [class]="menuItemClass" (click)="menuOpen.set(false); shuffle()">
@@ -412,7 +415,7 @@ export class TypesetCustomizerComponent {
     if (!open || !this.isBrowser) return;
 
     setTimeout(() => {
-      const menu = this.document.querySelector<HTMLElement>('.cdk-overlay-container [role="menu"]');
+      const menu = this.document.querySelector<HTMLElement>('.cdk-overlay-container [data-typeset-menu]');
       menu?.focus();
     });
   }

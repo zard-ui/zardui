@@ -13,12 +13,12 @@ import {
 } from '../../utils/registry.js';
 
 /*
- * Um item está instalado quando todos os arquivos que ele declara já existem.
+ * An item is installed when every file it declares already exists.
  *
- * A pergunta antiga era "o diretório tem algum arquivo?", o que só funciona
- * para item que mora sozinho. O typeset é gravado junto do CSS global do
- * projeto, um diretório que nunca está vazio — ele seria pulado sempre. Pelo
- * caminho, item instalado pela metade passa a ser completado em vez de pulado.
+ * The old question was "does the directory hold any file?", which only works
+ * for an item that lives alone. Typeset is written next to the project's
+ * global stylesheet, a directory that is never empty — it would be skipped
+ * every time. On the way, a half-installed item is now completed, not skipped.
  */
 export function isItemInstalled(dir: string, files: readonly string[]): boolean {
   if (!existsSync(dir)) return false;
@@ -35,6 +35,19 @@ export function getTargetDir(
 ): string {
   const basePath = component.basePath ?? component.name;
 
+  /*
+   * A stylesheet goes next to the global CSS declared in components.json, not
+   * inside components/. That is what lets the `@import './typeset.css'` the
+   * setup injects resolve without a brittle relative path.
+   *
+   * It comes before `customPath` on purpose: --path moves components, and a
+   * stylesheet that moved with them would be imported from a directory it does
+   * not sit in — the install would report success and style nothing.
+   */
+  if (basePath === 'styles') {
+    return path.dirname(resolvedConfig.resolvedPaths.tailwindCss);
+  }
+
   if (customPath) {
     return path.resolve(cwd, customPath, basePath);
   }
@@ -49,15 +62,6 @@ export function getTargetDir(
 
   if (basePath === 'utils') {
     return resolvedConfig.resolvedPaths.utils;
-  }
-
-  /*
-   * Folha de estilo vai para junto do CSS global declarado em components.json,
-   * e não para dentro de components/. É o que faz o `@import './typeset.css'`
-   * que o setup injeta resolver sem caminho relativo frágil.
-   */
-  if (basePath === 'styles') {
-    return path.dirname(resolvedConfig.resolvedPaths.tailwindCss);
   }
 
   return path.resolve(resolvedConfig.resolvedPaths.components, basePath);

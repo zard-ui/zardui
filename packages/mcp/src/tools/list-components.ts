@@ -4,21 +4,27 @@ import { registryService } from '../services/registry.service.js';
 import type { RegistryItem } from '../types/registry.types.js';
 
 /**
- * O que o item é de fato, já que o registry chama todos de `registry:component`.
+ * What the item actually is, since the registry calls everything
+ * `registry:component`.
  *
- * Sem isto, um agente pede `get-component typeset` esperando um componente
- * Angular e recebe uma folha de estilo — e `get-component-docs typeset` não
- * acha nada, porque a página do typeset não mora sob `/docs/components`. O
- * rótulo é o que evita as duas perguntas erradas; o mesmo vale para `core`,
- * `utils` e `dark-mode`, que também nunca foram componentes de UI.
+ * Without this, an agent asks for `get-component typeset` expecting an Angular
+ * component and gets a stylesheet — and `get-component-docs typeset` finds
+ * nothing, because the typeset page does not live under `/docs/components`.
+ * The label is what heads off both wrong questions; the same goes for `core`,
+ * `utils` and `dark-mode`, which were never UI components either.
+ *
+ * The base path falls back to the name because the registry publishes `core`
+ * without one — matching how `getTargetDir` reads the same item in the CLI.
  */
 function kindOf(item: RegistryItem): 'component' | 'stylesheet' | 'utility' {
-  if (item.basePath === 'styles') return 'stylesheet';
-  if (item.basePath === 'core' || item.basePath === 'services' || item.basePath === 'utils') return 'utility';
+  const basePath = item.basePath ?? item.name;
+
+  if (basePath === 'styles') return 'stylesheet';
+  if (basePath === 'core' || basePath === 'services' || basePath === 'utils') return 'utility';
   return 'component';
 }
 
-/** Onde a documentação do item é publicada, quando existe uma. */
+/** Where the item's documentation is published, when there is one. */
 function docsPathOf(item: RegistryItem): string | undefined {
   switch (kindOf(item)) {
     case 'component':

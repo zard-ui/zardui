@@ -17,7 +17,7 @@ export const CHANGELOG_FIXTURE = `
 </ul>
 <h3>Breaking changes</h3>
 <p>The deprecated <code>store.update()</code> alias is removed. Replace it with <code>store.set()</code>; the signature is identical:</p>
-<pre><code>- store.update((s) =&gt; ({ count: s.count + 1 }))
+<pre tabindex="0"><code>- store.update((s) =&gt; ({ count: s.count + 1 }))
 + store.set((s) =&gt; ({ count: s.count + 1 }))</code></pre>
 <h2>v2.3.1</h2>
 <p><em>May 30, 2026</em></p>

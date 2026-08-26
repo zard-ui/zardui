@@ -11,7 +11,7 @@ export const ELEMENTS_FIXTURE = `
 <p>Everything below comes from production traffic against our completions endpoint (<a href="#">https://api.example.com/v1/organizations/org_2f8a91c/deployments/dep_09xkq/streaming-completions?include_usage=true&amp;format=sse</a>), rendered by the same stylesheet you’re reading now.<sup><a href="#fn1" id="ref1">1</a></sup></p>
 <h2>The setup</h2>
 <p>Messages arrive as <abbr title="Server-Sent Events">SSE</abbr> and render token by token. The renderer repairs unterminated markdown; the stylesheet’s only job is to keep already-painted content perfectly still while new content arrives below it. The whole contract fits in one method:</p>
-<pre><code>readonly messages = signal&lt;Message[]&gt;([])
+<pre tabindex="0"><code>readonly messages = signal&lt;Message[]&gt;([])
 
 async send(text: string) {
   for await (const part of this.transport.stream(text)) {
@@ -98,7 +98,7 @@ async send(text: string) {
 <details>
   <summary>How we capture the streams for the suite</summary>
   <p>Every failed render in production writes its raw token sequence to a bucket. The suite replays each capture twice, once all at once and once token by token, and diffs the computed styles of everything that was on screen before the last token arrived.</p>
-  <pre><code>replay: captures
+  <pre tabindex="0"><code>replay: captures
 	npm run suite -- --replay captures/ --diff computed
 
 captures:

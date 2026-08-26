@@ -10,9 +10,14 @@ import type { TypesetFixture } from '../../models/typeset.model';
  * The samples, in the order the switcher offers them.
  *
  * The first five are the genres a typeset actually has to survive, and their
- * markup is the upstream shadcn fixture verbatim — the preset that reads well
- * here reads well on the page it was copied from. `elements` closes the list:
- * it is the visual test, not a genre.
+ * shape is the upstream shadcn fixture — the preset that reads well here reads
+ * well on the page it was copied from. The prose and the code are written for
+ * Angular, since that is the framework this port documents. `elements` closes
+ * the list: it is the visual test, not a genre.
+ *
+ * Every `pre` carries `tabindex="0"`: typeset gives a code block
+ * `overflow-x: auto`, and a scrollable region no key can reach is an
+ * accessibility failure the e2e suite catches.
  */
 export const TYPESET_FIXTURES: readonly TypesetFixture[] = [
   {

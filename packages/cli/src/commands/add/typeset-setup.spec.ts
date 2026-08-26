@@ -22,13 +22,13 @@ import { existsSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
 
 const mockExistsSync = existsSync as jest.MockedFunction<typeof existsSync>;
-const mockReadFile = readFile as jest.MockedFunction<any>;
-const mockWriteFile = writeFile as jest.MockedFunction<any>;
+const mockReadFile = readFile as jest.MockedFunction<typeof readFile>;
+const mockWriteFile = writeFile as jest.MockedFunction<typeof writeFile>;
 const mockLoggerWarn = logger.warn as jest.MockedFunction<typeof logger.warn>;
 
 const CSS_PATH = '/project/src/styles.css';
 
-/** O conteúdo que `setupTypeset` gravou, ou null se ele não gravou nada. */
+/** What `setupTypeset` wrote, or null when it wrote nothing. */
 function written(): string | null {
   return mockWriteFile.mock.calls.length ? (mockWriteFile.mock.calls[0][1] as string) : null;
 }
@@ -99,6 +99,28 @@ describe('setupTypeset', () => {
 
     expect(written()).toBe(
       "@import 'tailwindcss';\n@import './theme.css' layer(base);\n@import './typeset.css';\n\nbody {\n}\n",
+    );
+  });
+
+  it('should not mistake a mention of typeset.css in a comment for the import', async () => {
+    mockReadFile.mockResolvedValue("@import 'tailwindcss';\n/* TODO: add typeset.css here */\n");
+
+    await setupTypeset(CSS_PATH);
+
+    expect(written()).toBe("@import 'tailwindcss';\n@import './typeset.css';\n/* TODO: add typeset.css here */\n");
+  });
+
+  it('should not anchor on a commented-out @import that follows a rule', async () => {
+    mockReadFile.mockResolvedValue(
+      "@import 'tailwindcss';\n\n:root {\n  --radius: 0.5rem;\n}\n\n/*\n@import './old.css';\n*/\n",
+    );
+
+    await setupTypeset(CSS_PATH);
+
+    // The import has to land after the real one, never after the rule — CSS
+    // ignores an @import that follows a declaration block.
+    expect(written()).toBe(
+      "@import 'tailwindcss';\n@import './typeset.css';\n\n:root {\n  --radius: 0.5rem;\n}\n\n/*\n@import './old.css';\n*/\n",
     );
   });
 

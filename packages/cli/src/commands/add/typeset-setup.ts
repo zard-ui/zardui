@@ -5,11 +5,28 @@ import * as fsPromises from 'fs/promises';
 
 const TYPESET_IMPORT = "@import './typeset.css';";
 
-/** Todo `@import` de CSS do arquivo, na ordem em que aparecem. */
+/**
+ * The same text with every CSS comment blanked out.
+ *
+ * Spaces replace the comment rather than removing it, so every offset into the
+ * result still points at the same character of the original. A commented-out
+ * `@import` is a note, not a rule, and CSS ignores it — so must we, or we
+ * anchor the new import to a line the browser never reads.
+ */
+function withoutComments(content: string): string {
+  return content.replace(/\/\*[\s\S]*?\*\//g, comment => ' '.repeat(comment.length));
+}
+
+/** Whether the stylesheet already imports typeset.css for real. */
+function importsTypeset(content: string): boolean {
+  return /@import\s[^;]*['"][^'"]*typeset\.css['"][^;]*;/.test(withoutComments(content));
+}
+
+/** Every CSS `@import` in the file, in the order they appear. */
 function cssImports(content: string): RegExpExecArray[] {
-  // O `url(...)` e a lista de media query são opcionais e vão até o `;`, então
-  // o padrão fecha no ponto e vírgula em vez de fechar na aspa: um
-  // `@import 'x' layer(base);` também precisa ser reconhecido como o último.
+  // `url(...)` and the media query list are optional and run to the `;`, so the
+  // pattern closes on the semicolon rather than on the quote: an
+  // `@import 'x' layer(base);` has to be recognised as the last one too.
   const importRegex = /^[ \t]*@import\s[^;]*;/gm;
 
   const matches: RegExpExecArray[] = [];
@@ -20,14 +37,14 @@ function cssImports(content: string): RegExpExecArray[] {
 }
 
 /**
- * Liga o typeset importando-o no CSS global do projeto.
+ * Wires typeset up by importing it into the project's global CSS.
  *
- * O arquivo foi gravado ao lado desse CSS, mas um arquivo que ninguém importa
- * não estiliza nada — e a ordem importa: entrar depois dos outros `@import`
- * deixa o typeset ver os tokens do tema, que é de onde ele tira cor e raio.
+ * The file was written next to that CSS, but a file nobody imports styles
+ * nothing — and the order matters: coming after the other `@import`s lets
+ * typeset see the theme tokens, which is where it takes colour and radius from.
  *
- * Chamar duas vezes é o mesmo que chamar uma; um `add typeset` repetido não
- * pode duplicar a linha.
+ * Calling this twice is the same as calling it once; a repeated `add typeset`
+ * must not duplicate the line.
  */
 export async function setupTypeset(tailwindCssPath: string): Promise<void> {
   if (!existsSync(tailwindCssPath)) {
@@ -37,18 +54,17 @@ export async function setupTypeset(tailwindCssPath: string): Promise<void> {
 
   const content = await fsPromises.readFile(tailwindCssPath, 'utf8');
 
-  if (content.includes('typeset.css')) {
+  if (importsTypeset(content)) {
     logger.info('Typeset already imported in your global stylesheet.');
     return;
   }
 
-  const imports = cssImports(content);
+  const imports = cssImports(withoutComments(content));
   const last = imports[imports.length - 1];
 
-  // Sem nenhum `@import` para se ancorar, não há posição segura: antes de uma
-  // `@layer` ou de um `@charset` o import é inválido, e adivinhar corromperia
-  // o CSS de quem instalou. Melhor uma linha para copiar do que um arquivo
-  // quebrado.
+  // With no `@import` to anchor to there is no safe position: before a `@layer`
+  // or a `@charset` the import is invalid, and guessing would corrupt the CSS
+  // of whoever installed it. Better one line to copy than a broken file.
   if (!last) {
     logger.warn(`No @import found in ${tailwindCssPath}. Add \`${TYPESET_IMPORT}\` to it manually.`);
     return;

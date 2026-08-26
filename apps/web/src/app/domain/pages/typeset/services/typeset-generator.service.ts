@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { computed, effect, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, PLATFORM_ID, signal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -51,15 +51,22 @@ export class TypesetGeneratorService {
   private readonly future = signal<readonly TypesetState[]>([]);
 
   constructor() {
-    // The URL is the input; the signal is the truth. Reading back what we just
-    // wrote finds the same state and does nothing, so this covers the first load,
-    // a reload and the browser's back button without looping.
+    /*
+     * The URL is the input; the signal is the truth. Reading back what we just
+     * wrote finds the same state and does nothing, so this covers the first
+     * load, a reload and the browser's back button without looping.
+     *
+     * The state is read `untracked`, or the effect would also depend on the
+     * signal it writes: a setter updates `_state` and only then asks the router
+     * to rewrite the URL, so the re-run would parse the parameters still on the
+     * old URL and put the previous choice back.
+     */
     effect(() => {
       const params = this.queryParams();
       if (!params) return;
 
       const fromUrl = this.parse((key: string) => params.get(key));
-      if (!statesMatch(fromUrl, this._state())) {
+      if (!statesMatch(fromUrl, untracked(this._state))) {
         this._state.set(fromUrl);
       }
     });
@@ -439,6 +446,7 @@ export class TypesetGeneratorService {
     const leading = Number(read(PARAM_KEYS.leading));
     const measure = Number(read(PARAM_KEYS.measure));
     const heading = read(PARAM_KEYS.heading);
+    const item = read(PARAM_KEYS.item);
 
     return {
       body: this.validFont(read(PARAM_KEYS.body), TEXT_FONTS, DEFAULT_STATE.body),
@@ -448,7 +456,7 @@ export class TypesetGeneratorService {
       leading: pick(LEADING_CHOICES, leading, DEFAULT_STATE.leading),
       flow: pick(FLOW_CHOICES, read(PARAM_KEYS.flow), DEFAULT_STATE.flow),
       measure: MEASURE_CHOICES.some(choice => choice.value === measure) ? measure : DEFAULT_STATE.measure,
-      item: findFixture(read(PARAM_KEYS.item)) ? (read(PARAM_KEYS.item) as string) : DEFAULT_STATE.item,
+      item: item && findFixture(item) ? item : DEFAULT_STATE.item,
     };
   }
 
