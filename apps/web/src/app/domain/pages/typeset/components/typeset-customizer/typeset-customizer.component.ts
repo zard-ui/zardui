@@ -257,7 +257,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
           The tabindex is what lets the open menu hold focus itself, and that is
           what keeps the list quiet on open — see onMenuVisible below. The data
           attribute is how that lookup finds THIS menu: the overlay container is
-          shared, and a dropdown left open elsewhere is a `[(role = 'menu')]` too.
+          shared, and a dropdown left open elsewhere carries the menu role too.
         -->
         <div
           role="menu"
