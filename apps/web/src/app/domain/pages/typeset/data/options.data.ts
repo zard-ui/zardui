@@ -1,4 +1,4 @@
-import type { TypesetChoice, TypesetMeasure } from '../models/typeset.model';
+import { INHERIT_HEADING, type TypesetChoice, type TypesetMeasure } from '../models/typeset.model';
 
 /** Base body size, in px. Everything else in the preset derives from it. */
 export const SCALE_CHOICES: readonly TypesetChoice<number>[] = [
@@ -36,7 +36,7 @@ export const MEASURE_CHOICES: readonly TypesetMeasure[] = [
 
 export const DEFAULT_STATE = {
   body: 'geist',
-  heading: 'inherit',
+  heading: INHERIT_HEADING,
   mono: 'geist-mono',
   scale: 15,
   leading: 1.75,

@@ -68,6 +68,10 @@ describe('TypesetDocsPage', () => {
     it('opts embedded components out of typeset', () => {
       const embedded = fixture.debugElement.queryAll(By.css('.typeset z-code-block, .typeset z-callout'));
 
+      // Without this, a template change that moves every embedded block out of
+      // the query leaves the loop with nothing to check and the test green.
+      expect(embedded.length).toBeGreaterThan(0);
+
       for (const element of embedded) {
         expect((element.nativeElement as HTMLElement).classList).toContain('not-typeset');
       }

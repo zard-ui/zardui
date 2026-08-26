@@ -1,8 +1,22 @@
 import { visit } from 'unist-util-visit';
 
-/** Acrescenta uma classe sem descartar as que o nó já carrega. */
-function addClass(node: any, className: string): void {
-  const existing = node.properties?.class ?? node.properties?.className ?? [];
+/**
+ * The slice of HAST these plugins touch.
+ *
+ * Declared here rather than imported: `@types/hast` reaches this project only
+ * as a transitive dependency, and a plugin this small does not justify taking
+ * one on. Both plugins read a tag name and edit a class, so that is the shape.
+ */
+interface HastNode {
+  type?: string;
+  tagName?: string;
+  properties?: Record<string, unknown>;
+  children?: HastNode[];
+}
+
+/** Adds a class without discarding the ones the node already carries. */
+function addClass(node: HastNode, className: string): void {
+  const existing = node.properties?.['class'] ?? node.properties?.['className'] ?? [];
   const classes = Array.isArray(existing) ? existing : String(existing).split(/\s+/).filter(Boolean);
 
   if (classes.includes(className)) return;
@@ -10,51 +24,55 @@ function addClass(node: any, className: string): void {
   node.properties = { ...node.properties, class: [...classes, className] };
 }
 
-function containsPre(node: any): boolean {
+function containsPre(node: HastNode): boolean {
   if (node?.tagName === 'pre') return true;
-  return Array.isArray(node?.children) && node.children.some((child: any) => containsPre(child));
+  return Array.isArray(node?.children) && node.children.some(child => containsPre(child));
 }
 
 /**
- * Protege os blocos de código do typeset.
+ * Keeps typeset off the code blocks.
  *
- * `rehypeEnhancedCode` monta um bloco com cabeçalho, botão de copiar e ícones,
- * todo dimensionado à mão. O typeset estiliza `pre`, `pre code` e `img` — os
- * três aparecem aí dentro. Sem esta marca o bloco só sobrevive por acidente:
- * as regras de `pre.shiki` em `styles.css` estão fora de camada e por isso
- * vencem, o que deixa a proteção dependendo de onde alguém escreveu o seletor.
+ * `rehypeEnhancedCode` builds a block with a header, a copy button and icons,
+ * all sized by hand. Typeset styles `pre`, `pre code` and `img` — all three
+ * appear in there. Without this mark the block survives only by accident: the
+ * `pre.shiki` rules in `styles.css` sit outside any layer and therefore win,
+ * which leaves the protection resting on where someone wrote a selector.
  *
- * A regra é a raiz: em markdown, um bloco de código é sempre um bloco de topo,
- * então marcar o filho da raiz que o contém cobre o wrapper inteiro. O `pre`
- * solto também é marcado, para o caso de um bloco dentro de item de lista.
+ * The root is the rule: in markdown a code block is always a top-level block,
+ * so marking the root child that contains it covers the whole wrapper. A bare
+ * `pre` is marked too, for a block inside a list item.
  */
 export function rehypeNotTypeset() {
-  return (tree: any) => {
+  return (tree: HastNode) => {
     for (const child of tree.children ?? []) {
       if (child.type === 'element' && containsPre(child)) addClass(child, 'not-typeset');
     }
 
-    visit(tree, 'element', (node: any) => {
+    visit(tree, 'element', (node: HastNode) => {
       if (node.tagName === 'pre') addClass(node, 'not-typeset');
     });
   };
 }
 
 /**
- * Envolve toda tabela num container que rola na horizontal.
+ * Wraps every table in a container that scrolls horizontally.
  *
- * O typeset deixa a tabela ser tabela e encolher para caber; uma tabela de API
- * com cinco colunas fica ilegível assim. `typeset-scroll` devolve a largura
- * natural e passa o transbordo para o container, e é o próprio typeset quem
- * estiliza o wrapper — nada de classe de utilitário aqui.
+ * Typeset lets a table be a table and shrink to fit; a five-column API table
+ * is unreadable that way. `typeset-scroll` gives back the natural width and
+ * hands the overflow to the container — and typeset styles the wrapper itself,
+ * so no utility class is needed here.
  */
 export function rehypeScrollableTables() {
-  return (tree: any) => {
-    visit(tree, 'element', (node: any, index: any, parent: any) => {
+  return (tree: HastNode) => {
+    visit(tree, 'element', (node: HastNode, index, parent: HastNode | undefined) => {
       if (node.tagName !== 'table' || !parent || index === null || index === undefined) return;
-      if (parent.tagName === 'div' && parent.properties?.class?.includes?.('typeset-scroll')) return;
 
-      parent.children[index] = {
+      // The class may be an array or a string, depending on who built the node.
+      const parentClass = parent.properties?.['class'];
+      const classes = Array.isArray(parentClass) ? parentClass : String(parentClass ?? '').split(/\s+/);
+      if (parent.tagName === 'div' && classes.includes('typeset-scroll')) return;
+
+      parent.children![index] = {
         type: 'element',
         tagName: 'div',
         properties: { class: ['typeset-scroll'] },

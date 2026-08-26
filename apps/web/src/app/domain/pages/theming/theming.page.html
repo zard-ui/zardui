@@ -97,7 +97,7 @@
         <code>--primary-foreground</code>
         is the text on top of it.
       </p>
-      <!-- Dentro da prosa: o bloco de código traz o próprio dimensionamento. -->
+      <!-- Inside the prose: the code block brings its own sizing. -->
       <z-code-block class="not-typeset" [data]="conventionExample" />
     </div>
 
@@ -109,16 +109,16 @@
       <z-convention-preview />
     </div>
 
-    <div class="flex flex-col gap-3">
+    <div class="typeset typeset-docs text-muted-foreground flex flex-col gap-3">
       <h3 class="text-base font-semibold sm:text-lg">Tokens or raw utility classes?</h3>
       <p>
         Prefer tokens. They react to
         <code>.dark</code>
         and to scoped overrides on their own:
       </p>
-      <z-code-block [data]="cssVarsIntroBlock" />
+      <z-code-block class="not-typeset" [data]="cssVarsIntroBlock" />
       <p>Raw Tailwind colors work too, but you own every dark-mode variant by hand and lose scoped theming entirely:</p>
-      <z-code-block [data]="utilityClassesIntroBlock" />
+      <z-code-block class="not-typeset" [data]="utilityClassesIntroBlock" />
     </div>
   </section>
 
@@ -212,7 +212,7 @@
       </p>
     </div>
 
-    <div class="flex flex-col gap-3">
+    <div class="typeset typeset-docs text-muted-foreground flex flex-col gap-3">
       <h3 class="text-base font-semibold sm:text-lg">Adding a new color</h3>
       <p>
         Declare the raw value, override it under
@@ -220,11 +220,11 @@
         , then map it — the same three steps every built-in token goes through.
       </p>
       @for (block of addingColorsExample; track $index) {
-        <z-code-block [data]="block" />
+        <z-code-block class="not-typeset" [data]="block" />
       }
     </div>
 
-    <div class="flex flex-col gap-3">
+    <div class="typeset typeset-docs text-muted-foreground flex flex-col gap-3">
       <h3 class="text-base font-semibold sm:text-lg">Overriding tokens in one scope</h3>
       <p>
         Because
@@ -234,26 +234,26 @@
         instead of a baked-in color, any container can redefine a token for its subtree.
       </p>
       @for (block of scopedTokensExample; track $index) {
-        <z-code-block [data]="block" />
+        <z-code-block class="not-typeset" [data]="block" />
       }
     </div>
 
-    <div class="flex flex-col gap-3">
+    <div class="typeset typeset-docs text-muted-foreground flex flex-col gap-3">
       <h3 class="text-base font-semibold sm:text-lg">A theme per route</h3>
       <p>Put the override class on a layout component's host and everything rendered through its outlet inherits it.</p>
       @for (block of routeThemeExample; track $index) {
-        <z-code-block [data]="block" />
+        <z-code-block class="not-typeset" [data]="block" />
       }
     </div>
 
-    <div class="flex flex-col gap-3">
+    <div class="typeset typeset-docs text-muted-foreground flex flex-col gap-3">
       <h3 class="text-base font-semibold sm:text-lg">Other color formats</h3>
       <p>
         The raw tokens hold plain CSS colors, so RGB, HSL and HEX all work. Keep the
         <code>&#64;theme inline</code>
         mapping as it is.
       </p>
-      <z-code-block [data]="otherColorFormatsBlock" />
+      <z-code-block class="not-typeset" [data]="otherColorFormatsBlock" />
       <p>
         Need the values? The
         <a class="underline underline-offset-4" routerLink="/colors">colors page</a>

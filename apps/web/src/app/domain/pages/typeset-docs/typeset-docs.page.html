@@ -26,7 +26,7 @@
 
     <p>A typeset is a small preset class. You can keep several in one app, one per context.</p>
 
-    <!-- Dentro da prosa: o bloco de código traz o próprio dimensionamento. -->
+    <!-- Inside the prose: the code block brings its own sizing. -->
     <z-code-block class="not-typeset" [data]="presetExampleBlock" />
 
     <p>
@@ -167,22 +167,24 @@
 
     <z-code-block [data]="anatomyBlock" />
 
-    <ul>
-      <li>
-        <code>--typeset-size</code>
-        sets the base text size.
-        <code>1em</code>
-        follows the surrounding layout.
-      </li>
-      <li>
-        <code>--typeset-leading</code>
-        sets the space between lines.
-      </li>
-      <li>
-        <code>--typeset-flow</code>
-        sets the space between blocks; headings and rules derive their spacing from it.
-      </li>
-    </ul>
+    <div class="typeset typeset-docs text-muted-foreground">
+      <ul>
+        <li>
+          <code>--typeset-size</code>
+          sets the base text size.
+          <code>1em</code>
+          follows the surrounding layout.
+        </li>
+        <li>
+          <code>--typeset-leading</code>
+          sets the space between lines.
+        </li>
+        <li>
+          <code>--typeset-flow</code>
+          sets the space between blocks; headings and rules derive their spacing from it.
+        </li>
+      </ul>
+    </div>
 
     <z-callout variant="info" title="Typeset sets no max-width" icon="?">
       Your layout owns the measure. The builder's Measure control puts it on the wrapper instead of hiding it in the
