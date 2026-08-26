@@ -9,6 +9,7 @@
 - [Components](https://zardui.com/docs/components): Browse all available components in the library.
 - [Blocks](https://zardui.com/blocks): Pre-built component compositions and templates.
 - [Colors](https://zardui.com/colors): Tailwind color palette reference in all formats.
+- [Typeset](https://zardui.com/typeset): Build a typography preset for rendered markdown and take away the CSS.
 
 ## Get Started
 
@@ -16,6 +17,7 @@
 - [Installation](https://zardui.com/docs/installation): Step-by-step guide to install Zard UI in your Angular project.
 - [Components JSON](https://zardui.com/docs/components-json): Configuration file for customizing the CLI and component installation.
 - [Theming](https://zardui.com/docs/theming): Guide to customizing colors, typography, and design tokens with TailwindCSS v4.
+- [Typeset](https://zardui.com/docs/typeset): One CSS file that styles HTML and rendered markdown, governed by size, leading and flow.
 - [Pre-processors](https://zardui.com/docs/pre-processors): Understanding SCSS/Sass integration with Tailwind v4 - risks, limitations, and alternatives.
 - [Dark Mode](https://zardui.com/docs/dark-mode): Implementing dark mode in your Angular application.
 - [CLI](https://zardui.com/docs/cli): Command-line tool for installing and managing Zard UI components.

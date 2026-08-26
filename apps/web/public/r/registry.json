@@ -26,6 +26,19 @@
       ]
     },
     {
+      "name": "typeset",
+      "type": "registry:component",
+      "basePath": "styles",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "typeset.css"
+      ]
+    },
+    {
       "name": "dark-mode",
       "type": "registry:component",
       "basePath": "services",

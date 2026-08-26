@@ -97,6 +97,14 @@ Always enforced. Each links to a file with Incorrect/Correct pairs.
 - **Validation state is `data-invalid` on the field and `aria-invalid` on the control.**
 - **Errors render in `z-field-error`**, not a loose paragraph.
 
+### Typeset → [rules/typeset.md](./rules/typeset.md)
+
+- **Rendered markdown gets a `typeset` container, never a class per tag.** `zard-cli add typeset` installs the stylesheet.
+- **Six variables govern it**, three of which are the rhythm: `--typeset-size`, `--typeset-leading`, `--typeset-flow`.
+- **`not-typeset` on any component embedded in prose.** It brings its own sizing.
+- **`typeset-scroll` around a wide table**, instead of a hand-rolled overflow wrapper.
+- **Utilities beat it with no `!important`** — every element selector sits inside `:where()`.
+
 ### Icons → [rules/icons.md](./rules/icons.md)
 
 - **Icons come from `@ng-icons/<family>` and are registered with `provideIcons` in `viewProviders`.** An unregistered name renders nothing, silently.
@@ -147,6 +155,7 @@ protected readonly classes = computed(() => mergeClasses(cardVariants(), this.cl
 | Empty states    | `z-empty`                                                                                                                                                    |
 | Chat / messages | `z-bubble`, `z-bubble-group`, `z-bubble-content`, `z-bubble-reactions`                                                                                       |
 | Keyboard hints  | `z-kbd`                                                                                                                                                      |
+| Rendered prose  | `typeset` + a preset class (a stylesheet, not a component) — see [rules/typeset.md](./rules/typeset.md)                                                       |
 
 Names are the registry names — the same string `zard-cli add` takes.
 
@@ -193,3 +202,4 @@ There is no `search`, `view`, `diff`, `info`, or `build` command — those are s
 - [rules/composition.md](./rules/composition.md) — composing with what exists before inventing markup
 - [rules/forms.md](./rules/forms.md) — Signal Forms, Reactive Forms, Template-driven
 - [rules/icons.md](./rules/icons.md) — ng-icons, `provideIcons`, the catalog, the configurable family
+- [rules/typeset.md](./rules/typeset.md) — styling rendered markdown with one container class instead of one per tag

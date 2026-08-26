@@ -53,6 +53,16 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'typeset',
+    basePath: 'styles',
+    files: [
+      {
+        name: 'typeset.css',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'dark-mode',
     basePath: 'services',
     files: [

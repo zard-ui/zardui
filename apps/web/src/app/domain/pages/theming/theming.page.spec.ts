@@ -99,6 +99,17 @@ describe('ThemingPage', () => {
     });
   });
 
+  describe('typeset', () => {
+    it('opts embedded code blocks out of typeset', () => {
+      const embedded = fixture.debugElement.queryAll(By.css('.typeset z-code-block'));
+
+      expect(embedded.length).toBeGreaterThan(0);
+      for (const element of embedded) {
+        expect((element.nativeElement as HTMLElement).classList).toContain('not-typeset');
+      }
+    });
+  });
+
   describe('tables', () => {
     it('gives every table a caption', () => {
       const tables = fixture.debugElement.queryAll(By.css('table'));

@@ -4,11 +4,13 @@
 /blocks
 /charts
 /themes
+/typeset
 /docs/introduction
 /docs/components
 /docs/installation
 /docs/theming
 /docs/cli
+/docs/typeset
 /docs/skills
 /docs/registry
 /docs/mcp
@@ -17,6 +19,7 @@
 /docs/installation
 /docs/components-json
 /docs/theming
+/docs/typeset
 /docs/dark-mode
 /docs/cli
 /docs/monorepo

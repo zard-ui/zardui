@@ -68,6 +68,8 @@ export interface AddWizardOptions {
   installComponent(component: ComponentMeta): Promise<void>;
   /** Only called when dark-mode is part of the install. */
   setupDarkMode(indexHtml: string): Promise<void>;
+  /** Only called when typeset is part of the install. */
+  setupTypeset(): Promise<void>;
   /**
    * Where index.html should be, according to the configured project type.
    *
@@ -84,6 +86,7 @@ export interface AddWizardResult {
 }
 
 const DARK_MODE = 'dark-mode';
+const TYPESET = 'typeset';
 
 export async function runAddWizard(options: AddWizardOptions): Promise<AddWizardResult> {
   const state: State = {
@@ -227,6 +230,12 @@ export async function runAddWizard(options: AddWizardOptions): Promise<AddWizard
       state.tasksDone++;
       state.taskStartedAt = Date.now();
       ctx.refresh();
+    }
+
+    // After the loop, and against what was actually written: injecting the
+    // import for a file whose install failed would point the CSS at nothing.
+    if (state.installed.includes(TYPESET)) {
+      await options.setupTypeset();
     }
 
     if (components.some(component => component.name === DARK_MODE)) {

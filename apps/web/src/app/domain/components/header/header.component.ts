@@ -9,7 +9,6 @@ import { MobileMenuComponent } from '@doc/domain/components/mobile-nav/mobile-na
 import { SOCIAL_MEDIAS } from '@doc/shared/constants/medias.constant';
 import { HEADER_PATHS } from '@doc/shared/constants/routes.constant';
 import { GithubService } from '@doc/shared/services/github.service';
-import { LayoutService } from '@doc/shared/services/layout.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
@@ -59,16 +58,10 @@ export class HeaderComponent {
   readonly appVersion = environment.appVersion;
   private readonly githubService = inject(GithubService);
   private readonly darkModeService = inject(ZardDarkMode);
-  private readonly layoutService = inject(LayoutService);
   readonly repoStars = this.githubService.starsCountFormatted;
-  readonly isLayoutFixed = this.layoutService.isLayoutFixed;
 
   toggleTheme(): void {
     this.darkModeService.toggleTheme();
-  }
-
-  toggleLayout(): void {
-    this.layoutService.toggleLayout();
   }
 
   handleKeyboardShortcut(event: KeyboardEvent) {
