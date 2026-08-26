@@ -7,39 +7,37 @@ export const HOVER_CARD_API: ApiSection[] = [
     description: 'The directive that opens rich content when its trigger is hovered or focused.',
     props: [
       {
-        name: 'zHoverCard',
+        name: '[zContent]',
         description: 'Required. Template rendered inside the hover card',
         type: 'TemplateRef<void>',
         default: '-',
       },
       {
-        name: 'zPlacement',
+        name: '[zPlacement]',
         description: 'Preferred position relative to the trigger',
         type: "'top' | 'bottom' | 'left' | 'right'",
         default: "'bottom'",
       },
       {
-        name: 'zOpenDelay',
+        name: '[zOpenDelay]',
         description: 'Delay in milliseconds before opening',
         type: 'number',
         default: '700',
       },
       {
-        name: 'zCloseDelay',
+        name: '[zCloseDelay]',
         description: 'Delay in milliseconds before closing',
         type: 'number',
         default: '300',
       },
       {
-        name: 'zVisible',
+        name: '[zVisible]',
         description: 'Controls visibility programmatically',
         type: 'boolean',
         default: 'false',
       },
-    ],
-    outputs: [
       {
-        name: 'zVisibleChange',
+        name: '(zVisibleChange)',
         description: 'Emits when visibility changes',
         type: 'output<boolean>',
         default: '-',
@@ -49,6 +47,6 @@ export const HOVER_CARD_API: ApiSection[] = [
   {
     selector: 'z-hover-card',
     description: 'The wrapper component that styles hover card content.',
-    props: [{ name: 'class', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

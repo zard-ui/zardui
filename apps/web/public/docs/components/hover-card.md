@@ -37,6 +37,7 @@ import {
   effect,
   inject,
   input,
+  type InputSignal,
   numberAttribute,
   type OnDestroy,
   type OnInit,
@@ -161,7 +162,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   private pointerOverOverlay = false;
   private focusWithinTrigger = false;
   private focusWithinOverlay = false;
-  private hasObservedInitialVisible = false;
+  private lastVisible = false;
 
   constructor() {
     effect(() => {
@@ -183,10 +184,11 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     effect(() => {
       const visible = this.zVisible();
 
-      if (!this.hasObservedInitialVisible) {
-        this.hasObservedInitialVisible = true;
+      if (visible === this.lastVisible) {
         return;
       }
+
+      this.lastVisible = visible;
 
       if (!this.overlayReady()) {
         return;
@@ -241,24 +243,21 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
       this.renderer.listen(overlayElement, 'focusout', (event: FocusEvent) => {
         const nextTarget = event.relatedTarget;
 
-        if (
-          nextTarget instanceof Node &&
-          (overlayElement.contains(nextTarget) || this.elementRef.nativeElement.contains(nextTarget))
-        ) {
+        if (nextTarget instanceof Node && overlayElement.contains(nextTarget)) {
           return;
         }
 
         this.focusWithinOverlay = false;
+
+        if (nextTarget instanceof Node && this.elementRef.nativeElement.contains(nextTarget)) {
+          return;
+        }
+
         this.scheduleClose();
       }),
       this.renderer.listen(overlayElement, 'keydown', (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
-          this.closeNow();
-        }
-      }),
-      this.renderer.listen('document', 'keydown', (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-          this.closeNow();
+          this.onEscape();
         }
       }),
     );
@@ -304,7 +303,11 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   protected onEscape(): void {
+    const restoreFocus = this.isOpen() && this.overlayRef?.overlayElement.contains(document.activeElement);
     this.closeNow();
+    if (restoreFocus) {
+      this.elementRef.nativeElement.focus();
+    }
   }
 
   private getPositions(): ConnectedPosition[] {
@@ -362,6 +365,8 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     }
 
     this.overlayRef?.detach();
+    this.pointerOverOverlay = false;
+    this.focusWithinOverlay = false;
     this.isOpen.set(false);
     this.zVisibleChange.emit(false);
   }
@@ -377,6 +382,15 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   private scheduleClose(): void {
+    if (this.zVisible()) {
+      this.cancelClose();
+      return;
+    }
+
+    if (this.pointerOverTrigger || this.pointerOverOverlay || this.focusWithinTrigger || this.focusWithinOverlay) {
+      this.cancelClose();
+      return;
+    }
     this.cancelOpen();
     this.cancelClose();
 
@@ -422,7 +436,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   private updateContentSide(side: ZardHoverCardPlacement): void {
-    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>('z-hover-card');
+    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>('[data-slot="hover-card-content"]');
 
     if (!content) {
       return;
@@ -443,7 +457,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
 
 /** Styled content container rendered inside a hover card overlay. */
 @Component({
-  selector: 'z-hover-card',
+  selector: 'z-hover-card, [z-hover-card]',
   template: `
     <ng-content />
   `,
@@ -457,7 +471,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
 })
 export class ZardHoverCardComponent {
   /** Additional CSS classes merged with the default hover card styles. */
-  readonly class = input<ClassValue>('');
+  readonly class: InputSignal<ClassValue> = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(hoverCardVariants(), this.class()));
 }
@@ -656,15 +670,12 @@ The directive that opens rich content when its trigger is hovered or focused.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zHoverCard` | Required. Template rendered inside the hover card | `TemplateRef<void>` | `-` |
-| `zPlacement` | Preferred position relative to the trigger | `'top' \| 'bottom' \| 'left' \| 'right'` | `'bottom'` |
-| `zOpenDelay` | Delay in milliseconds before opening | `number` | `700` |
-| `zCloseDelay` | Delay in milliseconds before closing | `number` | `300` |
-| `zVisible` | Controls visibility programmatically | `boolean` | `false` |
-
-| Output | Description | Type | Default |
-| --- | --- | --- | --- |
-| `zVisibleChange` | Emits when visibility changes | `output<boolean>` | `-` |
+| `[zContent]` | Required. Template rendered inside the hover card | `TemplateRef<void>` | `-` |
+| `[zPlacement]` | Preferred position relative to the trigger | `'top' \| 'bottom' \| 'left' \| 'right'` | `'bottom'` |
+| `[zOpenDelay]` | Delay in milliseconds before opening | `number` | `700` |
+| `[zCloseDelay]` | Delay in milliseconds before closing | `number` | `300` |
+| `[zVisible]` | Controls visibility programmatically | `boolean` | `false` |
+| `(zVisibleChange)` | Emits when visibility changes | `output<boolean>` | `-` |
 
 ### z-hover-card
 
@@ -672,7 +683,7 @@ The wrapper component that styles hover card content.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ---
 
