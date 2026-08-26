@@ -13,7 +13,7 @@ import { TypesetGeneratorService } from '../../services/typeset-generator.servic
  * standalone route renders it on the bare page.
  */
 @Component({
-  selector: 'app-typeset-surface',
+  selector: 'z-typeset-surface',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },

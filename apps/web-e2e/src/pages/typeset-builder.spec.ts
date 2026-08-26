@@ -4,12 +4,12 @@ import { checkA11y } from '../utils/axe-helper';
 
 /** The `style` the preview container carries, which is the builder's output. */
 async function previewStyle(page: Page): Promise<string> {
-  return (await page.locator('app-typeset-preview .typeset').getAttribute('style')) ?? '';
+  return (await page.locator('z-typeset-preview .typeset').getAttribute('style')) ?? '';
 }
 
 /** One row of the panel by its label, so `Body` cannot match another row. */
 function control(page: Page, label: string) {
-  return page.locator(`app-typeset-control[data-control="${label}"]`);
+  return page.locator(`z-typeset-control[data-control="${label}"]`);
 }
 
 /** Opens a row's list and picks a value by its exact label. */
@@ -90,7 +90,7 @@ test.describe('Typeset builder', () => {
       .poll(
         async () =>
           await page
-            .locator('app-typeset-preview .typeset p')
+            .locator('z-typeset-preview .typeset p')
             .first()
             .evaluate(el => getComputedStyle(el).fontFamily),
       )
@@ -144,13 +144,13 @@ test.describe('Typeset builder', () => {
   test('the code panel hands out the preset for the current choices', async ({ page }) => {
     await choose(page, 'Size', '18px');
 
-    const panel = page.locator('app-typeset-code-panel');
+    const panel = page.locator('z-typeset-code-panel');
     await expect(panel).toContainText('--typeset-size: 18px;');
     await expect(panel).toContainText('npx zard-cli@latest add typeset');
   });
 
   test('the package manager select rewrites the install command', async ({ page }) => {
-    const panel = page.locator('app-typeset-code-panel');
+    const panel = page.locator('z-typeset-code-panel');
     await expect(panel).toContainText('npm install');
 
     await panel.getByRole('combobox').click();
@@ -168,7 +168,7 @@ test.describe('Typeset builder', () => {
   test('switching the sample changes what the preview renders', async ({ page }) => {
     await page.getByRole('button', { name: 'Elements', exact: true }).click();
 
-    await expect(page.locator('app-typeset-preview .typeset table').first()).toBeVisible();
+    await expect(page.locator('z-typeset-preview .typeset table').first()).toBeVisible();
     await expect.poll(() => page.url()).toContain('item=elements');
   });
 
@@ -176,7 +176,7 @@ test.describe('Typeset builder', () => {
     await page.goto('/typeset/preview?body=lora&scale=18');
     await page.waitForLoadState('networkidle');
 
-    const style = (await page.locator('app-typeset-surface .typeset').getAttribute('style')) ?? '';
+    const style = (await page.locator('z-typeset-surface .typeset').getAttribute('style')) ?? '';
     expect(style).toContain('--typeset-size: 18px');
     expect(style).toContain('Lora Variable');
 

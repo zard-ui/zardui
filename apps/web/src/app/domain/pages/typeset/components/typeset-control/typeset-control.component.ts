@@ -38,7 +38,7 @@ export interface TypesetControlGroup<T extends string | number> {
  * upwards from the strip on a phone, where there is not.
  */
 @Component({
-  selector: 'app-typeset-control',
+  selector: 'z-typeset-control',
   standalone: true,
   imports: [NgIcon, ...ZardPopoverImports],
   providers: [provideIcons({ lucideCheck, lucideLock, lucideLockOpen })],

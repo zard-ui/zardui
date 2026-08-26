@@ -17,7 +17,7 @@ import { TypesetSurfaceComponent } from '../typeset-surface/typeset-surface.comp
  * name stays in the tooltip and in the accessible name.
  */
 @Component({
-  selector: 'app-typeset-preview',
+  selector: 'z-typeset-preview',
   standalone: true,
   imports: [NgIcon, TypesetSurfaceComponent, ZardTooltipImports],
   providers: [provideIcons({ lucideExternalLink })],
@@ -28,7 +28,7 @@ import { TypesetSurfaceComponent } from '../typeset-surface/typeset-surface.comp
       class="bg-background ring-foreground/10 relative isolate flex h-full flex-col overflow-hidden rounded-2xl ring-1"
     >
       <div class="min-h-0 flex-1 overflow-y-auto px-6 py-10 sm:px-10 sm:py-16">
-        <app-typeset-surface />
+        <z-typeset-surface />
 
         <!-- The switcher floats over the end of the text; without this the last line sits behind it. -->
         <div class="h-16" aria-hidden="true"></div>

@@ -20,7 +20,7 @@ import { TypesetGeneratorService } from './services/typeset-generator.service';
 const SCROLL_LOCK_CLASS = 'scroll-locked';
 
 @Component({
-  selector: 'app-typeset-page',
+  selector: 'z-typeset-page',
   standalone: true,
   imports: [TypesetCustomizerComponent, TypesetPreviewComponent, TypesetCodePanelComponent],
   // The service holds the state that lives in this route's URL; scoping it to the

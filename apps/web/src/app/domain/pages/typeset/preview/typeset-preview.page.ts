@@ -14,7 +14,7 @@ import { TypesetGeneratorService } from '../services/typeset-generator.service';
  * same preset at full width.
  */
 @Component({
-  selector: 'app-typeset-preview-page',
+  selector: 'z-typeset-preview-page',
   standalone: true,
   imports: [TypesetSurfaceComponent],
   providers: [TypesetGeneratorService],
@@ -22,7 +22,7 @@ import { TypesetGeneratorService } from '../services/typeset-generator.service';
   encapsulation: ViewEncapsulation.None,
   template: `
     <main class="px-6 py-16">
-      <app-typeset-surface />
+      <z-typeset-surface />
     </main>
   `,
   styleUrl: '../typeset-fonts.css',

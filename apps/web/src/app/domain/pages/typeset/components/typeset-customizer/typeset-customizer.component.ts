@@ -61,7 +61,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
  * dialog you have to open before you can change a font.
  */
 @Component({
-  selector: 'app-typeset-customizer',
+  selector: 'z-typeset-customizer',
   standalone: true,
   imports: [NgIcon, TypesetCodePanelComponent, TypesetControlComponent, ZardButtonComponent, ...ZardPopoverImports],
   providers: [
@@ -116,7 +116,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
         <div class="flex flex-row gap-2.5 px-3 py-3 md:flex-col md:gap-3.25 md:px-2.5 md:py-2.5">
           <!-- Below 28rem the measure goes: it is the choice that changes the prose least. -->
           <div class="shrink-0 max-[28rem]:hidden">
-            <app-typeset-control
+            <z-typeset-control
               label="Measure"
               [onPhone]="isMobile()"
               [groups]="measureGroups"
@@ -125,12 +125,12 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
               (valueChange)="service.setMeasure($event)"
             >
               <ng-icon slot="icon" name="lucideMoveHorizontal" class="size-4.5" />
-            </app-typeset-control>
+            </z-typeset-control>
           </div>
 
           <div class="bg-border -mx-2.5 hidden h-px md:block"></div>
 
-          <app-typeset-control
+          <z-typeset-control
             label="Heading"
             lockable
             [onPhone]="isMobile()"
@@ -144,9 +144,9 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
             <span slot="icon" class="text-base leading-none" [style.font-family]="service.headingFont().family">
               Aa
             </span>
-          </app-typeset-control>
+          </z-typeset-control>
 
-          <app-typeset-control
+          <z-typeset-control
             label="Body"
             lockable
             [onPhone]="isMobile()"
@@ -158,9 +158,9 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
             (lockedChange)="toggleLock('body')"
           >
             <span slot="icon" class="text-base leading-none" [style.font-family]="service.bodyFont().family">Aa</span>
-          </app-typeset-control>
+          </z-typeset-control>
 
-          <app-typeset-control
+          <z-typeset-control
             label="Mono"
             lockable
             [onPhone]="isMobile()"
@@ -172,11 +172,11 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
             (lockedChange)="toggleLock('mono')"
           >
             <span slot="icon" class="text-base leading-none" [style.font-family]="service.monoFont().family">Aa</span>
-          </app-typeset-control>
+          </z-typeset-control>
 
           <div class="bg-border -mx-2.5 hidden h-px md:block"></div>
 
-          <app-typeset-control
+          <z-typeset-control
             label="Size"
             lockable
             [onPhone]="isMobile()"
@@ -188,9 +188,9 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
             (lockedChange)="toggleLock('scale')"
           >
             <ng-icon slot="icon" name="lucideALargeSmall" class="size-4.5" />
-          </app-typeset-control>
+          </z-typeset-control>
 
-          <app-typeset-control
+          <z-typeset-control
             label="Leading"
             lockable
             [onPhone]="isMobile()"
@@ -202,9 +202,9 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
             (lockedChange)="toggleLock('leading')"
           >
             <ng-icon slot="icon" name="lucideUnfoldVertical" class="size-4.5" />
-          </app-typeset-control>
+          </z-typeset-control>
 
-          <app-typeset-control
+          <z-typeset-control
             label="Flow"
             lockable
             [onPhone]="isMobile()"
@@ -216,7 +216,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
             (lockedChange)="toggleLock('flow')"
           >
             <ng-icon slot="icon" name="lucideMoveVertical" class="size-4.5" />
-          </app-typeset-control>
+          </z-typeset-control>
 
           <!-- The trailing padding collapses inside a scroller; this gap gives it back. -->
           <div class="w-0.5 shrink-0 md:hidden" aria-hidden="true"></div>
@@ -310,7 +310,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
 
     <ng-template #codeTemplate>
       <div class="flex h-[70svh] min-h-0 flex-col md:h-full">
-        <app-typeset-code-panel />
+        <z-typeset-code-panel />
       </div>
     </ng-template>
   `,

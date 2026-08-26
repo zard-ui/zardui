@@ -26,7 +26,7 @@ const CLI_COMMAND = 'npx zard-cli@latest add typeset';
 const IMPORT_CSS = `@import 'tailwindcss';\n@import './typeset.css';`;
 
 @Component({
-  selector: 'app-typeset-code-panel',
+  selector: 'z-typeset-code-panel',
   standalone: true,
   imports: [NgIcon, NgTemplateOutlet, RouterLink, ZardButtonComponent, ZardSelectImports],
   providers: [provideIcons({ lucideCheck, lucideCopy })],
