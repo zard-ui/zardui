@@ -253,7 +253,17 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
 
     <ng-template #menu>
       <z-popover class="w-52 gap-0 rounded-xl p-1.5">
-        <div role="menu" aria-label="Typeset options" (keydown)="onMenuKeydown($event)">
+        <!--
+          The tabindex is what lets the open menu hold focus itself, and that
+          is what keeps the list quiet on open — see onMenuVisible below.
+        -->
+        <div
+          role="menu"
+          aria-label="Typeset options"
+          tabindex="-1"
+          class="outline-none"
+          (keydown)="onMenuKeydown($event)"
+        >
           <button type="button" role="menuitem" [class]="menuItemClass" (click)="menuOpen.set(false); shuffle()">
             Shuffle
             <span class="text-muted-foreground text-xs tracking-widest">R</span>
@@ -392,20 +402,27 @@ export class TypesetCustomizerComponent {
   /*
    * The CDK overlay mounts the menu at the end of the `body`. Without moving
    * focus there on open, a keyboard user opens a menu they cannot walk.
+   *
+   * Focus lands on the menu itself, not on its first item: an item takes
+   * `focus:bg-accent` with it, and a menu that opens with a row already lit
+   * reads as a choice already made. The first arrow key picks a row.
    */
   protected onMenuVisible(open: boolean): void {
     this.menuOpen.set(open);
     if (!open || !this.isBrowser) return;
 
     setTimeout(() => {
-      const item = this.document.querySelector<HTMLElement>(
-        '.cdk-overlay-container [role="menu"] [role="menuitem"]:not([disabled])',
-      );
-      item?.focus();
+      const menu = this.document.querySelector<HTMLElement>('.cdk-overlay-container [role="menu"]');
+      menu?.focus();
     });
   }
 
-  /** Up and down walk the menu, the way a `role="menu"` is expected to behave. */
+  /**
+   * Up and down walk the menu, the way a `role="menu"` is expected to behave.
+   *
+   * With nothing lit yet, down enters at the top and up enters at the bottom —
+   * so either key reaches the item nearest it in one press.
+   */
   protected onMenuKeydown(event: KeyboardEvent): void {
     const step = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0;
     if (step === 0) return;
@@ -414,7 +431,8 @@ export class TypesetCustomizerComponent {
 
     const items = menuItemsOf(event.currentTarget as HTMLElement);
     const current = items.indexOf(this.document.activeElement as HTMLElement);
-    const next = current === -1 ? 0 : (current + step + items.length) % items.length;
+    const entry = step === 1 ? 0 : items.length - 1;
+    const next = current === -1 ? entry : (current + step + items.length) % items.length;
     items[next]?.focus();
   }
 
