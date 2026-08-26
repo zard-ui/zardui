@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.117",
+  "version": "1.0.0-beta.118",
   "items": [
     {
       "name": "core",
