@@ -85,6 +85,7 @@
 /docs/components/sidebar
 /docs/components/drawer
 /docs/components/bubble
+/docs/components/hover-card
 /docs/components/context-menu
 /docs/components/message
 /docs/components/marker

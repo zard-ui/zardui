@@ -136,6 +136,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Sidebar', path: '/docs/components/sidebar', available: true },
     { name: 'Drawer', path: '/docs/components/drawer', available: true },
     { name: 'Bubble', path: '/docs/components/bubble', available: true },
+    { name: 'Hover Card', path: '/docs/components/hover-card', available: true },
     { name: 'Context Menu', path: '/docs/components/context-menu', available: true },
     { name: 'Message', path: '/docs/components/message', available: true },
     { name: 'Marker', path: '/docs/components/marker', available: true },

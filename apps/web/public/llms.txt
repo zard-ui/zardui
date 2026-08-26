@@ -72,6 +72,7 @@
 - [Dialog](https://zardui.com/docs/components/dialog): A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.
 - [Drawer](https://zardui.com/docs/components/drawer): A draggable panel that slides in from an edge of the screen.
 - [Dropdown](https://zardui.com/docs/components/dropdown): Displays a menu to the user — such as a set of actions or functions — triggered by a button.
+- [Hover Card](https://zardui.com/docs/components/hover-card): For sighted users to preview content available behind the link.
 - [Popover](https://zardui.com/docs/components/popover): Displays rich content in a portal, triggered by a button.
 - [Sheet](https://zardui.com/docs/components/sheet): Extends the Dialog component to display content that complements the main content of the screen.
 - [Tooltip](https://zardui.com/docs/components/tooltip): A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.
