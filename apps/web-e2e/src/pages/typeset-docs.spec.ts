@@ -16,8 +16,8 @@ test.describe('Typeset documentation page', () => {
     const container = page.locator('.typeset.typeset-docs').first();
     await expect(container).toBeVisible();
 
-    // A prova de que a folha de estilo está ligada: o container resolve as
-    // variáveis do preset, e não os defaults do `.typeset`.
+    // The proof that the stylesheet is wired up: the container resolves the
+    // preset's variables, not the defaults of `.typeset`.
     const rhythm = await container.evaluate(el => {
       const style = getComputedStyle(el);
       return {
@@ -35,23 +35,24 @@ test.describe('Typeset documentation page', () => {
 
     const line = await paragraph.evaluate(el => getComputedStyle(el).lineHeight);
 
-    // 16px × 1.6. Se o typeset não tivesse alcançado o parágrafo, viria do tema.
+    // 16px x 1.6. Had typeset not reached the paragraph, this would come from the theme.
     expect(line).toBe('25.6px');
   });
 
   test('lets a utility class win with no !important', async ({ page }) => {
     const heading = page.locator('section#principles h2').first();
 
-    // O typeset derivaria 20px aqui; o utilitário `text-2xl` da página vence,
-    // que é o contrato de especificidade zero que a página documenta.
+    // Typeset would derive 20px here; the page's `text-2xl` utility wins, which
+    // is the zero-specificity contract the page documents.
     await expect(heading).toHaveCSS('font-size', '24px');
   });
 
   test('scroll spy follows the reader down the page', async ({ page }) => {
-    // A entrada ativa é marcada pelo peso, não por um href: as âncoras da barra
-    // lateral rolam por handler de clique. O fundo da página é o único ponto
-    // determinístico — a diretiva elege a última seção acima do limiar, então
-    // uma seção do meio depende de onde exatamente o scroll parou.
+    // The active entry is marked by weight, not by an href: the sidebar anchors
+    // scroll through a click handler. The bottom of the page is the only
+    // deterministic point — the directive elects the last section above the
+    // threshold, so a middle section depends on exactly where the scroll came
+    // to rest.
     const sidebar = page.getByRole('complementary');
     const last = sidebar.getByText('Prior art', { exact: true });
 

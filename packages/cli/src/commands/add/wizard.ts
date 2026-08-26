@@ -68,7 +68,7 @@ export interface AddWizardOptions {
   installComponent(component: ComponentMeta): Promise<void>;
   /** Only called when dark-mode is part of the install. */
   setupDarkMode(indexHtml: string): Promise<void>;
-  /** Só é chamado quando typeset entra na instalação. */
+  /** Only called when typeset is part of the install. */
   setupTypeset(): Promise<void>;
   /**
    * Where index.html should be, according to the configured project type.
@@ -232,8 +232,8 @@ export async function runAddWizard(options: AddWizardOptions): Promise<AddWizard
       ctx.refresh();
     }
 
-    // Depois do laço, e olhando o que de fato foi gravado: injetar o import de
-    // um arquivo que falhou na instalação deixaria o CSS apontando para o vazio.
+    // After the loop, and against what was actually written: injecting the
+    // import for a file whose install failed would point the CSS at nothing.
     if (state.installed.includes(TYPESET)) {
       await options.setupTypeset();
     }
