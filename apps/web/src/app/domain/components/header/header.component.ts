@@ -15,8 +15,6 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
-import { environment } from '../../../../environments/environment';
-
 const DarkModeSvg = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
@@ -55,7 +53,6 @@ export class HeaderComponent {
 
   readonly headerPaths = HEADER_PATHS;
   readonly githubData = SOCIAL_MEDIAS.find(m => m.name === 'GitHub') ?? null;
-  readonly appVersion = environment.appVersion;
   private readonly githubService = inject(GithubService);
   private readonly darkModeService = inject(ZardDarkMode);
   readonly repoStars = this.githubService.starsCountFormatted;

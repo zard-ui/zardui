@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  appVersion: 'beta',
+  appVersion: 'latest',
   package: 'zard-cli',
   features: {
     copyPage: true,
