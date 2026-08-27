@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 /**
  * A `##`-level section of a utility page: heading, optional lead paragraph and
- * projected content. Keeps the three pages free of repeated heading class
+ * projected content. Keeps the utility pages free of repeated heading class
  * strings.
  *
  * The anchor lives on the host element (`scrollSpyItem` + `id`) so it stays a

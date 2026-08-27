@@ -23,7 +23,7 @@ src/styles.css
 
 ```
 @import 'tailwindcss';
-@import './app/shared/core/css/tailwind.css';
+@import './app/shared/core/css/tailwind';
 ```
 
 ## Usage

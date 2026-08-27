@@ -24,5 +24,5 @@ classes are available as soon as it is imported after Tailwind.
 
 ```css title="src/styles.css" copyButton
 @import 'tailwindcss';
-@import './app/shared/core/css/tailwind.css';
+@import './app/shared/core/css/tailwind';
 ```
