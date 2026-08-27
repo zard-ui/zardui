@@ -1,3 +1,13 @@
+## 1.0.0-beta.119 (2026-08-27)
+
+### ✨ Features
+
+- **utils:** add the scroll-fade and shimmer CSS utilities ([#721](https://github.com/zard-ui/zardui/pull/721))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.118 (2026-08-26)
 
 ### ✨ Features
