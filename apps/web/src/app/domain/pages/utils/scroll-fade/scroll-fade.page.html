@@ -69,10 +69,12 @@
     <p class="text-muted-foreground leading-relaxed">
       The default fade depth is
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">min(12%, calc(var(--spacing) * 10))</code>
-      — 12% of the container, capped at 40px — and the default reveal distance, how far you scroll before an edge is
-      fully faded, is
+      — 12% of the container, capped at ten spacing units — and the default reveal distance, how far you scroll before
+      an edge is fully faded, is
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">calc(var(--spacing) * 24)</code>
-      — 96px.
+      — twenty-four of them. On the stock spacing scale that is 40px and 96px; both follow
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">--spacing</code>
+      if a project changes it.
     </p>
   </z-utils-section>
 

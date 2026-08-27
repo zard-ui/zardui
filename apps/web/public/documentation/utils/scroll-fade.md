@@ -53,7 +53,8 @@ The classes write these custom properties, so a stylesheet can set them directly
 
 ## Reveal
 
-`--scroll-fade-reveal` is how far you scroll before an edge is fully faded. It defaults to 96px.
+`--scroll-fade-reveal` is how far you scroll before an edge is fully faded. It defaults to 24 spacing units —
+96px unless the project changes `--spacing`.
 
 ```angular-html copyButton
 <div class="scroll-fade h-72 overflow-y-auto [--scroll-fade-reveal:64px]">

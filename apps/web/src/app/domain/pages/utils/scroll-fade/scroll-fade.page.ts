@@ -50,7 +50,7 @@ const CLASS_ROWS: UtilsClassRow[] = [
 const PROPERTY_ROWS: UtilsClassRow[] = [
   {
     name: '--scroll-fade-size',
-    description: 'Fade depth for every edge — 12% of the container, capped at 40px.',
+    description: 'Fade depth for every edge — 12% of the container, capped at ten spacing units (40px by default).',
     default: 'min(12%, calc(var(--spacing) * 10))',
   },
   {
@@ -75,7 +75,7 @@ const PROPERTY_ROWS: UtilsClassRow[] = [
   },
   {
     name: '--scroll-fade-reveal',
-    description: 'How far you scroll before an edge is fully faded — 96px.',
+    description: 'How far you scroll before an edge is fully faded — 24 spacing units (96px by default).',
     default: 'calc(var(--spacing) * 24)',
   },
 ];

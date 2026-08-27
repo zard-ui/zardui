@@ -219,7 +219,7 @@ That makes the effect scroll-aware rather than decorative:
 - Mid-scroll, both edges fade — there is content in both directions.
 - At the end, the trailing edge sharpens again.
 
-The default fade depth is `min(12%, calc(var(--spacing) * 10))` — 12% of the container, capped at 40px — and the default reveal distance, how far you scroll before an edge is fully faded, is `calc(var(--spacing) * 24)` — 96px.
+The default fade depth is `min(12%, calc(var(--spacing) * 10))` — 12% of the container, capped at ten spacing units — and the default reveal distance, how far you scroll before an edge is fully faded, is `calc(var(--spacing) * 24)` — twenty-four of them. On the stock spacing scale that is 40px and 96px; both follow `--spacing` if a project changes it.
 
 ## Edges
 
@@ -536,7 +536,7 @@ How far you scroll before an edge reaches its full depth. Shorter feels snappier
 </div>
 ```
 
-default — 96px
+default reveal
 
 Attach a payment method
 
@@ -596,7 +596,7 @@ const ROWS = [
   template: `
     <div class="grid w-full max-w-2xl gap-6 sm:grid-cols-2">
       <div class="flex flex-col gap-2">
-        <p class="text-muted-foreground font-mono text-xs">default — 96px</p>
+        <p class="text-muted-foreground font-mono text-xs">default reveal</p>
         <div class="bg-card scroll-fade h-56 overflow-y-auto rounded-lg border px-4">
           @for (row of rows; track row) {
             <p class="border-b py-3 text-sm last:border-0">{{ row }}</p>
@@ -673,9 +673,9 @@ css/utilities.css
 
 | Property | Description | Default |
 | --- | --- | --- |
-| `--scroll-fade-size` | Fade depth for every edge — 12% of the container, capped at 40px. | `min(12%, calc(var(--spacing) * 10))` |
+| `--scroll-fade-size` | Fade depth for every edge — 12% of the container, capped at ten spacing units (40px by default). | `min(12%, calc(var(--spacing) * 10))` |
 | `--scroll-fade-t-size` | Top-edge depth. | `--scroll-fade-size` |
 | `--scroll-fade-b-size` | Bottom-edge depth. | `--scroll-fade-size` |
 | `--scroll-fade-s-size` | Inline-start depth. | `--scroll-fade-size` |
 | `--scroll-fade-e-size` | Inline-end depth. | `--scroll-fade-size` |
-| `--scroll-fade-reveal` | How far you scroll before an edge is fully faded — 96px. | `calc(var(--spacing) * 24)` |
+| `--scroll-fade-reveal` | How far you scroll before an edge is fully faded — 24 spacing units (96px by default). | `calc(var(--spacing) * 24)` |
