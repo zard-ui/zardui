@@ -81,6 +81,7 @@ Always enforced. Each links to a file with Incorrect/Correct pairs.
 - **`size-*` when width and height match.** `size-4`, not `w-4 h-4`.
 - **No `dark:` colour overrides.** The tokens already switch.
 - **Tailwind v4 only.** There is no `tailwind.config.js`; the theme lives in CSS.
+- **`scroll-fade` needs an overflow container; `shimmer` is text-only.** Both are pure-CSS utilities from the `core` item.
 
 ### Composition → [rules/composition.md](./rules/composition.md)
 
@@ -198,7 +199,7 @@ There is no `search`, `view`, `diff`, `info`, or `build` command — those are s
 - [mcp.md](./mcp.md) — the nine MCP tools, how to connect, `ZARD_REGISTRY_URL` / `ZARD_DOCS_URL`
 - [customization.md](./customization.md) — theme tokens, CVA variants, `mergeClasses`, extending a component
 - [rules/angular.md](./rules/angular.md) — standalone, `input()`, OnPush, `ViewEncapsulation.None`, selectors
-- [rules/styling.md](./rules/styling.md) — Tailwind v4, semantic tokens, `mergeClasses`, variants before raw classes
+- [rules/styling.md](./rules/styling.md) — Tailwind v4, semantic tokens, `mergeClasses`, variants before raw classes, the `scroll-fade` / `shimmer` utilities
 - [rules/composition.md](./rules/composition.md) — composing with what exists before inventing markup
 - [rules/forms.md](./rules/forms.md) — Signal Forms, Reactive Forms, Template-driven
 - [rules/icons.md](./rules/icons.md) — ng-icons, `provideIcons`, the catalog, the configurable family

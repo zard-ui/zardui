@@ -13,6 +13,7 @@ See [customization.md](../customization.md) for the theme tokens and how to add 
 - No `dark:` colour overrides
 - Tailwind v4 — no config file
 - No manual z-index on overlays
+- CSS utilities: `scroll-fade` and `shimmer`
 
 ---
 
@@ -171,3 +172,26 @@ There is no `tailwind.config.js` and nothing to add to one. The theme is CSS: `@
 ## No manual z-index on overlays
 
 Dialog, sheet, popover, tooltip, dropdown and the alert dialog manage their own stacking through the CDK overlay. A `z-50` added by hand competes with it.
+
+---
+
+## CSS utilities: `scroll-fade` and `shimmer`
+
+Two pure-CSS utilities ship in `css/utilities.css`, which `css/tailwind.css` imports (both come from the `core` registry item). No directive, no service, no listener.
+
+`scroll-fade` fades the edges of a scroll container in sync with its scroll position. **It only paints a mask — it does not make the container scrollable.** Always pair it with an overflow class and a height.
+
+```angular-html
+<div class="scroll-fade h-72 overflow-y-auto">…</div>
+<div class="scroll-fade-x overflow-x-auto">…</div>
+```
+
+`scroll-fade`/`scroll-fade-y` fade both vertical edges; `scroll-fade-x` both inline ones. Single edges: `-t` `-b` `-l` `-r` (physical), `-s` `-e` (logical, mirror under RTL). Depth comes from `scroll-fade-<n>` / `scroll-fade-[<value>]` and per edge from `scroll-fade-t-<n>` etc. — those carry a value only, so keep the mask class next to them (`scroll-fade scroll-fade-4`). `scroll-fade-none` disables it.
+
+`shimmer` sweeps a highlight across text while something is being generated. **It is text-only** — on a wrapper it clips that wrapper's background to its own text and everything inside looks broken. Put it on the element that holds the words.
+
+```angular-html
+<p class="shimmer text-muted-foreground">Generating response…</p>
+```
+
+`shimmer-once` runs a single sweep, `shimmer-reverse` flips the direction, `shimmer-none` turns it off (useful as `md:shimmer-none`). Tune with `shimmer-color-*` (theme colour or arbitrary, `/<opacity>` supported), `shimmer-duration-*` (**milliseconds** — `shimmer-duration-1000` is 1s), `shimmer-spread-*` and `shimmer-angle-*`. The base colour is `currentColor`, so it adapts on its own — including in dark mode — and `prefers-reduced-motion: reduce` disables it automatically.

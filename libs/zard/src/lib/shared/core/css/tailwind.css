@@ -1,3 +1,5 @@
+@import './utilities.css';
+
 @theme inline {
   --animate-caret-blink: caret-blink 1s ease-out infinite;
 
@@ -10,6 +12,24 @@
     20%,
     50% {
       opacity: 0;
+    }
+  }
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height, var(--accordion-panel-height, auto));
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height, var(--accordion-panel-height, auto));
+    }
+    to {
+      height: 0;
     }
   }
 }
@@ -72,115 +92,5 @@
 @custom-variant data-vertical {
   &:where([data-orientation='vertical']) {
     @slot;
-  }
-}
-
-@utility no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-/* Shimmer — animated sweep over text, for streaming/in-progress status.
-   Ported from the shadcn package so `class="shimmer"` behaves identically. */
-@property --shimmer-angle {
-  syntax: '<angle>';
-  inherits: true;
-  initial-value: 20deg;
-}
-
-@property --shimmer-image {
-  syntax: '*';
-  inherits: false;
-}
-
-@property --shimmer-text-fill {
-  syntax: '*';
-  inherits: false;
-}
-
-@theme inline {
-  @keyframes shimmer {
-    from {
-      background-position: 100% 0;
-    }
-    to {
-      background-position: 0 0;
-    }
-  }
-}
-
-@utility shimmer {
-  --_spread: var(--shimmer-spread, calc(3ch + 40px));
-  --_base: currentColor;
-  --_highlight: var(--shimmer-color, oklch(from currentColor l c h / calc(alpha* 0.2)));
-
-  background-image: var(
-    --shimmer-image,
-    linear-gradient(
-      calc(90deg + var(--shimmer-angle)),
-      var(--_base) calc(50% - var(--_spread)),
-      color-mix(in oklch, var(--_highlight), var(--_base) 50%) calc(50% - var(--_spread) * 0.5),
-      var(--_highlight) 50%,
-      color-mix(in oklch, var(--_highlight), var(--_base) 50%) calc(50% + var(--_spread) * 0.5),
-      var(--_base) calc(50% + var(--_spread))
-    )
-  );
-  background-repeat: no-repeat;
-  background-size: calc(200% + var(--_spread) * 2) 100%;
-  background-position: 0 0;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: var(--shimmer-text-fill, transparent);
-  animation: shimmer var(--shimmer-duration, 2s) linear infinite;
-
-  @variant dark {
-    --_highlight: var(--shimmer-color, oklch(from currentColor max(0.8, calc(l + 0.4)) c h / calc(alpha + 0.4)));
-  }
-
-  &:where([dir='rtl'], [dir='rtl'] *) {
-    animation-direction: reverse;
-  }
-}
-
-@utility shimmer-once {
-  animation-iteration-count: 1;
-}
-
-@utility shimmer-reverse {
-  animation-direction: reverse;
-}
-
-@utility shimmer-none {
-  --shimmer-image: none;
-  --shimmer-text-fill: currentColor;
-}
-
-@utility shimmer-color-* {
-  --shimmer-color: --value(--color, [color]);
-  --shimmer-color: color-mix(in oklch, --value(--color, [color]) calc(--modifier(integer) * 1%), transparent);
-}
-
-@utility shimmer-duration-* {
-  --shimmer-duration: calc(--value(integer) * 1ms);
-}
-
-@utility shimmer-spread-* {
-  --shimmer-spread: calc(var(--spacing) * --value(integer));
-  --shimmer-spread: --value([length], [percentage]);
-}
-
-@utility shimmer-angle-* {
-  --shimmer-angle: calc(--value(integer) * 1deg);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .shimmer {
-    animation: none;
-    background-image: none;
-    -webkit-text-fill-color: currentColor;
   }
 }

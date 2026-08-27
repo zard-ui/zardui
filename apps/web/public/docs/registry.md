@@ -126,6 +126,7 @@ registry.json
         "provider/event-manager-plugins/zard-event-manager-plugin.ts",
         "provider/providezard.ts",
         "css/tailwind.css",
+        "css/utilities.css",
         "index.ts"
       ],
       "icons": { "family": "lucide", "symbols": [], "tokens": [] }

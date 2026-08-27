@@ -76,6 +76,14 @@ export const FORMS_PATH: NavSection = {
   ],
 };
 
+export const UTILITIES_PATH: NavSection = {
+  title: 'Utilities',
+  data: [
+    { name: 'Scroll Fade', path: '/docs/utils/scroll-fade', available: true },
+    { name: 'Shimmer', path: '/docs/utils/shimmer', available: true },
+  ],
+};
+
 export const FEATURED_PATH: NavSection = {
   title: 'Featured',
   data: [
@@ -165,6 +173,7 @@ export const SIDEBAR_PATHS: NavSection[] = [
   COMPONENTS_PATH,
   DOCS_PATH,
   FORMS_PATH,
+  UTILITIES_PATH,
   FEATURED_PATH,
   CONTRIBUTE_PATH,
 ];
