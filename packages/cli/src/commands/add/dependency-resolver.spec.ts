@@ -14,19 +14,23 @@ jest.mock('../../utils/logger.js', () => ({
 
 jest.mock('fs', () => ({
   existsSync: jest.fn().mockReturnValue(false),
-  readdirSync: jest.fn().mockReturnValue([]),
 }));
 
-import { getComponentMeta, resolveDependencies } from '@cli/commands/add/dependency-resolver.js';
+import {
+  getComponentMeta,
+  getTargetDir,
+  isItemInstalled,
+  resolveDependencies,
+} from '@cli/commands/add/dependency-resolver.js';
 import { Config } from '@cli/utils/config.js';
-import { existsSync, readdirSync } from 'fs';
+import { existsSync, type PathLike } from 'fs';
+import * as path from 'path';
 
 import { fetchRegistryIndex, invalidateRegistryCache } from '../../utils/registry.js';
 
 const mockFetchRegistryIndex = fetchRegistryIndex as jest.MockedFunction<typeof fetchRegistryIndex>;
 const mockInvalidateRegistryCache = invalidateRegistryCache as jest.MockedFunction<typeof invalidateRegistryCache>;
 const mockExistsSync = existsSync as jest.MockedFunction<typeof existsSync>;
-const mockReaddirSync = readdirSync as jest.MockedFunction<typeof readdirSync>;
 
 const fakeRegistryIndex = {
   $schema: 'https://zardui.com/schema.json',
@@ -98,6 +102,7 @@ describe('getComponentMeta', () => {
     expect(meta).toEqual({
       name: 'button',
       basePath: 'button',
+      files: ['button.component.ts'],
       dependencies: ['@angular/cdk'],
       devDependencies: [],
       registryDependencies: ['core'],
@@ -133,19 +138,26 @@ describe('resolveDependencies', () => {
   });
 
   it('should skip already installed components when overwrite is false', async () => {
-    mockExistsSync.mockImplementation((dir: any) => {
-      // button directory exists and has files
-      return String(dir).includes('button');
-    });
-    mockReaddirSync.mockImplementation((dir: any) => {
-      if (String(dir).includes('button')) return ['button.component.ts'] as any;
-      return [] as any;
-    });
+    // The directory and every file the item declares are already there.
+    mockExistsSync.mockImplementation((target: PathLike) => String(target).includes('button'));
 
     const result = await resolveDependencies(['button'], fakeResolvedConfig, '/project', { overwrite: false });
 
     const componentNames = result.componentsToInstall.map(c => c.name);
     expect(componentNames).not.toContain('button');
+  });
+
+  it('should reinstall a component whose declared files are missing', async () => {
+    // The directory exists but the file the item declares does not: an install
+    // cut in half, which is now completed rather than skipped.
+    mockExistsSync.mockImplementation(
+      (target: PathLike) => String(target) === '/project/src/app/shared/components/button',
+    );
+
+    const result = await resolveDependencies(['button'], fakeResolvedConfig, '/project', { overwrite: false });
+
+    const componentNames = result.componentsToInstall.map(c => c.name);
+    expect(componentNames).toContain('button');
   });
 
   it('should collect dependencies from nested registry dependencies', async () => {
@@ -160,5 +172,70 @@ describe('resolveDependencies', () => {
     // npm dependencies from all levels
     expect(result.dependenciesToInstall).toContain('@angular/cdk');
     expect(result.dependenciesToInstall).toContain('rxjs');
+  });
+});
+
+describe('isItemInstalled', () => {
+  beforeEach(() => {
+    mockExistsSync.mockReset();
+  });
+
+  it('should report not installed when no declared file exists', () => {
+    mockExistsSync.mockImplementation((target: PathLike) => String(target) === '/project/components/button');
+
+    expect(isItemInstalled('/project/components/button', ['button.component.ts', 'index.ts'])).toBe(false);
+  });
+
+  it('should report not installed when only some declared files exist', () => {
+    mockExistsSync.mockImplementation((target: PathLike) => !String(target).endsWith('index.ts'));
+
+    expect(isItemInstalled('/project/components/button', ['button.component.ts', 'index.ts'])).toBe(false);
+  });
+
+  it('should report installed when every declared file exists', () => {
+    mockExistsSync.mockReturnValue(true);
+
+    expect(isItemInstalled('/project/components/button', ['button.component.ts', 'index.ts'])).toBe(true);
+  });
+
+  it('should report not installed when the directory is missing', () => {
+    mockExistsSync.mockReturnValue(false);
+
+    expect(isItemInstalled('/project/components/button', ['button.component.ts'])).toBe(false);
+  });
+
+  it('should report not installed when the item declares no file', () => {
+    mockExistsSync.mockReturnValue(true);
+
+    expect(isItemInstalled('/project/components/button', [])).toBe(false);
+  });
+});
+
+describe('getTargetDir', () => {
+  it('should write a styles item next to the global stylesheet', () => {
+    const target = getTargetDir({ name: 'typeset', basePath: 'styles' }, fakeResolvedConfig, '/project');
+
+    expect(target).toBe(path.dirname('/project/src/styles.css'));
+  });
+
+  it('should write a component into the components directory', () => {
+    const target = getTargetDir({ name: 'button', basePath: 'button' }, fakeResolvedConfig, '/project');
+
+    expect(target).toBe(path.resolve('/project/src/app/shared/components', 'button'));
+  });
+
+  it('should keep a styles item next to the global stylesheet even under --path', () => {
+    // --path moves components. A stylesheet that moved with them would still be
+    // imported as `./typeset.css` from beside the global CSS, and resolve to
+    // nothing — the install would report success and style nothing.
+    const target = getTargetDir({ name: 'typeset', basePath: 'styles' }, fakeResolvedConfig, '/project', 'src/ui');
+
+    expect(target).toBe(path.dirname('/project/src/styles.css'));
+  });
+
+  it('should honour --path for a component', () => {
+    const target = getTargetDir({ name: 'button', basePath: 'button' }, fakeResolvedConfig, '/project', 'src/ui');
+
+    expect(target).toBe(path.resolve('/project', 'src/ui', 'button'));
   });
 });

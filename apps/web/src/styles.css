@@ -1,6 +1,7 @@
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
 @import '../../../libs/zard/src/lib/shared/core/css/tailwind.css';
+@import '../../../libs/zard/src/lib/shared/core/css/typeset.css';
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource-variable/geist';
 
@@ -243,6 +244,37 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
+
+  /*
+   * The typeset builder is a fixed-height tool: it sizes itself to the viewport
+   * and scrolls inside its own panels. The page under it must not scroll as
+   * well, or the controls slide away from the preview they drive.
+   *
+   * The page adds this on the way in and drops it on the way out, so it never
+   * outlives the route — see `TypesetPage`.
+   *
+   * No `scrollbar-gutter` here: a gutter is only reserved for a container that
+   * shows a scrollbar, so it is inert next to `overflow: hidden`. Losing the
+   * bar widens the page by its width for as long as the lock is on.
+   */
+  .scroll-locked {
+    overflow: hidden;
+  }
+
+  /*
+   * The footer goes with it. The builder already fills the viewport under the
+   * header, so the footer is the entire overflow: hiding the bar and leaving it
+   * in the flow only makes it unreachable, and any programmatic scroll — an
+   * anchor, a focused control, the router restoring a position — would strand
+   * the page below the header with no way to scroll back.
+   *
+   * Taking it out of the flow leaves nothing to scroll at all, which is the
+   * difference between a page that refuses to move and a page that has nowhere
+   * to move to.
+   */
+  .scroll-locked z-footer {
+    display: none;
+  }
 }
 
 code[data-line-numbers] {
@@ -270,6 +302,20 @@ code[data-line-numbers-max-digits='3'] > [data-line]::before {
 
 code[data-line-numbers-max-digits='4'] > [data-line]::before {
   width: 2.25rem;
+}
+
+/* The site's own typeset: the rhythm the documentation prose is written to.
+   The three values are ones the builder at /typeset can reproduce, so anyone
+   reading the docs can land on this exact preset by picking them there.
+
+   They are also the values that land on what the pages already measured, so
+   adopting typeset moved no text: 16px matches `sm:text-base`, 1.6 lands
+   within half a pixel of `leading-relaxed`, and a 1em flow reproduces the
+   `gap-4` these sections used to carry between blocks. */
+.typeset-docs {
+  --typeset-size: 16px;
+  --typeset-leading: 1.6;
+  --typeset-flow: 1em;
 }
 
 /* Shiki code block styling for z-code-block / z-code-tabs */

@@ -32,14 +32,28 @@ const REGISTRY_OUTPUT = path.resolve(__dirname, '../apps/web/public/r');
  */
 const IMPLICIT_ITEMS = new Set(['utils', 'core']);
 
-const NON_COMPONENT_BASE_PATHS = ['core', 'services', 'utils'];
+/**
+ * Where a non-component item is written, keyed by the base path it publishes.
+ *
+ * The first three agree. Typeset does not: it installs next to the consumer's
+ * global stylesheet, but it lives beside the core's tailwind.css, which is
+ * where it is edited and tested. Mirrors `NON_COMPONENT_PATHS` in
+ * `scripts/build-registry.cts` — the two must name the same directories.
+ */
+const NON_COMPONENT_PATHS: Record<string, string> = {
+  core: 'core',
+  services: 'services',
+  utils: 'utils',
+  styles: 'core/css',
+};
 
 const problems: string[] = [];
 const report = (item: string, message: string) => problems.push(`${item}: ${message}`);
 
 function sourceDirOf(name: string, basePath?: string): string {
   const base = basePath ?? name;
-  return NON_COMPONENT_BASE_PATHS.includes(base) ? path.join(LIB_PATH, base) : path.join(LIB_PATH, 'components', base);
+  const nonComponent = NON_COMPONENT_PATHS[base];
+  return nonComponent ? path.join(LIB_PATH, nonComponent) : path.join(LIB_PATH, 'components', base);
 }
 
 /** The files that make up a registry item: everything but demos, docs and specs. */
@@ -81,6 +95,20 @@ function importedBasePaths(dir: string, files: string[]): Set<string> {
 function checkSourcePass(): void {
   const itemNameOfBasePath = new Map(registry.map(item => [item.basePath ?? item.name, item.name]));
 
+  /*
+   * Which item owns each source file, by absolute path.
+   *
+   * One item's directory can sit inside another's — typeset is written in
+   * `core/css` — and then each scan turns up the other's files. Without an
+   * owner, the core would be told to list typeset.css and typeset to list
+   * tailwind.css, when both are listed already, by the item that ships them.
+   */
+  const ownerOfFile = new Map<string, string>();
+  for (const item of registry) {
+    const dir = sourceDirOf(item.name, item.basePath);
+    for (const file of item.files) ownerOfFile.set(path.join(dir, file.name), item.name);
+  }
+
   for (const item of registry) {
     const dir = sourceDirOf(item.name, item.basePath);
 
@@ -89,7 +117,9 @@ function checkSourcePass(): void {
       continue;
     }
 
-    const actual = sourceFilesOf(dir);
+    const actual = sourceFilesOf(dir).filter(
+      file => (ownerOfFile.get(path.join(dir, file)) ?? item.name) === item.name,
+    );
     const listed = item.files.map(file => file.name);
 
     for (const file of listed) {

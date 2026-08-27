@@ -20,6 +20,7 @@ export const HEADER_PATHS: NavItem[] = [
   { name: 'Blocks', path: '/blocks', available: true },
   { name: 'Charts', path: '/charts', available: true },
   { name: 'Themes', path: '/themes', available: true },
+  { name: 'Typeset', path: '/typeset', available: true },
 ];
 
 /**
@@ -35,7 +36,7 @@ export const SECTIONS: NavSection = {
     { name: 'Installation', path: '/docs/installation', available: true },
     { name: 'Theming', path: '/docs/theming', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
-    { name: 'Typeset', path: '/docs/typeset', available: false },
+    { name: 'Typeset', path: '/docs/typeset', available: true },
     { name: 'Skills', path: '/docs/skills', available: true },
     { name: 'Registry', path: '/docs/registry', available: true },
     { name: 'MCP Server', path: '/docs/mcp', available: true },
@@ -50,7 +51,7 @@ export const DOCS_PATH: NavSection = {
     { name: 'Installation', path: '/docs/installation', available: true },
     { name: 'components.json', path: '/docs/components-json', available: true },
     { name: 'Theming', path: '/docs/theming', available: true },
-    { name: 'Typeset', path: '/docs/typeset', available: false },
+    { name: 'Typeset', path: '/docs/typeset', available: true },
     { name: 'Dark Mode', path: '/docs/dark-mode', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
     { name: 'Monorepo', path: '/docs/monorepo', available: true },
@@ -143,6 +144,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Sidebar', path: '/docs/components/sidebar', available: true },
     { name: 'Drawer', path: '/docs/components/drawer', available: true },
     { name: 'Bubble', path: '/docs/components/bubble', available: true },
+    { name: 'Hover Card', path: '/docs/components/hover-card', available: true },
     { name: 'Context Menu', path: '/docs/components/context-menu', available: true },
     { name: 'Message', path: '/docs/components/message', available: true },
     { name: 'Marker', path: '/docs/components/marker', available: true },

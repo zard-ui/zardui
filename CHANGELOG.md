@@ -1,3 +1,17 @@
+## 1.0.0-beta.118 (2026-08-26)
+
+### ✨ Features
+
+- **typeset:** a styling system for HTML and rendered markdown ([#720](https://github.com/zard-ui/zardui/pull/720))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
+## 1.0.0-beta.117 (2026-08-26)
+
+This was a version bump only, there were no code changes.
+
 ## 1.0.0-beta.116 (2026-08-21)
 
 ### 🐛 Bug Fixes

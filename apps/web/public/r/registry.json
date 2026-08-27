@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.116",
+  "version": "1.0.0-beta.118",
   "items": [
     {
       "name": "core",
@@ -24,6 +24,19 @@
         "css/tailwind.css",
         "css/utilities.css",
         "index.ts"
+      ]
+    },
+    {
+      "name": "typeset",
+      "type": "registry:component",
+      "basePath": "styles",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "typeset.css"
       ]
     },
     {

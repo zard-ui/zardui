@@ -61,10 +61,25 @@ function getCliVersion(): string {
   }
 }
 
+/*
+ * Where a non-component item's source lives in this repository.
+ *
+ * The key is the `basePath` the registry publishes — the install destination —
+ * and the value is the source directory. The first three agree; typeset does
+ * not: it ships next to the installing project's global CSS, but it is born
+ * beside the core's tailwind.css, which is where it is edited and tested.
+ */
+const NON_COMPONENT_PATHS: Record<string, string> = {
+  core: 'core',
+  services: 'services',
+  utils: 'utils',
+  styles: 'core/css',
+};
+
 function getSourcePath(componentName: string, basePath: string): string {
-  const nonComponentPaths = ['core', 'services', 'utils'];
-  if (nonComponentPaths.includes(basePath)) {
-    return path.join(LIB_PATH, basePath);
+  const nonComponentPath = NON_COMPONENT_PATHS[basePath];
+  if (nonComponentPath) {
+    return path.join(LIB_PATH, nonComponentPath);
   }
   return path.join(LIB_PATH, 'components', basePath);
 }

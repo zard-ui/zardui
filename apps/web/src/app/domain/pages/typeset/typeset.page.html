@@ -1,0 +1,21 @@
+<!--
+  The width is the screen's, not the container-wrapper's: the builder is a
+  three-panel tool, and the site's fixed-layout ceiling would narrow the preview
+  for exactly the people who have the monitor for it.
+
+  The DOM order is code panel, preview, customizer. It reads bottom-up on a
+  phone — the code hidden, the preview on top and the controls within thumb
+  reach — and flex-row-reverse flips it on a desktop, where the customizer is
+  the left column.
+-->
+<section class="flex h-[calc(100svh-var(--header-height))] min-h-0 flex-col overflow-hidden">
+  <div class="flex min-h-0 flex-1 flex-col gap-4 p-4 pt-1 md:flex-row-reverse md:gap-6 md:p-6 md:pt-1.5">
+    <div class="hidden min-h-0 xl:block xl:w-88 2xl:w-104">
+      <z-typeset-code-panel />
+    </div>
+
+    <z-typeset-preview class="min-h-0 w-full flex-1" />
+
+    <z-typeset-customizer class="w-full shrink-0 self-start md:w-48 2xl:w-56" />
+  </div>
+</section>

@@ -65,6 +65,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/theming/theming.page').then(c => c.ThemingPage),
       },
       {
+        path: 'typeset',
+        loadComponent: () => import('./domain/pages/typeset-docs/typeset-docs.page').then(c => c.TypesetDocsPage),
+      },
+      {
         path: 'forms',
         loadChildren: () => import('./domain/pages/forms/forms.routes').then(m => m.FORMS_ROUTES),
       },
@@ -143,6 +147,20 @@ export const appRoutes: Route[] = [
       {
         path: '',
         loadComponent: () => import('./domain/pages/themes/themes.page').then(c => c.ThemesPage),
+      },
+    ],
+  },
+  {
+    path: 'typeset/preview',
+    loadComponent: () => import('./domain/pages/typeset/preview/typeset-preview.page').then(c => c.TypesetPreviewPage),
+  },
+  {
+    path: 'typeset',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./domain/pages/typeset/typeset.page').then(c => c.TypesetPage),
       },
     ],
   },
