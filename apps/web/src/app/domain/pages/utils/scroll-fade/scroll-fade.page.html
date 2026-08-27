@@ -72,7 +72,7 @@
       — 12% of the container, capped at 40px — and the default reveal distance, how far you scroll before an edge is
       fully faded, is
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">calc(var(--spacing) * 24)</code>
-      , or 96px.
+      — 96px.
     </p>
   </z-utils-section>
 
@@ -91,9 +91,9 @@
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">-s</code>
       and
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">-e</code>
-      are logical: they follow the reading direction, so they swap under
+      are logical: under
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">dir="rtl"</code>
-      .
+      they swap to follow the reading direction.
     </p>
     <z-code-box [codeData]="demos.edges.code" [dynamicComponent]="demos.edges.component" />
   </z-utils-section>
@@ -138,11 +138,11 @@
     <z-code-block [data]="blocks.rtl" />
     <p class="text-muted-foreground leading-relaxed">
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-x</code>
-      ,
+      mirrors, and so do the
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-s</code>
       and
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-e</code>
-      mirror. Reach for
+      edges. Reach for
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-l</code>
       or
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">scroll-fade-r</code>

@@ -7,7 +7,7 @@ description: A sweeping highlight across text, for the seconds where something i
 
 A sweeping highlight across text, for the seconds where something is being generated.
 
-A spinner tells you the app is busy. A shimmering line tells you *this text* is what you are waiting for. Because the effect is built out of `currentColor` , it adapts to whatever colour the element already has — for the common case there is nothing to configure.
+A spinner tells you the app is busy. A shimmering line tells you *this text* is what you are waiting for. Because `currentColor` is what the effect is built out of, it adapts to whatever colour the element already has — for the common case there is nothing to configure.
 
 ## Installation
 
@@ -52,7 +52,7 @@ export class ZardUtilsShimmerBasicComponent {}
 
 ## How it works
 
-The element gets a `linear-gradient` background clipped to its glyphs — `background-clip: text` plus a transparent `-webkit-text-fill-color` — and the `tw-shimmer` keyframes slide that background across. The gradient's base stop is `currentColor` , so the text keeps its own colour everywhere the highlight is not.
+The element gets a `linear-gradient` background clipped to its glyphs — `background-clip: text` plus a transparent `-webkit-text-fill-color` — and the `tw-shimmer` keyframes slide that background across. The gradient's base stop stays at `currentColor` so the text keeps its own colour everywhere the highlight is not.
 
 Dark mode brightens the highlight through a `@variant dark` override, rather than dimming it the way a fixed colour would.
 
@@ -74,7 +74,7 @@ css/utilities.css
 
 The defaults are a 2s duration, a `calc(3ch + 40px)` spread and a `20deg` angle.
 
-The gradient relies on relative colour syntax and `color-mix()` . For older browsers, gate the class behind a feature query so the text simply keeps its own colour.
+The gradient relies on `color-mix()` and relative colour syntax. For older browsers, gate the class behind a feature query so the text simply keeps its own colour.
 
 ```
 <p class="supports-[color:oklch(from_white_l_c_h)]:shimmer text-muted-foreground">Generating response...</p>
@@ -117,7 +117,7 @@ export class ZardUtilsShimmerColorComponent {}
 
 ## Duration
 
-`shimmer-duration-*` is in **milliseconds** , unlike the `2s` default — `shimmer-duration-1000` is one second. It is the easiest thing here to get wrong.
+`shimmer-duration-*` takes **milliseconds** rather than the seconds its `2s` default suggests — `shimmer-duration-1000` is one second. It is the easiest thing here to get wrong.
 
 ```
 <p class="shimmer shimmer-duration-1000">One second per sweep</p>
@@ -254,7 +254,7 @@ export class ZardUtilsShimmerStatusComponent {}
 
 ## Reduced motion
 
-Under `prefers-reduced-motion: reduce` the animation and the gradient are both switched off and the text renders in `currentColor` . That is built into the utility — there is nothing to add at the call site, and no configuration that can turn the guarantee off.
+Under `prefers-reduced-motion: reduce` the animation and the gradient are both switched off and `currentColor` comes back. That is built into the utility — there is nothing to add at the call site, and no configuration that can turn the guarantee off.
 
 ## Class reference
 

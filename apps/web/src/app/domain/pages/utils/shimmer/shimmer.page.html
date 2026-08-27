@@ -14,9 +14,10 @@
   <p class="leading-relaxed">
     A spinner tells you the app is busy. A shimmering line tells you
     <em>this text</em>
-    is what you are waiting for. Because the effect is built out of
+    is what you are waiting for. Because
     <code class="bg-muted rounded px-1.5 py-0.5 text-sm">currentColor</code>
-    , it adapts to whatever colour the element already has — for the common case there is nothing to configure.
+    is what the effect is built out of, it adapts to whatever colour the element already has — for the common case there
+    is nothing to configure.
   </p>
 
   <z-utils-section
@@ -53,9 +54,9 @@
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">-webkit-text-fill-color</code>
       — and the
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">tw-shimmer</code>
-      keyframes slide that background across. The gradient's base stop is
+      keyframes slide that background across. The gradient's base stop stays at
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">currentColor</code>
-      , so the text keeps its own colour everywhere the highlight is not.
+      so the text keeps its own colour everywhere the highlight is not.
     </p>
     <p class="text-muted-foreground leading-relaxed">
       Dark mode brightens the highlight through a
@@ -71,9 +72,10 @@
       angle.
     </p>
     <p class="text-muted-foreground leading-relaxed">
-      The gradient relies on relative colour syntax and
+      The gradient relies on
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">color-mix()</code>
-      . For older browsers, gate the class behind a feature query so the text simply keeps its own colour.
+      and relative colour syntax. For older browsers, gate the class behind a feature query so the text simply keeps its
+      own colour.
     </p>
     <z-code-block [data]="blocks.guard" />
   </z-utils-section>
@@ -91,11 +93,11 @@
   <z-utils-section scrollSpyItem="duration" id="duration" heading="Duration">
     <p class="text-muted-foreground leading-relaxed">
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">shimmer-duration-*</code>
-      is in
+      takes
       <strong>milliseconds</strong>
-      , unlike the
+      rather than the seconds its
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">2s</code>
-      default —
+      default suggests —
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">shimmer-duration-1000</code>
       is one second. It is the easiest thing here to get wrong.
     </p>
@@ -150,10 +152,10 @@
     <p class="text-muted-foreground leading-relaxed">
       Under
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">prefers-reduced-motion: reduce</code>
-      the animation and the gradient are both switched off and the text renders in
+      the animation and the gradient are both switched off and
       <code class="bg-muted rounded px-1.5 py-0.5 text-sm">currentColor</code>
-      . That is built into the utility — there is nothing to add at the call site, and no configuration that can turn
-      the guarantee off.
+      comes back. That is built into the utility — there is nothing to add at the call site, and no configuration that
+      can turn the guarantee off.
     </p>
   </z-utils-section>
 

@@ -219,7 +219,7 @@ That makes the effect scroll-aware rather than decorative:
 - Mid-scroll, both edges fade — there is content in both directions.
 - At the end, the trailing edge sharpens again.
 
-The default fade depth is `min(12%, calc(var(--spacing) * 10))` — 12% of the container, capped at 40px — and the default reveal distance, how far you scroll before an edge is fully faded, is `calc(var(--spacing) * 24)` , or 96px.
+The default fade depth is `min(12%, calc(var(--spacing) * 10))` — 12% of the container, capped at 40px — and the default reveal distance, how far you scroll before an edge is fully faded, is `calc(var(--spacing) * 24)` — 96px.
 
 ## Edges
 
@@ -236,7 +236,7 @@ scroll-fade and scroll-fade-y are the same utility. The rest fade a single edge.
 <div class="scroll-fade-e overflow-x-auto">Inline end only</div>
 ```
 
-`-l` and `-r` are physical and always mean left and right. `-s` and `-e` are logical: they follow the reading direction, so they swap under `dir="rtl"` .
+`-l` and `-r` are physical and always mean left and right. `-s` and `-e` are logical: under `dir="rtl"` they swap to follow the reading direction.
 
 scroll-fade-t
 
@@ -633,7 +633,7 @@ The inline utilities read the direction from the document, so one class covers b
 </div>
 ```
 
-`scroll-fade-x` , `scroll-fade-s` and `scroll-fade-e` mirror. Reach for `scroll-fade-l` or `scroll-fade-r` only when you mean the physical side regardless of direction.
+`scroll-fade-x` mirrors, and so do the `scroll-fade-s` and `scroll-fade-e` edges. Reach for `scroll-fade-l` or `scroll-fade-r` only when you mean the physical side regardless of direction.
 
 ## Browser support
 

@@ -43,7 +43,7 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
     reason:
       'Defines the `data-*` custom variants (`data-open`, `data-checked`, `data-selected`, `data-disabled`, `data-active`, `data-horizontal`, `data-vertical`) and the accordion and caret keyframes, and imports `css/utilities.css` — where `no-scrollbar`, `scroll-fade` and `shimmer` live. The path follows the `core` alias in `components.json`.',
     breaksWhenMissing:
-      'The 64 `data-*:` classes the library relies on silently compile to nothing — open/closed states, checked switches and selected menu items stop reacting. `animate-caret-blink` and every CSS utility also disappear.',
+      'The 64 `data-*:` classes the library relies on silently compile to nothing — open/closed states, checked switches and selected menu items stop reacting. `animate-caret-blink`, `no-scrollbar`, `scroll-fade` and `shimmer` also disappear.',
   },
   {
     id: 'plugin-animate',

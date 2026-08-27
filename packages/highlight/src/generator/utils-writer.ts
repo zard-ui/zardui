@@ -56,6 +56,12 @@ export async function generateUtilsDemoFiles(): Promise<number> {
 /** Regenerates a single demo source. Used by the dev watcher. */
 export async function generateSingleUtilsDemo(filePath: string): Promise<void> {
   const relative = path.relative(DEMOS_PATH, filePath);
+
+  // A path outside DEMOS_PATH relativizes to something like '../elsewhere.ts', whose
+  // two segments would otherwise pass the shape check below and send the output to
+  // OUTPUT_PATH/../elsewhere.ts. Same guard the CLI uses before it writes a component.
+  if (path.isAbsolute(relative) || relative.startsWith('..')) return;
+
   const parts = relative.split(path.sep);
   if (parts.length !== 2 || path.extname(parts[1]) !== '.ts') return;
 
