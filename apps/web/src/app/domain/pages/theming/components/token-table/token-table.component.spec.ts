@@ -1,4 +1,5 @@
 import { Clipboard } from '@angular/cdk/clipboard';
+import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -11,8 +12,17 @@ describe('TokenTableComponent', () => {
   let fixture: ComponentFixture<TokenTableComponent>;
   let clipboard: { copy: jest.Mock };
 
-  const rows = () => fixture.debugElement.queryAll(By.css('tbody tr'));
-  const tables = () => fixture.debugElement.queryAll(By.css('table'));
+  const rows = () => fixture.debugElement.queryAll(By.css('li'));
+  const groups = () => fixture.debugElement.queryAll(By.css('ul'));
+  /** The two <code> elements of a row, in order: token name, resolved value. */
+  const codesOf = (row: DebugElement) =>
+    row.queryAll(By.css('code')).map(el => ((el.nativeElement as HTMLElement).textContent ?? '').trim());
+  const nameOf = (row: DebugElement) => codesOf(row)[0];
+  const valueOf = (row: DebugElement) => codesOf(row)[1];
+  /** Copy buttons of a row, in order: token name, resolved value. */
+  const copyButtons = (row: DebugElement) =>
+    row.queryAll(By.css('button')).map(el => el.nativeElement as HTMLButtonElement);
+
   const search = () => fixture.debugElement.query(By.css('input[type=search]')).nativeElement as HTMLInputElement;
   const modeButton = (label: string) =>
     fixture.debugElement
@@ -42,30 +52,25 @@ describe('TokenTableComponent', () => {
     expect(rows()).toHaveLength(THEME_TOKENS.length);
   });
 
-  it('renders one table per token group', () => {
-    expect(tables()).toHaveLength(TOKEN_GROUPS.length);
+  it('renders one list per token group', () => {
+    expect(groups()).toHaveLength(TOKEN_GROUPS.length);
   });
 
-  it('gives every table a caption and row headers', () => {
-    for (const table of tables()) {
-      expect(table.query(By.css('caption'))).toBeTruthy();
-      expect(table.queryAll(By.css('th[scope="row"]')).length).toBeGreaterThan(0);
+  it('names every list for screen readers', () => {
+    for (const group of groups()) {
+      expect((group.nativeElement as HTMLElement).getAttribute('aria-label')).toMatch(/ tokens$/);
     }
   });
 
   it('shows light values by default', () => {
-    const firstValue = rows()[0].query(By.css('td code')).nativeElement.textContent.trim();
-
-    expect(firstValue).toBe(BASE_COLORS[0].light[THEME_TOKENS[0].name]);
+    expect(valueOf(rows()[0])).toBe(BASE_COLORS[0].light[THEME_TOKENS[0].name]);
   });
 
   it('switches every value to the dark palette', () => {
     modeButton('Dark').nativeElement.click();
     fixture.detectChanges();
 
-    const firstValue = rows()[0].query(By.css('td code')).nativeElement.textContent.trim();
-
-    expect(firstValue).toBe(BASE_COLORS[0].dark[THEME_TOKENS[0].name]);
+    expect(valueOf(rows()[0])).toBe(BASE_COLORS[0].dark[THEME_TOKENS[0].name]);
   });
 
   it('filters by token name', () => {
@@ -78,7 +83,7 @@ describe('TokenTableComponent', () => {
   it('filters by the component that consumes the token', () => {
     type('skeleton');
 
-    const names = rows().map(row => row.query(By.css('th code')).nativeElement.textContent.trim());
+    const names = rows().map(row => nameOf(row));
     expect(names).toContain('--muted');
   });
 
@@ -90,15 +95,13 @@ describe('TokenTableComponent', () => {
   });
 
   it('copies the token name when its button is clicked', () => {
-    const button = rows()[0].query(By.css('th button')).nativeElement as HTMLButtonElement;
-    button.click();
+    copyButtons(rows()[0])[0].click();
 
     expect(clipboard.copy).toHaveBeenCalledWith(`--${THEME_TOKENS[0].name}`);
   });
 
   it('copies the resolved value when the swatch is clicked', () => {
-    const button = rows()[0].query(By.css('td button')).nativeElement as HTMLButtonElement;
-    button.click();
+    copyButtons(rows()[0])[1].click();
 
     expect(clipboard.copy).toHaveBeenCalledWith(BASE_COLORS[0].light[THEME_TOKENS[0].name]);
   });

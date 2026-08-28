@@ -19,7 +19,10 @@ There are three ways to get a theme:
 
 This is the whole file, exactly as `zard-cli init` writes it for the Neutral base color. Paste it into `src/styles.css` and every component is themed.
 
+```bash
 src/styles.css
+Expand
+```
 
 ```
 @layer ng-icon, theme, base, components, utilities;
@@ -181,7 +184,7 @@ Nine parts, in the order they appear above. Each one earns its place — the las
 
 1. `@layer ng-icon, theme, base, components, utilities;`Cascade layer order Declaring the layers up front fixes their priority. `ng-icon` comes first, so it has the lowest weight — `@ng-icons/core` ships its rules inside `@layer ng-icon`.Without it Icon styles win over your utilities: `text-primary` on an `<ng-icon>` stops changing its color.
 2. `@import 'tailwindcss';`TailwindCSS itself Pulls in preflight, the default theme and the utility engine. Everything below extends it.Without it No utility class resolves at all.
-3. `@import './app/shared/core/css/zard';`ZardUI's core stylesheet Defines the `data-*` custom variants (`data-open`, `data-checked`, `data-selected`, `data-disabled`, `data-active`, `data-horizontal`, `data-vertical`) and the accordion and caret keyframes, and imports `css/utilities.css` — where `no-scrollbar`, `scroll-fade` and `shimmer` live. The path follows the `core` alias in `components.json`.Without it The 64 `data-*:` classes the library relies on silently compile to nothing — open/closed states, checked switches and selected menu items stop reacting. `animate-caret-blink`, `no-scrollbar`, `scroll-fade` and `shimmer` also disappear.
+3. `@import './app/shared/core/css/zard';`ZardUI's core stylesheet Defines the `data-*` custom variants (`data-open`, `data-checked`, `data-selected`, `data-disabled`, `data-active`, `data-horizontal`, `data-vertical`) the accordion and caret keyframes, and `no-scrollbar`, which combobox and command rely on. `scroll-fade` and `shimmer` are not here — they ship in `utilities.css`, a separate registry item. The path follows the `core` alias in `components.json`.Without it The 64 `data-*:` classes the library relies on silently compile to nothing — open/closed states, checked switches and selected menu items stop reacting. `animate-caret-blink` and `no-scrollbar` also disappear.
 4. `@plugin "tailwindcss-animate";`Enter/exit animations Provides `animate-in`, `animate-out`, `fade-*`, `zoom-*` and `slide-in-from-*`.Without it Dialogs, sheets, popovers and dropdowns appear and vanish with no transition — over 50 classes across the library stop resolving.
 5. `@custom-variant dark (&:is(.dark *));`Class-based dark mode Binds the `dark:` variant to a `.dark` ancestor instead of `prefers-color-scheme`. That is what lets `ZardDarkMode` flip the theme by toggling one class on `<html>`.Without it`dark:` follows the OS setting only. The theme toggle stops working and the `.dark` block below never applies.
 6. `:root { --background: oklch(1 0 0); … }`Light values The raw color of every token, in OKLCH. Plain CSS variables — no Tailwind involved yet.Without it Every token resolves to nothing and components render unstyled.
@@ -189,7 +192,7 @@ Nine parts, in the order they appear above. Each one earns its place — the las
 8. `@theme inline { --color-primary: var(--primary); … }`Tokens → Tailwind utilities Turns each token into a color utility: `--color-primary` is what makes `bg-primary` exist. `inline` is the important word — it makes Tailwind emit `var(--primary)` in the output instead of copying the value, so the `.dark` override still applies at runtime.Without it Without the block, `bg-primary` does not exist. Without `inline`, the light value gets baked into the CSS and dark mode has no effect.
 9. `@layer base { * { @apply border-border outline-ring/50; } … }`Global defaults Gives every element the themed border color and focus ring, and paints `body` with `bg-background text-foreground`.Without it Borders fall back to `currentColor`, focus rings lose their theme color, and the page background stays white in dark mode.
 
-#### Why OKLCH and not HSL or HEX?
+Why OKLCH and not HSL or HEX?
 
 Lightness is perceptual: the same lightness value looks equally light at any hue, so a palette stays balanced when you shift the hue. Interpolation stays clean — color-mix() and opacity modifiers do not drift toward grey the way HSL does.
 
@@ -332,68 +335,58 @@ Showing 32 of 32 tokens · light values for Neutral
 
 Canvas, text and the four action colors.
 
-| Token | Value | Used by |
-| --- | --- | --- |
-| `--background`App canvas. `@layer base` applies it to `body`.`bg-background``text-background``ring-background` | `oklch(1 0 0)` | 12 components avatar, button, calendar, card, field, input-group, kbd, layout, sheet, switch, tabs, tooltip |
-| `--foreground`Default text color, applied to `body` next to `--background`.`text-foreground``bg-foreground``ring-foreground``fill-foreground` | `oklch(0.145 0 0)` | 18 components alert, alert-dialog, badge, breadcrumb, button, card, command, dialog, empty, input, input-group, input-otp, sheet, spinner, switch, tabs, toggle, tooltip |
-| `--primary`Main action color — filled buttons, checked switches, progress fill.`bg-primary``text-primary``border-primary``ring-primary``fill-primary` | `oklch(0.205 0 0)` | 18 components alert-dialog, avatar, badge, button, calendar, carousel, checkbox, empty, field, input-group, input-otp, item, progress, radio-group, sheet, slider, switch, tabs |
-| `--primary-foreground`Text and icons drawn on top of `--primary`.`text-primary-foreground``bg-primary-foreground` | `oklch(0.985 0 0)` | 9 components avatar, badge, button, calendar, checkbox, input-group, radio-group, sheet, switch |
-| `--secondary`Low-emphasis action color for secondary buttons and badges.`bg-secondary` | `oklch(0.97 0 0)` | 3 components badge, button, input-group |
-| `--secondary-foreground`Text drawn on top of `--secondary`.`text-secondary-foreground` | `oklch(0.205 0 0)` | 3 components badge, button, input-group |
-| `--muted`Quiet surface — skeletons, separators, keyboard chips, table headers.`bg-muted` | `oklch(0.97 0 0)` | 20 components alert-dialog, avatar, button, button-group, calendar, card, command, dialog, empty, input-group, item, kbd, progress, skeleton, slider, spinner, table, tabs, toggle, toggle-group |
-| `--muted-foreground`Secondary text — descriptions, placeholders, helper copy. The most used token in the library.`text-muted-foreground` | `oklch(0.556 0 0)` | 32 components accordion, alert, alert-dialog, avatar, breadcrumb, button-group, calendar, card, combobox, command, date-picker, dialog, dropdown, empty, field, form, input, input-group, input-otp, item, kbd, layout, menu, popover, select, separator, sheet, slider, table, tabs, textarea, toggle-group |
-| `--accent`Hover and active surface for list items — menus, selects, trees, calendars.`bg-accent` | `oklch(0.97 0 0)` | 6 components badge, calendar, dropdown, layout, menu, select |
-| `--accent-foreground`Text drawn on top of `--accent`.`text-accent-foreground` | `oklch(0.205 0 0)` | 6 components badge, calendar, command, dropdown, menu, select |
-| `--destructive`Error and danger states — delete buttons, invalid fields, error rings.`bg-destructive``text-destructive``border-destructive``ring-destructive` | `oklch(0.577 0.245 27.325)` | 18 components alert, alert-dialog, badge, button, checkbox, command, dropdown, field, input, input-group, input-otp, menu, radio-group, select, sheet, switch, textarea, toggle |
-| `--destructive-foreground`Text drawn on top of a solid `--destructive` surface. Matches `--primary-foreground` in every theme.`text-destructive-foreground` | `oklch(0.985 0 0)` | Not used yet |
+- `--background``oklch(1 0 0)`App canvas. `@layer base` applies it to `body`.`bg-background``text-background``ring-background` Used by 12 components avatar, button, calendar, card, field, input-group, kbd, layout, sheet, switch, tabs, tooltip
+- `--foreground``oklch(0.145 0 0)`Default text color, applied to `body` next to `--background`.`text-foreground``bg-foreground``ring-foreground``fill-foreground` Used by 18 components alert, alert-dialog, badge, breadcrumb, button, card, command, dialog, empty, input, input-group, input-otp, sheet, spinner, switch, tabs, toggle, tooltip
+- `--primary``oklch(0.205 0 0)`Main action color — filled buttons, checked switches, progress fill.`bg-primary``text-primary``border-primary``ring-primary``fill-primary` Used by 18 components alert-dialog, avatar, badge, button, calendar, carousel, checkbox, empty, field, input-group, input-otp, item, progress, radio-group, sheet, slider, switch, tabs
+- `--primary-foreground``oklch(0.985 0 0)`Text and icons drawn on top of `--primary`.`text-primary-foreground``bg-primary-foreground` Used by 9 components avatar, badge, button, calendar, checkbox, input-group, radio-group, sheet, switch
+- `--secondary``oklch(0.97 0 0)`Low-emphasis action color for secondary buttons and badges.`bg-secondary` Used by 3 components badge, button, input-group
+- `--secondary-foreground``oklch(0.205 0 0)`Text drawn on top of `--secondary`.`text-secondary-foreground` Used by 3 components badge, button, input-group
+- `--muted``oklch(0.97 0 0)`Quiet surface — skeletons, separators, keyboard chips, table headers.`bg-muted` Used by 20 components alert-dialog, avatar, button, button-group, calendar, card, command, dialog, empty, input-group, item, kbd, progress, skeleton, slider, spinner, table, tabs, toggle, toggle-group
+- `--muted-foreground``oklch(0.556 0 0)`Secondary text — descriptions, placeholders, helper copy. The most used token in the library.`text-muted-foreground` Used by 32 components accordion, alert, alert-dialog, avatar, breadcrumb, button-group, calendar, card, combobox, command, date-picker, dialog, dropdown, empty, field, form, input, input-group, input-otp, item, kbd, layout, menu, popover, select, separator, sheet, slider, table, tabs, textarea, toggle-group
+- `--accent``oklch(0.97 0 0)`Hover and active surface for list items — menus, selects, trees, calendars.`bg-accent` Used by 6 components badge, calendar, dropdown, layout, menu, select
+- `--accent-foreground``oklch(0.205 0 0)`Text drawn on top of `--accent`.`text-accent-foreground` Used by 6 components badge, calendar, command, dropdown, menu, select
+- `--destructive``oklch(0.577 0.245 27.325)`Error and danger states — delete buttons, invalid fields, error rings.`bg-destructive``text-destructive``border-destructive``ring-destructive` Used by 18 components alert, alert-dialog, badge, button, checkbox, command, dropdown, field, input, input-group, input-otp, menu, radio-group, select, sheet, switch, textarea, toggle
+- `--destructive-foreground``oklch(0.985 0 0)`Text drawn on top of a solid `--destructive` surface. Matches `--primary-foreground` in every theme.`text-destructive-foreground`Not used yet
 
 ### Surfaces
 
 Layers that sit above the canvas.
 
-| Token | Value | Used by |
-| --- | --- | --- |
-| `--card`Raised surface for cards and alerts.`bg-card` | `oklch(1 0 0)` | 2 components alert, card |
-| `--card-foreground`Text drawn on top of `--card`.`text-card-foreground` | `oklch(0.145 0 0)` | 2 components alert, card |
-| `--popover`Floating surface — dialogs, dropdowns, menus, selects, command palette.`bg-popover` | `oklch(1 0 0)` | 7 components alert-dialog, command, dialog, dropdown, menu, popover, select |
-| `--popover-foreground`Text drawn on top of `--popover`.`text-popover-foreground` | `oklch(0.145 0 0)` | 7 components alert-dialog, command, dialog, dropdown, menu, popover, select |
+- `--card``oklch(1 0 0)`Raised surface for cards and alerts.`bg-card` Used by 2 components alert, card
+- `--card-foreground``oklch(0.145 0 0)`Text drawn on top of `--card`.`text-card-foreground` Used by 2 components alert, card
+- `--popover``oklch(1 0 0)`Floating surface — dialogs, dropdowns, menus, selects, command palette.`bg-popover` Used by 7 components alert-dialog, command, dialog, dropdown, menu, popover, select
+- `--popover-foreground``oklch(0.145 0 0)`Text drawn on top of `--popover`.`text-popover-foreground` Used by 7 components alert-dialog, command, dialog, dropdown, menu, popover, select
 
 ### Form
 
 Borders, inputs and focus rings.
 
-| Token | Value | Used by |
-| --- | --- | --- |
-| `--border`Default border color. `@layer base` applies `border-border` to every element.`border-border``bg-border``fill-border` | `oklch(0.922 0 0)` | 14 components avatar, badge, button, carousel, command, dropdown, field, input-group, item, layout, resizable, select, separator, table |
-| `--input`Border of form controls, and their fill at 30% opacity.`border-input``bg-input` | `oklch(0.922 0 0)` | 15 components button, button-group, card, checkbox, command, input, input-group, input-otp, radio-group, select, sheet, switch, tabs, textarea, toggle |
-| `--ring`Focus ring. `@layer base` sets `outline-ring/50` globally; components add `ring-ring/50`.`ring-ring``border-ring``outline-ring` | `oklch(0.708 0 0)` | 19 components accordion, badge, button, calendar, card, checkbox, input, input-group, input-otp, item, radio-group, resizable, select, sheet, slider, switch, tabs, textarea, toggle |
+- `--border``oklch(0.922 0 0)`Default border color. `@layer base` applies `border-border` to every element.`border-border``bg-border``fill-border` Used by 14 components avatar, badge, button, carousel, command, dropdown, field, input-group, item, layout, resizable, select, separator, table
+- `--input``oklch(0.922 0 0)`Border of form controls, and their fill at 30% opacity.`border-input``bg-input` Used by 15 components button, button-group, card, checkbox, command, input, input-group, input-otp, radio-group, select, sheet, switch, tabs, textarea, toggle
+- `--ring``oklch(0.708 0 0)`Focus ring. `@layer base` sets `outline-ring/50` globally; components add `ring-ring/50`.`ring-ring``border-ring``outline-ring` Used by 19 components accordion, badge, button, calendar, card, checkbox, input, input-group, input-otp, item, radio-group, resizable, select, sheet, slider, switch, tabs, textarea, toggle
 
 ### Charts
 
 Categorical palette for data visualization.
 
-| Token | Value | Used by |
-| --- | --- | --- |
-| `--chart-1`Categorical series 1 for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet. | `oklch(0.809 0.105 251.813)` | Not used yet |
-| `--chart-2`Categorical series 2 for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet. | `oklch(0.623 0.214 259.815)` | Not used yet |
-| `--chart-3`Categorical series 3 for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet. | `oklch(0.546 0.245 262.881)` | Not used yet |
-| `--chart-4`Categorical series 4 for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet. | `oklch(0.488 0.243 264.376)` | Not used yet |
-| `--chart-5`Categorical series 5 for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet. | `oklch(0.424 0.199 265.638)` | Not used yet |
+- `--chart-1``oklch(0.809 0.105 251.813)`Categorical series 1 for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet.Not used yet
+- `--chart-2``oklch(0.623 0.214 259.815)`Categorical series 2 for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet.Not used yet
+- `--chart-3``oklch(0.546 0.245 262.881)`Categorical series 3 for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet.Not used yet
+- `--chart-4``oklch(0.488 0.243 264.376)`Categorical series 4 for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet.Not used yet
+- `--chart-5``oklch(0.424 0.199 265.638)`Categorical series 5 for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet.Not used yet
 
 ### Sidebar
 
 A self-contained scale for app shells.
 
-| Token | Value | Used by |
-| --- | --- | --- |
-| `--sidebar`Sidebar surface, kept separate from `--background` so the two can contrast.`bg-sidebar` | `oklch(0.985 0 0)` | 1 component layout |
-| `--sidebar-foreground`Text drawn on top of `--sidebar`.`text-sidebar-foreground` | `oklch(0.145 0 0)` | 1 component layout |
-| `--sidebar-primary`Active sidebar entry. Defined by the CLI; not consumed by any component yet. | `oklch(0.205 0 0)` | Not used yet |
-| `--sidebar-primary-foreground`Text on top of `--sidebar-primary`. Defined by the CLI; not consumed yet. | `oklch(0.985 0 0)` | Not used yet |
-| `--sidebar-accent`Hover surface for sidebar entries.`bg-sidebar-accent` | `oklch(0.97 0 0)` | 1 component layout |
-| `--sidebar-accent-foreground`Text on top of `--sidebar-accent`. Defined by the CLI; not consumed yet. | `oklch(0.205 0 0)` | Not used yet |
-| `--sidebar-border`Divider between the sidebar and the content area.`border-sidebar-border` | `oklch(0.922 0 0)` | 1 component layout |
-| `--sidebar-ring`Focus ring inside the sidebar.`ring-sidebar-ring` | `oklch(0.708 0 0)` | 1 component layout |
+- `--sidebar``oklch(0.985 0 0)`Sidebar surface, kept separate from `--background` so the two can contrast.`bg-sidebar` Used by 1 component layout
+- `--sidebar-foreground``oklch(0.145 0 0)`Text drawn on top of `--sidebar`.`text-sidebar-foreground` Used by 1 component layout
+- `--sidebar-primary``oklch(0.205 0 0)`Active sidebar entry. Defined by the CLI; not consumed by any component yet.Not used yet
+- `--sidebar-primary-foreground``oklch(0.985 0 0)`Text on top of `--sidebar-primary`. Defined by the CLI; not consumed yet.Not used yet
+- `--sidebar-accent``oklch(0.97 0 0)`Hover surface for sidebar entries.`bg-sidebar-accent` Used by 1 component layout
+- `--sidebar-accent-foreground``oklch(0.205 0 0)`Text on top of `--sidebar-accent`. Defined by the CLI; not consumed yet.Not used yet
+- `--sidebar-border``oklch(0.922 0 0)`Divider between the sidebar and the content area.`border-sidebar-border` Used by 1 component layout
+- `--sidebar-ring``oklch(0.708 0 0)`Focus ring inside the sidebar.`ring-sidebar-ring` Used by 1 component layout
 
 ## Radius & scale
 
@@ -401,14 +394,10 @@ A self-contained scale for app shells.
 
 `--radius` :
 
-Card
-
-| Utility | Definition | At 0.625rem |
-| --- | --- | --- |
-| `rounded-sm` | `--radius-sm: calc(var(--radius) - 4px)` | 6px |
-| `rounded-md` | `--radius-md: calc(var(--radius) - 2px)` | 8px |
-| `rounded-lg` | `--radius-lg: var(--radius)` | 10px |
-| `rounded-xl` | `--radius-xl: calc(var(--radius) + 4px)` | 14px |
+- `rounded-sm`6px`--radius-sm: calc(var(--radius) - 4px)`
+- `rounded-md`8px`--radius-md: calc(var(--radius) - 2px)`
+- `rounded-lg`10px`--radius-lg: var(--radius)`
+- `rounded-xl`14px`--radius-xl: calc(var(--radius) + 4px)`
 
 ## Base colors
 

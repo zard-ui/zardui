@@ -48,85 +48,78 @@
         <p class="text-muted-foreground text-xs sm:text-sm">{{ section.summary }}</p>
       </div>
 
-      <div class="overflow-x-auto rounded-lg border">
-        <table class="w-full min-w-3xl border-collapse text-left text-sm">
-          <caption class="sr-only">
-            {{ section.label }} tokens with their {{ mode() }} values in the {{ baseColor().label }} base color
-          </caption>
-          <thead class="bg-muted/50">
-            <tr>
-              <th scope="col" class="px-4 py-2.5 font-medium">Token</th>
-              <th scope="col" class="px-4 py-2.5 font-medium">Value</th>
-              <th scope="col" class="px-4 py-2.5 font-medium">Used by</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (row of section.rows; track row.token.name) {
-              <tr class="border-t align-top">
-                <!-- The name and value live outside the copy buttons on purpose: the markdown
-                     serializer drops <button> subtrees, and this table has to survive that. -->
-                <th scope="row" class="px-4 py-3 font-normal">
-                  <span class="flex items-center gap-1.5">
-                    <code class="text-xs font-medium">--{{ row.token.name }}</code>
-                    <button
-                      type="button"
-                      class="text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer rounded focus-visible:ring-3"
-                      [attr.aria-label]="'Copy token name --' + row.token.name"
-                      (click)="copy('--' + row.token.name)"
-                    >
-                      <ng-icon name="lucideClipboard" class="size-3" />
-                    </button>
-                  </span>
-                  <p
-                    class="text-muted-foreground mt-1 text-xs font-normal"
-                    [innerHTML]="row.token.description | inlineCode"
-                  ></p>
-                  @if (row.token.utilities.length) {
-                    <span class="mt-1.5 flex flex-wrap gap-1">
-                      @for (prefix of row.token.utilities; track prefix) {
-                        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">{{ prefix }}-{{ row.token.name }}</code>
-                      }
-                    </span>
-                  }
-                </th>
+      <!--
+        A list, not a table: three columns forced a 768px minimum inside a docs
+        column half that wide, so the reference could only be read by scrolling
+        sideways. Stacked rows give the description and the utility chips the
+        full width and drop the horizontal scroll entirely.
+      -->
+      <ul class="divide-border divide-y rounded-lg border" [attr.aria-label]="section.label + ' tokens'">
+        @for (row of section.rows; track row.token.name) {
+          <li class="flex flex-col gap-2 px-3 py-3.5 sm:px-4">
+            <!-- The name and value sit outside the copy buttons on purpose: the
+                 markdown serializer drops <button> subtrees, and this reference
+                 has to survive that. -->
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+              <span
+                class="border-border inline-flex size-5 shrink-0 items-center justify-center rounded border"
+                [style.background]="surface()"
+              >
+                <span class="size-4 rounded-sm" [style.background]="row.value"></span>
+              </span>
 
-                <td class="px-4 py-3">
-                  <span class="flex items-center gap-2">
-                    <span
-                      class="border-border inline-flex size-5 shrink-0 items-center justify-center rounded border"
-                      [style.background]="surface()"
-                    >
-                      <span class="size-4 rounded-sm" [style.background]="row.value"></span>
-                    </span>
-                    <code class="text-muted-foreground text-xs break-words">{{ row.value }}</code>
-                    <button
-                      type="button"
-                      class="text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer rounded focus-visible:ring-3"
-                      [attr.aria-label]="'Copy ' + mode() + ' value of --' + row.token.name + ': ' + row.value"
-                      (click)="copy(row.value)"
-                    >
-                      @if (lastCopied() === row.value) {
-                        <ng-icon name="lucideCheck" class="size-3" />
-                      } @else {
-                        <ng-icon name="lucideClipboard" class="size-3" />
-                      }
-                    </button>
-                  </span>
-                </td>
+              <code class="text-xs font-medium">--{{ row.token.name }}</code>
+              <button
+                type="button"
+                class="text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer rounded focus-visible:ring-3"
+                [attr.aria-label]="'Copy token name --' + row.token.name"
+                (click)="copy('--' + row.token.name)"
+              >
+                <ng-icon name="lucideClipboard" class="size-3" />
+              </button>
 
-                <td class="text-muted-foreground px-4 py-3 text-xs">
-                  @if (row.token.usedBy.length; as count) {
-                    <span>{{ count }} {{ count === 1 ? 'component' : 'components' }}</span>
-                    <p class="mt-1">{{ row.token.usedBy.join(', ') }}</p>
+              <span class="flex items-center gap-1.5 sm:ml-auto">
+                <code class="text-muted-foreground text-xs break-all">{{ row.value }}</code>
+                <button
+                  type="button"
+                  class="text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer rounded focus-visible:ring-3"
+                  [attr.aria-label]="'Copy ' + mode() + ' value of --' + row.token.name + ': ' + row.value"
+                  (click)="copy(row.value)"
+                >
+                  @if (lastCopied() === row.value) {
+                    <ng-icon name="lucideCheck" class="size-3" />
                   } @else {
-                    <span class="italic">Not used yet</span>
+                    <ng-icon name="lucideClipboard" class="size-3" />
                   }
-                </td>
-              </tr>
+                </button>
+              </span>
+            </div>
+
+            <p class="text-muted-foreground text-xs" [innerHTML]="row.token.description | inlineCode"></p>
+
+            @if (row.token.utilities.length) {
+              <span class="flex flex-wrap gap-1">
+                @for (prefix of row.token.utilities; track prefix) {
+                  <code class="bg-muted rounded px-1.5 py-0.5 text-xs">{{ prefix }}-{{ row.token.name }}</code>
+                }
+              </span>
             }
-          </tbody>
-        </table>
-      </div>
+
+            @if (row.token.usedBy.length; as count) {
+              <!-- Collapsed by default: the full list runs to 32 names for the
+                   most used tokens, which would bury the token itself. -->
+              <details class="text-muted-foreground text-xs">
+                <summary class="hover:text-foreground w-fit cursor-pointer">
+                  Used by {{ count }} {{ count === 1 ? 'component' : 'components' }}
+                </summary>
+                <p class="mt-1.5">{{ row.token.usedBy.join(', ') }}</p>
+              </details>
+            } @else {
+              <span class="text-muted-foreground text-xs italic">Not used yet</span>
+            }
+          </li>
+        }
+      </ul>
     </section>
   } @empty {
     <p class="text-muted-foreground rounded-lg border border-dashed p-6 text-center text-sm">

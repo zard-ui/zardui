@@ -54,8 +54,13 @@ export interface RadiusStep {
   utility: string;
   /** The `@theme inline` declaration that defines it. */
   formula: string;
-  /** Resolved value when `--radius` is `0.625rem` (10px). */
-  resolved: string;
+  /**
+   * Pixels the formula adds to `--radius` — `-4` for `calc(var(--radius) - 4px)`.
+   *
+   * Stored as the offset rather than a resolved value so the preview can answer
+   * for whichever `--radius` is selected, not only for the default.
+   */
+  offset: number;
 }
 
 /** One entry of the troubleshooting list. */

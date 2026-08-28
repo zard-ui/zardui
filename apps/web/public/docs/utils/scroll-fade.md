@@ -11,7 +11,7 @@ A scroll container that overflows tells you nothing about where you are in it. `
 
 ## Installation
 
-The utility ships in its own utilities.css, next to the library's global stylesheet in the core registry item. Refresh it and the classes are there.
+The utility ships in utilities.css, its own registry item — separate from core, so nothing pulls it in until you ask for it.
 
 ```
 npx zard-cli add utilities
@@ -24,6 +24,7 @@ src/styles.css
 ```
 @import 'tailwindcss';
 @import './app/shared/core/css/zard';
+@import './utilities.css';
 ```
 
 ## Usage

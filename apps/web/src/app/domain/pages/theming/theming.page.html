@@ -79,9 +79,7 @@
 
     <z-theme-anatomy />
 
-    <z-callout variant="info" title="Why OKLCH and not HSL or HEX?" icon="?">
-      {{ oklchReasons[0] }} {{ oklchReasons[1] }}
-    </z-callout>
+    <z-alert zIcon="lucideCircleQuestionMark" zTitle="Why OKLCH and not HSL or HEX?" [zDescription]="oklchSummary" />
   </section>
 
   <!-- Convention -->

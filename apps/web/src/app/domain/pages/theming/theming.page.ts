@@ -17,14 +17,17 @@ import { THEMING_UTILITY_CLASSES_INTRO } from '@generated/documentation/theming/
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeDisplayComponent } from '@highlight/components/code-display/code-display.component';
 import type { CodeBlockData } from '@highlight/types';
+import { provideIcons } from '@ng-icons/core';
+import { lucideCircleQuestionMark } from '@ng-icons/lucide';
 
-import { CalloutComponent } from '@doc/domain/components/callout/callout.component';
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
 import { SeoService } from '@doc/shared/services/seo.service';
+
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 
 import { BaseColorPreviewComponent } from './components/base-color-preview/base-color-preview.component';
 import { ConventionPreviewComponent } from './components/convention-preview/convention-preview.component';
@@ -40,7 +43,7 @@ import { ThemingClipboardService } from './services/theming-clipboard.service';
   selector: 'z-theming',
   imports: [
     RouterModule,
-    CalloutComponent,
+    ZardAlertComponent,
     DocContentComponent,
     DocHeadingComponent,
     ScrollSpyDirective,
@@ -57,6 +60,7 @@ import { ThemingClipboardService } from './services/theming-clipboard.service';
   templateUrl: './theming.page.html',
   // Scoped to the page so the "last copied" state does not leak into other routes.
   providers: [ThemingClipboardService],
+  viewProviders: [provideIcons({ lucideCircleQuestionMark })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThemingPage implements OnInit {
@@ -83,7 +87,8 @@ export class ThemingPage implements OnInit {
   };
 
   readonly tokenCount = THEME_TOKENS.length;
-  readonly oklchReasons = OKLCH_REASONS;
+  /** The two reasons the callout shows; the full list lives in OKLCH_REASONS. */
+  readonly oklchSummary = OKLCH_REASONS.slice(0, 2).join(' ');
 
   readonly navigationConfig: NavigationConfig = {
     items: [
