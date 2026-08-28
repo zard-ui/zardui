@@ -3,6 +3,21 @@
   "title": "Sidebar 16",
   "description": "A sidebar with a sticky site header.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "avatar",
+    "breadcrumb",
+    "button",
+    "collapsible",
+    "dropdown",
+    "field",
+    "input",
+    "separator",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-16-nav-main.component.html",

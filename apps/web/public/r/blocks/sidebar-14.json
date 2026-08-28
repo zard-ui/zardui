@@ -3,6 +3,11 @@
   "title": "Sidebar 14",
   "description": "A sidebar on the right.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "breadcrumb",
+    "sidebar"
+  ],
+  "dependencies": [],
   "files": [
     {
       "name": "sidebar-14-app-sidebar.component.html",

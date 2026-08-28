@@ -3,6 +3,19 @@
   "title": "Sidebar 15",
   "description": "A left and right sidebar.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "avatar",
+    "breadcrumb",
+    "calendar",
+    "collapsible",
+    "dropdown",
+    "separator",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-15-calendars.component.html",

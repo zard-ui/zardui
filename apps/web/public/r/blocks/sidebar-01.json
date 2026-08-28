@@ -3,6 +3,18 @@
   "title": "Sidebar 01",
   "description": "A simple sidebar with navigation grouped by section.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "breadcrumb",
+    "dropdown",
+    "field",
+    "input",
+    "separator",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-01-app-sidebar.component.html",

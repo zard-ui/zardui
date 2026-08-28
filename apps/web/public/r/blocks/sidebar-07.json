@@ -3,6 +3,18 @@
   "title": "Sidebar 07",
   "description": "A sidebar that collapses to icons.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "avatar",
+    "breadcrumb",
+    "collapsible",
+    "dropdown",
+    "separator",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-07-app-sidebar.component.html",

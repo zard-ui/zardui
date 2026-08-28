@@ -3,6 +3,18 @@
   "title": "Sidebar 05",
   "description": "A sidebar with collapsible submenus.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "breadcrumb",
+    "collapsible",
+    "field",
+    "input",
+    "separator",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-05-app-sidebar.component.html",

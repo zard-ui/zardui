@@ -3,6 +3,16 @@
   "title": "Sidebar 13",
   "description": "A sidebar in a dialog.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "breadcrumb",
+    "button",
+    "dialog",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-13-settings-dialog.component.html",

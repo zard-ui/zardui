@@ -3,6 +3,19 @@
   "title": "Sidebar 06",
   "description": "A sidebar with submenus as dropdowns.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "breadcrumb",
+    "button",
+    "card",
+    "dropdown",
+    "input",
+    "separator",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-06-app-sidebar.component.html",

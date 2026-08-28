@@ -3,6 +3,19 @@
   "title": "Sidebar 10",
   "description": "A sidebar in a popover.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "breadcrumb",
+    "button",
+    "collapsible",
+    "dropdown",
+    "popover",
+    "separator",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-10-app-sidebar.component.html",

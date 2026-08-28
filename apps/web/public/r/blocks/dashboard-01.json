@@ -3,6 +3,25 @@
   "title": "Dashboard 01",
   "description": "A dashboard with sidebar, charts and data table.",
   "category": "Dashboard",
+  "registryDependencies": [
+    "avatar",
+    "badge",
+    "button",
+    "card",
+    "chart",
+    "checkbox",
+    "dropdown",
+    "select",
+    "separator",
+    "sidebar",
+    "table",
+    "tabs",
+    "toggle-group"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "dashboard-01-app-sidebar.component.html",

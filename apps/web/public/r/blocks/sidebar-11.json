@@ -3,6 +3,16 @@
   "title": "Sidebar 11",
   "description": "A sidebar with a collapsible file tree.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "breadcrumb",
+    "collapsible",
+    "separator",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-11-app-sidebar.component.html",

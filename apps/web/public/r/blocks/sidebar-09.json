@@ -3,6 +3,20 @@
   "title": "Sidebar 09",
   "description": "Collapsible nested sidebars.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "avatar",
+    "breadcrumb",
+    "dropdown",
+    "field",
+    "input",
+    "separator",
+    "sidebar",
+    "switch"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-09-app-sidebar.component.html",

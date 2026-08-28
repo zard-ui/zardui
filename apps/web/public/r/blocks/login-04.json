@@ -3,6 +3,13 @@
   "title": "Login with form and image",
   "description": "A login page with form and image.",
   "category": "Login",
+  "registryDependencies": [
+    "button",
+    "card",
+    "field",
+    "input"
+  ],
+  "dependencies": [],
   "files": [
     {
       "name": "login-04.component.html",

@@ -3,6 +3,18 @@
   "title": "Sidebar 08",
   "description": "An inset sidebar with secondary navigation.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "avatar",
+    "breadcrumb",
+    "collapsible",
+    "dropdown",
+    "separator",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-08-nav-main.component.html",

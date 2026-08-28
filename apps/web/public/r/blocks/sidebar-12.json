@@ -3,6 +3,19 @@
   "title": "Sidebar 12",
   "description": "A sidebar with a calendar.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "avatar",
+    "breadcrumb",
+    "calendar",
+    "collapsible",
+    "dropdown",
+    "separator",
+    "sidebar"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "sidebar-12-app-sidebar.component.html",
