@@ -253,7 +253,7 @@ projects/ui/ng-package.json
 Create a core folder at projects/ui/src/lib/shared/core
 
 ```bash
-core/diretives/string-template-outlet/string-template-outlet.directive.ts
+core/directives/string-template-outlet.directive.ts
 Expand
 ```
 

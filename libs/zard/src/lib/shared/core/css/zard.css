@@ -1,4 +1,16 @@
-@import './utilities.css';
+/*
+ * `no-scrollbar` lives here, not in utilities.css, because combobox and command
+ * carry it in their variants — it has to ship with every install, while
+ * utilities.css is opt-in.
+ */
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 
 @theme inline {
   --animate-caret-blink: caret-blink 1s ease-out infinite;

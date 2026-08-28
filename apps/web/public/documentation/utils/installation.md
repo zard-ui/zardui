@@ -1,28 +1,29 @@
 # Installation
 
-The utilities live in `css/utilities.css`, their own file inside the `core` registry item, apart from the
-theme tokens and the custom variants. Refresh the item to pull them into an existing project.
+The utilities are their own registry item, separate from `core`. Nothing in the library needs them, so
+they are not installed with it — add them when you want `scroll-fade` or `shimmer`.
 
 ```bash tab="npm" copyButton
-npx zard-cli add core --overwrite
+npx zard-cli add utilities
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx zard-cli add core --overwrite
+pnpm dlx zard-cli add utilities
 ```
 
 ```bash tab="yarn" copyButton
-yarn dlx zard-cli add core --overwrite
+yarn dlx zard-cli add utilities
 ```
 
 ```bash tab="bun" copyButton
-bunx zard-cli add core --overwrite
+bunx zard-cli add utilities
 ```
 
-`css/tailwind.css` imports the file on its first line, so nothing changes in the global stylesheet — the
-classes are available as soon as it is imported after Tailwind.
+The file lands next to your global stylesheet and the CLI adds the `@import` for it, after the ones
+already there.
 
 ```css title="src/styles.css" copyButton
 @import 'tailwindcss';
-@import './app/shared/core/css/tailwind';
+@import './app/shared/core/css/zard';
+@import './utilities.css';
 ```

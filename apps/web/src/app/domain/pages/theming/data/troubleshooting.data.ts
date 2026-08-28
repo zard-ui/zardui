@@ -17,7 +17,7 @@ export const TROUBLESHOOTING: TroubleshootingEntry[] = [
     id: 'states-not-reacting',
     symptom: 'Accordions, switches and menu items ignore their open/checked/selected state.',
     cause: 'The core stylesheet is not imported, so the `data-*` custom variants do not exist.',
-    fix: "Add `@import './app/shared/core/css/tailwind';` right after `@import 'tailwindcss';`.",
+    fix: "Add `@import './app/shared/core/css/zard';` right after `@import 'tailwindcss';`.",
   },
   {
     id: 'no-animations',

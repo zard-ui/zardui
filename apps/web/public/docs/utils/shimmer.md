@@ -14,7 +14,7 @@ A spinner tells you the app is busy. A shimmering line tells you *this text* is 
 The utility ships in its own utilities.css, next to the library's global stylesheet in the core registry item. Refresh it and the classes are there.
 
 ```
-npx zard-cli add core --overwrite
+npx zard-cli add utilities
 ```
 
 `tailwind.css` imports it on its first line, so the classes are available as soon as that stylesheet is imported after Tailwind.
@@ -23,7 +23,7 @@ src/styles.css
 
 ```
 @import 'tailwindcss';
-@import './app/shared/core/css/tailwind';
+@import './app/shared/core/css/zard';
 ```
 
 ## Usage

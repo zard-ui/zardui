@@ -1,4 +1,4 @@
-export * from './directives/string-template-outlet/string-template-outlet.directive';
+export * from './directives/string-template-outlet.directive';
 export * from './directives/id.directive';
 export * from './overlay/overlay-ref';
 export * from './overlay/overlay-stack';

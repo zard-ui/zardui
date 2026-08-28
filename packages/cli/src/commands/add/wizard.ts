@@ -70,6 +70,7 @@ export interface AddWizardOptions {
   setupDarkMode(indexHtml: string): Promise<void>;
   /** Only called when typeset is part of the install. */
   setupTypeset(): Promise<void>;
+  setupUtilities(): Promise<void>;
   /**
    * Where index.html should be, according to the configured project type.
    *
@@ -87,6 +88,7 @@ export interface AddWizardResult {
 
 const DARK_MODE = 'dark-mode';
 const TYPESET = 'typeset';
+const UTILITIES = 'utilities';
 
 export async function runAddWizard(options: AddWizardOptions): Promise<AddWizardResult> {
   const state: State = {
@@ -236,6 +238,10 @@ export async function runAddWizard(options: AddWizardOptions): Promise<AddWizard
     // import for a file whose install failed would point the CSS at nothing.
     if (state.installed.includes(TYPESET)) {
       await options.setupTypeset();
+    }
+
+    if (state.installed.includes(UTILITIES)) {
+      await options.setupUtilities();
     }
 
     if (components.some(component => component.name === DARK_MODE)) {

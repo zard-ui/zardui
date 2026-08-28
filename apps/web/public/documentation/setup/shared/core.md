@@ -1,4 +1,4 @@
-```typescript title="core/diretives/string-template-outlet/string-template-outlet.directive.ts" expandable="true" copyButton showLineNumbers
+```typescript title="core/directives/string-template-outlet.directive.ts" expandable="true" copyButton showLineNumbers
 import {
   Directive,
   type EmbeddedViewRef,

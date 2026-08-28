@@ -83,7 +83,7 @@ export class ThemeGeneratorService {
     return `
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
-@import './app/shared/core/css/tailwind.css';
+@import './app/shared/core/css/zard.css';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));

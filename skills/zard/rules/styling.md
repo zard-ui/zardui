@@ -177,7 +177,7 @@ Dialog, sheet, popover, tooltip, dropdown and the alert dialog manage their own 
 
 ## CSS utilities: `scroll-fade` and `shimmer`
 
-Two pure-CSS utilities ship in `css/utilities.css`, which `css/tailwind.css` imports (both come from the `core` registry item). No directive, no service, no listener.
+Two pure-CSS utilities ship in `css/utilities.css`, its own registry item (`zard-cli add utilities`) — not part of `core`, and not installed with it. No directive, no service, no listener.
 
 `scroll-fade` fades the edges of a scroll container in sync with its scroll position. **It only paints a mask — it does not make the container scrollable.** Always pair it with an overflow class and a height.
 

@@ -36,7 +36,7 @@ const IMPLICIT_ITEMS = new Set(['utils', 'core']);
  * Where a non-component item is written, keyed by the base path it publishes.
  *
  * The first three agree. Typeset does not: it installs next to the consumer's
- * global stylesheet, but it lives beside the core's tailwind.css, which is
+ * global stylesheet, but it lives beside the core's zard.css, which is
  * where it is edited and tested. Mirrors `NON_COMPONENT_PATHS` in
  * `scripts/build-registry.cts` — the two must name the same directories.
  */
@@ -101,7 +101,7 @@ function checkSourcePass(): void {
    * One item's directory can sit inside another's — typeset is written in
    * `core/css` — and then each scan turns up the other's files. Without an
    * owner, the core would be told to list typeset.css and typeset to list
-   * tailwind.css, when both are listed already, by the item that ships them.
+   * zard.css, when both are listed already, by the item that ships them.
    */
   const ownerOfFile = new Map<string, string>();
   for (const item of registry) {

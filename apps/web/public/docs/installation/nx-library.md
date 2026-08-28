@@ -228,7 +228,7 @@ Expand
 Create a core folder at libs/ui/src/lib/shared/core
 
 ```bash
-core/diretives/string-template-outlet/string-template-outlet.directive.ts
+core/directives/string-template-outlet.directive.ts
 Expand
 ```
 

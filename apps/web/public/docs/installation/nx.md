@@ -264,7 +264,7 @@ export const appConfig: ApplicationConfig = {
 Create a core folder at apps/my-app/src/app/shared/core
 
 ```bash
-core/diretives/string-template-outlet/string-template-outlet.directive.ts
+core/directives/string-template-outlet.directive.ts
 Expand
 ```
 

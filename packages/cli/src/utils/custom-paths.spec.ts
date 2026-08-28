@@ -532,10 +532,10 @@ describe('updateTsConfig', () => {
 });
 
 describe('applyThemeToStyles', () => {
-  /** The `@import '<path>/css/tailwind'` the theme writes into the global CSS. */
+  /** The `@import '<path>/css/zard'` the theme writes into the global CSS. */
   const importedCorePath = (): string => {
     const css = mockWriteFile.mock.calls[0][1] as string;
-    return /@import '([^']+)\/css\/tailwind'/.exec(css)?.[1] ?? '';
+    return /@import '([^']+)\/css\/zard'/.exec(css)?.[1] ?? '';
   };
 
   beforeEach(() => {

@@ -16,7 +16,7 @@ export const OKLCH_REASONS: string[] = [
  *
  * Every `reason` and `breaksWhenMissing` below is checked against this repository — the layer
  * order against `@ng-icons/core` (which ships its rules inside `@layer ng-icon`), the core import
- * against `libs/zard/src/lib/shared/core/css/tailwind.css`, and the usage counts against a scan of
+ * against `libs/zard/src/lib/shared/core/css/zard.css`, and the usage counts against a scan of
  * `libs/zard/src/lib/shared/components/**`.
  */
 export const ANATOMY_PARTS: AnatomyPart[] = [
@@ -38,12 +38,12 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
   },
   {
     id: 'import-core',
-    snippet: "@import './app/shared/core/css/tailwind';",
+    snippet: "@import './app/shared/core/css/zard';",
     title: "ZardUI's core stylesheet",
     reason:
-      'Defines the `data-*` custom variants (`data-open`, `data-checked`, `data-selected`, `data-disabled`, `data-active`, `data-horizontal`, `data-vertical`) and the accordion and caret keyframes, and imports `css/utilities.css` — where `no-scrollbar`, `scroll-fade` and `shimmer` live. The path follows the `core` alias in `components.json`.',
+      'Defines the `data-*` custom variants (`data-open`, `data-checked`, `data-selected`, `data-disabled`, `data-active`, `data-horizontal`, `data-vertical`) the accordion and caret keyframes, and `no-scrollbar`, which combobox and command rely on. `scroll-fade` and `shimmer` are not here — they ship in `utilities.css`, a separate registry item. The path follows the `core` alias in `components.json`.',
     breaksWhenMissing:
-      'The 64 `data-*:` classes the library relies on silently compile to nothing — open/closed states, checked switches and selected menu items stop reacting. `animate-caret-blink`, `no-scrollbar`, `scroll-fade` and `shimmer` also disappear.',
+      'The 64 `data-*:` classes the library relies on silently compile to nothing — open/closed states, checked switches and selected menu items stop reacting. `animate-caret-blink` and `no-scrollbar` also disappear.',
   },
   {
     id: 'plugin-animate',
