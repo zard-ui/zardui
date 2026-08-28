@@ -16,8 +16,9 @@ import { TYPESET_USAGE_WRAPPER } from '@generated/documentation/typeset/usage-wr
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
+import { provideIcons } from '@ng-icons/core';
+import { lucideInfo } from '@ng-icons/lucide';
 
-import { CalloutComponent } from '@doc/domain/components/callout/callout.component';
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
@@ -25,12 +26,14 @@ import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.d
 import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
 import { SeoService } from '@doc/shared/services/seo.service';
 
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
+
 @Component({
   selector: 'z-typeset-docs',
   standalone: true,
   imports: [
     RouterModule,
-    CalloutComponent,
+    ZardAlertComponent,
     DocContentComponent,
     DocHeadingComponent,
     ScrollSpyDirective,
@@ -40,6 +43,7 @@ import { SeoService } from '@doc/shared/services/seo.service';
   ],
   templateUrl: './typeset-docs.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideInfo })],
 })
 export class TypesetDocsPage implements OnInit {
   private readonly seoService = inject(SeoService);
