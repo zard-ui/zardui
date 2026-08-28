@@ -15,6 +15,7 @@ import { THEMING_ROUTE_THEME } from '@generated/documentation/theming/route-them
 import { THEMING_SCOPED_TOKENS } from '@generated/documentation/theming/scoped-tokens';
 import { THEMING_UTILITY_CLASSES_INTRO } from '@generated/documentation/theming/utility-classes-intro';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import { CodeDisplayComponent } from '@highlight/components/code-display/code-display.component';
 import type { CodeBlockData } from '@highlight/types';
 
 import { CalloutComponent } from '@doc/domain/components/callout/callout.component';
@@ -45,6 +46,7 @@ import { ThemingClipboardService } from './services/theming-clipboard.service';
     ScrollSpyDirective,
     ScrollSpyItemDirective,
     CodeBlockComponent,
+    CodeDisplayComponent,
     BaseColorPreviewComponent,
     ConventionPreviewComponent,
     RadiusPreviewComponent,
