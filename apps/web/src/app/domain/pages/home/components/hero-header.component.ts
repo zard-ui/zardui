@@ -53,7 +53,10 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
           </p>
 
           <div class="flex w-full items-center justify-center gap-2 pt-2">
-            <a z-button routerLink="/docs/installation" class="h-[31px] rounded-lg">
+            <!-- 26px de raio numa altura de 35px: quase uma pílula, mas não uma.
+                 O canto reto que sobra é o que mantém o botão parecido com os
+                 controles da parede logo abaixo, em vez de com um chip. -->
+            <a z-button routerLink="/docs/installation" class="h-[35px] rounded-[26px]">
               Get Started
               <ng-icon name="lucideArrowRight" data-icon="inline-end" />
             </a>

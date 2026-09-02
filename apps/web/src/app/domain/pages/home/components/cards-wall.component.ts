@@ -62,8 +62,27 @@ import {
          apareceria a 1900px de janela dentro do espaço que sobrou — cinco
          colunas espremidas, com "Help Center" quebrando em duas linhas. A
          largura que importa é a que a parede realmente tem. -->
+    <!-- A parede é um escopo de tema, não só um container.
+
+         Os tokens de chart do site são azuis, e a parede os quer cinzas: um card
+         de gráfico aqui não está mostrando um dado, está mostrando um
+         componente, e cinco azuis saturados no meio de dezessete cards puxam o
+         olho para o gráfico em vez de para a biblioteca. Redefinir os tokens
+         aqui os deixa cinzas só dentro da parede — o @theme inline do styles.css
+         faz a utility bg-chart-1 compilar para var(--chart-1), então esta
+         sobrescrita local basta e nada fora daqui muda. Os cinco valores são os
+         mesmos nos dois modos, de propósito: é o que a referência faz.
+
+         Os raios também vivem aqui, e não card a card: 24px no card e 18px em
+         tudo que é controle é uma medida da parede inteira, e repeti-la em
+         dezessete arquivos é dezessete lugares para ela sair de sincronia.
+
+         Checkbox e radio ficam de fora do 18px de propósito: são caixas de
+         16px, e um raio de 18px numa delas não é um canto arredondado, é um
+         círculo — o checkbox viraria um radio. Eles ficam com o raio da
+         biblioteca. -->
     <div
-      class="bg-muted dark:bg-background @container relative flex w-full max-w-none flex-col overflow-hidden p-6 pb-0!"
+      class="bg-muted dark:bg-background @container relative flex w-full max-w-none flex-col overflow-hidden p-6 pb-0! [--chart-1:#d4d4d4] [--chart-2:#737373] [--chart-3:#525252] [--chart-4:#404040] [--chart-5:#262626] **:data-[slot=badge]:rounded-[18px] **:data-[slot=button]:rounded-[18px] **:data-[slot=card]:rounded-3xl **:data-[slot=card-footer]:rounded-b-3xl **:data-[slot=card-header]:rounded-t-3xl **:data-[slot=input-group]:rounded-[18px] **:data-[slot=item]:rounded-[18px] **:data-[slot=select]:rounded-[18px] [&_input:not([type=checkbox]):not([type=radio])]:rounded-[18px] [&_textarea]:rounded-[18px]"
     >
       <!-- Os cortes saem de 320px por coluna mais o gap: 2 × 320 + 40 = 680px,
            3 × 320 + 80 = 1024px, e assim por diante.
