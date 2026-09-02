@@ -22,21 +22,24 @@ export const avatarVariants = cva(
 );
 
 export const fallbackVariants = cva(
-  'bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full text-sm group-data-[size=sm]/avatar:text-xs',
+  'bg-muted text-muted-foreground absolute inset-0 flex size-full items-center justify-center rounded-full text-sm group-data-[size=sm]/avatar:text-xs',
 );
 
-export const imageVariants = cva('aspect-square size-full rounded-full object-cover', {
-  variants: {
-    zSize: {
-      sm: '',
-      default: '',
-      lg: '',
+export const imageVariants = cva(
+  'absolute inset-0 aspect-square size-full rounded-full object-cover opacity-0 transition-opacity duration-200',
+  {
+    variants: {
+      zSize: {
+        sm: '',
+        default: '',
+        lg: '',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
     },
   },
-  defaultVariants: {
-    zSize: 'default',
-  },
-});
+);
 
 export const avatarBadgeVariants = mergeClasses(
   'absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground bg-blend-color ring-2 ring-background select-none',
