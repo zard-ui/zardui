@@ -7,11 +7,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
   selector: 'z-demo-accordion-card',
   imports: [ZardAccordionImports, ZardCardImports],
   template: `
-    <z-card
-      zTitle="Subscription & Billing"
-      zDescription="Common questions about your account, plans, payments and cancellations."
-      class="w-full max-w-sm"
-    >
+    <z-card class="w-full max-w-sm">
       <div z-card-header>
         <z-card-title zTitle="Subscription & Billing" />
         <z-card-description zDescription="Common questions about your account, plans, payments and cancellations." />
