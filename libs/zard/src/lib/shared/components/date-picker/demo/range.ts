@@ -10,7 +10,6 @@ const currentYear = new Date().getFullYear();
 @Component({
   selector: 'z-demo-date-picker-range',
   imports: [ZardDatePickerComponent, ZardFieldImports],
-  standalone: true,
   template: `
     <div z-field class="mx-auto w-60">
       <label z-field-label for="date-picker-range">Date range</label>

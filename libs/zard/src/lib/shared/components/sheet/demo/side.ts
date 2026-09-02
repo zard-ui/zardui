@@ -12,7 +12,7 @@ const PARAGRAPHS = Array.from({ length: 10 }).map(
 );
 
 @Component({
-  selector: 'zard-demo-sheet-side-content',
+  selector: 'z-demo-sheet-side-content',
   template: `
     @for (paragraph of paragraphs; track $index) {
       <p class="mb-2 leading-relaxed">{{ paragraph }}</p>

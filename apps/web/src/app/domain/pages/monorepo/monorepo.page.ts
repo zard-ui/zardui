@@ -5,25 +5,24 @@ import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-head
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { MonorepoApplicationSection } from './sections/application.component';
-import { MonorepoLibrarySection } from './sections/library.component';
-import { MonorepoOverviewSection } from './sections/overview.component';
-import { MonorepoProjectsSection } from './sections/projects.component';
+import { MonorepoApplicationSectionComponent } from './sections/application.component';
+import { MonorepoLibrarySectionComponent } from './sections/library.component';
+import { MonorepoOverviewSectionComponent } from './sections/overview.component';
+import { MonorepoProjectsSectionComponent } from './sections/projects.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-monorepo',
-  standalone: true,
   imports: [
     DocContentComponent,
     DocHeadingComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
-    MonorepoOverviewSection,
-    MonorepoApplicationSection,
-    MonorepoLibrarySection,
-    MonorepoProjectsSection,
+    MonorepoOverviewSectionComponent,
+    MonorepoApplicationSectionComponent,
+    MonorepoLibrarySectionComponent,
+    MonorepoProjectsSectionComponent,
   ],
   template: `
     <z-content
@@ -39,10 +38,10 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
         id="overview"
       ></z-doc-heading>
 
-      <monorepo-overview-section scrollSpyItem="what-changes" id="what-changes"></monorepo-overview-section>
-      <monorepo-application-section scrollSpyItem="application" id="application"></monorepo-application-section>
-      <monorepo-library-section scrollSpyItem="library" id="library"></monorepo-library-section>
-      <monorepo-projects-section scrollSpyItem="projects" id="projects"></monorepo-projects-section>
+      <z-monorepo-overview-section scrollSpyItem="what-changes" id="what-changes"></z-monorepo-overview-section>
+      <z-monorepo-application-section scrollSpyItem="application" id="application"></z-monorepo-application-section>
+      <z-monorepo-library-section scrollSpyItem="library" id="library"></z-monorepo-library-section>
+      <z-monorepo-projects-section scrollSpyItem="projects" id="projects"></z-monorepo-projects-section>
     </z-content>
   `,
 })

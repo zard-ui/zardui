@@ -35,8 +35,9 @@ async function main() {
 
   program.addCommand(create).addCommand(init).addCommand(add).addCommand(apply).addCommand(preset);
 
-  // parseAsync, e não parse: as ações são assíncronas, e só assim uma falha
-  // dentro delas chega ao tratamento abaixo em vez de virar unhandled rejection.
+  // parseAsync, not parse: the actions are async, and only this way does a
+  // failure inside them reach the handler below instead of becoming an
+  // unhandled rejection.
   await program.parseAsync();
 }
 

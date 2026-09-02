@@ -12,7 +12,6 @@ import { SeoService } from '@doc/shared/services/seo.service';
 @Component({
   selector: 'z-install',
   templateUrl: './install.page.html',
-  standalone: true,
   imports: [StepsComponent, DocContentComponent, DocHeadingComponent],
 })
 export class InstallPage implements OnInit {
@@ -24,6 +23,7 @@ export class InstallPage implements OnInit {
   readonly navigationConfig: NavigationConfig = {
     items: [{ id: 'overview', label: 'Overview', type: 'core' }],
   };
+
   activeAnchor!: string;
 
   activeTab = signal<'manual' | 'cli'>('cli');

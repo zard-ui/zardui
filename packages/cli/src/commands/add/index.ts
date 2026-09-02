@@ -7,10 +7,12 @@ import {
   resolveDependencies,
   type ComponentMeta,
 } from '@cli/commands/add/dependency-resolver.js';
+import { setupTypeset } from '@cli/commands/add/typeset-setup.js';
 import { runAddWizard } from '@cli/commands/add/wizard.js';
 import { indexHtmlFor } from '@cli/commands/init/project-kind.js';
 import { injectThemeScript } from '@cli/commands/init/theme-loader.js';
 import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
+import { pinAllForAngular } from '@cli/utils/angular-compat.js';
 import { getConfig, resolveConfigPaths, type Config } from '@cli/utils/config.js';
 import { CliError } from '@cli/utils/errors.js';
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
@@ -54,8 +56,8 @@ export const add = new Command()
     const projectInfo = await validateProject(cwd);
     const resolvedConfig: ResolvedConfig = await resolveConfigPaths(cwd, config);
 
-    // O catálogo decide se `icons` é um valor válido e como traduzir os símbolos
-    // na instalação, então vem antes de resolver componente nenhum.
+    // The catalog decides whether `icons` is a valid value and how to translate
+    // the symbols on install, so it comes before resolving any component.
     await loadIconCatalog(getRegistryUrl(config));
     assertIconFamily(config.icons);
 
@@ -74,7 +76,7 @@ export const add = new Command()
         );
         return {
           components: componentsToInstall,
-          dependencies: resolveCompatibleVersions(dependenciesToInstall, projectInfo.angularVersion),
+          dependencies: pinAllForAngular(dependenciesToInstall, projectInfo.angularVersion),
         };
       },
       installDependencies: (packages: string[]) => installDependencies(packages, cwd, config.packageManager),
@@ -86,12 +88,13 @@ export const add = new Command()
         await injectThemeScript(cwd, indexHtml);
         await updateProvideZardWithDarkMode(cwd, resolvedConfig);
       },
+      setupTypeset: () => setupTypeset(resolvedConfig.resolvedPaths.tailwindCss),
       defaultIndexHtml: indexHtmlFor(config.projectType, config.baseUrl),
     };
 
     if (!isInteractive()) {
-      // Ver a nota em `init`: sem isto, sair em modo texto é indistinguível de
-      // a interface não existir.
+      // See the note in `init`: without this, falling back to text mode is
+      // indistinguishable from the interface not existing.
       logger.debug(
         `No terminal to draw on (stdin TTY: ${Boolean(process.stdin.isTTY)}, ` +
           `stdout TTY: ${Boolean(process.stdout.isTTY)}, controlling terminal: unreachable) — running headless.`,
@@ -123,14 +126,16 @@ type AddActions = {
   installDependencies(packages: string[]): Promise<void>;
   installComponent(component: ComponentMeta): Promise<void>;
   setupDarkMode(indexHtml: string): Promise<void>;
+  setupTypeset(): Promise<void>;
   defaultIndexHtml: string;
 };
 
 /**
- * Caminho sem UI — CI, pipes e terminais não interativos.
+ * The path without a UI — CI, pipes and non-interactive terminals.
  *
- * Sem alguém para escolher na lista, os componentes precisam vir por argumento
- * ou via `--all`; a confirmação é dispensada porque não há como respondê-la.
+ * With nobody to pick from the list, the components have to arrive as arguments
+ * or through `--all`; the confirmation is skipped because there is no way to
+ * answer it.
  */
 async function runHeadless(preselected: string[], options: AddOptions, actions: AddActions): Promise<void> {
   if (!preselected.length) {
@@ -169,6 +174,10 @@ async function runHeadless(preselected: string[], options: AddOptions, actions: 
       componentSpinner.fail(component.name);
       logger.debug(`Failed to install ${component.name}: ${error instanceof Error ? error.message : error}`);
     }
+  }
+
+  if (installed.includes('typeset')) {
+    await actions.setupTypeset();
   }
 
   if (components.some(component => component.name === 'dark-mode')) {
@@ -230,19 +239,6 @@ function warnOnPrereleaseAngular(angularVersionRaw: string | null): void {
   }
 }
 
-const ANGULAR_VERSION_PACKAGES = ['embla-carousel-angular'];
-
-function resolveCompatibleVersions(dependencies: Set<string>, angularVersion: string | null): string[] {
-  const angularMajor = angularVersion ? parseInt(angularVersion.split('.')[0] as string, 10) : null;
-
-  return Array.from(dependencies).map(dep => {
-    if (angularMajor && ANGULAR_VERSION_PACKAGES.includes(dep)) {
-      return `${dep}@^${angularMajor}.0.0`;
-    }
-    return dep;
-  });
-}
-
 async function installDependencies(
   packages: string[],
   cwd: string,
@@ -250,8 +246,8 @@ async function installDependencies(
 ): Promise<void> {
   if (packages.length === 0) return;
 
-  // Um projeto já inicializado costuma ter todas elas: sem o filtro, cada `add`
-  // pagaria uma revalidação completa da árvore para não instalar nada.
+  // An already-initialized project usually has all of them: without the filter,
+  // every `add` would pay for a full tree revalidation to install nothing.
   const missing = await filterInstalledPackages(packages, cwd);
   if (missing.length === 0) {
     logger.debug(`Dependencies already installed: ${packages.join(', ')}`);

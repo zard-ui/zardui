@@ -12,12 +12,12 @@ const POSTCSS_CONFIG = `{
 `;
 
 /**
- * Escreve o `.postcssrc.json` na raiz do projeto que vai usá-lo.
+ * Writes `.postcssrc.json` at the root of the project that will use it.
  *
- * O build do Angular procura o arquivo a partir do CSS que está processando e
- * sobe até a raiz do workspace, então o projeto é o lugar mais específico que
- * funciona — e num monorepo com vários apps é o único que não configura todos
- * eles de uma vez. `projectRoot` é `.` no app único.
+ * The Angular build looks for the file starting from the CSS it is processing
+ * and walks up to the workspace root, so the project is the most specific place
+ * that works — and in a monorepo with several apps it is the only one that does
+ * not configure all of them at once. `projectRoot` is `.` for a single app.
  */
 export async function createPostCssConfig(cwd: string, projectRoot = '.'): Promise<void> {
   const targetDir = path.resolve(cwd, projectRoot);
@@ -27,14 +27,14 @@ export async function createPostCssConfig(cwd: string, projectRoot = '.'): Promi
 }
 
 /**
- * O `@import` do CSS é resolvido pelo bundler a partir do arquivo que o contém,
- * então precisa ser um caminho relativo de verdade — não dá para montá-lo
- * fatiando o alias.
+ * The CSS `@import` is resolved by the bundler relative to the file containing
+ * it, so it has to be a real relative path — it cannot be assembled by slicing
+ * the alias.
  *
- * A versão anterior pegava o segundo segmento do baseUrl e colava o alias sem o
- * primeiro caractere. Só acertava no layout `src/app` + `@/...`: com baseUrl
- * `projects/admin/src/app` mirava `./admin/...`, e com um alias `@app/core`
- * gerava `./appapp/core`.
+ * The previous version took the second segment of baseUrl and pasted the alias
+ * without its first character. It only worked for the `src/app` + `@/...`
+ * layout: with baseUrl `projects/admin/src/app` it aimed at `./admin/...`, and
+ * with an `@app/core` alias it produced `./appapp/core`.
  */
 export function coreImportPath(cwd: string, config: Config): string {
   const cssDir = path.dirname(path.resolve(cwd, config.tailwind.css));
@@ -62,8 +62,8 @@ export async function applyThemeToStyles(cwd: string, config: Config): Promise<v
   const stylesPath = path.join(cwd, config.tailwind.css);
   const themeContent = themeCssFor(cwd, config);
 
-  // Numa biblioteca esse arquivo normalmente não existe — é o init que o cria,
-  // para a lib expor os tokens a quem a consome.
+  // In a library that file usually does not exist — init creates it, so the
+  // library can expose the tokens to whoever consumes it.
   await mkdir(path.dirname(stylesPath), { recursive: true });
   await writeFile(stylesPath, themeContent, 'utf8');
 }

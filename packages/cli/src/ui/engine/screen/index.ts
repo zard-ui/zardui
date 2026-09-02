@@ -1,8 +1,8 @@
 /**
- * screen — a fronteira "ligar/desligar a UI". Amarra terminal, renderer,
- * scheduler, input, focus e animation. Setup/teardown simétricos à prova de
- * crash (ADR-0007). Traz a edição interativa embutida (input/select/checkbox…).
- * (Implementação real.)
+ * screen — the "turn the UI on and off" boundary. Ties together terminal,
+ * renderer, scheduler, input, focus and animation. Symmetric, crash-proof
+ * setup/teardown (ADR-0007). Carries the built-in interactive editing
+ * (input/select/checkbox…).
  */
 
 import { performance } from 'node:perf_hooks';
@@ -34,7 +34,7 @@ export interface Screen {
   readonly focus: FocusManager;
   readonly animation: AnimationClock;
   readonly terminal: Terminal;
-  /** Registra a função-view declarativa reconstruída a cada frame. */
+  /** Registers the declarative view function rebuilt every frame. */
   setView(fn: () => Node): void;
   mount(): void;
   unmount(): void;
@@ -67,7 +67,7 @@ export function createScreen(options: ScreenOptions = {}): Screen {
   let focusDisposables: Disposable[] = [];
   const subs: Disposable[] = [];
 
-  // ── edição interativa embutida: o componente focado recebe a tecla ──
+  // ── built-in interactive editing: the focused component receives the key ──
   function editNode(node: Node, e: KeyEvent): boolean {
     const p = node.props as Record<string, unknown>;
     const key = node.key ?? '';
@@ -213,8 +213,8 @@ export function createScreen(options: ScreenOptions = {}): Screen {
     if (!consumed) {
       for (const cb of [...globalKeys]) cb(e);
     }
-    // render síncrono: mantém a árvore (e o valor dos nós interativos) fresca
-    // entre teclas digitadas em rajada, antes do próximo evento.
+    // synchronous render: keeps the tree (and the value of the interactive
+    // nodes) fresh between keys typed in a burst, before the next event.
     scheduler.renderSync();
   }
 

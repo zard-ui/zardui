@@ -5,11 +5,15 @@
   "files": [
     {
       "name": "index.ts",
-      "content": "export * from './merge-classes';\nexport * from './number';\n"
+      "content": "export * from './merge-classes';\nexport * from './noop';\nexport * from './number';\n"
     },
     {
       "name": "merge-classes.ts",
-      "content": "import { type ClassValue, clsx } from 'clsx';\nimport { twMerge } from 'tailwind-merge';\n\nexport type { ClassValue };\n\nexport function mergeClasses(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n\nexport const noopFn = () => void 0;\n\nexport const isElementContentTruncated = (element: HTMLElement | undefined): boolean => {\n  if (!element) {\n    return false;\n  }\n  const range = document.createRange();\n  range.selectNodeContents(element);\n  const rangeWidth = range.getBoundingClientRect().width;\n  const elementWidth = element.getBoundingClientRect().width;\n\n  return rangeWidth > elementWidth;\n};\n"
+      "content": "import { type ClassValue, clsx } from 'clsx';\nimport { twMerge } from 'tailwind-merge';\n\nexport type { ClassValue };\n\n/** Merges CVA variants with a consumer's `class` input, last write winning. */\nexport function mergeClasses(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n"
+    },
+    {
+      "name": "noop.ts",
+      "content": "/** Does nothing. Used as the initial value of a ControlValueAccessor callback. */\nexport const noopFn = (): void => void 0;\n"
     },
     {
       "name": "number.ts",

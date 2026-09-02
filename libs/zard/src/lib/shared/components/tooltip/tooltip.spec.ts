@@ -8,7 +8,6 @@ import { type ZardTooltipDirective } from './tooltip';
 
 @Component({
   imports: [ZardTooltipImports],
-  standalone: true,
   template: `
     <div #hoverTooltip zTooltip="Test Hover" #hoverDir="zTooltip"></div>
     <div #clickTooltip zTooltip="Test Click" zTrigger="click" #clickDir="zTooltip"></div>

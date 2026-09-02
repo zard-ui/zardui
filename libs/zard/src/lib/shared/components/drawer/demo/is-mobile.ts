@@ -11,7 +11,9 @@ export function injectIsMobile(): Signal<boolean> {
   assertInInjectionContext(injectIsMobile);
 
   const isMobile = signal(false);
-  if (!isPlatformBrowser(inject(PLATFORM_ID))) return isMobile.asReadonly();
+  if (!isPlatformBrowser(inject(PLATFORM_ID))) {
+    return isMobile.asReadonly();
+  }
 
   const media = window.matchMedia(MOBILE_QUERY);
   const sync = () => isMobile.set(media.matches);

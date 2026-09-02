@@ -1,10 +1,10 @@
 /**
- * Resumo pós-execução — o que permanece no histórico depois do alt-screen.
+ * The post-run summary — what stays in the history after the alt-screen.
  *
- * Ao sair da tela cheia, tudo que o wizard desenhou desaparece. O que o usuário
- * precisa reter (o que foi escrito, o que rodar em seguida, o que deu errado)
- * é reimpresso aqui, no fluxo normal do terminal, onde continua rolável e
- * copiável depois que o comando termina.
+ * On leaving the full screen, everything the wizard drew disappears. What the
+ * user needs to keep (what was written, what to run next, what went wrong) is
+ * reprinted here, in the terminal's normal flow, where it stays scrollable and
+ * copyable after the command ends.
  */
 
 import { type LogRecord } from './log-sink.js';
@@ -23,11 +23,11 @@ export interface Report {
   readonly status: ReportStatus;
   /** Uma frase: o desfecho do comando. */
   readonly headline: string;
-  /** Itens do que foi efetivamente feito. */
+  /** What was actually done. */
   readonly items?: readonly string[];
-  /** Texto de apoio, exibido em tom secundário. */
+  /** Supporting text, shown in a secondary tone. */
   readonly notes?: readonly string[];
-  /** Próximos passos sugeridos. */
+  /** Suggested next steps. */
   readonly commands?: readonly ReportCommand[];
   /** Mensagens retidas enquanto a tela estava montada. */
   readonly logs?: readonly LogRecord[];
@@ -66,8 +66,8 @@ export function printReport(report: Report): void {
     }
   }
 
-  // Duas linhas, não uma: o prompt do shell volta logo abaixo e, colado, o
-  // último comando sugerido parece parte dele.
+  // Two lines, not one: the shell prompt comes back right below and, pressed up
+  // against it, the last suggested command looks like part of it.
   writeLine();
   writeLine();
 }

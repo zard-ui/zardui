@@ -1,0 +1,416 @@
+<z-content
+  [navigationConfig]="navigationConfig"
+  [activeAnchor]="activeAnchor()"
+  scrollSpy
+  (scrollSpyChange)="activeAnchor.set($event)"
+>
+  <z-doc-heading
+    title="Typeset"
+    description="A styling system for HTML and rendered markdown, from blog posts to streaming chat. One CSS file you own."
+    scrollSpyItem="overview"
+    id="overview"
+  ></z-doc-heading>
+
+  <div class="typeset typeset-docs text-muted-foreground">
+    <p>
+      You render markdown and get back plain unstyled HTML: headings, paragraphs, lists, tables. So you style the
+      elements one by one — font sizes, line heights, spacing. You do it for the blog. Then again for the docs. Then
+      again for the chat. Every time, the same fight: sizing and spacing.
+    </p>
+
+    <p>
+      Typeset is one CSS file that styles everything inside a
+      <code>typeset</code>
+      container. The file lives in your project, so you change it directly when you need to.
+    </p>
+
+    <p>A typeset is a small preset class. You can keep several in one app, one per context.</p>
+
+    <!-- Inside the prose: the code block brings its own sizing. -->
+    <z-code-block class="not-typeset" [data]="presetExampleBlock" />
+
+    <p>
+      Pick fonts and rhythm visually in the
+      <a class="underline underline-offset-4" routerLink="/typeset">typeset builder</a>
+      ; it hands you the CSS, the font install commands and the preset.
+    </p>
+  </div>
+
+  <!-- Principles -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="principles" id="principles">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Principles</h2>
+      <p>
+        Scale ratios, tracking, kerning, optical sizing, measure, leading, the space above and below every element —
+        exposing all of it is too much. Typeset condenses it into three controls:
+        <strong class="text-foreground font-medium">size</strong>
+        ,
+        <strong class="text-foreground font-medium">leading</strong>
+        and
+        <strong class="text-foreground font-medium">flow</strong>
+        . Heading sizes, list indents, the gap under a heading, the space around a rule: all derived. Three controls.
+        That is the rhythm.
+      </p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="features" id="features">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Features</h2>
+
+      <ul>
+        <li>
+          <strong class="text-foreground font-medium">It fits its container.</strong>
+          Sizes are in
+          <code>em</code>
+          , never
+          <code>rem</code>
+          . Put it in a chat bubble and it follows the smaller type around it. Put it in an article and it scales with
+          the page. On small screens it gets a small bump for readability.
+        </li>
+        <li>
+          <strong class="text-foreground font-medium">It uses your theme.</strong>
+          Colors, fonts and radius come from your tokens. Dark mode follows.
+        </li>
+        <li>
+          <strong class="text-foreground font-medium">It is easy to tune.</strong>
+          Three values control base size, line height and block spacing.
+        </li>
+        <li>
+          <strong class="text-foreground font-medium">It works with streaming.</strong>
+          A new block arriving never restyles the blocks already on screen.
+        </li>
+      </ul>
+    </div>
+
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h3 class="text-base font-semibold sm:text-lg">Live preview</h3>
+      <p>
+        Everything below this line is plain HTML inside a
+        <code>typeset typeset-docs</code>
+        container. No utility class on any element in it.
+      </p>
+    </div>
+
+    <div class="bg-card rounded-lg border p-6 sm:p-8">
+      <div class="typeset typeset-docs">
+        <h2>The rhythm of a page</h2>
+        <p>
+          Three controls decide how this reads: the base
+          <em>size</em>
+          , the
+          <em>leading</em>
+          between lines, and the
+          <em>flow</em>
+          between blocks. Every other measurement on this page derives from those three.
+        </p>
+        <h3>What derives from them</h3>
+        <ul>
+          <li>Heading sizes, and the space each one takes above itself.</li>
+          <li>The indent of a list, and the gap between its items.</li>
+          <li>The margin around a rule, and the padding inside a code block.</li>
+        </ul>
+        <blockquote>
+          <p>
+            The layout owns the measure. Typeset sets no
+            <code>max-width</code>
+            of its own.
+          </p>
+        </blockquote>
+        <p>
+          Inline code such as
+          <code>--typeset-flow</code>
+          picks up the mono family, and a
+          <a href="#custom-typesets">link</a>
+          keeps the surrounding weight.
+        </p>
+        <hr />
+        <p>A rule closes a section, and the heading after it starts the next one without extra space.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Installation -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="installation" id="installation">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Installation</h2>
+      <p>
+        The CLI writes
+        <code>typeset.css</code>
+        next to your global stylesheet and adds the import for you. Manually, copy the file and import it after
+        Tailwind.
+      </p>
+    </div>
+
+    <z-code-tabs [data]="installTabs" />
+
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h3 class="text-base font-semibold sm:text-lg">Then wrap your content</h3>
+      <p>
+        <code>typeset</code>
+        turns the styles on.
+        <code>typeset-docs</code>
+        is your preset.
+      </p>
+    </div>
+
+    <z-code-block [data]="usageWrapperBlock" />
+  </section>
+
+  <!-- Custom typesets -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="custom-typesets" id="custom-typesets">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Custom typesets</h2>
+      <p>Six variables govern the whole system. Three of them name font families; the other three are the rhythm.</p>
+    </div>
+
+    <z-code-block [data]="anatomyBlock" />
+
+    <div class="typeset typeset-docs text-muted-foreground">
+      <ul>
+        <li>
+          <code>--typeset-size</code>
+          sets the base text size.
+          <code>1em</code>
+          follows the surrounding layout.
+        </li>
+        <li>
+          <code>--typeset-leading</code>
+          sets the space between lines.
+        </li>
+        <li>
+          <code>--typeset-flow</code>
+          sets the space between blocks; headings and rules derive their spacing from it.
+        </li>
+      </ul>
+    </div>
+
+    <z-callout variant="info" title="Typeset sets no max-width" icon="?">
+      Your layout owns the measure. The builder's Measure control puts it on the wrapper instead of hiding it in the
+      stylesheet, so typeset never argues with the layout around it.
+    </z-callout>
+
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h3 class="text-base font-semibold sm:text-lg">Several presets in one app</h3>
+      <p>One per context. They all read the same stylesheet; only the variables differ.</p>
+    </div>
+
+    <z-code-block [data]="multiplePresetsBlock" />
+
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h3 class="text-base font-semibold sm:text-lg">One-off, without a preset</h3>
+      <p>An arbitrary-property utility sets the variable on the element itself.</p>
+    </div>
+
+    <z-code-block [data]="inlineOverrideBlock" />
+  </section>
+
+  <!-- Fonts -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="fonts" id="fonts">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Fonts</h2>
+      <p>The three font variables tell typeset which families to use. Leave them alone and typeset follows your app.</p>
+      <p>
+        <code>--font-sans</code>
+        and
+        <code>--font-mono</code>
+        already exist in a zard theme.
+        <code>--font-heading</code>
+        does not: define it only if you want headings on a different face from body text — otherwise typeset falls back
+        to
+        <code>--font-sans</code>
+        .
+      </p>
+    </div>
+
+    <z-code-block [data]="fontsExampleBlock" />
+  </section>
+
+  <!-- Custom themes -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="custom-themes" id="custom-themes">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Custom themes</h2>
+      <p>Two presets that change the reading experience, not just the size.</p>
+    </div>
+
+    <z-code-block [data]="customThemesBlock" />
+  </section>
+
+  <!-- Accessibility and dark mode -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="accessibility" id="accessibility">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Accessibility and dark mode
+      </h2>
+      <p>
+        A larger preset for readers who need one, and a touch more leading in the dark theme, where thinner strokes read
+        tighter than they measure.
+      </p>
+    </div>
+
+    <z-code-block [data]="accessibilityBlock" />
+  </section>
+
+  <!-- Responsive table -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="responsive-table" id="responsive-table">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Responsive table</h2>
+      <p>
+        Tables stay real tables and wrap to fit. To scroll a wide one instead, wrap it. It works for any wide block, not
+        just tables.
+      </p>
+    </div>
+
+    <z-code-block [data]="responsiveTableBlock" />
+  </section>
+
+  <!-- Overrides -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="overrides" id="overrides">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Overrides</h2>
+      <p>
+        Typeset lives in the
+        <code>components</code>
+        layer and wraps every element selector in
+        <code>:where()</code>
+        , which costs zero specificity. A Tailwind utility on the element wins with no
+        <code>!important</code>
+        .
+      </p>
+    </div>
+
+    <z-code-block [data]="overridesBlock" />
+  </section>
+
+  <!-- Opting out -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="opting-out" id="opting-out">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Opting out</h2>
+      <p>
+        <code>not-typeset</code>
+        and
+        <code>data-not-typeset</code>
+        both cover the element and everything inside it. Another
+        <code>typeset</code>
+        container in that subtree stays opted out too.
+      </p>
+    </div>
+
+    <z-code-block [data]="optOutBlock" />
+  </section>
+
+  <!-- Streaming -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="streaming" id="streaming">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Streaming</h2>
+      <p>
+        Text that arrives token by token restyles itself if the CSS looks forward. Three rules keep that from happening.
+      </p>
+
+      <ul>
+        <li>
+          <strong class="text-foreground font-medium">No forward-looking selectors.</strong>
+          <code>:last-child</code>
+          ,
+          <code>:has()</code>
+          and
+          <code>:empty</code>
+          are kept out of layout rules, because their matches change as content is appended.
+        </li>
+        <li>
+          <strong class="text-foreground font-medium">Spacing flows one way.</strong>
+          <code>margin-block-start</code>
+          only. A new block brings its own space.
+        </li>
+        <li>
+          <strong class="text-foreground font-medium">Table separators live on the cells being added</strong>
+          , so a new row never restyles the row above it.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Prior art -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="prior-art" id="prior-art">
+    <div class="typeset typeset-docs text-muted-foreground">
+      <h2 class="mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Prior art</h2>
+      <p>
+        <code>prose</code>
+        , from
+        <code>&#64;tailwindcss/typography</code>
+        , is excellent at what it was built for. Typeset takes a different approach.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full min-w-3xl border-collapse text-left text-sm">
+        <caption class="sr-only">How typeset differs from the Tailwind typography plugin</caption>
+        <thead class="bg-muted/50">
+          <tr>
+            <th scope="col" class="px-4 py-2.5 font-medium"></th>
+            <th scope="col" class="px-4 py-2.5 font-medium">&#64;tailwindcss/typography</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Typeset</th>
+          </tr>
+        </thead>
+        <tbody class="text-muted-foreground">
+          <tr class="border-t align-top">
+            <th scope="row" class="text-foreground px-4 py-3 font-medium">Sizing</th>
+            <td class="px-4 py-3">
+              fixed
+              <code>rem</code>
+              scale,
+              <code>prose-sm</code>
+              to
+              <code>prose-2xl</code>
+            </td>
+            <td class="px-4 py-3">relative to the container, any size</td>
+          </tr>
+          <tr class="border-t align-top">
+            <th scope="row" class="text-foreground px-4 py-3 font-medium">Dark mode</th>
+            <td class="px-4 py-3">
+              <code>prose-invert</code>
+              , a second palette
+            </td>
+            <td class="px-4 py-3">your tokens flip, nothing to add</td>
+          </tr>
+          <tr class="border-t align-top">
+            <th scope="row" class="text-foreground px-4 py-3 font-medium">Theming</th>
+            <td class="px-4 py-3">prose color variables, scale baked in</td>
+            <td class="px-4 py-3">your theme tokens, plus font and rhythm controls</td>
+          </tr>
+          <tr class="border-t align-top">
+            <th scope="row" class="text-foreground px-4 py-3 font-medium">Overrides</th>
+            <td class="px-4 py-3">
+              <code>prose-a:</code>
+              ,
+              <code>prose-headings:</code>
+              modifier API
+            </td>
+            <td class="px-4 py-3">plain utilities and CSS win</td>
+          </tr>
+          <tr class="border-t align-top">
+            <th scope="row" class="text-foreground px-4 py-3 font-medium">Streaming</th>
+            <td class="px-4 py-3">no append-stability contract</td>
+            <td class="px-4 py-3">designed for stable appends</td>
+          </tr>
+          <tr class="border-t align-top">
+            <th scope="row" class="text-foreground px-4 py-3 font-medium">Distribution</th>
+            <td class="px-4 py-3">npm plugin, generated CSS</td>
+            <td class="px-4 py-3">one CSS file you own</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Typeset borrows the two best ideas from the plugin: the zero-specificity
+      <code>:where()</code>
+      guard, and the escape-hatch class —
+      <code>not-typeset</code>
+      , in the spirit of
+      <code>not-prose</code>
+      .
+    </p>
+  </section>
+</z-content>

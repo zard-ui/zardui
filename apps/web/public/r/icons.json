@@ -46,6 +46,9 @@
     "bold": {
       "lucide": "lucideBold"
     },
+    "book-open-check": {
+      "lucide": "lucideBookOpenCheck"
+    },
     "bookmark": {
       "lucide": "lucideBookmark"
     },
@@ -75,6 +78,12 @@
     },
     "chevron-up": {
       "lucide": "lucideChevronUp"
+    },
+    "chevrons-left": {
+      "lucide": "lucideChevronsLeft"
+    },
+    "chevrons-right": {
+      "lucide": "lucideChevronsRight"
     },
     "chevrons-up-down": {
       "lucide": "lucideChevronsUpDown"
@@ -127,6 +136,9 @@
     "dot": {
       "lucide": "lucideDot"
     },
+    "download": {
+      "lucide": "lucideDownload"
+    },
     "ellipsis": {
       "lucide": "lucideEllipsis"
     },
@@ -135,9 +147,6 @@
     },
     "eye-off": {
       "lucide": "lucideEyeOff"
-    },
-    "file": {
-      "lucide": "lucideFile"
     },
     "file-code": {
       "lucide": "lucideFileCode"
@@ -159,6 +168,9 @@
     },
     "footprints": {
       "lucide": "lucideFootprints"
+    },
+    "gallery-vertical-end": {
+      "lucide": "lucideGalleryVerticalEnd"
     },
     "git-branch": {
       "lucide": "lucideGitBranch"
@@ -183,9 +195,6 @@
     },
     "keyboard": {
       "lucide": "lucideKeyboard"
-    },
-    "layers": {
-      "lucide": "lucideLayers"
     },
     "layout-grid": {
       "lucide": "lucideLayoutGrid"
@@ -229,6 +238,9 @@
     "monitor": {
       "lucide": "lucideMonitor"
     },
+    "more-horizontal": {
+      "lucide": "lucideMoreHorizontal"
+    },
     "octagon-x": {
       "lucide": "lucideOctagonX"
     },
@@ -246,6 +258,9 @@
     },
     "refresh-cw": {
       "lucide": "lucideRefreshCw"
+    },
+    "rotate-ccw": {
+      "lucide": "lucideRotateCcw"
     },
     "save": {
       "lucide": "lucideSave"
@@ -277,14 +292,17 @@
     "sun": {
       "lucide": "lucideSun"
     },
-    "tablet": {
-      "lucide": "lucideTablet"
-    },
     "tag": {
       "lucide": "lucideTag"
     },
     "terminal": {
       "lucide": "lucideTerminal"
+    },
+    "thumbs-down": {
+      "lucide": "lucideThumbsDown"
+    },
+    "thumbs-up": {
+      "lucide": "lucideThumbsUp"
     },
     "trash": {
       "lucide": "lucideTrash"
@@ -306,9 +324,6 @@
     },
     "user-round-x": {
       "lucide": "lucideUserRoundX"
-    },
-    "users": {
-      "lucide": "lucideUsers"
     },
     "volume-off": {
       "lucide": "lucideVolumeOff"

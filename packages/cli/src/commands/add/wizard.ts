@@ -33,23 +33,23 @@ type Phase = 'selecting' | 'resolving' | 'confirming' | 'installing' | 'darkMode
 
 interface State {
   phase: Phase;
-  /** Nomes disponíveis no registry, na ordem em que serão exibidos. */
+  /** Names available in the registry, in the order they will be shown. */
   names: string[];
   /** Texto do filtro de busca. */
   filter: string;
-  /** Índices (sobre `names`) que passaram no filtro. */
+  /** Indices (into `names`) that passed the filter. */
   visible: number[];
   cursor: number;
   selected: Set<number>;
-  /** Resumo do que a resolução de dependências encontrou. */
+  /** Summary of what dependency resolution found. */
   componentCount: number;
   dependencyCount: number;
   confirmValue: boolean;
   tasks: TaskLine[];
   tasksDone: number;
-  /** Quando a etapa atual começou, para exibir há quanto tempo ela roda. */
+  /** When the current step started, so its elapsed time can be shown. */
   taskStartedAt: number;
-  /** Valor e cursor do campo onde o caminho do index.html é informado. */
+  /** Value and cursor of the field where the index.html path is entered. */
   indexHtml: TextInput;
   transcript: [string, string][];
   failure: string | null;
@@ -57,22 +57,25 @@ interface State {
 }
 
 export interface AddWizardOptions {
-  /** Componentes já informados na linha de comando — pulam a seleção. */
+  /** Components already given on the command line — they skip selection. */
   readonly preselected: readonly string[];
-  /** Carrega os nomes disponíveis; só é chamado quando há seleção a fazer. */
+  /** Loads the available names; only called when there is a selection to make. */
   loadNames(): Promise<string[]>;
   resolve(names: string[]): Promise<{ components: ComponentMeta[]; dependencies: string[] }>;
-  /** Pula a confirmação (`--yes`). */
+  /** Skips the confirmation (`--yes`). */
   readonly skipConfirmation: boolean;
   installDependencies(packages: string[]): Promise<void>;
   installComponent(component: ComponentMeta): Promise<void>;
-  /** Só é chamado quando dark-mode entra na instalação. */
+  /** Only called when dark-mode is part of the install. */
   setupDarkMode(indexHtml: string): Promise<void>;
+  /** Only called when typeset is part of the install. */
+  setupTypeset(): Promise<void>;
   /**
-   * Onde o index.html deve estar, segundo o tipo de projeto configurado.
+   * Where index.html should be, according to the configured project type.
    *
-   * Um `src/index.html` fixo só existe no app Angular único: num workspace ele
-   * está sob `apps/<app>/`, e no Analog é a página de entrada do Vite, na raiz.
+   * A fixed `src/index.html` only exists in a single Angular app: in a workspace
+   * it sits under `apps/<app>/`, and in Analog it is Vite's entry page, at the
+   * project root.
    */
   readonly defaultIndexHtml: string;
 }
@@ -83,6 +86,7 @@ export interface AddWizardResult {
 }
 
 const DARK_MODE = 'dark-mode';
+const TYPESET = 'typeset';
 
 export async function runAddWizard(options: AddWizardOptions): Promise<AddWizardResult> {
   const state: State = {
@@ -228,6 +232,12 @@ export async function runAddWizard(options: AddWizardOptions): Promise<AddWizard
       ctx.refresh();
     }
 
+    // After the loop, and against what was actually written: injecting the
+    // import for a file whose install failed would point the CSS at nothing.
+    if (state.installed.includes(TYPESET)) {
+      await options.setupTypeset();
+    }
+
     if (components.some(component => component.name === DARK_MODE)) {
       state.phase = 'darkMode';
       ctx.refresh();
@@ -279,7 +289,7 @@ function handleSelectionKey(
     return;
   }
   if (event.ctrl && event.key === 'a') {
-    // Alterna tudo que está visível, respeitando o filtro corrente.
+    // Toggles everything visible, honouring the current filter.
     const allSelected = state.visible.every(index => state.selected.has(index));
     for (const index of state.visible) {
       if (allSelected) state.selected.delete(index);
@@ -302,7 +312,7 @@ function handleSelectionKey(
   }
 }
 
-/** Janela deslizante da lista: mantém o cursor sempre visível. */
+/** Sliding window over the list: keeps the cursor visible at all times. */
 const VISIBLE_ROWS = 10;
 
 function windowOf(state: State): { slice: number[]; offset: number } {

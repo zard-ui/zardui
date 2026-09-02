@@ -1,4 +1,3 @@
-import { DOCUMENT } from '@angular/common';
 import {
   type AfterViewInit,
   booleanAttribute,
@@ -6,6 +5,7 @@ import {
   Component,
   computed,
   DestroyRef,
+  DOCUMENT,
   ElementRef,
   forwardRef,
   inject,
@@ -24,7 +24,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter, fromEvent, map, switchMap, takeUntil, tap } from 'rxjs';
 
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 import { clamp, convertValueToPercentage, roundToStep } from '@/shared/utils/number';
 
 import {
@@ -52,8 +53,9 @@ type OnChangeType = (value: number[]) => void;
     '[style.height]': '"100%"',
     '[attr.data-orientation]': 'orientation()',
   },
+  exportAs: 'zSliderTrack',
 })
-export class ZSliderTrackComponent {
+export class ZardSliderTrackComponent {
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly class = input<ClassValue>('');
 
@@ -83,8 +85,9 @@ export class ZSliderTrackComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  exportAs: 'zSliderRange',
 })
-export class ZSliderRangeComponent {
+export class ZardSliderRangeComponent {
   readonly percent = input<number[]>([0]);
 
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
@@ -137,8 +140,9 @@ export class ZSliderRangeComponent {
     '[style.left]': 'orientation() === "horizontal" ? "calc(" + percent() + "% + " + offset() + "px)" : null',
     '[style.bottom]': 'orientation() === "vertical" ? "calc(" + percent() + "% + " + offset() + "px)" : null',
   },
+  exportAs: 'zSliderThumb',
 })
-export class ZSliderThumbComponent {
+export class ZardSliderThumbComponent {
   readonly value = input(0);
   readonly min = input(0);
   readonly max = input(100);
@@ -164,7 +168,7 @@ export class ZSliderThumbComponent {
 
 @Component({
   selector: 'z-slider',
-  imports: [ZSliderTrackComponent, ZSliderRangeComponent, ZSliderThumbComponent],
+  imports: [ZardSliderTrackComponent, ZardSliderRangeComponent, ZardSliderThumbComponent],
   template: `
     <span
       data-slot="slider"
@@ -223,8 +227,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 
   readonly zSlideIndexChange = output<number[]>();
 
-  readonly thumbRefs = viewChildren(ZSliderThumbComponent);
-  readonly trackRef = viewChild.required(ZSliderTrackComponent);
+  readonly thumbRefs = viewChildren(ZardSliderThumbComponent);
+  readonly trackRef = viewChild.required(ZardSliderTrackComponent);
 
   protected readonly classes = computed(() => mergeClasses(sliderVariants(), this.class()));
 

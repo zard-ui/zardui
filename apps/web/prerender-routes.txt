@@ -4,11 +4,13 @@
 /blocks
 /charts
 /themes
+/typeset
 /docs/introduction
 /docs/components
 /docs/installation
 /docs/theming
 /docs/cli
+/docs/typeset
 /docs/skills
 /docs/registry
 /docs/mcp
@@ -17,6 +19,7 @@
 /docs/installation
 /docs/components-json
 /docs/theming
+/docs/typeset
 /docs/dark-mode
 /docs/cli
 /docs/monorepo
@@ -31,6 +34,8 @@
 /docs/forms/signal-forms
 /docs/forms/reactive-forms
 /docs/forms/template-driven-forms
+/docs/utils/scroll-fade
+/docs/utils/shimmer
 /docs/featured/youtube
 /docs/featured/articles
 /docs/components/accordion
@@ -56,7 +61,6 @@
 /docs/components/input-group
 /docs/components/input-otp
 /docs/components/item
-/docs/components/layout
 /docs/components/dialog
 /docs/components/pagination
 /docs/components/progress
@@ -71,7 +75,6 @@
 /docs/components/toggle
 /docs/components/toggle-group
 /docs/components/tooltip
-/docs/components/tree
 /docs/components/navigation-menu
 /docs/components/resizable
 /docs/components/sheet
@@ -80,8 +83,14 @@
 /docs/components/dropdown
 /docs/components/popover
 /docs/components/kbd
+/docs/components/collapsible
+/docs/components/sidebar
 /docs/components/drawer
 /docs/components/bubble
+/docs/components/hover-card
+/docs/components/context-menu
+/docs/components/message
+/docs/components/marker
 /docs/contribute
 /docs/contribute/setup
 /docs/contribute/architecture

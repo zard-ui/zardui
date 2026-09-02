@@ -25,7 +25,7 @@ export const appRoutes: Route[] = [
     children: [
       {
         path: '',
-        loadChildren: async () => (await import('./domain/pages/blocks/blocks.routes')).BLOCKS_ROUTES,
+        loadChildren: () => import('./domain/pages/blocks/blocks.routes').then(m => m.BLOCKS_ROUTES),
       },
     ],
   },
@@ -35,7 +35,7 @@ export const appRoutes: Route[] = [
     children: [
       {
         path: '',
-        loadChildren: async () => (await import('./domain/pages/charts/charts.routes')).CHARTS_ROUTES,
+        loadChildren: () => import('./domain/pages/charts/charts.routes').then(m => m.CHARTS_ROUTES),
       },
     ],
   },
@@ -54,7 +54,7 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'installation',
-        loadChildren: async () => (await import('./domain/pages/enviroments/enviroments.routes')).ENVIRONMENTS_ROUTES,
+        loadChildren: () => import('./domain/pages/environments/environments.routes').then(m => m.ENVIRONMENTS_ROUTES),
       },
       {
         path: 'components-json',
@@ -65,12 +65,20 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/theming/theming.page').then(c => c.ThemingPage),
       },
       {
+        path: 'typeset',
+        loadComponent: () => import('./domain/pages/typeset-docs/typeset-docs.page').then(c => c.TypesetDocsPage),
+      },
+      {
         path: 'forms',
-        loadChildren: async () => (await import('./domain/pages/forms/forms.routes')).FORMS_ROUTES,
+        loadChildren: () => import('./domain/pages/forms/forms.routes').then(m => m.FORMS_ROUTES),
+      },
+      {
+        path: 'utils',
+        loadChildren: async () => (await import('./domain/pages/utils/utils.routes')).UTILS_ROUTES,
       },
       {
         path: 'dark-mode',
-        loadComponent: () => import('./domain/pages/dark-mode/dark-mode.page').then(c => c.DarkmodePage),
+        loadComponent: () => import('./domain/pages/dark-mode/dark-mode.page').then(c => c.DarkModePage),
       },
       {
         path: 'cli',
@@ -94,11 +102,11 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'components',
-        loadChildren: async () => (await import('./domain/pages/component/component.routes')).COMPONENTS_ROUTES,
+        loadChildren: () => import('./domain/pages/component/component.routes').then(m => m.COMPONENTS_ROUTES),
       },
       {
         path: 'contribute',
-        loadChildren: async () => (await import('./domain/pages/contribute/contribute.routes')).CONTRIBUTE_ROUTES,
+        loadChildren: () => import('./domain/pages/contribute/contribute.routes').then(m => m.CONTRIBUTE_ROUTES),
       },
       {
         path: 'version-support',
@@ -107,15 +115,15 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'about',
-        loadComponent: async () => import('./domain/pages/about/about.page').then(c => c.AboutPage),
+        loadComponent: () => import('./domain/pages/about/about.page').then(c => c.AboutPage),
       },
       {
         path: 'figma',
-        loadComponent: async () => import('./domain/pages/figma/figma.page').then(c => c.FigmaPage),
+        loadComponent: () => import('./domain/pages/figma/figma.page').then(c => c.FigmaPage),
       },
       {
         path: 'roadmap',
-        loadComponent: async () => import('./domain/pages/roadmap/roadmap.page').then(c => c.RoadmapPage),
+        loadComponent: () => import('./domain/pages/roadmap/roadmap.page').then(c => c.RoadmapPage),
       },
       {
         path: 'pre-processors',
@@ -124,11 +132,11 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'changelog',
-        loadComponent: async () => import('./domain/pages/change-log/change-log.page').then(c => c.ChangeLogPage),
+        loadComponent: () => import('./domain/pages/change-log/change-log.page').then(c => c.ChangeLogPage),
       },
       {
         path: 'featured',
-        loadChildren: async () => (await import('./domain/pages/featured/featured.routes')).FEATURED_ROUTES,
+        loadChildren: () => import('./domain/pages/featured/featured.routes').then(m => m.FEATURED_ROUTES),
       },
     ],
   },
@@ -149,6 +157,20 @@ export const appRoutes: Route[] = [
       {
         path: '',
         loadComponent: () => import('./domain/pages/themes/themes.page').then(c => c.ThemesPage),
+      },
+    ],
+  },
+  {
+    path: 'typeset/preview',
+    loadComponent: () => import('./domain/pages/typeset/preview/typeset-preview.page').then(c => c.TypesetPreviewPage),
+  },
+  {
+    path: 'typeset',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./domain/pages/typeset/typeset.page').then(c => c.TypesetPage),
       },
     ],
   },

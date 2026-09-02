@@ -1,3 +1,5 @@
+@import './utilities.css';
+
 @theme inline {
   --animate-caret-blink: caret-blink 1s ease-out infinite;
 
@@ -90,14 +92,5 @@
 @custom-variant data-vertical {
   &:where([data-orientation='vertical']) {
     @slot;
-  }
-}
-
-@utility no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
   }
 }

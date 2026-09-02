@@ -9,7 +9,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-icon',
   imports: [ZardButtonComponent, NgIcon],
   template: `
-    <button z-button zType="outline" zSize="icon" aria-label="Submit">
+    <button type="button" z-button zType="outline" zSize="icon" aria-label="Submit">
       <ng-icon name="lucideCircleFadingArrowUp" />
     </button>
   `,

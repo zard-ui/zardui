@@ -35,6 +35,8 @@ import { skeletonVariants } from './skeleton.variants';
   encapsulation: ViewEncapsulation.None,
   host: {
     class: 'block',
+    // A placeholder carries no information; announcing it only adds noise.
+    'aria-hidden': 'true',
   },
   exportAs: 'zSkeleton',
 })

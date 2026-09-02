@@ -1,0 +1,48 @@
+<button z-button zSize="sm" (click)="openSettings()">Open Dialog</button>
+
+<ng-template #settings>
+  <z-sidebar-provider class="min-h-0 items-start">
+    <z-sidebar zCollapsible="none" class="hidden md:flex">
+      <z-sidebar-content>
+        <div z-sidebar-group>
+          <div z-sidebar-group-content>
+            <ul z-sidebar-menu>
+              @for (item of nav; track item.name) {
+                <li z-sidebar-menu-item>
+                  <a z-sidebar-menu-button href="#" [zActive]="item.name === 'Messages &amp; media'">
+                    <ng-icon [name]="item.icon" />
+                    <span>{{ item.name }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </z-sidebar-content>
+    </z-sidebar>
+
+    <main class="flex h-[480px] flex-1 flex-col overflow-hidden">
+      <header
+        class="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12"
+      >
+        <div class="flex items-center gap-2 px-4">
+          <z-breadcrumb>
+            <z-breadcrumb-item class="hidden md:block">
+              <a z-breadcrumb-link href="#">Settings</a>
+            </z-breadcrumb-item>
+            <z-breadcrumb-separator class="hidden md:block" />
+            <z-breadcrumb-item>
+              <span z-breadcrumb-page>Messages &amp; media</span>
+            </z-breadcrumb-item>
+          </z-breadcrumb>
+        </div>
+      </header>
+
+      <div class="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0">
+        @for (item of placeholders; track item) {
+          <div class="bg-muted/50 aspect-video max-w-3xl rounded-xl"></div>
+        }
+      </div>
+    </main>
+  </z-sidebar-provider>
+</ng-template>

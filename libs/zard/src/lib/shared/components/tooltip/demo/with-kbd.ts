@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSave } from '@ng-icons/lucide';
@@ -8,7 +8,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd';
 import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
 
 @Component({
-  selector: 'z-demo-kbd-tooltip',
+  selector: 'z-demo-tooltip-with-kbd',
   imports: [NgIcon, ZardButtonComponent, ZardTooltipDirective, ZardKbdComponent],
   template: `
     <button type="button" z-button [zTooltip]="shortcutTip" zType="outline" zSize="icon-sm">
@@ -20,6 +20,7 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
       <z-kbd>S</z-kbd>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSave })],
 })
 export class ZardDemoTooltipWithKbdComponent {}

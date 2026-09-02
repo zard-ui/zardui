@@ -1,3 +1,77 @@
+## 1.0.0-beta.119 (2026-08-27)
+
+### ✨ Features
+
+- **utils:** add the scroll-fade and shimmer CSS utilities ([#721](https://github.com/zard-ui/zardui/pull/721))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
+## 1.0.0-beta.118 (2026-08-26)
+
+### ✨ Features
+
+- **typeset:** a styling system for HTML and rendered markdown ([#720](https://github.com/zard-ui/zardui/pull/720))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
+## 1.0.0-beta.117 (2026-08-26)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.116 (2026-08-21)
+
+### 🐛 Bug Fixes
+
+- v1 audit — hydration, keyboard and CLI install bugs ([#717](https://github.com/zard-ui/zardui/pull/717))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
+## 1.0.0-beta.115 (2026-08-20)
+
+### ✨ Features
+
+- **marker:** add marker component ([#716](https://github.com/zard-ui/zardui/pull/716))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
+## 1.0.0-beta.114 (2026-08-20)
+
+### ✨ Features
+
+- **sidebar:** align the sidebar blocks with shadcn, add dashboard-01 and rebuild the block viewer ([#715](https://github.com/zard-ui/zardui/pull/715))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
+## 1.0.0-beta.113 (2026-08-20)
+
+### ✨ Features
+
+- **message:** add message component ([#714](https://github.com/zard-ui/zardui/pull/714))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
+## 1.0.0-beta.112 (2026-08-20)
+
+### ✨ Features
+
+- **context-menu:** add context menu component ([#713](https://github.com/zard-ui/zardui/pull/713))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.111 (2026-08-18)
 
 ### ✨ Features

@@ -12,6 +12,9 @@
       "options": {
         "config": "apps/web-e2e/playwright.config.ts"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

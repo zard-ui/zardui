@@ -5,9 +5,8 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-invalid',
+  selector: 'z-demo-combobox-invalid',
   imports: [ZardComboboxImports, ZardFieldImports],
-  standalone: true,
   template: `
     <div z-field class="w-full min-w-48" data-invalid="true">
       <label z-field-label for="combobox-invalid">Framework</label>

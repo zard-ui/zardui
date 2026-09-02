@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
@@ -51,6 +51,7 @@ const TABLE_DATA: readonly Row[] = [
       </tbody>
     </table>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCheckboxTableComponent {
   protected readonly rows = TABLE_DATA;

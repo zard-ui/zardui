@@ -50,7 +50,6 @@ import { ZardSonnerComponent } from '@/shared/components/sonner/sonner.component
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [RouterOutlet, ZardSonnerComponent],
   template: \`
     <router-outlet></router-outlet>

@@ -18,7 +18,7 @@ npx zard-cli@latest add resizable
 ### Manual
 
 ```angular-ts
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
   booleanAttribute,
@@ -26,6 +26,7 @@ import {
   Component,
   computed,
   contentChildren,
+  DOCUMENT,
   ElementRef,
   inject,
   input,
@@ -387,11 +388,11 @@ export type ZardResizableLayoutVariants = NonNullable<VariantProps<typeof resiza
 ```
 
 ```angular-ts
-export * from '@/shared/components/resizable/resizable.component';
-export * from '@/shared/components/resizable/resizable-panel.component';
-export * from '@/shared/components/resizable/resizable-handle.component';
-export * from '@/shared/components/resizable/resizable.imports';
-export * from '@/shared/components/resizable/resizable.variants';
+export * from './resizable.component';
+export * from './resizable-panel.component';
+export * from './resizable-handle.component';
+export * from './resizable.imports';
+export * from './resizable.variants';
 ```
 
 ```angular-ts
@@ -774,7 +775,7 @@ import { ZardResizableImports } from '@/shared/components/resizable/resizable.im
 Use `zLayout="vertical"` for vertical resizing.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';
 
@@ -796,6 +797,7 @@ import { ZardResizableImports } from '@/shared/components/resizable/resizable.im
       </z-resizable-panel>
     </z-resizable>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoResizableVerticalComponent {}
 ```
@@ -805,7 +807,7 @@ export class ZardDemoResizableVerticalComponent {}
 Use the `zWithHandle` input on `z-resizable-handle` to show a visible handle.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';
 
@@ -829,6 +831,7 @@ import { ZardResizableImports } from '@/shared/components/resizable/resizable.im
       </z-resizable>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoResizableWithHandleComponent {}
 ```
@@ -841,12 +844,12 @@ The main container component that manages resizable panels.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zLayout` | Layout direction of the panels | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| `zLazy` | If true, panels only update after resize ends | `boolean` | `false` |
-| `class` | Additional CSS classes to apply | `ClassValue` | `''` |
-| `zResizeStart` | Emitted when resize starts | `output<ZardResizeEvent>` | `-` |
-| `zResize` | Emitted during resize | `output<ZardResizeEvent>` | `-` |
-| `zResizeEnd` | Emitted when resize ends | `output<ZardResizeEvent>` | `-` |
+| `[zLayout]` | Layout direction of the panels | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `[zLazy]` | If true, panels only update after resize ends | `boolean` | `false` |
+| `[class]` | Additional CSS classes to apply | `ClassValue` | `''` |
+| `(zResizeStart)` | Emitted when resize starts | `output<ZardResizeEvent>` | `-` |
+| `(zResize)` | Emitted during resize | `output<ZardResizeEvent>` | `-` |
+| `(zResizeEnd)` | Emitted when resize ends | `output<ZardResizeEvent>` | `-` |
 
 ### z-resizable-panel
 
@@ -854,12 +857,12 @@ Individual panel component within a resizable container.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zDefaultSize` | Initial size as percentage | `number \| string \| undefined` | `undefined` |
-| `zMin` | Minimum size as percentage | `number` | `0` |
-| `zMax` | Maximum size as percentage | `number` | `100` |
-| `zCollapsible` | Whether panel can be collapsed | `boolean` | `false` |
-| `zResizable` | Whether panel can be resized | `boolean` | `true` |
-| `class` | Additional CSS classes to apply | `ClassValue` | `''` |
+| `[zDefaultSize]` | Initial size as percentage | `number \| string \| undefined` | `undefined` |
+| `[zMin]` | Minimum size as percentage | `number` | `0` |
+| `[zMax]` | Maximum size as percentage | `number` | `100` |
+| `[zCollapsible]` | Whether panel can be collapsed | `boolean` | `false` |
+| `[zResizable]` | Whether panel can be resized | `boolean` | `true` |
+| `[class]` | Additional CSS classes to apply | `ClassValue` | `''` |
 
 ### z-resizable-handle
 
@@ -867,10 +870,10 @@ Draggable divider between panels.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zWithHandle` | Shows visual grip handle | `boolean` | `false` |
-| `zDisabled` | Disables resize functionality | `boolean` | `false` |
-| `zHandleIndex` | Index of the handle (auto-managed) | `number` | `0` |
-| `class` | Additional CSS classes to apply | `ClassValue` | `''` |
+| `[zWithHandle]` | Shows visual grip handle | `boolean` | `false` |
+| `[zDisabled]` | Disables resize functionality | `boolean` | `false` |
+| `[zHandleIndex]` | Index of the handle (auto-managed) | `number` | `0` |
+| `[class]` | Additional CSS classes to apply | `ClassValue` | `''` |
 
 ---
 

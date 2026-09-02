@@ -5,9 +5,9 @@ import { LOCAL_PRESET_CATALOG, duplicateCodes, serializeCatalog } from '../packa
 import { registry, type ComponentRegistry } from '../packages/cli/src/core/registry/registry-data';
 
 /**
- * A forma dos arquivos publicados. Sobe quando a mudança quebra quem lê — campo
- * removido, significado alterado —, e é o que permite a uma CLI antiga dizer
- * "atualize" em vez de ler errado em silêncio. Ver `utils/schema-version.ts`.
+ * The shape of the published files. It goes up when a change breaks a reader — a
+ * field removed, a meaning altered — and it is what lets an old CLI say "update"
+ * instead of silently reading it wrong. See `utils/schema-version.ts`.
  */
 const SCHEMA_VERSION = 1;
 
@@ -62,48 +62,68 @@ function getCliVersion(): string {
   }
 }
 
+/*
+ * Where a non-component item's source lives in this repository.
+ *
+ * The key is the `basePath` the registry publishes — the install destination —
+ * and the value is the source directory. The first three agree; typeset does
+ * not: it ships next to the installing project's global CSS, but it is born
+ * beside the core's tailwind.css, which is where it is edited and tested.
+ */
+const NON_COMPONENT_PATHS: Record<string, string> = {
+  core: 'core',
+  services: 'services',
+  utils: 'utils',
+  styles: 'core/css',
+};
+
 function getSourcePath(componentName: string, basePath: string): string {
-  const nonComponentPaths = ['core', 'services', 'utils'];
-  if (nonComponentPaths.includes(basePath)) {
-    return path.join(LIB_PATH, basePath);
+  const nonComponentPath = NON_COMPONENT_PATHS[basePath];
+  if (nonComponentPath) {
+    return path.join(LIB_PATH, nonComponentPath);
   }
   return path.join(LIB_PATH, 'components', basePath);
 }
 
 /**
- * Lê um arquivo do repositório com quebras de linha normalizadas.
+ * Reads a file from the repository with normalized line endings.
  *
- * O conteúdo vai literal para dentro do JSON do registry e é gravado assim no
- * projeto de quem instala. Lido cru no Windows, cada arquivo entraria com
- * `\r\n` embutido — o registry mudaria por inteiro conforme quem rodou o build
- * e todo componente instalado chegaria com CRLF na máquina do usuário.
+ * The content goes verbatim into the registry JSON and is written that way into
+ * the installing project. Read raw on Windows, every file would carry embedded
+ * `\r\n` — the registry would change wholesale depending on who ran the build,
+ * and every installed component would arrive with CRLF on the user's machine.
  */
 function readText(filePath: string): string {
   return fs.readFileSync(filePath, 'utf8').replace(/\r\n/g, '\n');
 }
 
-function readComponentFile(componentName: string, basePath: string, fileName: string): string | null {
+/**
+ * A listed file that is not on disk is a broken publish, not a warning.
+ *
+ * `alert-dialog` shipped five of its six declared files for months because this
+ * only logged: the item went out missing a file and the build still exited 0.
+ */
+function readComponentFile(componentName: string, basePath: string, fileName: string): string {
   const sourcePath = getSourcePath(componentName, basePath);
   const filePath = path.join(sourcePath, fileName);
-  try {
-    if (fs.existsSync(filePath)) {
-      return readText(filePath);
-    }
-    console.warn(`  ⚠️  File not found: ${filePath}`);
-    return null;
-  } catch (error) {
-    console.warn(`  ⚠️  Error reading file: ${filePath}`, error);
-    return null;
+
+  if (!fs.existsSync(filePath)) {
+    throw new Error(
+      `Registry item "${componentName}" lists a file that does not exist: ${filePath}\n` +
+        'Fix the file list in packages/cli/src/core/registry/registry-data.ts.',
+    );
   }
+
+  return readText(filePath);
 }
 
 /*
- * O campo `docs` do registry foi removido, e não é perda: ele procurava
- * `doc/overview.md` e `doc/api.md`, que a biblioteca abandonou em favor de
- * `doc/api.ts`. Dos 49 itens publicados, exatamente um ainda tinha os arquivos
- * antigos — os outros 45 componentes documentados saíam sem documentação
- * nenhuma, e o MCP respondia "sem docs" para praticamente tudo. Quem responde
- * agora é o `.md` da página, que é completo e existe para os 46.
+ * The registry's `docs` field was removed, and it is no loss: it looked for
+ * `doc/overview.md` and `doc/api.md`, which the library abandoned in favour of
+ * `doc/api.ts`. Of the published items, exactly one still had the old files —
+ * every other documented component went out with no documentation at all, and
+ * the MCP answered "no docs" for practically everything. What answers now is the
+ * page's `.md`, which is complete and exists for all of them.
  */
 
 function readComponentDemos(componentName: string, basePath: string): RegistryFile[] {
@@ -130,23 +150,19 @@ function buildComponentJson(component: ComponentRegistry): RegistryItem | null {
   const basePath = component.basePath ?? component.name;
 
   for (const file of component.files) {
-    const content = readComponentFile(component.name, basePath, file.name);
-    if (content !== null) {
-      files.push({
-        name: file.name,
-        content,
-      });
-    }
+    files.push({
+      name: file.name,
+      content: readComponentFile(component.name, basePath, file.name),
+    });
   }
 
   if (files.length === 0) {
-    console.warn(`  ⚠️  No files found for component: ${component.name}`);
-    return null;
+    throw new Error(`Registry item "${component.name}" declares no files.`);
   }
 
   const item: RegistryItem = {
-    // O item tem forma própria — arquivos com conteúdo, e os ícones dos demos
-    // que o índice não carrega —, então tem schema próprio para apontar.
+    // The item has a shape of its own — files with content, and the demo icons
+    // the index does not carry — so it points at a schema of its own.
     $schema: 'https://zardui.com/schema/registry-item.json',
     name: component.name,
     type: 'registry:component',
@@ -169,16 +185,16 @@ function buildComponentJson(component: ComponentRegistry): RegistryItem | null {
     item.registryDependencies = component.registryDependencies;
   }
 
-  // Os demos são lidos, mas não publicados: quem os consumia era o MCP, que
-  // agora lê o `.md` da página — um documento com instalação, uso, exemplos e
-  // API de uma vez, em vez de fragmentos de código soltos. Aqui eles servem
-  // só para o mapeamento de ícones, porque metade dos componentes que usam
-  // ícone só o usa nos exemplos.
+  // The demos are read but not published: the MCP was what consumed them, and it
+  // now reads the page's `.md` — one document with installation, usage, examples
+  // and API at once, rather than loose code fragments. Here they serve only the
+  // icon mapping, because half the components that use an icon only use it in
+  // the examples.
   const demos = readComponentDemos(component.name, basePath);
 
-  // Lidos do próprio código, nunca declarados à mão: uma lista escrita no
-  // registry-data envelheceria em silêncio no primeiro ícone trocado, e o campo
-  // existe justamente para dizer o que o componente desenha de verdade.
+  // Read from the code itself, never declared by hand: a list written in
+  // registry-data would go stale in silence at the first icon swapped, and the
+  // field exists precisely to say what the component actually draws.
   item.icons = collectIcons(
     files.map(file => file.content),
     demos.map(demo => demo.content),
@@ -188,11 +204,11 @@ function buildComponentJson(component: ComponentRegistry): RegistryItem | null {
 }
 
 /**
- * `icons.json` — as famílias suportadas e a tabela que traduz entre elas.
+ * `icons.json` — the supported families and the table that translates between them.
  *
- * Publicar isto é o que faz uma família nova valer para quem já tem a CLI
- * instalada: ela lê daqui em vez da cópia embutida, então acrescentar uma coluna
- * é um deploy do site, e não um release do pacote.
+ * Publishing this is what makes a new family work for someone who already has the
+ * CLI installed: it reads from here instead of the bundled copy, so adding a
+ * column is a site deploy, not a package release.
  */
 function buildIconCatalog(): { $schema: string; schemaVersion: number; families: unknown; icons: unknown } {
   return {
@@ -239,8 +255,8 @@ function buildRegistryIndex(items: RegistryItem[]): RegistryIndex {
       ...(item.dependencies?.length && { dependencies: item.dependencies }),
       ...(item.devDependencies?.length && { devDependencies: item.devDependencies }),
       ...(item.registryDependencies?.length && { registryDependencies: item.registryDependencies }),
-      // O índice carrega só o que o `add` instala: os ícones dos demos não
-      // influenciam dependência nenhuma e o índice é baixado a cada comando.
+      // The index carries only what `add` installs: the demo icons influence no
+      // dependency, and the index is downloaded on every command.
       ...(item.icons && {
         icons: { family: item.icons.family, symbols: item.icons.symbols, tokens: item.icons.tokens },
       }),

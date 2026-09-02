@@ -74,8 +74,6 @@ import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
       </nav>
     </aside>
   `,
-
-  standalone: true,
   // `display: contents` removes the host box from layout so the inner <aside>
   // becomes the direct grid item. Without this, the host wrapper (kept at the
   // aside's own height by the grid's `items-start`) leaves the sticky no travel

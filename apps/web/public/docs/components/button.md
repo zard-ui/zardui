@@ -248,26 +248,26 @@ import { ZardButtonComponent } from '../button.component';
   template: `
     <div class="flex flex-col items-start gap-8 sm:flex-row">
       <div class="flex items-start gap-2">
-        <button z-button zSize="xs" zType="outline">Extra Small</button>
-        <button z-button zSize="icon-xs" zType="outline" aria-label="Submit">
+        <button type="button" z-button zSize="xs" zType="outline">Extra Small</button>
+        <button type="button" z-button zSize="icon-xs" zType="outline" aria-label="Submit">
           <ng-icon name="lucideArrowUpRight" />
         </button>
       </div>
       <div class="flex items-start gap-2">
-        <button z-button zSize="sm" zType="outline">Small</button>
-        <button z-button zSize="icon-sm" zType="outline" aria-label="Submit">
+        <button type="button" z-button zSize="sm" zType="outline">Small</button>
+        <button type="button" z-button zSize="icon-sm" zType="outline" aria-label="Submit">
           <ng-icon name="lucideArrowUpRight" />
         </button>
       </div>
       <div class="flex items-start gap-2">
-        <button z-button zType="outline">Default</button>
-        <button z-button zSize="icon" zType="outline" aria-label="Submit">
+        <button type="button" z-button zType="outline">Default</button>
+        <button type="button" z-button zSize="icon" zType="outline" aria-label="Submit">
           <ng-icon name="lucideArrowUpRight" />
         </button>
       </div>
       <div class="flex items-start gap-2">
-        <button z-button zType="outline" zSize="lg">Large</button>
-        <button z-button zSize="icon-lg" zType="outline" aria-label="Submit">
+        <button type="button" z-button zType="outline" zSize="lg">Large</button>
+        <button type="button" z-button zSize="icon-lg" zType="outline" aria-label="Submit">
           <ng-icon name="lucideArrowUpRight" />
         </button>
       </div>
@@ -290,7 +290,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-default',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button>Button</button>
+    <button type="button" z-button>Button</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -308,7 +308,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-outline',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="outline">Outline</button>
+    <button type="button" z-button zType="outline">Outline</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -326,7 +326,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-secondary',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="secondary">Secondary</button>
+    <button type="button" z-button zType="secondary">Secondary</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -344,7 +344,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-ghost',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="ghost">Ghost</button>
+    <button type="button" z-button zType="ghost">Ghost</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -362,7 +362,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-destructive',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="destructive">Destructive</button>
+    <button type="button" z-button zType="destructive">Destructive</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -380,7 +380,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-link',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="link">Link</button>
+    <button type="button" z-button zType="link">Link</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -401,7 +401,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-icon',
   imports: [ZardButtonComponent, NgIcon],
   template: `
-    <button z-button zType="outline" zSize="icon" aria-label="Submit">
+    <button type="button" z-button zType="outline" zSize="icon" aria-label="Submit">
       <ng-icon name="lucideCircleFadingArrowUp" />
     </button>
   `,
@@ -427,7 +427,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-with-icon',
   imports: [ZardButtonComponent, NgIcon],
   template: `
-    <button z-button zType="outline" zSize="sm">
+    <button type="button" z-button zType="outline" zSize="sm">
       <ng-icon name="lucideGitBranch" />
       New Branch
     </button>
@@ -455,7 +455,7 @@ import { ZardButtonComponent } from '../button.component';
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <div class="flex flex-col gap-8">
-      <button z-button zType="outline" zSize="icon" class="rounded-full" aria-label="Submit">
+      <button type="button" z-button zType="outline" zSize="icon" class="rounded-full" aria-label="Submit">
         <ng-icon name="lucideArrowUp" />
       </button>
     </div>
@@ -483,8 +483,8 @@ import { ZardButtonComponent } from '../button.component';
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <div class="flex gap-2">
-      <button z-button zType="outline" [zLoading]="true" [zDisabled]="true">Generating</button>
-      <button z-button zType="secondary" [zDisabled]="true">
+      <button type="button" z-button zType="outline" [zLoading]="true" [zDisabled]="true">Generating</button>
+      <button type="button" z-button zType="secondary" [zDisabled]="true">
         Downloading
         <ng-icon name="lucideLoaderCircle" class="animate-spin" />
       </button>
@@ -658,11 +658,12 @@ Displays a button or a component that looks like a button.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zDisabled` | Button disabled state | `boolean` | `false` |
-| `zLoading` | Button loading state | `boolean` | `false` |
-| `zShape` | Button shape | `'default' \| 'circle' \| 'square'` | `'default'` |
-| `zSize` | Button size | `'default' \| 'xs' \| 'sm' \| 'lg' \| 'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'default'` |
-| `zType` | Button type | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'default'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zDisabled]` | Button disabled state | `boolean` | `false` |
+| `[zLoading]` | Button loading state | `boolean` | `false` |
+| `[zShape]` | Button shape | `'default' \| 'circle' \| 'square'` | `'default'` |
+| `[zSize]` | Button size | `'default' \| 'xs' \| 'sm' \| 'lg' \| 'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'default'` |
+| `[zType]` | Button type | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'default'` |
 
 ---
 

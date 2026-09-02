@@ -34,7 +34,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import { switchVariants, type ZardSwitchSizeVariants } from './switch.variants';
 
@@ -81,6 +82,9 @@ type OnChangeType = (value: boolean) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'switch',
+  },
   exportAs: 'zSwitch',
 })
 export class ZardSwitchComponent implements ControlValueAccessor {
@@ -168,7 +172,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
 ### Description
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
@@ -185,6 +189,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
       <z-switch zId="switch-focus-mode" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSwitchDescriptionComponent {}
 ```
@@ -194,7 +199,7 @@ export class ZardDemoSwitchDescriptionComponent {}
 Card-style selection where `FieldLabel` wraps the entire `Field` for a clickable card pattern.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
@@ -224,6 +229,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
       </label>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSwitchChoiceCardComponent {}
 ```
@@ -233,7 +239,7 @@ export class ZardDemoSwitchChoiceCardComponent {}
 Add the `zDisabled` prop to the `Switch` component to disable the switch. Add the `data-disabled` prop to the `Field` component for styling.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
@@ -247,6 +253,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
       <label z-field-label for="switch-disabled-unchecked">Disabled</label>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSwitchDisabledComponent {}
 ```
@@ -256,7 +263,7 @@ export class ZardDemoSwitchDisabledComponent {}
 Add the `zInvalid` prop to the `Switch` component to indicate an invalid state. Add the `data-invalid` prop to the `Field` component for styling.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
@@ -273,6 +280,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
       <z-switch zId="switch-terms" zInvalid />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSwitchInvalidComponent {}
 ```
@@ -282,7 +290,7 @@ export class ZardDemoSwitchInvalidComponent {}
 Use the `zSize` prop to change the size of the switch.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
 
@@ -295,6 +303,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
       <z-switch>Default</z-switch>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSwitchSizeComponent {}
 ```

@@ -7,7 +7,7 @@ import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
 import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
 
 @Component({
-  selector: 'zard-demo-sheet-preview-form',
+  selector: 'z-demo-sheet-preview-form',
   imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
   template: `
     <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">

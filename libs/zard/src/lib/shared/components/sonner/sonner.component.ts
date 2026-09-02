@@ -91,6 +91,9 @@ const DEFAULT_TOAST_OPTIONS: ToasterProps['toastOptions'] = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCircleCheck, lucideInfo, lucideLoader2, lucideOctagonX, lucideTriangleAlert })],
+  host: {
+    'data-slot': 'sonner',
+  },
   exportAs: 'zSonner',
 })
 export class ZardSonnerComponent {
@@ -116,7 +119,9 @@ export class ZardSonnerComponent {
   protected readonly resolvedStyle = computed(() => ({ ...DEFAULT_STYLE, ...(this.style() ?? {}) }));
   protected readonly resolvedToastOptions = computed<ToasterProps['toastOptions']>(() => {
     const provided = this.toastOptions();
-    if (!provided) return DEFAULT_TOAST_OPTIONS;
+    if (!provided) {
+      return DEFAULT_TOAST_OPTIONS;
+    }
     return {
       ...DEFAULT_TOAST_OPTIONS,
       ...provided,
@@ -185,7 +190,9 @@ export class ZardSonnerComponent {
   }
 
   private demote(): void {
-    if (!this.host.hasAttribute('popover')) return;
+    if (!this.host.hasAttribute('popover')) {
+      return;
+    }
 
     try {
       this.host.hidePopover();

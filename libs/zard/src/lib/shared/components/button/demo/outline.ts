@@ -6,7 +6,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-outline',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="outline">Outline</button>
+    <button type="button" z-button zType="outline">Outline</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

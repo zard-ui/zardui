@@ -105,7 +105,9 @@ export default [
     files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts', '**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
     // Override or add rules here
     rules: {
-      '@stylistic/indent': ['error', 2],
+      // Indentation is Prettier's job. Keeping @stylistic/indent on as well makes the
+      // two disagree on nested ternaries and object literals, and every disagreement
+      // is an unfixable error (Prettier reformats it right back).
       '@stylistic/max-len': [
         'error',
         { code: 120, ignoreStrings: true, ignoreUrls: true, ignoreTemplateLiterals: true },
@@ -113,12 +115,11 @@ export default [
     },
   },
   {
-    // Código vendorizado do terminal-engine: manipula bytes ANSI e mocks de TTY,
-    // então convive mal com regras pensadas para código de aplicação. A formatação
-    // continua garantida pelo Prettier.
+    // The vendored terminal-engine code: it manipulates ANSI bytes and TTY mocks,
+    // so it sits badly with rules written for application code. Formatting is still
+    // guaranteed by Prettier.
     files: ['packages/cli/src/ui/engine/**/*.ts'],
     rules: {
-      '@stylistic/indent': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       'no-control-regex': 'off',

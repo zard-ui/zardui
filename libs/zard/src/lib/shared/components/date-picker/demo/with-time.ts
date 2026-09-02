@@ -9,7 +9,6 @@ import { ZardDatePickerComponent } from '../date-picker.component';
 @Component({
   selector: 'z-demo-date-picker-with-time',
   imports: [ZardDatePickerComponent, ZardFieldImports, ZardInputComponent],
-  standalone: true,
   template: `
     <!-- A fixed width, not max-w-*: the field group is w-full, so it has nothing to resolve against. -->
     <div z-field-group class="mx-auto w-xs flex-row">

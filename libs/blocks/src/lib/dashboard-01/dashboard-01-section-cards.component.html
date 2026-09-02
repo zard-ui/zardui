@@ -1,0 +1,28 @@
+<div
+  class="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs sm:grid-cols-2 lg:px-6 xl:grid-cols-4"
+>
+  @for (card of cards; track card.description) {
+    <z-card>
+      <z-card-header>
+        <z-card-description [zDescription]="card.description" />
+        <!-- `z-card-title` renders its `zTitle` input, not projected content. -->
+        <z-card-title [zTitle]="card.value" class="text-2xl font-semibold tabular-nums lg:text-3xl" />
+
+        <z-card-action>
+          <z-badge zType="outline">
+            <ng-icon [name]="trendIcon(card.trend)" />
+            {{ card.badge }}
+          </z-badge>
+        </z-card-action>
+      </z-card-header>
+
+      <z-card-footer class="flex-col items-start gap-1.5 bg-transparent text-sm">
+        <div class="line-clamp-1 flex gap-2 font-medium">
+          {{ card.headline }}
+          <ng-icon [name]="trendIcon(card.trend)" class="size-4" />
+        </div>
+        <div class="text-muted-foreground">{{ card.caption }}</div>
+      </z-card-footer>
+    </z-card>
+  }
+</div>

@@ -7,7 +7,6 @@ import { ZardDatePickerComponent } from '../date-picker.component';
 @Component({
   selector: 'z-demo-date-picker-preview',
   imports: [ZardDatePickerComponent],
-  standalone: true,
   template: `
     <z-date-picker class="mx-auto" [(value)]="selectedDate" />
   `,

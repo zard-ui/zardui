@@ -4,9 +4,8 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-multiple',
+  selector: 'z-demo-combobox-multiple',
   imports: [ZardComboboxImports],
-  standalone: true,
   template: `
     <z-combobox zMultiple zAutoHighlight zWidth="full" [(zValue)]="value">
       <z-combobox-chips class="w-full max-w-xs">

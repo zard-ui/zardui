@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck } from '@ng-icons/lucide';
@@ -32,6 +32,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
       </z-bubble>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCheck })],
   host: { class: 'contents' },
 })

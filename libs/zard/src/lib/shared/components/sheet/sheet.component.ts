@@ -21,6 +21,7 @@ import {
   type Type,
   viewChild,
   type ViewContainerRef,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -29,7 +30,8 @@ import type { ClassValue } from 'clsx';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import type { ZardSheetRef } from './sheet-ref';
 import {
@@ -214,6 +216,7 @@ export class ZardSheetOptions<T, U> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideX })],
   host: {
     'data-slot': 'sheet-content',

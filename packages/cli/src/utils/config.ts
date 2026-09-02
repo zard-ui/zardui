@@ -46,29 +46,29 @@ const configSchema = z.object({
   preset: presetConfigSchema.optional(),
   appConfigFile: z.string().default('src/app/app.config.ts'),
   style: z.enum(['css']).default('css'),
-  // A família de ícones em que os componentes são gravados. Ausente nos
-  // arquivos escritos antes da propriedade — e lucide é o que eles usam.
+  // The icon family the components are written in. Absent from files written
+  // before the property existed — and lucide is what those use.
   //
-  // Não é um enum: as famílias válidas são as que o registry publica no momento
-  // da execução, e não as que existiam quando esta CLI foi compilada. Fechar a
-  // lista aqui faria uma família nova ser recusada por uma CLI velha, que é
-  // exatamente o que o catálogo remoto veio evitar. Quem valida o valor é
-  // `assertIconFamily`, contra o catálogo, e com uma mensagem que diz quais são.
+  // Not an enum: the valid families are the ones the registry publishes at run
+  // time, not the ones that existed when this CLI was compiled. Closing the list
+  // here would make an old CLI reject a new family, which is exactly what the
+  // remote catalog exists to avoid. `assertIconFamily` validates the value
+  // against the catalog, with a message that names the options.
   icons: z.string().default(SOURCE_ICON_FAMILY),
-  // Direção do layout. Ainda não muda o que é instalado: existe para o projeto
-  // declarar a intenção, e para quem lê o arquivo saber que o campo é nosso.
+  // Layout direction. It does not change what gets installed yet: it exists so
+  // the project can declare the intent, and so a reader knows the field is ours.
   rtl: z.boolean().default(false),
-  // Ausente nos components.json escritos antes do menu de tipo de projeto;
-  // aplicação Angular é o que eles descrevem.
+  // Absent from components.json files written before the project-type menu; an
+  // Angular application is what those describe.
   projectType: z.enum(['angular', 'angular-library', 'nx', 'nx-library', 'analog']).default('angular'),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']).default('npm'),
   registryUrl: z.string().optional(),
   tailwind: z
     .object({
       css: z.string().default('src/styles.css'),
-      baseColor: z.string().default('slate'),
+      baseColor: z.string().default('neutral'),
     })
-    .default({ css: 'src/styles.css', baseColor: 'slate' }),
+    .default({ css: 'src/styles.css', baseColor: 'neutral' }),
   baseUrl: z.string().default('src/app'),
   aliases: z
     .object({
@@ -123,7 +123,7 @@ export const DEFAULT_CONFIG: Config = {
   packageManager: 'npm',
   tailwind: {
     css: 'src/styles.css',
-    baseColor: 'slate',
+    baseColor: 'neutral',
   },
   baseUrl: 'src/app',
   aliases: {
@@ -158,12 +158,12 @@ export async function getConfig(cwd: string): Promise<Config | null> {
 }
 
 /**
- * Separa o prefixo do alias do caminho que vem depois dele.
+ * Splits an alias prefix from the path that follows it.
  *
- * `@`, `@app`, `~` — o nome não importa: o prefixo é um apelido para `baseUrl`,
- * e o resto é o caminho dentro do projeto. Tratar só `@/` fazia um alias como
- * `@app/components` escapar da substituição e virar uma pasta literal chamada
- * `@app` na raiz, fora de qualquer coisa que o tsconfig mapeie.
+ * `@`, `@app`, `~` — the name does not matter: the prefix is a nickname for
+ * `baseUrl`, and the rest is the path inside the project. Handling only `@/`
+ * let an alias like `@app/components` escape the substitution and become a
+ * literal folder named `@app` at the root, outside anything the tsconfig maps.
  */
 export function splitAlias(alias: string): { prefix: string; rest: string } {
   const clean = alias.replace(/\/+$/, '');
@@ -174,7 +174,7 @@ export function splitAlias(alias: string): { prefix: string; rest: string } {
   return { prefix: clean.slice(0, separator), rest: clean.slice(separator + 1) };
 }
 
-/** O prefixo do alias, com `/*` — a chave que o tsconfig precisa mapear. */
+/** The alias prefix, with `/*` — the key the tsconfig has to map. */
 export function aliasPattern(alias: string): string {
   return `${splitAlias(alias).prefix}/*`;
 }

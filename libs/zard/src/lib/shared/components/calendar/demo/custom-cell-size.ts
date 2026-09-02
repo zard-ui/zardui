@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 
@@ -7,7 +7,6 @@ import { ZardCalendarComponent } from '../calendar.component';
 @Component({
   selector: 'z-demo-calendar-custom-cell-size',
   imports: [ZardCalendarComponent, ZardCardImports],
-  standalone: true,
   template: `
     <z-card zSize="sm" class="mx-auto w-fit">
       <z-card-content>
@@ -20,6 +19,7 @@ import { ZardCalendarComponent } from '../calendar.component';
       </z-card-content>
     </z-card>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCalendarCustomCellSizeComponent {
   readonly dateRange = signal<Date[] | null>(null);
