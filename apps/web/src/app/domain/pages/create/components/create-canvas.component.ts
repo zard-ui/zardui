@@ -1,154 +1,144 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
 import {
-  BlockAppearanceSettingsComponent,
-  BlockButtonGroupNestedComponent,
-  BlockButtonGroupPopoverComponent,
-  BlockButtonGroupToolbarComponent,
-  BlockEmptyAvatarGroupComponent,
-  BlockFieldCheckboxComponent,
-  BlockFieldHearComponent,
-  BlockFieldSeparatorComponent,
-  BlockFieldSliderComponent,
-  BlockInputGroupChatComponent,
-  BlockInputGroupSecureComponent,
-  BlockInputGroupStackComponent,
-  BlockItemTwoFactorComponent,
-  BlockItemVerifiedComponent,
-  BlockNotionPromptFormComponent,
-  BlockPaymentFormComponent,
-  BlockSpinnerBadgesComponent,
-  BlockSpinnerEmptyComponent,
-} from '../../home/components/blocks';
+  CardAccountAccessComponent,
+  CardAnalyticsComponent,
+  CardClaimableBalanceComponent,
+  CardContributionHistoryComponent,
+  CardDividendIncomeComponent,
+  CardEmptyDistributeTrackComponent,
+  CardNewChatComponent,
+  CardNewMilestoneComponent,
+  CardNotificationSettingsComponent,
+  CardPaymentsComponent,
+  CardPayoutThresholdComponent,
+  CardPowerUsageComponent,
+  CardQrConnectComponent,
+  CardSavingsTargetsComponent,
+  CardSidebarNavComponent,
+  CardTransferFundsComponent,
+  CardUiElementsComponent,
+} from '../../home/components/cards';
 import { CreateBuilderService } from '../services/create-builder.service';
 
 /**
- * O canvas: componentes reais, com os tokens do preset aplicados no container.
+ * O canvas: os mesmos cards da home, com os tokens do preset aplicados.
  *
- * São os mesmos blocos da home — os mesmos componentes da biblioteca —, então o
- * preview é honesto por construção: não existe uma versão "de demonstração" que
- * possa divergir do que o `add` instala.
+ * Serem os mesmos é o ponto. Não existe uma versão "de demonstração" que possa
+ * divergir do que o `add` instala — o que a pessoa vê aqui é literalmente o que
+ * a home mostra, com outras variáveis CSS.
  *
- * O mosaico é deliberadamente **cortado** nas bordas direita e inferior. A
- * tentação é encolhê-lo até caber, e isso mataria o efeito: são os cards saindo
- * pela borda que comunicam "tem mais coisa aqui" em vez de "isto é tudo".
+ * O mosaico é deliberadamente **cortado** nas bordas. A tentação é encolhê-lo
+ * até caber, e isso mataria o efeito: são os cards saindo pela borda que
+ * comunicam "tem mais coisa aqui" em vez de "isto é tudo".
+ *
+ * As duas páginas existem porque um preset muda coisas que nenhum conjunto de
+ * quatro colunas mostra ao mesmo tempo — a página 2 é onde estão o vazio, o
+ * gráfico e a lista de preferências.
  */
 @Component({
   selector: 'z-create-canvas',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    BlockPaymentFormComponent,
-    BlockEmptyAvatarGroupComponent,
-    BlockSpinnerBadgesComponent,
-    BlockInputGroupChatComponent,
-    BlockFieldSliderComponent,
-    BlockInputGroupStackComponent,
-    BlockInputGroupSecureComponent,
-    BlockItemTwoFactorComponent,
-    BlockItemVerifiedComponent,
-    BlockFieldSeparatorComponent,
-    BlockAppearanceSettingsComponent,
-    BlockNotionPromptFormComponent,
-    BlockButtonGroupToolbarComponent,
-    BlockFieldCheckboxComponent,
-    BlockButtonGroupNestedComponent,
-    BlockButtonGroupPopoverComponent,
-    BlockFieldHearComponent,
-    BlockSpinnerEmptyComponent,
+    CardUiElementsComponent,
+    CardSidebarNavComponent,
+    CardSavingsTargetsComponent,
+    CardContributionHistoryComponent,
+    CardClaimableBalanceComponent,
+    CardDividendIncomeComponent,
+    CardNewMilestoneComponent,
+    CardPayoutThresholdComponent,
+    CardAccountAccessComponent,
+    CardQrConnectComponent,
+    CardNewChatComponent,
+    CardPaymentsComponent,
+    CardTransferFundsComponent,
+    CardEmptyDistributeTrackComponent,
+    CardAnalyticsComponent,
+    CardNotificationSettingsComponent,
+    CardPowerUsageComponent,
   ],
-  host: { class: 'relative block h-full overflow-hidden rounded-[18px]' },
+  host: {
+    class:
+      'ring-foreground/10 md:ring-muted dark:ring-foreground/10 relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[18px] ring',
+  },
   template: `
     <div
-      class="bg-muted text-foreground h-full overflow-hidden"
+      class="bg-muted text-foreground dark:bg-background no-scrollbar h-full min-h-0 overflow-x-hidden overflow-y-auto"
       [class.dark]="builder.previewDark()"
       [style]="builder.scopedStyles()"
       [attr.dir]="builder.preset().rtl ? 'rtl' : 'ltr'"
     >
-      <!-- Colunas que terminam onde o conteúdo termina, sem altura imposta: o que
-           passa da borda é cortado pelo container, e é esse corte que comunica
-           "tem mais coisa aqui". -->
-      <div class="grid grid-cols-1 items-start gap-6 p-6 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      <!-- Colunas de largura fixa, e não um grid que se ajusta: é o que faz o
+           mosaico transbordar a moldura e ser cortado nela. Um grid elástico
+           caberia sempre, e um preview que cabe sempre parece um catálogo
+           completo com quatro cards.
+
+           400px por coluna, e não os 320px da parede da home: aqui cabem menos
+           colunas de propósito. O preview existe para julgar tipografia, raio e
+           espaçamento de um card, e num terço a menos de largura o que se julga
+           é a compressão, não o preset. -->
+      <div
+        class="3xl:[--canvas-gap:--spacing(10)] grid auto-cols-(--canvas-col) grid-flow-col items-start gap-(--canvas-gap) p-(--canvas-gap) [--canvas-col:25rem] [--canvas-gap:--spacing(7)]"
+      >
         @if (page() === 1) {
-          <div class="flex flex-col gap-6 *:w-full">
-            <z-block-payment-form />
-            <z-block-spinner-badges />
-            <z-block-field-checkbox />
+          <div class="flex flex-col gap-(--canvas-gap)">
+            <z-card-ui-elements />
+            <z-card-sidebar-nav />
+            <z-card-savings-targets />
           </div>
-          <div class="hidden flex-col gap-6 *:w-full md:flex">
-            <z-block-empty-avatar-group />
-            <z-block-input-group-chat />
-            <z-block-field-slider />
-            <z-block-input-group-stack />
-            <z-block-item-verified />
-            <z-block-spinner-empty />
+          <div class="flex flex-col gap-(--canvas-gap)">
+            <z-card-contribution-history />
+            <z-card-claimable-balance />
+            <z-card-dividend-income />
           </div>
-          <div class="hidden flex-col gap-6 *:w-full xl:flex">
-            <z-block-input-group-secure />
-            <z-block-item-two-factor />
-            <z-block-field-separator>Appearance Settings</z-block-field-separator>
-            <z-block-appearance-settings />
-            <z-block-field-hear />
+          <div class="flex flex-col gap-(--canvas-gap)">
+            <z-card-new-milestone />
+            <z-card-payout-threshold />
+            <z-card-account-access />
           </div>
-          <div class="hidden flex-col gap-6 *:w-full 2xl:flex">
-            <z-block-notion-prompt-form />
-            <z-block-button-group-toolbar />
-            <div class="flex justify-between gap-4">
-              <z-block-button-group-nested />
-              <z-block-button-group-popover />
-            </div>
-            <z-block-field-checkbox />
-            <z-block-item-verified />
-            <z-block-field-slider />
-            <z-block-empty-avatar-group />
+          <div class="flex flex-col gap-(--canvas-gap)">
+            <z-card-qr-connect />
+            <z-card-new-chat />
+            <z-card-payments />
           </div>
         } @else {
-          <div class="flex flex-col gap-6 *:w-full">
-            <z-block-appearance-settings />
-            <z-block-field-checkbox />
-            <z-block-field-hear />
-            <z-block-spinner-badges />
+          <div class="flex flex-col gap-(--canvas-gap)">
+            <z-card-notification-settings />
+            <z-card-power-usage />
+            <z-card-analytics />
           </div>
-          <div class="hidden flex-col gap-6 *:w-full md:flex">
-            <z-block-notion-prompt-form />
-            <z-block-button-group-toolbar />
-            <div class="flex justify-between gap-4">
-              <z-block-button-group-nested />
-              <z-block-button-group-popover />
-            </div>
-            <z-block-spinner-empty />
-            <z-block-input-group-chat />
-            <z-block-item-two-factor />
+          <div class="flex flex-col gap-(--canvas-gap)">
+            <z-card-transfer-funds />
+            <z-card-empty-distribute-track />
+            <z-card-claimable-balance />
           </div>
-          <div class="hidden flex-col gap-6 *:w-full xl:flex">
-            <z-block-item-verified />
-            <z-block-field-slider />
-            <z-block-input-group-secure />
-            <z-block-empty-avatar-group />
-            <z-block-input-group-stack />
+          <div class="flex flex-col gap-(--canvas-gap)">
+            <z-card-payments />
+            <z-card-contribution-history />
+            <z-card-qr-connect />
           </div>
-          <div class="hidden flex-col gap-6 *:w-full 2xl:flex">
-            <z-block-payment-form />
-            <z-block-field-separator>Appearance Settings</z-block-field-separator>
-            <z-block-appearance-settings />
-            <z-block-spinner-badges />
+          <div class="flex flex-col gap-(--canvas-gap)">
+            <z-card-account-access />
+            <z-card-savings-targets />
+            <z-card-dividend-income />
           </div>
         }
       </div>
     </div>
 
-    <nav class="absolute right-4 bottom-4 flex gap-1.5" aria-label="Canvas pages">
+    <nav
+      class="dark bg-card/90 absolute right-3 bottom-3 z-20 flex items-center gap-1 rounded-xl p-1 shadow-xl backdrop-blur-xl"
+      aria-label="Preview pages"
+    >
       @for (item of pages; track item) {
         <button
           type="button"
-          class="grid h-7 w-9 place-items-center rounded-full text-[11px] font-medium transition-colors"
-          [class]="
-            page() === item
-              ? 'bg-foreground text-background'
-              : 'bg-background/70 text-muted-foreground ring-border hover:text-foreground ring-1'
-          "
+          class="text-muted-foreground hover:text-foreground h-7 min-w-8 rounded-lg px-2.5 text-xs font-medium transition-colors"
+          [class]="page() === item ? 'bg-accent text-accent-foreground' : ''"
           [attr.aria-current]="page() === item ? 'true' : null"
-          [attr.aria-label]="'Canvas page ' + item"
+          [attr.aria-label]="'Preview page ' + item"
           (click)="page.set(item)"
         >
           {{ item.toString().padStart(2, '0') }}

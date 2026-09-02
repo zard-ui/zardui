@@ -1,8 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, type OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideSettings2, lucideX } from '@ng-icons/lucide';
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
@@ -15,52 +12,32 @@ import { CreateBuilderService } from './services/create-builder.service';
  * `/create` — o builder do design system.
  *
  * A página ocupa a altura da janela e não rola: quem rola é a lista de controles
- * e o canvas. O painel flutua sobre o canvas com um respiro, e o canvas é
- * cortado nas bordas de propósito (ver `create-canvas`).
+ * e o canvas. Em telas grandes é `flex-row-reverse` — o canvas vem primeiro no
+ * DOM porque é ele o conteúdo, e o painel é a ferramenta; a inversão visual
+ * coloca a ferramenta à esquerda, onde a leitura começa, sem inverter a ordem de
+ * tabulação.
  *
- * Abaixo de 1024px o painel vira uma folha acionada por um botão flutuante — em
- * 224px de controles sobre 390px de tela não sobraria preview nenhum, e o
- * preview é a razão da página existir.
+ * Os atalhos vivem no painel, que é quem sabe o que cada um faz.
  */
 @Component({
   selector: 'z-create',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CreateMenuComponent, CreateCanvasComponent, CreateCodeDialogComponent, NgIcon],
+  imports: [CreateMenuComponent, CreateCanvasComponent, CreateCodeDialogComponent],
   providers: [CreateBuilderService],
-  viewProviders: [provideIcons({ lucideSettings2, lucideX })],
   template: `
-    <main class="relative flex h-[calc(100svh-4rem)] overflow-hidden p-4">
-      <div class="bg-muted h-full w-full overflow-hidden rounded-[18px]">
+    <main
+      class="section-soft relative flex h-[calc(100svh-var(--header-height))] min-h-0 flex-col overflow-hidden [--customizer-width:--spacing(56)] [--gap:--spacing(4)] md:[--gap:--spacing(6)] 2xl:[--customizer-width:--spacing(60)]"
+    >
+      <div class="flex min-h-0 flex-1 flex-col gap-(--gap) p-(--gap) pt-[calc(var(--gap)*0.25)] md:flex-row-reverse">
         <z-create-canvas />
+        <z-create-menu (getCode)="dialogOpen.set(true)" />
       </div>
-
-      @if (sheetOpen()) {
-        <div class="fixed inset-0 z-90 bg-black/50 lg:hidden" (click)="sheetOpen.set(false)"></div>
-      }
-
-      <!-- Um painel só, posicionado de dois jeitos. Renderizar dois deixaria o
-           de baixo no DOM em toda largura de tela: invisível para quem olha,
-           presente para o leitor de tela e para quem navega por teclado. -->
-      <div [class]="menuClasses()">
-        <z-create-menu (getCode)="onGetCode()" />
-      </div>
-
-      <button
-        type="button"
-        class="bg-foreground text-background fixed right-6 bottom-6 z-90 flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium shadow-lg lg:hidden"
-        [attr.aria-expanded]="sheetOpen()"
-        (click)="sheetOpen.set(!sheetOpen())"
-      >
-        <ng-icon [name]="sheetOpen() ? 'lucideX' : 'lucideSettings2'" size="16" />
-        {{ sheetOpen() ? 'Close' : 'Customise' }}
-      </button>
 
       @if (warning()) {
         <p
-          class="bg-background text-foreground absolute top-8 left-1/2 z-80 -translate-x-1/2 rounded-full border px-3 py-1.5 text-xs shadow-sm"
+          class="bg-background text-foreground absolute top-4 left-1/2 z-80 -translate-x-1/2 rounded-full border px-3 py-1.5 text-xs shadow-sm"
           role="status"
-          aria-label="Preset link notice"
         >
           {{ warning() }}
         </p>
@@ -77,28 +54,8 @@ export class CreatePage implements OnInit {
   private readonly seo = inject(SeoService);
   private readonly builder = inject(CreateBuilderService);
 
-  readonly sheetOpen = signal(false);
   readonly dialogOpen = signal(false);
   readonly warning = signal<string | null>(null);
-
-  /**
-   * Onde o painel fica, e se ele está lá.
-   *
-   * Em telas grandes ele flutua sobre o canvas; abaixo de 1024px vira uma folha
-   * que só existe quando pedida — 224px de controles sobre 390px de tela não
-   * deixariam preview nenhum, e o preview é a razão da página existir.
-   */
-  readonly menuClasses = computed(() =>
-    this.sheetOpen()
-      ? 'fixed top-4 bottom-4 left-4 z-95 max-h-[calc(100%-2rem)] lg:absolute lg:top-8 lg:left-8'
-      : 'absolute top-8 left-8 z-40 hidden max-h-[calc(100%-4rem)] lg:block',
-  );
-
-  /** Abrir o dialog por cima da folha empilharia duas camadas modais. */
-  onGetCode(): void {
-    this.sheetOpen.set(false);
-    this.dialogOpen.set(true);
-  }
 
   ngOnInit(): void {
     this.seo.setDocsSeo(

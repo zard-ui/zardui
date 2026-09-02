@@ -58,6 +58,9 @@ const DARK_MODE_OPTIONS: readonly ControlOption[] = [
   { id: 'off', label: 'Off' },
 ];
 
+/** Quantos passos de desfazer a página guarda. */
+const HISTORY_LIMIT = 50;
+
 /** O caminho do core dentro de um projeto recém-inicializado — o que o `init` escreveria. */
 const DEFAULT_CORE_PATH = './app/shared/core';
 
@@ -80,9 +83,22 @@ export class CreateBuilderService {
   private readonly _locked = signal<ReadonlySet<ControlId>>(new Set());
   private readonly _overrides = signal<Partial<Record<ThemeColorKey, string>>>({});
 
+  /**
+   * O histórico como duas pilhas, e não um índice num array.
+   *
+   * Cada mudança empurra o preset anterior em `_past` e esvazia `_future`: é o
+   * comportamento que todo editor tem, e o que faz "desfazer, mexer noutra
+   * coisa" não deixar um ramo órfão alcançável pelo Redo.
+   */
+  private readonly _past = signal<readonly Preset[]>([]);
+  private readonly _future = signal<readonly Preset[]>([]);
+
   readonly catalog = this._catalog.asReadonly();
   readonly preset = this._preset.asReadonly();
   readonly locked = this._locked.asReadonly();
+
+  readonly canUndo = computed(() => this._past().length > 0);
+  readonly canRedo = computed(() => this._future().length > 0);
 
   /**
    * O modo em que o preview é desenhado.
@@ -157,6 +173,7 @@ export class CreateBuilderService {
    */
   applyCode(code: string): { ok: boolean; reason?: string } {
     try {
+      this.record();
       this._preset.set(decodePreset(code, this._catalog()));
       this._overrides.set({});
       return { ok: true };
@@ -167,6 +184,8 @@ export class CreateBuilderService {
   }
 
   select(id: ControlId, value: string): void {
+    this.record();
+
     this._preset.update(preset => {
       if (id === 'darkMode') return { ...preset, darkMode: value === 'off' ? 'off' : 'class' };
       if (id === 'rtl') return { ...preset, rtl: value === 'on' };
@@ -200,6 +219,8 @@ export class CreateBuilderService {
     const catalog = this._catalog();
     const locked = this._locked();
 
+    this.record();
+
     const pick = <T extends CatalogEntry>(entries: readonly T[], current: string): string => {
       const options = selectable(entries);
       return options.length === 0 ? current : (options[Math.floor(Math.random() * options.length)] as T).id;
@@ -218,9 +239,46 @@ export class CreateBuilderService {
   }
 
   reset(): void {
+    this.record();
+
     this._preset.set(DEFAULT_PRESET);
     this._overrides.set({});
     this.syncUrl();
+  }
+
+  /** Volta um passo, guardando o estado atual para o Redo. */
+  undo(): void {
+    const past = this._past();
+    const previous = past.at(-1);
+    if (!previous) return;
+
+    this._past.set(past.slice(0, -1));
+    this._future.update(future => [...future, this._preset()]);
+    this._preset.set(previous);
+    this.syncUrl();
+  }
+
+  redo(): void {
+    const future = this._future();
+    const next = future.at(-1);
+    if (!next) return;
+
+    this._future.set(future.slice(0, -1));
+    this._past.update(past => [...past, this._preset()]);
+    this._preset.set(next);
+    this.syncUrl();
+  }
+
+  /**
+   * Guarda o estado atual antes de mudá-lo.
+   *
+   * O teto de 50 passos existe porque cada entrada é um preset inteiro e a
+   * página vive aberta enquanto alguém experimenta: sem teto, uma sessão longa
+   * de Shuffle acumularia milhares de objetos que ninguém vai desfazer.
+   */
+  private record(): void {
+    this._past.update(past => [...past, this._preset()].slice(-HISTORY_LIMIT));
+    this._future.set([]);
   }
 
   /** O arquivo que substitui o código curto quando há cor editada à mão. */
