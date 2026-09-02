@@ -3,7 +3,7 @@ import { Component, signal } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-demo',
+  selector: 'z-demo-context-menu-preview',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -52,7 +52,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuDemoComponent {
+export class ZardDemoContextMenuPreviewComponent {
   readonly showBookmarks = signal(true);
   readonly showFullUrls = signal(false);
   readonly person = signal('pedro');

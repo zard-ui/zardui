@@ -3,7 +3,7 @@ import { Component, signal } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-radio-demo',
+  selector: 'z-demo-context-menu-radio',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -31,7 +31,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuRadioDemoComponent {
+export class ZardDemoContextMenuRadioComponent {
   readonly person = signal('pedro');
   readonly theme = signal('light');
 }

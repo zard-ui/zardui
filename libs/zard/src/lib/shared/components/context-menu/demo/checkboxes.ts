@@ -3,7 +3,7 @@ import { Component, signal } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-checkboxes-demo',
+  selector: 'z-demo-context-menu-checkboxes',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -24,7 +24,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuCheckboxesDemoComponent {
+export class ZardDemoContextMenuCheckboxesComponent {
   readonly showBookmarksBar = signal(true);
   readonly showFullUrls = signal(false);
   readonly showDeveloperTools = signal(true);
