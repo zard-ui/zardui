@@ -5,10 +5,10 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.co
 
 /** Demonstrates the default hover card behavior and content composition. */
 @Component({
-  selector: 'z-demo-hover-card-default',
+  selector: 'z-demo-hover-card-preview',
   imports: [ZardButtonComponent, ZardHoverCardComponent, ZardHoverCardDirective],
   template: `
-    <button type="button" z-button zType="link" [zHoverCard]="content" [zOpenDelay]="100">Hover Here</button>
+    <button type="button" z-button zType="link" [zHoverCard]="content">Hover Here</button>
 
     <ng-template #content>
       <z-hover-card>
@@ -22,4 +22,4 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.co
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoHoverCardDefaultComponent {}
+export class ZardDemoHoverCardPreviewComponent {}

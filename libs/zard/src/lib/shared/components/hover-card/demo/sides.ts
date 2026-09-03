@@ -5,7 +5,7 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.co
 
 /** Demonstrates every supported hover card placement. */
 @Component({
-  selector: 'z-demo-hover-card-placements',
+  selector: 'z-demo-hover-card-sides',
   imports: [ZardButtonComponent, ZardHoverCardComponent, ZardHoverCardDirective],
   template: `
     <div class="flex flex-wrap gap-2">
