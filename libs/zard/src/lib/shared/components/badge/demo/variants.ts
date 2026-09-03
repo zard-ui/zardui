@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardBadgeComponent } from '../badge.component';
 
 @Component({
-  selector: 'z-demo-badge-default',
+  selector: 'z-demo-badge-variants',
   imports: [ZardBadgeComponent],
   template: `
     <div class="flex flex-col items-center gap-2">
@@ -13,9 +13,10 @@ import { ZardBadgeComponent } from '../badge.component';
         <z-badge zType="destructive">Destructive</z-badge>
         <z-badge zType="outline">Outline</z-badge>
         <z-badge zType="ghost">Ghost</z-badge>
+        <z-badge zType="link">Link</z-badge>
       </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoBadgeDefaultComponent {}
+export class ZardDemoBadgeVariantsComponent {}
