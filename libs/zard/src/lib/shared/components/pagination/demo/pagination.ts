@@ -22,6 +22,7 @@ export const PAGINATION = {
   },
   usage: { importBlock: PAGINATION_USAGE_IMPORT, codeBlock: PAGINATION_USAGE_CODE },
   preview: {
+    name: 'preview',
     component: ZardDemoPaginationPreviewComponent,
     codeData: PAGINATION_DEMO_PREVIEW,
   },
