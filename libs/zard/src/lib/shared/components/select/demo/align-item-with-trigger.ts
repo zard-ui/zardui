@@ -5,7 +5,7 @@ import { ZardSelectImports, type ZardSelectPositionVariants } from '@/shared/com
 import { ZardSwitchComponent } from '@/shared/components/switch';
 
 @Component({
-  selector: 'z-demo-select-align-item',
+  selector: 'z-demo-select-align-item-with-trigger',
   imports: [ZardSelectImports, ZardSwitchComponent, ...ZardFieldImports],
   template: `
     <div z-field-group class="w-full min-w-xs">
@@ -32,7 +32,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSelectAlignItemComponent {
+export class ZardDemoSelectAlignItemWithTriggerComponent {
   readonly alignItem = signal(true);
   readonly selectedFruit = signal('banana');
 

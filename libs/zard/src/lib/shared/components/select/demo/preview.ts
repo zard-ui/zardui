@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
-  selector: 'z-demo-select-default',
+  selector: 'z-demo-select-preview',
   imports: [ZardSelectImports],
   template: `
     <z-select class="w-full min-w-48" zPlaceholder="Select a fruit" [(zValue)]="selectedFruit">
@@ -17,6 +17,6 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSelectDefaultComponent {
+export class ZardDemoSelectPreviewComponent {
   readonly selectedFruit = signal('');
 }

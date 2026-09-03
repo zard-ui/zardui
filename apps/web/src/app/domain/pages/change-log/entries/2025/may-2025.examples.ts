@@ -1,6 +1,6 @@
 import { CHECKBOX_DEMO_PREVIEW } from '@generated/components/checkbox/demo/preview';
 import { RADIO_GROUP_DEMO_PREVIEW } from '@generated/components/radio-group/demo/preview';
-import { SELECT_DEMO_DEFAULT } from '@generated/components/select/demo/default';
+import { SELECT_DEMO_PREVIEW } from '@generated/components/select/demo/preview';
 import { SLIDER_DEMO_DEFAULT } from '@generated/components/slider/demo/default';
 import { SWITCH_DEMO_DEFAULT } from '@generated/components/switch/demo/default';
 import { CHECKBOX_CLI_ADD } from '@generated/installation/cli/add-checkbox';
@@ -11,7 +11,7 @@ import { SWITCH_CLI_ADD } from '@generated/installation/cli/add-switch';
 
 import { ZardDemoCheckboxPreviewComponent } from '@zard/components/checkbox/demo/preview';
 import { ZardDemoRadioGroupPreviewComponent } from '@zard/components/radio-group/demo/preview';
-import { ZardDemoSelectDefaultComponent } from '@zard/components/select/demo/default';
+import { ZardDemoSelectPreviewComponent } from '@zard/components/select/demo/preview';
 import { ZardDemoSliderDefaultComponent } from '@zard/components/slider/demo/default';
 import { ZardDemoSwitchDefaultComponent } from '@zard/components/switch/demo/default';
 
@@ -22,9 +22,9 @@ export const MAY_2025_EXAMPLES: ChangelogExample[] = [
     name: 'default',
     description:
       'Dropdown select with grouped options, multi-select support, keyboard navigation, and custom item rendering.',
-    component: ZardDemoSelectDefaultComponent,
+    component: ZardDemoSelectPreviewComponent,
     componentName: 'select',
-    codeData: SELECT_DEMO_DEFAULT,
+    codeData: SELECT_DEMO_PREVIEW,
     cliAdd: SELECT_CLI_ADD,
   },
   {
