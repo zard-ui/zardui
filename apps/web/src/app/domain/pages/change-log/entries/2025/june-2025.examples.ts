@@ -1,5 +1,5 @@
 import { ALERT_DIALOG_DEMO_PREVIEW } from '@generated/components/alert-dialog/demo/preview';
-import { DIALOG_DEMO_BASIC } from '@generated/components/dialog/demo/basic';
+import { DIALOG_DEMO_PREVIEW } from '@generated/components/dialog/demo/preview';
 import { DROPDOWN_DEMO_DEFAULT } from '@generated/components/dropdown/demo/default';
 import { POPOVER_DEMO_PREVIEW } from '@generated/components/popover/demo/preview';
 import { ALERT_DIALOG_CLI_ADD } from '@generated/installation/cli/add-alert-dialog';
@@ -8,7 +8,7 @@ import { DROPDOWN_CLI_ADD } from '@generated/installation/cli/add-dropdown';
 import { POPOVER_CLI_ADD } from '@generated/installation/cli/add-popover';
 
 import { ZardDemoAlertDialogPreviewComponent } from '@zard/components/alert-dialog/demo/preview';
-import { ZardDemoDialogBasicComponent } from '@zard/components/dialog/demo/basic';
+import { ZardDemoDialogPreviewComponent } from '@zard/components/dialog/demo/preview';
 import { ZardDemoDropdownDefaultComponent } from '@zard/components/dropdown/demo/default';
 import { ZardDemoPopoverPreviewComponent } from '@zard/components/popover/demo/preview';
 
@@ -16,12 +16,12 @@ import { type ChangelogExample } from '../changelog-entry.interface';
 
 export const JUNE_2025_EXAMPLES: ChangelogExample[] = [
   {
-    name: 'basic',
+    name: 'preview',
     description:
       'Modal dialog component for displaying important content that requires user attention with backdrop overlay.',
-    component: ZardDemoDialogBasicComponent,
+    component: ZardDemoDialogPreviewComponent,
     componentName: 'dialog',
-    codeData: DIALOG_DEMO_BASIC,
+    codeData: DIALOG_DEMO_PREVIEW,
     cliAdd: DIALOG_CLI_ADD,
   },
   {

@@ -12,7 +12,7 @@ interface iDialogData {
 }
 
 @Component({
-  selector: 'z-demo-dialog-basic',
+  selector: 'z-demo-dialog-preview-content',
   imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
   template: `
     <form [formGroup]="form" class="grid gap-4">
@@ -28,9 +28,9 @@ interface iDialogData {
     </form>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  exportAs: 'zardDemoDialogBasic',
+  exportAs: 'zardDemoDialogPreviewContent',
 })
-export class ZardDemoDialogBasicInputComponent implements AfterViewInit {
+export class ZardDemoDialogPreviewContentComponent implements AfterViewInit {
   private zData = inject(Z_MODAL_DATA) as iDialogData;
 
   form = new FormGroup({
@@ -46,20 +46,21 @@ export class ZardDemoDialogBasicInputComponent implements AfterViewInit {
 }
 
 @Component({
+  selector: 'z-demo-dialog-preview',
   imports: [ZardDialogImports],
   template: `
     <button type="button" z-button zType="outline" (click)="openDialog()">Edit profile</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoDialogBasicComponent {
+export class ZardDemoDialogPreviewComponent {
   private dialogService = inject(ZardDialogService);
 
   openDialog() {
     this.dialogService.create({
       zTitle: 'Edit Profile',
       zDescription: `Make changes to your profile here. Click save when you're done.`,
-      zContent: ZardDemoDialogBasicInputComponent,
+      zContent: ZardDemoDialogPreviewContentComponent,
       zData: {
         name: 'Samuel Rizzon',
         username: '@samuelrizzondev',

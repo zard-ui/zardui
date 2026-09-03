@@ -1,15 +1,15 @@
-import { DIALOG_DEMO_BASIC } from '@generated/components/dialog/demo/basic';
 import { DIALOG_DEMO_CUSTOM_CLOSE } from '@generated/components/dialog/demo/custom-close';
 import { DIALOG_DEMO_NO_CLOSE_BUTTON } from '@generated/components/dialog/demo/no-close-button';
+import { DIALOG_DEMO_PREVIEW } from '@generated/components/dialog/demo/preview';
 import { DIALOG_DEMO_SCROLLABLE_CONTENT } from '@generated/components/dialog/demo/scrollable-content';
 import { DIALOG_DEMO_STICKY_FOOTER } from '@generated/components/dialog/demo/sticky-footer';
 import { DIALOG_CLI_ADD } from '@generated/installation/cli/add-dialog';
 import { DIALOG_MANUAL_CODE } from '@generated/installation/manual/dialog';
 import { DIALOG_USAGE_CODE, DIALOG_USAGE_IMPORT } from '@generated/usage/dialog';
 
-import { ZardDemoDialogBasicComponent } from './basic';
 import { ZardDemoDialogCustomCloseComponent } from './custom-close';
 import { ZardDemoDialogNoCloseButtonComponent } from './no-close-button';
+import { ZardDemoDialogPreviewComponent } from './preview';
 import { ZardDemoDialogScrollableContentComponent } from './scrollable-content';
 import { ZardDemoDialogStickyFooterComponent } from './sticky-footer';
 import { DIALOG_API } from '../doc/api';
@@ -26,8 +26,8 @@ export const DIALOG = {
   usage: { importBlock: DIALOG_USAGE_IMPORT, codeBlock: DIALOG_USAGE_CODE },
   preview: {
     name: 'preview',
-    component: ZardDemoDialogBasicComponent,
-    codeData: DIALOG_DEMO_BASIC,
+    component: ZardDemoDialogPreviewComponent,
+    codeData: DIALOG_DEMO_PREVIEW,
     column: false,
   },
   examples: [
@@ -39,7 +39,8 @@ export const DIALOG = {
     },
     {
       name: 'no-close-button',
-      description: 'Use `zClosable: false` to hide the close button.',
+      description:
+        'Use `zClosable: false` to hide the close button; press Escape or click outside the dialog to close it.',
       component: ZardDemoDialogNoCloseButtonComponent,
       codeData: DIALOG_DEMO_NO_CLOSE_BUTTON,
     },
