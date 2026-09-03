@@ -13,7 +13,7 @@ import {
 import { ZardCommandImports } from '@/shared/components/command/command.imports';
 
 @Component({
-  selector: 'z-demo-command-default',
+  selector: 'z-demo-command-preview',
   imports: [ZardCommandImports],
   template: `
     <z-command class="min-w-sm" #cmd="zCommand">
@@ -51,4 +51,4 @@ import { ZardCommandImports } from '@/shared/components/command/command.imports'
     }),
   ],
 })
-export class ZardDemoCommandDefaultComponent {}
+export class ZardDemoCommandPreviewComponent {}
