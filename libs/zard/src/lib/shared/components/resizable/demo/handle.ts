@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';
 
 @Component({
-  selector: 'z-demo-resizable-with-handle',
+  selector: 'z-demo-resizable-handle',
   imports: [...ZardResizableImports],
   template: `
     <div class="space-y-4">
@@ -24,4 +24,4 @@ import { ZardResizableImports } from '@/shared/components/resizable/resizable.im
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoResizableWithHandleComponent {}
+export class ZardDemoResizableHandleComponent {}

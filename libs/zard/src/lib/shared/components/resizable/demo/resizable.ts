@@ -1,12 +1,12 @@
+import { RESIZABLE_DEMO_HANDLE } from '@generated/components/resizable/demo/handle';
 import { RESIZABLE_DEMO_PREVIEW } from '@generated/components/resizable/demo/preview';
 import { RESIZABLE_DEMO_VERTICAL } from '@generated/components/resizable/demo/vertical';
-import { RESIZABLE_DEMO_WITH_HANDLE } from '@generated/components/resizable/demo/with-handle';
 import { RESIZABLE_CLI_ADD } from '@generated/installation/cli/add-resizable';
 import { RESIZABLE_MANUAL_CODE } from '@generated/installation/manual/resizable';
 import { RESIZABLE_USAGE_CODE, RESIZABLE_USAGE_IMPORT } from '@generated/usage/resizable';
 
+import { ZardDemoResizableHandleComponent } from '@/shared/components/resizable/demo/handle';
 import { ZardDemoResizableVerticalComponent } from '@/shared/components/resizable/demo/vertical';
-import { ZardDemoResizableWithHandleComponent } from '@/shared/components/resizable/demo/with-handle';
 
 import { ZardDemoResizablePreviewComponent } from './preview';
 import { RESIZABLE_API } from '../doc/api';
@@ -17,6 +17,10 @@ export const RESIZABLE = {
   description: 'A resizable layout component that allows users to resize panels by dragging dividers between them.',
   fullWidth: true,
   api: RESIZABLE_API,
+  about: {
+    description:
+      'A group (`z-resizable`) lays out `z-resizable-panel`s separated by `z-resizable-handle`s; sizes are percentages of the group along its resize axis (0-100, not pixels). `[zDefaultSize]` accepts a bare number/numeric string (treated as a percentage) or an explicit `"50%"`/`"300px"` string — a `px` value is converted to a percentage of the container at layout time. `[zMin]`/`[zMax]` follow the same rule. The `zDefaultSize`s of the panels in one group should add up to 100; if a panel omits it, the remaining space is split evenly.',
+  },
   installData: {
     cliAdd: RESIZABLE_CLI_ADD,
     manualCode: RESIZABLE_MANUAL_CODE,
@@ -35,10 +39,10 @@ export const RESIZABLE = {
       codeData: RESIZABLE_DEMO_VERTICAL,
     },
     {
-      name: 'with-handle',
+      name: 'handle',
       description: 'Use the `zWithHandle` input on `z-resizable-handle` to show a visible handle.',
-      component: ZardDemoResizableWithHandleComponent,
-      codeData: RESIZABLE_DEMO_WITH_HANDLE,
+      component: ZardDemoResizableHandleComponent,
+      codeData: RESIZABLE_DEMO_HANDLE,
     },
   ],
 };
