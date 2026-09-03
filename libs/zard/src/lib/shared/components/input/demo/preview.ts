@@ -4,7 +4,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 
 @Component({
-  selector: 'z-demo-input-default',
+  selector: 'z-demo-input-preview',
   imports: [ZardInputComponent, ...ZardFieldImports],
   template: `
     <div z-field class="w-72">
@@ -15,4 +15,4 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoInputDefaultComponent {}
+export class ZardDemoInputPreviewComponent {}
