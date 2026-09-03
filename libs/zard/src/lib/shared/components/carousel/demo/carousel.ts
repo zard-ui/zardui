@@ -20,7 +20,7 @@ import { ZardDemoCarouselApiComponent } from '@/shared/components/carousel/demo/
 import { ZardDemoCarouselOrientationComponent } from '@/shared/components/carousel/demo/orientation';
 import { ZardDemoCarouselPluginsComponent } from '@/shared/components/carousel/demo/plugins';
 import { ZardDemoCarouselPreviewComponent } from '@/shared/components/carousel/demo/preview';
-import { ZardDemoCarouselSizeComponent } from '@/shared/components/carousel/demo/sizes';
+import { ZardDemoCarouselSizesComponent } from '@/shared/components/carousel/demo/sizes';
 import { ZardDemoCarouselSpacingComponent } from '@/shared/components/carousel/demo/spacing';
 
 import { CAROUSEL_API } from '../doc/api';
@@ -50,7 +50,7 @@ export const CAROUSEL = {
     {
       name: 'sizes',
       description: 'To set the size of the items, you can use the `basis` utility class on the `<z-carousel-item />`.',
-      component: ZardDemoCarouselSizeComponent,
+      component: ZardDemoCarouselSizesComponent,
       codeData: CAROUSEL_DEMO_SIZES,
       codeAfter: [{ codeData: CAROUSEL_SNIPPET_SIZES_THIRDS }, { codeData: CAROUSEL_SNIPPET_SIZES_RESPONSIVE }],
     },
