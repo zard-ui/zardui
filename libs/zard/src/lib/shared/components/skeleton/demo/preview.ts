@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardSkeletonComponent } from '../skeleton.component';
+import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';
 
 @Component({
-  selector: 'z-demo-skeleton-default',
+  selector: 'z-demo-skeleton-preview',
   imports: [ZardSkeletonComponent],
   template: `
     <div class="flex items-center space-x-4">
@@ -16,4 +16,4 @@ import { ZardSkeletonComponent } from '../skeleton.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSkeletonDefaultComponent {}
+export class ZardDemoSkeletonPreviewComponent {}
