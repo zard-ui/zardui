@@ -15,8 +15,8 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
         ngSrc="https://avatar.vercel.sh/zardui"
         alt="Event cover"
         class="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
-        width="120"
-        height="120"
+        width="640"
+        height="360"
       />
       <z-card-header>
         <z-card-action>

@@ -18,6 +18,7 @@ export const CARD_API: ApiSection[] = [
     selector: 'z-card-header, [z-card-header]',
     description: 'Container for card title, description, and optional action.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zHeaderBorder]',
         description: 'Adds a bottom border to the header',
