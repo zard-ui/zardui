@@ -9,7 +9,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
 
 @Component({
-  selector: 'z-demo-field-default',
+  selector: 'z-demo-field-preview',
   imports: [
     ...ZardFieldImports,
     ZardButtonComponent,
@@ -121,6 +121,6 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoFieldDefaultComponent {
+export class ZardDemoFieldPreviewComponent {
   protected sameAsShipping = true;
 }

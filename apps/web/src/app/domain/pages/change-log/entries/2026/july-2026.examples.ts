@@ -1,4 +1,4 @@
-import { FIELD_DEMO_DEFAULT } from '@generated/components/field/demo/default';
+import { FIELD_DEMO_PREVIEW } from '@generated/components/field/demo/preview';
 import { ITEM_DEMO_DEFAULT } from '@generated/components/item/demo/default';
 import { SONNER_DEMO_DEFAULT } from '@generated/components/sonner/demo/default';
 import { TEXTAREA_DEMO_DEFAULT } from '@generated/components/textarea/demo/default';
@@ -7,7 +7,7 @@ import { ITEM_CLI_ADD } from '@generated/installation/cli/add-item';
 import { SONNER_CLI_ADD } from '@generated/installation/cli/add-sonner';
 import { TEXTAREA_CLI_ADD } from '@generated/installation/cli/add-textarea';
 
-import { ZardDemoFieldDefaultComponent } from '@zard/components/field/demo/default';
+import { ZardDemoFieldPreviewComponent } from '@zard/components/field/demo/preview';
 import { ZardDemoItemDefaultComponent } from '@zard/components/item/demo/default';
 import { ZardDemoSonnerDefaultComponent } from '@zard/components/sonner/demo/default';
 import { ZardDemoTextareaDefaultComponent } from '@zard/components/textarea/demo/default';
@@ -19,9 +19,9 @@ export const JULY_2026_EXAMPLES: ChangelogExample[] = [
     name: 'default',
     description:
       'Composable building blocks for accessible forms, pairing a control with its label, description, and error message.',
-    component: ZardDemoFieldDefaultComponent,
+    component: ZardDemoFieldPreviewComponent,
     componentName: 'field',
-    codeData: FIELD_DEMO_DEFAULT,
+    codeData: FIELD_DEMO_PREVIEW,
     cliAdd: FIELD_CLI_ADD,
   },
   {
