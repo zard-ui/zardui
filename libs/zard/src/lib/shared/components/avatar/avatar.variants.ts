@@ -63,5 +63,25 @@ export const avatarGroupVariants = cva(
   },
 );
 
+/**
+ * The "+N" chip appended to a `z-avatar-group` for members the stack does not show.
+ * Carries `data-slot="avatar"` so it also picks up the group's own ring/spacing rules.
+ */
+export const avatarGroupCountVariants = cva(
+  'relative flex shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground font-medium ring-2 ring-background select-none',
+  {
+    variants: {
+      zSize: {
+        sm: 'size-6 text-xs',
+        default: 'size-8 text-xs',
+        lg: 'size-10 text-sm',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
+    },
+  },
+);
+
 export type ZardAvatarSizeVariants = NonNullable<VariantProps<typeof avatarVariants>['zSize']>;
 export type ZardAvatarGroupOrientationVariants = NonNullable<VariantProps<typeof avatarGroupVariants>['zOrientation']>;

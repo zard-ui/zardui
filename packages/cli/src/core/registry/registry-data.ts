@@ -354,6 +354,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'avatar-group-count.component.ts',
+        content: '',
+      },
+      {
         name: 'avatar.variants.ts',
         content: '',
       },

@@ -1,26 +1,32 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { provideIcons } from '@ng-icons/core';
+import { lucideBadgeCheck, lucidePlus } from '@ng-icons/lucide';
+
 import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
 
 @Component({
-  selector: 'z-demo-avatar-badge',
+  selector: 'z-demo-avatar-badge-with-icon',
   imports: [ZardAvatarComponent],
   template: `
     <div class="flex gap-3">
       <z-avatar
         [zShowBadge]="true"
         zSrc="/images/avatar/imgs/avatar_image.jpg"
-        zAlt="Online"
-        zBadgeClass="bg-green-600 dark:bg-green-500"
+        zAlt="Verified user"
+        zBadgeIcon="lucideBadgeCheck"
+        zBadgeClass="bg-blue-600 dark:bg-blue-700"
       />
       <z-avatar
+        class="grayscale"
         [zShowBadge]="true"
         zSrc="/images/avatar/imgs/avatar_image.jpg"
-        zAlt="Away"
-        zBadgeClass="bg-yellow-500 dark:bg-yellow-600"
+        zAlt="New member"
+        zBadgeIcon="lucidePlus"
       />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideBadgeCheck, lucidePlus })],
 })
-export class ZardDemoAvatarBadgeComponent {}
+export class ZardDemoAvatarBadgeWithIconComponent {}

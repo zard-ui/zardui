@@ -283,6 +283,7 @@
         "avatar.imports.ts",
         "avatar.component.ts",
         "avatar-group.component.ts",
+        "avatar-group-count.component.ts",
         "avatar.variants.ts",
         "index.ts"
       ]
