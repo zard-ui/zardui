@@ -1,6 +1,6 @@
 import { ALERT_DIALOG_DEMO_PREVIEW } from '@generated/components/alert-dialog/demo/preview';
 import { DIALOG_DEMO_PREVIEW } from '@generated/components/dialog/demo/preview';
-import { DROPDOWN_DEMO_DEFAULT } from '@generated/components/dropdown/demo/default';
+import { DROPDOWN_DEMO_BASIC } from '@generated/components/dropdown/demo/basic';
 import { POPOVER_DEMO_PREVIEW } from '@generated/components/popover/demo/preview';
 import { ALERT_DIALOG_CLI_ADD } from '@generated/installation/cli/add-alert-dialog';
 import { DIALOG_CLI_ADD } from '@generated/installation/cli/add-dialog';
@@ -9,7 +9,7 @@ import { POPOVER_CLI_ADD } from '@generated/installation/cli/add-popover';
 
 import { ZardDemoAlertDialogPreviewComponent } from '@zard/components/alert-dialog/demo/preview';
 import { ZardDemoDialogPreviewComponent } from '@zard/components/dialog/demo/preview';
-import { ZardDemoDropdownDefaultComponent } from '@zard/components/dropdown/demo/default';
+import { ZardDemoDropdownBasicComponent } from '@zard/components/dropdown/demo/basic';
 import { ZardDemoPopoverPreviewComponent } from '@zard/components/popover/demo/preview';
 
 import { type ChangelogExample } from '../changelog-entry.interface';
@@ -42,11 +42,11 @@ export const JUNE_2025_EXAMPLES: ChangelogExample[] = [
     cliAdd: ALERT_DIALOG_CLI_ADD,
   },
   {
-    name: 'default',
+    name: 'basic',
     description: 'Context menu with hierarchical actions, keyboard navigation, and support for nested submenus.',
-    component: ZardDemoDropdownDefaultComponent,
+    component: ZardDemoDropdownBasicComponent,
     componentName: 'dropdown',
-    codeData: DROPDOWN_DEMO_DEFAULT,
+    codeData: DROPDOWN_DEMO_BASIC,
     cliAdd: DROPDOWN_CLI_ADD,
   },
 ];
