@@ -6,7 +6,7 @@ import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
 import type { ZardDrawerPlacement } from '@/shared/components/drawer/drawer.variants';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
 
-import { injectIsMobile } from './is-mobile';
+import { injectIsMobile } from './support/is-mobile';
 
 const DELIVERY_TIMES = [
   {
@@ -23,6 +23,7 @@ const DELIVERY_TIMES = [
 ];
 
 @Component({
+  selector: 'z-demo-drawer-preview',
   imports: [ZardBadgeComponent, ZardButtonComponent, ZardDrawerImports, ...ZardRadioGroupImports],
   template: `
     <button type="button" z-button zType="secondary" (click)="visible.set(true)">Open Drawer</button>
@@ -64,7 +65,7 @@ const DELIVERY_TIMES = [
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoDrawerBasicComponent {
+export class ZardDemoDrawerPreviewComponent {
   private readonly isMobileViewport = injectIsMobile();
 
   readonly times = DELIVERY_TIMES;

@@ -1,8 +1,8 @@
-import { DRAWER_DEMO_BASIC } from '@generated/components/drawer/demo/basic';
 import { DRAWER_DEMO_CUSTOM_SIZES } from '@generated/components/drawer/demo/custom-sizes';
 import { DRAWER_DEMO_NESTED } from '@generated/components/drawer/demo/nested';
 import { DRAWER_DEMO_NON_MODAL } from '@generated/components/drawer/demo/non-modal';
 import { DRAWER_DEMO_POSITION } from '@generated/components/drawer/demo/position';
+import { DRAWER_DEMO_PREVIEW } from '@generated/components/drawer/demo/preview';
 import { DRAWER_DEMO_RESPONSIVE } from '@generated/components/drawer/demo/responsive';
 import { DRAWER_DEMO_SERVICE } from '@generated/components/drawer/demo/service';
 import { DRAWER_DEMO_SNAP_POINTS } from '@generated/components/drawer/demo/snap-points';
@@ -12,11 +12,11 @@ import { DRAWER_MANUAL_CODE } from '@generated/installation/manual/drawer';
 import { DRAWER_USAGE_CODE, DRAWER_USAGE_IMPORT } from '@generated/usage/drawer';
 import type { CodeBlockData } from '@highlight/types';
 
-import { ZardDemoDrawerBasicComponent } from './basic';
 import { ZardDemoDrawerCustomSizesComponent } from './custom-sizes';
 import { ZardDemoDrawerNestedComponent } from './nested';
 import { ZardDemoDrawerNonModalComponent } from './non-modal';
 import { ZardDemoDrawerPositionComponent } from './position';
+import { ZardDemoDrawerPreviewComponent } from './preview';
 import { ZardDemoDrawerResponsiveComponent } from './responsive';
 import { ZardDemoDrawerServiceComponent } from './service';
 import { ZardDemoDrawerSnapPointsComponent } from './snap-points';
@@ -51,6 +51,10 @@ export const DRAWER = {
   componentName: 'drawer',
   componentType: 'drawer',
   description: 'A draggable panel that slides in from an edge of the screen.',
+  about: {
+    description:
+      "A modal drawer wires Angular CDK's real focus trap and scroll block: opening it moves focus to its first tabbable element, keeps Tab from leaving the panel, and restores focus to the trigger on close, while the page behind is scroll-locked. Set `zModal` to `false` to opt out of all three and leave the page interactive. Escape and backdrop presses close only the topmost drawer, so nested drawers stack safely.",
+  },
   api: DRAWER_API,
   installData: {
     cliAdd: DRAWER_CLI_ADD,
@@ -60,8 +64,8 @@ export const DRAWER = {
   composition: DRAWER_COMPOSITION,
   preview: {
     name: 'preview',
-    component: ZardDemoDrawerBasicComponent,
-    codeData: DRAWER_DEMO_BASIC,
+    component: ZardDemoDrawerPreviewComponent,
+    codeData: DRAWER_DEMO_PREVIEW,
     column: false,
   },
   examples: [

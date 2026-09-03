@@ -4,9 +4,10 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
 import type { ZardDrawerPlacement } from '@/shared/components/drawer/drawer.variants';
 
-import { injectIsMobile } from './is-mobile';
+import { injectIsMobile } from './support/is-mobile';
 
 @Component({
+  selector: 'z-demo-drawer-nested',
   imports: [ZardButtonComponent, ZardDrawerImports],
   template: `
     <button type="button" z-button zType="secondary" (click)="first.set(true)">Open Drawer</button>

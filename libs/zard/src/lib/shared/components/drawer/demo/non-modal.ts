@@ -4,6 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
 
 @Component({
+  selector: 'z-demo-drawer-non-modal',
   imports: [ZardButtonComponent, ZardDrawerImports],
   template: `
     <button type="button" z-button zType="outline" (click)="visible.set(true)">Non Modal</button>

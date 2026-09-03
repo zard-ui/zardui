@@ -31,6 +31,7 @@ export class ZardDemoDrawerServiceFormComponent {
 }
 
 @Component({
+  selector: 'z-demo-drawer-service',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="openDrawer()">Open from a service</button>

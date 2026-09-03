@@ -5,6 +5,7 @@ import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
 import type { ZardDrawerSnapPoint } from '@/shared/components/drawer/drawer.utils';
 
 @Component({
+  selector: 'z-demo-drawer-snap-points',
   imports: [ZardButtonComponent, ZardDrawerImports],
   template: `
     <button type="button" z-button zType="outline" (click)="visible.set(true)">Open Snap Drawer</button>

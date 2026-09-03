@@ -5,6 +5,7 @@ import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
 import type { ZardDrawerPlacement } from '@/shared/components/drawer/drawer.variants';
 
 @Component({
+  selector: 'z-demo-drawer-position',
   imports: [ZardButtonComponent, ZardDrawerImports],
   template: `
     <div class="flex flex-wrap gap-2">

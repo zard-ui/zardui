@@ -5,7 +5,7 @@ import { ZardDialogService } from '@/shared/components/dialog';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
 import { ZardInputComponent } from '@/shared/components/input';
 
-import { injectIsMobile } from './is-mobile';
+import { injectIsMobile } from './support/is-mobile';
 
 @Component({
   selector: 'z-demo-drawer-profile-form',
@@ -30,6 +30,7 @@ import { injectIsMobile } from './is-mobile';
 export class ZardDemoDrawerProfileFormComponent {}
 
 @Component({
+  selector: 'z-demo-drawer-responsive',
   imports: [ZardButtonComponent, ZardDrawerImports, ZardDemoDrawerProfileFormComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="open()">Edit Profile</button>

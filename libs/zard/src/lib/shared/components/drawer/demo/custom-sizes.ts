@@ -4,6 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
 
 @Component({
+  selector: 'z-demo-drawer-custom-sizes',
   imports: [ZardButtonComponent, ZardDrawerImports],
   template: `
     <div class="flex flex-wrap gap-2">

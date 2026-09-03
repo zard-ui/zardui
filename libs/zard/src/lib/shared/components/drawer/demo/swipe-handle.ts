@@ -4,6 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
 
 @Component({
+  selector: 'z-demo-drawer-swipe-handle',
   imports: [ZardButtonComponent, ZardDrawerImports],
   template: `
     <button type="button" z-button zType="secondary" (click)="visible.set(true)">Open Drawer</button>
