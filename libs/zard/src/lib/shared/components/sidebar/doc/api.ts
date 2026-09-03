@@ -74,7 +74,7 @@ export const SIDEBAR_API: ApiSection[] = [
     props: [CLASS_PROP],
   },
   {
-    selector: 'z-sidebar-inset, main[z-sidebar-inset]',
+    selector: 'main[z-sidebar-inset]',
     description: 'The page area next to the sidebar. Required when zVariant is "inset".',
     props: [CLASS_PROP],
   },
@@ -84,12 +84,12 @@ export const SIDEBAR_API: ApiSection[] = [
     props: [],
   },
   {
-    selector: 'z-sidebar-header, [z-sidebar-header]',
+    selector: '[z-sidebar-header]',
     description: 'Sticky region at the top of the sidebar.',
     props: [CLASS_PROP],
   },
   {
-    selector: 'z-sidebar-footer, [z-sidebar-footer]',
+    selector: '[z-sidebar-footer]',
     description: 'Sticky region at the bottom of the sidebar.',
     props: [CLASS_PROP],
   },
@@ -99,17 +99,17 @@ export const SIDEBAR_API: ApiSection[] = [
     props: [CLASS_PROP],
   },
   {
-    selector: 'z-sidebar-content, [z-sidebar-content]',
+    selector: 'z-sidebar-content',
     description: 'Scrollable area between the header and the footer.',
     props: [CLASS_PROP],
   },
   {
-    selector: 'z-sidebar-group, [z-sidebar-group]',
+    selector: '[z-sidebar-group]',
     description: 'A section inside the content. Wrap it in z-collapsible to make it collapsible.',
     props: [CLASS_PROP],
   },
   {
-    selector: 'z-sidebar-group-label, [z-sidebar-group-label]',
+    selector: '[z-sidebar-group-label]',
     description: 'The group heading. Fades out when the sidebar collapses to icons.',
     props: [CLASS_PROP],
   },
@@ -119,7 +119,7 @@ export const SIDEBAR_API: ApiSection[] = [
     props: [CLASS_PROP],
   },
   {
-    selector: 'z-sidebar-group-content, [z-sidebar-group-content]',
+    selector: '[z-sidebar-group-content]',
     description: 'Content wrapper inside a group.',
     props: [CLASS_PROP],
   },
@@ -134,7 +134,7 @@ export const SIDEBAR_API: ApiSection[] = [
     props: [CLASS_PROP],
   },
   {
-    selector: 'button[z-sidebar-menu-button], a[z-sidebar-menu-button]',
+    selector: 'button[z-sidebar-menu-button]',
     description:
       "The clickable menu row. Use the anchor form with routerLink instead of shadcn's asChild. Carries peer/menu-button.",
     props: [
@@ -152,8 +152,8 @@ export const SIDEBAR_API: ApiSection[] = [
     ],
   },
   {
-    selector: 'button[z-sidebar-menu-action], a[z-sidebar-menu-action]',
-    description: 'Secondary action pinned to the right of a menu row.',
+    selector: 'button[z-sidebar-menu-action]',
+    description: 'Secondary action pinned to the right of a menu row. Also usable on an anchor.',
     props: [
       {
         name: '[zShowOnHover]',
@@ -165,7 +165,7 @@ export const SIDEBAR_API: ApiSection[] = [
     ],
   },
   {
-    selector: 'z-sidebar-menu-badge, [z-sidebar-menu-badge]',
+    selector: '[z-sidebar-menu-badge]',
     description: 'A counter pinned to the right of a menu row. Not interactive.',
     props: [CLASS_PROP],
   },
@@ -189,8 +189,8 @@ export const SIDEBAR_API: ApiSection[] = [
     props: [CLASS_PROP],
   },
   {
-    selector: 'a[z-sidebar-menu-sub-button], button[z-sidebar-menu-sub-button]',
-    description: 'The clickable row inside a submenu.',
+    selector: 'a[z-sidebar-menu-sub-button]',
+    description: 'The clickable row inside a submenu. Also usable on a button.',
     props: [
       { name: '[zSize]', description: 'Row text size', type: "'sm' | 'md'", default: "'md'" },
       { name: '[zActive]', description: 'Marks the row as the current one', type: 'boolean', default: 'false' },
