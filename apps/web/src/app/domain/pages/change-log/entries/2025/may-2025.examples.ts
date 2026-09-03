@@ -2,7 +2,7 @@ import { CHECKBOX_DEMO_PREVIEW } from '@generated/components/checkbox/demo/previ
 import { RADIO_GROUP_DEMO_PREVIEW } from '@generated/components/radio-group/demo/preview';
 import { SELECT_DEMO_PREVIEW } from '@generated/components/select/demo/preview';
 import { SLIDER_DEMO_PREVIEW } from '@generated/components/slider/demo/preview';
-import { SWITCH_DEMO_DEFAULT } from '@generated/components/switch/demo/default';
+import { SWITCH_DEMO_PREVIEW } from '@generated/components/switch/demo/preview';
 import { CHECKBOX_CLI_ADD } from '@generated/installation/cli/add-checkbox';
 import { RADIO_GROUP_CLI_ADD } from '@generated/installation/cli/add-radio-group';
 import { SELECT_CLI_ADD } from '@generated/installation/cli/add-select';
@@ -13,7 +13,7 @@ import { ZardDemoCheckboxPreviewComponent } from '@zard/components/checkbox/demo
 import { ZardDemoRadioGroupPreviewComponent } from '@zard/components/radio-group/demo/preview';
 import { ZardDemoSelectPreviewComponent } from '@zard/components/select/demo/preview';
 import { ZardDemoSliderPreviewComponent } from '@zard/components/slider/demo/preview';
-import { ZardDemoSwitchDefaultComponent } from '@zard/components/switch/demo/default';
+import { ZardDemoSwitchPreviewComponent } from '@zard/components/switch/demo/preview';
 
 import { type ChangelogExample } from '../changelog-entry.interface';
 
@@ -46,9 +46,9 @@ export const MAY_2025_EXAMPLES: ChangelogExample[] = [
   {
     name: 'default',
     description: 'Toggle switch component for boolean settings with smooth animation transitions.',
-    component: ZardDemoSwitchDefaultComponent,
+    component: ZardDemoSwitchPreviewComponent,
     componentName: 'switch',
-    codeData: SWITCH_DEMO_DEFAULT,
+    codeData: SWITCH_DEMO_PREVIEW,
     cliAdd: SWITCH_CLI_ADD,
   },
   {
