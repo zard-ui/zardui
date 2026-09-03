@@ -26,6 +26,7 @@ export class ZardDemoSheetSideContentComponent {
 }
 
 @Component({
+  selector: 'z-demo-sheet-side',
   imports: [ZardButtonComponent],
   template: `
     <div class="flex flex-wrap gap-2">

@@ -33,6 +33,7 @@ export class ZardDemoSheetPreviewFormComponent {
 }
 
 @Component({
+  selector: 'z-demo-sheet-preview',
   imports: [ZardButtonComponent, ZardSheetImports],
   template: `
     <button type="button" z-button zType="outline" (click)="openSheet()">Open</button>
