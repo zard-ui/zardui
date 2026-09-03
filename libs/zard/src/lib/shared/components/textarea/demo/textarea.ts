@@ -1,17 +1,19 @@
 import { TEXTAREA_DEMO_BUTTON } from '@generated/components/textarea/demo/button';
-import { TEXTAREA_DEMO_DEFAULT } from '@generated/components/textarea/demo/default';
 import { TEXTAREA_DEMO_DISABLED } from '@generated/components/textarea/demo/disabled';
 import { TEXTAREA_DEMO_FIELD } from '@generated/components/textarea/demo/field';
+import { TEXTAREA_DEMO_FORM } from '@generated/components/textarea/demo/form';
 import { TEXTAREA_DEMO_INVALID } from '@generated/components/textarea/demo/invalid';
+import { TEXTAREA_DEMO_PREVIEW } from '@generated/components/textarea/demo/preview';
 import { TEXTAREA_CLI_ADD } from '@generated/installation/cli/add-textarea';
 import { TEXTAREA_MANUAL_CODE } from '@generated/installation/manual/textarea';
 import { TEXTAREA_USAGE_CODE, TEXTAREA_USAGE_IMPORT } from '@generated/usage/textarea';
 
 import { ZardDemoTextareaButtonComponent } from './button';
-import { ZardDemoTextareaDefaultComponent } from './default';
 import { ZardDemoTextareaDisabledComponent } from './disabled';
 import { ZardDemoTextareaFieldComponent } from './field';
+import { ZardDemoTextareaFormComponent } from './form';
 import { ZardDemoTextareaInvalidComponent } from './invalid';
+import { ZardDemoTextareaPreviewComponent } from './preview';
 import { TEXTAREA_API } from '../doc/api';
 
 export const TEXTAREA = {
@@ -19,6 +21,11 @@ export const TEXTAREA = {
   componentType: 'textarea',
   description: 'Displays a form textarea or a component that looks like a textarea.',
   api: TEXTAREA_API,
+  about: {
+    title: 'A native textarea, styled',
+    description:
+      '`textarea[z-textarea]` is a directive, not a wrapper component: it applies textarea styling directly to a native `<textarea>` element, so every native attribute (`rows`, `placeholder`, `disabled`, `required`, `maxlength`, `aria-invalid`, …) keeps working as-is, and the control grows with its content via CSS `field-sizing: content` rather than a bound auto-resize input. Pair it with `z-field` for a label, description or error, and `z-input-group` to add a toolbar of text and buttons around it.',
+  },
   installData: {
     cliAdd: TEXTAREA_CLI_ADD,
     manualCode: TEXTAREA_MANUAL_CODE,
@@ -26,36 +33,44 @@ export const TEXTAREA = {
   usage: { importBlock: TEXTAREA_USAGE_IMPORT, codeBlock: TEXTAREA_USAGE_CODE },
   preview: {
     name: 'preview',
-    component: ZardDemoTextareaDefaultComponent,
+    component: ZardDemoTextareaPreviewComponent,
     column: false,
-    codeData: TEXTAREA_DEMO_DEFAULT,
+    codeData: TEXTAREA_DEMO_PREVIEW,
   },
   examples: [
     {
       name: 'field',
-      description: 'Use Field, FieldLabel, and FieldDescription to create a textarea with a label and description.',
+      description:
+        'Wrap `textarea[z-textarea]` in `z-field` with a `z-field-label` and `z-field-description` to add a label and helper text.',
       component: ZardDemoTextareaFieldComponent,
       codeData: TEXTAREA_DEMO_FIELD,
     },
     {
       name: 'disabled',
       description:
-        'Use the disabled prop to disable the textarea. To style the disabled state, add the data-disabled attribute to the Field component.',
+        'Set the native `disabled` attribute on `textarea[z-textarea]`, and add `data-disabled="true"` to the surrounding `z-field` so its label dims along with the control.',
       component: ZardDemoTextareaDisabledComponent,
       codeData: TEXTAREA_DEMO_DISABLED,
     },
     {
       name: 'invalid',
       description:
-        'Use the aria-invalid prop to mark the textarea as invalid. To style the invalid state, add the data-invalid attribute to the Field component.',
+        'Set `aria-invalid="true"` on `textarea[z-textarea]` and `data-invalid="true"` on the surrounding `z-field` to mark the field as invalid; see the `form` example for wiring these attributes to a reactive form control.',
       component: ZardDemoTextareaInvalidComponent,
       codeData: TEXTAREA_DEMO_INVALID,
     },
     {
       name: 'button',
-      description: 'Pair with Button to create a textarea with a submit button.',
+      description: 'Pair `textarea[z-textarea]` with `z-button` to build a message box with a submit action.',
       component: ZardDemoTextareaButtonComponent,
       codeData: TEXTAREA_DEMO_BUTTON,
+    },
+    {
+      name: 'form',
+      description:
+        "A reactive form built from `z-field` and `formControlName`, with a live validation message on the feedback textarea once it's touched and invalid.",
+      component: ZardDemoTextareaFormComponent,
+      codeData: TEXTAREA_DEMO_FORM,
     },
   ],
 };

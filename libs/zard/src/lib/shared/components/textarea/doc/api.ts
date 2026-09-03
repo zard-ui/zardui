@@ -4,10 +4,10 @@ export const TEXTAREA_API: ApiSection[] = [
   {
     selector: 'textarea[z-textarea]',
     description:
-      'A multi-line text input directive applied to a native textarea. All native HTML textarea attributes (placeholder, name, disabled, readonly, aria-invalid, etc.) are supported.',
+      'A directive that styles a native `<textarea>` element. All native HTML textarea attributes (`rows`, `placeholder`, `disabled`, `required`, `readonly`, `maxlength`, `aria-invalid`, etc.) keep working as-is; the control grows with its content via CSS `field-sizing: content`, with no dedicated auto-resize input and no built-in character-count display.',
     props: [
-      { name: '[value]', description: 'Textarea value, two-way bindable', type: 'string', default: "''" },
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[value]', description: 'Textarea value, two-way bindable', type: 'string', default: "''" },
       { name: '[(value)]', description: 'Textarea value (two-way binding)', type: 'string', default: "''" },
     ],
   },

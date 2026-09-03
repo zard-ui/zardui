@@ -1,7 +1,7 @@
 import { FIELD_DEMO_PREVIEW } from '@generated/components/field/demo/preview';
 import { ITEM_DEMO_PREVIEW } from '@generated/components/item/demo/preview';
 import { SONNER_DEMO_PREVIEW } from '@generated/components/sonner/demo/preview';
-import { TEXTAREA_DEMO_DEFAULT } from '@generated/components/textarea/demo/default';
+import { TEXTAREA_DEMO_PREVIEW } from '@generated/components/textarea/demo/preview';
 import { FIELD_CLI_ADD } from '@generated/installation/cli/add-field';
 import { ITEM_CLI_ADD } from '@generated/installation/cli/add-item';
 import { SONNER_CLI_ADD } from '@generated/installation/cli/add-sonner';
@@ -10,7 +10,7 @@ import { TEXTAREA_CLI_ADD } from '@generated/installation/cli/add-textarea';
 import { ZardDemoFieldPreviewComponent } from '@zard/components/field/demo/preview';
 import { ZardDemoItemPreviewComponent } from '@zard/components/item/demo/preview';
 import { ZardDemoSonnerPreviewComponent } from '@zard/components/sonner/demo/preview';
-import { ZardDemoTextareaDefaultComponent } from '@zard/components/textarea/demo/default';
+import { ZardDemoTextareaPreviewComponent } from '@zard/components/textarea/demo/preview';
 
 import { type ChangelogExample } from '../changelog-entry.interface';
 
@@ -35,9 +35,9 @@ export const JULY_2026_EXAMPLES: ChangelogExample[] = [
   {
     name: 'default',
     description: 'Multi-line text input with the same variants, sizes, and validation states as the single-line input.',
-    component: ZardDemoTextareaDefaultComponent,
+    component: ZardDemoTextareaPreviewComponent,
     componentName: 'textarea',
-    codeData: TEXTAREA_DEMO_DEFAULT,
+    codeData: TEXTAREA_DEMO_PREVIEW,
     cliAdd: TEXTAREA_CLI_ADD,
   },
   {
