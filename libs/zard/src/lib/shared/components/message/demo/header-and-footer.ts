@@ -4,7 +4,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 import { ZardMessageImports } from '@/shared/components/message/message.imports';
 
 @Component({
-  selector: 'z-demo-message-header-footer',
+  selector: 'z-demo-message-header-and-footer',
   imports: [...ZardBubbleImports, ...ZardMessageImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -35,4 +35,4 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
-export class ZardDemoMessageHeaderFooterComponent {}
+export class ZardDemoMessageHeaderAndFooterComponent {}
