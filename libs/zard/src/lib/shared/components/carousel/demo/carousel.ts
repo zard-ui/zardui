@@ -1,4 +1,6 @@
+import { CAROUSEL_DEMO_API } from '@generated/components/carousel/demo/api';
 import { CAROUSEL_DEMO_ORIENTATION } from '@generated/components/carousel/demo/orientation';
+import { CAROUSEL_DEMO_PLUGINS } from '@generated/components/carousel/demo/plugins';
 import { CAROUSEL_DEMO_PREVIEW } from '@generated/components/carousel/demo/preview';
 import { CAROUSEL_DEMO_SIZES } from '@generated/components/carousel/demo/sizes';
 import { CAROUSEL_DEMO_SPACING } from '@generated/components/carousel/demo/spacing';
@@ -14,7 +16,9 @@ import { CAROUSEL_MANUAL_CODE } from '@generated/installation/manual/carousel';
 import { CAROUSEL_MANUAL_INSTALL_DEPS } from '@generated/installation/manual/install-deps-carousel';
 import { CAROUSEL_USAGE_IMPORT, CAROUSEL_USAGE_CODE } from '@generated/usage/carousel';
 
+import { ZardDemoCarouselApiComponent } from '@/shared/components/carousel/demo/api';
 import { ZardDemoCarouselOrientationComponent } from '@/shared/components/carousel/demo/orientation';
+import { ZardDemoCarouselPluginsComponent } from '@/shared/components/carousel/demo/plugins';
 import { ZardDemoCarouselPreviewComponent } from '@/shared/components/carousel/demo/preview';
 import { ZardDemoCarouselSizeComponent } from '@/shared/components/carousel/demo/sizes';
 import { ZardDemoCarouselSpacingComponent } from '@/shared/components/carousel/demo/spacing';
@@ -65,6 +69,20 @@ export const CAROUSEL = {
       codeData: CAROUSEL_DEMO_ORIENTATION,
       previewHeight: '34rem',
       codeAfter: { codeData: CAROUSEL_SNIPPET_ORIENTATION },
+    },
+    {
+      name: 'api',
+      description:
+        'Listen for `(zInited)` to capture the Embla Carousel instance and `(zSelected)` to react to slide changes, reading `selectedScrollSnap()` and `scrollSnapList().length` off it.',
+      component: ZardDemoCarouselApiComponent,
+      codeData: CAROUSEL_DEMO_API,
+    },
+    {
+      name: 'plugins',
+      description:
+        'Use `ZardCarouselPluginsService` to create an Embla plugin, such as autoplay, and pass it to `[zPlugins]`.',
+      component: ZardDemoCarouselPluginsComponent,
+      codeData: CAROUSEL_DEMO_PLUGINS,
     },
   ],
 };
