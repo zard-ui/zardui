@@ -4,7 +4,7 @@ import { ZardKbdGroupComponent } from '@/shared/components/kbd/kbd-group.compone
 import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
 
 @Component({
-  selector: 'z-demo-kbd-default',
+  selector: 'z-demo-kbd-preview',
   imports: [ZardKbdComponent, ZardKbdGroupComponent],
   template: `
     <div class="flex flex-col items-center justify-center gap-4">
@@ -23,4 +23,4 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoKbdDefaultComponent {}
+export class ZardDemoKbdPreviewComponent {}
