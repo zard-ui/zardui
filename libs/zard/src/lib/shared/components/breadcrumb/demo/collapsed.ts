@@ -1,14 +1,20 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardBreadcrumbImports } from '../breadcrumb.imports';
+import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 
 @Component({
-  selector: 'z-demo-breadcrumb-default',
+  selector: 'z-demo-breadcrumb-collapsed',
   imports: [ZardBreadcrumbImports],
   template: `
-    <z-breadcrumb zLabel="Default breadcrumb">
+    <z-breadcrumb zLabel="Collapsed breadcrumb">
       <z-breadcrumb-item>
         <a z-breadcrumb-link [routerLink]="['/']">Home</a>
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <z-breadcrumb-ellipsis />
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link [routerLink]="['/docs/introduction']">Docs</a>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
         <a z-breadcrumb-link [routerLink]="['/docs/components']">Components</a>
@@ -20,4 +26,4 @@ import { ZardBreadcrumbImports } from '../breadcrumb.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoBreadcrumbDefaultComponent {}
+export class ZardDemoBreadcrumbCollapsedComponent {}
