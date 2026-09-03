@@ -26,10 +26,17 @@
     "tokens": [],
     "demos": {
       "symbols": [
-        "lucideChevronsUpDown"
+        "lucideChevronDown",
+        "lucideChevronRight",
+        "lucideChevronsUpDown",
+        "lucideFile",
+        "lucideFolder"
       ],
       "tokens": [
-        "chevrons-up-down"
+        "chevron-down",
+        "chevron-right",
+        "chevrons-up-down",
+        "folder"
       ]
     }
   }
