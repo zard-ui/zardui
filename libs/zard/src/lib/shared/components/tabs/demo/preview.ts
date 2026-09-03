@@ -5,7 +5,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
-  selector: 'z-demo-tabs-default',
+  selector: 'z-demo-tabs-preview',
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardCardImports],
   template: `
     <z-tab-group class="w-[400px]">
@@ -57,4 +57,4 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoTabsDefaultComponent {}
+export class ZardDemoTabsPreviewComponent {}

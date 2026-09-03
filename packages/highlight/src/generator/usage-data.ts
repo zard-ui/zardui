@@ -311,8 +311,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
 </table>`,
   },
   tabs: {
-    importCode: `import { ZardTabComponent } from '@/shared/components/tabs/tab.component';
-import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';`,
+    importCode: `import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';`,
     templateCode: `<z-tab-group>
   <z-tab label="Account">Account content here.</z-tab>
   <z-tab label="Password">Password content here.</z-tab>
