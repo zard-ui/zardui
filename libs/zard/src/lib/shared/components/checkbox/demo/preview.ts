@@ -5,7 +5,7 @@ import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.com
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 
 @Component({
-  selector: 'z-demo-checkbox-default',
+  selector: 'z-demo-checkbox-preview',
   imports: [ZardCheckboxComponent, ...ZardFieldImports, FormsModule],
   template: `
     <div z-field-group class="min-w-sm">
@@ -24,7 +24,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
         <z-checkbox zId="toggle-checkbox" zDisabled />
         <label z-field-label for="toggle-checkbox">Enable notifications</label>
       </div>
-      <label z-field-label>
+      <label z-field-label for="toggle-checkbox-2">
         <div z-field zOrientation="horizontal">
           <z-checkbox zId="toggle-checkbox-2" [(ngModel)]="notifications" />
           <div z-field-content>
@@ -36,7 +36,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
     </div>
   `,
 })
-export class ZardDemoCheckboxDefaultComponent {
+export class ZardDemoCheckboxPreviewComponent {
   terms = false;
   termsWithDesc = true;
   notifications = false;

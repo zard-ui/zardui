@@ -93,7 +93,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   checkbox: {
     importCode: `import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';`,
-    templateCode: `<z-checkbox zLabel="Accept terms and conditions"></z-checkbox>`,
+    templateCode: `<z-checkbox>Accept terms and conditions</z-checkbox>`,
   },
   combobox: {
     importCode: `import { ZardComboboxImports } from '@/shared/components/combobox/combobox.imports';`,

@@ -1,4 +1,4 @@
-import { CHECKBOX_DEMO_DEFAULT } from '@generated/components/checkbox/demo/default';
+import { CHECKBOX_DEMO_PREVIEW } from '@generated/components/checkbox/demo/preview';
 import { RADIO_GROUP_DEMO_DEFAULT } from '@generated/components/radio-group/demo/default';
 import { SELECT_DEMO_DEFAULT } from '@generated/components/select/demo/default';
 import { SLIDER_DEMO_DEFAULT } from '@generated/components/slider/demo/default';
@@ -9,7 +9,7 @@ import { SELECT_CLI_ADD } from '@generated/installation/cli/add-select';
 import { SLIDER_CLI_ADD } from '@generated/installation/cli/add-slider';
 import { SWITCH_CLI_ADD } from '@generated/installation/cli/add-switch';
 
-import { ZardDemoCheckboxDefaultComponent } from '@zard/components/checkbox/demo/default';
+import { ZardDemoCheckboxPreviewComponent } from '@zard/components/checkbox/demo/preview';
 import { ZardDemoRadioGroupDefaultComponent } from '@zard/components/radio-group/demo/default';
 import { ZardDemoSelectDefaultComponent } from '@zard/components/select/demo/default';
 import { ZardDemoSliderDefaultComponent } from '@zard/components/slider/demo/default';
@@ -30,9 +30,9 @@ export const MAY_2025_EXAMPLES: ChangelogExample[] = [
   {
     name: 'default',
     description: 'Checkbox input component with indeterminate state support and full accessibility features.',
-    component: ZardDemoCheckboxDefaultComponent,
+    component: ZardDemoCheckboxPreviewComponent,
     componentName: 'checkbox',
-    codeData: CHECKBOX_DEMO_DEFAULT,
+    codeData: CHECKBOX_DEMO_PREVIEW,
     cliAdd: CHECKBOX_CLI_ADD,
   },
   {
