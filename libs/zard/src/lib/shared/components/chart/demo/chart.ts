@@ -1,18 +1,12 @@
-import { CHART_DEMO_AREA_DEFAULT } from '@generated/components/chart/demo/area-default';
+import { CHART_DEMO_ACCESSIBILITY } from '@generated/components/chart/demo/accessibility';
 import { CHART_DEMO_AREA_GRADIENT } from '@generated/components/chart/demo/area-gradient';
-import { CHART_DEMO_AREA_STACKED } from '@generated/components/chart/demo/area-stacked';
-import { CHART_DEMO_BAR_HORIZONTAL } from '@generated/components/chart/demo/bar-horizontal';
 import { CHART_DEMO_BAR_INTERACTIVE } from '@generated/components/chart/demo/bar-interactive';
-import { CHART_DEMO_BAR_LABEL } from '@generated/components/chart/demo/bar-label';
 import { CHART_DEMO_BAR_MULTIPLE } from '@generated/components/chart/demo/bar-multiple';
-import { CHART_DEMO_BAR_STACKED } from '@generated/components/chart/demo/bar-stacked';
-import { CHART_DEMO_DEFAULT } from '@generated/components/chart/demo/default';
 import { CHART_DEMO_ECHARTS_DATAZOOM } from '@generated/components/chart/demo/echarts-datazoom';
+import { CHART_DEMO_LEGEND } from '@generated/components/chart/demo/legend';
 import { CHART_DEMO_LINE_DEFAULT } from '@generated/components/chart/demo/line-default';
-import { CHART_DEMO_LINE_DOTS } from '@generated/components/chart/demo/line-dots';
-import { CHART_DEMO_LINE_STEP } from '@generated/components/chart/demo/line-step';
 import { CHART_DEMO_PIE_DONUT_TEXT } from '@generated/components/chart/demo/pie-donut-text';
-import { CHART_DEMO_PIE_LABEL } from '@generated/components/chart/demo/pie-label';
+import { CHART_DEMO_PREVIEW } from '@generated/components/chart/demo/preview';
 import { CHART_DEMO_RADAR_DEFAULT } from '@generated/components/chart/demo/radar-default';
 import { CHART_DEMO_RADIAL_SIMPLE } from '@generated/components/chart/demo/radial-simple';
 import { CHART_DEMO_TOOLTIP_INDICATORS } from '@generated/components/chart/demo/tooltip-indicators';
@@ -30,21 +24,15 @@ import { CHART_MANUAL_INSTALL_DEPS } from '@generated/installation/manual/instal
 import { CHART_REGISTER } from '@generated/installation/register/register-chart';
 import { CHART_USAGE_CODE, CHART_USAGE_IMPORT } from '@generated/usage/chart';
 
-import { ZardDemoChartAreaDefaultComponent } from '@/shared/components/chart/demo/area-default';
+import { ZardDemoChartAccessibilityComponent } from '@/shared/components/chart/demo/accessibility';
 import { ZardDemoChartAreaGradientComponent } from '@/shared/components/chart/demo/area-gradient';
-import { ZardDemoChartAreaStackedComponent } from '@/shared/components/chart/demo/area-stacked';
-import { ZardDemoChartBarHorizontalComponent } from '@/shared/components/chart/demo/bar-horizontal';
 import { ZardDemoChartBarInteractiveComponent } from '@/shared/components/chart/demo/bar-interactive';
-import { ZardDemoChartBarLabelComponent } from '@/shared/components/chart/demo/bar-label';
 import { ZardDemoChartBarMultipleComponent } from '@/shared/components/chart/demo/bar-multiple';
-import { ZardDemoChartBarStackedComponent } from '@/shared/components/chart/demo/bar-stacked';
-import { ZardDemoChartDefaultComponent } from '@/shared/components/chart/demo/default';
 import { ZardDemoChartEchartsDatazoomComponent } from '@/shared/components/chart/demo/echarts-datazoom';
+import { ZardDemoChartLegendComponent } from '@/shared/components/chart/demo/legend';
 import { ZardDemoChartLineDefaultComponent } from '@/shared/components/chart/demo/line-default';
-import { ZardDemoChartLineDotsComponent } from '@/shared/components/chart/demo/line-dots';
-import { ZardDemoChartLineStepComponent } from '@/shared/components/chart/demo/line-step';
 import { ZardDemoChartPieDonutTextComponent } from '@/shared/components/chart/demo/pie-donut-text';
-import { ZardDemoChartPieLabelComponent } from '@/shared/components/chart/demo/pie-label';
+import { ZardDemoChartPreviewComponent } from '@/shared/components/chart/demo/preview';
 import { ZardDemoChartRadarDefaultComponent } from '@/shared/components/chart/demo/radar-default';
 import { ZardDemoChartRadialSimpleComponent } from '@/shared/components/chart/demo/radial-simple';
 import { ZardDemoChartTooltipIndicatorsComponent } from '@/shared/components/chart/demo/tooltip-indicators';
@@ -57,8 +45,9 @@ export const CHART = {
   componentType: 'chart',
   description: 'Beautiful charts built with Apache ECharts. Copy and paste into your apps.',
   about: {
-    description: 'The chart is built on Apache ECharts, wired into Angular through ngx-echarts.',
-    link: { label: 'Apache ECharts', href: 'https://echarts.apache.org/' },
+    description:
+      'The chart is built on Apache ECharts, wired into Angular through ngx-echarts. This page covers configuration, theming, the tooltip, the legend and accessibility — for the full set of area, bar, line, pie, radar and radial variations, see the gallery.',
+    link: { label: 'Browse the chart gallery', href: '/charts' },
   },
   installData: {
     cliAdd: CHART_CLI_ADD,
@@ -69,11 +58,13 @@ export const CHART = {
   usage: { importBlock: CHART_USAGE_IMPORT, codeBlock: CHART_USAGE_CODE },
   preview: {
     name: 'preview',
-    component: ZardDemoChartDefaultComponent,
+    component: ZardDemoChartPreviewComponent,
     column: false,
-    codeData: CHART_DEMO_DEFAULT,
+    codeData: CHART_DEMO_PREVIEW,
   },
   examples: [
+    // Reference — chart config, theming, tooltip, legend, accessibility and the rest of the
+    // topics shadcn documents on its chart page. See /charts for the family-by-family gallery.
     {
       name: 'chart-config',
       description:
@@ -100,100 +91,29 @@ export const CHART = {
       codeAfter: [{ codeData: CHART_SNIPPET_LAZY_PROVIDER }],
     },
     {
-      name: 'bar-multiple',
-      description: 'Pass more than one data key to `zSeries` to draw them side by side.',
-      component: ZardDemoChartBarMultipleComponent,
-      codeData: CHART_DEMO_BAR_MULTIPLE,
-    },
-    {
-      name: 'bar-stacked',
-      description: 'Use `zStacked` to stack every series on the same axis.',
-      component: ZardDemoChartBarStackedComponent,
-      codeData: CHART_DEMO_BAR_STACKED,
-    },
-    {
-      name: 'bar-horizontal',
-      description: 'Use `zHorizontal` to swap the category and value axes.',
-      component: ZardDemoChartBarHorizontalComponent,
-      codeData: CHART_DEMO_BAR_HORIZONTAL,
-    },
-    {
-      name: 'bar-label',
-      description: 'Use `zLabel` to print the value on every data point — the `LabelList` equivalent.',
-      component: ZardDemoChartBarLabelComponent,
-      codeData: CHART_DEMO_BAR_LABEL,
-    },
-    {
-      name: 'bar-interactive',
-      description: 'Series are plain inputs, so a `signal` is all it takes to make the chart interactive.',
-      component: ZardDemoChartBarInteractiveComponent,
-      codeData: CHART_DEMO_BAR_INTERACTIVE,
-      previewHeight: '30rem',
-    },
-    {
-      name: 'area-default',
-      description: 'Use `zType="area"` and set `smooth` on the series for shadcn\'s natural curve.',
-      component: ZardDemoChartAreaDefaultComponent,
-      codeData: CHART_DEMO_AREA_DEFAULT,
-    },
-    {
-      name: 'area-stacked',
-      component: ZardDemoChartAreaStackedComponent,
-      codeData: CHART_DEMO_AREA_STACKED,
-    },
-    {
-      name: 'area-gradient',
-      description: 'Use `zGradient` to fill the band with a vertical gradient instead of a flat tint.',
-      component: ZardDemoChartAreaGradientComponent,
-      codeData: CHART_DEMO_AREA_GRADIENT,
-    },
-    {
-      name: 'line-default',
-      component: ZardDemoChartLineDefaultComponent,
-      codeData: CHART_DEMO_LINE_DEFAULT,
-    },
-    {
-      name: 'line-dots',
-      description: 'Set `showSymbol` on the series to draw a dot on every data point.',
-      component: ZardDemoChartLineDotsComponent,
-      codeData: CHART_DEMO_LINE_DOTS,
-    },
-    {
-      name: 'line-step',
-      description: "Set `step` to `'start'`, `'middle'` or `'end'` for a stepped line.",
-      component: ZardDemoChartLineStepComponent,
-      codeData: CHART_DEMO_LINE_STEP,
-    },
-    {
-      name: 'pie-label',
-      component: ZardDemoChartPieLabelComponent,
-      codeData: CHART_DEMO_PIE_LABEL,
-    },
-    {
-      name: 'pie-donut-text',
-      description: 'Use `zInnerRadius` for the donut and `zCenterValue` / `zCenterLabel` for the text in the middle.',
-      component: ZardDemoChartPieDonutTextComponent,
-      codeData: CHART_DEMO_PIE_DONUT_TEXT,
-    },
-    {
-      name: 'radar-default',
-      component: ZardDemoChartRadarDefaultComponent,
-      codeData: CHART_DEMO_RADAR_DEFAULT,
-    },
-    {
-      name: 'radial-simple',
-      component: ZardDemoChartRadialSimpleComponent,
-      codeData: CHART_DEMO_RADIAL_SIMPLE,
-    },
-    {
-      name: 'tooltip-indicators',
-      description: 'The tooltip ships the same three indicator shapes as shadcn/ui: `dot`, `line` and `dashed`.',
+      name: 'tooltip',
+      description:
+        '`z-chart-tooltip` declares the tooltip: `zLabelKey` and `zNameKey` pick the config keys used for the heading and each row, `zHideLabel` and `zHideIndicator` control what shows, and the tooltip ships the same three indicator shapes as shadcn/ui — `dot`, `line` and `dashed`.',
       component: ZardDemoChartTooltipIndicatorsComponent,
       codeData: CHART_DEMO_TOOLTIP_INDICATORS,
       column: true,
     },
     {
-      name: 'opt-in features',
+      name: 'legend',
+      description:
+        '`z-chart-legend` renders the shadcn markup below (or above) the chart and toggles a series on click when it is hovered or pressed. `zVerticalAlign` picks which side it sits on.',
+      component: ZardDemoChartLegendComponent,
+      codeData: CHART_DEMO_LEGEND,
+    },
+    {
+      name: 'accessibility',
+      description:
+        '`zAccessibility` (on by default) sets `role="img"` and a generated `aria-label` on the chart surface and turns on ECharts\' own aria description. Turn it off only if an accessible summary is provided elsewhere.',
+      component: ZardDemoChartAccessibilityComponent,
+      codeData: CHART_DEMO_ACCESSIBILITY,
+    },
+    {
+      name: 'opt-in-features',
       description:
         'ECharts features Recharts has no counterpart for are opt-in, so the default chart stays visually identical to shadcn/ui.',
       component: ZardDemoChartEchartsDatazoomComponent,
@@ -217,6 +137,51 @@ export const CHART = {
         '- **Rounded stacked bars** — only the outermost bar of a stack is rounded, matching Recharts. On negative bars ECharts still rounds the top corners rather than the outward end.',
         '- **Server-side rendering** — the server paints a static SVG and the browser swaps in the live chart on hydration. It cannot read CSS variables, so the SVG uses the light palette; set `[zSsrWidth]` and `[zSsrHeight]` to match your layout.',
       ].join('\n'),
+    },
+    // Gallery representatives — one or two examples per chart family. The rest of each family
+    // (interactive, stacked, gradient, dots, legend, grid variants, ...) lives at /charts.
+    {
+      name: 'bar-multiple',
+      description: 'Pass more than one data key to `zSeries` to draw them side by side.',
+      component: ZardDemoChartBarMultipleComponent,
+      codeData: CHART_DEMO_BAR_MULTIPLE,
+    },
+    {
+      name: 'bar-interactive',
+      description: 'Series are plain inputs, so a `signal` is all it takes to make the chart interactive.',
+      component: ZardDemoChartBarInteractiveComponent,
+      codeData: CHART_DEMO_BAR_INTERACTIVE,
+      previewHeight: '30rem',
+    },
+    {
+      name: 'area-gradient',
+      description: 'Use `zGradient` to fill the area under a `zType="area"` series with a vertical gradient.',
+      component: ZardDemoChartAreaGradientComponent,
+      codeData: CHART_DEMO_AREA_GRADIENT,
+    },
+    {
+      name: 'line-default',
+      description: 'The plainest line chart: one series, one axis.',
+      component: ZardDemoChartLineDefaultComponent,
+      codeData: CHART_DEMO_LINE_DEFAULT,
+    },
+    {
+      name: 'pie-donut-text',
+      description: 'Use `zInnerRadius` for the donut and `zCenterValue` / `zCenterLabel` for the text in the middle.',
+      component: ZardDemoChartPieDonutTextComponent,
+      codeData: CHART_DEMO_PIE_DONUT_TEXT,
+    },
+    {
+      name: 'radar-default',
+      description: 'A radar chart with two series over the same set of indicators.',
+      component: ZardDemoChartRadarDefaultComponent,
+      codeData: CHART_DEMO_RADAR_DEFAULT,
+    },
+    {
+      name: 'radial-simple',
+      description: 'A single radial bar, the simplest `zRadialVariant="bar"` chart.',
+      component: ZardDemoChartRadialSimpleComponent,
+      codeData: CHART_DEMO_RADIAL_SIMPLE,
     },
   ],
 };

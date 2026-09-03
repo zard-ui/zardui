@@ -1,46 +1,37 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrendingUp } from '@ng-icons/lucide';
-
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
+import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
-  selector: 'z-demo-chart-radar-multiple',
-  imports: [ZardCardImports, ZardChartImports, NgIcon],
+  selector: 'z-demo-chart-preview',
+  imports: [ZardCardImports, ZardChartImports],
   template: `
     <z-card class="w-full">
       <z-card-header>
-        <z-card-title zTitle="Radar Chart - Multiple" />
+        <z-card-title zTitle="Bar Chart" />
         <z-card-description zDescription="Showing total visitors for the last 6 months" />
       </z-card-header>
       <z-card-content>
         <z-chart
-          zType="radar"
+          zType="bar"
           [zConfig]="chartConfig"
           [zData]="chartData"
           [zSeries]="series"
-          zNameKey="month"
-          class="mx-auto aspect-square h-[250px]"
+          zXAxisKey="month"
+          [zXAxisFormatter]="shortMonth"
+          class="w-full"
         >
-          <z-chart-tooltip zTrigger="item" zIndicator="dot" zHideLabel />
+          <z-chart-tooltip zIndicator="dashed" />
+          <z-chart-legend />
         </z-chart>
       </z-card-content>
-      <z-card-footer class="flex-col gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
-        <div class="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="size-4" />
-        </div>
-        <div class="text-muted-foreground leading-none">January - June 2024</div>
-      </z-card-footer>
     </z-card>
   `,
-  providers: [provideIcons({ lucideTrendingUp })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoChartRadarMultipleComponent {
+export class ZardDemoChartPreviewComponent {
   protected readonly chartConfig: ZardChartConfig = {
     desktop: { label: 'Desktop', color: 'var(--chart-1)' },
     mobile: { label: 'Mobile', color: 'var(--chart-2)' },
@@ -55,8 +46,7 @@ export class ZardDemoChartRadarMultipleComponent {
     { month: 'June', desktop: 214, mobile: 140 },
   ];
 
-  protected readonly series: ZardChartSeries[] = [
-    { dataKey: 'desktop', fillOpacity: 0.6 },
-    { dataKey: 'mobile', fillOpacity: 0.4 },
-  ];
+  protected readonly series = ['desktop', 'mobile'];
+
+  protected readonly shortMonth = (value: string) => value.slice(0, 3);
 }

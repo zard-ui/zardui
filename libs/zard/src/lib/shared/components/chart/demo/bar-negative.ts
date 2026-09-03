@@ -8,6 +8,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartOptionOverride } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-bar-negative',
   imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">

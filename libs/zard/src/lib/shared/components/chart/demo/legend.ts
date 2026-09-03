@@ -1,47 +1,44 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrendingUp } from '@ng-icons/lucide';
-
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
+import type { ZardChartLegendAlignVariants } from '@/shared/components/chart/chart.variants';
 
 @Component({
-  selector: 'z-demo-chart-bar-multiple',
-  imports: [ZardCardImports, ZardChartImports, NgIcon],
+  selector: 'z-demo-chart-legend',
+  imports: [ZardCardImports, ZardChartImports],
   template: `
     <z-card class="w-full">
       <z-card-header>
-        <z-card-title zTitle="Bar Chart - Multiple" />
-        <z-card-description zDescription="January - June 2024" />
+        <z-card-title zTitle="Legend" />
+        <z-card-description zDescription="zVerticalAlign places z-chart-legend above or below the chart" />
       </z-card-header>
       <z-card-content>
-        <z-chart
-          zType="bar"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
-          [zSeries]="series"
-          zXAxisKey="month"
-          [zXAxisFormatter]="shortMonth"
-          class="w-full"
-        >
-          <z-chart-tooltip zIndicator="dashed" />
-        </z-chart>
-      </z-card-content>
-      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
-        <div class="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="size-4" />
+        <div class="grid gap-6 md:grid-cols-2">
+          @for (align of aligns; track align) {
+            <div class="flex flex-col gap-2">
+              <p class="text-muted-foreground text-xs">zVerticalAlign="{{ align }}"</p>
+              <z-chart
+                zType="bar"
+                [zConfig]="chartConfig"
+                [zData]="chartData"
+                [zSeries]="series"
+                zXAxisKey="month"
+                [zXAxisFormatter]="shortMonth"
+                class="h-[220px] w-full"
+              >
+                <z-chart-legend [zVerticalAlign]="align" />
+              </z-chart>
+            </div>
+          }
         </div>
-        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
-      </z-card-footer>
+      </z-card-content>
     </z-card>
   `,
-  providers: [provideIcons({ lucideTrendingUp })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoChartBarMultipleComponent {
+export class ZardDemoChartLegendComponent {
   protected readonly chartConfig: ZardChartConfig = {
     desktop: { label: 'Desktop', color: 'var(--chart-1)' },
     mobile: { label: 'Mobile', color: 'var(--chart-2)' },
@@ -57,6 +54,8 @@ export class ZardDemoChartBarMultipleComponent {
   ];
 
   protected readonly series = ['desktop', 'mobile'];
+
+  protected readonly aligns: ZardChartLegendAlignVariants[] = ['top', 'bottom'];
 
   protected readonly shortMonth = (value: string) => value.slice(0, 3);
 }
