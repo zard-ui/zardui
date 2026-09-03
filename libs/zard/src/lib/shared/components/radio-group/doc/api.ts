@@ -6,8 +6,8 @@ export const RADIO_GROUP_API: ApiSection[] = [
     description: 'Wrapper that groups radio items and manages the selected value.',
     props: [
       { name: '[value]', description: 'Selected value, two-way bindable', type: 'unknown', default: 'null' },
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       { name: '[(value)]', description: 'Selected value (two-way binding)', type: 'unknown', default: 'null' },
+      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       { name: '[zDisabled]', description: 'Disables every item in the group', type: 'boolean', default: 'false' },
       { name: '[name]', description: 'Optional name for native form submission', type: 'string', default: "''" },
     ],

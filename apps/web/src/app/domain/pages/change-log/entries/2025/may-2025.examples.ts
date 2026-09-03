@@ -1,5 +1,5 @@
 import { CHECKBOX_DEMO_PREVIEW } from '@generated/components/checkbox/demo/preview';
-import { RADIO_GROUP_DEMO_DEFAULT } from '@generated/components/radio-group/demo/default';
+import { RADIO_GROUP_DEMO_PREVIEW } from '@generated/components/radio-group/demo/preview';
 import { SELECT_DEMO_DEFAULT } from '@generated/components/select/demo/default';
 import { SLIDER_DEMO_DEFAULT } from '@generated/components/slider/demo/default';
 import { SWITCH_DEMO_DEFAULT } from '@generated/components/switch/demo/default';
@@ -10,7 +10,7 @@ import { SLIDER_CLI_ADD } from '@generated/installation/cli/add-slider';
 import { SWITCH_CLI_ADD } from '@generated/installation/cli/add-switch';
 
 import { ZardDemoCheckboxPreviewComponent } from '@zard/components/checkbox/demo/preview';
-import { ZardDemoRadioGroupDefaultComponent } from '@zard/components/radio-group/demo/default';
+import { ZardDemoRadioGroupPreviewComponent } from '@zard/components/radio-group/demo/preview';
 import { ZardDemoSelectDefaultComponent } from '@zard/components/select/demo/default';
 import { ZardDemoSliderDefaultComponent } from '@zard/components/slider/demo/default';
 import { ZardDemoSwitchDefaultComponent } from '@zard/components/switch/demo/default';
@@ -38,9 +38,9 @@ export const MAY_2025_EXAMPLES: ChangelogExample[] = [
   {
     name: 'default',
     description: 'Radio button group for mutually exclusive options with customizable layouts and orientation.',
-    component: ZardDemoRadioGroupDefaultComponent,
+    component: ZardDemoRadioGroupPreviewComponent,
     componentName: 'radio-group',
-    codeData: RADIO_GROUP_DEMO_DEFAULT,
+    codeData: RADIO_GROUP_DEMO_PREVIEW,
     cliAdd: RADIO_GROUP_CLI_ADD,
   },
   {
