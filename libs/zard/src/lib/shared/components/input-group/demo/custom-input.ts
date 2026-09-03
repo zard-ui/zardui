@@ -6,12 +6,13 @@ import { lucidePencil } from '@ng-icons/lucide';
 import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
 
 @Component({
-  selector: 'z-demo-input-group-custom',
+  selector: 'z-demo-input-group-custom-input',
   imports: [NgIcon, ...ZardInputGroupImports],
   template: `
     <z-input-group class="w-80">
       <z-input-group-addon><ng-icon name="lucidePencil" /></z-input-group-addon>
       <input
+        id="input-group-custom-input"
         data-slot="input-group-control"
         type="text"
         placeholder="Custom input control..."
@@ -22,4 +23,4 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePencil })],
 })
-export class ZardDemoInputGroupCustomComponent {}
+export class ZardDemoInputGroupCustomInputComponent {}

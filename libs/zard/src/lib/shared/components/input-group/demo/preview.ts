@@ -7,11 +7,11 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
 
 @Component({
-  selector: 'z-demo-input-group-default',
+  selector: 'z-demo-input-group-preview',
   imports: [ZardInputComponent, NgIcon, ...ZardInputGroupImports],
   template: `
     <z-input-group class="min-w-xs">
-      <input z-input placeholder="Search..." />
+      <input z-input id="input-group-preview-search" placeholder="Search..." />
       <z-input-group-addon>
         <ng-icon name="lucideSearch" />
       </z-input-group-addon>
@@ -21,4 +21,4 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSearch })],
 })
-export class ZardDemoInputGroupDefaultComponent {}
+export class ZardDemoInputGroupPreviewComponent {}

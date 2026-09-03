@@ -43,7 +43,6 @@ const UNDOCUMENTED_BY_DESIGN = new Set([
   'z-dropdown-menu-checkbox-item.zVariant',
   'z-dropdown-menu-radio-item.variant',
   'z-dropdown-menu-radio-item.zVariant',
-  'button[z-input-group-button].zVariant',
 ]);
 
 interface Declared {
