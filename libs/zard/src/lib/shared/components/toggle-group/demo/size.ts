@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import {
   ZardToggleGroupComponent,
@@ -6,7 +6,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'z-demo-toggle-group-sizes',
+  selector: 'z-demo-toggle-group-size',
   imports: [ZardToggleGroupComponent],
   template: `
     <div class="space-y-4">
@@ -32,8 +32,9 @@ import {
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoToggleGroupSizesComponent {
+export class ZardDemoToggleGroupSizeComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'top',

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideBold, lucideItalic, lucideUnderline } from '@ng-icons/lucide';
@@ -21,6 +21,7 @@ import {
       lucideUnderline,
     }),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToggleGroupDisabledComponent {
   items: ZardToggleGroupItem[] = [

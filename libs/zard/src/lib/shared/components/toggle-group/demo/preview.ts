@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideBold, lucideItalic, lucideUnderline } from '@ng-icons/lucide';
@@ -9,7 +9,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'z-demo-toggle-group-default',
+  selector: 'z-demo-toggle-group-preview',
   imports: [ZardToggleGroupComponent],
   template: `
     <z-toggle-group zMode="multiple" zType="outline" [zItems]="items" (valueChange)="onToggleChange($event)" />
@@ -21,8 +21,9 @@ import {
       lucideUnderline,
     }),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoToggleGroupDefaultComponent {
+export class ZardDemoToggleGroupPreviewComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'bold',

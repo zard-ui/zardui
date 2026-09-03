@@ -8,7 +8,7 @@ export const TOGGLE_GROUP_API: ApiSection[] = [
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zDefaultValue]',
-        description: 'Default value',
+        description: "Uncontrolled initial value — a string when zMode is 'single', a string[] when 'multiple'",
         type: 'string | string[]',
         default: '-',
       },
@@ -32,7 +32,8 @@ export const TOGGLE_GROUP_API: ApiSection[] = [
       },
       {
         name: '[zMode]',
-        description: 'Selection mode — single allows one active toggle, multiple allows many',
+        description:
+          "Selection mode: 'single' binds a string value and allows one pressed item at a time; 'multiple' binds a string[] value and allows any number pressed",
         type: "'single' | 'multiple'",
         default: "'multiple'",
       },
@@ -45,7 +46,7 @@ export const TOGGLE_GROUP_API: ApiSection[] = [
       {
         name: '[zSize]',
         description: 'Size variant of the toggle group',
-        type: "'default' | 'sm' | 'lg'",
+        type: "'sm' | 'default' | 'lg'",
         default: "'default'",
       },
       {
@@ -62,14 +63,15 @@ export const TOGGLE_GROUP_API: ApiSection[] = [
       },
       {
         name: '[zValue]',
-        description: 'Controlled value of the toggle group',
+        description:
+          "Controlled value of the toggle group — a string when zMode is 'single', a string[] when 'multiple'",
         type: 'string | string[] | undefined',
         default: '-',
       },
       {
         name: '(valueChange)',
-        description: 'Emitted when toggle state changes, returns updated value',
-        type: 'output<string | string[]>',
+        description: 'Emitted when toggle state changes, returns the updated value in the shape matching zMode',
+        type: 'EventEmitter<string | string[]>',
         default: '-',
       },
     ],
