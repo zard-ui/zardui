@@ -5,7 +5,7 @@ import { ZardPaginationImports } from '@/shared/components/pagination';
 import { ZardSelectImports } from '@/shared/components/select';
 
 @Component({
-  selector: 'z-demo-pagination-iconsonly',
+  selector: 'z-demo-pagination-icons-only',
   imports: [ZardPaginationImports, ZardFieldImports, ZardSelectImports],
   template: `
     <div class="flex w-full justify-around">
