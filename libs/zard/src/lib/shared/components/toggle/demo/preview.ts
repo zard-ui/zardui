@@ -6,7 +6,7 @@ import { lucideBookmark } from '@ng-icons/lucide';
 import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
-  selector: 'z-demo-toggle-default',
+  selector: 'z-demo-toggle-preview',
   imports: [ZardToggleComponent, NgIcon],
   template: `
     <z-toggle zAriaLabel="Toggle bookmark" zSize="sm" zType="outline">
@@ -17,4 +17,4 @@ import { ZardToggleComponent } from '../toggle.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBookmark })],
 })
-export class ZardDemoToggleDefaultComponent {}
+export class ZardDemoTogglePreviewComponent {}

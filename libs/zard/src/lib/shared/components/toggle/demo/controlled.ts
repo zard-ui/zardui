@@ -6,7 +6,7 @@ import { lucideLightbulb, lucideLightbulbOff } from '@ng-icons/lucide';
 import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
-  selector: 'z-demo-toggle-with-bindings',
+  selector: 'z-demo-toggle-controlled',
   imports: [ZardToggleComponent, NgIcon],
   template: `
     <div class="flex flex-col items-center gap-8">
@@ -19,7 +19,7 @@ import { ZardToggleComponent } from '../toggle.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideLightbulb, lucideLightbulbOff })],
 })
-export class ZardDemoToggleWithBindingsComponent {
+export class ZardDemoToggleControlledComponent {
   protected readonly lightOn = signal(false);
   protected readonly bulb = computed(() => (this.lightOn() ? 'lucideLightbulb' : 'lucideLightbulbOff'));
   protected readonly state = computed(() => (this.lightOn() ? 'on' : 'off'));
