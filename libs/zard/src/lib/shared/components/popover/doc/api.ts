@@ -49,7 +49,7 @@ export const POPOVER_API: ApiSection[] = [
         name: '(zVisibleChange)',
         description: 'Emits when visibility changes. Fires immediately, before the exit animation ends',
         type: 'EventEmitter<boolean>',
-        default: '',
+        default: '-',
       },
     ],
   },

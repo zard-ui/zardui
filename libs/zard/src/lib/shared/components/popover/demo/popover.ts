@@ -1,8 +1,8 @@
 import { POPOVER_DEMO_ALIGN } from '@generated/components/popover/demo/align';
 import { POPOVER_DEMO_BASIC } from '@generated/components/popover/demo/basic';
+import { POPOVER_DEMO_CLOSE_ON_ACTION } from '@generated/components/popover/demo/close-on-action';
 import { POPOVER_DEMO_FORM } from '@generated/components/popover/demo/form';
 import { POPOVER_DEMO_HOVER } from '@generated/components/popover/demo/hover';
-import { POPOVER_DEMO_INTERACTIVE } from '@generated/components/popover/demo/interactive';
 import { POPOVER_DEMO_PLACEMENT } from '@generated/components/popover/demo/placement';
 import { POPOVER_DEMO_PREVIEW } from '@generated/components/popover/demo/preview';
 import { POPOVER_CLI_ADD } from '@generated/installation/cli/add-popover';
@@ -12,9 +12,9 @@ import type { CodeBlockData } from '@highlight/types';
 
 import { ZardDemoPopoverAlignComponent } from '@/shared/components/popover/demo/align';
 import { ZardDemoPopoverBasicComponent } from '@/shared/components/popover/demo/basic';
+import { ZardDemoPopoverCloseOnActionComponent } from '@/shared/components/popover/demo/close-on-action';
 import { ZardDemoPopoverFormComponent } from '@/shared/components/popover/demo/form';
 import { ZardDemoPopoverHoverComponent } from '@/shared/components/popover/demo/hover';
-import { ZardDemoPopoverInteractiveComponent } from '@/shared/components/popover/demo/interactive';
 import { ZardDemoPopoverPlacementComponent } from '@/shared/components/popover/demo/placement';
 import { ZardDemoPopoverPreviewComponent } from '@/shared/components/popover/demo/preview';
 import { POPOVER_API } from '@/shared/components/popover/doc/api';
@@ -44,6 +44,10 @@ export const POPOVER = {
   componentType: 'popover',
   api: POPOVER_API,
   description: 'Displays rich content in a portal, triggered by a button.',
+  about: {
+    description:
+      'Reach for `[zPopover]` with `z-popover` when a trigger should open a floating panel of interactive content — a form, a menu of actions — that stays open until it is dismissed by clicking outside, pressing `Escape`, or completing an action inside it. Setting `zTrigger="hover"` opens it on hover instead of click, but for a hover- or focus-triggered preview of non-essential content prefer `[zHoverCard]`/`z-hover-card`: it debounces the pointer with open/close delays (700ms/300ms by default) so a passing cursor does not trigger it, which a hover-triggered popover does not do on its own. Use `[zTooltip]`/`z-tooltip` instead of either for a short text label.',
+  },
   installData: {
     cliAdd: POPOVER_CLI_ADD,
     manualCode: POPOVER_MANUAL_CODE,
@@ -64,7 +68,8 @@ export const POPOVER = {
     },
     {
       name: 'align',
-      description: 'Use `zAlign` to align the popover against the trigger.',
+      description:
+        'Set `zAlign` to `start`, `center` or `end` to align the popover along the side chosen by `zPlacement`.',
       component: ZardDemoPopoverAlignComponent,
       codeData: POPOVER_DEMO_ALIGN,
     },
@@ -76,21 +81,24 @@ export const POPOVER = {
     },
     {
       name: 'placement',
-      description: 'Use `zPlacement` to choose the side the popover opens on.',
+      description:
+        'Set `zPlacement` to `top`, `bottom`, `left` or `right` to choose which side of the trigger the popover opens on. The overlay flips to another side automatically when the preferred placement does not fit in the viewport.',
       component: ZardDemoPopoverPlacementComponent,
       codeData: POPOVER_DEMO_PLACEMENT,
     },
     {
       name: 'hover',
-      description: 'Set `zTrigger="hover"` to open the popover on pointer enter.',
+      description:
+        'Set `zTrigger="hover"` to open the popover on pointer enter instead of click. Prefer `[zHoverCard]` for a hover-triggered preview of non-essential content — it adds open/close delays that a hover-triggered popover does not have, so a passing cursor does not trigger it.',
       component: ZardDemoPopoverHoverComponent,
       codeData: POPOVER_DEMO_HOVER,
     },
     {
-      name: 'interactive',
-      description: 'Control the popover programmatically through `show()`, `hide()` and `toggle()`.',
-      component: ZardDemoPopoverInteractiveComponent,
-      codeData: POPOVER_DEMO_INTERACTIVE,
+      name: 'close-on-action',
+      description:
+        'Read the `zPopover` directive with `viewChild` and call `hide()` to close the popover programmatically — for example, after an in-panel action like a save button completes.',
+      component: ZardDemoPopoverCloseOnActionComponent,
+      codeData: POPOVER_DEMO_CLOSE_ON_ACTION,
     },
   ],
 };
