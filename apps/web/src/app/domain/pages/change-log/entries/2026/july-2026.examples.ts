@@ -1,6 +1,6 @@
 import { FIELD_DEMO_PREVIEW } from '@generated/components/field/demo/preview';
 import { ITEM_DEMO_PREVIEW } from '@generated/components/item/demo/preview';
-import { SONNER_DEMO_DEFAULT } from '@generated/components/sonner/demo/default';
+import { SONNER_DEMO_PREVIEW } from '@generated/components/sonner/demo/preview';
 import { TEXTAREA_DEMO_DEFAULT } from '@generated/components/textarea/demo/default';
 import { FIELD_CLI_ADD } from '@generated/installation/cli/add-field';
 import { ITEM_CLI_ADD } from '@generated/installation/cli/add-item';
@@ -9,7 +9,7 @@ import { TEXTAREA_CLI_ADD } from '@generated/installation/cli/add-textarea';
 
 import { ZardDemoFieldPreviewComponent } from '@zard/components/field/demo/preview';
 import { ZardDemoItemPreviewComponent } from '@zard/components/item/demo/preview';
-import { ZardDemoSonnerDefaultComponent } from '@zard/components/sonner/demo/default';
+import { ZardDemoSonnerPreviewComponent } from '@zard/components/sonner/demo/preview';
 import { ZardDemoTextareaDefaultComponent } from '@zard/components/textarea/demo/default';
 
 import { type ChangelogExample } from '../changelog-entry.interface';
@@ -41,12 +41,12 @@ export const JULY_2026_EXAMPLES: ChangelogExample[] = [
     cliAdd: TEXTAREA_CLI_ADD,
   },
   {
-    name: 'default',
+    name: 'preview',
     description:
       'An opinionated toast component with stacking, positioning, and per-type styling. Replaces the old toast.',
-    component: ZardDemoSonnerDefaultComponent,
+    component: ZardDemoSonnerPreviewComponent,
     componentName: 'sonner',
-    codeData: SONNER_DEMO_DEFAULT,
+    codeData: SONNER_DEMO_PREVIEW,
     cliAdd: SONNER_CLI_ADD,
   },
 ];
