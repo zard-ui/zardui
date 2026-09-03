@@ -4,14 +4,14 @@ import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-d
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
 @Component({
-  selector: 'z-demo-alert-dialog-default',
+  selector: 'z-demo-alert-dialog-preview',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="open()">Show Dialog</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoAlertDialogDefaultComponent {
+export class ZardDemoAlertDialogPreviewComponent {
   private readonly alertDialogService = inject(ZardAlertDialogService);
 
   open() {

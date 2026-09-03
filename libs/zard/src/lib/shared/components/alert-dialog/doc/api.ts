@@ -8,6 +8,18 @@ export const ALERT_DIALOG_API: ApiSection[] = [
       { name: '[zTitle]', description: 'Dialog title text or template', type: 'string | TemplateRef<T>', default: '-' },
       { name: '[zDescription]', description: 'Dialog description/body text', type: 'string', default: '-' },
       {
+        name: '[zMedia]',
+        description: 'Template rendered as a media slot above the title (e.g. an icon)',
+        type: 'TemplateRef<void>',
+        default: '-',
+      },
+      {
+        name: '[zMediaClass]',
+        description: 'Extra classes applied to the media slot wrapper (e.g. tinted backgrounds for destructive)',
+        type: 'ClassValue',
+        default: '-',
+      },
+      {
         name: '[zContent]',
         description: 'Custom content component, template, or HTML',
         type: 'string | TemplateRef<T> | Type<T>',
@@ -40,8 +52,20 @@ export const ALERT_DIALOG_API: ApiSection[] = [
         default: 'false',
       },
       { name: '[zClosable]', description: 'Whether dialog can be closed', type: 'boolean', default: 'true' },
+      {
+        name: '[zSize]',
+        description: 'Visual size of the dialog. `default` is wider on `sm+` breakpoints; `sm` keeps a compact width',
+        type: "'default' | 'sm'",
+        default: "'default'",
+      },
       { name: '[zWidth]', description: "Custom width (e.g., '400px', '50%')", type: 'string', default: '-' },
       { name: '[zCustomClasses]', description: 'Additional CSS classes to apply', type: 'ClassValue', default: '-' },
+      {
+        name: '[zDuration]',
+        description: 'Animation duration (ms) used when closing. Matches the CSS transition',
+        type: 'number',
+        default: '100',
+      },
       {
         name: '[zOnOk]',
         description: 'OK button click handler',
