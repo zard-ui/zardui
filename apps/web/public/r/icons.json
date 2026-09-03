@@ -55,6 +55,9 @@
     "bot": {
       "lucide": "lucideBot"
     },
+    "building-2": {
+      "lucide": "lucideBuilding2"
+    },
     "calculator": {
       "lucide": "lucideCalculator"
     },
@@ -148,6 +151,9 @@
     "eye-off": {
       "lucide": "lucideEyeOff"
     },
+    "file": {
+      "lucide": "lucideFile"
+    },
     "file-code": {
       "lucide": "lucideFileCode"
     },
@@ -231,6 +237,9 @@
     },
     "mail-check": {
       "lucide": "lucideMailCheck"
+    },
+    "message-square": {
+      "lucide": "lucideMessageSquare"
     },
     "minus": {
       "lucide": "lucideMinus"
@@ -327,6 +336,9 @@
     },
     "volume-off": {
       "lucide": "lucideVolumeOff"
+    },
+    "wallet": {
+      "lucide": "lucideWallet"
     },
     "waves": {
       "lucide": "lucideWaves"

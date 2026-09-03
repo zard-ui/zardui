@@ -74,11 +74,14 @@
       ],
       "tokens": [
         "bell",
+        "building-2",
         "credit-card",
         "keyboard",
         "mail",
+        "message-square",
         "settings",
-        "user"
+        "user",
+        "wallet"
       ]
     }
   }
