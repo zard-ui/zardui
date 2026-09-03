@@ -5,7 +5,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardEmptyComponent } from '@/shared/components/empty';
 
 @Component({
-  selector: 'z-demo-empty-custom-image',
+  selector: 'z-demo-empty-avatar',
   imports: [ZardAvatarComponent, ZardButtonComponent, ZardEmptyComponent],
   template: `
     <z-empty
@@ -18,7 +18,7 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
     <ng-template #customImage>
       <z-avatar
         zSize="lg"
-        zSrc="images/avatar/imgs/avatar_image.jpg"
+        zSrc="/images/avatar/imgs/avatar_image.jpg"
         zFallback="CN"
         zAlt="User avatar"
         class="grayscale"
@@ -31,4 +31,4 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoEmptyCustomImageComponent {}
+export class ZardDemoEmptyAvatarComponent {}

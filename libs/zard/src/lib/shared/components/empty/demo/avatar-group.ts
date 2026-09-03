@@ -8,12 +8,12 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardEmptyComponent } from '@/shared/components/empty';
 
 @Component({
-  selector: 'z-demo-empty-advanced-customization',
+  selector: 'z-demo-empty-avatar-group',
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, NgIcon, ZardEmptyComponent],
   template: `
     <z-empty
       [zImage]="customImage"
-      [zTitle]="customTitle"
+      zTitle="No Team Members"
       zDescription="Invite your team to collaborate on this project."
       [zActions]="[actionInvite]"
     />
@@ -27,13 +27,6 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
       </z-avatar-group>
     </ng-template>
 
-    <ng-template #customTitle>
-      <span>
-        No Team
-        <strong>members</strong>
-      </span>
-    </ng-template>
-
     <ng-template #actionInvite>
       <button type="button" z-button zSize="sm">
         <ng-icon name="lucidePlus" />
@@ -44,4 +37,4 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus })],
 })
-export class ZardDemoEmptyAdvancedComponent {}
+export class ZardDemoEmptyAvatarGroupComponent {}
