@@ -1,5 +1,5 @@
 import { FIELD_DEMO_PREVIEW } from '@generated/components/field/demo/preview';
-import { ITEM_DEMO_DEFAULT } from '@generated/components/item/demo/default';
+import { ITEM_DEMO_PREVIEW } from '@generated/components/item/demo/preview';
 import { SONNER_DEMO_DEFAULT } from '@generated/components/sonner/demo/default';
 import { TEXTAREA_DEMO_DEFAULT } from '@generated/components/textarea/demo/default';
 import { FIELD_CLI_ADD } from '@generated/installation/cli/add-field';
@@ -8,7 +8,7 @@ import { SONNER_CLI_ADD } from '@generated/installation/cli/add-sonner';
 import { TEXTAREA_CLI_ADD } from '@generated/installation/cli/add-textarea';
 
 import { ZardDemoFieldPreviewComponent } from '@zard/components/field/demo/preview';
-import { ZardDemoItemDefaultComponent } from '@zard/components/item/demo/default';
+import { ZardDemoItemPreviewComponent } from '@zard/components/item/demo/preview';
 import { ZardDemoSonnerDefaultComponent } from '@zard/components/sonner/demo/default';
 import { ZardDemoTextareaDefaultComponent } from '@zard/components/textarea/demo/default';
 
@@ -27,9 +27,9 @@ export const JULY_2026_EXAMPLES: ChangelogExample[] = [
   {
     name: 'default',
     description: 'A versatile row for displaying media, a title, a description, and actions side by side.',
-    component: ZardDemoItemDefaultComponent,
+    component: ZardDemoItemPreviewComponent,
     componentName: 'item',
-    codeData: ITEM_DEMO_DEFAULT,
+    codeData: ITEM_DEMO_PREVIEW,
     cliAdd: ITEM_CLI_ADD,
   },
   {

@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardItemImports } from '@/shared/components/item/item.imports';
@@ -11,14 +12,20 @@ interface Song {
 
 @Component({
   selector: 'z-demo-item-image',
-  imports: [...ZardItemImports],
+  imports: [NgOptimizedImage, ...ZardItemImports],
   template: `
     <div class="flex w-full min-w-md flex-col gap-6">
       <z-item-group class="gap-4">
         @for (song of music; track song.title) {
           <a z-item href="#" zVariant="outline" role="listitem">
             <z-item-media zVariant="image">
-              <img [src]="'https://avatar.vercel.sh/' + song.title" [alt]="song.title" class="object-cover grayscale" />
+              <img
+                [ngSrc]="'https://avatar.vercel.sh/' + song.title"
+                [alt]="song.title"
+                width="120"
+                height="120"
+                class="grayscale"
+              />
             </z-item-media>
             <z-item-content>
               <z-item-title class="line-clamp-1">

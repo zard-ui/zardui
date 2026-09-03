@@ -7,7 +7,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardItemImports } from '@/shared/components/item/item.imports';
 
 @Component({
-  selector: 'z-demo-item-default',
+  selector: 'z-demo-item-preview',
   imports: [ZardButtonComponent, NgIcon, ...ZardItemImports],
   template: `
     <div class="flex w-full min-w-md flex-col gap-6">
@@ -37,4 +37,4 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBadgeCheck, lucideChevronRight })],
 })
-export class ZardDemoItemDefaultComponent {}
+export class ZardDemoItemPreviewComponent {}
