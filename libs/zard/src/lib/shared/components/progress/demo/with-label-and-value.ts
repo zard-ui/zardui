@@ -4,7 +4,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardProgressComponent } from '@/shared/components/progress/progress.component';
 
 @Component({
-  selector: 'z-demo-progress-label',
+  selector: 'z-demo-progress-with-label-and-value',
   imports: [ZardProgressComponent, ...ZardFieldImports],
   template: `
     <z-field class="w-full min-w-sm">
@@ -17,4 +17,4 @@ import { ZardProgressComponent } from '@/shared/components/progress/progress.com
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoProgressLabelComponent {}
+export class ZardDemoProgressWithLabelAndValueComponent {}
