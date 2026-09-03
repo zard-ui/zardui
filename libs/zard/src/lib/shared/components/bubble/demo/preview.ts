@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
 @Component({
-  selector: 'z-demo-bubble-default',
+  selector: 'z-demo-bubble-preview',
   imports: [...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -42,4 +42,4 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
-export class ZardDemoBubbleDefaultComponent {}
+export class ZardDemoBubblePreviewComponent {}

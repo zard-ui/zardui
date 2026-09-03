@@ -5,6 +5,7 @@ import { lucideChevronDown } from '@ng-icons/lucide';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsible.imports';
 
 const TEXT = `The accessibility review found two focus states that were visually too subtle in dark mode.
 
@@ -18,7 +19,7 @@ const PREVIEW_LENGTH = 180;
 
 @Component({
   selector: 'z-demo-bubble-collapsible',
-  imports: [NgIcon, ZardButtonComponent, ...ZardBubbleImports],
+  imports: [NgIcon, ZardButtonComponent, ...ZardCollapsibleImports, ...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
       <z-bubble zVariant="muted">
@@ -27,26 +28,20 @@ const PREVIEW_LENGTH = 180;
 
       <z-bubble zVariant="muted" zAlign="end">
         <z-bubble-content class="whitespace-pre-line">
-          <div id="bubble-collapsible-text">{{ visibleText() }}</div>
-          @if (isLong) {
-            <button
-              type="button"
-              z-button
-              zType="link"
-              class="text-muted-foreground gap-1 p-0"
-              aria-controls="bubble-collapsible-text"
-              [attr.aria-expanded]="open()"
-              (click)="open.set(!open())"
-            >
-              {{ open() ? 'Show less' : 'Show more' }}
-              <ng-icon
-                name="lucideChevronDown"
-                data-icon="inline-end"
-                class="transition-transform"
-                [class.rotate-180]="open()"
-              />
-            </button>
-          }
+          <div z-collapsible #turn="zCollapsible" [zOpen]="open()" (zOpenChange)="open.set($event)">
+            <div [id]="turn.contentId()">{{ visibleText() }}</div>
+            @if (isLong) {
+              <button type="button" z-button z-collapsible-trigger zType="link" class="text-muted-foreground gap-1 p-0">
+                {{ open() ? 'Show less' : 'Show more' }}
+                <ng-icon
+                  name="lucideChevronDown"
+                  data-icon="inline-end"
+                  class="transition-transform"
+                  [class.rotate-180]="open()"
+                />
+              </button>
+            }
+          </div>
         </z-bubble-content>
       </z-bubble>
     </div>

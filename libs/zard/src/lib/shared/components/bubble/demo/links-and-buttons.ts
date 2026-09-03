@@ -4,7 +4,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'z-demo-bubble-link-button',
+  selector: 'z-demo-bubble-links-and-buttons',
   imports: [...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -18,9 +18,7 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
           </button>
         </z-bubble>
         <z-bubble zVariant="tinted" zAlign="end">
-          <button type="button" z-bubble-content (click)="notify('You clicked help with subscription')">
-            I need help with my subscription
-          </button>
+          <a z-bubble-content href="/docs/components/bubble" target="_blank" rel="noreferrer">Read the docs instead</a>
         </z-bubble>
         <z-bubble zVariant="tinted" zAlign="end">
           <button type="button" z-bubble-content (click)="notify('You clicked something else. Talk to a human.')">
@@ -33,7 +31,7 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
-export class ZardDemoBubbleLinkButtonComponent {
+export class ZardDemoBubbleLinksAndButtonsComponent {
   private readonly sonner = inject(ZardSonnerService);
 
   protected notify(message: string) {
