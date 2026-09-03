@@ -121,19 +121,8 @@
     @apply bg-background text-foreground;
   }
 }
-
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-track {
-  border-radius: 5px;
-  background: var(--muted);
-}
 ```
+
+Want a thinner, theme-colored scrollbar instead of the browser default? Zard ships that as an opt-in utility, `scrollbar-thin`, instead of global CSS, so it never repaints scroll surfaces you did not ask it to. Add the class to `html` (or any container that scrolls) to opt in.
+
+**Upgrading an existing project:** if you ran `zard-cli init` before this change, your `styles.css` already has a bare `::-webkit-scrollbar { ... }` block appended after `@layer base`. It is safe to delete — it was restyling every scrollbar in your app, not just zard's, and repainting them whenever `--muted` / `--muted-foreground` changed. Delete it, and add the `scrollbar-thin` class to `html` if you want to keep the same look.

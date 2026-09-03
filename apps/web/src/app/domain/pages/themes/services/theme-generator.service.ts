@@ -153,21 +153,6 @@ ${darkVars}
     appearance: textfield; /* Added for general compatibility */
   }
 }
-
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-track {
-  border-radius: 5px;
-  background: var(--muted);
-}
 `;
   }
 
