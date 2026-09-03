@@ -7,7 +7,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
 
 @Component({
-  selector: 'z-demo-marker-default',
+  selector: 'z-demo-marker-preview',
   imports: [NgIcon, ZardSpinnerComponent, ...ZardMarkerImports],
   template: `
     <div class="flex w-full max-w-sm min-w-sm flex-col gap-8">
@@ -34,4 +34,4 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideGitBranch, lucideSearch })],
 })
-export class ZardDemoMarkerDefaultComponent {}
+export class ZardDemoMarkerPreviewComponent {}

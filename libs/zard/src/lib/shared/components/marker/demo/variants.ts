@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 
 @Component({
-  selector: 'z-demo-marker-variant',
+  selector: 'z-demo-marker-variants',
   imports: [...ZardMarkerImports],
   template: `
     <div class="flex w-full max-w-sm min-w-sm flex-col gap-8">
@@ -22,4 +22,4 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoMarkerVariantComponent {}
+export class ZardDemoMarkerVariantsComponent {}

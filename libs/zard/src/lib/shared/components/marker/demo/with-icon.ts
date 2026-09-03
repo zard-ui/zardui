@@ -6,7 +6,7 @@ import { lucideBookOpenCheck, lucideGitBranch, lucideSearch } from '@ng-icons/lu
 import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 
 @Component({
-  selector: 'z-demo-marker-icon',
+  selector: 'z-demo-marker-with-icon',
   imports: [NgIcon, ...ZardMarkerImports],
   template: `
     <div class="flex w-full max-w-sm min-w-sm flex-col gap-12">
@@ -29,4 +29,4 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBookOpenCheck, lucideGitBranch, lucideSearch })],
 })
-export class ZardDemoMarkerIconComponent {}
+export class ZardDemoMarkerWithIconComponent {}

@@ -7,7 +7,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'z-demo-marker-link',
+  selector: 'z-demo-marker-links-and-buttons',
   imports: [NgIcon, ...ZardMarkerImports],
   template: `
     <div class="flex w-full max-w-sm min-w-sm flex-col gap-8">
@@ -25,7 +25,7 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideGitBranch, lucideRotateCcw })],
 })
-export class ZardDemoMarkerLinkComponent {
+export class ZardDemoMarkerLinksAndButtonsComponent {
   private readonly sonner = inject(ZardSonnerService);
 
   revert() {
