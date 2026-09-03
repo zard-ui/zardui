@@ -13,7 +13,7 @@ import { type ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
-  buttonGroupDividerVariants,
+  buttonGroupSeparatorVariants,
   buttonGroupTextVariants,
   buttonGroupVariants,
   type ZardButtonGroupVariants,
@@ -52,7 +52,7 @@ export class ZardButtonGroupComponent {
 }
 
 @Component({
-  selector: 'z-button-group-divider',
+  selector: 'z-button-group-separator',
   imports: [ZardSeparatorComponent],
   template: `
     <z-separator [class]="classes()" aria-hidden="true" [zOrientation]="orientation()" />
@@ -63,9 +63,9 @@ export class ZardButtonGroupComponent {
     class: 'contents',
     'data-slot': 'button-group-separator',
   },
-  exportAs: 'zButtonGroupDivider',
+  exportAs: 'zButtonGroupSeparator',
 })
-export class ZardButtonGroupDividerComponent {
+export class ZardButtonGroupSeparatorComponent {
   readonly zOrientation = input<ZardSeparatorVariants['zOrientation']>(null);
   readonly class = input<ClassValue>('');
 
@@ -84,7 +84,7 @@ export class ZardButtonGroupDividerComponent {
 
   protected readonly classes = computed(() =>
     mergeClasses(
-      buttonGroupDividerVariants({
+      buttonGroupSeparatorVariants({
         zOrientation: this.orientation(),
       }),
       this.class(),

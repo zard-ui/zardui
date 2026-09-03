@@ -4,10 +4,10 @@ import { render, screen } from '@testing-library/angular';
 
 import {
   ZardButtonGroupComponent,
-  ZardButtonGroupDividerComponent,
+  ZardButtonGroupSeparatorComponent,
   ZardButtonGroupTextDirective,
 } from './button-group.component';
-import { buttonGroupDividerVariants, buttonGroupTextVariants, buttonGroupVariants } from './button-group.variants';
+import { buttonGroupSeparatorVariants, buttonGroupTextVariants, buttonGroupVariants } from './button-group.variants';
 
 describe('ButtonGroup', () => {
   describe('ButtonGroupComponent', () => {
@@ -64,41 +64,41 @@ describe('ButtonGroup', () => {
     });
   });
 
-  describe('ButtonGroupDividerComponent', () => {
-    it('should render a divider and have a class of contents', async () => {
-      const r = await render(ZardButtonGroupDividerComponent);
+  describe('ButtonGroupSeparatorComponent', () => {
+    it('should render a separator and have a class of contents', async () => {
+      const r = await render(ZardButtonGroupSeparatorComponent);
       expect(r.fixture.nativeElement.querySelector('z-separator')).toBeTruthy();
       expect(r.fixture.nativeElement.classList).toContain('contents');
     });
 
-    it('should apply custom classes to the child divider', async () => {
-      const r = await render(ZardButtonGroupDividerComponent, {
+    it('should apply custom classes to the child separator', async () => {
+      const r = await render(ZardButtonGroupSeparatorComponent, {
         bindings: [inputBinding('class', () => 'custom-class')],
       });
       expect(Array.from(r.fixture.nativeElement.querySelector('z-separator').classList)).toContain('custom-class');
     });
 
-    it('should set the correct orientation on the child divider', async () => {
+    it('should set the correct orientation on the child separator', async () => {
       const orientation = signal<'horizontal' | 'vertical'>('vertical');
-      const r = await render(ZardButtonGroupDividerComponent, {
+      const r = await render(ZardButtonGroupSeparatorComponent, {
         bindings: [inputBinding('zOrientation', orientation)],
       });
 
-      let divider = r.fixture.nativeElement.querySelector('z-separator');
+      let separator = r.fixture.nativeElement.querySelector('z-separator');
 
-      expect(divider.getAttribute('data-orientation')).toBe('vertical');
+      expect(separator.getAttribute('data-orientation')).toBe('vertical');
 
       orientation.set('horizontal');
       r.fixture.detectChanges();
-      divider = r.fixture.nativeElement.querySelector('z-separator');
-      expect(divider.getAttribute('data-orientation')).toBe('horizontal');
+      separator = r.fixture.nativeElement.querySelector('z-separator');
+      expect(separator.getAttribute('data-orientation')).toBe('horizontal');
     });
 
     it('should inherit orientation from the parent component if set', async () => {
       @Component({
-        imports: [ZardButtonGroupComponent, ZardButtonGroupDividerComponent],
+        imports: [ZardButtonGroupComponent, ZardButtonGroupSeparatorComponent],
         template: `
-          <z-button-group [zOrientation]="orientation()"><z-button-group-divider /></z-button-group>
+          <z-button-group [zOrientation]="orientation()"><z-button-group-separator /></z-button-group>
         `,
       })
       class TestComponent {
@@ -109,24 +109,24 @@ describe('ButtonGroup', () => {
         bindings: [inputBinding('orientation', orientation)],
       });
 
-      let divider = r.fixture.nativeElement.querySelector('z-separator');
-      // divider is inverse of parent presentationaly
-      expect(divider.getAttribute('data-orientation')).toBe('horizontal');
+      let separator = r.fixture.nativeElement.querySelector('z-separator');
+      // separator is inverse of parent presentationaly
+      expect(separator.getAttribute('data-orientation')).toBe('horizontal');
 
       orientation.set('horizontal');
       r.fixture.detectChanges();
 
-      divider = r.fixture.nativeElement.querySelector('z-separator');
-      expect(divider.getAttribute('data-orientation')).toBe('vertical');
+      separator = r.fixture.nativeElement.querySelector('z-separator');
+      expect(separator.getAttribute('data-orientation')).toBe('vertical');
     });
 
     it('should apply the appropriate classes for both orientations', async () => {
       const orientation = signal<'horizontal' | 'vertical'>('vertical');
-      const r = await render(ZardButtonGroupDividerComponent, {
+      const r = await render(ZardButtonGroupSeparatorComponent, {
         bindings: [inputBinding('zOrientation', orientation)],
       });
 
-      let expected = buttonGroupDividerVariants({ zOrientation: 'vertical' }).split(' ');
+      let expected = buttonGroupSeparatorVariants({ zOrientation: 'vertical' }).split(' ');
       let actual = Array.from(r.fixture.nativeElement.querySelector('z-separator').classList);
 
       for (const cls of expected) {
@@ -136,15 +136,15 @@ describe('ButtonGroup', () => {
       orientation.set('horizontal');
       r.fixture.detectChanges();
 
-      expected = buttonGroupDividerVariants({ zOrientation: 'horizontal' }).split(' ');
+      expected = buttonGroupSeparatorVariants({ zOrientation: 'horizontal' }).split(' ');
       actual = Array.from(r.fixture.nativeElement.querySelector('z-separator').classList);
       for (const cls of expected) {
         expect(actual).toContain(cls);
       }
     });
 
-    it('should have an aria-hidden attribute set to true on the divider', async () => {
-      const r = await render(ZardButtonGroupDividerComponent);
+    it('should have an aria-hidden attribute set to true on the separator', async () => {
+      const r = await render(ZardButtonGroupSeparatorComponent);
       expect(r.fixture.nativeElement.querySelector('z-separator').getAttribute('aria-hidden')).toBe('true');
     });
   });

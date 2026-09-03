@@ -20,7 +20,7 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/n
 import { ZardSeparatorComponent } from '@/shared/components/separator';
 
 @Component({
-  selector: 'z-demo-button-group-default',
+  selector: 'z-demo-button-group-preview',
   imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon, ZardNavigationMenuImports, ZardSeparatorComponent],
   template: `
     <z-button-group>
@@ -116,4 +116,4 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
     }),
   ],
 })
-export class ZardDemoButtonGroupDefaultComponent {}
+export class ZardDemoButtonGroupPreviewComponent {}
