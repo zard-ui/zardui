@@ -2,37 +2,53 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 
 export const TOOLTIP_API: ApiSection[] = [
   {
-    selector: '[z-tooltip]',
-    description: 'A directive that shows a tooltip popup on hover or click.',
+    selector: '[zTooltip]',
+    description: 'The directive that shows a tooltip popup when its host is hovered, focused, or clicked.',
     props: [
-      { name: '[zTooltip]', description: 'The text content of tooltip', type: 'string', default: '-' },
+      {
+        name: '[zTooltip]',
+        description: 'The tooltip content: a string, or a template for richer content such as a `z-kbd`',
+        type: 'string | TemplateRef<void>',
+        default: '-',
+      },
       {
         name: '[zPosition]',
-        description: 'The position of the tooltip',
+        description: 'Side of the trigger the tooltip opens on (shadcn calls this input `side`)',
         type: "'top' | 'bottom' | 'left' | 'right'",
         default: "'top'",
       },
       {
         name: '[zPositionOffset]',
-        description: 'The position of the tooltip offset',
+        description: 'Distance in pixels between the tooltip and the trigger',
         type: 'number',
         default: '4',
       },
-      { name: '[zTrigger]', description: 'The tooltip trigger mode', type: "'hover' | 'click'", default: "'hover'" },
+      {
+        name: '[zTrigger]',
+        description: 'How the tooltip is triggered',
+        type: "'hover' | 'click'",
+        default: "'hover'",
+      },
       {
         name: '[zShowDelay]',
-        description: 'Delay showing the tooltip after trigger in milliseconds',
+        description: 'Delay in milliseconds before showing the tooltip',
         type: 'number',
         default: '150',
       },
       {
         name: '[zHideDelay]',
-        description: 'Delay hiding the tooltip after trigger in milliseconds',
+        description: 'Delay in milliseconds before hiding the tooltip',
         type: 'number',
         default: '100',
       },
-      { name: '(zShow)', description: 'Emitted when the tooltip is shown', type: 'output<void>', default: '-' },
-      { name: '(zHide)', description: 'Emitted when the tooltip is hidden', type: 'output<void>', default: '-' },
+      { name: '(zShow)', description: 'Emits when the tooltip is shown', type: 'EventEmitter<void>', default: '-' },
+      { name: '(zHide)', description: 'Emits when the tooltip is hidden', type: 'EventEmitter<void>', default: '-' },
     ],
+  },
+  {
+    selector: 'z-tooltip',
+    description:
+      'The tooltip content. Mounted automatically by `[zTooltip]` — never placed directly in a template. Exposes `role="tooltip"`, `data-side` and `data-state` while mounted.',
+    props: [],
   },
 ];

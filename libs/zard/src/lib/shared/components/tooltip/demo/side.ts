@@ -4,7 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
 
 @Component({
-  selector: 'z-demo-tooltip-position',
+  selector: 'z-demo-tooltip-side',
   imports: [ZardButtonComponent, ZardTooltipImports],
   template: `
     <div class="flex flex-col space-y-2">
@@ -20,4 +20,4 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoTooltipPositionComponent {}
+export class ZardDemoTooltipSideComponent {}
