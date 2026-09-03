@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
 
 @Component({
-  selector: 'z-demo-spinner-customization',
+  selector: 'z-demo-spinner-custom-icon',
   imports: [ZardSpinnerComponent],
   template: `
     <div class="flex items-center gap-4">
@@ -34,4 +34,4 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSpinnerCustomizationComponent {}
+export class ZardDemoSpinnerCustomIconComponent {}

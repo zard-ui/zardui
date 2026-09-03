@@ -1,13 +1,13 @@
 import { PROGRESS_DEMO_PREVIEW } from '@generated/components/progress/demo/preview';
 import { SKELETON_DEMO_PREVIEW } from '@generated/components/skeleton/demo/preview';
-import { SPINNER_DEMO_CUSTOMIZATION } from '@generated/components/spinner/demo/customization';
+import { SPINNER_DEMO_CUSTOM_ICON } from '@generated/components/spinner/demo/custom-icon';
 import { PROGRESS_CLI_ADD } from '@generated/installation/cli/add-progress';
 import { SKELETON_CLI_ADD } from '@generated/installation/cli/add-skeleton';
 import { SPINNER_CLI_ADD } from '@generated/installation/cli/add-spinner';
 
 import { ZardDemoProgressPreviewComponent } from '@zard/components/progress/demo/preview';
 import { ZardDemoSkeletonPreviewComponent } from '@zard/components/skeleton/demo/preview';
-import { ZardDemoSpinnerCustomizationComponent } from '@zard/components/spinner/demo/customization';
+import { ZardDemoSpinnerCustomIconComponent } from '@zard/components/spinner/demo/custom-icon';
 
 import { type ChangelogExample } from '../changelog-entry.interface';
 
@@ -30,12 +30,12 @@ export const SEPTEMBER_2025_EXAMPLES: ChangelogExample[] = [
     cliAdd: SKELETON_CLI_ADD,
   },
   {
-    name: 'customization',
+    name: 'custom-icon',
     description:
       'Animated loading spinner customizable via the [zIcon] template input for swapping the underlying icon.',
-    component: ZardDemoSpinnerCustomizationComponent,
+    component: ZardDemoSpinnerCustomIconComponent,
     componentName: 'spinner',
-    codeData: SPINNER_DEMO_CUSTOMIZATION,
+    codeData: SPINNER_DEMO_CUSTOM_ICON,
     cliAdd: SPINNER_CLI_ADD,
   },
 ];
