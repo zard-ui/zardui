@@ -1,11 +1,11 @@
 import { DATE_PICKER_DEMO_BASIC } from '@generated/components/date-picker/demo/basic';
 import { DATE_PICKER_DEMO_DATE_OF_BIRTH } from '@generated/components/date-picker/demo/date-of-birth';
 import { DATE_PICKER_DEMO_FORMATS } from '@generated/components/date-picker/demo/formats';
+import { DATE_PICKER_DEMO_INPUT } from '@generated/components/date-picker/demo/input';
 import { DATE_PICKER_DEMO_PREVIEW } from '@generated/components/date-picker/demo/preview';
 import { DATE_PICKER_DEMO_RANGE } from '@generated/components/date-picker/demo/range';
 import { DATE_PICKER_DEMO_SIZES } from '@generated/components/date-picker/demo/sizes';
-import { DATE_PICKER_DEMO_WITH_INPUT } from '@generated/components/date-picker/demo/with-input';
-import { DATE_PICKER_DEMO_WITH_TIME } from '@generated/components/date-picker/demo/with-time';
+import { DATE_PICKER_DEMO_TIME_PICKER } from '@generated/components/date-picker/demo/time-picker';
 import { DATE_PICKER_CLI_ADD } from '@generated/installation/cli/add-date-picker';
 import { DATE_PICKER_MANUAL_CODE } from '@generated/installation/manual/date-picker';
 import { DATE_PICKER_USAGE_IMPORT, DATE_PICKER_USAGE_CODE } from '@generated/usage/date-picker';
@@ -13,11 +13,11 @@ import { DATE_PICKER_USAGE_IMPORT, DATE_PICKER_USAGE_CODE } from '@generated/usa
 import { ZardDemoDatePickerBasicComponent } from './basic';
 import { ZardDemoDatePickerDateOfBirthComponent } from './date-of-birth';
 import { ZardDemoDatePickerFormatsComponent } from './formats';
+import { ZardDemoDatePickerInputComponent } from './input';
 import { ZardDemoDatePickerPreviewComponent } from './preview';
 import { ZardDemoDatePickerRangeComponent } from './range';
 import { ZardDemoDatePickerSizesComponent } from './sizes';
-import { ZardDemoDatePickerWithInputComponent } from './with-input';
-import { ZardDemoDatePickerWithTimeComponent } from './with-time';
+import { ZardDemoDatePickerTimePickerComponent } from './time-picker';
 import { DATE_PICKER_API } from '../doc/api';
 
 export const DATE_PICKER = {
@@ -25,6 +25,10 @@ export const DATE_PICKER = {
   componentName: 'date-picker',
   componentType: 'date-picker',
   description: 'A button that opens a calendar in a popover to pick one date, several dates, or a date range.',
+  about: {
+    description:
+      "shadcn has no Date Picker component — its docs page composes `Popover`, `Calendar` and `Button` by hand for every example. `z-date-picker` bundles that composition into one selector: a `z-button` trigger, a `[zPopover]`-driven popover, a `z-calendar` inside it, `zFormat`-based display formatting, and `ControlValueAccessor` so it drops into template-driven or reactive forms as a single `value`/`(dateChange)` pair covering single, multiple and range selection instead of assembling three components by hand each time. Consumers who want shadcn's raw composition instead of the bundled component can still assemble `[zPopover]` and `z-calendar` themselves, the way the `input` example on this page does.",
+  },
   installData: {
     cliAdd: DATE_PICKER_CLI_ADD,
     manualCode: DATE_PICKER_MANUAL_CODE,
@@ -57,17 +61,17 @@ export const DATE_PICKER = {
       codeData: DATE_PICKER_DEMO_RANGE,
     },
     {
-      name: 'with-time',
+      name: 'time-picker',
       description: 'Put the picker next to a `type="time"` input to collect a date and a time.',
-      component: ZardDemoDatePickerWithTimeComponent,
-      codeData: DATE_PICKER_DEMO_WITH_TIME,
+      component: ZardDemoDatePickerTimePickerComponent,
+      codeData: DATE_PICKER_DEMO_TIME_PICKER,
     },
     {
-      name: 'with-input',
+      name: 'input',
       description:
         'Compose `z-input-group`, `z-popover` and `z-calendar` when the date should also be typeable — arrow down opens the calendar.',
-      component: ZardDemoDatePickerWithInputComponent,
-      codeData: DATE_PICKER_DEMO_WITH_INPUT,
+      component: ZardDemoDatePickerInputComponent,
+      codeData: DATE_PICKER_DEMO_INPUT,
     },
     {
       name: 'sizes',

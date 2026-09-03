@@ -62,7 +62,7 @@ function parseDate(value: string): Date | null {
 }
 
 @Component({
-  selector: 'z-demo-date-picker-with-input',
+  selector: 'z-demo-date-picker-input',
   imports: [
     NgIcon,
     ZardCalendarComponent,
@@ -74,11 +74,11 @@ function parseDate(value: string): Date | null {
   ],
   template: `
     <div z-field class="mx-auto w-52">
-      <label z-field-label for="date-picker-with-input">Subscription date</label>
+      <label z-field-label for="date-picker-input">Subscription date</label>
       <z-input-group>
         <input
           z-input
-          id="date-picker-with-input"
+          id="date-picker-input"
           placeholder="June 01, 2025"
           [value]="inputValue()"
           (input)="onInput($event)"
@@ -112,7 +112,7 @@ function parseDate(value: string): Date | null {
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCalendar })],
 })
-export class ZardDemoDatePickerWithInputComponent {
+export class ZardDemoDatePickerInputComponent {
   readonly selectedDate = signal<Date | null>(new Date(2025, 5, 1));
   readonly inputValue = signal(formatDate(new Date(2025, 5, 1)));
   readonly isOpen = signal(false);

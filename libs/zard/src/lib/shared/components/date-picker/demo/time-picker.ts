@@ -7,16 +7,16 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardDatePickerComponent } from '../date-picker.component';
 
 @Component({
-  selector: 'z-demo-date-picker-with-time',
+  selector: 'z-demo-date-picker-time-picker',
   imports: [ZardDatePickerComponent, ZardFieldImports, ZardInputComponent],
   template: `
     <!-- A fixed width, not max-w-*: the field group is w-full, so it has nothing to resolve against. -->
     <div z-field-group class="mx-auto w-xs flex-row">
       <!-- The width goes on the field: it forces w-full onto whatever it wraps. -->
       <div z-field class="w-40">
-        <label z-field-label for="date-picker-with-time">Date</label>
+        <label z-field-label for="date-picker-time-picker-date">Date</label>
         <z-date-picker
-          zId="date-picker-with-time"
+          zId="date-picker-time-picker-date"
           zCaptionLayout="dropdown"
           zPlaceholder="Select date"
           zFormat="MMM d, yyyy"
@@ -39,6 +39,6 @@ import { ZardDatePickerComponent } from '../date-picker.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoDatePickerWithTimeComponent {
+export class ZardDemoDatePickerTimePickerComponent {
   readonly selectedDate = signal<CalendarValue>(null);
 }
