@@ -4,7 +4,7 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'z-demo-combobox-default',
+  selector: 'z-demo-combobox-preview',
   imports: [ZardComboboxImports],
   template: `
     <z-combobox [(zValue)]="value">
@@ -22,7 +22,7 @@ import type { ZardComboboxOption } from '../combobox.types';
     </z-combobox>
   `,
 })
-export class ZardDemoComboboxDefaultComponent {
+export class ZardDemoComboboxPreviewComponent {
   readonly value = signal<string | string[] | null>(null);
 
   frameworks: ZardComboboxOption[] = [
