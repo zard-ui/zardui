@@ -20,8 +20,8 @@ interface FileRow {
       <table z-table>
         <thead z-table-header>
           <tr z-table-row>
-            <th z-table-head>Name</th>
-            <th z-table-head class="text-right">Size</th>
+            <th z-table-head scope="col">Name</th>
+            <th z-table-head scope="col" class="text-right">Size</th>
           </tr>
         </thead>
         <tbody z-table-body>

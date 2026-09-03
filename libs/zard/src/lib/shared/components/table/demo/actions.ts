@@ -16,12 +16,12 @@ interface Product {
   selector: 'z-demo-table-actions',
   imports: [ZardTableImports, ZardDropdownImports, NgIcon],
   template: `
-    <table z-table>
+    <table z-table aria-label="Products and their actions">
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head>Product</th>
-          <th z-table-head>Price</th>
-          <th z-table-head class="text-right">Actions</th>
+          <th z-table-head scope="col">Product</th>
+          <th z-table-head scope="col">Price</th>
+          <th z-table-head scope="col" class="text-right">Actions</th>
         </tr>
       </thead>
       <tbody z-table-body>

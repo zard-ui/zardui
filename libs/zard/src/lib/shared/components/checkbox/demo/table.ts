@@ -26,13 +26,13 @@ const TABLE_DATA: readonly Row[] = [
     <table z-table>
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head class="w-8">
+          <th z-table-head scope="col" class="w-8">
             <label z-field-label for="select-all-checkbox" class="sr-only">Select all</label>
             <z-checkbox zId="select-all-checkbox" [ngModel]="allSelected()" (checkChange)="toggleAll($event)" />
           </th>
-          <th z-table-head>Name</th>
-          <th z-table-head>Email</th>
-          <th z-table-head>Role</th>
+          <th z-table-head scope="col">Name</th>
+          <th z-table-head scope="col">Email</th>
+          <th z-table-head scope="col">Role</th>
         </tr>
       </thead>
       <tbody z-table-body>
