@@ -1,7 +1,7 @@
 import { SLIDER_DEMO_CONTROLLED } from '@generated/components/slider/demo/controlled';
-import { SLIDER_DEMO_DEFAULT } from '@generated/components/slider/demo/default';
 import { SLIDER_DEMO_DISABLED } from '@generated/components/slider/demo/disabled';
 import { SLIDER_DEMO_MULTIPLE } from '@generated/components/slider/demo/multiple';
+import { SLIDER_DEMO_PREVIEW } from '@generated/components/slider/demo/preview';
 import { SLIDER_DEMO_RANGE } from '@generated/components/slider/demo/range';
 import { SLIDER_DEMO_VERTICAL } from '@generated/components/slider/demo/vertical';
 import { SLIDER_CLI_ADD } from '@generated/installation/cli/add-slider';
@@ -12,8 +12,8 @@ import { ZardDemoSliderControlledComponent } from '@/shared/components/slider/de
 import { ZardDemoSliderMultipleComponent } from '@/shared/components/slider/demo/multiple';
 import { ZardDemoSliderRangeComponent } from '@/shared/components/slider/demo/range';
 
-import { ZardDemoSliderDefaultComponent } from './default';
 import { ZardDemoSliderDisabledComponent } from './disabled';
+import { ZardDemoSliderPreviewComponent } from './preview';
 import { ZardDemoSliderVerticalComponent } from './vertical';
 import { SLIDER_API } from '../doc/api';
 
@@ -22,40 +22,47 @@ export const SLIDER = {
   componentType: 'slider',
   api: SLIDER_API,
   description: 'An input where the user selects a value from within a given range.',
+  about: {
+    description:
+      "`[zValue]`/`[zDefault]` and the `range`/`multiple-thumbs` examples share one value shape: an array of numbers, one entry per thumb — a single-element array is a single thumb, two elements are a range, three or more render that many thumbs, always in ascending order. `[zDefault]` sets the initial value and is read only once; for a slider whose value the component owns, bind `[zValue]` and listen for `(zSlideIndexChange)` instead, as the `controlled` example does. `z-slider` also implements Angular's `ControlValueAccessor`, so `formControlName`/`[(ngModel)]` work the same way without wiring `zValue` by hand.",
+  },
   fullWidth: true,
   installData: {
     cliAdd: SLIDER_CLI_ADD,
     manualCode: SLIDER_MANUAL_CODE,
   },
   usage: { importBlock: SLIDER_USAGE_IMPORT, codeBlock: SLIDER_USAGE_CODE },
-  preview: { name: 'default', component: ZardDemoSliderDefaultComponent, codeData: SLIDER_DEMO_DEFAULT },
+  preview: { name: 'preview', component: ZardDemoSliderPreviewComponent, codeData: SLIDER_DEMO_PREVIEW },
   examples: [
     {
       name: 'range',
-      description: 'Use an array with two values for a range slider.',
+      description:
+        'Bind `[zDefault]` (or `[zValue]`) to a two-value array — `[lower, upper]` — for a range slider with two independently draggable thumbs.',
       component: ZardDemoSliderRangeComponent,
       codeData: SLIDER_DEMO_RANGE,
     },
     {
       name: 'multiple-thumbs',
-      description: 'Use an array with multiple values for multiple thumbs.',
+      description:
+        'Bind `[zDefault]` (or `[zValue]`) to an array with three or more values to render one thumb per entry.',
       component: ZardDemoSliderMultipleComponent,
       codeData: SLIDER_DEMO_MULTIPLE,
     },
     {
       name: 'vertical',
-      description: 'Use zOrientation="vertical" for a vertical slider.',
+      description: 'Set `[zOrientation]="vertical"` for a vertical slider.',
       component: ZardDemoSliderVerticalComponent,
       codeData: SLIDER_DEMO_VERTICAL,
     },
     {
       name: 'controlled',
+      description: 'Bind `[zValue]` and listen for `(zSlideIndexChange)` to drive the slider value from a signal.',
       component: ZardDemoSliderControlledComponent,
       codeData: SLIDER_DEMO_CONTROLLED,
     },
     {
       name: 'disabled',
-      description: 'Use zDisabled prop to disable the slider.',
+      description: 'Use the `zDisabled` input to disable slider interaction.',
       component: ZardDemoSliderDisabledComponent,
       codeData: SLIDER_DEMO_DISABLED,
     },

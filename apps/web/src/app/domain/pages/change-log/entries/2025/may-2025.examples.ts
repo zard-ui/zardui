@@ -1,7 +1,7 @@
 import { CHECKBOX_DEMO_PREVIEW } from '@generated/components/checkbox/demo/preview';
 import { RADIO_GROUP_DEMO_PREVIEW } from '@generated/components/radio-group/demo/preview';
 import { SELECT_DEMO_PREVIEW } from '@generated/components/select/demo/preview';
-import { SLIDER_DEMO_DEFAULT } from '@generated/components/slider/demo/default';
+import { SLIDER_DEMO_PREVIEW } from '@generated/components/slider/demo/preview';
 import { SWITCH_DEMO_DEFAULT } from '@generated/components/switch/demo/default';
 import { CHECKBOX_CLI_ADD } from '@generated/installation/cli/add-checkbox';
 import { RADIO_GROUP_CLI_ADD } from '@generated/installation/cli/add-radio-group';
@@ -12,7 +12,7 @@ import { SWITCH_CLI_ADD } from '@generated/installation/cli/add-switch';
 import { ZardDemoCheckboxPreviewComponent } from '@zard/components/checkbox/demo/preview';
 import { ZardDemoRadioGroupPreviewComponent } from '@zard/components/radio-group/demo/preview';
 import { ZardDemoSelectPreviewComponent } from '@zard/components/select/demo/preview';
-import { ZardDemoSliderDefaultComponent } from '@zard/components/slider/demo/default';
+import { ZardDemoSliderPreviewComponent } from '@zard/components/slider/demo/preview';
 import { ZardDemoSwitchDefaultComponent } from '@zard/components/switch/demo/default';
 
 import { type ChangelogExample } from '../changelog-entry.interface';
@@ -54,9 +54,9 @@ export const MAY_2025_EXAMPLES: ChangelogExample[] = [
   {
     name: 'default',
     description: 'Range slider for numeric value selection with min/max bounds, step support, and value display.',
-    component: ZardDemoSliderDefaultComponent,
+    component: ZardDemoSliderPreviewComponent,
     componentName: 'slider',
-    codeData: SLIDER_DEMO_DEFAULT,
+    codeData: SLIDER_DEMO_PREVIEW,
     cliAdd: SLIDER_CLI_ADD,
     // The slider takes its width from its parent, so it needs the preview area
     // to stretch it; without this it renders zero pixels wide.

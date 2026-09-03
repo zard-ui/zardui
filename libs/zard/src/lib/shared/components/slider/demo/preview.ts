@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardSliderComponent } from '../slider.component';
 
 @Component({
-  selector: 'z-demo-slider-default',
+  selector: 'z-demo-slider-preview',
   imports: [ZardSliderComponent],
   template: `
     <div class="flex min-h-50 w-full items-center p-10">
@@ -12,4 +12,4 @@ import { ZardSliderComponent } from '../slider.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSliderDefaultComponent {}
+export class ZardDemoSliderPreviewComponent {}
