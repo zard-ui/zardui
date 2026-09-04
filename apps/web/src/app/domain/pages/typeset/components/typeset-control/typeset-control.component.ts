@@ -34,8 +34,10 @@ export interface TypesetControlGroup<T extends string | number> {
  * One control of the customizer: what the slot is, what it currently holds, and
  * the list it can be changed to.
  *
- * The list opens beside the panel on a desktop, where there is room for it, and
- * upwards from the strip on a phone, where there is not.
+ * The list opens beside the panel in the column, where there is room for it, and
+ * upwards from the strip below `lg`, where there is not. `onPhone` is named for
+ * the common case; the caller passes `injectIsCompact()`, which is also true for
+ * a 768–1023px strip that is not, strictly, a phone.
  */
 @Component({
   selector: 'z-typeset-control',
@@ -48,7 +50,7 @@ export interface TypesetControlGroup<T extends string | number> {
     <div class="group/control relative">
       <button
         type="button"
-        class="ring-foreground/10 hover:bg-muted aria-expanded:bg-muted focus-visible:ring-foreground/50 relative w-36 touch-manipulation rounded-xl p-3 text-left ring-1 transition-colors select-none focus-visible:outline-none md:w-full md:rounded-lg md:px-2.5 md:py-2"
+        class="ring-foreground/10 hover:bg-muted aria-expanded:bg-muted focus-visible:ring-foreground/50 relative w-36 touch-manipulation rounded-xl p-3 text-left ring-1 transition-colors select-none focus-visible:outline-none lg:w-full lg:rounded-lg lg:px-2.5 lg:py-2"
         zPopover
         zAlign="start"
         [zPlacement]="onPhone() ? 'top' : 'right'"
@@ -67,7 +69,7 @@ export interface TypesetControlGroup<T extends string | number> {
           original does. The shrink-0 is what stops flex from squeezing it back.
         -->
         <span
-          class="pointer-events-none absolute top-1/2 right-4 flex size-4 -translate-y-1/2 items-center justify-center select-none md:right-2.5 [&>*]:shrink-0"
+          class="pointer-events-none absolute top-1/2 right-4 flex size-4 -translate-y-1/2 items-center justify-center select-none lg:right-2.5 [&>*]:shrink-0"
         >
           <ng-content select="[slot=icon]" />
         </span>
@@ -77,7 +79,7 @@ export interface TypesetControlGroup<T extends string | number> {
         <!-- A sibling of the trigger, not a child: a button inside a button is not valid HTML. -->
         <button
           type="button"
-          class="ring-foreground/60 text-foreground absolute top-1/2 right-8 flex size-4 -translate-y-1/2 items-center justify-center rounded transition-opacity outline-none group-focus-within/control:opacity-100 group-hover/control:opacity-100 focus-visible:ring-1 max-md:hidden pointer-coarse:hidden"
+          class="ring-foreground/60 text-foreground absolute top-1/2 right-8 flex size-4 -translate-y-1/2 items-center justify-center rounded transition-opacity outline-none group-focus-within/control:opacity-100 group-hover/control:opacity-100 focus-visible:ring-1 max-lg:hidden pointer-coarse:hidden"
           [class.opacity-0]="!locked() && !open()"
           [attr.aria-pressed]="locked()"
           [attr.aria-label]="(locked() ? 'Unlock ' : 'Lock ') + label()"
@@ -139,7 +141,7 @@ export class TypesetControlComponent<T extends string | number> {
   /** What the row shows. Falls back to the label of the selected option. */
   readonly display = input.required<string>();
 
-  /** Where the list has room to open. The strip at the bottom of a phone has none to its right. */
+  /** Where the list has room to open. The strip has none to its right — pass `injectIsCompact()`. */
   readonly onPhone = input(false, { transform: booleanAttribute });
 
   /** Whether the row offers the padlock that holds it through a shuffle. */
