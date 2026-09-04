@@ -105,6 +105,24 @@ export class RoadmapPage implements OnInit {
         { text: 'V1.0 published on npm', completed: false },
       ],
     },
+    {
+      // Task #60 restructures the roadmap for everything after V1.0; this entry is the
+      // minimal placeholder that gives the /themes deprecation notice something real to
+      // link to. Fold it into whatever "post-v1" shape that task settles on.
+      id: 'zard-cli-create',
+      title: 'zard-cli create - Project-level Theming',
+      period: 'Post-V1.0',
+      status: 'planned',
+      progress: 0,
+      description:
+        'A CLI-driven customization flow that replaces the /themes web customizer, generating a theme tailored to the project without leaving the terminal.',
+      goals: ['Project-aware customization', 'CLI-first workflow', 'Supersede the /themes web customizer'],
+      deliverables: [
+        { text: 'Interactive theme customization in zard-cli', completed: false },
+        { text: 'Project-level presets and overrides', completed: false },
+        { text: '/themes web customizer retired in favor of the CLI flow', completed: false },
+      ],
+    },
   ];
 
   readonly overallProgress = Math.round(

@@ -23,7 +23,7 @@
 
     <div class="space-y-6 sm:space-y-8">
       @for (phase of phases; track phase.id; let last = $last) {
-        <div class="relative pl-10 sm:pl-14">
+        <div [id]="phase.id" class="relative scroll-mt-24 pl-10 sm:pl-14">
           <div
             class="border-background absolute top-2 left-0 z-10 flex size-6 items-center justify-center rounded-full border-2 sm:size-10 sm:border-4"
             [class]="

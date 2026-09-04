@@ -1,8 +1,27 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCheck, lucideCopy, lucideMoon, lucidePalette, lucideSquare, lucideSun } from '@ng-icons/lucide';
+import {
+  lucideCheck,
+  lucideCopy,
+  lucideDownload,
+  lucideFileText,
+  lucideMoon,
+  lucidePalette,
+  lucideRotateCcw,
+  lucideSquare,
+  lucideSun,
+} from '@ng-icons/lucide';
 
 import { ZardAccordionItemComponent } from '@zard/components/accordion/accordion-item.component';
 import { ZardAccordionComponent } from '@zard/components/accordion/accordion.component';
@@ -39,17 +58,32 @@ import { ThemePresetCardComponent } from '../theme-preset-card/theme-preset-card
       lucidePalette,
       lucideCheck,
       lucideCopy,
+      lucideRotateCcw,
+      lucideFileText,
+      lucideDownload,
     }),
   ],
 })
 export class ThemeSidebarComponent {
   private readonly themeService = inject(ThemeGeneratorService);
 
+  /**
+   * `z-slider` takes no accessible-name input, and `aria-labelledby` on the
+   * host element does not reach the inner `[role="slider"]` thumb the
+   * accessible-name computation actually looks at — confirmed by a Lighthouse
+   * `aria-input-field-name` failure on this exact control. `thumbRefs()` and
+   * `nativeElement` are both public on the slider components, so this sets the
+   * name directly rather than widening the shared component's API for one
+   * caller.
+   */
+  private readonly radiusSlider = viewChild<ZardSliderComponent>('radiusSlider');
+
   readonly presets = THEME_PRESETS;
   readonly activePreset = this.themeService.activePreset;
   readonly currentColors = this.themeService.currentColors;
   readonly previewDarkMode = this.themeService.previewDarkMode;
   readonly theme = this.themeService.theme;
+  readonly isDirty = this.themeService.isDirty;
 
   readonly colorGroups = [
     { key: 'base', label: 'Base Colors', colors: COLOR_GROUPS.base },
@@ -65,9 +99,22 @@ export class ThemeSidebarComponent {
   });
 
   readonly copySuccess = signal(false);
+  readonly copyStylesSuccess = signal(false);
+
+  constructor() {
+    effect(() => {
+      const thumb = this.radiusSlider()?.thumbRefs()[0];
+      thumb?.nativeElement.setAttribute('aria-label', 'Radius');
+    });
+  }
 
   onPresetSelect(name: string): void {
     this.themeService.applyPreset(name);
+  }
+
+  /** Back to the values of the preset this theme started from. */
+  reset(): void {
+    this.themeService.reset();
   }
 
   onColorChange(key: ThemeColorKey, value: string): void {
@@ -90,5 +137,17 @@ export class ThemeSidebarComponent {
       this.copySuccess.set(true);
       setTimeout(() => this.copySuccess.set(false), 2000);
     }
+  }
+
+  async copyStylesCss(): Promise<void> {
+    const success = await this.themeService.copyStylesCss();
+    if (success) {
+      this.copyStylesSuccess.set(true);
+      setTimeout(() => this.copyStylesSuccess.set(false), 2000);
+    }
+  }
+
+  downloadStylesCss(): void {
+    this.themeService.downloadStylesCss();
   }
 }
