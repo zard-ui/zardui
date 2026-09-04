@@ -12,6 +12,7 @@
     "check:api-docs": "npx tsx scripts/check-api-docs.cts",
     "check:scrollbar": "npx tsx scripts/check-scrollbar.cts",
     "check:install-docs": "npx tsx scripts/check-install-docs.cts",
+    "check:skills": "npx tsx scripts/check-skills.cts",
     "build:cli": "npx nx run cli:build",
     "build:mcp": "npx nx run mcp:build",
     "dev:mcp": "npx nx run mcp:build:dev",

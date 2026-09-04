@@ -47,6 +47,8 @@ jobs:
         run: npm run check:api-docs
       - name: Check scrollbar restyle scope
         run: npm run check:scrollbar
+      - name: Check skills
+        run: npm run check:skills
 
   build:
     runs-on: ubuntu-latest
