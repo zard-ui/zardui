@@ -7,7 +7,6 @@ interface Cell {
   readonly y: number;
 }
 
-/** O desenho do QR, linha a linha — `1` é módulo preto. */
 const QR_ROWS = [
   '111111100101101111111',
   '100000101001001000001',
@@ -32,18 +31,6 @@ const QR_ROWS = [
   '111111101011101101111',
 ];
 
-/**
- * O QR de emparelhamento — o card que dá respiro à coluna.
- *
- * O código é desenhado em SVG a partir de uma matriz literal, e não gerado nem
- * carregado como imagem: ele não precisa levar a lugar nenhum, precisa parecer
- * um QR. Uma imagem custaria uma requisição e um `layout shift`; um gerador
- * custaria uma dependência para produzir sempre o mesmo desenho.
- *
- * O fundo branco é literal e fica branco em qualquer tema: um QR invertido não é
- * legível por leitor nenhum, e este card também é uma amostra do que o tema faz
- * *não* fazer.
- */
 @Component({
   selector: 'z-card-qr-connect',
   standalone: true,

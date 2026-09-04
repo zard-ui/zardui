@@ -9,20 +9,13 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardCardImports } from '@zard/components/card/card.imports';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
+import { ZardFieldImports } from '@zard/components/field/field.imports';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardInputGroupImports } from '@zard/components/input-group/input-group.imports';
 import { ZardRadioGroupImports } from '@zard/components/radio-group/radio-group.imports';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTextareaComponent } from '@zard/components/textarea/textarea.component';
 
-/**
- * O card de abertura da parede: um punhado de componentes lado a lado.
- *
- * É o único que não finge ser um pedaço de produto. Ele existe para dizer, antes
- * de qualquer contexto, o que a biblioteca entrega — botão, campo, badge, rádio,
- * checkbox, switch, grupo de botões — e por isso abre a primeira coluna, onde a
- * leitura começa.
- */
 @Component({
   selector: 'z-card-ui-elements',
   standalone: true,
@@ -36,6 +29,7 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
     ZardInputGroupImports,
     ZardTextareaComponent,
     ZardCheckboxComponent,
+    ZardFieldImports,
     ZardSwitchComponent,
     ZardRadioGroupImports,
     FormsModule,
@@ -47,7 +41,7 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
     <z-card>
       <z-card-content class="flex flex-col gap-6">
         <div class="flex gap-2">
-          <button type="button" z-button>
+          <button type="button" z-button class="has-data-[icon=inline-end]:pr-2.5!">
             Button
             <ng-icon name="lucideArrowRight" data-icon="inline-end" />
           </button>
@@ -55,20 +49,25 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
           <button type="button" z-button zType="outline">Outline</button>
         </div>
 
-        <div class="flex flex-col gap-4">
-          <z-input-group>
-            <input z-input placeholder="Name" aria-label="Name" />
-            <z-input-group-addon zAlign="inline-end">
-              <ng-icon name="lucideSearch" class="text-muted-foreground size-4" />
-            </z-input-group-addon>
-          </z-input-group>
-          <textarea z-textarea placeholder="Message" aria-label="Message" class="resize-none"></textarea>
+        <div z-field-group>
+          <div z-field>
+            <z-input-group>
+              <input z-input placeholder="Name" aria-label="Name" />
+              <z-input-group-addon zAlign="inline-end">
+                <ng-icon name="lucideSearch" class="text-muted-foreground size-4" />
+              </z-input-group-addon>
+            </z-input-group>
+          </div>
+          <div z-field class="flex-1">
+            <textarea z-textarea placeholder="Message" aria-label="Message" class="resize-none"></textarea>
+          </div>
         </div>
 
         <div class="flex items-center gap-2">
           <div class="flex gap-2">
             <z-badge>Badge</z-badge>
             <z-badge zType="secondary">Secondary</z-badge>
+            <z-badge zType="outline" class="4xl:flex hidden">Outline</z-badge>
           </div>
 
           <z-radio-group
@@ -83,22 +82,39 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
             <z-radio zId="ui-elements-banana" [value]="'banana'" />
           </z-radio-group>
 
-          <z-checkbox zId="ui-elements-alerts" [ngModel]="true" class="gap-0">
-            <span class="sr-only">Enable email alerts</span>
-          </z-checkbox>
-          <z-switch zId="ui-elements-compact" [zChecked]="true">
+          <div class="flex gap-3">
+            <z-checkbox zId="ui-elements-alerts" [ngModel]="true" class="gap-0">
+              <span class="sr-only">Enable email alerts</span>
+            </z-checkbox>
+            <z-checkbox zId="ui-elements-push" class="4xl:flex hidden gap-0">
+              <span class="sr-only">Enable push alerts</span>
+            </z-checkbox>
+          </div>
+          <z-switch zId="ui-elements-compact" [zChecked]="true" class="4xl:hidden flex">
             <span class="sr-only">Enable compact notifications</span>
           </z-switch>
         </div>
 
         <div class="flex items-center gap-4">
           <button type="button" z-button zType="outline">Alert Dialog</button>
-          <z-button-group class="ml-auto">
+          <z-button-group
+            class="ml-auto [&>*:first-child]:rounded-l-[18px]! [&>*:not(:first-child)]:rounded-l-none! [&>*:not(:last-child)]:rounded-r-none! [&>[data-slot]:last-child:last-child]:rounded-r-[18px]!"
+          >
             <button type="button" z-button zType="outline">Button Group</button>
-            <button type="button" z-button zType="outline" zSize="icon-sm" aria-label="Open quick actions">
+            <button
+              type="button"
+              z-button
+              zType="outline"
+              zSize="icon-sm"
+              class="size-8"
+              aria-label="Open quick actions"
+            >
               <ng-icon name="lucideChevronUp" />
             </button>
           </z-button-group>
+          <z-switch zId="ui-elements-advanced" [zChecked]="true" class="4xl:flex hidden">
+            <span class="sr-only">Enable advanced setting</span>
+          </z-switch>
         </div>
       </z-card-content>
     </z-card>

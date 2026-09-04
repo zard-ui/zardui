@@ -9,13 +9,6 @@ import { ZardFieldImports } from '@zard/components/field/field.imports';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardItemImports } from '@zard/components/item/item.imports';
 
-/**
- * Acesso à conta: dois campos e uma zona de perigo.
- *
- * A zona de perigo é um `item` clicável no rodapé, e não um botão vermelho: uma
- * ação destrutiva que se parece com um botão comum de destaque convida ao clique
- * exatamente onde não se quer convidar.
- */
 @Component({
   selector: 'z-card-account-access',
   standalone: true,
@@ -34,7 +27,18 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
         <div z-field-group>
           <div z-field>
             <label z-field-label for="account-email">Email Address</label>
-            <input z-input id="account-email" type="email" placeholder="artist@studio.inc" />
+            <input
+              z-input
+              id="account-email"
+              type="email"
+              placeholder="artist@studio.inc"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              data-1p-ignore
+              data-lpignore="true"
+            />
           </div>
 
           <div z-field>
@@ -47,12 +51,20 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
                 Forgot?
               </a>
             </div>
-            <input z-input id="account-password" type="password" placeholder="••••••••••••••••" />
+            <input
+              z-input
+              id="account-password"
+              type="password"
+              placeholder="••••••••••••••••"
+              autocomplete="new-password"
+              data-1p-ignore
+              data-lpignore="true"
+            />
           </div>
         </div>
       </z-card-content>
 
-      <z-card-footer class="flex-col gap-4">
+      <z-card-content class="flex flex-col gap-4">
         <button type="button" z-button class="w-full">
           <ng-icon name="lucideLock" />
           Update Security
@@ -66,9 +78,9 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
             <div z-item-title>Danger Zone</div>
             <p z-item-description class="line-clamp-1">Archive account and remove catalog</p>
           </div>
-          <ng-icon name="lucideChevronRight" class="text-muted-foreground size-4 shrink-0" />
+          <ng-icon name="lucideChevronRight" class="size-4 shrink-0" />
         </a>
-      </z-card-footer>
+      </z-card-content>
     </z-card>
   `,
 })

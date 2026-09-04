@@ -14,13 +14,6 @@ interface Action {
   readonly icon: string;
 }
 
-/**
- * Breadcrumb no cabeçalho e uma lista de atalhos embaixo.
- *
- * O card existe pelo breadcrumb: é o componente que só faz sentido dentro de uma
- * página, e mostrá-lo dentro de um card é a única forma de dar a ele um contexto
- * na parede.
- */
 @Component({
   selector: 'z-card-payments',
   standalone: true,

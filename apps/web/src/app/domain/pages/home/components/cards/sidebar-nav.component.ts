@@ -4,9 +4,11 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideActivity,
   lucideArrowLeftRight,
+  lucideBell,
   lucideBookOpen,
   lucideCalendar,
   lucideChartColumn,
+  lucideChartNoAxesColumn,
   lucideChartPie,
   lucideCircleHelp,
   lucideCreditCard,
@@ -15,13 +17,11 @@ import {
   lucideLandmark,
   lucideMessageCircle,
   lucidePalette,
-  lucideBell,
   lucideShield,
   lucideTarget,
   lucideTrendingUp,
   lucideUser,
   lucideWallet,
-  lucideChartNoAxesColumn,
 } from '@ng-icons/lucide';
 
 import { ZardCardImports } from '@zard/components/card/card.imports';
@@ -38,14 +38,6 @@ interface NavSection {
   readonly placement: string;
 }
 
-/**
- * Quatro menus de navegação num quadrado 2 × 2.
- *
- * Não usa o componente de sidebar: a sidebar traz provider, colapso e contexto
- * de layout, e nada disso serve a um card que só precisa mostrar como uma lista
- * de navegação se lê. O que está sendo demonstrado é o *ritmo* — rótulo de
- * grupo, ícone, item, item ativo —, e isso é `div` e `button`.
- */
 @Component({
   selector: 'z-card-sidebar-nav',
   standalone: true,
@@ -79,21 +71,28 @@ interface NavSection {
   template: `
     <div class="grid w-full grid-cols-2 gap-4 xl:gap-6">
       @for (section of sections; track section.label) {
-        <z-card [class]="'overflow-hidden rounded-3xl py-0 ' + section.placement">
-          <nav class="flex flex-col gap-1 p-2" [attr.aria-label]="section.label">
-            <span class="text-muted-foreground px-2 py-1.5 text-xs font-medium">{{ section.label }}</span>
-            @for (entry of section.entries; track entry.label) {
-              <button
-                type="button"
-                class="hover:bg-accent hover:text-accent-foreground flex h-8 items-center gap-2 rounded-md px-2 text-sm transition-colors"
-                [class.bg-accent]="entry.active"
-                [class.font-medium]="entry.active"
-                [attr.aria-current]="entry.active ? 'page' : null"
-              >
-                <ng-icon [name]="entry.icon" class="size-4 shrink-0" />
-                {{ entry.label }}
-              </button>
-            }
+        <z-card [class]="'overflow-hidden rounded-[22px]! py-0! ' + section.placement">
+          <nav class="flex w-full min-w-0 flex-col p-2" [attr.aria-label]="section.label">
+            <span class="text-sidebar-foreground/70 flex h-8 shrink-0 items-center rounded-xl px-3 text-xs font-medium">
+              {{ section.label }}
+            </span>
+            <ul class="flex w-full min-w-0 flex-col gap-1">
+              @for (entry of section.entries; track entry.label) {
+                <li class="relative">
+                  <button
+                    type="button"
+                    class="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex h-8 w-full items-center gap-2 overflow-hidden rounded-xl py-2 pr-3 pl-2.5 text-left text-sm whitespace-nowrap transition-colors"
+                    [class.bg-sidebar-accent]="entry.active"
+                    [class.text-sidebar-accent-foreground]="entry.active"
+                    [class.font-medium]="entry.active"
+                    [attr.aria-current]="entry.active ? 'page' : null"
+                  >
+                    <ng-icon [name]="entry.icon" class="shrink-0" />
+                    {{ entry.label }}
+                  </button>
+                </li>
+              }
+            </ul>
           </nav>
         </z-card>
       }

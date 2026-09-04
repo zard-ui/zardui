@@ -13,13 +13,6 @@ interface Holding {
   readonly bars: readonly number[];
 }
 
-/**
- * Uma lista de posições, cada uma com um mini-gráfico de quatro barras.
- *
- * O gráfico é pequeno de propósito: ele não é para ser lido, é para dizer que a
- * linha tem uma tendência. Rótulo, eixo e tooltip nesse tamanho dariam ruído
- * sem dar informação.
- */
 @Component({
   selector: 'z-card-dividend-income',
   standalone: true,

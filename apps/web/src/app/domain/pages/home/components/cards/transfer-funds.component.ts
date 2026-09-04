@@ -18,13 +18,6 @@ interface Account {
   readonly label: string;
 }
 
-/**
- * Transferência entre contas: valor, origem, destino e o resumo do que sai.
- *
- * O resumo é um bloco `muted` acima do botão, e não texto solto: o que ele diz —
- * prazo, taxa, total — é o que a pessoa confere antes de confirmar, e agrupá-lo
- * separa "o que estou preenchendo" de "o que vai acontecer".
- */
 @Component({
   selector: 'z-card-transfer-funds',
   standalone: true,
@@ -106,9 +99,9 @@ interface Account {
         </div>
       </z-card-content>
 
-      <z-card-footer>
+      <z-card-content class="flex items-center">
         <button type="button" z-button class="w-full">Confirm Transfer</button>
-      </z-card-footer>
+      </z-card-content>
     </z-card>
   `,
 })

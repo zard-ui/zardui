@@ -16,12 +16,6 @@ interface Currency {
   readonly label: string;
 }
 
-/**
- * O card mais denso da parede: select, barra, textarea e um botão.
- *
- * É o que carrega o botão de fechar no canto — um `card-action`, para mostrar
- * que o cabeçalho comporta uma ação sem virar duas linhas.
- */
 @Component({
   selector: 'z-card-payout-threshold',
   standalone: true,
@@ -78,16 +72,16 @@ interface Currency {
             <textarea
               z-textarea
               id="payout-notes"
-              class="min-h-[100px]"
+              class="min-h-[100px] resize-none"
               placeholder="Add any notes for this payout configuration..."
             ></textarea>
           </div>
         </div>
       </z-card-content>
 
-      <z-card-footer>
+      <z-card-content class="flex items-center">
         <button type="button" z-button class="w-full">Save Threshold</button>
-      </z-card-footer>
+      </z-card-content>
     </z-card>
   `,
 })

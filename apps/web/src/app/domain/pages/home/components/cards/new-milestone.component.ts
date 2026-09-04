@@ -5,13 +5,6 @@ import { ZardCardImports } from '@zard/components/card/card.imports';
 import { ZardFieldImports } from '@zard/components/field/field.imports';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 
-/**
- * O formulário curto: três campos e duas ações.
- *
- * Existe na parede para mostrar `field` + `input` no formato em que a maioria
- * dos produtos os usa — rótulo em cima, campo largo, e um par de botões
- * empilhados no rodapé.
- */
 @Component({
   selector: 'z-card-new-milestone',
   standalone: true,
@@ -45,10 +38,10 @@ import { ZardInputComponent } from '@zard/components/input/input.component';
         </div>
       </z-card-content>
 
-      <z-card-footer class="flex-col gap-2">
+      <z-card-content class="flex flex-col gap-2">
         <button type="button" z-button class="w-full">Create Goal</button>
         <button type="button" z-button zType="outline" class="w-full">Cancel</button>
-      </z-card-footer>
+      </z-card-content>
     </z-card>
   `,
 })

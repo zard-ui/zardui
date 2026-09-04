@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 
 import {
   CardAccountAccessComponent,
@@ -18,25 +18,73 @@ import {
   CardSidebarNavComponent,
   CardUiElementsComponent,
 } from './cards';
+import { CardsSkeletonRailsComponent } from './cards-skeleton-rails.component';
 
-/**
- * A parede de cards da home.
- *
- * Cinco colunas que aparecem uma a uma conforme a tela cresce, sobre um fundo
- * `muted` no claro e `background` no escuro. O gradiente de cima e o de baixo
- * não são decoração: eles é que fazem a parede *terminar* sem terminar — o corte
- * comunica que há mais biblioteca do que cabe na tela, o que um grid que acaba
- * limpo não comunicaria.
- *
- * As colunas são fixas, e não um `masonry`: a ordem em que os cards aparecem é
- * uma decisão de leitura (o card de componentes primeiro, o denso no meio, o
- * vazio por último), e um algoritmo de empacotamento a desfaria a cada largura.
- */
+// Breakpoints are viewport based, as in the reference: the wall pads itself,
+// so a container query on it would measure the content box and drift.
+// The wall renders every primitive with the "rhea" look of the reference
+// landing: filled borderless inputs, 18px pills, roomier items and fields,
+// neutral chart greys. Everything is scoped here so the components keep their
+// defaults elsewhere. Selectors combine a data-slot with a second attribute so
+// they outrank the variants shipped by the primitives (0,3,0) without `!`,
+// which keeps the per-card `x!` escapes working. The `dark:` variant here is
+// `:is(.dark *)`, worth (0,1,0) on its own, so dark-only defaults need one
+// more attribute or tag in the selector to be beaten.
+const WALL_CLASSES = [
+  'relative flex w-full max-w-none flex-col overflow-hidden bg-muted p-12 pb-0! lg:p-6 dark:bg-background',
+  '[--gap:--spacing(8)] lg:[--gap:--spacing(6)] min-[1900px]:[--gap:--spacing(10)]!',
+  '[--ng-icon__size:1rem]',
+  '[--chart-1:#d4d4d4] [--chart-2:#737373] [--chart-3:#525252] [--chart-4:#404040] [--chart-5:#262626]',
+  // Card
+  '**:data-[slot=card]:[--card-spacing:--spacing(5)] **:data-[slot=card]:data-[size=sm]:[--card-spacing:--spacing(4)]',
+  '**:data-[slot=card]:data-[size]:gap-(--card-spacing) **:data-[slot=card]:data-[size]:py-(--card-spacing)',
+  '**:data-[slot=card]:rounded-3xl **:data-[slot=card]:shadow-sm **:data-[slot=card]:ring-foreground/5 [.dark_&_[data-slot=card]]:ring-foreground/10',
+  '**:data-[slot=card-header]:gap-1.5 **:data-[slot=card-header]:rounded-t-3xl [&_[data-slot=card]_[data-slot=card-header]]:px-(--card-spacing)',
+  '[&_[data-slot=card]_[data-slot=card-title]]:text-base',
+  '[&_[data-slot=card]_[data-slot=card-content]]:px-(--card-spacing)',
+  // Button and badge
+  '**:data-[slot=button]:rounded-[18px] **:data-[slot=button]:data-[size=default]:px-3 **:data-[slot=button]:data-[size=sm]:px-3 **:data-[slot=button]:data-[size=sm]:text-sm',
+  '[.dark_&_[data-slot=button][data-variant=outline]]:border-border [.dark_&_[data-slot=button][data-variant=outline]]:bg-transparent',
+  '**:data-[slot=badge]:h-5 **:data-[slot=badge]:rounded-[18px]',
+  '**:data-[slot=input-group-button]:rounded-[18px]',
+  // Text controls
+  '[&_input:not([type=checkbox]):not([type=radio])]:rounded-[18px] [&_input:not([type=checkbox]):not([type=radio])]:border-transparent [&_input:not([type=checkbox]):not([type=radio])]:bg-input/50',
+  '[&_textarea]:rounded-[18px] [&_textarea]:border-transparent [&_textarea[data-slot=textarea]]:bg-input/50',
+  '**:data-[slot=input-group]:rounded-[18px] **:data-[slot=input-group]:border-transparent [&_z-input-group[data-slot=input-group]]:bg-input/50',
+  '**:data-[slot=select-trigger]:gap-1.5 **:data-[slot=select-trigger]:rounded-[18px] **:data-[slot=select-trigger]:border-transparent [&_button[data-slot=select-trigger]]:bg-input/50 **:data-[slot=select-trigger]:shadow-none',
+  // Checkbox, radio and switch
+  '[&_input[type=checkbox]]:rounded-[5px] [&_input[type=checkbox]]:border-transparent [&_input[type=checkbox]]:bg-input/90 [&_input[type=checkbox]]:shadow-none',
+  '[&_input[type=checkbox]:checked]:border-primary [&_input[type=checkbox]:checked]:bg-primary [&_[data-slot=checkbox]_ng-icon]:[--ng-icon__size:0.875rem]',
+  '[&_z-radio>button[role=radio]]:border-transparent [&_z-radio>button[role=radio]]:bg-input/90 [&_z-radio>button[role=radio][data-checked]]:bg-primary dark:[&_[data-slot=radio-group-indicator]>span]:size-2.5',
+  '[&_z-switch_button]:mr-0! [&_z-switch_button]:h-5 [&_z-switch_button]:border-2 [&_z-switch_button[data-state=checked]]:border-primary [&_z-switch_button[role=switch][data-state=unchecked]]:bg-input/90',
+  '[&_z-switch_button>span]:shadow-sm [&_z-switch_button>span[data-state=checked]]:translate-x-[calc(100%-4px)]',
+  // Item, field, progress and empty
+  '**:data-[slot=item]:gap-3.5 **:data-[slot=item]:rounded-[18px] **:data-[slot=item]:px-4 **:data-[slot=item]:py-3.5 [&_[data-slot=item-description]:not(.text-xs)]:leading-5',
+  '**:data-[slot=field-group]:gap-6 **:data-[slot=field]:gap-3 **:data-[slot=field-content]:gap-1',
+  '**:data-[slot=progress]:h-2',
+  '**:data-[slot=empty]:rounded-[22px] **:data-[slot=empty-media]:data-[variant=icon]:size-10 **:data-[slot=empty-media]:data-[variant=icon]:rounded-xl [&_[data-slot=empty-media]_ng-icon]:size-5!',
+  '**:data-[slot=empty-title]:text-lg **:data-[slot=empty-content]:gap-4',
+].join(' ');
+
 @Component({
   selector: 'z-cards-wall',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // The select dropdown is rendered into the body by the CDK overlay, so no
+  // style scoped to the wall can reach it. Encapsulation is off for these two
+  // rules alone; the overlay selector keeps them off inline selects.
+  encapsulation: ViewEncapsulation.None,
+  styles: `
+    .cdk-overlay-pane [data-slot='select-content'] {
+      border-radius: 18px;
+    }
+
+    .cdk-overlay-pane [data-slot='select-item'] {
+      border-radius: 14px;
+    }
+  `,
   imports: [
+    CardsSkeletonRailsComponent,
     CardUiElementsComponent,
     CardSidebarNavComponent,
     CardSavingsTargetsComponent,
@@ -56,42 +104,11 @@ import {
   ],
   host: { class: 'block' },
   template: `
-    <!-- As colunas respondem à largura da parede, e não à da janela.
-         Não é preciosismo: o site tem um modo de layout fixo que ainda encolhe
-         quem estiver em volta, e num breakpoint de viewport a quinta coluna
-         apareceria a 1900px de janela dentro do espaço que sobrou — cinco
-         colunas espremidas, com "Help Center" quebrando em duas linhas. A
-         largura que importa é a que a parede realmente tem. -->
-    <!-- A parede é um escopo de tema, não só um container.
+    <div [class]="wallClasses">
+      <z-cards-skeleton-rails />
 
-         Os tokens de chart do site são azuis, e a parede os quer cinzas: um card
-         de gráfico aqui não está mostrando um dado, está mostrando um
-         componente, e cinco azuis saturados no meio de dezessete cards puxam o
-         olho para o gráfico em vez de para a biblioteca. Redefinir os tokens
-         aqui os deixa cinzas só dentro da parede — o @theme inline do styles.css
-         faz a utility bg-chart-1 compilar para var(--chart-1), então esta
-         sobrescrita local basta e nada fora daqui muda. Os cinco valores são os
-         mesmos nos dois modos, de propósito: é o que a referência faz.
-
-         Os raios também vivem aqui, e não card a card: 24px no card e 18px em
-         tudo que é controle é uma medida da parede inteira, e repeti-la em
-         dezessete arquivos é dezessete lugares para ela sair de sincronia.
-
-         Checkbox e radio ficam de fora do 18px de propósito: são caixas de
-         16px, e um raio de 18px numa delas não é um canto arredondado, é um
-         círculo — o checkbox viraria um radio. Eles ficam com o raio da
-         biblioteca. -->
-    <div
-      class="bg-muted dark:bg-background @container relative flex w-full max-w-none flex-col overflow-hidden p-6 pb-0! [--chart-1:#d4d4d4] [--chart-2:#737373] [--chart-3:#525252] [--chart-4:#404040] [--chart-5:#262626] **:data-[slot=badge]:rounded-[18px] **:data-[slot=button]:rounded-[18px] **:data-[slot=card]:rounded-3xl **:data-[slot=card-footer]:rounded-b-3xl **:data-[slot=card-header]:rounded-t-3xl **:data-[slot=input-group]:rounded-[18px] **:data-[slot=item]:rounded-[18px] **:data-[slot=select]:rounded-[18px] [&_input:not([type=checkbox]):not([type=radio])]:rounded-[18px] [&_textarea]:rounded-[18px]"
-    >
-      <!-- Os cortes saem de 320px por coluna mais o gap: 2 × 320 + 40 = 680px,
-           3 × 320 + 80 = 1024px, e assim por diante.
-
-           O gap é declarado aqui, e não no elemento acima: quem declara o
-           container não responde às próprias container queries, e lá as três
-           faixas de gap nunca valeriam — o valor cairia sempre no primeiro. -->
       <div
-        class="relative z-10 mx-auto grid max-w-[1900px] grid-cols-1 gap-(--gap) [--gap:--spacing(6)] @min-[42.5rem]:grid-cols-2 @min-[64rem]:grid-cols-3 @min-[64rem]:[--gap:--spacing(8)] @min-[85.5rem]:grid-cols-4 @min-[107rem]:grid-cols-5 @min-[107rem]:[--gap:--spacing(10)]"
+        class="relative z-10 mx-auto grid gap-(--gap) min-[1400px]:grid-cols-4! min-[1900px]:grid-cols-5! md:max-w-3xl md:grid-cols-2 lg:max-w-none lg:grid-cols-3 xl:max-w-[1600px] 2xl:max-w-[1900px]"
       >
         <div class="flex flex-col items-start gap-(--gap)">
           <z-card-ui-elements />
@@ -99,27 +116,25 @@ import {
           <z-card-savings-targets />
         </div>
 
-        <div class="hidden flex-col gap-(--gap) @min-[64rem]:flex">
+        <div class="hidden flex-col gap-(--gap) lg:flex">
           <z-card-contribution-history />
           <z-card-claimable-balance />
           <z-card-dividend-income />
         </div>
 
-        <div class="hidden flex-col gap-(--gap) @min-[85.5rem]:flex">
+        <div class="hidden flex-col gap-(--gap) min-[1400px]:flex">
           <z-card-new-milestone />
           <z-card-payout-threshold />
           <z-card-account-access />
         </div>
 
-        <!-- Vem depois no DOM mas aparece já com duas colunas: é o par que abre a
-             parede na tela mais estreita que ainda a mostra. -->
-        <div class="hidden flex-col gap-(--gap) @min-[42.5rem]:flex">
+        <div class="hidden flex-col gap-(--gap) md:flex">
           <z-card-qr-connect />
           <z-card-new-chat />
           <z-card-payments />
         </div>
 
-        <div class="hidden flex-col gap-(--gap) @min-[107rem]:flex">
+        <div class="hidden flex-col gap-(--gap) min-[1900px]:flex">
           <z-card-empty-distribute-track />
           <z-card-analytics />
           <z-card-notification-settings />
@@ -127,17 +142,17 @@ import {
         </div>
       </div>
 
-      <!-- Dois véus, e não um mask-image: a máscara cobraria composite do
-           elemento inteiro a cada scroll, e esta é a página mais visitada. -->
       <div
         class="from-background via-muted absolute inset-x-0 top-0 z-1 h-120 bg-linear-to-b to-transparent dark:hidden"
         aria-hidden="true"
       ></div>
       <div
-        class="from-background via-muted/80 dark:via-background/80 absolute inset-x-0 bottom-0 z-20 h-64 bg-linear-to-t to-transparent"
+        class="from-background via-muted/80 dark:via-background/80 absolute inset-x-0 bottom-0 z-20 h-48 bg-linear-to-t to-transparent lg:h-80 xl:h-64"
         aria-hidden="true"
       ></div>
     </div>
   `,
 })
-export class CardsWallComponent {}
+export class CardsWallComponent {
+  readonly wallClasses = WALL_CLASSES;
+}

@@ -8,13 +8,6 @@ interface Reading {
   readonly usage: number;
 }
 
-/**
- * Consumo por hora, e dois números embaixo do gráfico.
- *
- * Mesma escolha do histórico de aportes: barras em `div`. Oito retângulos e
- * oito rótulos não justificam uma biblioteca de gráficos num card que fecha a
- * quinta coluna.
- */
 @Component({
   selector: 'z-card-power-usage',
   standalone: true,

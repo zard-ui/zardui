@@ -11,13 +11,6 @@ interface Target {
   readonly achieved: string;
 }
 
-/**
- * Metas de poupança: rótulo, valor, barra, e o quanto já foi.
- *
- * A barra vem depois do número, não antes: o valor é a meta e a barra é o
- * progresso rumo a ela — invertê-los faria a pessoa ler a distância antes de
- * saber a distância de quê.
- */
 @Component({
   selector: 'z-card-savings-targets',
   standalone: true,
@@ -54,9 +47,9 @@ interface Target {
         </div>
       </z-card-content>
 
-      <z-card-footer>
+      <z-card-content class="flex items-center">
         <p z-card-description class="text-center" zDescription="You have not met your targets for this year."></p>
-      </z-card-footer>
+      </z-card-content>
     </z-card>
   `,
 })

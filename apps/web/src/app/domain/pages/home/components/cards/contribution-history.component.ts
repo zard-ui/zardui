@@ -9,14 +9,6 @@ interface Contribution {
   readonly amount: number;
 }
 
-/**
- * Histórico de aportes: barras, dois indicadores e um botão de relatório.
- *
- * As barras são `div`s com altura em porcentagem, e não um gráfico de verdade.
- * Uma biblioteca de charts aqui custaria o bundle e um ciclo de layout por card
- * numa parede que tem dezoito — para desenhar cinco retângulos cuja única função
- * é dar textura à coluna.
- */
 @Component({
   selector: 'z-card-contribution-history',
   standalone: true,
@@ -65,9 +57,9 @@ interface Contribution {
         </div>
       </z-card-content>
 
-      <z-card-footer>
+      <z-card-content class="flex items-center">
         <button type="button" z-button class="w-full">View Full Report</button>
-      </z-card-footer>
+      </z-card-content>
     </z-card>
   `,
 })
@@ -78,19 +70,11 @@ export class CardContributionHistoryComponent {
     { month: 'Feb', amount: 900 },
     { month: 'Mar', amount: 1300 },
     { month: 'Apr', amount: 750 },
-    { month: 'May', amount: 1400 },
   ];
 
   readonly maxAmount = Math.max(...this.chartData.map(item => item.amount));
 
-  /**
-   * A cor de cada barra, escrita por extenso.
-   *
-   * `bg-chart-{{ n }}` não existiria no CSS: o Tailwind varre o código à procura
-   * de nomes de classe completos, e um nome montado em tempo de execução nunca é
-   * encontrado por essa varredura.
-   */
-  private readonly barColors = ['bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5', 'bg-chart-1'];
+  private readonly barColors = ['bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'];
 
   barClass(index: number): string {
     return `min-h-2 rounded-lg ${this.barColors[index % this.barColors.length]}`;
