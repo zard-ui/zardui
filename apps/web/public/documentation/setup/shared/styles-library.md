@@ -1,7 +1,7 @@
 ```css title="styles.css" expandable="true" showLineNumbers copyButton
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
-@import './app/shared/core/css/zard';
+@import './lib/shared/core/css/zard';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
