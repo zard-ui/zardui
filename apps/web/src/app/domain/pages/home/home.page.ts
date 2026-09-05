@@ -30,8 +30,14 @@ import { HeroHeaderComponent } from './components/hero-header.component';
         </section>
 
         <section class="hidden md:block">
-          @defer (on immediate; hydrate on viewport) {
+          <!-- Both triggers watch the viewport: the server-rendered wall hydrates
+               when it scrolls into view, and on a client-side navigation it is
+               only built once its placeholder is seen — which, below md, never
+               happens, because the section is not displayed. -->
+          @defer (on viewport; hydrate on viewport) {
             <z-cards-wall />
+          } @placeholder {
+            <div class="h-svh" aria-hidden="true"></div>
           }
         </section>
       </div>
