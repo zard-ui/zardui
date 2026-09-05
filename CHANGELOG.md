@@ -1,3 +1,13 @@
+## 1.0.0-beta.120 (2026-09-05)
+
+### ✨ Features
+
+- **web:** rebuild the landing with a wall of product cards ([#722](https://github.com/zard-ui/zardui/pull/722))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.119 (2026-08-27)
 
 ### ✨ Features
