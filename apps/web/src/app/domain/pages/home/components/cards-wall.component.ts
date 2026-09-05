@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import {
   CardAccountAccessComponent,
@@ -72,14 +80,14 @@ const WALL_CLASSES = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   // The select dropdown is rendered into the body by the CDK overlay, so no
   // style scoped to the wall can reach it. Encapsulation is off for these two
-  // rules alone; the overlay selector keeps them off inline selects.
+  // rules alone; `body:has()` keeps them to pages that show the wall.
   encapsulation: ViewEncapsulation.None,
   styles: `
-    .cdk-overlay-pane [data-slot='select-content'] {
+    body:has(z-cards-wall) .cdk-overlay-pane [data-slot='select-content'] {
       border-radius: 18px;
     }
 
-    .cdk-overlay-pane [data-slot='select-item'] {
+    body:has(z-cards-wall) .cdk-overlay-pane [data-slot='select-item'] {
       border-radius: 14px;
     }
   `,
@@ -105,7 +113,9 @@ const WALL_CLASSES = [
   host: { class: 'block' },
   template: `
     <div [class]="wallClasses">
-      <z-cards-skeleton-rails />
+      @if (ultraWide()) {
+        <z-cards-skeleton-rails />
+      }
 
       <div
         class="relative z-10 mx-auto grid gap-(--gap) min-[1400px]:grid-cols-4! min-[1900px]:grid-cols-5! md:max-w-3xl md:grid-cols-2 lg:max-w-none lg:grid-cols-3 xl:max-w-[1600px] 2xl:max-w-[1900px]"
@@ -155,4 +165,23 @@ const WALL_CLASSES = [
 })
 export class CardsWallComponent {
   readonly wallClasses = WALL_CLASSES;
+
+  // The rails only exist past 2200px. Hiding them with CSS would still build
+  // three hundred skeleton nodes on every phone, so they are gated on the
+  // viewport instead; the server renders none and the client adds them once it
+  // knows its width.
+  protected readonly ultraWide = signal(false);
+
+  constructor() {
+    const destroyRef = inject(DestroyRef);
+
+    afterNextRender(() => {
+      const query = window.matchMedia('(min-width: 2200px)');
+      const update = () => this.ultraWide.set(query.matches);
+
+      update();
+      query.addEventListener('change', update);
+      destroyRef.onDestroy(() => query.removeEventListener('change', update));
+    });
+  }
 }

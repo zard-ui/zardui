@@ -20,7 +20,7 @@ interface Target {
   template: `
     <z-card>
       <z-card-header>
-        <h3 z-card-title zTitle="Savings Targets"></h3>
+        <z-card-title zTitle="Savings Targets" />
         <p
           z-card-description
           zDescription="Active milestones for 2024 across your portfolio. Monitor how close you are to each savings goal."

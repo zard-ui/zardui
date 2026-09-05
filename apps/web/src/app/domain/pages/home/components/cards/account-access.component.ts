@@ -8,28 +8,37 @@ import { ZardCardImports } from '@zard/components/card/card.imports';
 import { ZardFieldImports } from '@zard/components/field/field.imports';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardItemImports } from '@zard/components/item/item.imports';
+import { ZardIdDirective } from '@zard/core';
 
 @Component({
   selector: 'z-card-account-access',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardCardImports, ZardFieldImports, ZardItemImports, ZardInputComponent, ZardButtonComponent, NgIcon],
+  imports: [
+    ZardIdDirective,
+    ZardCardImports,
+    ZardFieldImports,
+    ZardItemImports,
+    ZardInputComponent,
+    ZardButtonComponent,
+    NgIcon,
+  ],
   viewProviders: [provideIcons({ lucideChevronRight, lucideCircleAlert, lucideLock })],
   host: { class: 'block w-full' },
   template: `
     <z-card>
       <z-card-header>
-        <h3 z-card-title zTitle="Account Access"></h3>
+        <z-card-title zTitle="Account Access" />
         <p z-card-description zDescription="Update your credentials or re-authenticate."></p>
       </z-card-header>
 
       <z-card-content>
         <div z-field-group>
-          <div z-field>
-            <label z-field-label for="account-email">Email Address</label>
+          <div z-field zardId="account-email" #email="zardId">
+            <label z-field-label [for]="email.id()">Email Address</label>
             <input
               z-input
-              id="account-email"
+              [id]="email.id()"
               type="email"
               placeholder="artist@studio.inc"
               autocomplete="off"
@@ -41,9 +50,9 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
             />
           </div>
 
-          <div z-field>
+          <div z-field zardId="account-password" #password="zardId">
             <div class="flex items-center justify-between">
-              <label z-field-label for="account-password">Current Password</label>
+              <label z-field-label [for]="password.id()">Current Password</label>
               <a
                 href="#"
                 class="text-muted-foreground hover:text-foreground text-xs font-medium tracking-wider uppercase"
@@ -53,7 +62,7 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
             </div>
             <input
               z-input
-              id="account-password"
+              [id]="password.id()"
               type="password"
               placeholder="••••••••••••••••"
               autocomplete="new-password"

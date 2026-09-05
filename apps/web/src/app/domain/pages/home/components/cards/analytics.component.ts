@@ -13,7 +13,7 @@ import { ZardCardImports } from '@zard/components/card/card.imports';
   template: `
     <z-card zSize="sm" class="mx-auto w-full max-w-sm pb-0!">
       <z-card-header>
-        <h3 z-card-title zTitle="Analytics"></h3>
+        <z-card-title zTitle="Analytics" />
         <ng-template #visitors>
           418.2K Visitors
           <z-badge>+10%</z-badge>

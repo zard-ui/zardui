@@ -17,7 +17,7 @@ interface Reading {
   template: `
     <z-card>
       <z-card-header>
-        <h3 z-card-title zTitle="Power Usage"></h3>
+        <z-card-title zTitle="Power Usage" />
         <p z-card-description zDescription="Whole Home"></p>
       </z-card-header>
 

@@ -5,6 +5,7 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardImports } from '@zard/components/card/card.imports';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
 import { ZardFieldImports } from '@zard/components/field/field.imports';
+import { ZardIdDirective } from '@zard/core';
 
 interface NotificationOption {
   readonly id: string;
@@ -17,22 +18,29 @@ interface NotificationOption {
   selector: 'z-card-notification-settings',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardCardImports, ZardFieldImports, ZardCheckboxComponent, ZardButtonComponent, FormsModule],
+  imports: [
+    ZardIdDirective,
+    ZardCardImports,
+    ZardFieldImports,
+    ZardCheckboxComponent,
+    ZardButtonComponent,
+    FormsModule,
+  ],
   host: { class: 'block w-full' },
   template: `
     <z-card>
       <z-card-header>
-        <h3 z-card-title zTitle="Notifications"></h3>
+        <z-card-title zTitle="Notifications" />
         <p z-card-description zDescription="Choose which email and push alerts you want to receive."></p>
       </z-card-header>
 
       <z-card-content>
         <div z-field-group>
           @for (option of options; track option.id) {
-            <div z-field zOrientation="horizontal">
-              <z-checkbox [zId]="'notify-' + option.id" [ngModel]="option.checked" class="gap-0" />
+            <div z-field zOrientation="horizontal" zardId="notify" #notify="zardId">
+              <z-checkbox [zId]="notify.id()" [ngModel]="option.checked" class="gap-0" />
               <div z-field-content>
-                <label z-field-label [for]="'notify-' + option.id">{{ option.label }}</label>
+                <label z-field-label [for]="notify.id()">{{ option.label }}</label>
                 <p z-field-description>{{ option.description }}</p>
               </div>
             </div>

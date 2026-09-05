@@ -15,12 +15,14 @@ import { ZardInputGroupImports } from '@zard/components/input-group/input-group.
 import { ZardRadioGroupImports } from '@zard/components/radio-group/radio-group.imports';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTextareaComponent } from '@zard/components/textarea/textarea.component';
+import { ZardIdDirective } from '@zard/core';
 
 @Component({
   selector: 'z-card-ui-elements',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    ZardIdDirective,
     ZardCardImports,
     ZardButtonComponent,
     ZardButtonGroupComponent,
@@ -76,21 +78,21 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
             aria-label="Fruit preference"
             class="ml-auto flex w-fit flex-row gap-3"
           >
-            <label class="sr-only" for="ui-elements-apple">Apple</label>
-            <z-radio zId="ui-elements-apple" [value]="'apple'" />
-            <label class="sr-only" for="ui-elements-banana">Banana</label>
-            <z-radio zId="ui-elements-banana" [value]="'banana'" />
+            <label class="sr-only" zardId="fruit-apple" #apple="zardId" [for]="apple.id()">Apple</label>
+            <z-radio [zId]="apple.id()" [value]="'apple'" />
+            <label class="sr-only" zardId="fruit-banana" #banana="zardId" [for]="banana.id()">Banana</label>
+            <z-radio [zId]="banana.id()" [value]="'banana'" />
           </z-radio-group>
 
           <div class="flex gap-3">
-            <z-checkbox zId="ui-elements-alerts" [ngModel]="true" class="gap-0">
+            <z-checkbox [ngModel]="true" class="gap-0">
               <span class="sr-only">Enable email alerts</span>
             </z-checkbox>
-            <z-checkbox zId="ui-elements-push" class="4xl:flex hidden gap-0">
+            <z-checkbox class="4xl:flex hidden gap-0">
               <span class="sr-only">Enable push alerts</span>
             </z-checkbox>
           </div>
-          <z-switch zId="ui-elements-compact" [zChecked]="true" class="4xl:hidden flex">
+          <z-switch [zChecked]="true" class="4xl:hidden flex">
             <span class="sr-only">Enable compact notifications</span>
           </z-switch>
         </div>
@@ -112,7 +114,7 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
               <ng-icon name="lucideChevronUp" />
             </button>
           </z-button-group>
-          <z-switch zId="ui-elements-advanced" [zChecked]="true" class="4xl:flex hidden">
+          <z-switch [zChecked]="true" class="4xl:flex hidden">
             <span class="sr-only">Enable advanced setting</span>
           </z-switch>
         </div>

@@ -23,7 +23,7 @@ interface Holding {
   template: `
     <z-card>
       <z-card-header>
-        <h3 z-card-title zTitle="Q2 Dividend Income"></h3>
+        <z-card-title zTitle="Q2 Dividend Income" />
         <p z-card-description zDescription="Quarterly dividend payouts across your portfolio holdings."></p>
         <div z-card-action>
           <button type="button" z-button zType="ghost" zSize="icon-sm" class="bg-muted" aria-label="Dismiss">

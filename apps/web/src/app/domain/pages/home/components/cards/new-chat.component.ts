@@ -18,7 +18,7 @@ import { ZardInputGroupImports } from '@zard/components/input-group/input-group.
   template: `
     <z-card class="mx-auto h-[560px] w-full max-w-sm gap-0!">
       <z-card-header class="gap-1! border-b pb-5!">
-        <h3 z-card-title zTitle="New Chat"></h3>
+        <z-card-title zTitle="New Chat" />
         <p z-card-description zDescription="How can I help you today?"></p>
         <div z-card-action>
           <button type="button" z-button zType="outline" zSize="icon" aria-label="Reset conversation">

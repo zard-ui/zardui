@@ -21,7 +21,7 @@ const formatCurrency = (amount: number) =>
     <z-card>
       <z-card-header>
         <p z-card-description zDescription="Claimable Balance"></p>
-        <h3 z-card-title class="text-4xl! tabular-nums" [zTitle]="'$' + total"></h3>
+        <z-card-title class="text-4xl! tabular-nums" [zTitle]="'$' + total" />
         <z-badge zType="outline">
           <span class="size-2 rounded-full bg-yellow-500"></span>
           Pending Setup

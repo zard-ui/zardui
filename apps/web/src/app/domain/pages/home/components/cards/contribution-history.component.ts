@@ -18,12 +18,12 @@ interface Contribution {
   template: `
     <z-card>
       <z-card-header>
-        <h3 z-card-title zTitle="Contribution History"></h3>
-        <p z-card-description zDescription="Last 6 months of activity"></p>
+        <z-card-title zTitle="Contribution History" />
+        <p z-card-description zDescription="Last 5 months of activity"></p>
       </z-card-header>
 
       <z-card-content>
-        <div class="flex h-[200px] w-full items-end gap-3" role="img" aria-label="Last 6 months of contributions">
+        <div class="flex h-[200px] w-full items-end gap-3" role="img" aria-label="Last 5 months of contributions">
           @for (item of chartData; track item.month; let index = $index) {
             <div class="flex h-full flex-1 flex-col justify-end gap-2">
               <div [class]="barClass(index)" [style.height.%]="(item.amount / maxAmount) * 100"></div>

@@ -51,7 +51,7 @@ const QR_ROWS = [
       </z-card-content>
 
       <z-card-header class="text-center">
-        <h3 z-card-title zTitle="Scan to connect your mobile device"></h3>
+        <z-card-title zTitle="Scan to connect your mobile device" />
         <p
           z-card-description
           class="text-balance"

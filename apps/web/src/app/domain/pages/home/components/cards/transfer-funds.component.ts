@@ -12,6 +12,7 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
 import { ZardSelectItemComponent } from '@zard/components/select/select-item.component';
 import { ZardSelectComponent } from '@zard/components/select/select.component';
 import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
+import { ZardIdDirective } from '@zard/core';
 
 interface Account {
   readonly value: string;
@@ -23,6 +24,7 @@ interface Account {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    ZardIdDirective,
     ZardCardImports,
     ZardFieldImports,
     ZardItemImports,
@@ -39,7 +41,7 @@ interface Account {
   template: `
     <z-card>
       <z-card-header>
-        <h3 z-card-title zTitle="Transfer Funds"></h3>
+        <z-card-title zTitle="Transfer Funds" />
         <p z-card-description zDescription="Move money between your connected accounts."></p>
         <div z-card-action>
           <button type="button" z-button zType="ghost" zSize="icon-sm" class="bg-muted" aria-label="Dismiss">
@@ -50,13 +52,13 @@ interface Account {
 
       <z-card-content>
         <div z-field-group>
-          <div z-field>
-            <label z-field-label for="transfer-amount">Amount to Transfer</label>
+          <div z-field zardId="transfer-amount" #amount="zardId">
+            <label z-field-label [for]="amount.id()">Amount to Transfer</label>
             <z-input-group>
               <z-input-group-addon>
                 <z-input-group-text>$</z-input-group-text>
               </z-input-group-addon>
-              <input z-input id="transfer-amount" value="1,200.00" />
+              <input z-input [id]="amount.id()" value="1,200.00" />
             </z-input-group>
           </div>
 
