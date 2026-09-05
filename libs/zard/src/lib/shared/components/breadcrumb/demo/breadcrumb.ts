@@ -21,10 +21,6 @@ export const BREADCRUMB = {
   componentName: 'breadcrumb',
   componentType: 'breadcrumb',
   description: 'Displays the path to the current resource using a hierarchy of links.',
-  about: {
-    description:
-      '`z-breadcrumb-item` renders a `z-breadcrumb-link` for every item except the last, and a `z-breadcrumb-page` (with `aria-current="page"`) for the last one — project a `z-breadcrumb-link`, `z-breadcrumb-page`, or `z-breadcrumb-ellipsis` yourself to opt out of that automatic behavior, as the `dropdown` example does. `z-breadcrumb-link` ships its own Router-compatible inputs (`routerLink`, `queryParams`, `fragment`, ...) so it navigates through the Angular `Router` without needing the `RouterLink` directive; pass a plain `href` instead when the target does not go through the router. Separators render automatically between items unless you project your own `z-breadcrumb-separator` elements, and there is no standalone list selector — `zAlign`/`zWrap` on `z-breadcrumb` itself control the wrapping list.',
-  },
   installData: {
     cliAdd: BREADCRUMB_CLI_ADD,
     manualCode: BREADCRUMB_MANUAL_CODE,

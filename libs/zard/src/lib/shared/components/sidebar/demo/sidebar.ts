@@ -109,7 +109,7 @@ export const SIDEBAR = {
   description: 'A composable, themeable and customizable sidebar component.',
   about: {
     description:
-      'Sidebars are one of the most complex components to build. They are central to any application and often contain a lot of moving parts. This page opens with composition, the imperative API, the keyboard shortcut, sizing, theming and controlled mode — the gallery below it covers every collapsible mode, variant and slot. This is a solid foundation to build on top of — composable, themeable, customizable.',
+      'Sidebars are one of the most complex components to build. They are central to any application and often contain a lot of moving parts. This is a solid foundation to build on top of — composable, themeable, customizable.',
     link: { label: 'Browse the Blocks Library', href: '/blocks/sidebar' },
   },
   api: SIDEBAR_API,

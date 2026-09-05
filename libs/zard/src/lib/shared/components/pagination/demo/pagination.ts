@@ -17,10 +17,6 @@ export const PAGINATION = {
   componentName: 'pagination',
   componentType: 'pagination',
   description: 'Pagination with page navigation, next and previous links.',
-  about: {
-    description:
-      'Give `z-pagination` a `[zTotal]` and `[(zPageIndex)]` and it renders the full previous/numbers/next nav itself, driving page changes internally. Pass a `[zContent]` template instead to take full manual control of the composition — `ul[z-pagination-content]` > `li[z-pagination-item]` wrapping `z-pagination-button` (or `a`/`button[z-pagination-button]`), `z-pagination-previous`, `z-pagination-next` and `z-pagination-ellipsis` — which is also how an app wires real `routerLink`/`href` navigation onto the page links, as the `routing` example does.',
-  },
   api: PAGINATION_API,
   installData: {
     cliAdd: PAGINATION_CLI_ADD,

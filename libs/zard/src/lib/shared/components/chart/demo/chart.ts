@@ -45,9 +45,8 @@ export const CHART = {
   componentType: 'chart',
   description: 'Beautiful charts built with Apache ECharts. Copy and paste into your apps.',
   about: {
-    description:
-      'The chart is built on Apache ECharts, wired into Angular through ngx-echarts. This page covers configuration, theming, the tooltip, the legend and accessibility — for the full set of area, bar, line, pie, radar and radial variations, see the gallery.',
-    link: { label: 'Browse the chart gallery', href: '/charts' },
+    description: 'The chart is built on Apache ECharts, wired into Angular through ngx-echarts.',
+    link: { label: 'Apache ECharts', href: 'https://echarts.apache.org/' },
   },
   installData: {
     cliAdd: CHART_CLI_ADD,

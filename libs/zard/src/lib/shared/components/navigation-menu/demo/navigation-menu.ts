@@ -43,8 +43,7 @@ export const NAVIGATION_MENU = {
   description: 'A collection of links for navigating websites.',
   api: NAVIGATION_MENU_API,
   about: {
-    description:
-      'Built on the Angular CDK Menu: `z-navigation-menu-trigger` opens `z-navigation-menu-content` (a list of `z-navigation-menu-link` entries), and by default every trigger inside a root shares one animated `z-navigation-menu-viewport` — set `[zViewport]="false"` to give each trigger its own popup instead. Triggers sit in the normal Tab order (there is no roving arrow-key focus between them); `Enter`/`Space` opens the focused trigger, `ArrowDown` opens it and moves focus straight to its first link, and `Escape` closes the open panel and returns focus to the trigger that owns it. Reach for `z-navigation-menu` for a page\'s persistent top-level navigation with rich dropdown panels; use `z-dropdown` for an action menu attached to a single control.',
+    description: 'The navigation menu is built on top of the Angular CDK Menu.',
     link: { label: 'Angular CDK Menu', href: 'https://material.angular.dev/cdk/menu/overview' },
   },
   installData: {

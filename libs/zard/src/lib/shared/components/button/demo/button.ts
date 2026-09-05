@@ -37,10 +37,6 @@ export const BUTTON = {
   componentName: 'button',
   componentType: 'button',
   description: 'Displays a button or a component that looks like a button.',
-  about: {
-    description:
-      "The selector is `z-button, [z-button]`. Use `<z-button>` as a standalone element, or apply the `z-button` attribute to a native `<button>` or `<a>` — `<button z-button>` or `<a z-button>` — when the underlying element's own semantics matter, such as a submit button inside a form or a link that should look like a button.",
-  },
   installData: {
     cliAdd: BUTTON_CLI_ADD,
     manualCode: BUTTON_MANUAL_CODE,

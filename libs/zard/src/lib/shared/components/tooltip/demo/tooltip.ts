@@ -23,10 +23,6 @@ export const TOOLTIP = {
   api: TOOLTIP_API,
   description:
     'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
-  about: {
-    description:
-      "Reach for `[zTooltip]` when hovering or focusing a trigger should surface a short text label — a button's name, a truncated value — never rich or interactive content. It opens and closes fast (`zShowDelay`/`zHideDelay` default to 150ms/100ms) since it only needs to confirm what the trigger does. Use `[zHoverCard]`/`z-hover-card` instead for a rich, non-essential preview that can tolerate a slower 700ms/300ms delay, and `[zPopover]`/`z-popover` for a click-opened panel of interactive content. Compose a `z-kbd`/`z-kbd-group` inside the `zTooltip` template to pair a label with its keyboard shortcut.",
-  },
   installData: {
     cliAdd: TOOLTIP_CLI_ADD,
     manualCode: TOOLTIP_MANUAL_CODE,

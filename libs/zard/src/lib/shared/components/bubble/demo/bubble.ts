@@ -28,11 +28,7 @@ export const BUBBLE = {
   componentName: 'bubble',
   componentType: 'bubble',
   description:
-    'A message bubble for chat and conversational UI. `z-bubble` frames one turn of content with a `zVariant` treatment and a `zAlign` side, and pairs with `z-bubble-reactions` and `z-bubble-group` to build a full thread.',
-  about: {
-    description:
-      '`z-bubble` renders the message surface only. Project `z-bubble-content` for the bubble body, or apply it as an attribute on a native `button`/`a` to turn the whole turn into an interactive link or quick reply. Add `z-bubble-reactions` for a badge row anchored to a corner of the bubble, and wrap consecutive turns from the same sender in `z-bubble-group` to stack them tightly. For a full conversational turn with an avatar, sender name, timestamp, and message-level actions, compose `z-message` instead — `z-bubble` stays intentionally scoped to just the surface.',
-  },
+    'Displays conversational content in a message bubble. Supports variants, alignment, grouping, reactions, and collapsible content.',
   api: BUBBLE_API,
   installData: {
     cliAdd: BUBBLE_CLI_ADD,

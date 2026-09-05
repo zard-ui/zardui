@@ -17,10 +17,6 @@ export const RESIZABLE = {
   description: 'A resizable layout component that allows users to resize panels by dragging dividers between them.',
   fullWidth: true,
   api: RESIZABLE_API,
-  about: {
-    description:
-      'A group (`z-resizable`) lays out `z-resizable-panel`s separated by `z-resizable-handle`s; sizes are percentages of the group along its resize axis (0-100, not pixels). `[zDefaultSize]` accepts a bare number/numeric string (treated as a percentage) or an explicit `"50%"`/`"300px"` string — a `px` value is converted to a percentage of the container at layout time. `[zMin]`/`[zMax]` follow the same rule. The `zDefaultSize`s of the panels in one group should add up to 100; if a panel omits it, the remaining space is split evenly.',
-  },
   installData: {
     cliAdd: RESIZABLE_CLI_ADD,
     manualCode: RESIZABLE_MANUAL_CODE,

@@ -16,10 +16,6 @@ export const SEPARATOR = {
   componentName: 'separator',
   componentType: 'separator',
   description: 'Visually or semantically separates content.',
-  about: {
-    description:
-      'A separator is decorative by default (`zDecorative` is `true`), so it renders `role="none"` and stays out of the accessibility tree — right for a purely visual line. Set `[zDecorative]="false"` when the line marks a real boundary between sections instead: it then exposes `role="separator"` (plus `aria-orientation="vertical"` on a vertical one) so assistive tech announces it. `z-breadcrumb`, `z-dropdown-menu`, `z-context-menu`, `z-select`, `z-command`, `z-field`, `z-item`, `z-button-group` and `z-sidebar` ship their own purpose-built separator elements rather than composing `z-separator` — `z-separator` is the standalone one for arbitrary layouts.',
-  },
   api: SEPARATOR_API,
   installData: {
     cliAdd: SEPARATOR_CLI_ADD,

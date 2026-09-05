@@ -35,11 +35,6 @@ export const FIELD = {
   componentName: 'field',
   componentType: 'field',
   description: 'Composable building blocks for building accessible forms with labels, descriptions and errors.',
-  about: {
-    title: 'Composing a field',
-    description:
-      '`z-field` wraps one control together with its `z-field-label`, `z-field-description` and `z-field-error`, and sets `role="group"` plus `data-orientation` so the group reads as one accessible unit. Associate the label with its control the same way you would in plain HTML — `<label z-field-label for="email">` next to `<input z-input id="email">` — clicking the label then focuses (or toggles) the control. Compose several fields with `z-field-group`, or wrap a whole section in `z-field-set` + `z-field-legend` when it needs a shared heading; `z-field-separator` divides sections inside a group. Flag an invalid control by setting the `data-invalid` attribute on `z-field` and `aria-invalid` on the control, then pass the errors to `z-field-error` via its `[zErrors]` input (or project static content).',
-  },
   installData: {
     cliAdd: FIELD_CLI_ADD,
     manualCode: FIELD_MANUAL_CODE,

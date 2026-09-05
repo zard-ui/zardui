@@ -51,10 +51,6 @@ export const DRAWER = {
   componentName: 'drawer',
   componentType: 'drawer',
   description: 'A draggable panel that slides in from an edge of the screen.',
-  about: {
-    description:
-      "A modal drawer wires Angular CDK's real focus trap and scroll block: opening it moves focus to its first tabbable element, keeps Tab from leaving the panel, and restores focus to the trigger on close, while the page behind is scroll-locked. Set `zModal` to `false` to opt out of all three and leave the page interactive. Escape and backdrop presses close only the topmost drawer, so nested drawers stack safely.",
-  },
   api: DRAWER_API,
   installData: {
     cliAdd: DRAWER_CLI_ADD,

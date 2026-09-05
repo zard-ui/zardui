@@ -22,10 +22,6 @@ export const BADGE = {
   componentName: 'badge',
   componentType: 'badge',
   description: 'Displays a badge or a component that looks like a badge.',
-  about: {
-    description:
-      'The selector is `z-badge, a[z-badge]`. Use `<z-badge>` as a standalone element for a static label, or apply the `z-badge` attribute to a native `<a>` — `<a z-badge>` — when the badge itself needs to navigate, as in the `link` example.',
-  },
   installData: {
     cliAdd: BADGE_CLI_ADD,
     manualCode: BADGE_MANUAL_CODE,

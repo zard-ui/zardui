@@ -22,10 +22,6 @@ export const MESSAGE = {
   componentName: 'message',
   componentType: 'message',
   description: 'Displays a message in a conversation, with optional avatar, header, footer, and alignment.',
-  about: {
-    description:
-      '`z-message` owns the row layout — avatar, alignment, header and footer — around the message surface. A `z-message` with no projected `z-message-content` builds the whole turn itself (an avatar from `zSrc`/`zFallback`, a `z-bubble` sized by `zVariant`, and the header/footer from `zHeader`/`zFooter`), so a plain turn is one tag; project the explicit `z-message-content`, with `z-message-header`/`z-message-footer` around a `z-bubble`, when the turn needs a custom composition such as actions or an attachment. Reach for `z-bubble` alone when a turn needs no avatar or header/footer, and for `z-marker` for a single inline status row with no surface at all. shadcn ships a companion `MessageScroller` for the auto-scrolling container around a whole conversation; zard has no counterpart, so wrap a thread in your own scrollable container.',
-  },
   api: MESSAGE_API,
   installData: {
     cliAdd: MESSAGE_CLI_ADD,

@@ -34,10 +34,6 @@ export const INPUT_GROUP = {
   componentName: 'input-group',
   componentType: 'input-group',
   description: 'Add addons, buttons, and helper content to inputs.',
-  about: {
-    description:
-      "`z-input-group` wraps `input[z-input]` or `textarea[z-textarea]` together with one or more `z-input-group-addon` slots holding an icon, `z-input-group-text`, `button[z-input-group-button]`, `z-kbd` or `z-spinner`. Each addon's `zAlign` places it `inline-start` (default), `inline-end`, `block-start` or `block-end` relative to the control, and the whole group shares one focus ring and one `aria-invalid` state. Use `z-input-group` when the extra content is anchored to a single field; reach for `z-button-group` instead for a standalone row of buttons or controls that is not attached to a field.",
-  },
   api: INPUT_GROUP_API,
   installData: {
     cliAdd: INPUT_GROUP_CLI_ADD,

@@ -29,11 +29,6 @@ export const ITEM = {
   componentType: 'item',
   description: 'A versatile component for displaying content with media, title, description, and actions.',
   api: ITEM_API,
-  about: {
-    title: 'Composing an item',
-    description:
-      '`z-item` is a row with optional media, a title/description pair, and trailing actions, shaped by three independent scales. On the container, `zVariant` picks the surface (`default` transparent, `outline` bordered, `muted` a tinted background) and `zSize` picks the density (`default` and `sm` share the same padding, `xs` tightens it for compact contexts such as a dropdown menu). On `z-item-media`, its own `zVariant` (`default`, `icon`, `image`) styles whatever is projected into it — `icon` sizes an `ng-icon`, `image` clips an `<img>` to a fixed square that scales with the container\'s `zSize`; there is no dedicated `avatar` media variant, so project a real `z-avatar` / `z-avatar-group` into the `default` variant and size it with a `class` instead. Compose a list with `z-item-group` (`role="list"`) and `z-item-separator` between rows; a single item\'s `z-item-header` / `z-item-footer` add a full-width row above or below `z-item-content` (which wraps `z-item-title` and `z-item-description`), and `z-item-actions` holds trailing controls. Render the whole row as `a[z-item]` — with `[routerLink]` for in-app navigation or a plain `href` for an external destination — to make it a real link rather than a styled div.',
-  },
   installData: {
     cliAdd: ITEM_CLI_ADD,
     manualCode: ITEM_MANUAL_CODE,

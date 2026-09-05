@@ -44,10 +44,6 @@ export const POPOVER = {
   componentType: 'popover',
   api: POPOVER_API,
   description: 'Displays rich content in a portal, triggered by a button.',
-  about: {
-    description:
-      'Reach for `[zPopover]` with `z-popover` when a trigger should open a floating panel of interactive content — a form, a menu of actions — that stays open until it is dismissed by clicking outside, pressing `Escape`, or completing an action inside it. Setting `zTrigger="hover"` opens it on hover instead of click, but for a hover- or focus-triggered preview of non-essential content prefer `[zHoverCard]`/`z-hover-card`: it debounces the pointer with open/close delays (700ms/300ms by default) so a passing cursor does not trigger it, which a hover-triggered popover does not do on its own. Use `[zTooltip]`/`z-tooltip` instead of either for a short text label.',
-  },
   installData: {
     cliAdd: POPOVER_CLI_ADD,
     manualCode: POPOVER_MANUAL_CODE,

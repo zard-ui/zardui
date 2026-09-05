@@ -52,10 +52,6 @@ export const SELECT = {
   componentType: 'select',
   api: SELECT_API,
   description: 'Displays a list of options for the user to pick from—triggered by a button.',
-  about: {
-    description:
-      '`z-select` bundles the trigger button and its CDK-overlay listbox into a single component — there is no separate trigger/content pair to compose. Options are declared with `z-select-item`, optionally grouped under `z-select-group`/`z-select-label` and divided with `z-select-separator`. It is a closed list picked without typing; reach for `z-combobox` when the list needs to be filtered by typing, and `z-command` for a standalone filterable action list that is not bound to a form value, such as inside a dialog for a command palette.',
-  },
   installData: {
     cliAdd: SELECT_CLI_ADD,
     manualCode: SELECT_MANUAL_CODE,

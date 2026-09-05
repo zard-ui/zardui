@@ -21,11 +21,6 @@ export const CARD = {
   componentType: 'card',
   description: 'Displays a card with header, content, and footer.',
   fullWidth: true,
-  about: {
-    title: 'Composing a card',
-    description:
-      '`z-card` is a plain container: `z-card-header` groups `z-card-title`, `z-card-description` and an optional `z-card-action` (title and description stack, the action sits in the top-right corner of the header). `z-card-content` holds the body and `z-card-footer` closes the card; both `z-card-header` and `z-card-footer` accept `zHeaderBorder` / `zFooterBorder` to add a divider. `zSize="sm"` on the root tightens the gap and padding of every section at once through a `data-size` attribute selector. Card has no `--card-spacing` CSS variable — override spacing per instance with a `class` on the root or on any section.',
-  },
   installData: {
     cliAdd: CARD_CLI_ADD,
     manualCode: CARD_MANUAL_CODE,

@@ -20,11 +20,6 @@ export const COLLAPSIBLE = {
   componentName: 'collapsible',
   componentType: 'collapsible',
   description: 'An interactive component which expands and collapses a panel.',
-  about: {
-    title: 'One panel vs. a list of panels',
-    description:
-      'A collapsible is a single `[z-collapsible]` toggling one region of content — use it to progressively disclose details, a settings block, or a nested tree. An accordion is the multi-item cousin: a list of collapsibles that share exclusivity rules (`z-accordion-item` inside `z-accordion`). Reach for a collapsible when there is exactly one thing to show or hide; reach for an accordion when there are several sibling sections.',
-  },
   api: COLLAPSIBLE_API,
   installData: {
     cliAdd: COLLAPSIBLE_CLI_ADD,

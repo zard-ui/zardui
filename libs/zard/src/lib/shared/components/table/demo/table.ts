@@ -52,10 +52,6 @@ export const TABLE = {
   componentType: 'table',
   api: TABLE_API,
   description: 'A responsive table component for displaying structured data.',
-  about: {
-    description:
-      'Apply `z-table` to a native `<table>`, then apply the matching attribute to each native tag it wraps: `thead[z-table-header]`, `tbody[z-table-body]`, `tr[z-table-row]`, `th[z-table-head]`, `td[z-table-cell]`, `caption[z-table-caption]` and `tfoot[z-table-footer]`. Give every `th[z-table-head]` a `scope`, and add a `caption[z-table-caption]` or an `aria-label` on `z-table` so the table has an accessible name. The checkbox and context-menu docs compose this same markup for their row-selection and right-click examples.',
-  },
   installData: {
     cliAdd: TABLE_CLI_ADD,
     manualCode: TABLE_MANUAL_CODE,

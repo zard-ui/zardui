@@ -19,10 +19,6 @@ export const TABS = {
   componentType: 'tabs',
   api: TABS_API,
   description: 'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
-  about: {
-    description:
-      "`z-tab-group` composes `z-tab` children directly — there is no separate list, trigger or content selector; each `z-tab`'s `label` renders the button and its projected content becomes that tab's panel. Navigation uses a roving `tabindex`: only the active trigger sits in the page's Tab order and activation happens on click — `ArrowLeft`/`ArrowRight` (or `ArrowUp`/`ArrowDown` when `zOrientation=\"vertical\"`) and `Home`/`End` do not move focus or selection between triggers.",
-  },
   installData: {
     cliAdd: TABS_CLI_ADD,
     manualCode: TABS_MANUAL_CODE,

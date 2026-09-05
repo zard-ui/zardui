@@ -23,10 +23,6 @@ export const SPINNER = {
   componentType: 'spinner',
   description:
     'A visual component that displays a loading animation to indicate that an action or process is in progress.',
-  about: {
-    description:
-      '`z-spinner` renders a single SVG loader with `role="status"` and an `aria-label` announcing "Loading" by default, overridable per instance via `[zAriaLabel]`; the spin animation does not currently honor `prefers-reduced-motion` — a real, verified gap, not a hypothetical one. There is no `zSize` input: dimensions, color and animation speed are all set through `class` (e.g. `size-8`). When a spinner sits inside `z-button`, `z-badge` or `z-input-group-addon`, the demos mark its position with `data-icon="inline-start"` / `"inline-end"` — a documentation convention only, with no matching CSS in the library.',
-  },
   api: SPINNER_API,
   installData: {
     cliAdd: SPINNER_CLI_ADD,

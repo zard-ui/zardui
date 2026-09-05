@@ -21,11 +21,6 @@ export const TEXTAREA = {
   componentType: 'textarea',
   description: 'Displays a form textarea or a component that looks like a textarea.',
   api: TEXTAREA_API,
-  about: {
-    title: 'A native textarea, styled',
-    description:
-      '`textarea[z-textarea]` is a directive, not a wrapper component: it applies textarea styling directly to a native `<textarea>` element, so every native attribute (`rows`, `placeholder`, `disabled`, `required`, `maxlength`, `aria-invalid`, …) keeps working as-is, and the control grows with its content via CSS `field-sizing: content` rather than a bound auto-resize input. Pair it with `z-field` for a label, description or error, and `z-input-group` to add a toolbar of text and buttons around it.',
-  },
   installData: {
     cliAdd: TEXTAREA_CLI_ADD,
     manualCode: TEXTAREA_MANUAL_CODE,

@@ -33,10 +33,6 @@ export const HOVER_CARD = {
   componentName: 'hover-card',
   componentType: 'hover-card',
   description: 'For sighted users to preview content available behind the link.',
-  about: {
-    description:
-      'Reach for `[zHoverCard]` with `z-hover-card` when hovering or focusing a trigger should surface a rich, non-essential preview — a profile card, a link summary — that stays open while the pointer or focus moves into it. Use `[zTooltip]`/`z-tooltip` instead for a short text label, and `[zPopover]`/`z-popover` when the panel holds interactive content that should open on click rather than hover.',
-  },
   api: HOVER_CARD_API,
   installData: {
     cliAdd: HOVER_CARD_CLI_ADD,

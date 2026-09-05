@@ -31,10 +31,6 @@ export const COMBOBOX = {
   componentName: 'combobox',
   componentType: 'combobox',
   description: 'Autocomplete input with a list of suggestions.',
-  about: {
-    description:
-      '`z-combobox` is a multi-part composition: an editable trigger (`z-combobox-input`, or a standalone element carrying `[z-combobox-trigger]` for the popup pattern), a `z-combobox-content` popup positioned through the CDK overlay, and one `z-combobox-item` per option, optionally grouped with `z-combobox-group`/`z-combobox-label`. Reach for it when the list needs to be filtered by typing; use `z-select` for a closed list picked without search, and `z-command` for a standalone filterable action list that is not bound to a form value, such as inside a dialog for a command palette.',
-  },
   installData: {
     cliAdd: COMBOBOX_CLI_ADD,
     manualCode: COMBOBOX_MANUAL_CODE,

@@ -36,10 +36,6 @@ export const DROPDOWN = {
   componentType: 'dropdown',
   description: 'Displays a menu to the user — such as a set of actions or functions — triggered by a button.',
   api: DROPDOWN_API,
-  about: {
-    description:
-      'There are two ways to build one: `[z-dropdown]` on a trigger element paired with a standalone `z-dropdown-menu-content` is the composable form used by every example below (and the one `z-context-menu` shares its row primitives with); `z-dropdown-menu` is a self-contained alternative that owns its own trigger and overlay in one element, for when the menu never needs to be triggered from anywhere else.',
-  },
   installData: {
     cliAdd: DROPDOWN_CLI_ADD,
     manualCode: DROPDOWN_MANUAL_CODE,

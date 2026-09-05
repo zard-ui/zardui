@@ -22,10 +22,6 @@ export const SLIDER = {
   componentType: 'slider',
   api: SLIDER_API,
   description: 'An input where the user selects a value from within a given range.',
-  about: {
-    description:
-      "`[zValue]`/`[zDefault]` and the `range`/`multiple-thumbs` examples share one value shape: an array of numbers, one entry per thumb — a single-element array is a single thumb, two elements are a range, three or more render that many thumbs, always in ascending order. `[zDefault]` sets the initial value and is read only once; for a slider whose value the component owns, bind `[zValue]` and listen for `(zSlideIndexChange)` instead, as the `controlled` example does. `z-slider` also implements Angular's `ControlValueAccessor`, so `formControlName`/`[(ngModel)]` work the same way without wiring `zValue` by hand.",
-  },
   fullWidth: true,
   installData: {
     cliAdd: SLIDER_CLI_ADD,

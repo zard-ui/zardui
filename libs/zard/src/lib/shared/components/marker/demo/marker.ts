@@ -26,10 +26,6 @@ export const MARKER = {
   componentName: 'marker',
   componentType: 'marker',
   description: 'Displays an inline status, system note, bordered row, or labeled separator in a conversation.',
-  about: {
-    description:
-      '`z-marker` renders its own content surface when nothing is projected, so a short row needs no sub-component — reach for the explicit `z-marker-content` element when you need a class override such as `shimmer`, or an icon slot for a whole component like `z-spinner`. Apply the `[z-marker]` attribute selector to a native `a`/`button` to turn the whole row into an interactive link or action. Marker stays scoped to a single inline row — a status update, system note, bordered row, or labeled separator; compose `z-bubble` for a full message surface, or `z-message` for a conversational turn with an avatar, sender, and timestamp.',
-  },
   api: MARKER_API,
   installData: {
     cliAdd: MARKER_CLI_ADD,

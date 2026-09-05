@@ -25,10 +25,6 @@ export const RADIO_GROUP = {
   componentType: 'radio-group',
   description:
     'A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked at a time.',
-  about: {
-    description:
-      'z-radio-group holds the selected value (`[(value)]`) and the group-level `zDisabled` state; every z-radio reads its checked state from the nearest z-radio-group and throws if rendered outside one. Unlike z-checkbox, z-radio renders a bare `<button role="radio">` with no internal label, so it pairs safely with either a sibling or a wrapping `label[z-field-label]`. "Comfortable" and "Compact" on shadcn\'s page are just option labels used inside its Default and Description demos, not a spacing/density input — zard\'s radio-group has none either, matching upstream.',
-  },
   api: RADIO_GROUP_API,
   installData: {
     cliAdd: RADIO_GROUP_CLI_ADD,

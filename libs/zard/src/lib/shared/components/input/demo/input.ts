@@ -37,11 +37,6 @@ export const INPUT = {
   componentType: 'input',
   description: 'Displays a form input field or a component that looks like an input field.',
   api: INPUT_API,
-  about: {
-    title: 'A native input, styled',
-    description:
-      '`input[z-input]` is a directive, not a wrapper component: it applies input styling directly to a native `<input>` element, so every native attribute (`type`, `placeholder`, `disabled`, `required`, `aria-invalid`, …) keeps working as-is. Pair it with `z-field` for a label, description or error, `z-input-group` to add icons, text or buttons inside the input, and `z-button-group` to add a button beside it.',
-  },
   installData: {
     cliAdd: INPUT_CLI_ADD,
     manualCode: INPUT_MANUAL_CODE,

@@ -25,10 +25,6 @@ export const SONNER = {
   componentType: 'sonner',
   api: SONNER_API,
   description: 'An opinionated toast component for Angular.',
-  about: {
-    description:
-      'Sonner shows transient, imperative notifications: inject `ZardSonnerService` and call `toast(message, options)` (or `.success` / `.error` / ...) from anywhere, no template binding required. Mount a single `z-sonner` at the root of the app (e.g. next to the router outlet) — every call renders into that one instance. For a persistent entry inside a conversation thread, use `z-message` instead.',
-  },
   installData: {
     cliAdd: SONNER_CLI_ADD,
     manualCode: SONNER_MANUAL_CODE,

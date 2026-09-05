@@ -15,10 +15,6 @@ export const SHEET = {
   componentType: 'sheet',
   api: SHEET_API,
   description: 'Extends the Dialog component to display content that complements the main content of the screen.',
-  about: {
-    description:
-      'A sheet is a dialog anchored to an edge of the screen — pick the edge with `zSide` — for secondary or detail content that keeps the surrounding page visible instead of covering it entirely. Reach for `ZardDialogService` instead when the content is centered and self-contained, `ZardDrawerService` for a touch-first panel with swipe-to-dismiss and snap points, and `ZardAlertDialogService` when the user must explicitly acknowledge an interruptive confirmation before continuing.',
-  },
   installData: {
     cliAdd: SHEET_CLI_ADD,
     manualCode: SHEET_MANUAL_CODE,

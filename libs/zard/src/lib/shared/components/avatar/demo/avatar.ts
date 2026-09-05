@@ -27,11 +27,6 @@ export const AVATAR = {
   componentName: 'avatar',
   componentType: 'avatar',
   description: 'An image element with a fallback for representing the user.',
-  about: {
-    title: 'Avatar, group and count',
-    description:
-      '`z-avatar` renders an image (`zSrc`) with a `zFallback` shown while it loads or if it errors. Stack several inside `z-avatar-group` — `zOrientation` switches between a horizontal and vertical stack, and each direct child picks up a ring and consistent spacing automatically. Append a `z-avatar-group-count` as the last child to show how many more members the stack does not display; it renders as a "+N" chip sized like the avatars around it.',
-  },
   installData: {
     cliAdd: AVATAR_CLI_ADD,
     manualCode: AVATAR_MANUAL_CODE,

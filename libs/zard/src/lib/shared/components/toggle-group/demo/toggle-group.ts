@@ -24,10 +24,6 @@ export const TOGGLE_GROUP = {
   api: TOGGLE_GROUP_API,
   description:
     'A set of two-state buttons that can be pressed or released. Multiple buttons can be selected at the same time.',
-  about: {
-    description:
-      '`z-toggle-group` is data-driven — pass a `zItems` array rather than composing separate item selectors. `zMode="single"` (the shadcn/Base UI `type` input) binds a `string` value and lets one item be pressed at a time; `zMode="multiple"` (the default) binds a `string[]` and allows any number pressed at once. Every item is a native `<button>` in the page\'s normal Tab order — there is no roving-tabindex/arrow-key navigation, so a disabled item is skipped only because native `disabled` buttons are unfocusable.',
-  },
   installData: {
     cliAdd: TOGGLE_GROUP_CLI_ADD,
     manualCode: TOGGLE_GROUP_MANUAL_CODE,

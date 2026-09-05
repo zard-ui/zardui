@@ -15,10 +15,6 @@ export const PROGRESS = {
   componentType: 'progress',
   description: 'Displays an indicator showing the completion progress of a task.',
   api: PROGRESS_API,
-  about: {
-    description:
-      "`z-progress` is a single element with a `[value]` input, not shadcn's four-part `Progress` / `ProgressLabel` / `ProgressValue` / `ProgressTrack` / `ProgressIndicator` composition. Project your own label and value markup — such as `z-field-label` — next to `z-progress`, as the `with-label-and-value` example does.",
-  },
   installData: {
     cliAdd: PROGRESS_CLI_ADD,
     manualCode: PROGRESS_MANUAL_CODE,

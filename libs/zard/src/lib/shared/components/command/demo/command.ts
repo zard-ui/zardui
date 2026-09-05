@@ -19,10 +19,6 @@ export const COMMAND = {
   componentName: 'command',
   componentType: 'command',
   description: 'Fast, composable, unstyled command menu for Angular.',
-  about: {
-    description:
-      '`z-command` is composed from `z-command-input` (the search box), `z-command-list` (the `role="listbox"` container), one `z-command-option` per entry — optionally grouped with `z-command-option-group` and divided with `z-command-divider` — and, inline in the template, whatever empty-state markup the consumer wants (a plain message or `z-empty`). It has no built-in trigger or open state of its own: pair it with `ZardDialogService` to build a `⌘K` command palette, as shown in every example on this page, or drop it inline like `preview`. Reach for `z-command` when the list is a standalone, filterable set of actions rather than a value bound to a form; use `z-combobox` when typing needs to pick a value the form keeps.',
-  },
   installData: {
     cliAdd: COMMAND_CLI_ADD,
     manualCode: COMMAND_MANUAL_CODE,

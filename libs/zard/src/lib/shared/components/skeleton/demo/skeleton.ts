@@ -22,10 +22,6 @@ export const SKELETON = {
   api: SKELETON_API,
   description: 'Use to show a placeholder while content is loading.',
   fullWidth: true,
-  about: {
-    description:
-      'A skeleton has no shape of its own — compose one `z-skeleton` per piece of content it stands in for (a circle for `z-avatar`, a bar the height of a text line, `h-8` to match `z-input`/`z-button`), laid out the way the loaded content will be. The pulse is Tailwind\'s `animate-pulse`, and it keeps animating under `prefers-reduced-motion: reduce` since the component sets no `motion-reduce:animate-none` override — a real, verified gap, not a hypothetical one. The host carries `aria-hidden="true"`, so every `z-skeleton` is skipped by assistive tech entirely rather than announced as a loading region. `z-sidebar-menu-skeleton` follows the same compose-with-`z-skeleton` convention for its icon and text bars.',
-  },
   installData: {
     cliAdd: SKELETON_CLI_ADD,
     manualCode: SKELETON_MANUAL_CODE,

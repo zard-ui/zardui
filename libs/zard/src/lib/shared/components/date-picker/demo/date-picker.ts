@@ -25,10 +25,6 @@ export const DATE_PICKER = {
   componentName: 'date-picker',
   componentType: 'date-picker',
   description: 'A button that opens a calendar in a popover to pick one date, several dates, or a date range.',
-  about: {
-    description:
-      "shadcn has no Date Picker component — its docs page composes `Popover`, `Calendar` and `Button` by hand for every example. `z-date-picker` bundles that composition into one selector: a `z-button` trigger, a `[zPopover]`-driven popover, a `z-calendar` inside it, `zFormat`-based display formatting, and `ControlValueAccessor` so it drops into template-driven or reactive forms as a single `value`/`(dateChange)` pair covering single, multiple and range selection instead of assembling three components by hand each time. Consumers who want shadcn's raw composition instead of the bundled component can still assemble `[zPopover]` and `z-calendar` themselves, the way the `input` example on this page does.",
-  },
   installData: {
     cliAdd: DATE_PICKER_CLI_ADD,
     manualCode: DATE_PICKER_MANUAL_CODE,
