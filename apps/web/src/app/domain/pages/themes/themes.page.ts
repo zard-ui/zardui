@@ -50,8 +50,8 @@ const NOTICE_STORAGE_KEY = 'zard-themes-cli-create-notice-dismissed';
         Tailwind CSS.
       </p>
       <section class="flex w-full items-center justify-center gap-2 pt-2 **:data-[slot=button]:shadow-none">
-        <a z-button href="/themes#themes">start customize</a>
-        <a z-button zType="ghost" routerLink="/docs/theming">Documentation</a>
+        <a z-button href="/themes#themes" class="h-[35px] rounded-[26px] px-3">start customize</a>
+        <a z-button zType="ghost" routerLink="/docs/theming" class="h-9 rounded-[26px] px-3">Documentation</a>
       </section>
     </section>
 
