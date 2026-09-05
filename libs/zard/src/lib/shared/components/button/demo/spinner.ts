@@ -11,8 +11,8 @@ import { ZardButtonComponent } from '../button.component';
     <div class="flex gap-2">
       <button type="button" z-button zType="outline" [zLoading]="true" [zDisabled]="true">Generating</button>
       <button type="button" z-button zType="secondary" [zDisabled]="true">
-        <z-spinner data-icon="inline-start" />
         Downloading
+        <z-spinner data-icon="inline-start" />
       </button>
     </div>
   `,
