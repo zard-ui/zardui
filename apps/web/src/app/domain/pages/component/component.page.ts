@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -50,6 +50,17 @@ export class ComponentPage implements OnInit {
 
   activeAnchor = 'overview';
   componentData = signal<ComponentData | undefined>(undefined);
+
+  /**
+   * The page instance is reused when only the `:componentName` param changes, so the template renders this
+   * one-element list through a `@for` keyed by component name: switching components rebuilds every demo,
+   * heading anchor and code box instead of reusing the previous component's instances by index.
+   */
+  protected readonly loadedComponent = computed(() => {
+    const data = this.componentData();
+    return data ? [data] : [];
+  });
+
   navigationConfig: NavigationConfig = { items: [] };
 
   activeTab = signal<'manual' | 'cli'>('cli');
