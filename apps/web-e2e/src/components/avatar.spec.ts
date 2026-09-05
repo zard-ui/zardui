@@ -29,8 +29,8 @@ test.describe('Avatar component', () => {
   });
 
   test('an avatar with a broken src keeps rendering the fallback, not the img', async () => {
-    // Second avatar in the basic demo points at a deliberately broken URL.
-    const brokenAvatar = demoPage.firstDemoBox.locator('z-avatar').nth(1);
+    // Second avatar in the basic example points at a deliberately broken URL.
+    const brokenAvatar = demoPage.getDemoByName('basic').locator('z-avatar').nth(1);
 
     await expect(brokenAvatar.locator('img')).toHaveCount(0);
     await expect(brokenAvatar.locator('span')).toBeVisible();
