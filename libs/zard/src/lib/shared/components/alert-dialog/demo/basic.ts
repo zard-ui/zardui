@@ -16,7 +16,9 @@ export class ZardDemoAlertDialogBasicComponent {
 
   open() {
     this.alertDialogService.create({
-      zTitle: 'Are you sure you want to continue?',
+      zTitle: 'Are you absolutely sure?',
+      zDescription:
+        'This action cannot be undone. This will permanently delete your account and remove your data from our servers.',
       zOkText: 'Continue',
       zCancelText: 'Cancel',
     });

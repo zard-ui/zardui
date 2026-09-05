@@ -1,20 +1,10 @@
-import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
+import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import {
-  inject,
-  Injectable,
-  InjectionToken,
-  Injector,
-  PLATFORM_ID,
-  TemplateRef,
-  type ViewContainerRef,
-} from '@angular/core';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID } from '@angular/core';
 
 import { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
-
-type ContentType<T> = ComponentType<T> | TemplateRef<T> | string | undefined;
 
 export const Z_ALERT_MODAL_DATA = new InjectionToken<unknown>('Z_ALERT_MODAL_DATA');
 
@@ -51,7 +41,7 @@ export class ZardAlertDialogService {
 
     const overlayRef = this.createOverlay();
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
-    const alertDialogRef = this.attachAlertDialogContent<T>(config.zContent, alertDialogContainer, overlayRef, config);
+    const alertDialogRef = this.attachAlertDialogContent<T>(alertDialogContainer, overlayRef, config);
 
     alertDialogContainer.alertDialogRef = alertDialogRef;
 
@@ -117,37 +107,12 @@ export class ZardAlertDialogService {
   }
 
   private attachAlertDialogContent<T>(
-    componentOrTemplateRef: ContentType<T>,
     alertDialogContainer: ZardAlertDialogComponent<T>,
     overlayRef: OverlayRef,
     config: ZardAlertDialogOptions<T>,
   ): ZardAlertDialogRef<T> {
     const alertDialogRef = new ZardAlertDialogRef<T>(overlayRef, config, alertDialogContainer, this.platformId);
 
-    if (componentOrTemplateRef instanceof TemplateRef) {
-      // CDK's TemplatePortal type requires a ViewContainerRef even though it tolerates null at runtime,
-      // and types the template context as T (the template's data shape) — we expose `alertDialogRef` instead.
-      const vcr = (config.zViewContainerRef ?? null) as unknown as ViewContainerRef;
-      const ctx = { alertDialogRef } as unknown as T;
-      alertDialogContainer.attachTemplatePortal(new TemplatePortal(componentOrTemplateRef, vcr, ctx));
-    } else if (componentOrTemplateRef && typeof componentOrTemplateRef !== 'string') {
-      const injector = this.createInjector<T>(alertDialogRef, config);
-      const contentRef = alertDialogContainer.attachComponentPortal<T>(
-        new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector),
-      );
-      alertDialogRef.setComponentInstance(contentRef.instance);
-    }
-
     return alertDialogRef;
-  }
-
-  private createInjector<T>(alertDialogRef: ZardAlertDialogRef<T>, config: ZardAlertDialogOptions<T>): Injector {
-    return Injector.create({
-      parent: this.injector,
-      providers: [
-        { provide: ZardAlertDialogRef, useValue: alertDialogRef },
-        { provide: Z_ALERT_MODAL_DATA, useValue: config.zData },
-      ],
-    });
   }
 }

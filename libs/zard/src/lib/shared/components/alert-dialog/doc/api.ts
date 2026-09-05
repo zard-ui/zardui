@@ -19,12 +19,6 @@ export const ALERT_DIALOG_API: ApiSection[] = [
         type: 'ClassValue',
         default: '-',
       },
-      {
-        name: '[zContent]',
-        description: 'Custom content component, template, or HTML',
-        type: 'string | TemplateRef<T> | Type<T>',
-        default: '-',
-      },
       { name: '[zData]', description: 'Data to pass to custom content components', type: 'object', default: '-' },
       {
         name: '[zOkText]',

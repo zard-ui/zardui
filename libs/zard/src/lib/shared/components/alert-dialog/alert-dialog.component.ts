@@ -19,7 +19,6 @@ import {
   inject,
   output,
   type TemplateRef,
-  type Type,
   viewChild,
   type ViewContainerRef,
   ViewEncapsulation,
@@ -48,7 +47,6 @@ export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardAlertDialogOptions<T> {
   zCancelText?: string | null;
   zClosable?: boolean;
-  zContent?: string | TemplateRef<T> | Type<T>;
   zCustomClasses?: ClassValue;
   zData?: object;
   zDescription?: string;
@@ -111,15 +109,6 @@ export class ZardAlertDialogOptions<T> {
           }
         </header>
       }
-
-      <main class="flex flex-col space-y-4">
-        <ng-template cdkPortalOutlet />
-
-        @if (isStringContent()) {
-          <!-- Angular auto-sanitizes [innerHTML] by default; scripts/event handlers are stripped. -->
-          <div data-testid="z-alert-content" [innerHTML]="config.zContent"></div>
-        }
-      </main>
 
       <footer [class]="footerClasses()" data-slot="alert-dialog-footer">
         @if (config.zCancelText !== null) {
@@ -200,7 +189,6 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   protected readonly descriptionClasses = computed(() => alertDialogDescriptionVariants());
   protected readonly footerClasses = computed(() => alertDialogFooterVariants());
   protected readonly mediaClasses = computed(() => mergeClasses(alertDialogMediaVariants(), this.config.zMediaClass));
-  protected readonly isStringContent = computed(() => typeof this.config.zContent === 'string');
   protected readonly titleId = computed(() => (this.config.zTitle ? `${this.idRef().id()}-title` : null));
   protected readonly descriptionId = computed(() =>
     this.config.zDescription ? `${this.idRef().id()}-description` : null,

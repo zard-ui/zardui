@@ -1,6 +1,8 @@
 export interface RawUsageData {
   importCode: string;
   templateCode: string;
+  /** Language of `templateCode`; defaults to `angular-html`. Use `angular-ts` for service-driven components. */
+  templateLanguage?: 'angular-html' | 'angular-ts';
 }
 
 export const USAGE_DATA: Record<string, RawUsageData> = {
@@ -17,11 +19,17 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-alert zTitle="Heads up!" zDescription="You can add components to your app using the cli."></z-alert>`,
   },
   'alert-dialog': {
-    importCode: `import { ZardAlertDialogComponent } from '@/shared/components/alert-dialog/alert-dialog.component';`,
-    templateCode: `<z-alert-dialog
-  zTitle="Are you absolutely sure?"
-  zDescription="This action cannot be undone."
-></z-alert-dialog>`,
+    importCode: `import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';`,
+    templateCode: `open() {
+  this.alertDialogService.create({
+    zTitle: 'Are you absolutely sure?',
+    zDescription:
+      'This action cannot be undone. This will permanently delete your account and remove your data from our servers.',
+    zOkText: 'Continue',
+    zCancelText: 'Cancel',
+  });
+}`,
+    templateLanguage: 'angular-ts',
   },
   avatar: {
     importCode: `import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';`,
