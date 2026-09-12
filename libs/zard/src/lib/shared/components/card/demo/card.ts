@@ -36,14 +36,14 @@ export const CARD = {
   examples: [
     {
       name: 'size',
-      description: 'Set zSize to "sm" to switch the card to its compact gap and padding scale.',
+      description: 'Set `zSize="sm"` to switch the card to its compact gap and padding scale.',
       component: ZardDemoCardSizeComponent,
       codeData: CARD_DEMO_SIZE,
     },
     {
       name: 'spacing',
       description:
-        'Zard has no --card-spacing CSS variable like shadcn does. Widen or tighten a card by passing class overrides to the root and to each section instead.',
+        'Every gap and padding of the card reads the `--card-spacing` CSS variable. Override it on the root with a class such as `[--card-spacing:--spacing(6)]` to widen or tighten the whole card at once.',
       component: ZardDemoCardSpacingComponent,
       codeData: CARD_DEMO_SPACING,
     },

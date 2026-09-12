@@ -11,7 +11,7 @@ describe('ZardCardComponent', () => {
 
     const card = debugElement.nativeElement;
     expect(card).toHaveClass('rounded-xl', 'bg-card', 'text-card-foreground');
-    expect(card).toHaveClass('flex', 'flex-col', 'py-4');
+    expect(card).toHaveClass('flex', 'flex-col', 'py-(--card-spacing)');
   });
 
   it('applies custom classes', async () => {
@@ -58,7 +58,7 @@ describe('ZardCardHeaderComponent', () => {
     const { container } = await render(TestHostComponent);
 
     const header = container.querySelector('[data-slot="card-header"]');
-    expect(header).toHaveClass('grid', 'items-start', 'gap-1', 'px-4');
+    expect(header).toHaveClass('grid', 'items-start', 'gap-1', 'px-(--card-spacing)');
   });
 
   it('applies border-b when zHeaderBorder is true', async () => {
@@ -269,7 +269,7 @@ describe('ZardCardContentComponent', () => {
 
     const { container } = await render(TestHostComponent);
 
-    expect(container.querySelector('[data-slot="card-content"]')).toHaveClass('px-4');
+    expect(container.querySelector('[data-slot="card-content"]')).toHaveClass('px-(--card-spacing)');
   });
 
   it('applies custom classes', async () => {
@@ -317,7 +317,7 @@ describe('ZardCardFooterComponent', () => {
     const { container } = await render(TestHostComponent);
 
     const footer = container.querySelector('[data-slot="card-footer"]');
-    expect(footer).toHaveClass('flex', 'items-center', 'p-4');
+    expect(footer).toHaveClass('flex', 'items-center', 'p-(--card-spacing)');
   });
 
   it('applies border-t when zFooterBorder is true', async () => {
