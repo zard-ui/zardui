@@ -9,27 +9,22 @@ import {
   selector: 'z-demo-toggle-group-size',
   imports: [ZardToggleGroupComponent],
   template: `
-    <div class="space-y-4">
-      <div>
-        <z-toggle-group
-          zDefaultValue="top"
-          zMode="single"
-          zSize="sm"
-          [zItems]="items"
-          zType="outline"
-          (valueChange)="onToggleChange($event)"
-        />
-      </div>
-      <div>
-        <z-toggle-group
-          zDefaultValue="top"
-          zMode="single"
-          zSize="lg"
-          [zItems]="items"
-          zType="outline"
-          (valueChange)="onToggleChange($event)"
-        />
-      </div>
+    <div class="flex flex-col gap-4">
+      <z-toggle-group
+        zDefaultValue="top"
+        zMode="single"
+        zSize="sm"
+        zType="outline"
+        [zItems]="items"
+        (valueChange)="onToggleChange($event)"
+      />
+      <z-toggle-group
+        zDefaultValue="top"
+        zMode="single"
+        zType="outline"
+        [zItems]="items"
+        (valueChange)="onToggleChange($event)"
+      />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

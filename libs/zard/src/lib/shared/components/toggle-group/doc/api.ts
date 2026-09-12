@@ -51,9 +51,9 @@ export const TOGGLE_GROUP_API: ApiSection[] = [
       },
       {
         name: '[zSpacing]',
-        description: 'Gap spacing between toggle items',
+        description: 'Gap between items in spacing units. `0` joins them into a single bar',
         type: 'number',
-        default: '0',
+        default: '2',
       },
       {
         name: '[zType]',

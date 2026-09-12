@@ -50,7 +50,8 @@ export const TOGGLE_GROUP = {
     },
     {
       name: 'spacing',
-      description: 'Use `zSpacing` to add spacing between toggle group items.',
+      description:
+        'Use `zSpacing` to control the gap between items, in spacing units. The default is `2`; set it to `0` to join the items into a single bar.',
       component: ZardDemoToggleGroupSpacingComponent,
       codeData: TOGGLE_GROUP_DEMO_SPACING,
     },

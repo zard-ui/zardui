@@ -15,7 +15,6 @@ import {
     <z-toggle-group
       zMode="multiple"
       zOrientation="vertical"
-      [zDefaultValue]="['bold', 'italic']"
       [zItems]="items"
       [zSpacing]="1"
       (valueChange)="onToggleChange($event)"

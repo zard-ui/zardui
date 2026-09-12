@@ -335,11 +335,14 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   'toggle-group': {
     importCode: `import { ZardToggleGroupComponent } from '@/shared/components/toggle-group/toggle-group.component';`,
-    templateCode: `<z-toggle-group>
-  <z-toggle value="bold">Bold</z-toggle>
-  <z-toggle value="italic">Italic</z-toggle>
-  <z-toggle value="underline">Underline</z-toggle>
-</z-toggle-group>`,
+    templateCode: `<z-toggle-group
+  zMode="single"
+  [zItems]="[
+    { value: 'a', label: 'A' },
+    { value: 'b', label: 'B' },
+    { value: 'c', label: 'C' },
+  ]"
+/>`,
   },
   tooltip: {
     importCode: `import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';`,

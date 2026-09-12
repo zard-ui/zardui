@@ -13,7 +13,6 @@ import {
       zDefaultValue="top"
       zMode="single"
       zSize="sm"
-      zType="outline"
       [zItems]="items"
       [zSpacing]="2"
       (valueChange)="onToggleChange($event)"
