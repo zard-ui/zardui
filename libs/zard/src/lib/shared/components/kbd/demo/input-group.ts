@@ -17,7 +17,8 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
         <ng-icon name="lucideSearch" class="text-muted-foreground" />
       </z-input-group-addon>
       <z-input-group-addon zAlign="inline-end">
-        <z-kbd>⌘K</z-kbd>
+        <z-kbd>⌘</z-kbd>
+        <z-kbd>K</z-kbd>
       </z-input-group-addon>
     </z-input-group>
   `,
