@@ -1,5 +1,4 @@
 import { RADIO_GROUP_DEMO_CHOICE_CARD } from '@generated/components/radio-group/demo/choice-card';
-import { RADIO_GROUP_DEMO_CONTROLLED } from '@generated/components/radio-group/demo/controlled';
 import { RADIO_GROUP_DEMO_DESCRIPTION } from '@generated/components/radio-group/demo/description';
 import { RADIO_GROUP_DEMO_DISABLED } from '@generated/components/radio-group/demo/disabled';
 import { RADIO_GROUP_DEMO_FIELDSET } from '@generated/components/radio-group/demo/fieldset';
@@ -11,7 +10,6 @@ import { RADIO_GROUP_MANUAL_CODE } from '@generated/installation/manual/radio-gr
 import { RADIO_GROUP_USAGE_CODE, RADIO_GROUP_USAGE_IMPORT } from '@generated/usage/radio-group';
 
 import { ZardDemoRadioGroupChoiceCardComponent } from './choice-card';
-import { ZardDemoRadioGroupControlledComponent } from './controlled';
 import { ZardDemoRadioGroupDescriptionComponent } from './description';
 import { ZardDemoRadioGroupDisabledComponent } from './disabled';
 import { ZardDemoRadioGroupFieldsetComponent } from './fieldset';
@@ -71,13 +69,6 @@ export const RADIO_GROUP = {
         'Set `zInvalid` on `z-radio` (which sets `aria-invalid`) and `data-invalid` on `z-field` to show validation errors.',
       component: ZardDemoRadioGroupInvalidComponent,
       codeData: RADIO_GROUP_DEMO_INVALID,
-    },
-    {
-      name: 'controlled',
-      description:
-        'Drive `z-radio-group` from external state with a one-way `[value]` binding and the `(valueChange)` output, the equivalent of a controlled value/onValueChange pair.',
-      component: ZardDemoRadioGroupControlledComponent,
-      codeData: RADIO_GROUP_DEMO_CONTROLLED,
     },
     {
       name: 'reactive-forms',
