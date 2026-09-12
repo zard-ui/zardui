@@ -6,7 +6,6 @@ import { FIELD_DEMO_INPUT } from '@generated/components/field/demo/input';
 import { FIELD_DEMO_INVALID } from '@generated/components/field/demo/invalid';
 import { FIELD_DEMO_PREVIEW } from '@generated/components/field/demo/preview';
 import { FIELD_DEMO_RADIO } from '@generated/components/field/demo/radio';
-import { FIELD_DEMO_RESPONSIVE } from '@generated/components/field/demo/responsive';
 import { FIELD_DEMO_SELECT } from '@generated/components/field/demo/select';
 import { FIELD_DEMO_SLIDER } from '@generated/components/field/demo/slider';
 import { FIELD_DEMO_SWITCH } from '@generated/components/field/demo/switch';
@@ -23,7 +22,6 @@ import { ZardDemoFieldInputComponent } from './input';
 import { ZardDemoFieldInvalidComponent } from './invalid';
 import { ZardDemoFieldPreviewComponent } from './preview';
 import { ZardDemoFieldRadioComponent } from './radio';
-import { ZardDemoFieldResponsiveComponent } from './responsive';
 import { ZardDemoFieldSelectComponent } from './select';
 import { ZardDemoFieldSliderComponent } from './slider';
 import { ZardDemoFieldSwitchComponent } from './switch';
@@ -118,13 +116,6 @@ export const FIELD = {
         'Stack `z-field-set` blocks with `z-field-group` and divide them with `z-field-separator`; nest a `data-slot="checkbox-group"` `z-field-group` for tighter spacing between related checkboxes.',
       component: ZardDemoFieldFieldGroupComponent,
       codeData: FIELD_DEMO_FIELD_GROUP,
-    },
-    {
-      name: 'responsive',
-      description:
-        'Set `zOrientation="responsive"` on `z-field` to stack the label and control on narrow containers and align them in a row once the parent `z-field-group` container query crosses its `@md` breakpoint.',
-      component: ZardDemoFieldResponsiveComponent,
-      codeData: FIELD_DEMO_RESPONSIVE,
     },
     {
       name: 'invalid',
