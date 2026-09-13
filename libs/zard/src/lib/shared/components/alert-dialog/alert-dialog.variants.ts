@@ -28,12 +28,12 @@ export const alertDialogHeaderVariants = cva([
 ]);
 
 export const alertDialogTitleVariants = cva([
-  'text-base font-medium',
+  'text-base font-medium wrap-anywhere',
   'sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
 ]);
 
 export const alertDialogDescriptionVariants = cva([
-  'text-sm text-balance text-muted-foreground md:text-pretty',
+  'text-sm text-balance text-muted-foreground wrap-anywhere md:text-pretty',
   '*:[a]:underline *:[a]:underline-offset-[3px] *:[a]:hover:text-foreground',
 ]);
 

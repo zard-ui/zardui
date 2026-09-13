@@ -8,10 +8,10 @@ export const dialogVariants = cva([
 
 export const dialogHeaderVariants = cva('flex flex-col gap-2');
 
-export const dialogTitleVariants = cva('text-base leading-none font-medium');
+export const dialogTitleVariants = cva('text-base leading-none font-medium wrap-anywhere');
 
 export const dialogDescriptionVariants = cva(
-  'text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-[3px] *:[a]:hover:text-foreground',
+  'text-sm text-muted-foreground wrap-anywhere *:[a]:underline *:[a]:underline-offset-[3px] *:[a]:hover:text-foreground',
 );
 
 export const dialogFooterVariants = cva(

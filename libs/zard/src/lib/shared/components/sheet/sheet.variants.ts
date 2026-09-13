@@ -57,9 +57,9 @@ export const sheetVariants = cva(
 
 export const sheetHeaderVariants = cva('flex flex-col gap-0.5 p-4');
 
-export const sheetTitleVariants = cva('text-base font-medium text-foreground');
+export const sheetTitleVariants = cva('text-base font-medium text-foreground wrap-anywhere');
 
-export const sheetDescriptionVariants = cva('text-sm text-muted-foreground');
+export const sheetDescriptionVariants = cva('text-sm text-muted-foreground wrap-anywhere');
 
 export const sheetFooterVariants = cva('mt-auto flex flex-col gap-2 p-4');
 
