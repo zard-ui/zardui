@@ -93,5 +93,6 @@ const match = /(?:^|;\s*)sidebar_state=(true|false)/.exec(cookies ?? '');
 const persistedOpen = match ? match[1] === 'true' : undefined;
 
 // `undefined` means "nothing persisted yet", so the provider falls back to open.
-// An explicit zDefaultOpen wins over this either way — shadcn feeds the cookie in through it.
+// An explicit zDefaultOpen wins over this either way — shadcn feeds the cookie in through it —
+// and such a provider never writes the cookie: a state it will not read back is not persisted.
 ```

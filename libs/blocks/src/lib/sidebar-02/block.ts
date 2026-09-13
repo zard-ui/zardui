@@ -282,7 +282,7 @@ export class Sidebar02VersionSwitcherComponent {
     {
       name: 'sidebar-02.component.html',
       path: 'src/components/sidebar-02/sidebar-02.component.html',
-      content: `<z-sidebar-provider>
+      content: `<z-sidebar-provider zDefaultOpen="true">
   <lib-sidebar-02-app-sidebar />
 
   <main z-sidebar-inset>

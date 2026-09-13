@@ -337,7 +337,7 @@ export class Sidebar12NavUserComponent {
     {
       name: 'sidebar-12.component.html',
       path: 'src/components/sidebar-12/sidebar-12.component.html',
-      content: `<z-sidebar-provider>
+      content: `<z-sidebar-provider zDefaultOpen="true">
   <lib-sidebar-12-app-sidebar />
 
   <main z-sidebar-inset>

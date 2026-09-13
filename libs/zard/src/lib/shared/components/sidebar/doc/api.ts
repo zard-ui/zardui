@@ -10,7 +10,7 @@ export const SIDEBAR_API: ApiSection[] = [
       {
         name: '[zDefaultOpen]',
         description:
-          'Initial open state. Left unset, the persisted sidebar_state cookie decides, falling back to true; set explicitly, it wins over the cookie',
+          'Initial open state. Left unset, the persisted sidebar_state cookie decides, falling back to true; set explicitly, it wins over the cookie and the provider stops writing it',
         type: 'boolean | undefined',
         default: 'undefined',
       },

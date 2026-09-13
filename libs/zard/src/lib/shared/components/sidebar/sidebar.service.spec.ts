@@ -57,6 +57,16 @@ describe('ZardSidebarService', () => {
     );
   });
 
+  it('does not write the cookie once zDefaultOpen is explicit', () => {
+    const { service, documentMock } = setup();
+
+    service.applyDefaultOpen(true);
+    service.setOpen(false);
+
+    expect(service.open()).toBe(false);
+    expect(documentMock.cookie).toBe('');
+  });
+
   it('takes the initial state from the cookie when present', () => {
     const { service } = setup({ cookie: `foo=bar; ${ZARD_SIDEBAR_COOKIE_NAME}=false; other=1` });
 

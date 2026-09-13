@@ -175,7 +175,7 @@ export const SIDEBAR = {
     {
       name: 'ssr-cookie',
       description:
-        'New in the Angular port: the open state is persisted in the `sidebar_state` cookie and read back on the server, so there is no layout flash on hydration.',
+        'New in the Angular port: the open state is persisted in the `sidebar_state` cookie and read back on the server, so there is no layout flash on hydration. A provider with an explicit `zDefaultOpen` neither reads nor writes it.',
       codeData: SIDEBAR_SNIPPET_SSR_COOKIE,
     },
     {
