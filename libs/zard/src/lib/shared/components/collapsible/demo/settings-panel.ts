@@ -1,83 +1,57 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronDown } from '@ng-icons/lucide';
+import { lucideMaximize, lucideMinimize } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsible.imports';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
-import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
-import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
 
 @Component({
   selector: 'z-demo-collapsible-settings-panel',
-  imports: [
-    ZardCollapsibleImports,
-    ZardButtonComponent,
-    ZardFieldImports,
-    ZardRadioGroupImports,
-    ZardSwitchComponent,
-    ZardCheckboxComponent,
-    NgIcon,
-    FormsModule,
-  ],
+  imports: [ZardCollapsibleImports, ZardCardImports, ZardFieldImports, ZardButtonComponent, ZardInputComponent, NgIcon],
   template: `
-    <div class="w-full max-w-sm">
-      <z-collapsible class="flex flex-col gap-3">
-        <div class="flex items-center justify-between gap-4">
-          <div>
-            <h4 class="text-sm font-semibold">Appearance</h4>
-            <p class="text-muted-foreground text-sm">Fine-tune how the interface looks.</p>
+    <z-card zSize="sm" class="mx-auto w-full min-w-xs">
+      <z-card-header>
+        <z-card-title zTitle="Radius" />
+        <z-card-description zDescription="Set the corner radius of the element." />
+      </z-card-header>
+      <z-card-content>
+        <z-collapsible class="flex items-start gap-2" [zOpen]="isOpen()" (zOpenChange)="isOpen.set($event)">
+          <div z-field-group class="grid w-full grid-cols-2 gap-2">
+            <div z-field>
+              <label z-field-label for="radius-top-left" class="sr-only">Radius top left</label>
+              <input z-input id="radius-top-left" placeholder="0" value="0" />
+            </div>
+            <div z-field>
+              <label z-field-label for="radius-top-right" class="sr-only">Radius top right</label>
+              <input z-input id="radius-top-right" placeholder="0" value="0" />
+            </div>
+            <z-collapsible-content class="col-span-full">
+              <div class="grid grid-cols-2 gap-2">
+                <div z-field>
+                  <label z-field-label for="radius-bottom-left" class="sr-only">Radius bottom left</label>
+                  <input z-input id="radius-bottom-left" placeholder="0" value="0" />
+                </div>
+                <div z-field>
+                  <label z-field-label for="radius-bottom-right" class="sr-only">Radius bottom right</label>
+                  <input z-input id="radius-bottom-right" placeholder="0" value="0" />
+                </div>
+              </div>
+            </z-collapsible-content>
           </div>
-
-          <button z-button z-collapsible-trigger zType="outline" zSize="sm" class="group">
-            Customize
-            <ng-icon name="lucideChevronDown" class="transition-transform group-data-[state=open]:rotate-180" />
+          <button z-button z-collapsible-trigger zType="outline" zSize="icon" aria-label="Toggle all corners">
+            <ng-icon [name]="isOpen() ? 'lucideMinimize' : 'lucideMaximize'" />
           </button>
-        </div>
-
-        <z-collapsible-content>
-          <div z-field-group class="rounded-md border p-4">
-            <fieldset z-field-set>
-              <legend z-field-legend zVariant="label">Corner radius</legend>
-
-              <z-radio-group class="gap-2" [(ngModel)]="radius" name="radius">
-                <div z-field zOrientation="horizontal">
-                  <z-radio zId="radius-none" value="none" />
-                  <label z-field-label for="radius-none" class="font-normal">None</label>
-                </div>
-                <div z-field zOrientation="horizontal">
-                  <z-radio zId="radius-md" value="md" />
-                  <label z-field-label for="radius-md" class="font-normal">Medium</label>
-                </div>
-                <div z-field zOrientation="horizontal">
-                  <z-radio zId="radius-lg" value="lg" />
-                  <label z-field-label for="radius-lg" class="font-normal">Large</label>
-                </div>
-              </z-radio-group>
-            </fieldset>
-
-            <z-field-separator />
-
-            <div z-field zOrientation="horizontal">
-              <label z-field-label for="reduce-motion">Reduce motion</label>
-              <z-switch zId="reduce-motion" zSize="sm" />
-            </div>
-
-            <div z-field zOrientation="horizontal">
-              <span z-checkbox zId="show-grid" name="showGrid"></span>
-              <label z-field-label for="show-grid" class="font-normal">Show grid lines</label>
-            </div>
-          </div>
-        </z-collapsible-content>
-      </z-collapsible>
-    </div>
+        </z-collapsible>
+      </z-card-content>
+    </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideChevronDown })],
+  viewProviders: [provideIcons({ lucideMaximize, lucideMinimize })],
 })
 export class ZardDemoCollapsibleSettingsPanelComponent {
-  protected radius = 'md';
+  protected readonly isOpen = signal(false);
 }

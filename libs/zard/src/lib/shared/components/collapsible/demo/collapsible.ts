@@ -44,7 +44,7 @@ export const COLLAPSIBLE = {
     {
       name: 'settings-panel',
       description:
-        'A `[z-collapsible-trigger]` button reveals a real configuration block instead of a paragraph — a `z-radio-group` for corner radius, a `z-switch`, and a `z-checkbox`, each composed with `z-field`/`z-field-label` the same way they would be outside a collapsible.',
+        'A collapsible that grows a form in place: the first two radius fields are always visible, and `z-collapsible-content` reveals the other two inside the same `z-field-group` grid. The icon trigger flips between maximize and minimize with the `zOpen`/`zOpenChange` pair.',
       component: ZardDemoCollapsibleSettingsPanelComponent,
       column: true,
       codeData: COLLAPSIBLE_DEMO_SETTINGS_PANEL,
@@ -52,7 +52,7 @@ export const COLLAPSIBLE = {
     {
       name: 'file-tree',
       description:
-        'Collapsibles nested inside a collapsible\'s content: each folder is its own `[z-collapsible]`, so "components" and "ui" open and close independently of one another.',
+        'A recursive file explorer: every folder is its own `z-collapsible` whose content renders the same template again, so nested folders open and close independently of one another.',
       component: ZardDemoCollapsibleFileTreeComponent,
       column: true,
       codeData: COLLAPSIBLE_DEMO_FILE_TREE,

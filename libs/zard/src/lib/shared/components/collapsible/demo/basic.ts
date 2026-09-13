@@ -24,7 +24,7 @@ import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsi
               <p class="text-muted-foreground text-sm">
                 This panel can be expanded or collapsed to reveal additional content.
               </p>
-              <button z-button zType="outline" zSize="xs" class="w-fit">Learn More</button>
+              <button z-button zSize="xs" class="w-fit">Learn More</button>
             </div>
           </z-collapsible-content>
         </z-collapsible>
