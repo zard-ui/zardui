@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { TABS_0, TABS_1 } from '@generated/pages/mcp/installation';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
@@ -10,6 +10,7 @@ const SERVER = { command: 'npx', args: ['-y', 'zard-mcp'] };
 
 @Component({
   selector: 'z-mcp-installation-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CodeTabsComponent, ZardButtonComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -64,7 +65,7 @@ export class McpInstallationSectionComponent {
     { client: 'Cursor', path: '.cursor/mcp.json' },
     { client: 'VS Code', path: '.vscode/mcp.json' },
     { client: 'Windsurf', path: '~/.codeium/windsurf/mcp_config.json' },
-    { client: 'Zed', path: 'settings.json' },
+    { client: 'Zed', path: '.zed/settings.json' },
     { client: 'Codex', path: '~/.codex/config.toml' },
   ];
 

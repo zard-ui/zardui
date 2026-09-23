@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 interface ToolRow {
   readonly name: string;
@@ -8,6 +8,7 @@ interface ToolRow {
 
 @Component({
   selector: 'z-mcp-tools-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Tools</h2>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">

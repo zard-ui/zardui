@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { BLOCK_0 } from '@generated/pages/mcp/configuration';
@@ -7,6 +7,7 @@ import type { CodeBlockData } from '@highlight/types';
 
 @Component({
   selector: 'z-mcp-configuration-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CodeBlockComponent, RouterLink],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">

@@ -35,7 +35,7 @@ Commit the project file and everyone on the repository gets the server.
 - Cursor `.cursor/mcp.json`
 - VS Code `.vscode/mcp.json`
 - Windsurf `~/.codeium/windsurf/mcp_config.json`
-- Zed `settings.json`
+- Zed `.zed/settings.json`
 - Codex `~/.codex/config.toml`
 
 .mcp.json · .cursor/mcp.json · Windsurf
@@ -65,7 +65,7 @@ Commit the project file and everyone on the repository gets the server.
 }
 ```
 
-Zed settings.json
+Zed .zed/settings.json
 
 ```
 {
