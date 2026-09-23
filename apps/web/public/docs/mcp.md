@@ -87,14 +87,14 @@ Nine tools, in two groups: eight that read the registry, and one that writes to 
 
 | Tool | Input | Description |
 | --- | --- | --- |
-| `list-components` | — | Every available component, with its metadata. |
-| `search-components` | `query` | Find components by name. |
+| `list-components` | — | Every component, with a one-line description and category. |
+| `search-components` | `query, limit?` | Find components by name, purpose or the name other libraries use ("modal", "toast"). |
 | `get-component` | `name` | The full source code of a component. |
 | `get-component-docs` | `name` | The documentation page: installation, usage, examples and API reference. |
 | `get-component-examples` | `name` | The usage examples, with the code of each one. |
-| `get-dependencies` | `name` | The dependency tree of a component — npm packages and other registry items. |
-| `install-component` | `name, cwd?` | Installs a component into the project, via CLI. |
-| `list-blocks` | — | Every available block — pre-built compositions. |
+| `get-dependencies` | `name` | Everything an install brings: registry components in install order, npm packages, and the tree. |
+| `install-component` | `name, cwd?, overwrite?` | Installs a component into the project, via CLI. Existing files are kept unless overwrite. |
+| `list-blocks` | `category?` | Every available block — pre-built compositions — optionally by category. |
 | `get-block` | `id` | The full source code of a block. |
 
 ### Reading versus writing

@@ -22,7 +22,7 @@ interface CapturedTool {
 function registerAndCapture(): CapturedTool {
   let captured: CapturedTool | undefined;
   const server = {
-    tool(_name: string, _desc: string, _schema: unknown, handler: CapturedTool['handler']) {
+    registerTool(_name: string, _config: unknown, handler: CapturedTool['handler']) {
       captured = { handler };
     },
   } as never;
@@ -47,7 +47,7 @@ describe('install-component tool (CWE-78 regression)', () => {
     // An argument vector, never a built string — and no shell, which is what
     // makes a `;` in the name just a character.
     expect(args).toContain('button');
-    expect(args[args.length - 2]).toBe('button');
+    expect(args.slice(-2)).toEqual(['button', '--yes']);
     expect(options.shell).toBe(false);
     expect(typeof file).toBe('string');
   });

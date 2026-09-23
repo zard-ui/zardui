@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 import { resolveCliInvocation } from '../utils/cli-runner.js';
 import { assertRegistryId, InvalidIdentifierError } from '../utils/identifiers.js';
+import { errorMessage, fail, text } from '../utils/result.js';
 
 function execFileAsync(file: string, args: string[], cwd: string): Promise<{ stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
@@ -47,46 +48,48 @@ function assertWorkingDirectory(cwd: string): string {
 }
 
 export function registerInstallComponent(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'install-component',
-    'Install a Zard UI component into the current project using the CLI',
     {
-      name: z.string().describe('Component name to install (e.g., "button", "card", "dialog")'),
-      cwd: z.string().optional().describe('Working directory (defaults to current directory)'),
+      title: 'Install component',
+      description:
+        'Install a Zard UI component and its registry dependencies into an Angular project with zard-cli, and add its npm packages. ' +
+        'The project must already be set up with `npx zard-cli init` (a components.json at its root). ' +
+        'Existing files are kept unless overwrite is true.',
+      inputSchema: {
+        name: z.string().describe('Component name to install (e.g. "button", "date-picker")'),
+        cwd: z
+          .string()
+          .optional()
+          .describe(
+            'Absolute path of the Angular project root. Pass it: the server process may not start in the project.',
+          ),
+        overwrite: z.boolean().optional().describe('Replace files that already exist (default false)'),
+      },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
     },
-    async ({ name, cwd }) => {
-      const fail = (text: string) => ({ content: [{ type: 'text' as const, text }], isError: true });
-
+    async ({ name, cwd, overwrite }) => {
       let workDir: string;
       try {
         assertRegistryId(name, 'component');
         workDir = assertWorkingDirectory(cwd || process.cwd());
       } catch (error) {
         if (error instanceof InvalidIdentifierError) return fail(error.message);
-        return fail(error instanceof Error ? error.message : String(error));
+        return fail(errorMessage(error));
       }
 
       const cli = resolveCliInvocation(workDir);
+      const args = [...cli.prefix, 'add', name, '--yes', ...(overwrite ? ['--overwrite'] : [])];
 
       try {
-        const { stdout, stderr } = await execFileAsync(cli.file, [...cli.prefix, 'add', name, '--yes'], workDir);
-
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: `Successfully installed component "${name}".\n\n${stdout}${stderr ? `\n${stderr}` : ''}`,
-            },
-          ],
-        };
+        const { stdout, stderr } = await execFileAsync(cli.file, args, workDir);
+        return text(`Installed "${name}" in ${workDir}.\n\n${stdout}${stderr ? `\n${stderr}` : ''}`);
       } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
         const hint =
           cli.source === 'npx'
             ? '\n\nCould not find zard-cli in this project or npm alongside Node. Install it with `npm i -D zard-cli`.'
             : '';
-
-        return fail(`Failed to install component "${name}": ${message}${hint}`);
+        return fail(`Failed to install component "${name}": ${errorMessage(error)}${hint}`);
       }
     },
   );

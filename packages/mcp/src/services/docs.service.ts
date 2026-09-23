@@ -14,13 +14,14 @@
  * pages; the official site is the default.
  */
 
+import { fetchWithTimeout, HttpError } from '../utils/http.js';
 import { assertRegistryId } from '../utils/identifiers.js';
 
 const DOCS_TTL = 5 * 60 * 1000;
-const FETCH_TIMEOUT = 10_000;
 
 class DocsService {
   private cache = new Map<string, { text: string; timestamp: number }>();
+  private catalog: { data: Map<string, CatalogEntry>; timestamp: number } | null = null;
 
   private get baseUrl(): string {
     return (process.env['ZARD_DOCS_URL'] || 'https://zardui.com').replace(/\/+$/, '');
@@ -33,6 +34,25 @@ class DocsService {
     return `${this.baseUrl}/docs/components/${assertRegistryId(name, 'component')}`;
   }
 
+  /**
+   * Titles, descriptions and categories by component name.
+   *
+   * Best effort: a third-party registry has no llms.txt, and search still works
+   * on names alone, so a failure here yields an empty catalog, never an error.
+   */
+  async getCatalog(): Promise<Map<string, CatalogEntry>> {
+    if (this.catalog && Date.now() - this.catalog.timestamp < DOCS_TTL) return this.catalog.data;
+    let data = new Map<string, CatalogEntry>();
+    try {
+      const response = await fetchWithTimeout(`${this.baseUrl}/llms.txt`);
+      if (response.ok) data = parseCatalog(await response.text());
+    } catch {
+      // Offline or no llms.txt: names alone.
+    }
+    this.catalog = { data, timestamp: Date.now() };
+    return data;
+  }
+
   /** The page markdown, or null when the page does not exist. */
   async getComponentMarkdown(name: string): Promise<string | null> {
     const url = `${this.urlFor(name)}.md`;
@@ -40,32 +60,21 @@ class DocsService {
     const cached = this.cache.get(name);
     if (cached && Date.now() - cached.timestamp < DOCS_TTL) return cached.text;
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+    const response = await fetchWithTimeout(url);
+    if (response.status === 404) return null;
+    if (!response.ok) throw new HttpError(response);
 
-    try {
-      const response = await fetch(url, {
-        signal: controller.signal,
-        headers: { 'User-Agent': 'zard-mcp' },
-      });
+    const text = await response.text();
 
-      if (response.status === 404) return null;
-      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    // The site is a single-page app: a path that does not exist answers 200
+    // with the site's own shell, not 404. Without this check, asking for the
+    // docs of a component that is not there handed fifty kB of markup to the
+    // model — worse than no answer, since it burns context and explains
+    // nothing.
+    if (!isMarkdown(response, text)) return null;
 
-      const text = await response.text();
-
-      // The site is a single-page app: a path that does not exist answers 200
-      // with the site's own shell, not 404. Without this check, asking for the
-      // docs of a component that is not there handed fifty kB of markup to the
-      // model — worse than no answer, since it burns context and explains
-      // nothing.
-      if (!isMarkdown(response, text)) return null;
-
-      this.cache.set(name, { text, timestamp: Date.now() });
-      return text;
-    } finally {
-      clearTimeout(timeout);
-    }
+    this.cache.set(name, { text, timestamp: Date.now() });
+    return text;
   }
 }
 
@@ -102,6 +111,40 @@ export function sectionOf(markdown: string, heading: string): string | null {
   const end = rest.findIndex(line => line.startsWith('## '));
 
   return [lines[start], ...(end === -1 ? rest : rest.slice(0, end))].join('\n').trim();
+}
+
+export interface CatalogEntry {
+  title: string;
+  description: string;
+  category: string;
+}
+
+/**
+ * The component entries of `llms.txt`: title, one-line description and category
+ * for each slug.
+ *
+ * The registry carries names and files, nothing a model can search by meaning.
+ * Someone asking for "a modal" or "toast notifications" needs to reach `dialog`
+ * and `sonner`, and only the descriptions make that possible.
+ */
+export function parseCatalog(llms: string): Map<string, CatalogEntry> {
+  const catalog = new Map<string, CatalogEntry>();
+  let inComponents = false;
+  let category = '';
+  for (const line of llms.split('\n')) {
+    if (line.startsWith('## ')) {
+      inComponents = line.trim() === '## Components';
+      continue;
+    }
+    if (!inComponents) continue;
+    if (line.startsWith('### ')) {
+      category = line.slice(4).trim();
+      continue;
+    }
+    const match = /^- \[([^\]]+)\]\([^)]*\/docs\/components\/([a-z0-9-]+)\):\s*(.*)$/i.exec(line.trim());
+    if (match) catalog.set(match[2], { title: match[1], description: match[3].trim(), category });
+  }
+  return catalog;
 }
 
 export const docsService = new DocsService();

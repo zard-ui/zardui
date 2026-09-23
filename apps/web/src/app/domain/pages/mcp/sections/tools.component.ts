@@ -33,7 +33,13 @@ interface ToolRow {
               </td>
               <td class="p-4 align-middle">
                 @if (tool.input) {
-                  <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">{{ tool.input }}</code>
+                  <span class="flex flex-wrap gap-1">
+                    @for (param of tool.input.split(', '); track param) {
+                      <code class="bg-muted rounded px-1.5 py-0.5 text-xs whitespace-nowrap sm:text-sm">
+                        {{ param }}
+                      </code>
+                    }
+                  </span>
                 } @else {
                   <span class="text-muted-foreground">—</span>
                 }
@@ -69,8 +75,12 @@ interface ToolRow {
 })
 export class McpToolsSection {
   readonly tools: ToolRow[] = [
-    { name: 'list-components', input: '', description: 'Every available component, with its metadata.' },
-    { name: 'search-components', input: 'query', description: 'Find components by name.' },
+    { name: 'list-components', input: '', description: 'Every component, with a one-line description and category.' },
+    {
+      name: 'search-components',
+      input: 'query, limit?',
+      description: 'Find components by name, purpose or the name other libraries use ("modal", "toast").',
+    },
     { name: 'get-component', input: 'name', description: 'The full source code of a component.' },
     {
       name: 'get-component-docs',
@@ -81,10 +91,18 @@ export class McpToolsSection {
     {
       name: 'get-dependencies',
       input: 'name',
-      description: 'The dependency tree of a component — npm packages and other registry items.',
+      description: 'Everything an install brings: registry components in install order, npm packages, and the tree.',
     },
-    { name: 'install-component', input: 'name, cwd?', description: 'Installs a component into the project, via CLI.' },
-    { name: 'list-blocks', input: '', description: 'Every available block — pre-built compositions.' },
+    {
+      name: 'install-component',
+      input: 'name, cwd?, overwrite?',
+      description: 'Installs a component into the project, via CLI. Existing files are kept unless overwrite.',
+    },
+    {
+      name: 'list-blocks',
+      input: 'category?',
+      description: 'Every available block — pre-built compositions — optionally by category.',
+    },
     { name: 'get-block', input: 'id', description: 'The full source code of a block.' },
   ];
 }
