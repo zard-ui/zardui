@@ -5,6 +5,7 @@ import { registerGetComponentDocs } from './tools/get-component-docs.js';
 import { registerGetComponentExamples } from './tools/get-component-examples.js';
 import { registerGetComponent } from './tools/get-component.js';
 import { registerGetDependencies } from './tools/get-dependencies.js';
+import { registerGetDocs } from './tools/get-docs.js';
 import { registerInstallComponent } from './tools/install-component.js';
 import { registerListBlocks } from './tools/list-blocks.js';
 import { registerListComponents } from './tools/list-components.js';
@@ -23,6 +24,7 @@ Workflow:
 2. Learn its API before writing templates: get-component-docs (or get-component-examples for code only). Do not guess selectors, inputs or imports from shadcn/React — Zard UI uses Angular selectors and inputs such as \`z-button\` / \`zType\`.
 3. Add it: install-component with cwd set to the Angular project root. It installs registry dependencies too. The project needs \`npx zard-cli init\` first.
 4. For whole page sections, list-blocks then get-block.
+5. For project-wide questions — theming and CSS variables, dark mode, forms, setup — read the guide with get-docs.
 
 Component names are lowercase with dashes (date-picker, input-otp). Unknown names come back with suggestions.`;
 
@@ -38,6 +40,7 @@ export function createServer(version: string): McpServer {
   registerGetComponentExamples(server);
   registerGetComponent(server);
   registerGetDependencies(server);
+  registerGetDocs(server);
   registerInstallComponent(server);
   registerListBlocks(server);
   registerGetBlock(server);

@@ -21,7 +21,7 @@ const DOCS_TTL = 5 * 60 * 1000;
 
 class DocsService {
   private cache = new Map<string, { text: string; timestamp: number }>();
-  private catalog: { data: Map<string, CatalogEntry>; timestamp: number } | null = null;
+  private llms: { text: string; timestamp: number } | null = null;
 
   private get baseUrl(): string {
     return (process.env['ZARD_DOCS_URL'] || 'https://zardui.com').replace(/\/+$/, '');
@@ -35,29 +35,55 @@ class DocsService {
   }
 
   /**
-   * Titles, descriptions and categories by component name.
+   * The site's llms.txt, the index that both the catalog and the guides are
+   * read from.
    *
    * Best effort: a third-party registry has no llms.txt, and search still works
-   * on names alone, so a failure here yields an empty catalog, never an error.
+   * on names alone, so a failure here yields an empty index, never an error.
    */
-  async getCatalog(): Promise<Map<string, CatalogEntry>> {
-    if (this.catalog && Date.now() - this.catalog.timestamp < DOCS_TTL) return this.catalog.data;
-    let data = new Map<string, CatalogEntry>();
+  private async getLlms(): Promise<string> {
+    if (this.llms && Date.now() - this.llms.timestamp < DOCS_TTL) return this.llms.text;
+    let text = '';
     try {
       const response = await fetchWithTimeout(`${this.baseUrl}/llms.txt`);
-      if (response.ok) data = parseCatalog(await response.text());
+      if (response.ok) text = await response.text();
     } catch {
       // Offline or no llms.txt: names alone.
     }
-    this.catalog = { data, timestamp: Date.now() };
-    return data;
+    this.llms = { text, timestamp: Date.now() };
+    return text;
+  }
+
+  /** Titles, descriptions and categories by component name. */
+  async getCatalog(): Promise<Map<string, CatalogEntry>> {
+    return parseCatalog(await this.getLlms());
+  }
+
+  /** The guide pages — installation, theming, forms… — by slug. */
+  async getGuides(): Promise<Map<string, GuideEntry>> {
+    return parseGuides(await this.getLlms());
   }
 
   /** The page markdown, or null when the page does not exist. */
   async getComponentMarkdown(name: string): Promise<string | null> {
-    const url = `${this.urlFor(name)}.md`;
+    return this.fetchMarkdown(`${this.urlFor(name)}.md`);
+  }
 
-    const cached = this.cache.get(name);
+  /**
+   * A guide page as markdown, or null when there is no such guide.
+   *
+   * Only slugs listed in llms.txt are fetched: the slug may contain a slash
+   * (`forms/signal-forms`), so the allowlist, not a pattern, is what keeps it
+   * from turning into an arbitrary path on the docs site.
+   */
+  async getGuideMarkdown(slug: string): Promise<string | null> {
+    const guides = await this.getGuides();
+    if (!guides.has(slug)) return null;
+    return this.fetchMarkdown(`${this.baseUrl}/docs/${slug}.md`);
+  }
+
+  private async fetchMarkdown(url: string): Promise<string | null> {
+    const cached = this.cache.get(url);
     if (cached && Date.now() - cached.timestamp < DOCS_TTL) return cached.text;
 
     const response = await fetchWithTimeout(url);
@@ -73,7 +99,7 @@ class DocsService {
     // nothing.
     if (!isMarkdown(response, text)) return null;
 
-    this.cache.set(name, { text, timestamp: Date.now() });
+    this.cache.set(url, { text, timestamp: Date.now() });
     return text;
   }
 }
@@ -145,6 +171,28 @@ export function parseCatalog(llms: string): Map<string, CatalogEntry> {
     if (match) catalog.set(match[2], { title: match[1], description: match[3].trim(), category });
   }
   return catalog;
+}
+
+export interface GuideEntry {
+  title: string;
+  description: string;
+}
+
+/**
+ * Sections of llms.txt that are about building the library, not using it. A
+ * model writing an app has no use for the contribution guide or the credits,
+ * and listing them only dilutes the choice.
+ */
+const NOT_GUIDES = /^(components|contribute)(\/|$)|^(changelog|about|figma)$/;
+
+/** The `/docs/<slug>` entries of llms.txt that are guides for using the library. */
+export function parseGuides(llms: string): Map<string, GuideEntry> {
+  const guides = new Map<string, GuideEntry>();
+  for (const line of llms.split('\n')) {
+    const match = /^- \[([^\]]+)\]\([^)]*?\/docs\/([a-z0-9-]+(?:\/[a-z0-9-]+)*)\):\s*(.*)$/i.exec(line.trim());
+    if (match && !NOT_GUIDES.test(match[2])) guides.set(match[2], { title: match[1], description: match[3].trim() });
+  }
+  return guides;
 }
 
 export const docsService = new DocsService();

@@ -23,6 +23,12 @@ export function distance(a: string, b: string): number {
   return previous[b.length];
 }
 
+function sharedPrefix(a: string, b: string): number {
+  let i = 0;
+  while (i < a.length && i < b.length && a[i] === b[i]) i++;
+  return i;
+}
+
 /** Lowercase, with separators removed: `Date Picker`, `date_picker` and `datepicker` all compare equal. */
 function squash(value: string): string {
   return value.toLowerCase().replace(/[\s_-]+/g, '');
@@ -32,7 +38,7 @@ function squash(value: string): string {
  * Up to `limit` candidates that look like what was asked for, best first.
  *
  * A candidate qualifies when one contains the other (`dropdown-menu` →
- * `dropdown`) or when the edit distance is small relative to the length, so a
+ * `dropdown`), when they share a stem of four letters, or when the edit distance is small relative to the length, so a
  * short name does not match everything.
  */
 export function suggest(input: string, candidates: readonly string[], limit = 3): string[] {
@@ -43,6 +49,8 @@ export function suggest(input: string, candidates: readonly string[], limit = 3)
       const name = squash(candidate);
       if (name === wanted) return { candidate, score: 0 };
       if (name.includes(wanted) || wanted.includes(name)) return { candidate, score: 1 };
+      // A shared stem: "theme" → "theming", "toggl" → "toggle-group".
+      if (sharedPrefix(wanted, name) >= 4) return { candidate, score: 2 };
       const d = distance(wanted, name);
       return {
         candidate,

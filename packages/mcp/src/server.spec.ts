@@ -28,6 +28,19 @@ const REGISTRY = {
 
 const LLMS = `# Zard UI
 
+## Get Started
+
+- [Theming](https://zardui.com/docs/theming): Design tokens in OKLCH.
+- [Changelog](https://zardui.com/docs/changelog): Release notes.
+
+## Forms
+
+- [Signal Forms](https://zardui.com/docs/forms/signal-forms): Forms with signals.
+
+## Contribute
+
+- [Setup](https://zardui.com/docs/contribute/setup): Dev server.
+
 ## Components
 
 ### Form & Input
@@ -88,6 +101,9 @@ const fetchMock = jest.fn((url: string) => {
     );
   if (url.endsWith('/llms.txt')) return respond(LLMS, 200, 'text/plain');
   if (url.endsWith('/docs/components/button.md')) return respond(BUTTON_MD, 200, 'text/markdown');
+  if (url.endsWith('/docs/theming.md'))
+    return respond('# Theming\n\n## Colors\n\n--primary\n\n## Radius\n\n--radius', 200, 'text/markdown');
+  if (url.endsWith('/docs/forms/signal-forms.md')) return respond('# Signal Forms', 200, 'text/markdown');
   // The site answers unknown paths with its HTML shell, not 404.
   if (url.includes('/docs/components/')) return respond('<!doctype html><html></html>', 200, 'text/html');
   return respond('Not Found', 404, 'text/plain');
@@ -119,7 +135,7 @@ describe('zard-mcp over the protocol', () => {
 
   it('marks every tool but install-component as read-only, and gives each a title', async () => {
     const { tools } = await client.listTools();
-    expect(tools).toHaveLength(9);
+    expect(tools).toHaveLength(10);
     for (const tool of tools) {
       expect(tool.title).toBeTruthy();
       expect(tool.annotations?.readOnlyHint).toBe(tool.name !== 'install-component');
@@ -205,6 +221,39 @@ describe('zard-mcp over the protocol', () => {
     const data = (await call('list-blocks', { category: 'login' })).data();
     expect(data.blocks.map((b: { id: string }) => b.id)).toEqual(['login-01']);
     expect(data.categories).toEqual(['Login', 'Dashboard']);
+  });
+
+  it('lists only the guides for using the library', async () => {
+    const { guides } = (await call('get-docs')).data();
+    expect(guides.map((g: { topic: string }) => g.topic)).toEqual(['theming', 'forms/signal-forms', 'utils/shimmer']);
+  });
+
+  it('reads a nested guide, tolerating a /docs/ prefix', async () => {
+    expect((await call('get-docs', { topic: '/docs/forms/signal-forms' })).text).toBe('# Signal Forms');
+  });
+
+  it('refuses a guide outside the list without fetching it', async () => {
+    fetchMock.mockClear();
+    const res = await call('get-docs', { topic: '../admin' });
+    expect(res.isError).toBe(true);
+    expect(fetchMock.mock.calls.some(([url]) => String(url).includes('admin'))).toBe(false);
+  });
+
+  it('returns one section of a guide, and lists the sections when it is not there', async () => {
+    expect((await call('get-docs', { topic: 'theming', section: 'colors' })).text).toBe('## Colors\n\n--primary');
+    const res = await call('get-docs', { topic: 'theming', section: 'fonts' });
+    expect(res.isError).toBe(true);
+    expect(res.text).toContain('Sections: Colors, Radius.');
+  });
+
+  it('accepts a topic written with spaces', async () => {
+    expect((await call('get-docs', { topic: 'Forms/Signal Forms' })).isError).toBe(false);
+  });
+
+  it('suggests a guide for a misspelled topic', async () => {
+    const res = await call('get-docs', { topic: 'theme' });
+    expect(res.isError).toBe(true);
+    expect(res.text).toContain('"theming"');
   });
 
   it('suggests a block for a misspelled id', async () => {

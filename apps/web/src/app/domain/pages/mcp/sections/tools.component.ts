@@ -12,7 +12,7 @@ interface ToolRow {
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Tools</h2>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Nine tools: eight read, one writes. A wrong name comes back with a suggestion, so asking for
+      Ten tools: nine read, one writes. A wrong name comes back with a suggestion, so asking for
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">toast</code>
       points the assistant to
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">sonner</code>
@@ -80,6 +80,11 @@ export class McpToolsSection {
       name: 'get-dependencies',
       input: 'name',
       description: 'Everything an install brings: registry components in install order, npm packages, and the tree.',
+    },
+    {
+      name: 'get-docs',
+      input: 'topic?, section?',
+      description: 'A guide — theming, dark mode, forms, setup — whole or one section. No topic lists them.',
     },
     {
       name: 'install-component',

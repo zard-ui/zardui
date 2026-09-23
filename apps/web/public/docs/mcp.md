@@ -89,7 +89,7 @@ args = ["-y", "zard-mcp"]
 
 ### Check that it works
 
-Restart the client and look for `zard-ui` with nine tools. In Claude Code or Codex run `/mcp` to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in `mcp.json` and it connects.
+Restart the client and look for `zard-ui` with ten tools. In Claude Code or Codex run `/mcp` to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in `mcp.json` and it connects.
 
 ## Usage
 
@@ -102,7 +102,7 @@ Describe what you want, not which tool to call. Naming zard/ui in the prompt kee
 
 ## Tools
 
-Nine tools: eight read, one writes. A wrong name comes back with a suggestion, so asking for `toast` points the assistant to `sonner` without a second search.
+Ten tools: nine read, one writes. A wrong name comes back with a suggestion, so asking for `toast` points the assistant to `sonner` without a second search.
 
 | Tool | Input | Description |
 | --- | --- | --- |
@@ -112,6 +112,7 @@ Nine tools: eight read, one writes. A wrong name comes back with a suggestion, s
 | `get-component-docs` | `name` | The documentation page: installation, usage, examples and API reference. |
 | `get-component-examples` | `name` | The usage examples, with the code of each one. |
 | `get-dependencies` | `name` | Everything an install brings: registry components in install order, npm packages, and the tree. |
+| `get-docs` | `topic?, section?` | A guide — theming, dark mode, forms, setup — whole or one section. No topic lists them. |
 | `install-component` | `name, cwd?, overwrite?` | Installs a component into the project, via CLI. Existing files are kept unless overwrite. |
 | `list-blocks` | `category?` | Every available block — pre-built compositions — optionally by category. |
 | `get-block` | `id` | The full source code of a block. |
@@ -148,7 +149,7 @@ Two environment variables, both optional, for teams serving their own components
 
 ## Security
 
-Eight tools only read published files. Only `install-component` writes to your project, so keep your client asking before it runs. It never builds a shell command: names are validated and passed as discrete arguments, and the project's own `zard-cli` is preferred over downloading one.
+Nine tools only read published files. Only `install-component` writes to your project, so keep your client asking before it runs. It never builds a shell command: names are validated and passed as discrete arguments, and the project's own `zard-cli` is preferred over downloading one.
 
 Component docs and source become part of the model's context; treat a custom registry with the same trust as a dependency. Teams can pin the server to a version:
 
