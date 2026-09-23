@@ -48,9 +48,8 @@ import type { CodeBlockData } from '@highlight/types';
               <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">https://zardui.com</code>
             </td>
             <td class="text-muted-foreground p-4 align-middle">
-              The site the documentation pages are read from, as
-              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">/docs/components/&lt;name&gt;.md</code>
-              . Separate from the registry because a custom registry serves files, not pages.
+              The site whose component pages are read, as markdown. Separate from the registry because a custom registry
+              serves files, not pages.
             </td>
           </tr>
         </tbody>

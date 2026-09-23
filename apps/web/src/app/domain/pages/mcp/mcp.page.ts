@@ -8,7 +8,10 @@ import { SeoService } from '@doc/shared/services/seo.service';
 import { McpConfigurationSection } from './sections/configuration.component';
 import { McpInstallationSection } from './sections/installation.component';
 import { McpOverviewSection } from './sections/overview.component';
+import { McpSecuritySection } from './sections/security.component';
 import { McpToolsSection } from './sections/tools.component';
+import { McpTroubleshootingSection } from './sections/troubleshooting.component';
+import { McpUsageSection } from './sections/usage.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
@@ -22,8 +25,11 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     ScrollSpyItemDirective,
     McpOverviewSection,
     McpInstallationSection,
+    McpUsageSection,
     McpToolsSection,
     McpConfigurationSection,
+    McpSecuritySection,
+    McpTroubleshootingSection,
   ],
   template: `
     <z-content
@@ -41,8 +47,11 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
       <mcp-overview-section scrollSpyItem="what-is-it" id="what-is-it"></mcp-overview-section>
       <mcp-installation-section scrollSpyItem="installation" id="installation"></mcp-installation-section>
+      <mcp-usage-section scrollSpyItem="usage" id="usage"></mcp-usage-section>
       <mcp-tools-section scrollSpyItem="tools" id="tools"></mcp-tools-section>
       <mcp-configuration-section scrollSpyItem="configuration" id="configuration"></mcp-configuration-section>
+      <mcp-security-section scrollSpyItem="security" id="security"></mcp-security-section>
+      <mcp-troubleshooting-section scrollSpyItem="troubleshooting" id="troubleshooting"></mcp-troubleshooting-section>
     </z-content>
   `,
 })
@@ -55,8 +64,11 @@ export class McpPage implements OnInit {
       { id: 'overview', label: 'Overview', type: 'core' },
       { id: 'what-is-it', label: 'What it is', type: 'custom' },
       { id: 'installation', label: 'Installation', type: 'custom' },
+      { id: 'usage', label: 'Usage', type: 'custom' },
       { id: 'tools', label: 'Tools', type: 'custom' },
       { id: 'configuration', label: 'Configuration', type: 'custom' },
+      { id: 'security', label: 'Security', type: 'custom' },
+      { id: 'troubleshooting', label: 'Troubleshooting', type: 'custom' },
     ],
   };
 

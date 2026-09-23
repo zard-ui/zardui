@@ -9,40 +9,36 @@ Give your AI assistant the real zard/ui components: the source code, the docs an
 
 ## What it is
 
-An assistant asked for a zard/ui component has to work from whatever it happened to memorise about the library — which is how you end up with inputs that do not exist and imports that never resolve. The MCP server replaces the guess with the source: it gives the assistant the same [registry](/docs/registry) the CLI installs from, plus the documentation page of each component.
+Without it, an assistant writes zard/ui from memory — inputs that do not exist, imports that never resolve. With it, the assistant reads the same [registry](/docs/registry) the CLI installs from and each component's documentation page, then installs through the [CLI](/docs/cli) itself.
 
-In practice that means it can list what exists, search by name, read the actual code of a component, resolve what that component depends on, and install it for you — with the same result as running the [CLI](/docs/cli) yourself, because it is the CLI doing the work.
-
-It works with any client that speaks the Model Context Protocol — Claude Code, Cursor, VS Code, and the others — and it is versioned separately from the component library, so updating one does not force the other.
+It works with any client that speaks the Model Context Protocol, and is versioned apart from the library.
 
 ## Installation
 
-The server is published as `zard-mcp` and speaks over stdio, so there is nothing to run or keep alive: your client starts it when it needs it. If your tool has a command for adding MCP servers, that is the shortest way in.
+The server is published as `zard-mcp` and runs over stdio: your client starts it on demand, and it needs Node 20 or newer. Cursor and VS Code install it in one click.
+
+[Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=zard-ui&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsInphcmQtbWNwIl19) · [Add to VS Code](https://vscode.dev/redirect/mcp/install?name=zard-ui&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22zard-mcp%22%5D%7D)
+
+### From the command line
 
 ```
 claude mcp add zard-ui -- npx -y zard-mcp
+codex mcp add zard-ui -- npx -y zard-mcp
+gemini mcp add zard-ui npx -y zard-mcp
 ```
 
 ### By configuration file
 
-Clients that read a project file use the same shape. Committing it to the repository is what makes the server available to everyone working on the project, rather than to whoever set it up.
+Commit the project file and everyone on the repository gets the server.
 
-.mcp.json
+- Claude Code `.mcp.json`
+- Cursor `.cursor/mcp.json`
+- VS Code `.vscode/mcp.json`
+- Windsurf `~/.codeium/windsurf/mcp_config.json`
+- Zed `settings.json`
+- Codex `~/.codex/config.toml`
 
-```
-{
-  "mcpServers": {
-    "zard-ui": {
-      "command": "npx",
-      "args": ["-y", "zard-mcp"]
-    }
-  }
-}
-```
-
-Cursor reads its own file:
-
-.cursor/mcp.json
+.mcp.json · .cursor/mcp.json · Windsurf
 
 ```
 {
@@ -54,8 +50,6 @@ Cursor reads its own file:
   }
 }
 ```
-
-VS Code uses a different key and asks for the transport explicitly:
 
 .vscode/mcp.json
 
@@ -71,19 +65,44 @@ VS Code uses a different key and asks for the transport explicitly:
 }
 ```
 
+Zed settings.json
+
+```
+{
+  "context_servers": {
+    "zard-ui": {
+      "source": "custom",
+      "command": "npx",
+      "args": ["-y", "zard-mcp"]
+    }
+  }
+}
+```
+
+~/.codex/config.toml
+
+```
+[mcp_servers.zard-ui]
+command = "npx"
+args = ["-y", "zard-mcp"]
+```
+
 ### Check that it works
 
-Ask for something that only the registry can answer. If the assistant comes back with real component code instead of an invented API, the server is connected.
+Restart the client and look for `zard-ui` with nine tools. In Claude Code or Codex run `/mcp` to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in `mcp.json` and it connects.
 
-Prompt
+## Usage
 
-```
-Add a Zard UI dialog to my settings page, with a destructive confirm button.
-```
+Describe what you want, not which tool to call. Naming zard/ui in the prompt keeps the assistant from reaching for another library.
+
+- Which zard/ui components could I use for a settings page?
+- Add a zard/ui dialog to my settings page, with a destructive confirm button. Read its docs first.
+- Show me the zard/ui login blocks, then add login-02 to /login with the components it needs.
+- What does installing the zard/ui date-picker bring into my project, npm packages included?
 
 ## Tools
 
-Nine tools, in two groups: eight that read the registry, and one that writes to your project. The assistant picks them on its own — you describe what you want, not which tool to call.
+Nine tools: eight read, one writes. A wrong name comes back with a suggestion, so asking for `toast` points the assistant to `sonner` without a second search.
 
 | Tool | Input | Description |
 | --- | --- | --- |
@@ -97,15 +116,9 @@ Nine tools, in two groups: eight that read the registry, and one that writes to 
 | `list-blocks` | `category?` | Every available block — pre-built compositions — optionally by category. |
 | `get-block` | `id` | The full source code of a block. |
 
-### Reading versus writing
-
-Everything except `install-component` only fetches published files. That one runs the CLI in a working directory and writes components into your project, so it is the one worth approving deliberately if your client asks before running tools.
-
-It never builds a shell command: the component name is validated and passed as a discrete argument, so nothing in it can start a second command. The working directory must exist, because it decides which `zard-cli` runs — the copy installed in the project is preferred over downloading one.
-
 ### Where the answers come from
 
-Source code comes from the registry, the same files the CLI installs. Documentation and examples come from the markdown of each component's page — one document with installation, usage, examples and the API reference, which is why an assistant using this server writes code against the real API instead of guessing at one.
+Source from the registry, the same files the CLI installs. Docs and examples from each component's page markdown, API reference included — which is why the assistant writes against the real API.
 
 ## Configuration
 
@@ -114,7 +127,7 @@ Two environment variables, both optional, for teams serving their own components
 | Variable | Default | Description |
 | --- | --- | --- |
 | `ZARD_REGISTRY_URL` | `https://zardui.com/r` | Where component source and metadata are read from. See the [registry page](/docs/registry) for the format a custom one has to publish. |
-| `ZARD_DOCS_URL` | `https://zardui.com` | The site the documentation pages are read from, as `/docs/components/<name>.md` . Separate from the registry because a custom registry serves files, not pages. |
+| `ZARD_DOCS_URL` | `https://zardui.com` | The site whose component pages are read, as markdown. Separate from the registry because a custom registry serves files, not pages. |
 
 .mcp.json
 
@@ -132,3 +145,32 @@ Two environment variables, both optional, for teams serving their own components
   }
 }
 ```
+
+## Security
+
+Eight tools only read published files. Only `install-component` writes to your project, so keep your client asking before it runs. It never builds a shell command: names are validated and passed as discrete arguments, and the project's own `zard-cli` is preferred over downloading one.
+
+Component docs and source become part of the model's context; treat a custom registry with the same trust as a dependency. Teams can pin the server to a version:
+
+.mcp.json
+
+```
+{
+  "mcpServers": {
+    "zard-ui": {
+      "command": "npx",
+      "args": ["-y", "zard-mcp@1.0.0"]
+    }
+  }
+}
+```
+
+## Troubleshooting
+
+**The server shows no tools, or fails to start.** Check that `node --version` is 20 or newer, then delete the npx cache in `~/.npm/_npx` and restart the client. On Windows, some clients need the command as `cmd /c npx -y zard-mcp` instead.
+
+**The assistant invents an API instead of using the server.** Name zard/ui in the prompt, or ask it to read the component docs first. Check the server is connected before blaming the model.
+
+**Installing fails with "Configuration not found".** The project has not been set up yet. Run `npx zard-cli init` at its root, then try again.
+
+**Components land in the wrong project.** The server process does not always start in your project, so the assistant must pass its root as `cwd` for the install. Ask it to install into the absolute path.
