@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 
 import { ZardBadgeComponent } from '@/shared/components/badge';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
+import { ZardDrawerService } from '@/shared/components/drawer/drawer.service';
 import type { ZardDrawerPlacement } from '@/shared/components/drawer/drawer.variants';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
 
 import { injectIsMobile } from './support/is-mobile';
 
@@ -22,50 +24,88 @@ const DELIVERY_TIMES = [
   { value: '6-30', id: 'delivery-6-30', label: '6:30 PM – 6:45 PM', description: 'Last slot before kitchen closes' },
 ];
 
+/** Content the service renders: the same list, so the pick is read back from the instance in `zOnOk`. */
+@Component({
+  selector: 'z-demo-drawer-preview-content',
+  imports: [ZardBadgeComponent, ...ZardRadioGroupImports],
+  template: `
+    <z-radio-group [(value)]="deliveryTime" class="grid w-full gap-2">
+      @for (time of times; track time.value) {
+        <label
+          [for]="'service-' + time.id"
+          class="has-data-[state=checked]:bg-input/30 flex w-full items-center gap-3 rounded-2xl border p-4 select-none"
+        >
+          <span class="flex flex-1 flex-col gap-1 leading-snug">
+            <span class="flex items-center gap-2 text-sm font-medium">
+              {{ time.label }}
+              @if (time.badge) {
+                <z-badge zType="secondary">{{ time.badge }}</z-badge>
+              }
+            </span>
+            <span class="text-muted-foreground text-sm">{{ time.description }}</span>
+          </span>
+          <z-radio [zId]="'service-' + time.id" [value]="time.value" />
+        </label>
+      }
+    </z-radio-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDrawerPreviewContentComponent {
+  readonly times = DELIVERY_TIMES;
+  readonly deliveryTime = signal<unknown>('asap');
+}
+
 @Component({
   selector: 'z-demo-drawer-preview',
-  imports: [ZardBadgeComponent, ZardButtonComponent, ZardDrawerImports, ...ZardRadioGroupImports],
+  imports: [ZardBadgeComponent, ZardButtonComponent, ZardDrawerImports, ...ZardRadioGroupImports, ZardTabsImports],
   template: `
-    <button type="button" z-button zType="secondary" (click)="visible.set(true)">Open Drawer</button>
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="secondary" (click)="visible.set(true)">Open Drawer</button>
 
-    <z-drawer [(zVisible)]="visible" [zPlacement]="placement()" [zHandle]="isMobile()">
-      <z-drawer-header>
-        <z-drawer-title>Pick a delivery time</z-drawer-title>
-        <z-drawer-description>We'll prepare your order as soon as possible.</z-drawer-description>
-      </z-drawer-header>
+        <z-drawer [(zVisible)]="visible" [zPlacement]="placement()" [zHandle]="isMobile()">
+          <z-drawer-header>
+            <z-drawer-title>Pick a delivery time</z-drawer-title>
+            <z-drawer-description>We'll prepare your order as soon as possible.</z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 overflow-y-auto p-4">
+            <z-radio-group [(value)]="deliveryTime" class="grid w-full gap-2">
+              @for (time of times; track time.value) {
+                <label
+                  [for]="time.id"
+                  class="has-data-[state=checked]:bg-input/30 flex w-full items-center gap-3 rounded-2xl border p-4 select-none"
+                >
+                  <span class="flex flex-1 flex-col gap-1 leading-snug">
+                    <span class="flex items-center gap-2 text-sm font-medium">
+                      {{ time.label }}
+                      @if (time.badge) {
+                        <z-badge zType="secondary">{{ time.badge }}</z-badge>
+                      }
+                    </span>
+                    <span class="text-muted-foreground text-sm">{{ time.description }}</span>
+                  </span>
+                  <z-radio [zId]="time.id" [value]="time.value" />
+                </label>
+              }
+            </z-radio-group>
+          </div>
+          <z-drawer-footer>
+            <button type="button" z-button (click)="visible.set(false)">Confirm Delivery Time</button>
+            <button type="button" z-button zType="ghost" z-drawer-close>Cancel</button>
+          </z-drawer-footer>
+        </z-drawer>
+      </z-tab>
 
-      <div class="flex-1 overflow-y-auto p-4">
-        <z-radio-group [(value)]="deliveryTime" class="grid w-full gap-2">
-          @for (time of times; track time.value) {
-            <label
-              [for]="time.id"
-              class="has-data-[state=checked]:bg-input/30 flex w-full items-center gap-3 rounded-2xl border p-4 select-none"
-            >
-              <span class="flex flex-1 flex-col gap-1 leading-snug">
-                <span class="flex items-center gap-2 text-sm font-medium">
-                  {{ time.label }}
-                  @if (time.badge) {
-                    <z-badge zType="secondary">{{ time.badge }}</z-badge>
-                  }
-                </span>
-                <span class="text-muted-foreground text-sm">{{ time.description }}</span>
-              </span>
-
-              <z-radio [zId]="time.id" [value]="time.value" />
-            </label>
-          }
-        </z-radio-group>
-      </div>
-
-      <z-drawer-footer>
-        <button type="button" z-button (click)="visible.set(false)">Confirm Delivery Time</button>
-        <button type="button" z-button zType="ghost" z-drawer-close>Cancel</button>
-      </z-drawer-footer>
-    </z-drawer>
+      <z-tab label="Service">
+        <button type="button" z-button zType="secondary" (click)="openDrawer()">Open Drawer</button>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDrawerPreviewComponent {
+  private readonly drawerService = inject(ZardDrawerService);
   private readonly isMobileViewport = injectIsMobile();
 
   readonly times = DELIVERY_TIMES;
@@ -75,4 +115,19 @@ export class ZardDemoDrawerPreviewComponent {
   /** Bottom sheet where the screen is narrow, side panel where there is room. */
   readonly isMobile = computed(() => this.isMobileViewport());
   readonly placement = computed<ZardDrawerPlacement>(() => (this.isMobile() ? 'bottom' : 'right'));
+
+  openDrawer() {
+    this.drawerService.create({
+      zTitle: 'Pick a delivery time',
+      zDescription: `We'll prepare your order as soon as possible.`,
+      zContent: ZardDemoDrawerPreviewContentComponent,
+      zPlacement: this.placement(),
+      zHandle: this.isMobile(),
+      zOkText: 'Confirm Delivery Time',
+      zCancelText: 'Cancel',
+      zOnOk: instance => {
+        console.log('Delivery time:', instance.deliveryTime());
+      },
+    });
+  }
 }

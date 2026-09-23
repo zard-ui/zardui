@@ -19,6 +19,9 @@ export const alertDialogVariants = cva(
   },
 );
 
+/** Classes of the mask behind an alert dialog, shared by the declarative form and the service. */
+export const ALERT_DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+
 export const alertDialogHeaderVariants = cva([
   'grid grid-rows-[auto_1fr] place-items-center gap-1.5 text-center',
   'has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] has-data-[slot=alert-dialog-media]:gap-x-4',
@@ -34,7 +37,7 @@ export const alertDialogTitleVariants = cva([
 
 export const alertDialogDescriptionVariants = cva([
   'text-sm text-balance text-muted-foreground wrap-anywhere md:text-pretty',
-  '*:[a]:underline *:[a]:underline-offset-[3px] *:[a]:hover:text-foreground',
+  '[&_a]:underline [&_a]:underline-offset-[3px] [&_a]:hover:text-foreground',
 ]);
 
 export const alertDialogFooterVariants = cva([

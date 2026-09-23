@@ -91,7 +91,7 @@ Always enforced. Each links to a file with Incorrect/Correct pairs.
 
 - **Use the full composition.** `z-card` wants `z-card-header` / `z-card-title` / `z-card-content` / `z-card-footer`, not everything dumped into content.
 - **Items belong to their group.** `z-select-item` inside `z-select-group`.
-- **Dialogs are opened through `ZardDialogService`**, not by putting a `z-dialog` in the template with an `open` flag.
+- **Dialogs, sheets, alert dialogs and drawers have two forms.** Compose `z-dialog` / `z-sheet` / `z-alert-dialog` / `z-drawer` in the template with `[(zVisible)]` and the header/title/description/footer children, or open the same panel from code through `ZardDialogService` / `ZardSheetService` / `ZardAlertDialogService` / `ZardDrawerService`. Never toggle them with a hand-written `open` flag or `@if`.
 - **Toasts go through `ZardSonnerService`** — `show`, `success`, `error`, `promise`.
 - **Use the component instead of styled markup.** `z-separator` not `<hr>`, `z-skeleton` not an `animate-pulse` div, `z-badge` not a styled span, `z-empty` not a hand-built empty state.
 
@@ -155,7 +155,7 @@ protected readonly classes = computed(() => mergeClasses(cardVariants(), this.cl
 | Navigation      | `z-navigation-menu`, `z-breadcrumb`, `z-tab-group`, `z-pagination`                                                                                           |
 | Nested / tree list | `z-collapsible`, nested — a folder tree is a `z-collapsible` inside a `z-collapsible-content`, not a dedicated tree component. See the composition rule.  |
 | Layout          | `z-sidebar` (with `z-sidebar-provider` and `z-sidebar-inset`), `z-separator`, `z-resizable`, `z-accordion`, `z-carousel`                                     |
-| Overlays        | `ZardDialogService` (modal), `z-drawer` (bottom/side sheet), `z-sheet` (side panel), `z-alert-dialog` (confirmation), `z-popover`, `z-tooltip`, `z-dropdown` |
+| Overlays        | `z-dialog` (modal), `z-drawer` (bottom/side sheet), `z-sheet` (side panel), `z-alert-dialog` (confirmation) — each also from code via its service —, `z-popover`, `z-tooltip`, `z-dropdown` |
 | Command palette | `z-command`                                                                                                                                                  |
 | Feedback        | `ZardSonnerService` (toast), `z-alert`, `z-progress`, `z-skeleton`, `z-spinner`                                                                              |
 | Empty states    | `z-empty`                                                                                                                                                    |

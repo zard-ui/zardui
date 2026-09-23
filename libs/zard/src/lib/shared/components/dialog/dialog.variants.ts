@@ -6,6 +6,9 @@ export const dialogVariants = cva([
   'sm:max-w-sm',
 ]);
 
+/** Classes of the mask behind a dialog, shared by the declarative form and the service. */
+export const DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+
 export const dialogHeaderVariants = cva('flex flex-col gap-2');
 
 export const dialogTitleVariants = cva('text-base leading-none font-medium wrap-anywhere');

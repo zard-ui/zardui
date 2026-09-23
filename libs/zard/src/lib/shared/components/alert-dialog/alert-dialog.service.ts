@@ -3,8 +3,9 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID } from '@angular/core';
 
+import { ZardAlertDialogContainerComponent, ZardAlertDialogOptions } from './alert-dialog-container.component';
 import { ZardAlertDialogRef } from './alert-dialog-ref';
-import { ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
+import { ALERT_DIALOG_BACKDROP_CLASSES } from './alert-dialog.variants';
 
 export const Z_ALERT_MODAL_DATA = new InjectionToken<unknown>('Z_ALERT_MODAL_DATA');
 
@@ -41,7 +42,7 @@ export class ZardAlertDialogService {
 
     const overlayRef = this.createOverlay();
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
-    const alertDialogRef = this.attachAlertDialogContent<T>(alertDialogContainer, overlayRef, config);
+    const alertDialogRef = new ZardAlertDialogRef<T>(overlayRef, config, alertDialogContainer, this.platformId);
 
     alertDialogContainer.alertDialogRef = alertDialogRef;
 
@@ -82,8 +83,9 @@ export class ZardAlertDialogService {
     return this.overlay.create(
       new OverlayConfig({
         hasBackdrop: true,
-        backdropClass: ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'],
+        backdropClass: ALERT_DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
+        scrollStrategy: this.overlay.scrollStrategies.block(),
       }),
     );
   }
@@ -94,25 +96,16 @@ export class ZardAlertDialogService {
       providers: [
         { provide: OverlayRef, useValue: overlayRef },
         { provide: ZardAlertDialogOptions, useValue: config },
+        { provide: Z_ALERT_MODAL_DATA, useValue: config.zData },
       ],
     });
 
-    const containerPortal = new ComponentPortal<ZardAlertDialogComponent<T>>(
-      ZardAlertDialogComponent,
+    const containerPortal = new ComponentPortal<ZardAlertDialogContainerComponent<T>>(
+      ZardAlertDialogContainerComponent,
       config.zViewContainerRef,
       injector,
     );
 
     return overlayRef.attach(containerPortal).instance;
-  }
-
-  private attachAlertDialogContent<T>(
-    alertDialogContainer: ZardAlertDialogComponent<T>,
-    overlayRef: OverlayRef,
-    config: ZardAlertDialogOptions<T>,
-  ): ZardAlertDialogRef<T> {
-    const alertDialogRef = new ZardAlertDialogRef<T>(overlayRef, config, alertDialogContainer, this.platformId);
-
-    return alertDialogRef;
   }
 }

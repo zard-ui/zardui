@@ -19,17 +19,21 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-alert zTitle="Heads up!" zDescription="You can add components to your app using the cli."></z-alert>`,
   },
   'alert-dialog': {
-    importCode: `import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';`,
-    templateCode: `open() {
-  this.alertDialogService.create({
-    zTitle: 'Are you absolutely sure?',
-    zDescription:
-      'This action cannot be undone. This will permanently delete your account and remove your data from our servers.',
-    zOkText: 'Continue',
-    zCancelText: 'Cancel',
-  });
-}`,
-    templateLanguage: 'angular-ts',
+    importCode: `import { ZardAlertDialogImports } from '@/shared/components/alert-dialog/alert-dialog.imports';`,
+    templateCode: `<button type="button" z-button zType="outline" (click)="visible.set(true)">Show Dialog</button>
+
+<z-alert-dialog [(zVisible)]="visible">
+  <z-alert-dialog-header>
+    <z-alert-dialog-title>Are you absolutely sure?</z-alert-dialog-title>
+    <z-alert-dialog-description>
+      This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+    </z-alert-dialog-description>
+  </z-alert-dialog-header>
+  <z-alert-dialog-footer>
+    <button type="button" z-button zType="outline" z-alert-dialog-close>Cancel</button>
+    <button type="button" z-button (click)="visible.set(false)">Continue</button>
+  </z-alert-dialog-footer>
+</z-alert-dialog>`,
   },
   avatar: {
     importCode: `import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';`,
@@ -139,8 +143,18 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   dialog: {
     importCode: `import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';`,
-    templateCode: `<z-dialog zTitle="Edit profile" zDescription="Make changes to your profile here.">
+    templateCode: `<button type="button" z-button zType="outline" (click)="visible.set(true)">Edit profile</button>
+
+<z-dialog [(zVisible)]="visible">
+  <z-dialog-header>
+    <z-dialog-title>Edit profile</z-dialog-title>
+    <z-dialog-description>Make changes to your profile here.</z-dialog-description>
+  </z-dialog-header>
   <p>Dialog content goes here.</p>
+  <z-dialog-footer>
+    <button type="button" z-button zType="outline" z-dialog-close>Cancel</button>
+    <button type="button" z-button (click)="save()">Save changes</button>
+  </z-dialog-footer>
 </z-dialog>`,
   },
   separator: {
@@ -286,8 +300,20 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
 </z-select>`,
   },
   sheet: {
-    importCode: `import { ZardSheetService } from '@/shared/components/sheet/sheet.service';`,
-    templateCode: `<button type="button" z-button zType="outline" (click)="openSheet()">Open</button>`,
+    importCode: `import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';`,
+    templateCode: `<button type="button" z-button zType="outline" (click)="visible.set(true)">Open</button>
+
+<z-sheet [(zVisible)]="visible">
+  <z-sheet-header>
+    <z-sheet-title>Edit profile</z-sheet-title>
+    <z-sheet-description>Make changes to your profile here.</z-sheet-description>
+  </z-sheet-header>
+  <p class="px-4">Sheet content goes here.</p>
+  <z-sheet-footer>
+    <button type="button" z-button (click)="save()">Save changes</button>
+    <button type="button" z-button zType="outline" z-sheet-close>Close</button>
+  </z-sheet-footer>
+</z-sheet>`,
   },
   skeleton: {
     importCode: `import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';`,

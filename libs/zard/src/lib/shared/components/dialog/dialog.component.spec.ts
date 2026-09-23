@@ -4,13 +4,14 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { lucideCheck, lucideX } from '@ng-icons/lucide';
 
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
 
-import { ZardDialogOptions } from './dialog.component';
+import { ZardDialogOptions } from './dialog-container.component';
 import { ZardDialogService } from './dialog.service';
 
 @Component({
-  imports: [ZardDialogImports],
+  imports: [ZardDialogImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="openDialog()">Open dialog</button>
   `,
@@ -28,7 +29,7 @@ class DialogTestHostComponent {
 }
 
 @Component({
-  imports: [ZardDialogImports],
+  imports: [ZardDialogImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="openDialogWithIcons()">Open dialog with icons</button>
   `,
@@ -50,7 +51,7 @@ class DialogWithIconsTestHostComponent {
 }
 
 @Component({
-  imports: [ZardDialogImports],
+  imports: [ZardDialogImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="openDialogNoFooter()">Open dialog</button>
   `,
@@ -101,7 +102,7 @@ describe('ZardDialogComponent', () => {
       openDialog();
 
       if (isPlatformBrowser(platformId)) {
-        const dialogElement = document.querySelector('z-dialog');
+        const dialogElement = document.querySelector('z-dialog-panel');
         expect(dialogElement).toBeTruthy();
 
         const titleElement = dialogElement?.querySelector('[data-testid="z-title"]');
@@ -119,7 +120,7 @@ describe('ZardDialogComponent', () => {
       openDialog();
 
       if (isPlatformBrowser(platformId)) {
-        const dialogElement = document.querySelector('z-dialog');
+        const dialogElement = document.querySelector('z-dialog-panel');
         const closeButton = dialogElement?.querySelector('[data-testid="z-close-header-button"]');
         expect(closeButton).toBeTruthy();
       }
@@ -129,7 +130,7 @@ describe('ZardDialogComponent', () => {
       openDialog();
 
       if (isPlatformBrowser(platformId)) {
-        const dialogElement = document.querySelector('z-dialog');
+        const dialogElement = document.querySelector('z-dialog-panel');
         const closeButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-close-header-button"]');
         closeButton?.click();
         fixture.detectChanges();
@@ -137,7 +138,7 @@ describe('ZardDialogComponent', () => {
         await new Promise(resolve => setTimeout(resolve, 200));
         fixture.detectChanges();
 
-        expect(document.querySelector('z-dialog')).toBeNull();
+        expect(document.querySelector('z-dialog-panel')).toBeNull();
       }
     });
 
@@ -145,7 +146,7 @@ describe('ZardDialogComponent', () => {
       openDialog();
 
       if (isPlatformBrowser(platformId)) {
-        const dialogElement = document.querySelector('z-dialog');
+        const dialogElement = document.querySelector('z-dialog-panel');
         const cancelButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-cancel-button"]');
         cancelButton?.click();
         fixture.detectChanges();
@@ -153,7 +154,7 @@ describe('ZardDialogComponent', () => {
         await new Promise(resolve => setTimeout(resolve, 200));
         fixture.detectChanges();
 
-        expect(document.querySelector('z-dialog')).toBeNull();
+        expect(document.querySelector('z-dialog-panel')).toBeNull();
       }
     });
 
@@ -161,7 +162,7 @@ describe('ZardDialogComponent', () => {
       openDialog();
 
       if (isPlatformBrowser(platformId)) {
-        const dialogElement = document.querySelector('z-dialog');
+        const dialogElement = document.querySelector('z-dialog-panel');
         const okButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-ok-button"]');
         okButton?.click();
         fixture.detectChanges();
@@ -169,7 +170,7 @@ describe('ZardDialogComponent', () => {
         await new Promise(resolve => setTimeout(resolve, 200));
         fixture.detectChanges();
 
-        expect(document.querySelector('z-dialog')).toBeNull();
+        expect(document.querySelector('z-dialog-panel')).toBeNull();
       }
     });
   });
@@ -192,7 +193,7 @@ describe('ZardDialogComponent', () => {
       openDialog();
 
       if (isPlatformBrowser(platformId)) {
-        const dialogElement = document.querySelector('z-dialog');
+        const dialogElement = document.querySelector('z-dialog-panel');
         expect(dialogElement).toBeTruthy();
 
         const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
@@ -207,7 +208,7 @@ describe('ZardDialogComponent', () => {
       openDialog();
 
       if (isPlatformBrowser(platformId)) {
-        const dialogElement = document.querySelector('z-dialog');
+        const dialogElement = document.querySelector('z-dialog-panel');
 
         const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
         const okIcon = okButton?.querySelector('ng-icon');
@@ -238,7 +239,7 @@ describe('ZardDialogComponent', () => {
       openDialog();
 
       if (isPlatformBrowser(platformId)) {
-        const dialogElement = document.querySelector('z-dialog');
+        const dialogElement = document.querySelector('z-dialog-panel');
         expect(dialogElement).toBeTruthy();
 
         const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');

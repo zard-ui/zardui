@@ -173,6 +173,18 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'sheet-panel.component.ts',
+        content: '',
+      },
+      {
+        name: 'sheet-container.component.ts',
+        content: '',
+      },
+      {
+        name: 'sheet-host.ts',
+        content: '',
+      },
+      {
         name: 'sheet.variants.ts',
         content: '',
       },
@@ -321,6 +333,22 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'alert-dialog-panel.component.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog-container.component.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog-host.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog.imports.ts',
+        content: '',
+      },
+      {
         name: 'alert-dialog.service.ts',
         content: '',
       },
@@ -461,6 +489,18 @@ export const registry: ComponentRegistry[] = [
     files: [
       {
         name: 'dialog.component.ts',
+        content: '',
+      },
+      {
+        name: 'dialog-panel.component.ts',
+        content: '',
+      },
+      {
+        name: 'dialog-container.component.ts',
+        content: '',
+      },
+      {
+        name: 'dialog-host.ts',
         content: '',
       },
       {

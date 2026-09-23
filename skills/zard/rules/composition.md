@@ -7,7 +7,7 @@ Compose what exists before inventing markup. Almost every "custom" piece of UI i
 - Use the component, not styled markup
 - Use the full composition
 - Items belong to their group
-- Dialogs and sheets are opened by a service
+- Dialogs, sheets, alert dialogs and drawers: template or service
 - Toasts go through the service
 - Avatars need a fallback
 - Loading state is an input
@@ -110,21 +110,35 @@ Tabs work the same way: `z-tab` inside `z-tab-group`, never on its own.
 
 ---
 
-## Dialogs and sheets are opened by a service
+## Dialogs, sheets, alert dialogs and drawers: template or service
 
-This is where zard/ui differs most from a trigger-and-content library. A dialog is not a `z-dialog` in the template toggled by a boolean — it is created imperatively, with a component as its content.
+All four overlays come in two forms that render the same panel. Compose the overlay in the template when its content
+belongs to the page, and open it from code when the trigger lives in a service, a guard or a handler that has no
+template of its own.
 
-**Incorrect:**
+**Template.** The root holds the open state through `[(zVisible)]` and projects header, content and footer:
 
 ```angular-html
-<z-dialog [open]="showEdit()">
-  <h2>Edit profile</h2>
-  <app-profile-form />
-</z-dialog>
 <button z-button (click)="showEdit.set(true)">Edit</button>
+
+<z-dialog [(zVisible)]="showEdit">
+  <z-dialog-header>
+    <z-dialog-title>Edit profile</z-dialog-title>
+    <z-dialog-description>Make changes here. Save when you are done.</z-dialog-description>
+  </z-dialog-header>
+  <app-profile-form />
+  <z-dialog-footer>
+    <button z-button zType="outline" z-dialog-close>Cancel</button>
+    <button z-button (click)="save()">Save changes</button>
+  </z-dialog-footer>
+</z-dialog>
 ```
 
-**Correct:**
+`z-sheet`, `z-alert-dialog` and `z-drawer` follow the same vocabulary (`z-sheet-header`, `z-alert-dialog-media`,
+`[z-drawer-close]`, …). Import the bundle (`ZardDialogImports`, `ZardSheetImports`, `ZardAlertDialogImports`,
+`ZardDrawerImports`), never the panel or container components directly.
+
+**Service.** The same panel from code, with the header and footer built from the options:
 
 ```angular-ts
 import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
@@ -145,9 +159,11 @@ export class ProfilePage {
 }
 ```
 
-The content component reads what was passed with `inject(Z_MODAL_DATA)`. `z-sheet` and `z-alert-dialog` follow the same shape, through `ZardSheetService` and `ZardAlertDialogService`.
+The content component reads what was passed with `inject(Z_MODAL_DATA)`. `ZardSheetService`, `ZardAlertDialogService`
+and `ZardDrawerService` follow the same shape; `[z-dialog-close]`-style directives work inside service-opened content
+too.
 
-`z-drawer` is the exception: it takes **both**. `ZardDrawerService.create()` works like the others, and `<z-drawer [(zVisible)]="open">` with projected content is equally valid — so the boolean-flag form is not a mistake there. Pick the service when the content is its own component, the template when the drawer belongs to the page it lives in.
+**Incorrect:** toggling the panel yourself with `@if` or an `open` flag, or querying the overlay from the DOM.
 
 Read the component's documentation page before writing the options object — the option names are specific and inventing one fails silently.
 

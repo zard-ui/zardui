@@ -1,266 +1,363 @@
-import { A11yModule } from '@angular/cdk/a11y';
-import { OverlayModule } from '@angular/cdk/overlay';
+import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import {
-  BasePortalOutlet,
-  CdkPortalOutlet,
-  type ComponentPortal,
-  PortalModule,
-  type TemplatePortal,
-} from '@angular/cdk/portal';
-import {
+  afterNextRender,
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
-  type ComponentRef,
   computed,
-  ElementRef,
-  type EmbeddedViewRef,
-  type EventEmitter,
+  DestroyRef,
+  Directive,
+  effect,
+  forwardRef,
   inject,
+  input,
+  model,
   output,
+  PLATFORM_ID,
+  signal,
   type TemplateRef,
-  type Type,
+  untracked,
+  ViewContainerRef,
   viewChild,
-  type ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideX } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
+import { filter } from 'rxjs';
 
-import { ZardIdDirective } from '@/shared/core';
+import { ZardStringTemplateOutletDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
-import { noopFn } from '@/shared/utils/noop';
 
-import type { ZardDialogRef } from './dialog-ref';
+import { nextDialogId, ZardDialogHost } from './dialog-host';
+import { DIALOG_DURATION, ZardDialogPanelComponent } from './dialog-panel.component';
 import {
+  DIALOG_BACKDROP_CLASSES,
   dialogDescriptionVariants,
   dialogFooterVariants,
   dialogHeaderVariants,
   dialogTitleVariants,
-  dialogVariants,
 } from './dialog.variants';
-import { ZardButtonComponent } from '../button/button.component';
 
-export type OnClickCallback<T> = (instance: T) => false | void | object;
-export class ZardDialogOptions<T, U> {
-  zCancelIcon?: string;
-  zCancelText?: string | null;
-  zClosable?: boolean;
-  zContent?: string | TemplateRef<T> | Type<T>;
-  zCustomClasses?: ClassValue;
-  zData?: U;
-  zDescription?: string;
-  /** Animation duration (ms) used when closing. Defaults to 100 (matches CSS transition). */
-  zDuration?: number;
-  zHideFooter?: boolean;
-  /**
-   * Keeps the title and description in the accessibility tree but out of the layout (`sr-only`),
-   * the same trick shadcn uses when a dialog's content owns its own visual header.
-   */
-  zHideHeader?: boolean;
-  zMaskClosable?: boolean;
-  zOkDestructive?: boolean;
-  zOkDisabled?: boolean;
-  zOkIcon?: string;
-  zOkText?: string | null;
-  zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
-  zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
-  zTitle?: string | TemplateRef<T>;
-  zViewContainerRef?: ViewContainerRef;
-  zWidth?: string;
+const ESCAPE_KEYS = ['Escape', 'Esc'];
+
+/**
+ * A modal window layered over the page, composed in the template.
+ *
+ * ```html
+ * <z-dialog [(zVisible)]="visible">
+ *   <z-dialog-header>
+ *     <z-dialog-title>Title</z-dialog-title>
+ *     <z-dialog-description>Description</z-dialog-description>
+ *   </z-dialog-header>
+ *   ...content...
+ *   <z-dialog-footer>
+ *     <button type="button" z-button z-dialog-close>Cancel</button>
+ *   </z-dialog-footer>
+ * </z-dialog>
+ * ```
+ *
+ * `ZardDialogService.create()` opens the same panel from code.
+ */
+@Component({
+  selector: 'z-dialog',
+  imports: [ZardDialogPanelComponent],
+  template: `
+    <ng-template #panel>
+      <z-dialog-panel
+        [zClosable]="zClosable()"
+        [zWidth]="zWidth()"
+        [zDuration]="zDuration()"
+        [zState]="state()"
+        [zLabelledBy]="titleId()"
+        [zDescribedBy]="descriptionId()"
+        [class]="class()"
+        (closeRequested)="requestClose()"
+      >
+        <ng-content />
+      </z-dialog-panel>
+    </ng-template>
+  `,
+  // forwardRef: the decorator is evaluated before the class binding exists, so a bare
+  // reference to ZardDialogComponent here throws "Cannot access before initialization"
+  // whenever the module is evaluated outside the AOT compiler.
+  providers: [{ provide: ZardDialogHost, useExisting: forwardRef(() => ZardDialogComponent) }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: { style: 'display: contents' },
+  exportAs: 'zDialog',
+})
+export class ZardDialogComponent extends ZardDialogHost {
+  private readonly overlay = inject(Overlay);
+  private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly panel = viewChild.required<TemplateRef<void>>('panel');
+
+  /** Open state, two-way bound. */
+  readonly zVisible = model(false);
+  /** Renders the close button in the top-right corner. */
+  readonly zClosable = input(true, { transform: booleanAttribute });
+  /** Whether a click on the mask closes the dialog. */
+  readonly zMaskClosable = input(true, { transform: booleanAttribute });
+  /** Explicit width; leave unset for the responsive default. */
+  readonly zWidth = input<string | undefined>(undefined);
+  /** How long the enter and leave transitions run, in ms. */
+  readonly zDuration = input(DIALOG_DURATION);
+  /** Custom classes applied to the panel. */
+  readonly class = input<ClassValue>('');
+
+  /** Emitted once the dialog is attached to the DOM. */
+  readonly zAfterOpen = output<void>();
+  /** Emitted once the dialog has finished its exit transition and is gone. */
+  readonly zAfterClose = output<void>();
+
+  readonly titleId = signal<string | null>(null);
+  readonly descriptionId = signal<string | null>(null);
+
+  protected readonly state = signal<'open' | 'closed'>('open');
+
+  private overlayRef: OverlayRef | null = null;
+  private disposeTimer: ReturnType<typeof setTimeout> | null = null;
+  private previouslyFocused: HTMLElement | null = null;
+  private destroyed = false;
+
+  constructor() {
+    super();
+
+    effect(() => {
+      const visible = this.zVisible();
+      untracked(() => (visible ? this.open() : this.startClose()));
+    });
+
+    this.destroyRef.onDestroy(() => {
+      this.destroyed = true;
+      this.dispose();
+    });
+  }
+
+  requestClose(): void {
+    this.zVisible.set(false);
+  }
+
+  private open(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    // Re-opening mid-exit: keep the same overlay and reverse the transition.
+    if (this.overlayRef) {
+      this.clearDisposeTimer();
+      this.state.set('open');
+      return;
+    }
+
+    this.previouslyFocused = document.activeElement as HTMLElement | null;
+    this.state.set('open');
+
+    const overlayRef = this.overlay.create(
+      new OverlayConfig({
+        hasBackdrop: true,
+        backdropClass: DIALOG_BACKDROP_CLASSES,
+        positionStrategy: this.overlay.position().global(),
+        scrollStrategy: this.overlay.scrollStrategies.block(),
+        disposeOnNavigation: true,
+      }),
+    );
+    this.overlayRef = overlayRef;
+
+    overlayRef.attach(new TemplatePortal(this.panel(), this.viewContainerRef));
+
+    overlayRef.backdropClick().subscribe(() => {
+      if (this.zMaskClosable()) {
+        this.requestClose();
+      }
+    });
+    overlayRef
+      .keydownEvents()
+      .pipe(filter(event => ESCAPE_KEYS.includes(event.key)))
+      .subscribe(event => {
+        event.preventDefault();
+        this.requestClose();
+      });
+
+    this.zAfterOpen.emit();
+  }
+
+  private startClose(): void {
+    if (!this.overlayRef || this.disposeTimer !== null) {
+      return;
+    }
+
+    this.state.set('closed');
+    this.overlayRef.detachBackdrop();
+    this.disposeTimer = setTimeout(() => this.dispose(), this.zDuration());
+  }
+
+  private dispose(): void {
+    this.clearDisposeTimer();
+    if (!this.overlayRef) {
+      return;
+    }
+
+    this.overlayRef.dispose();
+    this.overlayRef = null;
+
+    if (this.previouslyFocused?.isConnected) {
+      this.previouslyFocused.focus();
+    }
+    this.previouslyFocused = null;
+
+    // Teardown disposes the overlay too, but the output is already gone by then.
+    if (!this.destroyed) {
+      this.zAfterClose.emit();
+    }
+  }
+
+  private clearDisposeTimer(): void {
+    if (this.disposeTimer === null) {
+      return;
+    }
+
+    clearTimeout(this.disposeTimer);
+    this.disposeTimer = null;
+  }
 }
 
 @Component({
-  selector: 'z-dialog',
-  imports: [A11yModule, OverlayModule, PortalModule, ZardButtonComponent, ZardIdDirective, NgIcon],
+  selector: 'z-dialog-header, [z-dialog-header]',
   template: `
-    <ng-container zardId="z-dialog" #idRef="zardId">
-      @if (config.zClosable || config.zClosable === undefined) {
-        <button
-          type="button"
-          data-testid="z-close-header-button"
-          data-slot="dialog-close"
-          z-button
-          zType="ghost"
-          zSize="icon-sm"
-          class="absolute top-2 right-2"
-          (click)="onCloseClick()"
-        >
-          <ng-icon name="lucideX" class="size-4!" />
-          <span class="sr-only">Close</span>
-        </button>
-      }
-
-      @if (config.zTitle || config.zDescription) {
-        <header [class]="headerClasses()" data-slot="dialog-header">
-          @if (config.zTitle) {
-            <h4 data-testid="z-title" data-slot="dialog-title" [class]="titleClasses()" [id]="idRef.id() + '-title'">
-              {{ config.zTitle }}
-            </h4>
-
-            @if (config.zDescription) {
-              <p
-                data-testid="z-description"
-                data-slot="dialog-description"
-                [class]="descriptionClasses()"
-                [id]="idRef.id() + '-description'"
-              >
-                {{ config.zDescription }}
-              </p>
-            }
-          }
-        </header>
-      }
-
-      <main class="flex flex-col space-y-4">
-        <ng-template cdkPortalOutlet />
-
-        @if (isStringContent()) {
-          <!-- Angular auto-sanitizes [innerHTML] by default; scripts/event handlers are stripped. -->
-          <div data-testid="z-content" [innerHTML]="config.zContent"></div>
-        }
-      </main>
-
-      @if (!config.zHideFooter) {
-        <footer [class]="footerClasses()" data-slot="dialog-footer">
-          @if (config.zCancelText !== null) {
-            <button type="button" data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
-              @if (config.zCancelIcon) {
-                @if (isSvgString(config.zCancelIcon)) {
-                  <ng-icon [svg]="config.zCancelIcon" class="size-4!" />
-                } @else {
-                  <ng-icon [name]="config.zCancelIcon" class="size-4!" />
-                }
-              }
-
-              {{ config.zCancelText ?? 'Cancel' }}
-            </button>
-          }
-
-          @if (config.zOkText !== null) {
-            <button
-              type="button"
-              data-testid="z-ok-button"
-              z-button
-              [zType]="config.zOkDestructive ? 'destructive' : 'default'"
-              [zDisabled]="config.zOkDisabled"
-              (click)="onOkClick()"
-            >
-              @if (config.zOkIcon) {
-                @if (isSvgString(config.zOkIcon)) {
-                  <ng-icon [svg]="config.zOkIcon" class="size-4!" />
-                } @else {
-                  <ng-icon [name]="config.zOkIcon" class="size-4!" />
-                }
-              }
-
-              {{ config.zOkText ?? 'OK' }}
-            </button>
-          }
-        </footer>
-      }
-    </ng-container>
-  `,
-  styles: `
-    :host {
-      --z-dialog-duration: 100ms;
-      opacity: 1;
-      transform: scale(1);
-      transition:
-        opacity var(--z-dialog-duration) ease-out,
-        transform var(--z-dialog-duration) ease-out;
-    }
-
-    @starting-style {
-      :host {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-    }
-
-    :host.dialog-leave {
-      opacity: 0;
-      transform: scale(0.9);
-      transition:
-        opacity var(--z-dialog-duration) ease-in,
-        transform var(--z-dialog-duration) ease-in;
-    }
+    <ng-content />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ lucideX })],
   host: {
+    'data-slot': 'dialog-header',
     '[class]': 'classes()',
-    '[style.width]': 'config.zWidth ? config.zWidth : null',
-    '[style.--z-dialog-duration]': 'durationCss()',
-    'data-slot': 'dialog-content',
-    role: 'dialog',
-    'aria-modal': 'true',
-    '[attr.aria-labelledby]': 'titleId()',
-    '[attr.aria-describedby]': 'descriptionId()',
-    cdkTrapFocus: 'true',
-    cdkTrapFocusAutoCapture: 'true',
   },
-  exportAs: 'zDialog',
+  exportAs: 'zDialogHeader',
 })
-export class ZardDialogComponent<T, U> extends BasePortalOutlet {
-  private readonly host = inject(ElementRef<HTMLElement>);
-  protected readonly config = inject(ZardDialogOptions<T, U>);
-  private readonly idRef = viewChild.required<ZardIdDirective>('idRef');
+export class ZardDialogHeaderComponent {
+  readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(dialogVariants(), this.config.zCustomClasses));
-  protected readonly headerClasses = computed(() =>
-    mergeClasses(dialogHeaderVariants(), this.config.zHideHeader && 'sr-only'),
-  );
+  protected readonly classes = computed(() => mergeClasses(dialogHeaderVariants(), this.class()));
+}
 
-  protected readonly titleClasses = computed(() => dialogTitleVariants());
-  protected readonly descriptionClasses = computed(() => dialogDescriptionVariants());
-  protected readonly footerClasses = computed(() => dialogFooterVariants());
-  protected readonly isStringContent = computed(() => typeof this.config.zContent === 'string');
-  protected readonly titleId = computed(() => (this.config.zTitle ? `${this.idRef().id()}-title` : null));
-  protected readonly descriptionId = computed(() =>
-    this.config.zDescription ? `${this.idRef().id()}-description` : null,
-  );
+@Component({
+  selector: 'z-dialog-title, [z-dialog-title]',
+  imports: [ZardStringTemplateOutletDirective],
+  template: `
+    @let title = zTitle();
+    <ng-container *zStringTemplateOutlet="title">
+      {{ title }}
+      <ng-content />
+    </ng-container>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'dialog-title',
+    role: 'heading',
+    'aria-level': '2',
+    '[attr.id]': 'id',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zDialogTitle',
+})
+export class ZardDialogTitleComponent {
+  private readonly dialog = inject(ZardDialogHost, { optional: true });
 
-  protected readonly durationCss = computed(() =>
-    this.config.zDuration !== undefined ? `${this.config.zDuration}ms` : null,
-  );
+  readonly class = input<ClassValue>('');
+  readonly zTitle = input<string | TemplateRef<void>>();
 
-  protected isSvgString(icon: string): boolean {
-    return /^\s*<svg/i.test(icon);
+  protected readonly id = nextDialogId('title');
+  protected readonly classes = computed(() => mergeClasses(dialogTitleVariants(), this.class()));
+
+  constructor() {
+    // Registered after the first render: the panel reads this id through an input binding,
+    // and writing to it mid-render would trip change-detection checks in dev mode.
+    afterNextRender(() => this.dialog?.titleId.set(this.id));
+
+    inject(DestroyRef).onDestroy(() => {
+      if (this.dialog?.titleId() === this.id) {
+        this.dialog.titleId.set(null);
+      }
+    });
   }
+}
 
-  dialogRef?: ZardDialogRef<T>;
+@Component({
+  selector: 'z-dialog-description, [z-dialog-description]',
+  imports: [ZardStringTemplateOutletDirective],
+  template: `
+    @let description = zDescription();
+    <ng-container *zStringTemplateOutlet="description">
+      {{ description }}
+      <ng-content />
+    </ng-container>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'dialog-description',
+    '[attr.id]': 'id',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zDialogDescription',
+})
+export class ZardDialogDescriptionComponent {
+  private readonly dialog = inject(ZardDialogHost, { optional: true });
 
-  readonly portalOutlet = viewChild.required(CdkPortalOutlet);
+  readonly class = input<ClassValue>('');
+  readonly zDescription = input<string | TemplateRef<void>>();
 
-  okTriggered = output<void>();
-  cancelTriggered = output<void>();
+  protected readonly id = nextDialogId('description');
+  protected readonly classes = computed(() => mergeClasses(dialogDescriptionVariants(), this.class()));
 
-  getNativeElement(): HTMLElement {
-    return this.host.nativeElement;
+  constructor() {
+    afterNextRender(() => this.dialog?.descriptionId.set(this.id));
+
+    inject(DestroyRef).onDestroy(() => {
+      if (this.dialog?.descriptionId() === this.id) {
+        this.dialog.descriptionId.set(null);
+      }
+    });
   }
+}
 
-  attachComponentPortal<C>(portal: ComponentPortal<C>): ComponentRef<C> {
-    if (this.portalOutlet().hasAttached()) {
-      throw new Error('Attempting to attach modal content after content is already attached');
-    }
-    return this.portalOutlet().attachComponentPortal(portal);
-  }
+@Component({
+  selector: 'z-dialog-footer, [z-dialog-footer]',
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'dialog-footer',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zDialogFooter',
+})
+export class ZardDialogFooterComponent {
+  readonly class = input<ClassValue>('');
 
-  attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
-    if (this.portalOutlet().hasAttached()) {
-      throw new Error('Attempting to attach modal content after content is already attached');
-    }
-    return this.portalOutlet().attachTemplatePortal(portal);
-  }
+  protected readonly classes = computed(() => mergeClasses(dialogFooterVariants(), this.class()));
+}
 
-  onOkClick() {
-    this.okTriggered.emit();
-  }
+/** Closes the dialog it is projected into — declarative or service-opened alike. */
+@Directive({
+  selector: '[z-dialog-close]',
+  host: {
+    'data-slot': 'dialog-close',
+    '(click)': 'onClick()',
+  },
+  exportAs: 'zDialogClose',
+})
+export class ZardDialogCloseDirective {
+  private readonly dialog = inject(ZardDialogHost, { optional: true });
 
-  onCloseClick() {
-    this.cancelTriggered.emit();
+  protected onClick(): void {
+    this.dialog?.requestClose();
   }
 }
