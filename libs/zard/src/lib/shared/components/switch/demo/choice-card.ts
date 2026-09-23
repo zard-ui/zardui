@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
@@ -28,5 +28,6 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
       </label>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSwitchChoiceCardComponent {}

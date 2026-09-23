@@ -4,9 +4,8 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-clear',
+  selector: 'z-demo-combobox-clear',
   imports: [ZardComboboxImports],
-  standalone: true,
   template: `
     <z-combobox [(zValue)]="value">
       <z-combobox-input zShowClear placeholder="Select a framework" />

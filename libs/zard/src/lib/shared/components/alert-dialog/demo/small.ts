@@ -4,10 +4,10 @@ import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-d
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
 @Component({
-  selector: 'zard-demo-alert-dialog-small',
+  selector: 'z-demo-alert-dialog-small',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="outline" (click)="open()">Show Dialog</button>
+    <button type="button" z-button zType="outline" (click)="open()">Show Dialog</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

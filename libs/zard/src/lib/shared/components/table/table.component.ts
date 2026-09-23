@@ -24,6 +24,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table',
     '[class]': 'classes()',
   },
   exportAs: 'zTable',
@@ -52,6 +53,7 @@ export class ZardTableComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-header',
     '[class]': 'classes()',
   },
   exportAs: 'zTableHeader',
@@ -70,6 +72,7 @@ export class ZardTableHeaderComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-body',
     '[class]': 'classes()',
   },
   exportAs: 'zTableBody',
@@ -88,6 +91,7 @@ export class ZardTableBodyComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-row',
     '[class]': 'classes()',
   },
   exportAs: 'zTableRow',
@@ -106,6 +110,7 @@ export class ZardTableRowComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-head',
     '[class]': 'classes()',
   },
   exportAs: 'zTableHead',
@@ -124,6 +129,7 @@ export class ZardTableHeadComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-cell',
     '[class]': 'classes()',
   },
   exportAs: 'zTableCell',
@@ -142,6 +148,7 @@ export class ZardTableCellComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-caption',
     '[class]': 'classes()',
   },
   exportAs: 'zTableCaption',
@@ -160,6 +167,7 @@ export class ZardTableCaptionComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-footer',
     '[class]': 'classes()',
   },
   exportAs: 'zTableFooter',

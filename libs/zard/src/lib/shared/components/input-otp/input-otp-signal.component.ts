@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, effect, forwardRef, model, untracked } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  forwardRef,
+  model,
+  untracked,
+  ViewEncapsulation,
+} from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 
 import { ZardInputOtpComponent } from './input-otp.component';
@@ -38,9 +46,11 @@ import { ZardInputOtpComponent } from './input-otp.component';
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.data-disabled]': 'disabled() ? "" : null',
   },
+  exportAs: 'zInputOtpSignal',
 })
 export class ZardInputOtpSignalComponent extends ZardInputOtpComponent implements FormValueControl<string> {
   readonly value = model<string>('');

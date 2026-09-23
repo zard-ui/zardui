@@ -9,7 +9,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-with-icon',
   imports: [ZardButtonComponent, NgIcon],
   template: `
-    <button z-button zType="outline" zSize="sm">
+    <button type="button" z-button zType="outline" zSize="sm">
       <ng-icon name="lucideGitBranch" />
       New Branch
     </button>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
@@ -16,5 +16,6 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <p z-field-description>This field must be filled out.</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputRequiredComponent {}

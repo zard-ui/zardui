@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'mcp-usage-section',
-  standalone: true,
+  selector: 'z-mcp-usage-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Usage</h2>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
@@ -16,7 +16,7 @@ import { Component } from '@angular/core';
     </ul>
   `,
 })
-export class McpUsageSection {
+export class McpUsageSectionComponent {
   readonly prompts = [
     'Which zard/ui components could I use for a settings page?',
     'Add a zard/ui dialog to my settings page, with a destructive confirm button. Read its docs first.',

@@ -29,11 +29,11 @@
       <div class="bg-primary/10 rounded-md p-1.5">
         <ng-icon name="lucideMoon" class="text-primary size-3.5!" />
       </div>
-      <label class="text-foreground text-sm font-medium">Presets</label>
+      <span class="text-foreground text-sm font-medium" id="theme-presets-label">Presets</span>
     </div>
     <div class="grid grid-cols-2 gap-2">
       @for (preset of presets; track preset.name) {
-        <app-theme-preset-card
+        <z-theme-preset-card
           [preset]="preset"
           [isActive]="activePreset() === preset.name"
           (selection)="onPresetSelect($event)"
@@ -48,12 +48,13 @@
         <div class="bg-primary/10 rounded-md p-1.5">
           <ng-icon name="lucideSquare" class="text-primary size-3.5!" />
         </div>
-        <label class="text-foreground text-sm font-medium">Radius</label>
+        <span class="text-foreground text-sm font-medium" id="theme-radius-label">Radius</span>
       </div>
       <span class="bg-muted text-muted-foreground rounded-md px-2 py-0.5 font-mono text-xs">{{ theme().radius }}</span>
     </div>
     <div class="rounded-lg border bg-white/50 p-3 dark:bg-white/5">
       <z-slider
+        aria-labelledby="theme-radius-label"
         [zMin]="0"
         [zMax]="1"
         [zStep]="0.125"
@@ -68,14 +69,14 @@
       <div class="bg-primary/10 rounded-md p-1.5">
         <ng-icon name="lucidePalette" class="text-primary size-3.5!" />
       </div>
-      <label class="text-foreground text-sm font-medium">Colors</label>
+      <span class="text-foreground text-sm font-medium" id="theme-colors-label">Colors</span>
     </div>
     <z-accordion zType="multiple" [zDefaultValue]="['base']" class="space-y-1">
       @for (group of colorGroups; track group.key) {
         <z-accordion-item [zValue]="group.key" [zTitle]="group.label">
           @for (colorKey of group.colors; track colorKey) {
             <div class="py-3">
-              <app-color-picker-field
+              <z-color-picker-field
                 [colorKey]="colorKey"
                 [value]="currentColors()[colorKey]"
                 (valueChange)="onColorChange(colorKey, $event)"

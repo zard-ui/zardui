@@ -1,9 +1,9 @@
 /**
- * O passo que ensina o ng-packagr a publicar o CSS de tema.
+ * The step that teaches ng-packagr to publish the theme CSS.
  *
- * O ng-packagr só empacota o que o ponto de entrada alcança, então sem esta
- * declaração o arquivo de tokens existe no repositório da lib e some do pacote
- * — e os componentes não renderizam na aplicação que a instala.
+ * ng-packagr only bundles what the entry point reaches, so without this
+ * declaration the token file exists in the library's repository and vanishes
+ * from the package — and the components do not render in the app that installs it.
  */
 
 jest.mock('@antfu/ni', () => ({ detect: jest.fn() }));
@@ -42,7 +42,7 @@ const answers: InitAnswers = {
   utilsAlias: '@/shared/utils',
 };
 
-/** Roda só o passo do ng-package.json e devolve o arquivo resultante. */
+/** Runs only the ng-package.json step and returns the resulting file. */
 async function runAssetStep(ngPackage: unknown | null): Promise<{ assets?: unknown[] } | null> {
   const cwd = await mkdtemp(path.join(tmpdir(), 'zard-ng-package-'));
   const libraryRoot = path.join(cwd, 'projects', 'ui');
@@ -65,9 +65,9 @@ describe('ng-package.json step', () => {
   const base = { lib: { entryFile: 'src/public-api.ts' } };
 
   /**
-   * Um caminho simples preserva a pasta de origem no pacote, e o consumidor
-   * acabaria importando `<lib>/src/styles.css` — um `src/` que é detalhe do
-   * repositório da lib, não algo que quem a instala deva conhecer.
+   * A plain path preserves the source folder inside the package, and the consumer
+   * would end up importing `<lib>/src/styles.css` — a `src/` that is a detail of
+   * the library's repository, not something whoever installs it should know.
    */
   it('should publish the theme at the package root', async () => {
     const result = await runAssetStep(base);
@@ -95,8 +95,9 @@ describe('ng-package.json step', () => {
     expect(result?.assets).toEqual(assets);
   });
 
-  // Uma lib Nx só ganha ng-package.json quando é publicável; sem ele não há
-  // pacote a montar, e o passo avisa em vez de falhar a instalação inteira.
+  // An Nx library only gets an ng-package.json when it is publishable; without
+  // one there is no package to assemble, and the step warns instead of failing
+  // the whole install.
   it('should not fail when the library has no ng-package.json', async () => {
     await expect(runAssetStep(null)).resolves.toBeNull();
   });

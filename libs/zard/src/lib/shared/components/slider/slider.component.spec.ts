@@ -6,15 +6,14 @@ import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plu
 
 import {
   ZardSliderComponent,
-  ZSliderRangeComponent,
-  ZSliderThumbComponent,
-  ZSliderTrackComponent,
+  ZardSliderRangeComponent,
+  ZardSliderThumbComponent,
+  ZardSliderTrackComponent,
 } from './slider.component';
 
 @Component({
   selector: 'test-slider-host',
   imports: [ZardSliderComponent],
-  standalone: true,
   template: `
     <z-slider
       [zMin]="min"
@@ -64,9 +63,9 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
 
   it('should render slider with thumb, track and range', () => {
     expect(fixture.debugElement.query(By.directive(ZardSliderComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZSliderThumbComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZSliderTrackComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZSliderRangeComponent))).toBeTruthy();
+    expect(fixture.debugElement.query(By.directive(ZardSliderThumbComponent))).toBeTruthy();
+    expect(fixture.debugElement.query(By.directive(ZardSliderTrackComponent))).toBeTruthy();
+    expect(fixture.debugElement.query(By.directive(ZardSliderRangeComponent))).toBeTruthy();
   });
 
   it('should have orientation attribute on host', () => {
@@ -75,7 +74,9 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
   });
 
   it('should apply aria attributes on thumb', () => {
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuemin')).toBe('0');
     expect(thumb.getAttribute('aria-valuemax')).toBe('100');
     expect(thumb.getAttribute('aria-valuenow')).toBe('40');
@@ -89,12 +90,16 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
   });
 
   it('should render projected value into the thumb correctly', () => {
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuenow')).toBe('40');
   });
 
   it('should set tabindex="0" on thumb', () => {
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('tabindex')).toBe('0');
   });
 
@@ -102,7 +107,9 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
     component.value = [60];
     fixture.detectChanges();
 
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-disabled')).toBeNull();
 
     fixture.componentInstance.value = [50];
@@ -115,13 +122,15 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
   });
 
   it('should apply correct thumb position style (horizontal)', () => {
-    const thumbHost = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement;
+    const thumbHost = fixture.debugElement.query(By.directive(ZardSliderThumbComponent)).nativeElement;
     const styleLeft = thumbHost.style.left;
     expect(styleLeft).toContain('%');
   });
 
   it('should apply zMin, zMax, and zStep correctly', () => {
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuemin')).toBe(String(component.min));
     expect(thumb.getAttribute('aria-valuemax')).toBe(String(component.max));
     expect(Number(thumb.getAttribute('aria-valuenow')) % component.step).toBe(0);
@@ -131,7 +140,9 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
     component.value = [70];
     fixture.detectChanges();
 
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuenow')).toBe('70');
   });
 
@@ -140,7 +151,9 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
     component.default = [20];
     fixture.detectChanges();
 
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuenow')).toBe('20');
   });
 
@@ -149,13 +162,15 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
     component.value = [47];
     fixture.detectChanges();
 
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     const value = Number(thumb.getAttribute('aria-valuenow'));
     expect(value % 25).toBe(0);
   });
 
   it('should move thumb with arrow keys', () => {
-    const thumbDebug = fixture.debugElement.query(By.directive(ZSliderThumbComponent));
+    const thumbDebug = fixture.debugElement.query(By.directive(ZardSliderThumbComponent));
     const thumbHost = thumbDebug.nativeElement as HTMLElement;
 
     thumbHost.focus();
@@ -173,7 +188,7 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
   });
 
   it('should go to min with Home and to max with End key', () => {
-    const thumbHost = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement;
+    const thumbHost = fixture.debugElement.query(By.directive(ZardSliderThumbComponent)).nativeElement;
 
     thumbHost.focus();
 
@@ -218,19 +233,19 @@ describe('ZardSliderComponent (range: two thumbs)', () => {
   });
 
   it('renders two thumbs', () => {
-    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZardSliderThumbComponent));
     expect(thumbs.length).toBe(2);
   });
 
   it('renders one range segment between the two thumbs', () => {
-    const ranges = fixture.debugElement.queryAll(By.directive(ZSliderRangeComponent));
+    const ranges = fixture.debugElement.queryAll(By.directive(ZardSliderRangeComponent));
     const rangeHost = ranges[0].nativeElement as HTMLElement;
     const spans = rangeHost.querySelectorAll('[data-slot="slider-range"]');
     expect(spans.length).toBe(1);
   });
 
   it('sets aria-valuenow on each thumb to its respective value', () => {
-    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZardSliderThumbComponent));
 
     const first = thumbs[0].nativeElement.querySelector('span');
     const second = thumbs[1].nativeElement.querySelector('span');
@@ -240,14 +255,14 @@ describe('ZardSliderComponent (range: two thumbs)', () => {
   });
 
   it('positions both thumbs with percentage style', () => {
-    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZardSliderThumbComponent));
 
     expect(thumbs[0].nativeElement.style.left).toContain('%');
     expect(thumbs[1].nativeElement.style.left).toContain('%');
   });
 
   it('prevents first thumb from moving past the second via arrow key', () => {
-    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZardSliderThumbComponent));
     const firstThumbHost = thumbs[0].nativeElement as HTMLElement;
 
     firstThumbHost.focus();
@@ -261,7 +276,7 @@ describe('ZardSliderComponent (range: two thumbs)', () => {
   });
 
   it('prevents second thumb from moving past the first via arrow key', () => {
-    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZardSliderThumbComponent));
     const secondThumbHost = thumbs[1].nativeElement as HTMLElement;
 
     secondThumbHost.focus();
@@ -298,26 +313,26 @@ describe('ZardSliderComponent (multiple: three thumbs)', () => {
   });
 
   it('renders three thumbs', () => {
-    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZardSliderThumbComponent));
     expect(thumbs.length).toBe(3);
   });
 
   it('renders two range segments between the three thumbs', () => {
-    const ranges = fixture.debugElement.queryAll(By.directive(ZSliderRangeComponent));
+    const ranges = fixture.debugElement.queryAll(By.directive(ZardSliderRangeComponent));
     const rangeHost = ranges[0].nativeElement as HTMLElement;
     const spans = rangeHost.querySelectorAll('[data-slot="slider-range"]');
     expect(spans.length).toBe(2);
   });
 
   it('sets aria-valuenow on each thumb to its respective value', () => {
-    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZardSliderThumbComponent));
 
     const values = thumbs.map(t => t.nativeElement.querySelector('span').getAttribute('aria-valuenow'));
     expect(values).toEqual(['10', '50', '90']);
   });
 
   it('keeps middle thumb between the first and third after key input', () => {
-    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZardSliderThumbComponent));
     const middleThumbHost = thumbs[1].nativeElement as HTMLElement;
 
     middleThumbHost.focus();
@@ -340,7 +355,6 @@ describe('ZardSliderComponent (zSlideIndexChange output)', () => {
   @Component({
     selector: 'test-slider-output-host',
     imports: [ZardSliderComponent],
-    standalone: true,
     template: `
       <z-slider [zMin]="0" [zMax]="100" [zStep]="10" [zValue]="[40]" (zSlideIndexChange)="onSlide($event)" />
     `,
@@ -371,7 +385,7 @@ describe('ZardSliderComponent (zSlideIndexChange output)', () => {
   });
 
   it('emits number[] from zSlideIndexChange on arrow key press', () => {
-    const thumbHost = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement as HTMLElement;
+    const thumbHost = fixture.debugElement.query(By.directive(ZardSliderThumbComponent)).nativeElement as HTMLElement;
 
     thumbHost.focus();
     thumbHost.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
@@ -410,9 +424,9 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
 
   it('should render slider with thumb, track and range', () => {
     expect(fixture.debugElement.query(By.directive(ZardSliderComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZSliderThumbComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZSliderTrackComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZSliderRangeComponent))).toBeTruthy();
+    expect(fixture.debugElement.query(By.directive(ZardSliderThumbComponent))).toBeTruthy();
+    expect(fixture.debugElement.query(By.directive(ZardSliderTrackComponent))).toBeTruthy();
+    expect(fixture.debugElement.query(By.directive(ZardSliderRangeComponent))).toBeTruthy();
   });
 
   it('should have orientation attribute on host', () => {
@@ -421,7 +435,9 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
   });
 
   it('should apply aria attributes on thumb', () => {
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuemin')).toBe('0');
     expect(thumb.getAttribute('aria-valuemax')).toBe('100');
     expect(thumb.getAttribute('aria-valuenow')).toBe('40');
@@ -435,12 +451,16 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
   });
 
   it('should render projected value into the thumb correctly', () => {
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuenow')).toBe('40');
   });
 
   it('should set tabindex="0" on thumb', () => {
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('tabindex')).toBe('0');
   });
 
@@ -448,7 +468,9 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
     component.value = [60];
     fixture.detectChanges();
 
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-disabled')).toBeNull();
 
     fixture.componentInstance.value = [50];
@@ -461,13 +483,15 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
   });
 
   it('should apply correct thumb position style (vertical)', () => {
-    const thumbHost = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement;
+    const thumbHost = fixture.debugElement.query(By.directive(ZardSliderThumbComponent)).nativeElement;
     const styleLeft = thumbHost.style.bottom;
     expect(styleLeft).toContain('%');
   });
 
   it('should apply zMin, zMax, and zStep correctly', () => {
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuemin')).toBe(String(component.min));
     expect(thumb.getAttribute('aria-valuemax')).toBe(String(component.max));
     expect(Number(thumb.getAttribute('aria-valuenow')) % component.step).toBe(0);
@@ -477,7 +501,9 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
     component.value = [70];
     fixture.detectChanges();
 
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuenow')).toBe('70');
   });
 
@@ -486,7 +512,9 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
     component.default = [20];
     fixture.detectChanges();
 
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuenow')).toBe('20');
   });
 
@@ -495,13 +523,15 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
     component.value = [47];
     fixture.detectChanges();
 
-    const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
     const value = Number(thumb.getAttribute('aria-valuenow'));
     expect(value % 25).toBe(0);
   });
 
   it('should move thumb with arrow keys', () => {
-    const thumbDebug = fixture.debugElement.query(By.directive(ZSliderThumbComponent));
+    const thumbDebug = fixture.debugElement.query(By.directive(ZardSliderThumbComponent));
     const thumbHost = thumbDebug.nativeElement as HTMLElement;
 
     thumbHost.focus();
@@ -519,7 +549,7 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
   });
 
   it('should go to min with Home and to max with End key', () => {
-    const thumbHost = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement;
+    const thumbHost = fixture.debugElement.query(By.directive(ZardSliderThumbComponent)).nativeElement;
 
     thumbHost.focus();
 

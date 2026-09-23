@@ -41,7 +41,7 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { '[class]': 'classes()' },
+  host: { 'data-slot': 'chart-legend', '[class]': 'classes()' },
   exportAs: 'zChartLegend',
 })
 export class ZardChartLegendComponent {

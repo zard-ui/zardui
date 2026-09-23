@@ -4,7 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-placement-demo',
+  selector: 'z-demo-popover-placement',
   imports: [ZardButtonComponent, ...ZardPopoverImports],
   template: `
     <div class="flex flex-col space-y-2">

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
@@ -25,6 +25,7 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
       />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoAvatarBadgeComponent {}

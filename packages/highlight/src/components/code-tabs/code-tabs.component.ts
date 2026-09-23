@@ -6,7 +6,6 @@ import { CopyButtonComponent } from '../copy-button/copy-button.component';
 
 @Component({
   selector: 'z-code-tabs',
-  standalone: true,
   imports: [CopyButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

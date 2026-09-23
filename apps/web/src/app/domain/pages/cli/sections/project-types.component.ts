@@ -3,13 +3,12 @@ import { Component } from '@angular/core';
 /**
  * O que muda de um tipo de projeto para outro.
  *
- * A tabela é o coração da página: escolher o tipo errado no init leva a um
- * projeto que compila mas não renderiza, e o motivo (o PostCSS no diretório
- * errado, o alias num tsconfig que ninguém estende) não é óbvio de fora.
+ * The table is the heart of the page: choosing the wrong type at init leads to a
+ * project that compiles but does not render, and the reason (PostCSS in the wrong
+ * directory, the alias in a tsconfig nobody extends) is not obvious from outside.
  */
 @Component({
-  selector: 'cli-project-types-section',
-  standalone: true,
+  selector: 'z-cli-project-types-section',
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
       Project types
@@ -82,7 +81,7 @@ import { Component } from '@angular/core';
     </p>
   `,
 })
-export class CliProjectTypesSection {
+export class CliProjectTypesSectionComponent {
   protected readonly types = [
     {
       name: 'angular',

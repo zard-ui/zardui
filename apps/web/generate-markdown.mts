@@ -28,7 +28,8 @@ globals['document'] = win.document;
 globals['HTMLElement'] = win.HTMLElement;
 
 const { COMPONENTS_REGISTRY } = await import('@doc/shared/constants/components.constant');
-const { serializeComponentToMarkdown, serializeFallbackMarkdown } = await import('@doc/shared/utils/markdown-serializer');
+const { serializeComponentToMarkdown, serializeFallbackMarkdown } =
+  await import('@doc/shared/utils/markdown-serializer');
 
 const OUTPUT_DIR = resolve('apps/web/public/docs/components');
 

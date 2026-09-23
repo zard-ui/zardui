@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +7,7 @@ import {
   forwardRef,
   inject,
   InjectionToken,
+  Injector,
   input,
   model,
   ViewEncapsulation,
@@ -44,7 +46,7 @@ const optionalBooleanAttribute = (value: unknown) => (value === undefined ? unde
 export class ZardDropdownMenuGroupComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(this.class()));
+  protected readonly classes = computed(() => mergeClasses('block', this.class()));
 }
 
 @Component({
@@ -63,7 +65,10 @@ export class ZardDropdownMenuGroupComponent {
 export class ZardDropdownMenuSeparatorComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses('bg-border -mx-1 my-1 h-px', this.class()));
+  // `block` is not decoration: on the `z-dropdown-menu-separator` element form the default
+  // `display: inline` swallows `h-px` and the negative margins, and the divider renders as a gap
+  // with no line in it.
+  protected readonly classes = computed(() => mergeClasses('bg-border -mx-1 my-1 block h-px', this.class()));
 }
 
 @Component({
@@ -140,18 +145,18 @@ export class ZardDropdownMenuShortcutComponent {
   exportAs: 'zDropdownMenuCheckboxItem',
 })
 export class ZardDropdownMenuCheckboxItemComponent {
+  private readonly injector = inject(Injector);
   private readonly dropdownService = inject(ZardDropdownService);
 
   readonly zChecked = model(false);
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zDisabled',
     transform: optionalBooleanAttribute,
   });
 
   readonly variant = input<ZardDropdownItemTypeVariants>('default');
-  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zType' });
-  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zVariant' });
+  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined);
+  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined);
   readonly class = input<ClassValue>('');
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
@@ -166,7 +171,7 @@ export class ZardDropdownMenuCheckboxItemComponent {
     }
 
     this.zChecked.set(!this.zChecked());
-    setTimeout(() => this.dropdownService.closeAndFocusTrigger(), 0);
+    afterNextRender(() => this.dropdownService.closeAndFocusTrigger(), { injector: this.injector });
   }
 }
 
@@ -191,7 +196,7 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
   readonly zValue = model<string | undefined>(undefined);
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(this.class()));
+  protected readonly classes = computed(() => mergeClasses('block', this.class()));
 
   select(value: string) {
     this.zValue.set(value);
@@ -222,21 +227,22 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
     '[attr.data-variant]': 'itemVariant()',
     '(click.prevent-with-stop)': 'onClick()',
   },
+  exportAs: 'zDropdownMenuRadioItem',
 })
 export class ZardDropdownMenuRadioItemComponent {
+  private readonly injector = inject(Injector);
   private readonly dropdownService = inject(ZardDropdownService);
   private readonly radioGroup = inject(ZARD_DROPDOWN_RADIO_GROUP, { optional: true });
 
   readonly zValue = input.required<string>();
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zDisabled',
     transform: optionalBooleanAttribute,
   });
 
   readonly variant = input<ZardDropdownItemTypeVariants>('default');
-  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zType' });
-  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zVariant' });
+  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined);
+  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined);
   readonly class = input<ClassValue>('');
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
@@ -252,6 +258,6 @@ export class ZardDropdownMenuRadioItemComponent {
     }
 
     this.radioGroup?.select(this.zValue());
-    setTimeout(() => this.dropdownService.closeAndFocusTrigger(), 0);
+    afterNextRender(() => this.dropdownService.closeAndFocusTrigger(), { injector: this.injector });
   }
 }

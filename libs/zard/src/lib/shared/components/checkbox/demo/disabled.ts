@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
@@ -14,5 +14,6 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCheckboxDisabledComponent {}

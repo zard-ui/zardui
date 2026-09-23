@@ -1,9 +1,9 @@
 /**
- * Um TTY simulado para exercitar wizards sem um terminal real.
+ * A simulated TTY, to exercise wizards without a real terminal.
  *
- * `runWizard` se recusa a montar fora de um TTY — é o que protege o usuário de
- * uma UI de tela cheia num pipe. Para testar o wizard em si, então, stdout vira
- * um buffer e stdin um emissor onde injetamos bytes de teclado.
+ * `runWizard` refuses to mount outside a TTY — that is what protects the user
+ * from a full-screen UI inside a pipe. To test the wizard itself, then, stdout
+ * becomes a buffer and stdin an emitter we inject keyboard bytes into.
  */
 
 import { EventEmitter } from 'node:events';

@@ -60,29 +60,30 @@ export class VersionSupportPage implements OnInit {
 
   readonly versions: VersionEntry[] = [
     {
+      version: 'Angular 22',
+      status: 'active',
+      label: 'Active',
+      description:
+        'Latest version. Supported since release; the CLI resolves the dependency versions a v22 project needs.',
+    },
+    {
       version: 'Angular 21',
       status: 'active',
       label: 'Active',
-      description: 'Latest version. All new features and components are built and tested against Angular 21.',
+      description: 'Fully supported. New features and components are built and tested against this version.',
     },
     {
       version: 'Angular 20',
       status: 'active',
       label: 'Active',
-      description: 'Fully supported. Bug fixes and security patches are applied to maintain compatibility.',
+      description: 'Supported. Bug fixes and security patches are applied to maintain compatibility.',
     },
     {
       version: 'Angular 19',
       status: 'active',
       label: 'Active',
-      description: 'Supported. Backward compatibility is maintained for this version.',
-    },
-    {
-      version: 'Angular 18',
-      status: 'active',
-      label: 'Active',
       description:
-        'Minimum supported Angular version. We recommend upgrading to Angular 19 or later for the best experience.',
+        'Minimum supported Angular version. We recommend upgrading to Angular 20 or later for the best experience.',
     },
   ];
 

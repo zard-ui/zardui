@@ -7,7 +7,7 @@ import * as path from 'node:path';
 const TAILWIND_IMPORT = "import tailwindcss from '@tailwindcss/vite';";
 const TAILWIND_PLUGIN = 'tailwindcss()';
 
-/** Os nomes que o Vite aceita, na ordem em que ele próprio procura. */
+/** The names Vite accepts, in the order it looks for them. */
 const CONFIG_FILES = ['vite.config.ts', 'vite.config.mts', 'vite.config.js', 'vite.config.mjs'];
 
 export function findViteConfig(cwd: string): string | null {
@@ -15,11 +15,12 @@ export function findViteConfig(cwd: string): string | null {
 }
 
 /**
- * Registra o Tailwind como plugin do Vite.
+ * Registers Tailwind as a Vite plugin.
  *
- * No Analog quem compila é o Vite, não o build do Angular — um `.postcssrc.json`
- * ali não é lido por ninguém, e sem o plugin o `@import 'tailwindcss'` que o
- * tema escreve no CSS global não gera utilitário nenhum.
+ * In Analog it is Vite that compiles, not the Angular build — a
+ * `.postcssrc.json` there is read by nobody, and without the plugin the
+ * `@import 'tailwindcss'` the theme writes into the global CSS emits no
+ * utilities at all.
  */
 export async function setupVitePlugin(cwd: string): Promise<void> {
   const configPath = findViteConfig(cwd);
@@ -49,10 +50,10 @@ export async function setupVitePlugin(cwd: string): Promise<void> {
 }
 
 /**
- * Acrescenta `tailwindcss()` à lista de plugins.
+ * Appends `tailwindcss()` to the plugin list.
  *
- * O plugin entra no fim: a ordem importa para o Vite, e o do Analog precisa
- * processar os arquivos Angular antes que o Tailwind varra as classes.
+ * It goes at the end: order matters to Vite, and Analog's plugin has to process
+ * the Angular files before Tailwind scans them for classes.
  */
 function registerPlugin(content: string, eol: string): string | null {
   const plugins = arrayRange(content, 'plugins');
@@ -60,8 +61,8 @@ function registerPlugin(content: string, eol: string): string | null {
   if (!plugins) return null;
   if (plugins.body.includes(TAILWIND_PLUGIN)) return content;
 
-  // A indentação dos itens existentes é a que o arquivo já usa; repeti-la evita
-  // que a linha nova destoe do resto quando não há Prettier depois.
+  // The existing items' indentation is whatever the file already uses; matching
+  // it keeps the new line from standing out when no Prettier runs afterwards.
   const indent = /\n([ \t]+)\S/.exec(plugins.body)?.[1] ?? '    ';
   const closingIndent = indent.slice(0, Math.max(0, indent.length - 2));
   const trimmed = plugins.body.replace(/\s+$/, '');

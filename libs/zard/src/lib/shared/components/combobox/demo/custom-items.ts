@@ -1,12 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardItemImports } from '../../item/item.imports';
 import { ZardComboboxImports } from '../combobox.imports';
 
 @Component({
-  selector: 'zard-demo-combobox-custom-items',
+  selector: 'z-demo-combobox-custom-items',
   imports: [ZardComboboxImports, ZardItemImports],
-  standalone: true,
   template: `
     <z-combobox zWidth="md" [(zValue)]="value">
       <z-combobox-input placeholder="Search countries..." />
@@ -29,6 +28,7 @@ import { ZardComboboxImports } from '../combobox.imports';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxCustomItemsComponent {
   readonly value = signal<string | string[] | null>(null);

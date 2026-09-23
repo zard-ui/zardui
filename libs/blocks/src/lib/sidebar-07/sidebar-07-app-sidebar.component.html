@@ -1,0 +1,16 @@
+<z-sidebar zCollapsible="icon">
+  <div z-sidebar-header>
+    <lib-sidebar-07-team-switcher [teams]="teams" />
+  </div>
+
+  <z-sidebar-content>
+    <lib-sidebar-07-nav-main [items]="navMain" />
+    <lib-sidebar-07-nav-projects [projects]="projects" />
+  </z-sidebar-content>
+
+  <div z-sidebar-footer>
+    <lib-sidebar-07-nav-user [user]="user" />
+  </div>
+
+  <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
+</z-sidebar>

@@ -55,7 +55,8 @@ import {
   type ZardDatePickerSizeVariants,
 } from '@/shared/components/date-picker/date-picker.variants';
 import { ZardPopoverComponent, ZardPopoverDirective, type ZardPopoverAlign } from '@/shared/components/popover';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 /** Separates the two ends of a range in the trigger label. */
 const RANGE_SEPARATOR = ' - ';
@@ -312,7 +313,6 @@ import { ZardDatePickerComponent } from '../date-picker.component';
 @Component({
   selector: 'z-demo-date-picker-basic',
   imports: [ZardDatePickerComponent, ZardFieldImports],
-  standalone: true,
   template: `
     <div z-field class="mx-auto w-44">
       <label z-field-label for="date-picker-basic">Date</label>
@@ -341,7 +341,6 @@ import { ZardDatePickerComponent } from '../date-picker.component';
 @Component({
   selector: 'z-demo-date-picker-date-of-birth',
   imports: [ZardDatePickerComponent, ZardFieldImports],
-  standalone: true,
   template: `
     <div z-field class="mx-auto w-44">
       <label z-field-label for="date-picker-date-of-birth">Date of birth</label>
@@ -384,7 +383,6 @@ const currentYear = new Date().getFullYear();
 @Component({
   selector: 'z-demo-date-picker-range',
   imports: [ZardDatePickerComponent, ZardFieldImports],
-  standalone: true,
   template: `
     <div z-field class="mx-auto w-60">
       <label z-field-label for="date-picker-range">Date range</label>
@@ -421,7 +419,6 @@ import { ZardDatePickerComponent } from '../date-picker.component';
 @Component({
   selector: 'z-demo-date-picker-with-time',
   imports: [ZardDatePickerComponent, ZardFieldImports, ZardInputComponent],
-  standalone: true,
   template: `
     <!-- A fixed width, not max-w-*: the field group is w-full, so it has nothing to resolve against. -->
     <div z-field-group class="mx-auto w-xs flex-row">
@@ -536,7 +533,6 @@ function parseDate(value: string): Date | null {
     ZardPopoverComponent,
     ZardPopoverDirective,
   ],
-  standalone: true,
   template: `
     <div z-field class="mx-auto w-52">
       <label z-field-label for="date-picker-with-input">Subscription date</label>
@@ -551,6 +547,7 @@ function parseDate(value: string): Date | null {
         />
         <z-input-group-addon zAlign="inline-end">
           <button
+            type="button"
             z-input-group-button
             aria-label="Select date"
             zPopover
@@ -623,7 +620,6 @@ import { ZardDatePickerComponent } from '../date-picker.component';
 @Component({
   selector: 'z-demo-date-picker-sizes',
   imports: [ZardDatePickerComponent, ZardFieldImports],
-  standalone: true,
   template: `
     <div z-field-group class="mx-auto w-60">
       <div z-field>
@@ -669,7 +665,6 @@ import { ZardDatePickerComponent } from '../date-picker.component';
 @Component({
   selector: 'z-demo-date-picker-formats',
   imports: [ZardDatePickerComponent, ZardFieldImports],
-  standalone: true,
   template: `
     <div z-field-group class="mx-auto w-60">
       <div z-field>
@@ -709,23 +704,23 @@ A button that opens a z-calendar inside a popover. Everything the calendar can d
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes on the host. Also where the trigger width is overridden | `ClassValue` | `''` |
-| `zId` | Applied to the trigger button, so a `<label for="…">` points at something focusable | `string` | `''` |
-| `zType` | Button variant used by the trigger | `ZardButtonTypeVariants` | `'outline'` |
-| `zSize` | Trigger height, following the button scale | `'xs' \| 'sm' \| 'default' \| 'lg'` | `'default'` |
-| `zIcon` | Trigger icon: a trailing chevron, a leading calendar, or none. `chevron` justifies the label to the start and pushes the icon to the end | `'chevron' \| 'calendar' \| 'none'` | `'chevron'` |
-| `value` | Selected date(s) — a Date in single mode, a Date[] in range and multiple modes | `CalendarValue` | `null` |
-| `zPlaceholder` | Trigger label shown while nothing is selected | `string` | `'Pick a date'` |
-| `zFormat` | Angular DatePipe pattern used to render the selected date(s), e.g. 'MMM dd, y' | `string` | `'MMMM d, yyyy'` |
-| `zMode` | Selection mode. `single` closes the popover on pick, `range` once both ends are set, `multiple` keeps it open | `'single' \| 'multiple' \| 'range'` | `'single'` |
-| `zCaptionLayout` | How the calendar renders its month/year caption | `'label' \| 'dropdown' \| 'dropdown-months' \| 'dropdown-years'` | `'label'` |
-| `zNumberOfMonths` | How many months the calendar renders side by side | `number` | `1` |
-| `zDisabledDates` | Individual days that cannot be selected, on top of the minDate/maxDate range | `Date[]` | `[]` |
-| `zShowOutsideDays` | Whether the days of the surrounding months are visible | `boolean` | `true` |
-| `zAlign` | Which edge of the popover lines up with the trigger | `'start' \| 'center' \| 'end'` | `'start'` |
-| `minDate` | Minimum selectable date. Also used to expand the year dropdown range | `Date \| null` | `null` |
-| `maxDate` | Maximum selectable date. Also used to expand the year dropdown range | `Date \| null` | `null` |
-| `disabled` | Whether the date picker is disabled | `boolean` | `false` |
+| `[class]` | Additional CSS classes on the host. Also where the trigger width is overridden | `ClassValue` | `''` |
+| `[zId]` | Applied to the trigger button, so a `<label for="…">` points at something focusable | `string` | `''` |
+| `[zType]` | Button variant used by the trigger | `ZardButtonTypeVariants` | `'outline'` |
+| `[zSize]` | Trigger height, following the button scale | `'xs' \| 'sm' \| 'default' \| 'lg'` | `'default'` |
+| `[zIcon]` | Trigger icon: a trailing chevron, a leading calendar, or none. `chevron` justifies the label to the start and pushes the icon to the end | `'chevron' \| 'calendar' \| 'none'` | `'chevron'` |
+| `[value]` | Selected date(s) — a Date in single mode, a Date[] in range and multiple modes | `CalendarValue` | `null` |
+| `[zPlaceholder]` | Trigger label shown while nothing is selected | `string` | `'Pick a date'` |
+| `[zFormat]` | Angular DatePipe pattern used to render the selected date(s), e.g. 'MMM dd, y' | `string` | `'MMMM d, yyyy'` |
+| `[zMode]` | Selection mode. `single` closes the popover on pick, `range` once both ends are set, `multiple` keeps it open | `'single' \| 'multiple' \| 'range'` | `'single'` |
+| `[zCaptionLayout]` | How the calendar renders its month/year caption | `'label' \| 'dropdown' \| 'dropdown-months' \| 'dropdown-years'` | `'label'` |
+| `[zNumberOfMonths]` | How many months the calendar renders side by side | `number` | `1` |
+| `[zDisabledDates]` | Individual days that cannot be selected, on top of the minDate/maxDate range | `Date[]` | `[]` |
+| `[zShowOutsideDays]` | Whether the days of the surrounding months are visible | `boolean` | `true` |
+| `[zAlign]` | Which edge of the popover lines up with the trigger | `'start' \| 'center' \| 'end'` | `'start'` |
+| `[minDate]` | Minimum selectable date. Also used to expand the year dropdown range | `Date \| null` | `null` |
+| `[maxDate]` | Maximum selectable date. Also used to expand the year dropdown range | `Date \| null` | `null` |
+| `[disabled]` | Whether the date picker is disabled | `boolean` | `false` |
 | `(dateChange)` | Emitted whenever the selection changes, including when a range is cleared | `EventEmitter<CalendarValue>` | `-` |
 
 ---

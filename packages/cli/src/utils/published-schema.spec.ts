@@ -3,12 +3,13 @@ import { existsSync, readFileSync } from 'node:fs';
 import * as path from 'node:path';
 
 /**
- * O JSON Schema publicado é o que faz o editor de quem usa completar e validar
- * o `components.json`. Ele é escrito à mão, então nada impede que um campo novo
- * entre no zod e não ali — e um schema incompleto é pior do que nenhum: marca
- * como erro um arquivo correto, porque `additionalProperties` é false.
+ * The published JSON Schema is what makes a user's editor complete and validate
+ * `components.json`. It is written by hand, so nothing stops a new field from
+ * landing in the zod schema and not there — and an incomplete schema is worse
+ * than none: it flags a correct file as an error, because `additionalProperties`
+ * is false.
  *
- * Roda a partir do repositório; no pacote publicado não há o que comparar.
+ * Runs from the repository; in the published package there is nothing to compare.
  */
 describe('the published components.json schema', () => {
   const SCHEMA = path.resolve(__dirname, '../../../../apps/web/public/schema.json');
@@ -19,8 +20,8 @@ describe('the published components.json schema', () => {
       properties: Record<string, { properties?: Record<string, unknown> }>;
     };
 
-    // `$schema` e `registryUrl` não estão no default: o primeiro é escrito pelo
-    // init, o segundo só existe em quem aponta para outro registry.
+    // `$schema` and `registryUrl` are not in the default: the first is written by
+    // init, the second only exists for someone pointing at another registry.
     const written = [...Object.keys(DEFAULT_CONFIG), '$schema', 'registryUrl'].sort();
 
     expect(Object.keys(schema.properties).sort()).toEqual(written);

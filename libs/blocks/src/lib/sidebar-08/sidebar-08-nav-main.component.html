@@ -1,0 +1,30 @@
+<div z-sidebar-group>
+  <div z-sidebar-group-label>Platform</div>
+
+  <ul z-sidebar-menu>
+    @for (item of items(); track item.title) {
+      <li z-sidebar-menu-item z-collapsible class="group/collapsible" [zOpen]="!!item.isActive">
+        <button z-collapsible-trigger z-sidebar-menu-button [zTooltip]="item.title">
+          <ng-icon [name]="item.icon" />
+          <span>{{ item.title }}</span>
+          <ng-icon
+            name="lucideChevronRight"
+            class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+          />
+        </button>
+
+        <z-collapsible-content>
+          <ul z-sidebar-menu-sub>
+            @for (subItem of item.items; track subItem.title) {
+              <li z-sidebar-menu-sub-item>
+                <a z-sidebar-menu-sub-button [href]="subItem.url">
+                  <span>{{ subItem.title }}</span>
+                </a>
+              </li>
+            }
+          </ul>
+        </z-collapsible-content>
+      </li>
+    }
+  </ul>
+</div>

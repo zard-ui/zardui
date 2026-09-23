@@ -8,7 +8,6 @@ import { CalloutComponent } from '@doc/domain/components/callout/callout.compone
 
 @Component({
   selector: 'z-json-introduction-section',
-  standalone: true,
   imports: [CodeTabsComponent, CalloutComponent],
   template: `
     <div class="flex flex-col gap-6 sm:gap-8">

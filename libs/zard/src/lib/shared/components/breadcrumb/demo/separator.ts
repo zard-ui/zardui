@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideDot } from '@ng-icons/lucide';
@@ -27,6 +27,7 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
       </z-breadcrumb-item>
     </z-breadcrumb>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideDot })],
 })
 export class ZardDemoBreadcrumbSeparatorComponent {}

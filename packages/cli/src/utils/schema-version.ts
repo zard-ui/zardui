@@ -1,23 +1,24 @@
 import { SchemaVersionError } from '@cli/utils/errors.js';
 
 /**
- * A versão do FORMATO do registry que esta CLI entende.
+ * The registry FORMAT version this CLI understands.
  *
- * Não confundir com a versão do pacote, que o índice também publica: aquela diz
- * de que release o conteúdo saiu, esta diz que forma ele tem. Sem separá-las não
- * havia como o registry mudar de forma sem quebrar em silêncio quem já estava
- * instalado — a CLI leria `files` de um item com outro shape e erraria calada.
+ * Not to be confused with the package version, which the index also publishes:
+ * that one says which release the content came from, this one says what shape it
+ * has. Without separating them there was no way for the registry to change shape
+ * without silently breaking whoever was already installed — the CLI would read
+ * `files` from an item with a different shape and get it wrong without a word.
  *
- * Sobe quando a mudança quebra quem lê: campo removido, significado alterado,
- * item reorganizado. Campo novo e opcional não sobe nada.
+ * It goes up when the change breaks a reader: a field removed, a meaning
+ * altered, an item reorganized. A new optional field raises nothing.
  */
 export const SUPPORTED_SCHEMA_VERSION = 1;
 
 /**
- * Recusa um documento mais novo do que esta CLI sabe ler.
+ * Rejects a document newer than this CLI knows how to read.
  *
- * A ausência do campo é um registry anterior à existência dele, que por
- * definição é a versão 1.
+ * A missing field means a registry older than the field itself, which is version
+ * 1 by definition.
  */
 export function assertSupportedSchema(schemaVersion: number | undefined, source: string): void {
   const version = schemaVersion ?? 1;

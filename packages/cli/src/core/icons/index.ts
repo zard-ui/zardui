@@ -1,15 +1,15 @@
 /**
- * Ícones — o que os componentes desenham e como isso muda de família.
+ * Icons — what the components draw, and how that changes with the family.
  *
- * Tudo aqui opera sobre um catálogo: o par (famílias declaradas, tabela de
- * tradução). O catálogo local é a cópia embutida; o que vale em execução vem de
- * `<registry>/icons.json`. É essa indireção que faz "suportar material" ser
- * publicar uma coluna nova no registry, sem release da CLI e sem caçar `lucide`
- * pelo código.
+ * Everything here works off a catalog: the pair (declared families, translation
+ * table). The local catalog is the bundled copy; the one that counts at runtime
+ * comes from `<registry>/icons.json`. That indirection is what makes "support
+ * material" a matter of publishing one more column in the registry, with no CLI
+ * release and no hunting for `lucide` through the code.
  *
- *   `extractIcons`    lê de um fonte quais ícones ele usa (o registry publica isso)
- *   `retargetIcons`   reescreve um fonte de uma família para outra (a instalação usa)
- *   `iconPackagesFor` diz que pacotes o projeto precisa ter (o init usa)
+ *   `extractIcons`    reads which icons a source uses (the registry publishes this)
+ *   `retargetIcons`   rewrites a source from one family to another (install uses it)
+ *   `iconPackagesFor` says which packages the project needs (init uses it)
  */
 
 import {
@@ -30,51 +30,51 @@ export {
 } from './families.js';
 export { ICON_MAP } from './icon-map.js';
 
-/** Um ícone pelo que ele significa: `check`, `chevron-down`. */
+/** An icon by what it means: `check`, `chevron-down`. */
 export type IconToken = string;
 
 /**
- * As famílias declaradas e a tabela que traduz entre elas.
+ * The declared families and the table that translates between them.
  *
- * `icons` é indexado por token e depois por família — a mesma forma do
- * `icon-map.ts`, que é a cópia local deste mesmo dado.
+ * `icons` is keyed by token and then by family — the same shape as
+ * `icon-map.ts`, which is the local copy of this same data.
  */
 export interface IconCatalog {
   readonly families: Readonly<Record<string, IconFamilyInfo>>;
   readonly icons: Readonly<Record<string, Readonly<Record<string, string>>>>;
 }
 
-/** O catálogo embutido na CLI — vale quando o registry não responde. */
+/** The catalog bundled with the CLI — used when the registry does not answer. */
 export const LOCAL_ICON_CATALOG: IconCatalog = { families: ICON_FAMILIES, icons: ICON_MAP };
 
-/** Uma lista de ícones nas duas formas: como o código os escreve e como a tabela os chama. */
+/** A list of icons in both forms: as the code writes them, and as the table names them. */
 export interface IconList {
-  /** Os símbolos como aparecem no código (`lucideCheck`). */
+  /** The symbols as they appear in the code (`lucideCheck`). */
   readonly symbols: string[];
-  /** Os mesmos ícones pela chave neutra da tabela (`check`). */
+  /** The same icons under the table's neutral key (`check`). */
   readonly tokens: IconToken[];
 }
 
 /**
- * Os ícones de um componente, do jeito que o registry os publica.
+ * A component's icons, in the shape the registry publishes them.
  *
- * As duas listas são separadas porque servem a coisas diferentes: `symbols` e
- * `tokens` são o que o `add` grava no projeto — é deles que sai a dependência
- * do ng-icons —, enquanto `demos` são os ícones que só aparecem nos exemplos da
- * documentação. Um componente pode não desenhar ícone nenhum e ainda assim ter
- * demos cheios deles, e trocar de família precisa alcançar os dois.
+ * The two lists are separate because they serve different things: `symbols` and
+ * `tokens` are what `add` writes into the project — the ng-icons dependency
+ * comes from them — while `demos` are the icons that only appear in the
+ * documentation examples. A component can draw no icon at all and still have
+ * demos full of them, and switching family has to reach both.
  */
 export interface ComponentIcons extends IconList {
-  /** A família em que os arquivos publicados estão escritos. */
+  /** The family the published files are written in. */
   readonly family: IconFamily;
   readonly demos: IconList;
 }
 
 /**
- * Índice reverso símbolo → token, montado por catálogo e memorizado.
+ * Reverse symbol → token index, built per catalog and memoized.
  *
- * O catálogo remoto é um objeto só, buscado uma vez por execução, então a chave
- * fraca basta e o índice não é remontado a cada arquivo instalado.
+ * The remote catalog is a single object, fetched once per run, so a weak key is
+ * enough and the index is not rebuilt for every installed file.
  */
 const reverseIndexes = new WeakMap<IconCatalog, Map<string, Map<string, IconToken>>>();
 
@@ -110,7 +110,7 @@ export function iconFamily(family: IconFamily, catalog: IconCatalog = LOCAL_ICON
   return catalog.families[family];
 }
 
-/** Os pacotes npm que um projeto configurado com essa família precisa ter. */
+/** The npm packages a project configured with this family needs. */
 export function iconPackagesFor(family: IconFamily, catalog: IconCatalog = LOCAL_ICON_CATALOG): string[] {
   const info = iconFamily(family, catalog);
   return info ? [ICON_CORE_PACKAGE, info.package] : [ICON_CORE_PACKAGE];
@@ -132,15 +132,15 @@ export function symbolFor(
   return catalog.icons[token]?.[family];
 }
 
-/** Os tokens que ainda não têm símbolo declarado nessa família. */
+/** Tokens that have no symbol declared in this family yet. */
 export function missingTokensFor(family: IconFamily, catalog: IconCatalog = LOCAL_ICON_CATALOG): IconToken[] {
   return Object.keys(catalog.icons).filter(token => symbolFor(token, family, catalog) === undefined);
 }
 
 /**
- * `import { lucideCheck, lucideX } from '@ng-icons/lucide'` — em uma linha ou em
- * várias, com `type` na frente ou apelidado. O que interessa é o pacote (que dá
- * a família) e os nomes importados dele.
+ * `import { lucideCheck, lucideX } from '@ng-icons/lucide'` — on one line or
+ * several, with a leading `type` or aliased. What matters is the package (which
+ * gives the family) and the names imported from it.
  */
 const ICON_IMPORT = /import\s*(?:type\s+)?\{([^}]*)\}\s*from\s*['"]@ng-icons\/([a-z0-9-]+)['"]/g;
 
@@ -149,12 +149,12 @@ function familyByPackageSuffix(suffix: string, catalog: IconCatalog): IconFamily
 }
 
 /**
- * Os símbolos de ícone que um fonte importa.
+ * The icon symbols a source imports.
  *
- * Só o import conta. Um `name="lucideCheck"` solto no template não desenha nada
- * sem o `provideIcons` correspondente, então o import é ao mesmo tempo a lista
- * completa e a lista sem falsos positivos — `@ng-icons/core` (NgIcon,
- * provideIcons, IconName) fica de fora porque não é família nenhuma.
+ * Only the import counts. A stray `name="lucideCheck"` in a template draws
+ * nothing without the matching `provideIcons`, so the import is at once the
+ * complete list and the list without false positives — `@ng-icons/core`
+ * (NgIcon, provideIcons, IconName) is left out because it is not a family.
  */
 export function extractIcons(
   source: string,
@@ -167,7 +167,7 @@ export function extractIcons(
     if (familyByPackageSuffix(match[2] ?? '', catalog) !== family) continue;
 
     for (const specifier of (match[1] ?? '').split(',')) {
-      // `type Foo`, `Foo as Bar` — o símbolo do pacote é sempre o primeiro nome.
+      // `type Foo`, `Foo as Bar` — the package's symbol is always the first name.
       const name = specifier
         .trim()
         .replace(/^type\s+/, '')
@@ -180,7 +180,7 @@ export function extractIcons(
   return [...found].sort();
 }
 
-/** Os ícones de um conjunto de arquivos, nas duas formas. */
+/** The icons of a set of files, in both forms. */
 export function listIcons(
   sources: readonly string[],
   family: IconFamily = SOURCE_ICON_FAMILY,
@@ -203,12 +203,12 @@ export function listIcons(
 }
 
 /**
- * O mapeamento de ícones de um componente, pronto para ir ao registry.
+ * A component's icon mapping, ready for the registry.
  *
- * Sai preenchido mesmo quando não há ícone nenhum: o campo estar sempre presente
- * é o que distingue "este componente não desenha ícones" de "este registry foi
- * publicado antes do mapeamento existir", e quem lê não precisa adivinhar qual
- * dos dois é.
+ * It comes back filled in even when there is no icon at all: the field always
+ * being present is what tells "this component draws no icons" apart from "this
+ * registry was published before the mapping existed", so a reader never has to
+ * guess which of the two it is.
  */
 export function collectIcons(
   files: readonly string[],
@@ -225,21 +225,21 @@ export function collectIcons(
 
 export interface RetargetResult {
   readonly content: string;
-  /** Símbolos que a família de destino não declara — ficaram como estavam. */
+  /** Symbols the target family does not declare — left untouched. */
   readonly missing: string[];
 }
 
 /**
- * Reescreve um fonte de uma família de ícones para outra.
+ * Rewrites a source from one icon family to another.
  *
- * São duas trocas: o pacote de onde os símbolos vêm e cada símbolo em si. O
- * símbolo é substituído em qualquer lugar em que apareça — o import, o
- * `provideIcons({ lucideCheck })` e o `name="lucideCheck"` do template são a
- * mesma palavra, e o shorthand do objeto continua válido depois da troca.
+ * Two swaps: the package the symbols come from, and each symbol itself. A symbol
+ * is replaced wherever it appears — the import, the `provideIcons({ lucideCheck })`
+ * and the template's `name="lucideCheck"` are the same word, and the object
+ * shorthand stays valid after the swap.
  *
- * Um símbolo sem equivalente na família de destino não é inventado: fica como
- * está e sai em `missing`, para quem chamou avisar em vez de gravar um import
- * que não resolve.
+ * A symbol with no equivalent in the target family is not invented: it stays as
+ * it is and comes back in `missing`, so the caller can warn instead of writing
+ * an import that does not resolve.
  */
 export function retargetIcons(
   source: string,
@@ -269,11 +269,11 @@ export function retargetIcons(
 }
 
 /**
- * A parte mecânica da troca, separada de quem decide o quê trocar.
+ * The mechanical half of the swap, separated from whatever decides what to swap.
  *
- * Fica exposta porque é onde os erros de reescrita moram — a substituição por
- * palavra inteira e a ordem da alternância — e porque testá-la não depende de
- * existir mais de uma família declarada.
+ * It is exported because this is where rewriting bugs live — whole-word
+ * replacement and the order of the alternation — and because testing it does
+ * not require more than one declared family.
  */
 export function rewriteIcons(
   source: string,
@@ -283,9 +283,9 @@ export function rewriteIcons(
 ): string {
   if (replacements.size === 0) return source;
 
-  // A alternância é testada na ordem escrita, então os nomes longos vêm antes:
-  // com `lucideClock` na frente, `lucideClock2` seria examinado a partir do
-  // prefixo, e é o `\b` do fim que decide — mais barato não depender disso.
+  // The alternation is tried in written order, so the long names come first:
+  // with `lucideClock` in front, `lucideClock2` would be matched from its prefix
+  // and only the trailing `\b` would save it — cheaper not to rely on that.
   const pattern = new RegExp(`\\b(${[...replacements.keys()].sort((a, b) => b.length - a.length).join('|')})\\b`, 'g');
 
   return source

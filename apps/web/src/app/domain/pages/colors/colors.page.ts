@@ -10,7 +10,6 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 
 @Component({
   selector: 'z-colors',
-  standalone: true,
   imports: [ZardButtonComponent, ColorPaletteComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './colors.page.html',

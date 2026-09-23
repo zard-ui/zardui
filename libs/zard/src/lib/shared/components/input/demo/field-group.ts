@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
@@ -24,5 +24,6 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputFieldGroupComponent {}

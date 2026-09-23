@@ -4,7 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-checkboxes-demo',
+  selector: 'z-demo-dropdown-checkboxes',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">View options</button>
@@ -16,7 +16,7 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
     </z-dropdown-menu-content>
   `,
 })
-export class ZardDropdownCheckboxesDemoComponent {
+export class ZardDemoDropdownCheckboxesComponent {
   statusBar = true;
   activityBar = false;
   panel = false;

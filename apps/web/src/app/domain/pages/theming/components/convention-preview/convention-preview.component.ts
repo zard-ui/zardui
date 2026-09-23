@@ -27,7 +27,6 @@ const PREVIEWED_PAIRS = ['primary', 'secondary', 'muted', 'accent', 'destructive
 
 @Component({
   selector: 'z-convention-preview',
-  standalone: true,
   templateUrl: './convention-preview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

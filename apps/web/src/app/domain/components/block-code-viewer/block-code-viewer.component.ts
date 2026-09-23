@@ -1,36 +1,34 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  input,
-  signal,
-  untracked,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal, untracked } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideClipboard, lucideFile, lucideFolder } from '@ng-icons/lucide';
+import { lucideCheck, lucideClipboard } from '@ng-icons/lucide';
 
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardTreeComponent } from '@zard/components/tree/tree.component';
-import type { TreeNode } from '@zard/components/tree/tree.types';
+import { ZardSidebarImports } from '@zard/components/sidebar/sidebar.imports';
+import { ZardTooltipDirective } from '@zard/components/tooltip/tooltip';
 
+import { BlockFileTreeComponent, type BlockFileNode } from './block-file-tree.component';
 import { SimpleCodeHighlightComponent } from '../../../shared/components/simple-code-highlight/simple-code-highlight.component';
 import type { BlockFile } from '../block-container/block-container.component';
 
+/** A tree node that also remembers which file it stands for. */
+interface BlockFileTreeNode extends BlockFileNode {
+  file?: BlockFile;
+  children?: BlockFileTreeNode[];
+}
+
 @Component({
   selector: 'z-block-code-viewer',
-  imports: [SimpleCodeHighlightComponent, ZardTreeComponent, NgIcon, ZardButtonComponent],
+  imports: [...ZardSidebarImports, BlockFileTreeComponent, ZardTooltipDirective, SimpleCodeHighlightComponent, NgIcon],
   templateUrl: './block-code-viewer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ lucideClipboard, lucideFile, lucideFolder })],
+  viewProviders: [provideIcons({ lucideCheck, lucideClipboard })],
 })
 export class BlockCodeViewerComponent {
   readonly files = input.required<BlockFile[]>();
 
   protected readonly selectedFile = signal<BlockFile | null>(null);
+  protected readonly copied = signal(false);
+  private copiedTimeout?: ReturnType<typeof setTimeout>;
 
   protected readonly fileTree = computed(() => this.buildFileTree(this.files()));
 
@@ -43,35 +41,26 @@ export class BlockCodeViewerComponent {
     });
   }
 
-  private buildFileTree(files: BlockFile[]): TreeNode<BlockFile>[] {
-    const root: TreeNode<BlockFile> = {
-      key: '',
-      label: 'root',
-      children: [],
-    };
+  private buildFileTree(files: BlockFile[]): BlockFileTreeNode[] {
+    const root: BlockFileTreeNode = { name: 'root', path: '', children: [] };
 
     for (const file of files) {
       const parts = file.path.split('/');
       let currentNode = root;
 
-      for (let i = 0; i < parts.length; i++) {
-        const part = parts[i];
-        const isFile = i === parts.length - 1;
-        const currentPath = parts.slice(0, i + 1).join('/');
+      for (let index = 0; index < parts.length; index++) {
+        const part = parts[index];
+        const isFile = index === parts.length - 1;
+        const currentPath = parts.slice(0, index + 1).join('/');
 
-        if (!currentNode.children) {
-          currentNode.children = [];
-        }
-
-        let childNode = currentNode.children.find(child => child.key === currentPath);
+        currentNode.children ??= [];
+        let childNode = currentNode.children.find(child => child.path === currentPath);
 
         if (!childNode) {
           childNode = {
-            key: currentPath,
-            label: part,
-            icon: isFile ? 'lucideFile' : 'lucideFolder',
-            leaf: isFile,
-            data: isFile ? file : undefined,
+            name: part,
+            path: currentPath,
+            file: isFile ? file : undefined,
             children: isFile ? undefined : [],
           };
           currentNode.children.push(childNode);
@@ -87,32 +76,35 @@ export class BlockCodeViewerComponent {
     return root.children ?? [];
   }
 
-  private sortChildren(node: TreeNode<BlockFile>): void {
-    if (node.children?.length) {
-      node.children.sort((a, b) => {
-        if (a.leaf !== b.leaf) {
-          return a.leaf ? 1 : -1;
-        }
-        return a.label.localeCompare(b.label);
-      });
-      for (const child of node.children) {
-        this.sortChildren(child);
+  private sortChildren(node: BlockFileTreeNode): void {
+    if (!node.children?.length) {
+      return;
+    }
+
+    node.children.sort((a, b) => {
+      const aIsFile = !a.children;
+      const bIsFile = !b.children;
+      if (aIsFile !== bIsFile) {
+        return aIsFile ? 1 : -1;
       }
+      return a.name.localeCompare(b.name);
+    });
+
+    for (const child of node.children) {
+      this.sortChildren(child);
     }
   }
 
-  protected handleNodeClick(node: TreeNode<BlockFile>): void {
-    if (node.leaf && node.data) {
-      this.selectedFile.set(node.data);
+  protected selectFile(node: BlockFileNode): void {
+    const file = (node as BlockFileTreeNode).file;
+    if (file) {
+      this.selectedFile.set(file);
     }
   }
 
   protected getFileIcon(fileName: string): string {
-    if (fileName.includes('.component.ts')) {
-      return '/icons/angular-file.svg';
-    }
-
     if (
+      fileName.includes('.component.ts') ||
       fileName.includes('.service.ts') ||
       fileName.includes('.module.ts') ||
       fileName.includes('.directive.ts') ||
@@ -121,12 +113,7 @@ export class BlockCodeViewerComponent {
       return '/icons/angular-file.svg';
     }
 
-    const ext = fileName.split('.').pop()?.toLowerCase();
-    switch (ext) {
-      case 'ts':
-        return '/icons/typescript.svg';
-      case 'js':
-        return '/icons/typescript.svg';
+    switch (fileName.split('.').pop()?.toLowerCase()) {
       case 'json':
         return '/icons/json.svg';
       case 'html':
@@ -138,8 +125,17 @@ export class BlockCodeViewerComponent {
 
   protected copyToClipboard(): void {
     const file = this.selectedFile();
-    if (file) {
-      navigator.clipboard.writeText(file.content).catch(() => undefined);
+    if (!file) {
+      return;
     }
+
+    navigator.clipboard
+      .writeText(file.content)
+      .then(() => {
+        this.copied.set(true);
+        clearTimeout(this.copiedTimeout);
+        this.copiedTimeout = setTimeout(() => this.copied.set(false), 2000);
+      })
+      .catch(() => undefined);
   }
 }

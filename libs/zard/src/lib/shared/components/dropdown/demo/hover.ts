@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-dropdown-hover-demo',
+  selector: 'z-demo-dropdown-hover',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" zTrigger="hover" z-dropdown [zDropdownMenu]="menu">Open</button>
@@ -55,8 +55,9 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDropdownHoverDemoComponent {
+export class ZardDemoDropdownHoverComponent {
   onProfile() {
     console.log('Profile clicked');
   }

@@ -9,6 +9,7 @@ import {
   input,
   signal,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
@@ -55,10 +56,12 @@ import { inputOtpSlotVariants } from './input-otp.variants';
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.data-slot]': '"input-otp-slot"',
     class: 'relative',
   },
+  exportAs: 'zInputOtpSlot',
 })
 export class ZardInputOtpSlotComponent {
   readonly slotInputRef = viewChild.required<ElementRef<HTMLInputElement>>('slotInput');

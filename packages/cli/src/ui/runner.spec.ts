@@ -56,10 +56,10 @@ describe('log sink', () => {
 });
 
 /**
- * Achar o terminal é o que decide entre a tela cheia e a saída em texto — e foi
- * exatamente aqui que `npx zard-cli init` degradava no macOS e no Linux: o npm
- * executa o binário por um shell, o stdin chega como pipe, e exigir que ele
- * fosse um TTY descartava um terminal que estava logo ali.
+ * Finding the terminal is what decides between the full screen and text output —
+ * and this is exactly where `npx zard-cli init` degraded on macOS and Linux: npm
+ * runs the binary through a shell, stdin arrives as a pipe, and requiring it to
+ * be a TTY threw away a terminal that was right there.
  */
 describe('resolveTerminalStreams', () => {
   const fakeStream = (isTTY: boolean): NodeJS.ReadStream & NodeJS.WriteStream =>

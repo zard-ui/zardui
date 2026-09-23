@@ -15,7 +15,7 @@ import { NgIcon, type IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import type { ZardCommandOptionGroupComponent } from '@/shared/components/command/command-option-group.component';
-import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { ZardCommand } from '@/shared/components/command/command.tokens';
 import {
   commandItemVariants,
   commandShortcutVariants,
@@ -58,7 +58,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 })
 export class ZardCommandOptionComponent {
   private readonly elementRef = inject(ElementRef);
-  private readonly parentCommandComponent = inject(ZardCommandComponent, { optional: true });
+  private readonly parentCommandComponent = inject(ZardCommand, { optional: true });
 
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
@@ -68,7 +68,7 @@ export class ZardCommandOptionComponent {
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly variant = input<ZardCommandItemVariants>('default');
   readonly class = input<ClassValue>('');
-  readonly parentCommand = input<ZardCommandComponent | null>(null);
+  readonly parentCommand = input<ZardCommand | null>(null);
   readonly commandGroup = input<ZardCommandOptionGroupComponent | null>(null);
 
   readonly isSelected = signal(false);
@@ -124,11 +124,17 @@ export class ZardCommandOptionComponent {
   }
 
   onMouseEnter() {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
     const parent = this.commandComponent;
-    if (!parent) return;
+    if (!parent) {
+      return;
+    }
     const idx = parent.filteredOptions().indexOf(this);
-    if (idx >= 0) parent.setActiveByIndex(idx);
+    if (idx >= 0) {
+      parent.setActiveByIndex(idx);
+    }
   }
 
   setSelected(selected: boolean) {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardKbdGroupComponent } from '@/shared/components/kbd/kbd-group.component';
 import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
@@ -21,5 +21,6 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
       </z-kbd-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoKbdDefaultComponent {}

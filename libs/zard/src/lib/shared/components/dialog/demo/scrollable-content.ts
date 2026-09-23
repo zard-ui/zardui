@@ -9,7 +9,7 @@ const PARAGRAPHS = Array.from({ length: 10 }).map(
 );
 
 @Component({
-  selector: 'zard-demo-dialog-scrollable-content-content',
+  selector: 'z-demo-dialog-scrollable-content-content',
   template: `
     <div class="no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto px-4">
       @for (paragraph of paragraphs; track $index) {
@@ -24,7 +24,7 @@ export class ZardDemoDialogScrollableContentInnerComponent {
 }
 
 @Component({
-  selector: 'zard-demo-dialog-scrollable-content',
+  selector: 'z-demo-dialog-scrollable-content',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="open()">Scrollable Content</button>

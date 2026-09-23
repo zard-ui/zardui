@@ -6,7 +6,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-default',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button>Button</button>
+    <button type="button" z-button>Button</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

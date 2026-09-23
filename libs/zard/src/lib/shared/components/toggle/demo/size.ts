@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardToggleComponent } from '../toggle.component';
 
@@ -12,5 +12,6 @@ import { ZardToggleComponent } from '../toggle.component';
       <z-toggle zAriaLabel="Toggle large" zSize="lg" zType="outline">Large</z-toggle>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToggleSizeComponent {}

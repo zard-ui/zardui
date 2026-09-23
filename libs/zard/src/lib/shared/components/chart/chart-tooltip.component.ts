@@ -23,7 +23,7 @@ import type { ZardChartTooltipIndicator, ZardChartTooltipTrigger } from './chart
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { class: 'hidden' },
+  host: { 'data-slot': 'chart-tooltip', class: 'hidden' },
   exportAs: 'zChartTooltip',
 })
 export class ZardChartTooltipComponent {

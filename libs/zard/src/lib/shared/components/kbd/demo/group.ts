@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardKbdGroupComponent } from '../kbd-group.component';
 import { ZardKbdComponent } from '../kbd.component';
@@ -14,5 +14,6 @@ import { ZardKbdComponent } from '../kbd.component';
       to open command palette
     </z-kbd-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoKbdGroupComponent {}

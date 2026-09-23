@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowRight } from '@ng-icons/lucide';
@@ -39,6 +39,7 @@ import { ZardSelectComponent } from '@/shared/components/select/select.component
       </z-button-group>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideArrowRight })],
 })
 export class ZardDemoButtonGroupSelectComponent {

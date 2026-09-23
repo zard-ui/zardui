@@ -16,6 +16,18 @@ function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+/**
+ * Whether a body is a web page rather than a payload.
+ *
+ * A server that answers a registry URL with its own site sends an HTML document,
+ * and a document always opens with one of these — so the test is on how the body
+ * starts, never on what it happens to contain.
+ */
+function looksLikeHtml(text: string): boolean {
+  const start = text.trimStart().slice(0, 100).toLowerCase();
+  return start.startsWith('<!doctype') || start.startsWith('<html');
+}
+
 export async function fetchJson<T>(url: string, options?: FetchOptions): Promise<T> {
   const { timeout = DEFAULT_TIMEOUT, retries = DEFAULT_RETRIES, backoffBase = DEFAULT_BACKOFF_BASE } = options ?? {};
 
@@ -45,14 +57,21 @@ export async function fetchJson<T>(url: string, options?: FetchOptions): Promise
 
       const text = await response.text();
 
-      if (!text || text.includes('<!DOCTYPE') || text.includes('<html')) {
-        throw new NetworkError('Received HTML instead of JSON from registry', url);
+      if (!text) {
+        throw new NetworkError('Empty response from registry', url);
       }
 
       try {
         return JSON.parse(text) as T;
       } catch {
-        throw new NetworkError('Invalid JSON response from registry', url);
+        // The HTML check runs only once the parse has already failed. Looking for
+        // the markers anywhere in the body rejected any valid payload that merely
+        // mentioned them — a code comment containing `<html>` was enough to make a
+        // component permanently uninstallable.
+        throw new NetworkError(
+          looksLikeHtml(text) ? 'Received HTML instead of JSON from registry' : 'Invalid JSON response from registry',
+          url,
+        );
       }
     } catch (error) {
       if (error instanceof NetworkError) {

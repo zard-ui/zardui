@@ -1,5 +1,6 @@
 import { bundlerFor, isLibraryKind } from '@cli/commands/init/project-kind.js';
 import { iconPackagesFor } from '@cli/core/icons/index.js';
+import { pinAllForAngular } from '@cli/utils/angular-compat.js';
 import { type Config } from '@cli/utils/config.js';
 import { getProjectInfo, type ProjectInfo } from '@cli/utils/get-project-info.js';
 import { iconCatalog } from '@cli/utils/icon-catalog.js';
@@ -9,25 +10,31 @@ import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/pa
 export async function installDependencies(cwd: string, config: Config, projectInfo?: ProjectInfo): Promise<void> {
   const info = projectInfo || (await getProjectInfo(cwd));
 
-  const cdkVersion = getCdkVersion(info.angularVersion);
-  // O pacote de ícones sai da família escolhida em `components.json`, e não de
-  // uma lista fixa: é o que faz `"icons"` valer alguma coisa no dia em que
-  // houver mais de uma família.
-  const deps = [
-    cdkVersion,
-    'class-variance-authority',
-    'clsx',
-    'tailwind-merge',
-    ...iconPackagesFor(config.icons, iconCatalog()),
-  ];
+  // The icon package comes from the family chosen in `components.json`, not from
+  // a fixed list: that is what makes `"icons"` mean something the day there is
+  // more than one family.
+  //
+  // Pinned against the project's Angular: the CDK and ng-icons both ship one
+  // release per Angular major and peer on `>=` it, so `latest` is the wrong
+  // answer for anyone not already on the newest Angular.
+  const deps = pinAllForAngular(
+    [
+      '@angular/cdk',
+      'class-variance-authority',
+      'clsx',
+      'tailwind-merge',
+      ...iconPackagesFor(config.icons, iconCatalog()),
+    ],
+    info.angularVersion,
+  );
   const devDeps = tailwindPackages(config.projectType);
 
   if (info.hasTailwind) {
     logger.info('Tailwind CSS is already installed. Only the missing pieces will be added.');
   }
 
-  // Cada lote que sobra vazio é uma invocação inteira do gerenciador poupada —
-  // o caso comum de um `init` repetido é justamente esse, nada a instalar.
+  // Every batch that comes back empty is a whole manager invocation saved — and
+  // that is exactly the common case for a repeated `init`: nothing to install.
   const [missingDeps, missingDevDeps] = await Promise.all([
     filterInstalledPackages(deps, cwd),
     filterInstalledPackages(devDeps, cwd),
@@ -43,16 +50,16 @@ export async function installDependencies(cwd: string, config: Config, projectIn
 }
 
 /**
- * O que o Tailwind precisa para rodar naquele tipo de projeto.
+ * What Tailwind needs to run in that kind of project.
  *
- * A lista é sempre a completa e o filtro de instalados decide o que sobra:
- * checar só a presença do `tailwindcss` deixava passar o caso de quem já o
- * tinha instalado mas sem o adaptador do bundler, e aí o build não gerava
- * utilitário nenhum.
+ * The list is always the complete one and the installed-filter decides what is
+ * left: checking only for `tailwindcss` missed the case of someone who had it
+ * installed but not the bundler adapter, and then the build emitted no
+ * utilities at all.
  *
- * Numa biblioteca não há bundler a configurar — quem compila o CSS é a
- * aplicação que a consome —, mas os pacotes ficam porque o tema que o init
- * escreve ali os declara.
+ * A library has no bundler to configure — the consuming application compiles
+ * the CSS — but the packages stay because the theme init writes there declares
+ * them.
  */
 function tailwindPackages(kind: Config['projectType']): string[] {
   const shared = ['tailwindcss', 'tailwindcss-animate'];
@@ -62,14 +69,4 @@ function tailwindPackages(kind: Config['projectType']): string[] {
   return bundlerFor(kind) === 'vite'
     ? [...shared, '@tailwindcss/vite']
     : [...shared, '@tailwindcss/postcss', 'postcss'];
-}
-
-function getCdkVersion(angularVersion?: string | null): string {
-  if (!angularVersion) {
-    return '@angular/cdk';
-  }
-
-  const majorVersion = Number.parseInt(angularVersion.split('.')[0]);
-
-  return `@angular/cdk@^${majorVersion}`;
 }

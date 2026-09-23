@@ -1,0 +1,48 @@
+<div class="[--header-height:calc(--spacing(14))]">
+  <z-sidebar-provider class="flex-col">
+    <lib-sidebar-16-site-header />
+
+    <div class="flex flex-1">
+      <z-sidebar class="top-(--header-height) h-[calc(100svh-var(--header-height))]!">
+        <div z-sidebar-header>
+          <ul z-sidebar-menu>
+            <li z-sidebar-menu-item>
+              <a z-sidebar-menu-button zSize="lg" href="#">
+                <div
+                  class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
+                >
+                  <ng-icon name="lucideCommand" class="size-4" />
+                </div>
+                <div class="grid flex-1 text-left text-sm leading-tight">
+                  <span class="truncate font-medium">Acme Inc</span>
+                  <span class="truncate text-xs">Enterprise</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <z-sidebar-content>
+          <lib-sidebar-16-nav-main [items]="navMain" />
+          <lib-sidebar-16-nav-projects [projects]="projects" />
+          <lib-sidebar-16-nav-secondary [items]="navSecondary" class="mt-auto" />
+        </z-sidebar-content>
+
+        <div z-sidebar-footer>
+          <lib-sidebar-16-nav-user [user]="user" />
+        </div>
+      </z-sidebar>
+
+      <main z-sidebar-inset>
+        <div class="flex flex-1 flex-col gap-4 p-4">
+          <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+            <div class="bg-muted/50 aspect-video rounded-xl"></div>
+            <div class="bg-muted/50 aspect-video rounded-xl"></div>
+            <div class="bg-muted/50 aspect-video rounded-xl"></div>
+          </div>
+          <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div>
+        </div>
+      </main>
+    </div>
+  </z-sidebar-provider>
+</div>

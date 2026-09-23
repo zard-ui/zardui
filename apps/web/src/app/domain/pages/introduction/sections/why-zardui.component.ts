@@ -17,7 +17,7 @@ interface FeatureCard {
 }
 
 @Component({
-  selector: 'why-zardui-section',
+  selector: 'z-introduction-why-zardui-section',
   imports: [ZardCardComponent, NgIcon, ZardCardHeaderComponent, ZardCardTitleComponent, ZardCardContentComponent],
   template: `
     <section class="flex flex-col gap-8">
@@ -57,7 +57,7 @@ interface FeatureCard {
     }),
   ],
 })
-export class WhyZardUISection {
+export class IntroductionWhyZardUISectionComponent {
   readonly cards: FeatureCard[] = [
     {
       title: 'Beautiful & Practical',

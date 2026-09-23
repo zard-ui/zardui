@@ -1,0 +1,63 @@
+<z-sidebar-provider>
+  <z-sidebar zVariant="inset">
+    <div z-sidebar-header>
+      <ul z-sidebar-menu>
+        <li z-sidebar-menu-item>
+          <a z-sidebar-menu-button zSize="lg" href="#">
+            <div
+              class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
+            >
+              <ng-icon name="lucideCommand" class="size-4" />
+            </div>
+            <div class="grid flex-1 text-left text-sm leading-tight">
+              <span class="truncate font-medium">Acme Inc</span>
+              <span class="truncate text-xs">Enterprise</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <z-sidebar-content>
+      <lib-sidebar-08-nav-main [items]="navMain" />
+      <lib-sidebar-08-nav-projects [projects]="projects" />
+      <lib-sidebar-08-nav-secondary [items]="navSecondary" class="mt-auto" />
+    </z-sidebar-content>
+
+    <div z-sidebar-footer>
+      <lib-sidebar-08-nav-user [user]="user" />
+    </div>
+  </z-sidebar>
+
+  <main z-sidebar-inset>
+    <header class="flex h-16 shrink-0 items-center gap-2">
+      <div class="flex items-center gap-2 px-4">
+        <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
+
+        <z-separator
+          zOrientation="vertical"
+          class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+        />
+
+        <z-breadcrumb>
+          <z-breadcrumb-item class="hidden md:block">
+            <a z-breadcrumb-link href="#">Build Your Application</a>
+          </z-breadcrumb-item>
+          <z-breadcrumb-separator class="hidden md:block" />
+          <z-breadcrumb-item>
+            <span z-breadcrumb-page>Data Fetching</span>
+          </z-breadcrumb-item>
+        </z-breadcrumb>
+      </div>
+    </header>
+
+    <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
+      <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+        <div class="bg-muted/50 aspect-video rounded-xl"></div>
+        <div class="bg-muted/50 aspect-video rounded-xl"></div>
+        <div class="bg-muted/50 aspect-video rounded-xl"></div>
+      </div>
+      <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div>
+    </div>
+  </main>
+</z-sidebar-provider>

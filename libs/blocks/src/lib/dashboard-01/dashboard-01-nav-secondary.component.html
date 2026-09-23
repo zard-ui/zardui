@@ -1,0 +1,14 @@
+<div z-sidebar-group [class]="class()">
+  <div z-sidebar-group-content>
+    <ul z-sidebar-menu>
+      @for (item of items(); track item.title) {
+        <li z-sidebar-menu-item>
+          <a z-sidebar-menu-button [href]="item.url">
+            <ng-icon [name]="item.icon" />
+            <span>{{ item.title }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+</div>

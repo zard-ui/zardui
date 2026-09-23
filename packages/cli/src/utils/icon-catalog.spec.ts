@@ -19,8 +19,8 @@ describe('the icon catalogue', () => {
   });
 
   /**
-   * O ponto inteiro do catálogo remoto: uma família publicada hoje vale para uma
-   * CLI compilada ontem.
+   * The entire point of the remote catalog: a family published today works with a
+   * CLI compiled yesterday.
    */
   it('takes the families the registry publishes, including ones this build never heard of', async () => {
     fetchJson.mockResolvedValue({
@@ -44,11 +44,11 @@ describe('the icon catalogue', () => {
   });
 
   /**
-   * O caso real, e o que quebrou de verdade quando foi testado contra produção:
-   * um registry servido por uma SPA responde 200 com HTML para um arquivo que
-   * não existe, e o cliente HTTP levanta NetworkError. Propagar isso derrubaria
-   * o `add` em todo registry que ainda não publicou o catálogo — que são todos,
-   * até o primeiro deploy.
+   * The real case, and what actually broke when this was tried against
+   * production: a registry served by an SPA answers 200 with HTML for a file that
+   * does not exist, and the HTTP client raises NetworkError. Propagating that
+   * would take `add` down on every registry that has not published the catalog
+   * yet — which is all of them, until the first deploy.
    */
   it('falls back when the registry answers with the HTML of its own site', async () => {
     fetchJson.mockRejectedValue(
@@ -84,7 +84,7 @@ describe('assertIconFamily', () => {
 
   /**
    * Antes, um typo aqui produzia "Invalid configuration file: components.json" —
-   * sem o campo, sem os valores aceitos, com o arquivo inteiro sob suspeita.
+   * no field named, no accepted values, and the whole file under suspicion.
    */
   it('names the field and lists what is accepted', () => {
     expect(() => assertIconFamily('materia', LOCAL_ICON_CATALOG)).toThrow(

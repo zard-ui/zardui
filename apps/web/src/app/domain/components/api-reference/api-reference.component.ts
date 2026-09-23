@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ApiSection } from './api-reference.types';
 
@@ -8,7 +8,7 @@ import type { ApiSection } from './api-reference.types';
   encapsulation: ViewEncapsulation.None,
   template: `
     <div>
-      @for (section of sections(); track section.selector) {
+      @for (section of sectionsWithGroups(); track section.selector) {
         <p class="text-muted-foreground api-component flex gap-2 text-base leading-7">
           <span class="component-selector">{{ section.selector }}</span>
           <span class="component-badge component-badge--component">Component</span>
@@ -17,56 +17,75 @@ import type { ApiSection } from './api-reference.types';
           {{ section.description }}
         </p>
 
-        <div
-          class="api-table-wrapper--component my-4 overflow-auto rounded-md border [&>table]:overflow-hidden [&>table]:rounded-md"
-        >
-          <table class="api-table--component w-full caption-bottom text-sm">
-            <thead class="[&_tr]:text-primary bg-neutral-100 dark:bg-neutral-800">
-              <tr class="hover:bg-muted/50 transition-colors">
-                <th class="h-12 px-4 text-left align-middle font-medium">Property</th>
-                <th class="h-12 px-4 text-left align-middle font-medium">Description</th>
-                <th class="h-12 px-4 text-left align-middle font-medium">Type</th>
-                <th class="h-12 px-4 text-left align-middle font-medium">Default</th>
-              </tr>
-            </thead>
-            <tbody class="bg-accent/20 [&_tr:last-child]:border-0">
-              @for (prop of section.props; track prop.name) {
-                <tr class="hover:bg-muted/50 border-b transition-colors">
-                  <td
-                    class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded-sm [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
-                  >
-                    <code class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono! text-sm font-semibold">
-                      {{ prop.name }}
-                    </code>
-                  </td>
-                  <td
-                    class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
-                  >
-                    {{ prop.description }}
-                  </td>
-                  <td
-                    class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded-sm [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
-                  >
-                    <code class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono! text-sm font-semibold">
-                      {{ prop.type }}
-                    </code>
-                  </td>
-                  <td
-                    class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded-sm [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
-                  >
-                    <code class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono! text-sm font-semibold">
-                      {{ prop.default }}
-                    </code>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+        @for (group of section.groups; track group.label) {
+          @if (group.entries.length) {
+            <div
+              class="api-table-wrapper--component my-4 overflow-auto rounded-md border [&>table]:overflow-hidden [&>table]:rounded-md"
+            >
+              <table class="api-table--component w-full caption-bottom text-sm">
+                <thead class="[&_tr]:text-primary bg-neutral-100 dark:bg-neutral-800">
+                  <tr class="hover:bg-muted/50 transition-colors">
+                    <th class="h-12 px-4 text-left align-middle font-medium">{{ group.label }}</th>
+                    <th class="h-12 px-4 text-left align-middle font-medium">Description</th>
+                    <th class="h-12 px-4 text-left align-middle font-medium">Type</th>
+                    <th class="h-12 px-4 text-left align-middle font-medium">Default</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-accent/20 [&_tr:last-child]:border-0">
+                  @for (entry of group.entries; track entry.name) {
+                    <tr class="hover:bg-muted/50 border-b transition-colors">
+                      <td
+                        class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded-sm [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
+                      >
+                        <code
+                          class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono! text-sm font-semibold"
+                        >
+                          {{ entry.name }}
+                        </code>
+                      </td>
+                      <td
+                        class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
+                      >
+                        {{ entry.description }}
+                      </td>
+                      <td
+                        class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded-sm [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
+                      >
+                        <code
+                          class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono! text-sm font-semibold"
+                        >
+                          {{ entry.type }}
+                        </code>
+                      </td>
+                      <td
+                        class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded-sm [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
+                      >
+                        <code
+                          class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono! text-sm font-semibold"
+                        >
+                          {{ entry.default }}
+                        </code>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        }
       }
     </div>
   `,
 })
 export class ApiReferenceComponent {
   readonly sections = input.required<ApiSection[]>();
+  protected readonly sectionsWithGroups = computed(() =>
+    this.sections().map(section => ({
+      ...section,
+      groups: [
+        { label: 'Property', entries: section.props },
+        { label: 'Output', entries: section.outputs ?? [] },
+      ],
+    })),
+  );
 }

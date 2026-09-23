@@ -6,7 +6,7 @@ import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 
 @Component({
-  selector: 'zard-demo-dialog-custom-close-content',
+  selector: 'z-demo-dialog-custom-close-content',
   imports: [ZardButtonComponent, ZardInputComponent],
   template: `
     <div class="flex items-center gap-2">
@@ -28,7 +28,7 @@ export class ZardDemoDialogCustomCloseContentComponent {
 }
 
 @Component({
-  selector: 'zard-demo-dialog-custom-close',
+  selector: 'z-demo-dialog-custom-close',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="open()">Share</button>

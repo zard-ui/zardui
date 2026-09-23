@@ -4,6 +4,6 @@ export const <%= constantName %>_API: ApiSection[] = [
   {
     selector: '<%= selector %>',
     description: '<%= descriptionEscaped %>',
-    props: [{ name: 'class', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

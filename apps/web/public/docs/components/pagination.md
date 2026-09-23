@@ -324,9 +324,9 @@ export const paginationVariants = cva('mx-auto flex w-full justify-center');
 ```
 
 ```angular-ts
-export * from '@/shared/components/pagination/pagination.component';
-export * from '@/shared/components/pagination/pagination.imports';
-export * from '@/shared/components/pagination/pagination.variants';
+export * from './pagination.component';
+export * from './pagination.imports';
+export * from './pagination.variants';
 ```
 
 ```angular-ts
@@ -458,6 +458,7 @@ Pagination component with previous, next, and numbered page navigation. Supports
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[zPageIndex]` | Current page, two-way bindable | `number` | `1` |
 | `[class]` | Custom CSS classes | `string` | `''` |
 | `[zAriaLabel]` | Use a unique, descriptive ARIA label for the element. | `string` | `Pagination` |
 | `[zContent]` | Custom pagination structure | `TemplateRef<void> \| undefined` | `undefined` |

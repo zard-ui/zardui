@@ -1,4 +1,4 @@
-import { Component, computed, signal, type TemplateRef, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, type TemplateRef, viewChild } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field';
 import {
@@ -7,7 +7,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-custom',
+  selector: 'z-demo-toggle-group-custom',
   imports: [ZardToggleGroupComponent, ...ZardFieldImports],
   template: `
     <div z-field class="w-full">
@@ -49,8 +49,9 @@ import {
       <span class="text-muted-foreground text-xs">Bold</span>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class ToggleGroupCustomComponent {
+export class ZardDemoToggleGroupCustomComponent {
   readonly light = viewChild<TemplateRef<void>>('light');
   readonly normal = viewChild<TemplateRef<void>>('normal');
   readonly medium = viewChild<TemplateRef<void>>('medium');

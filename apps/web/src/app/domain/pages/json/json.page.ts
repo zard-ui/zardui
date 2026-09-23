@@ -22,7 +22,6 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-json',
-  standalone: true,
   imports: [
     DocContentComponent,
     DocHeadingComponent,

@@ -18,7 +18,6 @@ npx zard-cli@latest add slider
 ### Manual
 
 ```angular-ts
-import { DOCUMENT } from '@angular/common';
 import {
   type AfterViewInit,
   booleanAttribute,
@@ -26,6 +25,7 @@ import {
   Component,
   computed,
   DestroyRef,
+  DOCUMENT,
   ElementRef,
   forwardRef,
   inject,
@@ -44,7 +44,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter, fromEvent, map, switchMap, takeUntil, tap } from 'rxjs';
 
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 import { clamp, convertValueToPercentage, roundToStep } from '@/shared/utils/number';
 
 import {
@@ -72,8 +73,9 @@ type OnChangeType = (value: number[]) => void;
     '[style.height]': '"100%"',
     '[attr.data-orientation]': 'orientation()',
   },
+  exportAs: 'zSliderTrack',
 })
-export class ZSliderTrackComponent {
+export class ZardSliderTrackComponent {
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly class = input<ClassValue>('');
 
@@ -103,8 +105,9 @@ export class ZSliderTrackComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  exportAs: 'zSliderRange',
 })
-export class ZSliderRangeComponent {
+export class ZardSliderRangeComponent {
   readonly percent = input<number[]>([0]);
 
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
@@ -157,8 +160,9 @@ export class ZSliderRangeComponent {
     '[style.left]': 'orientation() === "horizontal" ? "calc(" + percent() + "% + " + offset() + "px)" : null',
     '[style.bottom]': 'orientation() === "vertical" ? "calc(" + percent() + "% + " + offset() + "px)" : null',
   },
+  exportAs: 'zSliderThumb',
 })
-export class ZSliderThumbComponent {
+export class ZardSliderThumbComponent {
   readonly value = input(0);
   readonly min = input(0);
   readonly max = input(100);
@@ -184,7 +188,7 @@ export class ZSliderThumbComponent {
 
 @Component({
   selector: 'z-slider',
-  imports: [ZSliderTrackComponent, ZSliderRangeComponent, ZSliderThumbComponent],
+  imports: [ZardSliderTrackComponent, ZardSliderRangeComponent, ZardSliderThumbComponent],
   template: `
     <span
       data-slot="slider"
@@ -243,8 +247,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 
   readonly zSlideIndexChange = output<number[]>();
 
-  readonly thumbRefs = viewChildren(ZSliderThumbComponent);
-  readonly trackRef = viewChild.required(ZSliderTrackComponent);
+  readonly thumbRefs = viewChildren(ZardSliderThumbComponent);
+  readonly trackRef = viewChild.required(ZardSliderTrackComponent);
 
   protected readonly classes = computed(() => mergeClasses(sliderVariants(), this.class()));
 
@@ -535,7 +539,30 @@ export const sliderOrientationVariants = cva('absolute', {
 
 ```angular-ts
 export * from './slider.component';
+export * from './slider.imports';
 export * from './slider.variants';
+```
+
+```angular-ts
+/*
+ * The alias, not a relative path: the Angular compiler re-emits these imports from
+ * whichever module spreads the array, and it can only do that for a specifier the
+ * consumer can resolve too. A relative path here fails with NG3004.
+ */
+import {
+  ZardSliderComponent,
+  ZardSliderRangeComponent,
+  ZardSliderThumbComponent,
+  ZardSliderTrackComponent,
+} from '@/shared/components/slider/slider.component';
+
+/** Every part of the slider component, for a template that uses more than one. */
+export const ZardSliderImports = [
+  ZardSliderComponent,
+  ZardSliderTrackComponent,
+  ZardSliderRangeComponent,
+  ZardSliderThumbComponent,
+] as const;
 ```
 
 ## Usage
@@ -555,7 +582,7 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
 Use an array with two values for a range slider.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSliderComponent } from '../slider.component';
 
@@ -567,6 +594,7 @@ import { ZardSliderComponent } from '../slider.component';
       <z-slider class="mx-auto w-full max-w-xs" [zDefault]="[25, 50]" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSliderRangeComponent {}
 ```
@@ -576,7 +604,7 @@ export class ZardDemoSliderRangeComponent {}
 Use an array with multiple values for multiple thumbs.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSliderComponent } from '../slider.component';
 
@@ -588,6 +616,7 @@ import { ZardSliderComponent } from '../slider.component';
       <z-slider class="mx-auto w-full max-w-xs" [zDefault]="[10, 20, 70]" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSliderMultipleComponent {}
 ```
@@ -597,7 +626,7 @@ export class ZardDemoSliderMultipleComponent {}
 Use zOrientation="vertical" for a vertical slider.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSliderComponent } from '../slider.component';
 
@@ -612,6 +641,7 @@ import { ZardSliderComponent } from '../slider.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSliderVerticalComponent {}
 ```
@@ -619,7 +649,7 @@ export class ZardDemoSliderVerticalComponent {}
 ### Controlled
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field';
 
@@ -645,6 +675,7 @@ import { ZardSliderComponent } from '../slider.component';
       />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSliderControlledComponent {
   readonly value = signal([0.3, 0.7]);
@@ -660,7 +691,7 @@ export class ZardDemoSliderControlledComponent {
 Use zDisabled prop to disable the slider.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSliderComponent } from '../slider.component';
 
@@ -672,6 +703,7 @@ import { ZardSliderComponent } from '../slider.component';
       <z-slider class="mx-auto w-full max-w-xs" [zDefault]="[50]" zDisabled />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSliderDisabledComponent {}
 ```

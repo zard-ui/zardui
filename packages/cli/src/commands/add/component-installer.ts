@@ -6,9 +6,9 @@ import { promises as fs } from 'node:fs';
 import * as path from 'node:path';
 
 export function validateTargetPath(targetDir: string, projectRoot: string): void {
-  // Comparar prefixo de string deixava passar o diretório vizinho: `/proj-evil`
-  // começa com `/proj` sem estar dentro dele. O caminho relativo responde a
-  // pergunta certa — está contido? — e ainda normaliza os `..` do meio.
+  // Comparing string prefixes let a sibling directory through: `/proj-evil`
+  // starts with `/proj` without being inside it. The relative path answers the
+  // right question — is it contained? — and normalizes any `..` along the way.
   const relative = path.relative(path.resolve(projectRoot), path.resolve(targetDir));
 
   if (relative.startsWith('..') || path.isAbsolute(relative)) {

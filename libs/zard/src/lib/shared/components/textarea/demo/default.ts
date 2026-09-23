@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
 
@@ -8,5 +8,6 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
   template: `
     <textarea z-textarea placeholder="Type your message here." class="w-72"></textarea>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTextareaDefaultComponent {}

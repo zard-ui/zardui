@@ -1,19 +1,34 @@
-<div class="bg-background relative">
-  <div class="border-border relative min-h-svh w-full rounded-lg border">
-    <div
-      class="bg-surface absolute inset-0 h-full min-h-svh rounded-lg bg-[radial-gradient(#333437_1px,transparent_1px)] bg-size-[16px_16px]"
-    ></div>
-    <div class="relative flex min-h-svh justify-center">
+<div
+  class="bg-surface relative min-h-svh rounded-lg bg-[radial-gradient(#333437_1px,transparent_1px)] bg-size-[16px_16px]"
+>
+  <!-- The panels always add up to 100% of the row, so the handle sits past its right edge — outside
+       the block, the way shadcn's does, instead of covering the last 12px of the preview. -->
+  <z-resizable
+    class="relative z-10 min-h-svh"
+    zLayout="horizontal"
+    (zResizeStart)="resizing.set(true)"
+    (zResizeEnd)="resizing.set(false)"
+  >
+    <z-resizable-panel [zDefaultSize]="100" zMin="30" class="bg-background min-h-svh rounded-lg border">
       @if (isBrowser) {
         <iframe
           #previewIframe
           [src]="iframeUrl()"
-          [style.width]="viewportWidth()"
-          class="z-10 min-h-svh border-0 opacity-0 transition-[width] duration-300 ease-in-out"
+          class="size-full min-h-svh border-0 opacity-0 transition-opacity duration-300"
           [class.opacity-100]="iframeLoaded()"
+          [class.pointer-events-none]="resizing()"
           (load)="onIframeLoad()"
         ></iframe>
       }
-    </div>
-  </div>
+    </z-resizable-panel>
+
+    <!-- `shrink-0` keeps the 12px grab area: the panels are sized in percentages, so a shrinkable
+         handle collapses to its `min-w-px` and there is nothing left to grab. -->
+    <z-resizable-handle
+      zWithHandle
+      class="hidden w-3 shrink-0 bg-transparent after:hidden md:flex [&>div]:transition-all hover:[&>div]:h-8"
+    />
+
+    <z-resizable-panel [zDefaultSize]="0" zMin="0" class="min-h-svh"></z-resizable-panel>
+  </z-resizable>
 </div>

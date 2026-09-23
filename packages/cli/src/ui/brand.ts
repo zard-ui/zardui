@@ -1,13 +1,13 @@
 /**
- * Identidade visual da CLI — o banner e os cabeçalhos de comando.
+ * The CLI's visual identity — the banner and the command headers.
  *
- * O banner só aparece quando há altura sobrando: em terminais baixos ele cede
- * lugar ao conteúdo, que é o que o usuário precisa ver para responder.
+ * The banner only appears when there is height to spare: in short terminals it
+ * gives way to the content, which is what the user needs to see to answer.
  */
 
 import { banner, column, row, text, type Node } from './engine/index.js';
 
-/** O nome da marca como ela se escreve — a barra faz parte dele. */
+/** The brand name as it is written — the slash is part of it. */
 export const BRAND = 'zard/ui';
 
 export const ZARDUI_BANNER = [
@@ -22,7 +22,7 @@ export const ZARDUI_BANNER = [
 const BANNER_COLOR = '#fafafa';
 const TAGLINE = 'The Angular component toolkit · beautiful components in seconds';
 
-/** Altura mínima para o banner caber sem espremer as perguntas. */
+/** Minimum height for the banner to fit without squeezing the questions. */
 const BANNER_MIN_ROWS = 24;
 
 export function brandBanner(rows: number): Node[] {
@@ -32,7 +32,7 @@ export function brandBanner(rows: number): Node[] {
   return [banner({ lines: ZARDUI_BANNER, colors: [BANNER_COLOR] }), text(TAGLINE, { color: 'muted', dim: true })];
 }
 
-/** Cabeçalho compacto de um comando: `◇ zard/ui · initialize`. */
+/** A command's compact header: `◇ zard/ui · initialize`. */
 export function commandHeader(command: string, description?: string): Node {
   const head = row(
     { gap: 1 },

@@ -6,6 +6,12 @@ export const SONNER_API: ApiSection[] = [
     description: 'Container that renders toast notifications. Place once at the root of your app.',
     props: [
       {
+        name: '[style]',
+        description: 'Inline styles applied to every toast',
+        type: 'Record<string, string>',
+        default: 'undefined',
+      },
+      {
         name: '[theme]',
         description: 'Theme used for the toasts.',
         type: "'light' | 'dark' | 'system'",
@@ -48,6 +54,13 @@ export const SONNER_API: ApiSection[] = [
         description: 'Text direction for toasts.',
         type: "'ltr' | 'rtl' | 'auto'",
         default: "'auto'",
+      },
+      {
+        name: '[topLayer]',
+        description:
+          'Renders the toaster in the native top layer so toasts stay above dialogs, drawers and sheets. Disable it only if the app opts out of the CDK top layer.',
+        type: 'boolean',
+        default: 'true',
       },
       {
         name: '[class]',

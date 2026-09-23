@@ -8,8 +8,7 @@ import { hexToOklch, isValidHex, isValidOklch, oklchToHex } from '../../utils/ok
 let colorPickerFieldId = 0;
 
 @Component({
-  selector: 'app-color-picker-field',
-  standalone: true,
+  selector: 'z-color-picker-field',
   imports: [FormsModule, ZardInputComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

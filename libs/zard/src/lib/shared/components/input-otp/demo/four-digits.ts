@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
 import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.utils';
@@ -16,6 +16,7 @@ import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.util
       </z-input-otp-group>
     </z-input-otp>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputOtpFourDigitsComponent {
   readonly REGEXP_ONLY_DIGITS = REGEXP_ONLY_DIGITS;

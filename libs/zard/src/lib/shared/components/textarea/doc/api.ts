@@ -6,6 +6,7 @@ export const TEXTAREA_API: ApiSection[] = [
     description:
       'A multi-line text input directive applied to a native textarea. All native HTML textarea attributes (placeholder, name, disabled, readonly, aria-invalid, etc.) are supported.',
     props: [
+      { name: '[value]', description: 'Textarea value, two-way bindable', type: 'string', default: "''" },
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       { name: '[(value)]', description: 'Textarea value (two-way binding)', type: 'string', default: "''" },
     ],

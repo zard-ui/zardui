@@ -5,25 +5,24 @@ import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-head
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { CliCommandsSection } from './sections/commands.component';
-import { CliConfigurationSection } from './sections/configuration.component';
-import { CliInstallationSection } from './sections/installation.component';
-import { CliProjectTypesSection } from './sections/project-types.component';
-import { CliUpdateSection } from './sections/update.component';
+import { CliCommandsSectionComponent } from './sections/commands.component';
+import { CliConfigurationSectionComponent } from './sections/configuration.component';
+import { CliInstallationSectionComponent } from './sections/installation.component';
+import { CliProjectTypesSectionComponent } from './sections/project-types.component';
+import { CliUpdateSectionComponent } from './sections/update.component';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-cli',
-  standalone: true,
   imports: [
     DocContentComponent,
     DocHeadingComponent,
     ScrollSpyDirective,
-    CliInstallationSection,
-    CliProjectTypesSection,
-    CliCommandsSection,
-    CliConfigurationSection,
-    CliUpdateSection,
+    CliInstallationSectionComponent,
+    CliProjectTypesSectionComponent,
+    CliCommandsSectionComponent,
+    CliConfigurationSectionComponent,
+    CliUpdateSectionComponent,
   ],
   template: `
     <z-content
@@ -39,11 +38,11 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
         id="overview"
       ></z-doc-heading>
 
-      <cli-installation-section scrollSpyItem="installation" id="installation"></cli-installation-section>
-      <cli-project-types-section scrollSpyItem="project-types" id="project-types"></cli-project-types-section>
-      <cli-commands-section scrollSpyItem="commands" id="commands"></cli-commands-section>
-      <cli-configuration-section scrollSpyItem="configuration" id="configuration"></cli-configuration-section>
-      <cli-update-section scrollSpyItem="update" id="update"></cli-update-section>
+      <z-cli-installation-section scrollSpyItem="installation" id="installation"></z-cli-installation-section>
+      <z-cli-project-types-section scrollSpyItem="project-types" id="project-types"></z-cli-project-types-section>
+      <z-cli-commands-section scrollSpyItem="commands" id="commands"></z-cli-commands-section>
+      <z-cli-configuration-section scrollSpyItem="configuration" id="configuration"></z-cli-configuration-section>
+      <z-cli-update-section scrollSpyItem="update" id="update"></z-cli-update-section>
     </z-content>
   `,
 })
@@ -51,8 +50,8 @@ export class CliPage implements OnInit {
   private readonly seoService = inject(SeoService);
   activeAnchor?: string;
 
-  // Um item por seção que existe de fato — a lista antiga apontava para
-  // âncoras sem destino ("Available Components", "Requirements").
+  // One entry per section that actually exists — the old list pointed at anchors
+  // with no target ("Available Components", "Requirements").
   readonly navigationConfig: NavigationConfig = {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardToggleComponent } from '../toggle.component';
 
@@ -11,5 +11,6 @@ import { ZardToggleComponent } from '../toggle.component';
       <z-toggle zAriaLabel="Toggle disabled outline" zType="outline" zDisabled>Disabled</z-toggle>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToggleDisabledComponent {}

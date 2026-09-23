@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field';
 
@@ -24,6 +24,7 @@ import { ZardSliderComponent } from '../slider.component';
       />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSliderControlledComponent {
   readonly value = signal([0.3, 0.7]);

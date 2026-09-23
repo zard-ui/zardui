@@ -4,7 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-hover-demo',
+  selector: 'z-demo-popover-hover',
   imports: [ZardButtonComponent, ...ZardPopoverImports],
   template: `
     <button type="button" z-button zPopover zTrigger="hover" zType="outline" [zContent]="popoverContent">

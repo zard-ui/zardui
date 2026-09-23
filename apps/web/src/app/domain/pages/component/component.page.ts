@@ -20,7 +20,7 @@ import { SeoService } from '@doc/shared/services/seo.service';
 import { ZardCodeBoxComponent } from '@doc/widget/components/zard-code-box/zard-code-box.component';
 
 /** Components whose demos are only readable at the full width of the preview. */
-const FULL_WIDTH_PREVIEWS = ['slider', 'chart'];
+const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar'];
 
 @Component({
   selector: 'z-component',

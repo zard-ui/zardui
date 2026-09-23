@@ -5,39 +5,38 @@ import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-head
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { RegistryBlocksSection } from './sections/blocks.component';
-import { RegistryConsumingSection } from './sections/consuming.component';
-import { RegistryContributingSection } from './sections/contributing.component';
-import { RegistryCustomRegistrySection } from './sections/custom-registry.component';
-import { RegistryDependenciesSection } from './sections/dependencies.component';
-import { RegistryHowItWorksSection } from './sections/how-it-works.component';
-import { RegistryIconCatalogSection } from './sections/icon-catalog.component';
-import { RegistryItemSchemaSection } from './sections/item-schema.component';
-import { RegistryLocalDevelopmentSection } from './sections/local-development.component';
-import { RegistryOverviewSection } from './sections/overview.component';
-import { RegistryRegistryJsonSection } from './sections/registry-json.component';
+import { RegistryBlocksSectionComponent } from './sections/blocks.component';
+import { RegistryConsumingSectionComponent } from './sections/consuming.component';
+import { RegistryContributingSectionComponent } from './sections/contributing.component';
+import { RegistryCustomRegistrySectionComponent } from './sections/custom-registry.component';
+import { RegistryDependenciesSectionComponent } from './sections/dependencies.component';
+import { RegistryHowItWorksSectionComponent } from './sections/how-it-works.component';
+import { RegistryIconCatalogSectionComponent } from './sections/icon-catalog.component';
+import { RegistryItemSchemaSectionComponent } from './sections/item-schema.component';
+import { RegistryLocalDevelopmentSectionComponent } from './sections/local-development.component';
+import { RegistryOverviewSectionComponent } from './sections/overview.component';
+import { RegistryRegistryJsonSectionComponent } from './sections/registry-json.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-registry',
-  standalone: true,
   imports: [
     DocContentComponent,
     DocHeadingComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
-    RegistryOverviewSection,
-    RegistryHowItWorksSection,
-    RegistryRegistryJsonSection,
-    RegistryItemSchemaSection,
-    RegistryIconCatalogSection,
-    RegistryDependenciesSection,
-    RegistryConsumingSection,
-    RegistryBlocksSection,
-    RegistryCustomRegistrySection,
-    RegistryLocalDevelopmentSection,
-    RegistryContributingSection,
+    RegistryOverviewSectionComponent,
+    RegistryHowItWorksSectionComponent,
+    RegistryRegistryJsonSectionComponent,
+    RegistryItemSchemaSectionComponent,
+    RegistryIconCatalogSectionComponent,
+    RegistryDependenciesSectionComponent,
+    RegistryConsumingSectionComponent,
+    RegistryBlocksSectionComponent,
+    RegistryCustomRegistrySectionComponent,
+    RegistryLocalDevelopmentSectionComponent,
+    RegistryContributingSectionComponent,
   ],
   template: `
     <z-content
@@ -53,23 +52,26 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
         id="overview"
       ></z-doc-heading>
 
-      <registry-overview-section scrollSpyItem="what-is-it" id="what-is-it"></registry-overview-section>
-      <registry-how-it-works-section scrollSpyItem="how-it-works" id="how-it-works"></registry-how-it-works-section>
-      <registry-registry-json-section scrollSpyItem="registry-json" id="registry-json"></registry-registry-json-section>
-      <registry-item-schema-section scrollSpyItem="item-schema" id="item-schema"></registry-item-schema-section>
-      <registry-icon-catalog-section scrollSpyItem="icon-catalog" id="icon-catalog"></registry-icon-catalog-section>
-      <registry-dependencies-section scrollSpyItem="dependencies" id="dependencies"></registry-dependencies-section>
-      <registry-consuming-section scrollSpyItem="consuming" id="consuming"></registry-consuming-section>
-      <registry-blocks-section scrollSpyItem="blocks" id="blocks"></registry-blocks-section>
-      <registry-custom-registry-section
+      <z-registry-overview-section scrollSpyItem="what-is-it" id="what-is-it"></z-registry-overview-section>
+      <z-registry-how-it-works-section scrollSpyItem="how-it-works" id="how-it-works"></z-registry-how-it-works-section>
+      <z-registry-registry-json-section
+        scrollSpyItem="registry-json"
+        id="registry-json"
+      ></z-registry-registry-json-section>
+      <z-registry-item-schema-section scrollSpyItem="item-schema" id="item-schema"></z-registry-item-schema-section>
+      <z-registry-icon-catalog-section scrollSpyItem="icon-catalog" id="icon-catalog"></z-registry-icon-catalog-section>
+      <z-registry-dependencies-section scrollSpyItem="dependencies" id="dependencies"></z-registry-dependencies-section>
+      <z-registry-consuming-section scrollSpyItem="consuming" id="consuming"></z-registry-consuming-section>
+      <z-registry-blocks-section scrollSpyItem="blocks" id="blocks"></z-registry-blocks-section>
+      <z-registry-custom-registry-section
         scrollSpyItem="custom-registry"
         id="custom-registry"
-      ></registry-custom-registry-section>
-      <registry-local-development-section
+      ></z-registry-custom-registry-section>
+      <z-registry-local-development-section
         scrollSpyItem="local-development"
         id="local-development"
-      ></registry-local-development-section>
-      <registry-contributing-section scrollSpyItem="contributing" id="contributing"></registry-contributing-section>
+      ></z-registry-local-development-section>
+      <z-registry-contributing-section scrollSpyItem="contributing" id="contributing"></z-registry-contributing-section>
     </z-content>
   `,
 })

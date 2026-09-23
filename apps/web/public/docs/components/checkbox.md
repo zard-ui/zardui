@@ -36,7 +36,8 @@ import { lucideCheck } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import { checkboxLabelVariants, checkboxVariants } from './checkbox.variants';
 
@@ -261,7 +262,7 @@ export class ZardDemoCheckboxDescriptionComponent {
 Use the `disabled` prop to prevent interaction and add the `data-disabled` attribute to the `Field` component for disabled styles.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
@@ -277,6 +278,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCheckboxDisabledComponent {}
 ```
@@ -339,7 +341,7 @@ export class ZardDemoCheckboxGroupComponent {
 Combine the checkbox with the `Table` component for selectable rows.
 
 ```angular-ts
-import { Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
@@ -392,6 +394,7 @@ const TABLE_DATA: readonly Row[] = [
       </tbody>
     </table>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCheckboxTableComponent {
   protected readonly rows = TABLE_DATA;

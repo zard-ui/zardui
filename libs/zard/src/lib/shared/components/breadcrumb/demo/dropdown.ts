@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
@@ -39,6 +39,7 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/n
       </z-breadcrumb-item>
     </z-breadcrumb>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideChevronDown })],
 })
 export class ZardDemoBreadcrumbDropdownComponent {}

@@ -25,7 +25,7 @@ function harness(): {
   return { feed: s => sink?.(Buffer.from(s, 'latin1')), keys, mouse, pastes, stop: () => im.stop() };
 }
 
-test('tecla imprimível simples', () => {
+test('a simple printable key', () => {
   const h = harness();
   h.feed('a');
   assert.equal(h.keys[0]?.key, 'a');
@@ -57,7 +57,7 @@ test('modificadores: ctrl+seta e alt+tecla', () => {
   h.stop();
 });
 
-test('fragmentação entre chunks', () => {
+test('fragmentation across chunks', () => {
   const h = harness();
   h.feed('\x1b'); // ESC parcial
   h.feed('[A'); // completa → up
@@ -82,7 +82,7 @@ test('bracketed paste', () => {
   h.stop();
 });
 
-test("ESC isolado vira 'escape' após timeout", async () => {
+test("a lone ESC becomes 'escape' after the timeout", async () => {
   const h = harness();
   h.feed('\x1b');
   await delay(80);

@@ -5,8 +5,9 @@ export const BUTTON_GROUP_API: ApiSection[] = [
     selector: 'z-button-group',
     description: 'A container that groups related buttons together with consistent styling.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
-        name: 'zOrientation',
+        name: '[zOrientation]',
         description: 'Orientation of the button group',
         type: "'horizontal' | 'vertical'",
         default: "'horizontal'",
@@ -17,8 +18,9 @@ export const BUTTON_GROUP_API: ApiSection[] = [
     selector: 'z-button-group-divider',
     description: 'A visual divider between buttons in a group.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
-        name: 'zOrientation',
+        name: '[zOrientation]',
         description: "Override for divider orientation, by default it uses the parent's orientation",
         type: "'horizontal' | 'vertical'",
         default: 'null',

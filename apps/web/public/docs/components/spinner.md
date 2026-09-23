@@ -60,13 +60,15 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   host: {
     class: 'inline-flex',
     role: 'status',
-    'aria-label': 'Loading',
+    '[attr.aria-label]': 'zAriaLabel()',
   },
   exportAs: 'zSpinner',
 })
 export class ZardSpinnerComponent {
   readonly class = input<ClassValue>('');
   readonly zIcon = input<TemplateRef<{ $implicit: string }> | undefined>(undefined);
+  /** Announced by screen readers. An input because the library ships no translations. */
+  readonly zAriaLabel = input('Loading');
 
   protected readonly classes = computed(() => mergeClasses('size-4 animate-spin', this.class()));
   protected readonly iconContext = computed(() => ({ $implicit: this.classes() }));
@@ -92,7 +94,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
 ### Customization
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
 
@@ -126,6 +128,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </svg>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSpinnerCustomizationComponent {}
 ```
@@ -133,7 +136,7 @@ export class ZardDemoSpinnerCustomizationComponent {}
 ### Size
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
 
@@ -148,6 +151,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       <z-spinner class="size-8" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSpinnerSizeComponent {}
 ```
@@ -155,7 +159,7 @@ export class ZardDemoSpinnerSizeComponent {}
 ### Button
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
@@ -179,6 +183,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSpinnerButtonComponent {}
 ```
@@ -186,7 +191,7 @@ export class ZardDemoSpinnerButtonComponent {}
 ### Badge
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
@@ -210,6 +215,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </z-badge>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSpinnerBadgeComponent {}
 ```
@@ -217,7 +223,7 @@ export class ZardDemoSpinnerBadgeComponent {}
 ### Input Group
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowUp } from '@ng-icons/lucide';
@@ -251,6 +257,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideArrowUp })],
 })
 export class ZardDemoSpinnerInputGroupComponent {}
@@ -259,7 +266,7 @@ export class ZardDemoSpinnerInputGroupComponent {}
 ### Empty
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardEmptyComponent } from '@/shared/components/empty/empty.component';
@@ -287,6 +294,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       <button type="button" z-button zType="outline" zSize="sm">Cancel</button>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSpinnerEmptyComponent {}
 ```
@@ -299,6 +307,7 @@ A simple loading indicator built on the Lucide loader-circle icon.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[zAriaLabel]` | Text announced by screen readers | `string` | `'Loading'` |
 | `[class]` | Override or extend the default classes (size, color, animation duration). | `ClassValue` | `size-4 animate-spin` |
 | `[zIcon]` | Custom icon template. Receives the merged classes via `$implicit` so the icon stays in sync with the spinner sizing/animation. | `TemplateRef<{ $implicit: string }>` | `-` |
 

@@ -1,8 +1,8 @@
 /**
- * Superfície pública da UI da CLI.
+ * The public surface of the CLI's UI.
  *
- * Os comandos importam daqui — nunca de `./engine` diretamente — para que a
- * troca ou atualização da engine fique contida nesta camada.
+ * Commands import from here — never from `./engine` directly — so that replacing
+ * or upgrading the engine stays contained in this layer.
  */
 
 export * from './engine/index.js';

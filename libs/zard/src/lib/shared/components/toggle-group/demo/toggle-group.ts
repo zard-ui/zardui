@@ -9,14 +9,14 @@ import { TOGGLE_GROUP_CLI_ADD } from '@generated/installation/cli/add-toggle-gro
 import { TOGGLE_GROUP_MANUAL_CODE } from '@generated/installation/manual/toggle-group';
 import { TOGGLE_GROUP_USAGE_CODE, TOGGLE_GROUP_USAGE_IMPORT } from '@generated/usage/toggle-group';
 
-import ToggleGroupCustomComponent from '@/shared/components/toggle-group/demo/custom';
-import ToggleGroupVerticalComponent from '@/shared/components/toggle-group/demo/vertical';
+import { ZardDemoToggleGroupCustomComponent } from '@/shared/components/toggle-group/demo/custom';
+import { ZardDemoToggleGroupVerticalComponent } from '@/shared/components/toggle-group/demo/vertical';
 
-import ToggleGroupDefaultComponent from './default';
-import ToggleGroupDisabledComponent from './disabled';
-import ToggleGroupOutlineComponent from './outline';
-import ToggleGroupSizesComponent from './sizes';
-import ToggleGroupSpacingComponent from './spacing';
+import { ZardDemoToggleGroupDefaultComponent } from './default';
+import { ZardDemoToggleGroupDisabledComponent } from './disabled';
+import { ZardDemoToggleGroupOutlineComponent } from './outline';
+import { ZardDemoToggleGroupSizesComponent } from './sizes';
+import { ZardDemoToggleGroupSpacingComponent } from './spacing';
 import { TOGGLE_GROUP_API } from '../doc/api';
 
 export const TOGGLE_GROUP = {
@@ -31,7 +31,7 @@ export const TOGGLE_GROUP = {
   usage: { importBlock: TOGGLE_GROUP_USAGE_IMPORT, codeBlock: TOGGLE_GROUP_USAGE_CODE },
   preview: {
     name: 'preview',
-    component: ToggleGroupDefaultComponent,
+    component: ZardDemoToggleGroupDefaultComponent,
     codeData: TOGGLE_GROUP_DEMO_DEFAULT,
     column: false,
   },
@@ -39,36 +39,36 @@ export const TOGGLE_GROUP = {
     {
       name: 'outline',
       description: 'Use `zType="outline"` for an outline style.',
-      component: ToggleGroupOutlineComponent,
+      component: ZardDemoToggleGroupOutlineComponent,
       codeData: TOGGLE_GROUP_DEMO_OUTLINE,
     },
     {
       name: 'size',
       description: 'Use the `zSize` to change the size of the toggle group.',
-      component: ToggleGroupSizesComponent,
+      component: ZardDemoToggleGroupSizesComponent,
       codeData: TOGGLE_GROUP_DEMO_SIZES,
     },
     {
       name: 'spacing',
       description: 'Use `zSpacing` to add spacing between toggle group items.',
-      component: ToggleGroupSpacingComponent,
+      component: ZardDemoToggleGroupSpacingComponent,
       codeData: TOGGLE_GROUP_DEMO_SPACING,
     },
     {
       name: 'vertical',
       description: 'Use `zOrientation="vertical"` for vertical toggle groups.',
-      component: ToggleGroupVerticalComponent,
+      component: ZardDemoToggleGroupVerticalComponent,
       codeData: TOGGLE_GROUP_DEMO_VERTICAL,
     },
     {
       name: 'disabled',
-      component: ToggleGroupDisabledComponent,
+      component: ZardDemoToggleGroupDisabledComponent,
       codeData: TOGGLE_GROUP_DEMO_DISABLED,
     },
     {
       name: 'custom',
       description: 'A custom toggle group example.',
-      component: ToggleGroupCustomComponent,
+      component: ZardDemoToggleGroupCustomComponent,
       codeData: TOGGLE_GROUP_DEMO_CUSTOM,
     },
   ],

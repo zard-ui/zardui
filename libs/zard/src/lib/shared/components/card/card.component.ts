@@ -16,10 +16,10 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 import {
   cardActionVariants,
   cardContentVariants,
-  cardDescriptionVariant,
+  cardDescriptionVariants,
   cardFooterVariants,
   cardHeaderVariants,
-  cardTitleVariant,
+  cardTitleVariants,
   cardVariants,
   type ZardCardSizeType,
 } from './card.variants';
@@ -43,7 +43,7 @@ export class ZardCardTitleComponent {
   readonly class = input<ClassValue>('');
   readonly zTitle = input<string | TemplateRef<void>>();
 
-  protected readonly classes = computed(() => mergeClasses(cardTitleVariant(), this.class()));
+  protected readonly classes = computed(() => mergeClasses(cardTitleVariants(), this.class()));
 }
 
 @Component({
@@ -65,7 +65,7 @@ export class ZardCardDescriptionComponent {
   readonly class = input<ClassValue>('');
   readonly zDescription = input<string | TemplateRef<void>>();
 
-  protected readonly classes = computed(() => mergeClasses(cardDescriptionVariant(), this.class()));
+  protected readonly classes = computed(() => mergeClasses(cardDescriptionVariants(), this.class()));
 }
 
 @Component({

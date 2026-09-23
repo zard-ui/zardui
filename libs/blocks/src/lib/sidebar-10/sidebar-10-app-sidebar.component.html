@@ -1,0 +1,14 @@
+<z-sidebar class="border-r-0">
+  <div z-sidebar-header>
+    <lib-sidebar-10-team-switcher [teams]="teams" />
+    <lib-sidebar-10-nav-main [items]="navMain" />
+  </div>
+
+  <z-sidebar-content>
+    <lib-sidebar-10-nav-favorites [favorites]="favorites" />
+    <lib-sidebar-10-nav-workspaces [workspaces]="workspaces" />
+    <lib-sidebar-10-nav-secondary [items]="navSecondary" class="mt-auto" />
+  </z-sidebar-content>
+
+  <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
+</z-sidebar>

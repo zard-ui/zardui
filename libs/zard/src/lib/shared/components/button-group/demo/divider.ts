@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardButtonGroupComponent, ZardButtonGroupDividerComponent } from '../button-group.component';
@@ -8,10 +8,11 @@ import { ZardButtonGroupComponent, ZardButtonGroupDividerComponent } from '../bu
   imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardButtonGroupDividerComponent],
   template: `
     <z-button-group>
-      <button z-button zSize="sm" zType="secondary">Copy</button>
+      <button type="button" z-button zSize="sm" zType="secondary">Copy</button>
       <z-button-group-divider />
-      <button z-button zSize="sm" zType="secondary">Paste</button>
+      <button type="button" z-button zSize="sm" zType="secondary">Paste</button>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoButtonGroupDividerComponent {}

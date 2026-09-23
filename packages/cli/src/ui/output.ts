@@ -1,10 +1,10 @@
 /**
- * Saída em linha — a única porta por onde a CLI escreve texto solto no
- * terminal, fora da tela interativa.
+ * Line output — the only door through which the CLI writes loose text to the
+ * terminal, outside the interactive screen.
  *
- * Concentrar a escrita aqui garante que o logger, o resumo final e as
- * mensagens reemitidas do sink usem exatamente a mesma marcação de nível e a
- * mesma paleta.
+ * Concentrating writes here guarantees the logger, the final summary and the
+ * messages re-emitted from the sink all use exactly the same level markers and
+ * the same palette.
  */
 
 import { type LogRecord, type LogLevel } from './log-sink.js';
@@ -26,7 +26,7 @@ export function formatRecord(record: LogRecord): string {
   return MARKS[record.level](record.message);
 }
 
-/** Reemite no histórico do terminal as mensagens retidas durante a tela. */
+/** Re-emits into the terminal's history the messages held while the screen was up. */
 export function flushRecords(records: readonly LogRecord[]): void {
   for (const record of records) writeLine(formatRecord(record));
 }

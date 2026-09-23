@@ -24,10 +24,10 @@ const packageJsonSchema = z.object({
 });
 
 /**
- * Qual toolchain compila o projeto.
+ * Which toolchain compiles the project.
  *
- * Analog troca o build do Angular por Vite, e com isso troca também onde o
- * Tailwind é configurado: plugin no `vite.config.ts` em vez de `.postcssrc.json`.
+ * Analog swaps Angular's build for Vite, and with it where Tailwind is
+ * configured: a plugin in `vite.config.ts` instead of `.postcssrc.json`.
  */
 export type ProjectFlavor = 'angular' | 'analog';
 
@@ -35,13 +35,13 @@ export type ProjectFlavor = 'angular' | 'analog';
 export type WorkspaceProject = {
   name: string;
   projectType: 'application' | 'library';
-  /** Raiz do projeto, relativa ao workspace (`apps/web`, ou `''` no app único). */
+  /** Project root, relative to the workspace (`apps/web`, or `''` for a single app). */
   root: string;
   sourceRoot: string;
   flavor: ProjectFlavor;
   /** Os `styles` do target de build, relativos ao workspace. */
   styles: string[];
-  /** O `index` do target de build, quando declarado. */
+  /** The build target's `index`, when declared. */
   index: string | null;
 };
 
@@ -59,7 +59,7 @@ export type ProjectInfo = {
   tsconfigFile: string;
   angularVersion: string | null;
   angularVersionRaw: string | null;
-  /** O que o workspace declara, na ordem em que aparece. Vazio se não houver. */
+  /** What the workspace declares, in the order it appears. Empty when there is none. */
   projects: WorkspaceProject[];
 };
 
@@ -78,16 +78,16 @@ async function findPackageJson(startDir: string): Promise<string | null> {
   return null;
 }
 
-/** Normaliza separadores para o formato que os arquivos de configuração usam. */
+/** Normalizes separators to the form the configuration files use. */
 function toPosix(value: string): string {
   return value.split(path.sep).join('/');
 }
 
 /**
- * O que o target de build diz sobre o projeto.
+ * What the build target says about the project.
  *
- * `angular.json` chama de `architect`/`builder` e o Nx de `targets`/`executor`,
- * mas o formato das opções é o mesmo — então uma leitura só serve aos dois.
+ * `angular.json` calls it `architect`/`builder` and Nx calls it
+ * `targets`/`executor`, but the option shape is the same — so one read serves both.
  */
 function readBuildTarget(targets: any): { tool: string; styles: string[]; index: string | null } {
   const build = targets?.build ?? {};
@@ -101,17 +101,17 @@ function readBuildTarget(targets: any): { tool: string; styles: string[]; index:
   };
 }
 
-/** Analog substitui o builder do Angular pelo dele; é assim que se anuncia. */
+/** Analog replaces Angular's builder with its own; that is how it announces itself. */
 function flavorOf(tool: string): ProjectFlavor {
   return tool.startsWith('@analogjs/') ? 'analog' : 'angular';
 }
 
 /**
- * Lê os projetos do `angular.json`.
+ * Reads the projects out of `angular.json`.
  *
- * É o que distingue uma aplicação de uma biblioteca — o package.json não diz.
- * Workspace sem `angular.json` (ou ilegível) devolve lista vazia, e quem chama
- * decide o que fazer com isso.
+ * It is what tells an application from a library — package.json does not say. A
+ * workspace with no `angular.json` (or an unreadable one) returns an empty list,
+ * and the caller decides what to do with that.
  */
 async function readAngularProjects(workspaceRoot: string): Promise<WorkspaceProject[]> {
   try {
@@ -138,11 +138,11 @@ async function readAngularProjects(workspaceRoot: string): Promise<WorkspaceProj
 }
 
 /**
- * Onde procurar por `project.json`.
+ * Where to look for `project.json`.
  *
- * O Nx não obriga um layout, mas gera em `apps/` e `libs/` (ou no que
- * `workspaceLayout` disser), e monorepos de pacotes usam `packages/`. Procurar
- * só nesses lugares evita varrer o repositório inteiro atrás de configuração.
+ * Nx does not mandate a layout, but it generates into `apps/` and `libs/` (or
+ * wherever `workspaceLayout` says), and package monorepos use `packages/`.
+ * Looking only in those places avoids scanning the whole repository for config.
  */
 async function nxSearchRoots(workspaceRoot: string): Promise<string[]> {
   try {
@@ -156,10 +156,10 @@ async function nxSearchRoots(workspaceRoot: string): Promise<string[]> {
 }
 
 /**
- * Diretórios que contêm um `project.json`, até dois níveis abaixo da busca.
+ * Directories holding a `project.json`, up to two levels below the search root.
  *
- * Um projeto não contém outro, então achar a configuração encerra a descida —
- * o que também impede que `node_modules` de um projeto vire um segundo projeto.
+ * A project does not contain another, so finding the config ends the descent —
+ * which also keeps a project's `node_modules` from becoming a second project.
  */
 async function findProjectDirs(baseDir: string, depth: number): Promise<string[]> {
   if (await pathExists(path.join(baseDir, 'project.json'))) {
@@ -185,10 +185,10 @@ async function findProjectDirs(baseDir: string, depth: number): Promise<string[]
 }
 
 /**
- * Lê os projetos de um workspace Nx.
+ * Reads the projects of an Nx workspace.
  *
- * O Nx não tem `angular.json`: cada projeto se descreve no próprio
- * `project.json`, e a raiz do projeto é o diretório onde esse arquivo está.
+ * Nx has no `angular.json`: each project describes itself in its own
+ * `project.json`, and the project root is the directory that file sits in.
  */
 async function readNxProjects(workspaceRoot: string): Promise<WorkspaceProject[]> {
   const searchRoots = await nxSearchRoots(workspaceRoot);
@@ -220,18 +220,18 @@ async function readNxProjects(workspaceRoot: string): Promise<WorkspaceProject[]
     }),
   );
 
-  // A ordem do sistema de arquivos é arbitrária; ordenar dá ao menu uma lista
-  // estável entre execuções.
+  // Filesystem order is arbitrary; sorting gives the menu a list that is stable
+  // between runs.
   return projects
     .filter((project): project is WorkspaceProject => project !== null)
     .sort((a, b) => a.root.localeCompare(b.root));
 }
 
 /**
- * Aplicação ou biblioteca, quando o `project.json` não declara.
+ * Application or library, when `project.json` does not say.
  *
- * Um `serve` só existe para o que é servido; biblioteca nenhuma tem. É a
- * distinção que sobra quando o campo explícito falta.
+ * A `serve` target only exists for something that is served; no library has one.
+ * That is the distinction left when the explicit field is missing.
  */
 function nxProjectType(config: any): 'application' | 'library' {
   if (config.projectType === 'library' || config.projectType === 'application') {
@@ -241,17 +241,17 @@ function nxProjectType(config: any): 'application' | 'library' {
   return config.targets?.serve ? 'application' : 'library';
 }
 
-/** Configurações que só existem num projeto de testes de ponta a ponta. */
+/** Configuration files that only exist in an end-to-end test project. */
 const E2E_CONFIGS = ['playwright.config.ts', 'playwright.config.js', 'cypress.config.ts', 'cypress.config.js'];
 
 /**
- * Se o projeto existe apenas para rodar testes de ponta a ponta.
+ * Whether the project exists only to run end-to-end tests.
  *
- * O gerador do Nx cria `<app>-e2e` declarando `projectType: "application"`, e
- * com isso ele aparecia na lista de apps que podem receber os componentes — mas
- * ali não há `app.config.ts`, CSS global nem build para configurar. O sufixo é
- * a convenção do Nx; o arquivo de configuração do runner confirma os casos em
- * que o projeto foi renomeado.
+ * The Nx generator creates `<app>-e2e` declaring `projectType: "application"`,
+ * and with that it showed up in the list of apps that can receive components —
+ * but there is no `app.config.ts`, no global CSS and no build to configure in
+ * there. The suffix is Nx's convention; the runner's config file confirms the
+ * cases where the project was renamed.
  */
 async function isE2eProject(projectDir: string, name: string): Promise<boolean> {
   if (name.endsWith('-e2e') || name.endsWith('-e2e-ct')) return true;
@@ -278,15 +278,15 @@ export async function getProjectInfo(cwd: string): Promise<ProjectInfo> {
   const hasAnalog =
     !!deps['@analogjs/platform'] || !!deps['@analogjs/router'] || !!deps['@analogjs/vite-plugin-angular'];
 
-  // Um workspace Nx pode ter os dois arquivos; o `angular.json` só descreve os
-  // projetos que já existiam antes da migração, então o Nx tem a palavra final.
+  // An Nx workspace can have both files; `angular.json` only describes projects
+  // that existed before the migration, so Nx has the final word.
   const projects = hasNx ? await readNxProjects(workspaceRoot) : await readAngularProjects(workspaceRoot);
 
   const angularVersionRaw = (deps['@angular/core'] as string) || null;
   const angularVersion = angularVersionRaw?.replace(/[^0-9.]/g, '') || null;
 
-  // O Nx guarda os paths num tsconfig.base.json que os projetos estendem;
-  // escrever no tsconfig.json da raiz não chegaria a nenhum deles.
+  // Nx keeps the paths in a tsconfig.base.json the projects extend; writing into
+  // the root tsconfig.json would reach none of them.
   const tsconfigFile = (await pathExists(path.join(workspaceRoot, 'tsconfig.base.json')))
     ? 'tsconfig.base.json'
     : 'tsconfig.json';

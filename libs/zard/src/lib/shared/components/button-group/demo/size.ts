@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus } from '@ng-icons/lucide';
@@ -37,6 +37,7 @@ import { ZardButtonGroupComponent } from '@/shared/components/button-group/butto
       </button>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus })],
   host: {
     class: 'flex flex-col items-start gap-8',

@@ -8,7 +8,6 @@ import type { CodeBlockData } from '@highlight/types';
 
 @Component({
   selector: 'z-json-tailwind-section',
-  standalone: true,
   imports: [CodeBlockComponent, RouterLink],
   template: `
     <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="tailwind" id="tailwind">

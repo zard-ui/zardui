@@ -23,7 +23,6 @@ interface TokenSection {
 
 @Component({
   selector: 'z-token-table',
-  standalone: true,
   imports: [InlineCodePipe, NgIcon],
   templateUrl: './token-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

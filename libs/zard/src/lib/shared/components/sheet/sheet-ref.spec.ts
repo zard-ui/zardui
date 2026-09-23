@@ -48,7 +48,9 @@ describe('ZardSheetRef', () => {
 
   describe('[signals]', () => {
     it('should reflect close state and result in isClosing/result signals', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const ref = sheetService.create<unknown, unknown>({ zTitle: 'Signal test', zContent: 'x' });
 
@@ -65,7 +67,9 @@ describe('ZardSheetRef', () => {
     });
 
     it('should expose the content component instance', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const ref = sheetService.create({ zTitle: 'Instance', zContent: ZardButtonComponent });
 
@@ -76,7 +80,9 @@ describe('ZardSheetRef', () => {
     });
 
     it('should leave componentInstance null for string content', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const ref = sheetService.create({ zTitle: 'String', zContent: 'plain' });
 
@@ -89,7 +95,9 @@ describe('ZardSheetRef', () => {
 
   describe('[stack management]', () => {
     it('should only close the topmost sheet when Escape is pressed', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const first = sheetService.create({ zTitle: 'First', zContent: 'one' });
       const second = sheetService.create({ zTitle: 'Second', zContent: 'two' });
@@ -115,7 +123,9 @@ describe('ZardSheetRef', () => {
 
   describe('[focus restoration]', () => {
     it('should restore focus to the trigger button after close', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const trigger = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
       trigger.focus();
@@ -139,7 +149,9 @@ describe('ZardSheetRef', () => {
 
   describe('[duration]', () => {
     it('should propagate zDuration to the --z-sheet-duration CSS custom property', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const ref = sheetService.create<unknown, unknown>({ zTitle: 'Duration', zContent: 'x', zDuration: 400 });
       await new Promise(resolve => setTimeout(resolve, 50));
@@ -160,7 +172,9 @@ describe('ZardSheetRef', () => {
 
   describe('[mask]', () => {
     it('should not close on backdrop click when zMaskClosable is false', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const ref = sheetService.create({ zTitle: 'Masked', zContent: 'x', zMaskClosable: false });
       await new Promise(resolve => setTimeout(resolve, 50));

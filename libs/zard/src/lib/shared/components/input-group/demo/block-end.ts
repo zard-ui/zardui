@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
@@ -26,12 +26,13 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
           <textarea z-textarea id="block-end-textarea" placeholder="Write a comment..."></textarea>
           <z-input-group-addon zAlign="block-end">
             <span z-input-group-text>0/280</span>
-            <button z-input-group-button zVariant="default" zSize="sm" class="ml-auto">Post</button>
+            <button type="button" z-input-group-button zVariant="default" zSize="sm" class="ml-auto">Post</button>
           </z-input-group-addon>
         </z-input-group>
         <p z-field-description>Footer positioned below the textarea.</p>
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputGroupBlockEndComponent {}

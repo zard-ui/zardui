@@ -6,7 +6,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-form-demo',
+  selector: 'z-demo-popover-form',
   imports: [ZardButtonComponent, ZardInputComponent, ...ZardFieldImports, ...ZardPopoverImports],
   template: `
     <button type="button" z-button zPopover zAlign="start" zType="outline" [zContent]="popoverContent">

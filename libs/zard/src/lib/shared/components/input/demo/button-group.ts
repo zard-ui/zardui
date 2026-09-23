@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
@@ -13,9 +13,10 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
       <label z-field-label for="input-button-group">Search</label>
       <z-button-group>
         <input z-input id="input-button-group" placeholder="Type to search..." />
-        <button z-button zType="outline">Search</button>
+        <button type="button" z-button zType="outline">Search</button>
       </z-button-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputButtonGroupComponent {}

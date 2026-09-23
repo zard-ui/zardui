@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideShieldAlert } from '@ng-icons/lucide';
@@ -25,6 +25,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </z-item>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideShieldAlert })],
 })
 export class ZardDemoItemIconComponent {}

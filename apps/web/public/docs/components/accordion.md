@@ -39,7 +39,10 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
     <ng-content />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.Emulated,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'accordion',
+  },
   exportAs: 'zAccordion',
 })
 export class ZardAccordionComponent implements AfterContentInit {
@@ -202,6 +205,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronDown })],
   host: {
+    'data-slot': 'accordion-item',
     '[class]': 'itemClasses()',
     '[attr.data-state]': "isOpen() ? 'open' : 'closed'",
     '[attr.data-disabled]': 'zDisabled()',
@@ -241,10 +245,10 @@ export const ZardAccordionImports = [ZardAccordionComponent, ZardAccordionItemCo
 ```
 
 ```angular-ts
-export * from '@/shared/components/accordion/accordion.component';
-export * from '@/shared/components/accordion/accordion-item.component';
-export * from '@/shared/components/accordion/accordion.variants';
-export * from '@/shared/components/accordion/accordion.imports';
+export * from './accordion.component';
+export * from './accordion-item.component';
+export * from './accordion.variants';
+export * from './accordion.imports';
 ```
 
 ## Usage

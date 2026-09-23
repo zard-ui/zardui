@@ -1,16 +1,16 @@
 /**
- * Que tipo de projeto o `init` está configurando.
+ * Which kind of project `init` is configuring.
  *
- * Quem responde é o usuário, na primeira pergunta do wizard — a CLI não decide
- * por ele. O que o workspace revela entra depois, para preencher os caminhos
- * sugeridos do tipo escolhido; a detecção só vira decisão no caminho headless,
- * onde não há ninguém para perguntar.
+ * The user answers, in the wizard's first question — the CLI does not decide for
+ * them. What the workspace reveals comes afterwards, to fill in the suggested
+ * paths for the chosen type; detection only becomes a decision on the headless
+ * path, where there is nobody to ask.
  *
- * As diferenças entre os tipos não são cosméticas: uma biblioteca não tem
- * `app.config.ts` onde registrar providers nem CSS global pré-existente, o Nx
- * guarda os paths do TypeScript noutro arquivo, e o Analog troca o build do
- * Angular por Vite — e com ele a forma de configurar o Tailwind. Concentrar
- * essas diferenças aqui evita que cada etapa precise redescobri-las.
+ * The differences between the types are not cosmetic: a library has no
+ * `app.config.ts` to register providers in and no pre-existing global CSS, Nx
+ * keeps the TypeScript paths in a different file, and Analog swaps Angular's
+ * build for Vite — and with it the way Tailwind is configured. Concentrating
+ * those differences here keeps every step from rediscovering them.
  */
 
 import type { ProjectInfo, WorkspaceProject } from '@cli/utils/get-project-info.js';
@@ -22,23 +22,23 @@ export interface ProjectKindOption {
   readonly value: ProjectKind;
   readonly label: string;
   readonly detail: string;
-  /** A cor do ecossistema, para o menu dizer de relance a que mundo o tipo pertence. */
+  /** The ecosystem's colour, so the menu says at a glance which world the type belongs to. */
   readonly color: string;
 }
 
 /**
- * As cores de cada ecossistema no menu.
+ * The colour of each ecosystem in the menu.
  *
- * Angular fica no branco da base — é o caso padrão, e destacá-lo com uma cor
- * daria a impressão de que é uma opção especial entre as outras.
+ * Angular stays the base white — it is the default case, and giving it a colour
+ * would suggest it is a special option among the others.
  */
 const ANGULAR = '#fafafa';
 const NX = '#6aa9ff';
 const ANALOG = '#fb7185';
 
 /**
- * A ordem é a do menu: cada ecossistema com a aplicação antes da biblioteca,
- * do mais comum ao mais raro. Angular abre a lista porque é o default.
+ * Menu order: each ecosystem with the application before the library, from the
+ * most common to the rarest. Angular opens the list because it is the default.
  */
 export const PROJECT_KINDS: readonly ProjectKindOption[] = [
   {
@@ -74,7 +74,7 @@ export const PROJECT_KINDS: readonly ProjectKindOption[] = [
 ];
 
 interface KindTraits {
-  /** Bibliotecas não têm app.config.ts, CSS global nem build próprio de app. */
+  /** Libraries have no app.config.ts, no global CSS and no app build of their own. */
   readonly isLibrary: boolean;
   /** Quem gerencia o workspace — decide onde os paths do TypeScript vivem. */
   readonly workspace: 'angular' | 'nx';
@@ -96,11 +96,11 @@ export function isLibraryKind(kind: ProjectKind): boolean {
   return TRAITS[kind].isLibrary;
 }
 
-/** Onde os paths do TypeScript precisam ser escritos para o projeto enxergá-los. */
+/** Where the TypeScript paths have to be written for the project to see them. */
 export function tsconfigFileFor(kind: ProjectKind, projectInfo: ProjectInfo): string {
-  // O Nx estende um tsconfig.base.json na raiz; escrever no tsconfig.json de lá
-  // não chegaria a projeto nenhum. Fora do Nx o próprio tsconfig.json é o alvo,
-  // a menos que o workspace já mantenha um base — aí ele é quem manda.
+  // Nx extends a tsconfig.base.json at the root; writing into the tsconfig.json
+  // there would reach no project at all. Outside Nx the tsconfig.json itself is
+  // the target, unless the workspace already keeps a base — then that one wins.
   if (TRAITS[kind].workspace === 'nx') return 'tsconfig.base.json';
 
   return projectInfo.tsconfigFile;
@@ -112,11 +112,11 @@ export function bundlerFor(kind: ProjectKind): 'angular' | 'vite' {
 }
 
 /**
- * Os projetos do workspace que podem receber a instalação.
+ * The workspace projects that can receive the install.
  *
- * Escolhido o tipo, só faz sentido oferecer o que combina com ele: pedir para
- * instalar numa aplicação quem escolheu biblioteca seria oferecer um alvo que
- * as etapas seguintes não sabem configurar.
+ * Once the type is chosen, only what matches it makes sense to offer: asking
+ * someone who chose "library" to install into an application would offer a
+ * target the following steps do not know how to configure.
  */
 export function candidateProjects(kind: ProjectKind, projectInfo: ProjectInfo): WorkspaceProject[] {
   const wanted = TRAITS[kind].isLibrary ? 'library' : 'application';
@@ -124,18 +124,18 @@ export function candidateProjects(kind: ProjectKind, projectInfo: ProjectInfo): 
   return projectInfo.projects.filter(project => project.projectType === wanted);
 }
 
-/** Raiz padrão quando o workspace não declara nenhum projeto compatível. */
+/** Default root when the workspace declares no compatible project. */
 export function fallbackRootFor(kind: ProjectKind): string {
   return TRAITS[kind].fallbackRoot;
 }
 
 /**
- * O tipo que o caminho headless assume.
+ * The type the headless path assumes.
  *
- * Sem terminal interativo ninguém responde à primeira pergunta, então aqui — e
- * só aqui — o workspace decide: o gerenciador dá o mundo (Nx ou Angular), o
- * Analog se anuncia pelas próprias dependências, e a ausência de qualquer
- * aplicação é o que sugere que o alvo é uma biblioteca.
+ * With no interactive terminal nobody answers the first question, so here — and
+ * only here — the workspace decides: the manager gives the world (Nx or
+ * Angular), Analog announces itself through its own dependencies, and the
+ * absence of any application is what suggests the target is a library.
  */
 export function detectProjectKind(projectInfo: ProjectInfo): ProjectKind {
   const hasApplication = projectInfo.projects.some(project => project.projectType === 'application');
@@ -149,44 +149,44 @@ export function detectProjectKind(projectInfo: ProjectInfo): ProjectKind {
 }
 
 /**
- * Onde o código da biblioteca vive.
+ * Where a library's code lives.
  *
- * `src/lib` é a convenção tanto do `ng generate library` quanto do
- * `nx g @nx/angular:library`: `src/` guarda o ponto de entrada público, e tudo
- * que ele exporta fica em `src/lib`.
+ * `src/lib` is the convention for both `ng generate library` and
+ * `nx g @nx/angular:library`: `src/` holds the public entry point, and
+ * everything it exports sits in `src/lib`.
  */
 export function libraryBaseUrl(libraryRoot: string): string {
   return `${trimSlashes(libraryRoot)}/src/lib`;
 }
 
-/** O CSS de tema que a biblioteca passa a expor para quem a consome. */
+/** The theme CSS the library starts exposing to whoever consumes it. */
 export function libraryStylesPath(libraryRoot: string): string {
   return `${trimSlashes(libraryRoot)}/src/styles.css`;
 }
 
 /**
- * A raiz do projeto, deduzida do `baseUrl`.
+ * The project root, derived from `baseUrl`.
  *
- * Os dois layouts terminam dois níveis abaixo da raiz — `<root>/src/app` numa
- * aplicação, `<root>/src/lib` numa biblioteca —, então subir dois níveis
- * devolve o diretório onde vivem o `project.json`, o `ng-package.json` e o
- * `.postcssrc.json` daquele projeto. Um app único na raiz devolve `.`.
+ * Both layouts end two levels below the root — `<root>/src/app` in an
+ * application, `<root>/src/lib` in a library — so going up two levels gives the
+ * directory holding that project's `project.json`, `ng-package.json` and
+ * `.postcssrc.json`. A single app at the root gives `.`.
  */
 export function projectRootOf(baseUrl: string): string {
   return path.posix.normalize(path.posix.join(toPosix(baseUrl), '..', '..'));
 }
 
-/** O diretório de fontes do projeto — onde `index.html` e `main.ts` ficam. */
+/** The project's source directory — where `index.html` and `main.ts` sit. */
 export function sourceRootOf(baseUrl: string): string {
   return path.posix.dirname(toPosix(baseUrl));
 }
 
 /**
- * Onde procurar o `index.html` do projeto.
+ * Where to look for the project's `index.html`.
  *
- * No Analog ele é a página de entrada do Vite e fica na raiz, e não em `src/`
- * como no build do Angular — sugerir o caminho errado fazia o `add dark-mode`
- * falhar logo depois de perguntar.
+ * In Analog it is Vite's entry page and sits at the project root, not in `src/`
+ * as in the Angular build — suggesting the wrong path made `add dark-mode` fail
+ * right after asking.
  */
 export function indexHtmlFor(kind: ProjectKind, baseUrl: string): string {
   if (kind === 'analog') {

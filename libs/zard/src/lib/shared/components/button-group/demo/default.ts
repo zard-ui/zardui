@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -100,6 +100,7 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
       </z-button-group>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
       lucideArrowLeft,

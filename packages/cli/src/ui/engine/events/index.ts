@@ -1,6 +1,6 @@
 /**
- * events — primitivas de eventos tipadas. Base de input/focus/scheduler.
- * Sem dependências. Sem I/O. (Implementação real.)
+ * events — typed event primitives. The basis of input/focus/scheduler.
+ * No dependencies. No I/O.
  */
 
 export interface Disposable {
@@ -31,7 +31,7 @@ export function createEmitter<T>(): EventEmitter<T> {
       return { dispose: () => listeners.delete(wrap) };
     },
     emit(payload) {
-      // itera sobre cópia: listeners podem se remover durante o emit
+      // iterate over a copy: listeners may remove themselves during the emit
       for (const l of [...listeners]) l(payload);
     },
     clear() {

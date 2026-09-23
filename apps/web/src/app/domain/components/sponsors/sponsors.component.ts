@@ -11,7 +11,6 @@ export interface SponsorData {
 
 @Component({
   selector: 'z-sponsors',
-  standalone: true,
   imports: [ZardAvatarComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

@@ -9,7 +9,7 @@ const PARAGRAPHS = Array.from({ length: 10 }).map(
 );
 
 @Component({
-  selector: 'zard-demo-dialog-sticky-footer-content',
+  selector: 'z-demo-dialog-sticky-footer-content',
   template: `
     <div class="no-scrollbar -mx-4 max-h-[50vh] overflow-y-auto px-4">
       @for (paragraph of paragraphs; track $index) {
@@ -24,7 +24,7 @@ export class ZardDemoDialogStickyFooterContentComponent {
 }
 
 @Component({
-  selector: 'zard-demo-dialog-sticky-footer',
+  selector: 'z-demo-dialog-sticky-footer',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="open()">Sticky Footer</button>

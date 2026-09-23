@@ -268,7 +268,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-outline',
+  selector: 'z-demo-toggle-group-outline',
   imports: [ZardToggleGroupComponent],
   template: `
     <z-toggle-group
@@ -280,7 +280,7 @@ import {
     />
   `,
 })
-export default class ToggleGroupOutlineComponent {
+export class ZardDemoToggleGroupOutlineComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'all',
@@ -313,7 +313,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-sizes',
+  selector: 'z-demo-toggle-group-sizes',
   imports: [ZardToggleGroupComponent],
   template: `
     <div class="space-y-4">
@@ -340,7 +340,7 @@ import {
     </div>
   `,
 })
-export default class ToggleGroupSizesComponent {
+export class ZardDemoToggleGroupSizesComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'top',
@@ -383,7 +383,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-spacing',
+  selector: 'z-demo-toggle-group-spacing',
   imports: [ZardToggleGroupComponent],
   template: `
     <z-toggle-group
@@ -397,7 +397,7 @@ import {
     />
   `,
 })
-export default class ToggleGroupSpacingComponent {
+export class ZardDemoToggleGroupSpacingComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'top',
@@ -443,7 +443,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-vertical',
+  selector: 'z-demo-toggle-group-vertical',
   imports: [ZardToggleGroupComponent],
   template: `
     <z-toggle-group
@@ -463,7 +463,7 @@ import {
     }),
   ],
 })
-export default class ToggleGroupVerticalComponent {
+export class ZardDemoToggleGroupVerticalComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'bold',
@@ -502,7 +502,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-disabled',
+  selector: 'z-demo-toggle-group-disabled',
   imports: [ZardToggleGroupComponent],
   template: `
     <z-toggle-group [zDisabled]="true" zMode="multiple" [zItems]="items" (valueChange)="onToggleChange($event)" />
@@ -515,7 +515,7 @@ import {
     }),
   ],
 })
-export default class ToggleGroupDisabledComponent {
+export class ZardDemoToggleGroupDisabledComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'bold',
@@ -545,7 +545,7 @@ export default class ToggleGroupDisabledComponent {
 A custom toggle group example.
 
 ```angular-ts
-import { Component, computed, signal, type TemplateRef, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, type TemplateRef, viewChild } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field';
 import {
@@ -554,7 +554,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-custom',
+  selector: 'z-demo-toggle-group-custom',
   imports: [ZardToggleGroupComponent, ...ZardFieldImports],
   template: `
     <div z-field class="w-full">
@@ -596,8 +596,9 @@ import {
       <span class="text-muted-foreground text-xs">Bold</span>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class ToggleGroupCustomComponent {
+export class ZardDemoToggleGroupCustomComponent {
   readonly light = viewChild<TemplateRef<void>>('light');
   readonly normal = viewChild<TemplateRef<void>>('normal');
   readonly medium = viewChild<TemplateRef<void>>('medium');
@@ -648,18 +649,18 @@ A set of two-state buttons that can be pressed or released, with multiple select
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
-| `zDefaultValue` | Default value | `string \| string[]` | `-` |
-| `zDisabled` | Whether the entire group is disabled | `boolean` | `false` |
-| `zItemClass` | Additional CSS classes for group item | `ClassValue` | `''` |
-| `zItems` | Array of toggle items to display | `ZardToggleGroupItem[]` | `[]` |
-| `zMode` | Selection mode — single allows one active toggle, multiple allows many | `'single' \| 'multiple'` | `'multiple'` |
-| `zOrientation` | Layout direction of the toggle group | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| `zSize` | Size variant of the toggle group | `'default' \| 'sm' \| 'lg'` | `'default'` |
-| `zSpacing` | Gap spacing between toggle items | `number` | `0` |
-| `zType` | Visual style variant | `'default' \| 'outline'` | `'default'` |
-| `zValue` | Controlled value of the toggle group | `string \| string[] \| undefined` | `-` |
-| `valueChange` | Emitted when toggle state changes, returns updated value | `output<string \| string[]>` | `-` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zDefaultValue]` | Default value | `string \| string[]` | `-` |
+| `[zDisabled]` | Whether the entire group is disabled | `boolean` | `false` |
+| `[zItemClass]` | Additional CSS classes for group item | `ClassValue` | `''` |
+| `[zItems]` | Array of toggle items to display | `ZardToggleGroupItem[]` | `[]` |
+| `[zMode]` | Selection mode — single allows one active toggle, multiple allows many | `'single' \| 'multiple'` | `'multiple'` |
+| `[zOrientation]` | Layout direction of the toggle group | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `[zSize]` | Size variant of the toggle group | `'default' \| 'sm' \| 'lg'` | `'default'` |
+| `[zSpacing]` | Gap spacing between toggle items | `number` | `0` |
+| `[zType]` | Visual style variant | `'default' \| 'outline'` | `'default'` |
+| `[zValue]` | Controlled value of the toggle group | `string \| string[] \| undefined` | `-` |
+| `(valueChange)` | Emitted when toggle state changes, returns updated value | `output<string \| string[]>` | `-` |
 
 ---
 

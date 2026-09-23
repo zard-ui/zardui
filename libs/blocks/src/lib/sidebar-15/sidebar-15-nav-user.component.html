@@ -1,0 +1,71 @@
+<ul z-sidebar-menu>
+  <li z-sidebar-menu-item>
+    <button
+      z-sidebar-menu-button
+      zSize="lg"
+      z-dropdown
+      [zDropdownMenu]="userMenu"
+      class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+    >
+      <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="ZU" />
+
+      <div class="grid flex-1 text-left text-sm leading-tight">
+        <span class="truncate font-medium">{{ user().name }}</span>
+        <span class="truncate text-xs">{{ user().email }}</span>
+      </div>
+
+      <ng-icon name="lucideChevronsUpDown" class="ml-auto size-4" />
+    </button>
+
+    <z-dropdown-menu-content
+      #userMenu="zDropdownMenuContent"
+      class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+      [zSide]="menuSide()"
+      zAlign="end"
+    >
+      <z-dropdown-menu-label class="p-0 font-normal">
+        <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+          <z-avatar class="size-8 rounded-lg" [zSrc]="user().avatar" [zAlt]="user().name" zFallback="ZU" />
+
+          <div class="grid flex-1 text-left text-sm leading-tight">
+            <span class="truncate font-medium">{{ user().name }}</span>
+            <span class="truncate text-xs">{{ user().email }}</span>
+          </div>
+        </div>
+      </z-dropdown-menu-label>
+
+      <z-dropdown-menu-separator />
+
+      <z-dropdown-menu-group>
+        <z-dropdown-menu-item>
+          <ng-icon name="lucideSparkles" />
+          Upgrade to Pro
+        </z-dropdown-menu-item>
+      </z-dropdown-menu-group>
+
+      <z-dropdown-menu-separator />
+
+      <z-dropdown-menu-group>
+        <z-dropdown-menu-item>
+          <ng-icon name="lucideBadgeCheck" />
+          Account
+        </z-dropdown-menu-item>
+        <z-dropdown-menu-item>
+          <ng-icon name="lucideCreditCard" />
+          Billing
+        </z-dropdown-menu-item>
+        <z-dropdown-menu-item>
+          <ng-icon name="lucideBell" />
+          Notifications
+        </z-dropdown-menu-item>
+      </z-dropdown-menu-group>
+
+      <z-dropdown-menu-separator />
+
+      <z-dropdown-menu-item>
+        <ng-icon name="lucideLogOut" />
+        Log out
+      </z-dropdown-menu-item>
+    </z-dropdown-menu-content>
+  </li>
+</ul>

@@ -5,7 +5,6 @@ import { CodeHighlightService } from '../../services/code-highlight.service';
 
 @Component({
   selector: 'z-simple-code-highlight',
-  standalone: true,
   template: `
     <div class="relative">
       @if (showCopyButton()) {

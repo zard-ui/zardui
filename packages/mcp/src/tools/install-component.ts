@@ -66,7 +66,10 @@ export function registerInstallComponent(server: McpServer): void {
           ),
         overwrite: z.boolean().optional().describe('Replace files that already exist (default false)'),
       },
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+      // Destructive because `overwrite` replaces files the user may have edited;
+      // the hint describes the worst case, and clients use it to decide whether
+      // to ask first.
+      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: true },
     },
     async ({ name, cwd, overwrite }) => {
       let workDir: string;

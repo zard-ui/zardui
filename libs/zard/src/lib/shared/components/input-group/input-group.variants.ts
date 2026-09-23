@@ -13,7 +13,7 @@ export const inputGroupVariants = cva(
     'has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3',
     'has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5',
     // Input/textarea overrides when used as input-group-control
-    '[&>[data-slot=input-group-control]]:flex-1 [&>[data-slot=input-group-control]]:rounded-none [&>[data-slot=input-group-control]]:border-0! [&>[data-slot=input-group-control]]:bg-transparent! [&>[data-slot=input-group-control]]:shadow-none [&>[data-slot=input-group-control]]:ring-0!',
+    '*:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0!',
     '[&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0!',
     '[&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
   ),

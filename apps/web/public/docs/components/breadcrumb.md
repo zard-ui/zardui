@@ -466,7 +466,7 @@ export const breadcrumbVariants = cva('w-full', {
 export type ZardBreadcrumbSizeVariants = NonNullable<VariantProps<typeof breadcrumbVariants>['zSize']>;
 
 export const breadcrumbListVariants = cva(
-  'text-muted-foreground flex flex-wrap items-center gap-1.5 break-words sm:gap-2.5',
+  'text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word sm:gap-2.5',
   {
     variants: {
       zAlign: {
@@ -539,8 +539,8 @@ export const ZardBreadcrumbImports = [
 ```
 
 ```angular-ts
-export * from '@/shared/components/breadcrumb/breadcrumb.component';
-export * from '@/shared/components/breadcrumb/breadcrumb.variants';
+export * from './breadcrumb.component';
+export * from './breadcrumb.variants';
 ```
 
 ## Usage
@@ -568,7 +568,7 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
 ### Default
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBreadcrumbImports } from '../breadcrumb.imports';
 
@@ -588,6 +588,7 @@ import { ZardBreadcrumbImports } from '../breadcrumb.imports';
       </z-breadcrumb-item>
     </z-breadcrumb>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoBreadcrumbDefaultComponent {}
 ```
@@ -595,7 +596,7 @@ export class ZardDemoBreadcrumbDefaultComponent {}
 ### Separator
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideDot } from '@ng-icons/lucide';
@@ -624,6 +625,7 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
       </z-breadcrumb-item>
     </z-breadcrumb>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideDot })],
 })
 export class ZardDemoBreadcrumbSeparatorComponent {}
@@ -632,7 +634,7 @@ export class ZardDemoBreadcrumbSeparatorComponent {}
 ### Dropdown
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
@@ -673,6 +675,7 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/n
       </z-breadcrumb-item>
     </z-breadcrumb>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideChevronDown })],
 })
 export class ZardDemoBreadcrumbDropdownComponent {}
@@ -681,7 +684,7 @@ export class ZardDemoBreadcrumbDropdownComponent {}
 ### Ellipsis
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 
@@ -704,6 +707,7 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
       </z-breadcrumb-item>
     </z-breadcrumb>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoBreadcrumbEllipsisComponent {}
 ```
@@ -711,7 +715,7 @@ export class ZardDemoBreadcrumbEllipsisComponent {}
 ### Link
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 
@@ -731,6 +735,7 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
       </z-breadcrumb-item>
     </z-breadcrumb>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoBreadcrumbLinkComponent {}
 ```
@@ -757,7 +762,7 @@ An individual breadcrumb item. When no composed primitive is projected, it rende
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `routerLink` | Router-compatible inputs are forwarded to the generated breadcrumb link | `string \| any[]` | `-` |
+| `[routerLink]` | Router-compatible inputs are forwarded to the generated breadcrumb link | `string \| any[]` | `-` |
 
 ### z-breadcrumb-link, [z-breadcrumb-link]
 
@@ -766,8 +771,8 @@ A clickable breadcrumb link. Supports Router-compatible inputs and plain href li
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `routerLink` | Router-compatible inputs used to build the link URL and navigate on click | `string \| any[]` | `-` |
-| `href` | Plain link URL when routerLink is not provided | `string` | `-` |
+| `[routerLink]` | Router-compatible inputs used to build the link URL and navigate on click | `string \| any[]` | `-` |
+| `[href]` | Plain link URL when routerLink is not provided | `string` | `-` |
 
 ### z-breadcrumb-page, [z-breadcrumb-page]
 

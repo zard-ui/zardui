@@ -38,13 +38,22 @@ describe('ZardDropdownService', () => {
           }),
         }),
       }),
+      keydownEvents: jest.fn().mockReturnValue({
+        subscribe: jest.fn().mockReturnValue({
+          unsubscribe: jest.fn(),
+        }),
+      }),
       overlayElement: document.createElement('div'),
+      hostElement: document.createElement('div'),
     } as unknown as jest.Mocked<OverlayRef & { overlayElement: HTMLElement }>;
 
     mockOverlayPositionBuilder = {
       flexibleConnectedTo: jest.fn().mockReturnValue({
         withPositions: jest.fn().mockReturnValue({
           withPush: jest.fn().mockReturnValue(mockPositionStrategy),
+          withFlexibleDimensions: jest.fn().mockReturnValue({
+            withPush: jest.fn().mockReturnValue(mockPositionStrategy),
+          }),
         }),
       }),
     } as unknown as jest.Mocked<OverlayPositionBuilder>;
@@ -53,6 +62,7 @@ describe('ZardDropdownService', () => {
       create: jest.fn().mockReturnValue(mockOverlayRef),
       scrollStrategies: {
         reposition: jest.fn().mockReturnValue({}),
+        close: jest.fn().mockReturnValue({}),
       },
     } as unknown as jest.Mocked<Overlay>;
 
@@ -182,11 +192,19 @@ describe('ZardDropdownService', () => {
     let menuElement: HTMLElement;
     let menuItems: HTMLElement[];
     let keydownHandler: ((event: KeyboardEvent) => void) | undefined;
+    let typeaheadHandler: ((event: KeyboardEvent) => void) | undefined;
 
     beforeEach(() => {
       keydownHandler = undefined;
-      mockRenderer.listen.mockImplementation((_target, _eventName, callback) => {
-        keydownHandler = callback as (event: KeyboardEvent) => void;
+      typeaheadHandler = undefined;
+      // Two listeners are registered on the surface — the command set and the typeahead — so the
+      // handler is picked by event name instead of by whichever one was bound last.
+      mockRenderer.listen.mockImplementation((_target, eventName, callback) => {
+        if (eventName === 'keydown') {
+          typeaheadHandler = callback as (event: KeyboardEvent) => void;
+        } else if (String(eventName).startsWith('keydown.')) {
+          keydownHandler = callback as (event: KeyboardEvent) => void;
+        }
         return mockUnlistenFn;
       });
 
@@ -284,6 +302,30 @@ describe('ZardDropdownService', () => {
       expect(service.isOpen()).toBe(false);
       expect(focusSpy).toHaveBeenCalled();
     });
+
+    it('jumps to the next item starting with the typed character', async () => {
+      menuElement.innerHTML = '';
+      const profile = document.createElement('z-dropdown-menu-item');
+      profile.textContent = 'Profile';
+      const billing = document.createElement('z-dropdown-menu-item');
+      billing.textContent = 'Billing';
+      menuElement.append(profile, billing);
+
+      service.toggle(triggerElement, templateRef, viewContainerRef);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      typeaheadHandler?.(new KeyboardEvent('keydown', { key: 'b' }));
+
+      expect(billing).toHaveAttribute('data-highlighted', '');
+      expect(profile).not.toHaveAttribute('data-highlighted');
+    });
+
+    it('leaves the highlight alone when no item matches the typed character', async () => {
+      service.toggle(triggerElement, templateRef, viewContainerRef);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      typeaheadHandler?.(new KeyboardEvent('keydown', { key: 'z' }));
+
+      expect(menuItems.some(item => item.hasAttribute('data-highlighted'))).toBe(false);
+    });
   });
 
   describe('focused item management', () => {
@@ -319,6 +361,50 @@ describe('ZardDropdownService', () => {
       expect(firstItem.dataset['highlighted']).toBeUndefined();
     });
   });
+
+  describe('openAt', () => {
+    let templateRef: TemplateRef<unknown>;
+    let viewContainerRef: ViewContainerRef;
+
+    beforeEach(() => {
+      templateRef = { elementRef: new ElementRef(document.createElement('div')) } as TemplateRef<unknown>;
+      viewContainerRef = {
+        createEmbeddedView: jest.fn(),
+        clear: jest.fn(),
+        element: new ElementRef(document.createElement('div')),
+        injector: TestBed.inject(PLATFORM_ID),
+      } as unknown as ViewContainerRef;
+    });
+
+    it('anchors the overlay to the given coordinate', () => {
+      service.openAt({ x: 120, y: 240 }, templateRef, viewContainerRef);
+
+      expect(mockOverlayPositionBuilder.flexibleConnectedTo).toHaveBeenCalledWith({ x: 120, y: 240 });
+      expect(service.isOpen()).toBe(true);
+    });
+
+    it('dismisses the menu on scroll', () => {
+      service.openAt({ x: 0, y: 0 }, templateRef, viewContainerRef);
+
+      expect(mockOverlay.scrollStrategies.close).toHaveBeenCalled();
+    });
+
+    it('remembers the focus origin so Escape can return the focus to it', () => {
+      const focusOrigin = new ElementRef(document.createElement('div'));
+
+      service.openAt({ x: 10, y: 10 }, templateRef, viewContainerRef, focusOrigin);
+
+      expect(service.getTriggerElement()).toBe(focusOrigin);
+    });
+
+    it('closes an already open menu before opening at the new coordinate', () => {
+      service.openAt({ x: 10, y: 10 }, templateRef, viewContainerRef);
+      service.openAt({ x: 50, y: 50 }, templateRef, viewContainerRef);
+
+      expect(mockOverlayRef.detach).toHaveBeenCalled();
+      expect(mockOverlayPositionBuilder.flexibleConnectedTo).toHaveBeenLastCalledWith({ x: 50, y: 50 });
+    });
+  });
 });
 
 describe('ZardDropdownService - server platform behavior', () => {
@@ -344,7 +430,13 @@ describe('ZardDropdownService - server platform behavior', () => {
           }),
         }),
       }),
+      keydownEvents: jest.fn().mockReturnValue({
+        subscribe: jest.fn().mockReturnValue({
+          unsubscribe: jest.fn(),
+        }),
+      }),
       overlayElement: document.createElement('div'),
+      hostElement: document.createElement('div'),
     } as unknown as jest.Mocked<OverlayRef & { overlayElement: HTMLElement }>;
 
     mockOverlayPositionBuilder = {

@@ -15,7 +15,7 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
 
-import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { ZardCommand } from '@/shared/components/command/command.tokens';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
 
@@ -65,7 +65,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   exportAs: 'zCommandInput',
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {
-  private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
+  private readonly commandComponent = inject(ZardCommand, { optional: true });
   // `#searchInput` sits on an `input[z-input]` component, so read the element explicitly.
   readonly searchInput = viewChild<unknown, ElementRef<HTMLInputElement>>('searchInput', { read: ElementRef });
 
@@ -85,7 +85,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
   };
 
   onInput(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
+    const { value } = event.target as HTMLInputElement;
     this.updateParentComponents(value);
   }
 

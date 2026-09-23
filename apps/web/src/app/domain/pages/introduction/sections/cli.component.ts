@@ -6,8 +6,7 @@ interface CLIFeature {
 }
 
 @Component({
-  selector: 'cli-section',
-  standalone: true,
+  selector: 'z-introduction-cli-section',
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-2">
@@ -51,7 +50,7 @@ interface CLIFeature {
     </section>
   `,
 })
-export class CLISection {
+export class IntroductionCliSectionComponent {
   readonly features: CLIFeature[] = [
     {
       title: 'Smart Installation',

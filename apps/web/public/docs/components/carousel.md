@@ -131,9 +131,11 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
     }),
   ],
   host: {
+    'data-slot': 'carousel',
     '(keydown.arrowleft.prevent)': 'slidePrevious()',
     '(keydown.arrowright.prevent)': 'slideNext()',
   },
+  exportAs: 'zCarousel',
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);
@@ -308,8 +310,10 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'carousel-content',
     '[class]': 'classes()',
   },
+  exportAs: 'zCarouselContent',
 })
 export class ZardCarouselContentComponent {
   readonly #parent = inject(ZardCarouselComponent);
@@ -338,10 +342,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'carousel-item',
     '[class]': 'classes()',
     role: 'group',
     'aria-roledescription': 'slide',
   },
+  exportAs: 'zCarouselItem',
 })
 export class ZardCarouselItemComponent {
   readonly #parent = inject(ZardCarouselComponent);
@@ -357,8 +363,9 @@ export class ZardCarouselItemComponent {
 ```angular-ts
 import { Injectable } from '@angular/core';
 
-// Do pacote base, não do wrapper Angular: ele re-exportava esses tipos na v21 e
-// parou na v22. Por isso `embla-carousel` é dependência declarada do componente.
+// From the base package, not the Angular wrapper: the wrapper re-exported these
+// types in v21 and stopped in v22, which is why `embla-carousel` is a declared
+// dependency of the component.
 import type { EmblaPluginType } from 'embla-carousel';
 
 /**
@@ -470,12 +477,12 @@ export const ZardCarouselImports = [
 ```
 
 ```angular-ts
-export * from '@/shared/components/carousel/carousel.component';
-export * from '@/shared/components/carousel/carousel-content.component';
-export * from '@/shared/components/carousel/carousel-item.component';
-export * from '@/shared/components/carousel/carousel-plugins.service';
-export * from '@/shared/components/carousel/carousel.variants';
-export * from '@/shared/components/carousel/carousel.imports';
+export * from './carousel.component';
+export * from './carousel-content.component';
+export * from './carousel-item.component';
+export * from './carousel-plugins.service';
+export * from './carousel.variants';
+export * from './carousel.imports';
 ```
 
 ## Usage
@@ -509,7 +516,7 @@ import { ZardCarouselImports } from '@/shared/components/carousel/carousel.impor
 @Component({
   imports: [ZardCarouselImports, ZardCardImports],
   template: `
-    <div class="w-full max-w-[12rem] sm:max-w-xs md:max-w-sm">
+    <div class="w-full max-w-48 sm:max-w-xs md:max-w-sm">
       <z-carousel [zOptions]="{ align: 'start' }">
         <z-carousel-content>
           @for (slide of slides; track slide) {
@@ -569,7 +576,7 @@ import { ZardCarouselImports } from '@/shared/components/carousel/carousel.impor
 @Component({
   imports: [ZardCarouselImports, ZardCardImports],
   template: `
-    <div class="w-full max-w-[12rem] sm:max-w-xs md:max-w-sm">
+    <div class="w-full max-w-48 sm:max-w-xs md:max-w-sm">
       <z-carousel>
         <z-carousel-content class="-ml-1">
           @for (slide of slides; track slide) {

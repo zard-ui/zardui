@@ -5,7 +5,6 @@ import { InlineCodePipe } from '../../pipes/inline-code.pipe';
 
 @Component({
   selector: 'z-theme-anatomy',
-  standalone: true,
   imports: [InlineCodePipe],
   templateUrl: './theme-anatomy.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

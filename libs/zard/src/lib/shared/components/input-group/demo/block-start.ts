@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCopy, lucideFileCode } from '@ng-icons/lucide';
@@ -45,6 +45,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCopy, lucideFileCode })],
 })
 export class ZardDemoInputGroupBlockStartComponent {}

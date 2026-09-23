@@ -1,23 +1,24 @@
 /**
- * Edição de uma linha de texto num campo do wizard.
+ * Editing a single line of text in a wizard field.
  *
- * O campo aceitava só duas coisas — digitar no fim e apagar de trás para a
- * frente. Quem quisesse trocar o meio de um alias (`@/shared/components` para
- * `@app/shared/components`) apertava as setas, não via nada acontecer e ficava
- * sem saída a não ser apagar tudo e redigitar. Aqui o cursor é de verdade:
- * anda, insere no meio, apaga para os dois lados.
+ * The field accepted exactly two things — typing at the end and deleting
+ * backwards. Anyone who wanted to change the middle of an alias
+ * (`@/shared/components` to `@app/shared/components`) pressed the arrow keys,
+ * saw nothing happen, and was left with no option but to delete everything and
+ * retype it. Here the cursor is real: it moves, inserts in the middle, and
+ * deletes in both directions.
  */
 
 import type { KeyEvent } from '@cli/ui/engine/index.js';
 
 export interface TextInput {
   readonly value: string;
-  /** Posição do cursor, em caracteres — nunca fora de `[0, comprimento]`. */
+  /** Cursor position, in characters — never outside `[0, length]`. */
   readonly caret: number;
   /**
-   * true enquanto o campo ainda mostra a sugestão e o usuário não tocou nela:
-   * a primeira tecla digitada substitui a sugestão inteira, em vez de emendar
-   * nela. Mover o cursor ou apagar assume o valor e passa a editá-lo.
+   * True while the field still shows the suggestion and the user has not touched
+   * it: the first key typed replaces the whole suggestion instead of appending
+   * to it. Moving the cursor or deleting adopts the value and starts editing it.
    */
   readonly pristine: boolean;
 }
@@ -27,10 +28,10 @@ export function startInput(value: string): TextInput {
 }
 
 /**
- * Aplica uma tecla ao campo.
+ * Applies one key to the field.
  *
- * Devolve `null` quando a tecla não é de edição — `enter` e `escape` pertencem
- * ao fluxo do wizard, e é ele quem decide o que fazer com elas.
+ * Returns `null` when the key is not an editing key — `enter` and `escape`
+ * belong to the wizard's flow, and it decides what to do with them.
  */
 export function editInput(state: TextInput, event: KeyEvent): TextInput | null {
   const chars = [...state.value];
@@ -40,8 +41,9 @@ export function editInput(state: TextInput, event: KeyEvent): TextInput | null {
   if (event.alt) return null;
 
   if (event.key.length === 1) {
-    // A sugestão inteira sai na primeira tecla: quem já sabe o que quer digita
-    // direto, sem apagar caractere por caractere o que a CLI propôs.
+    // The whole suggestion goes on the first key: someone who already knows what
+    // they want types straight over it, rather than deleting the CLI's proposal
+    // one character at a time.
     if (state.pristine) return { value: event.key, caret: 1, pristine: false };
 
     chars.splice(caret, 0, event.key);
@@ -79,10 +81,10 @@ export function editInput(state: TextInput, event: KeyEvent): TextInput | null {
 /** Os atalhos de linha que qualquer shell oferece. */
 function editWithControl(state: TextInput, chars: string[], caret: number, key: string): TextInput | null {
   switch (key) {
-    case 'u': // limpa até o começo
+    case 'u': // clear to the start
       return { value: chars.slice(caret).join(''), caret: 0, pristine: false };
 
-    case 'k': // limpa até o fim
+    case 'k': // clear to the end
       return { value: chars.slice(0, caret).join(''), caret, pristine: false };
 
     case 'w': {

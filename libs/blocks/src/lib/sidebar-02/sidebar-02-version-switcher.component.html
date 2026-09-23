@@ -1,0 +1,33 @@
+<ul z-sidebar-menu>
+  <li z-sidebar-menu-item>
+    <button
+      z-sidebar-menu-button
+      zSize="lg"
+      z-dropdown
+      [zDropdownMenu]="versionMenu"
+      class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+    >
+      <div
+        class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
+      >
+        <ng-icon name="lucideGalleryVerticalEnd" class="size-4" />
+      </div>
+      <div class="flex flex-col gap-0.5 leading-none">
+        <span class="font-medium">Documentation</span>
+        <span>v{{ activeVersion() }}</span>
+      </div>
+      <ng-icon name="lucideChevronsUpDown" class="ml-auto" />
+    </button>
+
+    <z-dropdown-menu-content #versionMenu="zDropdownMenuContent" class="w-(--z-dropdown-menu-trigger-width)">
+      @for (version of versions(); track version) {
+        <z-dropdown-menu-item (click)="selectedVersion.set(version)">
+          v{{ version }}
+          @if (version === activeVersion()) {
+            <ng-icon name="lucideCheck" class="ml-auto" />
+          }
+        </z-dropdown-menu-item>
+      }
+    </z-dropdown-menu-content>
+  </li>
+</ul>

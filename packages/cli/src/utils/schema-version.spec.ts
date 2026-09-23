@@ -6,8 +6,8 @@ describe('assertSupportedSchema', () => {
   });
 
   /**
-   * Um registry publicado antes do campo existir é, por definição, a v1 — e
-   * recusá-lo quebraria toda CLI nova contra todo registry antigo.
+   * A registry published before the field existed is, by definition, v1 — and
+   * rejecting it would break every new CLI against every old registry.
    */
   it('reads a document without the field as v1', () => {
     expect(() => assertSupportedSchema(undefined, 'registry.json')).not.toThrow();

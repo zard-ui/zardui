@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import {
@@ -39,6 +39,7 @@ import { ZardCommandImports } from '@/shared/components/command/command.imports'
       </z-command-list>
     </z-command>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
       lucideCalendar,

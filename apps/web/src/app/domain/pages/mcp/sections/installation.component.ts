@@ -9,8 +9,7 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 const SERVER = { command: 'npx', args: ['-y', 'zard-mcp'] };
 
 @Component({
-  selector: 'mcp-installation-section',
-  standalone: true,
+  selector: 'z-mcp-installation-section',
   imports: [CodeTabsComponent, ZardButtonComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -56,7 +55,7 @@ const SERVER = { command: 'npx', args: ['-y', 'zard-mcp'] };
     </p>
   `,
 })
-export class McpInstallationSection {
+export class McpInstallationSectionComponent {
   readonly cliTabs: CodeTabData = TABS_0;
   readonly configTabs: CodeTabData = TABS_1;
 

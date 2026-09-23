@@ -39,17 +39,15 @@ export class ZardDropdownMenuItemComponent {
   private readonly dropdownService = inject(ZardDropdownService);
 
   readonly variant = input<ZardDropdownItemTypeVariants>('default');
-  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zType' });
-  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined, { alias: 'zVariant' });
+  readonly zType = input<ZardDropdownItemTypeVariants | undefined>(undefined);
+  readonly zVariant = input<ZardDropdownItemTypeVariants | undefined>(undefined);
   readonly inset = input(false, { transform: booleanAttribute });
   readonly zInset = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zInset',
     transform: value => (value === undefined ? undefined : booleanAttribute(value)),
   });
 
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zDisabled',
     transform: value => (value === undefined ? undefined : booleanAttribute(value)),
   });
 

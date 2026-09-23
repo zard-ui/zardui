@@ -18,12 +18,24 @@ npx zard-cli@latest add sonner
 ### Manual
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  NgZone,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCircleCheck, lucideInfo, lucideLoader2, lucideOctagonX, lucideTriangleAlert } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
-import { NgxSonnerToaster, type ToasterProps } from 'ngx-sonner';
+import { NgxSonnerToaster, toastState, type ToasterProps } from 'ngx-sonner';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -74,9 +86,34 @@ const DEFAULT_TOAST_OPTIONS: ToasterProps['toastOptions'] = {
       <ng-icon info-icon name="lucideInfo" class="size-4" />
     </ngx-sonner-toaster>
   `,
+  styles: `
+    /*
+     * Neutralize the UA styles of a popover host: the toaster inside is already
+     * fixed positioned, so the host must be a zero-sized, invisible anchor that
+     * never paints or captures pointer events.
+     */
+    z-sonner[popover] {
+      position: fixed;
+      inset: auto;
+      display: block;
+      width: 0;
+      height: 0;
+      max-width: none;
+      max-height: none;
+      margin: 0;
+      border: 0;
+      padding: 0;
+      overflow: visible;
+      background: transparent;
+      color: inherit;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCircleCheck, lucideInfo, lucideLoader2, lucideOctagonX, lucideTriangleAlert })],
+  host: {
+    'data-slot': 'sonner',
+  },
   exportAs: 'zSonner',
 })
 export class ZardSonnerComponent {
@@ -91,18 +128,100 @@ export class ZardSonnerComponent {
   readonly toastOptions = input<ToasterProps['toastOptions']>();
   readonly style = input<Record<string, string>>();
   readonly dir = input<'ltr' | 'rtl' | 'auto'>('auto');
+  /**
+   * Renders the toaster in the native top layer so toasts stay above CDK
+   * overlays (dialog, drawer, sheet, ...), which also live in the top layer
+   * and would otherwise cover them regardless of `z-index`.
+   */
+  readonly topLayer = input(true, { transform: booleanAttribute });
 
   protected readonly classes = computed(() => mergeClasses(sonnerVariants(), this.class()));
   protected readonly resolvedStyle = computed(() => ({ ...DEFAULT_STYLE, ...(this.style() ?? {}) }));
   protected readonly resolvedToastOptions = computed<ToasterProps['toastOptions']>(() => {
     const provided = this.toastOptions();
-    if (!provided) return DEFAULT_TOAST_OPTIONS;
+    if (!provided) {
+      return DEFAULT_TOAST_OPTIONS;
+    }
     return {
       ...DEFAULT_TOAST_OPTIONS,
       ...provided,
       classes: { ...DEFAULT_TOAST_OPTIONS.classes, ...(provided.classes ?? {}) },
     };
   });
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private readonly zone = inject(NgZone);
+  private readonly supportsTopLayer = typeof this.host.showPopover === 'function';
+
+  constructor() {
+    effect(() => {
+      // The top layer stacks by promotion order, so the toaster has to be
+      // re-promoted every time the toast list changes to stay on top of
+      // overlays opened after it.
+      toastState.toasts();
+
+      if (this.topLayer() && this.supportsTopLayer) {
+        this.promote();
+      } else {
+        this.demote();
+      }
+    });
+
+    if (this.supportsTopLayer) {
+      this.zone.runOutsideAngular(() => {
+        // Any other element entering the top layer (a dialog opened while a
+        // toast is visible) would be painted above the toaster.
+        this.host.ownerDocument.addEventListener('toggle', this.onDocumentToggle, true);
+      });
+
+      inject(DestroyRef).onDestroy(() =>
+        this.host.ownerDocument.removeEventListener('toggle', this.onDocumentToggle, true),
+      );
+    }
+  }
+
+  private readonly onDocumentToggle = (event: Event) => {
+    const isOpening = (event as Event & { newState?: string }).newState === 'open';
+
+    if (isOpening && event.target !== this.host && this.topLayer() && toastState.toasts().length > 0) {
+      this.promote();
+    }
+  };
+
+  private promote(): void {
+    this.host.setAttribute('popover', 'manual');
+
+    // `showPopover()` on an already open popover is a no-op, so it has to be
+    // closed first to be moved back to the front of the top layer.
+    try {
+      this.host.hidePopover();
+    } catch {
+      // Not open yet.
+    }
+
+    try {
+      this.host.showPopover();
+    } catch {
+      // Not connected to the document yet: drop the attribute so the toaster
+      // keeps rendering in the normal flow instead of being hidden by the
+      // closed-popover UA styles. The next toast promotes it again.
+      this.host.removeAttribute('popover');
+    }
+  }
+
+  private demote(): void {
+    if (!this.host.hasAttribute('popover')) {
+      return;
+    }
+
+    try {
+      this.host.hidePopover();
+    } catch {
+      // Already hidden or disconnected.
+    }
+
+    this.host.removeAttribute('popover');
+  }
 }
 ```
 
@@ -206,7 +325,6 @@ import { ZardSonnerComponent } from '@/shared/components/sonner/sonner.component
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [RouterOutlet, ZardSonnerComponent],
   template: `
     <router-outlet></router-outlet>
@@ -237,7 +355,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'zard-demo-sonner-types',
+  selector: 'z-demo-sonner-types',
   imports: [ZardButtonComponent],
   template: `
     <div class="flex flex-wrap gap-2">
@@ -290,7 +408,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'zard-demo-sonner-description',
+  selector: 'z-demo-sonner-description',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" class="w-fit" (click)="show()">Show Toast</button>
@@ -320,7 +438,7 @@ import { type ZardSonnerPosition } from '@/shared/components/sonner/sonner.compo
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'zard-demo-sonner-position',
+  selector: 'z-demo-sonner-position',
   imports: [ZardButtonComponent],
   template: `
     <div class="flex flex-wrap justify-center gap-2">
@@ -343,6 +461,45 @@ export class ZardDemoSonnerPositionComponent {
 }
 ```
 
+### With Dialog
+
+Toasts are rendered in the top layer, so they stay above dialogs, drawers and sheets.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
+import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
+import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
+
+@Component({
+  selector: 'z-demo-sonner-with-dialog',
+  imports: [ZardDialogImports],
+  template: `
+    <button type="button" z-button zType="outline" (click)="openDialog()">Open dialog</button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSonnerWithDialogComponent {
+  private readonly dialogService = inject(ZardDialogService);
+  private readonly sonner = inject(ZardSonnerService);
+
+  openDialog() {
+    this.dialogService.create({
+      zTitle: 'Save changes',
+      zDescription: 'The toast stays above the dialog and its backdrop.',
+      zContent: 'Confirm to dispatch a toast without closing the dialog.',
+      zOkText: 'Save',
+      zMaskClosable: false,
+      zOnOk: () => {
+        this.sonner.success('Changes saved');
+        return false;
+      },
+    });
+  }
+}
+```
+
 ## API Reference
 
 ### z-sonner
@@ -351,6 +508,7 @@ Container that renders toast notifications. Place once at the root of your app.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[style]` | Inline styles applied to every toast | `Record<string, string>` | `undefined` |
 | `[theme]` | Theme used for the toasts. | `'light' \| 'dark' \| 'system'` | `'system'` |
 | `[position]` | Position of the toast container on the viewport. | `'top-left' \| 'top-center' \| 'top-right' \| 'bottom-left' \| 'bottom-center' \| 'bottom-right'` | `'top-center'` |
 | `[richColors]` | Enables tinted backgrounds for success / error / warning / info toasts. | `boolean` | `false` |
@@ -360,6 +518,7 @@ Container that renders toast notifications. Place once at the root of your app.
 | `[closeButton]` | Shows a close button on each toast. | `boolean` | `false` |
 | `[toastOptions]` | Default options applied to every toast (classes, duration, descriptions, etc). | `ToasterProps['toastOptions']` | `{}` |
 | `[dir]` | Text direction for toasts. | `'ltr' \| 'rtl' \| 'auto'` | `'auto'` |
+| `[topLayer]` | Renders the toaster in the native top layer so toasts stay above dialogs, drawers and sheets. Disable it only if the app opts out of the CDK top layer. | `boolean` | `true` |
 | `[class]` | Additional Tailwind / utility classes merged into the host. | `ClassValue` | `''` |
 
 ### ZardSonnerService

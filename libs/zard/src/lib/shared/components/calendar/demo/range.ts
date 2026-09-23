@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardCalendarComponent } from '../calendar.component';
 
@@ -17,10 +17,10 @@ function addDays(date: Date, days: number): Date {
 @Component({
   selector: 'z-demo-calendar-range',
   imports: [ZardCalendarComponent],
-  standalone: true,
   template: `
     <z-calendar zMode="range" zNumberOfMonths="2" class="rounded-lg border" [(value)]="dateRange" />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCalendarRangeComponent {
   readonly dateRange = signal<Date[] | null>([startOfRange(), addDays(startOfRange(), RANGE_LENGTH_IN_DAYS)]);

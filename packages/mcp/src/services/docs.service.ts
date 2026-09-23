@@ -43,15 +43,20 @@ class DocsService {
    */
   private async getLlms(): Promise<string> {
     if (this.llms && Date.now() - this.llms.timestamp < DOCS_TTL) return this.llms.text;
-    let text = '';
     try {
       const response = await fetchWithTimeout(`${this.baseUrl}/llms.txt`);
-      if (response.ok) text = await response.text();
+      // A confirmed 404 means there is no index, and asking again will not
+      // change that. Anything else — a timeout, a 503 — is cached nowhere, so
+      // the next call retries instead of serving an empty index for minutes.
+      if (response.ok || response.status === 404) {
+        const text = response.ok ? await response.text() : '';
+        this.llms = { text, timestamp: Date.now() };
+        return text;
+      }
     } catch {
-      // Offline or no llms.txt: names alone.
+      // Offline: names alone, and retry on the next call.
     }
-    this.llms = { text, timestamp: Date.now() };
-    return text;
+    return '';
   }
 
   /** Titles, descriptions and categories by component name. */

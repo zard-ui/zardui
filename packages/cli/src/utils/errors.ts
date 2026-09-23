@@ -26,12 +26,12 @@ export class ConfigError extends CliError {
 }
 
 /**
- * O registry publica um formato mais novo do que esta CLI sabe ler.
+ * The registry publishes a newer format than this CLI knows how to read.
  *
- * Tem classe própria porque é o único erro de leitura do registry que NÃO pode
- * virar fallback: um arquivo ausente ou uma resposta que não é JSON são motivo
- * para seguir com a cópia local, mas um formato que não entendemos é motivo
- * para parar — continuar seria ler o conteúdo errado achando que está certo.
+ * It has its own class because it is the one registry read error that must NOT
+ * become a fallback: a missing file or a response that is not JSON are reasons
+ * to carry on with the local copy, but a format we do not understand is a reason
+ * to stop — carrying on would mean reading the wrong content and believing it.
  */
 export class SchemaVersionError extends CliError {
   constructor(message: string) {

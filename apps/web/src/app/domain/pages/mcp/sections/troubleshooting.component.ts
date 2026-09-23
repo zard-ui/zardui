@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 interface Problem {
   readonly symptom: string;
@@ -6,8 +6,8 @@ interface Problem {
 }
 
 @Component({
-  selector: 'mcp-troubleshooting-section',
-  standalone: true,
+  selector: 'z-mcp-troubleshooting-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
       Troubleshooting
@@ -30,7 +30,7 @@ interface Problem {
     </dl>
   `,
 })
-export class McpTroubleshootingSection {
+export class McpTroubleshootingSectionComponent {
   readonly problems: Problem[] = [
     {
       symptom: 'The server shows no tools, or fails to start',

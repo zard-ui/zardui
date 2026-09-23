@@ -1,11 +1,11 @@
 /**
- * O wizard do init, do ponto de vista de quem digita.
+ * The init wizard, from the point of view of whoever is typing.
  *
- * A primeira pergunta é o tipo de projeto, e é o usuário quem a responde — a
- * CLI não escolhe por ele a partir do que encontra no diretório. Tudo o que vem
- * depois (os caminhos sugeridos, as etapas que rodam) é consequência dessa
- * resposta, e é isso que estes testes exercitam: escolher outro tipo tem de
- * mudar o resto do formulário, não só o rótulo.
+ * The first question is the project type, and the user answers it — the CLI does
+ * not choose for them from what it finds in the directory. Everything that comes
+ * after (the suggested paths, the steps that run) follows from that answer, and
+ * that is what these tests exercise: choosing another type has to change the
+ * rest of the form, not just the label.
  */
 
 jest.mock('@antfu/ni', () => ({ detect: jest.fn() }));
@@ -23,11 +23,11 @@ const tick = (ms = 5) => new Promise(resolve => setTimeout(resolve, ms));
 jest.setTimeout(30_000);
 
 /**
- * O texto da tela sem ANSI e sem espaço nenhum.
+ * The screen's text with no ANSI and no whitespace at all.
  *
- * O renderer quebra o frame na largura do terminal, e a quebra cai onde tiver
- * de cair — inclusive no meio de uma palavra. Comparar sem espaços é o que
- * torna a asserção sobre o que está escrito independente de onde ela quebrou.
+ * The renderer wraps the frame at the terminal width, and the break falls
+ * wherever it falls — including mid-word. Comparing without spaces is what makes
+ * an assertion about what is written independent of where it wrapped.
  */
 const onScreen = (value: string): string =>
   value
@@ -87,7 +87,7 @@ interface Run {
   /** Envia teclas e espera a tela chegar onde deveria. */
   reach(keys: string[], expected: string): Promise<void>;
   press(keys: string[]): void;
-  /** O que já foi escrito, normalizado para asserções. */
+  /** What has been written so far, normalized for assertions. */
   screen(): string;
 }
 
@@ -111,8 +111,8 @@ async function startWizard(cwd: string, over: Partial<InitWizardOptions> = {}): 
     projectInfo: nxWorkspace,
     packageManager: 'npm',
     isReInitializing: false,
-    // Sem confirmação final e sem etapas, o wizard vai direto ao resultado
-    // assim que a última pergunta é respondida.
+    // With no final confirmation and no steps, the wizard goes straight to the
+    // result as soon as the last question is answered.
     skipConfirmation: true,
     buildSteps: () => [],
     ...over,
@@ -121,12 +121,12 @@ async function startWizard(cwd: string, over: Partial<InitWizardOptions> = {}): 
   const screen = (): string => onScreen(tty.output());
 
   /**
-   * Espera até a tela mostrar o que se espera dela.
+   * Waits until the screen shows what is expected of it.
    *
-   * Pausar por um tempo fixo entre teclas parece bastar até a máquina estar
-   * ocupada — e aí a tecla seguinte chega enquanto o wizard ainda checava o CSS
-   * em disco, que é justamente quando ele ignora a entrada. Esperar pelo texto
-   * do passo seguinte tira o teste das mãos do agendador.
+   * Pausing for a fixed time between keys looks like enough until the machine is
+   * busy — and then the next key arrives while the wizard is still checking the
+   * CSS on disk, which is exactly when it ignores input. Waiting for the next
+   * step's text takes the test out of the scheduler's hands.
    */
   const reach = async (keys: string[], expected: string): Promise<void> => {
     for (const key of keys) tty.press(key);
@@ -155,7 +155,7 @@ describe('runInitWizard', () => {
     const run = await startWizard(await workspaceOnDisk());
 
     try {
-      // A lista abre inteira: nenhum tipo fica escondido atrás da detecção.
+      // The list opens in full: no type hides behind detection.
       for (const label of ['Angular', 'Nx', 'Analog.js', 'Angular Library', 'Nx Library']) {
         expect(run.screen()).toContain(onScreen(label));
       }
@@ -171,15 +171,15 @@ describe('runInitWizard', () => {
     const run = await startWizard(await workspaceOnDisk());
 
     try {
-      // Nx é o terceiro item do menu; só há uma aplicação no workspace, então
-      // o wizard não pergunta qual — ele já sugere os caminhos dela.
+      // Nx is the third menu item; there is only one application in the
+      // workspace, so the wizard does not ask which — it suggests its paths.
       await run.reach([KEY.down, KEY.down, KEY.enter], PROMPTS.appConfig);
       expect(run.screen()).toContain(onScreen('apps/nx-app/src/app/app.config.ts'));
       expect(run.screen()).not.toContain(onScreen(PROMPTS.app));
 
       await run.reach([KEY.enter], PROMPTS.theme);
       await run.reach([KEY.enter], PROMPTS.globalCss);
-      // A checagem do CSS em disco acontece aqui, entre uma tela e outra.
+      // The on-disk CSS check happens here, between one screen and the next.
       await run.reach([KEY.enter], PROMPTS.components);
       await run.reach([KEY.enter], PROMPTS.utils);
       await run.reach([KEY.enter], PROMPTS.done);
@@ -197,20 +197,20 @@ describe('runInitWizard', () => {
   });
 
   /**
-   * Escolher biblioteca remove a pergunta do app.config — ela não teria
-   * resposta possível — e passa a mirar `src/lib` dentro da lib escolhida.
+   * Choosing a library removes the app.config question — it would have no
+   * possible answer — and starts aiming at `src/lib` inside the chosen library.
    */
   it('should drop the app.config question when a library is chosen', async () => {
     const run = await startWizard(await workspaceOnDisk());
 
     try {
-      // Nx Library é o quarto item do menu, e o tema é a pergunta seguinte.
+      // Nx Library is the fourth menu item, and the theme is the next question.
       await run.reach([KEY.down, KEY.down, KEY.down, KEY.enter], PROMPTS.theme);
       await run.reach([KEY.enter], PROMPTS.themeCss);
 
       expect(run.screen()).not.toContain(onScreen(PROMPTS.appConfig));
 
-      // O CSS de tema ainda não existe: numa biblioteca é o init que o cria.
+      // The theme CSS does not exist yet: in a library init is what creates it.
       await run.reach([KEY.enter], PROMPTS.components);
       await run.reach([KEY.enter], PROMPTS.utils);
       await run.reach([KEY.enter], PROMPTS.done);
@@ -228,11 +228,11 @@ describe('runInitWizard', () => {
   });
 
   /**
-   * Um campo de texto tem de aceitar o que se digita nele.
+   * A text field has to accept what is typed into it.
    *
-   * O alias é a resposta que mais gente troca — quem já usa `@app/...` no
-   * projeto precisa dizer isso aqui, ou todo import gerado aponta para um
-   * prefixo que o tsconfig não mapeia.
+   * The alias is the answer most people change — anyone already using `@app/...`
+   * in their project has to say so here, or every generated import points at a
+   * prefix the tsconfig does not map.
    */
   it('should accept typing into a text field', async () => {
     const run = await startWizard(await workspaceOnDisk());
@@ -251,7 +251,7 @@ describe('runInitWizard', () => {
       const result = await run.config;
 
       expect(result.aliases.components).toBe('@app/components');
-      // O alias novo arrasta consigo os irmãos derivados dele.
+      // The new alias drags the siblings derived from it along with it.
       expect(result.aliases.core).toBe('@app/core');
     } finally {
       run.tty.restore();
@@ -267,7 +267,7 @@ describe('runInitWizard', () => {
       await run.reach([KEY.enter], PROMPTS.globalCss);
       await run.reach([KEY.enter], PROMPTS.components);
 
-      // `@/shared/components` sem os 10 últimos caracteres é `@/shared/`.
+      // `@/shared/components` minus its last 10 characters is `@/shared/`.
       await run.reach([...Array(10).fill(KEY.backspace), ...'ui'], '@/shared/ui');
       await run.reach([KEY.enter], PROMPTS.utils);
       await run.reach([KEY.enter], PROMPTS.done);

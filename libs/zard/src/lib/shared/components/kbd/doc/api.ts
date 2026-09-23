@@ -4,11 +4,11 @@ export const KBD_API: ApiSection[] = [
   {
     selector: 'z-kbd',
     description: 'Displays a keyboard key.',
-    props: [{ name: 'class', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-kbd-group',
     description: 'Groups z-kbd components together.',
-    props: [{ name: 'class', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

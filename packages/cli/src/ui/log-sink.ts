@@ -1,11 +1,11 @@
 /**
- * Sink de mensagens — desvia a saída do logger enquanto a tela interativa está
- * montada.
+ * Message sink — diverts the logger's output while the interactive screen is
+ * mounted.
  *
- * Em alt-screen, qualquer `console.log` disparado por um módulo interno
- * (tsconfig-updater, theme-loader, package manager…) rasgaria o frame que a
- * engine acabou de pintar. Durante a captura as mensagens ficam retidas aqui e
- * são reemitidas no histórico do terminal depois do unmount, junto do resumo.
+ * In the alt-screen, any `console.log` fired by an internal module
+ * (tsconfig-updater, theme-loader, package manager…) would tear the frame the
+ * engine just painted. While capturing, messages are held here and re-emitted
+ * into the terminal's history after unmount, alongside the summary.
  */
 
 export type LogLevel = 'info' | 'warn' | 'error' | 'success' | 'debug';
@@ -17,7 +17,7 @@ export interface LogRecord {
 
 let buffer: LogRecord[] | null = null;
 
-/** Passa a reter as mensagens do logger em vez de escrevê-las no terminal. */
+/** Starts holding the logger's messages instead of writing them to the terminal. */
 export function beginCapture(): void {
   buffer = [];
 }
@@ -33,14 +33,14 @@ export function isCapturing(): boolean {
   return buffer !== null;
 }
 
-/** Retém uma mensagem. Devolve false quando não há captura ativa. */
+/** Holds one message. Returns false when no capture is active. */
 export function capture(level: LogLevel, message: string): boolean {
   if (buffer === null) return false;
   buffer.push({ level, message });
   return true;
 }
 
-/** Mensagens retidas até agora, sem encerrar a captura (para exibir na UI). */
+/** The messages held so far, without ending the capture (for display in the UI). */
 export function captured(): readonly LogRecord[] {
   return buffer ?? [];
 }

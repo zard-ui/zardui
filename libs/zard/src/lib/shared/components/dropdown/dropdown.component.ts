@@ -88,7 +88,6 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   readonly class = input<ClassValue>('');
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
-    alias: 'zDisabled',
     transform: value => (value === undefined ? undefined : booleanAttribute(value)),
   });
 

@@ -10,7 +10,7 @@ import { ZardButtonComponent } from '../button.component';
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <div class="flex flex-col gap-8">
-      <button z-button zType="outline" zSize="icon" class="rounded-full" aria-label="Submit">
+      <button type="button" z-button zType="outline" zSize="icon" class="rounded-full" aria-label="Submit">
         <ng-icon name="lucideArrowUp" />
       </button>
     </div>

@@ -8,7 +8,9 @@ import { ZardNavigationMenuLinkDirective } from './navigation-menu-link.directiv
 @Component({
   imports: [ZardNavigationMenuLinkDirective],
   template: `
-    <button z-navigation-menu-link [zDisabled]="disabled" [zInset]="inset" [class]="customClass">Menu Item</button>
+    <button type="button" z-navigation-menu-link [zDisabled]="disabled" [zInset]="inset" [class]="customClass">
+      Menu Item
+    </button>
   `,
 })
 class TestComponent {

@@ -35,7 +35,7 @@ class TestComponent {
 @Component({
   imports: [ZardDropdownMenuItemComponent],
   template: `
-    <button z-dropdown-menu-item variant="destructive" inset disabled>Delete project</button>
+    <button type="button" z-dropdown-menu-item variant="destructive" inset disabled>Delete project</button>
   `,
 })
 class AttributeSelectorTestComponent {}

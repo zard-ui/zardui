@@ -22,7 +22,7 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
 @Component({
   selector: 'z-navigation-menu-indicator, [z-navigation-menu-indicator]',
   template: `
-    <div class="bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-md"></div>
+    <div class="bg-border relative top-[60%] size-2 rotate-45 rounded-tl-sm shadow-md"></div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -55,7 +55,9 @@ export class ZardNavigationMenuIndicatorComponent {
       const active = this.service.active();
       const root = this.service.rootElement();
 
-      if (!active || !root || !isPlatformBrowser(this.platformId)) return;
+      if (!active || !root || !isPlatformBrowser(this.platformId)) {
+        return;
+      }
 
       const trigger = active.element.getBoundingClientRect();
       const bar = root.getBoundingClientRect();

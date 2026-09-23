@@ -11,7 +11,6 @@ const CLOSE_DELAY = 250;
 
 @Component({
   imports: [ZardButtonComponent],
-  standalone: true,
   template: `
     <button type="button" z-button zType="outline" (click)="openSheet()">Open basic sheet</button>
     <button type="button" z-button zType="outline" (click)="openSheetWithTemplate()">Open sheet with template</button>
@@ -148,7 +147,9 @@ describe('ZardSheetComponent', () => {
     it('should render the close button with an accessible label', () => {
       openSheet();
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const closeButton = document.querySelector('[data-testid="z-close-header-button"]');
       expect(closeButton).toBeTruthy();
@@ -159,7 +160,9 @@ describe('ZardSheetComponent', () => {
     it('should open without content when zContent is omitted', async () => {
       const ref = await createSheet({ zTitle: 'No content', zDescription: 'Header only' });
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet');
       expect(sheetElement).toBeTruthy();
@@ -175,7 +178,9 @@ describe('ZardSheetComponent', () => {
         zClosable: false,
       });
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet');
       expect(sheetElement).toBeTruthy();
@@ -238,7 +243,9 @@ describe('ZardSheetComponent', () => {
     it('should add the leave class while closing', async () => {
       openSheet();
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet') as HTMLElement;
       component.lastSheetRef?.close();
@@ -253,7 +260,9 @@ describe('ZardSheetComponent', () => {
     it('should prevent multiple close() calls from queuing duplicate disposals', async () => {
       openSheet();
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const closeButton = document.querySelector<HTMLButtonElement>('[data-testid="z-close-header-button"]');
       closeButton?.click();
@@ -282,7 +291,9 @@ describe('ZardSheetComponent', () => {
     it('should default to the right side when zSide is omitted', () => {
       openSheet();
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet');
       expect(sheetElement?.getAttribute('data-side')).toBe('right');
@@ -298,7 +309,9 @@ describe('ZardSheetComponent', () => {
     ] as const)('should apply the positioning classes for zSide "%s"', async (side, expectedClasses) => {
       await createSheet({ zTitle: `Sheet ${side}`, zContent: 'content', zSide: side });
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet') as HTMLElement;
       expect(sheetElement.getAttribute('data-side')).toBe(side);
@@ -310,7 +323,9 @@ describe('ZardSheetComponent', () => {
     it('should apply the small size classes on a left sheet', async () => {
       await createSheet({ zTitle: 'Small', zContent: 'content', zSide: 'left', zSize: 'sm' });
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet') as HTMLElement;
       // twMerge keeps the compound width and drops the base `w-3/4`.
@@ -322,7 +337,9 @@ describe('ZardSheetComponent', () => {
     it('should apply the large size classes on a top sheet', async () => {
       await createSheet({ zTitle: 'Large', zContent: 'content', zSide: 'top', zSize: 'lg' });
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet') as HTMLElement;
       expect(sheetElement.classList.contains('h-3/4')).toBe(true);
@@ -349,7 +366,9 @@ describe('ZardSheetComponent', () => {
     it('should disable the ok button when zOkDisabled is true', async () => {
       await createSheet({ zTitle: 'Disabled', zContent: 'content', zOkDisabled: true });
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const okButton = document.querySelector<HTMLButtonElement>('[data-testid="z-ok-button"]');
       expect(okButton).toBeTruthy();
@@ -360,7 +379,9 @@ describe('ZardSheetComponent', () => {
     it('should apply custom classes on top of the variant classes', async () => {
       await createSheet({ zTitle: 'Custom', zContent: 'content', zCustomClasses: ['gap-8', 'p-2'] });
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet') as HTMLElement;
       expect(sheetElement.classList.contains('gap-8')).toBe(true);
@@ -373,7 +394,9 @@ describe('ZardSheetComponent', () => {
     it('should expose role=dialog and aria-modal on the host', () => {
       openSheet();
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet') as HTMLElement;
       expect(sheetElement).toBeTruthy();
@@ -384,7 +407,9 @@ describe('ZardSheetComponent', () => {
     it('should link aria-labelledby to the title and aria-describedby to the description', () => {
       openSheet();
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet') as HTMLElement;
       const labelledBy = sheetElement.getAttribute('aria-labelledby');
@@ -399,7 +424,9 @@ describe('ZardSheetComponent', () => {
     it('should omit aria-labelledby and aria-describedby when there is no title or description', async () => {
       await createSheet({ zContent: 'content only' });
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const sheetElement = document.querySelector('z-sheet') as HTMLElement;
       expect(sheetElement.getAttribute('aria-labelledby')).toBeNull();

@@ -11,7 +11,7 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
   imports: [ZardButtonComponent, ZardEmptyComponent, NgIcon],
   template: `
     <z-empty
-      class="bg-muted/30 [&_[data-slot=empty-description]]:max-w-xs [&_[data-slot=empty-description]]:text-pretty"
+      class="bg-muted/30 **:data-[slot=empty-description]:max-w-xs **:data-[slot=empty-description]:text-pretty"
       zIcon="lucideBell"
       zTitle="No Notifications"
       zDescription="You're all caught up. New notifications will appear here."

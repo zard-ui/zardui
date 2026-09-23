@@ -1147,7 +1147,6 @@ describe('ZardSelectComponent', () => {
   describe('Multiselect mode', () => {
     @Component({
       imports: [ZardSelectComponent, ZardSelectItemComponent],
-      standalone: true,
       template: `
         <z-select
           [(zValue)]="value"

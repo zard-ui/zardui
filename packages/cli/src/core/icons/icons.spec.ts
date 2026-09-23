@@ -80,8 +80,8 @@ describe('collectIcons', () => {
   });
 
   /**
-   * Metade dos componentes que usam ícone só o usa nos exemplos — o registry
-   * precisa dizer isso, em vez de publicar "sem ícones" sobre eles.
+   * Half the components that use an icon only use it in the examples — the
+   * registry has to say so, instead of publishing "no icons" about them.
    */
   it('maps a component that only draws icons in its demos', () => {
     const icons = collectIcons(
@@ -148,9 +148,9 @@ describe('retargetIcons', () => {
   });
 
   /**
-   * O ensaio da segunda família: um catálogo com a coluna preenchida é tudo o
-   * que separa o estado de hoje de suportar material — nenhum outro arquivo do
-   * caminho de instalação precisa mudar, e é isto que prova essa afirmação.
+   * The dress rehearsal for a second family: a catalog with the column filled in
+   * is all that separates today's state from supporting material — no other file
+   * on the install path has to change, and this is what proves that claim.
    */
   describe('with a second family in the catalogue', () => {
     const catalog: IconCatalog = {
@@ -265,13 +265,13 @@ describe('rewriteIcons', () => {
 });
 
 /**
- * A tabela existe para traduzir os ícones que a biblioteca usa. Um ícone novo
- * em `libs/zard` sem linha correspondente passaria despercebido até alguém
- * trocar de família e descobrir que aquele componente ficou para trás — este é
- * o teste que avisa antes.
+ * The table exists to translate the icons the library uses. A new icon in
+ * `libs/zard` with no matching row would go unnoticed until someone switched
+ * family and found that component left behind — this is the test that warns
+ * first.
  *
- * Roda a partir do repositório; no pacote publicado, onde `libs/zard` não
- * existe, não há o que comparar.
+ * It runs from the repository; in the published package, where `libs/zard` does
+ * not exist, there is nothing to compare against.
  */
 describe('coverage of the icons the library actually uses', () => {
   const LIB = path.resolve(__dirname, '../../../../../libs/zard/src/lib/shared');
@@ -290,7 +290,7 @@ describe('coverage of the icons the library actually uses', () => {
 
     for (const file of sourceFiles(LIB)) {
       for (const symbol of extractIcons(readFileSync(file, 'utf8'))) {
-        // O pacote da família também exporta tipos; só os ícones importam.
+        // The family package also exports types; only the icons matter here.
         if (symbol.startsWith('lucide')) used.add(symbol);
       }
     }

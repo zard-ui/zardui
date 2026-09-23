@@ -47,7 +47,7 @@ test('TAB navega e space alterna checkbox', () => {
   ui.unmount();
 });
 
-test('select responde às setas', () => {
+test('select responds to the arrow keys', () => {
   const term = createMockTerminal({ size: { cols: 44, rows: 8 } });
   const ui = createScreen({ terminal: term, handleExitSignals: false });
   const st = { pm: 'npm' };

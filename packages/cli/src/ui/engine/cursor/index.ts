@@ -1,12 +1,11 @@
 /**
- * cursor — geração de sequências de posicionamento/visibilidade do cursor.
- * Funções puras (retornam bytes); quem escreve é o `terminal`.
- * (Fatia vertical / PoC: implementação real.)
+ * cursor — generates cursor positioning and visibility sequences.
+ * Pure functions returning bytes; `terminal` is what writes them.
  */
 
 import { csi } from '../ansi/index.js';
 
-/** Fábrica de sequências de cursor. Coordenadas base 0 na API; 1-based no CSI. */
+/** Cursor sequence factory. Coordinates are 0-based in the API, 1-based in CSI. */
 export interface Cursor {
   moveTo(x: number, y: number): string;
   moveBy(dx: number, dy: number): string;

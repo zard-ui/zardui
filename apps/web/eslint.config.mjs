@@ -11,10 +11,12 @@ export default [
   {
     files: ['**/*.ts'],
     rules: {
+      // `element` and `attribute` both: like the library, some docs components are
+      // meant to be applied to a native element (`button[z-color-card]`).
       '@angular-eslint/component-selector': [
         'error',
         {
-          type: 'element',
+          type: ['element', 'attribute'],
           prefix: 'z',
           style: 'kebab-case',
         },

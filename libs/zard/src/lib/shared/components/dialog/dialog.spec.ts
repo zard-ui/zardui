@@ -226,7 +226,9 @@ describe('ZardDialogComponent', () => {
     it('should expose role=dialog and aria-modal on the host', () => {
       openDialog();
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const dialog = document.querySelector('z-dialog') as HTMLElement;
       expect(dialog).toBeTruthy();
@@ -237,7 +239,9 @@ describe('ZardDialogComponent', () => {
     it('should link aria-labelledby to the title and aria-describedby to the description', () => {
       openDialog();
 
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const dialog = document.querySelector('z-dialog') as HTMLElement;
       const labelledBy = dialog.getAttribute('aria-labelledby');
@@ -250,7 +254,9 @@ describe('ZardDialogComponent', () => {
     });
 
     it('should restore focus to the trigger button after close', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const trigger = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
       trigger.focus();
@@ -276,7 +282,9 @@ describe('ZardDialogComponent', () => {
 
   describe('[stack management]', () => {
     it('should only close the topmost dialog when Escape is pressed', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const dialogService = TestBed.inject(ZardDialogService);
       const first = dialogService.create({ zTitle: 'First', zContent: 'one' });
@@ -303,7 +311,9 @@ describe('ZardDialogComponent', () => {
 
   describe('[signals]', () => {
     it('should reflect close state and result in isClosing/result signals', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const dialogService = TestBed.inject(ZardDialogService);
       const ref = dialogService.create<unknown, unknown>({ zTitle: 'Signal test', zContent: 'x' });
@@ -323,7 +333,9 @@ describe('ZardDialogComponent', () => {
 
   describe('[duration]', () => {
     it('should propagate zDuration to the --z-dialog-duration CSS custom property', async () => {
-      if (!isPlatformBrowser(platformId)) return;
+      if (!isPlatformBrowser(platformId)) {
+        return;
+      }
 
       const dialogService = TestBed.inject(ZardDialogService);
       dialogService.create<unknown, unknown>({ zTitle: 'Duration', zContent: 'x', zDuration: 250 });

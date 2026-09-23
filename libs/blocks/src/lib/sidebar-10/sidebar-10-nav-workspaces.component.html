@@ -1,0 +1,51 @@
+<div z-sidebar-group>
+  <div z-sidebar-group-label>Workspaces</div>
+
+  <div z-sidebar-group-content>
+    <ul z-sidebar-menu>
+      @for (workspace of workspaces(); track workspace.name) {
+        <li z-sidebar-menu-item z-collapsible>
+          <a z-sidebar-menu-button href="#">
+            <span>{{ workspace.emoji }}</span>
+            <span>{{ workspace.name }}</span>
+          </a>
+
+          <button
+            z-collapsible-trigger
+            z-sidebar-menu-action
+            zShowOnHover
+            class="bg-sidebar-accent text-sidebar-accent-foreground left-2 data-[state=open]:rotate-90"
+          >
+            <ng-icon name="lucideChevronRight" />
+            <span class="sr-only">Toggle</span>
+          </button>
+
+          <button z-sidebar-menu-action zShowOnHover>
+            <ng-icon name="lucidePlus" />
+            <span class="sr-only">Add page</span>
+          </button>
+
+          <z-collapsible-content>
+            <ul z-sidebar-menu-sub>
+              @for (page of workspace.pages; track page.name) {
+                <li z-sidebar-menu-sub-item>
+                  <a z-sidebar-menu-sub-button href="#">
+                    <span>{{ page.emoji }}</span>
+                    <span>{{ page.name }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </z-collapsible-content>
+        </li>
+      }
+
+      <li z-sidebar-menu-item>
+        <button z-sidebar-menu-button class="text-sidebar-foreground/70">
+          <ng-icon name="lucideMoreHorizontal" />
+          <span>More</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

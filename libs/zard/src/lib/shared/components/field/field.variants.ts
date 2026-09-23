@@ -29,30 +29,26 @@ export const fieldVariants = cva('group/field flex w-full gap-2 data-[invalid=tr
 
 export const fieldContentVariants = cva('group/field-content flex flex-1 flex-col gap-0.5 leading-snug');
 
-export const fieldLabelVariants = cva(
-  [
-    'group/field-label peer/field-label flex w-fit gap-2 text-sm font-medium leading-snug',
-    'group-data-[disabled=true]/field:opacity-50',
-    'has-data-checked:border-primary/30 has-data-checked:bg-primary/5',
-    'has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5',
-    'dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10',
-    'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col',
-  ].join(' '),
-);
+export const fieldLabelVariants = cva([
+  'group/field-label peer/field-label flex w-fit gap-2 text-sm/snug font-medium',
+  'group-data-[disabled=true]/field:opacity-50',
+  'has-data-checked:border-primary/30 has-data-checked:bg-primary/5',
+  'has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5',
+  'dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10',
+  'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col',
+]);
 
 export const fieldTitleVariants = cva(
   'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
 );
 
-export const fieldDescriptionVariants = cva(
-  [
-    'text-left text-sm leading-normal font-normal text-muted-foreground',
-    'group-has-data-horizontal/field:text-balance',
-    '[[data-variant=legend]+&]:-mt-1.5',
-    'last:mt-0 nth-last-2:-mt-1',
-    '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
-  ].join(' '),
-);
+export const fieldDescriptionVariants = cva([
+  'text-left text-sm/normal font-normal text-muted-foreground',
+  'group-has-data-horizontal/field:text-balance',
+  '[[data-variant=legend]+&]:-mt-1.5',
+  'last:mt-0 nth-last-2:-mt-1',
+  '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
+]);
 
 export const fieldSeparatorVariants = cva(
   'relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2',

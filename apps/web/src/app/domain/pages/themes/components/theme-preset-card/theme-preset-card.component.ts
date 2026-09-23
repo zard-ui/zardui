@@ -9,8 +9,7 @@ import type { ThemePreset } from '../../models/theme.model';
 import { oklchToHex } from '../../utils/oklch-converter';
 
 @Component({
-  selector: 'app-theme-preset-card',
-  standalone: true,
+  selector: 'z-theme-preset-card',
   imports: [NgIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

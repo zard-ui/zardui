@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSliderComponent } from '../slider.component';
 
@@ -10,5 +10,6 @@ import { ZardSliderComponent } from '../slider.component';
       <z-slider class="mx-auto w-full max-w-xs" [zDefault]="[50]" zDisabled />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSliderDisabledComponent {}

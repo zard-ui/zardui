@@ -40,7 +40,6 @@ const HIGHLIGHT_ICONS: Record<ChangelogHighlightIcon, IconName> = {
 
 @Component({
   selector: 'z-changelog',
-  standalone: true,
   imports: [
     ChangelogExamplesComponent,
     DocContentComponent,

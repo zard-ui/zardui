@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideLightbulb, lucideLightbulbOff } from '@ng-icons/lucide';
@@ -16,6 +16,7 @@ import { ZardToggleComponent } from '../toggle.component';
       <span>Light is {{ state() }}.</span>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideLightbulb, lucideLightbulbOff })],
 })
 export class ZardDemoToggleWithBindingsComponent {

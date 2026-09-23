@@ -95,6 +95,7 @@ type OnChangeType = (value: string) => void;
     '(cut)': 'onCut($event)',
     '(mousedown)': 'clearSelectAll()',
   },
+  exportAs: 'zInputOtp',
 })
 export class ZardInputOtpComponent implements ControlValueAccessor, AfterContentInit {
   readonly inputs = viewChildren<ElementRef<HTMLInputElement>>('otpInput');
@@ -581,7 +582,7 @@ export * from './input-otp.variants';
 ```
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -597,10 +598,12 @@ import { inputOtpGroupVariants } from './input-otp.variants';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.data-slot]': '"input-otp-group"',
     '[attr.data-input-otp-group]': '""',
   },
+  exportAs: 'zInputOtpGroup',
 })
 export class ZardInputOtpGroupComponent {
   readonly class = input<ClassValue>('');
@@ -610,7 +613,7 @@ export class ZardInputOtpGroupComponent {
 ```
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -637,11 +640,13 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     'aria-hidden': 'true',
     '[attr.data-slot]': '"input-otp-separator"',
     '[attr.data-input-otp-separator]': '""',
   },
+  exportAs: 'zInputOtpSeparator',
 })
 export class ZardInputOtpSeparatorComponent {
   private readonly inputOtp = inject(ZardInputOtpComponent, { optional: true });
@@ -655,7 +660,15 @@ export class ZardInputOtpSeparatorComponent {
 ```
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, effect, forwardRef, model, untracked } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  forwardRef,
+  model,
+  untracked,
+  ViewEncapsulation,
+} from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 
 import { ZardInputOtpComponent } from './input-otp.component';
@@ -695,9 +708,11 @@ import { ZardInputOtpComponent } from './input-otp.component';
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.data-disabled]': 'disabled() ? "" : null',
   },
+  exportAs: 'zInputOtpSignal',
 })
 export class ZardInputOtpSignalComponent extends ZardInputOtpComponent implements FormValueControl<string> {
   readonly value = model<string>('');
@@ -733,6 +748,7 @@ import {
   input,
   signal,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
@@ -779,10 +795,12 @@ import { inputOtpSlotVariants } from './input-otp.variants';
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.data-slot]': '"input-otp-slot"',
     class: 'relative',
   },
+  exportAs: 'zInputOtpSlot',
 })
 export class ZardInputOtpSlotComponent {
   readonly slotInputRef = viewChild.required<ElementRef<HTMLInputElement>>('slotInput');
@@ -959,7 +977,7 @@ import { REGEXP_ONLY_DIGITS_AND_CHARS } from '@/shared/components/input-otp/inpu
 ```
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
@@ -983,6 +1001,7 @@ import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.util
       </z-input-otp>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputOtpPatternComponent {
   readonly REGEXP_ONLY_DIGITS = REGEXP_ONLY_DIGITS;
@@ -1140,7 +1159,7 @@ export class ZardDemoInputOtpInvalidComponent {
 Use `zMaxLength` to change how many slots the input holds.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
 import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.utils';
@@ -1158,6 +1177,7 @@ import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.util
       </z-input-otp-group>
     </z-input-otp>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputOtpFourDigitsComponent {
   readonly REGEXP_ONLY_DIGITS = REGEXP_ONLY_DIGITS;
@@ -1169,7 +1189,7 @@ export class ZardDemoInputOtpFourDigitsComponent {
 Pair `REGEXP_ONLY_DIGITS_AND_CHARS` with `[zIntegerOnly]="false"` to accept letters too.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from '@/shared/components/input-otp/input-otp.utils';
@@ -1192,6 +1212,7 @@ import { REGEXP_ONLY_DIGITS_AND_CHARS } from '@/shared/components/input-otp/inpu
       </z-input-otp-group>
     </z-input-otp>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputOtpAlphanumericComponent {
   readonly REGEXP_ONLY_DIGITS_AND_CHARS = REGEXP_ONLY_DIGITS_AND_CHARS;
@@ -1203,7 +1224,7 @@ export class ZardDemoInputOtpAlphanumericComponent {
 Use `formControlName` to bind the OTP to a reactive form.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -1272,6 +1293,7 @@ const SLOT_CLASSES =
       </z-card>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideRefreshCw })],
 })
 export class ZardDemoInputOtpFormComponent {

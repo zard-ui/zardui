@@ -41,6 +41,8 @@ import { ZardCommandOptionComponent } from '@/shared/components/command/command-
 import { commandVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+import { ZardCommand } from './command.tokens';
+
 export interface ZardCommandOption {
   value: unknown;
   label: string;
@@ -65,11 +67,6 @@ export interface ZardCommandConfig {
   onSelect?: (option: ZardCommandOption) => void;
 }
 
-export abstract class ZardCommand {
-  abstract registerOption(option: ZardCommandOptionComponent): void;
-  abstract unregisterOption(option: ZardCommandOptionComponent): void;
-}
-
 @Component({
   selector: 'z-command',
   imports: [FormsModule],
@@ -89,6 +86,10 @@ export abstract class ZardCommand {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ZardCommandComponent),
       multi: true,
+    },
+    {
+      provide: ZardCommand,
+      useExisting: forwardRef(() => ZardCommandComponent),
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -123,16 +124,22 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
   private readonly resolvedIndex = computed(() => {
     const options = this.filteredOptions();
     const len = options.length;
-    if (len === 0) return -1;
+    if (len === 0) {
+      return -1;
+    }
 
     const raw = this.selectedIndex();
     const target = raw < 0 || raw >= len ? 0 : raw;
 
-    if (!options[target].zDisabled()) return target;
+    if (!options[target].zDisabled()) {
+      return target;
+    }
 
     for (let i = 1; i < len; i++) {
       const candidate = (target + i) % len;
-      if (!options[candidate].zDisabled()) return candidate;
+      if (!options[candidate].zDisabled()) {
+        return candidate;
+      }
     }
     return -1;
   });
@@ -143,11 +150,15 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
    */
   private findEnabledIndex(from: number, direction: 1 | -1, options: readonly ZardCommandOptionComponent[]): number {
     const len = options.length;
-    if (len === 0) return -1;
+    if (len === 0) {
+      return -1;
+    }
     let idx = from;
     for (let i = 0; i < len; i++) {
       idx = (idx + direction + len) % len;
-      if (!options[idx].zDisabled()) return idx;
+      if (!options[idx].zDisabled()) {
+        return idx;
+      }
     }
     return -1;
   }
@@ -197,7 +208,9 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
    */
   readonly isEmpty = computed(() => {
     const searchTerm = this.searchTerm().trim();
-    if (!searchTerm) return false;
+    if (!searchTerm) {
+      return false;
+    }
     return this.filteredOptions().length === 0;
   });
 
@@ -272,7 +285,9 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
   // in @Component host: '(keydown)': 'onKeyDown($event)'
   onKeyDown(event: Event) {
     const filteredOptions = this.filteredOptions();
-    if (filteredOptions.length === 0) return;
+    if (filteredOptions.length === 0) {
+      return;
+    }
 
     const { key } = event as KeyboardEvent;
     const currentIndex = this.resolvedIndex();
@@ -363,12 +378,17 @@ export const commandItemVariants = cva(
     'data-selected:bg-muted data-selected:text-accent-foreground',
     "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
     'data-selected:*:[svg]:text-accent-foreground',
-  ].join(' '),
+  ],
   {
     variants: {
       variant: {
         default: '',
-        destructive: 'data-selected:bg-destructive data-selected:text-destructive-foreground',
+        // Tinted background, destructive text — the same treatment as the
+        // destructive button and dropdown item. It used to be a solid
+        // `bg-destructive` with `text-destructive-foreground`, a token no theme
+        // ever defined, so the text stayed dark on red.
+        destructive:
+          'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
       },
     },
     defaultVariants: {
@@ -450,7 +470,7 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
 
-import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { ZardCommand } from '@/shared/components/command/command.tokens';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
 
@@ -500,7 +520,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   exportAs: 'zCommandInput',
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {
-  private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
+  private readonly commandComponent = inject(ZardCommand, { optional: true });
   // `#searchInput` sits on an `input[z-input]` component, so read the element explicitly.
   readonly searchInput = viewChild<unknown, ElementRef<HTMLInputElement>>('searchInput', { read: ElementRef });
 
@@ -520,7 +540,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
   };
 
   onInput(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
+    const { value } = event.target as HTMLInputElement;
     this.updateParentComponents(value);
   }
 
@@ -692,7 +712,7 @@ import { NgIcon, type IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import type { ZardCommandOptionGroupComponent } from '@/shared/components/command/command-option-group.component';
-import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { ZardCommand } from '@/shared/components/command/command.tokens';
 import {
   commandItemVariants,
   commandShortcutVariants,
@@ -735,7 +755,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 })
 export class ZardCommandOptionComponent {
   private readonly elementRef = inject(ElementRef);
-  private readonly parentCommandComponent = inject(ZardCommandComponent, { optional: true });
+  private readonly parentCommandComponent = inject(ZardCommand, { optional: true });
 
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
@@ -745,7 +765,7 @@ export class ZardCommandOptionComponent {
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly variant = input<ZardCommandItemVariants>('default');
   readonly class = input<ClassValue>('');
-  readonly parentCommand = input<ZardCommandComponent | null>(null);
+  readonly parentCommand = input<ZardCommand | null>(null);
   readonly commandGroup = input<ZardCommandOptionGroupComponent | null>(null);
 
   readonly isSelected = signal(false);
@@ -801,11 +821,17 @@ export class ZardCommandOptionComponent {
   }
 
   onMouseEnter() {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
     const parent = this.commandComponent;
-    if (!parent) return;
+    if (!parent) {
+      return;
+    }
     const idx = parent.filteredOptions().indexOf(this);
-    if (idx >= 0) parent.setActiveByIndex(idx);
+    if (idx >= 0) {
+      parent.setActiveByIndex(idx);
+    }
   }
 
   setSelected(selected: boolean) {
@@ -841,14 +867,53 @@ export const ZardCommandImports = [
 ```
 
 ```angular-ts
-export * from '@/shared/components/command/command.component';
-export * from '@/shared/components/command/command-input.component';
-export * from '@/shared/components/command/command-list.component';
-export * from '@/shared/components/command/command-option.component';
-export * from '@/shared/components/command/command-option-group.component';
-export * from '@/shared/components/command/command-divider.component';
-export * from '@/shared/components/command/command.imports';
-export * from '@/shared/components/command/command.variants';
+import type { Signal, WritableSignal } from '@angular/core';
+
+import type { ZardCommandOptionComponent } from './command-option.component';
+
+/**
+ * What a command's children may ask of it.
+ *
+ * The input and the options need the root at runtime, and the root needs both of
+ * them for its content queries — injecting the concrete `ZardCommandComponent`
+ * made that a real import cycle, and the module graph is evaluated in an order
+ * where one of the two classes is still undefined. The children inject this
+ * instead; `ZardCommandComponent` provides itself for the token.
+ *
+ * The reference to `ZardCommandOptionComponent` below is type-only, so it is
+ * erased at compile time and adds no edge back.
+ */
+export abstract class ZardCommand {
+  /** The current query, empty when nothing has been typed. */
+  abstract readonly searchTerm: WritableSignal<string>;
+  /** The options still visible for the current query, in document order. */
+  abstract readonly filteredOptions: Signal<readonly ZardCommandOptionComponent[]>;
+
+  abstract registerOption(option: ZardCommandOptionComponent): void;
+  abstract unregisterOption(option: ZardCommandOptionComponent): void;
+
+  /** Applies a new query. */
+  abstract onSearch(searchTerm: string): void;
+  /** Handles the arrow / enter / escape keys the input forwards. */
+  abstract onKeyDown(event: KeyboardEvent): void;
+
+  /** Moves the active highlight, by index into {@link filteredOptions}. */
+  abstract setActiveByIndex(index: number): void;
+  /** Commits a choice and emits it to the consumer. */
+  abstract selectOption(option: ZardCommandOptionComponent): void;
+}
+```
+
+```angular-ts
+export * from './command.component';
+export * from './command-input.component';
+export * from './command-list.component';
+export * from './command-option.component';
+export * from './command-option-group.component';
+export * from './command-divider.component';
+export * from './command.imports';
+export * from './command.tokens';
+export * from './command.variants';
 ```
 
 ## Usage
@@ -876,7 +941,7 @@ import { ZardCommandImports } from '@/shared/components/command/command.imports'
 ### Basic
 
 ```angular-ts
-import { type AfterViewInit, Component, inject, viewChild } from '@angular/core';
+import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
@@ -901,6 +966,7 @@ import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
       </z-command-list>
     </z-command>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 class ZardDemoCommandBasicDialogComponent implements AfterViewInit {
   private readonly cmd = viewChild.required(ZardCommandComponent);
@@ -913,7 +979,7 @@ class ZardDemoCommandBasicDialogComponent implements AfterViewInit {
   selector: 'z-demo-command-basic',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="outline" (click)="open()">Open Menu</button>
+    <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
 })
 export class ZardDemoCommandBasicComponent {
@@ -937,7 +1003,7 @@ export class ZardDemoCommandBasicComponent {
 ### Shortcuts
 
 ```angular-ts
-import { type AfterViewInit, Component, inject, viewChild } from '@angular/core';
+import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideCreditCard, lucideSettings, lucideUser } from '@ng-icons/lucide';
@@ -965,6 +1031,7 @@ import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
       </z-command-list>
     </z-command>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideUser, lucideCreditCard, lucideSettings })],
 })
 class ZardDemoCommandShortcutsDialogComponent implements AfterViewInit {
@@ -978,7 +1045,7 @@ class ZardDemoCommandShortcutsDialogComponent implements AfterViewInit {
   selector: 'z-demo-command-shortcuts',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="outline" (click)="open()">Open Menu</button>
+    <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
 })
 export class ZardDemoCommandShortcutsComponent {
@@ -1002,7 +1069,7 @@ export class ZardDemoCommandShortcutsComponent {
 ### Groups
 
 ```angular-ts
-import { type AfterViewInit, Component, inject, viewChild } from '@angular/core';
+import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import {
@@ -1046,6 +1113,7 @@ import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
       </z-command-list>
     </z-command>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({ lucideCalendar, lucideSmile, lucideCalculator, lucideUser, lucideCreditCard, lucideSettings }),
   ],
@@ -1061,7 +1129,7 @@ class ZardDemoCommandGroupsDialogComponent implements AfterViewInit {
   selector: 'z-demo-command-groups',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="outline" (click)="open()">Open Menu</button>
+    <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
 })
 export class ZardDemoCommandGroupsComponent {
@@ -1085,7 +1153,7 @@ export class ZardDemoCommandGroupsComponent {
 ### Scrollable
 
 ```angular-ts
-import { type AfterViewInit, Component, inject, viewChild } from '@angular/core';
+import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import {
@@ -1178,6 +1246,7 @@ import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
       </z-command-list>
     </z-command>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
       lucideHouse,
@@ -1217,7 +1286,7 @@ class ZardDemoCommandScrollableDialogComponent implements AfterViewInit {
   selector: 'z-demo-command-scrollable',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="outline" (click)="open()">Open Menu</button>
+    <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
 })
 export class ZardDemoCommandScrollableComponent {
@@ -1246,8 +1315,8 @@ The main command palette container that handles search input and keyboard naviga
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `size` | Size of the command palette | `'sm' \| 'default' \| 'lg' \| 'xl'` | `'default'` |
-| `class` | Additional CSS classes | `string` | `''` |
+| `[size]` | Size of the command palette | `'sm' \| 'default' \| 'lg' \| 'xl'` | `'default'` |
+| `[class]` | Additional CSS classes | `string` | `''` |
 | `(zCommandChange)` | Fired when the selected option changes | `output<ZardCommandOption>` | `-` |
 | `(zCommandSelected)` | Fired when an option is selected | `output<ZardCommandOption>` | `-` |
 
@@ -1257,8 +1326,8 @@ Search input component with debounced input handling and accessibility features.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `placeholder` | Placeholder text for input | `string` | `'Type a command or search...'` |
-| `class` | Additional CSS classes | `string` | `''` |
+| `[placeholder]` | Placeholder text for input | `string` | `'Type a command or search...'` |
+| `[class]` | Additional CSS classes | `string` | `''` |
 | `(valueChange)` | Fired when input value changes | `EventEmitter<string>` | `-` |
 
 ### z-command-list
@@ -1267,7 +1336,7 @@ Container for command options with proper ARIA listbox semantics.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `string` | `''` |
+| `[class]` | Additional CSS classes | `string` | `''` |
 
 ### z-command-option
 
@@ -1275,14 +1344,14 @@ Individual selectable option within the command palette with enhanced accessibil
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zValue` | Value of the option (required) | `any` | `-` |
-| `zLabel` | Label text (required) | `string` | `-` |
-| `zIcon` | Icon HTML content | `string` | `''` |
-| `zCommand` | Command identifier | `string` | `''` |
-| `zShortcut` | Keyboard shortcut display | `string` | `''` |
-| `zDisabled` | Disabled state | `boolean` | `false` |
-| `variant` | Visual variant | `'default' \| 'destructive'` | `'default'` |
-| `class` | Additional CSS classes | `string` | `''` |
+| `[zValue]` | Value of the option (required) | `any` | `-` |
+| `[zLabel]` | Label text (required) | `string` | `-` |
+| `[zIcon]` | Icon HTML content | `string` | `''` |
+| `[zCommand]` | Command identifier | `string` | `''` |
+| `[zShortcut]` | Keyboard shortcut display | `string` | `''` |
+| `[zDisabled]` | Disabled state | `boolean` | `false` |
+| `[variant]` | Visual variant | `'default' \| 'destructive'` | `'default'` |
+| `[class]` | Additional CSS classes | `string` | `''` |
 
 ### z-command-option-group
 
@@ -1290,8 +1359,8 @@ Groups related command options together with semantic grouping and accessibility
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zLabel` | Group label (required) | `string` | `-` |
-| `class` | Additional CSS classes | `string` | `''` |
+| `[zLabel]` | Group label (required) | `string` | `-` |
+| `[class]` | Additional CSS classes | `string` | `''` |
 
 ### z-command-divider
 
@@ -1299,7 +1368,7 @@ Visual separator between command groups with semantic role.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `string` | `''` |
+| `[class]` | Additional CSS classes | `string` | `''` |
 
 ---
 

@@ -6,6 +6,7 @@ import {
   computed,
   contentChildren,
   input,
+  isDevMode,
   output,
   signal,
   type TemplateRef,
@@ -14,7 +15,7 @@ import {
 } from '@angular/core';
 
 import { NgIcon } from '@ng-icons/core';
-import { twMerge } from 'tailwind-merge';
+import type { ClassValue } from 'clsx';
 
 import {
   tabButtonVariants,
@@ -22,10 +23,10 @@ import {
   tabNavVariants,
   type ZardTabVariants,
 } from '@/shared/components/tabs/tabs.variants';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-tab',
-  imports: [],
   template: `
     <ng-template #content>
       <ng-content />
@@ -33,6 +34,10 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'tab',
+  },
+  exportAs: 'zTab',
 })
 export class ZardTabComponent {
   readonly label = input.required<string>();
@@ -90,9 +95,11 @@ export class ZardTabComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'tab-group',
     '[class]': 'containerClasses()',
     '[attr.data-orientation]': 'zOrientation()',
   },
+  exportAs: 'zTabGroup',
 })
 export class ZardTabGroupComponent {
   private readonly tabComponents = contentChildren(ZardTabComponent, { descendants: true });
@@ -115,7 +122,7 @@ export class ZardTabGroupComponent {
   readonly zVariant = input<ZardTabVariants['zVariant']>('default');
   readonly zOrientation = input<ZardTabVariants['zOrientation']>('horizontal');
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly class = input<string>('');
+  readonly class = input<ClassValue>('');
 
   protected setActiveTab(index: number) {
     const currentTab = this.tabs()[this.activeTabIndex()];
@@ -139,7 +146,7 @@ export class ZardTabGroupComponent {
   }
 
   protected readonly containerClasses = computed(() =>
-    twMerge(tabContainerVariants({ zOrientation: this.zOrientation() }), this.class()),
+    mergeClasses(tabContainerVariants({ zOrientation: this.zOrientation() }), this.class()),
   );
 
   protected readonly navClasses = computed(() => tabNavVariants({ zVariant: this.zVariant() }));
@@ -150,7 +157,9 @@ export class ZardTabGroupComponent {
     if (index >= 0 && index < this.tabs().length) {
       this.setActiveTab(index);
     } else {
-      console.warn(`Index ${index} outside the range of available tabs.`);
+      if (isDevMode()) {
+        console.warn(`Index ${index} outside the range of available tabs.`);
+      }
     }
   }
 }

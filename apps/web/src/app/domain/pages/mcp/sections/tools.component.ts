@@ -7,8 +7,7 @@ interface ToolRow {
 }
 
 @Component({
-  selector: 'mcp-tools-section',
-  standalone: true,
+  selector: 'z-mcp-tools-section',
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Tools</h2>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
@@ -62,7 +61,7 @@ interface ToolRow {
     </p>
   `,
 })
-export class McpToolsSection {
+export class McpToolsSectionComponent {
   readonly tools: ToolRow[] = [
     { name: 'list-components', input: '', description: 'Every component, with a one-line description and category.' },
     {

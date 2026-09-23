@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -18,5 +18,6 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
       <button type="button" z-button zType="outline" zTooltip="Tooltip content" zPosition="bottom">Bottom</button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTooltipPositionComponent {}

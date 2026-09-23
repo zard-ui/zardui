@@ -6,7 +6,7 @@ import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.com
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
 @Component({
-  selector: 'cli-installation-section',
+  selector: 'z-cli-installation-section',
   imports: [CodeBlockComponent, CodeTabsComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -72,7 +72,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <z-code-block [data]="usageExample" />
   `,
 })
-export class CliInstallationSection {
+export class CliInstallationSectionComponent {
   readonly initTabs: CodeTabData = TABS_0;
   readonly initMenu: CodeBlockData = BLOCK_1;
   readonly initPrompt: CodeBlockData = BLOCK_2;

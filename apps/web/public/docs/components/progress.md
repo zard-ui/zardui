@@ -53,8 +53,12 @@ export class ZardProgressComponent {
 
   protected readonly clampedValue = computed(() => {
     const v = this.value();
-    if (v > 100) return 100;
-    if (v < 0) return 0;
+    if (v > 100) {
+      return 100;
+    }
+    if (v < 0) {
+      return 0;
+    }
     return v;
   });
 

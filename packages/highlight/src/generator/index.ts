@@ -6,6 +6,7 @@ import { generateInstallationFiles } from './installation-writer';
 import { generatePageDataFiles } from './page-data-writer';
 import { generateSnippetFiles } from './snippet-writer';
 import { generateUsageFiles } from './usage-writer';
+import { generateUtilsDemoFiles } from './utils-writer';
 import { startWatcher } from './watch';
 
 const isWatch = process.argv.includes('--watch');
@@ -13,17 +14,27 @@ const isWatch = process.argv.includes('--watch');
 async function generate(): Promise<void> {
   console.log('🔄 Generating highlighted code files...\n');
 
-  const [demoCount, installCount, docsCount, pageCount, usageCount, snippetCount, formDemoCount, formSnippetCount] =
-    await Promise.all([
-      generateDemoFiles(),
-      generateInstallationFiles(),
-      generateDocsFiles(),
-      generatePageDataFiles(),
-      generateUsageFiles(),
-      generateSnippetFiles(),
-      generateFormDemoFiles(),
-      generateFormSnippetFiles(),
-    ]);
+  const [
+    demoCount,
+    installCount,
+    docsCount,
+    pageCount,
+    usageCount,
+    snippetCount,
+    formDemoCount,
+    formSnippetCount,
+    utilsDemoCount,
+  ] = await Promise.all([
+    generateDemoFiles(),
+    generateInstallationFiles(),
+    generateDocsFiles(),
+    generatePageDataFiles(),
+    generateUsageFiles(),
+    generateSnippetFiles(),
+    generateFormDemoFiles(),
+    generateFormSnippetFiles(),
+    generateUtilsDemoFiles(),
+  ]);
 
   console.log(`✅ Wrote ${demoCount} demo files`);
   console.log(`✅ Wrote ${installCount} installation files`);
@@ -33,6 +44,7 @@ async function generate(): Promise<void> {
   console.log(`✅ Wrote ${snippetCount} snippet files`);
   console.log(`✅ Wrote ${formDemoCount} form guide demo files`);
   console.log(`✅ Wrote ${formSnippetCount} form guide snippet files`);
+  console.log(`✅ Wrote ${utilsDemoCount} utility demo files`);
   console.log('');
 }
 

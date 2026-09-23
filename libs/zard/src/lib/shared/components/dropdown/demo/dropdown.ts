@@ -12,17 +12,17 @@ import { DROPDOWN_CLI_ADD } from '@generated/installation/cli/add-dropdown';
 import { DROPDOWN_MANUAL_CODE } from '@generated/installation/manual/dropdown';
 import { DROPDOWN_USAGE_IMPORT, DROPDOWN_USAGE_CODE } from '@generated/usage/dropdown';
 
-import { ZardDropdownAvatarDemoComponent } from '@/shared/components/dropdown/demo/avatar';
-import { ZardDropdownCheckboxesDemoComponent } from '@/shared/components/dropdown/demo/checkboxes';
-import { ZardDropdownComplexDemoComponent } from '@/shared/components/dropdown/demo/complex';
-import { ZardDropdownDestructiveDemoComponent } from '@/shared/components/dropdown/demo/destructive';
-import { ZardDropdownHoverDemoComponent } from '@/shared/components/dropdown/demo/hover';
-import { ZardDropdownIconsDemoComponent } from '@/shared/components/dropdown/demo/icons';
-import { ZardDropdownRadioGroupDemoComponent } from '@/shared/components/dropdown/demo/radio-group';
-import { ZardDropdownShortcutsDemoComponent } from '@/shared/components/dropdown/demo/shortcuts';
-import { ZardDropdownSubmenuDemoComponent } from '@/shared/components/dropdown/demo/submenu';
+import { ZardDemoDropdownAvatarComponent } from '@/shared/components/dropdown/demo/avatar';
+import { ZardDemoDropdownCheckboxesComponent } from '@/shared/components/dropdown/demo/checkboxes';
+import { ZardDemoDropdownComplexComponent } from '@/shared/components/dropdown/demo/complex';
+import { ZardDemoDropdownDestructiveComponent } from '@/shared/components/dropdown/demo/destructive';
+import { ZardDemoDropdownHoverComponent } from '@/shared/components/dropdown/demo/hover';
+import { ZardDemoDropdownIconsComponent } from '@/shared/components/dropdown/demo/icons';
+import { ZardDemoDropdownRadioGroupComponent } from '@/shared/components/dropdown/demo/radio-group';
+import { ZardDemoDropdownShortcutsComponent } from '@/shared/components/dropdown/demo/shortcuts';
+import { ZardDemoDropdownSubmenuComponent } from '@/shared/components/dropdown/demo/submenu';
 
-import { ZardDropdownDemoComponent } from './default';
+import { ZardDemoDropdownDefaultComponent } from './default';
 import { DROPDOWN_API } from '../doc/api';
 
 export const DROPDOWN = {
@@ -38,54 +38,54 @@ export const DROPDOWN = {
   examples: [
     {
       name: 'basic',
-      component: ZardDropdownDemoComponent,
+      component: ZardDemoDropdownDefaultComponent,
       codeData: DROPDOWN_DEMO_DEFAULT,
     },
     {
       name: 'shortcuts',
-      component: ZardDropdownShortcutsDemoComponent,
+      component: ZardDemoDropdownShortcutsComponent,
       codeData: DROPDOWN_DEMO_SHORTCUTS,
     },
     {
       name: 'icons',
-      component: ZardDropdownIconsDemoComponent,
+      component: ZardDemoDropdownIconsComponent,
       codeData: DROPDOWN_DEMO_ICONS,
     },
     {
       name: 'checkboxes',
-      component: ZardDropdownCheckboxesDemoComponent,
+      component: ZardDemoDropdownCheckboxesComponent,
       codeData: DROPDOWN_DEMO_CHECKBOXES,
     },
     {
       name: 'radio-group',
-      component: ZardDropdownRadioGroupDemoComponent,
+      component: ZardDemoDropdownRadioGroupComponent,
       codeData: DROPDOWN_DEMO_RADIO_GROUP,
     },
     {
       name: 'destructive',
-      component: ZardDropdownDestructiveDemoComponent,
+      component: ZardDemoDropdownDestructiveComponent,
       codeData: DROPDOWN_DEMO_DESTRUCTIVE,
     },
     {
       name: 'submenu',
       description: 'Compose with `z-navigation-menu-trigger` for nested flyout behavior.',
-      component: ZardDropdownSubmenuDemoComponent,
+      component: ZardDemoDropdownSubmenuComponent,
       codeData: DROPDOWN_DEMO_SUBMENU,
     },
     {
       name: 'avatar',
-      component: ZardDropdownAvatarDemoComponent,
+      component: ZardDemoDropdownAvatarComponent,
       codeData: DROPDOWN_DEMO_AVATAR,
     },
     {
       name: 'complex',
-      component: ZardDropdownComplexDemoComponent,
+      component: ZardDemoDropdownComplexComponent,
       codeData: DROPDOWN_DEMO_COMPLEX,
     },
     {
       name: 'hover',
       description: 'Use `zTrigger="hover"` when the menu should open on pointer hover.',
-      component: ZardDropdownHoverDemoComponent,
+      component: ZardDemoDropdownHoverComponent,
       codeData: DROPDOWN_DEMO_HOVER,
     },
   ],

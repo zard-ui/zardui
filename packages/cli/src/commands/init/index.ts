@@ -41,8 +41,8 @@ export const init = new Command()
     const isReInitializing = existsSync(path.resolve(cwd, 'components.json'));
     const packageManager = await detectPackageManager(cwd);
 
-    // Antes de qualquer etapa: é o catálogo que diz qual pacote de ícones
-    // instalar, e ele vem do registry para não depender da versão da CLI.
+    // Before any step: the catalog is what says which icon package to install,
+    // and it comes from the registry so it does not depend on the CLI version.
     await loadIconCatalog(getRegistryUrl());
 
     const buildSteps = (config: Config): InitStep[] => buildInitSteps(cwd, config, projectInfo, isReInitializing);
@@ -89,12 +89,12 @@ export const init = new Command()
   });
 
 /**
- * Por que a tela cheia não foi montada.
+ * Why the full screen was not mounted.
  *
- * A CLI sair em modo texto é indistinguível, para quem está olhando, de a
- * interface não existir — foi assim que a degradação no macOS e no Linux passou
- * despercebida até virar relato de que "não apareceu". Com `--debug`, a resposta
- * vem do próprio comando.
+ * The CLI falling back to text mode is, to whoever is watching, indistinguishable
+ * from the interface not existing — which is how the degradation on macOS and
+ * Linux went unnoticed until it turned into "it never showed up" reports. With
+ * `--debug`, the command answers for itself.
  */
 function logHeadlessReason(): void {
   logger.debug(
@@ -116,10 +116,10 @@ function validateAngularProject(projectInfo: ProjectInfo): void {
 }
 
 /**
- * O tipo pedido em `--type`, quando houver.
+ * The type asked for with `--type`, when there is one.
  *
- * É a resposta à primeira pergunta do wizard dada de antemão — o que torna o
- * init utilizável em CI, onde ninguém pode escolher no menu.
+ * It is the answer to the wizard's first question given up front — which is what
+ * makes init usable in CI, where nobody can pick from a menu.
  */
 function resolveKind(value: string | undefined): ProjectKind | undefined {
   if (!value) return undefined;
@@ -136,7 +136,7 @@ function resolveKind(value: string | undefined): ProjectKind | undefined {
   return kind.value;
 }
 
-/** A raiz do projeto pedido em `--project`, procurado entre os compatíveis. */
+/** The root of the project asked for with `--project`, looked up among the compatible ones. */
 function resolveProjectRoot(name: string | undefined, kind: ProjectKind, projectInfo: ProjectInfo): string | undefined {
   if (!name) return undefined;
 
@@ -162,16 +162,16 @@ interface HeadlessOptions {
   yes: boolean;
   /** O que `--type` pediu; sem ele, o workspace decide. */
   kind?: ProjectKind;
-  /** O que `--project` pediu; sem ele, o primeiro projeto compatível. */
+  /** What `--project` asked for; without it, the first compatible project. */
   projectRoot?: string;
   buildSteps(config: Config): InitStep[];
 }
 
 /**
- * Caminho sem UI — CI, pipes e terminais não interativos.
+ * The path without a UI — CI, pipes and non-interactive terminals.
  *
- * Aqui ninguém pode responder nada, então os defaults valem e `--yes` é
- * obrigatório: sem ele a CLI se recusa a sobrescrever o CSS global do projeto.
+ * Nobody can answer anything here, so the defaults apply and `--yes` is
+ * required: without it the CLI refuses to overwrite the project's global CSS.
  */
 async function runHeadless(options: HeadlessOptions): Promise<void> {
   if (!options.yes) {
@@ -185,8 +185,8 @@ async function runHeadless(options: HeadlessOptions): Promise<void> {
   const answers = defaultAnswers(options.projectInfo, kind, options.projectRoot);
   const cssState = await inspectCssFile(options.cwd, answers.globalCss);
 
-  // Numa biblioteca o CSS de tema é criado pelo init, então não existir é o
-  // esperado; numa aplicação, o arquivo tem que estar lá e ligado ao build.
+  // In a library the theme CSS is created by init, so its absence is expected;
+  // in an application the file has to be there and wired into the build.
   if (cssState === 'missing' && !isLibraryKind(answers.kind)) {
     throw new CliError(
       `CSS file not found at: ${answers.globalCss}. Run init in an interactive terminal to choose another path.`,
@@ -225,11 +225,11 @@ function reportSuccess(config: Config, steps: readonly InitStep[], logs: readonl
 }
 
 /**
- * O que ainda falta fazer à mão.
+ * What is still left to do by hand.
  *
- * Numa biblioteca o init não tem onde registrar `provideZard()` nem como
- * importar os tokens — as duas coisas pertencem ao app que consome a lib, e
- * sem esse aviso o usuário só descobre quando os componentes não renderizam.
+ * In a library init has nowhere to register `provideZard()` and no way to import
+ * the tokens — both belong to the app consuming the library, and without this
+ * notice the user only finds out when the components do not render.
  */
 function nextStepsFor(config: Config): string[] {
   if (!isLibraryKind(config.projectType)) {

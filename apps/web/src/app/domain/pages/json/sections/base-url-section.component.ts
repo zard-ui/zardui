@@ -6,7 +6,6 @@ import type { CodeBlockData } from '@highlight/types';
 
 @Component({
   selector: 'z-json-base-url-section',
-  standalone: true,
   imports: [CodeBlockComponent],
   template: `
     <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="base-url" id="base-url">

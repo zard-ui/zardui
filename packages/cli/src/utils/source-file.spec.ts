@@ -1,9 +1,9 @@
 /**
- * As duas edições de código-fonte que o init faz em arquivos do usuário.
+ * The two source edits init makes to the user's files.
  *
- * Ambas já quebraram em projetos reais por assumirem a forma mais simples do
- * arquivo: um import cabe numa linha, um array não contém outro. Nenhuma das
- * duas premissas vale num `app.config.ts` ou num `vite.config.ts` de verdade.
+ * Both have broken in real projects by assuming the file's simplest shape: an
+ * import fits on one line, an array contains no other. Neither assumption holds
+ * in a real `app.config.ts` or `vite.config.ts`.
  */
 
 import { arrayRange, lineEndingOf, withImport } from '@cli/utils/source-file.js';
@@ -24,8 +24,8 @@ describe('withImport', () => {
     expect(withImport(content, IMPORT).split('\n')[2]).toBe(IMPORT);
   });
 
-  // A lista de símbolos quebra em várias linhas com frequência; um padrão preso
-  // a uma linha só não a alcançava, e o import ia parar antes de todos.
+  // The symbol list often wraps across several lines; a pattern anchored to a
+  // single line did not reach it, and the import ended up before all the others.
   it('should see through a multi-line import list', () => {
     const content = ["import {\n  provideHttpClient,\n  withInterceptors,\n} from '@angular/common/http';", ''].join(
       '\n',
@@ -95,7 +95,7 @@ describe('arrayRange', () => {
     expect(arrayRange('export const x = 1;', 'providers')).toBeNull();
   });
 
-  // Sem fechamento não há intervalo — melhor recusar do que inserir no escuro.
+  // With no closing bracket there is no range — better to refuse than insert blind.
   it('should return null when the array is never closed', () => {
     expect(arrayRange('providers: [a(),', 'providers')).toBeNull();
   });

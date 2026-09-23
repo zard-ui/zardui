@@ -11,7 +11,6 @@ import { ZardResizableComponent, type ZardResizeEvent } from './resizable.compon
 @Component({
   selector: 'test-handle-host',
   imports: [ZardResizableComponent, ZardResizablePanelComponent, ZardResizableHandleComponent],
-  standalone: true,
   template: `
     <z-resizable [zLayout]="layout">
       <z-resizable-panel [zDefaultSize]="defaultSize1" [zCollapsible]="collapsible1" [zResizable]="resizable1">

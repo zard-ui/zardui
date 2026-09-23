@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
@@ -16,6 +16,7 @@ import { ZardInputComponent } from '@/shared/components/input';
       <button type="button" z-button zType="outline"><ng-icon name="lucideSearch" /></button>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSearch })],
 })
 export class ZardDemoButtonGroupInputComponent {}

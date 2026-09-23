@@ -4,7 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
 
 @Component({
-  selector: 'zard-demo-sheet-no-close-button',
+  selector: 'z-demo-sheet-no-close-button',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="openSheet()">Open Sheet</button>

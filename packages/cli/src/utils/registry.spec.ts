@@ -95,6 +95,20 @@ describe('fetchRegistryIndex', () => {
     expect(result).toEqual(fakeRegistryIndex);
   });
 
+  // The cache used to be a single slot, so a second registry read inside the TTL
+  // was answered with the first registry's index.
+  it('should cache per registry URL, not globally', async () => {
+    const otherIndex = { ...fakeRegistryIndex, name: '@other' };
+    mockFetchJson.mockResolvedValueOnce(fakeRegistryIndex).mockResolvedValueOnce(otherIndex);
+
+    const first = await fetchRegistryIndex('https://example.com/r');
+    const second = await fetchRegistryIndex('https://other.example.com/r');
+
+    expect(mockFetchJson).toHaveBeenCalledTimes(2);
+    expect(first).toEqual(fakeRegistryIndex);
+    expect(second).toEqual(otherIndex);
+  });
+
   it('should respect cache TTL', async () => {
     mockFetchJson.mockResolvedValue(fakeRegistryIndex);
 
@@ -200,12 +214,12 @@ describe('fetchComponent', () => {
 });
 
 describe('transformContent', () => {
-  it('should replace utils import path', () => {
-    const content = `import { cn } from '../../shared/utils/utils'`;
+  it('should rewrite the utils alias', () => {
+    const content = `import { mergeClasses } from '@/shared/utils/merge-classes'`;
 
     const result = transformContent(content, fakeConfig);
 
-    expect(result).toBe(`import { cn } from '@/shared/utils/merge-classes'`);
+    expect(result).toBe(`import { mergeClasses } from '@/shared/utils/merge-classes'`);
   });
 
   it('should replace relative component imports with aliased imports', () => {
@@ -232,12 +246,12 @@ describe('transformContent', () => {
     expect(result).toBe(`import { ClassValue } from 'clsx'`);
   });
 
-  it('should replace number utils import path', () => {
-    const content = `import { toNumber } from '../../shared/utils/number'`;
+  it('should rewrite the number utils alias', () => {
+    const content = `import { clamp } from '@/shared/utils/number'`;
 
     const result = transformContent(content, fakeConfig);
 
-    expect(result).toBe(`import { toNumber } from '@/shared/utils/number'`);
+    expect(result).toBe(`import { clamp } from '@/shared/utils/number'`);
   });
 
   it('should transform @/shared/* paths to match aliases', () => {
@@ -259,9 +273,22 @@ describe('transformContent', () => {
       },
     };
 
-    const content = `import { cn } from '../../shared/utils/utils'`;
+    const content = [
+      `import { mergeClasses } from '@/shared/utils/merge-classes';`,
+      `import { ZardIdDirective } from '@/shared/core';`,
+      `import { ZardDarkMode } from '@/shared/services/dark-mode';`,
+      `import { ZardButtonComponent } from '@/shared/components/button';`,
+    ].join('\n');
+
     const result = transformContent(content, customConfig);
 
-    expect(result).toBe(`import { cn } from '~/utils/merge-classes'`);
+    expect(result).toBe(
+      [
+        `import { mergeClasses } from '~/utils/merge-classes';`,
+        `import { ZardIdDirective } from '~/core';`,
+        `import { ZardDarkMode } from '~/services/dark-mode';`,
+        `import { ZardButtonComponent } from '~/components/button';`,
+      ].join('\n'),
+    );
   });
 });

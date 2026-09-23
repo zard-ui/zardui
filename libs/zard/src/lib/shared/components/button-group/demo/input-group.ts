@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideAudioLines, lucidePlus } from '@ng-icons/lucide';
@@ -35,12 +35,13 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
           />
           <z-input-group-addon zAlign="inline-end">
             <button
+              type="button"
               z-input-group-button
               zTooltip="Voice Mode"
               aria-label="Voice Mode"
               [attr.aria-pressed]="voiceEnabled()"
               [attr.data-active]="voiceEnabled() ? '' : null"
-              class="data-[active]:bg-orange-100 data-[active]:text-orange-700 dark:data-[active]:bg-orange-800 dark:data-[active]:text-orange-100"
+              class="data-active:bg-orange-100 data-active:text-orange-700 dark:data-active:bg-orange-800 dark:data-active:text-orange-100"
               (click)="toggleVoice()"
             >
               <ng-icon name="lucideAudioLines" />
@@ -50,6 +51,7 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
       </z-button-group>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus, lucideAudioLines })],
 })
 export class ZardDemoButtonGroupInputGroupComponent {

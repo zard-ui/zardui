@@ -5,6 +5,12 @@ export const SELECT_API: ApiSection[] = [
     selector: 'z-select',
     description: 'A customizable select component that supports single and multiple value selection.',
     props: [
+      {
+        name: '[zValue]',
+        description: 'Selected value(s), two-way bindable',
+        type: 'string | string[]',
+        default: "''",
+      },
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zAlign]',

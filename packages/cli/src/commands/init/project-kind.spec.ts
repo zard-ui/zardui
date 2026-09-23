@@ -1,15 +1,15 @@
 /**
- * O que muda de um tipo de projeto para outro.
+ * What changes from one project type to another.
  *
- * As diferenças não são cosméticas: uma biblioteca não tem `app.config.ts` onde
- * registrar providers nem CSS global pré-existente, o Nx guarda os paths do
- * TypeScript noutro arquivo e vive sob `apps/`, e o Analog compila com Vite —
- * onde um `.postcssrc.json` não é lido por ninguém. Cada uma dessas premissas
- * quebrava uma etapa do init quando aplicada ao fluxo da aplicação Angular.
+ * The differences are not cosmetic: a library has no `app.config.ts` to register
+ * providers in and no pre-existing global CSS, Nx keeps the TypeScript paths in
+ * a different file and lives under `apps/`, and Analog compiles with Vite —
+ * where nobody reads a `.postcssrc.json`. Each of those assumptions broke a step
+ * of init when the Angular-application flow was applied to it.
  */
 
-// `steps.ts` alcança o package-manager, que importa @antfu/ni — ESM, que o Jest
-// não parseia. Aqui só interessa a lista de etapas, nenhuma delas é executada.
+// `steps.ts` reaches the package-manager, which imports @antfu/ni — ESM, which
+// Jest does not parse. Only the list of steps matters here; none of them run.
 jest.mock('@antfu/ni', () => ({ detect: jest.fn() }));
 
 import { buildConfig, defaultAnswers, type InitAnswers } from '@cli/commands/init/config-prompter.js';
@@ -80,8 +80,8 @@ const nxLibrary = project({
 const nxWorkspace = projectInfo([nxApplication, nxLibrary], { workspace: 'nx', hasNx: true });
 
 describe('PROJECT_KINDS', () => {
-  // A ordem é a do menu: cada ecossistema junto, com a aplicação antes da
-  // biblioteca, e Angular abrindo a lista porque é o default.
+  // Menu order: each ecosystem together, with the application before the
+  // library, and Angular opening the list because it is the default.
   it('should group every supported type by ecosystem, Angular first', () => {
     expect(PROJECT_KINDS.map(kind => kind.value)).toEqual(['angular', 'angular-library', 'nx', 'nx-library', 'analog']);
   });
@@ -90,8 +90,8 @@ describe('PROJECT_KINDS', () => {
     expect(PROJECT_KINDS.every(kind => kind.detail.length > 0)).toBe(true);
   });
 
-  // A cor diz de relance a que mundo o tipo pertence, e não faria isso se
-  // variasse entre a aplicação e a biblioteca do mesmo ecossistema.
+  // The colour says at a glance which world the type belongs to, and it would
+  // not if it varied between an ecosystem's application and its library.
   it('should paint both flavours of an ecosystem with the same colour', () => {
     const colorOf = (value: string) => PROJECT_KINDS.find(kind => kind.value === value)?.color;
 
@@ -111,8 +111,8 @@ describe('isLibraryKind', () => {
 });
 
 /**
- * A detecção não conduz o wizard — quem escolhe o tipo é o usuário, na primeira
- * pergunta. Ela só decide no caminho headless, onde não há quem responda.
+ * Detection does not drive the wizard — the user picks the type, in the first
+ * question. It only decides on the headless path, where nobody can answer.
  */
 describe('detectProjectKind', () => {
   it('should pick the Nx application when the workspace is managed by Nx', () => {
@@ -157,8 +157,8 @@ describe('candidateProjects', () => {
 });
 
 describe('tsconfigFileFor', () => {
-  // O tsconfig.json da raiz de um workspace Nx não é herdado por projeto
-  // nenhum: o alias escrito ali resolveria no editor e quebraria no build.
+  // The tsconfig.json at the root of an Nx workspace is inherited by no project:
+  // an alias written there would resolve in the editor and break in the build.
   it('should target tsconfig.base.json on Nx, whatever the workspace reports', () => {
     expect(tsconfigFileFor('nx', projectInfo())).toBe('tsconfig.base.json');
     expect(tsconfigFileFor('nx-library', projectInfo())).toBe('tsconfig.base.json');
@@ -178,7 +178,7 @@ describe('defaultAnswers', () => {
 
     expect(answers.projectRoot).toBe('apps/nx-app');
     expect(answers.appConfig).toBe('apps/nx-app/src/app/app.config.ts');
-    // O `styles` do target de build é onde o CSS global realmente está.
+    // The build target's `styles` is where the global CSS actually lives.
     expect(answers.globalCss).toBe('apps/nx-app/src/styles.css');
   });
 
@@ -195,7 +195,7 @@ describe('defaultAnswers', () => {
 
     expect(answers.projectRoot).toBe('projects/ui');
     expect(answers.globalCss).toBe('projects/ui/src/styles.css');
-    // A lib não tem app.config; o campo fica vazio em vez de apontar para nada.
+    // A library has no app.config; the field stays empty instead of pointing nowhere.
     expect(answers.appConfig).toBe('');
   });
 
@@ -278,19 +278,19 @@ describe('buildInitSteps', () => {
     }
   });
 
-  // O .postcssrc configura o build de uma aplicação; a lib é compilada pelo
-  // ng-packagr e quem processa Tailwind é o projeto que a consome.
+  // .postcssrc configures an application's build; a library is compiled by
+  // ng-packagr and Tailwind is processed by the project consuming it.
   it('should not write a postcss config on a library', () => {
     expect(labelsFor('angular-library')).not.toContain('.postcssrc.json');
     expect(labelsFor('angular')).toContain('.postcssrc.json');
   });
 
-  // Escrevê-lo na raiz do repositório configuraria todos os apps do workspace.
+  // Writing it at the repository root would configure every app in the workspace.
   it('should write the postcss config inside the Nx project', () => {
     expect(labelsFor('nx', nxWorkspace)).toContain('apps/nx-app/.postcssrc.json');
   });
 
-  // No Analog quem compila é o Vite; um .postcssrc.json ali não é lido.
+  // In Analog it is Vite that compiles; a .postcssrc.json there is never read.
   it('should register a Vite plugin instead of a postcss config on Analog', () => {
     expect(labelsFor('analog')).toContain('vite.config.ts');
     expect(labelsFor('analog')).not.toContain('.postcssrc.json');
@@ -342,8 +342,8 @@ describe('caminhos do projeto', () => {
     expect(sourceRootOf('apps/nx-app/src/app')).toBe('apps/nx-app/src');
   });
 
-  // No Analog o index.html é a página de entrada do Vite e fica na raiz do
-  // projeto, não em src/ como no build do Angular.
+  // In Analog index.html is Vite's entry page and sits at the project root, not
+  // in src/ as in the Angular build.
   it('should know where each toolchain keeps index.html', () => {
     expect(indexHtmlFor('angular', 'src/app')).toBe('src/index.html');
     expect(indexHtmlFor('nx', 'apps/nx-app/src/app')).toBe('apps/nx-app/src/index.html');

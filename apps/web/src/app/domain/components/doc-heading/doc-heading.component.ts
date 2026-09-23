@@ -5,7 +5,6 @@ import { AiAssistComponent } from '../ai-assist/ai-assist.component';
 
 @Component({
   selector: 'z-doc-heading',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ScrollSpyItemDirective, AiAssistComponent],
   template: `

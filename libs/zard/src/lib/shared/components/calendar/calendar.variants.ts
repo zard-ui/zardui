@@ -64,8 +64,8 @@ export const calendarCaptionLabelVariants = cva('font-medium select-none', {
 export const calendarDropdownRootVariants = cva(
   mergeClasses(
     'relative isolate rounded-(--cell-radius) border border-input bg-background shadow-xs',
-    'has-[:focus-visible]:border-ring has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/50',
-    'has-[:disabled]:pointer-events-none has-[:disabled]:opacity-50',
+    'has-focus-visible:border-ring has-focus-visible:ring-3 has-focus-visible:ring-ring/50',
+    'has-disabled:pointer-events-none has-disabled:opacity-50',
   ),
 );
 
@@ -86,9 +86,9 @@ export const calendarWeekVariants = cva('mt-2 grid w-full grid-cols-7 gap-x-0 ga
 
 export const calendarDayVariants = cva(
   mergeClasses(
-    'group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none',
+    'group/day relative aspect-square size-full rounded-(--cell-radius) p-0 text-center select-none',
     // Round the range rail at both ends of every week.
-    '[&:nth-child(7n+1)]:rounded-s-(--cell-radius) [&:nth-child(7n)]:rounded-e-(--cell-radius)',
+    'nth-[7n+1]:rounded-s-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
   ),
   {
     variants: {

@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSeparatorComponent } from '../separator.component';
 
 @Component({
   selector: 'z-demo-separator-menu',
   imports: [ZardSeparatorComponent],
-  standalone: true,
   template: `
     <div class="flex items-center gap-2 text-sm md:gap-4">
       <div class="flex flex-col gap-1">
@@ -24,5 +23,6 @@ import { ZardSeparatorComponent } from '../separator.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSeparatorMenuComponent {}

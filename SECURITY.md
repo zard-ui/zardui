@@ -4,8 +4,8 @@
 
 If you discover a security vulnerability in ZardUI, please report it by:
 
-1. **Email**: Send details to **gomesluiz.dev@gmail.com**
-2. **GitHub**: Create a private security advisory
+1. **GitHub** (preferred): open a [private security advisory](https://github.com/zard-ui/zardui/security/advisories/new)
+2. **Email**: **gomesluiz.dev@gmail.com**
 
 Please **DO NOT** create public GitHub issues for security vulnerabilities.
 
@@ -17,10 +17,10 @@ Please **DO NOT** create public GitHub issues for security vulnerabilities.
 
 ## Supported Versions
 
-| Version | Supported |
-| ------- | --------- |
-| 1.x.x   | ✅ Yes    |
-| < 1.0   | ❌ No     |
+| Version         | Supported |
+| --------------- | --------- |
+| 1.0.0-beta.x    | ✅ Yes    |
+| < 1.0.0-beta    | ❌ No     |
 
 ## Security Best Practices
 
@@ -31,4 +31,4 @@ Please **DO NOT** create public GitHub issues for security vulnerabilities.
 
 ## Contact
 
-For security-related questions: **gomesluiz.dev@gmail.com**
+Open a private advisory on GitHub, or email **gomesluiz.dev@gmail.com**.

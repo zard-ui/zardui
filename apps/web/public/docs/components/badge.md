@@ -95,7 +95,7 @@ import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 ### Default
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '../badge.component';
 
@@ -113,6 +113,7 @@ import { ZardBadgeComponent } from '../badge.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoBadgeDefaultComponent {}
 ```
@@ -120,7 +121,7 @@ export class ZardDemoBadgeDefaultComponent {}
 ### With Icons
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBadgeCheck, lucideBookmark } from '@ng-icons/lucide';
@@ -142,6 +143,7 @@ import { ZardBadgeComponent } from '../badge.component';
       </z-badge>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBadgeCheck, lucideBookmark })],
 })
 export class ZardDemoBadgeWithIconsComponent {}
@@ -150,7 +152,7 @@ export class ZardDemoBadgeWithIconsComponent {}
 ### Link
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -171,6 +173,7 @@ import { ZardBadgeComponent } from '../badge.component';
       </a>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideArrowUpRight })],
 })
 export class ZardDemoBadgeLinkComponent {}
@@ -179,7 +182,7 @@ export class ZardDemoBadgeLinkComponent {}
 ### Custom Colors
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '../badge.component';
 
@@ -197,6 +200,7 @@ import { ZardBadgeComponent } from '../badge.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoBadgeCustomColorsComponent {}
 ```
@@ -209,8 +213,8 @@ Displays a badge or a component that looks like a badge.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zType` | Badge type | `'default' \| 'secondary' \| 'destructive' \| 'outline' \| 'ghost' \| 'link'` | `'default'` |
-| `class` | Additional CSS classes | `string` | `''` |
+| `[zType]` | Badge type | `'default' \| 'secondary' \| 'destructive' \| 'outline' \| 'ghost' \| 'link'` | `'default'` |
+| `[class]` | Additional CSS classes | `string` | `''` |
 
 ---
 

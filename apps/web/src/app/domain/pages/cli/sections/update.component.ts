@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 
 @Component({
-  selector: 'cli-update-section',
+  selector: 'z-cli-update-section',
   imports: [ZardAlertComponent, RouterLink],
   template: `
     <section class="flex flex-col gap-6">
@@ -86,4 +86,4 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
     </section>
   `,
 })
-export class CliUpdateSection {}
+export class CliUpdateSectionComponent {}

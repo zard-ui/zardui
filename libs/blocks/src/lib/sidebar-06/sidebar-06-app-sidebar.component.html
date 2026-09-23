@@ -1,0 +1,31 @@
+<z-sidebar>
+  <div z-sidebar-header>
+    <ul z-sidebar-menu>
+      <li z-sidebar-menu-item>
+        <a z-sidebar-menu-button zSize="lg" href="#">
+          <div
+            class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
+          >
+            <ng-icon name="lucideGalleryVerticalEnd" class="size-4" />
+          </div>
+          <div class="flex flex-col gap-0.5 leading-none">
+            <span class="font-medium">Documentation</span>
+            <span>v1.0.0</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <z-sidebar-content>
+    <lib-sidebar-06-nav-main [items]="navMain" />
+  </z-sidebar-content>
+
+  <div z-sidebar-footer>
+    <div class="p-1">
+      <lib-sidebar-06-sidebar-opt-in-form />
+    </div>
+  </div>
+
+  <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
+</z-sidebar>

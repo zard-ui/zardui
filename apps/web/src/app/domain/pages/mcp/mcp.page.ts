@@ -5,31 +5,30 @@ import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-head
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { McpConfigurationSection } from './sections/configuration.component';
-import { McpInstallationSection } from './sections/installation.component';
-import { McpOverviewSection } from './sections/overview.component';
-import { McpSecuritySection } from './sections/security.component';
-import { McpToolsSection } from './sections/tools.component';
-import { McpTroubleshootingSection } from './sections/troubleshooting.component';
-import { McpUsageSection } from './sections/usage.component';
+import { McpConfigurationSectionComponent } from './sections/configuration.component';
+import { McpInstallationSectionComponent } from './sections/installation.component';
+import { McpOverviewSectionComponent } from './sections/overview.component';
+import { McpSecuritySectionComponent } from './sections/security.component';
+import { McpToolsSectionComponent } from './sections/tools.component';
+import { McpTroubleshootingSectionComponent } from './sections/troubleshooting.component';
+import { McpUsageSectionComponent } from './sections/usage.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-mcp',
-  standalone: true,
   imports: [
     DocContentComponent,
     DocHeadingComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
-    McpOverviewSection,
-    McpInstallationSection,
-    McpUsageSection,
-    McpToolsSection,
-    McpConfigurationSection,
-    McpSecuritySection,
-    McpTroubleshootingSection,
+    McpOverviewSectionComponent,
+    McpInstallationSectionComponent,
+    McpUsageSectionComponent,
+    McpToolsSectionComponent,
+    McpConfigurationSectionComponent,
+    McpSecuritySectionComponent,
+    McpTroubleshootingSectionComponent,
   ],
   template: `
     <z-content
@@ -45,13 +44,16 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
         id="overview"
       ></z-doc-heading>
 
-      <mcp-overview-section scrollSpyItem="what-is-it" id="what-is-it"></mcp-overview-section>
-      <mcp-installation-section scrollSpyItem="installation" id="installation"></mcp-installation-section>
-      <mcp-usage-section scrollSpyItem="usage" id="usage"></mcp-usage-section>
-      <mcp-tools-section scrollSpyItem="tools" id="tools"></mcp-tools-section>
-      <mcp-configuration-section scrollSpyItem="configuration" id="configuration"></mcp-configuration-section>
-      <mcp-security-section scrollSpyItem="security" id="security"></mcp-security-section>
-      <mcp-troubleshooting-section scrollSpyItem="troubleshooting" id="troubleshooting"></mcp-troubleshooting-section>
+      <z-mcp-overview-section scrollSpyItem="what-is-it" id="what-is-it"></z-mcp-overview-section>
+      <z-mcp-installation-section scrollSpyItem="installation" id="installation"></z-mcp-installation-section>
+      <z-mcp-usage-section scrollSpyItem="usage" id="usage"></z-mcp-usage-section>
+      <z-mcp-tools-section scrollSpyItem="tools" id="tools"></z-mcp-tools-section>
+      <z-mcp-configuration-section scrollSpyItem="configuration" id="configuration"></z-mcp-configuration-section>
+      <z-mcp-security-section scrollSpyItem="security" id="security"></z-mcp-security-section>
+      <z-mcp-troubleshooting-section
+        scrollSpyItem="troubleshooting"
+        id="troubleshooting"
+      ></z-mcp-troubleshooting-section>
     </z-content>
   `,
 })

@@ -1,6 +1,6 @@
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,6 +8,7 @@ import {
   computed,
   DestroyRef,
   Directive,
+  DOCUMENT,
   effect,
   ElementRef,
   inject,
@@ -23,6 +24,7 @@ import {
   signal,
   type TemplateRef,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
@@ -45,6 +47,9 @@ interface DelayConfig {
   isShow: boolean;
   delay: number;
 }
+
+/** Matches the `animate-out` duration applied by `tooltipVariants`. */
+const TOOLTIP_EXIT_DURATION = 150;
 
 const throttle = (callback: () => void, wait: number) => {
   let time = Date.now();
@@ -76,6 +81,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private ariaEffectRef?: ReturnType<typeof effect>;
   private componentRef?: ComponentRef<ZardTooltipComponent>;
   private delaySubject?: Subject<DelayConfig>;
+  private detachTimeoutId?: ReturnType<typeof setTimeout>;
   private listenersRefs: (() => void)[] = [];
   private overlayRef?: OverlayRef;
 
@@ -136,6 +142,11 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     if (this.ariaEffectRef) {
       this.ariaEffectRef.destroy();
       this.ariaEffectRef = undefined;
+    }
+
+    if (this.detachTimeoutId !== undefined) {
+      clearTimeout(this.detachTimeoutId);
+      this.detachTimeoutId = undefined;
     }
 
     this.delaySubject?.complete();
@@ -219,7 +230,18 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   }
 
   private show() {
-    if (this.componentRef || !this.tooltipText()) {
+    if (!this.tooltipText()) {
+      return;
+    }
+
+    // Re-entering the trigger while the exit animation is running: keep the
+    // same overlay and animate it back in instead of detaching it.
+    if (this.componentRef) {
+      if (this.detachTimeoutId !== undefined) {
+        clearTimeout(this.detachTimeoutId);
+        this.detachTimeoutId = undefined;
+        this.componentRef.instance.state.set('open');
+      }
       return;
     }
 
@@ -228,7 +250,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.componentRef?.onDestroy(() => {
       this.componentRef = undefined;
     });
-    this.componentRef?.instance.state.set('opened');
+    this.componentRef?.instance.state.set('open');
     this.componentRef?.instance.setProps(this.tooltipText(), this.zPosition());
     runInInjectionContext(this.injector, () => {
       this.ariaEffectRef = effect(() => {
@@ -244,7 +266,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   }
 
   private hide() {
-    if (!this.componentRef) {
+    if (!this.componentRef || this.detachTimeoutId !== undefined) {
       return;
     }
 
@@ -257,7 +279,12 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.renderer.removeAttribute(this.elementRef.nativeElement, 'aria-describedby');
     this.componentRef.instance.state.set('closed');
     this.zHide.emit();
-    this.overlayRef?.detach();
+
+    // Detach only once the exit animation has played out.
+    this.detachTimeoutId = setTimeout(() => {
+      this.detachTimeoutId = undefined;
+      this.overlayRef?.detach();
+    }, TOOLTIP_EXIT_DURATION);
   }
 }
 
@@ -280,6 +307,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[attr.id]': 'tooltipId()',
@@ -288,6 +316,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     'data-slot': 'tooltip-content',
     role: 'tooltip',
   },
+  exportAs: 'zTooltip',
 })
 export class ZardTooltipComponent {
   protected readonly arrowClasses = computed(() =>
@@ -296,7 +325,7 @@ export class ZardTooltipComponent {
 
   protected readonly classes = computed(() => mergeClasses(tooltipVariants()));
   protected readonly position = signal<ZardTooltipPositionVariants>('top');
-  readonly state = signal<'closed' | 'opened'>('closed');
+  readonly state = signal<'closed' | 'open'>('closed');
   readonly uniqueId = viewChild<ZardIdDirective>('z');
   protected readonly tooltipText = signal<ZardTooltipType>(null);
   protected readonly tooltipId = computed(() => this.uniqueId()?.id() ?? 'tooltip');

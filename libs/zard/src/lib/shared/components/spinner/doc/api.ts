@@ -5,6 +5,7 @@ export const SPINNER_API: ApiSection[] = [
     selector: 'z-spinner',
     description: 'A simple loading indicator built on the Lucide loader-circle icon.',
     props: [
+      { name: '[zAriaLabel]', description: 'Text announced by screen readers', type: 'string', default: "'Loading'" },
       {
         name: '[class]',
         description: 'Override or extend the default classes (size, color, animation duration).',

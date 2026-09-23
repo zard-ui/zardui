@@ -75,6 +75,7 @@ type OnChangeType = (value: string) => void;
     '(cut)': 'onCut($event)',
     '(mousedown)': 'clearSelectAll()',
   },
+  exportAs: 'zInputOtp',
 })
 export class ZardInputOtpComponent implements ControlValueAccessor, AfterContentInit {
   readonly inputs = viewChildren<ElementRef<HTMLInputElement>>('otpInput');

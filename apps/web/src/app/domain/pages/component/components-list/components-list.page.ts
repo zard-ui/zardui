@@ -32,7 +32,6 @@ import { SeoService } from '@doc/shared/services/seo.service';
       </div>
     </z-content>
   `,
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DocContentComponent, DocHeadingComponent, RouterLinkWithHref],
 })

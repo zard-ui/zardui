@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardCardImports } from '@/shared/components/card/card.imports';
@@ -21,7 +21,6 @@ const PRESETS: CalendarPreset[] = [
 @Component({
   selector: 'z-demo-calendar-presets',
   imports: [ZardCalendarComponent, ZardButtonComponent, ZardCardImports],
-  standalone: true,
   template: `
     <z-card zSize="sm" class="mx-auto w-fit max-w-[300px]">
       <z-card-content>
@@ -36,6 +35,7 @@ const PRESETS: CalendarPreset[] = [
       </z-card-footer>
     </z-card>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCalendarPresetsComponent {
   readonly presets = PRESETS;

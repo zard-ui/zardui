@@ -21,7 +21,8 @@ import { HeaderComponent } from '@doc/domain/components/header/header.component'
 import { getHeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
 
 const LOADING_TIMEOUT = 1000;
-const PREVIEW_URL_PREFIX = '/blocks/preview/';
+/** Routes that render their content alone, with no header and no footer. */
+const PREVIEW_URL_PREFIXES = ['/blocks/preview/', '/typeset/preview'];
 
 @Component({
   imports: [RouterModule, HeaderComponent, FooterComponent],
@@ -46,7 +47,9 @@ export class AppComponent {
 
   private scrollTimeoutId: number | null = null;
   private readonly currentUrl = signal(this.resolveInitialUrl());
-  protected readonly isPreviewRoute = computed(() => this.currentUrl().startsWith(PREVIEW_URL_PREFIX));
+  protected readonly isPreviewRoute = computed(() =>
+    PREVIEW_URL_PREFIXES.some(prefix => this.currentUrl().startsWith(prefix)),
+  );
 
   private resolveInitialUrl(): string {
     const pathname = this.document.location?.pathname;

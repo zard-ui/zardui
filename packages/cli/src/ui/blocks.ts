@@ -1,14 +1,14 @@
 /**
- * Blocos de view compartilhados pelos wizards.
+ * View blocks shared by the wizards.
  *
- * `init` e `add` são fluxos diferentes, mas o usuário deve reconhecer a mesma
- * CLI nos dois: o transcript de respostas, a barra de atalhos no rodapé e os
- * painéis de resultado vivem aqui para não divergirem.
+ * `init` and `add` are different flows, but the user should recognise the same
+ * CLI in both: the transcript of answers, the shortcut bar in the footer and the
+ * result panels live here so they cannot diverge.
  */
 
 import { column, panel, progressBar, row, spinner, text, type Node } from './engine/index.js';
 
-/** Barra de atalhos do rodapé: `↑/↓ navigate    enter confirm`. */
+/** The footer's shortcut bar: `↑/↓ navigate    enter confirm`. */
 export function controls(pairs: readonly (readonly [string, string])[]): Node {
   const segments: Node[] = [];
   pairs.forEach(([key, label], index) => {
@@ -18,7 +18,7 @@ export function controls(pairs: readonly (readonly [string, string])[]): Node {
   return row({}, ...segments);
 }
 
-/** Linha do transcript: uma pergunta já respondida. */
+/** A transcript line: one question already answered. */
 export function answeredLine(label: string, value: string): Node {
   return row(
     { gap: 0 },
@@ -38,14 +38,14 @@ export function question(prompt: string): Node {
   );
 }
 
-/** Campo de texto com cursor em bloco. */
+/** Text field with a block cursor. */
 /**
- * Campo de texto com o cursor onde ele realmente está.
+ * Text field with the cursor where it actually is.
  *
- * Desenhar o cursor sempre no fim escondia que ele pode andar — e sem enxergar
- * a posição não há como editar o meio do valor com alguma confiança. O
- * caractere sob o cursor é invertido; no fim da linha isso dá o mesmo bloco
- * cheio de antes.
+ * Always drawing the cursor at the end hid the fact that it can move — and
+ * without seeing the position there is no editing the middle of a value with any
+ * confidence. The character under the cursor is inverted; at the end of the line
+ * that gives the same solid block as before.
  */
 export function textField(value: string, caret = [...value].length): Node {
   const chars = [...value];
@@ -64,18 +64,19 @@ export interface Choice {
   readonly label: string;
   readonly hint?: string;
   /**
-   * Cor própria do item, quando ele representa algo que já tem identidade —
-   * um framework, por exemplo. Sem ela o rótulo segue o estado (ativo ou não).
+   * The item's own colour, when it stands for something that already has an
+   * identity — a framework, say. Without it the label follows the state (active
+   * or not).
    */
   readonly color?: string;
 }
 
 /**
- * Lista de escolha única, com o item ativo marcado por `❯`.
+ * Single-choice list, with the active item marked by `❯`.
  *
- * Um item colorido mantém a cor esteja ativo ou não: é ela que identifica o
- * que ele é. O estado continua legível pelo marcador e pelo peso — negrito no
- * ativo, apagado nos demais.
+ * A coloured item keeps its colour whether active or not: the colour is what
+ * identifies it. State stays legible through the marker and the weight — bold on
+ * the active one, dimmed on the rest.
  */
 export function choiceList(choices: readonly Choice[], activeIndex: number): Node[] {
   return choices.map((choice, index) => {
@@ -93,7 +94,7 @@ export function choiceList(choices: readonly Choice[], activeIndex: number): Nod
   });
 }
 
-/** Lista de múltipla escolha, com marcação por item. */
+/** Multiple-choice list, with a mark per item. */
 export function checkList(choices: readonly Choice[], activeIndex: number, selected: ReadonlySet<number>): Node[] {
   return choices.map((choice, index) => {
     const active = index === activeIndex;
@@ -117,12 +118,12 @@ export function confirmField(value: boolean): Node {
   );
 }
 
-/** Explicação do passo ativo, em texto secundário. */
+/** Explanation of the active step, in secondary text. */
 export function hint(content: string): Node {
   return text(`   ${content}`, { color: 'muted', dim: true });
 }
 
-/** Aviso destacado — usado quando recusar o passo interrompe o fluxo. */
+/** A highlighted warning — used when declining the step aborts the flow. */
 export function warning(content: string): Node {
   return text(`   ⚠  ${content}`, { color: 'warning', bold: true });
 }
@@ -132,16 +133,16 @@ export interface TaskLine {
   readonly note?: string;
 }
 
-/** A partir daqui a etapa atual passa a mostrar há quanto tempo está rodando. */
+/** Past this point the current step starts showing how long it has been running. */
 const SLOW_TASK_MS = 3000;
 
 /**
- * Lista de tarefas em execução: concluídas com ✔, a atual com spinner e as
- * pendentes apagadas — o mesmo vocabulário do transcript.
+ * The list of running tasks: done ones with ✔, the current one with a spinner and
+ * the pending ones dimmed — the same vocabulary as the transcript.
  *
- * `elapsedMs` é o tempo da etapa atual: passado dele, o contador aparece ao
- * lado. Instalar dependências pode levar minutos, e sem esse sinal um spinner
- * girando é indistinguível de um processo travado.
+ * `elapsedMs` is the current step's runtime: past a threshold, the counter shows
+ * next to it. Installing dependencies can take minutes, and without that signal a
+ * spinning spinner is indistinguishable from a hung process.
  */
 export function taskList(tasks: readonly TaskLine[], doneCount: number, elapsedMs?: number): Node[] {
   const allDone = doneCount >= tasks.length;
@@ -168,7 +169,7 @@ export function taskList(tasks: readonly TaskLine[], doneCount: number, elapsedM
   });
 }
 
-/** Cabeçalho da fase de execução, com spinner enquanto há trabalho pendente. */
+/** Header for the execution phase, with a spinner while work is pending. */
 export function taskHeader(label: string, allDone: boolean): Node {
   return row(
     { gap: 0 },
@@ -193,7 +194,7 @@ export function resultPanel(kind: 'success' | 'danger', message: string): Node {
   );
 }
 
-/** Moldura padrão de uma tela: respiro nas laterais e conteúdo em coluna. */
+/** A screen's standard frame: breathing room at the sides, content in a column. */
 export function page(...children: Node[]): Node {
   return column({ flexGrow: 1, padding: { top: 1, right: 3, bottom: 1, left: 3 }, gap: 0 }, ...children);
 }

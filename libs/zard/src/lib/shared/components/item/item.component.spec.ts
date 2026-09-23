@@ -18,7 +18,7 @@ import { ZardItemImports } from './item.imports';
           <z-item-description>Description</z-item-description>
         </z-item-content>
         <z-item-actions>
-          <button>Action</button>
+          <button type="button">Action</button>
         </z-item-actions>
       </z-item>
       <z-item-separator />

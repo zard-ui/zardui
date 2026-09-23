@@ -6,7 +6,7 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-destructive',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="destructive">Destructive</button>
+    <button type="button" z-button zType="destructive">Destructive</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

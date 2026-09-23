@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 
@@ -8,5 +8,6 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
   template: `
     <input z-input placeholder="Enter text" class="w-72" />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputBasicComponent {}

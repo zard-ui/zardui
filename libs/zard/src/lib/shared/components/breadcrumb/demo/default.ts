@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBreadcrumbImports } from '../breadcrumb.imports';
 
@@ -18,5 +18,6 @@ import { ZardBreadcrumbImports } from '../breadcrumb.imports';
       </z-breadcrumb-item>
     </z-breadcrumb>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoBreadcrumbDefaultComponent {}

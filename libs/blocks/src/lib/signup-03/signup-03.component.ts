@@ -11,7 +11,6 @@ import { ZardInputComponent } from '@zard/components/input/input.component';
 
 @Component({
   selector: 'lib-signup-03',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     NgIcon,

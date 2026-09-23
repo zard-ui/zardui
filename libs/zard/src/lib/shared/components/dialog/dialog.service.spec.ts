@@ -49,6 +49,20 @@ describe('ZardDialogService', () => {
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
     });
 
+    /**
+     * `zContent` is optional, and a title-and-buttons confirm needs no body. Without
+     * the guard `undefined` reached ComponentPortal and Angular threw NG0919, which
+     * reads as a circular dependency and points nowhere near the call.
+     */
+    it('creates a dialog ref with no content at all', () => {
+      const config = new ZardDialogOptions();
+      config.zTitle = 'Delete this?';
+      config.zDescription = 'This cannot be undone.';
+
+      expect(() => service.create(config)).not.toThrow();
+      expect(service.create(config)).toBeInstanceOf(ZardDialogRef);
+    });
+
     it('creates a dialog ref with custom data', () => {
       const config = new ZardDialogOptions<unknown, { id: number }>();
       config.zContent = TestContentComponent;

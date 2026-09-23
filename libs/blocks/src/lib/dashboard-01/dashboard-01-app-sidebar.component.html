@@ -1,0 +1,22 @@
+<z-sidebar zCollapsible="offcanvas" zVariant="inset">
+  <div z-sidebar-header>
+    <ul z-sidebar-menu>
+      <li z-sidebar-menu-item>
+        <a z-sidebar-menu-button href="#" class="p-1.5!">
+          <ng-icon name="lucideCircleDot" class="size-5!" />
+          <span class="text-base font-semibold">Acme Inc.</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <z-sidebar-content>
+    <lib-dashboard-01-nav-main [items]="navMain" />
+    <lib-dashboard-01-nav-documents [items]="documents" />
+    <lib-dashboard-01-nav-secondary [items]="navSecondary" class="mt-auto" />
+  </z-sidebar-content>
+
+  <div z-sidebar-footer>
+    <lib-dashboard-01-nav-user [user]="user" />
+  </div>
+</z-sidebar>

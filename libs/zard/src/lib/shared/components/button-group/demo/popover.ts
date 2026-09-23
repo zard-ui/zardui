@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBot, lucideChevronDown } from '@ng-icons/lucide';
@@ -53,6 +53,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       </ng-template>
     </z-button-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBot, lucideChevronDown })],
 })
 export class ZardDemoButtonGroupPopoverComponent {}

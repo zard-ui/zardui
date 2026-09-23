@@ -61,6 +61,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronDown })],
   host: {
+    'data-slot': 'accordion-item',
     '[class]': 'itemClasses()',
     '[attr.data-state]': "isOpen() ? 'open' : 'closed'",
     '[attr.data-disabled]': 'zDisabled()',

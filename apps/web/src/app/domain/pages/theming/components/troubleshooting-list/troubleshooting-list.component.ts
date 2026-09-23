@@ -7,7 +7,6 @@ import { InlineCodePipe } from '../../pipes/inline-code.pipe';
 
 @Component({
   selector: 'z-troubleshooting-list',
-  standalone: true,
   imports: [ZardAccordionImports, InlineCodePipe],
   template: `
     <div z-accordion zType="single" class="w-full">

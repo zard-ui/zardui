@@ -33,7 +33,7 @@ describe('terminal raw mode', () => {
     terminal.restore();
 
     // Sem o pause, o resume do raw mode segura o event loop e o comando nunca
-    // devolve o shell depois que o wizard termina.
+    // gives the shell back after the wizard ends.
     expect(stdin.setRawMode).toHaveBeenLastCalledWith(false);
     expect(stdin.pause).toHaveBeenCalledTimes(1);
   });
@@ -61,9 +61,9 @@ describe('terminal raw mode', () => {
 });
 
 /**
- * O alvo destes casos é a uniformidade: os terminais que as pessoas realmente
- * usam para rodar a CLI precisam chegar ao mesmo nível de cor, senão o mesmo
- * wizard sai com três aparências dependendo de quem o abriu.
+ * These cases are about uniformity: the terminals people actually run the CLI in
+ * have to arrive at the same colour depth, or the same wizard comes out looking
+ * three different ways depending on who opened it.
  */
 describe('color level detection', () => {
   const detect = (env: NodeJS.ProcessEnv, platform: NodeJS.Platform = 'linux'): string =>
@@ -109,10 +109,9 @@ describe('color level detection', () => {
 
 describe('terminal colors', () => {
   /**
-   * O último frame quase sempre termina no meio de uma cor. Sem zerar o SGR
-   * antes de sair do alt-screen, esse atributo continua valendo no buffer
-   * principal e o shell do usuário fica escrevendo colorido depois que a CLI
-   * já saiu.
+   * The last frame almost always ends mid-colour. Without clearing SGR before
+   * leaving the alt-screen, that attribute still applies in the main buffer and
+   * the user's shell keeps writing in colour after the CLI has exited.
    */
   it('should reset attributes before leaving the alt screen', () => {
     const { stdin, stdout } = fakeStreams();

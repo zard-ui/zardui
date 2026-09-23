@@ -8,7 +8,6 @@ import { ZardDatePickerComponent } from '../date-picker.component';
 @Component({
   selector: 'z-demo-date-picker-basic',
   imports: [ZardDatePickerComponent, ZardFieldImports],
-  standalone: true,
   template: `
     <div z-field class="mx-auto w-44">
       <label z-field-label for="date-picker-basic">Date</label>

@@ -105,7 +105,9 @@ export class ZardDialogService {
       const vcr = (config.zViewContainerRef ?? null) as unknown as ViewContainerRef;
       const ctx = { dialogRef } as unknown as T;
       dialogContainer.attachTemplatePortal(new TemplatePortal(componentOrTemplateRef, vcr, ctx));
-    } else if (typeof componentOrTemplateRef !== 'string') {
+    } else if (componentOrTemplateRef != null && typeof componentOrTemplateRef !== 'string') {
+      // Guard against a missing `zContent`: without it, `undefined` reaches ComponentPortal and
+      // Angular throws NG0919 (DEF_TYPE_UNDEFINED) while creating the component.
       const injector = this.createInjector<T, U>(dialogRef, config);
       const contentRef = dialogContainer.attachComponentPortal<T>(
         new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector),

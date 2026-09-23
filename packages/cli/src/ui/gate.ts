@@ -1,19 +1,19 @@
 /**
- * Gate — deixa um fluxo async esperar por uma resposta do teclado.
+ * Gate — lets an async flow wait for an answer from the keyboard.
  *
- * Wizards lineares (escolher → resolver → confirmar → instalar) ficam muito
- * mais legíveis escritos como uma função async do que como uma máquina de
- * estados no `onKey`. O gate é a peça que falta: o fluxo aguarda `wait()`, o
- * handler de teclado chama `settle()` quando o usuário decide.
+ * Linear wizards (choose → resolve → confirm → install) read far better written
+ * as one async function than as a state machine inside `onKey`. The gate is the
+ * missing piece: the flow awaits `wait()`, and the key handler calls `settle()`
+ * when the user decides.
  */
 
 export interface Gate<T> {
   wait(): Promise<T>;
-  /** Entrega a resposta. Chamadas seguintes são ignoradas. */
+  /** Delivers the answer. Later calls are ignored. */
   settle(value: T): void;
   /** Interrompe quem espera, propagando o erro. */
   fail(error: unknown): void;
-  /** true enquanto alguém aguarda uma resposta. */
+  /** True while somebody is waiting for an answer. */
   readonly pending: boolean;
 }
 

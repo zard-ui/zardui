@@ -76,8 +76,8 @@ describe('validateTargetPath', () => {
 });
 
 describe('installComponent', () => {
-  // Montados com path.join: o instalador usa o separador da plataforma, e uma
-  // expectativa escrita com `/` só passaria em POSIX.
+  // Built with path.join: the installer uses the platform separator, and an
+  // expectation written with `/` would only pass on POSIX.
   const TARGET = path.join('/project', 'src', 'components', 'button');
   const inTarget = (file: string): string => path.join(TARGET, file);
 

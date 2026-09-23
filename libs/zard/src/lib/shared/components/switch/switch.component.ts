@@ -14,7 +14,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import { switchVariants, type ZardSwitchSizeVariants } from './switch.variants';
 
@@ -61,6 +62,9 @@ type OnChangeType = (value: boolean) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'switch',
+  },
   exportAs: 'zSwitch',
 })
 export class ZardSwitchComponent implements ControlValueAccessor {

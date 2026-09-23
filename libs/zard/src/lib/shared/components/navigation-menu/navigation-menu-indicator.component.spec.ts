@@ -13,7 +13,7 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
       <z-navigation-menu-indicator />
     </div>
 
-    <ng-template #content></ng-template>
+    <ng-template #content />
   `,
   providers: [ZardNavigationMenuService],
 })

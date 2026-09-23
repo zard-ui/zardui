@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -19,6 +19,7 @@ import { ZardBadgeComponent } from '../badge.component';
       </a>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideArrowUpRight })],
 })
 export class ZardDemoBadgeLinkComponent {}

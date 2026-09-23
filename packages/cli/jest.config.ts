@@ -6,9 +6,9 @@ export default {
     '^.+\\.[tj]s$': '@swc/jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  // O código-fonte é ESM e importa com extensão `.js` (exigência do Node), mas
-  // os arquivos em disco são `.ts`. Sem estes dois mapeamentos o Jest não acha
-  // nem o alias `@cli/*` nem os relativos, e nenhuma suíte chega a rodar.
+  // The source is ESM and imports with a `.js` extension (Node requires it), but
+  // the files on disk are `.ts`. Without these mappings Jest resolves neither the
+  // `@cli/*` alias nor the relative imports, and no suite runs at all.
   moduleNameMapper: {
     '^@cli/(.*)\\.js$': '<rootDir>/src/$1',
     '^@cli/(.*)$': '<rootDir>/src/$1',

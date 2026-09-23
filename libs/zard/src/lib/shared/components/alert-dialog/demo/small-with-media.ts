@@ -7,13 +7,13 @@ import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-d
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
 @Component({
-  selector: 'zard-demo-alert-dialog-small-with-media',
+  selector: 'z-demo-alert-dialog-small-with-media',
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <ng-template #mediaIcon>
       <ng-icon name="lucideBluetooth" />
     </ng-template>
-    <button z-button zType="outline" (click)="open(mediaIcon)">Show Dialog</button>
+    <button type="button" z-button zType="outline" (click)="open(mediaIcon)">Show Dialog</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBluetooth })],

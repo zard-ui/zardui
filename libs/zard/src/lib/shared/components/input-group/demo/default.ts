@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
@@ -18,6 +18,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       <z-input-group-addon zAlign="inline-end">12 results</z-input-group-addon>
     </z-input-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSearch })],
 })
 export class ZardDemoInputGroupDefaultComponent {}

@@ -1,29 +1,81 @@
-<div class="overflow-hidden">
-  <div class="flex items-center justify-between px-6 py-4">
-    <section class="flex items-center gap-2">
-      <z-toggle-group
-        zMode="single"
-        zType="outline"
-        zSize="sm"
-        [zItems]="tabOptions"
-        [zValue]="activeTab()"
-        (valueChange)="onTabChange($event)"
-      />
+<div [id]="block().id" class="flex min-w-0 scroll-mt-24 flex-col items-stretch gap-4">
+  <div class="flex w-full items-center gap-2">
+    <nav [class]="navClasses" role="tablist" data-variant="default">
+      @for (tab of tabOptions; track tab.value) {
+        <button
+          type="button"
+          role="tab"
+          [class]="buttonClasses"
+          [attr.aria-selected]="activeTab() === tab.value"
+          [attr.data-active]="activeTab() === tab.value ? '' : null"
+          (click)="selectTab(tab.value)"
+        >
+          {{ tab.label }}
+        </button>
+      }
+    </nav>
 
-      <z-separator zOrientation="vertical" class="h-4 self-center!"></z-separator>
-      <h3 class="flex-1 text-center text-sm font-medium underline-offset-2 hover:underline md:flex-auto md:text-left">
-        {{ block().title }}
-      </h3>
-    </section>
+    <z-separator zOrientation="vertical" class="mx-2 hidden h-4 self-center! md:flex"></z-separator>
+
+    <!-- routerLink over a bare `#id` href: the app declares `<base href="/">`, so the fragment alone
+         would resolve against the site root and navigate away from the block list. -->
+    <a
+      [routerLink]="[]"
+      [fragment]="block().id"
+      class="truncate text-sm font-medium underline-offset-2 hover:underline"
+    >
+      {{ heading() }}
+    </a>
 
     @if (activeTab() === 'preview') {
-      <z-toggle-group
-        zMode="single"
-        zType="outline"
-        [zItems]="viewportOptions"
-        [zValue]="viewportSize()"
-        (valueChange)="onViewportChange($event)"
-      />
+      <div class="ml-auto hidden items-center gap-2 lg:flex">
+        <div class="flex h-7 items-center gap-1.5 rounded-md border p-[2px]">
+          <z-toggle-group
+            zMode="single"
+            zSize="sm"
+            [zSpacing]="1"
+            [zItems]="viewportOptions"
+            [zValue]="viewportSize()"
+            (valueChange)="onViewportChange($event)"
+            zItemClass="size-[22px] rounded-sm p-0 [&_ng-icon]:size-3.5!"
+          />
+
+          <z-separator zOrientation="vertical" class="h-4 self-center!"></z-separator>
+
+          <a
+            [href]="previewUrl()"
+            target="_blank"
+            rel="noreferrer"
+            title="Open in New Tab"
+            class="text-muted-foreground hover:bg-muted hover:text-foreground flex size-[22px] items-center justify-center rounded-sm transition-colors"
+          >
+            <ng-icon name="lucideFullscreen" class="size-3.5!" />
+            <span class="sr-only">Open in New Tab</span>
+          </a>
+
+          <button
+            type="button"
+            title="Refresh Preview"
+            (click)="refreshPreview()"
+            class="text-muted-foreground hover:bg-muted hover:text-foreground flex size-[22px] items-center justify-center rounded-sm transition-colors"
+          >
+            <ng-icon name="lucideRotateCw" class="size-3.5!" />
+            <span class="sr-only">Refresh Preview</span>
+          </button>
+        </div>
+
+        <z-separator zOrientation="vertical" class="h-4 self-center!"></z-separator>
+
+        <button
+          type="button"
+          [title]="copied() ? 'Copied' : 'Copy install command'"
+          (click)="copyCommand()"
+          class="bg-background hover:bg-accent hover:text-accent-foreground flex h-7 items-center gap-2 rounded-md border px-2.5 font-mono text-xs font-medium transition-colors"
+        >
+          <ng-icon [name]="copied() ? 'lucideCheck' : 'lucideTerminal'" class="text-muted-foreground size-3.5!" />
+          {{ command() }}
+        </button>
+      </div>
     }
   </div>
 

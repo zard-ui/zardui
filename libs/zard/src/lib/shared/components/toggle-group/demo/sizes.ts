@@ -6,7 +6,7 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-sizes',
+  selector: 'z-demo-toggle-group-sizes',
   imports: [ZardToggleGroupComponent],
   template: `
     <div class="space-y-4">
@@ -33,7 +33,7 @@ import {
     </div>
   `,
 })
-export default class ToggleGroupSizesComponent {
+export class ZardDemoToggleGroupSizesComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'top',

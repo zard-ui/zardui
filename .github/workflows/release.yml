@@ -89,14 +89,6 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Registry
-        run: npm run build:registry
-
-      - name: Commit Registry Changes
-        run: |
-          git add -A
-          git diff --staged --quiet || git commit -m "🔧 chore: update registry [skip ci]"
-
       - name: Build Libraries
         run: |
           npx nx run zard:build
@@ -114,6 +106,9 @@ jobs:
         run: npx nx release version ${{ inputs.version || 'prerelease' }} --preid=beta ${{ inputs.first_release == true && '--first-release' || '' }} --git-commit=false --git-tag=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Registry
+        run: npm run build:registry
 
       - name: Release Changelog
         if: ${{ inputs.dry_run != true }}

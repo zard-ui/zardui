@@ -1,0 +1,29 @@
+<z-sidebar-provider>
+  <lib-sidebar-15-sidebar-left />
+
+  <main z-sidebar-inset>
+    <header class="bg-background sticky top-0 flex h-14 shrink-0 items-center gap-2">
+      <div class="flex flex-1 items-center gap-2 px-3">
+        <button z-sidebar-trigger aria-label="Toggle Sidebar"></button>
+
+        <z-separator
+          zOrientation="vertical"
+          class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+        />
+
+        <z-breadcrumb>
+          <z-breadcrumb-item>
+            <span z-breadcrumb-page class="line-clamp-1">Project Management &amp; Task Tracking</span>
+          </z-breadcrumb-item>
+        </z-breadcrumb>
+      </div>
+    </header>
+
+    <div class="flex flex-1 flex-col gap-4 p-4">
+      <div class="bg-muted/50 mx-auto h-24 w-full max-w-3xl rounded-xl"></div>
+      <div class="bg-muted/50 mx-auto h-[100vh] w-full max-w-3xl rounded-xl"></div>
+    </div>
+  </main>
+
+  <lib-sidebar-15-sidebar-right />
+</z-sidebar-provider>

@@ -4,6 +4,10 @@
   "type": "registry:component",
   "files": [
     {
+      "name": "kbd.imports.ts",
+      "content": "/*\n * The alias, not a relative path: the Angular compiler re-emits these imports from\n * whichever module spreads the array, and it can only do that for a specifier the\n * consumer can resolve too. A relative path here fails with NG3004.\n */\nimport { ZardKbdGroupComponent } from '@/shared/components/kbd/kbd-group.component';\nimport { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';\n\n/** Every part of the kbd component, for a template that uses more than one. */\nexport const ZardKbdImports = [ZardKbdComponent, ZardKbdGroupComponent] as const;\n"
+    },
+    {
       "name": "kbd.component.ts",
       "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\nimport { kbdVariants } from './kbd.variants';\n\n@Component({\n  selector: 'z-kbd, [z-kbd]',\n  template: `\n    <kbd data-slot=\"kbd\" [class]=\"classes()\"><ng-content /></kbd>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  exportAs: 'zKbd',\n})\nexport class ZardKbdComponent {\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() => mergeClasses(kbdVariants(), this.class()));\n}\n"
     },
@@ -17,7 +21,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export * from './kbd.component';\nexport * from './kbd-group.component';\nexport * from './kbd.variants';\n"
+      "content": "export * from './kbd-group.component';\nexport * from './kbd.component';\nexport * from './kbd.imports';\nexport * from './kbd.variants';\n"
     }
   ],
   "icons": {

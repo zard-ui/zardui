@@ -1,9 +1,19 @@
-import { Component, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal, viewChild } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
-import { IconName, provideIcons } from '@ng-icons/core';
-import { lucideMonitor, lucideSmartphone, lucideTablet } from '@ng-icons/lucide';
+import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideCheck,
+  lucideFullscreen,
+  lucideMonitor,
+  lucideRotateCw,
+  lucideSmartphone,
+  lucideTablet,
+  lucideTerminal,
+} from '@ng-icons/lucide';
 
 import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
+import { tabButtonVariants, tabNavVariants } from '@zard/components/tabs/tabs.variants';
 import { ZardToggleGroupComponent } from '@zard/components/toggle-group/toggle-group.component';
 
 import { BlockCodeViewerComponent } from '../block-code-viewer/block-code-viewer.component';
@@ -35,44 +45,84 @@ export interface ViewportOption {
   icon: IconName;
 }
 
+/** How much of the preview area the iframe takes, as a percentage. Same values shadcn toggles between. */
+export type BlockViewportSize = '100' | '60' | '30';
+
 @Component({
   selector: 'z-block-container',
-  imports: [ZardSeparatorComponent, ZardToggleGroupComponent, BlockPreviewComponent, BlockCodeViewerComponent],
+  imports: [
+    NgIcon,
+    RouterLink,
+    ZardSeparatorComponent,
+    ZardToggleGroupComponent,
+    BlockPreviewComponent,
+    BlockCodeViewerComponent,
+  ],
   templateUrl: './block-container.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
+      lucideCheck,
+      lucideFullscreen,
       lucideMonitor,
-      lucideTablet,
+      lucideRotateCw,
       lucideSmartphone,
+      lucideTablet,
+      lucideTerminal,
     }),
   ],
 })
 export class BlockContainerComponent {
   readonly block = input.required<Block>();
 
+  private readonly preview = viewChild(BlockPreviewComponent);
+
   protected readonly activeTab = signal<'preview' | 'code'>('preview');
-  protected readonly viewportSize = signal<'desktop' | 'tablet' | 'mobile'>('desktop');
+  protected readonly viewportSize = signal<BlockViewportSize>('100');
+  protected readonly copied = signal(false);
+  private copiedTimeout?: ReturnType<typeof setTimeout>;
 
   protected readonly tabOptions = [
-    { label: 'Preview', value: 'preview' },
-    { label: 'Code', value: 'code' },
+    { label: 'Preview', value: 'preview' as const },
+    { label: 'Code', value: 'code' as const },
   ];
 
   protected readonly viewportOptions: ViewportOption[] = [
-    { value: 'desktop', ariaLabel: 'Desktop view', icon: 'lucideMonitor' },
-    { value: 'tablet', ariaLabel: 'Tablet view', icon: 'lucideTablet' },
-    { value: 'mobile', ariaLabel: 'Mobile view', icon: 'lucideSmartphone' },
+    { value: '100', ariaLabel: 'Desktop view', icon: 'lucideMonitor' },
+    { value: '60', ariaLabel: 'Tablet view', icon: 'lucideTablet' },
+    { value: '30', ariaLabel: 'Mobile view', icon: 'lucideSmartphone' },
   ];
 
-  protected onTabChange(value: string | string[]): void {
-    if (typeof value === 'string' && value) {
-      this.activeTab.set(value as 'preview' | 'code');
-    }
+  protected readonly navClasses = tabNavVariants({ zVariant: 'default' });
+  protected readonly buttonClasses = tabButtonVariants();
+
+  /** shadcn labels a block with its description; the trailing period is dropped as it is there. */
+  protected readonly heading = computed(() => this.block().description.replace(/\.$/, ''));
+  protected readonly previewUrl = computed(() => `/blocks/preview/${this.block().id}`);
+  protected readonly command = computed(() => `npx zard-cli add ${this.block().id}`);
+
+  protected selectTab(value: 'preview' | 'code'): void {
+    this.activeTab.set(value);
   }
 
   protected onViewportChange(value: string | string[]): void {
-    if (typeof value === 'string') {
-      this.viewportSize.set(value as 'desktop' | 'tablet' | 'mobile');
+    if (typeof value === 'string' && value) {
+      this.viewportSize.set(value as BlockViewportSize);
     }
+  }
+
+  protected refreshPreview(): void {
+    this.preview()?.reload();
+  }
+
+  protected copyCommand(): void {
+    navigator.clipboard
+      .writeText(this.command())
+      .then(() => {
+        this.copied.set(true);
+        clearTimeout(this.copiedTimeout);
+        this.copiedTimeout = setTimeout(() => this.copied.set(false), 2000);
+      })
+      .catch(() => undefined);
   }
 }

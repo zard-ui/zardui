@@ -6,6 +6,7 @@ export const PAGINATION_API: ApiSection[] = [
     description:
       'Pagination component with previous, next, and numbered page navigation. Supports two-way binding via [(zPageIndex)] model signal.',
     props: [
+      { name: '[zPageIndex]', description: 'Current page, two-way bindable', type: 'number', default: '1' },
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       {
         name: '[zAriaLabel]',

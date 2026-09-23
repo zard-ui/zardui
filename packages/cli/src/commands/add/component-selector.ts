@@ -1,10 +1,10 @@
 import { getAllComponentNames } from '@cli/commands/add/dependency-resolver.js';
 
 /**
- * Resolve quais componentes o comando deve instalar a partir dos argumentos.
+ * Works out which components the command should install, from its arguments.
  *
- * Devolve uma lista vazia quando não há nada informado: nesse caso quem escolhe
- * é o wizard (ou, sem terminal interativo, o comando falha pedindo os nomes).
+ * Returns an empty list when nothing was given: the wizard picks in that case
+ * (or, with no interactive terminal, the command fails asking for the names).
  */
 export async function selectComponents(components: string[], allFlag: boolean): Promise<string[]> {
   if (allFlag) return getAllComponentNames();

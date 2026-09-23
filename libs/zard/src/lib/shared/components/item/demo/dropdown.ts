@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
@@ -43,12 +43,13 @@ interface Person {
       }
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideChevronDown })],
 })
 export class ZardDemoItemDropdownComponent {
   protected readonly people: Person[] = [
-    { username: 'shadcn', avatar: 'https://github.com/shadcn.png', email: 'shadcn@vercel.com' },
-    { username: 'maxleiter', avatar: 'https://github.com/maxleiter.png', email: 'maxleiter@vercel.com' },
-    { username: 'evilrabbit', avatar: 'https://github.com/evilrabbit.png', email: 'evilrabbit@vercel.com' },
+    { username: 'zardui', avatar: 'https://github.com/zard-ui.png', email: 'zardui@example.com' },
+    { username: 'srizzon', avatar: 'https://github.com/srizzon.png', email: 'srizzon@example.com' },
+    { username: 'luizgomess', avatar: 'https://github.com/Luizgomess.png', email: 'luizgomess@example.com' },
   ];
 }

@@ -6,8 +6,7 @@ import { CodeBlockComponent } from '@highlight/components/code-block/code-block.
 import type { CodeBlockData } from '@highlight/types';
 
 @Component({
-  selector: 'cli-configuration-section',
-  standalone: true,
+  selector: 'z-cli-configuration-section',
   imports: [CodeBlockComponent, RouterLink],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -55,7 +54,7 @@ import type { CodeBlockData } from '@highlight/types';
     <z-code-block [data]="registryExample" />
   `,
 })
-export class CliConfigurationSection {
+export class CliConfigurationSectionComponent {
   readonly defaultConfig: CodeBlockData = BLOCK_0;
   readonly tsConfig: CodeBlockData = BLOCK_1;
   readonly importExample: CodeBlockData = BLOCK_2;

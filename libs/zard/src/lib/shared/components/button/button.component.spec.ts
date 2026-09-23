@@ -8,7 +8,7 @@ import { ZardButtonComponent } from './button.component';
 describe('ZardButtonComponent', () => {
   describe('basic rendering', () => {
     it('creates successfully', async () => {
-      await render('<button z-button>Test</button>', {
+      await render('<button type="button" z-button>Test</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -18,7 +18,7 @@ describe('ZardButtonComponent', () => {
 
   describe('disabled state', () => {
     it('applies disabled classes when zDisabled is true', async () => {
-      await render('<button z-button [zDisabled]="true">Button</button>', {
+      await render('<button type="button" z-button [zDisabled]="true">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -28,7 +28,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('does not apply disabled classes when zDisabled is false', async () => {
-      await render('<button z-button [zDisabled]="false">Button</button>', {
+      await render('<button type="button" z-button [zDisabled]="false">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -40,7 +40,7 @@ describe('ZardButtonComponent', () => {
 
   describe('loading state', () => {
     it('renders loading icon when zLoading is true', async () => {
-      const { container } = await render('<button z-button [zLoading]="true">Button</button>', {
+      const { container } = await render('<button type="button" z-button [zLoading]="true">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -50,7 +50,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('does not render loading icon when zLoading is false', async () => {
-      const { container } = await render('<button z-button [zLoading]="false">Button</button>', {
+      const { container } = await render('<button type="button" z-button [zLoading]="false">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -59,7 +59,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies loading classes when zLoading is true', async () => {
-      await render('<button z-button [zLoading]="true">Button</button>', {
+      await render('<button type="button" z-button [zLoading]="true">Button</button>', {
         imports: [ZardButtonComponent, NgIcon],
       });
 
@@ -71,7 +71,7 @@ describe('ZardButtonComponent', () => {
 
   describe('size variants', () => {
     it('applies default size classes', async () => {
-      await render('<button z-button>Button</button>', {
+      await render('<button type="button" z-button>Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -82,7 +82,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies xs size classes', async () => {
-      await render('<button z-button zSize="xs">Button</button>', {
+      await render('<button type="button" z-button zSize="xs">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -93,7 +93,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies sm size classes', async () => {
-      await render('<button z-button zSize="sm">Button</button>', {
+      await render('<button type="button" z-button zSize="sm">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -104,7 +104,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies lg size classes', async () => {
-      await render('<button z-button zSize="lg">Button</button>', {
+      await render('<button type="button" z-button zSize="lg">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -115,7 +115,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies icon size classes', async () => {
-      await render('<button z-button zSize="icon">Button</button>', {
+      await render('<button type="button" z-button zSize="icon">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -124,7 +124,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies icon-xs size classes', async () => {
-      await render('<button z-button zSize="icon-xs">Button</button>', {
+      await render('<button type="button" z-button zSize="icon-xs">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -133,7 +133,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies icon-sm size classes', async () => {
-      await render('<button z-button zSize="icon-sm">Button</button>', {
+      await render('<button type="button" z-button zSize="icon-sm">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -142,7 +142,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies icon-lg size classes', async () => {
-      await render('<button z-button zSize="icon-lg">Button</button>', {
+      await render('<button type="button" z-button zSize="icon-lg">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -153,7 +153,7 @@ describe('ZardButtonComponent', () => {
 
   describe('type variants', () => {
     it('applies default type classes', async () => {
-      await render('<button z-button>Button</button>', {
+      await render('<button type="button" z-button>Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -163,7 +163,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies destructive type classes', async () => {
-      await render('<button z-button zType="destructive">Button</button>', {
+      await render('<button type="button" z-button zType="destructive">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -173,7 +173,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies outline type classes', async () => {
-      await render('<button z-button zType="outline">Button</button>', {
+      await render('<button type="button" z-button zType="outline">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -183,7 +183,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies secondary type classes', async () => {
-      await render('<button z-button zType="secondary">Button</button>', {
+      await render('<button type="button" z-button zType="secondary">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -193,7 +193,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies ghost type classes', async () => {
-      await render('<button z-button zType="ghost">Button</button>', {
+      await render('<button type="button" z-button zType="ghost">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -203,7 +203,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies link type classes', async () => {
-      await render('<button z-button zType="link">Button</button>', {
+      await render('<button type="button" z-button zType="link">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -216,7 +216,7 @@ describe('ZardButtonComponent', () => {
 
   describe('shape variants', () => {
     it('applies default shape classes', async () => {
-      await render('<button z-button>Button</button>', {
+      await render('<button type="button" z-button>Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -225,7 +225,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies circle shape classes', async () => {
-      await render('<button z-button zShape="circle">Button</button>', {
+      await render('<button type="button" z-button zShape="circle">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -234,7 +234,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('applies square shape classes', async () => {
-      await render('<button z-button zShape="square">Button</button>', {
+      await render('<button type="button" z-button zShape="square">Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -245,7 +245,7 @@ describe('ZardButtonComponent', () => {
 
   describe('iconOnly detection', () => {
     it('sets data-icon-only attribute when button has only an icon', async () => {
-      await render('<button z-button><ng-icon name="lucideSun" /></button>', {
+      await render('<button type="button" z-button><ng-icon name="lucideSun" /></button>', {
         imports: [ZardButtonComponent, NgIcon],
         providers: [provideIcons({ lucideSun })],
       });
@@ -258,7 +258,7 @@ describe('ZardButtonComponent', () => {
 
     it('does not set data-icon-only when button has text and icon', async () => {
       await render(
-        `<button z-button>
+        `<button type="button" z-button>
           Button
           <ng-icon name="lucideSun" />
         </button>`,
@@ -275,7 +275,7 @@ describe('ZardButtonComponent', () => {
     });
 
     it('does not set data-icon-only when button has only text', async () => {
-      await render('<button z-button>Button</button>', {
+      await render('<button type="button" z-button>Button</button>', {
         imports: [ZardButtonComponent],
       });
 
@@ -287,7 +287,7 @@ describe('ZardButtonComponent', () => {
 
     it('does not set data-icon-only when button has icon before text', async () => {
       await render(
-        `<button z-button>
+        `<button type="button" z-button>
           <ng-icon name="lucideSun" />
           Button
         </button>`,

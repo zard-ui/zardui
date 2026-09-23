@@ -1,0 +1,9 @@
+<div z-sidebar-group class="px-0">
+  <div z-sidebar-group-content>
+    <!-- shadcn hooks the highlight onto react-day-picker's `.bg-accent` gridcell; the Zard calendar
+         marks the same cell with `data-today`, so the selector is retargeted, not redesigned. -->
+    <z-calendar
+      class="[&_[role=gridcell][data-today]]:bg-sidebar-primary [&_[role=gridcell][data-today]]:text-sidebar-primary-foreground [&_[role=gridcell]]:w-[33px]"
+    />
+  </div>
+</div>

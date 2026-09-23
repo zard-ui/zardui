@@ -182,7 +182,7 @@ import { ZardToggleComponent } from '@/shared/components/toggle/toggle.component
 Use `zType="outline"` for an outline style.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBold, lucideItalic } from '@ng-icons/lucide';
@@ -204,6 +204,7 @@ import { ZardToggleComponent } from '../toggle.component';
       </z-toggle>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBold, lucideItalic })],
 })
 export class ZardDemoToggleOutlineComponent {}
@@ -212,7 +213,7 @@ export class ZardDemoToggleOutlineComponent {}
 ### With Text
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideItalic } from '@ng-icons/lucide';
@@ -228,6 +229,7 @@ import { ZardToggleComponent } from '../toggle.component';
       Italic
     </z-toggle>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideItalic })],
 })
 export class ZardDemoToggleWithTextComponent {}
@@ -238,7 +240,7 @@ export class ZardDemoToggleWithTextComponent {}
 Use the `zSize` input to change the size of the toggle.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardToggleComponent } from '../toggle.component';
 
@@ -252,6 +254,7 @@ import { ZardToggleComponent } from '../toggle.component';
       <z-toggle zAriaLabel="Toggle large" zSize="lg" zType="outline">Large</z-toggle>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToggleSizeComponent {}
 ```
@@ -259,7 +262,7 @@ export class ZardDemoToggleSizeComponent {}
 ### Disabled
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardToggleComponent } from '../toggle.component';
 
@@ -272,6 +275,7 @@ import { ZardToggleComponent } from '../toggle.component';
       <z-toggle zAriaLabel="Toggle disabled outline" zType="outline" zDisabled>Disabled</z-toggle>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToggleDisabledComponent {}
 ```
@@ -279,7 +283,7 @@ export class ZardDemoToggleDisabledComponent {}
 ### With
 
 ```angular-ts
-import { Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideLightbulb, lucideLightbulbOff } from '@ng-icons/lucide';
@@ -297,6 +301,7 @@ import { ZardToggleComponent } from '../toggle.component';
       <span>Light is {{ state() }}.</span>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideLightbulb, lucideLightbulbOff })],
 })
 export class ZardDemoToggleWithBindingsComponent {

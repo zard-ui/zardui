@@ -5,7 +5,7 @@ import { type ZardSonnerPosition } from '@/shared/components/sonner/sonner.compo
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'zard-demo-sonner-position',
+  selector: 'z-demo-sonner-position',
   imports: [ZardButtonComponent],
   template: `
     <div class="flex flex-wrap justify-center gap-2">

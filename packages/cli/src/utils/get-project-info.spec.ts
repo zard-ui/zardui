@@ -1,8 +1,8 @@
 /**
- * A leitura do workspace — o que a CLI consegue saber antes de perguntar.
+ * Reading the workspace — what the CLI can know before asking.
  *
- * O Nx não tem `angular.json`: cada projeto se descreve no próprio
- * `project.json`, e nem tudo que está lá é um alvo válido para os componentes.
+ * Nx has no `angular.json`: each project describes itself in its own
+ * `project.json`, and not everything in there is a valid target for components.
  */
 
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
@@ -30,9 +30,9 @@ const nxPackageJson = {
 
 describe('getProjectInfo em workspaces Nx', () => {
   /**
-   * O gerador do Nx cria `<app>-e2e` declarando `projectType: "application"`.
-   * Ele aparecia na lista de apps que podem receber os componentes, mas ali não
-   * há `app.config.ts`, CSS global nem build para configurar.
+   * The Nx generator creates `<app>-e2e` declaring `projectType: "application"`.
+   * It showed up in the list of apps that can receive components, but there is no
+   * `app.config.ts`, no global CSS and no build to configure in there.
    */
   it('should leave e2e projects out of the workspace', async () => {
     const cwd = await workspace({
@@ -47,7 +47,7 @@ describe('getProjectInfo em workspaces Nx', () => {
     expect(info.projects.map(project => project.name)).toEqual(['web']);
   });
 
-  // Renomear o projeto não muda o que ele é; a config do runner denuncia.
+  // Renaming the project does not change what it is; the runner config gives it away.
   it('should recognise an e2e project by its runner config, not only by name', async () => {
     const cwd = await workspace({
       'package.json': nxPackageJson,
@@ -86,7 +86,7 @@ describe('getProjectInfo em workspaces Nx', () => {
     ]);
   });
 
-  // O tsconfig.json da raiz de um workspace Nx não é herdado por projeto nenhum.
+  // The tsconfig.json at the root of an Nx workspace is inherited by no project.
   it('should point at tsconfig.base.json when the workspace has one', async () => {
     const cwd = await workspace({
       'package.json': nxPackageJson,
@@ -117,7 +117,7 @@ describe('getProjectInfo em workspaces Angular', () => {
     expect(info.tsconfigFile).toBe('tsconfig.json');
   });
 
-  // Analog troca o builder do Angular pelo dele; é assim que se anuncia.
+  // Analog swaps Angular's builder for its own; that is how it announces itself.
   it('should spot an Analog project by its builder', async () => {
     const cwd = await workspace({
       'package.json': {
@@ -140,7 +140,7 @@ describe('getProjectInfo em workspaces Angular', () => {
 
     expect(info.hasAnalog).toBe(true);
     expect(info.projects[0]?.flavor).toBe('analog');
-    // `root: "."` vira raiz vazia, como num app único.
+    // `root: "."` becomes an empty root, as in a single app.
     expect(info.projects[0]?.root).toBe('');
   });
 });

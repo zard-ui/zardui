@@ -40,16 +40,16 @@ type StepKind = 'text' | 'select' | 'confirm';
 interface Step {
   readonly id: keyof InitAnswers | 'overwriteCss';
   readonly kind: StepKind;
-  /** Enunciado, idêntico ao que a CLI perguntava antes. */
+  /** The question itself, identical to what the CLI used to ask. */
   readonly prompt: string;
-  /** Rótulo curto usado no transcript das respostas. */
+  /** Short label used in the transcript of answers. */
   readonly label: string;
-  /** O que a etapa faz — some assim que ela é respondida. */
+  /** What the step does — disappears as soon as it is answered. */
   readonly detail: string;
   readonly choices?: readonly Choice[];
   readonly values?: readonly string[];
   readonly confirmDefault?: boolean;
-  /** Aviso exibido quando recusar a etapa interrompe a instalação. */
+  /** Warning shown when declining the step aborts the install. */
   readonly danger?: string;
 }
 
@@ -78,12 +78,12 @@ function themeStep(): Step {
 }
 
 /**
- * A linha do cabeçalho, dizendo onde a instalação vai cair.
+ * The header line, saying where the install will land.
  *
- * Antes da primeira resposta não há alvo nenhum a anunciar — o tipo é escolha
- * do usuário, e adiantá-lo aqui daria a impressão de que a CLI já decidiu. Com
- * um único projeto compatível o wizard também não pergunta qual, então é aqui
- * que o nome dele aparece, para a escolha não ficar implícita.
+ * Before the first answer there is no target to announce — the type is the
+ * user's choice, and pre-empting it here would suggest the CLI already decided.
+ * With a single compatible project the wizard does not ask which one either, so
+ * this is where its name appears, to keep the choice from being implicit.
  */
 function targetDescription(state: State, options: InitWizardOptions): string {
   if (!state.kindChosen) return 'Setting up zard/ui in your project…';
@@ -99,11 +99,11 @@ function targetDescription(state: State, options: InitWizardOptions): string {
 }
 
 /**
- * A primeira pergunta, sempre.
+ * The first question, always.
  *
- * Quem decide o tipo é o usuário: a lista abre inteira, na ordem do menu, sem
- * pré-seleção derivada do que há no diretório. Tudo o que vem depois — os
- * caminhos sugeridos, as etapas que rodam — é consequência desta resposta.
+ * The user decides the type: the list opens in full, in menu order, with no
+ * preselection derived from what is in the directory. Everything that comes
+ * after — the suggested paths, the steps that run — follows from this answer.
  */
 function kindStep(): Step {
   return {
@@ -118,10 +118,10 @@ function kindStep(): Step {
 }
 
 /**
- * Escolha do projeto, só quando há mais de um compatível.
+ * Project choice, only when more than one is compatible.
  *
- * Com um único candidato a pergunta não teria resposta alternativa; o nome
- * aparece no cabeçalho, e o usuário segue direto para a próxima etapa.
+ * With a single candidate the question would have no alternative answer; the
+ * name appears in the header and the user goes straight to the next step.
  */
 function projectStep(projects: WorkspaceProject[], kind: ProjectKind): Step {
   const library = isLibraryKind(kind);
@@ -214,19 +214,19 @@ interface State {
   steps: Step[];
   stepIndex: number;
   answers: InitAnswers;
-  /** Falso até o usuário responder o tipo — o cabeçalho não adianta a escolha. */
+  /** False until the user answers the type — the header does not pre-empt the choice. */
   kindChosen: boolean;
   /** Valor e cursor do campo de texto ativo. */
   input: TextInput;
   choiceIndex: number;
   confirmValue: boolean;
-  /** Erro de validação do passo atual — some quando o usuário edita. */
+  /** Validation error for the current step — clears when the user edits. */
   error: string | null;
-  /** Bloqueia a entrada enquanto uma checagem em disco está em curso. */
+  /** Blocks input while a check against disk is in flight. */
   checking: boolean;
   tasks: TaskLine[];
   tasksDone: number;
-  /** Quando a etapa atual começou, para exibir há quanto tempo ela roda. */
+  /** When the current step started, so its elapsed time can be shown. */
   taskStartedAt: number;
   failure: string | null;
 }
@@ -236,18 +236,18 @@ export interface InitWizardOptions {
   readonly projectInfo: ProjectInfo;
   readonly packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun';
   readonly isReInitializing: boolean;
-  /** Pula a confirmação final (`--yes`). */
+  /** Skips the final confirmation (`--yes`). */
   readonly skipConfirmation: boolean;
   /**
-   * O tipo pedido em `--type`, se houver.
+   * The type asked for with `--type`, if any.
    *
-   * A pergunta continua sendo feita — a flag só posiciona o cursor no que o
-   * usuário já disse querer, em vez de deixá-lo procurar na lista de novo.
+   * The question is still asked — the flag only puts the cursor on what the user
+   * already said they wanted, instead of making them find it in the list again.
    */
   readonly presetKind?: ProjectKind;
   /** O projeto pedido em `--project`, pelo mesmo motivo. */
   readonly presetProjectRoot?: string;
-  /** Etapas de execução, montadas só quando o config está pronto. */
+  /** Execution steps, built only once the config is ready. */
   buildSteps(config: Config): InitStep[];
 }
 
@@ -257,14 +257,14 @@ export interface InitWizardResult {
 }
 
 export async function runInitWizard(options: InitWizardOptions): Promise<InitWizardResult> {
-  // O menu abre no primeiro tipo da lista, não no que o diretório sugere: a
-  // escolha é do usuário, e um cursor já posicionado noutro item transformaria
-  // um palpite da CLI na resposta que ele confirma sem ler.
+  // The menu opens on the first type in the list, not on what the directory
+  // suggests: the choice is the user's, and a cursor already parked on another
+  // item would turn a CLI guess into the answer they confirm without reading.
   const firstKind = options.presetKind ?? (PROJECT_KINDS[0] as (typeof PROJECT_KINDS)[number]).value;
   const answers = defaultAnswers(options.projectInfo, firstKind, options.presetProjectRoot);
   const state: State = {
-    // Reinicializar sobrescreve configuração já existente: a confirmação vem
-    // antes de qualquer pergunta e não é pulada por --yes.
+    // Re-initializing overwrites existing configuration: the confirmation comes
+    // before any question and is not skipped by --yes.
     phase: options.isReInitializing ? 'reinit' : 'prompting',
     steps: baseSteps(options.projectInfo, firstKind),
     stepIndex: 0,
@@ -290,7 +290,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     return state.answers[step.id];
   };
 
-  /** Prepara os campos de entrada para o passo que acabou de virar ativo. */
+  /** Prepares the input fields for the step that has just become active. */
   const enterStep = (): void => {
     const step = currentStep();
     state.error = null;
@@ -304,8 +304,8 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     }
   };
 
-  // A primeira etapa também precisa dos campos preparados: sem isto o menu
-  // abre com o cursor no topo em vez do tipo que a detecção sugeriu.
+  // The first step needs its fields prepared too: without this the menu opens
+  // with the cursor at the top instead of on the type detection suggested.
   enterStep();
 
   const startExecution = (ctx: WizardContext<Config>): void => {
@@ -388,9 +388,9 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
       return;
     }
 
-    // Trocar o tipo de projeto troca as perguntas seguintes e os defaults que
-    // dependem dele — o caminho do CSS, por exemplo, deixa de ser o do app. O
-    // tema é preservado porque não depende do tipo.
+    // Changing the project type changes the following questions and the defaults
+    // that depend on it — the CSS path, for one, stops being the app's. The theme
+    // is preserved because it does not depend on the type.
     if (step.id === 'kind') {
       const kind = value as ProjectKind;
       state.answers = { ...defaultAnswers(options.projectInfo, kind), theme: state.answers.theme };
@@ -400,9 +400,9 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
       return;
     }
 
-    // Trocar o projeto alvo move junto o app.config e o CSS global: são
-    // caminhos daquele projeto, e mantê-los apontando para o anterior faria o
-    // init escrever no app errado.
+    // Changing the target project moves app.config and the global CSS with it:
+    // those are that project's paths, and leaving them pointing at the previous
+    // one would make init write into the wrong app.
     if (step.id === 'projectRoot') {
       state.answers = {
         ...defaultAnswers(options.projectInfo, state.answers.kind, value),
@@ -419,9 +419,9 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
       return;
     }
 
-    // O caminho do CSS é o único que precisa existir antes de seguir: é ele que
-    // recebe os tokens do tema. Numa biblioteca não há CSS global prévio — o
-    // arquivo é criado pelo init, então "não existe" é o caso esperado.
+    // The CSS path is the only one that has to exist before going on: it is what
+    // receives the theme tokens. A library has no pre-existing global CSS — init
+    // creates the file, so "does not exist" is the expected case.
     state.checking = true;
     ctx.refresh();
     void inspectCssFile(options.cwd, value).then(

@@ -58,7 +58,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSunMoon, lucideSun, lucideMoon })],
 })
-export class DarkmodePage implements OnInit {
+export class DarkModePage implements OnInit {
   activeAnchor?: string;
 
   readonly activeTab = signal<'manual' | 'cli'>('cli');

@@ -10,7 +10,6 @@ import { makeSafeDate } from './calendar.utils';
 
 @Component({
   imports: [ZardCalendarGridComponent],
-  standalone: true,
   template: `
     <z-calendar-grid
       [calendarDays]="calendarDays"

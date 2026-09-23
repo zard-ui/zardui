@@ -20,7 +20,7 @@ npx zard-cli@latest add tooltip
 ```angular-ts
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -28,6 +28,7 @@ import {
   computed,
   DestroyRef,
   Directive,
+  DOCUMENT,
   effect,
   ElementRef,
   inject,
@@ -43,6 +44,7 @@ import {
   signal,
   type TemplateRef,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
@@ -65,6 +67,9 @@ interface DelayConfig {
   isShow: boolean;
   delay: number;
 }
+
+/** Matches the `animate-out` duration applied by `tooltipVariants`. */
+const TOOLTIP_EXIT_DURATION = 150;
 
 const throttle = (callback: () => void, wait: number) => {
   let time = Date.now();
@@ -96,6 +101,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private ariaEffectRef?: ReturnType<typeof effect>;
   private componentRef?: ComponentRef<ZardTooltipComponent>;
   private delaySubject?: Subject<DelayConfig>;
+  private detachTimeoutId?: ReturnType<typeof setTimeout>;
   private listenersRefs: (() => void)[] = [];
   private overlayRef?: OverlayRef;
 
@@ -156,6 +162,11 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     if (this.ariaEffectRef) {
       this.ariaEffectRef.destroy();
       this.ariaEffectRef = undefined;
+    }
+
+    if (this.detachTimeoutId !== undefined) {
+      clearTimeout(this.detachTimeoutId);
+      this.detachTimeoutId = undefined;
     }
 
     this.delaySubject?.complete();
@@ -239,7 +250,18 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   }
 
   private show() {
-    if (this.componentRef || !this.tooltipText()) {
+    if (!this.tooltipText()) {
+      return;
+    }
+
+    // Re-entering the trigger while the exit animation is running: keep the
+    // same overlay and animate it back in instead of detaching it.
+    if (this.componentRef) {
+      if (this.detachTimeoutId !== undefined) {
+        clearTimeout(this.detachTimeoutId);
+        this.detachTimeoutId = undefined;
+        this.componentRef.instance.state.set('open');
+      }
       return;
     }
 
@@ -248,7 +270,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.componentRef?.onDestroy(() => {
       this.componentRef = undefined;
     });
-    this.componentRef?.instance.state.set('opened');
+    this.componentRef?.instance.state.set('open');
     this.componentRef?.instance.setProps(this.tooltipText(), this.zPosition());
     runInInjectionContext(this.injector, () => {
       this.ariaEffectRef = effect(() => {
@@ -264,7 +286,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   }
 
   private hide() {
-    if (!this.componentRef) {
+    if (!this.componentRef || this.detachTimeoutId !== undefined) {
       return;
     }
 
@@ -277,7 +299,12 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.renderer.removeAttribute(this.elementRef.nativeElement, 'aria-describedby');
     this.componentRef.instance.state.set('closed');
     this.zHide.emit();
-    this.overlayRef?.detach();
+
+    // Detach only once the exit animation has played out.
+    this.detachTimeoutId = setTimeout(() => {
+      this.detachTimeoutId = undefined;
+      this.overlayRef?.detach();
+    }, TOOLTIP_EXIT_DURATION);
   }
 }
 
@@ -300,6 +327,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[attr.id]': 'tooltipId()',
@@ -308,6 +336,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     'data-slot': 'tooltip-content',
     role: 'tooltip',
   },
+  exportAs: 'zTooltip',
 })
 export class ZardTooltipComponent {
   protected readonly arrowClasses = computed(() =>
@@ -316,7 +345,7 @@ export class ZardTooltipComponent {
 
   protected readonly classes = computed(() => mergeClasses(tooltipVariants()));
   protected readonly position = signal<ZardTooltipPositionVariants>('top');
-  readonly state = signal<'closed' | 'opened'>('closed');
+  readonly state = signal<'closed' | 'open'>('closed');
   readonly uniqueId = viewChild<ZardIdDirective>('z');
   protected readonly tooltipText = signal<ZardTooltipType>(null);
   protected readonly tooltipId = computed(() => this.uniqueId()?.id() ?? 'tooltip');
@@ -334,7 +363,7 @@ export class ZardTooltipComponent {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const tooltipVariants = cva(
-  'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-sm data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+  'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-xl bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
 );
 export type ZardTooltipVariants = VariantProps<typeof tooltipVariants>;
 
@@ -417,7 +446,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
 ### Hover
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -428,6 +457,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
   template: `
     <button type="button" z-button zType="outline" zTooltip="Tooltip content">Hover</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTooltipHoverComponent {}
 ```
@@ -435,7 +465,7 @@ export class ZardDemoTooltipHoverComponent {}
 ### Click
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -446,6 +476,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
   template: `
     <button type="button" z-button zType="outline" zTooltip="Tooltip content" zTrigger="click">Click</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTooltipClickComponent {}
 ```
@@ -453,7 +484,7 @@ export class ZardDemoTooltipClickComponent {}
 ### Position
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -473,6 +504,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
       <button type="button" z-button zType="outline" zTooltip="Tooltip content" zPosition="bottom">Bottom</button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTooltipPositionComponent {}
 ```
@@ -480,7 +512,7 @@ export class ZardDemoTooltipPositionComponent {}
 ### With Keyboard Shortcut
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSave } from '@ng-icons/lucide';
@@ -490,7 +522,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd';
 import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
 
 @Component({
-  selector: 'z-demo-kbd-tooltip',
+  selector: 'z-demo-tooltip-with-kbd',
   imports: [NgIcon, ZardButtonComponent, ZardTooltipDirective, ZardKbdComponent],
   template: `
     <button type="button" z-button [zTooltip]="shortcutTip" zType="outline" zSize="icon-sm">
@@ -502,6 +534,7 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
       <z-kbd>S</z-kbd>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideSave })],
 })
 export class ZardDemoTooltipWithKbdComponent {}
@@ -510,7 +543,7 @@ export class ZardDemoTooltipWithKbdComponent {}
 ### Disabled Button
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -523,6 +556,7 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
       <button type="button" z-button zType="outline" [zDisabled]="true">Disabled</button>
     </span>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTooltipDisabledButtonComponent {}
 ```
@@ -569,12 +603,12 @@ A directive that shows a tooltip popup on hover or click.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zTooltip` | The text content of tooltip | `string` | `-` |
-| `zPosition` | The position of the tooltip | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
-| `zPositionOffset` | The position of the tooltip offset | `number` | `4` |
-| `zTrigger` | The tooltip trigger mode | `'hover' \| 'click'` | `'hover'` |
-| `zShowDelay` | Delay showing the tooltip after trigger in milliseconds | `number` | `150` |
-| `zHideDelay` | Delay hiding the tooltip after trigger in milliseconds | `number` | `100` |
+| `[zTooltip]` | The text content of tooltip | `string` | `-` |
+| `[zPosition]` | The position of the tooltip | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
+| `[zPositionOffset]` | The position of the tooltip offset | `number` | `4` |
+| `[zTrigger]` | The tooltip trigger mode | `'hover' \| 'click'` | `'hover'` |
+| `[zShowDelay]` | Delay showing the tooltip after trigger in milliseconds | `number` | `150` |
+| `[zHideDelay]` | Delay hiding the tooltip after trigger in milliseconds | `number` | `100` |
 | `(zShow)` | Emitted when the tooltip is shown | `output<void>` | `-` |
 | `(zHide)` | Emitted when the tooltip is hidden | `output<void>` | `-` |
 

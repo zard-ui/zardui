@@ -10,8 +10,8 @@ import { ZardButtonComponent } from '../button.component';
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <div class="flex gap-2">
-      <button z-button zType="outline" [zLoading]="true" [zDisabled]="true">Generating</button>
-      <button z-button zType="secondary" [zDisabled]="true">
+      <button type="button" z-button zType="outline" [zLoading]="true" [zDisabled]="true">Generating</button>
+      <button type="button" z-button zType="secondary" [zDisabled]="true">
         Downloading
         <ng-icon name="lucideLoaderCircle" class="animate-spin" />
       </button>

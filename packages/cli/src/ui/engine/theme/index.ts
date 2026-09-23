@@ -1,7 +1,6 @@
 /**
- * theme — tokens semânticos de cor e resolução/downsampling para a
- * capacidade do terminal. Temas são imutáveis; `extend` cria derivados.
- * (Fatia vertical / PoC: implementação real.)
+ * theme — semantic colour tokens, resolved and downsampled to the terminal's
+ * capability. Themes are immutable; `extend` creates derived ones.
  */
 
 import type { AnsiColor, ColorLevel } from '../ansi/index.js';
@@ -73,7 +72,7 @@ function parseColor(c: string): [number, number, number] | null {
   return null;
 }
 
-// RGB → índice do cubo 6x6x6 + rampa de cinza do ANSI-256.
+// RGB → index in the 6x6x6 cube plus the ANSI-256 grayscale ramp.
 function toAnsi256(r: number, g: number, b: number): number {
   if (r === g && g === b) {
     if (r < 8) return 16;

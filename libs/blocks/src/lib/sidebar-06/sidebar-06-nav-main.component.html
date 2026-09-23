@@ -1,0 +1,32 @@
+<div z-sidebar-group>
+  <ul z-sidebar-menu>
+    @for (group of items(); track group.title) {
+      <li z-sidebar-menu-item>
+        <button
+          z-sidebar-menu-button
+          z-dropdown
+          [zDropdownMenu]="groupMenu"
+          class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        >
+          {{ group.title }}
+          <ng-icon name="lucideMoreHorizontal" class="ml-auto" />
+        </button>
+
+        <!-- Kept outside an @if: a template reference declared inside a control-flow block is not
+             visible to the trigger above it. -->
+        <z-dropdown-menu-content
+          #groupMenu="zDropdownMenuContent"
+          class="min-w-56 rounded-lg"
+          zSide="right"
+          zAlign="start"
+        >
+          @for (item of group.items; track item.title) {
+            <z-dropdown-menu-item>
+              <a [href]="item.url">{{ item.title }}</a>
+            </z-dropdown-menu-item>
+          }
+        </z-dropdown-menu-content>
+      </li>
+    }
+  </ul>
+</div>

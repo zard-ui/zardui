@@ -37,11 +37,4 @@ export const TROUBLESHOOTING: TroubleshootingEntry[] = [
     cause: 'The variable was declared inside a component stylesheet or a nested selector instead of `:root`.',
     fix: 'Declare raw values in `:root` / `.dark`, and scope overrides deliberately with a container class.',
   },
-  {
-    id: 'destructive-foreground-empty',
-    symptom: 'text-destructive-foreground renders with no color.',
-    cause:
-      '`@theme inline` maps `--color-destructive-foreground` to `--destructive-foreground`, which the CLI never defines.',
-    fix: 'Add `--destructive-foreground` to both `:root` and `.dark`, as the CSS on this page does.',
-  },
 ];

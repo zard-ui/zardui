@@ -15,47 +15,71 @@ reviews:
     - '!node_modules/**'
     - '!dist/**'
     - '!.angular/**'
-    - '!packages/**'
+    - '!apps/web/src/generated/**'
     - '!apps/web/public/**'
     - 'apps/**'
     - 'libs/**'
+    - 'packages/**'
     - 'scripts/**'
+    - 'tools/**'
 
   path_instructions:
-    - path: 'libs/zard/src/lib/components/**/*.component.ts'
+    - path: 'libs/zard/src/lib/shared/components/**/*.component.ts'
       instructions: |
         - NO standalone: true (it's default, must be omitted)
-        - MUST use ChangeDetectionStrategy.OnPush
+        - MUST use ChangeDetectionStrategy.OnPush and ViewEncapsulation.None
+        - MUST declare exportAs
         - Proper @/* library imports
         - Use input() and output() functions, NOT @Input/@Output decorators
-        - Use computed() for derived state
+        - Use computed() for derived state; never mutate state inside a computed()
         - Host bindings in host object, NOT @HostBinding/@HostListener
         - Use inject() function, NOT constructor injection
+        - Host class binding must be '[class]': 'classes()' with a computed named classes
+        - The class input must be input<ClassValue>('')
         - Verify mergeClasses() for CVA variant integration
+        - Import DOCUMENT from @angular/core, not the deprecated @angular/common re-export
+        - Guard every document/window access with isPlatformBrowser or an injected DOCUMENT
+        - Prefer afterNextRender over setTimeout(..., 0) for post-render work
         - Avoid 'any' type, use strict typing
 
-    - path: 'libs/zard/src/lib/components/**/*.html'
+    - path: 'libs/zard/src/lib/shared/components/**/*.directive.ts'
       instructions: |
-        - Use native control flow: @if, @for, @switch (NOT *ngIf/*ngFor/*ngSwitch)
-        - Use [class] bindings, NOT ngClass
-        - Use [style] bindings, NOT ngStyle
-        - Keep templates simple, avoid complex logic
-        - Use async pipe for observables
-        - Use NgOptimizedImage for static images
+        - Same conventions as components: signals, inject(), host object, exportAs
+        - Avoid 'any' type, use strict typing
 
-    - path: 'libs/zard/src/lib/components/**/*.variants.ts'
+    - path: 'libs/zard/src/lib/shared/components/**/*.variants.ts'
       instructions: |
         - Verify CVA patterns with strict TypeScript types
-        - Ensure TailwindCSS v4 utility classes
+        - Exported cva() constants must be named <name>Variants (plural)
+        - TailwindCSS v4 utility classes only; no v3 names such as bare `shadow` or `rounded`
+        - Prefer the project's own @custom-variant shortcuts (data-open, data-checked, ...)
+          over raw data-[state=...] selectors; they are NOT interchangeable, so never
+          swap one for the other without checking what the component actually sets
         - Use type inference when obvious
 
-    - path: 'libs/zard/src/lib/components/**/*.spec.ts'
+    - path: 'libs/zard/src/lib/shared/components/**/*.spec.ts'
       instructions: |
         - Jest + @happy-dom setup
-        - Test standalone components properly
+        - NO standalone: true on test host components (it's default)
         - Comprehensive coverage for signals and computed values
 
-    - path: 'libs/zard/src/lib/shared/**/*.service.ts'
+    - path: 'libs/zard/src/lib/shared/components/**/demo/**'
+      instructions: |
+        - Demos are copy-paste material: they must be exemplary, not merely working
+        - Selector must be z-demo-<component>-<variant>
+        - Class must be ZardDemo<Component><Variant>Component
+        - MUST set ChangeDetectionStrategy.OnPush; NO standalone: true
+        - Every <button> needs an explicit type attribute
+        - Use native control flow (@if/@for/@switch) and [class]/[style] bindings
+
+    - path: 'libs/zard/src/lib/shared/components/**/doc/api.ts'
+      instructions: |
+        - One ApiSection per public selector
+        - Every input, model and output must be documented, plus `class`
+        - Prop names are written unbracketed (zType, not [zType])
+        - Types and defaults must match the component source exactly
+
+    - path: 'libs/zard/src/lib/shared/{services,core,utils}/**/*.ts'
       instructions: |
         - Use providedIn: 'root' for singletons
         - Single responsibility principle
@@ -63,16 +87,30 @@ reviews:
         - Keep state transformations pure
         - Proper @/* library imports
 
-    - path: 'libs/zard/src/lib/components/**/demo/**'
-      instructions: 'Validate demo structure follows patterns with clear examples'
+    - path: 'packages/cli/src/core/registry/registry-data.ts'
+      instructions: |
+        - This is the file list the CLI installs from. Every source file of a component
+          must be listed here, or the installed component will not compile.
+        - registryDependencies must name every other registry item the files import from.
+        - Prefer regenerating it with the generator over editing by hand.
 
-    - path: 'libs/zard/src/lib/components/**/doc/**'
-      instructions: 'Ensure complete API documentation in overview.md and api.md'
+    - path: 'packages/{cli,mcp,highlight}/**/*.ts'
+      instructions: |
+        - English only in code, comments and user-facing strings
+        - Avoid 'any' type, use strict typing
+        - Node built-ins must work on Windows as well as POSIX
+
+    - path: 'libs/blocks/**'
+      instructions: |
+        - Blocks are copy-paste material for consumer projects
+        - Follow the z-/Zard* naming conventions used by the library
+        - Imports must resolve in a consumer project, not only inside this monorepo
 
     - path: 'apps/web/**'
       instructions: |
         - Lazy loading for feature routes
         - Proper @zard/* library consumption
+        - Selectors use the z- prefix; page classes end in Page, layouts in Layout
         - Follow same Angular best practices
 
   tools:
@@ -90,7 +128,5 @@ knowledge_base:
   code_guidelines:
     enabled: true
     filePatterns:
-      - '**/.cursorrules'
-      - '**/CLAUDE.md'
       - '**/CONTRIBUTING.md'
       - '**/README.md'

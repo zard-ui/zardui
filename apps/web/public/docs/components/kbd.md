@@ -53,8 +53,9 @@ export const kbdGroupVariants = cva(`inline-flex items-center gap-1`);
 ```
 
 ```angular-ts
-export * from './kbd.component';
 export * from './kbd-group.component';
+export * from './kbd.component';
+export * from './kbd.imports';
 export * from './kbd.variants';
 ```
 
@@ -87,6 +88,19 @@ export class ZardKbdGroupComponent {
 }
 ```
 
+```angular-ts
+/*
+ * The alias, not a relative path: the Angular compiler re-emits these imports from
+ * whichever module spreads the array, and it can only do that for a specifier the
+ * consumer can resolve too. A relative path here fails with NG3004.
+ */
+import { ZardKbdGroupComponent } from '@/shared/components/kbd/kbd-group.component';
+import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
+
+/** Every part of the kbd component, for a template that uses more than one. */
+export const ZardKbdImports = [ZardKbdComponent, ZardKbdGroupComponent] as const;
+```
+
 ## Usage
 
 ```angular-ts
@@ -102,7 +116,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
 ### Default
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardKbdGroupComponent } from '@/shared/components/kbd/kbd-group.component';
 import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
@@ -125,6 +139,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
       </z-kbd-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoKbdDefaultComponent {}
 ```
@@ -132,7 +147,7 @@ export class ZardDemoKbdDefaultComponent {}
 ### Group
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardKbdGroupComponent } from '../kbd-group.component';
 import { ZardKbdComponent } from '../kbd.component';
@@ -148,6 +163,7 @@ import { ZardKbdComponent } from '../kbd.component';
       to open command palette
     </z-kbd-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoKbdGroupComponent {}
 ```
@@ -155,7 +171,7 @@ export class ZardDemoKbdGroupComponent {}
 ### Button
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCornerDownLeft } from '@ng-icons/lucide';
@@ -176,6 +192,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
       </button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCornerDownLeft })],
 })
 export class ZardDemoKbdButtonComponent {}
@@ -184,7 +201,7 @@ export class ZardDemoKbdButtonComponent {}
 ### Tooltip
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardButtonGroupComponent } from '@/shared/components/button-group';
@@ -220,6 +237,7 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip';
       </z-kbd-group>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoKbdTooltipComponent {}
 ```
@@ -232,7 +250,7 @@ Displays a keyboard key.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-kbd-group
 
@@ -240,7 +258,7 @@ Groups z-kbd components together.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ---
 

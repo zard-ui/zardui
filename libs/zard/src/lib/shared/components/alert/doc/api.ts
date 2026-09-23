@@ -5,6 +5,7 @@ export const ALERT_API: ApiSection[] = [
     selector: 'z-alert',
     description: 'Displays a callout for user attention.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       { name: '[zAction]', description: 'Alert action', type: 'TemplateRef<void>', default: '-' },
       { name: '[zDescription]', description: 'Alert description', type: 'string | TemplateRef<void>', default: '-' },
       {

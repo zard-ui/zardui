@@ -1,0 +1,30 @@
+<z-sidebar-provider style="--sidebar-width: 350px">
+  <lib-sidebar-09-app-sidebar />
+
+  <main z-sidebar-inset>
+    <header class="bg-background sticky top-0 flex shrink-0 items-center gap-2 border-b p-4">
+      <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
+
+      <z-separator
+        zOrientation="vertical"
+        class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+      />
+
+      <z-breadcrumb>
+        <z-breadcrumb-item class="hidden md:block">
+          <a z-breadcrumb-link href="#">All Inboxes</a>
+        </z-breadcrumb-item>
+        <z-breadcrumb-separator class="hidden md:block" />
+        <z-breadcrumb-item>
+          <span z-breadcrumb-page>Inbox</span>
+        </z-breadcrumb-item>
+      </z-breadcrumb>
+    </header>
+
+    <div class="flex flex-1 flex-col gap-4 p-4">
+      @for (item of placeholders; track item) {
+        <div class="bg-muted/50 aspect-video h-12 w-full rounded-lg"></div>
+      }
+    </div>
+  </main>
+</z-sidebar-provider>

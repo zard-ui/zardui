@@ -9,7 +9,6 @@ import type { CodeBlockData } from '@highlight/types';
 
 @Component({
   selector: 'z-json-aliases-section',
-  standalone: true,
   imports: [CodeBlockComponent],
   template: `
     <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="aliases" id="aliases">

@@ -496,7 +496,13 @@ Every zard/ui form control implements a value accessor, so [formField] binds to 
 
 ### input
 
-For text inputs, bind `[formField]` to the field and mirror its invalid state with `aria-invalid`.
+For text inputs, bind
+
+[formField]
+
+to the field and mirror its invalid state with
+
+aria-invalid
 
 Username
 
@@ -592,7 +598,11 @@ export class ZardFormsSignalInputComponent {
 
 ### textarea
 
-Textareas work exactly like inputs. Add `z-field-description` for the helper copy below the control.
+Textareas work exactly like inputs. Add
+
+z-field-description
+
+for the helper copy below the control.
 
 More about you
 
@@ -682,7 +692,21 @@ export class ZardFormsSignalTextareaComponent {
 
 ### select
 
-`z-select` is a value accessor too. Use `zOrientation="responsive"` with `z-field-content` to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a `validate()` rule — a value rule, not a presence one.
+z-select
+
+is a value accessor too. Use
+
+zOrientation="responsive"
+
+with
+
+z-field-content
+
+to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a
+
+validate()
+
+rule — a value rule, not a presence one.
 
 Spoken Language
 
@@ -794,7 +818,23 @@ export class ZardFormsSignalSelectComponent {
 
 ### checkbox
 
-A checkbox group edits an array field. Bind each box to `value().includes(id)` and update the field on change. The first group is a single boolean field turned read-only with `disabled()` in the schema. Remember `data-slot="checkbox-group"` on the `z-field-group` for the tighter spacing.
+A checkbox group edits an array field. Bind each box to
+
+value().includes(id)
+
+and update the field on change. The first group is a single boolean field turned read-only with
+
+disabled()
+
+in the schema. Remember
+
+data-slot="checkbox-group"
+
+on the
+
+z-field-group
+
+for the tighter spacing.
 
 Responses
 
@@ -937,7 +977,19 @@ export class ZardFormsSignalCheckboxComponent {
 
 ### radio group
 
-Bind `[formField]` to `z-radio-group` — the individual `z-radio` items only carry their value.
+Bind
+
+[formField]
+
+to
+
+z-radio-group
+
+— the individual
+
+z-radio
+
+items only carry their value.
 
 Plan
 
@@ -1041,7 +1093,11 @@ export class ZardFormsSignalRadioComponent {
 
 ### switch
 
-Switches bind to a boolean field. Use a horizontal field with `z-field-content` so the label and description sit next to the control.
+Switches bind to a boolean field. Use a horizontal field with
+
+z-field-content
+
+so the label and description sit next to the control.
 
 Multi-factor authentication
 
@@ -1130,7 +1186,11 @@ export class ZardFormsSignalSwitchComponent {
 
 ### complex forms
 
-Everything above, composed into one form with fieldsets, separators, a `validate()` rule that rejects unknown plan values and length rules on the add-ons array.
+Everything above, composed into one form with fieldsets, separators, a
+
+validate()
+
+rule that rejects unknown plan values and length rules on the add-ons array.
 
 Subscription Plan
 

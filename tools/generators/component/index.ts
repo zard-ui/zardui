@@ -6,6 +6,7 @@ import type { ComponentGeneratorSchema } from './schema';
 const COMPONENTS_DIR = 'libs/zard/src/lib/shared/components';
 const INDEX_PATH = 'libs/zard/src/index.ts';
 const REGISTRY_PATH = 'apps/web/src/app/shared/constants/components.constant.ts';
+const REGISTRY_DATA_PATH = 'packages/cli/src/core/registry/registry-data.ts';
 const ROUTES_PATH = 'apps/web/src/app/shared/constants/routes.constant.ts';
 const USAGE_DATA_PATH = 'packages/highlight/src/generator/usage-data.ts';
 
@@ -78,13 +79,16 @@ export default async function componentGenerator(tree: Tree, schema: ComponentGe
   addExportToIndex(tree, kebabName);
 
   // 3. Add entry to COMPONENTS_REGISTRY
-  addRegistryEntry(tree, kebabName, constantName, desc);
+  addRegistryEntry(tree, kebabName, constantName, desc, schema.category ?? 'Misc');
 
   // 4. Add entry to COMPONENTS_PATH routes
   addRouteEntry(tree, kebabName, displayName);
 
   // 5. Add entry to USAGE_DATA so `@generated/usage/<name>` is produced
   addUsageDataEntry(tree, kebabName, className, selector, displayName);
+
+  // 6. Add the file list the CLI installs from
+  addRegistryDataEntry(tree, kebabName);
 
   await formatFiles(tree);
 
@@ -96,6 +100,9 @@ export default async function componentGenerator(tree: Tree, schema: ComponentGe
       'Next steps:',
       `  1. Implement ${COMPONENTS_DIR}/${kebabName}/${kebabName}.component.ts and its variants.`,
       `  2. Document the public API in ${COMPONENTS_DIR}/${kebabName}/doc/api.ts.`,
+      `  2b. Every new file you add under ${COMPONENTS_DIR}/${kebabName}/ must also be listed in`,
+      `     ${REGISTRY_DATA_PATH}, or the installed component will not compile.`,
+      '     `npm run check:registry` proves it.',
       '  3. Run `npm run generate:highlight` to emit the highlighted code under apps/web/src/generated/',
       `     (demo, installation and usage blocks imported by demo/${kebabName}.ts).`,
       '  4. Commit the generated files — apps/web/src/generated/ is versioned.',
@@ -139,7 +146,7 @@ function addExportToIndex(tree: Tree, name: string): void {
 }
 
 /** Appends the component entry to COMPONENTS_REGISTRY, anchored on its own declaration. */
-function addRegistryEntry(tree: Tree, name: string, constantName: string, description: string): void {
+function addRegistryEntry(tree: Tree, name: string, constantName: string, description: string, category: string): void {
   const content = tree.read(REGISTRY_PATH, 'utf-8');
   if (!content) {
     throw new Error(`Could not read ${REGISTRY_PATH}.`);
@@ -150,6 +157,7 @@ function addRegistryEntry(tree: Tree, name: string, constantName: string, descri
   const entry = `  {
     componentName: '${name}',
     description: '${escapeSingleQuotes(description)}',
+    category: '${category}',
     loadData: () => import('@zard/components/${name}/demo/${name}').then(m => m.${constantName}),
   },`;
 
@@ -210,6 +218,36 @@ function addUsageDataEntry(tree: Tree, name: string, className: string, selector
   }
 
   tree.write(USAGE_DATA_PATH, content.slice(0, closingIndex) + entry + '\n' + content.slice(closingIndex));
+}
+
+/**
+ * Appends the item to the CLI's `registry` — the file list `zard-cli add` installs.
+ *
+ * Only the scaffolded files are known here. Anything added to the component later
+ * has to be listed by hand, which is why `npm run check:registry` exists.
+ */
+function addRegistryDataEntry(tree: Tree, name: string): void {
+  const content = tree.read(REGISTRY_DATA_PATH, 'utf-8');
+  if (!content) {
+    throw new Error(`Could not read ${REGISTRY_DATA_PATH}.`);
+  }
+
+  if (new RegExp(`name: '${name}',`).test(content)) return;
+
+  const files = [`${name}.component.ts`, `${name}.variants.ts`, 'index.ts'];
+  const entry = `  {
+    name: '${name}',
+    files: [
+${files.map(file => `      {\n        name: '${file}',\n        content: '',\n      },`).join('\n')}
+    ],
+  },`;
+
+  const closingIndex = findLiteralClose(content, findDeclarationOpen(content, 'registry', '['), '[', ']');
+  if (closingIndex === -1) {
+    throw new Error(`Could not locate the end of the registry array in ${REGISTRY_DATA_PATH}.`);
+  }
+
+  tree.write(REGISTRY_DATA_PATH, content.slice(0, closingIndex) + entry + '\n' + content.slice(closingIndex));
 }
 
 /**

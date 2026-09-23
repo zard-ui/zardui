@@ -1,6 +1,6 @@
 /**
- * input — parser (máquina de estados sobre bytes, ADR-0008) que transforma
- * o stdin cru em KeyEvent/MouseEvent/paste semânticos. (Implementação real.)
+ * input — a parser (a byte-level state machine, ADR-0008) that turns raw stdin
+ * into semantic KeyEvent / MouseEvent / paste events.
  */
 
 import { createEmitter, type Disposable } from '../events/index.js';
@@ -78,7 +78,7 @@ const TILDE_KEY: Record<number, Key> = {
   8: 'end',
 };
 
-/** Decodifica uma tecla simples (não-escape) do início de `buf`. consumed=0 ⇒ incompleto. */
+/** Decodes one simple (non-escape) key from the start of `buf`. consumed=0 ⇒ incomplete. */
 function decodeSimple(buf: Buffer): Decoded {
   const b = buf[0];
   if (b === undefined) return { key: '', ctrl: false, shift: false, consumed: 0 };
@@ -105,8 +105,8 @@ export function createInputManager(
   const paste = createEmitter<string>();
   const escTimeout = options.escTimeout ?? 50;
 
-  // Anotação explícita: Buffer.concat devolve Buffer<ArrayBufferLike>, que não
-  // é atribuível ao Buffer<ArrayBuffer> inferido de Buffer.alloc.
+  // Explicit annotation: Buffer.concat returns Buffer<ArrayBufferLike>, which is
+  // not assignable to the Buffer<ArrayBuffer> inferred from Buffer.alloc.
   let pending: Buffer = Buffer.alloc(0);
   let pasteMode = false;
   let pasteBuf = '';
@@ -119,7 +119,7 @@ export function createInputManager(
 
   const PASTE_END = Buffer.from('\x1b[201~');
 
-  /** Consome UM token do início de `pending`; retorna bytes consumidos ou 0 (incompleto). */
+  /** Consumes ONE token from the start of `pending`; returns bytes consumed, or 0 (incomplete). */
   function step(): number {
     if (pending.length === 0) return 0;
 
@@ -141,7 +141,7 @@ export function createInputManager(
       return d.consumed;
     }
 
-    // ── sequência de escape ──
+    // ── escape sequence ──
     if (pending.length === 1) return 0; // ESC sozinho → timeout decide
     const b1 = pending[1]!;
 
@@ -160,13 +160,13 @@ export function createInputManager(
       while (i < pending.length) {
         const c = pending[i]!;
         if (c >= 0x30 && c <= 0x3f)
-          i++; // bytes de parâmetro (dígitos, ';', '<', '?')
+          i++; // parameter bytes (digits, ';', '<', '?')
         else break;
       }
-      if (i >= pending.length) return 0; // falta o byte final
+      if (i >= pending.length) return 0; // the final byte is missing
       const final = pending[i]!;
       if (final < 0x40 || final > 0x7e) {
-        // inválido: descarta ESC[ e segue
+        // invalid: drop ESC[ and carry on
         return 2;
       }
       const paramStr = pending.subarray(2, i).toString('latin1');
@@ -203,7 +203,7 @@ export function createInputManager(
         return consumed;
       }
 
-      // teclas de navegação (com modificadores opcionais)
+      // navigation keys (with optional modifiers)
       const nums = paramStr.split(';');
       const mod = nums.length > 1 ? Number(nums[1]) : 0;
       const bits = mod > 0 ? mod - 1 : 0;

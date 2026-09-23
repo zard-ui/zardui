@@ -35,7 +35,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardInputGroupComponent } from '@/shared/components/input-group';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import { inputGroupTextAreaVariants, textareaVariants } from './textarea.variants';
 
@@ -151,7 +152,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
 Use Field, FieldLabel, and FieldDescription to create a textarea with a label and description.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
@@ -166,6 +167,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       <textarea z-textarea id="textarea-message" placeholder="Type your message here."></textarea>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTextareaFieldComponent {}
 ```
@@ -175,7 +177,7 @@ export class ZardDemoTextareaFieldComponent {}
 Use the disabled prop to disable the textarea. To style the disabled state, add the data-disabled attribute to the Field component.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
@@ -189,6 +191,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       <textarea z-textarea id="textarea-disabled" placeholder="Type your message here." disabled></textarea>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTextareaDisabledComponent {}
 ```
@@ -198,7 +201,7 @@ export class ZardDemoTextareaDisabledComponent {}
 Use the aria-invalid prop to mark the textarea as invalid. To style the invalid state, add the data-invalid attribute to the Field component.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
@@ -213,6 +216,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       <p z-field-description>Please enter a valid message.</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTextareaInvalidComponent {}
 ```
@@ -222,7 +226,7 @@ export class ZardDemoTextareaInvalidComponent {}
 Pair with Button to create a textarea with a submit button.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
@@ -233,9 +237,10 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
   template: `
     <div class="grid w-72 gap-2">
       <textarea z-textarea placeholder="Type your message here."></textarea>
-      <button z-button>Send message</button>
+      <button type="button" z-button>Send message</button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTextareaButtonComponent {}
 ```
@@ -248,6 +253,7 @@ A multi-line text input directive applied to a native textarea. All native HTML 
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[value]` | Textarea value, two-way bindable | `string` | `''` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 | `[(value)]` | Textarea value (two-way binding) | `string` | `''` |
 

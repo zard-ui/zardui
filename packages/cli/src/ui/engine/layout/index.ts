@@ -1,7 +1,7 @@
 /**
- * layout — engine de layout tipo Flexbox, em inteiros, duas passagens
- * (medir bottom-up, posicionar top-down). Função pura: (Node, Size) → boxes.
- * (Fatia vertical / PoC: subconjunto real — column/row/center + box/panel + leafs.)
+ * layout — a Flexbox-like layout engine, in integers, in two passes (measure
+ * bottom-up, position top-down). A pure function: (Node, Size) → boxes.
+ * Supports column/row/center, box/panel and leaves.
  */
 
 import type { Node } from '../components/index.js';
@@ -87,7 +87,7 @@ function isContainer(n: Node): boolean {
   return CONTAINERS.has(n.type);
 }
 
-/** Largura/altura intrínseca de uma folha, dada a largura disponível. */
+/** A leaf's intrinsic width and height, given the available width. */
 function measureLeaf(n: Node, availW: number): WH {
   const p = n.props as Record<string, unknown>;
   switch (n.type) {
@@ -99,8 +99,8 @@ function measureLeaf(n: Node, availW: number): WH {
     case 'separator':
       return { w: availW, h: 1 };
     case 'spinner': {
-      // Sem label o renderer pinta só o glifo; medir '⠋ ' deixaria uma coluna
-      // fantasma e desalinharia a linha em relação às irmãs (✔, ○).
+      // With no label the renderer paints only the glyph; measuring '⠋ ' would
+      // leave a phantom column and misalign the row against its siblings (✔, ○).
       const label = str(p['label']);
       return { w: stringWidth(label ? '⠋ ' + label : '⠋'), h: 1 };
     }
@@ -245,7 +245,7 @@ function place(n: Node, rect: Rect, out: LayoutBox[]): void {
   const totalGrow = grows.reduce((a, b) => a + b, 0);
   const extra = kids.map((_, i) => (totalGrow > 0 ? Math.floor((leftover * (grows[i] ?? 0)) / totalGrow) : 0));
 
-  // justify: só quando não há flexGrow para consumir a sobra
+  // justify: only when no flexGrow is there to absorb the slack
   let startOffset = 0;
   let between = gap;
   if (totalGrow === 0 && leftover > 0 && kids.length > 0) {

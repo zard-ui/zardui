@@ -31,7 +31,7 @@ export const BREADCRUMB_API: ApiSection[] = [
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       {
-        name: 'routerLink',
+        name: '[routerLink]',
         description: 'Router-compatible inputs are forwarded to the generated breadcrumb link',
         type: 'string | any[]',
         default: '-',
@@ -45,12 +45,12 @@ export const BREADCRUMB_API: ApiSection[] = [
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       {
-        name: 'routerLink',
+        name: '[routerLink]',
         description: 'Router-compatible inputs used to build the link URL and navigate on click',
         type: 'string | any[]',
         default: '-',
       },
-      { name: 'href', description: 'Plain link URL when routerLink is not provided', type: 'string', default: '-' },
+      { name: '[href]', description: 'Plain link URL when routerLink is not provided', type: 'string', default: '-' },
     ],
   },
   {

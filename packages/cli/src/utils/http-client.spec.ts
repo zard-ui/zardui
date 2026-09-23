@@ -201,6 +201,14 @@ describe('fetchJson', () => {
     expect((caught as NetworkError).message).toMatch(/Received HTML instead of JSON/);
   });
 
+  it('accepts a payload that merely mentions HTML markers in its content', async () => {
+    // A code comment containing `<html>` used to be enough to reject the whole item.
+    const payload = { files: [{ content: 'the `.dark` class lands on <html>\n<!DOCTYPE is fine too' }] };
+    mockFetch.mockImplementation(() => Promise.resolve(createMockResponse({ text: JSON.stringify(payload) })));
+
+    await expect(fetchJson('https://example.com/api', { retries: 1 })).resolves.toEqual(payload);
+  });
+
   it('should throw NetworkError on invalid JSON', async () => {
     mockFetch.mockImplementation(() => Promise.resolve(createMockResponse({ text: 'not valid json {{{' })));
 

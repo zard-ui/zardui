@@ -1,22 +1,22 @@
 /**
- * Paths customizados — a superfície onde baseUrl, aliases e `--path` se cruzam.
+ * Custom paths — the surface where baseUrl, aliases and `--path` cross.
  *
- * Os quatro pontos que consomem essa configuração vivem em arquivos diferentes
- * (config, registry, dependency-resolver, tsconfig-updater) e precisam concordar
- * entre si: onde o arquivo é escrito, com que import ele sai e o que o tsconfig
- * mapeia. Quando divergem, o componente é instalado num lugar que o import não
- * alcança — e o projeto só quebra na hora do build.
+ * The four places that consume this configuration live in different files
+ * (config, registry, dependency-resolver, tsconfig-updater) and have to agree
+ * with each other: where the file is written, which import it comes out with,
+ * and what the tsconfig maps. When they diverge, the component is installed
+ * somewhere the import cannot reach — and the project only breaks at build time.
  *
- * Por isso a suíte é cruzada: cada cenário verifica destino, import e mapeamento
- * juntos, em vez de testar cada função isoladamente.
+ * Hence the cross-cutting suite: each scenario checks destination, import and
+ * mapping together, rather than testing each function in isolation.
  */
 
 const mockExistsSync = jest.fn();
 const mockReadFile = jest.fn();
 const mockWriteFile = jest.fn();
 
-// As fábricas são içadas acima dos `const` acima, então elas não podem ler as
-// variáveis na hora do registro — só quando o mock é de fato chamado.
+// The factories are hoisted above the `const`s above, so they cannot read the
+// variables at registration time — only when the mock is actually called.
 jest.mock('fs', () => ({ existsSync: (...args: unknown[]) => mockExistsSync(...args) }));
 jest.mock('node:fs/promises', () => ({
   readFile: (...args: unknown[]) => mockReadFile(...args),
@@ -36,7 +36,7 @@ import { transformContent } from '@cli/utils/registry.js';
 
 const CWD = '/proj';
 
-/** Compara caminhos sem depender do separador da plataforma. */
+/** Compares paths without depending on the platform separator. */
 const norm = (p: string): string => p.replace(/\\/g, '/').replace(/^[A-Za-z]:/, '');
 
 function makeConfig(baseUrl: string, aliases: Partial<Config['aliases']> & { components: string }): Config {
@@ -71,8 +71,8 @@ describe('resolveAliasToPath', () => {
     );
   });
 
-  // Um alias não é obrigado a se chamar `@`. Qualquer prefixo é só um apelido
-  // para baseUrl, e o que vem depois dele é o caminho dentro do projeto.
+  // An alias is not required to be called `@`. Any prefix is just a nickname for
+  // baseUrl, and what follows it is the path inside the project.
   it('should treat a non-@ prefix as an alias for baseUrl', () => {
     expect(resolveAliasToPath('@app/components', 'src/app')).toBe('src/app/components');
   });
@@ -152,8 +152,8 @@ describe('resolveConfigPaths', () => {
     expect(norm(resolved.resolvedPaths.components)).toBe('/proj/projects/admin/src/app/shared/components');
   });
 
-  // Sem resolver o prefixo, `@app/components` virava uma pasta literal chamada
-  // `@app` na raiz do projeto — fora de qualquer coisa que o tsconfig mapeie.
+  // Without resolving the prefix, `@app/components` became a literal folder named
+  // `@app` at the project root — outside anything the tsconfig maps.
   it('should not create a literal folder out of a non-@ alias prefix', async () => {
     const resolved = await resolveConfigPaths(CWD, makeConfig('src/app', { components: '@app/components' }));
 
@@ -255,8 +255,8 @@ describe('validateTargetPath', () => {
     expect(() => validateTargetPath(require('node:path').resolve('/other/place'), resolveIn('.'))).toThrow(CliError);
   });
 
-  // `/proj-evil` começa com `/proj`, mas não está dentro dele. Comparar prefixo
-  // de string sem exigir o separador deixa passar o diretório vizinho.
+  // `/proj-evil` starts with `/proj` but is not inside it. Comparing string
+  // prefixes without requiring the separator lets the sibling directory through.
   it('should reject a sibling directory that merely shares the prefix', () => {
     const sibling = require('node:path').resolve(`${ROOT}-evil/components`);
 
@@ -278,9 +278,9 @@ describe('transformContent', () => {
     expect(out).toBe("import { mergeClasses } from '@/ui/utils/merge-classes';");
   });
 
-  // `card.component.ts` importa o barrel: `from '@/shared/core'`, sem subpath.
-  // Sem reescrever, o componente instalado aponta para uma pasta que não existe
-  // quando o usuário escolheu outro alias.
+  // `card.component.ts` imports the barrel: `from '@/shared/core'`, with no
+  // subpath. Without rewriting it, the installed component points at a folder
+  // that does not exist when the user chose a different alias.
   it('should rewrite a barrel import that has no subpath', () => {
     const out = transformContent("import { ZardStringTemplateOutletDirective } from '@/shared/core';", config);
 
@@ -394,7 +394,7 @@ describe('transformContent', () => {
   });
 
   // Com `--path libs/ui`, os componentes do lote ficam vizinhos ali. Manter o
-  // alias faria `carousel` importar `@/shared/components/button` — um caminho
+  // alias would make `carousel` import `@/shared/components/button` — a path
   // que aponta para a pasta de onde eles justamente foram tirados.
   it('should make component imports relative when installing to a custom path', () => {
     const out = transformContent("import { ZardButtonComponent } from '@/shared/components/button';", config, {
@@ -419,7 +419,7 @@ describe('transformContent', () => {
   });
 
   it('should not confuse an alias key with a longer folder name', () => {
-    // `@/shared/core-legacy` não é o alias `core`; não pode virar `@/ui/core-legacy`.
+    // `@/shared/core-legacy` is not the `core` alias; it must not become `@/ui/core-legacy`.
     const out = transformContent("import { x } from '@/shared/core-legacy/thing';", config);
 
     expect(out).toBe("import { x } from '@/shared/core-legacy/thing';");
@@ -497,12 +497,12 @@ describe('updateTsConfig', () => {
   });
 
   it('should preserve a tsconfig written with comments', async () => {
-    mockReadFile.mockResolvedValue('{\n  // caminhos do projeto\n  "compilerOptions": { "strict": true }\n}');
+    mockReadFile.mockResolvedValue('{\n  // project paths\n  "compilerOptions": { "strict": true }\n}');
 
     await updateTsConfig(CWD, makeConfig('src/app', { components: '@/shared/components' }));
 
     const written = mockWriteFile.mock.calls[0][1] as string;
-    expect(written).toContain('caminhos do projeto');
+    expect(written).toContain('project paths');
     expect(written).toContain('"strict": true');
   });
 
@@ -523,7 +523,7 @@ describe('updateTsConfig', () => {
   });
 
   it('should not throw when the tsconfig is unparseable', async () => {
-    mockReadFile.mockResolvedValue('{ isso não é json }');
+    mockReadFile.mockResolvedValue('{ this is not json }');
 
     await expect(
       updateTsConfig(CWD, makeConfig('src/app', { components: '@/shared/components' })),
@@ -532,7 +532,7 @@ describe('updateTsConfig', () => {
 });
 
 describe('applyThemeToStyles', () => {
-  /** O `@import '<caminho>/css/tailwind'` que o tema escreve no CSS global. */
+  /** The `@import '<path>/css/tailwind'` the theme writes into the global CSS. */
   const importedCorePath = (): string => {
     const css = mockWriteFile.mock.calls[0][1] as string;
     return /@import '([^']+)\/css\/tailwind'/.exec(css)?.[1] ?? '';
@@ -659,9 +659,9 @@ describe('buildConfig', () => {
     expect(config.aliases.services).toBe('@/ui/services');
   });
 
-  // O default do wizard oferece `apps/[app]/src/app/app.config.ts` para
-  // workspaces. Fixar baseUrl em `src/app` mandava os componentes para uma
-  // pasta na raiz que não pertence a projeto nenhum.
+  // The wizard's default offers `apps/[app]/src/app/app.config.ts` for
+  // workspaces. Hardcoding baseUrl to `src/app` sent the components to a folder
+  // at the root that belongs to no project.
   it('should derive baseUrl from the app.config.ts location', () => {
     const config = buildConfig(answers({ appConfig: 'apps/admin/src/app/app.config.ts' }), 'npm');
 
@@ -708,13 +708,13 @@ describe('buildConfig', () => {
 });
 
 /**
- * O contrato que amarra tudo: para cada layout, o componente precisa cair num
- * diretório que o mapeamento do tsconfig alcança a partir do import gerado.
- * É a checagem que faltava quando cada peça foi corrigida isoladamente.
+ * The contract that ties it all together: for every layout, the component has to
+ * land in a directory the tsconfig mapping reaches from the generated import.
+ * This is the check that was missing when each piece was fixed in isolation.
  */
-describe('coerência entre destino, import e tsconfig', () => {
+describe('coherence between destination, import and tsconfig', () => {
   const LAYOUTS = [
-    { name: 'padrão', baseUrl: 'src/app', alias: '@/shared/components' },
+    { name: 'default', baseUrl: 'src/app', alias: '@/shared/components' },
     { name: 'subpasta ui', baseUrl: 'src/app', alias: '@/ui/components' },
     { name: 'prefixo @app', baseUrl: 'src/app', alias: '@app/components' },
     { name: 'prefixo til', baseUrl: 'src/app', alias: '~/components' },
@@ -739,10 +739,10 @@ describe('coerência entre destino, import e tsconfig', () => {
     });
     const resolved = await resolveConfigPaths(CWD, config);
 
-    // 1. onde o arquivo é escrito
+    // 1. where the file is written
     const target = norm(getTargetDir({ name: 'button' }, resolved, CWD));
 
-    // 2. com que import ele é referenciado
+    // 2. which import references it
     const importSpecifier = transformContent("from '@/shared/components/button'", config).slice(6, -1);
 
     // 3. o que o tsconfig mapeia
@@ -750,7 +750,7 @@ describe('coerência entre destino, import e tsconfig', () => {
     const paths = JSON.parse(mockWriteFile.mock.calls[0][1] as string).compilerOptions.paths;
     const [pattern, [mapping]] = Object.entries(paths)[0] as [string, string[]];
 
-    // o import precisa casar com o padrão, e a substituição precisa dar no destino
+    // the import has to match the pattern, and the substitution has to land on the destination
     const prefix = pattern.replace(/\*$/, '');
     expect(importSpecifier.startsWith(prefix)).toBe(true);
 

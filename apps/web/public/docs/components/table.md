@@ -44,6 +44,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table',
     '[class]': 'classes()',
   },
   exportAs: 'zTable',
@@ -72,6 +73,7 @@ export class ZardTableComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-header',
     '[class]': 'classes()',
   },
   exportAs: 'zTableHeader',
@@ -90,6 +92,7 @@ export class ZardTableHeaderComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-body',
     '[class]': 'classes()',
   },
   exportAs: 'zTableBody',
@@ -108,6 +111,7 @@ export class ZardTableBodyComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-row',
     '[class]': 'classes()',
   },
   exportAs: 'zTableRow',
@@ -126,6 +130,7 @@ export class ZardTableRowComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-head',
     '[class]': 'classes()',
   },
   exportAs: 'zTableHead',
@@ -144,6 +149,7 @@ export class ZardTableHeadComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-cell',
     '[class]': 'classes()',
   },
   exportAs: 'zTableCell',
@@ -162,6 +168,7 @@ export class ZardTableCellComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-caption',
     '[class]': 'classes()',
   },
   exportAs: 'zTableCaption',
@@ -180,6 +187,7 @@ export class ZardTableCaptionComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'table-footer',
     '[class]': 'classes()',
   },
   exportAs: 'zTableFooter',
@@ -262,9 +270,9 @@ export type ZardTableTypeVariants = NonNullable<VariantProps<typeof tableVariant
 ```
 
 ```angular-ts
-export * from '@/shared/components/table/table.component';
-export * from '@/shared/components/table/table.imports';
-export * from '@/shared/components/table/table.variants';
+export * from './table.component';
+export * from './table.imports';
+export * from './table.variants';
 ```
 
 ```angular-ts
@@ -538,8 +546,8 @@ A directive that accepts all properties supported by a native table. It automati
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zType` | Table type | `'default' \| 'striped' \| 'bordered'` | `'default'` |
-| `zSize` | Table size | `'default' \| 'compact' \| 'comfortable'` | `'default'` |
+| `[zType]` | Table type | `'default' \| 'striped' \| 'bordered'` | `'default'` |
+| `[zSize]` | Table size | `'default' \| 'compact' \| 'comfortable'` | `'default'` |
 
 ### [z-table-header]
 

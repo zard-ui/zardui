@@ -4,9 +4,8 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-auto-highlight',
+  selector: 'z-demo-combobox-auto-highlight',
   imports: [ZardComboboxImports],
-  standalone: true,
   template: `
     <z-combobox zAutoHighlight [(zValue)]="value">
       <z-combobox-input placeholder="Select a framework" />

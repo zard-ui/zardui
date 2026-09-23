@@ -16,8 +16,7 @@ import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.com
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
 @Component({
-  selector: 'cli-commands-section',
-  standalone: true,
+  selector: 'z-cli-commands-section',
   imports: [CodeBlockComponent, CodeTabsComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Commands</h2>
@@ -182,7 +181,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <z-code-block [data]="globalOptions" />
   `,
 })
-export class CliCommandsSection {
+export class CliCommandsSectionComponent {
   readonly initUsage: CodeBlockData = BLOCK_0;
   readonly initHeadless: CodeBlockData = BLOCK_1;
   readonly addUsage: CodeBlockData = BLOCK_2;

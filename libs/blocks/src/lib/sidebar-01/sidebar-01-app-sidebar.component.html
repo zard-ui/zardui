@@ -1,0 +1,27 @@
+<z-sidebar>
+  <div z-sidebar-header>
+    <lib-sidebar-01-version-switcher [versions]="versions" [defaultVersion]="versions[0]" />
+    <lib-sidebar-01-search-form />
+  </div>
+
+  <z-sidebar-content>
+    <!-- We create a z-sidebar-group for each parent. -->
+    @for (group of navMain; track group.title) {
+      <div z-sidebar-group>
+        <div z-sidebar-group-label>{{ group.title }}</div>
+
+        <div z-sidebar-group-content>
+          <ul z-sidebar-menu>
+            @for (item of group.items; track item.title) {
+              <li z-sidebar-menu-item>
+                <a z-sidebar-menu-button [href]="item.url" [zActive]="!!item.isActive">{{ item.title }}</a>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    }
+  </z-sidebar-content>
+
+  <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
+</z-sidebar>

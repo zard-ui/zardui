@@ -105,9 +105,11 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
     }),
   ],
   host: {
+    'data-slot': 'carousel',
     '(keydown.arrowleft.prevent)': 'slidePrevious()',
     '(keydown.arrowright.prevent)': 'slideNext()',
   },
+  exportAs: 'zCarousel',
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);

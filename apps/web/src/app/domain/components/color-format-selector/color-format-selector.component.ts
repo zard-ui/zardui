@@ -8,7 +8,6 @@ import { ZardSelectComponent } from '@zard/components/select/select.component';
 
 @Component({
   selector: 'z-color-format-selector',
-  standalone: true,
   imports: [ZardSelectComponent, ZardSelectItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './color-format-selector.component.html',

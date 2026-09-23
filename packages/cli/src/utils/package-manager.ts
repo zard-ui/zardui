@@ -13,19 +13,19 @@ let cachedPackageManager: PackageManager | null = null;
 const SUPPORTED: readonly PackageManager[] = ['npm', 'yarn', 'pnpm', 'bun'];
 
 function asPackageManager(value: string | null | undefined): PackageManager | null {
-  // `yarn@berry`, `pnpm@6`, `bun@1.3.14` — só a família interessa.
+  // `yarn@berry`, `pnpm@6`, `bun@1.3.14` — only the family matters.
   const name = value?.split('@')[0];
   return SUPPORTED.includes(name as PackageManager) ? (name as PackageManager) : null;
 }
 
 /**
- * Qual gerenciador o *projeto* usa.
+ * Which manager the *project* uses.
  *
- * A ordem importa. `npm_config_user_agent` descreve como a CLI foi chamada
- * (`npx` sempre diz npm), não o que o projeto usa — confiar nele primeiro fazia
- * um projeto bun receber `packageManager: "npm"` no components.json e ganhar um
- * package-lock.json ao lado do bun.lock. O projeto responde por si: primeiro o
- * campo `packageManager` do package.json, depois os lockfiles.
+ * Order matters. `npm_config_user_agent` describes how the CLI was invoked
+ * (`npx` always says npm), not what the project uses — trusting it first gave a
+ * bun project `packageManager: "npm"` in its components.json and a
+ * package-lock.json next to its bun.lock. The project answers for itself: the
+ * package.json `packageManager` field first, then the lockfiles.
  */
 export async function detectPackageManager(cwd: string = process.cwd()): Promise<PackageManager> {
   if (cachedPackageManager) return cachedPackageManager;
@@ -53,13 +53,13 @@ const RUNNER: Record<PackageManager, string> = {
 };
 
 /**
- * Como sugerir que o usuário rode a CLI de novo.
+ * How to suggest running the CLI again.
  *
- * Aqui a pergunta é outra: não é qual gerenciador o projeto usa para instalar
- * dependências, e sim por onde a CLI acabou de ser executada. Quem chamou
- * `npx zard-cli init` num projeto bun não espera terminar lendo `bunx` — e o
- * `npx` que ele já usou funciona. Só quando não dá para saber é que o
- * gerenciador do projeto responde.
+ * A different question: not which manager the project installs dependencies
+ * with, but how the CLI was just invoked. Someone who ran `npx zard-cli init`
+ * in a bun project does not expect to finish reading `bunx` — and the `npx`
+ * they already used works. Only when that cannot be known does the project's
+ * manager answer.
  */
 export function suggestedRunner(packageManager: PackageManager): string {
   const userAgent = process.env.npm_config_user_agent || '';
@@ -72,7 +72,7 @@ export function suggestedRunner(packageManager: PackageManager): string {
   return RUNNER[packageManager];
 }
 
-/** O campo `packageManager` do package.json — padrão do Corepack, é declaração explícita. */
+/** The package.json `packageManager` field — the Corepack standard, an explicit declaration. */
 async function readPackageManagerField(cwd: string): Promise<string | null> {
   try {
     const manifest = JSON.parse(await readFile(path.join(cwd, 'package.json'), 'utf8'));
@@ -102,11 +102,11 @@ export async function getInstallCommand(packageManager: string, isDev = false): 
 }
 
 /**
- * Trabalho que o gerenciador faz por hábito e que não serve à instalação em si.
+ * Work the manager does out of habit that the install itself does not need.
  *
- * A auditoria de vulnerabilidades manda a árvore inteira para o registro e
- * espera a resposta; em projeto Angular, com mais de mil pacotes, ela sozinha
- * responde por vários segundos de uma chamada que instala meia dúzia deles.
+ * The vulnerability audit sends the whole tree to the registry and waits for an
+ * answer; in an Angular project, with over a thousand packages, that alone
+ * accounts for several seconds of a call that installs half a dozen.
  */
 function speedFlags(packageManager: PackageManager): string[] {
   return packageManager === 'npm' ? ['--no-audit', '--no-fund'] : [];
@@ -132,17 +132,16 @@ export async function installPackages(
     args.push('--no-strict-peer-dependencies');
   }
 
-  // Com a tela interativa montada, herdar o stdio deixaria o gerenciador de
-  // pacotes escrever por cima do frame. Nesse caso a saída é capturada e só
-  // aparece em modo debug; fora dela, o comportamento continua sendo o de
-  // repassar a saída ao vivo.
+  // With the interactive screen mounted, inheriting stdio would let the package
+  // manager write over the frame. In that case the output is captured and only
+  // shows up in debug mode; outside it, the behaviour stays "pass the output
+  // through live".
   if (isCapturing()) {
     const command = `${packageManager} ${args.join(' ')}`;
     try {
-      // stdin ignorado, não em pipe: um pipe de entrada aberto nunca recebe EOF
-      // e o gerenciador de pacotes fica esperando nele para sempre. Fechar o
-      // stdin também garante que ele nunca tente abrir um prompt, o que seria
-      // invisível atrás da tela cheia.
+      // stdin ignored, not piped: an open input pipe never sees EOF and the
+      // package manager waits on it forever. Closing stdin also guarantees it
+      // never opens a prompt, which would be invisible behind the full screen.
       const result = await execa(packageManager, args, {
         cwd,
         stdin: 'ignore',
@@ -151,18 +150,19 @@ export async function installPackages(
       });
       logger.debug(`${command}\n${result.stdout}`);
     } catch (error) {
-      // Sem isso a falha chega ao usuário como uma linha genérica: a saída real
-      // do gerenciador de pacotes fica no sink e é impressa junto do resumo.
+      // Without this the failure reaches the user as one generic line: the
+      // package manager's real output stays in the sink and is printed with the
+      // summary.
       logger.error(`${command} failed:\n${outputOf(error)}`);
       throw error;
     }
     return;
   }
 
-  // stdin ignorado aqui também. A instalação recebe os pacotes por argumento e
-  // nunca tem o que perguntar; herdar um stdin que não fecha (pipe, CI, job em
-  // background) prende o gerenciador esperando um EOF que não vem — a saída
-  // continua ao vivo porque stdout e stderr seguem herdados.
+  // stdin ignored here too. The install takes its packages as arguments and has
+  // nothing to ask; inheriting a stdin that never closes (a pipe, CI, a
+  // background job) leaves the manager waiting for an EOF that never comes —
+  // output stays live because stdout and stderr are still inherited.
   await execa(packageManager, args, { cwd, stdin: 'ignore', stdout: 'inherit', stderr: 'inherit' });
 }
 
@@ -171,7 +171,7 @@ function outputOf(error: unknown): string {
   return (stderr?.trim() || stdout?.trim() || message || String(error)).trim();
 }
 
-/** Só npm e pnpm têm como relaxar a checagem de peers; nos outros, repetir é repetir a mesma falha. */
+/** Only npm and pnpm can relax peer checking; elsewhere, retrying repeats the same failure. */
 function canRelaxPeers(packageManager: PackageManager): boolean {
   return packageManager === 'npm' || packageManager === 'pnpm';
 }
@@ -179,12 +179,12 @@ function canRelaxPeers(packageManager: PackageManager): boolean {
 let peerRelaxationEngaged = false;
 
 /**
- * Instala o lote e, se o gerenciador recusar a árvore por conflito de peers,
- * repete com a checagem relaxada.
+ * Installs the batch and, if the manager rejects the tree over a peer conflict,
+ * retries with the check relaxed.
  *
- * A queda fica registrada para o resto da execução: quando o primeiro lote
- * precisou do fallback, os seguintes vão precisar pelo mesmo motivo, e a
- * tentativa que já se sabe condenada custa uma resolução inteira da árvore.
+ * The fallback is remembered for the rest of the run: once the first batch
+ * needed it, the following ones will need it for the same reason, and an
+ * attempt already known to be doomed costs a full tree resolution.
  */
 export async function installPackagesWithRetry(
   packages: string[],
@@ -211,16 +211,16 @@ export async function installPackagesWithRetry(
 }
 
 /**
- * Descarta do lote os pacotes que o projeto já declara e já resolve.
+ * Drops from the batch the packages the project already declares and resolves.
  *
- * O gerenciador cobra caro por invocação — revalida a árvore inteira mesmo
- * quando não há nada a fazer —, então o ganho não está em acelerar a instalação
- * e sim em não chamá-la. Um `add` em projeto já inicializado pede justamente as
- * dependências que o `init` colocou lá.
+ * The manager charges a lot per invocation — it revalidates the whole tree even
+ * when there is nothing to do — so the win is not in making the install faster
+ * but in not calling it. An `add` in an already-initialized project asks for
+ * exactly the dependencies `init` put there.
  *
- * O filtro é deliberadamente conservador: na dúvida o pacote continua no lote e
- * quem decide é o gerenciador. Comparar apenas a major basta porque as versões
- * que a CLI pede são sempre da forma `^N`.
+ * The filter is deliberately conservative: when in doubt the package stays in
+ * the batch and the manager decides. Comparing only the major is enough because
+ * the versions the CLI asks for are always of the form `^N`.
  */
 export async function filterInstalledPackages(packages: string[], cwd: string): Promise<string[]> {
   const declared = await readDeclaredDependencies(cwd);
@@ -239,7 +239,7 @@ export async function filterInstalledPackages(packages: string[], cwd: string): 
 }
 
 function parseSpec(spec: string): { name: string; range: string | null } {
-  // O `@` de `@ng-icons/core` abre o escopo, não a versão — por isso o último.
+  // The `@` in `@ng-icons/core` opens the scope, not the version — hence the last one.
   const separator = spec.lastIndexOf('@');
   if (separator <= 0) return { name: spec, range: null };
 
@@ -259,7 +259,7 @@ async function readDeclaredDependencies(cwd: string): Promise<Record<string, str
   }
 }
 
-/** node_modules pode estar acima do projeto — workspaces içam tudo para a raiz. */
+/** node_modules can sit above the project — workspaces hoist everything to the root. */
 function isResolvable(name: string, cwd: string): boolean {
   let dir = path.resolve(cwd);
 

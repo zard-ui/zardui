@@ -16,7 +16,7 @@ import { ColorPickerFieldComponent } from '../color-picker-field/color-picker-fi
 import { ThemePresetCardComponent } from '../theme-preset-card/theme-preset-card.component';
 
 @Component({
-  selector: 'app-theme-sidebar',
+  selector: 'z-theme-sidebar',
   imports: [
     FormsModule,
     ZardAccordionComponent,

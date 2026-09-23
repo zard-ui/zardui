@@ -92,6 +92,15 @@ function serializeApi(sections: ApiSection[] | undefined): string {
         parts.push(['| Prop | Description | Type | Default |', '| --- | --- | --- | --- |', ...rows].join('\n'));
       }
 
+      if (section.outputs?.length) {
+        const rows = section.outputs.map(
+          output =>
+            `| ${code(output.name)} | ${cell(output.description)} | ${code(output.type)} | ${code(output.default)} |`,
+        );
+
+        parts.push(['| Output | Description | Type | Default |', '| --- | --- | --- | --- |', ...rows].join('\n'));
+      }
+
       return parts.join('\n\n');
     })
     .join('\n\n');

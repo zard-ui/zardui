@@ -30,7 +30,7 @@ Sass functions can't access Tailwind's `theme()` output. Functions like `darken(
 
 !important Syntax
 
-Sass interprets `!important` as a syntax error inside `@apply`. Use interpolation: `#{!important}`
+Sass interprets `!important` as a syntax error inside `@apply` . Use interpolation: `#{!important}`
 
 Import Conflicts
 
@@ -77,7 +77,7 @@ Compile SCSS to CSS first, then import into Tailwind.
 
 ## References
 
-- [Tailwind v4 Compatibility](https://tailwindcss.com/docs/compatibility) — Official preprocessor guidance
+- [Tailwind v4 Compatibility](https://tailwindcss.com/docs/compatibility)— Official preprocessor guidance
 - [v3 → v4 import changes](https://stackoverflow.com/questions/79380519/how-to-upgrade-tailwindcss)
 - [Using @apply in Tailwind v4](https://stackoverflow.com/questions/79743663/how-to-use-apply-in-tailwind-v4)
 - [Tailwind v4 + Sass watch mode issues](https://stackoverflow.com/questions/79638676/tailwind-css-v4-with-sass-changes-to-scss-not-reflected-automatically)

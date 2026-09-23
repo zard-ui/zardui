@@ -5,6 +5,7 @@ export const FIELD_API: ApiSection[] = [
     selector: 'z-field',
     description: 'A field container that wraps a label, control and optional description / error.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zOrientation]',
         description: 'Layout direction of the field',
@@ -16,12 +17,13 @@ export const FIELD_API: ApiSection[] = [
   {
     selector: 'z-field-set',
     description: 'A semantic <fieldset> wrapper that vertically stacks fields with consistent spacing.',
-    props: [],
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-field-legend',
     description: 'Legend element for a field-set. Use the label variant when grouping inline controls.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zVariant]',
         description: 'Visual size of the legend',
@@ -34,17 +36,18 @@ export const FIELD_API: ApiSection[] = [
     selector: 'z-field-group',
     description:
       'Group of fields with consistent vertical spacing. Acts as a container query parent for responsive fields.',
-    props: [],
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-field-content',
     description: 'Wrapper for the textual portion of a field (title + description) when used in horizontal layouts.',
-    props: [],
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-field-label',
     description: 'Label for a form control. Use on <label> for proper semantics, or as <z-field-label>.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[for]',
         description: "Associates the label with a form control by referencing the control's id.",
@@ -56,17 +59,18 @@ export const FIELD_API: ApiSection[] = [
   {
     selector: 'z-field-title',
     description: 'Non-interactive title for a field (e.g. when wrapping a checkbox/radio along with description).',
-    props: [],
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-field-description',
     description: 'Helper text rendered below or beside a field control.',
-    props: [],
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-field-separator',
     description: 'Horizontal separator with optional centered content.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zContent]',
         description: 'Optional text or template displayed above the separator line',
@@ -80,6 +84,7 @@ export const FIELD_API: ApiSection[] = [
     description:
       'Renders a single error message or a list of errors. Falls back to projected content when no errors are provided.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zErrors]',
         description: 'Array of error objects with an optional `message` string. Duplicate messages are removed.',

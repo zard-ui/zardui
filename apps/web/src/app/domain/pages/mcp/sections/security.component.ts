@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { BLOCK_2 } from '@generated/pages/mcp/installation';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import type { CodeBlockData } from '@highlight/types';
 
 @Component({
-  selector: 'mcp-security-section',
-  standalone: true,
+  selector: 'z-mcp-security-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Security</h2>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
@@ -25,6 +25,6 @@ import type { CodeBlockData } from '@highlight/types';
   `,
   imports: [CodeBlockComponent],
 })
-export class McpSecuritySection {
+export class McpSecuritySectionComponent {
   readonly pinned: CodeBlockData = BLOCK_2;
 }

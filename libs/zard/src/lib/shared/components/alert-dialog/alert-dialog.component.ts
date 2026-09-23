@@ -17,21 +17,21 @@ import {
   type EmbeddedViewRef,
   type EventEmitter,
   inject,
-  NgModule,
   output,
   type TemplateRef,
   type Type,
   viewChild,
   type ViewContainerRef,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/noop';
 
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
-import { ZardAlertDialogService } from './alert-dialog.service';
 import {
   alertDialogDescriptionVariants,
   alertDialogFooterVariants,
@@ -169,6 +169,7 @@ export class ZardAlertDialogOptions<T> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
@@ -242,9 +243,3 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
     this.cancelTriggered.emit();
   }
 }
-
-@NgModule({
-  imports: [ZardButtonComponent, ZardAlertDialogComponent, OverlayModule, PortalModule, A11yModule],
-  providers: [ZardAlertDialogService],
-})
-export class ZardAlertDialogModule {}

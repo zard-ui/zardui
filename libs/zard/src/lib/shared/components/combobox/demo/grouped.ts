@@ -1,11 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardComboboxImports } from '../combobox.imports';
 
 @Component({
-  selector: 'zard-demo-combobox-grouped',
+  selector: 'z-demo-combobox-grouped',
   imports: [ZardComboboxImports],
-  standalone: true,
   template: `
     <z-combobox zWidth="md" [(zValue)]="value">
       <z-combobox-input placeholder="Select a timezone" />
@@ -31,6 +30,7 @@ import { ZardComboboxImports } from '../combobox.imports';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxGroupedComponent {
   readonly value = signal<string | string[] | null>(null);
