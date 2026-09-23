@@ -52,7 +52,7 @@ const SERVER = { command: 'npx', args: ['-y', 'zard-mcp'] };
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">/mcp</code>
       to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">mcp.json</code>
-      and it connects.
+      to connect it.
     </p>
   `,
 })

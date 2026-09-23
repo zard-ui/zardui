@@ -38,7 +38,7 @@ export class McpTroubleshootingSection {
     },
     {
       symptom: 'The assistant invents an API instead of using the server',
-      fix: 'Name zard/ui in the prompt, or ask it to read the component docs first. Check the server is connected before blaming the model.',
+      fix: 'Name zard/ui in the prompt, or ask it to read the component docs first. If it still guesses, check that the server shows as connected.',
     },
     {
       symptom: 'Installing fails with "Configuration not found"',

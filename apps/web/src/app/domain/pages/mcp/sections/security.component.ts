@@ -18,8 +18,8 @@ import type { CodeBlockData } from '@highlight/types';
       is preferred over downloading one.
     </p>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Component docs and source become part of the model's context; treat a custom registry with the same trust as a
-      dependency. Teams can pin the server to a version:
+      Whatever the registry serves ends up in the model's context, so trust a custom registry as you would a dependency.
+      Teams can pin the server to a version:
     </p>
     <z-code-block [data]="pinned" />
   `,

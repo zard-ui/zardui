@@ -12,7 +12,8 @@ interface ToolRow {
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Tools</h2>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Ten tools: nine read, one writes. A wrong name comes back with a suggestion, so asking for
+      Ten tools, in two groups: nine that read, and one that writes to your project. A wrong name comes back with a
+      suggestion, so asking for
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">toast</code>
       points the assistant to
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">sonner</code>
@@ -56,8 +57,8 @@ interface ToolRow {
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Where the answers come from</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Source from the registry, the same files the CLI installs. Docs and examples from each component's page markdown,
-      API reference included — which is why the assistant writes against the real API.
+      Source code comes from the registry, the same files the CLI installs. Documentation and examples come from the
+      markdown of each component's page, API reference included.
     </p>
   `,
 })
@@ -84,7 +85,8 @@ export class McpToolsSection {
     {
       name: 'get-docs',
       input: 'topic?, section?',
-      description: 'A guide — theming, dark mode, forms, setup — whole or one section. No topic lists them.',
+      description:
+        'A guide on theming, dark mode, forms or setup, whole or one section. Without a topic, the list of guides.',
     },
     {
       name: 'install-component',
@@ -94,7 +96,7 @@ export class McpToolsSection {
     {
       name: 'list-blocks',
       input: 'category?',
-      description: 'Every available block — pre-built compositions — optionally by category.',
+      description: 'Every available block, optionally filtered by category.',
     },
     { name: 'get-block', input: 'id', description: 'The full source code of a block.' },
   ];

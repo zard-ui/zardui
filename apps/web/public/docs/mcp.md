@@ -9,7 +9,7 @@ Give your AI assistant the real zard/ui components: the source code, the docs an
 
 ## What it is
 
-Without it, an assistant writes zard/ui from memory — inputs that do not exist, imports that never resolve. With it, the assistant reads the same [registry](/docs/registry) the CLI installs from and each component's documentation page, then installs through the [CLI](/docs/cli) itself.
+An assistant asked for a zard/ui component works from whatever it memorised about the library, which is how you end up with inputs that do not exist and imports that never resolve. The server gives it the same [registry](/docs/registry) the CLI installs from and each component's documentation page, and installs through the [CLI](/docs/cli) itself.
 
 It works with any client that speaks the Model Context Protocol, and is versioned apart from the library.
 
@@ -89,7 +89,7 @@ args = ["-y", "zard-mcp"]
 
 ### Check that it works
 
-Restart the client and look for `zard-ui` with ten tools. In Claude Code or Codex run `/mcp` to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in `mcp.json` and it connects.
+Restart the client and look for `zard-ui` with ten tools. In Claude Code or Codex run `/mcp` to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in `mcp.json` to connect it.
 
 ## Usage
 
@@ -102,7 +102,7 @@ Describe what you want, not which tool to call. Naming zard/ui in the prompt kee
 
 ## Tools
 
-Ten tools: nine read, one writes. A wrong name comes back with a suggestion, so asking for `toast` points the assistant to `sonner` without a second search.
+Ten tools, in two groups: nine that read, and one that writes to your project. A wrong name comes back with a suggestion, so asking for `toast` points the assistant to `sonner` without a second search.
 
 | Tool | Input | Description |
 | --- | --- | --- |
@@ -112,14 +112,14 @@ Ten tools: nine read, one writes. A wrong name comes back with a suggestion, so 
 | `get-component-docs` | `name` | The documentation page: installation, usage, examples and API reference. |
 | `get-component-examples` | `name` | The usage examples, with the code of each one. |
 | `get-dependencies` | `name` | Everything an install brings: registry components in install order, npm packages, and the tree. |
-| `get-docs` | `topic?, section?` | A guide — theming, dark mode, forms, setup — whole or one section. No topic lists them. |
+| `get-docs` | `topic?, section?` | A guide on theming, dark mode, forms or setup, whole or one section. Without a topic, the list of guides. |
 | `install-component` | `name, cwd?, overwrite?` | Installs a component into the project, via CLI. Existing files are kept unless overwrite. |
-| `list-blocks` | `category?` | Every available block — pre-built compositions — optionally by category. |
+| `list-blocks` | `category?` | Every available block, optionally filtered by category. |
 | `get-block` | `id` | The full source code of a block. |
 
 ### Where the answers come from
 
-Source from the registry, the same files the CLI installs. Docs and examples from each component's page markdown, API reference included — which is why the assistant writes against the real API.
+Source code comes from the registry, the same files the CLI installs. Documentation and examples come from the markdown of each component's page, API reference included.
 
 ## Configuration
 
@@ -151,7 +151,7 @@ Two environment variables, both optional, for teams serving their own components
 
 Nine tools only read published files. Only `install-component` writes to your project, so keep your client asking before it runs. It never builds a shell command: names are validated and passed as discrete arguments, and the project's own `zard-cli` is preferred over downloading one.
 
-Component docs and source become part of the model's context; treat a custom registry with the same trust as a dependency. Teams can pin the server to a version:
+Whatever the registry serves ends up in the model's context, so trust a custom registry as you would a dependency. Teams can pin the server to a version:
 
 .mcp.json
 
@@ -170,7 +170,7 @@ Component docs and source become part of the model's context; treat a custom reg
 
 **The server shows no tools, or fails to start.** Check that `node --version` is 20 or newer, then delete the npx cache in `~/.npm/_npx` and restart the client. On Windows, some clients need the command as `cmd /c npx -y zard-mcp` instead.
 
-**The assistant invents an API instead of using the server.** Name zard/ui in the prompt, or ask it to read the component docs first. Check the server is connected before blaming the model.
+**The assistant invents an API instead of using the server.** Name zard/ui in the prompt, or ask it to read the component docs first. If it still guesses, check that the server shows as connected.
 
 **Installing fails with "Configuration not found".** The project has not been set up yet. Run `npx zard-cli init` at its root, then try again.
 
