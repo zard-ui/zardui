@@ -73,7 +73,7 @@ export const FEATURED_ARTICLES: readonly FeaturedArticle[] = [
     // The article opens on screenshots of other libraries; this is its Zard UI one.
     cover: 'https://miro.medium.com/v2/resize:fit:1024/1*yyznCy_ysDaidR0QSsbDqw.png',
     publishedAt: '2026-08-17',
-    readingTime: 3,
+    readingTime: 4,
     source: 'Medium',
     tags: ['angular', 'uikit', 'figma', 'front-end-development'],
     language: 'en',
