@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { BLOCK_0 } from '@generated/pages/mcp/configuration';
@@ -7,6 +7,7 @@ import type { CodeBlockData } from '@highlight/types';
 
 @Component({
   selector: 'z-mcp-configuration-section',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CodeBlockComponent, RouterLink],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -47,9 +48,8 @@ import type { CodeBlockData } from '@highlight/types';
               <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">https://zardui.com</code>
             </td>
             <td class="text-muted-foreground p-4 align-middle">
-              The site the documentation pages are read from, as
-              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">/docs/components/&lt;name&gt;.md</code>
-              . Separate from the registry because a custom registry serves files, not pages.
+              The site whose component pages are read, as markdown. Separate from the registry because a custom registry
+              serves files, not pages.
             </td>
           </tr>
         </tbody>

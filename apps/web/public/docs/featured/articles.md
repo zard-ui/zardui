@@ -13,6 +13,7 @@ Every article below was written by someone outside the core team. Each card open
 
 ## English
 
+- [How I Met My Best Angular UI Library](https://medium.com/@ghased/how-i-meet-my-best-angular-ui-library-54596ad28ede)
 - [Building fast in Angular with Zard UI, Tailwind CSS and Signals](https://dev.to/hassantayyab/building-fast-in-angular-with-zard-ui-tailwind-css-and-signals-cj5)
 - [ZardUI Beta: Bringing shadcn/ui's Philosophy to Angular - Where You Own Every Line of Code](https://dev.to/samuelrizzondev/zardui-beta-bringing-shadcnuis-philosophy-to-angular-where-you-own-every-line-of-code-2a79)
 

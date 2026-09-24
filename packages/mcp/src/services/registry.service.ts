@@ -1,11 +1,11 @@
 import type { BlockData, BlocksRegistry, ComponentData, RegistryIndex, RegistryItem } from '../types/registry.types.js';
+import { fetchWithTimeout, HttpError, isHtmlShell } from '../utils/http.js';
 import { assertRegistryId } from '../utils/identifiers.js';
 
 const REGISTRY_TTL = 5 * 60 * 1000; // 5 minutes
-const FETCH_TIMEOUT = 10_000; // 10 seconds
 
 /**
- * A forma do registry que este servidor sabe ler.
+ * The registry format this server knows how to read.
  *
  * A newer registry may have reorganised the item, and reading its `files`
  * blindly would hand wrong code to whoever trusts the answer. Absent means v1,
@@ -18,38 +18,33 @@ interface CacheEntry<T> {
   timestamp: number;
 }
 
+/**
+ * Every cache expires. The server lives as long as the editor does — days,
+ * sometimes — and a release in the meantime must reach the next answer.
+ */
+function fresh(entry: CacheEntry<unknown>): boolean {
+  return Date.now() - entry.timestamp < REGISTRY_TTL;
+}
+
 class RegistryService {
   private registryCache: CacheEntry<RegistryIndex> | null = null;
-  private componentCache = new Map<string, ComponentData>();
+  private componentCache = new Map<string, CacheEntry<ComponentData>>();
   private blocksRegistryCache: CacheEntry<BlocksRegistry> | null = null;
-  private blockCache = new Map<string, BlockData>();
+  private blockCache = new Map<string, CacheEntry<BlockData>>();
 
   private get baseUrl(): string {
     return process.env['ZARD_REGISTRY_URL'] || 'https://zardui.com/r';
   }
 
   private async fetchJson<T>(url: string): Promise<T> {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
-
-    try {
-      const response = await fetch(url, {
-        signal: controller.signal,
-        headers: { 'User-Agent': 'zard-mcp' },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      return (await response.json()) as T;
-    } finally {
-      clearTimeout(timeout);
-    }
+    const response = await fetchWithTimeout(url);
+    if (!response.ok) throw new HttpError(response);
+    if (isHtmlShell(response)) throw new HttpError({ status: 404, statusText: 'Not Found' });
+    return (await response.json()) as T;
   }
 
   async getRegistry(): Promise<RegistryIndex> {
-    if (this.registryCache && Date.now() - this.registryCache.timestamp < REGISTRY_TTL) {
+    if (this.registryCache && fresh(this.registryCache)) {
       return this.registryCache.data;
     }
 
@@ -76,15 +71,15 @@ class RegistryService {
     assertRegistryId(name, 'component');
 
     const cached = this.componentCache.get(name);
-    if (cached) return cached;
+    if (cached && fresh(cached)) return cached.data;
 
     const data = await this.fetchJson<ComponentData>(`${this.baseUrl}/${name}.json`);
-    this.componentCache.set(name, data);
+    this.componentCache.set(name, { data, timestamp: Date.now() });
     return data;
   }
 
   async getBlocksRegistry(): Promise<BlocksRegistry> {
-    if (this.blocksRegistryCache && Date.now() - this.blocksRegistryCache.timestamp < REGISTRY_TTL) {
+    if (this.blocksRegistryCache && fresh(this.blocksRegistryCache)) {
       return this.blocksRegistryCache.data;
     }
 
@@ -97,10 +92,10 @@ class RegistryService {
     assertRegistryId(id, 'block');
 
     const cached = this.blockCache.get(id);
-    if (cached) return cached;
+    if (cached && fresh(cached)) return cached.data;
 
     const data = await this.fetchJson<BlockData>(`${this.baseUrl}/blocks/${id}.json`);
-    this.blockCache.set(id, data);
+    this.blockCache.set(id, { data, timestamp: Date.now() });
     return data;
   }
 }

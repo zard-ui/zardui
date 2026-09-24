@@ -1,7 +1,9 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
+import { docsService } from '../services/docs.service.js';
 import { registryService } from '../services/registry.service.js';
 import type { RegistryItem } from '../types/registry.types.js';
+import { errorMessage, fail, json } from '../utils/result.js';
 
 /**
  * What the item actually is, since the registry calls everything
@@ -37,31 +39,33 @@ function docsPathOf(item: RegistryItem): string | undefined {
 }
 
 export function registerListComponents(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'list-components',
-    'List everything the Zard UI registry publishes: UI components, plus the stylesheets and utilities that are installable but are not components. Read `kind` before asking for a component.',
-    {},
+    {
+      title: 'List components',
+      description:
+        'List everything the Zard UI registry publishes, with a one-line description and category: UI components, ' +
+        'plus the stylesheets and utilities that are installable but are not components. Read `kind` before asking ' +
+        'for a component. Prefer search-components when you already know roughly what you need.',
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    },
     async () => {
-      const items = await registryService.getItems();
-
-      const components = items.map(item => ({
-        name: item.name,
-        type: item.type,
-        kind: kindOf(item),
-        docsPath: docsPathOf(item),
-        filesCount: item.files.length,
-        dependencies: item.dependencies ?? [],
-        registryDependencies: item.registryDependencies ?? [],
-      }));
-
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: JSON.stringify({ components, total: components.length }, null, 2),
-          },
-        ],
-      };
+      try {
+        const [items, catalog] = await Promise.all([registryService.getItems(), docsService.getCatalog()]);
+        const components = items.map(item => {
+          const entry = catalog.get(item.name);
+          return {
+            name: item.name,
+            kind: kindOf(item),
+            docsPath: docsPathOf(item),
+            ...(entry && { description: entry.description, category: entry.category }),
+            registryDependencies: item.registryDependencies ?? [],
+          };
+        });
+        return json({ total: components.length, components });
+      } catch (error) {
+        return fail(`Could not reach the Zard UI registry: ${errorMessage(error)}`);
+      }
     },
   );
 }
