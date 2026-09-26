@@ -1,4 +1,4 @@
-import { Component, signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, signal, type TemplateRef, viewChild } from '@angular/core';
 import { type ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
