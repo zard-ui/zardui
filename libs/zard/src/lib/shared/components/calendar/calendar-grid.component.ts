@@ -19,9 +19,10 @@ import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
 import {
   calendarDayButtonVariants,
   calendarDayVariants,
+  calendarRowVariants,
   calendarWeekdaysVariants,
   calendarWeekdayVariants,
-  calendarWeekVariants,
+  calendarWeeksVariants,
 } from './calendar.variants';
 
 @Component({
@@ -38,33 +39,37 @@ import {
       </div>
 
       <!-- Calendar Days Grid -->
-      <div [class]="weekClasses()" role="rowgroup">
-        @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
-          <div
-            role="gridcell"
-            [class]="dayContainerClasses(day)"
-            [attr.data-selected]="day.isSelected ? 'true' : null"
-            [attr.data-today]="day.isToday ? 'true' : null"
-            [attr.data-outside]="day.isCurrentMonth ? null : 'true'"
-            [attr.data-disabled]="day.isDisabled ? 'true' : null"
-            [attr.data-range-start]="day.isRangeStart ? 'true' : null"
-            [attr.data-range-middle]="day.isInRange ? 'true' : null"
-            [attr.data-range-end]="day.isRangeEnd ? 'true' : null"
-          >
-            <button
-              type="button"
-              [id]="getDayId(i)"
-              [class]="dayButtonClasses(day)"
-              (click)="onDayClick(day.date, i)"
-              [disabled]="day.isDisabled"
-              [attr.data-day]="getDayLabel(day)"
-              [attr.aria-selected]="day.isSelected"
-              [attr.aria-label]="getDayAriaLabel(day)"
-              [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
-              role="button"
-            >
-              {{ day.date.getDate() }}
-            </button>
+      <div [class]="weeksClasses()" role="rowgroup">
+        @for (week of weeks(); track $index; let weekIndex = $index) {
+          <div [class]="rowClasses()" role="row">
+            @for (day of week; track day.date.getTime(); let dayIndex = $index) {
+              @let i = weekIndex * 7 + dayIndex;
+              <div
+                role="gridcell"
+                [class]="dayContainerClasses(day)"
+                [attr.aria-selected]="day.isSelected"
+                [attr.data-selected]="day.isSelected ? 'true' : null"
+                [attr.data-today]="day.isToday ? 'true' : null"
+                [attr.data-outside]="day.isCurrentMonth ? null : 'true'"
+                [attr.data-disabled]="day.isDisabled ? 'true' : null"
+                [attr.data-range-start]="day.isRangeStart ? 'true' : null"
+                [attr.data-range-middle]="day.isInRange ? 'true' : null"
+                [attr.data-range-end]="day.isRangeEnd ? 'true' : null"
+              >
+                <button
+                  type="button"
+                  [id]="getDayId(i)"
+                  [class]="dayButtonClasses(day)"
+                  (click)="onDayClick(day.date, i)"
+                  [disabled]="day.isDisabled"
+                  [attr.data-day]="getDayLabel(day)"
+                  [attr.aria-label]="getDayAriaLabel(day)"
+                  [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
+                >
+                  {{ day.date.getDate() }}
+                </button>
+              </div>
+            }
           </div>
         }
       </div>
@@ -104,7 +109,14 @@ export class ZardCalendarGridComponent {
 
   protected readonly weekdayClasses = computed(() => mergeClasses(calendarWeekdayVariants()));
 
-  protected readonly weekClasses = computed(() => mergeClasses(calendarWeekVariants()));
+  protected readonly weeksClasses = computed(() => mergeClasses(calendarWeeksVariants()));
+
+  protected readonly rowClasses = computed(() => mergeClasses(calendarRowVariants()));
+
+  protected readonly weeks = computed(() => {
+    const days = this.calendarDays();
+    return Array.from({ length: Math.ceil(days.length / 7) }, (_, i) => days.slice(i * 7, i * 7 + 7));
+  });
 
   protected dayContainerClasses(day: CalendarDay): string {
     return mergeClasses(
