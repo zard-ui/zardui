@@ -266,7 +266,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   protected onHostFocus(event: FocusEvent): void {
     if (event.target === this.elementRef.nativeElement) {
       this.focusButton();
-      this.open();
     }
   }
 

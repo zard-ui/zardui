@@ -314,6 +314,23 @@ describe('ZardSelectComponent', () => {
       expect(selectElement).not.toHaveAttribute('data-active');
       expect(document.activeElement).not.toBe(trigger);
     }));
+
+    it('delegates focus to trigger button without opening dropdown when host receives focus', () => {
+      const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
+        .nativeElement as HTMLElement;
+      const selectInstance = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
+        .componentInstance as ZardSelectComponent;
+      const trigger = hostFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+      const buttonSpy = jest.spyOn(trigger, 'focus');
+
+      expect(selectInstance.isOpen()).toBe(false);
+
+      selectElement.dispatchEvent(new FocusEvent('focus'));
+      hostFixture.detectChanges();
+
+      expect(buttonSpy).toHaveBeenCalledTimes(1);
+      expect(selectInstance.isOpen()).toBe(false);
+    });
   });
 
   describe('with FormControl', () => {
