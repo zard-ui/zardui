@@ -1,3 +1,13 @@
+## 1.0.0-beta.121 (2026-09-26)
+
+### 🐛 Bug Fixes
+
+- **select:** prevent Escape from bubbling to parent overlays ([#732](https://github.com/zard-ui/zardui/pull/732))
+
+### ❤️ Thank You
+
+- Roman Mykhailiuk @JustDo1t90
+
 ## 1.0.0-beta.120 (2026-09-05)
 
 ### ✨ Features
