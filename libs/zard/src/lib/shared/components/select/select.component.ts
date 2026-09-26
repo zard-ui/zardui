@@ -333,6 +333,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
         break;
       case 'Escape':
         if (this.isOpen()) {
+          event.stopPropagation();
           this.close();
         }
         break;
@@ -357,6 +358,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
         this.selectFocusedItem(items);
         break;
       case 'Escape':
+        e.stopPropagation();
         this.close();
         this.focusButton();
         break;
