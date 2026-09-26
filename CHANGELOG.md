@@ -1,3 +1,13 @@
+## 1.0.0-beta.122 (2026-09-26)
+
+### 🐛 Bug Fixes
+
+- **drawer:** resolve panel styles under ViewEncapsulation.None ([#731](https://github.com/zard-ui/zardui/pull/731))
+
+### ❤️ Thank You
+
+- Roman Mykhailiuk @JustDo1t90
+
 ## 1.0.0-beta.121 (2026-09-26)
 
 ### 🐛 Bug Fixes
