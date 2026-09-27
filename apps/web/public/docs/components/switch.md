@@ -61,7 +61,7 @@ type OnChangeType = (value: boolean) => void;
         <span
           [attr.data-size]="zSize()"
           [attr.data-state]="status()"
-          class="bg-background dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground pointer-events-none block rounded-full ring-0 transition-transform data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
+          class="bg-background dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground pointer-events-none block rounded-full ring-0 transition-transform data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)]"
         ></span>
       </button>
 
