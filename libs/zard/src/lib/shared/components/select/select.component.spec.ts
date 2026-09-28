@@ -314,7 +314,7 @@ describe('ZardSelectComponent', () => {
       expect(document.activeElement).toBe(selectedItem);
     }));
 
-    it('clears trigger focus after selecting an item', fakeAsync(() => {
+    it('focuses trigger after selecting an item in single mode', fakeAsync(() => {
       const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
         .nativeElement as HTMLElement;
       const trigger = hostFixture.nativeElement.querySelector('button') as HTMLButtonElement;
@@ -333,7 +333,33 @@ describe('ZardSelectComponent', () => {
 
       expect(hostComponent.value()).toBe('option2');
       expect(selectElement).not.toHaveAttribute('data-active');
-      expect(document.activeElement).not.toBe(trigger);
+      expect(document.activeElement).toBe(trigger);
+    }));
+
+    it('focuses trigger after selecting an item via keyboard (Enter) in single mode', fakeAsync(() => {
+      const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
+        .nativeElement as HTMLElement;
+      const trigger = hostFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+      trigger.focus();
+
+      trigger.click();
+      flush();
+      hostFixture.detectChanges();
+      flush();
+
+      const listbox = document.querySelector('[role="listbox"]') as HTMLElement;
+      expect(listbox).toBeTruthy();
+
+      // Navigate down to option2 and select with Enter
+      listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+      hostFixture.detectChanges();
+      listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      flush();
+      hostFixture.detectChanges();
+
+      expect(hostComponent.value()).toBe('option2');
+      expect(selectElement).not.toHaveAttribute('data-active');
+      expect(document.activeElement).toBe(trigger);
     }));
   });
 
@@ -1476,6 +1502,41 @@ describe('ZardSelectComponent', () => {
       fixture.detectChanges();
 
       expect(sheetRef.isClosing()).toBe(true);
+    });
+
+    it('selecting an item in single mode inside a z-drawer keeps drawer open and returns focus to trigger', async () => {
+      const drawerRef = drawerService.create({
+        zContent: fixture.componentInstance.overlayTemplate(),
+      });
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const trigger = document.querySelector('[data-slot="select-trigger"]') as HTMLButtonElement;
+      expect(trigger).toBeTruthy();
+      expect(drawerRef.isClosing()).toBe(false);
+
+      // Open the select
+      trigger.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const listbox = document.querySelector('[role="listbox"]') as HTMLElement;
+      expect(listbox).toBeTruthy();
+
+      // Select an option
+      const option = document.querySelector('[data-slot="select-content"] z-select-item[value="apple"]') as HTMLElement;
+      expect(option).toBeTruthy();
+      option.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      // Select dropdown closes, drawer remains open, and trigger inside drawer retains focus
+      expect(document.querySelector('[role="listbox"]')).toBeFalsy();
+      expect(drawerRef.isClosing()).toBe(false);
+      expect(document.activeElement).toBe(trigger);
     });
   });
 });

@@ -438,10 +438,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       this.updateOverlayPosition();
     } else {
       this.close();
-
-      setTimeout(() => {
-        this.blurButton();
-      }, 0);
+      this.focusButton();
     }
   }
 
