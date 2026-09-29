@@ -579,14 +579,20 @@ export const calendarWeekdayVariants = cva(
   ),
 );
 
-/** The day rows. `gap-y-2` reproduces the `week: mt-2` of shadcn; `gap-x-0` keeps the range rail continuous. */
+/** The container for the day rows. */
+export const calendarWeeksVariants = cva('mt-2 flex w-full flex-col gap-y-2');
+/** @deprecated Use `calendarWeeksVariants` and `calendarRowVariants`. Kept for backward compatibility. */
 export const calendarWeekVariants = cva('mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2');
+
+/** The day row: 7 columns for the days of the week. `gap-x-0` keeps the range rail continuous. */
+export const calendarRowVariants = cva('grid w-full grid-cols-7 gap-x-0');
 
 export const calendarDayVariants = cva(
   mergeClasses(
     'group/day relative aspect-square size-full rounded-(--cell-radius) p-0 text-center select-none',
-    // Round the range rail at both ends of every week.
-    'nth-[7n+1]:rounded-s-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
+    // Round the range rail at both ends of every week row (supports both nested rows and flat grid).
+    'first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius)',
+    'last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
   ),
   {
     variants: {
@@ -603,7 +609,7 @@ export const calendarDayVariants = cva(
           'relative isolate z-0 rounded-s-(--cell-radius) bg-muted',
           'after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-muted',
           // No neighbour to bridge to at the end of a week — do not bleed outside the grid.
-          '[&:nth-child(7n)]:after:hidden',
+          '[&:last-child]:after:hidden [&:nth-child(7n)]:after:hidden',
         ),
         false: '',
       },
@@ -615,7 +621,7 @@ export const calendarDayVariants = cva(
         true: mergeClasses(
           'relative isolate z-0 rounded-e-(--cell-radius) bg-muted',
           'after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-muted',
-          '[&:nth-child(7n+1)]:after:hidden',
+          '[&:first-child]:after:hidden [&:nth-child(7n+1)]:after:hidden',
         ),
         false: '',
       },
@@ -728,9 +734,10 @@ import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
 import {
   calendarDayButtonVariants,
   calendarDayVariants,
+  calendarRowVariants,
   calendarWeekdaysVariants,
   calendarWeekdayVariants,
-  calendarWeekVariants,
+  calendarWeeksVariants,
 } from './calendar.variants';
 
 @Component({
@@ -747,33 +754,37 @@ import {
       </div>
 
       <!-- Calendar Days Grid -->
-      <div [class]="weekClasses()" role="rowgroup">
-        @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
-          <div
-            role="gridcell"
-            [class]="dayContainerClasses(day)"
-            [attr.data-selected]="day.isSelected ? 'true' : null"
-            [attr.data-today]="day.isToday ? 'true' : null"
-            [attr.data-outside]="day.isCurrentMonth ? null : 'true'"
-            [attr.data-disabled]="day.isDisabled ? 'true' : null"
-            [attr.data-range-start]="day.isRangeStart ? 'true' : null"
-            [attr.data-range-middle]="day.isInRange ? 'true' : null"
-            [attr.data-range-end]="day.isRangeEnd ? 'true' : null"
-          >
-            <button
-              type="button"
-              [id]="getDayId(i)"
-              [class]="dayButtonClasses(day)"
-              (click)="onDayClick(day.date, i)"
-              [disabled]="day.isDisabled"
-              [attr.data-day]="getDayLabel(day)"
-              [attr.aria-selected]="day.isSelected"
-              [attr.aria-label]="getDayAriaLabel(day)"
-              [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
-              role="button"
-            >
-              {{ day.date.getDate() }}
-            </button>
+      <div [class]="weeksClasses()" role="rowgroup">
+        @for (week of weeks(); track $index; let weekIndex = $index) {
+          <div [class]="rowClasses()" role="row">
+            @for (day of week; track day.date.getTime(); let dayIndex = $index) {
+              @let i = weekIndex * 7 + dayIndex;
+              <div
+                role="gridcell"
+                [class]="dayContainerClasses(day)"
+                [attr.aria-selected]="day.isSelected"
+                [attr.data-selected]="day.isSelected ? 'true' : null"
+                [attr.data-today]="day.isToday ? 'true' : null"
+                [attr.data-outside]="day.isCurrentMonth ? null : 'true'"
+                [attr.data-disabled]="day.isDisabled ? 'true' : null"
+                [attr.data-range-start]="day.isRangeStart ? 'true' : null"
+                [attr.data-range-middle]="day.isInRange ? 'true' : null"
+                [attr.data-range-end]="day.isRangeEnd ? 'true' : null"
+              >
+                <button
+                  type="button"
+                  [id]="getDayId(i)"
+                  [class]="dayButtonClasses(day)"
+                  (click)="onDayClick(day.date, i)"
+                  [disabled]="day.isDisabled"
+                  [attr.data-day]="getDayLabel(day)"
+                  [attr.aria-label]="getDayAriaLabel(day)"
+                  [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
+                >
+                  {{ day.date.getDate() }}
+                </button>
+              </div>
+            }
           </div>
         }
       </div>
@@ -813,7 +824,14 @@ export class ZardCalendarGridComponent {
 
   protected readonly weekdayClasses = computed(() => mergeClasses(calendarWeekdayVariants()));
 
-  protected readonly weekClasses = computed(() => mergeClasses(calendarWeekVariants()));
+  protected readonly weeksClasses = computed(() => mergeClasses(calendarWeeksVariants()));
+
+  protected readonly rowClasses = computed(() => mergeClasses(calendarRowVariants()));
+
+  protected readonly weeks = computed(() => {
+    const days = this.calendarDays();
+    return Array.from({ length: Math.ceil(days.length / 7) }, (_, i) => days.slice(i * 7, i * 7 + 7));
+  });
 
   protected dayContainerClasses(day: CalendarDay): string {
     return mergeClasses(
