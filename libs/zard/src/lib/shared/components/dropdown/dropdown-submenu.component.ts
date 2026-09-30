@@ -79,7 +79,7 @@ export class ZardDropdownMenuSubContentComponent {
   imports: [NgIcon],
   template: `
     <ng-content />
-    <ng-icon name="lucideChevronRight" class="ml-auto size-4 shrink-0" aria-hidden="true" />
+    <ng-icon name="lucideChevronRight" class="ms-auto size-4 shrink-0 rtl:rotate-180" aria-hidden="true" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

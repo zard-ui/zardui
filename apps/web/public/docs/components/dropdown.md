@@ -365,7 +365,7 @@ export const dropdownItemVariants = cva(
           'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
       },
       inset: {
-        true: 'pl-8',
+        true: 'ps-8',
         false: '',
       },
     },
@@ -386,7 +386,7 @@ export const dropdownSubTriggerVariants = cva(
   {
     variants: {
       inset: {
-        true: 'pl-8',
+        true: 'ps-8',
         false: '',
       },
     },
@@ -401,7 +401,7 @@ export const dropdownLabelVariants = cva(
   {
     variants: {
       inset: {
-        true: 'pl-8',
+        true: 'ps-8',
         false: '',
       },
     },
@@ -750,14 +750,14 @@ export class ZardDropdownMenuShortcutComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() =>
-    mergeClasses('text-muted-foreground ml-auto text-xs tracking-widest', this.class()),
+    mergeClasses('text-muted-foreground ms-auto text-xs tracking-widest', this.class()),
   );
 }
 
 @Component({
   selector: 'z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item]',
   template: `
-    <span class="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
+    <span class="pointer-events-none absolute ltr:left-2 rtl:right-2 flex size-3.5 items-center justify-center">
       @if (zChecked()) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="size-4">
           <path d="M20 6 9 17l-5-5" />
@@ -844,7 +844,7 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
 @Component({
   selector: 'z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
   template: `
-    <span class="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
+    <span class="pointer-events-none absolute ltr:left-2 rtl:right-2 flex size-3.5 items-center justify-center">
       @if (isChecked()) {
         <span class="size-2 rounded-full bg-current"></span>
       }
@@ -983,7 +983,7 @@ export class ZardDropdownMenuSubContentComponent {
   imports: [NgIcon],
   template: `
     <ng-content />
-    <ng-icon name="lucideChevronRight" class="ml-auto size-4 shrink-0" aria-hidden="true" />
+    <ng-icon name="lucideChevronRight" class="ms-auto size-4 shrink-0 rtl:rotate-180" aria-hidden="true" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
