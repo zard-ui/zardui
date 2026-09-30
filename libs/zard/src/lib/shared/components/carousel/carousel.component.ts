@@ -9,6 +9,8 @@ import {
   viewChild,
   type InputSignal,
   type Signal,
+  inject,
+  ElementRef,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -113,6 +115,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);
+  private readonly elementRef = inject(ElementRef);
 
   readonly class = input<ClassValue>('');
   readonly zOptions: InputSignal<EmblaOptionsType> = input<EmblaOptionsType>({ loop: false });
@@ -130,6 +133,7 @@ export class ZardCarouselComponent {
   protected readonly options: Signal<EmblaOptionsType> = computed(() => ({
     ...this.zOptions(),
     axis: this.zOrientation() === 'horizontal' ? 'x' : 'y',
+    direction: getComputedStyle(this.elementRef.nativeElement).direction === 'rtl' ? 'rtl' : 'ltr',
   }));
 
   protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
