@@ -1,33 +1,37 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { z } from 'zod';
 
+import { componentName, failure, unknownComponent } from './shared.js';
 import { registryService } from '../services/registry.service.js';
+import { isNotFound } from '../utils/http.js';
+import { json } from '../utils/result.js';
 
 export function registerGetComponent(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'get-component',
-    'Get the complete source code of a Zard UI component',
-    { name: z.string().describe('Component name (e.g., "button", "card", "dialog")') },
+    {
+      title: 'Get component source',
+      description:
+        'Get the source files of a Zard UI component exactly as the CLI would install them, plus its npm and registry dependencies and the icons it uses. ' +
+        'To add it to a project, prefer install-component; to learn how to use it, prefer get-component-docs.',
+      inputSchema: { name: componentName },
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    },
     async ({ name }) => {
-      const component = await registryService.getComponent(name);
-
-      const output = {
-        name: component.name,
-        type: component.type,
-        registryDependencies: component.registryDependencies ?? [],
-        dependencies: component.dependencies ?? [],
-        // Whoever generates code from this needs to know which icons the
-        // component registers, and which set they come from.
-        icons: component.icons ?? null,
-        files: component.files.map(f => ({
-          name: f.name,
-          content: f.content,
-        })),
-      };
-
-      return {
-        content: [{ type: 'text' as const, text: JSON.stringify(output, null, 2) }],
-      };
+      try {
+        const component = await registryService.getComponent(name);
+        return json({
+          name: component.name,
+          type: component.type,
+          registryDependencies: component.registryDependencies ?? [],
+          dependencies: component.dependencies ?? [],
+          // Whoever generates code from this needs to know which icons the
+          // component registers, and which set they come from.
+          icons: component.icons ?? null,
+          files: component.files.map(f => ({ name: f.name, content: f.content })),
+        });
+      } catch (error) {
+        return isNotFound(error) ? unknownComponent(name) : failure(error, `component "${name}"`);
+      }
     },
   );
 }

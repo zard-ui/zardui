@@ -5,6 +5,10 @@ jest.mock('../services/registry.service', () => ({
   registryService: { getItems: jest.fn() },
 }));
 
+jest.mock('../services/docs.service', () => ({
+  docsService: { getCatalog: jest.fn(async () => new Map()) },
+}));
+
 const getItems = registryService.getItems as jest.Mock;
 
 interface ListedItem {
@@ -16,7 +20,7 @@ interface ListedItem {
 async function listed(): Promise<ListedItem[]> {
   let handler: (() => Promise<{ content: { text: string }[] }>) | undefined;
   const server = {
-    tool(_name: string, _desc: string, _schema: unknown, given: () => Promise<{ content: { text: string }[] }>) {
+    registerTool(_name: string, _config: unknown, given: () => Promise<{ content: { text: string }[] }>) {
       handler = given;
     },
   } as never;

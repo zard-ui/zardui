@@ -8,7 +8,10 @@ import { SeoService } from '@doc/shared/services/seo.service';
 import { McpConfigurationSectionComponent } from './sections/configuration.component';
 import { McpInstallationSectionComponent } from './sections/installation.component';
 import { McpOverviewSectionComponent } from './sections/overview.component';
+import { McpSecuritySectionComponent } from './sections/security.component';
 import { McpToolsSectionComponent } from './sections/tools.component';
+import { McpTroubleshootingSectionComponent } from './sections/troubleshooting.component';
+import { McpUsageSectionComponent } from './sections/usage.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
@@ -21,8 +24,11 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     ScrollSpyItemDirective,
     McpOverviewSectionComponent,
     McpInstallationSectionComponent,
+    McpUsageSectionComponent,
     McpToolsSectionComponent,
     McpConfigurationSectionComponent,
+    McpSecuritySectionComponent,
+    McpTroubleshootingSectionComponent,
   ],
   template: `
     <z-content
@@ -40,8 +46,14 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
       <z-mcp-overview-section scrollSpyItem="what-is-it" id="what-is-it"></z-mcp-overview-section>
       <z-mcp-installation-section scrollSpyItem="installation" id="installation"></z-mcp-installation-section>
+      <z-mcp-usage-section scrollSpyItem="usage" id="usage"></z-mcp-usage-section>
       <z-mcp-tools-section scrollSpyItem="tools" id="tools"></z-mcp-tools-section>
       <z-mcp-configuration-section scrollSpyItem="configuration" id="configuration"></z-mcp-configuration-section>
+      <z-mcp-security-section scrollSpyItem="security" id="security"></z-mcp-security-section>
+      <z-mcp-troubleshooting-section
+        scrollSpyItem="troubleshooting"
+        id="troubleshooting"
+      ></z-mcp-troubleshooting-section>
     </z-content>
   `,
 })
@@ -54,8 +66,11 @@ export class McpPage implements OnInit {
       { id: 'overview', label: 'Overview', type: 'core' },
       { id: 'what-is-it', label: 'What it is', type: 'custom' },
       { id: 'installation', label: 'Installation', type: 'custom' },
+      { id: 'usage', label: 'Usage', type: 'custom' },
       { id: 'tools', label: 'Tools', type: 'custom' },
       { id: 'configuration', label: 'Configuration', type: 'custom' },
+      { id: 'security', label: 'Security', type: 'custom' },
+      { id: 'troubleshooting', label: 'Troubleshooting', type: 'custom' },
     ],
   };
 

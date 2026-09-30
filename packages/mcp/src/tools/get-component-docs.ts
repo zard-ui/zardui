@@ -1,31 +1,30 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { z } from 'zod';
 
+import { componentName, failure, unknownComponent } from './shared.js';
 import { docsService } from '../services/docs.service.js';
+import { text } from '../utils/result.js';
 
 export function registerGetComponentDocs(server: McpServer): void {
-  server.tool(
+  server.registerTool(
     'get-component-docs',
-    'Get the full documentation page for a Zard UI component: installation, usage, examples and API reference',
-    { name: z.string().describe('Component name (e.g., "button", "card", "dialog")') },
+    {
+      title: 'Get component docs',
+      description:
+        'Get the full documentation page of a Zard UI component as markdown: installation, usage, every example with its code, and the API reference (inputs, outputs, variants). ' +
+        'Read this before writing template code that uses the component.',
+      inputSchema: { name: componentName },
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    },
     async ({ name }) => {
-      const markdown = await docsService.getComponentMarkdown(name);
-
-      if (markdown === null) {
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: `No documentation page for "${name}". Check the component name with list-components.`,
-            },
-          ],
-        };
+      try {
+        const markdown = await docsService.getComponentMarkdown(name);
+        // The markdown goes back raw, not wrapped in JSON: it already is the
+        // format a model reads best, and escaping it into a string would only
+        // get in the way.
+        return markdown === null ? unknownComponent(name) : text(markdown);
+      } catch (error) {
+        return failure(error, `the docs for "${name}"`);
       }
-
-      // The markdown goes back raw, not wrapped in JSON: it already is the
-      // format a model reads best, and escaping it into a string would only
-      // get in the way.
-      return { content: [{ type: 'text' as const, text: markdown }] };
     },
   );
 }

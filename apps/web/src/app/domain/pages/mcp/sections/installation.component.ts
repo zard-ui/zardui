@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { TABS_0, BLOCK_1, BLOCK_2, BLOCK_3, BLOCK_4 } from '@generated/pages/mcp/installation';
-import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import { TABS_0, TABS_1 } from '@generated/pages/mcp/installation';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
-import type { CodeBlockData, CodeTabData } from '@highlight/types';
+import type { CodeTabData } from '@highlight/types';
+
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+
+const SERVER = { command: 'npx', args: ['-y', 'zard-mcp'] };
 
 @Component({
   selector: 'z-mcp-installation-section',
-  imports: [CodeBlockComponent, CodeTabsComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CodeTabsComponent, ZardButtonComponent],
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
       Installation
@@ -15,38 +19,56 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       The server is published as
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-mcp</code>
-      and speaks over stdio, so there is nothing to run or keep alive: your client starts it when it needs it. If your
-      tool has a command for adding MCP servers, that is the shortest way in.
+      and runs over stdio: your client starts it on demand, and it needs Node 20 or newer. Cursor and VS Code install it
+      in one click.
     </p>
+    <div class="mt-6 flex flex-wrap gap-2">
+      <a z-button zType="outline" [href]="cursorUrl">Add to Cursor</a>
+      <a z-button zType="outline" [href]="vscodeUrl" target="_blank" rel="noopener">Add to VS Code</a>
+    </div>
+
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">From the command line</h3>
     <z-code-tabs [data]="cliTabs" />
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">By configuration file</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Clients that read a project file use the same shape. Committing it to the repository is what makes the server
-      available to everyone working on the project, rather than to whoever set it up.
+      Commit the project file and everyone on the repository gets the server.
     </p>
-    <z-code-block [data]="projectConfig" />
-
-    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">Cursor reads its own file:</p>
-    <z-code-block [data]="cursorConfig" />
-
-    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      VS Code uses a different key and asks for the transport explicitly:
-    </p>
-    <z-code-block [data]="vscodeConfig" />
+    <ul class="text-muted-foreground mt-4 ml-6 list-disc space-y-1 text-base leading-relaxed">
+      @for (file of configFiles; track file.client) {
+        <li>
+          {{ file.client }}
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">{{ file.path }}</code>
+        </li>
+      }
+    </ul>
+    <z-code-tabs [data]="configTabs" />
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Check that it works</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Ask for something that only the registry can answer. If the assistant comes back with real component code instead
-      of an invented API, the server is connected.
+      Restart the client and look for
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-ui</code>
+      with ten tools. In Claude Code or Codex run
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">/mcp</code>
+      to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">mcp.json</code>
+      to connect it.
     </p>
-    <z-code-block [data]="prompt" />
   `,
 })
 export class McpInstallationSectionComponent {
   readonly cliTabs: CodeTabData = TABS_0;
-  readonly projectConfig: CodeBlockData = BLOCK_1;
-  readonly cursorConfig: CodeBlockData = BLOCK_2;
-  readonly vscodeConfig: CodeBlockData = BLOCK_3;
-  readonly prompt: CodeBlockData = BLOCK_4;
+  readonly configTabs: CodeTabData = TABS_1;
+
+  readonly configFiles = [
+    { client: 'Claude Code', path: '.mcp.json' },
+    { client: 'Cursor', path: '.cursor/mcp.json' },
+    { client: 'VS Code', path: '.vscode/mcp.json' },
+    { client: 'Windsurf', path: '~/.codeium/windsurf/mcp_config.json' },
+    { client: 'Zed', path: '.zed/settings.json' },
+    { client: 'Codex', path: '~/.codex/config.toml' },
+  ];
+
+  readonly cursorUrl = `cursor://anysphere.cursor-deeplink/mcp/install?name=zard-ui&config=${btoa(JSON.stringify(SERVER))}`;
+  readonly vscodeUrl = `https://vscode.dev/redirect/mcp/install?name=zard-ui&config=${encodeURIComponent(JSON.stringify(SERVER))}`;
 }
