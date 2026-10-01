@@ -15,7 +15,7 @@ export const dropdownItemVariants = cva(
           'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
       },
       inset: {
-        true: 'pl-8',
+        true: 'ps-8',
         false: '',
       },
     },
@@ -36,7 +36,7 @@ export const dropdownSubTriggerVariants = cva(
   {
     variants: {
       inset: {
-        true: 'pl-8',
+        true: 'ps-8',
         false: '',
       },
     },
@@ -51,7 +51,7 @@ export const dropdownLabelVariants = cva(
   {
     variants: {
       inset: {
-        true: 'pl-8',
+        true: 'ps-8',
         false: '',
       },
     },
