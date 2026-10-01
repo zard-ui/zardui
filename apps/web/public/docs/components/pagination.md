@@ -128,7 +128,7 @@ export class ZardPaginationButtonComponent {
       [zDisabled]="zDisabled()"
     >
       <span class="sr-only">To previous page</span>
-      <ng-icon name="lucideChevronLeft" aria-hidden="true" />
+      <ng-icon name="lucideChevronLeft" aria-hidden="true" class="rtl:rotate-180"/>
       <span class="hidden sm:block" aria-hidden="true">Previous</span>
     </button>
   `,
@@ -159,7 +159,7 @@ export class ZardPaginationPreviousComponent {
     >
       <span class="sr-only">To next page</span>
       <span class="hidden sm:block" aria-hidden="true">Next</span>
-      <ng-icon name="lucideChevronRight" aria-hidden="true" />
+      <ng-icon name="lucideChevronRight" aria-hidden="true" class="rtl:rotate-180"/>
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
