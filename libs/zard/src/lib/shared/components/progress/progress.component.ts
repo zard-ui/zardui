@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -28,6 +36,7 @@ import { progressVariants } from './progress.variants';
   exportAs: 'zProgress',
 })
 export class ZardProgressComponent {
+  private readonly elementRef = inject(ElementRef);
   readonly value = input(0);
   readonly class = input<ClassValue>('');
 
@@ -42,7 +51,14 @@ export class ZardProgressComponent {
     return v;
   });
 
-  protected readonly indicatorTransform = computed(() => `translateX(-${100 - this.clampedValue()}%)`);
+  protected readonly indicatorTransform = computed(() => {
+    const dir = getComputedStyle(this.elementRef.nativeElement).direction;
+    let progress = 100 - this.clampedValue();
+    if (dir !== 'rtl') {
+      progress *= -1;
+    }
+    return `translateX(${progress}%)`;
+  });
 
   protected readonly classes = computed(() => mergeClasses(progressVariants(), this.class()));
 }
