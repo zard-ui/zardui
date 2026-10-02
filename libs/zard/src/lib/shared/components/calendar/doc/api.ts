@@ -99,4 +99,53 @@ export const CALENDAR_API: ApiSection[] = [
       },
     ],
   },
+  {
+    selector: 'ZardCalendarI18nService',
+    description:
+      'Injectable service that provides localized month names, weekday names, and week-start configuration. Driven by ZardI18nService or provideZardI18n().',
+    props: [
+      {
+        name: 'locale',
+        description: 'Signal emitting the current BCP-47 locale tag, e.g. "en-US", "fr-FR"',
+        type: 'Signal<string>',
+        default: "'en-US'",
+      },
+      {
+        name: 'weekStartsOn',
+        description: 'Signal emitting the starting day of the week (0 for Sunday, 1 for Monday, etc.)',
+        type: 'Signal<ZardDayOfWeek>',
+        default: '0',
+      },
+      {
+        name: 'shortMonths',
+        description: 'Signal emitting the 12 localized short month names for the current locale',
+        type: 'Signal<string[]>',
+        default: '',
+      },
+      {
+        name: 'longMonths',
+        description: 'Signal emitting the 12 localized full month names for the current locale',
+        type: 'Signal<string[]>',
+        default: '',
+      },
+      {
+        name: 'weekdays',
+        description: 'Signal emitting the 7 localized weekday names matching weekStartsOn',
+        type: 'Signal<string[]>',
+        default: '',
+      },
+      {
+        name: 'getMonthNames(format?, locale?)',
+        description: 'Returns formatted month names for a given locale',
+        type: "(format?: 'short' | 'long', locale?: string) => string[]",
+        default: '',
+      },
+      {
+        name: 'getWeekdayNames(format?, weekStartsOn?, locale?)',
+        description: 'Returns formatted weekday names for a given locale and starting day',
+        type: "(format?: 'short' | 'narrow' | 'long', weekStartsOn?: ZardDayOfWeek, locale?: string) => string[]",
+        default: '',
+      },
+    ],
+  },
 ];
