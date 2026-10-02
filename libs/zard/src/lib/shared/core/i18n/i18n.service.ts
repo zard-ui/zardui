@@ -44,7 +44,7 @@ export class ZardI18nService {
     }
 
     const preset = getPresetLocale(locale);
-    this.state.set({ ...(preset ?? this.state()), locale });
+    this.state.set({ ...(preset ?? {}), locale });
   }
 
   setTranslation(translation: Partial<ZardI18nInterface>): void {

@@ -123,6 +123,18 @@ describe('i18n module', () => {
       expect(service.current().locale).toBe('de-DE');
     });
 
+    it('should reset previous preset data when switching to an unknown locale via setLocale(string)', () => {
+      TestBed.configureTestingModule({});
+      const service = TestBed.inject(ZardI18nService);
+
+      service.setLocale('de-DE');
+      expect(service.current().calendar?.labels?.today).toBe('Heute');
+
+      service.setLocale('ja-JP');
+      expect(service.locale()).toBe('ja-JP');
+      expect(service.current().calendar).toBeUndefined();
+    });
+
     it('should reactively update when setLocale(ZardI18nInterface) is called', () => {
       TestBed.configureTestingModule({});
       const service = TestBed.inject(ZardI18nService);
