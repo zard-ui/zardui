@@ -43,6 +43,62 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'i18n/i18n.constants.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/i18n.provider.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/i18n.service.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/i18n.tokens.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/i18n.types.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/index.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/locales/de-de.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/locales/en-us.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/locales/es-es.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/locales/fr-fr.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/locales/it-it.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/locales/pt-br.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/locales/pt-pt.ts',
+        content: '',
+      },
+      {
+        name: 'i18n/locales/registry.ts',
+        content: '',
+      },
+      {
         name: 'css/tailwind.css',
         content: '',
       },
@@ -971,6 +1027,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'calendar-grid.component.ts',
+        content: '',
+      },
+      {
+        name: 'calendar-i18n.service.ts',
         content: '',
       },
       {

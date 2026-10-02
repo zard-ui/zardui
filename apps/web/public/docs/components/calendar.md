@@ -63,6 +63,7 @@ import {
 import { mergeClasses } from '@/shared/utils/merge-classes';
 import { noopFn } from '@/shared/utils/noop';
 
+import { ZardCalendarI18nService } from './calendar-i18n.service';
 import type { ZardButtonTypeVariants } from '../button/button.variants';
 
 @Component({
@@ -120,6 +121,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
 })
 export class ZardCalendarComponent implements ControlValueAccessor {
   private readonly injector = inject(Injector);
+  private readonly calendarI18n = inject(ZardCalendarI18nService);
   private readonly gridRefs = viewChildren(ZardCalendarGridComponent);
 
   /** The grid that owns the roving focus — always the first rendered month. */
@@ -216,6 +218,8 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     const selectedDates = getSelectedDatesArray(this.normalizedValue(), mode);
     const total = Math.max(1, this.zNumberOfMonths());
 
+    const weekStartsOn = this.calendarI18n.weekStartsOn();
+
     return Array.from({ length: total }, (_, offset) => {
       const monthDate = makeSafeDate(base.getFullYear(), base.getMonth() + offset, 1);
       const year = monthDate.getFullYear();
@@ -234,6 +238,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
           maxDate: this.maxDate(),
           disabled: this.disabled(),
           disabledDates: this.zDisabledDates(),
+          weekStartsOn,
         }),
       };
     });
@@ -719,6 +724,7 @@ import {
   Component,
   computed,
   type ElementRef,
+  inject,
   input,
   numberAttribute,
   output,
@@ -729,8 +735,9 @@ import {
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+import { ZardCalendarI18nService } from './calendar-i18n.service';
 import type { CalendarDay } from './calendar.types';
-import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
+import { getDayAriaLabel, getDayId } from './calendar.utils';
 import {
   calendarDayButtonVariants,
   calendarDayVariants,
@@ -746,7 +753,7 @@ import {
     <div #gridContainer class="w-full">
       <!-- Weekdays Header -->
       <div [class]="weekdaysClasses()" role="row">
-        @for (weekday of weekdays; track weekday) {
+        @for (weekday of effectiveWeekdays(); track weekday) {
           <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
           </div>
@@ -801,6 +808,7 @@ import {
   exportAs: 'zCalendarGrid',
 })
 export class ZardCalendarGridComponent {
+  private readonly calendarI18n = inject(ZardCalendarI18nService);
   private readonly gridContainer = viewChild.required<ElementRef<HTMLElement>>('gridContainer');
 
   // Inputs
@@ -816,7 +824,7 @@ export class ZardCalendarGridComponent {
   readonly nextMonth = output<{ position: string; dayOfWeek: number }>();
   readonly navigateYear = output<number>();
 
-  readonly weekdays = calendarWeekdays;
+  protected readonly effectiveWeekdays = this.calendarI18n.weekdays;
 
   private readonly focusedDayIndex = signal<number>(-1);
 
@@ -872,12 +880,12 @@ export class ZardCalendarGridComponent {
   }
 
   protected getDayAriaLabel(day: CalendarDay): string {
-    return getDayAriaLabel(day);
+    return getDayAriaLabel(day, this.calendarI18n.locale(), this.calendarI18n.labels());
   }
 
   /** Date exposed as `data-day`, mirroring the shadcn day button. */
   protected getDayLabel(day: CalendarDay): string {
-    return day.date.toLocaleDateString('en-US');
+    return day.date.toLocaleDateString(this.calendarI18n.locale());
   }
 
   protected getFocusedDayIndex(): number {
@@ -1068,11 +1076,91 @@ export class ZardCalendarGridComponent {
 ```
 
 ```angular-ts
+import { computed, inject, Injectable } from '@angular/core';
+
+import {
+  DEFAULT_CALENDAR_I18N,
+  DEFAULT_CALENDAR_LABELS,
+  type ZardCalendarI18n,
+  type ZardCalendarLabels,
+  type ZardDayOfWeek,
+  ZardI18nService,
+} from '@/shared/core/i18n';
+
+import { makeSafeDate } from './calendar.utils';
+
+export function capitalize(str: string, locale?: string): string {
+  if (!str) {
+    return str;
+  }
+  return str.charAt(0).toLocaleUpperCase(locale) + str.slice(1);
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ZardCalendarI18nService {
+  private readonly i18n = inject(ZardI18nService);
+
+  private readonly calendarData = this.i18n.getLocaleData<ZardCalendarI18n>('calendar', DEFAULT_CALENDAR_I18N);
+
+  readonly locale = this.i18n.locale;
+
+  readonly weekStartsOn = computed<ZardDayOfWeek>(() => {
+    const data = this.calendarData();
+    return data?.weekStartsOn ?? DEFAULT_CALENDAR_I18N.weekStartsOn ?? 0;
+  });
+
+  readonly labels = computed<ZardCalendarLabels>(() => {
+    const data = this.calendarData();
+    return {
+      ...DEFAULT_CALENDAR_LABELS,
+      ...(data?.labels ?? {}),
+    };
+  });
+
+  readonly shortMonths = computed(() => this.getMonthNames('short'));
+  readonly longMonths = computed(() => this.getMonthNames('long'));
+  readonly weekdays = computed(() => this.getWeekdayNames());
+
+  getMonthNames(format: 'short' | 'long' = 'short', locale: string = this.locale()): string[] {
+    const formatter = new Intl.DateTimeFormat(locale, { month: format });
+    return Array.from({ length: 12 }, (_, i) => {
+      const date = makeSafeDate(2024, i, 1);
+      return capitalize(formatter.format(date), locale);
+    });
+  }
+
+  getWeekdayNames(
+    format: 'short' | 'narrow' | 'long' = 'short',
+    weekStartsOn: ZardDayOfWeek = this.weekStartsOn(),
+    locale: string = this.locale(),
+  ): string[] {
+    const formatter = new Intl.DateTimeFormat(locale, { weekday: format });
+    return Array.from({ length: 7 }, (_, i) => {
+      const dayIndex = (weekStartsOn + i) % 7;
+      const date = makeSafeDate(2024, 0, 7 + dayIndex);
+      return capitalize(formatter.format(date).replace(/\.$/, ''), locale);
+    });
+  }
+
+  getWeekStartsOn(): ZardDayOfWeek {
+    return this.weekStartsOn();
+  }
+
+  getLabels(): ZardCalendarLabels {
+    return this.labels();
+  }
+}
+```
+
+```angular-ts
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   output,
   ViewEncapsulation,
@@ -1081,10 +1169,10 @@ import {
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown, lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 
-import type { ZardCalendarCaptionLayout } from '@/shared/components/calendar/calendar.types';
-import { calendarMonths, calendarMonthsLong } from '@/shared/components/calendar/calendar.utils';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+import { ZardCalendarI18nService } from './calendar-i18n.service';
+import type { ZardCalendarCaptionLayout } from './calendar.types';
 import {
   calendarCaptionLabelVariants,
   calendarCaptionVariants,
@@ -1111,7 +1199,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
           [class]="navButtonClasses()"
           (click)="onPreviousClick()"
           [zDisabled]="isPreviousDisabled()"
-          aria-label="Previous month"
+          [attr.aria-label]="labels().previousMonth"
         >
           <ng-icon name="lucideChevronLeft" class="size-4!" />
         </button>
@@ -1127,7 +1215,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
           [class]="navButtonClasses()"
           (click)="onNextClick()"
           [zDisabled]="isNextDisabled()"
-          aria-label="Next month"
+          [attr.aria-label]="labels().nextMonth"
         >
           <ng-icon name="lucideChevronRight" class="size-4!" />
         </button>
@@ -1151,9 +1239,9 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
                 [class]="dropdownClasses()"
                 [disabled]="disabled()"
                 (change)="onMonthChange($event)"
-                aria-label="Choose the month"
+                [attr.aria-label]="labels().chooseMonth ?? 'Choose the month'"
               >
-                @for (month of months; track month; let monthIndex = $index) {
+                @for (month of months(); track month; let monthIndex = $index) {
                   <option [value]="monthIndex" [selected]="monthIndex === selectedMonthIndex()">{{ month }}</option>
                 }
               </select>
@@ -1173,7 +1261,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
                 [class]="dropdownClasses()"
                 [disabled]="disabled()"
                 (change)="onYearChange($event)"
-                aria-label="Choose the year"
+                [attr.aria-label]="labels().chooseYear ?? 'Choose the year'"
               >
                 @for (year of availableYears(); track year) {
                   <option [value]="year" [selected]="year.toString() === currentYear()">{{ year }}</option>
@@ -1201,6 +1289,8 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
   exportAs: 'zCalendarNavigation',
 })
 export class ZardCalendarNavigationComponent {
+  private readonly calendarI18n = inject(ZardCalendarI18nService);
+
   // Inputs
   readonly currentMonth = input.required<string>();
   readonly currentYear = input.required<string>();
@@ -1221,7 +1311,8 @@ export class ZardCalendarNavigationComponent {
   readonly yearChange = output<string>();
   readonly previousMonth = output<void>();
   readonly nextMonth = output<void>();
-  readonly months = calendarMonths;
+  readonly months = this.calendarI18n.shortMonths;
+  protected readonly labels = this.calendarI18n.labels;
 
   protected readonly navClasses = computed(() => mergeClasses(calendarNavVariants()));
   protected readonly navButtonClasses = computed(() => mergeClasses(calendarNavButtonVariants()));
@@ -1256,18 +1347,19 @@ export class ZardCalendarNavigationComponent {
 
   /** Index of the month the caption points at, falling back to the current one. */
   protected readonly selectedMonthIndex = computed(() => {
-    const selectedMonth = Number.parseInt(this.currentMonth());
-    return !Number.isNaN(selectedMonth) && this.months[selectedMonth] ? selectedMonth : new Date().getMonth();
+    const selectedMonth = Number.parseInt(this.currentMonth(), 10);
+    const monthList = this.months();
+    return !Number.isNaN(selectedMonth) && monthList[selectedMonth] ? selectedMonth : new Date().getMonth();
   });
 
-  protected readonly currentMonthName = computed(() => this.months[this.selectedMonthIndex()]);
+  protected readonly currentMonthName = computed(() => this.months()[this.selectedMonthIndex()]);
 
   /** Full month name, used by the `label`, `dropdown-years` and `dropdown-months` captions. */
   protected readonly longMonthName = computed(() => {
-    const parsedMonth = Number.parseInt(this.currentMonth());
+    const parsedMonth = Number.parseInt(this.currentMonth(), 10);
     const month = Number.isNaN(parsedMonth) ? new Date().getMonth() : parsedMonth;
-
-    return calendarMonthsLong[month] ?? calendarMonthsLong[new Date().getMonth()];
+    const longMonths = this.calendarI18n.longMonths();
+    return longMonths[month] ?? longMonths[new Date().getMonth()];
   });
 
   protected readonly monthYearLabel = computed(() => `${this.longMonthName()} ${this.currentYear()}`);
@@ -1343,6 +1435,8 @@ export const ZardCalendarImports = [
 ```
 
 ```angular-ts
+import type { ZardDayOfWeek } from '@/shared/core/i18n';
+
 export type CalendarMode = 'single' | 'multiple' | 'range';
 export type CalendarValue = Date | Date[] | null;
 
@@ -1378,10 +1472,14 @@ export interface CalendarDayConfig {
   disabled: boolean;
   /** Individual days that cannot be selected, on top of the min/max range. */
   disabledDates?: Date[];
+  /** Day of week the calendar starts on (0 = Sunday, 1 = Monday, ..., 6 = Saturday). Defaults to 0. */
+  weekStartsOn?: ZardDayOfWeek;
 }
 ```
 
 ```angular-ts
+import { DEFAULT_CALENDAR_LABELS, DEFAULT_LOCALE, type ZardCalendarLabels } from '@/shared/core/i18n';
+
 import type { CalendarDay, CalendarDayConfig, CalendarMode, CalendarValue } from './calendar.types';
 
 export const calendarMonths = [
@@ -1453,7 +1551,7 @@ export function isDateDisabled(
  * Generates calendar days for a given month with all selection states
  */
 export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
-  const { year, month, mode, selectedDates, minDate, maxDate, disabled, disabledDates } = config;
+  const { year, month, mode, selectedDates, minDate, maxDate, disabled, disabledDates, weekStartsOn = 0 } = config;
 
   const today = new Date();
 
@@ -1462,13 +1560,16 @@ export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
   // Get last day of the month
   const lastDay = new Date(year, month + 1, 0);
 
-  // Get the first day of the week for the first day of the month
+  // Get the first day of the week for the first day of the month aligned with weekStartsOn
+  const startDiff = (firstDay.getDay() - weekStartsOn + 7) % 7;
   const startDate = new Date(firstDay);
-  startDate.setDate(startDate.getDate() - startDate.getDay());
+  startDate.setDate(startDate.getDate() - startDiff);
 
-  // Get the last day of the week for the last day of the month
+  // Get the last day of the week for the last day of the month aligned with weekStartsOn
+  const endOfWeekDay = (weekStartsOn + 6) % 7;
+  const endDiff = (endOfWeekDay - lastDay.getDay() + 7) % 7;
   const endDate = new Date(lastDay);
-  endDate.setDate(endDate.getDate() + (6 - endDate.getDay()));
+  endDate.setDate(endDate.getDate() + endDiff);
 
   const days: CalendarDay[] = [];
   const currentWeekDate = new Date(startDate);
@@ -1562,26 +1663,32 @@ export function getDayId(index: number, monthIndex = 0): string {
 /**
  * Generates an accessible ARIA label for a calendar day
  */
-export function getDayAriaLabel(day: CalendarDay): string {
-  const dateStr = day.date.toLocaleDateString('en-US', {
+export function getDayAriaLabel(
+  day: CalendarDay,
+  locale: string = DEFAULT_LOCALE,
+  labels?: Partial<ZardCalendarLabels>,
+): string {
+  const dateStr = day.date.toLocaleDateString(locale, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
 
-  const labels = [
+  const merged = { ...DEFAULT_CALENDAR_LABELS, ...labels };
+
+  const ariaLabels = [
     dateStr,
-    day.isToday && 'Today',
-    day.isSelected && 'Selected',
-    day.isRangeStart && 'Range start',
-    day.isRangeEnd && 'Range end',
-    day.isInRange && 'In range',
-    !day.isCurrentMonth && 'Outside month',
-    day.isDisabled && 'Disabled',
+    day.isToday && (merged.today ?? 'Today'),
+    day.isSelected && (merged.selected ?? 'Selected'),
+    day.isRangeStart && (merged.rangeStart ?? 'Range start'),
+    day.isRangeEnd && (merged.rangeEnd ?? 'Range end'),
+    day.isInRange && (merged.inRange ?? 'In range'),
+    !day.isCurrentMonth && (merged.outsideMonth ?? 'Outside month'),
+    day.isDisabled && (merged.disabled ?? 'Disabled'),
   ].filter(Boolean);
 
-  return labels.join(', ');
+  return ariaLabels.join(', ');
 }
 
 /**
@@ -1663,6 +1770,7 @@ export function toValidDate(value: unknown): Date | null {
 
 ```angular-ts
 export * from './calendar-grid.component';
+export * from './calendar-i18n.service';
 export * from './calendar-navigation.component';
 export * from './calendar.component';
 export * from './calendar.imports';
@@ -2049,6 +2157,79 @@ export class ZardDemoCalendarExpandYearSelectionRangeComponent {
 }
 ```
 
+### I18n
+
+Localize the calendar by providing `provideZardI18n()` in your application config, or injecting `ZardI18nService` to switch locales dynamically at runtime. The calendar updates month names, weekday names, and the starting day of the week.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardI18nService } from '@/shared/core/i18n';
+
+import { ZardCalendarI18nService } from '../calendar-i18n.service';
+import { ZardCalendarComponent } from '../calendar.component';
+
+@Component({
+  selector: 'z-demo-calendar-i18n',
+  imports: [ZardCalendarComponent, ZardButtonComponent],
+  template: `
+    <div class="flex flex-col items-center gap-4">
+      <div class="flex flex-wrap justify-center gap-2">
+        @for (loc of locales; track loc.code) {
+          <button
+            z-button
+            type="button"
+            [zType]="currentLocale() === loc.code ? 'default' : 'outline'"
+            zSize="sm"
+            (click)="setLocale(loc.code)"
+          >
+            {{ loc.label }}
+          </button>
+        }
+      </div>
+
+      <z-calendar zMode="single" class="rounded-lg border" />
+    </div>
+  `,
+  providers: [ZardI18nService, ZardCalendarI18nService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCalendarI18nComponent {
+  private readonly i18n = inject(ZardI18nService);
+
+  readonly locales = [
+    { code: 'en-US', label: 'English (US)' },
+    { code: 'fr-FR', label: 'Français' },
+    { code: 'de-DE', label: 'Deutsch' },
+    { code: 'es-ES', label: 'Español' },
+    { code: 'it-IT', label: 'Italiano' },
+    { code: 'pt-BR', label: 'Português' },
+  ];
+
+  readonly currentLocale = this.i18n.locale;
+
+  setLocale(code: string): void {
+    this.i18n.setLocale(code);
+  }
+}
+```
+
+**Setting the locale code**
+
+By default, `provideZardI18n()` uses the existing `LOCALE_ID` locale code from `@angular/core` or `en-US`. If you want to override it, provide a new value for the locale code:
+
+```angular-ts
+import { ApplicationConfig } from '@angular/core';
+import { provideZardI18n } from '@/shared/core/i18n';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZardI18n('pt-BR'),
+  ],
+};
+```
+
 ## API Reference
 
 ### z-calendar
@@ -2072,6 +2253,20 @@ A calendar component that allows users to select a date or a range of dates, wit
 | `resetNavigation()` | Public method that moves the visible month back to the selected value and clears the roving focus | `() => void` | `-` |
 | `[--cell-size]` | CSS variable: width and height of a day cell, e.g. `class="[--cell-size:--spacing(12)]"` | `length` | `--spacing(7)` |
 | `[--cell-radius]` | CSS variable: corner radius of a day cell, e.g. `class="[--cell-radius:var(--radius-lg)]"` | `length` | `var(--radius-md)` |
+
+### ZardCalendarI18nService
+
+Injectable service that provides localized month names, weekday names, and week-start configuration. Driven by ZardI18nService or provideZardI18n().
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `locale` | Signal emitting the current BCP-47 locale tag, e.g. "en-US", "fr-FR" | `Signal<string>` | `'en-US'` |
+| `weekStartsOn` | Signal emitting the starting day of the week (0 for Sunday, 1 for Monday, etc.) | `Signal<ZardDayOfWeek>` | `0` |
+| `shortMonths` | Signal emitting the 12 localized short month names for the current locale | `Signal<string[]>` |  |
+| `longMonths` | Signal emitting the 12 localized full month names for the current locale | `Signal<string[]>` |  |
+| `weekdays` | Signal emitting the 7 localized weekday names matching weekStartsOn | `Signal<string[]>` |  |
+| `getMonthNames(format?, locale?)` | Returns formatted month names for a given locale | `(format?: 'short' \| 'long', locale?: string) => string[]` |  |
+| `getWeekdayNames(format?, weekStartsOn?, locale?)` | Returns formatted weekday names for a given locale and starting day | `(format?: 'short' \| 'narrow' \| 'long', weekStartsOn?: ZardDayOfWeek, locale?: string) => string[]` |  |
 
 ---
 

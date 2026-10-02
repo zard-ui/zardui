@@ -2,6 +2,7 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import type { CalendarValue } from '@/shared/components/calendar/calendar.types';
+import { provideZardI18n, ZardI18nService } from '@/shared/core/i18n';
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 import { ZardDatePickerComponent } from './date-picker.component';
@@ -332,6 +333,88 @@ describe('ZardDatePickerComponent', () => {
       fixture.detectChanges();
 
       expect(trigger().disabled).toBe(true);
+    });
+  });
+
+  describe('i18n integration', () => {
+    let diFixture: ComponentFixture<ZardDatePickerComponent>;
+    let diComponent: ZardDatePickerComponent;
+    let i18nService: ZardI18nService;
+
+    const diTrigger = () => (diFixture.nativeElement as HTMLElement).querySelector('button') as HTMLButtonElement;
+
+    const openDiPopover = async () => {
+      diTrigger().click();
+      diFixture.detectChanges();
+      await diFixture.whenStable();
+
+      return document.querySelector('.cdk-overlay-container z-calendar') as HTMLElement | null;
+    };
+
+    const diDayButton = (day: string) => {
+      const cells = Array.from(
+        document.querySelectorAll('.cdk-overlay-container [role="gridcell"]:not([data-outside]) button'),
+      ) as HTMLButtonElement[];
+
+      return cells.find(cell => cell.textContent?.trim() === day) as HTMLButtonElement;
+    };
+
+    beforeEach(async () => {
+      await TestBed.resetTestingModule();
+      await TestBed.configureTestingModule({
+        imports: [ZardDatePickerComponent],
+        providers: [
+          provideZardI18n('fr-FR'),
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
+      }).compileComponents();
+
+      diFixture = TestBed.createComponent(ZardDatePickerComponent);
+      diComponent = diFixture.componentInstance;
+      i18nService = TestBed.inject(ZardI18nService);
+      diFixture.detectChanges();
+    });
+
+    it('renders nested localized calendar and responds to date selection (AC-01)', async () => {
+      diFixture.componentRef.setInput('value', new Date(2024, 7, 15)); // August 2024
+      diFixture.detectChanges();
+
+      const calendarEl = await openDiPopover();
+      expect(calendarEl).toBeTruthy();
+
+      const caption = calendarEl?.querySelector('[data-slot="calendar-caption"]');
+      expect(caption?.textContent?.trim()).toBe('Août 2024');
+
+      const columnHeaders = calendarEl?.querySelectorAll('[role="columnheader"]');
+      expect(columnHeaders?.[0].textContent?.trim()).toMatch(/^Lun/);
+
+      const onDateChange = jest.fn();
+      diComponent.dateChange.subscribe(onDateChange);
+
+      diDayButton('20').click();
+      diFixture.detectChanges();
+      await diFixture.whenStable();
+
+      expect(diComponent.value()).toEqual(new Date(2024, 7, 20));
+      expect(onDateChange).toHaveBeenCalledWith(new Date(2024, 7, 20));
+    });
+
+    it('reactively updates nested calendar when locale changes dynamically', async () => {
+      diFixture.componentRef.setInput('value', new Date(2024, 7, 15));
+      diFixture.detectChanges();
+
+      let calendarEl = await openDiPopover();
+      expect(calendarEl?.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('Août 2024');
+
+      i18nService.setLocale('es-ES');
+      diFixture.detectChanges();
+
+      calendarEl = document.querySelector('.cdk-overlay-container z-calendar') as HTMLElement | null;
+      expect(calendarEl?.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('Agosto 2024');
     });
   });
 });

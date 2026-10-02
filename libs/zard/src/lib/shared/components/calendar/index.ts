@@ -1,4 +1,5 @@
 export * from './calendar-grid.component';
+export * from './calendar-i18n.service';
 export * from './calendar-navigation.component';
 export * from './calendar.component';
 export * from './calendar.imports';

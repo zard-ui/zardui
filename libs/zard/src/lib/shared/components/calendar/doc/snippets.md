@@ -12,3 +12,15 @@ Each fenced block is exported as `CALENDAR_SNIPPET_<ID>` via the snippet generat
 <!-- Or use fixed values. -->
 <z-calendar class="rounded-lg border [--cell-size:2.75rem] md:[--cell-size:3rem]" />
 ```
+
+```angular-ts id="i18n-app-config" title="app.config.ts" copyButton
+import { ApplicationConfig } from '@angular/core';
+import { provideZardI18n } from '@/shared/core/i18n';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZardI18n('pt-BR'),
+  ],
+};
+```
+
