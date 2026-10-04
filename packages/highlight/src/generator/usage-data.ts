@@ -420,4 +420,19 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
     importCode: `import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';`,
     templateCode: `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>`,
   },
+  attachment: {
+    importCode: `import { ZardAttachmentImports } from '@/shared/components/attachment/imports';`,
+    templateCode: `<z-attachment>
+  <z-attachment-media><ng-icon name="lucideFileText" /></z-attachment-media>
+  <z-attachment-content>
+    <z-attachment-title>report.pdf</z-attachment-title>
+    <z-attachment-description>PDF · 1.2 MB</z-attachment-description>
+  </z-attachment-content>
+  <z-attachment-actions>
+    <button z-attachment-action aria-label="Remove report.pdf">
+      <ng-icon name="lucideX" />
+    </button>
+  </z-attachment-actions>
+</z-attachment>`,
+  },
 };

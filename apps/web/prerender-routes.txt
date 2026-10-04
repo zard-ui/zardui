@@ -91,6 +91,7 @@
 /docs/components/context-menu
 /docs/components/message
 /docs/components/marker
+/docs/components/attachment
 /docs/contribute
 /docs/contribute/setup
 /docs/contribute/architecture

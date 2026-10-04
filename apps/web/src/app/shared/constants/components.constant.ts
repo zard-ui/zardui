@@ -399,4 +399,10 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     category: 'Overlays & Dialogs',
     loadData: () => import('@zard/components/hover-card/demo/hover-card').then(m => m.HOVER_CARD),
   },
+  {
+    componentName: 'attachment',
+    description: 'Composable file and image attachment',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/attachment/demo/attachment').then(m => m.ATTACHMENT),
+  },
 ];

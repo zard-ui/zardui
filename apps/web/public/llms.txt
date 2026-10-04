@@ -94,6 +94,7 @@
 
 ### Display & Media
 
+- [Attachment](https://zardui.com/docs/components/attachment): Composable file and image attachment
 - [Avatar](https://zardui.com/docs/components/avatar): An image element with a fallback for representing the user.
 - [Bubble](https://zardui.com/docs/components/bubble): Displays conversational content in a message bubble. Supports variants, alignment, grouping, reactions, and collapsible content.
 - [Card](https://zardui.com/docs/components/card): Displays a card with header, content, and footer.
