@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, type TemplateRef, viewChild } from '@angular/core';
 import { type ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
@@ -8,6 +8,9 @@ import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plu
 import { ZardSelectItemComponent } from './select-item.component';
 import { ZardSelectComponent } from './select.component';
 import { ZardSelectImports } from './select.imports';
+import { ZardDialogService } from '../dialog/dialog.service';
+import { ZardDrawerService } from '../drawer/drawer.service';
+import { ZardSheetService } from '../sheet/sheet.service';
 
 @Component({
   imports: [ZardSelectComponent, ZardSelectItemComponent],
@@ -131,9 +134,10 @@ describe('ZardSelectComponent', () => {
         expect(component.isOpen()).toBeTruthy();
       }));
 
-      it('should close dropdown on Escape key', fakeAsync(() => {
+      it('should close dropdown on Escape key and stop propagation', fakeAsync(() => {
         const event = new KeyboardEvent('keydown', { key: 'Escape' });
         jest.spyOn(event, 'preventDefault');
+        jest.spyOn(event, 'stopPropagation');
 
         component.toggle();
         fixture.debugElement.nativeElement.dispatchEvent(event);
@@ -141,6 +145,23 @@ describe('ZardSelectComponent', () => {
         fixture.detectChanges();
 
         expect(event.preventDefault).toHaveBeenCalled();
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(component.isOpen()).toBeFalsy();
+      }));
+
+      it('should stop propagation on Escape key during dropdown keydown', fakeAsync(() => {
+        component.toggle();
+        flush();
+        fixture.detectChanges();
+
+        const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true });
+        jest.spyOn(event, 'stopPropagation');
+
+        component.onDropdownKeydown(event);
+        flush();
+        fixture.detectChanges();
+
+        expect(event.stopPropagation).toHaveBeenCalled();
         expect(component.isOpen()).toBeFalsy();
       }));
     });
@@ -293,7 +314,7 @@ describe('ZardSelectComponent', () => {
       expect(document.activeElement).toBe(selectedItem);
     }));
 
-    it('clears trigger focus after selecting an item', fakeAsync(() => {
+    it('focuses trigger after selecting an item in single mode', fakeAsync(() => {
       const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
         .nativeElement as HTMLElement;
       const trigger = hostFixture.nativeElement.querySelector('button') as HTMLButtonElement;
@@ -312,8 +333,51 @@ describe('ZardSelectComponent', () => {
 
       expect(hostComponent.value()).toBe('option2');
       expect(selectElement).not.toHaveAttribute('data-active');
-      expect(document.activeElement).not.toBe(trigger);
+      expect(document.activeElement).toBe(trigger);
     }));
+
+    it('focuses trigger after selecting an item via keyboard (Enter) in single mode', fakeAsync(() => {
+      const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
+        .nativeElement as HTMLElement;
+      const trigger = hostFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+      trigger.focus();
+
+      trigger.click();
+      flush();
+      hostFixture.detectChanges();
+      flush();
+
+      const listbox = document.querySelector('[role="listbox"]') as HTMLElement;
+      expect(listbox).toBeTruthy();
+
+      // Navigate down to option2 and select with Enter
+      listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+      hostFixture.detectChanges();
+      listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      flush();
+      hostFixture.detectChanges();
+
+      expect(hostComponent.value()).toBe('option2');
+      expect(selectElement).not.toHaveAttribute('data-active');
+      expect(document.activeElement).toBe(trigger);
+    }));
+
+    it('delegates focus to trigger button without opening dropdown when host receives focus', () => {
+      const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
+        .nativeElement as HTMLElement;
+      const selectInstance = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
+        .componentInstance as ZardSelectComponent;
+      const trigger = hostFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+      const buttonSpy = jest.spyOn(trigger, 'focus');
+
+      expect(selectInstance.isOpen()).toBe(false);
+
+      selectElement.dispatchEvent(new FocusEvent('focus'));
+      hostFixture.detectChanges();
+
+      expect(buttonSpy).toHaveBeenCalledTimes(1);
+      expect(selectInstance.isOpen()).toBe(false);
+    });
   });
 
   describe('with FormControl', () => {
@@ -1290,6 +1354,206 @@ describe('ZardSelectComponent', () => {
       selectComponent.selectItem('option3', 'OptionThree');
 
       expect(hostComponent.selectionChanges).toEqual([['option1'], ['option1', 'option3']]);
+    });
+  });
+
+  describe('regression: Escape bubbling to enclosing overlays', () => {
+    @Component({
+      imports: [ZardSelectComponent, ZardSelectItemComponent],
+      template: `
+        <ng-template #overlayTemplate>
+          <z-select zPlaceholder="Choose item">
+            <z-select-item zValue="apple">Apple</z-select-item>
+            <z-select-item zValue="banana">Banana</z-select-item>
+          </z-select>
+        </ng-template>
+      `,
+    })
+    class OverlayWithSelectHostComponent {
+      readonly overlayTemplate = viewChild.required<TemplateRef<void>>('overlayTemplate');
+    }
+
+    let fixture: ComponentFixture<OverlayWithSelectHostComponent>;
+    let drawerService: ZardDrawerService;
+    let dialogService: ZardDialogService;
+    let sheetService: ZardSheetService;
+
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [OverlayWithSelectHostComponent],
+        providers: [
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
+      }).compileComponents();
+
+      fixture = TestBed.createComponent(OverlayWithSelectHostComponent);
+      drawerService = TestBed.inject(ZardDrawerService);
+      dialogService = TestBed.inject(ZardDialogService);
+      sheetService = TestBed.inject(ZardSheetService);
+      fixture.detectChanges();
+    });
+
+    afterEach(() => {
+      document.querySelectorAll('.cdk-overlay-container').forEach(n => n.remove());
+    });
+
+    it('pressing Escape in an open z-select should only close select, not parent z-drawer', async () => {
+      const drawerRef = drawerService.create({
+        zContent: fixture.componentInstance.overlayTemplate(),
+      });
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const trigger = document.querySelector('[data-slot="select-trigger"]') as HTMLButtonElement;
+      expect(trigger).toBeTruthy();
+      expect(drawerRef.isClosing()).toBe(false);
+
+      // Open the select
+      trigger.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const listbox = document.querySelector('[role="listbox"]') as HTMLElement;
+      expect(listbox).toBeTruthy();
+
+      // Dispatch Escape keydown from within the open select dropdown
+      listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      // Select should be closed, parent drawer MUST NOT be closed
+      expect(document.querySelector('[role="listbox"]')).toBeFalsy();
+      expect(drawerRef.isClosing()).toBe(false);
+
+      // Pressing Escape a second time (with select now closed) closes the drawer
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(drawerRef.isClosing()).toBe(true);
+    });
+
+    it('pressing Escape in an open z-select should only close select, not parent z-dialog', async () => {
+      const dialogRef = dialogService.create({
+        zContent: fixture.componentInstance.overlayTemplate(),
+      });
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const trigger = document.querySelector('[data-slot="select-trigger"]') as HTMLButtonElement;
+      expect(trigger).toBeTruthy();
+      expect(dialogRef.isClosing()).toBe(false);
+
+      // Open the select
+      trigger.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const listbox = document.querySelector('[role="listbox"]') as HTMLElement;
+      expect(listbox).toBeTruthy();
+
+      // Dispatch Escape keydown from within the open select dropdown
+      listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      // Select should be closed, parent dialog MUST NOT be closed
+      expect(document.querySelector('[role="listbox"]')).toBeFalsy();
+      expect(dialogRef.isClosing()).toBe(false);
+
+      // Pressing Escape a second time closes the dialog
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(dialogRef.isClosing()).toBe(true);
+    });
+
+    it('pressing Escape in an open z-select should only close select, not parent z-sheet', async () => {
+      const sheetRef = sheetService.create({
+        zContent: fixture.componentInstance.overlayTemplate(),
+      });
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const trigger = document.querySelector('[data-slot="select-trigger"]') as HTMLButtonElement;
+      expect(trigger).toBeTruthy();
+      expect(sheetRef.isClosing()).toBe(false);
+
+      // Open the select
+      trigger.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const listbox = document.querySelector('[role="listbox"]') as HTMLElement;
+      expect(listbox).toBeTruthy();
+
+      // Dispatch Escape keydown from within the open select dropdown
+      listbox.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      // Select should be closed, parent sheet MUST NOT be closed
+      expect(document.querySelector('[role="listbox"]')).toBeFalsy();
+      expect(sheetRef.isClosing()).toBe(false);
+
+      // Pressing Escape a second time closes the sheet
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(sheetRef.isClosing()).toBe(true);
+    });
+
+    it('selecting an item in single mode inside a z-drawer keeps drawer open and returns focus to trigger', async () => {
+      const drawerRef = drawerService.create({
+        zContent: fixture.componentInstance.overlayTemplate(),
+      });
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const trigger = document.querySelector('[data-slot="select-trigger"]') as HTMLButtonElement;
+      expect(trigger).toBeTruthy();
+      expect(drawerRef.isClosing()).toBe(false);
+
+      // Open the select
+      trigger.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const listbox = document.querySelector('[role="listbox"]') as HTMLElement;
+      expect(listbox).toBeTruthy();
+
+      // Select an option
+      const option = document.querySelector('[data-slot="select-content"] z-select-item[value="apple"]') as HTMLElement;
+      expect(option).toBeTruthy();
+      option.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      // Select dropdown closes, drawer remains open, and trigger inside drawer retains focus
+      expect(document.querySelector('[role="listbox"]')).toBeFalsy();
+      expect(drawerRef.isClosing()).toBe(false);
+      expect(document.activeElement).toBe(trigger);
     });
   });
 });

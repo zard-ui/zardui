@@ -97,7 +97,7 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = createMockDays(35);
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
     expect(buttons).toHaveLength(35);
   });
 
@@ -105,7 +105,7 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = createMockDays(35);
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
     buttons.forEach((button, index) => {
       const dayNumber = host.calendarDays[index].date.getDate();
       expect(button.nativeElement).toHaveTextContent(dayNumber.toString());
@@ -117,7 +117,7 @@ describe('ZardCalendarGridComponent', () => {
     host.onDateSelect = jest.fn();
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
     buttons[5].nativeElement.click();
     fixture.detectChanges();
 
@@ -133,7 +133,7 @@ describe('ZardCalendarGridComponent', () => {
     host.onDateSelect = jest.fn();
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
     buttons[5].nativeElement.click();
     fixture.detectChanges();
 
@@ -245,7 +245,7 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = createMockDays(35);
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
     expect(buttons[0].nativeElement).toHaveAttribute('tabindex', '0');
     expect(buttons[1].nativeElement).toHaveAttribute('tabindex', '-1');
   });
@@ -256,7 +256,7 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = days;
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
     expect(buttons[10].nativeElement).toHaveClass('bg-primary');
     expect(buttons[10].nativeElement).toHaveClass('text-primary-foreground');
   });
@@ -267,7 +267,7 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = days;
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
     expect(buttons[15].nativeElement).toHaveAttribute('disabled');
     expect(buttons[15].nativeElement).toHaveClass('opacity-50');
     expect(buttons[15].nativeElement).toHaveClass('cursor-not-allowed');
@@ -279,7 +279,7 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = days;
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
     // Outside days are muted but keep full opacity, unlike disabled ones.
     expect(buttons[0].nativeElement).toHaveClass('text-muted-foreground');
     expect(buttons[0].nativeElement).not.toHaveClass('opacity-50');
@@ -318,7 +318,7 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = days;
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
     expect(buttons[5].nativeElement).toHaveClass('rounded-s-(--cell-radius)');
     expect(buttons[5].nativeElement).toHaveClass('bg-primary');
     expect(buttons[10].nativeElement).toHaveClass('rounded-none');
@@ -342,7 +342,7 @@ describe('ZardCalendarGridComponent', () => {
     fixture.detectChanges();
 
     const cells = fixture.debugElement.queryAll(By.css('[role="gridcell"]'));
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
 
     expect(cells[5].nativeElement).toHaveClass('bg-transparent');
     expect(cells[5].nativeElement).toHaveClass('after:hidden');
@@ -383,26 +383,65 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = days;
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
-    expect(buttons[0].nativeElement).toHaveAttribute('data-day', days[0].date.toLocaleDateString());
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
+    expect(buttons[0].nativeElement).toHaveAttribute('data-day', days[0].date.toLocaleDateString('en-US'));
   });
 
-  it('sets aria-selected attribute correctly', () => {
+  it('sets aria-selected attribute correctly on gridcell', () => {
     const days = createMockDays(35);
     days[7].isSelected = true;
     host.calendarDays = days;
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
-    expect(buttons[7].nativeElement).toHaveAttribute('aria-selected', 'true');
-    expect(buttons[0].nativeElement).toHaveAttribute('aria-selected', 'false');
+    const cells = fixture.debugElement.queryAll(By.css('[role="gridcell"]'));
+    expect(cells[7].nativeElement).toHaveAttribute('aria-selected', 'true');
+    expect(cells[0].nativeElement).toHaveAttribute('aria-selected', 'false');
+
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
+    expect(buttons[7].nativeElement).not.toHaveAttribute('aria-selected');
+    expect(buttons[0].nativeElement).not.toHaveAttribute('aria-selected');
+  });
+
+  it('renders weeks in role="row" elements inside role="rowgroup"', () => {
+    host.calendarDays = createMockDays(36);
+    fixture.detectChanges();
+
+    const rowgroup = fixture.debugElement.query(By.css('[role="rowgroup"]'));
+    expect(rowgroup).toBeTruthy();
+
+    let rows = rowgroup.queryAll(By.css('[role="row"]'));
+    expect(rows).toHaveLength(6);
+
+    const expectedCellCounts = [7, 7, 7, 7, 7, 1];
+    rows.forEach((row, index) => {
+      const cells = row.queryAll(By.css('[role="gridcell"]'));
+      expect(cells).toHaveLength(expectedCellCounts[index]);
+    });
+
+    // Verify recomputation when calendarDays changes
+    host.calendarDays = createMockDays(14);
+    fixture.detectChanges();
+
+    rows = rowgroup.queryAll(By.css('[role="row"]'));
+    expect(rows).toHaveLength(2);
+    rows.forEach(row => {
+      const cells = row.queryAll(By.css('[role="gridcell"]'));
+      expect(cells).toHaveLength(7);
+    });
+
+    // Verify empty array renders 0 rows
+    host.calendarDays = [];
+    fixture.detectChanges();
+
+    rows = rowgroup.queryAll(By.css('[role="row"]'));
+    expect(rows).toHaveLength(0);
   });
 
   it('generates correct day IDs', () => {
     host.calendarDays = createMockDays(35);
     fixture.detectChanges();
 
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
     for (let i = 0; i < buttons.length; i++) {
       expect(buttons[i].nativeElement).toHaveAttribute('id', `calendar-day-${i}`);
     }
@@ -421,7 +460,7 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = [mockDay];
     fixture.detectChanges();
 
-    const button = fixture.debugElement.query(By.css('[role="button"]'));
+    const button = fixture.debugElement.query(By.css('button'));
     const ariaLabel = button.nativeElement.getAttribute('aria-label');
 
     expect(ariaLabel).toContain('Thursday');
@@ -444,7 +483,7 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = [mockDay];
     fixture.detectChanges();
 
-    const button = fixture.debugElement.query(By.css('[role="button"]'));
+    const button = fixture.debugElement.query(By.css('button'));
     const ariaLabel = button.nativeElement.getAttribute('aria-label');
 
     expect(ariaLabel).toContain('Disabled');
@@ -466,7 +505,7 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = [mockDay];
     fixture.detectChanges();
 
-    const button = fixture.debugElement.query(By.css('[role="button"]'));
+    const button = fixture.debugElement.query(By.css('button'));
     const ariaLabel = button.nativeElement.getAttribute('aria-label');
 
     expect(ariaLabel).toContain('Range start');
@@ -489,7 +528,7 @@ describe('ZardCalendarGridComponent', () => {
     fixture.detectChanges();
 
     const cells = fixture.debugElement.queryAll(By.css('[role="gridcell"]'));
-    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
 
     expect(cells[0].nativeElement).toHaveClass('bg-transparent');
     expect(cells[0].nativeElement).not.toHaveClass('bg-muted');

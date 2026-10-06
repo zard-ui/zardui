@@ -286,7 +286,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   protected onHostFocus(event: FocusEvent): void {
     if (event.target === this.elementRef.nativeElement) {
       this.focusButton();
-      this.open();
     }
   }
 
@@ -353,6 +352,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
         break;
       case 'Escape':
         if (this.isOpen()) {
+          event.stopPropagation();
           this.close();
         }
         break;
@@ -377,6 +377,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
         this.selectFocusedItem(items);
         break;
       case 'Escape':
+        e.stopPropagation();
         this.close();
         this.focusButton();
         break;
@@ -436,10 +437,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       this.updateOverlayPosition();
     } else {
       this.close();
-
-      setTimeout(() => {
-        this.blurButton();
-      }, 0);
+      this.focusButton();
     }
   }
 

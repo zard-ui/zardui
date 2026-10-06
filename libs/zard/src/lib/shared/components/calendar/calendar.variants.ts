@@ -77,14 +77,20 @@ export const calendarWeekdayVariants = cva(
   ),
 );
 
-/** The day rows. `gap-y-2` reproduces the `week: mt-2` of shadcn; `gap-x-0` keeps the range rail continuous. */
+/** The container for the day rows. */
+export const calendarWeeksVariants = cva('mt-2 flex w-full flex-col gap-y-2');
+/** @deprecated Use `calendarWeeksVariants` and `calendarRowVariants`. Kept for backward compatibility. */
 export const calendarWeekVariants = cva('mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2');
+
+/** The day row: 7 columns for the days of the week. `gap-x-0` keeps the range rail continuous. */
+export const calendarRowVariants = cva('grid w-full grid-cols-7 gap-x-0');
 
 export const calendarDayVariants = cva(
   mergeClasses(
     'group/day relative aspect-square size-full rounded-(--cell-radius) p-0 text-center select-none',
-    // Round the range rail at both ends of every week.
-    'nth-[7n+1]:rounded-s-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
+    // Round the range rail at both ends of every week row (supports both nested rows and flat grid).
+    'first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius)',
+    'last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
   ),
   {
     variants: {
@@ -101,7 +107,7 @@ export const calendarDayVariants = cva(
           'relative isolate z-0 rounded-s-(--cell-radius) bg-muted',
           'after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-muted',
           // No neighbour to bridge to at the end of a week — do not bleed outside the grid.
-          '[&:nth-child(7n)]:after:hidden',
+          '[&:last-child]:after:hidden [&:nth-child(7n)]:after:hidden',
         ),
         false: '',
       },
@@ -113,7 +119,7 @@ export const calendarDayVariants = cva(
         true: mergeClasses(
           'relative isolate z-0 rounded-e-(--cell-radius) bg-muted',
           'after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-muted',
-          '[&:nth-child(7n+1)]:after:hidden',
+          '[&:first-child]:after:hidden [&:nth-child(7n+1)]:after:hidden',
         ),
         false: '',
       },

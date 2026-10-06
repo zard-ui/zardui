@@ -844,7 +844,7 @@ const SWIPE_START_THRESHOLD = 3;
     </div>
   `,
   styles: `
-    :host {
+    z-drawer-panel {
       --z-drawer-duration: 450ms;
       --z-drawer-ease: cubic-bezier(0.22, 1, 0.36, 1);
       /* Matches the m-2 inset in the variants: the panel has to travel that far extra to
@@ -864,39 +864,39 @@ const SWIPE_START_THRESHOLD = 3;
     /* translate carries the enter/exit slide and transform the swipe offset and the nested
        stacking, so the inline styles never overwrite the animation (and vice versa). */
     @starting-style {
-      :host([data-placement='top']) {
+      z-drawer-panel[data-placement='top'] {
         translate: 0 calc(-1 * var(--z-drawer-exit));
       }
-      :host([data-placement='bottom']) {
+      z-drawer-panel[data-placement='bottom'] {
         translate: 0 var(--z-drawer-exit);
       }
-      :host([data-placement='left']) {
+      z-drawer-panel[data-placement='left'] {
         translate: calc(-1 * var(--z-drawer-exit)) 0;
       }
-      :host([data-placement='right']) {
+      z-drawer-panel[data-placement='right'] {
         translate: var(--z-drawer-exit) 0;
       }
     }
 
-    :host([data-state='closed'][data-placement='top']) {
+    z-drawer-panel[data-state='closed'][data-placement='top'] {
       translate: 0 calc(-1 * var(--z-drawer-exit));
     }
-    :host([data-state='closed'][data-placement='bottom']) {
+    z-drawer-panel[data-state='closed'][data-placement='bottom'] {
       translate: 0 var(--z-drawer-exit);
     }
-    :host([data-state='closed'][data-placement='left']) {
+    z-drawer-panel[data-state='closed'][data-placement='left'] {
       translate: calc(-1 * var(--z-drawer-exit)) 0;
     }
-    :host([data-state='closed'][data-placement='right']) {
+    z-drawer-panel[data-state='closed'][data-placement='right'] {
       translate: var(--z-drawer-exit) 0;
     }
 
-    :host([data-swiping]) {
+    z-drawer-panel[data-swiping] {
       transition: none;
     }
 
     /* A drawer stacked behind another one dims and stops scrolling. */
-    :host([data-nested-open]) {
+    z-drawer-panel[data-nested-open] {
       overflow: hidden;
       filter: brightness(0.95);
     }
@@ -908,48 +908,48 @@ const SWIPE_START_THRESHOLD = 3;
       background: var(--color-muted);
     }
 
-    :host([data-axis='y']) [data-slot='drawer-swipe-handle']::after {
+    z-drawer-panel[data-axis='y'] [data-slot='drawer-swipe-handle']::after {
       width: 100px;
       height: 6px;
     }
 
-    :host([data-axis='x']) [data-slot='drawer-swipe-handle']::after {
+    z-drawer-panel[data-axis='x'] [data-slot='drawer-swipe-handle']::after {
       width: 6px;
       height: 100px;
     }
 
-    :host::after {
+    z-drawer-panel::after {
       content: '';
       position: absolute;
       pointer-events: none;
       background: var(--z-drawer-bleed);
     }
 
-    :host([data-axis='y'])::after {
+    z-drawer-panel[data-axis='y']::after {
       inset-inline: 0;
       height: 3rem;
     }
 
-    :host([data-axis='x'])::after {
+    z-drawer-panel[data-axis='x']::after {
       inset-block: 0;
       width: 3rem;
     }
 
-    :host([data-placement='bottom'])::after {
+    z-drawer-panel[data-placement='bottom']::after {
       top: 100%;
     }
-    :host([data-placement='top'])::after {
+    z-drawer-panel[data-placement='top']::after {
       bottom: 100%;
     }
-    :host([data-placement='right'])::after {
+    z-drawer-panel[data-placement='right']::after {
       left: 100%;
     }
-    :host([data-placement='left'])::after {
+    z-drawer-panel[data-placement='left']::after {
       right: 100%;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      :host {
+      z-drawer-panel {
         transition-duration: 1ms;
       }
     }
