@@ -14,6 +14,7 @@ import {
   template: `
     <z-toggle-group [zDisabled]="true" zMode="multiple" [zItems]="items" (valueChange)="onToggleChange($event)" />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
       lucideBold,
@@ -21,7 +22,6 @@ import {
       lucideUnderline,
     }),
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToggleGroupDisabledComponent {
   items: ZardToggleGroupItem[] = [

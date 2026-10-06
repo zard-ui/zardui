@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, type OnInit, signal } from '@angular/core';
 
 import type { EmblaPluginType } from 'embla-carousel';
 
@@ -36,7 +36,11 @@ export class ZardDemoCarouselPluginsComponent implements OnInit {
   protected slides = ['1', '2', '3', '4', '5'];
   protected readonly plugins = signal<EmblaPluginType[]>([]);
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
+    void this.#loadAutoplay();
+  }
+
+  async #loadAutoplay(): Promise<void> {
     const autoplay = await this.#pluginsService.createAutoplayPlugin({ delay: 2000, stopOnInteraction: true });
     this.plugins.set([autoplay]);
   }

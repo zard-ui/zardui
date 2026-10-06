@@ -20,6 +20,7 @@ import {
       (valueChange)="onToggleChange($event)"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
       lucideBold,
@@ -27,7 +28,6 @@ import {
       lucideUnderline,
     }),
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToggleGroupVerticalComponent {
   items: ZardToggleGroupItem[] = [

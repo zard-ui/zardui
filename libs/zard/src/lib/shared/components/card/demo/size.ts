@@ -9,7 +9,6 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 @Component({
   selector: 'z-demo-card-size',
   imports: [ZardCardImports, ZardButtonComponent, NgIcon],
-  viewProviders: [provideIcons({ lucideChevronRight })],
   template: `
     <z-card zSize="sm" class="mx-auto w-full max-w-xs">
       <z-card-header>
@@ -39,6 +38,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronRight })],
 })
 export class ZardDemoCardSizeComponent {
   readonly featureName = 'Scheduled reports';
