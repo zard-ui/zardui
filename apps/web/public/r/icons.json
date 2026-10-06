@@ -238,8 +238,14 @@
     "mail-check": {
       "lucide": "lucideMailCheck"
     },
+    "maximize": {
+      "lucide": "lucideMaximize"
+    },
     "message-square": {
       "lucide": "lucideMessageSquare"
+    },
+    "minimize": {
+      "lucide": "lucideMinimize"
     },
     "minus": {
       "lucide": "lucideMinus"

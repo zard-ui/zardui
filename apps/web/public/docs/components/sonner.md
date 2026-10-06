@@ -348,6 +348,8 @@ import { ZardSonnerComponent } from '@/shared/components/sonner/sonner.component
 
 ### Types
 
+Use `sonner.success`, `.info`, `.warning` or `.error` to dispatch a styled toast.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
@@ -378,13 +380,68 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
         Warning
       </button>
       <button type="button" z-button zType="outline" (click)="sonner.error('Event has not been created')">Error</button>
-      <button type="button" z-button zType="outline" (click)="showPromise()">Promise</button>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSonnerTypesComponent {
   protected readonly sonner = inject(ZardSonnerService);
+}
+```
+
+### Action
+
+Pass an `action` option with a `label` and `onClick` to render a button inside the toast.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
+
+@Component({
+  selector: 'z-demo-sonner-action',
+  imports: [ZardButtonComponent],
+  template: `
+    <button type="button" z-button zType="outline" (click)="show()">Message sent</button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSonnerActionComponent {
+  private readonly sonner = inject(ZardSonnerService);
+
+  show() {
+    this.sonner.show('Message sent', {
+      description: 'Your message was delivered to the channel.',
+      action: {
+        label: 'Undo',
+        onClick: () => this.sonner.show('Message recalled'),
+      },
+    });
+  }
+}
+```
+
+### Promise
+
+Use `sonner.promise` to track a promise through loading, success and error.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
+
+@Component({
+  selector: 'z-demo-sonner-promise',
+  imports: [ZardButtonComponent],
+  template: `
+    <button type="button" z-button zType="outline" (click)="showPromise()">Create Event</button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSonnerPromiseComponent {
+  private readonly sonner = inject(ZardSonnerService);
 
   showPromise() {
     this.sonner.promise<{ name: string }>(
@@ -400,6 +457,8 @@ export class ZardDemoSonnerTypesComponent {
 ```
 
 ### Description
+
+Pass a `description` option to render supporting text underneath the message.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -428,7 +487,7 @@ export class ZardDemoSonnerDescriptionComponent {
 
 ### Position
 
-Use the `position` option to change the position of the toast.
+Use the `position` option to change the position of a single toast.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -523,19 +582,35 @@ Container that renders toast notifications. Place once at the root of your app.
 
 ### ZardSonnerService
 
-Inject this service to dispatch toasts from any component or service.
+Inject this service to dispatch toasts from any component or service. Every method returns the id of the dispatched toast (`dismiss()` can target it later). `message` accepts a plain string or an Angular `Type<unknown>` for custom content.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `show(message, options?)` | Dispatches a default toast and returns its id. | `(message: string \| number, options?: ExternalToast) => string \| number` |  |
-| `success(message, options?)` | Dispatches a success-styled toast (green). | `(message: string \| number, options?: ExternalToast) => string \| number` |  |
-| `error(message, options?)` | Dispatches an error-styled toast (red). | `(message: string \| number, options?: ExternalToast) => string \| number` |  |
-| `warning(message, options?)` | Dispatches a warning-styled toast (yellow). | `(message: string \| number, options?: ExternalToast) => string \| number` |  |
-| `info(message, options?)` | Dispatches an info-styled toast (blue). | `(message: string \| number, options?: ExternalToast) => string \| number` |  |
-| `loading(message, options?)` | Dispatches a loading-styled toast with a spinner. | `(message: string \| number, options?: ExternalToast) => string \| number` |  |
-| `message(message, options?)` | Dispatches a neutral message-styled toast. | `(message: string \| number, options?: ExternalToast) => string \| number` |  |
-| `promise(promise, options)` | Binds a toast to the lifecycle of a promise (loading → success/error). | `<T>(promise: PromiseT<T>, options: PromiseData<T>) => string \| number` |  |
+| `show(message, options?)` | Dispatches a default toast. | `(message: string \| Type<unknown>, options?: ExternalToast) => string \| number` |  |
+| `success(message, options?)` | Dispatches a success-styled toast (green). | `(message: string \| Type<unknown>, options?: ExternalToast) => string \| number` |  |
+| `error(message, options?)` | Dispatches an error-styled toast (red). | `(message: string \| Type<unknown>, options?: ExternalToast) => string \| number` |  |
+| `warning(message, options?)` | Dispatches a warning-styled toast (yellow). | `(message: string \| Type<unknown>, options?: ExternalToast) => string \| number` |  |
+| `info(message, options?)` | Dispatches an info-styled toast (blue). | `(message: string \| Type<unknown>, options?: ExternalToast) => string \| number` |  |
+| `loading(message, options?)` | Dispatches a loading-styled toast with a spinner. | `(message: string \| Type<unknown>, options?: ExternalToast) => string \| number` |  |
+| `message(message, options?)` | Dispatches a neutral, unstyled toast. | `(message: string \| Type<unknown>, options?: ExternalToast) => string \| number` |  |
+| `promise(promise, options?)` | Binds a toast to the lifecycle of a promise: shows `options.loading`, then swaps to `options.success` or `options.error` once the promise settles. | `<T>(promise: Promise<T> \| (() => Promise<T>), options?: PromiseData<T>) => string \| number \| undefined` |  |
+| `custom(component, options?)` | Dispatches a toast that renders the given Angular component in place of the message. | `<T>(component: Type<T>, options?: ExternalToast) => string \| number` |  |
 | `dismiss(id?)` | Dismisses a toast by id, or all toasts when no id is provided. | `(id?: string \| number) => void` |  |
+| `options.id` | Custom id for the toast, so it can be targeted later (e.g. by `dismiss(id)`). | `string \| number` | `auto-generated` |
+| `options.description` | Supporting text rendered underneath the message. | `string \| Type<unknown>` | `-` |
+| `options.duration` | Time in milliseconds before the toast auto-dismisses. | `number` | `4000` |
+| `options.position` | Overrides the toaster's `[position]` for this one toast. | `'top-left' \| 'top-center' \| 'top-right' \| 'bottom-left' \| 'bottom-center' \| 'bottom-right'` | `toaster's [position]` |
+| `options.action` | Renders a primary button inside the toast; clicking it calls `onClick` and closes the toast. | `{ label: string; onClick: (event: MouseEvent) => void }` | `-` |
+| `options.cancel` | Renders a secondary button inside the toast; clicking it calls `onClick` and closes the toast. | `{ label: string; onClick?: () => void }` | `-` |
+| `options.closeButton` | Shows a close button on this toast, overriding the toaster's `[closeButton]`. | `boolean` | `false` |
+| `options.dismissible` | Whether the toast can be dismissed by swiping. | `boolean` | `true` |
+| `options.important` | Announces via `aria-live="assertive"` instead of `"polite"` when true. | `boolean` | `false` |
+| `options.icon` | Icon rendered in front of the message, replacing the type icon. | `Type<unknown>` | `-` |
+| `options.invert` | Renders a dark toast in light mode and vice versa. | `boolean` | `false` |
+| `options.class / options.classes` | Custom class for the toast, or a per-slot class map (title, description, actionButton, ...). | `string / ToastClassnames` | `-` |
+| `options.style` | Inline styles applied to this toast only. | `Record<string, unknown>` | `-` |
+| `options.onDismiss` | Called when the toast is dismissed by the user (close button or swipe). | `(toast: ToastT) => void` | `-` |
+| `options.onAutoClose` | Called when the toast disappears automatically after `options.duration`. | `(toast: ToastT) => void` | `-` |
 
 ---
 

@@ -30,14 +30,18 @@
         "lucideChevronRight",
         "lucideChevronsUpDown",
         "lucideFile",
-        "lucideFolder"
+        "lucideFolder",
+        "lucideMaximize",
+        "lucideMinimize"
       ],
       "tokens": [
         "chevron-down",
         "chevron-right",
         "chevrons-up-down",
         "file",
-        "folder"
+        "folder",
+        "maximize",
+        "minimize"
       ]
     }
   }

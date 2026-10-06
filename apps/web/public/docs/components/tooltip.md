@@ -363,7 +363,7 @@ export class ZardTooltipComponent {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const tooltipVariants = cva(
-  'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-xl bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+  'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
 );
 export type ZardTooltipVariants = VariantProps<typeof tooltipVariants>;
 
@@ -443,7 +443,9 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
 
 ## Examples
 
-### Hover
+### Side
+
+Set `zPosition` (shadcn calls this input `side`) to `top`, `bottom`, `left` or `right` to choose which side of the trigger the tooltip opens on.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -452,45 +454,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
 
 @Component({
-  selector: 'z-demo-tooltip-hover',
-  imports: [ZardButtonComponent, ZardTooltipImports],
-  template: `
-    <button type="button" z-button zType="outline" zTooltip="Tooltip content">Hover</button>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoTooltipHoverComponent {}
-```
-
-### Click
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
-
-@Component({
-  selector: 'z-demo-tooltip-click',
-  imports: [ZardButtonComponent, ZardTooltipImports],
-  template: `
-    <button type="button" z-button zType="outline" zTooltip="Tooltip content" zTrigger="click">Click</button>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoTooltipClickComponent {}
-```
-
-### Position
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
-
-@Component({
-  selector: 'z-demo-tooltip-position',
+  selector: 'z-demo-tooltip-side',
   imports: [ZardButtonComponent, ZardTooltipImports],
   template: `
     <div class="flex flex-col space-y-2">
@@ -506,10 +470,12 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoTooltipPositionComponent {}
+export class ZardDemoTooltipSideComponent {}
 ```
 
 ### With Keyboard Shortcut
+
+Compose a `z-kbd` inside the `zTooltip` template to show the shortcut for the action it labels.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -542,6 +508,8 @@ export class ZardDemoTooltipWithKbdComponent {}
 
 ### Disabled Button
 
+A disabled `<button>` fires no pointer events, so `[zTooltip]` placed on it never triggers. Wrap the button in a focusable `<span tabindex="0">` and put `[zTooltip]` on the wrapper instead.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -561,16 +529,39 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
 export class ZardDemoTooltipDisabledButtonComponent {}
 ```
 
-### Events
+### Click
+
+Set `zTrigger="click"` to open the tooltip on click instead of hover. Keep click-triggered tooltips to a single short label; for a click-opened panel of interactive content, reach for `[zPopover]` instead.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
 
 @Component({
-  selector: 'z-demo-tooltip-events',
+  selector: 'z-demo-tooltip-click',
+  imports: [ZardButtonComponent, ZardTooltipImports],
+  template: `
+    <button type="button" z-button zType="outline" zTooltip="Tooltip content" zTrigger="click">Click</button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoTooltipClickComponent {}
+```
+
+### On Show Hide
+
+Listen to `(zShow)` and `(zHide)` to react to the tooltip opening and closing, for example to sync external state.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
+
+@Component({
+  selector: 'z-demo-tooltip-on-show-hide',
   imports: [ZardButtonComponent, ZardTooltipImports],
   template: `
     <div class="flex w-25 flex-col gap-4">
@@ -581,8 +572,9 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
       <span class="text-sm">Event: {{ event }}</span>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoTooltipEventsComponent {
+export class ZardDemoTooltipOnShowHideComponent {
   protected event = 'none';
 
   protected onShow() {
@@ -597,20 +589,24 @@ export class ZardDemoTooltipEventsComponent {
 
 ## API Reference
 
-### [z-tooltip]
+### [zTooltip]
 
-A directive that shows a tooltip popup on hover or click.
+The directive that shows a tooltip popup when its host is hovered, focused, or clicked.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zTooltip]` | The text content of tooltip | `string` | `-` |
-| `[zPosition]` | The position of the tooltip | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
-| `[zPositionOffset]` | The position of the tooltip offset | `number` | `4` |
-| `[zTrigger]` | The tooltip trigger mode | `'hover' \| 'click'` | `'hover'` |
-| `[zShowDelay]` | Delay showing the tooltip after trigger in milliseconds | `number` | `150` |
-| `[zHideDelay]` | Delay hiding the tooltip after trigger in milliseconds | `number` | `100` |
-| `(zShow)` | Emitted when the tooltip is shown | `output<void>` | `-` |
-| `(zHide)` | Emitted when the tooltip is hidden | `output<void>` | `-` |
+| `[zTooltip]` | The tooltip content: a string, or a template for richer content such as a `z-kbd` | `string \| TemplateRef<void>` | `-` |
+| `[zPosition]` | Side of the trigger the tooltip opens on (shadcn calls this input `side`) | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
+| `[zPositionOffset]` | Distance in pixels between the tooltip and the trigger | `number` | `4` |
+| `[zTrigger]` | How the tooltip is triggered | `'hover' \| 'click'` | `'hover'` |
+| `[zShowDelay]` | Delay in milliseconds before showing the tooltip | `number` | `150` |
+| `[zHideDelay]` | Delay in milliseconds before hiding the tooltip | `number` | `100` |
+| `(zShow)` | Emits when the tooltip is shown | `EventEmitter<void>` | `-` |
+| `(zHide)` | Emits when the tooltip is hidden | `EventEmitter<void>` | `-` |
+
+### z-tooltip
+
+The tooltip content. Mounted automatically by `[zTooltip]` — never placed directly in a template. Exposes `role="tooltip"`, `data-side` and `data-state` while mounted.
 
 ---
 

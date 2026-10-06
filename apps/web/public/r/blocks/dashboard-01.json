@@ -134,7 +134,7 @@
     {
       "name": "dashboard-01.component.html",
       "path": "src/components/dashboard-01/dashboard-01.component.html",
-      "content": "<z-sidebar-provider class=\"[--header-height:calc(--spacing(12))] [--sidebar-width:calc(--spacing(72))]\">\n  <lib-dashboard-01-app-sidebar />\n\n  <main z-sidebar-inset>\n    <lib-dashboard-01-site-header />\n\n    <div class=\"flex flex-1 flex-col\">\n      <div class=\"flex flex-1 flex-col gap-2\">\n        <div class=\"flex flex-col gap-4 py-4 md:gap-6 md:py-6\">\n          <lib-dashboard-01-section-cards />\n\n          <div class=\"px-4 lg:px-6\">\n            <lib-dashboard-01-chart-area-interactive />\n          </div>\n\n          <lib-dashboard-01-data-table />\n        </div>\n      </div>\n    </div>\n  </main>\n</z-sidebar-provider>\n",
+      "content": "<z-sidebar-provider\n  zDefaultOpen=\"true\"\n  class=\"[--header-height:calc(--spacing(12))] [--sidebar-width:calc(--spacing(72))]\"\n>\n  <lib-dashboard-01-app-sidebar />\n\n  <main z-sidebar-inset>\n    <lib-dashboard-01-site-header />\n\n    <div class=\"flex flex-1 flex-col\">\n      <div class=\"flex flex-1 flex-col gap-2\">\n        <div class=\"flex flex-col gap-4 py-4 md:gap-6 md:py-6\">\n          <lib-dashboard-01-section-cards />\n\n          <div class=\"px-4 lg:px-6\">\n            <lib-dashboard-01-chart-area-interactive />\n          </div>\n\n          <lib-dashboard-01-data-table />\n        </div>\n      </div>\n    </div>\n  </main>\n</z-sidebar-provider>\n",
       "language": "html"
     },
     {

@@ -1942,6 +1942,8 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
 
 ### Basic
 
+A basic dropdown menu with a label and a separator.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -1949,21 +1951,61 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-demo-dropdown-default',
+  selector: 'z-demo-dropdown-basic',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open menu</button>
 
     <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-48">
+      <z-dropdown-menu-label>My Account</z-dropdown-menu-label>
       <z-dropdown-menu-item (click)="log('Profile')">Profile</z-dropdown-menu-item>
       <z-dropdown-menu-item (click)="log('Billing')">Billing</z-dropdown-menu-item>
       <z-dropdown-menu-item (click)="log('Team')">Team</z-dropdown-menu-item>
+      <z-dropdown-menu-separator />
       <z-dropdown-menu-item [disabled]="true">Subscription</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoDropdownDefaultComponent {
+export class ZardDemoDropdownBasicComponent {
+  log(item: string) {
+    console.log(`${item} clicked`);
+  }
+}
+```
+
+### Submenu
+
+Use `z-dropdown-menu-sub-trigger` with a `z-dropdown-menu-sub-content` to nest secondary actions.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
+
+@Component({
+  selector: 'z-demo-dropdown-submenu',
+  imports: [ZardDropdownImports, ZardButtonComponent],
+  template: `
+    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
+
+    <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-56">
+      <z-dropdown-menu-item (click)="log('Back')">Back</z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Forward')">Forward</z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Reload')">Reload</z-dropdown-menu-item>
+      <z-dropdown-menu-separator />
+      <z-dropdown-menu-sub-trigger [zSubMenu]="moreTools">More Tools</z-dropdown-menu-sub-trigger>
+      <z-dropdown-menu-sub-content #moreTools="zDropdownMenuSubContent" class="w-48">
+        <z-dropdown-menu-item (click)="log('Save Page As')">Save Page As...</z-dropdown-menu-item>
+        <z-dropdown-menu-item (click)="log('Create Shortcut')">Create Shortcut...</z-dropdown-menu-item>
+        <z-dropdown-menu-item (click)="log('Developer Tools')">Developer Tools</z-dropdown-menu-item>
+      </z-dropdown-menu-sub-content>
+    </z-dropdown-menu-content>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDropdownSubmenuComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -1971,6 +2013,8 @@ export class ZardDemoDropdownDefaultComponent {
 ```
 
 ### Shortcuts
+
+Add `z-dropdown-menu-shortcut` to show keyboard hints.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -2015,6 +2059,8 @@ export class ZardDemoDropdownShortcutsComponent {
 ```
 
 ### Icons
+
+Combine icons with labels for quick scanning.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -2062,6 +2108,8 @@ export class ZardDemoDropdownIconsComponent {
 
 ### Checkboxes
 
+Use `z-dropdown-menu-checkbox-item` for toggles.
+
 ```angular-ts
 import { Component } from '@angular/core';
 
@@ -2088,7 +2136,54 @@ export class ZardDemoDropdownCheckboxesComponent {
 }
 ```
 
+### Checkboxes Icons
+
+Add icons to checkbox items.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBell, lucideMail, lucideMessageSquare } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
+
+@Component({
+  selector: 'z-demo-dropdown-checkboxes-icons',
+  imports: [ZardDropdownImports, ZardButtonComponent, NgIcon],
+  template: `
+    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Notifications</button>
+
+    <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-64">
+      <z-dropdown-menu-label>Notification Preferences</z-dropdown-menu-label>
+      <z-dropdown-menu-checkbox-item [(zChecked)]="email">
+        <ng-icon name="lucideMail" class="mr-2 size-4" />
+        Email notifications
+      </z-dropdown-menu-checkbox-item>
+      <z-dropdown-menu-checkbox-item [(zChecked)]="sms">
+        <ng-icon name="lucideMessageSquare" class="mr-2 size-4" />
+        SMS notifications
+      </z-dropdown-menu-checkbox-item>
+      <z-dropdown-menu-checkbox-item [(zChecked)]="push">
+        <ng-icon name="lucideBell" class="mr-2 size-4" />
+        Push notifications
+      </z-dropdown-menu-checkbox-item>
+    </z-dropdown-menu-content>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideMail, lucideMessageSquare, lucideBell })],
+})
+export class ZardDemoDropdownCheckboxesIconsComponent {
+  email = true;
+  sms = false;
+  push = true;
+}
+```
+
 ### Radio Group
+
+Use `z-dropdown-menu-radio-group` for exclusive choices.
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -2124,7 +2219,54 @@ export class ZardDemoDropdownRadioGroupComponent {
 }
 ```
 
+### Radio Icons
+
+Show radio options with icons.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBuilding2, lucideCreditCard, lucideWallet } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
+
+@Component({
+  selector: 'z-demo-dropdown-radio-icons',
+  imports: [ZardDropdownImports, ZardButtonComponent, NgIcon],
+  template: `
+    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Payment Method</button>
+
+    <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-56">
+      <z-dropdown-menu-label>Select Payment Method</z-dropdown-menu-label>
+      <z-dropdown-menu-radio-group [(zValue)]="selected">
+        <z-dropdown-menu-radio-item zValue="card">
+          <ng-icon name="lucideCreditCard" class="mr-2 size-4" />
+          Credit Card
+        </z-dropdown-menu-radio-item>
+        <z-dropdown-menu-radio-item zValue="paypal">
+          <ng-icon name="lucideWallet" class="mr-2 size-4" />
+          PayPal
+        </z-dropdown-menu-radio-item>
+        <z-dropdown-menu-radio-item zValue="bank">
+          <ng-icon name="lucideBuilding2" class="mr-2 size-4" />
+          Bank Transfer
+        </z-dropdown-menu-radio-item>
+      </z-dropdown-menu-radio-group>
+    </z-dropdown-menu-content>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCreditCard, lucideWallet, lucideBuilding2 })],
+})
+export class ZardDemoDropdownRadioIconsComponent {
+  selected = 'card';
+}
+```
+
 ### Destructive
+
+Use `zType="destructive"` to style a row as destructive.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -2154,62 +2296,9 @@ export class ZardDemoDropdownDestructiveComponent {
 }
 ```
 
-### Submenu
-
-Compose with `z-navigation-menu-trigger` for nested flyout behavior.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronRight } from '@ng-icons/lucide';
-
-import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
-import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu';
-
-@Component({
-  selector: 'z-demo-dropdown-submenu',
-  imports: [ZardDropdownImports, ZardButtonComponent, ZardNavigationMenuImports, NgIcon],
-  template: `
-    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
-
-    <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-56">
-      <z-dropdown-menu-item (click)="log('Back')">Back</z-dropdown-menu-item>
-      <z-dropdown-menu-item (click)="log('Forward')">Forward</z-dropdown-menu-item>
-      <z-dropdown-menu-item (click)="log('Reload')">Reload</z-dropdown-menu-item>
-      <z-dropdown-menu-separator />
-      <button
-        type="button"
-        z-navigation-menu-link
-        z-navigation-menu-trigger
-        [zNavigationMenuTriggerFor]="moreToolsMenu"
-        zPlacement="rightTop"
-      >
-        More Tools
-        <ng-icon name="lucideChevronRight" class="ml-auto size-4" />
-      </button>
-    </z-dropdown-menu-content>
-
-    <ng-template #moreToolsMenu>
-      <div z-navigation-menu-content class="w-48">
-        <button type="button" z-navigation-menu-link (click)="log('Save Page As')">Save Page As...</button>
-        <button type="button" z-navigation-menu-link (click)="log('Create Shortcut')">Create Shortcut...</button>
-        <button type="button" z-navigation-menu-link (click)="log('Developer Tools')">Developer Tools</button>
-      </div>
-    </ng-template>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideChevronRight })],
-})
-export class ZardDemoDropdownSubmenuComponent {
-  log(item: string) {
-    console.log(`${item} clicked`);
-  }
-}
-```
-
 ### Avatar
+
+Compose with `z-avatar` for an account menu triggered from the user's picture.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -2251,6 +2340,8 @@ export class ZardDemoDropdownAvatarComponent {
 ```
 
 ### Complex
+
+Groups, shortcuts, separators and a disabled row combined in one menu.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -2413,64 +2504,71 @@ export class ZardDemoDropdownHoverComponent {
 
 ## API Reference
 
-### z-dropdown
+### [z-dropdown]
 
-Trigger directive that opens a linked dropdown menu content template.
+Trigger directive. Opens the linked `z-dropdown-menu-content` next to the element it is set on.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zDropdownMenu]` | Reference to the `z-dropdown-menu-content` template exported as `zDropdownMenuContent`. | `ZardDropdownMenuContentComponent` | `-` |
-| `[zTrigger]` | Interaction used to open the dropdown. | `'click' \| 'hover'` | `'click'` |
-| `[zDisabled]` | Disables the dropdown trigger | `boolean` | `false` |
+| `[zDropdownMenu]` | The `z-dropdown-menu-content` to open, exported as `zDropdownMenuContent`. | `ZardDropdownMenuContentComponent` | `-` |
+| `[zTrigger]` | Interaction that opens the dropdown. | `'click' \| 'hover'` | `'click'` |
+| `[zDisabled]` | Disables the trigger. | `boolean` | `false` |
 
 ### z-dropdown-menu
 
-Projected dropdown component with built-in trigger and overlay management.
+Self-contained alternative to `[z-dropdown]`: trigger and overlay in one element, with the trigger projected through `[dropdown-trigger]` and the rows as default content. Use it when the menu never needs to be opened from anywhere but its own trigger.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `(openChange)` | Emitted when the menu opens or closes | `boolean` | `—` |
+| `(openChange)` | Emitted when the menu opens or closes. | `boolean` | `—` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[disabled]` | Disables the dropdown | `boolean` | `false` |
+| `[disabled]` | Disables the dropdown. | `boolean` | `false` |
 | `[zDisabled]` | Disables the dropdown using the Zard-prefixed API. | `boolean` | `false` |
 
 ### z-dropdown-menu-content
 
-Reusable content template displayed by a `z-dropdown` trigger.
+The menu surface opened by `[z-dropdown]`. Every row primitive below is declared inside it. Placement follows `zSide`/`zAlign`/`zSideOffset` relative to the trigger — the same vocabulary Radix uses for `DropdownMenuContent` — because a dropdown, unlike a context menu, always has an anchor element to be a side or an alignment of.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zSide]` | Edge of the trigger the menu opens from. | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
-| `[zAlign]` | Alignment of the menu along that edge. | `'start' \| 'center' \| 'end'` | `'start'` |
-| `[zSideOffset]` | Gap between trigger and menu, in pixels. | `number` | `4` |
+| `[zSide]` | Edge of the trigger the menu opens from. Same meaning as Radix's `side`. | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
+| `[zAlign]` | Alignment of the menu along that edge. Same meaning as Radix's `align`. | `'start' \| 'center' \| 'end'` | `'start'` |
+| `[zSideOffset]` | Gap between trigger and menu, in pixels. Same meaning as Radix's `sideOffset`. | `number` | `4` |
 
-### z-dropdown-menu-item
+### z-dropdown-menu-group
 
-Clickable menu item that closes the dropdown after selection.
+Groups related rows under a shared label.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zType]` | Visual type of the item. | `'default' \| 'destructive'` | `'default'` |
-| `[variant]` | Visual variant of the item | `'default' \| 'destructive'` | `'default'` |
-| `[zInset]` | Adds left padding for alignment. | `boolean` | `false` |
-| `[inset]` | Adds left padding for alignment | `boolean` | `false` |
-| `[zDisabled]` | Disables the dropdown item. | `boolean` | `false` |
-| `[disabled]` | Disables the dropdown item | `boolean` | `false` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-label
 
-Label for grouping dropdown menu items.
+Label naming a group of rows.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[inset]` | Adds left padding for alignment. | `boolean` | `false` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+
+### z-dropdown-menu-item
+
+Clickable menu row that closes the dropdown after selection. `variant` and `zVariant` are also accepted, as shadcn-compatibility aliases for `zType` — `zType` is the documented, canonical name.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[zType]` | Visual type of the item. | `'default' \| 'destructive'` | `'default'` |
 | `[zInset]` | Adds left padding for alignment. | `boolean` | `false` |
+| `[inset]` | Adds left padding for alignment. | `boolean` | `false` |
+| `[zDisabled]` | Disables the item. | `boolean` | `false` |
+| `[disabled]` | Disables the item. | `boolean` | `false` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-separator
 
-Visual separator between dropdown menu sections.
+Divider between menu sections.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2478,7 +2576,7 @@ Visual separator between dropdown menu sections.
 
 ### z-dropdown-menu-shortcut
 
-Right-aligned shortcut text inside a dropdown menu item.
+Right-aligned keyboard hint inside a menu row.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2486,35 +2584,56 @@ Right-aligned shortcut text inside a dropdown menu item.
 
 ### z-dropdown-menu-checkbox-item
 
-Checkbox-style dropdown menu item with checked state and menuitemcheckbox semantics.
+Menu row with a checked state and `menuitemcheckbox` semantics. `variant` and `zVariant` are also accepted, as shadcn-compatibility aliases for `zType` — `zType` is the documented, canonical name.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zChecked]` | Checked state, two-way bindable | `boolean` | `false` |
-| `[(zChecked)]` | Checked state for the checkbox item. | `boolean` | `false` |
-| `[zDisabled]` | Disables the checkbox item. | `boolean` | `false` |
+| `[zChecked]` | Checked state, two-way bindable. | `boolean` | `false` |
+| `[(zChecked)]` | Checked state (two-way binding). | `boolean` | `false` |
+| `[zDisabled]` | Disables the item. | `boolean` | `false` |
+| `[disabled]` | Disables the item. | `boolean` | `false` |
 | `[zType]` | Visual type of the item. | `'default' \| 'destructive'` | `'default'` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-radio-group
 
-Radio group wrapper for dropdown menu radio items.
+Radio group wrapper for menu radio items.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zValue]` | Value of the selected radio item, two-way bindable | `string` | `undefined` |
-| `[(zValue)]` | Selected radio item value. | `string \| undefined` | `undefined` |
+| `[zValue]` | Selected radio item value, two-way bindable. | `string \| undefined` | `undefined` |
+| `[(zValue)]` | Selected radio item value (two-way binding). | `string \| undefined` | `undefined` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-radio-item
 
-Radio-style dropdown menu item with menuitemradio semantics.
+Menu row with `menuitemradio` semantics. `variant` and `zVariant` are also accepted, as shadcn-compatibility aliases for `zType` — `zType` is the documented, canonical name.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zValue]` | Value represented by this radio item. | `string` | `-` |
-| `[zDisabled]` | Disables the radio item. | `boolean` | `false` |
+| `[zDisabled]` | Disables the item. | `boolean` | `false` |
+| `[disabled]` | Disables the item. | `boolean` | `false` |
 | `[zType]` | Visual type of the item. | `'default' \| 'destructive'` | `'default'` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+
+### z-dropdown-menu-sub-trigger
+
+Menu row that opens a nested menu to its side, on hover, click or `ArrowRight`.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[zSubMenu]` | Submenu content, exported as `zDropdownMenuSubContent`. | `ZardDropdownMenuSubContentComponent \| TemplateRef<unknown>` | `-` |
+| `[zInset]` | Adds left padding for alignment. | `boolean` | `false` |
+| `[zDisabled]` | Disables the sub-trigger. | `boolean` | `false` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+
+### z-dropdown-menu-sub-content
+
+Surface of a submenu. Declared next to its sub-trigger and referenced by it. It has no `side`/`align` inputs — the submenu always opens beside its trigger and flips to the opposite side when the preferred one runs out of room, the same automatic behaviour a native OS submenu has.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ---

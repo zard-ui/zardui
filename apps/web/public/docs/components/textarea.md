@@ -149,7 +149,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
 
 ### Field
 
-Use Field, FieldLabel, and FieldDescription to create a textarea with a label and description.
+Wrap `textarea[z-textarea]` in `z-field` with a `z-field-label` and `z-field-description` to add a label and helper text.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -174,7 +174,7 @@ export class ZardDemoTextareaFieldComponent {}
 
 ### Disabled
 
-Use the disabled prop to disable the textarea. To style the disabled state, add the data-disabled attribute to the Field component.
+Set the native `disabled` attribute on `textarea[z-textarea]`, and add `data-disabled="true"` to the surrounding `z-field` so its label dims along with the control.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -198,7 +198,7 @@ export class ZardDemoTextareaDisabledComponent {}
 
 ### Invalid
 
-Use the aria-invalid prop to mark the textarea as invalid. To style the invalid state, add the data-invalid attribute to the Field component.
+Set `aria-invalid="true"` on `textarea[z-textarea]` and `data-invalid="true"` on the surrounding `z-field` to mark the field as invalid; see the `form` example for wiring these attributes to a reactive form control.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -223,10 +223,10 @@ export class ZardDemoTextareaInvalidComponent {}
 
 ### Button
 
-Pair with Button to create a textarea with a submit button.
+Pair `textarea[z-textarea]` with `z-button` to build a message box with a submit action.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
@@ -236,25 +236,100 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
   imports: [ZardTextareaComponent, ZardButtonComponent],
   template: `
     <div class="grid w-72 gap-2">
-      <textarea z-textarea placeholder="Type your message here."></textarea>
-      <button type="button" z-button>Send message</button>
+      <textarea
+        z-textarea
+        id="textarea-button-message"
+        placeholder="Type your message here."
+        [(value)]="message"
+      ></textarea>
+      <button type="button" z-button [zDisabled]="!message().trim()" (click)="send()">Send message</button>
+      @if (sentMessage()) {
+        <p class="text-muted-foreground text-sm" aria-live="polite">Sent: "{{ sentMessage() }}"</p>
+      }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoTextareaButtonComponent {}
+export class ZardDemoTextareaButtonComponent {
+  protected readonly message = signal('');
+  protected readonly sentMessage = signal('');
+
+  protected send(): void {
+    this.sentMessage.set(this.message());
+    this.message.set('');
+  }
+}
+```
+
+### Form
+
+A reactive form built from `z-field` and `formControlName`, with a live validation message on the feedback textarea once it's touched and invalid.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
+
+@Component({
+  selector: 'z-demo-textarea-form',
+  imports: [ZardTextareaComponent, ZardButtonComponent, ReactiveFormsModule, ...ZardFieldImports],
+  template: `
+    <form class="grid w-72 gap-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+      @let feedbackControl = form.controls.feedback;
+      @let feedbackInvalid = feedbackControl.invalid && feedbackControl.touched;
+      <div z-field [attr.data-invalid]="feedbackInvalid || null">
+        <label z-field-label for="textarea-form-feedback">Feedback</label>
+        <textarea
+          z-textarea
+          id="textarea-form-feedback"
+          placeholder="Tell us what you think..."
+          formControlName="feedback"
+          [attr.aria-invalid]="feedbackInvalid || null"
+        ></textarea>
+        @if (feedbackInvalid) {
+          <z-field-error>
+            @if (feedbackControl.hasError('required')) {
+              Feedback is required.
+            } @else if (feedbackControl.hasError('minlength')) {
+              Feedback must be at least 10 characters.
+            }
+          </z-field-error>
+        } @else {
+          <p z-field-description>Share as much detail as you can.</p>
+        }
+      </div>
+      <button z-button type="submit">Submit feedback</button>
+    </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoTextareaFormComponent {
+  protected readonly form = new FormGroup({
+    feedback: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(10)] }),
+  });
+
+  protected onSubmit(): void {
+    this.form.markAllAsTouched();
+    if (this.form.valid) {
+      console.log('Feedback submitted:', this.form.getRawValue());
+    }
+  }
+}
 ```
 
 ## API Reference
 
 ### textarea[z-textarea]
 
-A multi-line text input directive applied to a native textarea. All native HTML textarea attributes (placeholder, name, disabled, readonly, aria-invalid, etc.) are supported.
+A directive that styles a native `<textarea>` element. All native HTML textarea attributes (`rows`, `placeholder`, `disabled`, `required`, `readonly`, `maxlength`, `aria-invalid`, etc.) keep working as-is; the control grows with its content via CSS `field-sizing: content`, with no dedicated auto-resize input and no built-in character-count display.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[value]` | Textarea value, two-way bindable | `string` | `''` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[value]` | Textarea value, two-way bindable | `string` | `''` |
 | `[(value)]` | Textarea value (two-way binding) | `string` | `''` |
 
 ---

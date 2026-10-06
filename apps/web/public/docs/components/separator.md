@@ -98,6 +98,8 @@ import { ZardSeparatorComponent } from '@/shared/components/separator/separator.
 
 ### Vertical
 
+A vertical `z-separator` relies on `self-stretch` to fill the cross axis of its flex container — give the row `items-center` (or an explicit height) so it has something to stretch to, or it collapses to zero height. This one is decorative (the `zDecorative` default), so it renders `role="none"` and is not announced.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -122,6 +124,8 @@ export class ZardDemoSeparatorVerticalComponent {}
 
 ### Menu
 
+These separators mark real boundaries between menu sections, so `[zDecorative]="false"` gives them `role="separator"` and `aria-orientation="vertical"` instead of the default decorative `role="none"`.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -136,12 +140,12 @@ import { ZardSeparatorComponent } from '../separator.component';
         <span class="font-medium">Settings</span>
         <span class="text-muted-foreground text-xs">Manage preferences</span>
       </div>
-      <z-separator zOrientation="vertical" />
+      <z-separator zOrientation="vertical" [zDecorative]="false" />
       <div class="flex flex-col gap-1">
         <span class="font-medium">Account</span>
         <span class="text-muted-foreground text-xs">Profile & security</span>
       </div>
-      <z-separator zOrientation="vertical" class="hidden md:block" />
+      <z-separator zOrientation="vertical" [zDecorative]="false" class="hidden md:block" />
       <div class="hidden flex-col gap-1 md:flex">
         <span class="font-medium">Help</span>
         <span class="text-muted-foreground text-xs">Support & docs</span>
@@ -154,6 +158,8 @@ export class ZardDemoSeparatorMenuComponent {}
 ```
 
 ### List
+
+Horizontal separators between list rows are meaningful dividers here too, not decoration, so `[zDecorative]="false"` exposes `role="separator"` to assistive tech.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -169,12 +175,12 @@ import { ZardSeparatorComponent } from '../separator.component';
         <dt>Item 1</dt>
         <dd class="text-muted-foreground">Value 1</dd>
       </dl>
-      <z-separator />
+      <z-separator [zDecorative]="false" />
       <dl class="flex items-center justify-between">
         <dt>Item 2</dt>
         <dd class="text-muted-foreground">Value 2</dd>
       </dl>
-      <z-separator />
+      <z-separator [zDecorative]="false" />
       <dl class="flex items-center justify-between">
         <dt>Item 3</dt>
         <dd class="text-muted-foreground">Value 3</dd>

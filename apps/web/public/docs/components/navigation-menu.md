@@ -1851,46 +1851,48 @@ import { navigationMenuTriggerVariants, ZardNavigationMenuImports } from '@/shar
   selector: 'z-demo-navigation-menu-link',
   imports: [ZardNavigationMenuImports, RouterLink, RouterLinkActive],
   template: `
-    <z-navigation-menu>
-      <ul z-navigation-menu-list>
-        <li z-navigation-menu-item>
-          <a
-            z-navigation-menu-link
-            routerLink="/docs/components/navigation-menu"
-            routerLinkActive
-            #navigationMenuLink="routerLinkActive"
-            [zActive]="navigationMenuLink.isActive"
-            [class]="triggerClass"
-          >
-            Navigation Menu
-          </a>
-        </li>
-        <li z-navigation-menu-item>
-          <a
-            z-navigation-menu-link
-            routerLink="/docs/components/dropdown"
-            routerLinkActive
-            #dropdownLink="routerLinkActive"
-            [zActive]="dropdownLink.isActive"
-            [class]="triggerClass"
-          >
-            Dropdown
-          </a>
-        </li>
-        <li z-navigation-menu-item>
-          <a
-            z-navigation-menu-link
-            routerLink="/docs/components/tabs"
-            routerLinkActive
-            #tabsLink="routerLinkActive"
-            [zActive]="tabsLink.isActive"
-            [class]="triggerClass"
-          >
-            Tabs
-          </a>
-        </li>
-      </ul>
-    </z-navigation-menu>
+    <nav aria-label="Docs" class="contents">
+      <z-navigation-menu>
+        <ul z-navigation-menu-list>
+          <li z-navigation-menu-item>
+            <a
+              z-navigation-menu-link
+              routerLink="/docs/components/navigation-menu"
+              routerLinkActive
+              #navigationMenuLink="routerLinkActive"
+              [zActive]="navigationMenuLink.isActive"
+              [class]="triggerClass"
+            >
+              Navigation Menu
+            </a>
+          </li>
+          <li z-navigation-menu-item>
+            <a
+              z-navigation-menu-link
+              routerLink="/docs/components/dropdown"
+              routerLinkActive
+              #dropdownLink="routerLinkActive"
+              [zActive]="dropdownLink.isActive"
+              [class]="triggerClass"
+            >
+              Dropdown
+            </a>
+          </li>
+          <li z-navigation-menu-item>
+            <a
+              z-navigation-menu-link
+              routerLink="/docs/components/tabs"
+              routerLinkActive
+              #tabsLink="routerLinkActive"
+              [zActive]="tabsLink.isActive"
+              [class]="triggerClass"
+            >
+              Tabs
+            </a>
+          </li>
+        </ul>
+      </z-navigation-menu>
+    </nav>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -1912,22 +1914,24 @@ import { navigationMenuTriggerVariants, ZardNavigationMenuImports } from '@/shar
   selector: 'z-demo-navigation-menu-simple',
   imports: [ZardNavigationMenuImports],
   template: `
-    <z-navigation-menu>
-      <ul z-navigation-menu-list>
-        <li z-navigation-menu-item>
-          <a z-navigation-menu-link href="#" zActive [class]="triggerClass">Overview</a>
-        </li>
-        <li z-navigation-menu-item>
-          <a z-navigation-menu-link href="#" [class]="triggerClass">Documentation</a>
-        </li>
-        <li z-navigation-menu-item>
-          <a z-navigation-menu-link href="#" [class]="triggerClass">Blocks</a>
-        </li>
-        <li z-navigation-menu-item>
-          <a z-navigation-menu-link href="#" [class]="triggerClass">Changelog</a>
-        </li>
-      </ul>
-    </z-navigation-menu>
+    <nav aria-label="Quick links" class="contents">
+      <z-navigation-menu>
+        <ul z-navigation-menu-list>
+          <li z-navigation-menu-item>
+            <a z-navigation-menu-link href="#" zActive [class]="triggerClass">Overview</a>
+          </li>
+          <li z-navigation-menu-item>
+            <a z-navigation-menu-link href="#" [class]="triggerClass">Documentation</a>
+          </li>
+          <li z-navigation-menu-item>
+            <a z-navigation-menu-link href="#" [class]="triggerClass">Blocks</a>
+          </li>
+          <li z-navigation-menu-item>
+            <a z-navigation-menu-link href="#" [class]="triggerClass">Changelog</a>
+          </li>
+        </ul>
+      </z-navigation-menu>
+    </nav>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -1950,37 +1954,39 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu';
   selector: 'z-demo-navigation-menu-no-viewport',
   imports: [ZardNavigationMenuImports],
   template: `
-    <z-navigation-menu [zViewport]="false">
-      <ul z-navigation-menu-list>
-        <li z-navigation-menu-item>
-          <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="overview">Overview</button>
+    <nav aria-label="Standalone popups" class="contents">
+      <z-navigation-menu [zViewport]="false">
+        <ul z-navigation-menu-list>
+          <li z-navigation-menu-item>
+            <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="overview">Overview</button>
 
-          <ng-template #overview>
-            <div z-navigation-menu-content>
-              <ul class="w-56">
-                <li><a z-navigation-menu-link href="#">Introduction</a></li>
-                <li><a z-navigation-menu-link href="#">Installation</a></li>
-                <li><a z-navigation-menu-link href="#">Theming</a></li>
-              </ul>
-            </div>
-          </ng-template>
-        </li>
+            <ng-template #overview>
+              <div z-navigation-menu-content>
+                <ul class="w-56">
+                  <li><a z-navigation-menu-link href="#">Introduction</a></li>
+                  <li><a z-navigation-menu-link href="#">Installation</a></li>
+                  <li><a z-navigation-menu-link href="#">Theming</a></li>
+                </ul>
+              </div>
+            </ng-template>
+          </li>
 
-        <li z-navigation-menu-item>
-          <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="resources">Resources</button>
+          <li z-navigation-menu-item>
+            <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="resources">Resources</button>
 
-          <ng-template #resources>
-            <div z-navigation-menu-content>
-              <ul class="w-56">
-                <li><a z-navigation-menu-link href="#">Blocks</a></li>
-                <li><a z-navigation-menu-link href="#">Changelog</a></li>
-                <li><a z-navigation-menu-link href="#">Contributing</a></li>
-              </ul>
-            </div>
-          </ng-template>
-        </li>
-      </ul>
-    </z-navigation-menu>
+            <ng-template #resources>
+              <div z-navigation-menu-content>
+                <ul class="w-56">
+                  <li><a z-navigation-menu-link href="#">Blocks</a></li>
+                  <li><a z-navigation-menu-link href="#">Changelog</a></li>
+                  <li><a z-navigation-menu-link href="#">Contributing</a></li>
+                </ul>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+      </z-navigation-menu>
+    </nav>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -1991,7 +1997,7 @@ export class ZardDemoNavigationMenuNoViewportComponent {}
 
 ### z-navigation-menu
 
-Root of the navigation bar. Scopes the shared viewport to the triggers inside it.
+Root of the navigation bar. Scopes the shared viewport to the triggers inside it. Renders no landmark role of its own — wrap it in a labelled `<nav>`, as every example on this page does, so assistive tech can identify it.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2000,7 +2006,7 @@ Root of the navigation bar. Scopes the shared viewport to the triggers inside it
 | `[zAlign]` | Which edge of the active trigger the shared viewport lines up with | `'start' \| 'center' \| 'end'` | `'start'` |
 | `[zHoverDelay]` | Delay in ms before closing once the pointer leaves the bar | `number` | `100` |
 
-### z-navigation-menu-list
+### [z-navigation-menu-list]
 
 The `<ul>` holding the items of the bar.
 
@@ -2008,7 +2014,7 @@ The `<ul>` holding the items of the bar.
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-navigation-menu-item
+### [z-navigation-menu-item]
 
 The `<li>` wrapping a trigger and its content, or a standalone link.
 
@@ -2016,7 +2022,7 @@ The `<li>` wrapping a trigger and its content, or a standalone link.
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-navigation-menu-trigger
+### [z-navigation-menu-trigger]
 
 Opens the content it points to. Inside a root it opens on hover; standalone it opens on click.
 
@@ -2030,7 +2036,7 @@ Opens the content it points to. Inside a root it opens on hover; standalone it o
 | `[zShowChevron]` | Render the built-in chevron | `boolean` | `true inside a root, false standalone` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-navigation-menu-content
+### [z-navigation-menu-content]
 
 Container for the links of one trigger. Inside the shared viewport it is plain content; in overlay mode it is the popup itself.
 
@@ -2038,9 +2044,9 @@ Container for the links of one trigger. Inside the shared viewport it is plain c
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-navigation-menu-link
+### [z-navigation-menu-link]
 
-A single entry. Pair `[zActive]` with `routerLinkActive` to mark the current route.
+A single entry, usable on a `<button>` or an `<a>`. Pair `[zActive]` with `routerLinkActive` to mark the current route — the directive has no router inputs of its own, so stack Angular `routerLink` directly on the element.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2049,7 +2055,7 @@ A single entry. Pair `[zActive]` with `routerLinkActive` to mark the current rou
 | `[zInset]` | Add left padding for alignment | `boolean` | `false` |
 | `[zType]` | Visual variant of the link | `'default' \| 'destructive'` | `'default'` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[menuItemTriggered]` | Emits when the link is activated | `EventEmitter` |  |
+| `(menuItemTriggered)` | Emits when the link is activated | `EventEmitter<void>` |  |
 
 ### z-navigation-menu-indicator
 
@@ -2079,14 +2085,6 @@ Displays a keyboard shortcut aligned to the end of a link.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
-
-### z-context-menu
-
-Opens a content template on right click, anchored to the pointer.
-
-| Prop | Description | Type | Default |
-| --- | --- | --- | --- |
-| `[zContextMenuTriggerFor]` | Reference to the context menu content | `TemplateRef<void>` | `required` |
 
 ### navigationMenuTriggerVariants()
 
