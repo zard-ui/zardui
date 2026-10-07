@@ -524,7 +524,9 @@ export class ZardDialogOptions<T, U> {
         </z-dialog-header>
       }
 
-      <main class="flex flex-col space-y-4">
+      <!-- display: contents makes the content a direct item of the panel grid, as it is in the
+           declarative form: the panel gap spaces it, and an empty main adds no gap of its own. -->
+      <main class="contents">
         <ng-template cdkPortalOutlet />
 
         @if (isStringContent()) {
@@ -577,6 +579,18 @@ export class ZardDialogOptions<T, U> {
       }
     </z-dialog-panel>
   `,
+  // A component passed as zContent renders its own children inside its host, one level below the
+  // panel grid. Giving that host the panel's grid and gap lays those children out as the
+  // declarative form does. :where() in the components layer keeps it a default: any display or
+  // gap utility on the host still wins.
+  styles: `
+    @layer components {
+      :where(z-dialog-container [data-slot='dialog-body']) {
+        display: grid;
+        gap: calc(var(--spacing, 0.25rem) * 4);
+      }
+    }
+  `,
   // forwardRef: the decorator is evaluated before the class binding exists, so a bare
   // reference to ZardDialogContainerComponent here throws "Cannot access before initialization"
   // whenever the module is evaluated outside the AOT compiler.
@@ -628,7 +642,13 @@ export class ZardDialogContainerComponent<T, U> extends BasePortalOutlet impleme
     if (this.portalOutlet().hasAttached()) {
       throw new Error('Attempting to attach modal content after content is already attached');
     }
-    return this.portalOutlet().attachComponentPortal(portal);
+    const componentRef = this.portalOutlet().attachComponentPortal(portal);
+    const contentHost = componentRef.location.nativeElement as HTMLElement;
+    if (!contentHost.hasAttribute('data-slot')) {
+      contentHost.setAttribute('data-slot', 'dialog-body');
+    }
+
+    return componentRef;
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
