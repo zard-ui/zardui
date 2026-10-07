@@ -121,8 +121,8 @@ export class ZardTabComponent {
     '[class]': 'containerClasses()',
     '[attr.data-orientation]': 'zOrientation()',
   },
-  exportAs: 'zTabGroup',
   hostDirectives: [ZardIdDirective],
+  exportAs: 'zTabGroup',
 })
 export class ZardTabGroupComponent {
   /** Scopes the tab and panel ids, which repeat for every group on the page when built from the index alone. */

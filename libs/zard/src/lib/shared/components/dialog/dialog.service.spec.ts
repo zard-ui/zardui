@@ -14,8 +14,8 @@ import { ZardDialogService } from './dialog.service';
 class TestContentComponent {}
 
 @Component({
-  host: { 'data-slot': 'custom-slot' },
   template: '<p>Own slot</p>',
+  host: { 'data-slot': 'custom-slot' },
 })
 class OwnSlotContentComponent {}
 

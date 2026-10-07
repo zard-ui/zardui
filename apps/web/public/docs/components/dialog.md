@@ -579,10 +579,6 @@ export class ZardDialogOptions<T, U> {
       }
     </z-dialog-panel>
   `,
-  // forwardRef: the decorator is evaluated before the class binding exists, so a bare
-  // reference to ZardDialogContainerComponent here throws "Cannot access before initialization"
-  // whenever the module is evaluated outside the AOT compiler.
-  providers: [{ provide: ZardDialogHost, useExisting: forwardRef(() => ZardDialogContainerComponent) }],
   // A component passed as zContent renders its own children inside its host, one level below the
   // panel grid. Giving that host the panel's grid and gap lays those children out as the
   // declarative form does. :where() in the components layer keeps it a default: any display or
@@ -595,6 +591,10 @@ export class ZardDialogOptions<T, U> {
       }
     }
   `,
+  // forwardRef: the decorator is evaluated before the class binding exists, so a bare
+  // reference to ZardDialogContainerComponent here throws "Cannot access before initialization"
+  // whenever the module is evaluated outside the AOT compiler.
+  providers: [{ provide: ZardDialogHost, useExisting: forwardRef(() => ZardDialogContainerComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: { style: 'display: contents' },
