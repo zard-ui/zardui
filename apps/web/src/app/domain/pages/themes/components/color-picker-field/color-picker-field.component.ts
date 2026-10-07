@@ -23,6 +23,7 @@ let colorPickerFieldId = 0;
             type="color"
             [value]="hexValue()"
             (input)="onColorPickerChange($event)"
+            [attr.aria-label]="formatLabel(colorKey()) + ' color swatch'"
             class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
           />
           <div class="size-9 rounded-md border shadow-sm" [style.background-color]="hexValue()"></div>

@@ -67,7 +67,7 @@ function getCliVersion(): string {
  * The key is the `basePath` the registry publishes — the install destination —
  * and the value is the source directory. The first three agree; typeset does
  * not: it ships next to the installing project's global CSS, but it is born
- * beside the core's tailwind.css, which is where it is edited and tested.
+ * beside the core's zard.css, which is where it is edited and tested.
  */
 const NON_COMPONENT_PATHS: Record<string, string> = {
   core: 'core',
@@ -242,6 +242,53 @@ function buildRegistryIndex(items: RegistryItem[]): RegistryIndex {
   };
 }
 
+/**
+ * The registry items a block's sources import, as `@zard/components/<name>`.
+ *
+ * Blocks are written inside the monorepo, so their imports name the library
+ * directly. That is the only record of what a block depends on, and reading it
+ * here keeps the list from drifting away from the code.
+ */
+function componentsImportedBy(files: { content: string }[]): string[] {
+  const known = new Set(registry.map(item => item.name));
+  const found = new Set<string>();
+
+  for (const file of files) {
+    for (const match of file.content.matchAll(/@zard\/components\/([a-z0-9-]+)/g)) {
+      const name = match[1];
+
+      if (!known.has(name)) {
+        throw new Error(
+          `A block imports "@zard/components/${name}", which is not a registry item.
+` + 'Add it to packages/cli/src/core/registry/registry-data.ts, or fix the import.',
+        );
+      }
+
+      found.add(name);
+    }
+  }
+
+  return [...found].sort();
+}
+
+/** npm packages a block imports, excluding Angular and the library itself. */
+function packagesImportedBy(files: { content: string }[]): string[] {
+  const found = new Set<string>();
+
+  for (const file of files) {
+    for (const match of file.content.matchAll(/from '(@?[a-z0-9@][a-z0-9@/-]*)'/g)) {
+      const specifier = match[1];
+      if (specifier.startsWith('.') || specifier.startsWith('@zard/') || specifier.startsWith('@angular/')) continue;
+
+      // `@scope/name` keeps two segments, a bare package only the first.
+      const parts = specifier.split('/');
+      found.add(specifier.startsWith('@') ? parts.slice(0, 2).join('/') : parts[0]);
+    }
+  }
+
+  return [...found].sort();
+}
+
 async function main() {
   console.log('🔧 Building component registry...\n');
 
@@ -326,6 +373,8 @@ function buildBlocksRegistry() {
     title: string;
     description: string;
     category: string;
+    registryDependencies: string[];
+    dependencies: string[];
   }
 
   interface BlockFile {
@@ -355,7 +404,7 @@ function buildBlocksRegistry() {
     const description = descMatch?.[1] ?? '';
     const category = catMatch?.[1] ?? 'Other';
 
-    blocksMeta.push({ id, title, description, category });
+    blocksMeta.push({ id, title, description, category, registryDependencies: [], dependencies: [] });
 
     // Extract files from block.ts content
     const files: BlockFile[] = [];
@@ -375,7 +424,16 @@ function buildBlocksRegistry() {
       });
     }
 
-    const blockData = { id, title, description, category, files };
+    // What the block needs, read from its own imports. Without this the CLI
+    // would write files referencing components the project may not have — and a
+    // block author would have to remember to list them by hand.
+    const registryDependencies = componentsImportedBy(files);
+    const dependencies = packagesImportedBy(files);
+
+    blocksMeta[blocksMeta.length - 1].registryDependencies = registryDependencies;
+    blocksMeta[blocksMeta.length - 1].dependencies = dependencies;
+
+    const blockData = { id, title, description, category, registryDependencies, dependencies, files };
     const blockOutputFile = path.join(BLOCKS_OUTPUT_PATH, `${id}.json`);
     fs.writeJsonSync(blockOutputFile, blockData, { spaces: 2 });
     console.log(`   🧱 Generated: blocks/${id}.json (${files.length} files)`);

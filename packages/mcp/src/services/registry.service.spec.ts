@@ -32,6 +32,7 @@ describe('registryService path safety', () => {
     fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
+      headers: new Headers({ 'content-type': 'application/json' }),
       json: async () => ({ name: 'button', type: 'registry:component', files: [] }),
     });
 

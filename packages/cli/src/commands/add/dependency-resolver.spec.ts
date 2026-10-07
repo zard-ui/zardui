@@ -1,5 +1,7 @@
 jest.mock('../../utils/registry.js', () => ({
   fetchRegistryIndex: jest.fn(),
+  fetchBlocksIndex: jest.fn().mockResolvedValue({ blocks: [] }),
+  getAvailableBlocks: jest.fn().mockResolvedValue([]),
   invalidateRegistryCache: jest.fn(),
 }));
 
@@ -26,10 +28,11 @@ import { Config } from '@cli/utils/config.js';
 import { existsSync, type PathLike } from 'fs';
 import * as path from 'path';
 
-import { fetchRegistryIndex, invalidateRegistryCache } from '../../utils/registry.js';
+import { fetchBlocksIndex, fetchRegistryIndex, invalidateRegistryCache } from '../../utils/registry.js';
 
 const mockFetchRegistryIndex = fetchRegistryIndex as jest.MockedFunction<typeof fetchRegistryIndex>;
 const mockInvalidateRegistryCache = invalidateRegistryCache as jest.MockedFunction<typeof invalidateRegistryCache>;
+const mockFetchBlocksIndex = fetchBlocksIndex as jest.MockedFunction<typeof fetchBlocksIndex>;
 const mockExistsSync = existsSync as jest.MockedFunction<typeof existsSync>;
 
 const fakeRegistryIndex = {
@@ -79,6 +82,7 @@ const fakeResolvedConfig: Config & { resolvedPaths: any } = {
     utils: '@/shared/utils',
     core: '@/shared/core',
     services: '@/shared/services',
+    blocks: '@/shared/blocks',
   },
   resolvedPaths: {
     tailwindCss: '/project/src/styles.css',
@@ -87,6 +91,7 @@ const fakeResolvedConfig: Config & { resolvedPaths: any } = {
     utils: '/project/src/app/shared/utils',
     core: '/project/src/app/shared/core',
     services: '/project/src/app/shared/services',
+    blocks: '/project/src/app/shared/blocks',
   },
 };
 
@@ -237,5 +242,55 @@ describe('getTargetDir', () => {
     const target = getTargetDir({ name: 'button', basePath: 'button' }, fakeResolvedConfig, '/project', 'src/ui');
 
     expect(target).toBe(path.resolve('/project', 'src/ui', 'button'));
+  });
+});
+
+/*
+ * Blocks come from their own index, and a block is written as a folder: every
+ * file of `login-01` belongs together, and two blocks under the same `--path`
+ * must not land in one directory.
+ */
+describe('blocks', () => {
+  const loginBlock = {
+    id: 'login-01',
+    title: 'Login 01',
+    description: 'A login form.',
+    category: 'Login',
+    registryDependencies: ['button', 'card'],
+    dependencies: ['@ng-icons/core'],
+  };
+
+  beforeEach(() => {
+    mockFetchBlocksIndex.mockResolvedValue({ blocks: [loginBlock] });
+  });
+
+  it('resolves a block id the component registry does not know', async () => {
+    const meta = await getComponentMeta('login-01');
+
+    expect(meta).toMatchObject({ name: 'login-01', basePath: 'blocks', isBlock: true });
+  });
+
+  it('carries the components the block needs, so `add` pulls them in', async () => {
+    const meta = await getComponentMeta('login-01');
+
+    expect(meta?.registryDependencies).toEqual(['button', 'card']);
+  });
+
+  it('still returns undefined for a name that is neither', async () => {
+    expect(await getComponentMeta('not-a-thing')).toBeUndefined();
+  });
+
+  it('writes a block into its own directory under the blocks alias', () => {
+    const target = getTargetDir({ name: 'login-01', basePath: 'blocks' }, fakeResolvedConfig, '/project');
+
+    expect(target).toBe(path.join('/project/src/app/shared/blocks', 'login-01'));
+  });
+
+  it('keeps one directory per block under --path', () => {
+    const first = getTargetDir({ name: 'login-01', basePath: 'blocks' }, fakeResolvedConfig, '/project', 'src/ui');
+    const second = getTargetDir({ name: 'signup-01', basePath: 'blocks' }, fakeResolvedConfig, '/project', 'src/ui');
+
+    expect(first).toBe(path.join(path.resolve('/project', 'src/ui'), 'login-01'));
+    expect(second).not.toBe(first);
   });
 });

@@ -12,6 +12,12 @@
     id="overview"
   />
 
+  @if (release; as currentRelease) {
+    <div class="mt-8 mb-12">
+      <z-changelog-release [release]="currentRelease" />
+    </div>
+  }
+
   <div class="mt-8 space-y-16">
     @for (entry of entries; track entry.meta.id) {
       <!-- Month Block -->

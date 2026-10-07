@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import {
   ZardToggleGroupComponent,
@@ -17,6 +17,7 @@ import {
       (valueChange)="onToggleChange($event)"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToggleGroupOutlineComponent {
   items: ZardToggleGroupItem[] = [

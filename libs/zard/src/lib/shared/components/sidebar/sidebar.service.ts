@@ -32,6 +32,12 @@ export class ZardSidebarService {
   private readonly internalOpen = signal(this.persistedOpen ?? true);
   private readonly internalOpenMobile = signal(false);
 
+  /**
+   * False once the provider set an explicit `zDefaultOpen`. Such a provider never reads the cookie
+   * back, so writing it would only change the initial state of every other provider on the site.
+   */
+  private persistOpen = true;
+
   /** Mirrors the provider's `zOpen` input. `undefined` means the provider is uncontrolled. */
   readonly controlledOpen = signal<boolean | undefined>(undefined);
 
@@ -80,9 +86,11 @@ export class ZardSidebarService {
    * as `defaultOpen`. Angular has no server component to do that, so the service reads it too — but
    * only as the fallback. An explicit `zDefaultOpen` still wins, which keeps that input meaningful
    * and stops one provider's persisted state from deciding for every other provider on the page.
+   * Such a provider also stops writing the cookie: a state it never reads back is not persisted.
    */
   applyDefaultOpen(defaultOpen: boolean | undefined): void {
     if (defaultOpen !== undefined) {
+      this.persistOpen = false;
       this.internalOpen.set(defaultOpen);
       return;
     }
@@ -93,7 +101,7 @@ export class ZardSidebarService {
   }
 
   private persist(open: boolean): void {
-    if (!this.isBrowser) {
+    if (!this.isBrowser || !this.persistOpen) {
       return;
     }
 

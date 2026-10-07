@@ -66,7 +66,7 @@ describe('TypesetDocsPage', () => {
     });
 
     it('opts embedded components out of typeset', () => {
-      const embedded = fixture.debugElement.queryAll(By.css('.typeset z-code-block, .typeset z-callout'));
+      const embedded = fixture.debugElement.queryAll(By.css('.typeset z-code-block, .typeset z-alert'));
 
       // Without this, a template change that moves every embedded block out of
       // the query leaves the loop with nothing to check and the test green.

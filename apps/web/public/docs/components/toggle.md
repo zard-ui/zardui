@@ -212,6 +212,8 @@ export class ZardDemoToggleOutlineComponent {}
 
 ### With Text
 
+Combine an icon with a text label inside the toggle.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -261,6 +263,8 @@ export class ZardDemoToggleSizeComponent {}
 
 ### Disabled
 
+Set `zDisabled` to prevent interaction, on either `default` or `outline` types.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -280,7 +284,9 @@ import { ZardToggleComponent } from '../toggle.component';
 export class ZardDemoToggleDisabledComponent {}
 ```
 
-### With
+### Controlled
+
+Bind `[(zValue)]` two-way to drive the toggle from, and read it back into, external state.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
@@ -291,7 +297,7 @@ import { lucideLightbulb, lucideLightbulbOff } from '@ng-icons/lucide';
 import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
-  selector: 'z-demo-toggle-with-bindings',
+  selector: 'z-demo-toggle-controlled',
   imports: [ZardToggleComponent, NgIcon],
   template: `
     <div class="flex flex-col items-center gap-8">
@@ -304,7 +310,7 @@ import { ZardToggleComponent } from '../toggle.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideLightbulb, lucideLightbulbOff })],
 })
-export class ZardDemoToggleWithBindingsComponent {
+export class ZardDemoToggleControlledComponent {
   protected readonly lightOn = signal(false);
   protected readonly bulb = computed(() => (this.lightOn() ? 'lucideLightbulb' : 'lucideLightbulbOff'));
   protected readonly state = computed(() => (this.lightOn() ? 'on' : 'off'));

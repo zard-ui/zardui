@@ -7,10 +7,11 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
 import { ZardCommandImports } from '@/shared/components/command/command.imports';
 import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
+import { ZardKbdImports } from '@/shared/components/kbd/kbd.imports';
 
 @Component({
   selector: 'z-demo-command-shortcuts-dialog',
-  imports: [ZardCommandImports],
+  imports: [ZardCommandImports, ZardKbdImports],
   template: `
     <z-command #cmd="zCommand">
       <z-command-input placeholder="Type a command or search..." />
@@ -19,9 +20,30 @@ import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
           <div class="py-6 text-center text-sm">No results found.</div>
         }
         <z-command-option-group zLabel="Settings">
-          <z-command-option zLabel="Profile" zValue="profile" zIcon="lucideUser" zShortcut="⌘P" />
-          <z-command-option zLabel="Billing" zValue="billing" zIcon="lucideCreditCard" zShortcut="⌘B" />
-          <z-command-option zLabel="Settings" zValue="settings" zIcon="lucideSettings" zShortcut="⌘S" />
+          <z-command-option zLabel="Profile" zValue="profile" zIcon="lucideUser">
+            <span data-slot="command-option-trailing">
+              <z-kbd-group>
+                <z-kbd>⌘</z-kbd>
+                <z-kbd>P</z-kbd>
+              </z-kbd-group>
+            </span>
+          </z-command-option>
+          <z-command-option zLabel="Billing" zValue="billing" zIcon="lucideCreditCard">
+            <span data-slot="command-option-trailing">
+              <z-kbd-group>
+                <z-kbd>⌘</z-kbd>
+                <z-kbd>B</z-kbd>
+              </z-kbd-group>
+            </span>
+          </z-command-option>
+          <z-command-option zLabel="Settings" zValue="settings" zIcon="lucideSettings">
+            <span data-slot="command-option-trailing">
+              <z-kbd-group>
+                <z-kbd>⌘</z-kbd>
+                <z-kbd>S</z-kbd>
+              </z-kbd-group>
+            </span>
+          </z-command-option>
         </z-command-option-group>
       </z-command-list>
     </z-command>
@@ -42,6 +64,7 @@ class ZardDemoCommandShortcutsDialogComponent implements AfterViewInit {
   template: `
     <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCommandShortcutsComponent {
   private readonly dialogService = inject(ZardDialogService);

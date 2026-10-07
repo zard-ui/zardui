@@ -3,6 +3,13 @@
   "title": "Login form",
   "description": "A simple login form.",
   "category": "Login",
+  "registryDependencies": [
+    "button",
+    "card",
+    "field",
+    "input"
+  ],
+  "dependencies": [],
   "files": [
     {
       "name": "login-01.component.html",

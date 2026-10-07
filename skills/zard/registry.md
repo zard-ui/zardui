@@ -18,6 +18,17 @@ The index is fetched on every command, so it deliberately stays small. Source co
 
 Schemas: `https://zardui.com/schema/registry.json`, `https://zardui.com/schema/registry-item.json`, `https://zardui.com/schema/icons.json`.
 
+### Blocks
+
+Blocks — pre-built compositions like `dashboard-01` or `login-01` — are a parallel, smaller index at the same base URL, not entries in `registry.json`:
+
+| File                     | What it is                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------------ |
+| `/r/blocks-registry.json` | The block index: `id`, `title`, `description`, `category`, `registryDependencies`, `dependencies`. |
+| `/r/blocks/<id>.json`    | One block, with `files` added — path and content for every file it writes.                       |
+
+`zard-cli add <id>` accepts a block id the same way it accepts a component name — component names are checked first, so a block id never collides with one. A block writes one directory per block under `aliases.blocks` (default `@/shared/blocks`), not `aliases.components`. See [mcp.md](./mcp.md) for `list-blocks` / `get-block`.
+
 ---
 
 ## `schemaVersion`

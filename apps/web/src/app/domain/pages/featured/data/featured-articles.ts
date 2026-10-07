@@ -33,6 +33,9 @@ export interface FeaturedArticle {
  * uploads a dedicated cover, `cover_image` comes back `null` while `social_image` still holds the
  * image dev.to actually renders on the article — that is the case of the ZardUI Beta post below.
  * Always keep the remote CDN URL here; covers are never copied into the repository.
+ *
+ * Medium has no public article endpoint and answers scripted requests with 403; its RSS feed
+ * (`https://medium.com/feed/@{username}`) carries title, date, tags and images instead.
  */
 export const FEATURED_ARTICLES: readonly FeaturedArticle[] = [
   {
@@ -60,6 +63,19 @@ export const FEATURED_ARTICLES: readonly FeaturedArticle[] = [
     readingTime: 4,
     source: 'dev.to',
     tags: ['webdev', 'angular', 'tailwindcss', 'typescript'],
+    language: 'en',
+  },
+  {
+    id: 'how-i-met-my-best-angular-ui-library',
+    title: 'How I Met My Best Angular UI Library',
+    author: 'Djawad',
+    url: 'https://medium.com/@ghased/how-i-meet-my-best-angular-ui-library-54596ad28ede',
+    // The article opens on screenshots of other libraries; this is its Zard UI one.
+    cover: 'https://miro.medium.com/v2/resize:fit:1024/1*yyznCy_ysDaidR0QSsbDqw.png',
+    publishedAt: '2026-08-17',
+    readingTime: 4,
+    source: 'Medium',
+    tags: ['angular', 'uikit', 'figma', 'front-end-development'],
     language: 'en',
   },
 ];

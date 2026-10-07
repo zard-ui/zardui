@@ -320,7 +320,7 @@ import { Component } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-basic-demo',
+  selector: 'z-demo-context-menu-basic',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -339,7 +339,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuBasicDemoComponent {
+export class ZardDemoContextMenuBasicComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -356,7 +356,7 @@ import { Component } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-submenu-demo',
+  selector: 'z-demo-context-menu-submenu',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -391,7 +391,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuSubmenuDemoComponent {
+export class ZardDemoContextMenuSubmenuComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -408,7 +408,7 @@ import { Component } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-shortcuts-demo',
+  selector: 'z-demo-context-menu-shortcuts',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -445,7 +445,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuShortcutsDemoComponent {
+export class ZardDemoContextMenuShortcutsComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -462,7 +462,7 @@ import { Component } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-groups-demo',
+  selector: 'z-demo-context-menu-groups',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -508,7 +508,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuGroupsDemoComponent {
+export class ZardDemoContextMenuGroupsComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -528,7 +528,7 @@ import { lucideClipboardPaste, lucideCopy, lucideScissors, lucideTrash2 } from '
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-icons-demo',
+  selector: 'z-demo-context-menu-icons',
   imports: [ZardContextMenuImports, NgIcon],
   template: `
     <div
@@ -562,7 +562,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   viewProviders: [provideIcons({ lucideClipboardPaste, lucideCopy, lucideScissors, lucideTrash2 })],
   host: { class: 'contents' },
 })
-export class ZardContextMenuIconsDemoComponent {
+export class ZardDemoContextMenuIconsComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -579,7 +579,7 @@ import { Component, signal } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-checkboxes-demo',
+  selector: 'z-demo-context-menu-checkboxes',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -600,7 +600,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuCheckboxesDemoComponent {
+export class ZardDemoContextMenuCheckboxesComponent {
   readonly showBookmarksBar = signal(true);
   readonly showFullUrls = signal(false);
   readonly showDeveloperTools = signal(true);
@@ -617,7 +617,7 @@ import { Component, signal } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-radio-demo',
+  selector: 'z-demo-context-menu-radio',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -645,7 +645,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuRadioDemoComponent {
+export class ZardDemoContextMenuRadioComponent {
   readonly person = signal('pedro');
   readonly theme = signal('light');
 }
@@ -664,7 +664,7 @@ import { lucidePencil, lucideShare, lucideTrash2 } from '@ng-icons/lucide';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-destructive-demo',
+  selector: 'z-demo-context-menu-destructive',
   imports: [ZardContextMenuImports, NgIcon],
   template: `
     <div
@@ -694,7 +694,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   viewProviders: [provideIcons({ lucidePencil, lucideShare, lucideTrash2 })],
   host: { class: 'contents' },
 })
-export class ZardContextMenuDestructiveDemoComponent {
+export class ZardDemoContextMenuDestructiveComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -721,15 +721,15 @@ interface FileRow {
 }
 
 @Component({
-  selector: 'z-context-menu-table-rows-demo',
+  selector: 'z-demo-context-menu-table-rows',
   imports: [ZardContextMenuImports, ZardTableImports],
   template: `
     <div class="w-full max-w-md">
       <table z-table>
         <thead z-table-header>
           <tr z-table-row>
-            <th z-table-head>Name</th>
-            <th z-table-head class="text-right">Size</th>
+            <th z-table-head scope="col">Name</th>
+            <th z-table-head scope="col" class="text-right">Size</th>
           </tr>
         </thead>
         <tbody z-table-body>
@@ -763,7 +763,7 @@ interface FileRow {
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuTableRowsDemoComponent {
+export class ZardDemoContextMenuTableRowsComponent {
   private readonly contextMenu = inject(ZardContextMenuService);
   private readonly rowMenu = viewChild.required<ZardDropdownMenuContentComponent>('rowMenu');
 
@@ -820,7 +820,7 @@ import { Component } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-disabled-demo',
+  selector: 'z-demo-context-menu-disabled',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -839,7 +839,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuDisabledDemoComponent {}
+export class ZardDemoContextMenuDisabledComponent {}
 ```
 
 ## API Reference
@@ -866,7 +866,7 @@ Opens a menu at a pointer event or a coordinate, for one shared menu serving man
 
 ### z-dropdown-menu-content
 
-The menu surface. Every item primitive below is declared inside it.
+The menu surface. Every item primitive below is declared inside it. Placement is automatic — the menu opens at the pointer and flips to whichever quadrant keeps it on screen. The `zSide`/`zAlign`/`zSideOffset` inputs this component also has are for `z-dropdown`; a context menu has no anchor element to be a side or an alignment of, so they have no effect here.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -896,7 +896,7 @@ Menu row that opens a nested menu to its side, on hover, click or `ArrowRight`.
 
 ### z-dropdown-menu-sub-content
 
-Surface of a submenu. Declared next to its sub-trigger and referenced by it.
+Surface of a submenu. Declared next to its sub-trigger and referenced by it. It has no `side`/`align` inputs — the submenu always opens beside its trigger and flips to the opposite side when the preferred one runs out of room, the same automatic behaviour a native OS submenu has.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -910,6 +910,7 @@ Menu row with a checked state and `menuitemcheckbox` semantics.
 | --- | --- | --- | --- |
 | `[(zChecked)]` | Checked state for the item. | `boolean` | `false` |
 | `[zDisabled]` | Disables the item. | `boolean` | `false` |
+| `[zType]` | Visual type of the item. | `'default' \| 'destructive'` | `'default'` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-radio-group
@@ -929,6 +930,7 @@ Menu row with `menuitemradio` semantics.
 | --- | --- | --- | --- |
 | `[zValue]` | Value represented by this radio item. | `string` | `-` |
 | `[zDisabled]` | Disables the item. | `boolean` | `false` |
+| `[zType]` | Visual type of the item. | `'default' \| 'destructive'` | `'default'` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-group

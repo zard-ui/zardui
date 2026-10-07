@@ -720,7 +720,7 @@ export class ZardDemoPopoverBasicComponent {}
 
 ### Align
 
-Use `zAlign` to align the popover against the trigger.
+Set `zAlign` to `start`, `center` or `end` to align the popover along the side chosen by `zPlacement`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -811,7 +811,7 @@ export class ZardDemoPopoverFormComponent {}
 
 ### Placement
 
-Use `zPlacement` to choose the side the popover opens on.
+Set `zPlacement` to `top`, `bottom`, `left` or `right` to choose which side of the trigger the popover opens on. The overlay flips to another side automatically when the preferred placement does not fit in the viewport.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -856,7 +856,7 @@ export class ZardDemoPopoverPlacementComponent {}
 
 ### Hover
 
-Set `zTrigger="hover"` to open the popover on pointer enter.
+Set `zTrigger="hover"` to open the popover on pointer enter instead of click. Prefer `[zHoverCard]` for a hover-triggered preview of non-essential content — it adds open/close delays that a hover-triggered popover does not have, so a passing cursor does not trigger it.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -886,42 +886,45 @@ import { ZardPopoverImports } from '@/shared/components/popover/popover.imports'
 export class ZardDemoPopoverHoverComponent {}
 ```
 
-### Interactive
+### Close On Action
 
-Control the popover programmatically through `show()`, `hide()` and `toggle()`.
+Read the `zPopover` directive with `viewChild` and call `hide()` to close the popover programmatically — for example, after an in-panel action like a save button completes.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardPopoverDirective } from '@/shared/components/popover/popover.component';
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-demo-popover-interactive',
-  imports: [FormsModule, ZardButtonComponent, ZardInputComponent, ...ZardPopoverImports],
+  selector: 'z-demo-popover-close-on-action',
+  imports: [FormsModule, ZardButtonComponent, ZardInputComponent, ...ZardFieldImports, ...ZardPopoverImports],
   template: `
-    <button type="button" z-button zPopover zType="outline" [zContent]="interactiveContent" #popoverTrigger>
+    <button type="button" z-button zPopover zType="outline" [zContent]="popoverContent" #popoverTrigger>
       Settings
     </button>
 
-    <ng-template #interactiveContent>
+    <ng-template #popoverContent>
       <z-popover>
         <div z-popover-header>
           <h4 z-popover-title>Settings</h4>
           <p z-popover-description>Manage your account settings.</p>
         </div>
 
-        <div class="space-y-2">
-          <label for="interactive-width" class="text-sm font-medium">Width</label>
-          <input id="interactive-width" z-input type="text" placeholder="100%" class="w-full" [(ngModel)]="width" />
-        </div>
+        <div z-field-group class="gap-3">
+          <div z-field>
+            <label z-field-label for="close-on-action-width">Width</label>
+            <input id="close-on-action-width" z-input type="text" placeholder="100%" [(ngModel)]="width" />
+          </div>
 
-        <div class="space-y-2">
-          <label for="interactive-height" class="text-sm font-medium">Height</label>
-          <input id="interactive-height" z-input type="text" placeholder="25px" class="w-full" [(ngModel)]="height" />
+          <div z-field>
+            <label z-field-label for="close-on-action-height">Height</label>
+            <input id="close-on-action-height" z-input type="text" placeholder="25px" [(ngModel)]="height" />
+          </div>
         </div>
 
         <button type="button" z-button class="w-full" zSize="sm" (click)="saveChanges()">Save changes</button>
@@ -930,14 +933,13 @@ import { ZardPopoverImports } from '@/shared/components/popover/popover.imports'
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoPopoverInteractiveComponent {
+export class ZardDemoPopoverCloseOnActionComponent {
   readonly popoverDirective = viewChild.required('popoverTrigger', { read: ZardPopoverDirective });
 
   readonly width = signal('100%');
   readonly height = signal('25px');
 
   saveChanges() {
-    console.log('Settings saved:', { width: this.width(), height: this.height() });
     this.popoverDirective().hide();
   }
 }
@@ -960,7 +962,7 @@ The directive that creates a popover when applied to a trigger element.
 | `[zOrigin]` | Custom anchor element | `ElementRef` | `-` |
 | `[zVisible]` | Control visibility programmatically | `boolean` | `false` |
 | `[zOverlayClickable]` | Close on outside click | `boolean` | `true` |
-| `(zVisibleChange)` | Emits when visibility changes. Fires immediately, before the exit animation ends | `EventEmitter<boolean>` |  |
+| `(zVisibleChange)` | Emits when visibility changes. Fires immediately, before the exit animation ends | `EventEmitter<boolean>` | `-` |
 
 ### z-popover
 

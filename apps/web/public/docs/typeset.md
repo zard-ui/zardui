@@ -97,7 +97,7 @@ typeset.css
 - `--typeset-leading` sets the space between lines.
 - `--typeset-flow` sets the space between blocks; headings and rules derive their spacing from it.
 
-#### Typeset sets no max-width
+Typeset sets no max-width
 
 Your layout owns the measure. The builder's Measure control puts it on the wrapper instead of hiding it in the stylesheet, so typeset never argues with the layout around it.
 

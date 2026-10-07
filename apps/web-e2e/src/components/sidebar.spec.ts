@@ -63,19 +63,27 @@ test.describe('Sidebar component', () => {
     await expect(demoPage.firstDemoBox.locator('[data-slot="sidebar"]')).toHaveAttribute('data-state', 'expanded');
   });
 
-  test('the open state survives a reload through the cookie when zDefaultOpen is unset', async ({ page }) => {
-    // A block is the realistic case: an app shell that leaves the initial state to the cookie.
+  test('a block with an explicit zDefaultOpen neither reads nor writes the cookie', async ({ page, context }) => {
+    // The blocks pin zDefaultOpen so their previews are deterministic. Reading and writing the
+    // cookie when the input is unset is covered by the sidebar service unit tests.
     await page.goto('/blocks/preview/sidebar-07');
+    await context.addCookies([{ name: 'sidebar_state', value: 'false', url: page.url() }]);
+    await page.reload();
+
     const sidebar = page.locator('[data-slot="sidebar"]').first();
+    // A persisted collapsed state does not override the explicit default.
     await expect(sidebar).toHaveAttribute('data-state', 'expanded');
 
+    await context.clearCookies();
     await page.locator('[data-slot="sidebar-trigger"]').first().click();
     await expect(sidebar).toHaveAttribute('data-state', 'collapsed');
 
-    await page.reload();
+    // Collapsing it does not persist a state the provider would never read back.
+    const cookies = await context.cookies();
+    expect(cookies.find(cookie => cookie.name === 'sidebar_state')).toBeUndefined();
 
-    // Already collapsed in the server-rendered markup, so there is no layout flash.
-    await expect(page.locator('[data-slot="sidebar"]').first()).toHaveAttribute('data-state', 'collapsed');
+    await page.reload();
+    await expect(page.locator('[data-slot="sidebar"]').first()).toHaveAttribute('data-state', 'expanded');
   });
 
   test('the rail toggles the sidebar too', async () => {

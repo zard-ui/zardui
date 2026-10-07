@@ -530,37 +530,9 @@ trigger[zHoverCard]
 
 ## Examples
 
-### Default
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.component';
-
-/** Demonstrates the default hover card behavior and content composition. */
-@Component({
-  selector: 'z-demo-hover-card-default',
-  imports: [ZardButtonComponent, ZardHoverCardComponent, ZardHoverCardDirective],
-  template: `
-    <button type="button" z-button zType="link" [zHoverCard]="content" [zOpenDelay]="100">Hover Here</button>
-
-    <ng-template #content>
-      <z-hover-card>
-        <div class="space-y-1">
-          <h4 class="text-sm font-semibold">Next.js</h4>
-          <p class="text-sm">The React Framework - created and maintained by @vercel.</p>
-          <div class="text-muted-foreground text-xs">Released December 2021</div>
-        </div>
-      </z-hover-card>
-    </ng-template>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoHoverCardDefaultComponent {}
-```
-
 ### Sides
+
+Set `zPlacement` to `top`, `bottom`, `left` or `right` to choose which side of the trigger the hover card opens on. The overlay flips to another side automatically when the preferred placement does not fit in the viewport.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -570,7 +542,7 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.co
 
 /** Demonstrates every supported hover card placement. */
 @Component({
-  selector: 'z-demo-hover-card-placements',
+  selector: 'z-demo-hover-card-sides',
   imports: [ZardButtonComponent, ZardHoverCardComponent, ZardHoverCardDirective],
   template: `
     <div class="flex flex-wrap gap-2">
@@ -662,6 +634,53 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.co
 export class ZardDemoHoverCardSidesComponent {}
 ```
 
+### Delay
+
+Hover intent defaults to a 700ms open delay and a 300ms close delay — long enough to ignore a passing cursor, unlike a tooltip. Override either with the `zOpenDelay` and `zCloseDelay` inputs, in milliseconds.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.component';
+
+/** Contrasts the default hover intent delay with an instant, tooltip-like open. */
+@Component({
+  selector: 'z-demo-hover-card-delay',
+  imports: [ZardButtonComponent, ZardHoverCardComponent, ZardHoverCardDirective],
+  template: `
+    <div class="flex flex-wrap gap-2">
+      <button type="button" z-button zType="outline" [zHoverCard]="instantContent" [zOpenDelay]="0" [zCloseDelay]="0">
+        No delay
+      </button>
+      <button type="button" z-button zType="outline" [zHoverCard]="slowContent" [zOpenDelay]="1000" [zCloseDelay]="500">
+        1s delay
+      </button>
+    </div>
+
+    <ng-template #instantContent>
+      <z-hover-card>
+        <div class="flex flex-col gap-1">
+          <h4 class="font-medium">No delay</h4>
+          <p>Opens immediately, like a tooltip — a quick pass of the cursor is enough to trigger it.</p>
+        </div>
+      </z-hover-card>
+    </ng-template>
+
+    <ng-template #slowContent>
+      <z-hover-card>
+        <div class="flex flex-col gap-1">
+          <h4 class="font-medium">1s delay</h4>
+          <p>Opens after a full second and closes after 500ms, set with [zOpenDelay] and [zCloseDelay].</p>
+        </div>
+      </z-hover-card>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoHoverCardDelayComponent {}
+```
+
 ## API Reference
 
 ### [zHoverCard]
@@ -675,11 +694,11 @@ The directive that opens rich content when its trigger is hovered or focused.
 | `[zOpenDelay]` | Delay in milliseconds before opening | `number` | `700` |
 | `[zCloseDelay]` | Delay in milliseconds before closing | `number` | `300` |
 | `[zVisible]` | Controls visibility programmatically | `boolean` | `false` |
-| `(zVisibleChange)` | Emits when visibility changes | `output<boolean>` | `-` |
+| `(zVisibleChange)` | Emits when visibility changes | `EventEmitter<boolean>` | `-` |
 
 ### z-hover-card
 
-The wrapper component that styles hover card content.
+The wrapper component that styles hover card content. Exposes `data-state` and `data-side` while mounted, driving the open and directional animations.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

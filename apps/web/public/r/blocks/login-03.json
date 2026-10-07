@@ -3,6 +3,16 @@
   "title": "Login with muted background",
   "description": "A login page with a muted background color.",
   "category": "Login",
+  "registryDependencies": [
+    "button",
+    "card",
+    "field",
+    "input"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "login-03.component.html",

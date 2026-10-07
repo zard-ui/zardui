@@ -6,16 +6,16 @@ import { lucidePlus } from '@ng-icons/lucide';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import {
   ZardButtonGroupComponent,
-  ZardButtonGroupDividerComponent,
+  ZardButtonGroupSeparatorComponent,
 } from '@/shared/components/button-group/button-group.component';
 
 @Component({
   selector: 'z-demo-button-group-split',
-  imports: [ZardButtonGroupComponent, ZardButtonGroupDividerComponent, ZardButtonComponent, NgIcon],
+  imports: [ZardButtonGroupComponent, ZardButtonGroupSeparatorComponent, ZardButtonComponent, NgIcon],
   template: `
     <z-button-group>
       <button type="button" z-button zType="secondary">Button</button>
-      <z-button-group-divider />
+      <z-button-group-separator />
       <button type="button" z-button zType="secondary" zSize="icon" aria-label="Add">
         <ng-icon name="lucidePlus" />
       </button>

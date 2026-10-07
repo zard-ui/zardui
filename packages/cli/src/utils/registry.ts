@@ -40,6 +40,39 @@ export interface RegistryItem {
   icons?: RegistryIcons;
 }
 
+/**
+ * A block, as the registry publishes it.
+ *
+ * Blocks live under `/blocks/` in their own index, and their file entries carry
+ * a `path` the components' do not — so they get their own type instead of being
+ * bent into `RegistryItem`.
+ */
+export interface BlockItem {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  registryDependencies?: string[];
+  dependencies?: string[];
+  files: Array<{
+    name: string;
+    path: string;
+    content: string;
+    language: string;
+  }>;
+}
+
+export interface BlocksIndex {
+  blocks: Array<{
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    registryDependencies?: string[];
+    dependencies?: string[];
+  }>;
+}
+
 export interface RegistryIndex {
   $schema: string;
   /** The file's shape. Absent from registries older than the field. */
@@ -119,12 +152,50 @@ export async function fetchRegistryIndex(registryUrl?: string): Promise<Registry
 
 export function invalidateRegistryCache(): void {
   registryIndexCache.clear();
+  blocksIndexCache.clear();
 }
 
 export async function fetchComponentFromRegistry(componentName: string, registryUrl?: string): Promise<RegistryItem> {
   const baseUrl = registryUrl || DEFAULT_REGISTRY_URL;
   const url = `${baseUrl}/${componentName}.json`;
   return fetchJson<RegistryItem>(url);
+}
+
+const blocksIndexCache = new Map<string, { data: BlocksIndex; timestamp: number }>();
+
+/**
+ * The block index, cached like the component one.
+ *
+ * A registry that predates blocks has no `blocks-registry.json`; that is not an
+ * error, it just means this registry publishes none.
+ */
+export async function fetchBlocksIndex(registryUrl?: string): Promise<BlocksIndex> {
+  const baseUrl = registryUrl || DEFAULT_REGISTRY_URL;
+  const cached = blocksIndexCache.get(baseUrl);
+
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data;
+  }
+
+  let data: BlocksIndex;
+  try {
+    data = await fetchJson<BlocksIndex>(`${baseUrl}/blocks-registry.json`);
+  } catch {
+    data = { blocks: [] };
+  }
+
+  blocksIndexCache.set(baseUrl, { data, timestamp: Date.now() });
+  return data;
+}
+
+export async function fetchBlockFromRegistry(blockId: string, registryUrl?: string): Promise<BlockItem> {
+  const baseUrl = registryUrl || DEFAULT_REGISTRY_URL;
+  return fetchJson<BlockItem>(`${baseUrl}/blocks/${blockId}.json`);
+}
+
+export async function getAvailableBlocks(registryUrl?: string): Promise<string[]> {
+  const index = await fetchBlocksIndex(registryUrl);
+  return index.blocks.map(block => block.id);
 }
 
 export async function getAvailableComponents(registryUrl?: string): Promise<string[]> {
@@ -157,6 +228,17 @@ export function transformContent(content: string, config: Config, options: Trans
     core: trimSlashes(config.aliases.core),
     services: trimSlashes(config.aliases.services),
   };
+
+  /*
+   * Blocks are authored inside the monorepo, so their sources import the library
+   * by its workspace alias (`@zard/components/card/card.imports`). Nothing maps
+   * that name in the installing project — left alone, every block would arrive
+   * with imports that do not resolve.
+   */
+  transformed = transformed.replace(
+    /(['"])@zard\/components\/([\w\-/.]+)\1/g,
+    (_match, quote: string, subpath: string) => `${quote}${aliases.components}/${subpath}${quote}`,
+  );
 
   // Replace relative component imports with aliased imports
   const componentImportRegex = /from ['"]\.\.\/([\w-/.]+)['"]/g;
@@ -191,13 +273,32 @@ export function transformContent(content: string, config: Config, options: Trans
   return transformed;
 }
 
+/**
+ * A block in the shape the installer already understands.
+ *
+ * The two differ only in what the registry carries: a block entry adds `path`
+ * and `language` per file, neither of which affects how the files are written.
+ */
+function blockAsRegistryItem(block: BlockItem): RegistryItem {
+  return {
+    name: block.id,
+    type: 'registry:component',
+    basePath: 'blocks',
+    dependencies: block.dependencies,
+    registryDependencies: block.registryDependencies,
+    files: block.files.map(file => ({ name: file.name, content: file.content })),
+  };
+}
+
 export async function fetchComponent(
   componentName: string,
   config: Config,
   registryUrl?: string,
-  options: TransformOptions = {},
+  options: TransformOptions & { isBlock?: boolean } = {},
 ): Promise<RegistryItem> {
-  const item = await fetchComponentFromRegistry(componentName, registryUrl);
+  const item = options.isBlock
+    ? blockAsRegistryItem(await fetchBlockFromRegistry(componentName, registryUrl))
+    : await fetchComponentFromRegistry(componentName, registryUrl);
 
   if (!item.files || !Array.isArray(item.files)) {
     throw new ConfigError(`Component "${componentName}" has no files in the registry`);

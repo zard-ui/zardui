@@ -467,9 +467,9 @@ export const drawerHeaderVariants = cva(
   'flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-left',
 );
 
-export const drawerTitleVariants = cva('text-base font-medium text-foreground');
+export const drawerTitleVariants = cva('text-base font-medium text-foreground wrap-anywhere');
 
-export const drawerDescriptionVariants = cva('text-sm text-balance text-muted-foreground');
+export const drawerDescriptionVariants = cva('text-sm text-balance text-muted-foreground wrap-anywhere');
 
 export const drawerFooterVariants = cva('mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0');
 
@@ -1799,46 +1799,85 @@ z-drawer
 A vertical drawer sizes itself to its content and is capped at `calc(100dvh - 6rem)`. A side drawer spans 75% of the viewport width, or `24rem` on larger screens. Override either with `class`.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
+import { ZardDrawerService } from '@/shared/components/drawer/drawer.service';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+/** Placeholder block the service renders as string content. */
+const TALL_BOX = '<div class="bg-muted h-96 w-full rounded-2xl"></div>';
+const FILL_BOX = '<div class="bg-muted min-h-40 w-full rounded-2xl"></div>';
 
 @Component({
-  imports: [ZardButtonComponent, ZardDrawerImports],
+  selector: 'z-demo-drawer-custom-sizes',
+  imports: [ZardButtonComponent, ZardDrawerImports, ZardTabsImports],
   template: `
-    <div class="flex flex-wrap gap-2">
-      <button type="button" z-button zType="secondary" (click)="halfHeight.set(true)">Half height</button>
-      <button type="button" z-button zType="secondary" (click)="wideSide.set(true)">Wide side</button>
-    </div>
+    <z-tab-group>
+      <z-tab label="Template">
+        <div class="flex flex-wrap gap-2">
+          <button type="button" z-button zType="secondary" (click)="halfHeight.set(true)">Half height</button>
+          <button type="button" z-button zType="secondary" (click)="wideSide.set(true)">Wide side</button>
+        </div>
 
-    <z-drawer [(zVisible)]="halfHeight" class="h-[50vh]">
-      <z-drawer-header>
-        <z-drawer-title>Half height</z-drawer-title>
-        <z-drawer-description>The drawer keeps the height you give it.</z-drawer-description>
-      </z-drawer-header>
+        <z-drawer [(zVisible)]="halfHeight" class="h-[50vh]">
+          <z-drawer-header>
+            <z-drawer-title>Half height</z-drawer-title>
+            <z-drawer-description>The drawer keeps the height you give it.</z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 overflow-y-auto p-4">
+            <div class="bg-muted h-96 w-full rounded-2xl"></div>
+          </div>
+        </z-drawer>
 
-      <div class="flex-1 overflow-y-auto p-4">
-        <div class="bg-muted h-96 w-full rounded-2xl"></div>
-      </div>
-    </z-drawer>
+        <z-drawer [(zVisible)]="wideSide" zPlacement="right" class="sm:w-lg">
+          <z-drawer-header>
+            <z-drawer-title>Wide side</z-drawer-title>
+            <z-drawer-description>A side drawer is 24rem wide until you widen it.</z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 p-4">
+            <div class="bg-muted size-full rounded-2xl"></div>
+          </div>
+        </z-drawer>
+      </z-tab>
 
-    <z-drawer [(zVisible)]="wideSide" zPlacement="right" class="sm:w-lg">
-      <z-drawer-header>
-        <z-drawer-title>Wide side</z-drawer-title>
-        <z-drawer-description>A side drawer is 24rem wide until you widen it.</z-drawer-description>
-      </z-drawer-header>
-
-      <div class="flex-1 p-4">
-        <div class="bg-muted size-full rounded-2xl"></div>
-      </div>
-    </z-drawer>
+      <z-tab label="Service">
+        <div class="flex flex-wrap gap-2">
+          <button type="button" z-button zType="secondary" (click)="openHalfHeight()">Half height</button>
+          <button type="button" z-button zType="secondary" (click)="openWideSide()">Wide side</button>
+        </div>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDrawerCustomSizesComponent {
+  private readonly drawerService = inject(ZardDrawerService);
+
   readonly halfHeight = signal(false);
   readonly wideSide = signal(false);
+
+  openHalfHeight() {
+    this.drawerService.create({
+      zTitle: 'Half height',
+      zDescription: 'The drawer keeps the height you give it.',
+      zCustomClasses: 'h-[50vh]',
+      zContent: TALL_BOX,
+      zHideFooter: true,
+    });
+  }
+
+  openWideSide() {
+    this.drawerService.create({
+      zTitle: 'Wide side',
+      zDescription: 'A side drawer is 24rem wide until you widen it.',
+      zPlacement: 'right',
+      zCustomClasses: 'sm:w-lg',
+      zContent: FILL_BOX,
+      zHideFooter: true,
+    });
+  }
 }
 ```
 
@@ -1847,49 +1886,81 @@ export class ZardDemoDrawerCustomSizesComponent {
 Use `zPlacement` to set the side of the drawer. Values are `top`, `right`, `bottom` and `left`.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
+import { ZardDrawerService } from '@/shared/components/drawer/drawer.service';
 import type { ZardDrawerPlacement } from '@/shared/components/drawer/drawer.variants';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+const PLACEMENTS: ZardDrawerPlacement[] = ['top', 'right', 'bottom', 'left'];
+
+/** Placeholder block the service renders as string content. */
+const BOX = '<div class="bg-muted min-h-40 w-full rounded-2xl"></div>';
 
 @Component({
-  imports: [ZardButtonComponent, ZardDrawerImports],
+  selector: 'z-demo-drawer-position',
+  imports: [ZardButtonComponent, ZardDrawerImports, ZardTabsImports],
   template: `
-    <div class="flex flex-wrap gap-2">
-      @for (option of placements; track option) {
-        <button type="button" z-button zType="secondary" class="capitalize" (click)="open(option)">
-          {{ option }}
-        </button>
-      }
-    </div>
+    <z-tab-group>
+      <z-tab label="Template">
+        <div class="flex flex-wrap gap-2">
+          @for (option of placements; track option) {
+            <button type="button" z-button zType="secondary" class="capitalize" (click)="open(option)">
+              {{ option }}
+            </button>
+          }
+        </div>
 
-    <z-drawer [(zVisible)]="visible" [zPlacement]="placement()">
-      <z-drawer-header>
-        <z-drawer-title>Move Goal</z-drawer-title>
-        <z-drawer-description>Set your daily activity goal.</z-drawer-description>
-      </z-drawer-header>
+        <z-drawer [(zVisible)]="visible" [zPlacement]="placement()">
+          <z-drawer-header>
+            <z-drawer-title>Move Goal</z-drawer-title>
+            <z-drawer-description>Set your daily activity goal.</z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 p-4">
+            <div class="bg-muted size-full min-h-40 rounded-2xl"></div>
+          </div>
+          <z-drawer-footer>
+            <button type="button" z-button z-drawer-close>Close</button>
+          </z-drawer-footer>
+        </z-drawer>
+      </z-tab>
 
-      <div class="flex-1 p-4">
-        <div class="bg-muted size-full min-h-40 rounded-2xl"></div>
-      </div>
-
-      <z-drawer-footer>
-        <button type="button" z-button z-drawer-close>Close</button>
-      </z-drawer-footer>
-    </z-drawer>
+      <z-tab label="Service">
+        <div class="flex flex-wrap gap-2">
+          @for (option of placements; track option) {
+            <button type="button" z-button zType="secondary" class="capitalize" (click)="openDrawer(option)">
+              {{ option }}
+            </button>
+          }
+        </div>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDrawerPositionComponent {
-  readonly placements: ZardDrawerPlacement[] = ['top', 'right', 'bottom', 'left'];
+  private readonly drawerService = inject(ZardDrawerService);
 
+  readonly placements = PLACEMENTS;
   readonly visible = signal(false);
   readonly placement = signal<ZardDrawerPlacement>('bottom');
 
   open(placement: ZardDrawerPlacement) {
     this.placement.set(placement);
     this.visible.set(true);
+  }
+
+  openDrawer(placement: ZardDrawerPlacement) {
+    this.drawerService.create({
+      zTitle: 'Move Goal',
+      zDescription: 'Set your daily activity goal.',
+      zPlacement: placement,
+      zContent: BOX,
+      zOkText: null,
+      zCancelText: 'Close',
+    });
   }
 }
 ```
@@ -1899,35 +1970,60 @@ export class ZardDemoDrawerPositionComponent {
 Use `zHandle` to render a swipe handle.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
+import { ZardDrawerService } from '@/shared/components/drawer/drawer.service';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+/** Placeholder block the service renders as string content. */
+const BOX = '<div class="bg-muted h-80 w-full rounded-2xl"></div>';
 
 @Component({
-  imports: [ZardButtonComponent, ZardDrawerImports],
+  selector: 'z-demo-drawer-swipe-handle',
+  imports: [ZardButtonComponent, ZardDrawerImports, ZardTabsImports],
   template: `
-    <button type="button" z-button zType="secondary" (click)="visible.set(true)">Open Drawer</button>
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="secondary" (click)="visible.set(true)">Open Drawer</button>
 
-    <z-drawer [(zVisible)]="visible" zHandle>
-      <z-drawer-header>
-        <z-drawer-title>Drawer</z-drawer-title>
-        <z-drawer-description>Drawer with a swipe handle.</z-drawer-description>
-      </z-drawer-header>
+        <z-drawer [(zVisible)]="visible" zHandle>
+          <z-drawer-header>
+            <z-drawer-title>Drawer</z-drawer-title>
+            <z-drawer-description>Drawer with a swipe handle.</z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 p-4">
+            <div class="bg-muted h-80 w-full rounded-2xl"></div>
+          </div>
+          <z-drawer-footer>
+            <button type="button" z-button z-drawer-close>Close</button>
+          </z-drawer-footer>
+        </z-drawer>
+      </z-tab>
 
-      <div class="flex-1 p-4">
-        <div class="bg-muted h-80 w-full rounded-2xl"></div>
-      </div>
-
-      <z-drawer-footer>
-        <button type="button" z-button z-drawer-close>Close</button>
-      </z-drawer-footer>
-    </z-drawer>
+      <z-tab label="Service">
+        <button type="button" z-button zType="secondary" (click)="openDrawer()">Open Drawer</button>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDrawerSwipeHandleComponent {
+  private readonly drawerService = inject(ZardDrawerService);
+
   readonly visible = signal(false);
+
+  openDrawer() {
+    this.drawerService.create({
+      zTitle: 'Drawer',
+      zDescription: 'Drawer with a swipe handle.',
+      zHandle: true,
+      zContent: BOX,
+      zOkText: null,
+      zCancelText: 'Close',
+    });
+  }
 }
 ```
 
@@ -1936,67 +2032,127 @@ export class ZardDemoDrawerSwipeHandleComponent {
 Open drawers from inside another drawer. Parent drawers stay mounted and stack behind the frontmost drawer.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDrawerRef } from '@/shared/components/drawer/drawer-ref';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
+import { injectDrawerData, ZardDrawerService } from '@/shared/components/drawer/drawer.service';
 import type { ZardDrawerPlacement } from '@/shared/components/drawer/drawer.variants';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
 
-import { injectIsMobile } from './is-mobile';
+import { injectIsMobile } from './support/is-mobile';
+
+interface NestedDrawerData {
+  level: number;
+  placement: ZardDrawerPlacement;
+  handle: boolean;
+}
+
+const LEVELS = [
+  { title: 'Drawer', description: 'Open another drawer from the same direction.' },
+  { title: 'Nested Drawer', description: 'The parent drawer stays mounted behind this one.' },
+  { title: 'Third Drawer', description: 'Two drawers are stacked behind this one.' },
+];
+
+/** Content the service renders; the last level closes itself, the others open the next one. */
+@Component({
+  selector: 'z-demo-drawer-nested-content',
+  imports: [ZardButtonComponent],
+  template: `
+    <div class="bg-muted size-full min-h-32 rounded-2xl"></div>
+    <div class="flex flex-col gap-2">
+      @if (data.level < levels.length) {
+        <button type="button" z-button zType="outline" (click)="openNext()">Open Nested Drawer</button>
+      } @else {
+        <button type="button" z-button (click)="drawerRef.close()">Close</button>
+      }
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDrawerNestedContentComponent {
+  private readonly drawerService = inject(ZardDrawerService);
+  protected readonly drawerRef = inject(ZardDrawerRef);
+  protected readonly data = injectDrawerData<NestedDrawerData>();
+  protected readonly levels = LEVELS;
+
+  openNext() {
+    openNestedDrawer(this.drawerService, { ...this.data, level: this.data.level + 1 });
+  }
+}
+
+function openNestedDrawer(drawerService: ZardDrawerService, data: NestedDrawerData) {
+  const { title, description } = LEVELS[data.level - 1];
+
+  drawerService.create({
+    zTitle: title,
+    zDescription: description,
+    zContent: ZardDemoDrawerNestedContentComponent,
+    zData: data,
+    zPlacement: data.placement,
+    zHandle: data.handle,
+    zHideFooter: true,
+  });
+}
 
 @Component({
-  imports: [ZardButtonComponent, ZardDrawerImports],
+  selector: 'z-demo-drawer-nested',
+  imports: [ZardButtonComponent, ZardDrawerImports, ZardTabsImports],
   template: `
-    <button type="button" z-button zType="secondary" (click)="first.set(true)">Open Drawer</button>
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="secondary" (click)="first.set(true)">Open Drawer</button>
 
-    <z-drawer [(zVisible)]="first" [zPlacement]="placement()" [zHandle]="isMobile()">
-      <z-drawer-header>
-        <z-drawer-title>Drawer</z-drawer-title>
-        <z-drawer-description>Open another drawer from the same direction.</z-drawer-description>
-      </z-drawer-header>
+        <z-drawer [(zVisible)]="first" [zPlacement]="placement()" [zHandle]="isMobile()">
+          <z-drawer-header>
+            <z-drawer-title>Drawer</z-drawer-title>
+            <z-drawer-description>Open another drawer from the same direction.</z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 p-4">
+            <div class="bg-muted size-full min-h-32 rounded-2xl"></div>
+          </div>
+          <z-drawer-footer>
+            <button type="button" z-button zType="outline" (click)="second.set(true)">Open Nested Drawer</button>
+          </z-drawer-footer>
+        </z-drawer>
 
-      <div class="flex-1 p-4">
-        <div class="bg-muted size-full min-h-32 rounded-2xl"></div>
-      </div>
+        <z-drawer [(zVisible)]="second" [zPlacement]="placement()" [zHandle]="isMobile()">
+          <z-drawer-header>
+            <z-drawer-title>Nested Drawer</z-drawer-title>
+            <z-drawer-description>The parent drawer stays mounted behind this one.</z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 p-4">
+            <div class="bg-muted size-full min-h-32 rounded-2xl"></div>
+          </div>
+          <z-drawer-footer>
+            <button type="button" z-button zType="outline" (click)="third.set(true)">Open Third Drawer</button>
+          </z-drawer-footer>
+        </z-drawer>
 
-      <z-drawer-footer>
-        <button type="button" z-button zType="outline" (click)="second.set(true)">Open Nested Drawer</button>
-      </z-drawer-footer>
-    </z-drawer>
+        <z-drawer [(zVisible)]="third" [zPlacement]="placement()" [zHandle]="isMobile()">
+          <z-drawer-header>
+            <z-drawer-title>Third Drawer</z-drawer-title>
+            <z-drawer-description>Two drawers are stacked behind this one.</z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 p-4">
+            <div class="bg-muted size-full min-h-32 rounded-2xl"></div>
+          </div>
+          <z-drawer-footer>
+            <button type="button" z-button z-drawer-close>Close</button>
+          </z-drawer-footer>
+        </z-drawer>
+      </z-tab>
 
-    <z-drawer [(zVisible)]="second" [zPlacement]="placement()" [zHandle]="isMobile()">
-      <z-drawer-header>
-        <z-drawer-title>Nested Drawer</z-drawer-title>
-        <z-drawer-description>The parent drawer stays mounted behind this one.</z-drawer-description>
-      </z-drawer-header>
-
-      <div class="flex-1 p-4">
-        <div class="bg-muted size-full min-h-32 rounded-2xl"></div>
-      </div>
-
-      <z-drawer-footer>
-        <button type="button" z-button zType="outline" (click)="third.set(true)">Open Third Drawer</button>
-      </z-drawer-footer>
-    </z-drawer>
-
-    <z-drawer [(zVisible)]="third" [zPlacement]="placement()" [zHandle]="isMobile()">
-      <z-drawer-header>
-        <z-drawer-title>Third Drawer</z-drawer-title>
-        <z-drawer-description>Two drawers are stacked behind this one.</z-drawer-description>
-      </z-drawer-header>
-
-      <div class="flex-1 p-4">
-        <div class="bg-muted size-full min-h-32 rounded-2xl"></div>
-      </div>
-
-      <z-drawer-footer>
-        <button type="button" z-button z-drawer-close>Close</button>
-      </z-drawer-footer>
-    </z-drawer>
+      <z-tab label="Service">
+        <button type="button" z-button zType="secondary" (click)="openDrawer()">Open Drawer</button>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDrawerNestedComponent {
+  private readonly drawerService = inject(ZardDrawerService);
   private readonly isMobileViewport = injectIsMobile();
 
   readonly first = signal(false);
@@ -2005,6 +2161,10 @@ export class ZardDemoDrawerNestedComponent {
 
   readonly isMobile = computed(() => this.isMobileViewport());
   readonly placement = computed<ZardDrawerPlacement>(() => (this.isMobile() ? 'bottom' : 'right'));
+
+  openDrawer() {
+    openNestedDrawer(this.drawerService, { level: 1, placement: this.placement(), handle: this.isMobile() });
+  }
 }
 ```
 
@@ -2013,35 +2173,61 @@ export class ZardDemoDrawerNestedComponent {
 Set `[zModal]="false"` to allow interaction with the rest of the page while the drawer is open. A non-modal drawer keeps no mask, so an outside press does not dismiss it.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
+import { ZardDrawerService } from '@/shared/components/drawer/drawer.service';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+/** Placeholder block the service renders as string content. */
+const BOX = '<div class="bg-muted min-h-40 w-full rounded-2xl"></div>';
 
 @Component({
-  imports: [ZardButtonComponent, ZardDrawerImports],
+  selector: 'z-demo-drawer-non-modal',
+  imports: [ZardButtonComponent, ZardDrawerImports, ZardTabsImports],
   template: `
-    <button type="button" z-button zType="outline" (click)="visible.set(true)">Non Modal</button>
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Non Modal</button>
 
-    <z-drawer [(zVisible)]="visible" zPlacement="right" [zModal]="false">
-      <z-drawer-header>
-        <z-drawer-title>Non Modal Drawer</z-drawer-title>
-        <z-drawer-description>The page behind stays scrollable and clickable.</z-drawer-description>
-      </z-drawer-header>
+        <z-drawer [(zVisible)]="visible" zPlacement="right" [zModal]="false">
+          <z-drawer-header>
+            <z-drawer-title>Non Modal Drawer</z-drawer-title>
+            <z-drawer-description>The page behind stays scrollable and clickable.</z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 p-4">
+            <div class="bg-muted size-full rounded-2xl"></div>
+          </div>
+          <z-drawer-footer>
+            <button type="button" z-button z-drawer-close>Close</button>
+          </z-drawer-footer>
+        </z-drawer>
+      </z-tab>
 
-      <div class="flex-1 p-4">
-        <div class="bg-muted size-full rounded-2xl"></div>
-      </div>
-
-      <z-drawer-footer>
-        <button type="button" z-button z-drawer-close>Close</button>
-      </z-drawer-footer>
-    </z-drawer>
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="openDrawer()">Non Modal</button>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDrawerNonModalComponent {
+  private readonly drawerService = inject(ZardDrawerService);
+
   readonly visible = signal(false);
+
+  openDrawer() {
+    this.drawerService.create({
+      zTitle: 'Non Modal Drawer',
+      zDescription: 'The page behind stays scrollable and clickable.',
+      zPlacement: 'right',
+      zMask: false,
+      zContent: BOX,
+      zOkText: null,
+      zCancelText: 'Close',
+    });
+  }
 }
 ```
 
@@ -2050,41 +2236,69 @@ export class ZardDemoDrawerNonModalComponent {
 Use `zSnapPoints` to snap a drawer to preset heights. Numbers between `0` and `1` represent fractions of the viewport. Numbers greater than `1` are treated as pixel values. String values support `px` and `rem` units. Snap points apply to vertical drawers. Track the active one with `[(zSnapPoint)]`; at the largest snap point the drawer gets a `data-expanded` attribute you can style against.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
+import { ZardDrawerService } from '@/shared/components/drawer/drawer.service';
 import type { ZardDrawerSnapPoint } from '@/shared/components/drawer/drawer.utils';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+const SNAP_POINTS: ZardDrawerSnapPoint[] = ['31rem', 1];
+
+/** Placeholder block the service renders as string content. */
+const BOX = '<div class="bg-muted h-80 w-full rounded-2xl"></div>';
 
 @Component({
-  imports: [ZardButtonComponent, ZardDrawerImports],
+  selector: 'z-demo-drawer-snap-points',
+  imports: [ZardButtonComponent, ZardDrawerImports, ZardTabsImports],
   template: `
-    <button type="button" z-button zType="outline" (click)="visible.set(true)">Open Snap Drawer</button>
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Open Snap Drawer</button>
 
-    <z-drawer [(zVisible)]="visible" [zSnapPoints]="snapPoints" [(zSnapPoint)]="snapPoint" zHandle>
-      <z-drawer-header>
-        <z-drawer-title>Snap points</z-drawer-title>
-        <z-drawer-description>
-          Drag the drawer to snap between a compact peek and a near full-height view.
-        </z-drawer-description>
-      </z-drawer-header>
+        <z-drawer [(zVisible)]="visible" [zSnapPoints]="snapPoints" [(zSnapPoint)]="snapPoint" zHandle>
+          <z-drawer-header>
+            <z-drawer-title>Snap points</z-drawer-title>
+            <z-drawer-description>
+              Drag the drawer to snap between a compact peek and a near full-height view.
+            </z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 touch-pan-y overflow-y-auto p-4">
+            <div class="bg-muted h-80 w-full rounded-2xl"></div>
+          </div>
+          <z-drawer-footer>
+            <button type="button" z-button z-drawer-close>Close</button>
+          </z-drawer-footer>
+        </z-drawer>
+      </z-tab>
 
-      <div class="flex-1 touch-pan-y overflow-y-auto p-4">
-        <div class="bg-muted h-80 w-full rounded-2xl"></div>
-      </div>
-
-      <z-drawer-footer>
-        <button type="button" z-button z-drawer-close>Close</button>
-      </z-drawer-footer>
-    </z-drawer>
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="openDrawer()">Open Snap Drawer</button>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDrawerSnapPointsComponent {
-  readonly snapPoints: ZardDrawerSnapPoint[] = ['31rem', 1];
+  private readonly drawerService = inject(ZardDrawerService);
 
+  readonly snapPoints = SNAP_POINTS;
   readonly visible = signal(false);
   readonly snapPoint = signal<ZardDrawerSnapPoint | undefined>('31rem');
+
+  openDrawer() {
+    this.drawerService.create({
+      zTitle: 'Snap points',
+      zDescription: 'Drag the drawer to snap between a compact peek and a near full-height view.',
+      zSnapPoints: SNAP_POINTS,
+      zSnapPoint: '31rem',
+      zHandle: true,
+      zContent: BOX,
+      zOkText: null,
+      zCancelText: 'Close',
+    });
+  }
 }
 ```
 
@@ -2096,11 +2310,14 @@ You can combine the Dialog and Drawer components to create a responsive dialog. 
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardDialogService } from '@/shared/components/dialog';
+import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
+import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
 import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
+import { ZardDrawerService } from '@/shared/components/drawer/drawer.service';
 import { ZardInputComponent } from '@/shared/components/input';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
 
-import { injectIsMobile } from './is-mobile';
+import { injectIsMobile } from './support/is-mobile';
 
 @Component({
   selector: 'z-demo-drawer-profile-form',
@@ -2111,12 +2328,10 @@ import { injectIsMobile } from './is-mobile';
         <label for="drawer-demo-email" class="text-sm leading-none font-medium select-none">Email</label>
         <input z-input id="drawer-demo-email" type="email" value="shadcn@example.com" />
       </div>
-
       <div class="grid gap-3">
         <label for="drawer-demo-username" class="text-sm leading-none font-medium select-none">Username</label>
         <input z-input id="drawer-demo-username" value="@shadcn" />
       </div>
-
       <button type="submit" z-button>Save changes</button>
     </form>
   `,
@@ -2124,34 +2339,69 @@ import { injectIsMobile } from './is-mobile';
 })
 export class ZardDemoDrawerProfileFormComponent {}
 
+/** Same content, two surfaces: a dialog where there is room, a drawer where there is not. */
 @Component({
-  imports: [ZardButtonComponent, ZardDrawerImports, ZardDemoDrawerProfileFormComponent],
+  selector: 'z-demo-drawer-responsive',
+  imports: [
+    ZardButtonComponent,
+    ZardDialogImports,
+    ZardDrawerImports,
+    ZardTabsImports,
+    ZardDemoDrawerProfileFormComponent,
+  ],
   template: `
-    <button type="button" z-button zType="outline" (click)="open()">Edit Profile</button>
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Edit Profile</button>
 
-    <z-drawer [(zVisible)]="visible">
-      <z-drawer-header>
-        <z-drawer-title>Edit profile</z-drawer-title>
-        <z-drawer-description>Make changes to your profile here. Click save when you're done.</z-drawer-description>
-      </z-drawer-header>
+        @if (isMobile()) {
+          <z-drawer [(zVisible)]="visible">
+            <z-drawer-header>
+              <z-drawer-title>Edit profile</z-drawer-title>
+              <z-drawer-description>
+                Make changes to your profile here. Click save when you're done.
+              </z-drawer-description>
+            </z-drawer-header>
+            <div class="p-4">
+              <z-demo-drawer-profile-form />
+            </div>
+          </z-drawer>
+        } @else {
+          <z-dialog [(zVisible)]="visible">
+            <z-dialog-header>
+              <z-dialog-title>Edit profile</z-dialog-title>
+              <z-dialog-description>
+                Make changes to your profile here. Click save when you're done.
+              </z-dialog-description>
+            </z-dialog-header>
+            <z-demo-drawer-profile-form />
+          </z-dialog>
+        }
+      </z-tab>
 
-      <div class="p-4">
-        <z-demo-drawer-profile-form />
-      </div>
-    </z-drawer>
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="open()">Edit Profile</button>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDrawerResponsiveComponent {
   private readonly dialogService = inject(ZardDialogService);
-  private readonly isMobile = injectIsMobile();
+  private readonly drawerService = inject(ZardDrawerService);
+  private readonly isMobileViewport = injectIsMobile();
 
   readonly visible = signal(false);
+  readonly isMobile = this.isMobileViewport;
 
-  /** Same content, two surfaces: a dialog where there is room, a drawer where there is not. */
   open() {
     if (this.isMobile()) {
-      this.visible.set(true);
+      this.drawerService.create({
+        zTitle: 'Edit profile',
+        zDescription: `Make changes to your profile here. Click save when you're done.`,
+        zContent: ZardDemoDrawerProfileFormComponent,
+        zHideFooter: true,
+      });
       return;
     }
 
@@ -2159,70 +2409,7 @@ export class ZardDemoDrawerResponsiveComponent {
       zTitle: 'Edit profile',
       zDescription: `Make changes to your profile here. Click save when you're done.`,
       zContent: ZardDemoDrawerProfileFormComponent,
-      zOkText: null,
-      zCancelText: null,
-    });
-  }
-}
-```
-
-### Service
-
-Use `ZardDrawerService.create()` when the drawer is opened from code instead of from a template.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-
-import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardDrawerService } from '@/shared/components/drawer/drawer.service';
-import { ZardInputComponent } from '@/shared/components/input';
-
-@Component({
-  selector: 'z-demo-drawer-service-form',
-  imports: [ReactiveFormsModule, ZardInputComponent],
-  template: `
-    <form [formGroup]="form" class="grid gap-4 px-4">
-      <div class="grid gap-3">
-        <label for="drawer-service-name" class="text-sm leading-none font-medium select-none">Name</label>
-        <input z-input id="drawer-service-name" formControlName="name" />
-      </div>
-
-      <div class="grid gap-3">
-        <label for="drawer-service-goal" class="text-sm leading-none font-medium select-none">Daily goal</label>
-        <input z-input id="drawer-service-goal" type="number" formControlName="goal" />
-      </div>
-    </form>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoDrawerServiceFormComponent {
-  readonly form = new FormGroup({
-    name: new FormControl('Pedro Duarte'),
-    goal: new FormControl(350),
-  });
-}
-
-@Component({
-  imports: [ZardButtonComponent],
-  template: `
-    <button type="button" z-button zType="outline" (click)="openDrawer()">Open from a service</button>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoDrawerServiceComponent {
-  private readonly drawerService = inject(ZardDrawerService);
-
-  openDrawer() {
-    this.drawerService.create({
-      zTitle: 'Move goal',
-      zDescription: 'Set your daily activity goal.',
-      zContent: ZardDemoDrawerServiceFormComponent,
-      zOkText: 'Submit',
-      zCancelText: 'Cancel',
-      zOnOk: instance => {
-        console.log('Goal submitted:', instance.form.value);
-      },
+      zHideFooter: true,
     });
   }
 }
@@ -2232,24 +2419,32 @@ export class ZardDemoDrawerServiceComponent {
 
 ### z-drawer
 
-Root of a declarative drawer. Holds the open state and hosts the projected content. The panel exposes `data-placement`, `data-axis`, `data-state`, `data-swiping`, `data-snap-points` and `data-expanded`, plus a `--z-drawer-bleed` variable that fills the inset gap for an edge-to-edge look.
+Root of a declarative drawer. Holds the open state and hosts the projected content. The panel exposes `data-placement`, `data-axis`, `data-state`, `data-swiping`, `data-snap-points`, `data-expanded` and `data-nested-open` (present while a drawer stacked on top of this one is open). Two CSS variables tune the panel: `--z-drawer-inset` (gap kept between the panel and the viewport edge, default `0.5rem`) and `--z-drawer-bleed` (fills that gap while the panel is dragged past its edge — set it for an edge-to-edge look). A drawer with `zSnapPoints` also publishes `--z-drawer-visible-size`, the pixels of the panel currently on screen, so content can size itself against whatever is reachable at the active snap point.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zVisible]` | Open state, two-way bound | `boolean` | `false` |
-| `[zPlacement]` | Edge of the screen the drawer slides from | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
+| `[zPlacement]` | Edge of the screen the drawer slides from. Also sets the swipe axis: top/bottom drag vertically, left/right drag horizontally | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
 | `[zSnapPoints]` | Sizes the drawer rests at. 0–1 is a fraction of the viewport, above that pixels, strings keep their CSS unit | `(number \| string)[]` | `-` |
-| `[zSnapPoint]` | Active snap point, two-way bound. Defaults to the first one | `number \| string` | `-` |
+| `[zSnapPoint]` | Active snap point, two-way bound through [(zSnapPoint)]. Defaults to the first one | `number \| string` | `-` |
 | `[zDismissible]` | Whether swiping, the mask and Escape can close the drawer | `boolean` | `true` |
 | `[zHandle]` | Renders the swipe handle | `boolean` | `false` |
 | `[zModal]` | Renders the mask and blocks the page behind. Set false for a non-modal drawer | `boolean` | `true` |
 | `[class]` | Custom CSS classes applied to the panel | `ClassValue` | `-` |
-| `(zAfterOpen)` | Emitted once the drawer is attached | `OutputRef<void>` | `-` |
-| `(zAfterClose)` | Emitted once the exit animation has finished | `OutputRef<void>` | `-` |
+| `(zAfterOpen)` | Emitted once the drawer is attached | `EventEmitter<void>` | `-` |
+| `(zAfterClose)` | Emitted once the exit animation has finished | `EventEmitter<void>` | `-` |
 
-### z-drawer-header / z-drawer-footer
+### z-drawer-header
 
-Layout slots for the top and bottom of a drawer.
+Layout slot for the top of a drawer, next to `z-drawer-title` and `z-drawer-description`.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+
+### z-drawer-footer
+
+Layout slot for the bottom of a drawer, typically the action buttons.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2292,7 +2487,7 @@ Configuration accepted by `ZardDrawerService.create()`.
 | `[zDismissible]` | Whether swiping, the mask and Escape can close the drawer | `boolean` | `true` |
 | `[zHandle]` | Renders the swipe handle | `boolean` | `false` |
 | `[zMask]` | Renders the backdrop and blocks the page behind. Set false for a non-modal drawer | `boolean` | `true` |
-| `[zMaskClosable]` | Whether clicking outside closes the drawer | `boolean` | `true` |
+| `[zMaskClosable]` | Whether clicking outside closes the drawer. Also requires zDismissible | `boolean` | `true` |
 | `[zClosable]` | Whether to show the close button | `boolean` | `true` |
 | `[zDuration]` | Exit animation duration in ms | `number` | `450` |
 | `[zOkText]` | OK button text, null to hide button | `string \| null` | `'OK'` |

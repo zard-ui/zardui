@@ -103,6 +103,36 @@ describe('ZardTabGroupComponent', () => {
     expect(updatedTabPanels[2].nativeElement.hasAttribute('hidden')).toBeTruthy();
   });
 
+  /** Two groups on one page used to emit tab-0 / tabpanel-0 twice, so aria-controls pointed at both. */
+  it('scopes tab and panel ids to each group and keeps them paired', async () => {
+    @Component({
+      imports: [ZardTabGroupComponent, ZardTabComponent],
+      template: `
+        <z-tab-group>
+          <z-tab label="A">A</z-tab>
+          <z-tab label="B">B</z-tab>
+        </z-tab-group>
+        <z-tab-group>
+          <z-tab label="C">C</z-tab>
+          <z-tab label="D">D</z-tab>
+        </z-tab-group>
+      `,
+    })
+    class TwoGroupsHostComponent {}
+
+    const { container } = await render(TwoGroupsHostComponent);
+
+    const ids = [...container.querySelectorAll('[role="tab"], [role="tabpanel"]')].map(element => element.id);
+    expect(ids).toHaveLength(8);
+    expect(new Set(ids).size).toBe(8);
+
+    for (const tab of container.querySelectorAll('[role="tab"]')) {
+      const panel = container.querySelector(`#${tab.getAttribute('aria-controls')}`);
+      expect(panel?.getAttribute('role')).toBe('tabpanel');
+      expect(panel?.getAttribute('aria-labelledby')).toBe(tab.id);
+    }
+  });
+
   it('applies horizontal layout classes by default', async () => {
     const { fixture } = await render(getHostComponent('horizontal'));
     fixture.detectChanges();

@@ -403,7 +403,7 @@ export class ZardDemoDatePickerRangeComponent {
 }
 ```
 
-### With Time
+### Time Picker
 
 Put the picker next to a `type="time"` input to collect a date and a time.
 
@@ -417,16 +417,16 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardDatePickerComponent } from '../date-picker.component';
 
 @Component({
-  selector: 'z-demo-date-picker-with-time',
+  selector: 'z-demo-date-picker-time-picker',
   imports: [ZardDatePickerComponent, ZardFieldImports, ZardInputComponent],
   template: `
     <!-- A fixed width, not max-w-*: the field group is w-full, so it has nothing to resolve against. -->
     <div z-field-group class="mx-auto w-xs flex-row">
       <!-- The width goes on the field: it forces w-full onto whatever it wraps. -->
       <div z-field class="w-40">
-        <label z-field-label for="date-picker-with-time">Date</label>
+        <label z-field-label for="date-picker-time-picker-date">Date</label>
         <z-date-picker
-          zId="date-picker-with-time"
+          zId="date-picker-time-picker-date"
           zCaptionLayout="dropdown"
           zPlaceholder="Select date"
           zFormat="MMM d, yyyy"
@@ -449,12 +449,12 @@ import { ZardDatePickerComponent } from '../date-picker.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoDatePickerWithTimeComponent {
+export class ZardDemoDatePickerTimePickerComponent {
   readonly selectedDate = signal<CalendarValue>(null);
 }
 ```
 
-### With Input
+### Input
 
 Compose `z-input-group`, `z-popover` and `z-calendar` when the date should also be typeable — arrow down opens the calendar.
 
@@ -523,7 +523,7 @@ function parseDate(value: string): Date | null {
 }
 
 @Component({
-  selector: 'z-demo-date-picker-with-input',
+  selector: 'z-demo-date-picker-input',
   imports: [
     NgIcon,
     ZardCalendarComponent,
@@ -535,11 +535,11 @@ function parseDate(value: string): Date | null {
   ],
   template: `
     <div z-field class="mx-auto w-52">
-      <label z-field-label for="date-picker-with-input">Subscription date</label>
+      <label z-field-label for="date-picker-input">Subscription date</label>
       <z-input-group>
         <input
           z-input
-          id="date-picker-with-input"
+          id="date-picker-input"
           placeholder="June 01, 2025"
           [value]="inputValue()"
           (input)="onInput($event)"
@@ -573,7 +573,7 @@ function parseDate(value: string): Date | null {
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCalendar })],
 })
-export class ZardDemoDatePickerWithInputComponent {
+export class ZardDemoDatePickerInputComponent {
   readonly selectedDate = signal<Date | null>(new Date(2025, 5, 1));
   readonly inputValue = signal(formatDate(new Date(2025, 5, 1)));
   readonly isOpen = signal(false);

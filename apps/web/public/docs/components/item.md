@@ -374,52 +374,9 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
 
 ## Examples
 
-### Default
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideBadgeCheck, lucideChevronRight } from '@ng-icons/lucide';
-
-import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardItemImports } from '@/shared/components/item/item.imports';
-
-@Component({
-  selector: 'z-demo-item-default',
-  imports: [ZardButtonComponent, NgIcon, ...ZardItemImports],
-  template: `
-    <div class="flex w-full min-w-md flex-col gap-6">
-      <z-item zVariant="outline">
-        <z-item-content>
-          <z-item-title>Basic Item</z-item-title>
-          <z-item-description>A simple item with title and description.</z-item-description>
-        </z-item-content>
-        <z-item-actions>
-          <button type="button" z-button zType="outline" zSize="sm">Action</button>
-        </z-item-actions>
-      </z-item>
-
-      <a z-item href="#" zVariant="outline" zSize="sm">
-        <z-item-media>
-          <ng-icon name="lucideBadgeCheck" size="1.25rem" />
-        </z-item-media>
-        <z-item-content>
-          <z-item-title>Your profile has been verified.</z-item-title>
-        </z-item-content>
-        <z-item-actions>
-          <ng-icon name="lucideChevronRight" size="1rem" />
-        </z-item-actions>
-      </a>
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideBadgeCheck, lucideChevronRight })],
-})
-export class ZardDemoItemDefaultComponent {}
-```
-
 ### Variant
+
+zVariant on z-item switches the container surface between default (transparent), outline (a visible border) and muted (a tinted background); every row here also sets z-item-media's zVariant to "icon".
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -471,6 +428,8 @@ export class ZardDemoItemVariantComponent {}
 
 ### Size
 
+zSize on z-item sets the density: default and sm share the same padding, xs switches to the compact scale used inside menus and tightens the gap between title and description.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -521,6 +480,8 @@ export class ZardDemoItemSizeComponent {}
 
 ### Icon
 
+z-item-media's own zVariant switches between default, icon and image treatments; set to "icon" here, it sizes and aligns a projected ng-icon at the leading edge of the item.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -556,6 +517,8 @@ export class ZardDemoItemIconComponent {}
 ```
 
 ### Avatar
+
+There is no dedicated avatar media variant — project a real z-avatar or z-avatar-group into z-item-media's default variant and size it directly with a class on the avatar.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -613,7 +576,10 @@ export class ZardDemoItemAvatarComponent {}
 
 ### Image
 
+z-item-media's zVariant="image" clips a projected image (NgOptimizedImage here) to a fixed square that scales with the item's zSize.
+
 ```angular-ts
+import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardItemImports } from '@/shared/components/item/item.imports';
@@ -627,14 +593,20 @@ interface Song {
 
 @Component({
   selector: 'z-demo-item-image',
-  imports: [...ZardItemImports],
+  imports: [NgOptimizedImage, ...ZardItemImports],
   template: `
     <div class="flex w-full min-w-md flex-col gap-6">
       <z-item-group class="gap-4">
         @for (song of music; track song.title) {
           <a z-item href="#" zVariant="outline" role="listitem">
             <z-item-media zVariant="image">
-              <img [src]="'https://avatar.vercel.sh/' + song.title" [alt]="song.title" class="object-cover grayscale" />
+              <img
+                [ngSrc]="'https://avatar.vercel.sh/' + song.title"
+                [alt]="song.title"
+                width="120"
+                height="120"
+                class="grayscale"
+              />
             </z-item-media>
             <z-item-content>
               <z-item-title class="line-clamp-1">
@@ -663,6 +635,8 @@ export class ZardDemoItemImageComponent {
 ```
 
 ### Group
+
+z-item-group (role="list") wraps several z-item rows and applies consistent spacing between them.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -717,20 +691,25 @@ export class ZardDemoItemGroupComponent {
 
 ### Header
 
+z-item-header renders a full-width row above z-item-content and z-item-footer renders the matching row below it — shown here with an image header and a price/action footer.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { ZardBadgeComponent } from '@/shared/components/badge';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardItemImports } from '@/shared/components/item/item.imports';
 
 interface Model {
   name: string;
   description: string;
   image: string;
+  price: string;
 }
 
 @Component({
   selector: 'z-demo-item-header',
-  imports: [...ZardItemImports],
+  imports: [ZardBadgeComponent, ZardButtonComponent, ...ZardItemImports],
   template: `
     <div class="flex w-full min-w-xl flex-col gap-6">
       <z-item-group class="grid grid-cols-3 gap-4">
@@ -743,6 +722,10 @@ interface Model {
               <z-item-title>{{ model.name }}</z-item-title>
               <z-item-description>{{ model.description }}</z-item-description>
             </z-item-content>
+            <z-item-footer>
+              <z-badge zType="secondary">{{ model.price }}</z-badge>
+              <button type="button" z-button zType="outline" zSize="sm">Try it</button>
+            </z-item-footer>
           </z-item>
         }
       </z-item-group>
@@ -756,16 +739,19 @@ export class ZardDemoItemHeaderComponent {
       name: 'v0-1.5-sm',
       description: 'Everyday tasks and UI generation.',
       image: 'https://images.unsplash.com/photo-1650804068570-7fb2e3dbf888?q=80&w=640&auto=format&fit=crop',
+      price: 'Free',
     },
     {
       name: 'v0-1.5-lg',
       description: 'Advanced thinking or reasoning.',
       image: 'https://images.unsplash.com/photo-1610280777472-54133d004c8c?q=80&w=640&auto=format&fit=crop',
+      price: 'Pro',
     },
     {
       name: 'v0-2.0-mini',
       description: 'Open Source model for everyone.',
       image: 'https://images.unsplash.com/photo-1602146057681-08560aee8cde?q=80&w=640&auto=format&fit=crop',
+      price: 'Free',
     },
   ];
 }
@@ -773,8 +759,11 @@ export class ZardDemoItemHeaderComponent {
 
 ### Link
 
+Render the item as a real anchor with a[z-item]: bind [routerLink] for in-app navigation through the Angular Router, or pass a plain href with target/rel for an external destination.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronRight, lucideExternalLink } from '@ng-icons/lucide';
@@ -783,10 +772,10 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
 
 @Component({
   selector: 'z-demo-item-link',
-  imports: [NgIcon, ...ZardItemImports],
+  imports: [NgIcon, RouterLink, ...ZardItemImports],
   template: `
     <div class="flex w-full min-w-md flex-col gap-4">
-      <a z-item href="#">
+      <a z-item [routerLink]="['/docs/introduction']">
         <z-item-content>
           <z-item-title>Visit our documentation</z-item-title>
           <z-item-description>Learn how to get started with our components.</z-item-description>
@@ -796,7 +785,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
         </z-item-actions>
       </a>
 
-      <a z-item href="#" zVariant="outline" target="_blank" rel="noopener noreferrer">
+      <a z-item href="https://github.com/zard-ui/zardui" zVariant="outline" target="_blank" rel="noopener noreferrer">
         <z-item-content>
           <z-item-title>External resource</z-item-title>
           <z-item-description>Opens in a new tab with security attributes.</z-item-description>
@@ -814,6 +803,8 @@ export class ZardDemoItemLinkComponent {}
 ```
 
 ### Dropdown
+
+Compose z-item at zSize="xs" (the compact scale) inside a real z-dropdown-menu-item to give each menu option its own media/content row.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';

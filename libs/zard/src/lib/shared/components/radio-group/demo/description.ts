@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
 
 @Component({
   selector: 'z-demo-radio-group-description',
-  imports: [...ZardRadioGroupImports, ...ZardFieldImports, FormsModule],
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
   template: `
     <z-radio-group [(value)]="selected" class="w-fit">
       <div z-field zOrientation="horizontal">
@@ -32,6 +31,7 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
       </div>
     </z-radio-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoRadioGroupDescriptionComponent {
   selected: unknown = 'comfortable';

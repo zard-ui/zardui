@@ -1,6 +1,8 @@
 import { Component, inject, type OnInit } from '@angular/core';
 
-import { CalloutComponent } from '@doc/domain/components/callout/callout.component';
+import { provideIcons } from '@ng-icons/core';
+import { lucideInfo } from '@ng-icons/lucide';
+
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
@@ -9,13 +11,16 @@ import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.d
 import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
 import { SeoService } from '@doc/shared/services/seo.service';
 
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
+
 @Component({
   selector: 'z-figma',
   templateUrl: './figma.page.html',
+  viewProviders: [provideIcons({ lucideInfo })],
   imports: [
     DocContentComponent,
     DocHeadingComponent,
-    CalloutComponent,
+    ZardAlertComponent,
     ResourceCardComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
@@ -39,7 +44,6 @@ export class FigmaPage implements OnInit {
       { id: 'overview', label: 'Overview', type: 'core' },
       { id: 'paid', label: 'Paid', type: 'custom' },
       { id: 'free', label: 'Free', type: 'custom' },
-      { id: 'future', label: 'Future', type: 'custom' },
     ],
   };
 

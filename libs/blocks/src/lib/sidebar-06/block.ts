@@ -257,7 +257,7 @@ export class Sidebar06SidebarOptInFormComponent {}
     {
       name: 'sidebar-06.component.html',
       path: 'src/components/sidebar-06/sidebar-06.component.html',
-      content: `<z-sidebar-provider>
+      content: `<z-sidebar-provider zDefaultOpen="true">
   <lib-sidebar-06-app-sidebar />
 
   <main z-sidebar-inset>

@@ -9,11 +9,7 @@ import { CALENDAR_DEMO_PREVIEW } from '@generated/components/calendar/demo/previ
 import { CALENDAR_DEMO_RANGE } from '@generated/components/calendar/demo/range';
 import { CALENDAR_DEMO_WITH_CONSTRAINTS } from '@generated/components/calendar/demo/with-constraints';
 import { CALENDAR_DEMO_WITH_TIME } from '@generated/components/calendar/demo/with-time';
-import {
-  CALENDAR_SNIPPET_CUSTOM_CELL_SIZE_FIXED,
-  CALENDAR_SNIPPET_CUSTOM_CELL_SIZE_SPACING,
-  CALENDAR_SNIPPET_I18N_APP_CONFIG,
-} from '@generated/components/calendar/snippets';
+import { CALENDAR_SNIPPET_I18N_APP_CONFIG } from '@generated/components/calendar/snippets';
 import { CALENDAR_CLI_ADD } from '@generated/installation/cli/add-calendar';
 import { CALENDAR_MANUAL_CODE } from '@generated/installation/manual/calendar';
 import { CALENDAR_USAGE_IMPORT, CALENDAR_USAGE_CODE } from '@generated/usage/calendar';
@@ -86,13 +82,10 @@ export const CALENDAR = {
     },
     {
       name: 'custom-cell-size',
-      description: 'Override the `--cell-size` CSS variable to resize the whole calendar.',
+      description:
+        'Override the `--cell-size` CSS variable to resize the whole calendar, and pass a `zDayTemplate` to render extra content in each day — here a price that changes on weekends.',
       component: ZardDemoCalendarCustomCellSizeComponent,
       codeData: CALENDAR_DEMO_CUSTOM_CELL_SIZE,
-      codeAfter: [
-        { codeData: CALENDAR_SNIPPET_CUSTOM_CELL_SIZE_SPACING },
-        { codeData: CALENDAR_SNIPPET_CUSTOM_CELL_SIZE_FIXED },
-      ],
     },
     {
       name: 'with-constraints',

@@ -11,10 +11,10 @@ A scroll container that overflows tells you nothing about where you are in it. `
 
 ## Installation
 
-The utility ships in its own utilities.css, next to the library's global stylesheet in the core registry item. Refresh it and the classes are there.
+The utility ships in utilities.css, its own registry item — separate from core, so nothing pulls it in until you ask for it.
 
 ```
-npx zard-cli add core --overwrite
+npx zard-cli add utilities
 ```
 
 `tailwind.css` imports it on its first line, so the classes are available as soon as that stylesheet is imported after Tailwind.
@@ -23,7 +23,8 @@ src/styles.css
 
 ```
 @import 'tailwindcss';
-@import './app/shared/core/css/tailwind';
+@import './app/shared/core/css/zard';
+@import './utilities.css';
 ```
 
 ## Usage
@@ -246,7 +247,7 @@ Fetching registry index
 
 Downloading core
 
-Writing css/tailwind.css
+Writing css/zard.css
 
 Writing utils/merge-classes.ts
 
@@ -268,7 +269,7 @@ Fetching registry index
 
 Downloading core
 
-Writing css/tailwind.css
+Writing css/zard.css
 
 Writing utils/merge-classes.ts
 
@@ -289,7 +290,7 @@ const LINES = [
   'Resolving dependencies',
   'Fetching registry index',
   'Downloading core',
-  'Writing css/tailwind.css',
+  'Writing css/zard.css',
   'Writing utils/merge-classes.ts',
   'Linking peer dependencies',
   'Patching components.json',

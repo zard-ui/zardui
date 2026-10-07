@@ -2,7 +2,7 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 
 export const MARKER_API: ApiSection[] = [
   {
-    selector: 'z-marker, [z-marker]',
+    selector: 'z-marker',
     description:
       'Root of an inline conversation marker. Content projected without a `z-marker-content` child gets the content surface for free, so `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>` is a complete row. Use the attribute selector on an `a` or `button` to make the whole marker interactive, and set `role="status"` for streaming or in-progress markers.',
     props: [
@@ -24,13 +24,13 @@ export const MARKER_API: ApiSection[] = [
     ],
   },
   {
-    selector: 'z-marker-icon, [z-marker-icon]',
+    selector: 'z-marker-icon',
     description:
       'Decorative icon slot, hidden from assistive tech with `aria-hidden`. Project it when the icon is a component such as `z-spinner`; otherwise `zIcon` on the root is enough.',
     props: [{ name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: '-' }],
   },
   {
-    selector: 'z-marker-content, [z-marker-content]',
+    selector: 'z-marker-content',
     description:
       'Text content of the marker. Optional — the root wraps bare projected content in this surface. Project it to add classes such as `shimmer`, an animated streaming-text effect that is disabled automatically when the user prefers reduced motion.',
     props: [{ name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: '-' }],

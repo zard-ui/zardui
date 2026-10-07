@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-disabled-demo',
+  selector: 'z-demo-context-menu-disabled',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -22,4 +22,4 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuDisabledDemoComponent {}
+export class ZardDemoContextMenuDisabledComponent {}

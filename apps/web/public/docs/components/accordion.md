@@ -304,7 +304,7 @@ export class ZardDemoAccordionBasicComponent {}
 
 ### Multiple
 
-Use `type="multiple"` to allow multiple items to be open at the same time.
+Use `zType="multiple"` to allow multiple items to be open at the same time.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -315,7 +315,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-multiple',
   imports: [ZardAccordionImports],
   template: `
-    <div z-accordion zType="multiple" class="max-w-sm">
+    <div z-accordion zDefaultValue="notifications" zType="multiple" class="max-w-sm">
       <z-accordion-item zValue="notifications" zTitle="Notification Settings">
         Manage how you receive notifications. You can enable email alerts for updates or push notifications for mobile
         devices.
@@ -340,7 +340,7 @@ export class ZardDemoAccordionMultipleComponent {}
 
 ### Disabled
 
-Use the `disabled` prop on `AccordionItem` to disable individual items.
+Use the `zDisabled` input on `z-accordion-item` to disable individual items.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -375,7 +375,7 @@ export class ZardDemoAccordionDisabledComponent {}
 
 ### Borders
 
-Add `border` to the `Accordion` and `border-b last:border-b-0` to the `AccordionItem` to add borders to the items.
+Add `rounded-lg border` to the `z-accordion` class and `px-4` to each `z-accordion-item` for a bordered, padded layout.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -410,7 +410,7 @@ export class ZardDemoAccordionBordersComponent {}
 
 ### Card
 
-Wrap the `Accordion` in a `Card` component.
+Wrap the `z-accordion` in a `z-card` component.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -422,11 +422,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
   selector: 'z-demo-accordion-card',
   imports: [ZardAccordionImports, ZardCardImports],
   template: `
-    <z-card
-      zTitle="Subscription & Billing"
-      zDescription="Common questions about your account, plans, payments and cancellations."
-      class="w-full max-w-sm"
-    >
+    <z-card class="w-full max-w-sm">
       <div z-card-header>
         <z-card-title zTitle="Subscription & Billing" />
         <z-card-description zDescription="Common questions about your account, plans, payments and cancellations." />

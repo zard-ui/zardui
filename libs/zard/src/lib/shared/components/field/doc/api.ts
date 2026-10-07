@@ -3,12 +3,14 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const FIELD_API: ApiSection[] = [
   {
     selector: 'z-field',
-    description: 'A field container that wraps a label, control and optional description / error.',
+    description:
+      'A field container that wraps a label, control and optional description / error, exposed as `role="group"`. Set the `data-invalid` attribute (e.g. `[attr.data-invalid]="control.invalid && control.touched"`) to switch the whole field into its destructive styling; pair it with `aria-invalid` on the control itself.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zOrientation]',
-        description: 'Layout direction of the field',
+        description:
+          'Layout direction of the field: vertical stacks, horizontal aligns label and control in a row, responsive stacks until the parent `z-field-group` container query crosses its `@md` breakpoint.',
         type: "'vertical' | 'horizontal' | 'responsive'",
         default: "'vertical'",
       },
@@ -82,13 +84,14 @@ export const FIELD_API: ApiSection[] = [
   {
     selector: 'z-field-error',
     description:
-      'Renders a single error message or a list of errors. Falls back to projected content when no errors are provided.',
+      'Renders validation messages for a field, exposed as `role="alert"`. Pass the errors to show through `[zErrors]` — e.g. from a reactive form control\'s `errors` — or project static content when there is nothing to compute.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zErrors]',
-        description: 'Array of error objects with an optional `message` string. Duplicate messages are removed.',
-        type: 'Array<{ message?: string }>',
+        description:
+          'Array of error objects with an optional `message` string. A single entry renders inline, multiple render as a bulleted list, and duplicate messages are removed. Falls back to projected content when the array is empty.',
+        type: 'ReadonlyArray<{ message?: string } | undefined>',
         default: '[]',
       },
     ],

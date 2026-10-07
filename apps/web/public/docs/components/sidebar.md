@@ -90,7 +90,8 @@ export class ZardSidebarProviderComponent implements OnInit {
 
   /**
    * Initial open state. Left unset, the persisted cookie decides, falling back to open.
-   * Set explicitly, it wins over the cookie — the demos rely on that to stay deterministic.
+   * Set explicitly, it wins over the cookie and the provider stops writing it — the demos and the
+   * blocks rely on that to stay deterministic without changing the state of other sidebars.
    */
   readonly zDefaultOpen = input<boolean | undefined, unknown>(undefined, {
     transform: value => (value === undefined ? undefined : booleanAttribute(value)),
@@ -1212,6 +1213,12 @@ export class ZardSidebarService {
   private readonly internalOpen = signal(this.persistedOpen ?? true);
   private readonly internalOpenMobile = signal(false);
 
+  /**
+   * False once the provider set an explicit `zDefaultOpen`. Such a provider never reads the cookie
+   * back, so writing it would only change the initial state of every other provider on the site.
+   */
+  private persistOpen = true;
+
   /** Mirrors the provider's `zOpen` input. `undefined` means the provider is uncontrolled. */
   readonly controlledOpen = signal<boolean | undefined>(undefined);
 
@@ -1260,9 +1267,11 @@ export class ZardSidebarService {
    * as `defaultOpen`. Angular has no server component to do that, so the service reads it too — but
    * only as the fallback. An explicit `zDefaultOpen` still wins, which keeps that input meaningful
    * and stops one provider's persisted state from deciding for every other provider on the page.
+   * Such a provider also stops writing the cookie: a state it never reads back is not persisted.
    */
   applyDefaultOpen(defaultOpen: boolean | undefined): void {
     if (defaultOpen !== undefined) {
+      this.persistOpen = false;
       this.internalOpen.set(defaultOpen);
       return;
     }
@@ -1273,7 +1282,7 @@ export class ZardSidebarService {
   }
 
   private persist(open: boolean): void {
-    if (!this.isBrowser) {
+    if (!this.isBrowser || !this.persistOpen) {
       return;
     }
 
@@ -1411,71 +1420,91 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 export class ZardDemoSidebarStructureComponent {}
 ```
 
-### Custom Width
+### Use Sidebar
 
-The provider writes `--sidebar-width` and `--sidebar-width-icon` inline on its own host. Pass `style` to override them for a single provider, without touching the constants.
+Inject `ZardSidebarService` from any component inside the provider — the Angular counterpart of shadcn's `useSidebar()` hook.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
+import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports';
+import { ZardSidebarService } from '@/shared/components/sidebar/sidebar.service';
 
+/**
+ * Any component rendered inside z-sidebar-provider can inject the service — this is the Angular
+ * counterpart of shadcn's useSidebar() hook.
+ */
 @Component({
-  selector: 'z-demo-sidebar-custom-width',
-  imports: [ZardSidebarImports],
+  selector: 'z-demo-sidebar-debug-panel',
+  imports: [ZardButtonComponent, ZardBadgeComponent],
   template: `
-    <div class="flex w-full flex-col gap-4">
-      <z-sidebar-provider class="relative h-40 min-h-0 transform-gpu overflow-hidden rounded-xl border">
-        <z-sidebar zCollapsible="none">
-          <div z-sidebar-header class="font-medium">Default</div>
+    <div class="flex flex-col items-start gap-3">
+      <button z-button zType="outline" zSize="sm" (click)="sidebar.toggleSidebar()">toggleSidebar()</button>
 
-          <z-sidebar-content>
-            <div z-sidebar-group>
-              <div z-sidebar-group-label>16rem wide</div>
-            </div>
-          </z-sidebar-content>
-        </z-sidebar>
+      <dl class="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-2 text-sm">
+        <dt class="text-muted-foreground">state</dt>
+        <dd>
+          <z-badge zType="secondary">{{ sidebar.state() }}</z-badge>
+        </dd>
 
-        <main z-sidebar-inset class="p-4 text-sm">Uses the default --sidebar-width</main>
-      </z-sidebar-provider>
+        <dt class="text-muted-foreground">open</dt>
+        <dd>
+          <z-badge zType="secondary">{{ sidebar.open() }}</z-badge>
+        </dd>
 
-      <z-sidebar-provider
-        class="relative h-40 min-h-0 transform-gpu overflow-hidden rounded-xl border"
-        style="--sidebar-width: 20rem; --sidebar-width-icon: 4rem"
-      >
-        <z-sidebar zCollapsible="none">
-          <div z-sidebar-header class="font-medium">Wider</div>
+        <dt class="text-muted-foreground">isMobile</dt>
+        <dd>
+          <z-badge zType="secondary">{{ sidebar.isMobile() }}</z-badge>
+        </dd>
 
-          <z-sidebar-content>
-            <div z-sidebar-group>
-              <div z-sidebar-group-label>20rem wide</div>
-            </div>
-          </z-sidebar-content>
-        </z-sidebar>
-
-        <main z-sidebar-inset class="p-4 text-sm">Overrides it inline, without touching the constants</main>
-      </z-sidebar-provider>
+        <dt class="text-muted-foreground">openMobile</dt>
+        <dd>
+          <z-badge zType="secondary">{{ sidebar.openMobile() }}</z-badge>
+        </dd>
+      </dl>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSidebarCustomWidthComponent {}
-```
+export class ZardDemoSidebarDebugPanelComponent {
+  protected readonly sidebar = inject(ZardSidebarService);
+}
 
-**The defaults**
+@Component({
+  selector: 'z-demo-sidebar-use-sidebar',
+  imports: [ZardSidebarImports, ZardDemoSidebarDebugPanelComponent],
+  template: `
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
+      <z-sidebar zCollapsible="icon" class="h-full">
+        <z-sidebar-content>
+          <div z-sidebar-group>
+            <div z-sidebar-group-content>
+              <ul z-sidebar-menu>
+                <li z-sidebar-menu-item>
+                  <button z-sidebar-menu-button zTooltip="Overview">Overview</button>
+                </li>
+                <li z-sidebar-menu-item>
+                  <button z-sidebar-menu-button zTooltip="Insights">Insights</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </z-sidebar-content>
+      </z-sidebar>
 
-```angular-ts
-// The defaults the provider writes onto its own host. Override them per provider through the
-// `style` input (see the custom-width example) rather than editing these — the docs site itself
-// declares a global `--sidebar-width` for its navigation, and the inline values are what keep the
-// two from clashing.
-export const ZARD_SIDEBAR_COOKIE_NAME = 'sidebar_state';
-export const ZARD_SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-export const ZARD_SIDEBAR_WIDTH = '16rem';
-export const ZARD_SIDEBAR_WIDTH_MOBILE = '18rem';
-export const ZARD_SIDEBAR_WIDTH_ICON = '3rem';
-export const ZARD_SIDEBAR_KEYBOARD_SHORTCUT = 'b';
-export const ZARD_SIDEBAR_MOBILE_BREAKPOINT = '(max-width: 767.98px)';
+      <main z-sidebar-inset class="p-4">
+        <z-demo-sidebar-debug-panel />
+      </main>
+    </z-sidebar-provider>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSidebarUseSidebarComponent {}
 ```
 
 ### Keyboard Shortcut
@@ -1548,6 +1577,223 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSidebarKeyboardShortcutComponent {}
+```
+
+### Custom Width
+
+The provider writes `--sidebar-width` and `--sidebar-width-icon` inline on its own host. Pass `style` to override them for a single provider, without touching the constants.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports';
+
+@Component({
+  selector: 'z-demo-sidebar-custom-width',
+  imports: [ZardSidebarImports],
+  template: `
+    <div class="flex w-full flex-col gap-4">
+      <z-sidebar-provider class="relative h-40 min-h-0 transform-gpu overflow-hidden rounded-xl border">
+        <z-sidebar zCollapsible="none">
+          <div z-sidebar-header class="font-medium">Default</div>
+
+          <z-sidebar-content>
+            <div z-sidebar-group>
+              <div z-sidebar-group-label>16rem wide</div>
+            </div>
+          </z-sidebar-content>
+        </z-sidebar>
+
+        <main z-sidebar-inset class="p-4 text-sm">Uses the default --sidebar-width</main>
+      </z-sidebar-provider>
+
+      <z-sidebar-provider
+        class="relative h-40 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+        style="--sidebar-width: 20rem; --sidebar-width-icon: 4rem"
+      >
+        <z-sidebar zCollapsible="none">
+          <div z-sidebar-header class="font-medium">Wider</div>
+
+          <z-sidebar-content>
+            <div z-sidebar-group>
+              <div z-sidebar-group-label>20rem wide</div>
+            </div>
+          </z-sidebar-content>
+        </z-sidebar>
+
+        <main z-sidebar-inset class="p-4 text-sm">Overrides it inline, without touching the constants</main>
+      </z-sidebar-provider>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSidebarCustomWidthComponent {}
+```
+
+**The defaults**
+
+```angular-ts
+// The defaults the provider writes onto its own host. Override them per provider through the
+// `style` input (see the custom-width example) rather than editing these — the docs site itself
+// declares a global `--sidebar-width` for its navigation, and the inline values are what keep the
+// two from clashing.
+export const ZARD_SIDEBAR_COOKIE_NAME = 'sidebar_state';
+export const ZARD_SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+export const ZARD_SIDEBAR_WIDTH = '16rem';
+export const ZARD_SIDEBAR_WIDTH_MOBILE = '18rem';
+export const ZARD_SIDEBAR_WIDTH_ICON = '3rem';
+export const ZARD_SIDEBAR_KEYBOARD_SHORTCUT = 'b';
+export const ZARD_SIDEBAR_MOBILE_BREAKPOINT = '(max-width: 767.98px)';
+```
+
+### Theming
+
+The sidebar has its own colour scale so it can sit on a different background than the page it frames.
+
+```css
+/* The sidebar has its own colour scale, separate from the rest of the app, so it can sit on a
+   different background than the page it frames. Every token is already declared by zard/ui —
+   override them to theme the sidebar on its own. */
+:root {
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+/* The tokens are mapped in `@theme inline`, which is what turns them into the `bg-sidebar`,
+   `text-sidebar-foreground`, `border-sidebar-border` and `ring-sidebar-ring` utilities. */
+@theme inline {
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+```
+
+### Styling
+
+The sidebar publishes its state through data attributes, so anything inside it can react with plain Tailwind variants.
+
+```angular-html
+<!-- The sidebar publishes its state through data attributes, so anything inside it can react with
+     plain Tailwind variants — no extra bindings needed. -->
+
+<!-- 1. Hide an element once the sidebar has collapsed to icons.
+        `group` lives on z-sidebar, together with data-collapsible. -->
+<div z-sidebar-group class="group-data-[collapsible=icon]:hidden">
+  <div z-sidebar-group-label>Projects</div>
+</div>
+
+<!-- 2. Style a sibling from the active state of its menu button.
+        `peer/menu-button` lives on z-sidebar-menu-button, together with data-active. -->
+<li z-sidebar-menu-item>
+  <button z-sidebar-menu-button zActive>Inbox</button>
+  <div z-sidebar-menu-badge class="opacity-50 peer-data-[active=true]/menu-button:opacity-100">24</div>
+</li>
+```
+
+### Ssr Cookie
+
+New in the Angular port: the open state is persisted in the `sidebar_state` cookie and read back on the server, so there is no layout flash on hydration. A provider with an explicit `zDefaultOpen` neither reads nor writes it.
+
+```angular-ts
+// New in the Angular port. ZardSidebarService persists the open state in the `sidebar_state`
+// cookie and — this is the part shadcn has no equivalent for — reads it back on the server from
+// the incoming request, so the first painted frame already has the right layout and there is no
+// flash on hydration. This happens automatically; the code below is what runs inside the service.
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { inject, PLATFORM_ID, REQUEST } from '@angular/core';
+
+const document = inject(DOCUMENT);
+const request = inject(REQUEST, { optional: true });
+const isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+// On the client the cookie comes from `document.cookie`; on the server, from the Cookie header.
+const cookies = isBrowser ? document.cookie : request?.headers?.get('cookie');
+const match = /(?:^|;\s*)sidebar_state=(true|false)/.exec(cookies ?? '');
+const persistedOpen = match ? match[1] === 'true' : undefined;
+
+// `undefined` means "nothing persisted yet", so the provider falls back to open.
+// An explicit zDefaultOpen wins over this either way — shadcn feeds the cookie in through it —
+// and such a provider never writes the cookie: a state it will not read back is not persisted.
+```
+
+### Controlled
+
+Pass `zOpen` and listen to `zOpenChange` to own the state yourself.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports';
+import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
+
+@Component({
+  selector: 'z-demo-sidebar-controlled',
+  imports: [ZardSidebarImports, ZardSwitchComponent],
+  template: `
+    <div class="flex w-full flex-col gap-4">
+      <label class="flex items-center gap-2 text-sm">
+        <z-switch [zChecked]="open()" (zCheckedChange)="open.set($event)" zId="sidebar-open" />
+        Sidebar open
+      </label>
+
+      <z-sidebar-provider
+        class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+        [zOpen]="open()"
+        (zOpenChange)="open.set($event)"
+      >
+        <z-sidebar zCollapsible="icon" class="h-full">
+          <z-sidebar-content>
+            <div z-sidebar-group>
+              <div z-sidebar-group-content>
+                <ul z-sidebar-menu>
+                  <li z-sidebar-menu-item>
+                    <button z-sidebar-menu-button zTooltip="Dashboard">Dashboard</button>
+                  </li>
+                  <li z-sidebar-menu-item>
+                    <button z-sidebar-menu-button zTooltip="Team">Team</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </z-sidebar-content>
+        </z-sidebar>
+
+        <main z-sidebar-inset class="flex flex-col gap-4 p-4">
+          <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
+          <p class="text-muted-foreground text-sm">
+            The host owns the state: the trigger only reports through zOpenChange, and the switch stays in sync.
+          </p>
+        </main>
+      </z-sidebar-provider>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSidebarControlledComponent {
+  readonly open = signal(true);
+}
 ```
 
 ### Side Right
@@ -1862,93 +2108,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSidebarCollapsibleNoneComponent {}
-```
-
-### Use Sidebar
-
-Inject `ZardSidebarService` from any component inside the provider — the Angular counterpart of shadcn's `useSidebar()` hook.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-
-import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
-import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports';
-import { ZardSidebarService } from '@/shared/components/sidebar/sidebar.service';
-
-/**
- * Any component rendered inside z-sidebar-provider can inject the service — this is the Angular
- * counterpart of shadcn's useSidebar() hook.
- */
-@Component({
-  selector: 'z-demo-sidebar-debug-panel',
-  imports: [ZardButtonComponent, ZardBadgeComponent],
-  template: `
-    <div class="flex flex-col items-start gap-3">
-      <button z-button zType="outline" zSize="sm" (click)="sidebar.toggleSidebar()">toggleSidebar()</button>
-
-      <dl class="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-2 text-sm">
-        <dt class="text-muted-foreground">state</dt>
-        <dd>
-          <z-badge zType="secondary">{{ sidebar.state() }}</z-badge>
-        </dd>
-
-        <dt class="text-muted-foreground">open</dt>
-        <dd>
-          <z-badge zType="secondary">{{ sidebar.open() }}</z-badge>
-        </dd>
-
-        <dt class="text-muted-foreground">isMobile</dt>
-        <dd>
-          <z-badge zType="secondary">{{ sidebar.isMobile() }}</z-badge>
-        </dd>
-
-        <dt class="text-muted-foreground">openMobile</dt>
-        <dd>
-          <z-badge zType="secondary">{{ sidebar.openMobile() }}</z-badge>
-        </dd>
-      </dl>
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoSidebarDebugPanelComponent {
-  protected readonly sidebar = inject(ZardSidebarService);
-}
-
-@Component({
-  selector: 'z-demo-sidebar-use-sidebar',
-  imports: [ZardSidebarImports, ZardDemoSidebarDebugPanelComponent],
-  template: `
-    <z-sidebar-provider
-      zDefaultOpen="true"
-      class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
-    >
-      <z-sidebar zCollapsible="icon" class="h-full">
-        <z-sidebar-content>
-          <div z-sidebar-group>
-            <div z-sidebar-group-content>
-              <ul z-sidebar-menu>
-                <li z-sidebar-menu-item>
-                  <button z-sidebar-menu-button zTooltip="Overview">Overview</button>
-                </li>
-                <li z-sidebar-menu-item>
-                  <button z-sidebar-menu-button zTooltip="Insights">Insights</button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </z-sidebar-content>
-      </z-sidebar>
-
-      <main z-sidebar-inset class="p-4">
-        <z-demo-sidebar-debug-panel />
-      </main>
-    </z-sidebar-provider>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoSidebarUseSidebarComponent {}
 ```
 
 ### Header
@@ -2597,155 +2756,6 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 export class ZardDemoSidebarRailComponent {}
 ```
 
-### Controlled
-
-Pass `zOpen` and listen to `zOpenChange` to own the state yourself.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-
-import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports';
-import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
-
-@Component({
-  selector: 'z-demo-sidebar-controlled',
-  imports: [ZardSidebarImports, ZardSwitchComponent],
-  template: `
-    <div class="flex w-full flex-col gap-4">
-      <label class="flex items-center gap-2 text-sm">
-        <z-switch [zChecked]="open()" (zCheckedChange)="open.set($event)" zId="sidebar-open" />
-        Sidebar open
-      </label>
-
-      <z-sidebar-provider
-        class="relative h-72 min-h-0 transform-gpu overflow-hidden rounded-xl border"
-        [zOpen]="open()"
-        (zOpenChange)="open.set($event)"
-      >
-        <z-sidebar zCollapsible="icon" class="h-full">
-          <z-sidebar-content>
-            <div z-sidebar-group>
-              <div z-sidebar-group-content>
-                <ul z-sidebar-menu>
-                  <li z-sidebar-menu-item>
-                    <button z-sidebar-menu-button zTooltip="Dashboard">Dashboard</button>
-                  </li>
-                  <li z-sidebar-menu-item>
-                    <button z-sidebar-menu-button zTooltip="Team">Team</button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </z-sidebar-content>
-        </z-sidebar>
-
-        <main z-sidebar-inset class="flex flex-col gap-4 p-4">
-          <button z-sidebar-trigger class="self-start" aria-label="Toggle Sidebar"></button>
-          <p class="text-muted-foreground text-sm">
-            The host owns the state: the trigger only reports through zOpenChange, and the switch stays in sync.
-          </p>
-        </main>
-      </z-sidebar-provider>
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoSidebarControlledComponent {
-  readonly open = signal(true);
-}
-```
-
-### Theming
-
-The sidebar has its own colour scale so it can sit on a different background than the page it frames.
-
-```css
-/* The sidebar has its own colour scale, separate from the rest of the app, so it can sit on a
-   different background than the page it frames. Every token is already declared by zard/ui —
-   override them to theme the sidebar on its own. */
-:root {
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.439 0 0);
-}
-
-/* The tokens are mapped in `@theme inline`, which is what turns them into the `bg-sidebar`,
-   `text-sidebar-foreground`, `border-sidebar-border` and `ring-sidebar-ring` utilities. */
-@theme inline {
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-```
-
-### Styling
-
-The sidebar publishes its state through data attributes, so anything inside it can react with plain Tailwind variants.
-
-```angular-html
-<!-- The sidebar publishes its state through data attributes, so anything inside it can react with
-     plain Tailwind variants — no extra bindings needed. -->
-
-<!-- 1. Hide an element once the sidebar has collapsed to icons.
-        `group` lives on z-sidebar, together with data-collapsible. -->
-<div z-sidebar-group class="group-data-[collapsible=icon]:hidden">
-  <div z-sidebar-group-label>Projects</div>
-</div>
-
-<!-- 2. Style a sibling from the active state of its menu button.
-        `peer/menu-button` lives on z-sidebar-menu-button, together with data-active. -->
-<li z-sidebar-menu-item>
-  <button z-sidebar-menu-button zActive>Inbox</button>
-  <div z-sidebar-menu-badge class="opacity-50 peer-data-[active=true]/menu-button:opacity-100">24</div>
-</li>
-```
-
-### Ssr Cookie
-
-New in the Angular port: the open state is persisted in the `sidebar_state` cookie and read back on the server, so there is no layout flash on hydration.
-
-```angular-ts
-// New in the Angular port. ZardSidebarService persists the open state in the `sidebar_state`
-// cookie and — this is the part shadcn has no equivalent for — reads it back on the server from
-// the incoming request, so the first painted frame already has the right layout and there is no
-// flash on hydration. This happens automatically; the code below is what runs inside the service.
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { inject, PLATFORM_ID, REQUEST } from '@angular/core';
-
-const document = inject(DOCUMENT);
-const request = inject(REQUEST, { optional: true });
-const isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-
-// On the client the cookie comes from `document.cookie`; on the server, from the Cookie header.
-const cookies = isBrowser ? document.cookie : request?.headers?.get('cookie');
-const match = /(?:^|;\s*)sidebar_state=(true|false)/.exec(cookies ?? '');
-const persistedOpen = match ? match[1] === 'true' : undefined;
-
-// `undefined` means "nothing persisted yet", so the provider falls back to open.
-// An explicit zDefaultOpen wins over this either way — shadcn feeds the cookie in through it.
-```
-
 ## API Reference
 
 ### z-sidebar-provider
@@ -2754,7 +2764,7 @@ Wraps the sidebar and the page, provides ZardSidebarService and registers the ke
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zDefaultOpen]` | Initial open state. Left unset, the persisted sidebar_state cookie decides, falling back to true; set explicitly, it wins over the cookie | `boolean \| undefined` | `undefined` |
+| `[zDefaultOpen]` | Initial open state. Left unset, the persisted sidebar_state cookie decides, falling back to true; set explicitly, it wins over the cookie and the provider stops writing it | `boolean \| undefined` | `undefined` |
 | `[zOpen]` | When set, the provider is controlled: the state is owned by the consumer | `boolean \| undefined` | `undefined` |
 | `[style]` | Extra inline style, applied after --sidebar-width and --sidebar-width-icon so it can override them | `string` | `''` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
@@ -2788,7 +2798,7 @@ The thin strip on the sidebar edge. Toggles the sidebar, shows a resize cursor a
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-sidebar-inset, main[z-sidebar-inset]
+### main[z-sidebar-inset]
 
 The page area next to the sidebar. Required when zVariant is "inset".
 
@@ -2800,7 +2810,7 @@ The page area next to the sidebar. Required when zVariant is "inset".
 
 Adds the sidebar treatment to a Zard input. Use as <input z-input z-sidebar-input />.
 
-### z-sidebar-header, [z-sidebar-header]
+### [z-sidebar-header]
 
 Sticky region at the top of the sidebar.
 
@@ -2808,7 +2818,7 @@ Sticky region at the top of the sidebar.
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-sidebar-footer, [z-sidebar-footer]
+### [z-sidebar-footer]
 
 Sticky region at the bottom of the sidebar.
 
@@ -2824,7 +2834,7 @@ A separator inset to the sidebar padding, painted with --sidebar-border.
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-sidebar-content, [z-sidebar-content]
+### z-sidebar-content
 
 Scrollable area between the header and the footer.
 
@@ -2832,7 +2842,7 @@ Scrollable area between the header and the footer.
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-sidebar-group, [z-sidebar-group]
+### [z-sidebar-group]
 
 A section inside the content. Wrap it in z-collapsible to make it collapsible.
 
@@ -2840,7 +2850,7 @@ A section inside the content. Wrap it in z-collapsible to make it collapsible.
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-sidebar-group-label, [z-sidebar-group-label]
+### [z-sidebar-group-label]
 
 The group heading. Fades out when the sidebar collapses to icons.
 
@@ -2856,7 +2866,7 @@ Action button pinned to the top-right corner of a group.
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-sidebar-group-content, [z-sidebar-group-content]
+### [z-sidebar-group-content]
 
 Content wrapper inside a group.
 
@@ -2880,7 +2890,7 @@ A single menu row. Carries group/menu-item, which the action and badge react to.
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### button[z-sidebar-menu-button], a[z-sidebar-menu-button]
+### button[z-sidebar-menu-button]
 
 The clickable menu row. Use the anchor form with routerLink instead of shadcn's asChild. Carries peer/menu-button.
 
@@ -2892,16 +2902,16 @@ The clickable menu row. Use the anchor form with routerLink instead of shadcn's 
 | `[zTooltip]` | Label shown as a tooltip, but only while the sidebar is collapsed on desktop. The object form overrides that rule: `{ content, hidden: false }` keeps the tooltip on an expanded sidebar | `string \| TemplateRef<void> \| { content: string \| TemplateRef<void>; hidden?: boolean } \| null` | `null` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### button[z-sidebar-menu-action], a[z-sidebar-menu-action]
+### button[z-sidebar-menu-action]
 
-Secondary action pinned to the right of a menu row.
+Secondary action pinned to the right of a menu row. Also usable on an anchor.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zShowOnHover]` | Reveal the action only on hover or keyboard focus | `boolean` | `false` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### z-sidebar-menu-badge, [z-sidebar-menu-badge]
+### [z-sidebar-menu-badge]
 
 A counter pinned to the right of a menu row. Not interactive.
 
@@ -2934,9 +2944,9 @@ A row inside a submenu.
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
-### a[z-sidebar-menu-sub-button], button[z-sidebar-menu-sub-button]
+### a[z-sidebar-menu-sub-button]
 
-The clickable row inside a submenu.
+The clickable row inside a submenu. Also usable on a button.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

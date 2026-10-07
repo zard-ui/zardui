@@ -4,20 +4,34 @@
       <h2 class="text-foreground text-base font-semibold tracking-tight">Customize</h2>
       <p class="text-muted-foreground text-xs">Pick a style and color for your theme</p>
     </div>
-    <button
-      z-button
-      zType="outline"
-      zSize="sm"
-      (click)="toggleDarkMode()"
-      class="size-9 p-0"
-      title="Toggle preview mode"
-    >
-      @if (previewDarkMode()) {
-        <ng-icon name="lucideMoon" class="size-4!" />
-      } @else {
-        <ng-icon name="lucideSun" class="size-4!" />
-      }
-    </button>
+    <div class="flex items-center gap-1.5">
+      <button
+        z-button
+        zType="outline"
+        zSize="sm"
+        [zDisabled]="!isDirty()"
+        (click)="reset()"
+        class="size-9 p-0"
+        title="Reset to preset"
+        aria-label="Reset to preset"
+      >
+        <ng-icon name="lucideRotateCcw" class="size-4!" />
+      </button>
+      <button
+        z-button
+        zType="outline"
+        zSize="sm"
+        (click)="toggleDarkMode()"
+        class="size-9 p-0"
+        title="Toggle preview mode"
+      >
+        @if (previewDarkMode()) {
+          <ng-icon name="lucideMoon" class="size-4!" />
+        } @else {
+          <ng-icon name="lucideSun" class="size-4!" />
+        }
+      </button>
+    </div>
   </div>
 </div>
 
@@ -54,6 +68,7 @@
     </div>
     <div class="rounded-lg border bg-white/50 p-3 dark:bg-white/5">
       <z-slider
+        #radiusSlider="zSlider"
         aria-labelledby="theme-radius-label"
         [zMin]="0"
         [zMax]="1"
@@ -89,7 +104,7 @@
   </div>
 </div>
 
-<div class="bg-background/50 border-t p-4 backdrop-blur-sm">
+<div class="bg-background/50 space-y-2 border-t p-4 backdrop-blur-sm">
   <button z-button (click)="copyToClipboard()" class="h-10 w-full gap-2 font-medium">
     @if (copySuccess()) {
       <ng-icon name="lucideCheck" class="size-4!" />
@@ -99,4 +114,20 @@
       Copy CSS Variables
     }
   </button>
+
+  <div class="grid grid-cols-2 gap-2">
+    <button z-button zType="outline" zSize="sm" (click)="copyStylesCss()" class="h-9 gap-1.5 text-xs font-medium">
+      @if (copyStylesSuccess()) {
+        <ng-icon name="lucideCheck" class="size-3.5!" />
+        Copied!
+      } @else {
+        <ng-icon name="lucideFileText" class="size-3.5!" />
+        Copy styles.css
+      }
+    </button>
+    <button z-button zType="outline" zSize="sm" (click)="downloadStylesCss()" class="h-9 gap-1.5 text-xs font-medium">
+      <ng-icon name="lucideDownload" class="size-3.5!" />
+      Download
+    </button>
+  </div>
 </div>

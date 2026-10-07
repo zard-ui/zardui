@@ -1340,7 +1340,7 @@ export class Dashboard01SiteHeaderComponent {}
     {
       name: 'dashboard-01.component.html',
       path: 'src/components/dashboard-01/dashboard-01.component.html',
-      content: `<z-sidebar-provider class="[--header-height:calc(--spacing(12))] [--sidebar-width:calc(--spacing(72))]">
+      content: `<z-sidebar-provider zDefaultOpen="true" class="[--header-height:calc(--spacing(12))] [--sidebar-width:calc(--spacing(72))]">
   <lib-dashboard-01-app-sidebar />
 
   <main z-sidebar-inset>

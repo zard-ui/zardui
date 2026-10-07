@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
@@ -27,6 +27,7 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputOtpControlledComponent {
   value = '';

@@ -324,81 +324,9 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
 
 ## Examples
 
-### Default
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardAvatarComponent } from '@/shared/components/avatar';
-import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
-import { ZardMessageImports } from '@/shared/components/message/message.imports';
-
-@Component({
-  selector: 'z-demo-message-default',
-  imports: [ZardAvatarComponent, ...ZardBubbleImports, ...ZardMessageImports],
-  template: `
-    <div class="flex w-full max-w-sm flex-col gap-6 py-12">
-      <z-message zAlign="end">
-        <z-message-avatar>
-          <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
-        </z-message-avatar>
-        <z-message-content>
-          <z-bubble>
-            <z-bubble-content>Deploying to prod real quick.</z-bubble-content>
-          </z-bubble>
-        </z-message-content>
-      </z-message>
-
-      <z-message>
-        <z-message-avatar>
-          <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@luizgomess" zFallback="LG" />
-        </z-message-avatar>
-        <z-message-content>
-          <z-bubble zVariant="muted">
-            <z-bubble-content>It's 4:55 PM. On a Friday.</z-bubble-content>
-          </z-bubble>
-        </z-message-content>
-      </z-message>
-
-      <z-message zAlign="end">
-        <z-message-avatar>
-          <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
-        </z-message-avatar>
-        <z-message-content>
-          <z-bubble>
-            <z-bubble-content>It's a one-line change.</z-bubble-content>
-          </z-bubble>
-          <z-message-footer>Delivered</z-message-footer>
-        </z-message-content>
-      </z-message>
-
-      <z-message>
-        <z-message-avatar>
-          <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@luizgomess" zFallback="LG" />
-        </z-message-avatar>
-        <z-message-content>
-          <z-bubble-group>
-            <z-bubble zVariant="muted">
-              <z-bubble-content>It's always a one-line change 😭.</z-bubble-content>
-            </z-bubble>
-            <z-bubble zVariant="muted">
-              <z-bubble-content>Alright, let me take a look.</z-bubble-content>
-              <z-bubble-reactions role="img" aria-label="Reactions: thumbs up">
-                <span>👍</span>
-              </z-bubble-reactions>
-            </z-bubble>
-          </z-bubble-group>
-        </z-message-content>
-      </z-message>
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'contents' },
-})
-export class ZardDemoMessageDefaultComponent {}
-```
-
 ### Avatar
+
+Project a real `z-avatar` into `z-message-avatar` to render an avatar next to the turn. Set `zAlign="end"` on `z-message` to align the avatar, and the bubble it sits beside, to the end of the row.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -462,6 +390,8 @@ export class ZardDemoMessageAvatarComponent {}
 
 ### Group
 
+Wrap consecutive `z-message` elements from the same sender in `z-message-group` to stack them tightly. Leave `z-message-avatar` empty on the earlier turns — it reserves the same width as the real avatar on the last one, so the group stays aligned.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -502,7 +432,9 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
 export class ZardDemoMessageGroupComponent {}
 ```
 
-### Header Footer
+### Header And Footer
+
+Project `z-message-header` for a sender name and `z-message-footer` for metadata such as a delivery or read status. The footer follows the message's `zAlign` side, so it stays right-aligned on a sent turn.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -511,7 +443,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 import { ZardMessageImports } from '@/shared/components/message/message.imports';
 
 @Component({
-  selector: 'z-demo-message-header-footer',
+  selector: 'z-demo-message-header-and-footer',
   imports: [...ZardBubbleImports, ...ZardMessageImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -542,10 +474,12 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
-export class ZardDemoMessageHeaderFooterComponent {}
+export class ZardDemoMessageHeaderAndFooterComponent {}
 ```
 
 ### Actions
+
+Place message-level actions — copy, retry, like or dislike — inside `z-message-footer` as real `z-button`s. Give each icon-only button an `aria-label`, since the footer holds no visible text for it.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -604,6 +538,8 @@ export class ZardDemoMessageActionsComponent {}
 ```
 
 ### Attachment
+
+Project a real `z-item` next to the bubble inside `z-message-content` to attach media or a document to a turn — `zVariant="image"` for a photo, `zVariant="icon"` for a file — placed before or after the bubble depending on reading order.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -681,6 +617,8 @@ export class ZardDemoMessageAttachmentComponent {}
 ```
 
 ### Shorthand
+
+A zard-only shorthand: a `z-message` with no projected `z-message-content` builds the avatar, bubble and header/footer itself from `zSrc`/`zFallback`, `zVariant`, `zHeader` and `zFooter`, so a plain turn is one tag. Project the explicit `z-message-content` (with `z-message-header`/`z-message-footer` around a `z-bubble`) when the turn needs a custom composition.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';

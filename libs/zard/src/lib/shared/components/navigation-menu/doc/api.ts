@@ -3,7 +3,8 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const NAVIGATION_MENU_API: ApiSection[] = [
   {
     selector: 'z-navigation-menu',
-    description: 'Root of the navigation bar. Scopes the shared viewport to the triggers inside it.',
+    description:
+      'Root of the navigation bar. Scopes the shared viewport to the triggers inside it. Renders no landmark role of its own — wrap it in a labelled `<nav>`, as every example on this page does, so assistive tech can identify it.',
     props: [
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       {
@@ -27,17 +28,17 @@ export const NAVIGATION_MENU_API: ApiSection[] = [
     ],
   },
   {
-    selector: 'z-navigation-menu-list',
+    selector: '[z-navigation-menu-list]',
     description: 'The `<ul>` holding the items of the bar.',
     props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
-    selector: 'z-navigation-menu-item',
+    selector: '[z-navigation-menu-item]',
     description: 'The `<li>` wrapping a trigger and its content, or a standalone link.',
     props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
-    selector: 'z-navigation-menu-trigger',
+    selector: '[z-navigation-menu-trigger]',
     description: 'Opens the content it points to. Inside a root it opens on hover; standalone it opens on click.',
     props: [
       {
@@ -75,14 +76,15 @@ export const NAVIGATION_MENU_API: ApiSection[] = [
     ],
   },
   {
-    selector: 'z-navigation-menu-content',
+    selector: '[z-navigation-menu-content]',
     description:
       'Container for the links of one trigger. Inside the shared viewport it is plain content; in overlay mode it is the popup itself.',
     props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
-    selector: 'z-navigation-menu-link',
-    description: 'A single entry. Pair `[zActive]` with `routerLinkActive` to mark the current route.',
+    selector: '[z-navigation-menu-link]',
+    description:
+      'A single entry, usable on a `<button>` or an `<a>`. Pair `[zActive]` with `routerLinkActive` to mark the current route — the directive has no router inputs of its own, so stack Angular `routerLink` directly on the element.',
     props: [
       { name: '[zActive]', description: 'Marks the link as the current one', type: 'boolean', default: 'false' },
       { name: '[zDisabled]', description: 'Whether the link is disabled', type: 'boolean', default: 'false' },
@@ -95,9 +97,9 @@ export const NAVIGATION_MENU_API: ApiSection[] = [
       },
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       {
-        name: '[menuItemTriggered]',
+        name: '(menuItemTriggered)',
         description: 'Emits when the link is activated',
-        type: 'EventEmitter',
+        type: 'EventEmitter<void>',
         default: '',
       },
     ],
@@ -125,18 +127,6 @@ export const NAVIGATION_MENU_API: ApiSection[] = [
     selector: 'z-navigation-menu-shortcut',
     description: 'Displays a keyboard shortcut aligned to the end of a link.',
     props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
-  },
-  {
-    selector: 'z-context-menu',
-    description: 'Opens a content template on right click, anchored to the pointer.',
-    props: [
-      {
-        name: '[zContextMenuTriggerFor]',
-        description: 'Reference to the context menu content',
-        type: 'TemplateRef<void>',
-        default: 'required',
-      },
-    ],
   },
   {
     selector: 'navigationMenuTriggerVariants()',

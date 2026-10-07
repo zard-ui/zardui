@@ -15,7 +15,7 @@ export const registry: ComponentRegistry[] = [
     name: 'core',
     files: [
       {
-        name: 'directives/string-template-outlet/string-template-outlet.directive.ts',
+        name: 'directives/string-template-outlet.directive.ts',
         content: '',
       },
       {
@@ -99,11 +99,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'css/tailwind.css',
-        content: '',
-      },
-      {
-        name: 'css/utilities.css',
+        name: 'css/zard.css',
         content: '',
       },
       {
@@ -118,6 +114,16 @@ export const registry: ComponentRegistry[] = [
     files: [
       {
         name: 'typeset.css',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'utilities',
+    basePath: 'styles',
+    files: [
+      {
+        name: 'utilities.css',
         content: '',
       },
     ],
@@ -220,6 +226,18 @@ export const registry: ComponentRegistry[] = [
     files: [
       {
         name: 'sheet.component.ts',
+        content: '',
+      },
+      {
+        name: 'sheet-panel.component.ts',
+        content: '',
+      },
+      {
+        name: 'sheet-container.component.ts',
+        content: '',
+      },
+      {
+        name: 'sheet-host.ts',
         content: '',
       },
       {
@@ -371,6 +389,22 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'alert-dialog-panel.component.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog-container.component.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog-host.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog.imports.ts',
+        content: '',
+      },
+      {
         name: 'alert-dialog.service.ts',
         content: '',
       },
@@ -401,6 +435,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'avatar-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'avatar-group-count.component.ts',
         content: '',
       },
       {
@@ -507,6 +545,18 @@ export const registry: ComponentRegistry[] = [
     files: [
       {
         name: 'dialog.component.ts',
+        content: '',
+      },
+      {
+        name: 'dialog-panel.component.ts',
+        content: '',
+      },
+      {
+        name: 'dialog-container.component.ts',
+        content: '',
+      },
+      {
+        name: 'dialog-host.ts',
         content: '',
       },
       {

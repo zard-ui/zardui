@@ -7,7 +7,7 @@ export const SELECT_API: ApiSection[] = [
     props: [
       {
         name: '[zValue]',
-        description: 'Selected value(s), two-way bindable',
+        description: 'Selected value(s), two-way bindable — a plain `string`, or `string[]` when `zMultiple` is set',
         type: 'string | string[]',
         default: "''",
       },
@@ -25,27 +25,44 @@ export const SELECT_API: ApiSection[] = [
         type: 'boolean',
         default: 'false',
       },
-      { name: '[zLabel]', description: 'Optional label for the select', type: 'string', default: "''" },
+      {
+        name: '[zLabel]',
+        description: 'Optional manual override for the displayed label',
+        type: 'string',
+        default: "''",
+      },
       {
         name: '[zMaxLabelCount]',
-        description: 'Limits visible labels in multiselect mode',
+        description:
+          'In multiselect mode, how many selected labels render as badges before collapsing the rest into a "N more items selected" badge',
         type: 'number',
         default: '1',
       },
-      { name: '[zMultiple]', description: 'Multiselect mode', type: 'boolean', default: 'false' },
-      { name: '[zPlaceholder]', description: 'Placeholder text', type: 'string', default: "'Select an option...'" },
+      {
+        name: '[zMultiple]',
+        description:
+          'Turns the select into a multiselect; `zValue` becomes a `string[]` and each pick renders as a `z-badge`',
+        type: 'boolean',
+        default: 'false',
+      },
+      {
+        name: '[zPlaceholder]',
+        description: 'Placeholder text shown when nothing is selected',
+        type: 'string',
+        default: "'Select an option...'",
+      },
       {
         name: '[zPosition]',
-        description: 'Overlay positioning mode',
+        description:
+          "Overlay positioning mode: 'item-aligned' opens the listbox so the selected item sits over the trigger; 'popper' drops it from the trigger's edge instead",
         type: "'item-aligned' | 'popper'",
-        default: "'popper'",
+        default: "'item-aligned'",
       },
-      { name: '[zSize]', description: 'Trigger and item size', type: "'sm' | 'default' | 'lg'", default: "'default'" },
       { name: '[(zValue)]', description: 'Selected value', type: 'string | string[]', default: "'' | []" },
       {
         name: '(zSelectionChange)',
         description: 'Emitted when the selected value changes',
-        type: 'string | string[]',
+        type: 'EventEmitter<string | string[]>',
         default: '-',
       },
     ],
@@ -55,7 +72,7 @@ export const SELECT_API: ApiSection[] = [
     description: 'Represents an individual item inside a z-select component.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
-      { name: '[zValue]', description: 'The value associated with this item', type: 'string', default: "''" },
+      { name: '[zValue]', description: 'The value associated with this item (required)', type: 'string', default: '-' },
       { name: '[zDisabled]', description: 'Disables selection for this item', type: 'boolean', default: 'false' },
     ],
   },
