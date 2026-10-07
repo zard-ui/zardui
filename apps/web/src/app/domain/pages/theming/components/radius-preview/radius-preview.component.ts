@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 
 import { DEFAULT_RADIUS, RADIUS_PRESETS, RADIUS_STEPS } from '../../data/radius.data';
 import { ThemingClipboardService } from '../../services/theming-clipboard.service';
 
-const PX_PER_REM = 16;
+/** The browser default, used while prerendering where there is no root to measure. */
+const DEFAULT_PX_PER_REM = 16;
 
 /** `6` → `6px`, `4.8` → `4.8px`. Trailing zeros would read as false precision. */
 function formatPx(value: number): string {
@@ -20,6 +22,14 @@ function formatPx(value: number): string {
 })
 export class RadiusPreviewComponent {
   private readonly clipboard = inject(ThemingClipboardService);
+  private readonly document = inject(DOCUMENT);
+
+  /**
+   * What one `rem` is worth on this page. `rem` follows the root font size, which
+   * the reader can change in the browser settings, so a fixed 16 would label the
+   * swatches with sizes they are not drawn at.
+   */
+  private readonly pxPerRem = signal(DEFAULT_PX_PER_REM);
 
   readonly presets = RADIUS_PRESETS;
 
@@ -32,7 +42,7 @@ export class RadiusPreviewComponent {
     const value = this.radius();
     const amount = Number.parseFloat(value);
 
-    return value.endsWith('rem') ? amount * PX_PER_REM : amount;
+    return value.endsWith('rem') ? amount * this.pxPerRem() : amount;
   });
 
   /**
@@ -45,6 +55,13 @@ export class RadiusPreviewComponent {
   readonly steps = computed(() =>
     RADIUS_STEPS.map(step => ({ ...step, resolved: formatPx(Math.max(0, this.radiusPx() + step.offset)) })),
   );
+
+  constructor() {
+    afterNextRender(() => {
+      const rootFontSize = Number.parseFloat(getComputedStyle(this.document.documentElement).fontSize);
+      if (rootFontSize > 0) this.pxPerRem.set(rootFontSize);
+    });
+  }
 
   setRadius(value: string): void {
     this.radius.set(value);
