@@ -43,7 +43,7 @@ describe('ZardSheetRef', () => {
   });
 
   afterEach(() => {
-    document.querySelectorAll('z-sheet').forEach(sheet => sheet.remove());
+    document.querySelectorAll('z-sheet-panel').forEach(sheet => sheet.remove());
   });
 
   describe('[signals]', () => {
@@ -63,7 +63,7 @@ describe('ZardSheetRef', () => {
       expect(ref.result()).toBe('done');
 
       await new Promise(resolve => setTimeout(resolve, CLOSE_DELAY));
-      expect(document.querySelector('z-sheet')).toBeNull();
+      expect(document.querySelector('z-sheet-panel')).toBeNull();
     });
 
     it('should expose the content component instance', async () => {
@@ -103,14 +103,14 @@ describe('ZardSheetRef', () => {
       const second = sheetService.create({ zTitle: 'Second', zContent: 'two' });
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      let sheets = document.querySelectorAll('z-sheet');
+      let sheets = document.querySelectorAll('z-sheet-panel');
       expect(sheets.length).toBe(2);
 
       const topOverlay = sheets[1].closest('.cdk-overlay-pane') as HTMLElement;
       topOverlay.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
       await new Promise(resolve => setTimeout(resolve, CLOSE_DELAY));
 
-      sheets = document.querySelectorAll('z-sheet');
+      sheets = document.querySelectorAll('z-sheet-panel');
       expect(sheets.length).toBe(1);
       expect(second.isClosing()).toBe(true);
       expect(first.isClosing()).toBe(false);
@@ -135,14 +135,14 @@ describe('ZardSheetRef', () => {
       fixture.detectChanges();
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      const sheet = document.querySelector('z-sheet');
+      const sheet = document.querySelector('z-sheet-panel');
       expect(sheet).toBeTruthy();
 
       sheet?.querySelector<HTMLButtonElement>('[data-testid="z-cancel-button"]')?.click();
       fixture.detectChanges();
       await new Promise(resolve => setTimeout(resolve, CLOSE_DELAY));
 
-      expect(document.querySelector('z-sheet')).toBeNull();
+      expect(document.querySelector('z-sheet-panel')).toBeNull();
       expect(document.activeElement).toBe(trigger);
     });
   });
@@ -156,17 +156,17 @@ describe('ZardSheetRef', () => {
       const ref = sheetService.create<unknown, unknown>({ zTitle: 'Duration', zContent: 'x', zDuration: 400 });
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      const sheet = document.querySelector('z-sheet') as HTMLElement;
+      const sheet = document.querySelector('z-sheet-panel') as HTMLElement;
       expect(sheet.style.getPropertyValue('--z-sheet-duration')).toBe('400ms');
 
       ref.close();
 
       // Still attached before the configured duration elapses.
       await new Promise(resolve => setTimeout(resolve, 200));
-      expect(document.querySelector('z-sheet')).toBeTruthy();
+      expect(document.querySelector('z-sheet-panel')).toBeTruthy();
 
       await new Promise(resolve => setTimeout(resolve, 300));
-      expect(document.querySelector('z-sheet')).toBeNull();
+      expect(document.querySelector('z-sheet-panel')).toBeNull();
     });
   });
 
@@ -186,7 +186,7 @@ describe('ZardSheetRef', () => {
 
       await new Promise(resolve => setTimeout(resolve, CLOSE_DELAY));
       expect(ref.isClosing()).toBe(false);
-      expect(document.querySelector('z-sheet')).toBeTruthy();
+      expect(document.querySelector('z-sheet-panel')).toBeTruthy();
 
       ref.close();
       await new Promise(resolve => setTimeout(resolve, CLOSE_DELAY));

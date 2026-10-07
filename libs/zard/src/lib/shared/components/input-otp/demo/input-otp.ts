@@ -7,7 +7,7 @@ import { INPUT_OTP_DEMO_INVALID } from '@generated/components/input-otp/demo/inv
 import { INPUT_OTP_DEMO_PATTERN } from '@generated/components/input-otp/demo/pattern';
 import { INPUT_OTP_DEMO_PREVIEW } from '@generated/components/input-otp/demo/preview';
 import { INPUT_OTP_DEMO_SEPARATOR } from '@generated/components/input-otp/demo/separator';
-import { INPUT_OTP_SNIPPET_PATTERN_ALPHANUMERIC } from '@generated/components/input-otp/snippets';
+import { INPUT_OTP_SNIPPET_PATTERN_DIGITS_ONLY } from '@generated/components/input-otp/snippets';
 import { INPUT_OTP_CLI_ADD } from '@generated/installation/cli/add-input-otp';
 import { INPUT_OTP_MANUAL_CODE } from '@generated/installation/manual/input-otp';
 import { INPUT_OTP_USAGE_CODE, INPUT_OTP_USAGE_IMPORT } from '@generated/usage/input-otp';
@@ -46,11 +46,11 @@ export const INPUT_OTP = {
       component: ZardDemoInputOtpPatternComponent,
       column: true,
       codeData: INPUT_OTP_DEMO_PATTERN,
-      codeBefore: { codeData: INPUT_OTP_SNIPPET_PATTERN_ALPHANUMERIC },
+      codeBefore: { codeData: INPUT_OTP_SNIPPET_PATTERN_DIGITS_ONLY },
     },
     {
       name: 'separator',
-      description: 'Use `InputOtpSeparator` between groups to split the slots into smaller blocks.',
+      description: 'Use `z-input-otp-separator` between groups to split the slots into smaller blocks.',
       component: ZardDemoInputOtpSeparatorComponent,
       column: true,
       codeData: INPUT_OTP_DEMO_SEPARATOR,
@@ -71,13 +71,13 @@ export const INPUT_OTP = {
     },
     {
       name: 'invalid',
-      description: 'Use `zInvalid` on a slot — or on the whole `InputOtp` — to mark the value as invalid.',
+      description: 'Use `zInvalid` on a slot — or on the whole `z-input-otp` — to mark the value as invalid.',
       component: ZardDemoInputOtpInvalidComponent,
       column: true,
       codeData: INPUT_OTP_DEMO_INVALID,
     },
     {
-      name: 'four digits',
+      name: 'four-digits',
       description: 'Use `zMaxLength` to change how many slots the input holds.',
       component: ZardDemoInputOtpFourDigitsComponent,
       column: true,

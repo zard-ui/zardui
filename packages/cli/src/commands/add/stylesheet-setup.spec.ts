@@ -165,6 +165,33 @@ describe('setupUtilities', () => {
     expect(mockWriteFile).not.toHaveBeenCalled();
   });
 
+  it('should recognise the import written as a bare name or through url()', async () => {
+    for (const rule of ["@import 'utilities.css';", '@import url("./utilities.css");', '@import url(utilities.css);']) {
+      jest.clearAllMocks();
+      mockReadFile.mockResolvedValue(`@import 'tailwindcss';\n${rule}\n`);
+
+      await setupUtilities(CSS_PATH);
+
+      expect(mockWriteFile).not.toHaveBeenCalled();
+    }
+  });
+
+  it("should not take Tailwind's own utilities.css for the zard one", async () => {
+    mockReadFile.mockResolvedValue("@import 'tailwindcss/utilities.css' layer(utilities);\n");
+
+    await setupUtilities(CSS_PATH);
+
+    expect(written()).toBe("@import 'tailwindcss/utilities.css' layer(utilities);\n@import './utilities.css';\n");
+  });
+
+  it('should not take a file whose name merely ends in utilities.css for the import', async () => {
+    mockReadFile.mockResolvedValue("@import 'tailwindcss';\n@import './legacy-utilities.css';\n");
+
+    await setupUtilities(CSS_PATH);
+
+    expect(written()).toBe("@import 'tailwindcss';\n@import './legacy-utilities.css';\n@import './utilities.css';\n");
+  });
+
   it('should add utilities to a stylesheet that already imports typeset', async () => {
     mockReadFile.mockResolvedValue("@import 'tailwindcss';\n@import './typeset.css';\n");
 

@@ -8,6 +8,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-radar-default',
   imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">

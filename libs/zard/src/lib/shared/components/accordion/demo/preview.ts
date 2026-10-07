@@ -6,7 +6,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-preview',
   imports: [ZardAccordionImports],
   template: `
-    <div z-accordion zDefaultValue="returns" zType="single" class="max-w-sm">
+    <div z-accordion zDefaultValue="shipping" zType="single" class="max-w-sm">
       <z-accordion-item zValue="shipping" zTitle="What are your shipping options?">
         We offer standard (5-7 days), express (2-3 days), and overnight shipping. Free shipping on international orders.
       </z-accordion-item>

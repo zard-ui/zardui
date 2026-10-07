@@ -10,7 +10,9 @@ import { RouterLink } from '@angular/router';
     </h2>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Six areas, each its own file. The main guide carries the rules that always apply; the rest is loaded when the work
-      calls for it.
+      calls for it — this is what
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard</code>
+      installs.
     </p>
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Project context</h3>
@@ -70,7 +72,7 @@ import { RouterLink } from '@angular/router';
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Rules</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Five files of incorrect/correct pairs, in real zard/ui code:
+      Six files of incorrect/correct pairs, in real zard/ui code:
     </p>
     <ul class="text-muted-foreground my-6 ml-6 list-disc text-base leading-relaxed [&>li]:mt-2">
       <li>
@@ -104,6 +106,35 @@ import { RouterLink } from '@angular/router';
         — ng-icons,
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">provideIcons</code>
         , and the configurable family
+      </li>
+      <li>
+        <strong class="text-foreground font-medium">Typeset</strong>
+        — one container class for rendered markdown instead of a class per tag, and the six variables that govern it
+      </li>
+    </ul>
+
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">The migration skill</h3>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      A second, separate skill —
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-migration</code>
+      — for a project whose installed component source predates the current registry. Unlike
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard</code>
+      , it is invoked explicitly: three files, no lazy-loaded references, because a migration is read start to finish
+      rather than consulted rule by rule.
+    </p>
+    <ul class="text-muted-foreground my-6 ml-6 list-disc text-base leading-relaxed [&>li]:mt-2">
+      <li>
+        <strong class="text-foreground font-medium">SKILL.md</strong>
+        — how to tell which version a project is on with no version field to read, and the ordered, resumable migration
+        procedure
+      </li>
+      <li>
+        <strong class="text-foreground font-medium">renames.md</strong>
+        — every breaking rename and removal, old name to new name, sourced to the commit that made it
+      </li>
+      <li>
+        <strong class="text-foreground font-medium">recompositions.md</strong>
+        — the components that kept their name but changed shape, with real before/after markup
       </li>
     </ul>
   `,

@@ -14,13 +14,13 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
   template: `
     <div class="flex w-full min-w-md flex-col gap-4">
       <z-input-group>
-        <input z-input placeholder="Send a message..." disabled />
+        <input z-input id="spinner-input-group-message" placeholder="Send a message..." disabled />
         <z-input-group-addon zAlign="inline-end">
           <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <textarea z-textarea placeholder="Send a message..." disabled></textarea>
+        <textarea z-textarea placeholder="Send a message..." id="spinner-input-group-notes" disabled></textarea>
         <z-input-group-addon zAlign="block-end">
           <z-spinner />
           Validating...

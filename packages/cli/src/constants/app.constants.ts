@@ -29,8 +29,12 @@ export function resolveAppVersion(fromDir: string): string {
 
   for (const candidate of candidates) {
     try {
-      const packageJson = JSON.parse(readFileSync(candidate, 'utf8'));
+      const packageJson: unknown = JSON.parse(readFileSync(candidate, 'utf8'));
       if (
+        typeof packageJson === 'object' &&
+        packageJson !== null &&
+        'version' in packageJson &&
+        'name' in packageJson &&
         typeof packageJson.version === 'string' &&
         typeof packageJson.name === 'string' &&
         packageJson.name.startsWith('zard-cli')

@@ -2,7 +2,7 @@ import { installComponent, validateTargetPath } from '@cli/commands/add/componen
 import { selectComponents } from '@cli/commands/add/component-selector.js';
 import { updateProvideZardWithDarkMode } from '@cli/commands/add/dark-mode-setup.js';
 import {
-  getAllComponentNames,
+  getAllInstallableNames,
   getTargetDir,
   resolveDependencies,
   type ComponentMeta,
@@ -66,7 +66,7 @@ export const add = new Command()
     warnOnPrereleaseAngular(projectInfo.angularVersionRaw);
 
     const actions = {
-      loadNames: () => getAllComponentNames(),
+      loadNames: () => getAllInstallableNames(),
       resolve: async (names: string[]) => {
         const { componentsToInstall, dependenciesToInstall } = await resolveDependencies(
           names,
@@ -83,6 +83,7 @@ export const add = new Command()
       installComponent: (component: ComponentMeta) =>
         installComponent(component.name, getTargetDir(component, resolvedConfig, cwd, options.path), resolvedConfig, {
           customPath: Boolean(options.path),
+          isBlock: component.isBlock,
         }),
       setupDarkMode: async (indexHtml: string) => {
         await injectThemeScript(cwd, indexHtml);

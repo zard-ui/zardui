@@ -15,22 +15,23 @@ export const BUTTON_GROUP_API: ApiSection[] = [
     ],
   },
   {
-    selector: 'z-button-group-divider',
-    description: 'A visual divider between buttons in a group.',
+    selector: 'z-button-group-separator',
+    description:
+      'Visually divides buttons within a group. Buttons with `zType="outline"` do not need a separator since they have a border.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zOrientation]',
-        description: "Override for divider orientation, by default it uses the parent's orientation",
+        description: "Override for the separator orientation, by default it uses the parent's orientation",
         type: "'horizontal' | 'vertical'",
         default: 'null',
       },
     ],
   },
   {
-    selector: 'z-button-group-text',
+    selector: '[z-button-group-text]',
     description:
       'Applies styles to text elements so that they conform with the rest of the group, for example a label.',
-    props: [],
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

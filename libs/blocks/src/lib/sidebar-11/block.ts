@@ -168,7 +168,7 @@ export class Sidebar11AppSidebarComponent {
     {
       name: 'sidebar-11.component.html',
       path: 'src/components/sidebar-11/sidebar-11.component.html',
-      content: `<z-sidebar-provider>
+      content: `<z-sidebar-provider zDefaultOpen="true">
   <lib-sidebar-11-app-sidebar />
 
   <main z-sidebar-inset>

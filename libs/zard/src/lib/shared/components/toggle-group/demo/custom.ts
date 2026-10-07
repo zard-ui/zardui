@@ -20,6 +20,7 @@ import {
         zSize="lg"
         [zItems]="items()"
         [zSpacing]="2"
+        [zValue]="fontWeight()"
         (valueChange)="onToggleChange($event)"
       />
       <p z-field-description>
@@ -57,7 +58,7 @@ export class ZardDemoToggleGroupCustomComponent {
   readonly medium = viewChild<TemplateRef<void>>('medium');
   readonly bold = viewChild<TemplateRef<void>>('bold');
 
-  protected readonly fontWeight = signal<string>('');
+  protected readonly fontWeight = signal<string>('normal');
 
   readonly items = computed<ZardToggleGroupItem[]>(() => [
     {

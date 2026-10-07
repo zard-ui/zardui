@@ -15,7 +15,13 @@ import { oklchToHex } from '../../utils/oklch-converter';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
+    role: 'button',
+    tabindex: '0',
+    '[attr.aria-pressed]': 'isActive()',
+    '[attr.aria-label]': '"Apply the " + preset().name + " preset"',
     '(click)': 'selection.emit(preset().name)',
+    '(keydown.enter)': 'selection.emit(preset().name)',
+    '(keydown.space)': '$event.preventDefault(); selection.emit(preset().name)',
   },
   template: `
     <div class="flex items-center gap-1.5">
@@ -45,7 +51,7 @@ export class ThemePresetCardComponent {
 
   readonly classes = computed(() =>
     mergeClasses(
-      'flex cursor-pointer items-center gap-2.5 rounded-lg border bg-white/50 p-2.5 transition-all hover:bg-accent hover:shadow-sm dark:bg-white/5',
+      'flex cursor-pointer items-center gap-2.5 rounded-lg border bg-white/50 p-2.5 transition-all outline-none hover:bg-accent hover:shadow-sm focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-white/5',
       this.isActive() && 'border-primary bg-primary/5 ring-1 ring-primary/20',
     ),
   );

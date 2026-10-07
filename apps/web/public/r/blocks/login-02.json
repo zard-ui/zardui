@@ -3,6 +3,15 @@
   "title": "Login with cover image",
   "description": "A two column login page with a cover image.",
   "category": "Login",
+  "registryDependencies": [
+    "button",
+    "field",
+    "input"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "login-02.component.html",

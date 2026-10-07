@@ -28,8 +28,11 @@
   >
     <z-code-tabs [data]="blocks.installTabs" />
     <p class="text-muted-foreground leading-relaxed">
-      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">tailwind.css</code>
-      imports it on its first line, so the classes are available as soon as that stylesheet is imported after Tailwind.
+      The CLI writes
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">utilities.css</code>
+      next to your global stylesheet and adds its
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">@import</code>
+      after the ones already there. If you install by hand, copy the file there and add the same line yourself.
     </p>
     <z-code-block [data]="blocks.installImport" />
   </z-utils-section>

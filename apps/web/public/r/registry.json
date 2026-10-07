@@ -149,6 +149,9 @@
       },
       "files": [
         "sheet.component.ts",
+        "sheet-panel.component.ts",
+        "sheet-container.component.ts",
+        "sheet-host.ts",
         "sheet.variants.ts",
         "sheet-ref.ts",
         "sheet.imports.ts",
@@ -265,6 +268,10 @@
       },
       "files": [
         "alert-dialog.component.ts",
+        "alert-dialog-panel.component.ts",
+        "alert-dialog-container.component.ts",
+        "alert-dialog-host.ts",
+        "alert-dialog.imports.ts",
         "alert-dialog.service.ts",
         "alert-dialog-ref.ts",
         "alert-dialog.variants.ts",
@@ -283,6 +290,7 @@
         "avatar.imports.ts",
         "avatar.component.ts",
         "avatar-group.component.ts",
+        "avatar-group-count.component.ts",
         "avatar.variants.ts",
         "index.ts"
       ]
@@ -366,6 +374,9 @@
       },
       "files": [
         "dialog.component.ts",
+        "dialog-panel.component.ts",
+        "dialog-container.component.ts",
+        "dialog-host.ts",
         "dialog.service.ts",
         "dialog-ref.ts",
         "dialog.variants.ts",

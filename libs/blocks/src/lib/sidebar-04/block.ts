@@ -157,7 +157,7 @@ export class Sidebar04AppSidebarComponent {
     {
       name: 'sidebar-04.component.html',
       path: 'src/components/sidebar-04/sidebar-04.component.html',
-      content: `<z-sidebar-provider style="--sidebar-width: 19rem">
+      content: `<z-sidebar-provider zDefaultOpen="true" style="--sidebar-width: 19rem">
   <lib-sidebar-04-app-sidebar />
 
   <main z-sidebar-inset>

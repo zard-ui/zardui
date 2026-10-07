@@ -1,42 +1,66 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardDialogRef } from '@/shared/components/dialog/dialog-ref';
+import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
 import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
 
+/** Content the service renders; it brings its own footer, so the options hide the default one. */
 @Component({
   selector: 'z-demo-dialog-custom-close-content',
-  imports: [ZardButtonComponent, ZardInputComponent],
+  imports: [ZardButtonComponent, ZardDialogImports, ZardInputComponent],
   template: `
     <div class="flex items-center gap-2">
       <div class="grid flex-1 gap-2">
-        <label for="link" class="sr-only">Link</label>
-        <input z-input id="link" value="https://ui.zardui.com/docs/installation" readonly />
+        <label for="share-link-service" class="sr-only">Link</label>
+        <input z-input id="share-link-service" value="https://ui.zardui.com/docs/installation" readonly />
       </div>
     </div>
-    <footer
-      class="bg-muted/50 -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t p-4 sm:flex-row sm:justify-start"
-    >
-      <button type="button" z-button (click)="dialogRef.close()">Close</button>
-    </footer>
+    <z-dialog-footer class="sm:justify-start">
+      <button type="button" z-button z-dialog-close>Close</button>
+    </z-dialog-footer>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoDialogCustomCloseContentComponent {
-  protected readonly dialogRef = inject(ZardDialogRef);
-}
+export class ZardDemoDialogCustomCloseContentComponent {}
 
 @Component({
   selector: 'z-demo-dialog-custom-close',
-  imports: [ZardButtonComponent],
+  imports: [ZardButtonComponent, ZardDialogImports, ZardInputComponent, ZardTabsImports],
   template: `
-    <button type="button" z-button zType="outline" (click)="open()">Share</button>
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Share</button>
+
+        <z-dialog [(zVisible)]="visible">
+          <z-dialog-header>
+            <z-dialog-title>Share link</z-dialog-title>
+            <z-dialog-description>Anyone who has this link will be able to view this.</z-dialog-description>
+          </z-dialog-header>
+          <div class="flex items-center gap-2">
+            <div class="grid flex-1 gap-2">
+              <label for="share-link" class="sr-only">Link</label>
+              <input z-input id="share-link" value="https://ui.zardui.com/docs/installation" readonly />
+            </div>
+          </div>
+          <z-dialog-footer class="sm:justify-start">
+            <button type="button" z-button z-dialog-close>Close</button>
+          </z-dialog-footer>
+        </z-dialog>
+      </z-tab>
+
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="open()">Share</button>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDialogCustomCloseComponent {
   private readonly dialogService = inject(ZardDialogService);
+
+  readonly visible = signal(false);
 
   open() {
     this.dialogService.create({

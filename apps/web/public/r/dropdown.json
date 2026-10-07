@@ -62,18 +62,26 @@
     ],
     "demos": {
       "symbols": [
-        "lucideChevronRight",
+        "lucideBell",
+        "lucideBuilding2",
         "lucideCreditCard",
         "lucideKeyboard",
+        "lucideMail",
+        "lucideMessageSquare",
         "lucideSettings",
-        "lucideUser"
+        "lucideUser",
+        "lucideWallet"
       ],
       "tokens": [
-        "chevron-right",
+        "bell",
+        "building-2",
         "credit-card",
         "keyboard",
+        "mail",
+        "message-square",
         "settings",
-        "user"
+        "user",
+        "wallet"
       ]
     }
   }

@@ -4,8 +4,8 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { lucideCheck } from '@ng-icons/lucide';
 
+import { ZardDialogOptions } from './dialog-container.component';
 import { ZardDialogRef } from './dialog-ref';
-import { ZardDialogOptions } from './dialog.component';
 import { ZardDialogService } from './dialog.service';
 
 @Component({
@@ -85,7 +85,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       expect(okButton).toBeTruthy();
@@ -102,7 +102,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const cancelButton = dialogElement?.querySelector('[data-testid="z-cancel-button"]');
       expect(cancelButton).toBeTruthy();
@@ -120,7 +120,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       const cancelButton = dialogElement?.querySelector('[data-testid="z-cancel-button"]');
@@ -137,7 +137,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const footer = dialogElement?.querySelector('footer');
       expect(footer).toBeNull();
@@ -152,7 +152,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       expect(dialogElement?.getAttribute('style')).toContain('width: 500px');
     }));
@@ -166,7 +166,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       expect(okButton?.getAttribute('data-disabled')).toBe('true');
@@ -181,7 +181,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       expect(okButton?.className).toContain('destructive');
@@ -196,7 +196,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const closeButton = dialogElement?.querySelector('[data-testid="z-close-header-button"]');
       expect(closeButton).toBeNull();
@@ -211,7 +211,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const cancelButton = dialogElement?.querySelector('[data-testid="z-cancel-button"]');
       expect(cancelButton?.textContent?.trim()).toBe('Go Back');
@@ -226,7 +226,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       expect(okButton?.textContent?.trim()).toBe('Proceed');
@@ -241,7 +241,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const cancelButton = dialogElement?.querySelector('[data-testid="z-cancel-button"]');
       expect(cancelButton).toBeNull();
@@ -256,7 +256,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       expect(okButton).toBeNull();
@@ -272,7 +272,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const titleElement = dialogElement?.querySelector('[data-testid="z-title"]');
       expect(titleElement?.textContent?.trim()).toBe('Dialog Title');
@@ -289,7 +289,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       expect(dialogElement?.classList.contains('custom-class')).toBe(true);
       expect(dialogElement?.classList.contains('another-class')).toBe(true);

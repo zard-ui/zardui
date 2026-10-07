@@ -13,8 +13,9 @@ export async function generateUsageFiles(): Promise<number> {
   fs.ensureDirSync(OUTPUT_PATH);
 
   for (const [componentName, rawData] of Object.entries(USAGE_DATA)) {
+    const templateLanguage = rawData.templateLanguage ?? 'angular-html';
     const importHtml = await highlightCode(rawData.importCode, 'angular-ts');
-    const templateHtml = await highlightCode(rawData.templateCode, 'angular-html');
+    const templateHtml = await highlightCode(rawData.templateCode, templateLanguage);
 
     const importBlock: CodeBlockData = {
       html: importHtml,
@@ -28,7 +29,7 @@ export async function generateUsageFiles(): Promise<number> {
     const codeBlock: CodeBlockData = {
       html: templateHtml,
       code: rawData.templateCode,
-      language: 'angular-html',
+      language: templateLanguage,
       showLineNumbers: true,
       copyButton: true,
       expandable: false,

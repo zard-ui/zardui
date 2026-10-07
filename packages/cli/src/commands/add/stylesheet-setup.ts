@@ -20,9 +20,24 @@ function withoutComments(content: string): string {
  *
  * It asks the same scan that decides where to anchor, so the two cannot
  * disagree: whatever counts as an import here counts as one there.
+ *
+ * The target has to name the file the CLI wrote next to the stylesheet, not
+ * merely end with it: `tailwindcss/utilities.css` or `./legacy-utilities.css`
+ * are other files, and taking them for ours would leave ours unimported.
  */
 function alreadyImports(content: string, fileName: string): boolean {
-  return cssImports(withoutComments(content)).some(match => match[0].includes(fileName));
+  return cssImports(withoutComments(content)).some(match => {
+    const target = importTarget(match[0]);
+
+    return target === fileName || target === `./${fileName}`;
+  });
+}
+
+/** The path an `@import` rule points at, whether quoted or wrapped in `url(...)`. */
+function importTarget(rule: string): string | null {
+  const target = /@import\s+(?:url\(\s*)?(['"]?)([^'"()\s;]+)\1/.exec(rule);
+
+  return target ? target[2] : null;
 }
 
 /** Every CSS `@import` in the file, in the order they appear. */

@@ -30,10 +30,17 @@ test.describe('Accordion component', () => {
 
   test('clicking a collapsed item expands it', async () => {
     const firstCard = demoPage.firstDemoBox;
-    // First item is collapsed by default (item-2 is the default expanded one)
-    const firstItem = firstCard.locator('z-accordion-item').first();
-    const trigger = firstItem.locator('button').first();
-    const region = firstItem.locator('[role="region"]');
+    // Pick whichever item starts collapsed, so the test does not depend on which one the demo opens.
+    // Pinned by index: a "closed" filter would re-resolve to another item once this one opens.
+    const states = await firstCard
+      .locator('z-accordion-item [role="region"]')
+      .evaluateAll(regions => regions.map(region => region.getAttribute('data-state')));
+    const collapsedIndex = states.indexOf('closed');
+    expect(collapsedIndex).toBeGreaterThanOrEqual(0);
+
+    const collapsedItem = firstCard.locator('z-accordion-item').nth(collapsedIndex);
+    const trigger = collapsedItem.locator('button').first();
+    const region = collapsedItem.locator('[role="region"]');
 
     // Verify it starts collapsed
     await expect(region).toHaveAttribute('data-state', 'closed');

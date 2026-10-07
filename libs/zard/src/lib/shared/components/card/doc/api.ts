@@ -8,9 +8,16 @@ export const CARD_API: ApiSection[] = [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zSize]',
-        description: 'Size variant of the card',
+        description: 'Size variant of the card. `sm` sets `--card-spacing` to `--spacing(3)` and shrinks the title',
         type: "'default' | 'sm'",
         default: "'default'",
+      },
+      {
+        name: '[--card-spacing]',
+        description:
+          'CSS variable behind every gap and padding of the card and its sections, e.g. `class="[--card-spacing:--spacing(6)]"`',
+        type: 'length',
+        default: '--spacing(4)',
       },
     ],
   },
@@ -18,6 +25,7 @@ export const CARD_API: ApiSection[] = [
     selector: 'z-card-header, [z-card-header]',
     description: 'Container for card title, description, and optional action.',
     props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zHeaderBorder]',
         description: 'Adds a bottom border to the header',

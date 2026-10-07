@@ -73,6 +73,8 @@ import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.com
 
 ### Avatar
 
+A compact avatar label: a `size-10` circle standing in for `z-avatar` next to two short bars for a name and a secondary line.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -96,6 +98,8 @@ export class ZardDemoSkeletonAvatarComponent {}
 ```
 
 ### Card
+
+A loading `z-card`: the title and description bars are passed to `z-card-title`/`z-card-description` through their `zTitle`/`zDescription` template inputs, and an `aspect-video` bar fills `z-card-content` in place of media.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -132,6 +136,8 @@ export class ZardDemoSkeletonCardComponent {}
 
 ### Text
 
+A paragraph of body copy: three full-width lines, the last one narrower to mimic a line that does not reach the margin.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -153,6 +159,8 @@ export class ZardDemoSkeletonTextComponent {}
 ```
 
 ### Form
+
+Two label-and-control pairs plus a submit action: each label bar sits above an `h-8` bar matching the height of `z-input`, and the trailing `h-8` bar matches a default `z-button`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -182,6 +190,8 @@ export class ZardDemoSkeletonFormComponent {}
 
 ### Table
 
+A `z-table` body: five rows, each with a flexible primary-column bar and two fixed-width bars for secondary columns.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -210,13 +220,13 @@ export class ZardDemoSkeletonTableComponent {
 
 ## API Reference
 
-### [z-skeleton]
+### z-skeleton
 
-Renders a customizable placeholder during data loading to improve perceived performance and prevent layout shifts.
+Renders a customizable placeholder during data loading to improve perceived performance and prevent layout shifts. `class` is the only input — size and shape the placeholder yourself with utility classes (`size-12 rounded-full`, `h-4 w-full`, ...) to match the content it stands in for.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes | `string` | `''` |
+| `[class]` | Custom CSS classes sizing and shaping the placeholder | `string` | `''` |
 
 ---
 

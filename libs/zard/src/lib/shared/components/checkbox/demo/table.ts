@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardTableImports } from '@/shared/components/table/table.imports';
 
 interface Row {
@@ -20,23 +21,25 @@ const TABLE_DATA: readonly Row[] = [
 
 @Component({
   selector: 'z-demo-checkbox-table',
-  imports: [ZardCheckboxComponent, ...ZardTableImports, FormsModule],
+  imports: [ZardCheckboxComponent, ...ZardFieldImports, ...ZardTableImports, FormsModule],
   template: `
     <table z-table>
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head class="w-8">
+          <th z-table-head scope="col" class="w-8">
+            <label z-field-label for="select-all-checkbox" class="sr-only">Select all</label>
             <z-checkbox zId="select-all-checkbox" [ngModel]="allSelected()" (checkChange)="toggleAll($event)" />
           </th>
-          <th z-table-head>Name</th>
-          <th z-table-head>Email</th>
-          <th z-table-head>Role</th>
+          <th z-table-head scope="col">Name</th>
+          <th z-table-head scope="col">Email</th>
+          <th z-table-head scope="col">Role</th>
         </tr>
       </thead>
       <tbody z-table-body>
         @for (row of rows; track row.id) {
           <tr z-table-row [attr.data-state]="isSelected(row.id) ? 'selected' : null">
             <td z-table-cell>
+              <label z-field-label [for]="'row-' + row.id + '-checkbox'" class="sr-only">Select {{ row.name }}</label>
               <z-checkbox
                 [zId]="'row-' + row.id + '-checkbox'"
                 [ngModel]="isSelected(row.id)"

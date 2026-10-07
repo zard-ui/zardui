@@ -264,8 +264,7 @@ export const ZardTabsImports = [ZardTabGroupComponent, ZardTabComponent] as cons
 ## Usage
 
 ```angular-ts
-import { ZardTabComponent } from '@/shared/components/tabs/tab.component';
-import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
 ```
 
 ```angular-html
@@ -279,7 +278,7 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
 
 ### Line
 
-Use the `zVariant="line"` prop on `z-tab-group` for a line style.
+Use the `zVariant="line"` input on `z-tab-group` for a line style.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -335,6 +334,8 @@ export class ZardDemoTabsVerticalComponent {}
 
 ### Disabled
 
+Set `zDisabled` on a `z-tab` to remove it from the tab order and prevent activation.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -357,6 +358,8 @@ export class ZardDemoTabsDisabledComponent {}
 ```
 
 ### Icons
+
+Set `zIcon` on a `z-tab` to render an `ng-icon` before the label.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -395,8 +398,8 @@ A set of layered sections of content — known as tab panels — displayed one a
 | `[zVariant]` | Visual variant of the tab navigation | `'default' \| 'line'` | `'default'` |
 | `[zOrientation]` | Layout direction of the tab group | `'horizontal' \| 'vertical'` | `'horizontal'` |
 | `[zDisabled]` | Whether the entire tab group is disabled | `boolean` | `false` |
-| `(zTabChange)` | Emits when a new tab is selected | `$event` | `-` |
-| `(zDeselect)` | Emits when the current tab is deselected | `$event` | `-` |
+| `(zTabChange)` | Emits when a new tab is selected | `EventEmitter<{ index: number; label: string; tab: ZardTabComponent }>` | `-` |
+| `(zDeselect)` | Emits when the current tab is deselected | `EventEmitter<{ index: number; label: string; tab: ZardTabComponent }>` | `-` |
 
 ### z-tab
 

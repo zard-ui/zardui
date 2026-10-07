@@ -73,6 +73,13 @@ export const CALENDAR_API: ApiSection[] = [
         default: '1',
       },
       {
+        name: '[zDayTemplate]',
+        description:
+          'Template rendered inside every day button instead of the plain day number. The `CalendarDay` is the implicit context (`let-day`), so the template can read `date`, `isCurrentMonth`, `isSelected` and the range flags. A second `<span>` inside the button is styled as a small caption',
+        type: 'TemplateRef<CalendarDayTemplateContext> | null',
+        default: 'null',
+      },
+      {
         name: '(dateChange)',
         description: 'Emitted when date selection changes',
         type: 'EventEmitter<Date | Date[]>',

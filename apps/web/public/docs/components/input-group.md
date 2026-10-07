@@ -340,7 +340,7 @@ export class ZardDemoInputGroupInlineEndComponent {}
 
 ### Block Start
 
-Use `zAlign="block-start"` to position the addon above the input.
+Use `zAlign="block-start"` to position the addon above the input or textarea.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -398,7 +398,7 @@ export class ZardDemoInputGroupBlockStartComponent {}
 
 ### Block End
 
-Use `zAlign="block-end"` to position the addon below the input.
+Use `zAlign="block-end"` to position the addon below the input or textarea.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -443,6 +443,8 @@ export class ZardDemoInputGroupBlockEndComponent {}
 
 ### Icon
 
+Place an `<ng-icon>` inside `z-input-group-addon` for a decorative icon. Add one at `inline-start` and one at `inline-end` to bracket the input, or two icons in the same addon.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -458,19 +460,19 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   template: `
     <div class="grid w-full min-w-sm gap-6">
       <z-input-group>
-        <input z-input placeholder="Search..." />
+        <input z-input id="input-group-icon-search" placeholder="Search..." />
         <z-input-group-addon>
           <ng-icon name="lucideSearch" />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input type="email" placeholder="Enter your email" />
+        <input z-input id="input-group-icon-email" type="email" placeholder="Enter your email" />
         <z-input-group-addon>
           <ng-icon name="lucideMail" />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Card number" />
+        <input z-input id="input-group-icon-card" placeholder="Card number" />
         <z-input-group-addon>
           <ng-icon name="lucideCreditCard" />
         </z-input-group-addon>
@@ -479,7 +481,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Card number" />
+        <input z-input id="input-group-icon-card-actions" placeholder="Card number" />
         <z-input-group-addon zAlign="inline-end">
           <ng-icon name="lucideStar" />
           <ng-icon name="lucideInfo" />
@@ -495,6 +497,8 @@ export class ZardDemoInputGroupIconComponent {}
 
 ### Text
 
+Use `z-input-group-text` inside `z-input-group-addon` for a static text affix — a currency symbol, a domain, a unit — on either side of an `input[z-input]` or below a `textarea[z-textarea]`.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -509,22 +513,22 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
     <div class="grid w-full min-w-sm gap-6">
       <z-input-group>
         <z-input-group-addon><span z-input-group-text>$</span></z-input-group-addon>
-        <input z-input placeholder="0.00" />
+        <input z-input id="input-group-text-amount" placeholder="0.00" />
         <z-input-group-addon zAlign="inline-end"><span z-input-group-text>USD</span></z-input-group-addon>
       </z-input-group>
       <z-input-group>
         <z-input-group-addon><span z-input-group-text>https://</span></z-input-group-addon>
-        <input z-input placeholder="example.com" class="pl-0.5!" />
+        <input z-input id="input-group-text-domain" placeholder="example.com" class="pl-0.5!" />
         <z-input-group-addon zAlign="inline-end"><span z-input-group-text>.com</span></z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Enter your username" />
+        <input z-input id="input-group-text-username" placeholder="Enter your username" />
         <z-input-group-addon zAlign="inline-end">
           <span z-input-group-text>&#64;company.com</span>
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <textarea z-textarea placeholder="Enter your message"></textarea>
+        <textarea z-textarea id="input-group-text-message" placeholder="Enter your message"></textarea>
         <z-input-group-addon zAlign="block-end">
           <span z-input-group-text class="text-muted-foreground text-xs">120 characters left</span>
         </z-input-group-addon>
@@ -537,6 +541,8 @@ export class ZardDemoInputGroupTextComponent {}
 ```
 
 ### Button
+
+Put a `button[z-input-group-button]` inside `z-input-group-addon` for an action attached to the input. `zSize="icon-xs"` fits an icon-only button and `zVariant="secondary"` gives it more visual weight than the `ghost` default.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
@@ -554,7 +560,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
   template: `
     <div class="grid w-full min-w-sm gap-6">
       <z-input-group>
-        <input z-input placeholder="https://x.com/zard_ui" readonly />
+        <input z-input id="input-group-button-link" placeholder="https://x.com/zard_ui" readonly />
         <z-input-group-addon zAlign="inline-end">
           <button
             type="button"
@@ -583,7 +589,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
           </button>
         </z-input-group-addon>
         <z-input-group-addon class="text-muted-foreground pl-1.5">https://</z-input-group-addon>
-        <input z-input id="input-secure-19" />
+        <input z-input id="input-group-button-secure" />
         <z-input-group-addon zAlign="inline-end">
           <button type="button" z-input-group-button zSize="icon-xs" (click)="toggleFavorite()">
             <ng-icon
@@ -596,7 +602,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
       </z-input-group>
 
       <z-input-group>
-        <input z-input placeholder="Type to search..." />
+        <input z-input id="input-group-button-search" placeholder="Type to search..." />
         <z-input-group-addon zAlign="inline-end">
           <button type="button" z-input-group-button zVariant="secondary">Search</button>
         </z-input-group-addon>
@@ -631,6 +637,8 @@ export class ZardDemoInputGroupButtonComponent {
 
 ### Kbd
 
+Add a `z-kbd` inside `z-input-group-addon` to show a keyboard shortcut hint next to the input.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -646,7 +654,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
   imports: [ZardInputComponent, ZardKbdComponent, NgIcon, ...ZardInputGroupImports],
   template: `
     <z-input-group class="min-w-sm">
-      <input z-input placeholder="Search..." />
+      <input z-input id="input-group-kbd-search" placeholder="Search..." />
       <z-input-group-addon>
         <ng-icon name="lucideSearch" class="text-muted-foreground" />
       </z-input-group-addon>
@@ -662,6 +670,8 @@ export class ZardDemoInputGroupKbdComponent {}
 ```
 
 ### Dropdown
+
+Compose `[z-dropdown]` on a `button[z-input-group-button]` inside `z-input-group-addon` to open a `z-dropdown-menu-content` from the group.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -679,7 +689,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   template: `
     <div class="grid w-full min-w-sm gap-4">
       <z-input-group>
-        <input z-input placeholder="Enter file name" />
+        <input z-input id="input-group-dropdown-filename" placeholder="Enter file name" />
         <z-input-group-addon zAlign="inline-end">
           <button
             type="button"
@@ -700,7 +710,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       </z-input-group>
 
       <z-input-group class="[--radius:1rem]">
-        <input z-input placeholder="Enter search query" />
+        <input z-input id="input-group-dropdown-search" placeholder="Enter search query" />
         <z-input-group-addon zAlign="inline-end">
           <button type="button" z-input-group-button class="pr-1.5! text-xs" z-dropdown [zDropdownMenu]="searchMenu">
             Search In...
@@ -723,6 +733,8 @@ export class ZardDemoInputGroupDropdownComponent {}
 
 ### Spinner
 
+Add a `z-spinner` inside `z-input-group-addon` to show a busy state next to the input; pair it with `z-input-group-text` for a status label.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -739,26 +751,26 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
   template: `
     <div class="grid w-full min-w-sm gap-4">
       <z-input-group>
-        <input z-input placeholder="Searching..." />
+        <input z-input id="input-group-spinner-search" placeholder="Searching..." />
         <z-input-group-addon zAlign="inline-end">
           <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Processing..." />
+        <input z-input id="input-group-spinner-processing" placeholder="Processing..." />
         <z-input-group-addon>
           <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Saving changes..." />
+        <input z-input id="input-group-spinner-saving" placeholder="Saving changes..." />
         <z-input-group-addon zAlign="inline-end">
           <span z-input-group-text>Saving...</span>
           <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Refreshing data..." />
+        <input z-input id="input-group-spinner-refreshing" placeholder="Refreshing data..." />
         <z-input-group-addon>
           <ng-icon name="lucideLoader" class="animate-spin" />
         </z-input-group-addon>
@@ -775,6 +787,8 @@ export class ZardDemoInputGroupSpinnerComponent {}
 ```
 
 ### Textarea
+
+Wrap `textarea[z-textarea]` in `z-input-group` and use `zAlign="block-start"`/`zAlign="block-end"` addons to attach a toolbar above or below it.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -825,9 +839,9 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
 export class ZardDemoInputGroupTextareaComponent {}
 ```
 
-### Custom
+### Custom Input
 
-Add the `data-slot="input-group-control"` attribute to your custom input for automatic focus state handling.
+Add the `data-slot="input-group-control"` attribute to your own control to opt it into the group's styling and focus-state handling without using `input[z-input]`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -838,12 +852,13 @@ import { lucidePencil } from '@ng-icons/lucide';
 import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
 
 @Component({
-  selector: 'z-demo-input-group-custom',
+  selector: 'z-demo-input-group-custom-input',
   imports: [NgIcon, ...ZardInputGroupImports],
   template: `
     <z-input-group class="w-80">
       <z-input-group-addon><ng-icon name="lucidePencil" /></z-input-group-addon>
       <input
+        id="input-group-custom-input"
         data-slot="input-group-control"
         type="text"
         placeholder="Custom input control..."
@@ -854,7 +869,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePencil })],
 })
-export class ZardDemoInputGroupCustomComponent {}
+export class ZardDemoInputGroupCustomInputComponent {}
 ```
 
 ## API Reference
@@ -878,11 +893,12 @@ A slot inside the group for prefix/suffix content. Clicking it focuses the inner
 
 ### button[z-input-group-button]
 
-Compact button styled to fit inside an InputGroup.
+Compact button styled to fit inside a `z-input-group-addon`, with its own narrowed size and variant scale.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zVariant]` | Visual variant of the button. | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'ghost'` |
 | `[zSize]` | Button size | `'xs' \| 'sm' \| 'icon-xs' \| 'icon-sm'` | `'xs'` |
 
 ### z-input-group-text

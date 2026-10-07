@@ -2,9 +2,7 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 
 export const INPUT_OTP_API: ApiSection[] = [
   {
-    selector: 'z-input-otp, [z-input-otp]',
-    description:
-      'Container for a one-time password input. Renders its own slots when none are projected and integrates with Angular forms through ControlValueAccessor.',
+    selector: 'z-input-otp',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
@@ -15,7 +13,8 @@ export const INPUT_OTP_API: ApiSection[] = [
       },
       {
         name: '[zPattern]',
-        description: 'Per-character regex pattern used to validate typed and pasted input',
+        description:
+          "Per-character regex pattern used to validate typed and pasted input. Ready-made patterns — REGEXP_ONLY_DIGITS, REGEXP_ONLY_CHARS, REGEXP_ONLY_DIGITS_AND_CHARS — are exported from `input-otp.utils`, mirroring the `input-otp` library's constants of the same name",
         type: 'string',
         default: "'[0-9]'",
       },
@@ -38,15 +37,31 @@ export const INPUT_OTP_API: ApiSection[] = [
         type: "'sm' | 'default' | 'lg'",
         default: "'default'",
       },
-      { name: '(zValueChange)', description: 'Emitted whenever the value changes', type: 'string', default: '-' },
-      { name: '(zComplete)', description: 'Emitted when every slot is filled', type: 'string', default: '-' },
+      {
+        name: '(zValueChange)',
+        description: 'Emitted whenever the value changes',
+        type: 'EventEmitter<string>',
+        default: '-',
+      },
+      {
+        name: '(zComplete)',
+        description: 'Emitted when every slot is filled',
+        type: 'EventEmitter<string>',
+        default: '-',
+      },
     ],
   },
   {
-    selector: 'z-input-otp-signal, [z-input-otp-signal]',
+    selector: 'z-input-otp-signal',
     description:
       "Drop-in alternative to z-input-otp that implements the signal forms FormValueControl<string> contract. Use it when binding through [formField] from '@angular/forms/signals'. Inherits every input and output from z-input-otp.",
     props: [
+      {
+        name: '[value]',
+        description: 'Current value',
+        type: 'string',
+        default: "''",
+      },
       {
         name: '[(value)]',
         description: 'Current value; two-way bound by [formField]',
@@ -54,15 +69,21 @@ export const INPUT_OTP_API: ApiSection[] = [
         default: "''",
       },
       {
+        name: '[disabled]',
+        description: "Disabled state; mirrors the field's disabled state",
+        type: 'boolean',
+        default: 'false',
+      },
+      {
         name: '[(disabled)]',
-        description: "Disabled state; two-way bound by [formField] and mirrors the field's disabled state",
+        description: 'Disabled state; two-way bound by [formField]',
         type: 'boolean',
         default: 'false',
       },
     ],
   },
   {
-    selector: 'z-input-otp-slot, [z-input-otp-slot]',
+    selector: 'z-input-otp-slot',
     description:
       'Individual character slot. Displays the character, the active state, and the blinking fake caret while focused.',
     props: [
@@ -70,19 +91,19 @@ export const INPUT_OTP_API: ApiSection[] = [
       { name: '[zIndex]', description: 'Zero-based position of the slot', type: 'number', default: 'required' },
       {
         name: '[zInvalid]',
-        description: 'Marks this slot as invalid; also inherited from the parent InputOtp',
+        description: 'Marks this slot as invalid; also inherited from the parent z-input-otp',
         type: 'boolean',
         default: 'false',
       },
     ],
   },
   {
-    selector: 'z-input-otp-group, [z-input-otp-group]',
+    selector: 'z-input-otp-group',
     description: 'Groups slots together so they render as a single connected block.',
     props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
-    selector: 'z-input-otp-separator, [z-input-otp-separator]',
+    selector: 'z-input-otp-separator',
     description: 'Visual separator rendered between slot groups. Marked aria-hidden.',
     props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },

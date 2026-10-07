@@ -6,6 +6,7 @@ import type { ZardChartConfig, ZardChartOptionOverride } from '@/shared/componen
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
+  selector: 'z-demo-chart-pie-interactive',
   imports: [ZardCardImports, ZardChartImports, ZardSelectImports],
   template: `
     <z-card class="flex w-full flex-col">

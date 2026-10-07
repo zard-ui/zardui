@@ -171,6 +171,8 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
 
 ### Description
 
+Pair `z-field-content` with `z-field-label` and `z-field-description` for helper text.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -196,7 +198,7 @@ export class ZardDemoSwitchDescriptionComponent {}
 
 ### Choice Card
 
-Card-style selection where `FieldLabel` wraps the entire `Field` for a clickable card pattern.
+Card-style selection where `label[z-field-label]` wraps the entire `z-field` for a clickable card pattern.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -215,7 +217,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
             <div z-field-title>Share across devices</div>
             <p z-field-description>Focus is shared across devices, and turns off when you leave the app.</p>
           </div>
-          <z-switch zId="switch-share" />
+          <z-switch zId="switch-share"><span class="sr-only">Share across devices</span></z-switch>
         </div>
       </label>
       <label z-field-label for="switch-notifications">
@@ -224,7 +226,9 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
             <div z-field-title>Enable notifications</div>
             <p z-field-description>Receive notifications when focus mode is enabled or disabled.</p>
           </div>
-          <z-switch zId="switch-notifications" [zChecked]="true" />
+          <z-switch zId="switch-notifications" [zChecked]="true">
+            <span class="sr-only">Enable notifications</span>
+          </z-switch>
         </div>
       </label>
     </div>
@@ -236,7 +240,7 @@ export class ZardDemoSwitchChoiceCardComponent {}
 
 ### Disabled
 
-Add the `zDisabled` prop to the `Switch` component to disable the switch. Add the `data-disabled` prop to the `Field` component for styling.
+Use `zDisabled` to disable the switch, and add `data-disabled` to `z-field` for the matching wrapper styles.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -260,7 +264,7 @@ export class ZardDemoSwitchDisabledComponent {}
 
 ### Invalid
 
-Add the `zInvalid` prop to the `Switch` component to indicate an invalid state. Add the `data-invalid` prop to the `Field` component for styling.
+Use `zInvalid` to mark the switch as invalid (sets `aria-invalid`), and add `data-invalid` to `z-field` for the matching wrapper styles.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -287,7 +291,7 @@ export class ZardDemoSwitchInvalidComponent {}
 
 ### Size
 
-Use the `zSize` prop to change the size of the switch.
+Use `zSize` to change the size of the switch (`default` or `sm`).
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -298,9 +302,15 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
   selector: 'z-demo-switch-size',
   imports: [ZardSwitchComponent],
   template: `
-    <div class="grid w-full min-w-sm items-center justify-center gap-6">
-      <z-switch zSize="sm">Small</z-switch>
-      <z-switch>Default</z-switch>
+    <div class="grid w-full min-w-sm gap-6">
+      <div class="flex items-center gap-6">
+        <z-switch zSize="sm">Small</z-switch>
+        <z-switch zSize="sm" [zChecked]="true">Small (checked)</z-switch>
+      </div>
+      <div class="flex items-center gap-6">
+        <z-switch>Default</z-switch>
+        <z-switch [zChecked]="true">Default (checked)</z-switch>
+      </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -308,20 +318,101 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
 export class ZardDemoSwitchSizeComponent {}
 ```
 
+### Controlled
+
+Drive the switch from outside with a one-way `[zChecked]` binding and the `(zCheckedChange)` output, instead of the two-way `[(zChecked)]` binding.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
+
+@Component({
+  selector: 'z-demo-switch-controlled',
+  imports: [ZardSwitchComponent, ZardButtonComponent, ...ZardFieldImports],
+  template: `
+    <div z-field-group class="mx-auto w-64">
+      <div z-field zOrientation="horizontal">
+        <z-switch
+          zId="notifications-controlled"
+          [zChecked]="notifications()"
+          (zCheckedChange)="notifications.set($event)"
+        />
+        <label z-field-label for="notifications-controlled">Enable notifications</label>
+      </div>
+      <p class="text-muted-foreground text-sm">Notifications are {{ notifications() ? 'on' : 'off' }}.</p>
+      <button type="button" z-button zType="outline" zSize="sm" (click)="notifications.set(!notifications())">
+        Toggle from outside
+      </button>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSwitchControlledComponent {
+  protected readonly notifications = signal(true);
+}
+```
+
+### Reactive Forms
+
+Bind `z-switch` with `formControlName`; a control created with `disabled: true` renders the switch disabled and keeps it in sync.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
+
+@Component({
+  selector: 'z-demo-switch-reactive-forms',
+  imports: [ZardSwitchComponent, ...ZardFieldImports, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="form">
+      <div z-field-group class="mx-auto w-64">
+        <div z-field zOrientation="horizontal">
+          <z-switch zId="newsletter-switch" formControlName="newsletter" />
+          <label z-field-label for="newsletter-switch">Subscribe to newsletter</label>
+        </div>
+        <div z-field zOrientation="horizontal" data-disabled="true">
+          <z-switch zId="beta-switch" formControlName="betaFeatures" />
+          <label z-field-label for="beta-switch">Beta features (locked)</label>
+        </div>
+        <p class="text-muted-foreground text-sm">
+          Newsletter: {{ form.controls.newsletter.value ? 'subscribed' : 'not subscribed' }}
+        </p>
+      </div>
+    </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSwitchReactiveFormsComponent {
+  private readonly fb = inject(FormBuilder);
+
+  protected readonly form = this.fb.group({
+    newsletter: [true],
+    betaFeatures: [{ value: false, disabled: true }],
+  });
+}
+```
+
 ## API Reference
 
-### [z-switch]
+### z-switch
 
-A customizable switch with minimal configuration.
+A control that toggles between checked and unchecked, built on a native button with role="switch".
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[(zChecked)]` | Switch state (two-way binding) | `boolean` | `false` |
-| `[zDisabled]` | Switch disabled state | `boolean` | `false` |
-| `[zInvalid]` | Switch invalid state (sets aria-invalid) | `boolean` | `false` |
-| `[zId]` | Switch id | `string` | `-` |
+| `[zChecked]` | Checked state, two-way bindable | `boolean` | `false` |
+| `[(zChecked)]` | Checked state (two-way binding) | `boolean` | `false` |
+| `[zId]` | Id applied to the underlying button | `string` | `-` |
 | `[zSize]` | Switch size | `'default' \| 'sm'` | `'default'` |
+| `[zDisabled]` | Disables the switch | `boolean` | `false` |
+| `[zInvalid]` | Invalid state (sets aria-invalid) | `boolean` | `false` |
 
 ---
 

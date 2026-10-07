@@ -4,163 +4,451 @@
       "id": "dashboard-01",
       "title": "Dashboard 01",
       "description": "A dashboard with sidebar, charts and data table.",
-      "category": "Dashboard"
+      "category": "Dashboard",
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "chart",
+        "checkbox",
+        "dropdown",
+        "select",
+        "separator",
+        "sidebar",
+        "table",
+        "tabs",
+        "toggle-group"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "login-01",
       "title": "Login form",
       "description": "A simple login form.",
-      "category": "Login"
+      "category": "Login",
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
+      "dependencies": []
     },
     {
       "id": "login-02",
       "title": "Login with cover image",
       "description": "A two column login page with a cover image.",
-      "category": "Login"
+      "category": "Login",
+      "registryDependencies": [
+        "button",
+        "field",
+        "input"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "login-03",
       "title": "Login with muted background",
       "description": "A login page with a muted background color.",
-      "category": "Login"
+      "category": "Login",
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "login-04",
       "title": "Login with form and image",
       "description": "A login page with form and image.",
-      "category": "Login"
+      "category": "Login",
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
+      "dependencies": []
     },
     {
       "id": "login-05",
       "title": "Email-only login",
       "description": "A simple email-only login page.",
-      "category": "Login"
+      "category": "Login",
+      "registryDependencies": [
+        "button",
+        "field",
+        "input"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-01",
       "title": "Sidebar 01",
       "description": "A simple sidebar with navigation grouped by section.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "breadcrumb",
+        "dropdown",
+        "field",
+        "input",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-02",
       "title": "Sidebar 02",
       "description": "A sidebar with collapsible sections.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "breadcrumb",
+        "collapsible",
+        "dropdown",
+        "field",
+        "input",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-03",
       "title": "Sidebar 03",
       "description": "A sidebar with submenus.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "breadcrumb",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-04",
       "title": "Sidebar 04",
       "description": "A floating sidebar with submenus.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "breadcrumb",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-05",
       "title": "Sidebar 05",
       "description": "A sidebar with collapsible submenus.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "breadcrumb",
+        "collapsible",
+        "field",
+        "input",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-06",
       "title": "Sidebar 06",
       "description": "A sidebar with submenus as dropdowns.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "breadcrumb",
+        "button",
+        "card",
+        "dropdown",
+        "input",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-07",
       "title": "Sidebar 07",
       "description": "A sidebar that collapses to icons.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "collapsible",
+        "dropdown",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-08",
       "title": "Sidebar 08",
       "description": "An inset sidebar with secondary navigation.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "collapsible",
+        "dropdown",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-09",
       "title": "Sidebar 09",
       "description": "Collapsible nested sidebars.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "dropdown",
+        "field",
+        "input",
+        "separator",
+        "sidebar",
+        "switch"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-10",
       "title": "Sidebar 10",
       "description": "A sidebar in a popover.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "breadcrumb",
+        "button",
+        "collapsible",
+        "dropdown",
+        "popover",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-11",
       "title": "Sidebar 11",
       "description": "A sidebar with a collapsible file tree.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "breadcrumb",
+        "collapsible",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-12",
       "title": "Sidebar 12",
       "description": "A sidebar with a calendar.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "calendar",
+        "collapsible",
+        "dropdown",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-13",
       "title": "Sidebar 13",
       "description": "A sidebar in a dialog.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "breadcrumb",
+        "button",
+        "dialog",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-14",
       "title": "Sidebar 14",
       "description": "A sidebar on the right.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "breadcrumb",
+        "sidebar"
+      ],
+      "dependencies": []
     },
     {
       "id": "sidebar-15",
       "title": "Sidebar 15",
       "description": "A left and right sidebar.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "calendar",
+        "collapsible",
+        "dropdown",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "sidebar-16",
       "title": "Sidebar 16",
       "description": "A sidebar with a sticky site header.",
-      "category": "Sidebar"
+      "category": "Sidebar",
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "button",
+        "collapsible",
+        "dropdown",
+        "field",
+        "input",
+        "separator",
+        "sidebar"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "signup-01",
       "title": "Signup form",
       "description": "A simple signup form.",
-      "category": "Signup"
+      "category": "Signup",
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
+      "dependencies": []
     },
     {
       "id": "signup-02",
       "title": "Signup with cover image",
       "description": "A two column signup page with a cover image.",
-      "category": "Signup"
+      "category": "Signup",
+      "registryDependencies": [
+        "button",
+        "field",
+        "input"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "signup-03",
       "title": "Signup with muted background",
       "description": "A signup page with a muted background color.",
-      "category": "Signup"
+      "category": "Signup",
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     },
     {
       "id": "signup-04",
       "title": "Signup with form and image",
       "description": "A signup page with form and image.",
-      "category": "Signup"
+      "category": "Signup",
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
+      "dependencies": []
     },
     {
       "id": "signup-05",
       "title": "Signup with social providers",
       "description": "A simple signup form with social providers.",
-      "category": "Signup"
+      "category": "Signup",
+      "registryDependencies": [
+        "button",
+        "field",
+        "input"
+      ],
+      "dependencies": [
+        "@ng-icons/core",
+        "@ng-icons/lucide"
+      ]
     }
   ]
 }

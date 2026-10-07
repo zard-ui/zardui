@@ -30,10 +30,12 @@
     "tokens": [],
     "demos": {
       "symbols": [
-        "lucideCornerDownLeft"
+        "lucideCornerDownLeft",
+        "lucideSearch"
       ],
       "tokens": [
-        "corner-down-left"
+        "corner-down-left",
+        "search"
       ]
     }
   }

@@ -11,12 +11,12 @@ import { ZardSeparatorComponent } from '../separator.component';
         <dt>Item 1</dt>
         <dd class="text-muted-foreground">Value 1</dd>
       </dl>
-      <z-separator />
+      <z-separator [zDecorative]="false" />
       <dl class="flex items-center justify-between">
         <dt>Item 2</dt>
         <dd class="text-muted-foreground">Value 2</dd>
       </dl>
-      <z-separator />
+      <z-separator [zDecorative]="false" />
       <dl class="flex items-center justify-between">
         <dt>Item 3</dt>
         <dd class="text-muted-foreground">Value 3</dd>

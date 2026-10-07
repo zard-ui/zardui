@@ -6,7 +6,7 @@ import { lucidePencil, lucideShare, lucideTrash2 } from '@ng-icons/lucide';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-destructive-demo',
+  selector: 'z-demo-context-menu-destructive',
   imports: [ZardContextMenuImports, NgIcon],
   template: `
     <div
@@ -36,7 +36,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   viewProviders: [provideIcons({ lucidePencil, lucideShare, lucideTrash2 })],
   host: { class: 'contents' },
 })
-export class ZardContextMenuDestructiveDemoComponent {
+export class ZardDemoContextMenuDestructiveComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }

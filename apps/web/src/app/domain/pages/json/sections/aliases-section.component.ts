@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+import { JSON_ALIASES_BLOCKS_EXAMPLE } from '@generated/documentation/json/aliases-blocks-example';
 import { JSON_ALIASES_COMPONENTS_EXAMPLE } from '@generated/documentation/json/aliases-components-example';
 import { JSON_ALIASES_CORE_EXAMPLE } from '@generated/documentation/json/aliases-core-example';
 import { JSON_ALIASES_SERVICES_EXAMPLE } from '@generated/documentation/json/aliases-services-example';
@@ -70,11 +71,23 @@ import type { CodeBlockData } from '@highlight/types';
           </p>
           <z-code-block [data]="aliasesServicesExample" />
         </div>
+
+        <div id="aliases-blocks" class="flex scroll-mt-20 flex-col gap-4">
+          <h3 class="text-lg font-medium sm:text-xl lg:text-2xl">aliases.blocks</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+            Where
+            <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli add &lt;block&gt;</code>
+            writes a block. Each one gets a directory of its own here, since a block is several files that only make
+            sense together.
+          </p>
+          <z-code-block [data]="aliasesBlocksExample" />
+        </div>
       </div>
     </section>
   `,
 })
 export class JsonAliasesSectionComponent {
+  readonly aliasesBlocksExample: CodeBlockData = JSON_ALIASES_BLOCKS_EXAMPLE;
   readonly aliasesComponentsExample: CodeBlockData = JSON_ALIASES_COMPONENTS_EXAMPLE;
   readonly aliasesCoreExample: CodeBlockData = JSON_ALIASES_CORE_EXAMPLE;
   readonly aliasesServicesExample: CodeBlockData = JSON_ALIASES_SERVICES_EXAMPLE;

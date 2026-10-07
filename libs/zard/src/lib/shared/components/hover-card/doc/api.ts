@@ -39,14 +39,15 @@ export const HOVER_CARD_API: ApiSection[] = [
       {
         name: '(zVisibleChange)',
         description: 'Emits when visibility changes',
-        type: 'output<boolean>',
+        type: 'EventEmitter<boolean>',
         default: '-',
       },
     ],
   },
   {
     selector: 'z-hover-card',
-    description: 'The wrapper component that styles hover card content.',
+    description:
+      'The wrapper component that styles hover card content. Exposes `data-state` and `data-side` while mounted, driving the open and directional animations.',
     props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

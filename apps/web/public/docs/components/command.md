@@ -940,6 +940,8 @@ import { ZardCommandImports } from '@/shared/components/command/command.imports'
 
 ### Basic
 
+`z-command` has no dialog of its own, so the palette is built by composing it with `ZardDialogService`: the button opens a dialog whose content is a `z-command`, with `zClosable`/`zHideFooter`/`zOkText`/`zCancelText` turned off so only the command menu shows. A `document:keydown` listener on the trigger opens the same dialog on `⌘K` / `Ctrl+K`, with the hint rendered by `z-kbd-group` and `z-kbd` — never a hand-rolled `<kbd>`.
+
 ```angular-ts
 import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 
@@ -947,6 +949,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
 import { ZardCommandImports } from '@/shared/components/command/command.imports';
 import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
+import { ZardKbdImports } from '@/shared/components/kbd/kbd.imports';
 
 @Component({
   selector: 'z-demo-command-basic-dialog',
@@ -977,13 +980,32 @@ class ZardDemoCommandBasicDialogComponent implements AfterViewInit {
 
 @Component({
   selector: 'z-demo-command-basic',
-  imports: [ZardButtonComponent],
+  imports: [ZardButtonComponent, ZardKbdImports],
   template: `
-    <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
+    <button type="button" z-button zType="outline" class="gap-4" (click)="open()">
+      Open Menu
+      <z-kbd-group>
+        <z-kbd>⌘</z-kbd>
+        <z-kbd>K</z-kbd>
+      </z-kbd-group>
+    </button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    // A command palette a reader cannot learn to open is half-documented:
+    // ⌘K / Ctrl+K opens the same dialog as clicking the button.
+    '(document:keydown)': 'onKeydown($event)',
+  },
 })
 export class ZardDemoCommandBasicComponent {
   private readonly dialogService = inject(ZardDialogService);
+
+  onKeydown(event: KeyboardEvent) {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      this.open();
+    }
+  }
 
   open() {
     this.dialogService.create({
@@ -1002,6 +1024,8 @@ export class ZardDemoCommandBasicComponent {
 
 ### Shortcuts
 
+`zShortcut` on `z-command-option` (see `preview`) renders a plain-text hint. For a styled, per-key hint, project into the `[data-slot=command-option-trailing]` slot instead — here each option carries a `z-kbd-group` of `z-kbd`s rather than the `zShortcut` string.
+
 ```angular-ts
 import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 
@@ -1012,10 +1036,11 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
 import { ZardCommandImports } from '@/shared/components/command/command.imports';
 import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
+import { ZardKbdImports } from '@/shared/components/kbd/kbd.imports';
 
 @Component({
   selector: 'z-demo-command-shortcuts-dialog',
-  imports: [ZardCommandImports],
+  imports: [ZardCommandImports, ZardKbdImports],
   template: `
     <z-command #cmd="zCommand">
       <z-command-input placeholder="Type a command or search..." />
@@ -1024,9 +1049,30 @@ import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
           <div class="py-6 text-center text-sm">No results found.</div>
         }
         <z-command-option-group zLabel="Settings">
-          <z-command-option zLabel="Profile" zValue="profile" zIcon="lucideUser" zShortcut="⌘P" />
-          <z-command-option zLabel="Billing" zValue="billing" zIcon="lucideCreditCard" zShortcut="⌘B" />
-          <z-command-option zLabel="Settings" zValue="settings" zIcon="lucideSettings" zShortcut="⌘S" />
+          <z-command-option zLabel="Profile" zValue="profile" zIcon="lucideUser">
+            <span data-slot="command-option-trailing">
+              <z-kbd-group>
+                <z-kbd>⌘</z-kbd>
+                <z-kbd>P</z-kbd>
+              </z-kbd-group>
+            </span>
+          </z-command-option>
+          <z-command-option zLabel="Billing" zValue="billing" zIcon="lucideCreditCard">
+            <span data-slot="command-option-trailing">
+              <z-kbd-group>
+                <z-kbd>⌘</z-kbd>
+                <z-kbd>B</z-kbd>
+              </z-kbd-group>
+            </span>
+          </z-command-option>
+          <z-command-option zLabel="Settings" zValue="settings" zIcon="lucideSettings">
+            <span data-slot="command-option-trailing">
+              <z-kbd-group>
+                <z-kbd>⌘</z-kbd>
+                <z-kbd>S</z-kbd>
+              </z-kbd-group>
+            </span>
+          </z-command-option>
         </z-command-option-group>
       </z-command-list>
     </z-command>
@@ -1047,6 +1093,7 @@ class ZardDemoCommandShortcutsDialogComponent implements AfterViewInit {
   template: `
     <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCommandShortcutsComponent {
   private readonly dialogService = inject(ZardDialogService);
@@ -1067,6 +1114,8 @@ export class ZardDemoCommandShortcutsComponent {
 ```
 
 ### Groups
+
+Options organised into named sections with `z-command-option-group`, divided by `z-command-divider`. Typing in `z-command-input` filters every group at once; a group hides itself once none of its options match, and a divider hides itself during a search rather than sit next to an empty group.
 
 ```angular-ts
 import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
@@ -1131,6 +1180,7 @@ class ZardDemoCommandGroupsDialogComponent implements AfterViewInit {
   template: `
     <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCommandGroupsComponent {
   private readonly dialogService = inject(ZardDialogService);
@@ -1151,6 +1201,8 @@ export class ZardDemoCommandGroupsComponent {
 ```
 
 ### Scrollable
+
+A `z-command-list` with more options than fit the `max-h-72` viewport scrolls internally. Arrow-key navigation calls `scrollIntoView()` on the active `z-command-option`, so the highlighted row stays visible while keyboard focus remains on `z-command-input`.
 
 ```angular-ts
 import { type AfterViewInit, ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
@@ -1288,6 +1340,7 @@ class ZardDemoCommandScrollableDialogComponent implements AfterViewInit {
   template: `
     <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCommandScrollableComponent {
   private readonly dialogService = inject(ZardDialogService);
@@ -1311,64 +1364,64 @@ export class ZardDemoCommandScrollableComponent {
 
 ### z-command
 
-The main command palette container that handles search input and keyboard navigation with debounced search, ARIA accessibility, and comprehensive keyboard navigation.
+The command palette root. Filters its `z-command-option`s as `z-command-input` is typed, and owns the arrow-key / Enter / Escape navigation. Exported as `zCommand` for a template reference (`#cmd="zCommand"`) — every example on this page uses it to read `isEmpty()` and call `focus()`. Has no trigger or open state of its own; see the `basic` example for opening it from a `⌘K` shortcut inside a `ZardDialogService` dialog.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[size]` | Size of the command palette | `'sm' \| 'default' \| 'lg' \| 'xl'` | `'default'` |
-| `[class]` | Additional CSS classes | `string` | `''` |
-| `(zCommandChange)` | Fired when the selected option changes | `output<ZardCommandOption>` | `-` |
-| `(zCommandSelected)` | Fired when an option is selected | `output<ZardCommandOption>` | `-` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `(zCommandChange)` | Fired when the highlighted/committed option changes. | `EventEmitter<ZardCommandOption>` | `-` |
+| `(zCommandSelected)` | Fired when an option is chosen (click or Enter). | `EventEmitter<ZardCommandOption>` | `-` |
+| `isEmpty()` | Template-reference-only: `true` once a search term is typed and no option matches it. Zard ships no `z-command-empty`; use this to render the empty state yourself, as every example on this page does. | `Signal<boolean>` | `-` |
+| `focus()` | Template-reference-only: focuses `z-command-input`. Called after opening a dialog-hosted command so typing works immediately. | `() => void` | `-` |
 
 ### z-command-input
 
-Search input component with debounced input handling and accessibility features.
+The search box. Debounced by the app-wide input event manager, forwards arrow/Enter/Escape to the parent `z-command`, and exposes `focus()` via `exportAs="zCommandInput"`. Declares no `[class]` input of its own — a `class` attribute on the tag lands on its host element (not merged through `mergeClasses()`), which is enough to reach descendants with `**:` arbitrary-variant selectors.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[placeholder]` | Placeholder text for input | `string` | `'Type a command or search...'` |
-| `[class]` | Additional CSS classes | `string` | `''` |
-| `(valueChange)` | Fired when input value changes | `EventEmitter<string>` | `-` |
+| `[placeholder]` | Placeholder text for the input. | `string` | `'Type a command or search...'` |
+| `(valueChange)` | Fired on every keystroke, alongside the `ControlValueAccessor` value. | `EventEmitter<string>` | `-` |
 
 ### z-command-list
 
-Container for command options with proper ARIA listbox semantics.
+The `role="listbox"` container for options and groups. Scrolls internally past `max-h-72`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `string` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-command-option
 
-Individual selectable option within the command palette with enhanced accessibility and interaction features.
+A single selectable, filterable entry (`role="option"`). Projects `[data-slot=command-option-leading]` before the label and `[data-slot=command-option-trailing]` after it — the `shortcuts` example projects a `z-kbd-group` into the trailing slot instead of using `zShortcut`, for a styled per-key hint.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zValue]` | Value of the option (required) | `any` | `-` |
-| `[zLabel]` | Label text (required) | `string` | `-` |
-| `[zIcon]` | Icon HTML content | `string` | `''` |
-| `[zCommand]` | Command identifier | `string` | `''` |
-| `[zShortcut]` | Keyboard shortcut display | `string` | `''` |
-| `[zDisabled]` | Disabled state | `boolean` | `false` |
-| `[variant]` | Visual variant | `'default' \| 'destructive'` | `'default'` |
-| `[class]` | Additional CSS classes | `string` | `''` |
+| `[zValue]` | Value reported on selection (required). | `unknown` | `-` |
+| `[zLabel]` | Label text, and what the search filters against (required). | `string` | `-` |
+| `[zIcon]` | Leading icon name. | `IconName` | `undefined` |
+| `[zCommand]` | Extra text the search also matches against, in addition to `zLabel`. | `string` | `''` |
+| `[zShortcut]` | Plain-text shortcut hint rendered at the trailing edge. For a styled hint built from `z-kbd`, project into `[data-slot=command-option-trailing]` instead (see `shortcuts`). | `string` | `''` |
+| `[zDisabled]` | Disables the option: skipped by keyboard navigation and clicks. | `boolean` | `false` |
+| `[variant]` | Visual variant. | `'default' \| 'destructive'` | `'default'` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-command-option-group
 
-Groups related command options together with semantic grouping and accessibility.
+Groups related `z-command-option`s under a heading. Hides itself once every option inside it is filtered out by the current search.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zLabel]` | Group label (required) | `string` | `-` |
-| `[class]` | Additional CSS classes | `string` | `''` |
+| `[zLabel]` | Group heading (required). | `string` | `-` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ### z-command-divider
 
-Visual separator between command groups with semantic role.
+A `role="separator"` line between groups. Hides itself while a search is active, rather than sit next to a group that filtered down to nothing.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `string` | `''` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ---
 

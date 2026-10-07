@@ -36,8 +36,14 @@
       "ellipsis"
     ],
     "demos": {
-      "symbols": [],
-      "tokens": []
+      "symbols": [
+        "lucideChevronLeft",
+        "lucideChevronRight"
+      ],
+      "tokens": [
+        "chevron-left",
+        "chevron-right"
+      ]
     }
   }
 }

@@ -125,7 +125,7 @@ A zard component embedded in prose brings its own sizing. Typeset styling it on 
 <div class="typeset typeset-docs">
   <p>Rendered prose.</p>
   <z-card>…</z-card>
-  <z-code-block [data]="block" />
+  <z-badge zType="secondary">Beta</z-badge>
 </div>
 ```
 
@@ -135,7 +135,7 @@ A zard component embedded in prose brings its own sizing. Typeset styling it on 
 <div class="typeset typeset-docs">
   <p>Rendered prose.</p>
   <z-card class="not-typeset">…</z-card>
-  <z-code-block class="not-typeset" [data]="block" />
+  <z-badge class="not-typeset" zType="secondary">Beta</z-badge>
 </div>
 ```
 

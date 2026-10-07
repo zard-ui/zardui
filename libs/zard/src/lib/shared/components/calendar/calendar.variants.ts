@@ -62,11 +62,7 @@ export const calendarCaptionLabelVariants = cva('font-medium select-none', {
  * The focus ring therefore has to come from the select, through `has-[:focus-visible]`.
  */
 export const calendarDropdownRootVariants = cva(
-  mergeClasses(
-    'relative isolate rounded-(--cell-radius) border border-input bg-background shadow-xs',
-    'has-focus-visible:border-ring has-focus-visible:ring-3 has-focus-visible:ring-ring/50',
-    'has-disabled:pointer-events-none has-disabled:opacity-50',
-  ),
+  mergeClasses('relative isolate', 'has-disabled:pointer-events-none has-disabled:opacity-50'),
 );
 
 /** The native select itself: invisible, but on top and still clickable. */
@@ -160,7 +156,7 @@ export const calendarDayButtonVariants = cva(
     'relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1',
     'rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal',
     'transition-colors outline-none',
-    'hover:bg-muted hover:text-foreground dark:hover:text-foreground',
+    'hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 dark:hover:text-foreground',
     'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
     'disabled:pointer-events-none disabled:opacity-50',
     '[&>span]:text-xs [&>span]:opacity-70',
@@ -168,15 +164,15 @@ export const calendarDayButtonVariants = cva(
   {
     variants: {
       selected: {
-        true: 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+        true: 'bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
         false: '',
       },
       rangeStart: {
-        true: 'rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+        true: 'rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
         false: '',
       },
       rangeEnd: {
-        true: 'rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+        true: 'rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
         false: '',
       },
       rangeMiddle: {

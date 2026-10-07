@@ -2,13 +2,23 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 
 export const INPUT_API: ApiSection[] = [
   {
-    selector: 'z-input, input[z-input]',
+    selector: 'input[z-input]',
     description:
-      'A form input field. Usable as a component or as a directive on a native input. All native HTML input attributes (placeholder, name, disabled, readonly, aria-invalid, etc.) are supported on the directive form.',
+      'A directive that styles a native `<input>` element. All native HTML input attributes (`type`, `placeholder`, `disabled`, `required`, `readonly`, `aria-invalid`, etc.) keep working as-is.',
     props: [
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
-      { name: '[(value)]', description: 'Input value (two-way binding)', type: 'string', default: "''" },
-      { name: '[zType]', description: 'Native input type (z-input only)', type: 'string', default: "'text'" },
+      {
+        name: '[value]',
+        description: 'Input value, two-way bindable',
+        type: 'string | number | null',
+        default: 'null',
+      },
+      {
+        name: '[(value)]',
+        description: 'Input value (two-way binding)',
+        type: 'string | number | null',
+        default: 'null',
+      },
     ],
   },
 ];

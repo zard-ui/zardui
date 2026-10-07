@@ -21,7 +21,14 @@ import { TypesetGeneratorService } from '../services/typeset-generator.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <main class="px-6 py-16">
+    <!--
+      overflow-x-auto, same reasoning as the builder's own preview card: this
+      route has no code panel or customizer squeezing it, but a chosen measure
+      can still be wider than a narrow phone, and content the CSS can't wrap
+      (a table cell's unbroken code token, an unwrapped &lt;pre&gt;) must not be
+      allowed to grow the page itself — it scrolls in place instead.
+    -->
+    <main class="overflow-x-auto px-6 py-16">
       <z-typeset-surface />
     </main>
   `,

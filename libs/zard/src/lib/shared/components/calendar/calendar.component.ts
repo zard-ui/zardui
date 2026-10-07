@@ -12,6 +12,7 @@ import {
   linkedSignal,
   model,
   numberAttribute,
+  type TemplateRef,
   viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
@@ -24,6 +25,7 @@ import { filter, map } from 'rxjs';
 import { ZardCalendarGridComponent } from '@/shared/components/calendar/calendar-grid.component';
 import { ZardCalendarNavigationComponent } from '@/shared/components/calendar/calendar-navigation.component';
 import type {
+  CalendarDayTemplateContext,
   CalendarMode,
   CalendarValue,
   ZardCalendarCaptionLayout,
@@ -73,6 +75,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
             [disabled]="disabled()"
             [zShowOutsideDays]="zShowOutsideDays()"
             [zMonthIndex]="i"
+            [zDayTemplate]="zDayTemplate()"
             (dateSelect)="onDateSelect($event)"
             (previousMonth)="onGridPreviousMonth($event)"
             (nextMonth)="onGridNextMonth($event)"
@@ -133,6 +136,8 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
+  /** Renders each day button's content; receives the `CalendarDay` as the implicit context (`let-day`). */
+  readonly zDayTemplate = input<TemplateRef<CalendarDayTemplateContext> | null>(null);
 
   // Public outputs
   readonly dateChange = outputFromObservable(

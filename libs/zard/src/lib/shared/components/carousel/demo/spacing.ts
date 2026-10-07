@@ -4,6 +4,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
+  selector: 'z-demo-carousel-spacing',
   imports: [ZardCarouselImports, ZardCardImports],
   template: `
     <div class="w-full max-w-48 sm:max-w-xs md:max-w-sm">

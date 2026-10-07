@@ -24,6 +24,7 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 
       <z-alert
         zIcon="lucideInfo"
+        zRole="status"
         zTitle="The components.json file is optional"
         zDescription="It is only required if you're using the CLI to add components to your project. If you're using the copy and paste method, you don't need this file."
       />

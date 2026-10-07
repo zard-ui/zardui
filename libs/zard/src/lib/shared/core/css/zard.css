@@ -12,6 +12,44 @@
   }
 }
 
+/*
+ * `scrollbar-thin` is opt-in, for the same reason `no-scrollbar` lives here rather
+ * than in `utilities.css`: it has to be available to every install, not layered on
+ * top as an extra registry item.
+ *
+ * It used to ship differently — a CLI constant literally named `windowsScrollbar`
+ * wrote a bare, unscoped `::-webkit-scrollbar` rule into every project's global
+ * stylesheet, restyling every scroll surface in the host app (not just zard's),
+ * and repainting them on any `--muted` / `--muted-foreground` change. That constant
+ * is gone; this utility is the scoped replacement a consumer applies deliberately.
+ *
+ * `scrollbar-width` / `scrollbar-color` are the standard CSS properties and the
+ * primary mechanism here — Firefox and current Chromium/Edge honor them directly,
+ * so the thin, token-colored scrollbar renders without any WebKit-specific rule.
+ * The `&::-webkit-scrollbar*` rules are a scoped fallback for WebKit engines that
+ * still ignore `scrollbar-color` (older Safari); they never apply outside this
+ * class.
+ */
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) var(--muted);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background: var(--muted);
+  }
+}
+
 @theme inline {
   --animate-caret-blink: caret-blink 1s ease-out infinite;
 

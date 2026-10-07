@@ -52,6 +52,7 @@ function makeConfig(baseUrl: string, aliases: Partial<Config['aliases']> & { com
       utils: aliases.utils ?? `${prefix}/shared/utils`,
       core: aliases.core ?? `${prefix}/shared/core`,
       services: aliases.services ?? `${prefix}/shared/services`,
+      blocks: aliases.blocks ?? `${prefix}/shared/blocks`,
     },
   };
 }
@@ -696,6 +697,7 @@ describe('buildConfig', () => {
       utils: '@app/utils',
       core: '@app/core',
       services: '@app/services',
+      blocks: '@app/blocks',
     });
   });
 
@@ -759,5 +761,39 @@ describe('coherence between destination, import and tsconfig', () => {
       .replace(/\/{2,}/g, '/');
 
     expect(resolvedByTsconfig).toBe(target);
+  });
+});
+
+/*
+ * Blocks are authored inside the monorepo, so their sources import the library
+ * by its workspace alias. Nothing maps `@zard/*` in the installing project — if
+ * the rewrite misses, every block arrives with imports that do not resolve.
+ */
+describe('transformContent for blocks', () => {
+  const config = makeConfig('src/app', { components: '@/shared/components' });
+
+  it('rewrites the workspace alias onto the project alias', () => {
+    const source = "import { ZardCardImports } from '@zard/components/card/card.imports';";
+
+    expect(transformContent(source, config)).toBe(
+      "import { ZardCardImports } from '@/shared/components/card/card.imports';",
+    );
+  });
+
+  it('rewrites it under a custom alias too', () => {
+    const custom = makeConfig('src/app', { components: '@app/ui' });
+    const source = "import { ZardButtonComponent } from '@zard/components/button/button.component';";
+
+    expect(transformContent(source, custom)).toBe(
+      "import { ZardButtonComponent } from '@app/ui/button/button.component';",
+    );
+  });
+
+  it('handles double quotes, which the templates use', () => {
+    const source = 'import { ZardInputComponent } from "@zard/components/input/input.component";';
+
+    expect(transformContent(source, config)).toBe(
+      'import { ZardInputComponent } from "@/shared/components/input/input.component";',
+    );
   });
 });

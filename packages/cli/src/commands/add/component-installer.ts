@@ -20,10 +20,11 @@ export async function installComponent(
   componentName: string,
   targetDir: string,
   config: Config & { resolvedPaths: any },
-  options: { customPath?: boolean } = {},
+  options: { customPath?: boolean; isBlock?: boolean } = {},
 ): Promise<void> {
   const component = await fetchComponent(componentName, config, undefined, {
     siblingComponents: options.customPath,
+    isBlock: options.isBlock,
   });
 
   await fs.mkdir(targetDir, { recursive: true });

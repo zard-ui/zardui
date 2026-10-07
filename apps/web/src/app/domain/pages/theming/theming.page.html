@@ -79,7 +79,12 @@
 
     <z-theme-anatomy />
 
-    <z-alert zIcon="lucideCircleQuestionMark" zTitle="Why OKLCH and not HSL or HEX?" [zDescription]="oklchSummary" />
+    <z-alert
+      zIcon="lucideCircleQuestionMark"
+      zRole="status"
+      zTitle="Why OKLCH and not HSL or HEX?"
+      [zDescription]="oklchSummary"
+    />
   </section>
 
   <!-- Convention -->
@@ -127,9 +132,10 @@
         Token reference
       </h2>
       <p>
-        All {{ tokenCount }} tokens, with their Neutral values in both modes. The
+        All {{ tokenCount }} tokens, with their Neutral values in both modes. Expand
         <em>Used by</em>
-        column comes from a scan of the library source, so a token marked
+        under a token to see which components read it. The list comes from a scan of the library source, so a token
+        marked
         <em>not used yet</em>
         really is unused today.
       </p>
