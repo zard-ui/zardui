@@ -1,3 +1,13 @@
+## 1.0.0-beta.126 (2026-10-07)
+
+### 🐛 Bug Fixes
+
+- **dialog:** match the service layout to the declarative form ([#744](https://github.com/zard-ui/zardui/pull/744))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.125 (2026-10-07)
 
 ### ✨ Features
