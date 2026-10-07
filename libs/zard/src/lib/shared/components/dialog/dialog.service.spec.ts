@@ -13,6 +13,12 @@ import { ZardDialogService } from './dialog.service';
 })
 class TestContentComponent {}
 
+@Component({
+  host: { 'data-slot': 'custom-slot' },
+  template: '<p>Own slot</p>',
+})
+class OwnSlotContentComponent {}
+
 describe('ZardDialogService', () => {
   let service: ZardDialogService;
 
@@ -293,6 +299,59 @@ describe('ZardDialogService', () => {
       expect(dialogElement).toBeTruthy();
       expect(dialogElement?.classList.contains('custom-class')).toBe(true);
       expect(dialogElement?.classList.contains('another-class')).toBe(true);
+    }));
+  });
+
+  /**
+   * The service renders the same panel as the declarative form, so its content has to sit in the
+   * panel grid the same way: no extra gap for a missing body, and the panel gap between whatever a
+   * content component renders (fields, a z-dialog-footer) instead of none.
+   */
+  describe('content layout', () => {
+    it('renders the content wrapper as display: contents so it adds no box of its own', fakeAsync(() => {
+      const config = new ZardDialogOptions();
+      config.zTitle = 'Title only';
+      config.zHideFooter = true;
+
+      service.create(config);
+      tick();
+
+      const main = document.querySelector('z-dialog-panel main');
+      expect(main?.classList.contains('contents')).toBe(true);
+      expect(main?.children.length).toBe(0);
+    }));
+
+    it('marks a component passed as zContent with the dialog-body slot', fakeAsync(() => {
+      const config = new ZardDialogOptions();
+      config.zContent = TestContentComponent;
+
+      service.create<TestContentComponent, unknown>(config);
+      tick();
+
+      const host = document.querySelector('z-dialog-panel main > [data-slot="dialog-body"]');
+      expect(host).toBeTruthy();
+      expect(host?.textContent).toContain('Test Content');
+    }));
+
+    it('keeps a data-slot the content component sets on its own host', fakeAsync(() => {
+      const config = new ZardDialogOptions();
+      config.zContent = OwnSlotContentComponent;
+
+      service.create<OwnSlotContentComponent, unknown>(config);
+      tick();
+
+      expect(document.querySelector('z-dialog-panel main > [data-slot="custom-slot"]')).toBeTruthy();
+      expect(document.querySelector('[data-slot="dialog-body"]')).toBeNull();
+    }));
+
+    it('leaves string content out of the dialog-body slot', fakeAsync(() => {
+      const config = new ZardDialogOptions();
+      config.zContent = 'Plain <b>text</b>';
+
+      service.create(config);
+      tick();
+
+      expect(document.querySelector('[data-testid="z-content"]')?.getAttribute('data-slot')).toBeNull();
     }));
   });
 
