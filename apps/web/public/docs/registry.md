@@ -120,12 +120,12 @@ registry.json
       "name": "core",
       "type": "registry:component",
       "files": [
-        "directives/string-template-outlet/string-template-outlet.directive.ts",
+        "directives/string-template-outlet.directive.ts",
         "directives/id.directive.ts",
         "provider/event-manager-plugins/zard-debounce-event-manager-plugin.ts",
         "provider/event-manager-plugins/zard-event-manager-plugin.ts",
         "provider/providezard.ts",
-        "css/tailwind.css",
+        "css/zard.css",
         "css/utilities.css",
         "index.ts"
       ],

@@ -67,7 +67,7 @@ function getCliVersion(): string {
  * The key is the `basePath` the registry publishes — the install destination —
  * and the value is the source directory. The first three agree; typeset does
  * not: it ships next to the installing project's global CSS, but it is born
- * beside the core's tailwind.css, which is where it is edited and tested.
+ * beside the core's zard.css, which is where it is edited and tested.
  */
 const NON_COMPONENT_PATHS: Record<string, string> = {
   core: 'core',

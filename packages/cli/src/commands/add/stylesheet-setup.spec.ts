@@ -16,7 +16,7 @@ jest.mock('@cli/utils/logger.js', () => ({
   },
 }));
 
-import { setupTypeset } from '@cli/commands/add/typeset-setup.js';
+import { setupTypeset, setupUtilities } from '@cli/commands/add/stylesheet-setup.js';
 import { logger } from '@cli/utils/logger.js';
 import { existsSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
@@ -132,5 +132,44 @@ describe('setupTypeset', () => {
     expect(mockReadFile).not.toHaveBeenCalled();
     expect(mockWriteFile).not.toHaveBeenCalled();
     expect(mockLoggerWarn).toHaveBeenCalled();
+  });
+});
+
+/*
+ * `utilities` runs through the same code as typeset, so what is worth pinning
+ * here is what differs: which file it names, and that the two do not answer for
+ * each other — a project with typeset installed must still get utilities.
+ */
+describe('setupUtilities', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockExistsSync.mockReturnValue(true);
+    mockWriteFile.mockResolvedValue(undefined);
+  });
+
+  it('should import utilities.css after the last import', async () => {
+    mockReadFile.mockResolvedValue("@import 'tailwindcss';\n@import './app/shared/core/css/zard';\n\nbody {\n}\n");
+
+    await setupUtilities(CSS_PATH);
+
+    expect(written()).toBe(
+      "@import 'tailwindcss';\n@import './app/shared/core/css/zard';\n@import './utilities.css';\n\nbody {\n}\n",
+    );
+  });
+
+  it('should not duplicate the import when it is already there', async () => {
+    mockReadFile.mockResolvedValue("@import 'tailwindcss';\n@import './utilities.css';\n");
+
+    await setupUtilities(CSS_PATH);
+
+    expect(mockWriteFile).not.toHaveBeenCalled();
+  });
+
+  it('should add utilities to a stylesheet that already imports typeset', async () => {
+    mockReadFile.mockResolvedValue("@import 'tailwindcss';\n@import './typeset.css';\n");
+
+    await setupUtilities(CSS_PATH);
+
+    expect(written()).toBe("@import 'tailwindcss';\n@import './typeset.css';\n@import './utilities.css';\n");
   });
 });

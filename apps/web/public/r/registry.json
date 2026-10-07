@@ -14,15 +14,14 @@
         "tokens": []
       },
       "files": [
-        "directives/string-template-outlet/string-template-outlet.directive.ts",
+        "directives/string-template-outlet.directive.ts",
         "directives/id.directive.ts",
         "overlay/overlay-ref.ts",
         "overlay/overlay-stack.ts",
         "provider/event-manager-plugins/zard-debounce-event-manager-plugin.ts",
         "provider/event-manager-plugins/zard-event-manager-plugin.ts",
         "provider/providezard.ts",
-        "css/tailwind.css",
-        "css/utilities.css",
+        "css/zard.css",
         "index.ts"
       ]
     },
@@ -37,6 +36,19 @@
       },
       "files": [
         "typeset.css"
+      ]
+    },
+    {
+      "name": "utilities",
+      "type": "registry:component",
+      "basePath": "styles",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "utilities.css"
       ]
     },
     {

@@ -15,7 +15,7 @@ export const registry: ComponentRegistry[] = [
     name: 'core',
     files: [
       {
-        name: 'directives/string-template-outlet/string-template-outlet.directive.ts',
+        name: 'directives/string-template-outlet.directive.ts',
         content: '',
       },
       {
@@ -43,11 +43,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'css/tailwind.css',
-        content: '',
-      },
-      {
-        name: 'css/utilities.css',
+        name: 'css/zard.css',
         content: '',
       },
       {
@@ -62,6 +58,16 @@ export const registry: ComponentRegistry[] = [
     files: [
       {
         name: 'typeset.css',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'utilities',
+    basePath: 'styles',
+    files: [
+      {
+        name: 'utilities.css',
         content: '',
       },
     ],

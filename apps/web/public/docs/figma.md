@@ -1,25 +1,23 @@
 ---
 title: Figma
-description: Every component recreated in Figma. With customizable props, typography and icons.
+description: Figma kits built for shadcn/ui, which ZardUI follows component for component.
 ---
 
 # Figma
 
-Every component recreated in Figma. With customizable props, typography and icons.
+Figma kits built for shadcn/ui, which ZardUI follows component for component.
 
-#### Important Note
+Design with the shadcn/ui kits
 
-ZardUI design is completely based on shadcn/ui and now we don't have our own style guide in Figma, but this is planned for the future. For now you can use the resources created by the community for shadcn/ui listed below.
-
-#### Community Contributions
-
-The Figma files listed below are contributed by the community. If you have any questions or feedback, please reach out to the respective Figma file maintainers.
+ZardUI follows shadcn/ui, so any Figma file built for it maps onto these components — there is no separate ZardUI kit. The files below are maintained by their authors, not by the ZardUI team, so questions and feedback go to each maintainer.
 
 ## Paid
 
+Commercial kits, kept up to date by their authors.
+
 ### shadcn/ui kit
 
-by **Matt Wierzbicki**
+by Matt Wierzbicki
 
 Premium
 
@@ -30,9 +28,11 @@ A premium, always up-to-date UI kit for Figma - shadcn/ui compatible and optimiz
 
 ## Free
 
+Community files, free to duplicate from the Figma Community.
+
 ### shadcn/ui design system
 
-by **Pietro Schirano**
+by Pietro Schirano
 
 Free
 
@@ -43,7 +43,7 @@ A design companion for shadcn/ui. Each component was painstakingly crafted to pe
 
 ### Obra shadcn/ui
 
-by **Obra Studio**
+by Obra Studio
 
 Free
 
@@ -53,7 +53,3 @@ Carefully crafted kit designed in the philosophy of shadcn, tracks v4, MIT licen
 
 - [Open in Figma Community](https://www.figma.com/community/file/1514746685758799870/obra-shadcn-ui)
 - [obra.studio](https://obra.studio/)
-
-#### ZardUI Design System - Coming Soon
-
-We're working on creating our own comprehensive Figma design system specifically for ZardUI. This will include all components, patterns, and guidelines tailored to the Angular ecosystem. Stay tuned for updates!

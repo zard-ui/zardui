@@ -3,8 +3,6 @@ import { lineEndingOf } from '@cli/utils/source-file.js';
 import { existsSync } from 'fs';
 import * as fsPromises from 'fs/promises';
 
-const TYPESET_IMPORT = "@import './typeset.css';";
-
 /**
  * The same text with every CSS comment blanked out.
  *
@@ -17,9 +15,14 @@ function withoutComments(content: string): string {
   return content.replace(/\/\*[\s\S]*?\*\//g, comment => ' '.repeat(comment.length));
 }
 
-/** Whether the stylesheet already imports typeset.css for real. */
-function importsTypeset(content: string): boolean {
-  return /@import\s[^;]*['"][^'"]*typeset\.css['"][^;]*;/.test(withoutComments(content));
+/**
+ * Whether the stylesheet already imports `fileName` for real.
+ *
+ * It asks the same scan that decides where to anchor, so the two cannot
+ * disagree: whatever counts as an import here counts as one there.
+ */
+function alreadyImports(content: string, fileName: string): boolean {
+  return cssImports(withoutComments(content)).some(match => match[0].includes(fileName));
 }
 
 /** Every CSS `@import` in the file, in the order they appear. */
@@ -37,25 +40,28 @@ function cssImports(content: string): RegExpExecArray[] {
 }
 
 /**
- * Wires typeset up by importing it into the project's global CSS.
+ * Wires an installed stylesheet up by importing it into the project's global CSS.
  *
  * The file was written next to that CSS, but a file nobody imports styles
- * nothing — and the order matters: coming after the other `@import`s lets
- * typeset see the theme tokens, which is where it takes colour and radius from.
+ * nothing — and the order matters: coming after the other `@import`s lets the
+ * stylesheet see the theme tokens, which is where it takes colour and radius
+ * from.
  *
- * Calling this twice is the same as calling it once; a repeated `add typeset`
- * must not duplicate the line.
+ * Calling this twice is the same as calling it once; a repeated `add` must not
+ * duplicate the line.
  */
-export async function setupTypeset(tailwindCssPath: string): Promise<void> {
+async function importIntoGlobalCss(tailwindCssPath: string, fileName: string, label: string): Promise<void> {
+  const importLine = `@import './${fileName}';`;
+
   if (!existsSync(tailwindCssPath)) {
-    logger.warn(`${tailwindCssPath} not found. Import typeset.css in your global stylesheet manually.`);
+    logger.warn(`${tailwindCssPath} not found. Import ${fileName} in your global stylesheet manually.`);
     return;
   }
 
   const content = await fsPromises.readFile(tailwindCssPath, 'utf8');
 
-  if (importsTypeset(content)) {
-    logger.info('Typeset already imported in your global stylesheet.');
+  if (alreadyImports(content, fileName)) {
+    logger.info(`${label} already imported in your global stylesheet.`);
     return;
   }
 
@@ -66,14 +72,22 @@ export async function setupTypeset(tailwindCssPath: string): Promise<void> {
   // or a `@charset` the import is invalid, and guessing would corrupt the CSS
   // of whoever installed it. Better one line to copy than a broken file.
   if (!last) {
-    logger.warn(`No @import found in ${tailwindCssPath}. Add \`${TYPESET_IMPORT}\` to it manually.`);
+    logger.warn(`No @import found in ${tailwindCssPath}. Add \`${importLine}\` to it manually.`);
     return;
   }
 
   const eol = lineEndingOf(content);
   const end = last.index + last[0].length;
-  const updated = content.slice(0, end) + eol + TYPESET_IMPORT + content.slice(end);
+  const updated = content.slice(0, end) + eol + importLine + content.slice(end);
 
   await fsPromises.writeFile(tailwindCssPath, updated, 'utf8');
-  logger.info('Typeset imported in your global stylesheet.');
+  logger.info(`${label} imported in your global stylesheet.`);
+}
+
+export function setupTypeset(tailwindCssPath: string): Promise<void> {
+  return importIntoGlobalCss(tailwindCssPath, 'typeset.css', 'Typeset');
+}
+
+export function setupUtilities(tailwindCssPath: string): Promise<void> {
+  return importIntoGlobalCss(tailwindCssPath, 'utilities.css', 'Utilities');
 }

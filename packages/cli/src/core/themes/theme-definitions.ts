@@ -4,7 +4,7 @@ const getTailwindConfiguration = (corePath: string): string => {
   return `
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
-@import '${corePath}/css/tailwind';
+@import '${corePath}/css/zard';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
