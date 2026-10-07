@@ -1,3 +1,13 @@
+## 1.0.0-beta.124 (2026-09-29)
+
+### 🐛 Bug Fixes
+
+- **select:** return focus to trigger after option selection ([#738](https://github.com/zard-ui/zardui/pull/738))
+
+### ❤️ Thank You
+
+- Roman Mykhailiuk @JustDo1t90
+
 ## 1.0.0-beta.123 (2026-09-26)
 
 This was a version bump only, there were no code changes.
