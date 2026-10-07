@@ -1,3 +1,13 @@
+## 1.0.0-beta.127 (2026-10-07)
+
+### ✨ Features
+
+- **mcp:** fuzzy search, did-you-mean errors, annotations, instructions ([#728](https://github.com/zard-ui/zardui/pull/728))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.126 (2026-10-07)
 
 ### 🐛 Bug Fixes
