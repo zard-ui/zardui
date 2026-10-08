@@ -34,6 +34,15 @@ import { RouterLink } from '@angular/router';
       , not a replacement: the server fetches the real source and documentation on demand, the skill carries the
       conventions that apply before any component is fetched. Together they cover both halves of the problem.
     </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      A second skill,
+      <strong class="text-foreground font-medium">zard-migration</strong>
+      , covers a different problem: components are copied into a project rather than imported from a package, so nothing
+      upgrades them when a name is renamed or a component is recomposed. It documents every breaking change and the
+      procedure to bring an older project's source back in line with the current registry — see
+      <a class="text-foreground underline underline-offset-4" routerLink="." fragment="installation">Installation</a>
+      below.
+    </p>
   `,
 })
 export class SkillsOverviewSectionComponent {}

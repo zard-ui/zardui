@@ -195,7 +195,7 @@ export const bubbleContentVariants = cva(
   mergeClasses(
     'w-fit min-w-0 max-w-full overflow-hidden rounded-3xl border border-transparent px-3 py-2.5 text-sm/relaxed wrap-break-word',
     'group-data-[align=end]/bubble:self-end',
-    '[button]:text-left [button,a]:transition-colors [button,a]:outline-none',
+    '[button]:text-start [button,a]:transition-colors [button,a]:outline-none',
     '[button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-3 [button,a]:focus-visible:ring-ring/30',
   ),
 );
@@ -209,8 +209,8 @@ export const bubbleReactionsVariants = cva(
         bottom: 'bottom-0 translate-y-3/4',
       },
       zAlign: {
-        start: 'left-3',
-        end: 'right-3',
+        start: 'ltr:left-3 rtl:right-3',
+        end: 'ltr:right-3 rtl:left-3',
       },
     },
     defaultVariants: {
@@ -272,57 +272,9 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 
 ## Examples
 
-### Default
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
-
-@Component({
-  selector: 'z-demo-bubble-default',
-  imports: [...ZardBubbleImports],
-  template: `
-    <div class="flex w-full max-w-sm flex-col gap-8 py-12">
-      <z-bubble zAlign="end">
-        <z-bubble-content>Hey there! what's up?</z-bubble-content>
-      </z-bubble>
-      <z-bubble-group>
-        <z-bubble zVariant="muted">
-          <z-bubble-content>Hey! Want to see chat bubbles?</z-bubble-content>
-        </z-bubble>
-        <z-bubble zVariant="muted">
-          <z-bubble-content>
-            I can group messages, switch sides, and keep the whole thread easy to scan.
-          </z-bubble-content>
-          <z-bubble-reactions role="img" aria-label="Reaction: thumbs up">
-            <span>👍</span>
-          </z-bubble-reactions>
-        </z-bubble>
-      </z-bubble-group>
-      <z-bubble zAlign="end">
-        <z-bubble-content>Sure. Hit me with your best demo.</z-bubble-content>
-      </z-bubble>
-      <z-bubble zVariant="muted">
-        <z-bubble-content>
-          Yes. You are reading a demo that is demoing itself. Very meta. Very on-brand.
-        </z-bubble-content>
-        <z-bubble-reactions role="img" aria-label="Reactions: thumbs up, fire, eyes, and 2 more">
-          <span>👍</span>
-          <span>🔥</span>
-          <span>👀</span>
-          <span>+2</span>
-        </z-bubble-reactions>
-      </z-bubble>
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'contents' },
-})
-export class ZardDemoBubbleDefaultComponent {}
-```
-
 ### Variants
+
+The seven `zVariant` treatments on `z-bubble` — `default`, `secondary`, `muted`, `tinted`, `outline`, `ghost`, and `destructive` — from a strong primary bubble to unframed `ghost` content that spans the full row.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -379,6 +331,8 @@ export class ZardDemoBubbleVariantsComponent {}
 
 ### Alignment
 
+Set `zAlign="start"` (the default) or `zAlign="end"` on `z-bubble` to place a turn on the left or right of the thread — start for the other party, end for the current user.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -403,7 +357,38 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 export class ZardDemoBubbleAlignmentComponent {}
 ```
 
+### Shorthand
+
+A zard-only shorthand: skip `z-bubble-content` for plain text and project it straight into `z-bubble` — a bubble with no projected content gets the content surface for free. Reach for the explicit `z-bubble-content` element when you need a class override, or an interactive button/link surface.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
+
+@Component({
+  selector: 'z-demo-bubble-shorthand',
+  imports: [...ZardBubbleImports],
+  template: `
+    <div class="flex w-full max-w-sm flex-col gap-8 py-12">
+      <z-bubble zVariant="muted">Short turns do not need the content wrapper.</z-bubble>
+      <z-bubble zAlign="end">Hey there! what's up?</z-bubble>
+      <z-bubble zVariant="muted">
+        <z-bubble-content class="font-medium">
+          Project the content when you need to style it, or render it as a button or link.
+        </z-bubble-content>
+      </z-bubble>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
+})
+export class ZardDemoBubbleShorthandComponent {}
+```
+
 ### Group
+
+Wrap consecutive `z-bubble` elements from the same sender in `z-bubble-group` to stack them with a tighter gap, so a multi-message reply reads as one turn instead of three separate bubbles. Set `zAlign` on each `z-bubble`, not on the group.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -445,7 +430,9 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 export class ZardDemoBubbleGroupComponent {}
 ```
 
-### Link Button
+### Links And Buttons
+
+Apply `z-bubble-content` as an attribute on a native `button` or `a` instead of projecting it as an element, so the whole bubble becomes an interactive quick reply or link — the bubble already styles that hover state through `[data-slot=bubble-content]:is(button,a)`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -454,7 +441,7 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'z-demo-bubble-link-button',
+  selector: 'z-demo-bubble-links-and-buttons',
   imports: [...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
@@ -468,9 +455,7 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
           </button>
         </z-bubble>
         <z-bubble zVariant="tinted" zAlign="end">
-          <button type="button" z-bubble-content (click)="notify('You clicked help with subscription')">
-            I need help with my subscription
-          </button>
+          <a z-bubble-content href="/docs/components/bubble" target="_blank" rel="noreferrer">Read the docs instead</a>
         </z-bubble>
         <z-bubble zVariant="tinted" zAlign="end">
           <button type="button" z-bubble-content (click)="notify('You clicked something else. Talk to a human.')">
@@ -483,7 +468,7 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
-export class ZardDemoBubbleLinkButtonComponent {
+export class ZardDemoBubbleLinksAndButtonsComponent {
   private readonly sonner = inject(ZardSonnerService);
 
   protected notify(message: string) {
@@ -493,6 +478,8 @@ export class ZardDemoBubbleLinkButtonComponent {
 ```
 
 ### Reactions
+
+Use `z-bubble-reactions` to render a row of reactions or quick-action buttons anchored to a corner of the bubble. `zSide` (`top`/`bottom`) and `zAlign` (`start`/`end`) position it — the row overlaps the bubble edge, so give it room with a larger gap.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -550,6 +537,8 @@ export class ZardDemoBubbleReactionsComponent {
 
 ### Collapsible
 
+Long bubble content is not truncated automatically — compose `z-collapsible` inside `z-bubble-content` and pair a `z-button` with `[z-collapsible-trigger]` for a real "Show more"/"Show less" toggle.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
@@ -558,6 +547,7 @@ import { lucideChevronDown } from '@ng-icons/lucide';
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsible.imports';
 
 const TEXT = `The accessibility review found two focus states that were visually too subtle in dark mode.
 
@@ -571,7 +561,7 @@ const PREVIEW_LENGTH = 180;
 
 @Component({
   selector: 'z-demo-bubble-collapsible',
-  imports: [NgIcon, ZardButtonComponent, ...ZardBubbleImports],
+  imports: [NgIcon, ZardButtonComponent, ...ZardCollapsibleImports, ...ZardBubbleImports],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-8 py-12">
       <z-bubble zVariant="muted">
@@ -580,26 +570,20 @@ const PREVIEW_LENGTH = 180;
 
       <z-bubble zVariant="muted" zAlign="end">
         <z-bubble-content class="whitespace-pre-line">
-          <div id="bubble-collapsible-text">{{ visibleText() }}</div>
-          @if (isLong) {
-            <button
-              type="button"
-              z-button
-              zType="link"
-              class="text-muted-foreground gap-1 p-0"
-              aria-controls="bubble-collapsible-text"
-              [attr.aria-expanded]="open()"
-              (click)="open.set(!open())"
-            >
-              {{ open() ? 'Show less' : 'Show more' }}
-              <ng-icon
-                name="lucideChevronDown"
-                data-icon="inline-end"
-                class="transition-transform"
-                [class.rotate-180]="open()"
-              />
-            </button>
-          }
+          <div z-collapsible #turn="zCollapsible" [zOpen]="open()" (zOpenChange)="open.set($event)">
+            <div [id]="turn.contentId()">{{ visibleText() }}</div>
+            @if (isLong) {
+              <button type="button" z-button z-collapsible-trigger zType="link" class="text-muted-foreground gap-1 p-0">
+                {{ open() ? 'Show less' : 'Show more' }}
+                <ng-icon
+                  name="lucideChevronDown"
+                  data-icon="inline-end"
+                  class="transition-transform"
+                  [class.rotate-180]="open()"
+                />
+              </button>
+            }
+          </div>
         </z-bubble-content>
       </z-bubble>
     </div>
@@ -618,6 +602,8 @@ export class ZardDemoBubbleCollapsibleComponent {
 ```
 
 ### Tooltip
+
+Compose a bubble reaction with `[zTooltip]` to reveal metadata on hover, such as when a message was read.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -662,6 +648,8 @@ export class ZardDemoBubbleTooltipComponent {}
 ```
 
 ### Popover
+
+Pair a bubble reaction with `[zPopover]` to surface more information on demand, such as the full error message behind a failed action.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -714,33 +702,6 @@ import { ZardPopoverImports } from '@/shared/components/popover/popover.imports'
   host: { class: 'contents' },
 })
 export class ZardDemoBubblePopoverComponent {}
-```
-
-### Shorthand
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
-
-@Component({
-  selector: 'z-demo-bubble-shorthand',
-  imports: [...ZardBubbleImports],
-  template: `
-    <div class="flex w-full max-w-sm flex-col gap-8 py-12">
-      <z-bubble zVariant="muted">Short turns do not need the content wrapper.</z-bubble>
-      <z-bubble zAlign="end">Hey there! what's up?</z-bubble>
-      <z-bubble zVariant="muted">
-        <z-bubble-content class="font-medium">
-          Project the content when you need to style it, or render it as a button or link.
-        </z-bubble-content>
-      </z-bubble>
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'contents' },
-})
-export class ZardDemoBubbleShorthandComponent {}
 ```
 
 ## API Reference

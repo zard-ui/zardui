@@ -58,7 +58,7 @@ import {
   type ZardBreadcrumbSizeVariants,
   type ZardBreadcrumbWrapVariants,
 } from '@/shared/components/breadcrumb/breadcrumb.variants';
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 type BreadcrumbRouterLink = string | readonly unknown[] | UrlTree | null | undefined;
@@ -565,7 +565,9 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
 
 ## Examples
 
-### Default
+### Basic
+
+A basic breadcrumb with `z-breadcrumb-link` elements using plain `href` targets.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -573,15 +575,15 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardBreadcrumbImports } from '../breadcrumb.imports';
 
 @Component({
-  selector: 'z-demo-breadcrumb-default',
+  selector: 'z-demo-breadcrumb-basic',
   imports: [ZardBreadcrumbImports],
   template: `
-    <z-breadcrumb zLabel="Default breadcrumb">
+    <z-breadcrumb zLabel="Basic breadcrumb">
       <z-breadcrumb-item>
-        <a z-breadcrumb-link [routerLink]="['/']">Home</a>
+        <a z-breadcrumb-link href="/">Home</a>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
-        <a z-breadcrumb-link [routerLink]="['/docs/components']">Components</a>
+        <a z-breadcrumb-link href="/docs/components">Components</a>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
         <span z-breadcrumb-page>Breadcrumb</span>
@@ -590,10 +592,12 @@ import { ZardBreadcrumbImports } from '../breadcrumb.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoBreadcrumbDefaultComponent {}
+export class ZardDemoBreadcrumbBasicComponent {}
 ```
 
-### Separator
+### Custom Separator
+
+Project your own `li[z-breadcrumb-separator]` elements to replace the default chevron between items.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -604,7 +608,7 @@ import { lucideDot } from '@ng-icons/lucide';
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 
 @Component({
-  selector: 'z-demo-breadcrumb-separator',
+  selector: 'z-demo-breadcrumb-custom-separator',
   imports: [ZardBreadcrumbImports, NgIcon],
   template: `
     <z-breadcrumb zLabel="Breadcrumb with custom separator">
@@ -628,10 +632,12 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideDot })],
 })
-export class ZardDemoBreadcrumbSeparatorComponent {}
+export class ZardDemoBreadcrumbCustomSeparatorComponent {}
 ```
 
 ### Dropdown
+
+Compose a `z-breadcrumb-item` with `[z-dropdown]` and `z-dropdown-menu-content` for a menu trigger.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -640,11 +646,11 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
-import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/navigation-menu.imports';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
   selector: 'z-demo-breadcrumb-dropdown',
-  imports: [ZardBreadcrumbImports, ZardNavigationMenuImports, NgIcon],
+  imports: [ZardBreadcrumbImports, ZardDropdownImports, NgIcon],
   template: `
     <z-breadcrumb zLabel="Breadcrumb with dropdown">
       <z-breadcrumb-item>
@@ -655,20 +661,18 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/n
           z-breadcrumb-link
           type="button"
           class="flex items-center gap-1.5 border-0 bg-transparent p-0 text-inherit"
-          z-navigation-menu-trigger
-          [zNavigationMenuTriggerFor]="componentsMenu"
+          z-dropdown
+          [zDropdownMenu]="componentsMenu"
         >
           Components
           <ng-icon name="lucideChevronDown" class="size-3.5!" aria-hidden="true" />
         </button>
 
-        <ng-template #componentsMenu>
-          <div z-navigation-menu-content class="w-48">
-            <button type="button" z-navigation-menu-link>Documentation</button>
-            <button type="button" z-navigation-menu-link>Themes</button>
-            <button type="button" z-navigation-menu-link>Blocks</button>
-          </div>
-        </ng-template>
+        <z-dropdown-menu-content #componentsMenu="zDropdownMenuContent" class="w-48">
+          <z-dropdown-menu-item>Documentation</z-dropdown-menu-item>
+          <z-dropdown-menu-item>Themes</z-dropdown-menu-item>
+          <z-dropdown-menu-item>GitHub</z-dropdown-menu-item>
+        </z-dropdown-menu-content>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
         <span z-breadcrumb-page>Breadcrumb</span>
@@ -681,7 +685,9 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/n
 export class ZardDemoBreadcrumbDropdownComponent {}
 ```
 
-### Ellipsis
+### Collapsed
+
+Use `z-breadcrumb-ellipsis` to collapse a long trail while keeping the first and last items visible.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -689,7 +695,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 
 @Component({
-  selector: 'z-demo-breadcrumb-ellipsis',
+  selector: 'z-demo-breadcrumb-collapsed',
   imports: [ZardBreadcrumbImports],
   template: `
     <z-breadcrumb zLabel="Collapsed breadcrumb">
@@ -698,6 +704,9 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
       </z-breadcrumb-item>
       <z-breadcrumb-item>
         <z-breadcrumb-ellipsis />
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link [routerLink]="['/docs/introduction']">Docs</a>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
         <a z-breadcrumb-link [routerLink]="['/docs/components']">Components</a>
@@ -709,10 +718,12 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoBreadcrumbEllipsisComponent {}
+export class ZardDemoBreadcrumbCollapsedComponent {}
 ```
 
 ### Link
+
+Bind `[routerLink]` on `z-breadcrumb-link` to navigate through the Angular `Router` instead of a full page reload.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -723,12 +734,12 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
   selector: 'z-demo-breadcrumb-link',
   imports: [ZardBreadcrumbImports],
   template: `
-    <z-breadcrumb zLabel="Router breadcrumb">
+    <z-breadcrumb zLabel="Breadcrumb with Angular routing">
       <z-breadcrumb-item>
-        <a z-breadcrumb-link routerLink="/">Home</a>
+        <a z-breadcrumb-link [routerLink]="['/']">Home</a>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
-        <a z-breadcrumb-link routerLink="/docs/components">Components</a>
+        <a z-breadcrumb-link [routerLink]="['/docs/components']">Components</a>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
         <span z-breadcrumb-page>Breadcrumb</span>
@@ -744,61 +755,79 @@ export class ZardDemoBreadcrumbLinkComponent {}
 
 ### z-breadcrumb
 
-Displays the path to the current resource using a hierarchy of links. Separators render automatically unless explicit separators are projected.
+Displays the path to the current resource using a hierarchy of links. Renders a labelled `<nav>` wrapping an ordered list; separators render automatically unless explicit separators are projected.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes | `string` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zLabel]` | Accessible label for the breadcrumb navigation | `string` | `'breadcrumb'` |
-| `[zSize]` | Breadcrumb size | `'sm' \| 'md' \| 'lg'` | `'md'` |
-| `[zAlign]` | Horizontal alignment | `'start' \| 'center' \| 'end'` | `'start'` |
-| `[zWrap]` | Wrapping behavior | `'wrap' \| 'nowrap'` | `'wrap'` |
-| `[zSeparator]` | Custom separator for auto-rendered item separators | `string \| TemplateRef<void>` | `''` |
+| `[zSize]` | Breadcrumb text size | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `[zAlign]` | Horizontal alignment of the item list | `'start' \| 'center' \| 'end'` | `'start'` |
+| `[zWrap]` | Whether the item list wraps onto multiple lines | `'wrap' \| 'nowrap'` | `'wrap'` |
+| `[zSeparator]` | Custom separator content rendered between auto-generated separators | `string \| TemplateRef<void>` | `''` |
 
 ### z-breadcrumb-item, [z-breadcrumb-item]
 
-An individual breadcrumb item. When no composed primitive is projected, it renders a link for non-current items and a page for the current item.
+An individual breadcrumb item, rendered with `role="listitem"`. When no `z-breadcrumb-link`, `z-breadcrumb-page`, or `z-breadcrumb-ellipsis` is projected, it renders a generated link for every item except the last and a page for the last one; the router-compatible inputs below configure that generated link.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes | `string` | `''` |
-| `[routerLink]` | Router-compatible inputs are forwarded to the generated breadcrumb link | `string \| any[]` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[routerLink]` | Router-compatible command array, string, or UrlTree for the generated link | `string \| any[] \| UrlTree` | `[]` |
+| `[queryParams]` | Query params merged into the generated URL when routerLink is set | `Params` | `-` |
+| `[fragment]` | URL fragment appended to the generated URL when routerLink is set | `string` | `-` |
+| `[queryParamsHandling]` | How the current query params are merged with queryParams | `'merge' \| 'preserve' \| ''` | `-` |
+| `[state]` | Navigation state passed to the Router when routerLink is set | `unknown` | `-` |
+| `[info]` | Arbitrary navigation info passed to the Router when routerLink is set | `unknown` | `-` |
+| `[relativeTo]` | Route the routerLink commands are resolved against; defaults to the current activated route | `ActivatedRoute` | `-` |
+| `[preserveFragment]` | Keeps the current URL fragment when navigating via routerLink | `boolean` | `false` |
+| `[skipLocationChange]` | Navigates via routerLink without pushing a new browser history entry | `boolean` | `false` |
+| `[replaceUrl]` | Replaces the current browser history entry instead of pushing a new one | `boolean` | `false` |
 
 ### z-breadcrumb-link, [z-breadcrumb-link]
 
-A clickable breadcrumb link. Supports Router-compatible inputs and plain href links; prefer native anchors or buttons when composing interactive controls.
+A clickable breadcrumb link. Apply the attribute to a native `<a>` or `<button>` to reuse its interactive semantics. Set routerLink to navigate through the Angular Router (href is generated and kept in sync), or set href directly for a plain link.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes | `string` | `''` |
-| `[routerLink]` | Router-compatible inputs used to build the link URL and navigate on click | `string \| any[]` | `-` |
-| `[href]` | Plain link URL when routerLink is not provided | `string` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[routerLink]` | Router-compatible command array, string, or UrlTree; navigates via the Router and computes href | `string \| any[] \| UrlTree` | `-` |
+| `[queryParams]` | Query params merged into the generated URL when routerLink is set | `Params` | `-` |
+| `[fragment]` | URL fragment appended to the generated URL when routerLink is set | `string` | `-` |
+| `[queryParamsHandling]` | How the current query params are merged with queryParams | `'merge' \| 'preserve' \| ''` | `-` |
+| `[state]` | Navigation state passed to the Router when routerLink is set | `unknown` | `-` |
+| `[info]` | Arbitrary navigation info passed to the Router when routerLink is set | `unknown` | `-` |
+| `[relativeTo]` | Route the routerLink commands are resolved against; defaults to the current activated route | `ActivatedRoute` | `-` |
+| `[preserveFragment]` | Keeps the current URL fragment when navigating via routerLink | `boolean` | `false` |
+| `[skipLocationChange]` | Navigates via routerLink without pushing a new browser history entry | `boolean` | `false` |
+| `[replaceUrl]` | Replaces the current browser history entry instead of pushing a new one | `boolean` | `false` |
+| `[href]` | Plain link URL, used when routerLink is not set | `string` | `-` |
 
 ### z-breadcrumb-page, [z-breadcrumb-page]
 
-The current page in the breadcrumb trail. Renders non-clickable content with aria-current="page".
+The current page in the breadcrumb trail. Renders non-clickable content with `aria-current="page"`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes | `string` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-breadcrumb-separator, [z-breadcrumb-separator]
 
-A decorative separator between breadcrumb items. Project custom content to override the default chevron.
+A decorative separator between breadcrumb items (`aria-hidden`, `role="presentation"`). Project it manually — e.g. on an `<li>` — to override the default chevron and suppress the automatic separators; project custom content inside it to change the glyph.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes | `string` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]
 
-An ellipsis element for truncating long breadcrumb trails.
+A control that stands in for one or more collapsed items in a long breadcrumb trail.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes | `string` | `''` |
-| `[zColor]` | Ellipsis color | `'muted' \| 'strong'` | `'muted'` |
-| `[zLabel]` | Screen-reader label for the collapsed breadcrumb control | `string` | `'More breadcrumbs'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zColor]` | Icon color | `'muted' \| 'strong'` | `'muted'` |
+| `[zLabel]` | Screen-reader label for the collapsed items | `string` | `'More breadcrumbs'` |
 
 ---
 

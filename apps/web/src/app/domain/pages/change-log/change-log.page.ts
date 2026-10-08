@@ -21,6 +21,7 @@ import { SeoService } from '@doc/shared/services/seo.service';
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 
 import { ChangelogExamplesComponent } from './components/changelog-examples.component';
+import { ChangelogReleaseComponent } from './components/changelog-release.component';
 import { type ChangelogEntry, type ChangelogHighlightIcon } from './entries/changelog-entry.interface';
 import { ChangelogService } from './services/changelog.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
@@ -42,6 +43,7 @@ const HIGHLIGHT_ICONS: Record<ChangelogHighlightIcon, IconName> = {
   selector: 'z-changelog',
   imports: [
     ChangelogExamplesComponent,
+    ChangelogReleaseComponent,
     DocContentComponent,
     DocHeadingComponent,
     NgIcon,
@@ -75,6 +77,9 @@ export class ChangeLogPage implements OnInit {
   readonly activeAnchor = signal<string | undefined>(undefined);
 
   readonly entries = this.changelogService.entries;
+
+  /** The current release banner, if any entry carries one. At most one exists at a time. */
+  readonly release = this.entries.find(entry => entry.release)?.release;
 
   readonly navigationConfig: NavigationConfig = {
     items: [

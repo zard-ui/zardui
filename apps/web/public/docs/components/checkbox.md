@@ -165,14 +165,14 @@ import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.com
 ```
 
 ```angular-html
-<z-checkbox zLabel="Accept terms and conditions"></z-checkbox>
+<z-checkbox>Accept terms and conditions</z-checkbox>
 ```
 
 ## Examples
 
 ### Invalid
 
-Set `aria-invalid` on the checkbox and `data-invalid` on the field wrapper to show the invalid styles.
+Set `zInvalid` on `z-checkbox` (which sets `aria-invalid`) and `data-invalid` on `z-field` to show the invalid styles.
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -200,7 +200,7 @@ export class ZardDemoCheckboxInvalidComponent {
 
 ### Basic
 
-Pair the checkbox with `Field` and `FieldLabel` for proper layout and labeling.
+Pair `z-checkbox` with `z-field` and `z-field-label` for proper layout and labeling.
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -228,7 +228,7 @@ export class ZardDemoCheckboxBasicComponent {
 
 ### Description
 
-Use `FieldContent` and `FieldDescription` for helper text.
+Use `z-field-content` and `z-field-description` for helper text.
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -259,7 +259,7 @@ export class ZardDemoCheckboxDescriptionComponent {
 
 ### Disabled
 
-Use the `disabled` prop to prevent interaction and add the `data-disabled` attribute to the `Field` component for disabled styles.
+Use `zDisabled` to prevent interaction, and add the `data-disabled` attribute to `z-field` for disabled styles.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -285,7 +285,7 @@ export class ZardDemoCheckboxDisabledComponent {}
 
 ### Group
 
-Use multiple fields to create a checkbox list.
+Use multiple `z-field` rows inside a `fieldset[z-field-set]` to create a checkbox list.
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -338,13 +338,14 @@ export class ZardDemoCheckboxGroupComponent {
 
 ### Table
 
-Combine the checkbox with the `Table` component for selectable rows.
+Combine `z-checkbox` with `z-table` for selectable rows.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardTableImports } from '@/shared/components/table/table.imports';
 
 interface Row {
@@ -363,23 +364,25 @@ const TABLE_DATA: readonly Row[] = [
 
 @Component({
   selector: 'z-demo-checkbox-table',
-  imports: [ZardCheckboxComponent, ...ZardTableImports, FormsModule],
+  imports: [ZardCheckboxComponent, ...ZardFieldImports, ...ZardTableImports, FormsModule],
   template: `
     <table z-table>
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head class="w-8">
+          <th z-table-head scope="col" class="w-8">
+            <label z-field-label for="select-all-checkbox" class="sr-only">Select all</label>
             <z-checkbox zId="select-all-checkbox" [ngModel]="allSelected()" (checkChange)="toggleAll($event)" />
           </th>
-          <th z-table-head>Name</th>
-          <th z-table-head>Email</th>
-          <th z-table-head>Role</th>
+          <th z-table-head scope="col">Name</th>
+          <th z-table-head scope="col">Email</th>
+          <th z-table-head scope="col">Role</th>
         </tr>
       </thead>
       <tbody z-table-body>
         @for (row of rows; track row.id) {
           <tr z-table-row [attr.data-state]="isSelected(row.id) ? 'selected' : null">
             <td z-table-cell>
+              <label z-field-label [for]="'row-' + row.id + '-checkbox'" class="sr-only">Select {{ row.name }}</label>
               <z-checkbox
                 [zId]="'row-' + row.id + '-checkbox'"
                 [ngModel]="isSelected(row.id)"
@@ -419,6 +422,87 @@ export class ZardDemoCheckboxTableComponent {
     }
     this.selectedRows.set(next);
   }
+}
+```
+
+### Controlled
+
+Drive `z-checkbox` from external state with a one-way `[ngModel]` binding and the `(checkChange)` output, the equivalent of a controlled checked/onCheckedChange pair.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+
+@Component({
+  selector: 'z-demo-checkbox-controlled',
+  imports: [ZardCheckboxComponent, ZardButtonComponent, ...ZardFieldImports, FormsModule],
+  template: `
+    <div z-field-group class="mx-auto w-64">
+      <div z-field zOrientation="horizontal">
+        <z-checkbox
+          zId="notifications-controlled"
+          [ngModel]="notifications()"
+          (checkChange)="notifications.set($event)"
+        />
+        <label z-field-label for="notifications-controlled">Enable notifications</label>
+      </div>
+      <p class="text-muted-foreground text-sm">Notifications are {{ notifications() ? 'on' : 'off' }}.</p>
+      <button type="button" z-button zType="outline" zSize="sm" (click)="notifications.set(!notifications())">
+        Toggle from outside
+      </button>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCheckboxControlledComponent {
+  protected readonly notifications = signal(true);
+}
+```
+
+### Reactive Forms
+
+Bind `z-checkbox` with `formControlName`; the disabled state of a `FormControl` is respected out of the box.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+
+import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+
+@Component({
+  selector: 'z-demo-checkbox-reactive-forms',
+  imports: [ZardCheckboxComponent, ...ZardFieldImports, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="form">
+      <div z-field-group class="mx-auto w-64">
+        <div z-field zOrientation="horizontal">
+          <z-checkbox zId="newsletter-checkbox" formControlName="newsletter" />
+          <label z-field-label for="newsletter-checkbox">Subscribe to newsletter</label>
+        </div>
+        <div z-field zOrientation="horizontal" data-disabled="true">
+          <z-checkbox zId="beta-checkbox" formControlName="betaFeatures" />
+          <label z-field-label for="beta-checkbox">Beta features (locked)</label>
+        </div>
+        <p class="text-muted-foreground text-sm">
+          Newsletter: {{ form.controls.newsletter.value ? 'subscribed' : 'not subscribed' }}
+        </p>
+      </div>
+    </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCheckboxReactiveFormsComponent {
+  private readonly fb = inject(FormBuilder);
+
+  protected readonly form = this.fb.group({
+    newsletter: [true],
+    betaFeatures: [{ value: false, disabled: true }],
+  });
 }
 ```
 

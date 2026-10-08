@@ -8,6 +8,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-tooltip-icons',
   imports: [ZardCardImports, ZardChartImports],
   template: `
     <z-card class="w-full">

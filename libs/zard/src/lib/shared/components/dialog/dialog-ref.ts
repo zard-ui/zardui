@@ -2,10 +2,8 @@ import type { OverlayRef } from '@angular/cdk/overlay';
 
 import { ZardOverlayRefBase } from '@/shared/core';
 
-import type { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
-
-/** How long the leave transition runs, in ms. Mirrors the CSS. */
-const DIALOG_DURATION = 100;
+import type { ZardDialogContainerComponent, ZardDialogOptions } from './dialog-container.component';
+import { DIALOG_DURATION } from './dialog-panel.component';
 
 /**
  * Reference to a dialog opened via {@link ZardDialogService}.
@@ -19,7 +17,7 @@ export class ZardDialogRef<T = unknown, R = unknown, U = unknown> extends ZardOv
   constructor(
     overlayRef: OverlayRef | null,
     private readonly config: ZardDialogOptions<T, U>,
-    private readonly containerInstance: ZardDialogComponent<T, U> | null,
+    private readonly containerInstance: ZardDialogContainerComponent<T, U> | null,
     platformId: object,
   ) {
     super(overlayRef, config, platformId);
@@ -31,7 +29,8 @@ export class ZardDialogRef<T = unknown, R = unknown, U = unknown> extends ZardOv
   }
 
   protected override playLeaveAnimation(): void {
-    this.containerInstance?.getNativeElement().classList.add('dialog-leave');
+    this.containerInstance?.leave();
+    this.overlayRef?.detachBackdrop();
   }
 
   protected override closesOnOutsidePointer(): boolean {

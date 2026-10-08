@@ -559,7 +559,7 @@ export class Sidebar07TeamSwitcherComponent {
     {
       name: 'sidebar-07.component.html',
       path: 'src/components/sidebar-07/sidebar-07.component.html',
-      content: `<z-sidebar-provider>
+      content: `<z-sidebar-provider zDefaultOpen="true">
   <lib-sidebar-07-app-sidebar />
 
   <main z-sidebar-inset>

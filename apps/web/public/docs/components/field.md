@@ -31,7 +31,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
@@ -331,7 +331,7 @@ export const fieldTitleVariants = cva(
 );
 
 export const fieldDescriptionVariants = cva([
-  'text-left text-sm/normal font-normal text-muted-foreground',
+  'text-start text-sm/normal font-normal text-muted-foreground',
   'group-has-data-horizontal/field:text-balance',
   '[[data-variant=legend]+&]:-mt-1.5',
   'last:mt-0 nth-last-2:-mt-1',
@@ -415,6 +415,8 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
 
 ### Input
 
+Stack `z-field-label`, `z-input` and `z-field-description` inside `z-field`; `z-field-description` can be placed above or below the control depending on where it sits in the template.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -449,6 +451,8 @@ export class ZardDemoFieldInputComponent {}
 
 ### Textarea
 
+Compose `z-field` with `z-field-label`, `z-textarea` and `z-field-description` the same way as an input.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -477,6 +481,8 @@ export class ZardDemoFieldTextareaComponent {}
 ```
 
 ### Select
+
+Compose `z-field` with `z-field-label`, `z-select` and `z-field-description` to label and describe a select control.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -512,6 +518,8 @@ export class ZardDemoFieldSelectComponent {}
 
 ### Slider
 
+Use `z-field-title` instead of `z-field-label` when the control has no natural `for` target, and update `z-field-description` live from the `z-slider`'s `(zSlideIndexChange)` output.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
@@ -533,7 +541,7 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
         <z-slider
           class="mt-2 w-full"
           aria-label="Volume"
-          [zDefault]="value()"
+          [zValue]="value()"
           [zMin]="0"
           [zMax]="100"
           [zStep]="1"
@@ -550,6 +558,8 @@ export class ZardDemoFieldSliderComponent {
 ```
 
 ### Fieldset
+
+Group related `z-field`s under `z-field-set` with a `z-field-legend` and a shared `z-field-description`; lay fields out side by side with a plain grid inside `z-field-group`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -591,6 +601,8 @@ export class ZardDemoFieldFieldsetComponent {}
 ```
 
 ### Checkbox
+
+Set `zOrientation="horizontal"` on `z-field` to put `z-checkbox` before its `z-field-label`; use `z-field-content` when a checkbox needs both a title and a description.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -657,6 +669,8 @@ export class ZardDemoFieldCheckboxComponent {
 
 ### Radio
 
+Pair each `z-radio` (inside `z-radio-group`) with a horizontal `z-field` and `z-field-label`, wrapped in a `z-field-set` whose `z-field-legend` uses the `label` variant.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -699,6 +713,8 @@ export class ZardDemoFieldRadioComponent {
 
 ### Switch
 
+Pair `z-switch` with `z-field-label` and `zOrientation="horizontal"` on `z-field` for a single inline toggle.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -712,7 +728,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
     <div class="flex w-full min-w-xs justify-center">
       <div z-field zOrientation="horizontal" class="w-fit">
         <label z-field-label for="2fa">Multi-factor authentication</label>
-        <z-switch zId="2fa" zSize="sm" />
+        <z-switch zId="2fa" />
       </div>
     </div>
   `,
@@ -722,6 +738,8 @@ export class ZardDemoFieldSwitchComponent {}
 ```
 
 ### Choice Card
+
+Wrap `z-field` inside `z-field-label` (instead of the other way around) to make the whole card clickable, and use `z-field-content` for the title and description next to a `z-radio`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -773,6 +791,8 @@ export class ZardDemoFieldChoiceCardComponent {
 ```
 
 ### Field Group
+
+Stack `z-field-set` blocks with `z-field-group` and divide them with `z-field-separator`; nest a `data-slot="checkbox-group"` `z-field-group` for tighter spacing between related checkboxes.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -833,16 +853,69 @@ export class ZardDemoFieldFieldGroupComponent {
 }
 ```
 
+### Invalid
+
+Bind the `data-invalid` attribute on `z-field` and `aria-invalid` on the control to a reactive form control's `invalid && touched` state, then render the message from `control.hasError(...)` inside `z-field-error` — the pattern every other invalid-state demo in the library builds on.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+
+@Component({
+  selector: 'z-demo-field-invalid',
+  imports: [...ZardFieldImports, ZardInputComponent, ReactiveFormsModule],
+  template: `
+    <div class="w-full min-w-xs">
+      <form [formGroup]="signupForm">
+        @let emailControl = signupForm.controls.email;
+        @let emailInvalid = emailControl.invalid && emailControl.touched;
+        <div z-field [attr.data-invalid]="emailInvalid || null">
+          <label z-field-label for="signup-email">Email</label>
+          <input
+            z-input
+            type="email"
+            id="signup-email"
+            placeholder="you@example.com"
+            formControlName="email"
+            [attr.aria-invalid]="emailInvalid || null"
+          />
+          @if (emailInvalid) {
+            <z-field-error>
+              @if (emailControl.hasError('required')) {
+                Email is required.
+              } @else if (emailControl.hasError('email')) {
+                Enter a valid email address.
+              }
+            </z-field-error>
+          } @else {
+            <p z-field-description>We'll only use this to send you a receipt.</p>
+          }
+        </div>
+      </form>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoFieldInvalidComponent {
+  protected readonly signupForm = new FormGroup({
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+  });
+}
+```
+
 ## API Reference
 
 ### z-field
 
-A field container that wraps a label, control and optional description / error.
+A field container that wraps a label, control and optional description / error, exposed as `role="group"`. Set the `data-invalid` attribute (e.g. `[attr.data-invalid]="control.invalid && control.touched"`) to switch the whole field into its destructive styling; pair it with `aria-invalid` on the control itself.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zOrientation]` | Layout direction of the field | `'vertical' \| 'horizontal' \| 'responsive'` | `'vertical'` |
+| `[zOrientation]` | Layout direction of the field: vertical stacks, horizontal aligns label and control in a row, responsive stacks until the parent `z-field-group` container query crosses its `@md` breakpoint. | `'vertical' \| 'horizontal' \| 'responsive'` | `'vertical'` |
 
 ### z-field-set
 
@@ -913,12 +986,12 @@ Horizontal separator with optional centered content.
 
 ### z-field-error
 
-Renders a single error message or a list of errors. Falls back to projected content when no errors are provided.
+Renders validation messages for a field, exposed as `role="alert"`. Pass the errors to show through `[zErrors]` — e.g. from a reactive form control's `errors` — or project static content when there is nothing to compute.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zErrors]` | Array of error objects with an optional `message` string. Duplicate messages are removed. | `Array<{ message?: string }>` | `[]` |
+| `[zErrors]` | Array of error objects with an optional `message` string. A single entry renders inline, multiple render as a bulleted list, and duplicate messages are removed. Falls back to projected content when the array is empty. | `ReadonlyArray<{ message?: string } \| undefined>` | `[]` |
 
 ---
 

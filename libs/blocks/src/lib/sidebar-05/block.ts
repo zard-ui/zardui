@@ -216,7 +216,7 @@ export class Sidebar05SearchFormComponent {}
     {
       name: 'sidebar-05.component.html',
       path: 'src/components/sidebar-05/sidebar-05.component.html',
-      content: `<z-sidebar-provider>
+      content: `<z-sidebar-provider zDefaultOpen="true">
   <lib-sidebar-05-app-sidebar />
 
   <main z-sidebar-inset>

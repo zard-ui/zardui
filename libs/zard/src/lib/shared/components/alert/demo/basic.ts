@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { provideIcons } from '@ng-icons/core';
 import { lucideCircleCheck, lucideInfo } from '@ng-icons/lucide';
 
-import { ZardAlertComponent } from '../alert.component';
+import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
 
 @Component({
   selector: 'z-demo-alert-basic',

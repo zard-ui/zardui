@@ -1,3 +1,5 @@
+import { Directionality } from '@angular/cdk/bidi';
+import { signal } from '@angular/core';
 import { type ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ZardProgressComponent } from './progress.component';
@@ -38,6 +40,20 @@ describe('ZardProgressComponent', () => {
     fixture.detectChanges();
     expect(indicator().style.transform).toEqual('translateX(-0%)');
     expect(fixture.nativeElement.getAttribute('aria-valuenow')).toEqual('100');
+  });
+
+  it('slides the indicator in from the right in RTL', () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      imports: [ZardProgressComponent],
+      providers: [{ provide: Directionality, useValue: { value: 'rtl', valueSignal: signal('rtl') } }],
+    });
+    const rtlFixture = TestBed.createComponent(ZardProgressComponent);
+    rtlFixture.componentRef.setInput('value', 78);
+    rtlFixture.detectChanges();
+
+    const rtlIndicator: HTMLElement = rtlFixture.nativeElement.querySelector('[data-slot="progress-indicator"]');
+    expect(rtlIndicator.style.transform).toEqual('translateX(22%)');
   });
 
   it('translates the indicator according to the value', () => {

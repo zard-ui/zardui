@@ -24,12 +24,15 @@
     scrollSpyItem="installation"
     id="installation"
     heading="Installation"
-    lead="The utility ships in its own utilities.css, next to the library's global stylesheet in the core registry item. Refresh it and the classes are there."
+    lead="The utility ships in utilities.css, its own registry item — separate from core, so nothing pulls it in until you ask for it."
   >
     <z-code-tabs [data]="blocks.installTabs" />
     <p class="text-muted-foreground leading-relaxed">
-      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">tailwind.css</code>
-      imports it on its first line, so the classes are available as soon as that stylesheet is imported after Tailwind.
+      The CLI writes
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">utilities.css</code>
+      next to your global stylesheet and adds its
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">@import</code>
+      after the ones already there. If you install by hand, copy the file there and add the same line yourself.
     </p>
     <z-code-block [data]="blocks.installImport" />
   </z-utils-section>

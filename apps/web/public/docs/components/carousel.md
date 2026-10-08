@@ -24,6 +24,7 @@ npx zard-cli@latest add carousel
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -35,6 +36,7 @@ import {
   viewChild,
   type InputSignal,
   type Signal,
+  inject,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -139,6 +141,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);
+  // Directionality instead of getComputedStyle: it is a signal, so Embla follows a change of `dir`,
+  // and it exists during SSR, where reading computed styles throws.
+  private readonly directionality = inject(Directionality);
 
   readonly class = input<ClassValue>('');
   readonly zOptions: InputSignal<EmblaOptionsType> = input<EmblaOptionsType>({ loop: false });
@@ -156,6 +161,7 @@ export class ZardCarouselComponent {
   protected readonly options: Signal<EmblaOptionsType> = computed(() => ({
     ...this.zOptions(),
     axis: this.zOrientation() === 'horizontal' ? 'x' : 'y',
+    direction: this.directionality.valueSignal(),
   }));
 
   protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
@@ -243,7 +249,7 @@ export const carouselVariants = cva('overflow-hidden', {
 export const carouselContentVariants = cva('flex', {
   variants: {
     zOrientation: {
-      horizontal: '-ml-4',
+      horizontal: '-ms-4',
       vertical: '-mt-4 flex-col',
     },
   },
@@ -255,7 +261,7 @@ export const carouselContentVariants = cva('flex', {
 export const carouselItemVariants = cva('min-w-0 shrink-0 grow-0 basis-full', {
   variants: {
     zOrientation: {
-      horizontal: 'pl-4',
+      horizontal: 'ps-4',
       vertical: 'pt-4',
     },
   },
@@ -267,7 +273,7 @@ export const carouselItemVariants = cva('min-w-0 shrink-0 grow-0 basis-full', {
 export const carouselPreviousButtonVariants = cva('absolute size-8 touch-manipulation rounded-full px-0', {
   variants: {
     zOrientation: {
-      horizontal: 'top-1/2 -left-12 -translate-y-1/2',
+      horizontal: 'top-1/2 ltr:-left-12 rtl:-right-12 -translate-y-1/2 rtl:rotate-180',
       vertical: '-top-12 left-1/2 -translate-x-1/2 rotate-90',
     },
   },
@@ -279,7 +285,7 @@ export const carouselPreviousButtonVariants = cva('absolute size-8 touch-manipul
 export const carouselNextButtonVariants = cva('absolute size-8 touch-manipulation rounded-full px-0', {
   variants: {
     zOrientation: {
-      horizontal: 'top-1/2 -right-12 -translate-y-1/2',
+      horizontal: 'top-1/2 ltr:-right-12 rtl:-left-12 -translate-y-1/2 rtl:rotate-180',
       vertical: '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
     },
   },
@@ -514,6 +520,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
+  selector: 'z-demo-carousel-sizes',
   imports: [ZardCarouselImports, ZardCardImports],
   template: `
     <div class="w-full max-w-48 sm:max-w-xs md:max-w-sm">
@@ -536,7 +543,7 @@ import { ZardCarouselImports } from '@/shared/components/carousel/carousel.impor
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoCarouselSizeComponent {
+export class ZardDemoCarouselSizesComponent {
   protected slides = ['1', '2', '3', '4', '5'];
 }
 ```
@@ -574,6 +581,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
+  selector: 'z-demo-carousel-spacing',
   imports: [ZardCarouselImports, ZardCardImports],
   template: `
     <div class="w-full max-w-48 sm:max-w-xs md:max-w-sm">
@@ -632,6 +640,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
+  selector: 'z-demo-carousel-orientation',
   imports: [ZardCarouselImports, ZardCardImports],
   template: `
     <div class="w-full min-w-xs">
@@ -669,21 +678,136 @@ export class ZardDemoCarouselOrientationComponent {
 </z-carousel>
 ```
 
+### Api
+
+Listen for `(zInited)` to capture the Embla Carousel instance and `(zSelected)` to react to slide changes, reading `selectedScrollSnap()` and `scrollSnapList().length` off it.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import type { EmblaCarouselType } from 'embla-carousel';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
+
+@Component({
+  selector: 'z-demo-carousel-api',
+  imports: [ZardCarouselImports, ZardCardImports],
+  template: `
+    <div class="w-full max-w-48 sm:max-w-xs">
+      <z-carousel (zInited)="onInited($event)" (zSelected)="onSelected()">
+        <z-carousel-content>
+          @for (slide of slides; track slide) {
+            <z-carousel-item>
+              <div class="p-1">
+                <z-card>
+                  <z-card-content class="flex aspect-square items-center justify-center p-6">
+                    <span class="text-4xl font-semibold">{{ slide }}</span>
+                  </z-card-content>
+                </z-card>
+              </div>
+            </z-carousel-item>
+          }
+        </z-carousel-content>
+      </z-carousel>
+      <p class="text-muted-foreground py-2 text-center text-sm">Slide {{ current() }} of {{ count() }}</p>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCarouselApiComponent {
+  protected slides = ['1', '2', '3', '4', '5'];
+
+  protected readonly current = signal(1);
+  protected readonly count = signal(0);
+
+  #emblaApi?: EmblaCarouselType;
+
+  onInited(emblaApi: EmblaCarouselType): void {
+    this.#emblaApi = emblaApi;
+    this.count.set(emblaApi.scrollSnapList().length);
+    this.current.set(emblaApi.selectedScrollSnap() + 1);
+  }
+
+  onSelected(): void {
+    if (!this.#emblaApi) return;
+    this.current.set(this.#emblaApi.selectedScrollSnap() + 1);
+  }
+}
+```
+
+### Plugins
+
+Use `ZardCarouselPluginsService` to create an Embla plugin, such as autoplay, and pass it to `[zPlugins]`.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject, type OnInit, signal } from '@angular/core';
+
+import type { EmblaPluginType } from 'embla-carousel';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardCarouselPluginsService } from '@/shared/components/carousel/carousel-plugins.service';
+import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
+
+@Component({
+  selector: 'z-demo-carousel-plugins',
+  imports: [ZardCarouselImports, ZardCardImports],
+  template: `
+    <div class="w-full max-w-48 sm:max-w-xs">
+      <z-carousel [zPlugins]="plugins()" [zOptions]="{ loop: true }">
+        <z-carousel-content>
+          @for (slide of slides; track slide) {
+            <z-carousel-item>
+              <div class="p-1">
+                <z-card>
+                  <z-card-content class="flex aspect-square items-center justify-center p-6">
+                    <span class="text-4xl font-semibold">{{ slide }}</span>
+                  </z-card-content>
+                </z-card>
+              </div>
+            </z-carousel-item>
+          }
+        </z-carousel-content>
+      </z-carousel>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCarouselPluginsComponent implements OnInit {
+  readonly #pluginsService = inject(ZardCarouselPluginsService);
+
+  protected slides = ['1', '2', '3', '4', '5'];
+  protected readonly plugins = signal<EmblaPluginType[]>([]);
+
+  ngOnInit(): void {
+    void this.#loadAutoplay();
+  }
+
+  async #loadAutoplay(): Promise<void> {
+    const autoplay = await this.#pluginsService.createAutoplayPlugin({ delay: 2000, stopOnInteraction: true });
+    this.plugins.set([autoplay]);
+  }
+}
+```
+
 ## API Reference
 
 ### z-carousel
 
-A carousel component with slide controls and swipe gesture support.
+A carousel component with slide controls and swipe gesture support. Add `#ref="zCarousel"` on the element to call its public methods.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zOptions]` | Embla Carousel configuration options | `EmblaOptionsType` | `{loop: false}` |
-| `[zPlugins]` | Embla Carousel plugins | `EmblaPluginType[]` | `[]` |
+| `[zOptions]` | Embla Carousel configuration options, including `align` ('start' \| 'center' \| 'end'), `loop`, and `direction` ('ltr' \| 'rtl'). `axis` is derived from `zOrientation` and should not be set here | `EmblaOptionsType` | `{loop: false}` |
+| `[zPlugins]` | Embla Carousel plugins, e.g. an autoplay plugin created with `ZardCarouselPluginsService` | `EmblaPluginType[]` | `[]` |
 | `[zOrientation]` | Carousel orientation | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| `[zControls]` | Navigation type buttons | `'button' \| 'dot' \| 'none'` | `'button'` |
-| `(zInited)` | Emits Embla API when carousel is initialized | `EmblaCarouselType` | `-` |
-| `(zSelected)` | Emitted when a slide is selected | `void` | `-` |
+| `[zControls]` | Navigation controls rendered inside the carousel | `'button' \| 'dot' \| 'none'` | `'button'` |
+| `(zInited)` | Emits the Embla Carousel instance once initialized; read the current slide (`selectedScrollSnap()`) and total slide count (`scrollSnapList().length`) off it | `EventEmitter<EmblaCarouselType>` | `-` |
+| `(zSelected)` | Emitted when the selected slide changes | `EventEmitter<void>` | `-` |
+| `slidePrevious()` | Public method that scrolls to the previous slide | `() => void` | `-` |
+| `slideNext()` | Public method that scrolls to the next slide | `() => void` | `-` |
+| `goTo(index)` | Public method that scrolls to the slide at the given index | `(index: number) => void` | `-` |
 
 ### z-carousel-content
 

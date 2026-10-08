@@ -5,6 +5,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-pie-legend',
   imports: [ZardCardImports, ZardChartImports],
   template: `
     <z-card class="w-full">

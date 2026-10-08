@@ -54,4 +54,23 @@ export const AVATAR_API: ApiSection[] = [
       { name: '[class]', description: 'Additional CSS classes', type: 'string', default: "''" },
     ],
   },
+  {
+    selector: 'z-avatar-group-count',
+    description: 'A "+N" chip for the members a `z-avatar-group` stack does not show.',
+    props: [
+      {
+        name: '[zCount]',
+        description: 'Number of additional members represented by the chip',
+        type: 'number',
+        default: '0',
+      },
+      {
+        name: '[zSize]',
+        description: 'Chip size variant, matching the sibling avatars',
+        type: "'sm' | 'default' | 'lg'",
+        default: "'default'",
+      },
+      { name: '[class]', description: 'Additional CSS classes', type: 'string', default: "''" },
+    ],
+  },
 ];

@@ -196,7 +196,7 @@ export class ZardCardComponent {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const cardVariants = cva(
-  'group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl',
+  'group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl',
   {
     variants: {
       zSize: {
@@ -210,7 +210,7 @@ export const cardVariants = cva(
 export type ZardCardSizeType = NonNullable<VariantProps<typeof cardVariants>['zSize']>;
 
 export const cardHeaderVariants = cva(
-  'group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-4 group-data-[size=sm]/card:px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [&.border-b]:pb-4 group-data-[size=sm]/card:[&.border-b]:pb-3',
+  'group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [&.border-b]:pb-(--card-spacing)',
 );
 
 export const cardTitleVariants = cva('text-base/snug font-medium group-data-[size=sm]/card:text-sm');
@@ -219,9 +219,9 @@ export const cardDescriptionVariants = cva('text-sm text-muted-foreground');
 
 export const cardActionVariants = cva('col-start-2 row-span-2 row-start-1 self-start justify-self-end');
 
-export const cardContentVariants = cva('px-4 group-data-[size=sm]/card:px-3');
+export const cardContentVariants = cva('px-(--card-spacing)');
 
-export const cardFooterVariants = cva('flex items-center rounded-b-xl bg-muted/50 p-4 group-data-[size=sm]/card:p-3');
+export const cardFooterVariants = cva('flex items-center rounded-b-xl bg-muted/50 p-(--card-spacing)');
 ```
 
 ```angular-ts
@@ -267,7 +267,144 @@ import { ZardCardComponent } from '@/shared/components/card/card.component';
 
 ### Size
 
-Use the zSize="sm" input to set the size of the card to small. The small size variant uses smaller spacing.
+Set `zSize="sm"` to switch the card to its compact gap and padding scale.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronRight } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+
+@Component({
+  selector: 'z-demo-card-size',
+  imports: [ZardCardImports, ZardButtonComponent, NgIcon],
+  template: `
+    <z-card zSize="sm" class="mx-auto w-full max-w-xs">
+      <z-card-header>
+        <z-card-title [zTitle]="featureName" />
+        <z-card-description zDescription="Weekly snapshots. No more manual exports." />
+      </z-card-header>
+      <z-card-content>
+        <ul class="grid gap-2 py-2 text-sm">
+          <li class="flex gap-2">
+            <ng-icon name="lucideChevronRight" class="text-muted-foreground mt-0.5 size-4 shrink-0" />
+            <span>Choose a schedule (daily, or weekly).</span>
+          </li>
+          <li class="flex gap-2">
+            <ng-icon name="lucideChevronRight" class="text-muted-foreground mt-0.5 size-4 shrink-0" />
+            <span>Send to channels or specific teammates.</span>
+          </li>
+          <li class="flex gap-2">
+            <ng-icon name="lucideChevronRight" class="text-muted-foreground mt-0.5 size-4 shrink-0" />
+            <span>Include charts, tables, and key metrics.</span>
+          </li>
+        </ul>
+      </z-card-content>
+      <z-card-footer class="flex-col gap-2">
+        <z-button zSize="sm" class="w-full">Set up scheduled reports</z-button>
+        <z-button zType="outline" zSize="sm" class="w-full">See what's new</z-button>
+      </z-card-footer>
+    </z-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronRight })],
+})
+export class ZardDemoCardSizeComponent {
+  readonly featureName = 'Scheduled reports';
+}
+```
+
+### Spacing
+
+Every gap and padding of the card reads the `--card-spacing` CSS variable. Override it on the root with a class such as `[--card-spacing:--spacing(6)]` to widen or tighten the whole card at once.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import {
+  ZardToggleGroupComponent,
+  type ZardToggleGroupItem,
+} from '@/shared/components/toggle-group/toggle-group.component';
+
+const SPACING_OPTIONS = [
+  { className: '[--card-spacing:--spacing(4)]', label: '16px', value: '4' },
+  { className: '[--card-spacing:--spacing(5)]', label: '20px', value: '5' },
+  { className: '[--card-spacing:--spacing(6)]', label: '24px', value: '6' },
+  { className: '[--card-spacing:--spacing(8)]', label: '32px', value: '8' },
+];
+
+@Component({
+  selector: 'z-demo-card-spacing',
+  imports: [ZardCardImports, ZardButtonComponent, ...ZardFieldImports, ZardInputComponent, ZardToggleGroupComponent],
+  template: `
+    <div class="mx-auto grid w-full min-w-sm gap-4">
+      <z-toggle-group
+        zMode="single"
+        zType="outline"
+        zSize="sm"
+        class="justify-center"
+        [zItems]="items"
+        [zValue]="spacing()"
+        (valueChange)="onSpacingChange($event)"
+      />
+      <z-card [class]="selectedSpacing()">
+        <z-card-header>
+          <z-card-title zTitle="Login to your account" />
+          <z-card-description zDescription="Enter your email below to login to your account" />
+          <z-card-action>
+            <a z-button zType="link" href="#">Sign Up</a>
+          </z-card-action>
+        </z-card-header>
+        <z-card-content>
+          <div z-field-group>
+            <div z-field>
+              <label z-field-label for="card-spacing-email">Email</label>
+              <input z-input id="card-spacing-email" type="email" placeholder="m@example.com" required />
+            </div>
+            <div z-field>
+              <div class="flex items-center">
+                <label z-field-label for="card-spacing-password">Password</label>
+                <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
+              </div>
+              <input z-input id="card-spacing-password" type="password" required />
+            </div>
+          </div>
+        </z-card-content>
+        <z-card-footer class="flex-col gap-2">
+          <z-button class="w-full">Login</z-button>
+          <z-button zType="outline" class="w-full">Login with Google</z-button>
+        </z-card-footer>
+      </z-card>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCardSpacingComponent {
+  readonly items: ZardToggleGroupItem[] = SPACING_OPTIONS.map(({ value, label }) => ({ value, label }));
+
+  readonly spacing = signal('4');
+
+  readonly selectedSpacing = computed(() => SPACING_OPTIONS.find(option => option.value === this.spacing())?.className);
+
+  onSpacingChange(value: string | string[]) {
+    const next = Array.isArray(value) ? value[0] : value;
+    if (next) {
+      this.spacing.set(next);
+    }
+  }
+}
+```
+
+### Terms Of Service
+
+A card with a scrollable content section and two footer actions, composed from z-card-content and a zFooterBorder-divided z-card-footer.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -276,27 +413,43 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 
 @Component({
-  selector: 'z-demo-card-small',
+  selector: 'z-demo-card-terms-of-service',
   imports: [ZardCardImports, ZardButtonComponent],
   template: `
-    <z-card zSize="sm" class="mx-auto w-full max-w-sm">
+    <z-card class="mx-auto w-full max-w-sm">
       <z-card-header>
-        <z-card-title zTitle="Small Card" />
-        <z-card-description zDescription="This card uses the small size variant." />
+        <z-card-title zTitle="Terms of Service" />
+        <z-card-description zDescription="Review the terms before accepting the agreement." />
       </z-card-header>
-      <z-card-content>
-        <p>
-          The card component supports a zSize input that can be set to &quot;sm&quot; for a more compact appearance.
-        </p>
+      <z-card-content class="-mb-4">
+        <div class="bg-muted/50 -mx-4 max-h-48 space-y-4 overflow-y-auto border-t px-4 py-4 text-sm leading-relaxed">
+          <p>
+            These terms govern your use of the workspace, including access to shared documents, project files, and
+            collaboration tools.
+          </p>
+          <p>
+            You are responsible for the content you upload and for ensuring that your team has the appropriate
+            permissions to view or edit it.
+          </p>
+          <p>
+            We may update features or limits as the service evolves. When those changes materially affect your workflow,
+            we will notify your workspace administrators.
+          </p>
+          <p>
+            By continuing, you agree to keep your account credentials secure and to follow your organization's
+            acceptable use policies.
+          </p>
+        </div>
       </z-card-content>
-      <z-card-footer>
-        <z-button zType="outline" zSize="sm" class="w-full">Action</z-button>
+      <z-card-footer zFooterBorder class="justify-end gap-2">
+        <z-button zType="outline">Decline</z-button>
+        <z-button>Accept</z-button>
       </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoCardSmallComponent {}
+export class ZardDemoCardTermsOfServiceComponent {}
 ```
 
 ### Image
@@ -321,8 +474,8 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
         ngSrc="https://avatar.vercel.sh/zardui"
         alt="Event cover"
         class="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
-        width="120"
-        height="120"
+        width="640"
+        height="360"
       />
       <z-card-header>
         <z-card-action>
@@ -353,7 +506,8 @@ A structured container for displaying content with optional header and footer se
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zSize]` | Size variant of the card | `'default' \| 'sm'` | `'default'` |
+| `[zSize]` | Size variant of the card. `sm` sets `--card-spacing` to `--spacing(3)` and shrinks the title | `'default' \| 'sm'` | `'default'` |
+| `[--card-spacing]` | CSS variable behind every gap and padding of the card and its sections, e.g. `class="[--card-spacing:--spacing(6)]"` | `length` | `--spacing(4)` |
 
 ### z-card-header, [z-card-header]
 
@@ -361,6 +515,7 @@ Container for card title, description, and optional action.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zHeaderBorder]` | Adds a bottom border to the header | `boolean` | `false` |
 
 ### z-card-title, [z-card-title]

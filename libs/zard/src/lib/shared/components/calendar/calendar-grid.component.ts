@@ -1,21 +1,25 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
   type ElementRef,
+  inject,
   input,
   numberAttribute,
   output,
   signal,
+  type TemplateRef,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import type { CalendarDay } from './calendar.types';
-import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
+import { ZardCalendarI18nService } from './calendar-i18n.service';
+import type { CalendarDay, CalendarDayTemplateContext } from './calendar.types';
+import { getDayAriaLabel, getDayId } from './calendar.utils';
 import {
   calendarDayButtonVariants,
   calendarDayVariants,
@@ -27,11 +31,12 @@ import {
 
 @Component({
   selector: 'z-calendar-grid',
+  imports: [NgTemplateOutlet],
   template: `
     <div #gridContainer class="w-full">
       <!-- Weekdays Header -->
       <div [class]="weekdaysClasses()" role="row">
-        @for (weekday of weekdays; track weekday) {
+        @for (weekday of effectiveWeekdays(); track weekday) {
           <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
           </div>
@@ -66,7 +71,11 @@ import {
                   [attr.aria-label]="getDayAriaLabel(day)"
                   [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
                 >
-                  {{ day.date.getDate() }}
+                  @if (zDayTemplate(); as dayTemplate) {
+                    <ng-container *ngTemplateOutlet="dayTemplate; context: { $implicit: day }" />
+                  } @else {
+                    {{ day.date.getDate() }}
+                  }
                 </button>
               </div>
             }
@@ -86,6 +95,7 @@ import {
   exportAs: 'zCalendarGrid',
 })
 export class ZardCalendarGridComponent {
+  private readonly calendarI18n = inject(ZardCalendarI18nService);
   private readonly gridContainer = viewChild.required<ElementRef<HTMLElement>>('gridContainer');
 
   // Inputs
@@ -94,6 +104,8 @@ export class ZardCalendarGridComponent {
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   /** Position of this grid inside a multi-month calendar. Only used to scope the day ids. */
   readonly zMonthIndex = input(0, { transform: numberAttribute });
+  /** Custom content for each day button; falls back to the day number. */
+  readonly zDayTemplate = input<TemplateRef<CalendarDayTemplateContext> | null>(null);
 
   // Outputs
   readonly dateSelect = output<{ date: Date; index: number }>();
@@ -101,7 +113,7 @@ export class ZardCalendarGridComponent {
   readonly nextMonth = output<{ position: string; dayOfWeek: number }>();
   readonly navigateYear = output<number>();
 
-  readonly weekdays = calendarWeekdays;
+  protected readonly effectiveWeekdays = this.calendarI18n.weekdays;
 
   private readonly focusedDayIndex = signal<number>(-1);
 
@@ -157,12 +169,12 @@ export class ZardCalendarGridComponent {
   }
 
   protected getDayAriaLabel(day: CalendarDay): string {
-    return getDayAriaLabel(day);
+    return getDayAriaLabel(day, this.calendarI18n.locale(), this.calendarI18n.labels());
   }
 
   /** Date exposed as `data-day`, mirroring the shadcn day button. */
   protected getDayLabel(day: CalendarDay): string {
-    return day.date.toLocaleDateString('en-US');
+    return day.date.toLocaleDateString(this.calendarI18n.locale());
   }
 
   protected getFocusedDayIndex(): number {

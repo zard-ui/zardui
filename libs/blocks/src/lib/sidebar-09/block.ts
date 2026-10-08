@@ -381,7 +381,7 @@ export class Sidebar09NavUserComponent {
     {
       name: 'sidebar-09.component.html',
       path: 'src/components/sidebar-09/sidebar-09.component.html',
-      content: `<z-sidebar-provider style="--sidebar-width: 350px">
+      content: `<z-sidebar-provider zDefaultOpen="true" style="--sidebar-width: 350px">
   <lib-sidebar-09-app-sidebar />
 
   <main z-sidebar-inset>

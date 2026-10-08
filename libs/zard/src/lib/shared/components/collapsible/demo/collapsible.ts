@@ -1,13 +1,19 @@
+import { COLLAPSIBLE_DEMO_BASIC } from '@generated/components/collapsible/demo/basic';
 import { COLLAPSIBLE_DEMO_CONTROLLED } from '@generated/components/collapsible/demo/controlled';
-import { COLLAPSIBLE_DEMO_DEFAULT } from '@generated/components/collapsible/demo/default';
 import { COLLAPSIBLE_DEMO_DISABLED } from '@generated/components/collapsible/demo/disabled';
+import { COLLAPSIBLE_DEMO_FILE_TREE } from '@generated/components/collapsible/demo/file-tree';
+import { COLLAPSIBLE_DEMO_PREVIEW } from '@generated/components/collapsible/demo/preview';
+import { COLLAPSIBLE_DEMO_SETTINGS_PANEL } from '@generated/components/collapsible/demo/settings-panel';
 import { COLLAPSIBLE_CLI_ADD } from '@generated/installation/cli/add-collapsible';
 import { COLLAPSIBLE_MANUAL_CODE } from '@generated/installation/manual/collapsible';
 import { COLLAPSIBLE_USAGE_CODE, COLLAPSIBLE_USAGE_IMPORT } from '@generated/usage/collapsible';
 
+import { ZardDemoCollapsibleBasicComponent } from './basic';
 import { ZardDemoCollapsibleControlledComponent } from './controlled';
-import { ZardDemoCollapsibleDefaultComponent } from './default';
 import { ZardDemoCollapsibleDisabledComponent } from './disabled';
+import { ZardDemoCollapsibleFileTreeComponent } from './file-tree';
+import { ZardDemoCollapsiblePreviewComponent } from './preview';
+import { ZardDemoCollapsibleSettingsPanelComponent } from './settings-panel';
 import { COLLAPSIBLE_API } from '../doc/api';
 
 export const COLLAPSIBLE = {
@@ -21,12 +27,36 @@ export const COLLAPSIBLE = {
   },
   usage: { importBlock: COLLAPSIBLE_USAGE_IMPORT, codeBlock: COLLAPSIBLE_USAGE_CODE },
   preview: {
-    name: 'default',
-    component: ZardDemoCollapsibleDefaultComponent,
+    name: 'preview',
+    component: ZardDemoCollapsiblePreviewComponent,
     column: false,
-    codeData: COLLAPSIBLE_DEMO_DEFAULT,
+    codeData: COLLAPSIBLE_DEMO_PREVIEW,
   },
   examples: [
+    {
+      name: 'basic',
+      description:
+        "A minimal `[z-collapsible]` wrapped in a `z-card`. The trigger is a full-width ghost `z-button` whose chevron rotates through `group-data-[state=open]`, driven entirely by the directive's own `data-state` — no host state needed.",
+      component: ZardDemoCollapsibleBasicComponent,
+      column: true,
+      codeData: COLLAPSIBLE_DEMO_BASIC,
+    },
+    {
+      name: 'settings-panel',
+      description:
+        'A collapsible that grows a form in place: the first two radius fields are always visible, and `z-collapsible-content` reveals the other two inside the same `z-field-group` grid. The icon trigger flips between maximize and minimize with the `zOpen`/`zOpenChange` pair.',
+      component: ZardDemoCollapsibleSettingsPanelComponent,
+      column: true,
+      codeData: COLLAPSIBLE_DEMO_SETTINGS_PANEL,
+    },
+    {
+      name: 'file-tree',
+      description:
+        'A recursive file explorer: every folder is its own `z-collapsible` whose content renders the same template again, so nested folders open and close independently of one another.',
+      component: ZardDemoCollapsibleFileTreeComponent,
+      column: true,
+      codeData: COLLAPSIBLE_DEMO_FILE_TREE,
+    },
     {
       name: 'controlled',
       description:

@@ -3,6 +3,11 @@
   "title": "Sidebar 14",
   "description": "A sidebar on the right.",
   "category": "Sidebar",
+  "registryDependencies": [
+    "breadcrumb",
+    "sidebar"
+  ],
+  "dependencies": [],
   "files": [
     {
       "name": "sidebar-14-app-sidebar.component.html",
@@ -19,7 +24,7 @@
     {
       "name": "sidebar-14.component.html",
       "path": "src/components/sidebar-14/sidebar-14.component.html",
-      "content": "<z-sidebar-provider>\n  <main z-sidebar-inset>\n    <header class=\"flex h-16 shrink-0 items-center gap-2 border-b px-4\">\n      <z-breadcrumb>\n        <z-breadcrumb-item class=\"hidden md:block\">\n          <a z-breadcrumb-link href=\"#\">Build Your Application</a>\n        </z-breadcrumb-item>\n        <z-breadcrumb-separator class=\"hidden md:block\" />\n        <z-breadcrumb-item>\n          <span z-breadcrumb-page>Data Fetching</span>\n        </z-breadcrumb-item>\n      </z-breadcrumb>\n\n      <button z-sidebar-trigger class=\"-mr-1 ml-auto rotate-180\" aria-label=\"Toggle Sidebar\"></button>\n    </header>\n\n    <div class=\"flex flex-1 flex-col gap-4 p-4\">\n      <div class=\"grid auto-rows-min gap-4 md:grid-cols-3\">\n        <div class=\"bg-muted/50 aspect-video rounded-xl\"></div>\n        <div class=\"bg-muted/50 aspect-video rounded-xl\"></div>\n        <div class=\"bg-muted/50 aspect-video rounded-xl\"></div>\n      </div>\n      <div class=\"bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min\"></div>\n    </div>\n  </main>\n\n  <lib-sidebar-14-app-sidebar />\n</z-sidebar-provider>\n",
+      "content": "<z-sidebar-provider zDefaultOpen=\"true\">\n  <main z-sidebar-inset>\n    <header class=\"flex h-16 shrink-0 items-center gap-2 border-b px-4\">\n      <z-breadcrumb>\n        <z-breadcrumb-item class=\"hidden md:block\">\n          <a z-breadcrumb-link href=\"#\">Build Your Application</a>\n        </z-breadcrumb-item>\n        <z-breadcrumb-separator class=\"hidden md:block\" />\n        <z-breadcrumb-item>\n          <span z-breadcrumb-page>Data Fetching</span>\n        </z-breadcrumb-item>\n      </z-breadcrumb>\n\n      <button z-sidebar-trigger class=\"-mr-1 ml-auto rotate-180\" aria-label=\"Toggle Sidebar\"></button>\n    </header>\n\n    <div class=\"flex flex-1 flex-col gap-4 p-4\">\n      <div class=\"grid auto-rows-min gap-4 md:grid-cols-3\">\n        <div class=\"bg-muted/50 aspect-video rounded-xl\"></div>\n        <div class=\"bg-muted/50 aspect-video rounded-xl\"></div>\n        <div class=\"bg-muted/50 aspect-video rounded-xl\"></div>\n      </div>\n      <div class=\"bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min\"></div>\n    </div>\n  </main>\n\n  <lib-sidebar-14-app-sidebar />\n</z-sidebar-provider>\n",
       "language": "html"
     },
     {

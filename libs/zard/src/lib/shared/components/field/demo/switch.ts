@@ -10,7 +10,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
     <div class="flex w-full min-w-xs justify-center">
       <div z-field zOrientation="horizontal" class="w-fit">
         <label z-field-label for="2fa">Multi-factor authentication</label>
-        <z-switch zId="2fa" zSize="sm" />
+        <z-switch zId="2fa" />
       </div>
     </div>
   `,

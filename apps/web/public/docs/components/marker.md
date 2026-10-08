@@ -31,7 +31,7 @@ import {
 import { NgIcon } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { markerContentVariants, markerIconVariants, markerVariants, type ZardMarkerVariants } from './marker.variants';
@@ -194,49 +194,9 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 
 ## Examples
 
-### Default
+### Variants
 
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideGitBranch, lucideSearch } from '@ng-icons/lucide';
-
-import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
-import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
-
-@Component({
-  selector: 'z-demo-marker-default',
-  imports: [NgIcon, ZardSpinnerComponent, ...ZardMarkerImports],
-  template: `
-    <div class="flex w-full max-w-sm min-w-sm flex-col gap-8">
-      <z-marker>
-        <z-marker-icon><ng-icon name="lucideGitBranch" /></z-marker-icon>
-        <z-marker-content>Switched to a new branch</z-marker-content>
-      </z-marker>
-
-      <z-marker role="status">
-        <z-marker-icon><z-spinner /></z-marker-icon>
-        <z-marker-content class="shimmer">Thinking...</z-marker-content>
-      </z-marker>
-
-      <z-marker zVariant="separator">
-        <z-marker-content>Conversation compacted</z-marker-content>
-      </z-marker>
-
-      <z-marker>
-        <z-marker-icon><ng-icon name="lucideSearch" /></z-marker-icon>
-        <z-marker-content>Explored 4 files</z-marker-content>
-      </z-marker>
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideGitBranch, lucideSearch })],
-})
-export class ZardDemoMarkerDefaultComponent {}
-```
-
-### Variant
+The three `zVariant` values on `z-marker`: `default` for a plain inline row, `border` for a row with a bottom rule, and `separator` for a centered label with divider lines on each side.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -244,7 +204,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 
 @Component({
-  selector: 'z-demo-marker-variant',
+  selector: 'z-demo-marker-variants',
   imports: [...ZardMarkerImports],
   template: `
     <div class="flex w-full max-w-sm min-w-sm flex-col gap-8">
@@ -263,10 +223,12 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoMarkerVariantComponent {}
+export class ZardDemoMarkerVariantsComponent {}
 ```
 
 ### Status
+
+Set `role="status"` on `z-marker` and project the real `z-spinner` into `z-marker-icon` so a streaming or in-progress row is announced to assistive tech as it updates.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -297,6 +259,8 @@ export class ZardDemoMarkerStatusComponent {}
 
 ### Shimmer
 
+Add the `shimmer` utility class to `z-marker-content` for an animated streaming-text effect — it turns off automatically when the user prefers reduced motion.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -322,6 +286,8 @@ export class ZardDemoMarkerShimmerComponent {}
 ```
 
 ### Separator
+
+Set `zVariant="separator"` on `z-marker` for a centered label with divider lines on each side, such as a date or a section break in a conversation.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -352,6 +318,8 @@ export class ZardDemoMarkerSeparatorComponent {}
 ```
 
 ### Border
+
+Set `zVariant="border"` on `z-marker` for a status row that keeps the default alignment while adding a bottom rule that separates it from the next row.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -388,7 +356,9 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 export class ZardDemoMarkerBorderComponent {}
 ```
 
-### Icon
+### With Icon
+
+Project `z-marker-icon` alongside `z-marker-content` to pair an icon with the row. Add `class="flex-col"` on `z-marker` to stack the icon above the content instead of beside it.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -399,7 +369,7 @@ import { lucideBookOpenCheck, lucideGitBranch, lucideSearch } from '@ng-icons/lu
 import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 
 @Component({
-  selector: 'z-demo-marker-icon',
+  selector: 'z-demo-marker-with-icon',
   imports: [NgIcon, ...ZardMarkerImports],
   template: `
     <div class="flex w-full max-w-sm min-w-sm flex-col gap-12">
@@ -422,10 +392,12 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBookOpenCheck, lucideGitBranch, lucideSearch })],
 })
-export class ZardDemoMarkerIconComponent {}
+export class ZardDemoMarkerWithIconComponent {}
 ```
 
-### Link
+### Links And Buttons
+
+Apply the `[z-marker]` attribute selector to a native `a` or `button` so the whole row becomes an interactive link or action. The root already underlines and hovers-to-foreground an `a`; give a `button` its own hover class, since that built-in styling only targets `a`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -437,7 +409,7 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'z-demo-marker-link',
+  selector: 'z-demo-marker-links-and-buttons',
   imports: [NgIcon, ...ZardMarkerImports],
   template: `
     <div class="flex w-full max-w-sm min-w-sm flex-col gap-8">
@@ -455,7 +427,7 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideGitBranch, lucideRotateCcw })],
 })
-export class ZardDemoMarkerLinkComponent {
+export class ZardDemoMarkerLinksAndButtonsComponent {
   private readonly sonner = inject(ZardSonnerService);
 
   revert() {
@@ -465,6 +437,8 @@ export class ZardDemoMarkerLinkComponent {
 ```
 
 ### Shorthand
+
+A zard-only shorthand: a `z-marker` with no projected `z-marker-content` builds the row itself, so `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>` is one tag. Project the explicit `z-marker-content` (and `z-marker-icon`) slots when you need a class override such as `shimmer`, or an icon that is a whole component like `z-spinner`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -502,7 +476,7 @@ export class ZardDemoMarkerShorthandComponent {}
 
 ## API Reference
 
-### z-marker, [z-marker]
+### z-marker
 
 Root of an inline conversation marker. Content projected without a `z-marker-content` child gets the content surface for free, so `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>` is a complete row. Use the attribute selector on an `a` or `button` to make the whole marker interactive, and set `role="status"` for streaming or in-progress markers.
 
@@ -512,7 +486,7 @@ Root of an inline conversation marker. Content projected without a `z-marker-con
 | `[zIcon]` | Icon rendered in the decorative icon slot. A string is the `@ng-icons` name to render — register it with `provideIcons` — and a template is rendered as is. Ignored when a `z-marker-icon` is projected. | `string \| TemplateRef<void>` | `-` |
 | `[class]` | Override or extend default classes. | `ClassValue` | `-` |
 
-### z-marker-icon, [z-marker-icon]
+### z-marker-icon
 
 Decorative icon slot, hidden from assistive tech with `aria-hidden`. Project it when the icon is a component such as `z-spinner`; otherwise `zIcon` on the root is enough.
 
@@ -520,7 +494,7 @@ Decorative icon slot, hidden from assistive tech with `aria-hidden`. Project it 
 | --- | --- | --- | --- |
 | `[class]` | Override or extend default classes. | `ClassValue` | `-` |
 
-### z-marker-content, [z-marker-content]
+### z-marker-content
 
 Text content of the marker. Optional — the root wraps bare projected content in this surface. Project it to add classes such as `shimmer`, an animated streaming-text effect that is disabled automatically when the user prefers reduced motion.
 

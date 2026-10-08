@@ -10,6 +10,8 @@ import {
   BLOCK_6,
   BLOCK_7,
   BLOCK_8,
+  BLOCK_9,
+  BLOCK_10,
 } from '@generated/pages/cli/commands';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
@@ -128,7 +130,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       — Working directory, defaults to the current one
       <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-a, --all</code>
-      — Add every available component
+      — Add every available component. Blocks are not included; they are added by name
       <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-p, --path &lt;path&gt;</code>
       — Write the components somewhere other than the configured alias
@@ -168,6 +170,27 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     </p>
     <z-code-block [data]="addDarkMode" />
 
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <strong>Blocks:</strong>
+      a block is a whole screen already composed — a login form, a dashboard — and it installs by name, like a
+      component. It carries the components it uses, so running it on a project that has none of them still leaves you
+      with a block that compiles.
+    </p>
+    <z-code-block [data]="addBlock" />
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Each block is written to a directory of its own, under the
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">blocks</code>
+      alias of
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
+      —
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">@/shared/blocks</code>
+      unless you changed it.
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--path</code>
+      moves them elsewhere, still one directory per block, and the components they need follow along.
+    </p>
+    <z-code-block [data]="addBlockPath" />
+
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Global options</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-v, --version</code>
@@ -191,4 +214,6 @@ export class CliCommandsSectionComponent {
   readonly addInteractive: CodeBlockData = BLOCK_6;
   readonly addDarkMode: CodeBlockData = BLOCK_7;
   readonly globalOptions: CodeBlockData = BLOCK_8;
+  readonly addBlock: CodeBlockData = BLOCK_9;
+  readonly addBlockPath: CodeBlockData = BLOCK_10;
 }

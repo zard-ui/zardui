@@ -60,6 +60,7 @@ class ZardDemoCommandGroupsDialogComponent implements AfterViewInit {
   template: `
     <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCommandGroupsComponent {
   private readonly dialogService = inject(ZardDialogService);

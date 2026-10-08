@@ -3,6 +3,13 @@
   "title": "Signup form",
   "description": "A simple signup form.",
   "category": "Signup",
+  "registryDependencies": [
+    "button",
+    "card",
+    "field",
+    "input"
+  ],
+  "dependencies": [],
   "files": [
     {
       "name": "signup-01.component.html",

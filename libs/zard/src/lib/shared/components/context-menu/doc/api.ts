@@ -47,7 +47,8 @@ export const CONTEXT_MENU_API: ApiSection[] = [
   },
   {
     selector: 'z-dropdown-menu-content',
-    description: 'The menu surface. Every item primitive below is declared inside it.',
+    description:
+      'The menu surface. Every item primitive below is declared inside it. Placement is automatic — the menu opens at the pointer and flips to whichever quadrant keeps it on screen. The `zSide`/`zAlign`/`zSideOffset` inputs this component also has are for `z-dropdown`; a context menu has no anchor element to be a side or an alignment of, so they have no effect here.',
     props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
@@ -82,7 +83,8 @@ export const CONTEXT_MENU_API: ApiSection[] = [
   },
   {
     selector: 'z-dropdown-menu-sub-content',
-    description: 'Surface of a submenu. Declared next to its sub-trigger and referenced by it.',
+    description:
+      'Surface of a submenu. Declared next to its sub-trigger and referenced by it. It has no `side`/`align` inputs — the submenu always opens beside its trigger and flips to the opposite side when the preferred one runs out of room, the same automatic behaviour a native OS submenu has.',
     props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
@@ -91,6 +93,12 @@ export const CONTEXT_MENU_API: ApiSection[] = [
     props: [
       { name: '[(zChecked)]', description: 'Checked state for the item.', type: 'boolean', default: 'false' },
       { name: '[zDisabled]', description: 'Disables the item.', type: 'boolean', default: 'false' },
+      {
+        name: '[zType]',
+        description: 'Visual type of the item.',
+        type: "'default' | 'destructive'",
+        default: "'default'",
+      },
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
     ],
   },
@@ -113,6 +121,12 @@ export const CONTEXT_MENU_API: ApiSection[] = [
     props: [
       { name: '[zValue]', description: 'Value represented by this radio item.', type: 'string', default: '-' },
       { name: '[zDisabled]', description: 'Disables the item.', type: 'boolean', default: 'false' },
+      {
+        name: '[zType]',
+        description: 'Visual type of the item.',
+        type: "'default' | 'destructive'",
+        default: "'default'",
+      },
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
     ],
   },

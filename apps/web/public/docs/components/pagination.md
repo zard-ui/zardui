@@ -128,7 +128,7 @@ export class ZardPaginationButtonComponent {
       [zDisabled]="zDisabled()"
     >
       <span class="sr-only">To previous page</span>
-      <ng-icon name="lucideChevronLeft" aria-hidden="true" />
+      <ng-icon name="lucideChevronLeft" aria-hidden="true" class="rtl:rotate-180" />
       <span class="hidden sm:block" aria-hidden="true">Previous</span>
     </button>
   `,
@@ -159,7 +159,7 @@ export class ZardPaginationPreviousComponent {
     >
       <span class="sr-only">To next page</span>
       <span class="hidden sm:block" aria-hidden="true">Next</span>
-      <ng-icon name="lucideChevronRight" aria-hidden="true" />
+      <ng-icon name="lucideChevronRight" aria-hidden="true" class="rtl:rotate-180" />
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -397,7 +397,7 @@ import { ZardPaginationImports } from '@/shared/components/pagination';
 import { ZardSelectImports } from '@/shared/components/select';
 
 @Component({
-  selector: 'z-demo-pagination-iconsonly',
+  selector: 'z-demo-pagination-icons-only',
   imports: [ZardPaginationImports, ZardFieldImports, ZardSelectImports],
   template: `
     <div class="flex w-full justify-around">
@@ -450,22 +450,128 @@ export class ZardDemoPaginationIconsOnlyComponent {
 }
 ```
 
+### Routing
+
+Wire `a[z-pagination-button]` to Angular `RouterLink` with `[queryParams]` and `queryParamsHandling="merge"` so page links drive real router navigation — the URL updates and the page is bookmarkable, with no full reload.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
+
+import { paginationNextVariants, paginationPreviousVariants } from '@/shared/components/pagination/pagination.variants';
+
+import { ZardPaginationImports } from '../pagination.imports';
+
+@Component({
+  selector: 'z-demo-pagination-routing',
+  imports: [ZardPaginationImports, RouterLink, NgIcon],
+  template: `
+    <z-pagination
+      zAriaLabel="Routing pagination"
+      [zTotal]="totalPages"
+      [zPageIndex]="currentPage()"
+      [zContent]="content"
+    />
+
+    <ng-template #content>
+      <ul z-pagination-content>
+        <li z-pagination-item>
+          <a
+            z-pagination-button
+            zSize="default"
+            [class]="previousClasses"
+            [zDisabled]="currentPage() === 1"
+            [routerLink]="currentPage() === 1 ? null : []"
+            [queryParams]="{ page: previousPage() }"
+            queryParamsHandling="merge"
+            [attr.aria-disabled]="currentPage() === 1 ? 'true' : null"
+          >
+            <span class="sr-only">Go to previous page</span>
+            <ng-icon name="lucideChevronLeft" aria-hidden="true" />
+            <span class="hidden sm:block" aria-hidden="true">Previous</span>
+          </a>
+        </li>
+
+        @for (page of pages; track page) {
+          <li z-pagination-item>
+            <a
+              z-pagination-button
+              [routerLink]="[]"
+              [queryParams]="{ page }"
+              queryParamsHandling="merge"
+              [zActive]="page === currentPage()"
+              [attr.aria-current]="page === currentPage() ? 'page' : null"
+            >
+              <span class="sr-only">To page</span>
+              {{ page }}
+            </a>
+          </li>
+        }
+
+        <li z-pagination-item>
+          <a
+            z-pagination-button
+            zSize="default"
+            [class]="nextClasses"
+            [zDisabled]="currentPage() === totalPages"
+            [routerLink]="currentPage() === totalPages ? null : []"
+            [queryParams]="{ page: nextPage() }"
+            queryParamsHandling="merge"
+            [attr.aria-disabled]="currentPage() === totalPages ? 'true' : null"
+          >
+            <span class="sr-only">Go to next page</span>
+            <span class="hidden sm:block" aria-hidden="true">Next</span>
+            <ng-icon name="lucideChevronRight" aria-hidden="true" />
+          </a>
+        </li>
+      </ul>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
+})
+export class ZardDemoPaginationRoutingComponent {
+  private readonly route = inject(ActivatedRoute);
+
+  protected readonly totalPages = 5;
+  protected readonly pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  protected readonly previousClasses = paginationPreviousVariants();
+  protected readonly nextClasses = paginationNextVariants();
+
+  private readonly queryParamMap = toSignal(this.route.queryParamMap, {
+    initialValue: this.route.snapshot.queryParamMap,
+  });
+
+  protected readonly currentPage = computed(() => {
+    const page = Number(this.queryParamMap().get('page'));
+    return Number.isInteger(page) && page >= 1 && page <= this.totalPages ? page : 1;
+  });
+
+  protected readonly previousPage = computed(() => Math.max(1, this.currentPage() - 1));
+  protected readonly nextPage = computed(() => Math.min(this.totalPages, this.currentPage() + 1));
+}
+```
+
 ## API Reference
 
 ### z-pagination
 
-Pagination component with previous, next, and numbered page navigation. Supports two-way binding via [(zPageIndex)] model signal.
+Renders as a `role="group"` element (not a `<nav>` landmark) with an `[zAriaLabel]`-driven accessible name. Given `[zTotal]` and `[(zPageIndex)]`, it renders and manages the full previous/numbers/next navigation itself and calls `goToPage()` internally on click; pass `[zContent]` to replace that markup with your own composition (e.g. to wire real `routerLink`/`href` page links), in which case `[zTotal]`/`[zPageIndex]`/`[zSimple]`/`[zSize]`/`[zDisabled]` are ignored by the root and it is up to the projected content to use them.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zPageIndex]` | Current page, two-way bindable | `number` | `1` |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `[zAriaLabel]` | Use a unique, descriptive ARIA label for the element. | `string` | `Pagination` |
-| `[zContent]` | Custom pagination structure | `TemplateRef<void> \| undefined` | `undefined` |
+| `[zAriaLabel]` | Accessible name for the pagination element, rendered as its aria-label. | `string` | `'Pagination'` |
+| `[zContent]` | Custom pagination structure, replacing the built-in previous/numbers/next markup. | `TemplateRef<void> \| undefined` | `undefined` |
 | `[zDisabled]` | Disables pagination interaction | `boolean` | `false` |
+| `[zPageIndex]` | Current page, two-way bindable | `number` | `1` |
 | `[(zPageIndex)]` | Current page index | `number` | `1` |
 | `[zSimple]` | A simple pagination with only page numbers. | `boolean` | `false` |
-| `[zSize]` | Button size | `'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'icon'` |
+| `[zSize]` | Size of the numbered page buttons. | `'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'icon'` |
 | `[zTotal]` | Total number of pages | `number` | `1` |
 
 ### ul[z-pagination-content]
@@ -480,20 +586,20 @@ Container (unordered list) for pagination content (buttons and ellipsis).
 
 Wraps a pagination button or ellipsis as li element of container.
 
-### button[z-pagination-button], a[z-pagination-button]
+### button[z-pagination-button]
 
-Pagination button with support for active and disabled states.
+A single page button, styled via an internal z-button. Also usable as `a[z-pagination-button]` — render it on an anchor and stack Angular's `RouterLink` (this directive does not reimplement router inputs of its own) to make page links drive real navigation, as the `routing` example does.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
 | `[zActive]` | Whether the button is currently active | `boolean` | `false` |
 | `[zDisabled]` | Whether the button is disabled | `boolean` | `false` |
-| `[zSize]` | Button size | `'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'icon'` |
+| `[zSize]` | Button size | `'default' \| 'xs' \| 'sm' \| 'lg' \| 'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'icon'` |
 
 ### z-pagination-previous
 
-Button to navigate to the previous page.
+Button to navigate to the previous page. Its "Previous" text and "To previous page" screen-reader label are fixed, not exposed as an input — for a translated or custom label, build the previous button yourself with a `[zContent]` template instead.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -503,7 +609,7 @@ Button to navigate to the previous page.
 
 ### z-pagination-next
 
-Button to navigate to the next page.
+Button to navigate to the next page. Its "Next" text and "To next page" screen-reader label are fixed, not exposed as an input — for a translated or custom label, build the next button yourself with a `[zContent]` template instead.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

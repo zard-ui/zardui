@@ -7,15 +7,26 @@
   phone — the code hidden, the preview on top and the controls within thumb
   reach — and flex-row-reverse flips it on a desktop, where the customizer is
   the left column.
+
+  Three bands, not two: the strip customizer now runs through `lg` (1024px),
+  not just `md` (768px) — a 768–1023px laptop gets the full-width strip
+  instead of a column squeezed to 192px beside it. The code panel still
+  arrives at `xl` (1280px) unchanged; `min-w-0` on the preview is what keeps
+  that arrival safe — without it, the preview refuses to shrink below its
+  prose's natural width (a flexbox default), and the fixed-width columns
+  around it get pushed off-screen instead. With it, the preview shrinks to
+  whatever the row has left and, only if that is narrower than the chosen
+  measure, scrolls its own prose horizontally rather than clipping anything
+  (see the preview component's `overflow-x-auto` utility).
 -->
 <section class="flex h-[calc(100svh-var(--header-height))] min-h-0 flex-col overflow-hidden">
-  <div class="flex min-h-0 flex-1 flex-col gap-4 p-4 pt-1 md:flex-row-reverse md:gap-6 md:p-6 md:pt-1.5">
+  <div class="flex min-h-0 flex-1 flex-col gap-4 p-4 pt-1 md:gap-6 md:p-6 md:pt-1.5 lg:flex-row-reverse">
     <div class="hidden min-h-0 xl:block xl:w-88 2xl:w-104">
       <z-typeset-code-panel />
     </div>
 
-    <z-typeset-preview class="min-h-0 w-full flex-1" />
+    <z-typeset-preview class="min-h-0 w-full min-w-0 flex-1" />
 
-    <z-typeset-customizer class="w-full shrink-0 self-start md:w-48 2xl:w-56" />
+    <z-typeset-customizer class="w-full shrink-0 self-start lg:w-48 2xl:w-56" />
   </div>
 </section>

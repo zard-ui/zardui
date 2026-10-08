@@ -1,0 +1,20 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardAvatarGroupCountComponent } from '@/shared/components/avatar/avatar-group-count.component';
+import { ZardAvatarGroupComponent } from '@/shared/components/avatar/avatar-group.component';
+import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
+
+@Component({
+  selector: 'z-demo-avatar-group-count',
+  imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardAvatarGroupCountComponent],
+  template: `
+    <z-avatar-group class="grayscale">
+      <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zFallback="JD" />
+      <z-avatar zSrc="https://github.com/srizzon.png" zFallback="SA" />
+      <z-avatar zSrc="https://github.com/Luizgomess.png" zFallback="LU" />
+      <z-avatar-group-count [zCount]="3" />
+    </z-avatar-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoAvatarGroupCountComponent {}

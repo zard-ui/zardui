@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
 
 @Component({
   selector: 'z-demo-radio-group-fieldset',
-  imports: [...ZardRadioGroupImports, ...ZardFieldImports, FormsModule],
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
   template: `
     <fieldset z-field-set class="w-full max-w-xs">
       <legend z-field-legend zVariant="label">Subscription Plan</legend>
@@ -27,6 +26,7 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
       </z-radio-group>
     </fieldset>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoRadioGroupFieldsetComponent {
   plan: unknown = 'monthly';

@@ -12,7 +12,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
   imports: [ZardInputComponent, ZardKbdComponent, NgIcon, ...ZardInputGroupImports],
   template: `
     <z-input-group class="min-w-sm">
-      <input z-input placeholder="Search..." />
+      <input z-input id="input-group-kbd-search" placeholder="Search..." />
       <z-input-group-addon>
         <ng-icon name="lucideSearch" class="text-muted-foreground" />
       </z-input-group-addon>

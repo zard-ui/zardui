@@ -129,3 +129,24 @@ describe('sectionOf', () => {
     expect(sectionOf(page, 'Accessibility')).toBeNull();
   });
 });
+
+/**
+ * A failed fetch of the index must not be cached: an empty index would hide
+ * every guide and description until the cache expired, long after the site
+ * came back.
+ */
+describe('docsService llms.txt caching', () => {
+  const LLMS = '## Get Started\n\n- [Theming](https://zardui.com/docs/theming): Tokens.\n';
+
+  it('retries after a 503 instead of serving an empty index', async () => {
+    const fetchMock = jest
+      .fn()
+      .mockResolvedValueOnce(new Response('down', { status: 503 }))
+      .mockResolvedValueOnce(new Response(LLMS, { status: 200, headers: { 'content-type': 'text/plain' } }));
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
+
+    expect((await docsService.getGuides()).size).toBe(0);
+    expect([...(await docsService.getGuides()).keys()]).toEqual(['theming']);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+});

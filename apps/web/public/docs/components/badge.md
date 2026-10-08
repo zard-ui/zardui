@@ -92,7 +92,9 @@ import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 
 ## Examples
 
-### Default
+### Variants
+
+Set `zType` to switch between the six variants the badge implements: default, secondary, destructive, outline, ghost and link.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -100,7 +102,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardBadgeComponent } from '../badge.component';
 
 @Component({
-  selector: 'z-demo-badge-default',
+  selector: 'z-demo-badge-variants',
   imports: [ZardBadgeComponent],
   template: `
     <div class="flex flex-col items-center gap-2">
@@ -110,15 +112,18 @@ import { ZardBadgeComponent } from '../badge.component';
         <z-badge zType="destructive">Destructive</z-badge>
         <z-badge zType="outline">Outline</z-badge>
         <z-badge zType="ghost">Ghost</z-badge>
+        <z-badge zType="link">Link</z-badge>
       </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoBadgeDefaultComponent {}
+export class ZardDemoBadgeVariantsComponent {}
 ```
 
-### With Icons
+### With Icon
+
+Project an icon before or after the badge text to place it at the start or end.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -129,27 +134,60 @@ import { lucideBadgeCheck, lucideBookmark } from '@ng-icons/lucide';
 import { ZardBadgeComponent } from '../badge.component';
 
 @Component({
-  selector: 'z-demo-badge-with-icons',
+  selector: 'z-demo-badge-with-icon',
   imports: [ZardBadgeComponent, NgIcon],
   template: `
     <div class="flex w-full flex-wrap gap-2">
       <z-badge zType="secondary">
-        <ng-icon name="lucideBadgeCheck" />
+        <ng-icon name="lucideBadgeCheck" data-icon="inline-start" />
         Verified
       </z-badge>
       <z-badge zType="outline">
         Bookmark
-        <ng-icon name="lucideBookmark" />
+        <ng-icon name="lucideBookmark" data-icon="inline-end" />
       </z-badge>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBadgeCheck, lucideBookmark })],
 })
-export class ZardDemoBadgeWithIconsComponent {}
+export class ZardDemoBadgeWithIconComponent {}
+```
+
+### With Spinner
+
+Compose `z-spinner` inside a badge to show a loading state.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
+
+import { ZardBadgeComponent } from '../badge.component';
+
+@Component({
+  selector: 'z-demo-badge-with-spinner',
+  imports: [ZardBadgeComponent, ZardSpinnerComponent],
+  template: `
+    <div class="flex w-full flex-wrap gap-2">
+      <z-badge zType="destructive">
+        <z-spinner data-icon="inline-start" />
+        Deleting
+      </z-badge>
+      <z-badge zType="secondary">
+        <z-spinner data-icon="inline-start" />
+        Generating
+      </z-badge>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoBadgeWithSpinnerComponent {}
 ```
 
 ### Link
+
+Apply `z-badge` to a native `<a>` so the badge behaves as a real link.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -180,6 +218,8 @@ export class ZardDemoBadgeLinkComponent {}
 ```
 
 ### Custom Colors
+
+Override the default colors by passing custom classes through `class`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';

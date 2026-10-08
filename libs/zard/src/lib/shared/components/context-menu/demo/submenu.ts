@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-submenu-demo',
+  selector: 'z-demo-context-menu-submenu',
   imports: [ZardContextMenuImports],
   template: `
     <div
@@ -38,7 +38,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuSubmenuDemoComponent {
+export class ZardDemoContextMenuSubmenuComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }

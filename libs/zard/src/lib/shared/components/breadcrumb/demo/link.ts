@@ -6,12 +6,12 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
   selector: 'z-demo-breadcrumb-link',
   imports: [ZardBreadcrumbImports],
   template: `
-    <z-breadcrumb zLabel="Router breadcrumb">
+    <z-breadcrumb zLabel="Breadcrumb with Angular routing">
       <z-breadcrumb-item>
-        <a z-breadcrumb-link routerLink="/">Home</a>
+        <a z-breadcrumb-link [routerLink]="['/']">Home</a>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
-        <a z-breadcrumb-link routerLink="/docs/components">Components</a>
+        <a z-breadcrumb-link [routerLink]="['/docs/components']">Components</a>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
         <span z-breadcrumb-page>Breadcrumb</span>

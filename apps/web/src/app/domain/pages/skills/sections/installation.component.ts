@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { TABS_0, BLOCK_1 } from '@generated/pages/skills/installation';
+import { TABS_0, TABS_1, BLOCK_2 } from '@generated/pages/skills/installation';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
@@ -17,25 +17,47 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <a class="text-foreground underline underline-offset-4" href="https://skills.sh" target="_blank" rel="noopener">
         skills
       </a>
-      CLI installs it from this repository. It asks whether to install for the project or globally, and which agents to
-      install it for.
+      CLI installs from this repository. Because it hosts two skills, the command names which one with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--skill</code>
+      . It asks whether to install for the project or globally, and which agents to install it for.
     </p>
-    <z-code-tabs [data]="installTabs" />
+    <z-code-tabs [data]="zardTabs" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Installed for the project, it lands in
+      Migrating a project pinned to an older zard/ui — renamed selectors, a recomposed
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">card</code>
+      or
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">input-group</code>
+      , source that predates the
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">core</code>
+      /
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">utilities</code>
+      split? Install
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-migration</code>
+      instead, or in addition, with its own
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--skill</code>
+      :
+    </p>
+    <z-code-tabs [data]="migrationTabs" />
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Both commands can be run in the same project — they write to separate directories and don't conflict. Installed
+      for the project, they land in
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">.claude/skills/zard</code>
-      — one main file and a set of references it links to, so that a rule is only read when it is needed:
+      and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">.claude/skills/zard-migration</code>
+      — each a main file and a set of references it links to, so that a rule is only read when it is needed:
     </p>
     <z-code-block [data]="tree" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Nothing else to configure. Committing the installed directory is what makes the skill available to everyone
+      Nothing else to configure. Committing the installed directories is what makes the skills available to everyone
       working on the project, rather than to whoever ran the command.
     </p>
   `,
 })
 export class SkillsInstallationSectionComponent {
-  readonly installTabs: CodeTabData = TABS_0;
-  readonly tree: CodeBlockData = BLOCK_1;
+  readonly zardTabs: CodeTabData = TABS_0;
+  readonly migrationTabs: CodeTabData = TABS_1;
+  readonly tree: CodeBlockData = BLOCK_2;
 }

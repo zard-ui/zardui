@@ -1,3 +1,68 @@
+## 1.0.0-beta.128 (2026-10-08)
+
+### 🐛 Bug Fixes
+
+- add rtl support across components ([#746](https://github.com/zard-ui/zardui/pull/746))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+- Roman Mykhailiuk @JustDo1t90
+- Seyed Sadeq Shobeiry @shobeiry
+
+## 1.0.0-beta.127 (2026-10-07)
+
+### ✨ Features
+
+- **mcp:** fuzzy search, did-you-mean errors, annotations, instructions ([#728](https://github.com/zard-ui/zardui/pull/728))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
+## 1.0.0-beta.126 (2026-10-07)
+
+### 🐛 Bug Fixes
+
+- **dialog:** match the service layout to the declarative form ([#744](https://github.com/zard-ui/zardui/pull/744))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
+## 1.0.0-beta.125 (2026-10-07)
+
+### ✨ Features
+
+- ⚠️  pre-release docs review, declarative overlays and v1 polish ([#741](https://github.com/zard-ui/zardui/pull/741))
+- ⚠️  land the rest of the pre-release upgrade missing from #741 ([#742](https://github.com/zard-ui/zardui/pull/742), [#741](https://github.com/zard-ui/zardui/issues/741))
+
+### 🐛 Bug Fixes
+
+- **calendar:** resolve invalid ARIA structure in calendar grid ([#734](https://github.com/zard-ui/zardui/pull/734))
+- **select:** return focus to trigger after option selection ([#738](https://github.com/zard-ui/zardui/pull/738))
+- **select:** prevent premature open on host focus in Safari ([#733](https://github.com/zard-ui/zardui/pull/733))
+
+### ⚠️  Breaking Changes
+
+- land the rest of the pre-release upgrade missing from #741  ([#742](https://github.com/zard-ui/zardui/pull/742), [#741](https://github.com/zard-ui/zardui/issues/741))
+- pre-release docs review, declarative overlays and v1 polish  ([#741](https://github.com/zard-ui/zardui/pull/741))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+- Roman Mykhailiuk @JustDo1t90
+
+## 1.0.0-beta.124 (2026-09-29)
+
+### 🐛 Bug Fixes
+
+- **select:** return focus to trigger after option selection ([#738](https://github.com/zard-ui/zardui/pull/738))
+
+### ❤️ Thank You
+
+- Roman Mykhailiuk @JustDo1t90
+
 ## 1.0.0-beta.123 (2026-09-26)
 
 This was a version bump only, there were no code changes.

@@ -844,7 +844,7 @@ export class Sidebar15TeamSwitcherComponent {
     {
       name: 'sidebar-15.component.html',
       path: 'src/components/sidebar-15/sidebar-15.component.html',
-      content: `<z-sidebar-provider>
+      content: `<z-sidebar-provider zDefaultOpen="true">
   <lib-sidebar-15-sidebar-left />
 
   <main z-sidebar-inset>

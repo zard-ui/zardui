@@ -52,12 +52,16 @@ const configSchema = z.object({
       utils: z.string().default('@/shared/utils'),
       core: z.string().default('@/shared/core'),
       services: z.string().default('@/shared/services'),
+      // Absent from files written before blocks were installable; those get the
+      // default, which is where `init` would have put it anyway.
+      blocks: z.string().default('@/shared/blocks'),
     })
     .default({
       components: '@/shared/components',
       utils: '@/shared/utils',
       core: '@/shared/core',
       services: '@/shared/services',
+      blocks: '@/shared/blocks',
     }),
 });
 
@@ -80,6 +84,7 @@ export const DEFAULT_CONFIG: Config = {
     utils: '@/shared/utils',
     core: '@/shared/core',
     services: '@/shared/services',
+    blocks: '@/shared/blocks',
   },
 };
 
@@ -147,6 +152,7 @@ export async function resolveConfigPaths(cwd: string, config: Config) {
       utils: path.resolve(cwd, resolveAliasToPath(aliases.utils, baseUrl)),
       core: path.resolve(cwd, resolveAliasToPath(aliases.core, baseUrl)),
       services: path.resolve(cwd, resolveAliasToPath(aliases.services, baseUrl)),
+      blocks: path.resolve(cwd, resolveAliasToPath(aliases.blocks, baseUrl)),
     },
   };
 }

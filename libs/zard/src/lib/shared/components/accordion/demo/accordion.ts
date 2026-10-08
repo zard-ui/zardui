@@ -1,6 +1,6 @@
 import { ACCORDION_DEMO_BASIC } from '@generated/components/accordion/demo/basic';
 import { ACCORDION_DEMO_BORDERS } from '@generated/components/accordion/demo/borders';
-import { ACCORDION_DEMO_CARDS } from '@generated/components/accordion/demo/cards';
+import { ACCORDION_DEMO_CARD } from '@generated/components/accordion/demo/card';
 import { ACCORDION_DEMO_DISABLED } from '@generated/components/accordion/demo/disabled';
 import { ACCORDION_DEMO_MULTIPLE } from '@generated/components/accordion/demo/multiple';
 import { ACCORDION_DEMO_PREVIEW } from '@generated/components/accordion/demo/preview';
@@ -10,7 +10,7 @@ import { ACCORDION_USAGE_IMPORT, ACCORDION_USAGE_CODE } from '@generated/usage/a
 
 import { ZardDemoAccordionBasicComponent } from './basic';
 import { ZardDemoAccordionBordersComponent } from './borders';
-import { ZardDemoAccordionCardComponent } from './cards';
+import { ZardDemoAccordionCardComponent } from './card';
 import { ZardDemoAccordionDisabledComponent } from './disabled';
 import { ZardDemoAccordionMultipleComponent } from './multiple';
 import { ZardDemoAccordionPreviewComponent } from './preview';
@@ -42,14 +42,14 @@ export const ACCORDION = {
     },
     {
       name: 'multiple',
-      description: 'Use `type="multiple"` to allow multiple items to be open at the same time.',
+      description: 'Use `zType="multiple"` to allow multiple items to be open at the same time.',
       component: ZardDemoAccordionMultipleComponent,
       column: true,
       codeData: ACCORDION_DEMO_MULTIPLE,
     },
     {
       name: 'disabled',
-      description: 'Use the `disabled` prop on `AccordionItem` to disable individual items.',
+      description: 'Use the `zDisabled` input on `z-accordion-item` to disable individual items.',
       component: ZardDemoAccordionDisabledComponent,
       column: true,
       codeData: ACCORDION_DEMO_DISABLED,
@@ -57,17 +57,17 @@ export const ACCORDION = {
     {
       name: 'borders',
       description:
-        'Add `border` to the `Accordion` and `border-b last:border-b-0` to the `AccordionItem` to add borders to the items.',
+        'Add `rounded-lg border` to the `z-accordion` class and `px-4` to each `z-accordion-item` for a bordered, padded layout.',
       component: ZardDemoAccordionBordersComponent,
       column: true,
       codeData: ACCORDION_DEMO_BORDERS,
     },
     {
-      name: 'Card',
-      description: 'Wrap the `Accordion` in a `Card` component.',
+      name: 'card',
+      description: 'Wrap the `z-accordion` in a `z-card` component.',
       component: ZardDemoAccordionCardComponent,
       column: true,
-      codeData: ACCORDION_DEMO_CARDS,
+      codeData: ACCORDION_DEMO_CARD,
     },
   ],
 };

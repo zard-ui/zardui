@@ -2,16 +2,14 @@ import { CALENDAR_DEMO_BASIC } from '@generated/components/calendar/demo/basic';
 import { CALENDAR_DEMO_BOOKED_DATES } from '@generated/components/calendar/demo/booked-dates';
 import { CALENDAR_DEMO_CUSTOM_CELL_SIZE } from '@generated/components/calendar/demo/custom-cell-size';
 import { CALENDAR_DEMO_EXPAND_YEAR_SELECTION_RANGE } from '@generated/components/calendar/demo/expand-year-selection-range';
+import { CALENDAR_DEMO_I18N } from '@generated/components/calendar/demo/i18n';
 import { CALENDAR_DEMO_MULTIPLE } from '@generated/components/calendar/demo/multiple';
 import { CALENDAR_DEMO_PRESETS } from '@generated/components/calendar/demo/presets';
 import { CALENDAR_DEMO_PREVIEW } from '@generated/components/calendar/demo/preview';
 import { CALENDAR_DEMO_RANGE } from '@generated/components/calendar/demo/range';
 import { CALENDAR_DEMO_WITH_CONSTRAINTS } from '@generated/components/calendar/demo/with-constraints';
 import { CALENDAR_DEMO_WITH_TIME } from '@generated/components/calendar/demo/with-time';
-import {
-  CALENDAR_SNIPPET_CUSTOM_CELL_SIZE_FIXED,
-  CALENDAR_SNIPPET_CUSTOM_CELL_SIZE_SPACING,
-} from '@generated/components/calendar/snippets';
+import { CALENDAR_SNIPPET_I18N_APP_CONFIG } from '@generated/components/calendar/snippets';
 import { CALENDAR_CLI_ADD } from '@generated/installation/cli/add-calendar';
 import { CALENDAR_MANUAL_CODE } from '@generated/installation/manual/calendar';
 import { CALENDAR_USAGE_IMPORT, CALENDAR_USAGE_CODE } from '@generated/usage/calendar';
@@ -20,6 +18,7 @@ import { ZardDemoCalendarBasicComponent } from './basic';
 import { ZardDemoCalendarBookedDatesComponent } from './booked-dates';
 import { ZardDemoCalendarCustomCellSizeComponent } from './custom-cell-size';
 import { ZardDemoCalendarExpandYearSelectionRangeComponent } from './expand-year-selection-range';
+import { ZardDemoCalendarI18nComponent } from './i18n';
 import { ZardDemoCalendarMultipleComponent } from './multiple';
 import { ZardDemoCalendarPresetsComponent } from './presets';
 import { ZardDemoCalendarPreviewComponent } from './preview';
@@ -83,13 +82,10 @@ export const CALENDAR = {
     },
     {
       name: 'custom-cell-size',
-      description: 'Override the `--cell-size` CSS variable to resize the whole calendar.',
+      description:
+        'Override the `--cell-size` CSS variable to resize the whole calendar, and pass a `zDayTemplate` to render extra content in each day — here a price that changes on weekends.',
       component: ZardDemoCalendarCustomCellSizeComponent,
       codeData: CALENDAR_DEMO_CUSTOM_CELL_SIZE,
-      codeAfter: [
-        { codeData: CALENDAR_SNIPPET_CUSTOM_CELL_SIZE_SPACING },
-        { codeData: CALENDAR_SNIPPET_CUSTOM_CELL_SIZE_FIXED },
-      ],
     },
     {
       name: 'with-constraints',
@@ -103,6 +99,19 @@ export const CALENDAR = {
       description: '`minDate` and `maxDate` also expand the year dropdown — useful for a date of birth picker.',
       component: ZardDemoCalendarExpandYearSelectionRangeComponent,
       codeData: CALENDAR_DEMO_EXPAND_YEAR_SELECTION_RANGE,
+    },
+    {
+      name: 'i18n',
+      description:
+        'Localize the calendar by providing `provideZardI18n()` in your application config, or injecting `ZardI18nService` to switch locales dynamically at runtime. The calendar updates month names, weekday names, and the starting day of the week.',
+      component: ZardDemoCalendarI18nComponent,
+      codeData: CALENDAR_DEMO_I18N,
+      codeAfter: {
+        title: 'Setting the locale code',
+        description:
+          'By default, `provideZardI18n()` uses the existing `LOCALE_ID` locale code from `@angular/core` or `en-US`. If you want to override it, provide a new value for the locale code:',
+        codeData: CALENDAR_SNIPPET_I18N_APP_CONFIG,
+      },
     },
   ],
 };

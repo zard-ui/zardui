@@ -6,7 +6,7 @@ import { lucideClipboardPaste, lucideCopy, lucideScissors, lucideTrash2 } from '
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
 @Component({
-  selector: 'z-context-menu-icons-demo',
+  selector: 'z-demo-context-menu-icons',
   imports: [ZardContextMenuImports, NgIcon],
   template: `
     <div
@@ -40,7 +40,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
   viewProviders: [provideIcons({ lucideClipboardPaste, lucideCopy, lucideScissors, lucideTrash2 })],
   host: { class: 'contents' },
 })
-export class ZardContextMenuIconsDemoComponent {
+export class ZardDemoContextMenuIconsComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }

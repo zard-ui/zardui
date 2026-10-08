@@ -286,7 +286,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   protected onHostFocus(event: FocusEvent): void {
     if (event.target === this.elementRef.nativeElement) {
       this.focusButton();
-      this.open();
     }
   }
 
@@ -1483,9 +1482,9 @@ z-select
 
 ## Examples
 
-### Align Item
+### Align Item With Trigger
 
-Use the position prop on SelectContent to control alignment. When position="item-aligned" (default), the popup positions so the selected item appears over the trigger. When position="popper", the popup aligns to the trigger edge.
+`[zPosition]` controls how the listbox opens: `'item-aligned'` (the default) aligns the selected item over the trigger; `'popper'` drops the listbox from the trigger's edge instead. Toggle the switch to compare the two.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
@@ -1495,7 +1494,7 @@ import { ZardSelectImports, type ZardSelectPositionVariants } from '@/shared/com
 import { ZardSwitchComponent } from '@/shared/components/switch';
 
 @Component({
-  selector: 'z-demo-select-align-item',
+  selector: 'z-demo-select-align-item-with-trigger',
   imports: [ZardSelectImports, ZardSwitchComponent, ...ZardFieldImports],
   template: `
     <div z-field-group class="w-full min-w-xs">
@@ -1522,7 +1521,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSelectAlignItemComponent {
+export class ZardDemoSelectAlignItemWithTriggerComponent {
   readonly alignItem = signal(true);
   readonly selectedFruit = signal('banana');
 
@@ -1534,7 +1533,7 @@ export class ZardDemoSelectAlignItemComponent {
 
 ### Groups
 
-Use SelectGroup, SelectLabel, and SelectSeparator to organize items.
+Group items with `z-select-group`, label each group with `z-select-label`, and divide groups with `z-select-separator`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
@@ -1572,7 +1571,7 @@ export class ZardDemoSelectGroupsComponent {
 
 ### Scrollable
 
-A select with many items that scrolls.
+A select with enough items to require scrolling. Arrow keys, Home/End and Page Up/Down move the highlight and keep it scrolled into view.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
@@ -1633,6 +1632,8 @@ export class ZardDemoSelectScrollableComponent {
 
 ### Disabled
 
+`[zDisabled]` disables the trigger; the select cannot open, receive focus, or change its value.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
@@ -1659,7 +1660,7 @@ export class ZardDemoSelectDisabledComponent {
 
 ### Invalid
 
-Add the data-invalid attribute to the Field component and the aria-invalid attribute to the SelectTrigger component to show an error state.
+`[zInvalid]` sets `aria-invalid` on the trigger and applies destructive styling. Composed here inside `z-field` with `data-invalid` and a `z-field-error` for the full validation pattern.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
@@ -1692,13 +1693,15 @@ export class ZardDemoSelectInvalidComponent {
 
 ### Multi Select
 
+`[zMultiple]` turns the select into a multiselect; `[(zValue)]` becomes a `string[]` and each pick renders as a removable `z-badge` in the trigger. `[zMaxLabelCount]` caps how many badges show before collapsing the rest into a "N more items selected" badge.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
-  selector: 'z-demo-multi-select-basic',
+  selector: 'z-demo-select-multi-select',
   imports: [ZardSelectImports],
   template: `
     <div class="flex h-100 w-75 flex-col gap-4">
@@ -1723,8 +1726,63 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoMultiSelectBasicComponent {
+export class ZardDemoSelectMultiSelectComponent {
   readonly selectedValues = signal<string[]>([]);
+}
+```
+
+### Reactive Forms
+
+`formControlName` binds through `z-select`'s `ControlValueAccessor`, for both a single select and a `zMultiple` one — the multiselect control just carries a `string[]` value.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardSelectImports } from '@/shared/components/select/select.imports';
+
+@Component({
+  selector: 'z-demo-select-reactive-forms',
+  imports: [...ZardSelectImports, ...ZardFieldImports, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="form">
+      <div z-field-group class="w-full min-w-xs">
+        <div z-field>
+          <label z-field-label for="reactive-select-fruit">Favorite fruit</label>
+          <z-select id="reactive-select-fruit" formControlName="fruit" zPlaceholder="Select a fruit">
+            <z-select-item zValue="apple">Apple</z-select-item>
+            <z-select-item zValue="banana">Banana</z-select-item>
+            <z-select-item zValue="blueberry">Blueberry</z-select-item>
+            <z-select-item zValue="grapes">Grapes</z-select-item>
+            <z-select-item zValue="pineapple">Pineapple</z-select-item>
+          </z-select>
+        </div>
+        <div z-field>
+          <label z-field-label for="reactive-select-toppings">Toppings</label>
+          <z-select id="reactive-select-toppings" formControlName="toppings" zPlaceholder="Select toppings" zMultiple>
+            <z-select-item zValue="chocolate">Chocolate</z-select-item>
+            <z-select-item zValue="caramel">Caramel</z-select-item>
+            <z-select-item zValue="nuts">Nuts</z-select-item>
+            <z-select-item zValue="sprinkles">Sprinkles</z-select-item>
+          </z-select>
+        </div>
+        <p class="text-muted-foreground text-sm">
+          Fruit: {{ form.controls.fruit.value || 'none' }} · Toppings:
+          {{ form.controls.toppings.value.length ? form.controls.toppings.value.join(', ') : 'none' }}
+        </p>
+      </div>
+    </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSelectReactiveFormsComponent {
+  private readonly fb = inject(FormBuilder);
+
+  protected readonly form = this.fb.nonNullable.group({
+    fruit: ['banana'],
+    toppings: [['chocolate', 'nuts'] as string[]],
+  });
 }
 ```
 
@@ -1736,19 +1794,18 @@ A customizable select component that supports single and multiple value selectio
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zValue]` | Selected value(s), two-way bindable | `string \| string[]` | `''` |
+| `[zValue]` | Selected value(s), two-way bindable — a plain `string`, or `string[]` when `zMultiple` is set | `string \| string[]` | `''` |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zAlign]` | Overlay alignment relative to the trigger | `'start' \| 'center' \| 'end'` | `'center'` |
 | `[zDisabled]` | Disables the select | `boolean` | `false` |
 | `[zInvalid]` | Applies invalid ARIA state and destructive styling | `boolean` | `false` |
-| `[zLabel]` | Optional label for the select | `string` | `''` |
-| `[zMaxLabelCount]` | Limits visible labels in multiselect mode | `number` | `1` |
-| `[zMultiple]` | Multiselect mode | `boolean` | `false` |
-| `[zPlaceholder]` | Placeholder text | `string` | `'Select an option...'` |
-| `[zPosition]` | Overlay positioning mode | `'item-aligned' \| 'popper'` | `'popper'` |
-| `[zSize]` | Trigger and item size | `'sm' \| 'default' \| 'lg'` | `'default'` |
+| `[zLabel]` | Optional manual override for the displayed label | `string` | `''` |
+| `[zMaxLabelCount]` | In multiselect mode, how many selected labels render as badges before collapsing the rest into a "N more items selected" badge | `number` | `1` |
+| `[zMultiple]` | Turns the select into a multiselect; `zValue` becomes a `string[]` and each pick renders as a `z-badge` | `boolean` | `false` |
+| `[zPlaceholder]` | Placeholder text shown when nothing is selected | `string` | `'Select an option...'` |
+| `[zPosition]` | Overlay positioning mode: 'item-aligned' opens the listbox so the selected item sits over the trigger; 'popper' drops it from the trigger's edge instead | `'item-aligned' \| 'popper'` | `'item-aligned'` |
 | `[(zValue)]` | Selected value | `string \| string[]` | `'' \| []` |
-| `(zSelectionChange)` | Emitted when the selected value changes | `string \| string[]` | `-` |
+| `(zSelectionChange)` | Emitted when the selected value changes | `EventEmitter<string \| string[]>` | `-` |
 
 ### z-select-item
 
@@ -1757,7 +1814,7 @@ Represents an individual item inside a z-select component.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zValue]` | The value associated with this item | `string` | `''` |
+| `[zValue]` | The value associated with this item (required) | `string` | `-` |
 | `[zDisabled]` | Disables selection for this item | `boolean` | `false` |
 
 ### z-select-group

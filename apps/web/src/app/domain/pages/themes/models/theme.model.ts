@@ -14,6 +14,7 @@ export interface ThemeColors {
   accent: string;
   'accent-foreground': string;
   destructive: string;
+  'destructive-foreground': string;
   border: string;
   input: string;
   ring: string;
@@ -66,6 +67,7 @@ export const THEME_COLOR_KEYS: ThemeColorKey[] = [
   'accent',
   'accent-foreground',
   'destructive',
+  'destructive-foreground',
   'border',
   'input',
   'ring',
@@ -101,6 +103,7 @@ export const COLOR_GROUPS = {
     'accent',
     'accent-foreground',
     'destructive',
+    'destructive-foreground',
   ] as ThemeColorKey[],
   form: ['border', 'input', 'ring'] as ThemeColorKey[],
   chart: ['chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5'] as ThemeColorKey[],

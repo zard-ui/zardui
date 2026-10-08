@@ -4,12 +4,13 @@ export const DRAWER_API: ApiSection[] = [
   {
     selector: 'z-drawer',
     description:
-      'Root of a declarative drawer. Holds the open state and hosts the projected content. The panel exposes `data-placement`, `data-axis`, `data-state`, `data-swiping`, `data-snap-points` and `data-expanded`, plus a `--z-drawer-bleed` variable that fills the inset gap for an edge-to-edge look.',
+      'Root of a declarative drawer. Holds the open state and hosts the projected content. The panel exposes `data-placement`, `data-axis`, `data-state`, `data-swiping`, `data-snap-points`, `data-expanded` and `data-nested-open` (present while a drawer stacked on top of this one is open). Two CSS variables tune the panel: `--z-drawer-inset` (gap kept between the panel and the viewport edge, default `0.5rem`) and `--z-drawer-bleed` (fills that gap while the panel is dragged past its edge — set it for an edge-to-edge look). A drawer with `zSnapPoints` also publishes `--z-drawer-visible-size`, the pixels of the panel currently on screen, so content can size itself against whatever is reachable at the active snap point.',
     props: [
       { name: '[zVisible]', description: 'Open state, two-way bound', type: 'boolean', default: 'false' },
       {
         name: '[zPlacement]',
-        description: 'Edge of the screen the drawer slides from',
+        description:
+          'Edge of the screen the drawer slides from. Also sets the swipe axis: top/bottom drag vertically, left/right drag horizontally',
         type: "'top' | 'right' | 'bottom' | 'left'",
         default: "'bottom'",
       },
@@ -22,7 +23,7 @@ export const DRAWER_API: ApiSection[] = [
       },
       {
         name: '[zSnapPoint]',
-        description: 'Active snap point, two-way bound. Defaults to the first one',
+        description: 'Active snap point, two-way bound through [(zSnapPoint)]. Defaults to the first one',
         type: 'number | string',
         default: '-',
       },
@@ -43,20 +44,25 @@ export const DRAWER_API: ApiSection[] = [
       {
         name: '(zAfterOpen)',
         description: 'Emitted once the drawer is attached',
-        type: 'OutputRef<void>',
+        type: 'EventEmitter<void>',
         default: '-',
       },
       {
         name: '(zAfterClose)',
         description: 'Emitted once the exit animation has finished',
-        type: 'OutputRef<void>',
+        type: 'EventEmitter<void>',
         default: '-',
       },
     ],
   },
   {
-    selector: 'z-drawer-header / z-drawer-footer',
-    description: 'Layout slots for the top and bottom of a drawer.',
+    selector: 'z-drawer-header',
+    description: 'Layout slot for the top of a drawer, next to `z-drawer-title` and `z-drawer-description`.',
+    props: [{ name: '[class]', description: 'Custom CSS classes to apply', type: 'ClassValue', default: '-' }],
+  },
+  {
+    selector: 'z-drawer-footer',
+    description: 'Layout slot for the bottom of a drawer, typically the action buttons.',
     props: [{ name: '[class]', description: 'Custom CSS classes to apply', type: 'ClassValue', default: '-' }],
   },
   {
@@ -135,7 +141,7 @@ export const DRAWER_API: ApiSection[] = [
       },
       {
         name: '[zMaskClosable]',
-        description: 'Whether clicking outside closes the drawer',
+        description: 'Whether clicking outside closes the drawer. Also requires zDismissible',
         type: 'boolean',
         default: 'true',
       },

@@ -27,22 +27,10 @@ import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
         Warning
       </button>
       <button type="button" z-button zType="outline" (click)="sonner.error('Event has not been created')">Error</button>
-      <button type="button" z-button zType="outline" (click)="showPromise()">Promise</button>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSonnerTypesComponent {
   protected readonly sonner = inject(ZardSonnerService);
-
-  showPromise() {
-    this.sonner.promise<{ name: string }>(
-      () => new Promise(resolve => setTimeout(() => resolve({ name: 'Event' }), 2000)),
-      {
-        loading: 'Loading...',
-        success: data => `${data.name} has been created`,
-        error: 'Error',
-      },
-    );
-  }
 }

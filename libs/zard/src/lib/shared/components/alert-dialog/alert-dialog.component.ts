@@ -1,245 +1,385 @@
-import { A11yModule } from '@angular/cdk/a11y';
-import { OverlayModule } from '@angular/cdk/overlay';
+import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import {
-  BasePortalOutlet,
-  CdkPortalOutlet,
-  type ComponentPortal,
-  PortalModule,
-  type TemplatePortal,
-} from '@angular/cdk/portal';
-import { NgTemplateOutlet } from '@angular/common';
-import {
+  afterNextRender,
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
-  type ComponentRef,
   computed,
-  ElementRef,
-  type EmbeddedViewRef,
-  type EventEmitter,
+  DestroyRef,
+  Directive,
+  effect,
+  forwardRef,
   inject,
+  input,
+  model,
   output,
+  PLATFORM_ID,
+  signal,
   type TemplateRef,
-  type Type,
+  untracked,
+  ViewContainerRef,
   viewChild,
-  type ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
+import { filter } from 'rxjs';
 
-import { ZardIdDirective } from '@/shared/core';
+import { ZardStringTemplateOutletDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
-import { noopFn } from '@/shared/utils/noop';
 
-import type { ZardAlertDialogRef } from './alert-dialog-ref';
+import { nextAlertDialogId, ZardAlertDialogHost } from './alert-dialog-host';
+import { ALERT_DIALOG_DURATION, ZardAlertDialogPanelComponent } from './alert-dialog-panel.component';
 import {
+  ALERT_DIALOG_BACKDROP_CLASSES,
   alertDialogDescriptionVariants,
   alertDialogFooterVariants,
   alertDialogHeaderVariants,
   alertDialogMediaVariants,
   alertDialogTitleVariants,
-  alertDialogVariants,
   type ZardAlertDialogSizeVariants,
 } from './alert-dialog.variants';
-import { ZardButtonComponent } from '../button/button.component';
 
-export type OnClickCallback<T> = (instance: T) => false | void | object;
+const ESCAPE_KEYS = ['Escape', 'Esc'];
 
-export class ZardAlertDialogOptions<T> {
-  zCancelText?: string | null;
-  zClosable?: boolean;
-  zContent?: string | TemplateRef<T> | Type<T>;
-  zCustomClasses?: ClassValue;
-  zData?: object;
-  zDescription?: string;
-  /** Animation duration (ms) used when closing. Defaults to 100 (matches CSS transition). */
-  zDuration?: number;
-  zMaskClosable?: boolean;
-  /**
-   * Optional template rendered as a media slot above the title (e.g. an icon).
-   * When present, the header layout adapts to align media + title side-by-side
-   * on `default` size at sm breakpoint.
-   */
-  zMedia?: TemplateRef<void>;
-  /** Extra classes applied to the media slot wrapper (e.g. tinted backgrounds for destructive). */
-  zMediaClass?: ClassValue;
-  zOkDestructive?: boolean;
-  zOkDisabled?: boolean;
-  zOkText?: string | null;
-  zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
-  zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
-  /** Visual size of the dialog. `default` is wider on sm+; `sm` keeps the compact width. */
-  zSize?: ZardAlertDialogSizeVariants;
-  zTitle?: string | TemplateRef<T>;
-  zViewContainerRef?: ViewContainerRef;
-  zWidth?: string;
+/**
+ * A modal that interrupts the user with a decision, composed in the template.
+ *
+ * ```html
+ * <z-alert-dialog [(zVisible)]="visible">
+ *   <z-alert-dialog-header>
+ *     <z-alert-dialog-media><ng-icon name="lucideTrash2" /></z-alert-dialog-media>
+ *     <z-alert-dialog-title>Delete chat?</z-alert-dialog-title>
+ *     <z-alert-dialog-description>This cannot be undone.</z-alert-dialog-description>
+ *   </z-alert-dialog-header>
+ *   <z-alert-dialog-footer>
+ *     <button type="button" z-button zType="outline" z-alert-dialog-close>Cancel</button>
+ *     <button type="button" z-button zType="destructive" (click)="remove()">Delete</button>
+ *   </z-alert-dialog-footer>
+ * </z-alert-dialog>
+ * ```
+ *
+ * `ZardAlertDialogService.create()` opens the same panel from code.
+ */
+@Component({
+  selector: 'z-alert-dialog',
+  imports: [ZardAlertDialogPanelComponent],
+  template: `
+    <ng-template #panel>
+      <z-alert-dialog-panel
+        [zSize]="zSize()"
+        [zWidth]="zWidth()"
+        [zDuration]="zDuration()"
+        [zState]="state()"
+        [zLabelledBy]="titleId()"
+        [zDescribedBy]="descriptionId()"
+        [class]="class()"
+      >
+        <ng-content />
+      </z-alert-dialog-panel>
+    </ng-template>
+  `,
+  // forwardRef: the decorator is evaluated before the class binding exists, so a bare
+  // reference to ZardAlertDialogComponent here throws "Cannot access before initialization"
+  // whenever the module is evaluated outside the AOT compiler.
+  providers: [{ provide: ZardAlertDialogHost, useExisting: forwardRef(() => ZardAlertDialogComponent) }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: { style: 'display: contents' },
+  exportAs: 'zAlertDialog',
+})
+export class ZardAlertDialogComponent extends ZardAlertDialogHost {
+  private readonly overlay = inject(Overlay);
+  private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly panel = viewChild.required<TemplateRef<void>>('panel');
+
+  /** Open state, two-way bound. */
+  readonly zVisible = model(false);
+  /** Visual size. `default` widens on sm+ and lays media and title side by side; `sm` stays compact and centered. */
+  readonly zSize = input<ZardAlertDialogSizeVariants>('default');
+  /** Explicit width; leave unset for the size preset. */
+  readonly zWidth = input<string | undefined>(undefined);
+  /** Whether a click on the mask closes the alert dialog. Off by default: the user has to decide. */
+  readonly zMaskClosable = input(false, { transform: booleanAttribute });
+  /** How long the enter and leave transitions run, in ms. */
+  readonly zDuration = input(ALERT_DIALOG_DURATION);
+  /** Custom classes applied to the panel. */
+  readonly class = input<ClassValue>('');
+
+  /** Emitted once the alert dialog is attached to the DOM. */
+  readonly zAfterOpen = output<void>();
+  /** Emitted once the alert dialog has finished its exit transition and is gone. */
+  readonly zAfterClose = output<void>();
+
+  readonly titleId = signal<string | null>(null);
+  readonly descriptionId = signal<string | null>(null);
+
+  protected readonly state = signal<'open' | 'closed'>('open');
+
+  private overlayRef: OverlayRef | null = null;
+  private disposeTimer: ReturnType<typeof setTimeout> | null = null;
+  private previouslyFocused: HTMLElement | null = null;
+  private destroyed = false;
+
+  constructor() {
+    super();
+
+    effect(() => {
+      const visible = this.zVisible();
+      untracked(() => (visible ? this.open() : this.startClose()));
+    });
+
+    this.destroyRef.onDestroy(() => {
+      this.destroyed = true;
+      this.dispose();
+    });
+  }
+
+  requestClose(): void {
+    this.zVisible.set(false);
+  }
+
+  private open(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    // Re-opening mid-exit: keep the same overlay and reverse the transition.
+    if (this.overlayRef) {
+      this.clearDisposeTimer();
+      this.state.set('open');
+      return;
+    }
+
+    this.previouslyFocused = document.activeElement as HTMLElement | null;
+    this.state.set('open');
+
+    const overlayRef = this.overlay.create(
+      new OverlayConfig({
+        hasBackdrop: true,
+        backdropClass: ALERT_DIALOG_BACKDROP_CLASSES,
+        positionStrategy: this.overlay.position().global(),
+        scrollStrategy: this.overlay.scrollStrategies.block(),
+        disposeOnNavigation: true,
+      }),
+    );
+    this.overlayRef = overlayRef;
+
+    overlayRef.attach(new TemplatePortal(this.panel(), this.viewContainerRef));
+
+    overlayRef.backdropClick().subscribe(() => {
+      if (this.zMaskClosable()) {
+        this.requestClose();
+      }
+    });
+    overlayRef
+      .keydownEvents()
+      .pipe(filter(event => ESCAPE_KEYS.includes(event.key)))
+      .subscribe(event => {
+        event.preventDefault();
+        this.requestClose();
+      });
+
+    this.zAfterOpen.emit();
+  }
+
+  private startClose(): void {
+    if (!this.overlayRef || this.disposeTimer !== null) {
+      return;
+    }
+
+    this.state.set('closed');
+    this.overlayRef.detachBackdrop();
+    this.disposeTimer = setTimeout(() => this.dispose(), this.zDuration());
+  }
+
+  private dispose(): void {
+    this.clearDisposeTimer();
+    if (!this.overlayRef) {
+      return;
+    }
+
+    this.overlayRef.dispose();
+    this.overlayRef = null;
+
+    if (this.previouslyFocused?.isConnected) {
+      this.previouslyFocused.focus();
+    }
+    this.previouslyFocused = null;
+
+    // Teardown disposes the overlay too, but the output is already gone by then.
+    if (!this.destroyed) {
+      this.zAfterClose.emit();
+    }
+  }
+
+  private clearDisposeTimer(): void {
+    if (this.disposeTimer === null) {
+      return;
+    }
+
+    clearTimeout(this.disposeTimer);
+    this.disposeTimer = null;
+  }
 }
 
 @Component({
-  selector: 'z-alert-dialog',
-  imports: [A11yModule, NgTemplateOutlet, OverlayModule, PortalModule, ZardButtonComponent, ZardIdDirective],
+  selector: 'z-alert-dialog-header, [z-alert-dialog-header]',
   template: `
-    <ng-container zardId="z-alert-dialog" #idRef="zardId">
-      @if (config.zMedia || config.zTitle || config.zDescription) {
-        <header [class]="headerClasses()" data-slot="alert-dialog-header">
-          @if (config.zMedia) {
-            <div data-slot="alert-dialog-media" [class]="mediaClasses()">
-              <ng-container [ngTemplateOutlet]="config.zMedia" />
-            </div>
-          }
-
-          @if (config.zTitle) {
-            <h2
-              data-testid="z-alert-title"
-              data-slot="alert-dialog-title"
-              [class]="titleClasses()"
-              [id]="idRef.id() + '-title'"
-            >
-              {{ config.zTitle }}
-            </h2>
-          }
-
-          @if (config.zDescription) {
-            <!-- Angular auto-sanitizes [innerHTML]; safe inline links/markup are preserved. -->
-            <p
-              data-testid="z-alert-description"
-              data-slot="alert-dialog-description"
-              [class]="descriptionClasses()"
-              [id]="idRef.id() + '-description'"
-              [innerHTML]="config.zDescription"
-            ></p>
-          }
-        </header>
-      }
-
-      <main class="flex flex-col space-y-4">
-        <ng-template cdkPortalOutlet />
-
-        @if (isStringContent()) {
-          <!-- Angular auto-sanitizes [innerHTML] by default; scripts/event handlers are stripped. -->
-          <div data-testid="z-alert-content" [innerHTML]="config.zContent"></div>
-        }
-      </main>
-
-      <footer [class]="footerClasses()" data-slot="alert-dialog-footer">
-        @if (config.zCancelText !== null) {
-          <button type="button" data-testid="z-alert-cancel-button" z-button zType="outline" (click)="onCancelClick()">
-            {{ config.zCancelText || 'Cancel' }}
-          </button>
-        }
-
-        @if (config.zOkText !== null) {
-          <button
-            type="button"
-            data-testid="z-alert-ok-button"
-            z-button
-            [zType]="config.zOkDestructive ? 'destructive' : 'default'"
-            [zDisabled]="config.zOkDisabled"
-            (click)="onOkClick()"
-          >
-            {{ config.zOkText || 'Continue' }}
-          </button>
-        }
-      </footer>
-    </ng-container>
-  `,
-  styles: `
-    :host {
-      --z-alert-dialog-duration: 100ms;
-      opacity: 1;
-      transform: scale(1);
-      transition:
-        opacity var(--z-alert-dialog-duration) ease-out,
-        transform var(--z-alert-dialog-duration) ease-out;
-    }
-
-    @starting-style {
-      :host {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-    }
-
-    :host.alert-dialog-leave {
-      opacity: 0;
-      transform: scale(0.9);
-      transition:
-        opacity var(--z-alert-dialog-duration) ease-in,
-        transform var(--z-alert-dialog-duration) ease-in;
-    }
+    <ng-content />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'alert-dialog-header',
     '[class]': 'classes()',
-    '[style.width]': 'config.zWidth ? config.zWidth : null',
-    '[style.--z-alert-dialog-duration]': 'durationCss()',
-    '[attr.data-size]': 'size()',
-    'data-slot': 'alert-dialog-content',
-    role: 'alertdialog',
-    'aria-modal': 'true',
-    '[attr.aria-labelledby]': 'titleId()',
-    '[attr.aria-describedby]': 'descriptionId()',
-    cdkTrapFocus: 'true',
-    cdkTrapFocusAutoCapture: 'true',
   },
-  exportAs: 'zAlertDialog',
+  exportAs: 'zAlertDialogHeader',
 })
-export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
-  private readonly host = inject(ElementRef<HTMLElement>);
-  protected readonly config = inject(ZardAlertDialogOptions<T>);
-  private readonly idRef = viewChild.required<ZardIdDirective>('idRef');
+export class ZardAlertDialogHeaderComponent {
+  readonly class = input<ClassValue>('');
 
-  protected readonly size = computed<ZardAlertDialogSizeVariants>(() => this.config.zSize ?? 'default');
-  protected readonly classes = computed(() =>
-    mergeClasses(alertDialogVariants({ zSize: this.size() }), this.config.zCustomClasses),
-  );
+  protected readonly classes = computed(() => mergeClasses(alertDialogHeaderVariants(), this.class()));
+}
 
-  protected readonly headerClasses = computed(() => alertDialogHeaderVariants());
-  protected readonly titleClasses = computed(() => alertDialogTitleVariants());
-  protected readonly descriptionClasses = computed(() => alertDialogDescriptionVariants());
-  protected readonly footerClasses = computed(() => alertDialogFooterVariants());
-  protected readonly mediaClasses = computed(() => mergeClasses(alertDialogMediaVariants(), this.config.zMediaClass));
-  protected readonly isStringContent = computed(() => typeof this.config.zContent === 'string');
-  protected readonly titleId = computed(() => (this.config.zTitle ? `${this.idRef().id()}-title` : null));
-  protected readonly descriptionId = computed(() =>
-    this.config.zDescription ? `${this.idRef().id()}-description` : null,
-  );
+/** Media slot above the title, usually an icon. The header lays it next to the title on `default` size. */
+@Component({
+  selector: 'z-alert-dialog-media, [z-alert-dialog-media]',
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'alert-dialog-media',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zAlertDialogMedia',
+})
+export class ZardAlertDialogMediaComponent {
+  readonly class = input<ClassValue>('');
 
-  protected readonly durationCss = computed(() =>
-    this.config.zDuration !== undefined ? `${this.config.zDuration}ms` : null,
-  );
+  protected readonly classes = computed(() => mergeClasses(alertDialogMediaVariants(), this.class()));
+}
 
-  alertDialogRef?: ZardAlertDialogRef<T>;
+@Component({
+  selector: 'z-alert-dialog-title, [z-alert-dialog-title]',
+  imports: [ZardStringTemplateOutletDirective],
+  template: `
+    @let title = zTitle();
+    <ng-container *zStringTemplateOutlet="title">
+      {{ title }}
+      <ng-content />
+    </ng-container>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'alert-dialog-title',
+    role: 'heading',
+    'aria-level': '2',
+    '[attr.id]': 'id',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zAlertDialogTitle',
+})
+export class ZardAlertDialogTitleComponent {
+  private readonly alertDialog = inject(ZardAlertDialogHost, { optional: true });
 
-  readonly portalOutlet = viewChild.required(CdkPortalOutlet);
+  readonly class = input<ClassValue>('');
+  readonly zTitle = input<string | TemplateRef<void>>();
 
-  okTriggered = output<void>();
-  cancelTriggered = output<void>();
+  protected readonly id = nextAlertDialogId('title');
+  protected readonly classes = computed(() => mergeClasses(alertDialogTitleVariants(), this.class()));
 
-  getNativeElement(): HTMLElement {
-    return this.host.nativeElement;
+  constructor() {
+    // Registered after the first render: the panel reads this id through an input binding,
+    // and writing to it mid-render would trip change-detection checks in dev mode.
+    afterNextRender(() => this.alertDialog?.titleId.set(this.id));
+
+    inject(DestroyRef).onDestroy(() => {
+      if (this.alertDialog?.titleId() === this.id) {
+        this.alertDialog.titleId.set(null);
+      }
+    });
   }
+}
 
-  attachComponentPortal<C>(portal: ComponentPortal<C>): ComponentRef<C> {
-    if (this.portalOutlet().hasAttached()) {
-      throw new Error('Attempting to attach alert dialog content after content is already attached');
-    }
-    return this.portalOutlet().attachComponentPortal(portal);
+@Component({
+  selector: 'z-alert-dialog-description, [z-alert-dialog-description]',
+  imports: [ZardStringTemplateOutletDirective],
+  template: `
+    @let description = zDescription();
+    <ng-container *zStringTemplateOutlet="description">
+      {{ description }}
+      <ng-content />
+    </ng-container>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'alert-dialog-description',
+    '[attr.id]': 'id',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zAlertDialogDescription',
+})
+export class ZardAlertDialogDescriptionComponent {
+  private readonly alertDialog = inject(ZardAlertDialogHost, { optional: true });
+
+  readonly class = input<ClassValue>('');
+  readonly zDescription = input<string | TemplateRef<void>>();
+
+  protected readonly id = nextAlertDialogId('description');
+  protected readonly classes = computed(() => mergeClasses(alertDialogDescriptionVariants(), this.class()));
+
+  constructor() {
+    afterNextRender(() => this.alertDialog?.descriptionId.set(this.id));
+
+    inject(DestroyRef).onDestroy(() => {
+      if (this.alertDialog?.descriptionId() === this.id) {
+        this.alertDialog.descriptionId.set(null);
+      }
+    });
   }
+}
 
-  attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
-    if (this.portalOutlet().hasAttached()) {
-      throw new Error('Attempting to attach alert dialog content after content is already attached');
-    }
-    return this.portalOutlet().attachTemplatePortal(portal);
-  }
+@Component({
+  selector: 'z-alert-dialog-footer, [z-alert-dialog-footer]',
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'alert-dialog-footer',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zAlertDialogFooter',
+})
+export class ZardAlertDialogFooterComponent {
+  readonly class = input<ClassValue>('');
 
-  onOkClick() {
-    this.okTriggered.emit();
-  }
+  protected readonly classes = computed(() => mergeClasses(alertDialogFooterVariants(), this.class()));
+}
 
-  onCancelClick() {
-    this.cancelTriggered.emit();
+/** Closes the alert dialog it is projected into — declarative or service-opened alike. */
+@Directive({
+  selector: '[z-alert-dialog-close]',
+  host: {
+    'data-slot': 'alert-dialog-close',
+    '(click)': 'onClick()',
+  },
+  exportAs: 'zAlertDialogClose',
+})
+export class ZardAlertDialogCloseDirective {
+  private readonly alertDialog = inject(ZardAlertDialogHost, { optional: true });
+
+  protected onClick(): void {
+    this.alertDialog?.requestClose();
   }
 }

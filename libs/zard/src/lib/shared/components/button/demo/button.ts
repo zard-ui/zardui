@@ -1,4 +1,4 @@
-import { BUTTON_DEMO_AS_CHILD } from '@generated/components/button/demo/as-child';
+import { BUTTON_DEMO_AS_LINK } from '@generated/components/button/demo/as-link';
 import { BUTTON_DEMO_BUTTON_GROUP } from '@generated/components/button/demo/button-group';
 import { BUTTON_DEMO_DEFAULT } from '@generated/components/button/demo/default';
 import { BUTTON_DEMO_DESTRUCTIVE } from '@generated/components/button/demo/destructive';
@@ -16,7 +16,7 @@ import { BUTTON_CLI_ADD } from '@generated/installation/cli/add-button';
 import { BUTTON_MANUAL_CODE } from '@generated/installation/manual/button';
 import { BUTTON_USAGE_CODE, BUTTON_USAGE_IMPORT } from '@generated/usage/button';
 
-import { ZardDemoButtonAsChildComponent } from './as-child';
+import { ZardDemoButtonAsLinkComponent } from './as-link';
 import { ZardDemoButtonButtonGroupComponent } from './button-group';
 import { ZardDemoButtonDefaultComponent } from './default';
 import { ZardDemoButtonDestructiveComponent } from './destructive';
@@ -51,42 +51,51 @@ export const BUTTON = {
   examples: [
     {
       name: 'size',
-      description: 'Use the `zSize` prop to change the size of the button.',
+      description:
+        'Use the `zSize` input to change the size of the button — `xs`, `sm`, `default` and `lg`, plus the square `icon-xs`, `icon-sm`, `icon` and `icon-lg` sizes for icon-only buttons.',
       component: ZardDemoButtonSizeComponent,
       codeData: BUTTON_DEMO_SIZE,
     },
     {
       name: 'default',
+      description: 'The default button style, using `zType="default"`.',
       component: ZardDemoButtonDefaultComponent,
       codeData: BUTTON_DEMO_DEFAULT,
     },
     {
       name: 'outline',
+      description: 'Use `zType="outline"` for a bordered button with a transparent background.',
       component: ZardDemoButtonOutlineComponent,
       codeData: BUTTON_DEMO_OUTLINE,
     },
     {
       name: 'secondary',
+      description: 'Use `zType="secondary"` for a lower-emphasis alternative to the default button.',
       component: ZardDemoButtonSecondaryComponent,
       codeData: BUTTON_DEMO_SECONDARY,
     },
     {
       name: 'ghost',
+      description: 'Use `zType="ghost"` for a button with no background or border until it is hovered or focused.',
       component: ZardDemoButtonGhostComponent,
       codeData: BUTTON_DEMO_GHOST,
     },
     {
       name: 'destructive',
+      description: 'Use `zType="destructive"` to signal a dangerous or irreversible action.',
       component: ZardDemoButtonDestructiveComponent,
       codeData: BUTTON_DEMO_DESTRUCTIVE,
     },
     {
       name: 'link',
+      description: 'Use `zType="link"` to render a button that looks like a text link.',
       component: ZardDemoButtonLinkComponent,
       codeData: BUTTON_DEMO_LINK,
     },
     {
       name: 'icon',
+      description:
+        'Use `zSize="icon"` for a square, icon-only button. Always add an `aria-label` since there is no visible text for screen readers.',
       component: ZardDemoButtonIconComponent,
       codeData: BUTTON_DEMO_ICON,
     },
@@ -98,14 +107,14 @@ export const BUTTON = {
     },
     {
       name: 'rounded',
-      description: 'Use the `rounded-full` class to make the button rounded.',
+      description: 'Use `zShape="circle"` to render a fully rounded, icon-only button.',
       component: ZardDemoButtonRoundedComponent,
       codeData: BUTTON_DEMO_ROUNDED,
     },
     {
       name: 'spinner',
       description:
-        'Use the `[zLoading]` prop to show a loading spinner before the label, or project an `<ng-icon name="lucideLoaderCircle" class="animate-spin" />` manually to control its position.',
+        'Use the `[zLoading]` input to show a loading spinner before the label, or project a `<z-spinner>` manually to control its position within the button.',
       component: ZardDemoButtonSpinnerComponent,
       codeData: BUTTON_DEMO_SPINNER,
     },
@@ -117,11 +126,11 @@ export const BUTTON = {
       codeData: BUTTON_DEMO_BUTTON_GROUP,
     },
     {
-      name: 'as-child',
+      name: 'as-link',
       description:
-        "Apply the `z-button` attribute selector to a different element (like `<a>`) to give it the button appearance. Here's an example of a link that looks like a button.",
-      component: ZardDemoButtonAsChildComponent,
-      codeData: BUTTON_DEMO_AS_CHILD,
+        "Apply the `z-button` attribute selector to an `<a>` element to give it the button appearance. Here's a link that looks like a button.",
+      component: ZardDemoButtonAsLinkComponent,
+      codeData: BUTTON_DEMO_AS_LINK,
     },
   ],
 };

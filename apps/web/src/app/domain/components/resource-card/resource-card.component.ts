@@ -1,6 +1,10 @@
 import { Component, input } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideExternalLink, lucideFigma, lucideTwitter } from '@ng-icons/lucide';
+
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import type { ZardBadgeTypeVariants } from '@zard/components/badge/badge.variants';
 
 export interface ResourceLink {
   url: string;
@@ -14,69 +18,54 @@ export interface ResourceBadge {
   variant: 'premium' | 'free' | 'license';
 }
 
+/** Maps a link's icon to the lucide name that draws it. */
+const LINK_ICONS: Record<ResourceLink['icon'], string> = {
+  figma: 'lucideFigma',
+  external: 'lucideExternalLink',
+  twitter: 'lucideTwitter',
+};
+
 @Component({
   selector: 'z-resource-card',
-  imports: [ZardBadgeComponent],
+  imports: [ZardBadgeComponent, NgIcon],
+  viewProviders: [provideIcons({ lucideExternalLink, lucideFigma, lucideTwitter })],
   template: `
-    <div class="bg-card text-card-foreground rounded-lg border p-6 shadow-sm sm:p-8">
-      <div class="flex flex-col gap-4">
-        <div class="flex items-start justify-between">
-          <div class="flex flex-col gap-2">
-            <h3 class="text-lg font-semibold">{{ title() }}</h3>
-            <p class="text-muted-foreground text-sm">
-              by
-              <strong>{{ author() }}</strong>
-            </p>
+    <!--
+      Header, prose, then a strip of links. What identifies the kit sits on one
+      line, the description gets the full width, and the links read as actions
+      because they are set apart — rather than stacked in a column beside text
+      that is already short.
+    -->
+    <div class="bg-card text-card-foreground hover:border-ring/40 rounded-lg border transition-colors">
+      <div class="flex flex-col gap-3 p-5 sm:p-6">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+          <div class="flex flex-wrap items-baseline gap-x-2">
+            <h3 class="text-base font-semibold">{{ title() }}</h3>
+            <span class="text-muted-foreground text-sm">by {{ author() }}</span>
           </div>
-          @if (badges(); as badgeList) {
-            <div class="flex items-center gap-2">
-              @for (badge of badgeList; track badge.text) {
-                <z-badge [class]="getBadgeClasses(badge.variant)">{{ badge.text }}</z-badge>
+
+          @if (badges().length) {
+            <div class="flex flex-wrap items-center gap-2">
+              @for (badge of badges(); track badge.text) {
+                <z-badge [zType]="badgeType(badge.variant)">{{ badge.text }}</z-badge>
               }
             </div>
           }
         </div>
 
-        <p class="text-muted-foreground text-sm leading-relaxed">
-          {{ description() }}
-        </p>
-
-        @if (links(); as linkList) {
-          <div class="flex items-center gap-4 pt-2">
-            @for (link of linkList; track link.url) {
-              <a [href]="link.url" target="_blank" rel="noopener noreferrer" [class]="getLinkClasses(link.type)">
-                @switch (link.icon) {
-                  @case ('figma') {
-                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path
-                        d="M15.852 8.981h-4.588V0h4.588c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.491-4.49 4.491zM12.735 7.51h3.117c1.665 0 3.019-1.355 3.019-3.019s-1.354-3.019-3.019-3.019h-3.117V7.51zm0 1.471H8.148c-2.476 0-4.49-2.015-4.49-4.491S5.672 0 8.148 0h4.588v8.981zm-4.587-7.51c-1.665 0-3.019 1.355-3.019 3.019s1.354 3.02 3.019 3.02h3.117V1.471H8.148zm4.587 15.019H8.148c-2.476 0-4.49-2.014-4.49-4.49s2.014-4.49 4.49-4.49h4.588v8.98zM8.148 8.981c-1.665 0-3.019 1.355-3.019 3.019s1.355 3.019 3.019 3.019h3.117v-6.038H8.148zm7.704 0c2.476 0 4.49 2.015 4.49 4.491s-2.014 4.49-4.49 4.49c-2.476 0-4.491-2.015-4.491-4.491s2.015-4.49 4.491-4.49zm0 7.51c1.665 0 3.019-1.355 3.019-3.019s-1.354-3.02-3.019-3.02-3.019 1.355-3.019 3.02 1.354 3.019 3.019 3.019z"
-                      />
-                    </svg>
-                  }
-                  @case ('external') {
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                      />
-                    </svg>
-                  }
-                  @case ('twitter') {
-                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path
-                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-                      />
-                    </svg>
-                  }
-                }
-                {{ link.text }}
-              </a>
-            }
-          </div>
-        }
+        <p class="text-muted-foreground text-sm leading-relaxed">{{ description() }}</p>
       </div>
+
+      @if (links().length) {
+        <div class="border-border flex flex-wrap items-center gap-x-6 gap-y-2 border-t px-5 py-3 sm:px-6">
+          @for (link of links(); track link.url) {
+            <a [href]="link.url" target="_blank" rel="noopener noreferrer" [class]="linkClasses(link.type)">
+              <ng-icon [name]="iconName(link.icon)" />
+              {{ link.text }}
+            </a>
+          }
+        </div>
+      }
     </div>
   `,
 })
@@ -84,26 +73,34 @@ export class ResourceCardComponent {
   readonly title = input.required<string>();
   readonly author = input.required<string>();
   readonly description = input.required<string>();
-  readonly badges = input<ResourceBadge[]>();
-  readonly links = input<ResourceLink[]>();
+  readonly badges = input<ResourceBadge[]>([]);
+  readonly links = input<ResourceLink[]>([]);
 
-  protected getLinkClasses(type: 'primary' | 'secondary'): string {
-    const baseClasses = 'inline-flex items-center gap-2 text-sm';
-    return type === 'primary'
-      ? `${baseClasses} text-primary hover:underline`
-      : `${baseClasses} text-muted-foreground hover:text-foreground`;
+  protected iconName(icon: ResourceLink['icon']): string {
+    return LINK_ICONS[icon];
   }
 
-  protected getBadgeClasses(variant: 'premium' | 'free' | 'license'): string {
+  protected linkClasses(type: 'primary' | 'secondary'): string {
+    const base = 'inline-flex items-center gap-2 text-sm whitespace-nowrap [&_svg]:size-4';
+
+    return type === 'primary'
+      ? `${base} text-foreground font-medium hover:underline`
+      : `${base} text-muted-foreground hover:text-foreground`;
+  }
+
+  /**
+   * Badge colours come from the theme, not from a hardcoded green/blue pair:
+   * the old classes ignored the design tokens and were identical for `premium`
+   * and `license`, so the two were indistinguishable anyway.
+   */
+  protected badgeType(variant: 'premium' | 'free' | 'license'): ZardBadgeTypeVariants {
     switch (variant) {
       case 'premium':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 border-transparent';
+        return 'default';
       case 'free':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border-transparent';
+        return 'secondary';
       case 'license':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 border-transparent';
-      default:
-        return '';
+        return 'outline';
     }
   }
 }

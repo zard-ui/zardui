@@ -22,8 +22,8 @@ export const COLLAPSIBLE_API: ApiSection[] = [
       {
         name: '(zOpenChange)',
         description: 'Emits the new open state whenever the panel toggles',
-        type: 'boolean',
-        default: '',
+        type: 'EventEmitter<boolean>',
+        default: '-',
       },
     ],
   },

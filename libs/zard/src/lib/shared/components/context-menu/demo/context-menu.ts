@@ -1,10 +1,10 @@
 import { CONTEXT_MENU_DEMO_BASIC } from '@generated/components/context-menu/demo/basic';
 import { CONTEXT_MENU_DEMO_CHECKBOXES } from '@generated/components/context-menu/demo/checkboxes';
-import { CONTEXT_MENU_DEMO_DEFAULT } from '@generated/components/context-menu/demo/default';
 import { CONTEXT_MENU_DEMO_DESTRUCTIVE } from '@generated/components/context-menu/demo/destructive';
 import { CONTEXT_MENU_DEMO_DISABLED } from '@generated/components/context-menu/demo/disabled';
 import { CONTEXT_MENU_DEMO_GROUPS } from '@generated/components/context-menu/demo/groups';
 import { CONTEXT_MENU_DEMO_ICONS } from '@generated/components/context-menu/demo/icons';
+import { CONTEXT_MENU_DEMO_PREVIEW } from '@generated/components/context-menu/demo/preview';
 import { CONTEXT_MENU_DEMO_RADIO } from '@generated/components/context-menu/demo/radio';
 import { CONTEXT_MENU_DEMO_SHORTCUTS } from '@generated/components/context-menu/demo/shortcuts';
 import { CONTEXT_MENU_DEMO_SUBMENU } from '@generated/components/context-menu/demo/submenu';
@@ -14,18 +14,18 @@ import { CONTEXT_MENU_MANUAL_CODE } from '@generated/installation/manual/context
 import { CONTEXT_MENU_USAGE_CODE, CONTEXT_MENU_USAGE_IMPORT } from '@generated/usage/context-menu';
 import type { CodeBlockData } from '@highlight/types';
 
-import { ZardContextMenuBasicDemoComponent } from '@/shared/components/context-menu/demo/basic';
-import { ZardContextMenuCheckboxesDemoComponent } from '@/shared/components/context-menu/demo/checkboxes';
-import { ZardContextMenuDestructiveDemoComponent } from '@/shared/components/context-menu/demo/destructive';
-import { ZardContextMenuDisabledDemoComponent } from '@/shared/components/context-menu/demo/disabled';
-import { ZardContextMenuGroupsDemoComponent } from '@/shared/components/context-menu/demo/groups';
-import { ZardContextMenuIconsDemoComponent } from '@/shared/components/context-menu/demo/icons';
-import { ZardContextMenuRadioDemoComponent } from '@/shared/components/context-menu/demo/radio';
-import { ZardContextMenuShortcutsDemoComponent } from '@/shared/components/context-menu/demo/shortcuts';
-import { ZardContextMenuSubmenuDemoComponent } from '@/shared/components/context-menu/demo/submenu';
-import { ZardContextMenuTableRowsDemoComponent } from '@/shared/components/context-menu/demo/table-rows';
+import { ZardDemoContextMenuBasicComponent } from '@/shared/components/context-menu/demo/basic';
+import { ZardDemoContextMenuCheckboxesComponent } from '@/shared/components/context-menu/demo/checkboxes';
+import { ZardDemoContextMenuDestructiveComponent } from '@/shared/components/context-menu/demo/destructive';
+import { ZardDemoContextMenuDisabledComponent } from '@/shared/components/context-menu/demo/disabled';
+import { ZardDemoContextMenuGroupsComponent } from '@/shared/components/context-menu/demo/groups';
+import { ZardDemoContextMenuIconsComponent } from '@/shared/components/context-menu/demo/icons';
+import { ZardDemoContextMenuRadioComponent } from '@/shared/components/context-menu/demo/radio';
+import { ZardDemoContextMenuShortcutsComponent } from '@/shared/components/context-menu/demo/shortcuts';
+import { ZardDemoContextMenuSubmenuComponent } from '@/shared/components/context-menu/demo/submenu';
+import { ZardDemoContextMenuTableRowsComponent } from '@/shared/components/context-menu/demo/table-rows';
 
-import { ZardContextMenuDemoComponent } from './default';
+import { ZardDemoContextMenuPreviewComponent } from './preview';
 import { CONTEXT_MENU_API } from '../doc/api';
 
 const CONTEXT_MENU_COMPOSITION_CODE = `div[z-context-menu]
@@ -75,69 +75,69 @@ export const CONTEXT_MENU = {
   composition: CONTEXT_MENU_COMPOSITION,
   preview: {
     name: 'preview',
-    component: ZardContextMenuDemoComponent,
-    codeData: CONTEXT_MENU_DEMO_DEFAULT,
+    component: ZardDemoContextMenuPreviewComponent,
+    codeData: CONTEXT_MENU_DEMO_PREVIEW,
   },
   examples: [
     {
       name: 'basic',
       description: 'A few actions, one of them disabled. Right click the area to open the menu.',
-      component: ZardContextMenuBasicDemoComponent,
+      component: ZardDemoContextMenuBasicComponent,
       codeData: CONTEXT_MENU_DEMO_BASIC,
     },
     {
       name: 'submenu',
       description: 'Use `z-dropdown-menu-sub-trigger` with a `z-dropdown-menu-sub-content` to nest secondary actions.',
-      component: ZardContextMenuSubmenuDemoComponent,
+      component: ZardDemoContextMenuSubmenuComponent,
       codeData: CONTEXT_MENU_DEMO_SUBMENU,
     },
     {
       name: 'shortcuts',
       description: 'Add `z-dropdown-menu-shortcut` to show keyboard hints.',
-      component: ZardContextMenuShortcutsDemoComponent,
+      component: ZardDemoContextMenuShortcutsComponent,
       codeData: CONTEXT_MENU_DEMO_SHORTCUTS,
     },
     {
       name: 'groups',
       description: 'Group related actions and separate them with dividers.',
-      component: ZardContextMenuGroupsDemoComponent,
+      component: ZardDemoContextMenuGroupsComponent,
       codeData: CONTEXT_MENU_DEMO_GROUPS,
     },
     {
       name: 'icons',
       description: 'Combine icons with labels for quick scanning.',
-      component: ZardContextMenuIconsDemoComponent,
+      component: ZardDemoContextMenuIconsComponent,
       codeData: CONTEXT_MENU_DEMO_ICONS,
     },
     {
       name: 'checkboxes',
       description: 'Use `z-dropdown-menu-checkbox-item` for toggles.',
-      component: ZardContextMenuCheckboxesDemoComponent,
+      component: ZardDemoContextMenuCheckboxesComponent,
       codeData: CONTEXT_MENU_DEMO_CHECKBOXES,
     },
     {
       name: 'radio',
       description: 'Use `z-dropdown-menu-radio-item` for exclusive choices.',
-      component: ZardContextMenuRadioDemoComponent,
+      component: ZardDemoContextMenuRadioComponent,
       codeData: CONTEXT_MENU_DEMO_RADIO,
     },
     {
       name: 'destructive',
       description: 'Use `zType="destructive"` to style the row as destructive.',
-      component: ZardContextMenuDestructiveDemoComponent,
+      component: ZardDemoContextMenuDestructiveComponent,
       codeData: CONTEXT_MENU_DEMO_DESTRUCTIVE,
     },
     {
       name: 'table-rows',
       description:
         'One menu serving many rows: inject `ZardContextMenuService` and call `create($event, menu)` from the row that was clicked.',
-      component: ZardContextMenuTableRowsDemoComponent,
+      component: ZardDemoContextMenuTableRowsComponent,
       codeData: CONTEXT_MENU_DEMO_TABLE_ROWS,
     },
     {
       name: 'disabled',
       description: 'With `zDisabled` the trigger stands down and the browser shows its own menu.',
-      component: ZardContextMenuDisabledDemoComponent,
+      component: ZardDemoContextMenuDisabledComponent,
       codeData: CONTEXT_MENU_DEMO_DISABLED,
     },
   ],

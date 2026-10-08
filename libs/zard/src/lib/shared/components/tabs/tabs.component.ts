@@ -5,6 +5,7 @@ import {
   Component,
   computed,
   contentChildren,
+  inject,
   input,
   isDevMode,
   output,
@@ -23,6 +24,7 @@ import {
   tabNavVariants,
   type ZardTabVariants,
 } from '@/shared/components/tabs/tabs.variants';
+import { ZardIdDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -60,11 +62,11 @@ export class ZardTabComponent {
         <button
           type="button"
           role="tab"
-          [attr.id]="'tab-' + index"
+          [attr.id]="tabId(index)"
           [attr.aria-selected]="activeTabIndex() === index"
           [attr.data-active]="activeTabIndex() === index ? '' : null"
           [attr.tabindex]="activeTabIndex() === index ? 0 : -1"
-          [attr.aria-controls]="'tabpanel-' + index"
+          [attr.aria-controls]="panelId(index)"
           [disabled]="zDisabled() || tab.zDisabled()"
           (click)="setActiveTab(index)"
           [class]="buttonClasses()"
@@ -81,8 +83,8 @@ export class ZardTabComponent {
       @for (tab of tabs(); track $index; let index = $index) {
         <div
           role="tabpanel"
-          [attr.id]="'tabpanel-' + index"
-          [attr.aria-labelledby]="'tab-' + index"
+          [attr.id]="panelId(index)"
+          [attr.aria-labelledby]="tabId(index)"
           [attr.tabindex]="0"
           [hidden]="activeTabIndex() !== index"
           class="focus-visible:ring-primary/50 outline-none focus-visible:ring-2"
@@ -99,13 +101,25 @@ export class ZardTabComponent {
     '[class]': 'containerClasses()',
     '[attr.data-orientation]': 'zOrientation()',
   },
+  hostDirectives: [ZardIdDirective],
   exportAs: 'zTabGroup',
 })
 export class ZardTabGroupComponent {
+  /** Scopes the tab and panel ids, which repeat for every group on the page when built from the index alone. */
+  private readonly uniqueId = inject(ZardIdDirective);
+
   private readonly tabComponents = contentChildren(ZardTabComponent, { descendants: true });
 
   protected readonly tabs = computed(() => this.tabComponents());
   protected readonly activeTabIndex = signal<number>(0);
+
+  protected tabId(index: number): string {
+    return `${this.uniqueId.id()}-tab-${index}`;
+  }
+
+  protected panelId(index: number): string {
+    return `${this.uniqueId.id()}-tabpanel-${index}`;
+  }
 
   protected readonly zTabChange = output<{
     index: number;

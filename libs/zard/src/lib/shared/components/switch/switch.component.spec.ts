@@ -446,8 +446,10 @@ describe('ZardSwitchComponent', () => {
 
   describe('Thumb Element', () => {
     it.each([
-      ['sm', 'checked', 'data-[state=checked]:translate-x-[calc(100%-2px)]'],
-      ['default', 'checked', 'data-[state=checked]:translate-x-[calc(100%-2px)]'],
+      ['sm', 'checked', 'ltr:data-[state=checked]:translate-x-[calc(100%-2px)]'],
+      ['default', 'checked', 'ltr:data-[state=checked]:translate-x-[calc(100%-2px)]'],
+      ['sm', 'checked', 'rtl:data-[state=checked]:-translate-x-[calc(100%-2px)]'],
+      ['default', 'checked', 'rtl:data-[state=checked]:-translate-x-[calc(100%-2px)]'],
       ['sm', 'unchecked', 'data-[state=unchecked]:translate-x-0'],
       ['default', 'unchecked', 'data-[state=unchecked]:translate-x-0'],
     ])('applies correct transform class for size=%s and state=%s', async (zSize, zState, expectedClass) => {

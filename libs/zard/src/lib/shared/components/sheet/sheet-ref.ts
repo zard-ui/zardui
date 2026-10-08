@@ -2,23 +2,23 @@ import type { OverlayRef } from '@angular/cdk/overlay';
 
 import { ZardOverlayRefBase } from '@/shared/core';
 
-import type { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
-
-/** How long the leave transition runs, in ms. Mirrors the CSS. */
-const SHEET_DURATION = 200;
+import type { ZardSheetContainerComponent, ZardSheetOptions } from './sheet-container.component';
+import { SHEET_DURATION } from './sheet-panel.component';
 
 /**
  * Reference to a sheet opened via {@link ZardSheetService}.
  *
- * The lifecycle lives in {@link ZardOverlayRefBase}, shared with dialog, drawer
- * and alert-dialog; only the leave animation and the mask behaviour are the
+ * Exposes signals for reactive consumption (`isClosing`, `result`,
+ * `componentInstance`) and methods for closing the sheet. The lifecycle itself
+ * lives in {@link ZardOverlayRefBase}, shared with dialog, drawer and
+ * alert-dialog; only the leave animation and the mask behaviour are the
  * sheet's own.
  */
 export class ZardSheetRef<T = unknown, R = unknown, U = unknown> extends ZardOverlayRefBase<T, R> {
   constructor(
     overlayRef: OverlayRef | null,
     private readonly config: ZardSheetOptions<T, U>,
-    private readonly containerInstance: ZardSheetComponent<T, U> | null,
+    private readonly containerInstance: ZardSheetContainerComponent<T, U> | null,
     platformId: object,
   ) {
     super(overlayRef, config, platformId);
@@ -30,7 +30,8 @@ export class ZardSheetRef<T = unknown, R = unknown, U = unknown> extends ZardOve
   }
 
   protected override playLeaveAnimation(): void {
-    this.containerInstance?.getNativeElement().classList.add('sheet-leave');
+    this.containerInstance?.leave();
+    this.overlayRef?.detachBackdrop();
   }
 
   protected override closesOnOutsidePointer(): boolean {

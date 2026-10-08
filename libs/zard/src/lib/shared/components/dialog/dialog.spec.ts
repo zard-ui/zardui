@@ -2,12 +2,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
 
 import { ZardDialogService } from './dialog.service';
 
 @Component({
-  imports: [ZardDialogImports],
+  imports: [ZardDialogImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="openDialog()">Open dialog</button>
   `,
@@ -50,7 +51,7 @@ describe('ZardDialogComponent', () => {
     it('should create a dialog when the button is clicked', () => {
       openDialog();
 
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       if (isPlatformBrowser(platformId)) {
         expect(dialogElement).toBeTruthy();
       } else {
@@ -62,7 +63,7 @@ describe('ZardDialogComponent', () => {
     it('should display the dialog title, description and content', () => {
       openDialog();
 
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
 
       if (isPlatformBrowser(platformId)) {
         expect(dialogElement).toBeTruthy();
@@ -87,7 +88,7 @@ describe('ZardDialogComponent', () => {
     it('should close the dialog when the cancel button is clicked', async () => {
       openDialog();
 
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
 
       if (isPlatformBrowser(platformId)) {
         expect(dialogElement).toBeTruthy();
@@ -100,7 +101,7 @@ describe('ZardDialogComponent', () => {
         await new Promise(resolve => setTimeout(resolve, 200));
         fixture.detectChanges();
 
-        expect(document.querySelector('z-dialog')).toBeNull();
+        expect(document.querySelector('z-dialog-panel')).toBeNull();
       } else {
         // In SSR environment, dialog should not be created
         expect(dialogElement).toBeNull();
@@ -110,7 +111,7 @@ describe('ZardDialogComponent', () => {
     it('should close the dialog when the ok button is clicked', async () => {
       openDialog();
 
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
 
       if (isPlatformBrowser(platformId)) {
         expect(dialogElement).toBeTruthy();
@@ -124,7 +125,7 @@ describe('ZardDialogComponent', () => {
         await new Promise(resolve => setTimeout(resolve, 200));
         fixture.detectChanges();
 
-        expect(document.querySelector('z-dialog')).toBeNull();
+        expect(document.querySelector('z-dialog-panel')).toBeNull();
       } else {
         // In SSR environment, dialog should not be created
         expect(dialogElement).toBeNull();
@@ -135,7 +136,7 @@ describe('ZardDialogComponent', () => {
   it('should close the dialog when the x button is clicked', async () => {
     openDialog();
 
-    const dialogElement = document.querySelector('z-dialog');
+    const dialogElement = document.querySelector('z-dialog-panel');
 
     if (isPlatformBrowser(platformId)) {
       expect(dialogElement).toBeTruthy();
@@ -148,7 +149,7 @@ describe('ZardDialogComponent', () => {
       await new Promise(resolve => setTimeout(resolve, 200));
       fixture.detectChanges();
 
-      expect(document.querySelector('z-dialog')).toBeNull();
+      expect(document.querySelector('z-dialog-panel')).toBeNull();
     } else {
       // In SSR environment, dialog should not be created
       expect(dialogElement).toBeNull();
@@ -166,7 +167,7 @@ describe('ZardDialogComponent', () => {
       await new Promise(resolve => setTimeout(resolve, 50));
       fixture.detectChanges();
 
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
     });
 
@@ -180,7 +181,7 @@ describe('ZardDialogComponent', () => {
       await new Promise(resolve => setTimeout(resolve, 50));
       fixture.detectChanges();
 
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
 
       const closeButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-close-header-button"]');
@@ -190,7 +191,7 @@ describe('ZardDialogComponent', () => {
       await new Promise(resolve => setTimeout(resolve, 200));
       fixture.detectChanges();
 
-      expect(document.querySelector('z-dialog')).toBeNull();
+      expect(document.querySelector('z-dialog-panel')).toBeNull();
     });
 
     it('should prevent multiple close() calls from queuing duplicate disposals', async () => {
@@ -203,7 +204,7 @@ describe('ZardDialogComponent', () => {
       await new Promise(resolve => setTimeout(resolve, 50));
       fixture.detectChanges();
 
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
 
       const closeButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-close-header-button"]');
@@ -218,7 +219,7 @@ describe('ZardDialogComponent', () => {
       fixture.detectChanges();
 
       // Dialog should be closed without errors
-      expect(document.querySelector('z-dialog')).toBeNull();
+      expect(document.querySelector('z-dialog-panel')).toBeNull();
     });
   });
 
@@ -230,7 +231,7 @@ describe('ZardDialogComponent', () => {
         return;
       }
 
-      const dialog = document.querySelector('z-dialog') as HTMLElement;
+      const dialog = document.querySelector('z-dialog-panel') as HTMLElement;
       expect(dialog).toBeTruthy();
       expect(dialog.getAttribute('role')).toBe('dialog');
       expect(dialog.getAttribute('aria-modal')).toBe('true');
@@ -243,7 +244,7 @@ describe('ZardDialogComponent', () => {
         return;
       }
 
-      const dialog = document.querySelector('z-dialog') as HTMLElement;
+      const dialog = document.querySelector('z-dialog-panel') as HTMLElement;
       const labelledBy = dialog.getAttribute('aria-labelledby');
       const describedBy = dialog.getAttribute('aria-describedby');
 
@@ -266,7 +267,7 @@ describe('ZardDialogComponent', () => {
       fixture.detectChanges();
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      const dialog = document.querySelector('z-dialog');
+      const dialog = document.querySelector('z-dialog-panel');
       expect(dialog).toBeTruthy();
 
       // Close the dialog
@@ -275,7 +276,7 @@ describe('ZardDialogComponent', () => {
       fixture.detectChanges();
       await new Promise(resolve => setTimeout(resolve, 200));
 
-      expect(document.querySelector('z-dialog')).toBeNull();
+      expect(document.querySelector('z-dialog-panel')).toBeNull();
       expect(document.activeElement).toBe(trigger);
     });
   });
@@ -291,14 +292,14 @@ describe('ZardDialogComponent', () => {
       const second = dialogService.create({ zTitle: 'Second', zContent: 'two' });
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      let dialogs = document.querySelectorAll('z-dialog');
+      let dialogs = document.querySelectorAll('z-dialog-panel');
       expect(dialogs.length).toBe(2);
 
       const topOverlay = dialogs[1].closest('.cdk-overlay-pane') as HTMLElement;
       topOverlay.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
       await new Promise(resolve => setTimeout(resolve, 200));
 
-      dialogs = document.querySelectorAll('z-dialog');
+      dialogs = document.querySelectorAll('z-dialog-panel');
       expect(dialogs.length).toBe(1);
       expect(second.isClosing()).toBe(true);
       expect(first.isClosing()).toBe(false);
@@ -327,7 +328,7 @@ describe('ZardDialogComponent', () => {
       expect(ref.result()).toBe('done');
 
       await new Promise(resolve => setTimeout(resolve, 200));
-      expect(document.querySelector('z-dialog')).toBeNull();
+      expect(document.querySelector('z-dialog-panel')).toBeNull();
     });
   });
 
@@ -341,7 +342,7 @@ describe('ZardDialogComponent', () => {
       dialogService.create<unknown, unknown>({ zTitle: 'Duration', zContent: 'x', zDuration: 250 });
       await new Promise(resolve => setTimeout(resolve, 50));
 
-      const dialog = document.querySelector('z-dialog') as HTMLElement;
+      const dialog = document.querySelector('z-dialog-panel') as HTMLElement;
       expect(dialog.style.getPropertyValue('--z-dialog-duration')).toBe('250ms');
 
       dialog.querySelector<HTMLButtonElement>('[data-testid="z-cancel-button"]')?.click();
