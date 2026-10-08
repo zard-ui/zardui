@@ -1,3 +1,13 @@
+## 1.0.0-beta.132 (2026-10-08)
+
+### ✨ Features
+
+- **registry:** let components depend on the utilities stylesheet ([#749](https://github.com/zard-ui/zardui/pull/749))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.131 (2026-10-08)
 
 ### ✨ Features
