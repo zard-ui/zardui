@@ -1,6 +1,7 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
+import { provideZardI18n, ZardI18nService } from '@/shared/core/i18n';
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 import { ZardCalendarComponent, type CalendarDay } from './calendar.component';
@@ -388,6 +389,91 @@ describe('ZardCalendarComponent', () => {
       component.resetNavigation();
 
       expect(component['currentDate']().getTime()).toEqual(testDate.getTime());
+    });
+  });
+
+  describe('Internationalization (i18n)', () => {
+    it('renders default en-US calendar headers and labels when no DI provider is specified', () => {
+      fixture.componentRef.setInput('value', new Date(2024, 7, 15));
+      fixture.detectChanges();
+
+      const host = fixture.nativeElement as HTMLElement;
+      const caption = host.querySelector('[data-slot="calendar-caption"]');
+      expect(caption?.textContent?.trim()).toBe('August 2024');
+
+      const prevButton = host.querySelector('z-calendar-navigation button');
+      expect(prevButton?.getAttribute('aria-label')).toBe('Previous month');
+
+      const firstGridDay = component.calendarDays()[0];
+      expect(firstGridDay.date.getDay()).toBe(0);
+
+      const columnHeaders = host.querySelectorAll('[role="columnheader"]');
+      expect(columnHeaders[0].textContent?.trim()).toBe('Sun');
+    });
+
+    describe('with DI provideZardI18n', () => {
+      let diFixture: ComponentFixture<ZardCalendarComponent>;
+      let diComponent: ZardCalendarComponent;
+      let i18nService: ZardI18nService;
+
+      beforeEach(async () => {
+        await TestBed.resetTestingModule();
+        await TestBed.configureTestingModule({
+          imports: [ZardCalendarComponent],
+          providers: [
+            provideZardI18n('fr-FR'),
+            {
+              provide: EVENT_MANAGER_PLUGINS,
+              useClass: ZardEventManagerPlugin,
+              multi: true,
+            },
+          ],
+        }).compileComponents();
+
+        diFixture = TestBed.createComponent(ZardCalendarComponent);
+        diComponent = diFixture.componentInstance;
+        i18nService = TestBed.inject(ZardI18nService);
+        diFixture.detectChanges();
+      });
+
+      it('aligns calendar days grid to Monday (weekStartsOn = 1) from DI', () => {
+        diFixture.componentRef.setInput('value', new Date(2024, 9, 15));
+        diFixture.detectChanges();
+
+        const firstGridDay = diComponent.calendarDays()[0];
+        expect(firstGridDay.date.getDay()).toBe(1);
+      });
+
+      it('renders localized labels and month names in child navigation and grid', () => {
+        diFixture.componentRef.setInput('value', new Date(2024, 7, 15));
+        diFixture.detectChanges();
+
+        const host = diFixture.nativeElement as HTMLElement;
+        const caption = host.querySelector('[data-slot="calendar-caption"]');
+        expect(caption?.textContent?.trim()).toBe('Août 2024');
+
+        const prevButton = host.querySelector('z-calendar-navigation button');
+        expect(prevButton?.getAttribute('aria-label')).toBe('Mois précédent');
+
+        const columnHeaders = host.querySelectorAll('[role="columnheader"]');
+        expect(columnHeaders).toHaveLength(7);
+        expect(columnHeaders[0].textContent?.trim()).toMatch(/^Lun/);
+      });
+
+      it('reactively updates when ZardI18nService locale changes', () => {
+        diFixture.componentRef.setInput('value', new Date(2024, 7, 15));
+        diFixture.detectChanges();
+
+        const host = diFixture.nativeElement as HTMLElement;
+        expect(host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('Août 2024');
+
+        i18nService.setLocale('es-ES');
+        diFixture.detectChanges();
+
+        expect(host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('Agosto 2024');
+        const prevButton = host.querySelector('z-calendar-navigation button');
+        expect(prevButton?.getAttribute('aria-label')).toBe('Mes anterior');
+      });
     });
   });
 });

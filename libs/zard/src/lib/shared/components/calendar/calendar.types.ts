@@ -1,3 +1,5 @@
+import type { ZardDayOfWeek } from '@/shared/core/i18n';
+
 export type CalendarMode = 'single' | 'multiple' | 'range';
 export type CalendarValue = Date | Date[] | null;
 
@@ -38,4 +40,6 @@ export interface CalendarDayConfig {
   disabled: boolean;
   /** Individual days that cannot be selected, on top of the min/max range. */
   disabledDates?: Date[];
+  /** Day of week the calendar starts on (0 = Sunday, 1 = Monday, ..., 6 = Saturday). Defaults to 0. */
+  weekStartsOn?: ZardDayOfWeek;
 }

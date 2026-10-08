@@ -5,6 +5,7 @@ import {
   Component,
   computed,
   type ElementRef,
+  inject,
   input,
   numberAttribute,
   output,
@@ -16,8 +17,9 @@ import {
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+import { ZardCalendarI18nService } from './calendar-i18n.service';
 import type { CalendarDay, CalendarDayTemplateContext } from './calendar.types';
-import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
+import { getDayAriaLabel, getDayId } from './calendar.utils';
 import {
   calendarDayButtonVariants,
   calendarDayVariants,
@@ -34,7 +36,7 @@ import {
     <div #gridContainer class="w-full">
       <!-- Weekdays Header -->
       <div [class]="weekdaysClasses()" role="row">
-        @for (weekday of weekdays; track weekday) {
+        @for (weekday of effectiveWeekdays(); track weekday) {
           <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
           </div>
@@ -93,6 +95,7 @@ import {
   exportAs: 'zCalendarGrid',
 })
 export class ZardCalendarGridComponent {
+  private readonly calendarI18n = inject(ZardCalendarI18nService);
   private readonly gridContainer = viewChild.required<ElementRef<HTMLElement>>('gridContainer');
 
   // Inputs
@@ -110,7 +113,7 @@ export class ZardCalendarGridComponent {
   readonly nextMonth = output<{ position: string; dayOfWeek: number }>();
   readonly navigateYear = output<number>();
 
-  readonly weekdays = calendarWeekdays;
+  protected readonly effectiveWeekdays = this.calendarI18n.weekdays;
 
   private readonly focusedDayIndex = signal<number>(-1);
 
@@ -166,12 +169,12 @@ export class ZardCalendarGridComponent {
   }
 
   protected getDayAriaLabel(day: CalendarDay): string {
-    return getDayAriaLabel(day);
+    return getDayAriaLabel(day, this.calendarI18n.locale(), this.calendarI18n.labels());
   }
 
   /** Date exposed as `data-day`, mirroring the shadcn day button. */
   protected getDayLabel(day: CalendarDay): string {
-    return day.date.toLocaleDateString('en-US');
+    return day.date.toLocaleDateString(this.calendarI18n.locale());
   }
 
   protected getFocusedDayIndex(): number {

@@ -45,6 +45,7 @@ import {
 import { mergeClasses } from '@/shared/utils/merge-classes';
 import { noopFn } from '@/shared/utils/noop';
 
+import { ZardCalendarI18nService } from './calendar-i18n.service';
 import type { ZardButtonTypeVariants } from '../button/button.variants';
 
 @Component({
@@ -103,6 +104,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
 })
 export class ZardCalendarComponent implements ControlValueAccessor {
   private readonly injector = inject(Injector);
+  private readonly calendarI18n = inject(ZardCalendarI18nService);
   private readonly gridRefs = viewChildren(ZardCalendarGridComponent);
 
   /** The grid that owns the roving focus — always the first rendered month. */
@@ -201,6 +203,8 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     const selectedDates = getSelectedDatesArray(this.normalizedValue(), mode);
     const total = Math.max(1, this.zNumberOfMonths());
 
+    const weekStartsOn = this.calendarI18n.weekStartsOn();
+
     return Array.from({ length: total }, (_, offset) => {
       const monthDate = makeSafeDate(base.getFullYear(), base.getMonth() + offset, 1);
       const year = monthDate.getFullYear();
@@ -219,6 +223,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
           maxDate: this.maxDate(),
           disabled: this.disabled(),
           disabledDates: this.zDisabledDates(),
+          weekStartsOn,
         }),
       };
     });
