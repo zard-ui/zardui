@@ -1,5 +1,3 @@
-import { COMPONENTS_PATH } from '@doc/shared/constants/routes.constant';
-
 import { ZARD_VERSION } from '../../constants/zard-version.constant';
 import { type ChangelogEntry } from '../changelog-entry.interface';
 
@@ -33,36 +31,6 @@ export const SEPTEMBER_2026: ChangelogEntry = {
     title: 'Zard UI v1.0 is here',
     summary:
       'Alpha, Beta, and Release Candidate converge into a stable 1.0: the component API, the CLI, and the registry format are now covered by semantic versioning, and breaking changes only ship behind a major bump from here on.',
-    facts: [
-      {
-        label: 'Components',
-        value: `${COMPONENTS_PATH.data.length}+ accessible, production-ready components`,
-      },
-      {
-        label: 'CLI',
-        value:
-          'zard-cli sets up an existing Angular, Nx or Analog project and installs components and blocks on demand',
-      },
-      {
-        label: 'Registry',
-        value: 'A versioned JSON registry — the CLI and MCP server read the same source',
-      },
-      {
-        label: 'MCP Server',
-        value: 'zard-mcp on npm, so AI assistants read and generate against the real components',
-      },
-      {
-        label: 'Skills',
-        value: 'Two agent skills, zard and zard-migration, teach assistants the conventions and the upgrade path',
-      },
-      {
-        label: 'Stability',
-        value: 'Semantic versioning, starting now — no more surprise breaks between betas',
-      },
-    ],
-    cta: {
-      label: 'Get started',
-      link: '/docs/installation',
-    },
+    video: '/video/release-1.0.mp4',
   },
 };

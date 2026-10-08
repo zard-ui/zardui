@@ -47,18 +47,6 @@ export interface ChangelogExample {
   fillContainer?: boolean;
 }
 
-/** One fact shown in a release banner's grid — e.g. `{ label: 'Components', value: '53+ components' }`. */
-export interface ChangelogReleaseFact {
-  label: string;
-  value: string;
-}
-
-/** The call to action a release banner offers, e.g. "Get started" → `/docs/installation`. */
-export interface ChangelogReleaseCta {
-  label: string;
-  link: string;
-}
-
 /**
  * A release moment — the data behind `z-changelog-release`. Present only on the
  * entry for the month a major version ships; every other entry omits it entirely.
@@ -69,8 +57,11 @@ export interface ChangelogRelease {
   version: string;
   title: string;
   summary: string;
-  facts: ChangelogReleaseFact[];
-  cta?: ChangelogReleaseCta;
+  /**
+   * Path of the release clip under `apps/web/public`, e.g. `/video/release-1.0.mp4`.
+   * Shown like a GIF: it plays on its own, muted and in a loop, with no controls.
+   */
+  video: string;
 }
 
 /**
