@@ -31,15 +31,10 @@ import { aspectRatioVariants } from './aspect-ratio.variants';
   template: `
     <ng-content />
   `,
-  styles: `
-    :host {
-      display: block;
-    }
-  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.data-slot]': '"aspect-ratio"',
+    'data-slot': 'aspect-ratio',
     '[style.aspectRatio]': 'zRatio()',
     '[class]': 'classes()',
   },
@@ -56,7 +51,7 @@ export class ZardAspectRatioComponent {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const aspectRatioVariants = cva('block');
+export const aspectRatioVariants = cva('relative block');
 export type ZardAspectRatioVariants = VariantProps<typeof aspectRatioVariants>;
 ```
 
@@ -77,140 +72,94 @@ import { ZardAspectRatioComponent } from '@/shared/components/aspect-ratio/aspec
 
 ## Examples
 
-### Image
+### Square
+
+A square aspect ratio component using `[zRatio]="1 / 1"`. This is useful for displaying images in a square format.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAspectRatioComponent } from '../aspect-ratio.component';
 
 @Component({
-  selector: 'z-demo-aspect-ratio-image',
-  imports: [ZardAspectRatioComponent],
+  selector: 'z-demo-aspect-ratio-square',
+  imports: [ZardAspectRatioComponent, NgOptimizedImage],
   template: `
-    <div z-aspect-ratio [zRatio]="16 / 9" class="w-full overflow-hidden rounded-lg md:w-94">
-      <img src="/images/placeholder.svg" alt="Cover" class="size-full object-cover" />
-    </div>
-  `,
-})
-export class ZardDemoAspectRatioImageComponent {}
-```
-
-### Embed
-
-```angular-ts
-import { Component } from '@angular/core';
-
-import { ZardAspectRatioComponent } from '../aspect-ratio.component';
-
-@Component({
-  selector: 'z-demo-aspect-ratio-embed',
-  imports: [ZardAspectRatioComponent],
-  template: `
-    <z-aspect-ratio zRatio="4 / 3" class="w-[420px] overflow-hidden rounded-md border">
-      <iframe
-        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-        title="Video embed"
-        class="size-full"
-        allowfullscreen
-      ></iframe>
+    <z-aspect-ratio [zRatio]="1 / 1" class="bg-muted w-full max-w-48 rounded-lg">
+      <img
+        ngSrc="https://avatar.vercel.sh/shadcn1"
+        alt="Photo"
+        fill
+        class="rounded-lg object-cover grayscale dark:brightness-20"
+      />
     </z-aspect-ratio>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
 })
-export class ZardDemoAspectRatioEmbedComponent {}
+export class ZardDemoAspectRatioSquareComponent {}
 ```
 
-### Avatar
+### Portrait
+
+A portrait aspect ratio component using `[zRatio]="9 / 16"`. This is useful for displaying images in a portrait format.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardAvatarComponent } from '../../avatar';
 import { ZardAspectRatioComponent } from '../aspect-ratio.component';
 
 @Component({
-  selector: 'z-demo-aspect-ratio-avatar',
-  imports: [ZardAspectRatioComponent, ZardAvatarComponent],
+  selector: 'z-demo-aspect-ratio-portrait',
+  imports: [ZardAspectRatioComponent, NgOptimizedImage],
   template: `
-    <z-aspect-ratio class="w-36 overflow-hidden rounded-full border">
-      <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zFallback="ZA" class="size-full" />
+    <z-aspect-ratio [zRatio]="9 / 16" class="bg-muted w-full max-w-40 rounded-lg">
+      <img
+        ngSrc="https://avatar.vercel.sh/shadcn1"
+        alt="Photo"
+        fill
+        class="rounded-lg object-cover grayscale dark:brightness-20"
+      />
     </z-aspect-ratio>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
 })
-export class ZardDemoAspectRatioAvatarComponent {}
+export class ZardDemoAspectRatioPortraitComponent {}
 ```
 
-### Card Grid
+### Rtl
+
+The box keeps its ratio in a right-to-left layout; only the surrounding content mirrors.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import {
-  ZardCardComponent,
-  ZardCardContentComponent,
-  ZardCardDescriptionComponent,
-  ZardCardHeaderComponent,
-  ZardCardTitleComponent,
-} from '../../card';
 import { ZardAspectRatioComponent } from '../aspect-ratio.component';
 
-interface GridCard {
-  title: string;
-  description: string;
-  body: string;
-}
-
 @Component({
-  selector: 'z-demo-aspect-ratio-card-grid',
-  imports: [
-    ZardAspectRatioComponent,
-    ZardCardComponent,
-    ZardCardHeaderComponent,
-    ZardCardDescriptionComponent,
-    ZardCardTitleComponent,
-    ZardCardContentComponent,
-  ],
+  selector: 'z-demo-aspect-ratio-rtl',
+  imports: [ZardAspectRatioComponent, NgOptimizedImage],
   template: `
-    <div class="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] items-start gap-4">
-      @for (item of items; track item.title) {
-        <div z-aspect-ratio [zRatio]="16 / 11">
-          <z-card zSize="sm" class="flex size-full flex-col overflow-hidden">
-            <z-card-header class="px-4">
-              <z-card-title [zTitle]="item.title" />
-              <z-card-description [zDescription]="item.description" />
-            </z-card-header>
-
-            <z-card-content class="flex-1 px-4">
-              <p class="text-muted-foreground text-sm">{{ item.body }}</p>
-            </z-card-content>
-          </z-card>
-        </div>
-      }
-    </div>
+    <figure class="w-full max-w-sm" dir="rtl">
+      <z-aspect-ratio [zRatio]="16 / 9" class="bg-muted rounded-lg">
+        <img
+          ngSrc="https://avatar.vercel.sh/shadcn1"
+          alt="Photo"
+          fill
+          class="rounded-lg object-cover grayscale dark:brightness-20"
+        />
+      </z-aspect-ratio>
+      <figcaption class="text-muted-foreground mt-2 text-center text-sm">منظر طبيعي جميل</figcaption>
+    </figure>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
 })
-export class ZardDemoAspectRatioCardGridComponent {
-  protected readonly items: GridCard[] = [
-    {
-      title: 'Mountains',
-      description: 'Alpine peaks.',
-      body: 'A quiet ridge line above the clouds, shot just after sunrise.',
-    },
-    {
-      title: 'Forest',
-      description: 'Morning canopy.',
-      body: 'Dense pine cover with shafts of light breaking through the mist.',
-    },
-    { title: 'Ocean', description: 'Calm waters.', body: 'A wide, empty shoreline with the tide pulled far back.' },
-    {
-      title: 'Desert',
-      description: 'Endless dunes.',
-      body: 'Rippled sand stretching to the horizon under a clear sky.',
-    },
-    { title: 'Glacier', description: 'Frozen rivers.', body: 'Blue ice carved slowly over thousands of years.' },
-    { title: 'Canyon', description: 'Layered rock.', body: 'Deep red walls cut by a river far below.' },
-  ];
-}
+export class ZardDemoAspectRatioRtlComponent {}
 ```
 
 ## API Reference

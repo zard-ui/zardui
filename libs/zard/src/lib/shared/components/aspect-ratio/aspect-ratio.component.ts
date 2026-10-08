@@ -11,15 +11,10 @@ import { aspectRatioVariants } from './aspect-ratio.variants';
   template: `
     <ng-content />
   `,
-  styles: `
-    :host {
-      display: block;
-    }
-  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.data-slot]': '"aspect-ratio"',
+    'data-slot': 'aspect-ratio',
     '[style.aspectRatio]': 'zRatio()',
     '[class]': 'classes()',
   },
