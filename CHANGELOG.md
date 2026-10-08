@@ -1,3 +1,14 @@
+## 1.0.0-beta.131 (2026-10-08)
+
+### ✨ Features
+
+- **attachment:** add file and image attachment component ([#747](https://github.com/zard-ui/zardui/pull/747))
+
+### ❤️ Thank You
+
+- JustDo1t90
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.130 (2026-10-08)
 
 ### ✨ Features
