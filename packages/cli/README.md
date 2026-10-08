@@ -1,60 +1,114 @@
-# Zard
+# zard-cli
 
-Modern Angular component library inspired by shadcn/ui, built with TailwindCSS and designed for developers who value <b>beautiful</b>, <b>accessible</b>, and <b>completely free</b> open source components.
+The command line for [zard/ui](https://www.zardui.com): add beautiful, accessible Angular components to your project with a single command. The source lands in your codebase, so every component is yours to read and change.
 
-<a alt="Zard Ui logo" href="https://www.zardui.com/" target="_blank" rel="noreferrer">
-  <img align="center" width=100% src="https://www.zardui.com/images/github_banner.png"/>
+<a alt="zard/ui" href="https://www.zardui.com/docs/cli" target="_blank" rel="noreferrer">
+  <img align="center" width="100%" src="https://www.zardui.com/images/github_banner.png" alt="zard/ui"/>
 </a>
 
-<p align="center">Made with ❤️ from 🇧🇷</p>
 <p align="center">
-<img src="https://img.shields.io/github/stars/zard-ui/zardui" alt="zard ui repository stars"/>
+  <a href="https://www.npmjs.com/package/zard-cli"><img src="https://img.shields.io/npm/v/zard-cli?label=zard-cli" alt="npm version"/></a>
+  <a href="https://github.com/zard-ui/zardui"><img src="https://img.shields.io/github/stars/zard-ui/zardui" alt="GitHub stars"/></a>
+  <a href="https://github.com/zard-ui/zardui/blob/master/LICENSE.md"><img src="https://img.shields.io/npm/l/zard-cli" alt="license"/></a>
 </p>
 
-## Stack
+## Quick start
 
-![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+```bash
+# 1. Set up zard/ui in your project
+npx zard-cli@latest init
+
+# 2. Add components; whatever they depend on comes along
+npx zard-cli@latest add button card dialog
+```
+
+```ts
+import { Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+
+@Component({
+  selector: 'app-root',
+  imports: [ZardButtonComponent],
+  template: `
+    <z-button>Click me</z-button>
+  `,
+})
+export class AppComponent {}
+```
+
+Requires Node 20 or newer and an Angular project with Tailwind CSS v4 (`init` installs and wires Tailwind for you).
+
+## Commands
+
+### `init`
+
+Sets up your project: installs the dependencies, writes the theme tokens, maps the `@/` import alias, registers `provideZard()` and wires Tailwind into the build. The first question is the kind of project, and everything after it follows from that answer.
+
+```bash
+npx zard-cli init
+```
+
+| Option                 | Description                                                                |
+| ---------------------- | -------------------------------------------------------------------------- |
+| `-y, --yes`            | Skip the confirmation prompt                                               |
+| `-c, --cwd <cwd>`      | Working directory, defaults to the current one                             |
+| `-t, --type <type>`    | Project type: `angular`, `angular-library`, `nx`, `nx-library` or `analog` |
+| `-p, --project <name>` | Which workspace project to configure, when more than one is compatible     |
+
+Outside a terminal (CI, pipes) pass `--yes`, and `--type` to answer the first question:
+
+```bash
+npx zard-cli init --yes --type nx --project web
+```
+
+### `add`
+
+Adds components, blocks and utilities, resolving their dependencies.
+
+```bash
+npx zard-cli add [components...]
+```
+
+| Option              | Description                                                    |
+| ------------------- | -------------------------------------------------------------- |
+| `-y, --yes`         | Skip the confirmation prompt                                   |
+| `-o, --overwrite`   | Overwrite existing files                                       |
+| `-c, --cwd <cwd>`   | Working directory, defaults to the current one                 |
+| `-a, --all`         | Add every available component                                  |
+| `-p, --path <path>` | Write the components somewhere other than the configured alias |
+
+```bash
+npx zard-cli add dialog            # one component
+npx zard-cli add button card input # several at once
+npx zard-cli add sidebar-07        # a block, with the components it needs
+npx zard-cli add --all             # everything
+```
+
+## Project types
+
+| Type              | Tailwind                               | TypeScript paths     | Providers                          |
+| ----------------- | -------------------------------------- | -------------------- | ---------------------------------- |
+| `angular`         | `.postcssrc.json` at the root          | `tsconfig.json`      | `src/app/app.config.ts`            |
+| `angular-library` | none: the consuming app owns the build | `tsconfig.json`      | none                               |
+| `nx`              | `.postcssrc.json` inside the app       | `tsconfig.base.json` | `apps/<app>/src/app/app.config.ts` |
+| `nx-library`      | none: the consuming app owns the build | `tsconfig.base.json` | none                               |
+| `analog`          | plugin in `vite.config.ts`             | `tsconfig.json`      | `src/app/app.config.ts`            |
+
+## Custom registry
+
+The CLI installs from `https://zardui.com/r`. Point it at your own registry with an environment variable:
+
+```bash
+ZARD_REGISTRY_URL=https://registry.acme.dev/r npx zard-cli add button
+```
 
 ## Documentation
 
-Visit https://www.zardui.com/docs to view the documentation
-
-## Contributing
-
-We follow a **simple GitHub Flow** with automated releases. Please read our [contributing guide](/CONTRIBUTING.md) to get started.
-
-### Quick Start for Contributors
-
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feat/#123-your-feature`
-3. Develop with as many commits as you want
-4. Open a PR to `master`
-5. After review + merge = automatic release!
-
-### Development Commands
-
-```bash
-npm start          # Start dev server (port 4222)
-npm test           # Run all tests
-npm run build      # Build production
-npm run release    # Automated release
-```
+- [CLI guide](https://www.zardui.com/docs/cli): every option, the non-interactive mode and troubleshooting
+- [Components](https://www.zardui.com/docs/components)
+- [MCP server](https://www.zardui.com/docs/mcp): let your AI assistant install components through this CLI
 
 ## License
 
-Licensed under the [MIT license](/LICENSE.md).
-
-## Get In Touch
-
-<p>Click on one of the icons and Help us on this journey and be part of our community.</p>
-
-<a href="https://chat.whatsapp.com/Dctdh6Huhvm24OX6js5XKT" target="_blank">
-  <img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="whatsapp" />
-</a>
-<img src="https://dcbadge.limes.pink/api/server/https://discord.com/invite/yP8Uj9rAX9" alt="discord" />
-
-<span>Follow us in</span> <a href="https://x.com/zard_ui" target="_blank">
-  <img src="https://img.shields.io/badge/X-%23000000.svg?logo=X&logoColor=white" alt="X" />
-</a>
+[MIT](https://github.com/zard-ui/zardui/blob/master/LICENSE.md)
