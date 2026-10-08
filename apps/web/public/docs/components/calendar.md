@@ -32,6 +32,7 @@ import {
   linkedSignal,
   model,
   numberAttribute,
+  type TemplateRef,
   viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
@@ -44,6 +45,7 @@ import { filter, map } from 'rxjs';
 import { ZardCalendarGridComponent } from '@/shared/components/calendar/calendar-grid.component';
 import { ZardCalendarNavigationComponent } from '@/shared/components/calendar/calendar-navigation.component';
 import type {
+  CalendarDayTemplateContext,
   CalendarMode,
   CalendarValue,
   ZardCalendarCaptionLayout,
@@ -93,6 +95,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
             [disabled]="disabled()"
             [zShowOutsideDays]="zShowOutsideDays()"
             [zMonthIndex]="i"
+            [zDayTemplate]="zDayTemplate()"
             (dateSelect)="onDateSelect($event)"
             (previousMonth)="onGridPreviousMonth($event)"
             (nextMonth)="onGridNextMonth($event)"
@@ -153,6 +156,8 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
+  /** Renders each day button's content; receives the `CalendarDay` as the implicit context (`let-day`). */
+  readonly zDayTemplate = input<TemplateRef<CalendarDayTemplateContext> | null>(null);
 
   // Public outputs
   readonly dateChange = outputFromObservable(
@@ -560,11 +565,7 @@ export const calendarCaptionLabelVariants = cva('font-medium select-none', {
  * The focus ring therefore has to come from the select, through `has-[:focus-visible]`.
  */
 export const calendarDropdownRootVariants = cva(
-  mergeClasses(
-    'relative isolate rounded-(--cell-radius) border border-input bg-background shadow-xs',
-    'has-focus-visible:border-ring has-focus-visible:ring-3 has-focus-visible:ring-ring/50',
-    'has-disabled:pointer-events-none has-disabled:opacity-50',
-  ),
+  mergeClasses('relative isolate', 'has-disabled:pointer-events-none has-disabled:opacity-50'),
 );
 
 /** The native select itself: invisible, but on top and still clickable. */
@@ -658,7 +659,7 @@ export const calendarDayButtonVariants = cva(
     'relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1',
     'rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal',
     'transition-colors outline-none',
-    'hover:bg-muted hover:text-foreground dark:hover:text-foreground',
+    'hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 dark:hover:text-foreground',
     'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
     'disabled:pointer-events-none disabled:opacity-50',
     '[&>span]:text-xs [&>span]:opacity-70',
@@ -666,15 +667,15 @@ export const calendarDayButtonVariants = cva(
   {
     variants: {
       selected: {
-        true: 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+        true: 'bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
         false: '',
       },
       rangeStart: {
-        true: 'rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+        true: 'rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
         false: '',
       },
       rangeEnd: {
-        true: 'rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+        true: 'rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
         false: '',
       },
       rangeMiddle: {
@@ -713,6 +714,7 @@ export type ZardCalendarCaptionLabelVariants = NonNullable<VariantProps<typeof c
 ```
 
 ```angular-ts
+import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -723,13 +725,14 @@ import {
   numberAttribute,
   output,
   signal,
+  type TemplateRef,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import type { CalendarDay } from './calendar.types';
+import type { CalendarDay, CalendarDayTemplateContext } from './calendar.types';
 import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
 import {
   calendarDayButtonVariants,
@@ -742,6 +745,7 @@ import {
 
 @Component({
   selector: 'z-calendar-grid',
+  imports: [NgTemplateOutlet],
   template: `
     <div #gridContainer class="w-full">
       <!-- Weekdays Header -->
@@ -781,7 +785,11 @@ import {
                   [attr.aria-label]="getDayAriaLabel(day)"
                   [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
                 >
-                  {{ day.date.getDate() }}
+                  @if (zDayTemplate(); as dayTemplate) {
+                    <ng-container *ngTemplateOutlet="dayTemplate; context: { $implicit: day }" />
+                  } @else {
+                    {{ day.date.getDate() }}
+                  }
                 </button>
               </div>
             }
@@ -809,6 +817,8 @@ export class ZardCalendarGridComponent {
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   /** Position of this grid inside a multi-month calendar. Only used to scope the day ids. */
   readonly zMonthIndex = input(0, { transform: numberAttribute });
+  /** Custom content for each day button; falls back to the day number. */
+  readonly zDayTemplate = input<TemplateRef<CalendarDayTemplateContext> | null>(null);
 
   // Outputs
   readonly dateSelect = output<{ date: Date; index: number }>();
@@ -1366,6 +1376,11 @@ export interface CalendarDay {
   isRangeEnd?: boolean;
   isInRange?: boolean;
   id?: string;
+}
+
+/** Context handed to a `zDayTemplate`: the day is the implicit value (`let-day`). */
+export interface CalendarDayTemplateContext {
+  $implicit: CalendarDay;
 }
 
 export interface CalendarDayConfig {
@@ -1940,7 +1955,7 @@ export class ZardDemoCalendarBookedDatesComponent {
 
 ### Custom Cell Size
 
-Override the `--cell-size` CSS variable to resize the whole calendar.
+Override the `--cell-size` CSS variable to resize the whole calendar, and pass a `zDayTemplate` to render extra content in each day — here a price that changes on weekends.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
@@ -1949,36 +1964,53 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 
 import { ZardCalendarComponent } from '../calendar.component';
 
+const RANGE_LENGTH_IN_DAYS = 10;
+
+/** December 8 of the current year; the calendar opens on the month of the range start. */
+function startOfRange(): Date {
+  return new Date(new Date().getFullYear(), 11, 8);
+}
+
+function addDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+function isWeekend(date: Date): boolean {
+  return date.getDay() === 0 || date.getDay() === 6;
+}
+
 @Component({
   selector: 'z-demo-calendar-custom-cell-size',
   imports: [ZardCalendarComponent, ZardCardImports],
   template: `
-    <z-card zSize="sm" class="mx-auto w-fit">
-      <z-card-content>
+    <z-card class="mx-auto w-fit p-0">
+      <z-card-content class="p-0">
         <z-calendar
           zMode="range"
           zCaptionLayout="dropdown"
-          class="p-0 [--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
+          class="[--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
+          [zDayTemplate]="day"
           [(value)]="dateRange"
         />
       </z-card-content>
     </z-card>
+
+    <ng-template #day let-day>
+      {{ day.date.getDate() }}
+      @if (day.isCurrentMonth) {
+        <span>{{ isWeekend(day.date) ? '$120' : '$100' }}</span>
+      }
+    </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCalendarCustomCellSizeComponent {
-  readonly dateRange = signal<Date[] | null>(null);
+  readonly dateRange = signal<Date[] | null>([startOfRange(), addDays(startOfRange(), RANGE_LENGTH_IN_DAYS)]);
+
+  protected readonly isWeekend = isWeekend;
 }
-```
-
-```angular-html
-<!-- Scale every measurement with the Tailwind spacing scale. -->
-<z-calendar class="rounded-lg border [--cell-size:--spacing(11)] md:[--cell-size:--spacing(12)]" />
-```
-
-```angular-html
-<!-- Or use fixed values. -->
-<z-calendar class="rounded-lg border [--cell-size:2.75rem] md:[--cell-size:3rem]" />
 ```
 
 ### With Constraints
@@ -2068,6 +2100,7 @@ A calendar component that allows users to select a date or a range of dates, wit
 | `[zShowOutsideDays]` | Whether the days of the surrounding months are visible. When false they are hidden but keep their grid cell, so the layout never shifts | `boolean` | `true` |
 | `[zDisabledDates]` | Individual days that cannot be selected, on top of the minDate/maxDate range. Each day still keeps its grid cell and is marked with `data-disabled="true"` | `Date[]` | `[]` |
 | `[zNumberOfMonths]` | How many months are rendered side by side. They stack vertically below the `md` breakpoint, and only the first and the last month carry the navigation arrows | `number` | `1` |
+| `[zDayTemplate]` | Template rendered inside every day button instead of the plain day number. The `CalendarDay` is the implicit context (`let-day`), so the template can read `date`, `isCurrentMonth`, `isSelected` and the range flags. A second `<span>` inside the button is styled as a small caption | `TemplateRef<CalendarDayTemplateContext> \| null` | `null` |
 | `(dateChange)` | Emitted when date selection changes | `EventEmitter<Date \| Date[]>` | `-` |
 | `resetNavigation()` | Public method that moves the visible month back to the selected value and clears the roving focus | `() => void` | `-` |
 | `[--cell-size]` | CSS variable: width and height of a day cell, e.g. `class="[--cell-size:--spacing(12)]"` | `length` | `--spacing(7)` |

@@ -11,8 +11,9 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
+import { ZardSheetContainerComponent, ZardSheetOptions } from './sheet-container.component';
 import { ZardSheetRef } from './sheet-ref';
-import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
+import { SHEET_BACKDROP_CLASSES } from './sheet.variants';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 
@@ -67,8 +68,9 @@ export class ZardSheetService {
     return this.overlay.create(
       new OverlayConfig({
         hasBackdrop: true,
-        backdropClass: ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'],
+        backdropClass: SHEET_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
+        scrollStrategy: this.overlay.scrollStrategies.block(),
       }),
     );
   }
@@ -82,18 +84,18 @@ export class ZardSheetService {
       ],
     });
 
-    const containerPortal = new ComponentPortal<ZardSheetComponent<T, U>>(
-      ZardSheetComponent,
+    const containerPortal = new ComponentPortal<ZardSheetContainerComponent<T, U>>(
+      ZardSheetContainerComponent,
       config.zViewContainerRef,
       injector,
     );
 
-    return overlayRef.attach<ZardSheetComponent<T, U>>(containerPortal).instance;
+    return overlayRef.attach<ZardSheetContainerComponent<T, U>>(containerPortal).instance;
   }
 
   private attachSheetContent<T, U>(
     componentOrTemplateRef: ContentType<T>,
-    sheetContainer: ZardSheetComponent<T, U>,
+    sheetContainer: ZardSheetContainerComponent<T, U>,
     overlayRef: OverlayRef,
     config: ZardSheetOptions<T, U>,
   ): ZardSheetRef<T> {
@@ -108,7 +110,7 @@ export class ZardSheetService {
     } else if (componentOrTemplateRef != null && typeof componentOrTemplateRef !== 'string') {
       // Guard against a missing `zContent`: without it, `undefined` reaches ComponentPortal and
       // Angular throws NG0919 (DEF_TYPE_UNDEFINED) while creating the component.
-      const injector = this.createInjector<T, U>(sheetRef, config);
+      const injector = this.createInjector<T, U>(sheetRef, config, sheetContainer);
       const contentRef = sheetContainer.attachComponentPortal<T>(
         new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector),
       );
@@ -118,9 +120,15 @@ export class ZardSheetService {
     return sheetRef;
   }
 
-  private createInjector<T, U>(sheetRef: ZardSheetRef<T>, config: ZardSheetOptions<T, U>): Injector {
+  private createInjector<T, U>(
+    sheetRef: ZardSheetRef<T>,
+    config: ZardSheetOptions<T, U>,
+    sheetContainer: ZardSheetContainerComponent<T, U>,
+  ): Injector {
+    // Parented to the container's element injector so the content can reach `ZardSheetHost`
+    // — that is what lets `[z-sheet-close]` work inside service-opened content too.
     return Injector.create({
-      parent: this.injector,
+      parent: sheetContainer.injector,
       providers: [
         { provide: ZardSheetRef, useValue: sheetRef },
         { provide: Z_SHEET_DATA, useValue: config.zData },

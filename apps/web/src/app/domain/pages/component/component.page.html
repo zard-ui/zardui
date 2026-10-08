@@ -1,5 +1,4 @@
-@let data = componentData();
-@if (data) {
+@for (data of loadedComponent(); track data.componentName) {
   <z-content
     [navigationConfig]="navigationConfig"
     [activeAnchor]="activeAnchor"

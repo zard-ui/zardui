@@ -13,26 +13,26 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
   template: `
     <div class="grid w-full min-w-sm gap-4">
       <z-input-group>
-        <input z-input placeholder="Searching..." />
+        <input z-input id="input-group-spinner-search" placeholder="Searching..." />
         <z-input-group-addon zAlign="inline-end">
           <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Processing..." />
+        <input z-input id="input-group-spinner-processing" placeholder="Processing..." />
         <z-input-group-addon>
           <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Saving changes..." />
+        <input z-input id="input-group-spinner-saving" placeholder="Saving changes..." />
         <z-input-group-addon zAlign="inline-end">
           <span z-input-group-text>Saving...</span>
           <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Refreshing data..." />
+        <input z-input id="input-group-spinner-refreshing" placeholder="Refreshing data..." />
         <z-input-group-addon>
           <ng-icon name="lucideLoader" class="animate-spin" />
         </z-input-group-addon>

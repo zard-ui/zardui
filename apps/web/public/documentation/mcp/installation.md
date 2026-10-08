@@ -10,7 +10,9 @@ codex mcp add zard-ui -- npx -y zard-mcp
 gemini mcp add zard-ui npx -y zard-mcp
 ```
 
-```json title=".mcp.json" showLineNumbers copyButton
+<!-- config files -->
+
+```json tab=".mcp.json" copyButton
 {
   "mcpServers": {
     "zard-ui": {
@@ -21,7 +23,7 @@ gemini mcp add zard-ui npx -y zard-mcp
 }
 ```
 
-```json title=".cursor/mcp.json" copyButton
+```json tab="Cursor" copyButton
 {
   "mcpServers": {
     "zard-ui": {
@@ -32,7 +34,7 @@ gemini mcp add zard-ui npx -y zard-mcp
 }
 ```
 
-```json title=".vscode/mcp.json" copyButton
+```json tab="VS Code" copyButton
 {
   "servers": {
     "zard-ui": {
@@ -44,6 +46,42 @@ gemini mcp add zard-ui npx -y zard-mcp
 }
 ```
 
-```text title="Prompt"
-Add a Zard UI dialog to my settings page, with a destructive confirm button.
+```json tab="Windsurf" copyButton
+{
+  "mcpServers": {
+    "zard-ui": {
+      "command": "npx",
+      "args": ["-y", "zard-mcp"]
+    }
+  }
+}
+```
+
+```json tab="Zed" copyButton
+{
+  "context_servers": {
+    "zard-ui": {
+      "source": "custom",
+      "command": "npx",
+      "args": ["-y", "zard-mcp"]
+    }
+  }
+}
+```
+
+```toml tab="Codex" copyButton
+[mcp_servers.zard-ui]
+command = "npx"
+args = ["-y", "zard-mcp"]
+```
+
+```json title=".mcp.json" copyButton
+{
+  "mcpServers": {
+    "zard-ui": {
+      "command": "npx",
+      "args": ["-y", "zard-mcp@1.0.0"]
+    }
+  }
+}
 ```

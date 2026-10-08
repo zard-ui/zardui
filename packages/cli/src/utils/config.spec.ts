@@ -127,6 +127,7 @@ describe('resolveConfigPaths', () => {
         utils: '@/shared/utils',
         core: '@/shared/core',
         services: '@/shared/services',
+        blocks: '@/shared/blocks',
       },
     };
 
@@ -156,6 +157,7 @@ describe('resolveConfigPaths', () => {
         utils: '@/shared/utils',
         core: '@/shared/core',
         services: '@/shared/services',
+        blocks: '@/shared/blocks',
       },
     };
 

@@ -102,6 +102,7 @@ Notes:
 - `add dark-mode` needs an `index.html` path, which it asks for. Headless, it warns instead: run it interactively to configure it.
 - A pre-release Angular (`-rc`, `-next`, `-canary`) gets a compatibility warning, not a refusal.
 - Headless, the component names must come from arguments or `--all` — there is no list to pick from.
+- A block id (`dashboard-01`, `login-01` …) is accepted the same way as a component name — `add dashboard-01` pulls in the block and every component it uses, writing it under `aliases.blocks` instead of `aliases.components`. See [registry.md](./registry.md).
 
 **`--overwrite` discards local changes.** Never pass it without the user's explicit approval.
 

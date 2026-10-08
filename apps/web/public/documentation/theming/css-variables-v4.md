@@ -6,7 +6,7 @@ writes for the `neutral` base color, plus the `--destructive-foreground` definit
 ```css title="src/styles.css" copyButton expandable="true"
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
-@import './app/shared/core/css/tailwind';
+@import './app/shared/core/css/zard';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));

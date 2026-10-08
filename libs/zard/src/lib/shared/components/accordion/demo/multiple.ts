@@ -6,7 +6,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-multiple',
   imports: [ZardAccordionImports],
   template: `
-    <div z-accordion zType="multiple" class="max-w-sm">
+    <div z-accordion zDefaultValue="notifications" zType="multiple" class="max-w-sm">
       <z-accordion-item zValue="notifications" zTitle="Notification Settings">
         Manage how you receive notifications. You can enable email alerts for updates or push notifications for mobile
         devices.

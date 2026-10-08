@@ -23,6 +23,11 @@ export interface CalendarDay {
   id?: string;
 }
 
+/** Context handed to a `zDayTemplate`: the day is the implicit value (`let-day`). */
+export interface CalendarDayTemplateContext {
+  $implicit: CalendarDay;
+}
+
 export interface CalendarDayConfig {
   year: number;
   month: number;

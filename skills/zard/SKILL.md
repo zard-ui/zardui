@@ -30,18 +30,22 @@ An Angular component library. Components are installed as source code into the u
     "components": "@/shared/components",
     "utils": "@/shared/utils",
     "core": "@/shared/core",
-    "services": "@/shared/services"
+    "services": "@/shared/services",
+    "blocks": "@/shared/blocks"
   }
 }
 ```
 
 No `components.json` means the project has not been initialised — run `init` rather than writing component files by hand.
 
+A `components.json` that exists but whose installed component source uses a renamed selector or an old file layout (`core/css/tailwind.css` instead of `core/css/zard.css`, a bare `::-webkit-scrollbar` block in the global CSS, a button-group "divider" instead of "separator", a `toast` folder instead of `sonner`) belongs to a project predating the current registry. That is a job for [the migration skill](../zard-migration/SKILL.md), which names every renamed selector precisely — not for guessing which shape is current.
+
 For anything the file does not answer — what exists, what a component's API is, what it depends on — read the [registry](./registry.md) or use the [MCP server](./mcp.md). Never reconstruct a component API from memory.
 
 ## Key Fields
 
 - **`aliases.components`** → the import prefix for every component. Use the actual value; never hardcode `@/shared/components`. The prefix can be anything (`@app/...`, `~/...`) — it is mapped in `tsconfig.json`, or `tsconfig.base.json` in an Nx workspace.
+- **`aliases.blocks`** → the import prefix a block (`add dashboard-01`, `add login-01`) is written under. Absent from a `components.json` written before blocks were installable — a re-run of `init` adds it.
 - **`baseUrl`** → the source root the aliases resolve against. Components are written under it.
 - **`projectType`** → `angular`, `angular-library`, `nx`, `nx-library`, or `analog`. Decides which tsconfig holds the aliases, where Tailwind is configured, and whether an `app.config.ts` exists at all. See [cli.md](./cli.md).
 - **`appConfigFile`** → where `provideZard()` is registered. **Empty in a library** — there the consuming app registers it.
@@ -55,7 +59,7 @@ For anything the file does not answer — what exists, what a component's API is
 ## Principles
 
 1. **Install before importing.** A component only exists once `zard-cli add` has written it. Check the components directory first; do not import what is not there.
-2. **Compose what exists.** A settings page is Card + Field + Input + Button. A dashboard is Layout + Card + Chart + Table. Reach for custom markup only when nothing covers it.
+2. **Compose what exists.** A settings page is Card + Field + Input + Button. A dashboard is Sidebar + Card + Chart + Table. Reach for custom markup only when nothing covers it.
 3. **Variants before classes.** `zType="outline"`, `zSize="sm"` — not a `class` that re-styles the component into the same thing.
 4. **Semantic tokens only.** `bg-primary`, `text-muted-foreground`. Never `bg-blue-500`, never a `dark:` colour override.
 5. **The library's own conventions apply to the code you write.** Standalone, `OnPush`, `input()`, `z`-prefixed inputs. See [rules/angular.md](./rules/angular.md).
@@ -87,7 +91,7 @@ Always enforced. Each links to a file with Incorrect/Correct pairs.
 
 - **Use the full composition.** `z-card` wants `z-card-header` / `z-card-title` / `z-card-content` / `z-card-footer`, not everything dumped into content.
 - **Items belong to their group.** `z-select-item` inside `z-select-group`.
-- **Dialogs are opened through `ZardDialogService`**, not by putting a `z-dialog` in the template with an `open` flag.
+- **Dialogs, sheets, alert dialogs and drawers have two forms.** Compose `z-dialog` / `z-sheet` / `z-alert-dialog` / `z-drawer` in the template with `[(zVisible)]` and the header/title/description/footer children, or open the same panel from code through `ZardDialogService` / `ZardSheetService` / `ZardAlertDialogService` / `ZardDrawerService`. Never toggle them with a hand-written `open` flag or `@if`.
 - **Toasts go through `ZardSonnerService`** — `show`, `success`, `error`, `promise`.
 - **Use the component instead of styled markup.** `z-separator` not `<hr>`, `z-skeleton` not an `animate-pulse` div, `z-badge` not a styled span, `z-empty` not a hand-built empty state.
 
@@ -148,9 +152,10 @@ protected readonly classes = computed(() => mergeClasses(cardVariants(), this.cl
 | Dates           | `z-calendar`, `z-date-picker`                                                                                                                                |
 | Form structure  | `z-field-group`, `z-field`, `z-field-label`, `z-field-description`, `z-field-error`                                                                          |
 | Data display    | `z-table`, `z-card`, `z-item`, `z-badge`, `z-avatar`, `z-chart`                                                                                              |
-| Navigation      | `z-navigation-menu`, `z-breadcrumb`, `z-tab-group`, `z-pagination`, `z-tree`                                                                                 |
-| Layout          | `z-layout`, `z-separator`, `z-resizable`, `z-accordion`, `z-carousel`                                                                                        |
-| Overlays        | `ZardDialogService` (modal), `z-drawer` (bottom/side sheet), `z-sheet` (side panel), `z-alert-dialog` (confirmation), `z-popover`, `z-tooltip`, `z-dropdown` |
+| Navigation      | `z-navigation-menu`, `z-breadcrumb`, `z-tab-group`, `z-pagination`                                                                                           |
+| Nested / tree list | `z-collapsible`, nested — a folder tree is a `z-collapsible` inside a `z-collapsible-content`, not a dedicated tree component. See the composition rule.  |
+| Layout          | `z-sidebar` (with `z-sidebar-provider` and `z-sidebar-inset`), `z-separator`, `z-resizable`, `z-accordion`, `z-carousel`                                     |
+| Overlays        | `z-dialog` (modal), `z-drawer` (bottom/side sheet), `z-sheet` (side panel), `z-alert-dialog` (confirmation) — each also from code via its service —, `z-popover`, `z-tooltip`, `z-dropdown` |
 | Command palette | `z-command`                                                                                                                                                  |
 | Feedback        | `ZardSonnerService` (toast), `z-alert`, `z-progress`, `z-skeleton`, `z-spinner`                                                                              |
 | Empty states    | `z-empty`                                                                                                                                                    |
@@ -158,7 +163,19 @@ protected readonly classes = computed(() => mergeClasses(cardVariants(), this.cl
 | Keyboard hints  | `z-kbd`                                                                                                                                                      |
 | Rendered prose  | `typeset` + a preset class (a stylesheet, not a component) — see [rules/typeset.md](./rules/typeset.md)                                                       |
 
-Names are the registry names — the same string `zard-cli add` takes.
+Names are the registry names — the same string `zard-cli add` takes. Two names from an older registry, `tree` and `layout`, no longer exist: `layout`'s header/content/sidebar shape was replaced by the `sidebar` component above; `tree` has no replacement component — nest `z-collapsible` instead, per the row above. A project installed before the removal may still have them; see [the migration skill](../zard-migration/SKILL.md).
+
+### Non-component items
+
+Not every registry name is a component you pick for a UI need — five install infrastructure instead:
+
+| Item        | What it is                                                                          | Installed                                                              |
+| ----------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `core`      | Shared directives, the overlay stack, `provideZard()`, and the theme CSS             | Automatic — `init` installs it; no component declares it as a dependency |
+| `utils`     | `mergeClasses()` (`twMerge(clsx(...))`)                                              | Automatic — same as `core`                                              |
+| `utilities` | The `scroll-fade` / `shimmer` CSS utilities — see [rules/styling.md](./rules/styling.md) | Opt-in — `zard-cli add utilities`                                       |
+| `dark-mode` | The dark-mode service and the toggle script injected into `index.html`               | Opt-in — `zard-cli add dark-mode` (interactive; needs an `index.html` path) |
+| `typeset`   | The prose stylesheet for rendered markdown                                           | Opt-in — `zard-cli add typeset` — see [rules/typeset.md](./rules/typeset.md) |
 
 ## Workflow
 
@@ -204,3 +221,4 @@ There is no `search`, `view`, `diff`, `info`, or `build` command — those are s
 - [rules/forms.md](./rules/forms.md) — Signal Forms, Reactive Forms, Template-driven
 - [rules/icons.md](./rules/icons.md) — ng-icons, `provideIcons`, the catalog, the configurable family
 - [rules/typeset.md](./rules/typeset.md) — styling rendered markdown with one container class instead of one per tag
+- [../zard-migration/SKILL.md](../zard-migration/SKILL.md) — a separate skill for a project whose installed component source predates the current registry (renamed selectors, `--overwrite`, the `core`/`utils`/`utilities` split)

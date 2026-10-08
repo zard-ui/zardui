@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -8,13 +9,14 @@ import {
   numberAttribute,
   output,
   signal,
+  type TemplateRef,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import type { CalendarDay } from './calendar.types';
+import type { CalendarDay, CalendarDayTemplateContext } from './calendar.types';
 import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
 import {
   calendarDayButtonVariants,
@@ -27,6 +29,7 @@ import {
 
 @Component({
   selector: 'z-calendar-grid',
+  imports: [NgTemplateOutlet],
   template: `
     <div #gridContainer class="w-full">
       <!-- Weekdays Header -->
@@ -66,7 +69,11 @@ import {
                   [attr.aria-label]="getDayAriaLabel(day)"
                   [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
                 >
-                  {{ day.date.getDate() }}
+                  @if (zDayTemplate(); as dayTemplate) {
+                    <ng-container *ngTemplateOutlet="dayTemplate; context: { $implicit: day }" />
+                  } @else {
+                    {{ day.date.getDate() }}
+                  }
                 </button>
               </div>
             }
@@ -94,6 +101,8 @@ export class ZardCalendarGridComponent {
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   /** Position of this grid inside a multi-month calendar. Only used to scope the day ids. */
   readonly zMonthIndex = input(0, { transform: numberAttribute });
+  /** Custom content for each day button; falls back to the day number. */
+  readonly zDayTemplate = input<TemplateRef<CalendarDayTemplateContext> | null>(null);
 
   // Outputs
   readonly dateSelect = output<{ date: Date; index: number }>();

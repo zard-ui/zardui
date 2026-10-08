@@ -27,7 +27,15 @@ import { TypesetSurfaceComponent } from '../typeset-surface/typeset-surface.comp
     <div
       class="bg-background ring-foreground/10 relative isolate flex h-full flex-col overflow-hidden rounded-2xl ring-1"
     >
-      <div class="min-h-0 flex-1 overflow-y-auto px-6 py-10 sm:px-10 sm:py-16">
+      <!--
+        overflow-x-auto is the last resort, not the layout: min-w-0 on this
+        component's host (see the page template) is what lets this card shrink
+        to the width the row actually has. Only when a chosen measure is still
+        wider than that — the code panel narrows the row at xl, or a hard
+        floor like 320px leaves no room at all — does the prose scroll
+        sideways here instead of the card clipping it.
+      -->
+      <div class="min-h-0 flex-1 overflow-x-auto overflow-y-auto px-6 py-10 sm:px-10 sm:py-16">
         <z-typeset-surface />
 
         <!-- The switcher floats over the end of the text; without this the last line sits behind it. -->

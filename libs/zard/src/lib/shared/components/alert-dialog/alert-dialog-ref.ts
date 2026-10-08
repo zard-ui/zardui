@@ -2,24 +2,22 @@ import type { OverlayRef } from '@angular/cdk/overlay';
 
 import { ZardOverlayRefBase } from '@/shared/core';
 
-import type { ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
-
-/** How long the leave transition runs, in ms. Mirrors the CSS. */
-const ALERT_DIALOG_DURATION = 100;
+import type { ZardAlertDialogContainerComponent, ZardAlertDialogOptions } from './alert-dialog-container.component';
+import { ALERT_DIALOG_DURATION } from './alert-dialog-panel.component';
 
 /**
  * Reference to an alert dialog opened via {@link ZardAlertDialogService}.
  *
- * The lifecycle lives in {@link ZardOverlayRefBase}, shared with dialog, sheet
- * and drawer. Two things are the alert dialog's own: the mask does not dismiss
- * unless `zMaskClosable` says so — a confirmation should not be dismissable by
- * accident — and it closes with no result, because the answer is yes or no.
+ * An alert dialog answers yes or no, so it closes with no result: `result()`
+ * stays undefined and what the footer callbacks return is not forwarded. The
+ * rest of the lifecycle lives in {@link ZardOverlayRefBase}, shared with dialog,
+ * sheet and drawer.
  */
 export class ZardAlertDialogRef<T = unknown> extends ZardOverlayRefBase<T, void> {
   constructor(
     overlayRef: OverlayRef | null,
     private readonly config: ZardAlertDialogOptions<T>,
-    private readonly containerInstance: ZardAlertDialogComponent<T> | null,
+    private readonly containerInstance: ZardAlertDialogContainerComponent<T> | null,
     platformId: object,
   ) {
     super(overlayRef, config, platformId);
@@ -31,7 +29,8 @@ export class ZardAlertDialogRef<T = unknown> extends ZardOverlayRefBase<T, void>
   }
 
   protected override playLeaveAnimation(): void {
-    this.containerInstance?.getNativeElement().classList.add('alert-dialog-leave');
+    this.containerInstance?.leave();
+    this.overlayRef?.detachBackdrop();
   }
 
   protected override closesOnOutsidePointer(): boolean {

@@ -14,13 +14,14 @@
  * pages; the official site is the default.
  */
 
+import { fetchWithTimeout, HttpError } from '../utils/http.js';
 import { assertRegistryId } from '../utils/identifiers.js';
 
 const DOCS_TTL = 5 * 60 * 1000;
-const FETCH_TIMEOUT = 10_000;
 
 class DocsService {
   private cache = new Map<string, { text: string; timestamp: number }>();
+  private llms: { text: string; timestamp: number } | null = null;
 
   private get baseUrl(): string {
     return (process.env['ZARD_DOCS_URL'] || 'https://zardui.com').replace(/\/+$/, '');
@@ -33,39 +34,78 @@ class DocsService {
     return `${this.baseUrl}/docs/components/${assertRegistryId(name, 'component')}`;
   }
 
+  /**
+   * The site's llms.txt, the index that both the catalog and the guides are
+   * read from.
+   *
+   * Best effort: a third-party registry has no llms.txt, and search still works
+   * on names alone, so a failure here yields an empty index, never an error.
+   */
+  private async getLlms(): Promise<string> {
+    if (this.llms && Date.now() - this.llms.timestamp < DOCS_TTL) return this.llms.text;
+    try {
+      const response = await fetchWithTimeout(`${this.baseUrl}/llms.txt`);
+      // A confirmed 404 means there is no index, and asking again will not
+      // change that. Anything else — a timeout, a 503 — is cached nowhere, so
+      // the next call retries instead of serving an empty index for minutes.
+      if (response.ok || response.status === 404) {
+        const text = response.ok ? await response.text() : '';
+        this.llms = { text, timestamp: Date.now() };
+        return text;
+      }
+    } catch {
+      // Offline: names alone, and retry on the next call.
+    }
+    return '';
+  }
+
+  /** Titles, descriptions and categories by component name. */
+  async getCatalog(): Promise<Map<string, CatalogEntry>> {
+    return parseCatalog(await this.getLlms());
+  }
+
+  /** The guide pages — installation, theming, forms… — by slug. */
+  async getGuides(): Promise<Map<string, GuideEntry>> {
+    return parseGuides(await this.getLlms());
+  }
+
   /** The page markdown, or null when the page does not exist. */
   async getComponentMarkdown(name: string): Promise<string | null> {
-    const url = `${this.urlFor(name)}.md`;
+    return this.fetchMarkdown(`${this.urlFor(name)}.md`);
+  }
 
-    const cached = this.cache.get(name);
+  /**
+   * A guide page as markdown, or null when there is no such guide.
+   *
+   * Only slugs listed in llms.txt are fetched: the slug may contain a slash
+   * (`forms/signal-forms`), so the allowlist, not a pattern, is what keeps it
+   * from turning into an arbitrary path on the docs site.
+   */
+  async getGuideMarkdown(slug: string): Promise<string | null> {
+    const guides = await this.getGuides();
+    if (!guides.has(slug)) return null;
+    return this.fetchMarkdown(`${this.baseUrl}/docs/${slug}.md`);
+  }
+
+  private async fetchMarkdown(url: string): Promise<string | null> {
+    const cached = this.cache.get(url);
     if (cached && Date.now() - cached.timestamp < DOCS_TTL) return cached.text;
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+    const response = await fetchWithTimeout(url);
+    if (response.status === 404) return null;
+    if (!response.ok) throw new HttpError(response);
 
-    try {
-      const response = await fetch(url, {
-        signal: controller.signal,
-        headers: { 'User-Agent': 'zard-mcp' },
-      });
+    const text = await response.text();
 
-      if (response.status === 404) return null;
-      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    // The site is a single-page app: a path that does not exist answers 200
+    // with the site's own shell, not 404. Without this check, asking for the
+    // docs of a component that is not there handed fifty kB of markup to the
+    // model — worse than no answer, since it burns context and explains
+    // nothing.
+    if (!isMarkdown(response, text)) return null;
 
-      const text = await response.text();
-
-      // The site is a single-page app: a path that does not exist answers 200
-      // with the site's own shell, not 404. Without this check, asking for the
-      // docs of a component that is not there handed fifty kB of markup to the
-      // model — worse than no answer, since it burns context and explains
-      // nothing.
-      if (!isMarkdown(response, text)) return null;
-
-      this.cache.set(name, { text, timestamp: Date.now() });
-      return text;
-    } finally {
-      clearTimeout(timeout);
-    }
+    this.cache.set(url, { text, timestamp: Date.now() });
+    return text;
   }
 }
 
@@ -102,6 +142,62 @@ export function sectionOf(markdown: string, heading: string): string | null {
   const end = rest.findIndex(line => line.startsWith('## '));
 
   return [lines[start], ...(end === -1 ? rest : rest.slice(0, end))].join('\n').trim();
+}
+
+export interface CatalogEntry {
+  title: string;
+  description: string;
+  category: string;
+}
+
+/**
+ * The component entries of `llms.txt`: title, one-line description and category
+ * for each slug.
+ *
+ * The registry carries names and files, nothing a model can search by meaning.
+ * Someone asking for "a modal" or "toast notifications" needs to reach `dialog`
+ * and `sonner`, and only the descriptions make that possible.
+ */
+export function parseCatalog(llms: string): Map<string, CatalogEntry> {
+  const catalog = new Map<string, CatalogEntry>();
+  let inComponents = false;
+  let category = '';
+  for (const line of llms.split('\n')) {
+    if (line.startsWith('## ')) {
+      inComponents = line.trim() === '## Components';
+      continue;
+    }
+    if (!inComponents) continue;
+    if (line.startsWith('### ')) {
+      category = line.slice(4).trim();
+      continue;
+    }
+    const match = /^- \[([^\]]+)\]\([^)]*\/docs\/components\/([a-z0-9-]+)\):\s*(.*)$/i.exec(line.trim());
+    if (match) catalog.set(match[2], { title: match[1], description: match[3].trim(), category });
+  }
+  return catalog;
+}
+
+export interface GuideEntry {
+  title: string;
+  description: string;
+}
+
+/**
+ * Sections of llms.txt that are about building the library, not using it. A
+ * model writing an app has no use for the contribution guide or the credits,
+ * and listing them only dilutes the choice.
+ */
+const NOT_GUIDES = /^(components|contribute)(\/|$)|^(changelog|about|figma)$/;
+
+/** The `/docs/<slug>` entries of llms.txt that are guides for using the library. */
+export function parseGuides(llms: string): Map<string, GuideEntry> {
+  const guides = new Map<string, GuideEntry>();
+  for (const line of llms.split('\n')) {
+    const match = /^- \[([^\]]+)\]\([^)]*?\/docs\/([a-z0-9-]+(?:\/[a-z0-9-]+)*)\):\s*(.*)$/i.exec(line.trim());
+    if (match && !NOT_GUIDES.test(match[2])) guides.set(match[2], { title: match[1], description: match[3].trim() });
+  }
+  return guides;
 }
 
 export const docsService = new DocsService();

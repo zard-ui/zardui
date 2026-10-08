@@ -1,6 +1,7 @@
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
-@import '../../../libs/zard/src/lib/shared/core/css/tailwind.css';
+@import '../../../libs/zard/src/lib/shared/core/css/zard.css';
+@import '../../../libs/zard/src/lib/shared/core/css/utilities.css';
 @import '../../../libs/zard/src/lib/shared/core/css/typeset.css';
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource-variable/geist';
@@ -447,19 +448,4 @@ table.api-table--pipe tbody td:first-child code {
   .showcase-carousel .embla__slide {
     flex: 0 0 calc(344px / 1.2);
   }
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-track {
-  border-radius: 5px;
-  background: var(--muted);
 }

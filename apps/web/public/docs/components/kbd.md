@@ -113,38 +113,9 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
 
 ## Examples
 
-### Default
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardKbdGroupComponent } from '@/shared/components/kbd/kbd-group.component';
-import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
-
-@Component({
-  selector: 'z-demo-kbd-default',
-  imports: [ZardKbdComponent, ZardKbdGroupComponent],
-  template: `
-    <div class="flex flex-col items-center justify-center gap-4">
-      <z-kbd-group>
-        <z-kbd>⌘</z-kbd>
-        <z-kbd>⇧</z-kbd>
-        <z-kbd>⌥</z-kbd>
-        <z-kbd>⌃</z-kbd>
-      </z-kbd-group>
-      <z-kbd-group>
-        <z-kbd>Ctrl</z-kbd>
-        <span>+</span>
-        <z-kbd>B</z-kbd>
-      </z-kbd-group>
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoKbdDefaultComponent {}
-```
-
 ### Group
+
+Wrap several `z-kbd` elements (and any surrounding text) in `z-kbd-group` to keep a multi-key shortcut or an inline instruction aligned and spaced as one unit.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -169,6 +140,8 @@ export class ZardDemoKbdGroupComponent {}
 ```
 
 ### Button
+
+Project a `z-kbd` inside `button[z-button]` to show the key that triggers the action.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -199,6 +172,8 @@ export class ZardDemoKbdButtonComponent {}
 ```
 
 ### Tooltip
+
+Compose `z-kbd` and `z-kbd-group` inside the `ng-template` passed to `[zTooltip]` to show the shortcut for an action; `z-kbd` detects the tooltip content data-slot and switches to a transparent, tooltip-matching background automatically.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -240,6 +215,41 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoKbdTooltipComponent {}
+```
+
+### Input Group
+
+Compose `z-kbd` inside a `z-input-group-addon` (aligned `inline-end`) next to `input[z-input]` to hint at the shortcut that focuses the field, such as ⌘K for a search box.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch } from '@ng-icons/lucide';
+
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
+import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
+
+@Component({
+  selector: 'z-demo-kbd-input-group',
+  imports: [ZardInputComponent, ZardKbdComponent, NgIcon, ...ZardInputGroupImports],
+  template: `
+    <z-input-group class="min-w-sm">
+      <input z-input id="kbd-input-group-search" placeholder="Search..." />
+      <z-input-group-addon>
+        <ng-icon name="lucideSearch" class="text-muted-foreground" />
+      </z-input-group-addon>
+      <z-input-group-addon zAlign="inline-end">
+        <z-kbd>⌘</z-kbd>
+        <z-kbd>K</z-kbd>
+      </z-input-group-addon>
+    </z-input-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideSearch })],
+})
+export class ZardDemoKbdInputGroupComponent {}
 ```
 
 ## API Reference

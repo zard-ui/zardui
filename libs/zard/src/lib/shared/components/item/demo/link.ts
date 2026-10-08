@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronRight, lucideExternalLink } from '@ng-icons/lucide';
@@ -7,10 +8,10 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
 
 @Component({
   selector: 'z-demo-item-link',
-  imports: [NgIcon, ...ZardItemImports],
+  imports: [NgIcon, RouterLink, ...ZardItemImports],
   template: `
     <div class="flex w-full min-w-md flex-col gap-4">
-      <a z-item href="#">
+      <a z-item [routerLink]="['/docs/introduction']">
         <z-item-content>
           <z-item-title>Visit our documentation</z-item-title>
           <z-item-description>Learn how to get started with our components.</z-item-description>
@@ -20,7 +21,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
         </z-item-actions>
       </a>
 
-      <a z-item href="#" zVariant="outline" target="_blank" rel="noopener noreferrer">
+      <a z-item href="https://github.com/zard-ui/zardui" zVariant="outline" target="_blank" rel="noopener noreferrer">
         <z-item-content>
           <z-item-title>External resource</z-item-title>
           <z-item-description>Opens in a new tab with security attributes.</z-item-description>

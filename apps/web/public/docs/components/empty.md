@@ -1,11 +1,11 @@
 ---
 title: Empty
-description: Use the Empty component to display a empty state.
+description: Use the Empty component to display an empty state.
 ---
 
 # Empty
 
-Use the Empty component to display a empty state.
+Use the Empty component to display an empty state.
 
 ## Installation
 
@@ -31,7 +31,7 @@ import {
 import { NgIcon } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
@@ -255,6 +255,8 @@ export class ZardDemoEmptyBackgroundComponent {}
 
 ### Avatar
 
+Set `zImage` to a template projecting a `z-avatar` to represent a person in the empty state.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -263,7 +265,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardEmptyComponent } from '@/shared/components/empty';
 
 @Component({
-  selector: 'z-demo-empty-custom-image',
+  selector: 'z-demo-empty-avatar',
   imports: [ZardAvatarComponent, ZardButtonComponent, ZardEmptyComponent],
   template: `
     <z-empty
@@ -276,7 +278,7 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
     <ng-template #customImage>
       <z-avatar
         zSize="lg"
-        zSrc="images/avatar/imgs/avatar_image.jpg"
+        zSrc="/images/avatar/imgs/avatar_image.jpg"
         zFallback="CN"
         zAlt="User avatar"
         class="grayscale"
@@ -289,12 +291,12 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoEmptyCustomImageComponent {}
+export class ZardDemoEmptyAvatarComponent {}
 ```
 
 ### Avatar Group
 
-Use the `EmptyMedia` component to display an avatar group in the empty state.
+Set `zImage` to a template projecting a `z-avatar-group` to represent multiple people in the empty state.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -307,12 +309,12 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardEmptyComponent } from '@/shared/components/empty';
 
 @Component({
-  selector: 'z-demo-empty-advanced-customization',
+  selector: 'z-demo-empty-avatar-group',
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, NgIcon, ZardEmptyComponent],
   template: `
     <z-empty
       [zImage]="customImage"
-      [zTitle]="customTitle"
+      zTitle="No Team Members"
       zDescription="Invite your team to collaborate on this project."
       [zActions]="[actionInvite]"
     />
@@ -326,13 +328,6 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
       </z-avatar-group>
     </ng-template>
 
-    <ng-template #customTitle>
-      <span>
-        No Team
-        <strong>members</strong>
-      </span>
-    </ng-template>
-
     <ng-template #actionInvite>
       <button type="button" z-button zSize="sm">
         <ng-icon name="lucidePlus" />
@@ -343,12 +338,12 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePlus })],
 })
-export class ZardDemoEmptyAdvancedComponent {}
+export class ZardDemoEmptyAvatarGroupComponent {}
 ```
 
 ### Input Group
 
-Use the `InputGroup` component to add a search input to the empty state.
+Compose a `z-input-group` to add a search field to the empty state.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -407,8 +402,8 @@ Displays a placeholder when no data is available, commonly used in tables, lists
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zIcon]` | Icon to display | `ZardIcon` | `-` |
-| `[zImage]` | Image URL or custom template | `string \| TemplateRef<void>` | `-` |
+| `[zIcon]` | Icon name rendered in the media slot as the `icon` variant (`data-variant="icon"`). Ignored when `zImage` is set. | `ZardIcon` | `-` |
+| `[zImage]` | Image URL or custom template (e.g. a `z-avatar`/`z-avatar-group`) rendered in the media slot as the `default` variant (`data-variant="default"`). Takes priority over `zIcon`. | `string \| TemplateRef<void>` | `-` |
 | `[zDescription]` | Description text or custom template | `string \| TemplateRef<void>` | `-` |
 | `[zTitle]` | Title text or custom template | `string \| TemplateRef<void>` | `-` |
 | `[zActions]` | Array of action templates | `TemplateRef<void>[]` | `[]` |

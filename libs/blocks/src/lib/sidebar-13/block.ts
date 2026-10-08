@@ -20,7 +20,7 @@ export const sidebar13Block: Block = {
       content: `<button z-button zSize="sm" (click)="openSettings()">Open Dialog</button>
 
 <ng-template #settings>
-  <z-sidebar-provider class="min-h-0 items-start">
+  <z-sidebar-provider zDefaultOpen="true" class="min-h-0 items-start">
     <z-sidebar zCollapsible="none" class="hidden md:flex">
       <z-sidebar-content>
         <div z-sidebar-group>

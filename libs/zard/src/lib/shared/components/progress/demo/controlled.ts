@@ -9,7 +9,7 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
   template: `
     <div class="flex w-full min-w-sm flex-col gap-4">
       <z-progress [value]="value()[0]" />
-      <z-slider [zDefault]="value()" zMin="0" zMax="100" zStep="1" (zSlideIndexChange)="value.set($event)" />
+      <z-slider [zValue]="value()" zMin="0" zMax="100" zStep="1" (zSlideIndexChange)="value.set($event)" />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

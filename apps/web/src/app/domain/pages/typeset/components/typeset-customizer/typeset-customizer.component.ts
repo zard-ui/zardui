@@ -23,7 +23,7 @@ import { MONO_FONTS, TEXT_FONTS } from '../../data/fonts.data';
 import { FLOW_CHOICES, LEADING_CHOICES, MEASURE_CHOICES, SCALE_CHOICES } from '../../data/options.data';
 import { INHERIT_HEADING, type TypesetFont, type TypesetSlot } from '../../models/typeset.model';
 import { TypesetGeneratorService } from '../../services/typeset-generator.service';
-import { injectIsMobile } from '../../utils/inject-is-mobile';
+import { injectIsCompact } from '../../utils/inject-is-mobile';
 import { TypesetCodePanelComponent } from '../typeset-code-panel/typeset-code-panel.component';
 import { TypesetControlComponent, type TypesetControlGroup } from '../typeset-control/typeset-control.component';
 
@@ -54,11 +54,13 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
 /**
  * The panel that holds every choice.
  *
- * Two shapes, one component: a column beside the preview from `md` up, and a
+ * Two shapes, one component: a column beside the preview from `lg` up, and a
  * strip under it below that — the controls turn into a horizontal scroller, the
  * separators and the menu go away, and the footer holds the two buttons side by
  * side. A phone has no room for a fourteen-rem column and no patience for a
- * dialog you have to open before you can change a font.
+ * dialog you have to open before you can change a font — and neither does a
+ * 768–1023px laptop, which is why the strip now runs through `lg` (1024px)
+ * rather than stopping at `md` (768px). See {@link injectIsCompact}.
  */
 @Component({
   selector: 'z-typeset-customizer',
@@ -76,7 +78,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
   host: { class: 'block max-h-full min-h-0', '(document:keydown)': 'onShortcut($event)' },
   template: `
     <div class="bg-card/90 flex max-h-full min-h-0 flex-col overflow-hidden rounded-2xl border backdrop-blur-xl">
-      <header class="hidden shrink-0 border-b px-2.5 py-3 md:block">
+      <header class="hidden shrink-0 border-b px-2.5 py-3 lg:block">
         <button
           type="button"
           class="ring-foreground/10 hover:bg-muted aria-expanded:bg-muted focus-visible:ring-foreground/50 flex h-9 w-full items-center justify-between gap-2 rounded-lg px-2 text-sm font-medium ring-1 transition-colors focus-visible:outline-none"
@@ -109,16 +111,16 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
         </button>
       </header>
 
-      <!-- On a phone the row scrolls sideways; on a desktop it stacks. -->
+      <!-- Below the column threshold the row scrolls sideways; at and above it, it stacks. -->
       <div
-        class="no-scrollbar min-h-0 flex-1 overflow-x-auto overflow-y-hidden md:overflow-x-hidden md:overflow-y-auto"
+        class="no-scrollbar min-h-0 flex-1 overflow-x-auto overflow-y-hidden lg:overflow-x-hidden lg:overflow-y-auto"
       >
-        <div class="flex flex-row gap-2.5 px-3 py-3 md:flex-col md:gap-3.25 md:px-2.5 md:py-2.5">
+        <div class="flex flex-row gap-2.5 px-3 py-3 lg:flex-col lg:gap-3.25 lg:px-2.5 lg:py-2.5">
           <!-- Below 28rem the measure goes: it is the choice that changes the prose least. -->
           <div class="shrink-0 max-[28rem]:hidden">
             <z-typeset-control
               label="Measure"
-              [onPhone]="isMobile()"
+              [onPhone]="isCompact()"
               [groups]="measureGroups"
               [value]="service.state().measure"
               [display]="measureLabel()"
@@ -128,12 +130,12 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
             </z-typeset-control>
           </div>
 
-          <div class="bg-border -mx-2.5 hidden h-px md:block"></div>
+          <div class="bg-border -mx-2.5 hidden h-px lg:block"></div>
 
           <z-typeset-control
             label="Heading"
             lockable
-            [onPhone]="isMobile()"
+            [onPhone]="isCompact()"
             [groups]="headingGroups()"
             [value]="service.state().heading"
             [display]="service.headingFont().label"
@@ -149,7 +151,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
           <z-typeset-control
             label="Body"
             lockable
-            [onPhone]="isMobile()"
+            [onPhone]="isCompact()"
             [groups]="bodyGroups"
             [value]="service.state().body"
             [display]="service.bodyFont().label"
@@ -163,7 +165,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
           <z-typeset-control
             label="Mono"
             lockable
-            [onPhone]="isMobile()"
+            [onPhone]="isCompact()"
             [groups]="monoGroups"
             [value]="service.state().mono"
             [display]="service.monoFont().label"
@@ -174,12 +176,12 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
             <span slot="icon" class="text-base leading-none" [style.font-family]="service.monoFont().family">Aa</span>
           </z-typeset-control>
 
-          <div class="bg-border -mx-2.5 hidden h-px md:block"></div>
+          <div class="bg-border -mx-2.5 hidden h-px lg:block"></div>
 
           <z-typeset-control
             label="Size"
             lockable
-            [onPhone]="isMobile()"
+            [onPhone]="isCompact()"
             [groups]="scaleGroups"
             [value]="service.state().scale"
             [display]="scaleLabel()"
@@ -193,7 +195,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
           <z-typeset-control
             label="Leading"
             lockable
-            [onPhone]="isMobile()"
+            [onPhone]="isCompact()"
             [groups]="leadingGroups"
             [value]="service.state().leading"
             [display]="leadingLabel()"
@@ -207,7 +209,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
           <z-typeset-control
             label="Flow"
             lockable
-            [onPhone]="isMobile()"
+            [onPhone]="isCompact()"
             [groups]="flowGroups"
             [value]="service.state().flow"
             [display]="flowLabel()"
@@ -219,7 +221,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
           </z-typeset-control>
 
           <!-- The trailing padding collapses inside a scroller; this gap gives it back. -->
-          <div class="w-0.5 shrink-0 md:hidden" aria-hidden="true"></div>
+          <div class="w-0.5 shrink-0 lg:hidden" aria-hidden="true"></div>
         </div>
       </div>
 
@@ -229,11 +231,11 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
         original does not have. Shuffle carries no icon either — the original is
         just the word, centred.
       -->
-      <div class="bg-muted/50 flex shrink-0 flex-row-reverse gap-2 border-t px-2.5 py-3 md:flex-col">
+      <div class="bg-muted/50 flex shrink-0 flex-row-reverse gap-2 border-t px-2.5 py-3 lg:flex-col">
         <button
           z-button
           zType="outline"
-          class="hover:bg-muted dark:hover:bg-muted min-w-0 flex-1 bg-transparent md:w-full md:flex-none dark:bg-transparent"
+          class="hover:bg-muted dark:hover:bg-muted min-w-0 flex-1 bg-transparent lg:w-full lg:flex-none dark:bg-transparent"
           (click)="shuffle()"
         >
           <span class="w-full truncate text-center font-medium">Shuffle</span>
@@ -243,7 +245,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
         <button
           z-button
           zType="outline"
-          class="hover:bg-muted dark:hover:bg-muted min-w-0 flex-1 bg-transparent md:w-full md:flex-none xl:hidden dark:bg-transparent"
+          class="hover:bg-muted dark:hover:bg-muted min-w-0 flex-1 bg-transparent lg:w-full lg:flex-none xl:hidden dark:bg-transparent"
           (click)="openCode()"
         >
           <span class="w-full truncate text-center font-medium">Get code</span>
@@ -312,7 +314,8 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
     </ng-template>
 
     <ng-template #codeTemplate>
-      <div class="flex h-[70svh] min-h-0 flex-col md:h-full">
+      <!-- Matches openCode()'s placement: a bottom sheet under the strip's isCompact() threshold, a side sheet above it. -->
+      <div class="flex h-[70svh] min-h-0 flex-col lg:h-full">
         <z-typeset-code-panel />
       </div>
     </ng-template>
@@ -320,7 +323,7 @@ function fontGroups(fonts: readonly TypesetFont[], lead?: TypesetControlGroup<st
 })
 export class TypesetCustomizerComponent {
   protected readonly service = inject(TypesetGeneratorService);
-  protected readonly isMobile = injectIsMobile();
+  protected readonly isCompact = injectIsCompact();
 
   private readonly document = inject(DOCUMENT);
   private readonly darkMode = inject(ZardDarkMode);
@@ -475,15 +478,15 @@ export class TypesetCustomizerComponent {
     else this.shuffle();
   }
 
-  /** The code, from a sheet: up from the bottom on a phone, in from the side otherwise. */
+  /** The code, from a sheet: up from the bottom under the strip, in from the side beside a column. */
   protected openCode(): void {
     this.drawerService.create({
       zTitle: 'Get code',
       zDescription: 'Everything you need to put this typeset in your project.',
       zContent: this.codeTemplate(),
       zViewContainerRef: this.viewContainerRef,
-      zPlacement: this.isMobile() ? 'bottom' : 'right',
-      zHandle: this.isMobile(),
+      zPlacement: this.isCompact() ? 'bottom' : 'right',
+      zHandle: this.isCompact(),
       zHideFooter: true,
     });
   }

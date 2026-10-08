@@ -18,7 +18,7 @@ export const buttonGroupVariants = cva(
 );
 export type ZardButtonGroupVariants = VariantProps<typeof buttonGroupVariants>;
 
-export const buttonGroupDividerVariants = cva(
+export const buttonGroupSeparatorVariants = cva(
   'bg-input relative self-stretch grow-0 shrink-0 pointer-events-none select-none',
   {
     variants: {

@@ -6,7 +6,9 @@ import { Config } from '../../utils/config.js';
 import { iconCatalog } from '../../utils/icon-catalog.js';
 import { logger } from '../../utils/logger.js';
 import {
+  fetchBlocksIndex,
   fetchRegistryIndex,
+  getAvailableBlocks,
   invalidateRegistryCache,
   type RegistryIcons,
   type RegistryIndex,
@@ -48,6 +50,19 @@ export function getTargetDir(
     return path.dirname(resolvedConfig.resolvedPaths.tailwindCss);
   }
 
+  /*
+   * A block is a folder, not a file: it brings up to 22 sources that only make
+   * sense together, so each one gets a directory of its own under the blocks
+   * alias — or under `--path`, for the same reason components honour it.
+   *
+   * Before the generic `--path` branch: that one appends the basePath, which
+   * would drop every block into a shared `<path>/blocks` and mix their files.
+   */
+  if (basePath === 'blocks') {
+    const root = customPath ? path.resolve(cwd, customPath) : resolvedConfig.resolvedPaths.blocks;
+    return path.join(root, component.name);
+  }
+
   if (customPath) {
     return path.resolve(cwd, customPath, basePath);
   }
@@ -70,6 +85,8 @@ export function getTargetDir(
 export interface ComponentMeta {
   name: string;
   basePath?: string;
+  /** Blocks are fetched from `/blocks/` and written one directory per block. */
+  isBlock?: boolean;
   files?: string[];
   dependencies?: string[];
   devDependencies?: string[];
@@ -92,7 +109,10 @@ export async function getRegistryIndex(forceRefresh = false): Promise<RegistryIn
 export async function getComponentMeta(name: string): Promise<ComponentMeta | undefined> {
   const index = await getRegistryIndex();
   const item = index.items.find(i => i.name === name);
-  if (!item) return undefined;
+
+  // Blocks live in a separate index, and a block id never collides with a
+  // component name — so the component registry answers first and blocks fill in.
+  if (!item) return getBlockMeta(name);
 
   return {
     name: item.name,
@@ -105,9 +125,33 @@ export async function getComponentMeta(name: string): Promise<ComponentMeta | un
   };
 }
 
+/** The block behind an id, as a `ComponentMeta` the installer can carry. */
+async function getBlockMeta(name: string): Promise<ComponentMeta | undefined> {
+  const blocks = await fetchBlocksIndex();
+  const block = blocks.blocks.find(entry => entry.id === name);
+  if (!block) return undefined;
+
+  return {
+    name: block.id,
+    basePath: 'blocks',
+    isBlock: true,
+    // The index does not list a block's files, so `isItemInstalled` cannot tell
+    // whether it is already there. Re-adding a block rewrites it, which is the
+    // safe end of that trade.
+    dependencies: block.dependencies,
+    registryDependencies: block.registryDependencies,
+  };
+}
+
 export async function getAllComponentNames(): Promise<string[]> {
   const index = await getRegistryIndex();
   return index.items.map(item => item.name);
+}
+
+/** Everything `add` accepts by name: components first, then blocks. */
+export async function getAllInstallableNames(): Promise<string[]> {
+  const [components, blocks] = await Promise.all([getAllComponentNames(), getAvailableBlocks()]);
+  return [...components, ...blocks];
 }
 
 export async function resolveDependencies(

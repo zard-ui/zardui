@@ -1,16 +1,12 @@
 /*
- * Every `@utility` the library ships, kept apart from the theme tokens and the
- * custom variants that live in tailwind.css — which is what imports this file.
+ * The optional `@utility` classes — `scroll-fade` and `shimmer`. They are their
+ * own registry item (`zard-cli add utilities`), not part of `core`: nothing in
+ * the library needs them, they exist for the pages that want the effect.
+ *
+ * The utilities components do depend on live in zard.css, which every install
+ * has. Adding one here that a component uses would break that component for
+ * everyone who did not install this file.
  */
-
-@utility no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
 
 /* scroll-fade */
 @property --scroll-fade-t {

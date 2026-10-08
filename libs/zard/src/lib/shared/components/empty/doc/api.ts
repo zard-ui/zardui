@@ -5,10 +5,17 @@ export const EMPTY_API: ApiSection[] = [
     selector: 'z-empty',
     description: 'Displays a placeholder when no data is available, commonly used in tables, lists, or search results.',
     props: [
-      { name: '[zIcon]', description: 'Icon to display', type: 'ZardIcon', default: '-' },
+      {
+        name: '[zIcon]',
+        description:
+          'Icon name rendered in the media slot as the `icon` variant (`data-variant="icon"`). Ignored when `zImage` is set.',
+        type: 'ZardIcon',
+        default: '-',
+      },
       {
         name: '[zImage]',
-        description: 'Image URL or custom template',
+        description:
+          'Image URL or custom template (e.g. a `z-avatar`/`z-avatar-group`) rendered in the media slot as the `default` variant (`data-variant="default"`). Takes priority over `zIcon`.',
         type: 'string | TemplateRef<void>',
         default: '-',
       },

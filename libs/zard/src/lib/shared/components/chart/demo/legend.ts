@@ -1,0 +1,61 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardChartImports } from '@/shared/components/chart/chart.imports';
+import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
+import type { ZardChartLegendAlignVariants } from '@/shared/components/chart/chart.variants';
+
+@Component({
+  selector: 'z-demo-chart-legend',
+  imports: [ZardCardImports, ZardChartImports],
+  template: `
+    <z-card class="w-full">
+      <z-card-header>
+        <z-card-title zTitle="Legend" />
+        <z-card-description zDescription="zVerticalAlign places z-chart-legend above or below the chart" />
+      </z-card-header>
+      <z-card-content>
+        <div class="grid gap-6 md:grid-cols-2">
+          @for (align of aligns; track align) {
+            <div class="flex flex-col gap-2">
+              <p class="text-muted-foreground text-xs">zVerticalAlign="{{ align }}"</p>
+              <z-chart
+                zType="bar"
+                [zConfig]="chartConfig"
+                [zData]="chartData"
+                [zSeries]="series"
+                zXAxisKey="month"
+                [zXAxisFormatter]="shortMonth"
+                class="h-[220px] w-full"
+              >
+                <z-chart-legend [zVerticalAlign]="align" />
+              </z-chart>
+            </div>
+          }
+        </div>
+      </z-card-content>
+    </z-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoChartLegendComponent {
+  protected readonly chartConfig: ZardChartConfig = {
+    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
+    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
+  };
+
+  protected readonly chartData = [
+    { month: 'January', desktop: 186, mobile: 80 },
+    { month: 'February', desktop: 305, mobile: 200 },
+    { month: 'March', desktop: 237, mobile: 120 },
+    { month: 'April', desktop: 73, mobile: 190 },
+    { month: 'May', desktop: 209, mobile: 130 },
+    { month: 'June', desktop: 214, mobile: 140 },
+  ];
+
+  protected readonly series = ['desktop', 'mobile'];
+
+  protected readonly aligns: ZardChartLegendAlignVariants[] = ['top', 'bottom'];
+
+  protected readonly shortMonth = (value: string) => value.slice(0, 3);
+}

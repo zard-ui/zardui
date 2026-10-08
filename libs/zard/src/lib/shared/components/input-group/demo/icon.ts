@@ -12,19 +12,19 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   template: `
     <div class="grid w-full min-w-sm gap-6">
       <z-input-group>
-        <input z-input placeholder="Search..." />
+        <input z-input id="input-group-icon-search" placeholder="Search..." />
         <z-input-group-addon>
           <ng-icon name="lucideSearch" />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input type="email" placeholder="Enter your email" />
+        <input z-input id="input-group-icon-email" type="email" placeholder="Enter your email" />
         <z-input-group-addon>
           <ng-icon name="lucideMail" />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Card number" />
+        <input z-input id="input-group-icon-card" placeholder="Card number" />
         <z-input-group-addon>
           <ng-icon name="lucideCreditCard" />
         </z-input-group-addon>
@@ -33,7 +33,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <input z-input placeholder="Card number" />
+        <input z-input id="input-group-icon-card-actions" placeholder="Card number" />
         <z-input-group-addon zAlign="inline-end">
           <ng-icon name="lucideStar" />
           <ng-icon name="lucideInfo" />

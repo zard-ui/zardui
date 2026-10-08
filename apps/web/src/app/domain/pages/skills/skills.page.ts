@@ -33,7 +33,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     >
       <z-doc-heading
         title="Skills"
-        description="Teach your AI assistant how zard/ui is actually built — the conventions, the CLI and the registry — so it writes code that compiles the first time."
+        description="Teach your AI assistant how zard/ui is actually built — the conventions, the CLI and the registry — so it writes code that compiles the first time. A second skill migrates a project pinned to an older version."
         scrollSpyItem="overview"
         id="overview"
       ></z-doc-heading>
@@ -62,7 +62,7 @@ export class SkillsPage implements OnInit {
   ngOnInit(): void {
     this.seoService.setDocsSeo(
       'Skills',
-      'Install the zard/ui skill so your AI assistant knows the component conventions, the CLI commands and the registry format instead of guessing at them.',
+      'Install the zard/ui skills so your AI assistant knows the component conventions, the CLI commands and the registry format instead of guessing at them — plus a second skill for migrating an older project.',
       '/docs/skills',
       'og-skills.jpg',
     );

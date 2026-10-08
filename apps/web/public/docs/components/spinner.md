@@ -29,7 +29,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -91,7 +91,9 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
 
 ## Examples
 
-### Customization
+### Custom Icon
+
+Pass a custom `ng-template` to `[zIcon]` to swap the default loader icon. The template receives the spinner's merged classes via its implicit context, so the replacement icon stays in sync with sizing and animation.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -99,7 +101,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
 
 @Component({
-  selector: 'z-demo-spinner-customization',
+  selector: 'z-demo-spinner-custom-icon',
   imports: [ZardSpinnerComponent],
   template: `
     <div class="flex items-center gap-4">
@@ -130,10 +132,12 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSpinnerCustomizationComponent {}
+export class ZardDemoSpinnerCustomIconComponent {}
 ```
 
 ### Size
+
+Control the spinner's dimensions with Tailwind size utilities on `class` (`size-3`, `size-4`, `size-6`, `size-8`) — `z-spinner` has no dedicated `zSize` input.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -157,6 +161,8 @@ export class ZardDemoSpinnerSizeComponent {}
 ```
 
 ### Button
+
+Project `<z-spinner data-icon="inline-start">` before the label inside `z-button` to show a busy state, paired with `[zDisabled]` to prevent interaction while loading. `z-button` also exposes its own `[zLoading]` input that renders a spinner automatically — see the Button docs.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -190,6 +196,8 @@ export class ZardDemoSpinnerButtonComponent {}
 
 ### Badge
 
+Project `<z-spinner data-icon="inline-start">` inside `z-badge` to show a busy state next to the label.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -222,6 +230,8 @@ export class ZardDemoSpinnerBadgeComponent {}
 
 ### Input Group
 
+Place `<z-spinner>` inside `z-input-group-addon` to show a busy state next to an input or textarea; pair it with `z-input-group-text` for a status label, or with a trailing `z-input-group-button` for an action.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -239,13 +249,13 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
   template: `
     <div class="flex w-full min-w-md flex-col gap-4">
       <z-input-group>
-        <input z-input placeholder="Send a message..." disabled />
+        <input z-input id="spinner-input-group-message" placeholder="Send a message..." disabled />
         <z-input-group-addon zAlign="inline-end">
           <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
-        <textarea z-textarea placeholder="Send a message..." disabled></textarea>
+        <textarea z-textarea placeholder="Send a message..." id="spinner-input-group-notes" disabled></textarea>
         <z-input-group-addon zAlign="block-end">
           <z-spinner />
           Validating...
@@ -264,6 +274,8 @@ export class ZardDemoSpinnerInputGroupComponent {}
 ```
 
 ### Empty
+
+Project `<z-spinner>` into `z-empty`'s `[zImage]` media slot to show a busy state while content loads, alongside `zTitle`, `zDescription` and a cancel action passed to `[zActions]`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';

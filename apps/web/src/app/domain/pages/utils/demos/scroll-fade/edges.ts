@@ -4,7 +4,7 @@ const LINES = [
   'Resolving dependencies',
   'Fetching registry index',
   'Downloading core',
-  'Writing css/tailwind.css',
+  'Writing css/zard.css',
   'Writing utils/merge-classes.ts',
   'Linking peer dependencies',
   'Patching components.json',

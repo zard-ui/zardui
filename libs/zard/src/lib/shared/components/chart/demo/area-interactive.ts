@@ -6,6 +6,7 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
+  selector: 'z-demo-chart-area-interactive',
   imports: [ZardCardImports, ZardChartImports, ZardSelectImports],
   template: `
     <z-card class="w-full pt-0">

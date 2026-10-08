@@ -24,8 +24,18 @@ export const TABS_API: ApiSection[] = [
         type: 'boolean',
         default: 'false',
       },
-      { name: '(zTabChange)', description: 'Emits when a new tab is selected', type: '$event', default: '-' },
-      { name: '(zDeselect)', description: 'Emits when the current tab is deselected', type: '$event', default: '-' },
+      {
+        name: '(zTabChange)',
+        description: 'Emits when a new tab is selected',
+        type: 'EventEmitter<{ index: number; label: string; tab: ZardTabComponent }>',
+        default: '-',
+      },
+      {
+        name: '(zDeselect)',
+        description: 'Emits when the current tab is deselected',
+        type: 'EventEmitter<{ index: number; label: string; tab: ZardTabComponent }>',
+        default: '-',
+      },
     ],
   },
   {

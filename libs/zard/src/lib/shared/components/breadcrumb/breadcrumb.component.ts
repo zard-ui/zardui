@@ -38,7 +38,7 @@ import {
   type ZardBreadcrumbSizeVariants,
   type ZardBreadcrumbWrapVariants,
 } from '@/shared/components/breadcrumb/breadcrumb.variants';
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 type BreadcrumbRouterLink = string | readonly unknown[] | UrlTree | null | undefined;

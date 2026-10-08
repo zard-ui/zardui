@@ -8,10 +8,14 @@ import { MAY_2025 } from './2025/may-2025';
 import { NOVEMBER_2025 } from './2025/november-2025';
 import { OCTOBER_2025 } from './2025/october-2025';
 import { SEPTEMBER_2025 } from './2025/september-2025';
+import { APRIL_2026 } from './2026/april-2026';
 import { AUGUST_2026 } from './2026/august-2026';
+import { FEBRUARY_2026 } from './2026/february-2026';
+import { JANUARY_2026 } from './2026/january-2026';
 import { JULY_2026 } from './2026/july-2026';
 import { MARCH_2026 } from './2026/march-2026';
 import { MAY_2026 } from './2026/may-2026';
+import { SEPTEMBER_2026 } from './2026/september-2026';
 import { type ChangelogEntry } from './changelog-entry.interface';
 
 /**
@@ -21,12 +25,19 @@ import { type ChangelogEntry } from './changelog-entry.interface';
  * components and their highlighted code live in a sibling `.examples.ts` module
  * that the entry loads on demand, so adding a month costs nothing on first paint.
  * Add new months here — order does not matter, the list is sorted by date.
+ *
+ * June 2026 has no entry on purpose: the repository has zero commits that month,
+ * so there is nothing to curate. Do not add an empty placeholder for it.
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
+  SEPTEMBER_2026,
   AUGUST_2026,
   JULY_2026,
   MAY_2026,
+  APRIL_2026,
   MARCH_2026,
+  FEBRUARY_2026,
+  JANUARY_2026,
   DECEMBER_2025,
   NOVEMBER_2025,
   OCTOBER_2025,

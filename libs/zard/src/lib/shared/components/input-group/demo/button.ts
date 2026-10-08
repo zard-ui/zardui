@@ -13,7 +13,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
   template: `
     <div class="grid w-full min-w-sm gap-6">
       <z-input-group>
-        <input z-input placeholder="https://x.com/zard_ui" readonly />
+        <input z-input id="input-group-button-link" placeholder="https://x.com/zard_ui" readonly />
         <z-input-group-addon zAlign="inline-end">
           <button
             type="button"
@@ -42,7 +42,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
           </button>
         </z-input-group-addon>
         <z-input-group-addon class="text-muted-foreground pl-1.5">https://</z-input-group-addon>
-        <input z-input id="input-secure-19" />
+        <input z-input id="input-group-button-secure" />
         <z-input-group-addon zAlign="inline-end">
           <button type="button" z-input-group-button zSize="icon-xs" (click)="toggleFavorite()">
             <ng-icon
@@ -55,7 +55,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
       </z-input-group>
 
       <z-input-group>
-        <input z-input placeholder="Type to search..." />
+        <input z-input id="input-group-button-search" placeholder="Type to search..." />
         <z-input-group-addon zAlign="inline-end">
           <button type="button" z-input-group-button zVariant="secondary">Search</button>
         </z-input-group-addon>

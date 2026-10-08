@@ -4,7 +4,7 @@ const getTailwindConfiguration = (corePath: string): string => {
   return `
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
-@import '${corePath}/css/tailwind';
+@import '${corePath}/css/zard';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
@@ -71,23 +71,6 @@ const layerBase = `
     -moz-appearance: textfield;
     appearance: textfield; /* Added for general compatibility */
   }
-}
-`;
-
-const windowsScrollbar = `
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-track {
-  border-radius: 5px;
-  background: var(--muted);
 }
 `;
 
@@ -167,7 +150,6 @@ ${getTailwindConfiguration(corePath)}
 
 ${inlineTheme}
 ${layerBase}
-${windowsScrollbar}
 `;
 
 export const stone = (corePath: string) => `
@@ -246,7 +228,6 @@ ${getTailwindConfiguration(corePath)}
 
 ${inlineTheme}
 ${layerBase}
-${windowsScrollbar}
 `;
 
 export const zinc = (corePath: string) => `
@@ -325,7 +306,6 @@ ${getTailwindConfiguration(corePath)}
 
 ${inlineTheme}
 ${layerBase}
-${windowsScrollbar}
 `;
 
 export const gray = (corePath: string) => `
@@ -404,7 +384,6 @@ ${getTailwindConfiguration(corePath)}
 
 ${inlineTheme}
 ${layerBase}
-${windowsScrollbar}
 `;
 
 export const slate = (corePath: string) => `
@@ -483,5 +462,4 @@ ${getTailwindConfiguration(corePath)}
 
 ${inlineTheme}
 ${layerBase}
-${windowsScrollbar}
 `;

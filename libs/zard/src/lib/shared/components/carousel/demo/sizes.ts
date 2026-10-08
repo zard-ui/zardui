@@ -4,6 +4,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
+  selector: 'z-demo-carousel-sizes',
   imports: [ZardCarouselImports, ZardCardImports],
   template: `
     <div class="w-full max-w-48 sm:max-w-xs md:max-w-sm">
@@ -26,6 +27,6 @@ import { ZardCarouselImports } from '@/shared/components/carousel/carousel.impor
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoCarouselSizeComponent {
+export class ZardDemoCarouselSizesComponent {
   protected slides = ['1', '2', '3', '4', '5'];
 }

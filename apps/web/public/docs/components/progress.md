@@ -74,7 +74,7 @@ export class ZardProgressComponent {
   protected readonly indicatorTransform = computed(() => {
     const dir = getComputedStyle(this.elementRef.nativeElement).direction;
     let progress = 100 - this.clampedValue();
-    if (dir !== 'rtl'){
+    if (dir !== 'rtl') {
       progress *= -1;
     }
     return `translateX(${progress}%)`;
@@ -107,7 +107,9 @@ import { ZardProgressComponent } from '@/shared/components/progress/progress.com
 
 ## Examples
 
-### Label
+### With Label And Value
+
+Compose `z-field-label` above `z-progress` to render a label and the numeric value together.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -116,7 +118,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardProgressComponent } from '@/shared/components/progress/progress.component';
 
 @Component({
-  selector: 'z-demo-progress-label',
+  selector: 'z-demo-progress-with-label-and-value',
   imports: [ZardProgressComponent, ...ZardFieldImports],
   template: `
     <z-field class="w-full min-w-sm">
@@ -129,10 +131,12 @@ import { ZardProgressComponent } from '@/shared/components/progress/progress.com
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoProgressLabelComponent {}
+export class ZardDemoProgressWithLabelAndValueComponent {}
 ```
 
 ### Controlled
+
+Bind `[value]` on `z-progress` to a `z-slider`'s `(zSlideIndexChange)` output for a controlled progress bar.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
@@ -146,7 +150,7 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
   template: `
     <div class="flex w-full min-w-sm flex-col gap-4">
       <z-progress [value]="value()[0]" />
-      <z-slider [zDefault]="value()" zMin="0" zMax="100" zStep="1" (zSlideIndexChange)="value.set($event)" />
+      <z-slider [zValue]="value()" zMin="0" zMax="100" zStep="1" (zSlideIndexChange)="value.set($event)" />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

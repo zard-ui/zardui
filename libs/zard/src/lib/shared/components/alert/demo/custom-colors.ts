@@ -6,7 +6,7 @@ import { lucideAlertTriangle } from '@ng-icons/lucide';
 import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
 
 @Component({
-  selector: 'z-demo-alert-custom-color',
+  selector: 'z-demo-alert-custom-colors',
   imports: [ZardAlertComponent],
   template: `
     <div class="grid w-full max-w-md items-start gap-4">

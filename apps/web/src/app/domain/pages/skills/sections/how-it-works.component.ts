@@ -14,6 +14,8 @@ import { RouterLink } from '@angular/router';
         The description says when the skill applies — working with zard/ui, the CLI, the registry, or a project whose
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
         declares a zard project type. The assistant loads it on its own; you do not invoke it.
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-migration</code>
+        is the exception — a migration is consequential enough that it is invoked explicitly, by name.
       </li>
       <li>
         <strong class="text-foreground font-medium">Project context.</strong>
@@ -78,6 +80,17 @@ import { RouterLink } from '@angular/router';
           skills/zard
         </a>
         — the source of everything described above
+      </li>
+      <li>
+        <a
+          class="text-foreground underline underline-offset-4"
+          href="https://github.com/zard-ui/zardui/tree/master/skills/zard-migration"
+          target="_blank"
+          rel="noopener"
+        >
+          skills/zard-migration
+        </a>
+        — the second skill, for a project whose component source predates the current registry
       </li>
     </ul>
   `,

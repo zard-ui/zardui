@@ -159,7 +159,7 @@ export class Sidebar03AppSidebarComponent {
     {
       name: 'sidebar-03.component.html',
       path: 'src/components/sidebar-03/sidebar-03.component.html',
-      content: `<z-sidebar-provider>
+      content: `<z-sidebar-provider zDefaultOpen="true">
   <lib-sidebar-03-app-sidebar />
 
   <main z-sidebar-inset>

@@ -14,6 +14,7 @@ const LANGUAGES = [
   'shell',
   'angular-ts',
   'angular-html',
+  'toml',
 ] as const;
 
 export async function getHighlighter(): Promise<Highlighter> {

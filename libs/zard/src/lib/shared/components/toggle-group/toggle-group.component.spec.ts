@@ -219,21 +219,21 @@ describe('ZardToggleGroupComponent', () => {
 
   it('should set spacing attribute and --gap CSS variable', () => {
     fixture.componentRef.setInput('zItems', mockToggleItems);
-    fixture.componentRef.setInput('zSpacing', 2);
+    fixture.componentRef.setInput('zSpacing', 1);
+    fixture.detectChanges();
+
+    const container = fixture.nativeElement.querySelector('[role="group"]');
+    expect(container.getAttribute('data-spacing')).toBe('1');
+    expect(container.style.getPropertyValue('--gap')).toBe('1');
+  });
+
+  it('should set spacing attribute to 2 by default', () => {
+    fixture.componentRef.setInput('zItems', mockToggleItems);
     fixture.detectChanges();
 
     const container = fixture.nativeElement.querySelector('[role="group"]');
     expect(container.getAttribute('data-spacing')).toBe('2');
     expect(container.style.getPropertyValue('--gap')).toBe('2');
-  });
-
-  it('should set spacing attribute to 0 by default', () => {
-    fixture.componentRef.setInput('zItems', mockToggleItems);
-    fixture.detectChanges();
-
-    const container = fixture.nativeElement.querySelector('[role="group"]');
-    expect(container.getAttribute('data-spacing')).toBe('0');
-    expect(container.style.getPropertyValue('--gap')).toBe('0');
   });
 
   it('should apply data-variant and data-size attributes on items', () => {

@@ -77,7 +77,8 @@
         "components": { "type": "string", "default": "@/shared/components" },
         "utils": { "type": "string", "default": "@/shared/utils" },
         "core": { "type": "string", "default": "@/shared/core" },
-        "services": { "type": "string", "default": "@/shared/services" }
+        "services": { "type": "string", "default": "@/shared/services" },
+        "blocks": { "type": "string", "default": "@/shared/blocks" }
       },
       "additionalProperties": false
     }

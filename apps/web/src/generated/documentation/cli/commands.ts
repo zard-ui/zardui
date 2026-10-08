@@ -73,6 +73,18 @@ export const CLI_COMMANDS: CodeTabData = {
       "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --version</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> init</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --debug</span></span></code></pre>",
       "code": "npx zard-cli --version\nnpx zard-cli init --debug",
       "language": "bash"
+    },
+    {
+      "label": "bash",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> dashboard-01</span></span></code></pre>",
+      "code": "npx zard-cli add dashboard-01",
+      "language": "bash"
+    },
+    {
+      "label": "bash",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> login-01</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --path</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> src/app/features/auth</span></span></code></pre>",
+      "code": "npx zard-cli add login-01 --path src/app/features/auth",
+      "language": "bash"
     }
   ]
 };

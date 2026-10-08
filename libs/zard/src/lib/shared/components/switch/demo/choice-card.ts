@@ -14,7 +14,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
             <div z-field-title>Share across devices</div>
             <p z-field-description>Focus is shared across devices, and turns off when you leave the app.</p>
           </div>
-          <z-switch zId="switch-share" />
+          <z-switch zId="switch-share"><span class="sr-only">Share across devices</span></z-switch>
         </div>
       </label>
       <label z-field-label for="switch-notifications">
@@ -23,7 +23,9 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
             <div z-field-title>Enable notifications</div>
             <p z-field-description>Receive notifications when focus mode is enabled or disabled.</p>
           </div>
-          <z-switch zId="switch-notifications" [zChecked]="true" />
+          <z-switch zId="switch-notifications" [zChecked]="true">
+            <span class="sr-only">Enable notifications</span>
+          </z-switch>
         </div>
       </label>
     </div>

@@ -47,6 +47,32 @@ export interface ChangelogExample {
   fillContainer?: boolean;
 }
 
+/** One fact shown in a release banner's grid — e.g. `{ label: 'Components', value: '53+ components' }`. */
+export interface ChangelogReleaseFact {
+  label: string;
+  value: string;
+}
+
+/** The call to action a release banner offers, e.g. "Get started" → `/docs/installation`. */
+export interface ChangelogReleaseCta {
+  label: string;
+  link: string;
+}
+
+/**
+ * A release moment — the data behind `z-changelog-release`. Present only on the
+ * entry for the month a major version ships; every other entry omits it entirely.
+ * `version` must come from the single source of truth (see `ZARD_VERSION`), never
+ * be typed as a literal here.
+ */
+export interface ChangelogRelease {
+  version: string;
+  title: string;
+  summary: string;
+  facts: ChangelogReleaseFact[];
+  cta?: ChangelogReleaseCta;
+}
+
 /**
  * A month of the changelog. Plain data — never an Angular component — so the
  * registry can read it without instantiating anything.
@@ -56,4 +82,10 @@ export interface ChangelogEntry {
   overview: string; // Summary of the month's changes
   highlights?: ChangelogHighlight[]; // Structural/DX improvements (no visual component)
   loadExamples?: () => Promise<ChangelogExample[]>; // Present when the month ships components
+  /**
+   * Present only on the entry for the month a major version ships. The page renders
+   * `z-changelog-release` above the timeline for it — a release moment, not a card
+   * in the monthly grid. Optional, so the other entries need no change.
+   */
+  release?: ChangelogRelease;
 }

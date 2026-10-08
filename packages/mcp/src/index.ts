@@ -1,31 +1,26 @@
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { readFileSync } from 'node:fs';
 
-import { registerGetBlock } from './tools/get-block.js';
-import { registerGetComponentDocs } from './tools/get-component-docs.js';
-import { registerGetComponentExamples } from './tools/get-component-examples.js';
-import { registerGetComponent } from './tools/get-component.js';
-import { registerGetDependencies } from './tools/get-dependencies.js';
-import { registerInstallComponent } from './tools/install-component.js';
-import { registerListBlocks } from './tools/list-blocks.js';
-import { registerListComponents } from './tools/list-components.js';
-import { registerSearchComponents } from './tools/search-components.js';
+import { createServer } from './server.js';
 
-const server = new McpServer({ name: 'zard-mcp', version: '1.0.0' });
-
-registerListComponents(server);
-registerSearchComponents(server);
-registerGetComponent(server);
-registerGetComponentDocs(server);
-registerGetComponentExamples(server);
-registerGetDependencies(server);
-registerInstallComponent(server);
-registerListBlocks(server);
-registerGetBlock(server);
+/**
+ * The version clients see, read from the package that is running. The build
+ * copies package.json next to index.js; from source it sits one level up.
+ */
+function packageVersion(): string {
+  for (const candidate of ['./package.json', '../package.json']) {
+    try {
+      return JSON.parse(readFileSync(new URL(candidate, import.meta.url), 'utf8')).version;
+    } catch {
+      // Try the next location.
+    }
+  }
+  return '0.0.0';
+}
 
 async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
+  const server = createServer(packageVersion());
+  await server.connect(new StdioServerTransport());
   console.error('Zard MCP server started');
 }
 

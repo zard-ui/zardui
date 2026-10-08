@@ -24,7 +24,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCircleAlert } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
@@ -173,13 +173,15 @@ import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
 
 ### Basic
 
+Use `zIcon`, `zTitle`, and `zDescription` on `z-alert` to render a callout with an icon, title, and description.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideCircleCheck, lucideInfo } from '@ng-icons/lucide';
 
-import { ZardAlertComponent } from '../alert.component';
+import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
 
 @Component({
   selector: 'z-demo-alert-basic',
@@ -207,6 +209,8 @@ export class ZardDemoAlertBasicComponent {}
 
 ### Destructive
 
+Set `zType="destructive"` on `z-alert` to flag a critical message. When `zIcon` is not set, it defaults to `lucideCircleAlert`.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -230,6 +234,8 @@ export class ZardDemoAlertDestructiveComponent {}
 ```
 
 ### Action
+
+Pass a `TemplateRef` to `zAction` to render a `z-button` inside the alert.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -261,6 +267,8 @@ export class ZardDemoAlertActionComponent {}
 
 ### Custom Colors
 
+Override the `class` input on `z-alert` to customize its border, background, and text colors.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -270,7 +278,7 @@ import { lucideAlertTriangle } from '@ng-icons/lucide';
 import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
 
 @Component({
-  selector: 'z-demo-alert-custom-color',
+  selector: 'z-demo-alert-custom-colors',
   imports: [ZardAlertComponent],
   template: `
     <div class="grid w-full max-w-md items-start gap-4">
@@ -299,7 +307,7 @@ Displays a callout for user attention.
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zAction]` | Alert action | `TemplateRef<void>` | `-` |
 | `[zDescription]` | Alert description | `string \| TemplateRef<void>` | `-` |
-| `[zIcon]` | Alert icon. If not specified, default icon will be lucideCircleAlert | `TemplateRef<void> \| string` | `-` |
+| `[zIcon]` | Alert icon (an ng-icons name or a TemplateRef). When unset, defaults to 'lucideCircleAlert' for the 'destructive' zType; otherwise no icon renders. | `TemplateRef<void> \| string` | `-` |
 | `[zRole]` | Overrides the ARIA role. Defaults to 'status' when [zAction] is set, otherwise 'alert'. | `'alert' \| 'status'` | `-` |
 | `[zTitle]` | Alert title | `string \| TemplateRef<void>` | `-` |
 | `[zType]` | Alert variant | `'default' \| 'destructive'` | `'default'` |

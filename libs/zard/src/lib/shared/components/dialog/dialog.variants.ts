@@ -6,12 +6,15 @@ export const dialogVariants = cva([
   'sm:max-w-sm',
 ]);
 
+/** Classes of the mask behind a dialog, shared by the declarative form and the service. */
+export const DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+
 export const dialogHeaderVariants = cva('flex flex-col gap-2');
 
-export const dialogTitleVariants = cva('text-base leading-none font-medium');
+export const dialogTitleVariants = cva('text-base leading-none font-medium wrap-anywhere');
 
 export const dialogDescriptionVariants = cva(
-  'text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-[3px] *:[a]:hover:text-foreground',
+  'text-sm text-muted-foreground wrap-anywhere *:[a]:underline *:[a]:underline-offset-[3px] *:[a]:hover:text-foreground',
 );
 
 export const dialogFooterVariants = cva(

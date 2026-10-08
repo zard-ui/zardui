@@ -3,6 +3,16 @@
   "title": "Signup with muted background",
   "description": "A signup page with a muted background color.",
   "category": "Signup",
+  "registryDependencies": [
+    "button",
+    "card",
+    "field",
+    "input"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "signup-03.component.html",
