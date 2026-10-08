@@ -130,7 +130,7 @@ export class ZardAttachmentTitleComponent {
   private readonly attachment = inject(ZardAttachmentComponent, { optional: true });
   readonly class = input<ClassValue>('');
   protected readonly classes = computed(() =>
-    mergeClasses(attachmentTitleVariants(), this.attachment?.busy() && 'motion-safe:animate-pulse', this.class()),
+    mergeClasses(attachmentTitleVariants(), this.attachment?.busy() && 'shimmer', this.class()),
   );
 }
 
@@ -358,7 +358,7 @@ export const attachmentTriggerVariants = cva(
   'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
 );
 export const attachmentGroupVariants = cva(
-  'flex w-full min-w-0 gap-3 overflow-x-auto snap-x snap-mandatory scroll-px-1 scrollbar-none py-1 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+  'flex w-full min-w-0 gap-3 overflow-x-auto snap-x snap-mandatory scroll-fade-x scroll-px-1 scrollbar-none py-1 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
 );
 
 export type ZardAttachmentStateVariants = NonNullable<VariantProps<typeof attachmentVariants>['zState']>;
@@ -832,7 +832,7 @@ Projected text container.
 
 ### z-attachment-title
 
-Title; pulses only while the nearest attachment is busy, unless the user prefers reduced motion.
+Title; shimmers only while the nearest attachment is busy.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

@@ -1,11 +1,12 @@
 /*
  * The optional `@utility` classes — `scroll-fade` and `shimmer`. They are their
- * own registry item (`zard-cli add utilities`), not part of `core`: nothing in
- * the library needs them, they exist for the pages that want the effect.
+ * own registry item (`zard-cli add utilities`), not part of `core`, so a project
+ * only gets them when it asks for them or installs a component that uses them.
  *
- * The utilities components do depend on live in zard.css, which every install
- * has. Adding one here that a component uses would break that component for
- * everyone who did not install this file.
+ * A component that uses one of these classes declares `utilities` in its
+ * `registryDependencies`; `add` then installs this file with it and wires its
+ * `@import`. `npm run check:registry` enforces the declaration. Utilities every
+ * component may rely on without declaring anything live in zard.css instead.
  */
 
 /* scroll-fade */

@@ -173,7 +173,7 @@ Not every registry name is a component you pick for a UI need — five install i
 | ----------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
 | `core`      | Shared directives, the overlay stack, `provideZard()`, and the theme CSS             | Automatic — `init` installs it; no component declares it as a dependency |
 | `utils`     | `mergeClasses()` (`twMerge(clsx(...))`)                                              | Automatic — same as `core`                                              |
-| `utilities` | The `scroll-fade` / `shimmer` CSS utilities — see [rules/styling.md](./rules/styling.md) | Opt-in — `zard-cli add utilities`                                       |
+| `utilities` | The `scroll-fade` / `shimmer` CSS utilities — see [rules/styling.md](./rules/styling.md) | `zard-cli add utilities`, or installed with a component that uses them   |
 | `dark-mode` | The dark-mode service and the toggle script injected into `index.html`               | Opt-in — `zard-cli add dark-mode` (interactive; needs an `index.html` path) |
 | `typeset`   | The prose stylesheet for rendered markdown                                           | Opt-in — `zard-cli add typeset` — see [rules/typeset.md](./rules/typeset.md) |
 

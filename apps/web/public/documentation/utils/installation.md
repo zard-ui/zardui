@@ -1,7 +1,8 @@
 # Installation
 
-The utilities are their own registry item, separate from `core`. Nothing in the library needs them, so
-they are not installed with it — add them when you want `scroll-fade` or `shimmer`.
+The utilities are their own registry item, separate from `core`, so they are not installed with it. Add
+them when you want `scroll-fade` or `shimmer`; a component that uses them, such as `attachment`, brings
+them along when you install it.
 
 ```bash tab="npm" copyButton
 npx zard-cli add utilities
