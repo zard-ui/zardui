@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardTableImports } from '@/shared/components/table/table.imports';
 
@@ -14,12 +14,12 @@ interface Person {
   imports: [ZardTableImports],
   template: `
     <table z-table>
-      <caption z-table-caption>A list of your recent invoices.</caption>
+      <caption z-table-caption>A list of registered users.</caption>
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head>Name</th>
-          <th z-table-head>Age</th>
-          <th z-table-head>Address</th>
+          <th z-table-head scope="col">Name</th>
+          <th z-table-head scope="col">Age</th>
+          <th z-table-head scope="col">Address</th>
         </tr>
       </thead>
       <tbody z-table-body>
@@ -33,6 +33,10 @@ interface Person {
       </tbody>
     </table>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'block w-full overflow-x-auto',
+  },
 })
 export class ZardDemoTableSimpleComponent {
   listOfData: Person[] = [

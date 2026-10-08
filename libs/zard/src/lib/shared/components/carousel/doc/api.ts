@@ -3,16 +3,23 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const CAROUSEL_API: ApiSection[] = [
   {
     selector: 'z-carousel',
-    description: 'A carousel component with slide controls and swipe gesture support.',
+    description:
+      'A carousel component with slide controls and swipe gesture support. Add `#ref="zCarousel"` on the element to call its public methods.',
     props: [
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zOptions]',
-        description: 'Embla Carousel configuration options',
+        description:
+          "Embla Carousel configuration options, including `align` ('start' | 'center' | 'end'), `loop`, and `direction` ('ltr' | 'rtl'). `axis` is derived from `zOrientation` and should not be set here",
         type: 'EmblaOptionsType',
         default: '{loop: false}',
       },
-      { name: '[zPlugins]', description: 'Embla Carousel plugins', type: 'EmblaPluginType[]', default: '[]' },
+      {
+        name: '[zPlugins]',
+        description: 'Embla Carousel plugins, e.g. an autoplay plugin created with `ZardCarouselPluginsService`',
+        type: 'EmblaPluginType[]',
+        default: '[]',
+      },
       {
         name: '[zOrientation]',
         description: 'Carousel orientation',
@@ -21,17 +28,41 @@ export const CAROUSEL_API: ApiSection[] = [
       },
       {
         name: '[zControls]',
-        description: 'Navigation type buttons',
+        description: 'Navigation controls rendered inside the carousel',
         type: "'button' | 'dot' | 'none'",
         default: "'button'",
       },
       {
         name: '(zInited)',
-        description: 'Emits Embla API when carousel is initialized',
-        type: 'EmblaCarouselType',
+        description:
+          'Emits the Embla Carousel instance once initialized; read the current slide (`selectedScrollSnap()`) and total slide count (`scrollSnapList().length`) off it',
+        type: 'EventEmitter<EmblaCarouselType>',
         default: '-',
       },
-      { name: '(zSelected)', description: 'Emitted when a slide is selected', type: 'void', default: '-' },
+      {
+        name: '(zSelected)',
+        description: 'Emitted when the selected slide changes',
+        type: 'EventEmitter<void>',
+        default: '-',
+      },
+      {
+        name: 'slidePrevious()',
+        description: 'Public method that scrolls to the previous slide',
+        type: '() => void',
+        default: '-',
+      },
+      {
+        name: 'slideNext()',
+        description: 'Public method that scrolls to the next slide',
+        type: '() => void',
+        default: '-',
+      },
+      {
+        name: 'goTo(index)',
+        description: 'Public method that scrolls to the slide at the given index',
+        type: '(index: number) => void',
+        default: '-',
+      },
     ],
   },
   {

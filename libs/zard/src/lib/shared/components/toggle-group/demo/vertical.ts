@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideBold, lucideItalic, lucideUnderline } from '@ng-icons/lucide';
@@ -15,12 +15,12 @@ import {
     <z-toggle-group
       zMode="multiple"
       zOrientation="vertical"
-      [zDefaultValue]="['bold', 'italic']"
       [zItems]="items"
       [zSpacing]="1"
       (valueChange)="onToggleChange($event)"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
       lucideBold,

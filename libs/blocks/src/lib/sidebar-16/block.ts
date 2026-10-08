@@ -508,7 +508,7 @@ export class Sidebar16SiteHeaderComponent {
       name: 'sidebar-16.component.html',
       path: 'src/components/sidebar-16/sidebar-16.component.html',
       content: `<div class="[--header-height:calc(--spacing(14))]">
-  <z-sidebar-provider class="flex-col">
+  <z-sidebar-provider zDefaultOpen="true" class="flex-col">
     <lib-sidebar-16-site-header />
 
     <div class="flex flex-1">

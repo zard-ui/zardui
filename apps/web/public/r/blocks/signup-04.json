@@ -3,6 +3,13 @@
   "title": "Signup with form and image",
   "description": "A signup page with form and image.",
   "category": "Signup",
+  "registryDependencies": [
+    "button",
+    "card",
+    "field",
+    "input"
+  ],
+  "dependencies": [],
   "files": [
     {
       "name": "signup-04.component.html",

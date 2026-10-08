@@ -68,6 +68,31 @@ There is no `tailwind.config.js` — this is TailwindCSS v4, and the theme lives
 
 ---
 
+## Prose
+
+Theme tokens style components. They do not reach rendered markdown, which arrives as bare `h1`, `p`, `ul` and `table` with no class on anything.
+
+That is what typeset is for: one stylesheet, installed by `zard-cli add typeset`, plus a preset class that sets six variables. It reads the same tokens as everything else, so a theme change moves the prose with it, and dark mode needs nothing added.
+
+```css
+.typeset-docs {
+  --typeset-font-body: var(--font-geist);
+  --typeset-font-heading: var(--font-geist);
+  --typeset-font-mono: var(--font-geist-mono);
+  --typeset-size: 15px;
+  --typeset-leading: 1.75;
+  --typeset-flow: 1.25em;
+}
+```
+
+```angular-html
+<div class="typeset typeset-docs" [innerHTML]="renderedMarkdown()"></div>
+```
+
+Build a preset visually at [zardui.com/typeset](https://zardui.com/typeset). The rules — including `not-typeset`, `typeset-scroll`, and why a plain utility overrides it — are in [rules/typeset.md](./rules/typeset.md).
+
+---
+
 ## Variants
 
 Every component declares its variants with `cva()` in `<name>.variants.ts`, exported as `<name>Variants`, with one exported type per dimension.

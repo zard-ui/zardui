@@ -1,4 +1,4 @@
-import { existsSync, readdirSync } from 'fs';
+import { existsSync } from 'fs';
 import * as path from 'path';
 
 import { iconPackagesFor } from '../../core/icons/index.js';
@@ -6,21 +6,27 @@ import { Config } from '../../utils/config.js';
 import { iconCatalog } from '../../utils/icon-catalog.js';
 import { logger } from '../../utils/logger.js';
 import {
+  fetchBlocksIndex,
   fetchRegistryIndex,
+  getAvailableBlocks,
   invalidateRegistryCache,
   type RegistryIcons,
   type RegistryIndex,
 } from '../../utils/registry.js';
 
-function isComponentInstalled(dir: string): boolean {
+/*
+ * An item is installed when every file it declares already exists.
+ *
+ * The old question was "does the directory hold any file?", which only works
+ * for an item that lives alone. Typeset is written next to the project's
+ * global stylesheet, a directory that is never empty — it would be skipped
+ * every time. On the way, a half-installed item is now completed, not skipped.
+ */
+export function isItemInstalled(dir: string, files: readonly string[]): boolean {
   if (!existsSync(dir)) return false;
+  if (!files.length) return false;
 
-  try {
-    const files = readdirSync(dir);
-    return files.length > 0;
-  } catch {
-    return false;
-  }
+  return files.every(file => existsSync(path.join(dir, file)));
 }
 
 export function getTargetDir(
@@ -30,6 +36,32 @@ export function getTargetDir(
   customPath?: string,
 ): string {
   const basePath = component.basePath ?? component.name;
+
+  /*
+   * A stylesheet goes next to the global CSS declared in components.json, not
+   * inside components/. That is what lets the `@import './typeset.css'` the
+   * setup injects resolve without a brittle relative path.
+   *
+   * It comes before `customPath` on purpose: --path moves components, and a
+   * stylesheet that moved with them would be imported from a directory it does
+   * not sit in — the install would report success and style nothing.
+   */
+  if (basePath === 'styles') {
+    return path.dirname(resolvedConfig.resolvedPaths.tailwindCss);
+  }
+
+  /*
+   * A block is a folder, not a file: it brings up to 22 sources that only make
+   * sense together, so each one gets a directory of its own under the blocks
+   * alias — or under `--path`, for the same reason components honour it.
+   *
+   * Before the generic `--path` branch: that one appends the basePath, which
+   * would drop every block into a shared `<path>/blocks` and mix their files.
+   */
+  if (basePath === 'blocks') {
+    const root = customPath ? path.resolve(cwd, customPath) : resolvedConfig.resolvedPaths.blocks;
+    return path.join(root, component.name);
+  }
 
   if (customPath) {
     return path.resolve(cwd, customPath, basePath);
@@ -53,6 +85,9 @@ export function getTargetDir(
 export interface ComponentMeta {
   name: string;
   basePath?: string;
+  /** Blocks are fetched from `/blocks/` and written one directory per block. */
+  isBlock?: boolean;
+  files?: string[];
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
@@ -74,11 +109,15 @@ export async function getRegistryIndex(forceRefresh = false): Promise<RegistryIn
 export async function getComponentMeta(name: string): Promise<ComponentMeta | undefined> {
   const index = await getRegistryIndex();
   const item = index.items.find(i => i.name === name);
-  if (!item) return undefined;
+
+  // Blocks live in a separate index, and a block id never collides with a
+  // component name — so the component registry answers first and blocks fill in.
+  if (!item) return getBlockMeta(name);
 
   return {
     name: item.name,
     basePath: item.basePath,
+    files: item.files,
     dependencies: item.dependencies,
     devDependencies: item.devDependencies,
     registryDependencies: item.registryDependencies,
@@ -86,9 +125,33 @@ export async function getComponentMeta(name: string): Promise<ComponentMeta | un
   };
 }
 
+/** The block behind an id, as a `ComponentMeta` the installer can carry. */
+async function getBlockMeta(name: string): Promise<ComponentMeta | undefined> {
+  const blocks = await fetchBlocksIndex();
+  const block = blocks.blocks.find(entry => entry.id === name);
+  if (!block) return undefined;
+
+  return {
+    name: block.id,
+    basePath: 'blocks',
+    isBlock: true,
+    // The index does not list a block's files, so `isItemInstalled` cannot tell
+    // whether it is already there. Re-adding a block rewrites it, which is the
+    // safe end of that trade.
+    dependencies: block.dependencies,
+    registryDependencies: block.registryDependencies,
+  };
+}
+
 export async function getAllComponentNames(): Promise<string[]> {
   const index = await getRegistryIndex();
   return index.items.map(item => item.name);
+}
+
+/** Everything `add` accepts by name: components first, then blocks. */
+export async function getAllInstallableNames(): Promise<string[]> {
+  const [components, blocks] = await Promise.all([getAllComponentNames(), getAvailableBlocks()]);
+  return [...components, ...blocks];
 }
 
 export async function resolveDependencies(
@@ -117,7 +180,7 @@ export async function resolveDependencies(
   for (const component of componentMetas) {
     const targetDir = getTargetDir(component, resolvedConfig, cwd, options.path);
 
-    if (isComponentInstalled(targetDir) && !options.overwrite) {
+    if (isItemInstalled(targetDir, component.files ?? []) && !options.overwrite) {
       continue;
     }
 
@@ -187,7 +250,7 @@ async function resolveRegistryDependencies(
 
     const depTargetDir = getTargetDir(depComponent, resolvedConfig, cwd, options.path);
 
-    if (!isComponentInstalled(depTargetDir) || options.overwrite) {
+    if (!isItemInstalled(depTargetDir, depComponent.files ?? []) || options.overwrite) {
       componentsToInstall.push(depComponent);
       addComponentDependencies(depComponent, dependenciesToInstall, resolvedConfig.icons);
 

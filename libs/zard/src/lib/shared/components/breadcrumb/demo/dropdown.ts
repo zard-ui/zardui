@@ -4,11 +4,11 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
-import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/navigation-menu.imports';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
   selector: 'z-demo-breadcrumb-dropdown',
-  imports: [ZardBreadcrumbImports, ZardNavigationMenuImports, NgIcon],
+  imports: [ZardBreadcrumbImports, ZardDropdownImports, NgIcon],
   template: `
     <z-breadcrumb zLabel="Breadcrumb with dropdown">
       <z-breadcrumb-item>
@@ -19,20 +19,18 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/n
           z-breadcrumb-link
           type="button"
           class="flex items-center gap-1.5 border-0 bg-transparent p-0 text-inherit"
-          z-navigation-menu-trigger
-          [zNavigationMenuTriggerFor]="componentsMenu"
+          z-dropdown
+          [zDropdownMenu]="componentsMenu"
         >
           Components
           <ng-icon name="lucideChevronDown" class="size-3.5!" aria-hidden="true" />
         </button>
 
-        <ng-template #componentsMenu>
-          <div z-navigation-menu-content class="w-48">
-            <button type="button" z-navigation-menu-link>Documentation</button>
-            <button type="button" z-navigation-menu-link>Themes</button>
-            <button type="button" z-navigation-menu-link>Blocks</button>
-          </div>
-        </ng-template>
+        <z-dropdown-menu-content #componentsMenu="zDropdownMenuContent" class="w-48">
+          <z-dropdown-menu-item>Documentation</z-dropdown-menu-item>
+          <z-dropdown-menu-item>Themes</z-dropdown-menu-item>
+          <z-dropdown-menu-item>GitHub</z-dropdown-menu-item>
+        </z-dropdown-menu-content>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
         <span z-breadcrumb-page>Breadcrumb</span>

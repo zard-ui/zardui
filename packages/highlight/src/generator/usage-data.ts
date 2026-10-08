@@ -1,6 +1,8 @@
 export interface RawUsageData {
   importCode: string;
   templateCode: string;
+  /** Language of `templateCode`; defaults to `angular-html`. Use `angular-ts` for service-driven components. */
+  templateLanguage?: 'angular-html' | 'angular-ts';
 }
 
 export const USAGE_DATA: Record<string, RawUsageData> = {
@@ -17,11 +19,21 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-alert zTitle="Heads up!" zDescription="You can add components to your app using the cli."></z-alert>`,
   },
   'alert-dialog': {
-    importCode: `import { ZardAlertDialogComponent } from '@/shared/components/alert-dialog/alert-dialog.component';`,
-    templateCode: `<z-alert-dialog
-  zTitle="Are you absolutely sure?"
-  zDescription="This action cannot be undone."
-></z-alert-dialog>`,
+    importCode: `import { ZardAlertDialogImports } from '@/shared/components/alert-dialog/alert-dialog.imports';`,
+    templateCode: `<button type="button" z-button zType="outline" (click)="visible.set(true)">Show Dialog</button>
+
+<z-alert-dialog [(zVisible)]="visible">
+  <z-alert-dialog-header>
+    <z-alert-dialog-title>Are you absolutely sure?</z-alert-dialog-title>
+    <z-alert-dialog-description>
+      This action cannot be undone. This will permanently delete your account and remove your data from our servers.
+    </z-alert-dialog-description>
+  </z-alert-dialog-header>
+  <z-alert-dialog-footer>
+    <button type="button" z-button zType="outline" z-alert-dialog-close>Cancel</button>
+    <button type="button" z-button (click)="visible.set(false)">Continue</button>
+  </z-alert-dialog-footer>
+</z-alert-dialog>`,
   },
   avatar: {
     importCode: `import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';`,
@@ -93,7 +105,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   checkbox: {
     importCode: `import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';`,
-    templateCode: `<z-checkbox zLabel="Accept terms and conditions"></z-checkbox>`,
+    templateCode: `<z-checkbox>Accept terms and conditions</z-checkbox>`,
   },
   combobox: {
     importCode: `import { ZardComboboxImports } from '@/shared/components/combobox/combobox.imports';`,
@@ -131,8 +143,18 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   dialog: {
     importCode: `import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';`,
-    templateCode: `<z-dialog zTitle="Edit profile" zDescription="Make changes to your profile here.">
+    templateCode: `<button type="button" z-button zType="outline" (click)="visible.set(true)">Edit profile</button>
+
+<z-dialog [(zVisible)]="visible">
+  <z-dialog-header>
+    <z-dialog-title>Edit profile</z-dialog-title>
+    <z-dialog-description>Make changes to your profile here.</z-dialog-description>
+  </z-dialog-header>
   <p>Dialog content goes here.</p>
+  <z-dialog-footer>
+    <button type="button" z-button zType="outline" z-dialog-close>Cancel</button>
+    <button type="button" z-button (click)="save()">Save changes</button>
+  </z-dialog-footer>
 </z-dialog>`,
   },
   separator: {
@@ -278,8 +300,20 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
 </z-select>`,
   },
   sheet: {
-    importCode: `import { ZardSheetService } from '@/shared/components/sheet/sheet.service';`,
-    templateCode: `<button type="button" z-button zType="outline" (click)="openSheet()">Open</button>`,
+    importCode: `import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';`,
+    templateCode: `<button type="button" z-button zType="outline" (click)="visible.set(true)">Open</button>
+
+<z-sheet [(zVisible)]="visible">
+  <z-sheet-header>
+    <z-sheet-title>Edit profile</z-sheet-title>
+    <z-sheet-description>Make changes to your profile here.</z-sheet-description>
+  </z-sheet-header>
+  <p class="px-4">Sheet content goes here.</p>
+  <z-sheet-footer>
+    <button type="button" z-button (click)="save()">Save changes</button>
+    <button type="button" z-button zType="outline" z-sheet-close>Close</button>
+  </z-sheet-footer>
+</z-sheet>`,
   },
   skeleton: {
     importCode: `import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';`,
@@ -311,8 +345,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
 </table>`,
   },
   tabs: {
-    importCode: `import { ZardTabComponent } from '@/shared/components/tabs/tab.component';
-import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';`,
+    importCode: `import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';`,
     templateCode: `<z-tab-group>
   <z-tab label="Account">Account content here.</z-tab>
   <z-tab label="Password">Password content here.</z-tab>
@@ -328,11 +361,14 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
   },
   'toggle-group': {
     importCode: `import { ZardToggleGroupComponent } from '@/shared/components/toggle-group/toggle-group.component';`,
-    templateCode: `<z-toggle-group>
-  <z-toggle value="bold">Bold</z-toggle>
-  <z-toggle value="italic">Italic</z-toggle>
-  <z-toggle value="underline">Underline</z-toggle>
-</z-toggle-group>`,
+    templateCode: `<z-toggle-group
+  zMode="single"
+  [zItems]="[
+    { value: 'a', label: 'A' },
+    { value: 'b', label: 'B' },
+    { value: 'c', label: 'C' },
+  ]"
+/>`,
   },
   tooltip: {
     importCode: `import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';`,
@@ -386,6 +422,18 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
     <span>👍</span>
   </z-bubble-reactions>
 </z-bubble>`,
+  },
+  'hover-card': {
+    importCode: `import { ZardHoverCardComponent, ZardHoverCardDirective } from '@/shared/components/hover-card/hover-card.component';`,
+    templateCode: `<button [zHoverCard]="content">
+  Hover Here
+</button>
+
+<ng-template #content>
+  <z-hover-card>
+    The React Framework - created and maintained by @vercel.
+  </z-hover-card>
+</ng-template>`,
   },
   'context-menu': {
     importCode: `import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';`,

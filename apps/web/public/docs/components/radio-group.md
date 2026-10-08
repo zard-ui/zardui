@@ -204,18 +204,17 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
 
 ### Description
 
-Radio group items with a description using the `Field` component.
+Radio group items with a description, composed from `z-field`, `z-field-content` and `z-field-description`.
 
 ```angular-ts
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
 
 @Component({
   selector: 'z-demo-radio-group-description',
-  imports: [...ZardRadioGroupImports, ...ZardFieldImports, FormsModule],
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
   template: `
     <z-radio-group [(value)]="selected" class="w-fit">
       <div z-field zOrientation="horizontal">
@@ -241,6 +240,7 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
       </div>
     </z-radio-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoRadioGroupDescriptionComponent {
   selected: unknown = 'comfortable';
@@ -249,18 +249,17 @@ export class ZardDemoRadioGroupDescriptionComponent {
 
 ### Choice Card
 
-Use `FieldLabel` to wrap the entire `Field` for a clickable card-style selection.
+Wrap the whole `z-field` in a `label[z-field-label]` for a clickable card-style selection.
 
 ```angular-ts
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
 
 @Component({
   selector: 'z-demo-radio-group-choice-card',
-  imports: [...ZardRadioGroupImports, ...ZardFieldImports, FormsModule],
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
   template: `
     <z-radio-group [(value)]="selected" class="min-w-sm">
       <label z-field-label for="plus-plan">
@@ -292,6 +291,7 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
       </label>
     </z-radio-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoRadioGroupChoiceCardComponent {
   selected: unknown = 'plus';
@@ -300,18 +300,17 @@ export class ZardDemoRadioGroupChoiceCardComponent {
 
 ### Fieldset
 
-Use `FieldSet` and `FieldLegend` to group radio items with a label and description.
+Use `fieldset[z-field-set]` and `legend[z-field-legend]` to group radio items with a label and description.
 
 ```angular-ts
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
 
 @Component({
   selector: 'z-demo-radio-group-fieldset',
-  imports: [...ZardRadioGroupImports, ...ZardFieldImports, FormsModule],
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
   template: `
     <fieldset z-field-set class="w-full max-w-xs">
       <legend z-field-legend zVariant="label">Subscription Plan</legend>
@@ -332,6 +331,7 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
       </z-radio-group>
     </fieldset>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoRadioGroupFieldsetComponent {
   plan: unknown = 'monthly';
@@ -340,18 +340,17 @@ export class ZardDemoRadioGroupFieldsetComponent {
 
 ### Disabled
 
-Use the `disabled` prop on `RadioGroupItem` to disable individual items.
+Set `zDisabled` on a single `z-radio` to disable that item; `data-disabled` on `z-field` drives the disabled styles.
 
 ```angular-ts
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
 
 @Component({
   selector: 'z-demo-radio-group-disabled',
-  imports: [...ZardRadioGroupImports, ...ZardFieldImports, FormsModule],
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
   template: `
     <z-radio-group [(value)]="selected" class="w-fit">
       <div z-field zOrientation="horizontal" data-disabled="true">
@@ -368,6 +367,7 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
       </div>
     </z-radio-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoRadioGroupDisabledComponent {
   selected: unknown = 'option2';
@@ -376,18 +376,17 @@ export class ZardDemoRadioGroupDisabledComponent {
 
 ### Invalid
 
-Use `aria-invalid` on `RadioGroupItem` and `data-invalid` on `Field` to show validation errors.
+Set `zInvalid` on `z-radio` (which sets `aria-invalid`) and `data-invalid` on `z-field` to show validation errors.
 
 ```angular-ts
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
 
 @Component({
   selector: 'z-demo-radio-group-invalid',
-  imports: [...ZardRadioGroupImports, ...ZardFieldImports, FormsModule],
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
   template: `
     <fieldset z-field-set class="w-full max-w-xs">
       <legend z-field-legend zVariant="label">Notification Preferences</legend>
@@ -408,9 +407,69 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
       </z-radio-group>
     </fieldset>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoRadioGroupInvalidComponent {
   selected: unknown = 'email';
+}
+```
+
+### Reactive Forms
+
+Bind `z-radio-group` with `formControlName`; the disabled state of a `FormControl` is respected out of the box.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
+
+@Component({
+  selector: 'z-demo-radio-group-reactive-forms',
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="form">
+      <div z-field-group class="w-64">
+        <fieldset z-field-set>
+          <legend z-field-legend zVariant="label">Billing plan</legend>
+          <z-radio-group formControlName="plan">
+            <div z-field zOrientation="horizontal">
+              <z-radio zId="reactive-plan-monthly" value="monthly" />
+              <label z-field-label for="reactive-plan-monthly" class="font-normal">Monthly</label>
+            </div>
+            <div z-field zOrientation="horizontal">
+              <z-radio zId="reactive-plan-yearly" value="yearly" />
+              <label z-field-label for="reactive-plan-yearly" class="font-normal">Yearly</label>
+            </div>
+          </z-radio-group>
+        </fieldset>
+        <fieldset z-field-set>
+          <legend z-field-legend zVariant="label">Add-ons (locked)</legend>
+          <z-radio-group formControlName="addons">
+            <div z-field zOrientation="horizontal" data-disabled="true">
+              <z-radio zId="reactive-addons-none" value="none" />
+              <label z-field-label for="reactive-addons-none" class="font-normal">None</label>
+            </div>
+            <div z-field zOrientation="horizontal" data-disabled="true">
+              <z-radio zId="reactive-addons-priority" value="priority" />
+              <label z-field-label for="reactive-addons-priority" class="font-normal">Priority support</label>
+            </div>
+          </z-radio-group>
+        </fieldset>
+        <p class="text-muted-foreground text-sm">Plan: {{ form.controls.plan.value }}</p>
+      </div>
+    </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoRadioGroupReactiveFormsComponent {
+  private readonly fb = inject(FormBuilder);
+
+  protected readonly form = this.fb.group({
+    plan: ['monthly'],
+    addons: [{ value: 'none', disabled: true }],
+  });
 }
 ```
 
@@ -423,8 +482,8 @@ Wrapper that groups radio items and manages the selected value.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[value]` | Selected value, two-way bindable | `unknown` | `null` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 | `[(value)]` | Selected value (two-way binding) | `unknown` | `null` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 | `[zDisabled]` | Disables every item in the group | `boolean` | `false` |
 | `[name]` | Optional name for native form submission | `string` | `''` |
 

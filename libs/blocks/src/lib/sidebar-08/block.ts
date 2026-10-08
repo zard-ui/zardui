@@ -387,7 +387,7 @@ export class Sidebar08NavUserComponent {
     {
       name: 'sidebar-08.component.html',
       path: 'src/components/sidebar-08/sidebar-08.component.html',
-      content: `<z-sidebar-provider>
+      content: `<z-sidebar-provider zDefaultOpen="true">
   <z-sidebar zVariant="inset">
     <div z-sidebar-header>
       <ul z-sidebar-menu>

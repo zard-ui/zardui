@@ -1,7 +1,7 @@
 import { ALERT_DEMO_BASIC } from '@generated/components/alert/demo/basic';
-import { BADGE_DEMO_DEFAULT } from '@generated/components/badge/demo/default';
+import { BADGE_DEMO_VARIANTS } from '@generated/components/badge/demo/variants';
 import { BUTTON_DEMO_DEFAULT } from '@generated/components/button/demo/default';
-import { CARD_DEMO_DEFAULT } from '@generated/components/card/demo/default';
+import { CARD_DEMO_PREVIEW } from '@generated/components/card/demo/preview';
 import { TABLE_DEMO_SIMPLE } from '@generated/components/table/demo/simple';
 import { ALERT_CLI_ADD } from '@generated/installation/cli/add-alert';
 import { BADGE_CLI_ADD } from '@generated/installation/cli/add-badge';
@@ -10,9 +10,9 @@ import { CARD_CLI_ADD } from '@generated/installation/cli/add-card';
 import { TABLE_CLI_ADD } from '@generated/installation/cli/add-table';
 
 import { ZardDemoAlertBasicComponent } from '@zard/components/alert/demo/basic';
-import { ZardDemoBadgeDefaultComponent } from '@zard/components/badge/demo/default';
+import { ZardDemoBadgeVariantsComponent } from '@zard/components/badge/demo/variants';
 import { ZardDemoButtonDefaultComponent } from '@zard/components/button/demo/default';
-import { ZardDemoCardDefaultComponent } from '@zard/components/card/demo/default';
+import { ZardDemoCardPreviewComponent } from '@zard/components/card/demo/preview';
 import { ZardDemoTableSimpleComponent } from '@zard/components/table/demo/simple';
 
 import { type ChangelogExample } from '../changelog-entry.interface';
@@ -31,18 +31,18 @@ export const MARCH_2025_EXAMPLES: ChangelogExample[] = [
     name: 'default',
     description:
       'Container component for grouping related content with optional header, footer, and customizable padding.',
-    component: ZardDemoCardDefaultComponent,
+    component: ZardDemoCardPreviewComponent,
     componentName: 'card',
-    codeData: CARD_DEMO_DEFAULT,
+    codeData: CARD_DEMO_PREVIEW,
     cliAdd: CARD_CLI_ADD,
   },
   {
-    name: 'default',
+    name: 'variants',
     description:
       'Small label component for displaying status, categories, counts, or tags with various color variants.',
-    component: ZardDemoBadgeDefaultComponent,
+    component: ZardDemoBadgeVariantsComponent,
     componentName: 'badge',
-    codeData: BADGE_DEMO_DEFAULT,
+    codeData: BADGE_DEMO_VARIANTS,
     cliAdd: BADGE_CLI_ADD,
   },
   {

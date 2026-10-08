@@ -139,6 +139,90 @@ describe('ZardAvatarComponent', () => {
       expect(fallbackElement.nativeElement.textContent.trim()).toBe('AB');
     });
 
+    it('renders the fallback on the very first render with no intermediate frame', () => {
+      // Fresh fixture so no prior detectChanges() has run.
+      const freshFixture = TestBed.createComponent(TestHostComponent);
+      freshFixture.componentInstance.zSrc = undefined;
+      freshFixture.componentInstance.zFallback = 'ZA';
+      freshFixture.detectChanges();
+
+      const fallbackElement = freshFixture.debugElement.query(By.css('span.text-sm'));
+      expect(fallbackElement).toBeTruthy();
+      expect(fallbackElement.nativeElement.textContent.trim()).toBe('ZA');
+    });
+
+    it('keeps the fallback mounted underneath the image while it loads, both out of flex flow', () => {
+      hostComponent.zFallback = 'ZA';
+      hostComponent.zSrc = 'loading-image.jpg';
+      fixture.detectChanges();
+
+      const fallbackElement = fixture.debugElement.query(By.css('span.text-sm'));
+      const imgElement = fixture.debugElement.query(By.css('img'));
+
+      // Both nodes coexist during the load window ...
+      expect(fallbackElement).toBeTruthy();
+      expect(imgElement).toBeTruthy();
+      // ... but neither is a flex sibling that can be squeezed: both are taken out of flow.
+      expect(fallbackElement.nativeElement).toHaveClass('absolute');
+      expect(fallbackElement.nativeElement).toHaveClass('inset-0');
+      expect(imgElement.nativeElement).toHaveClass('absolute');
+      expect(imgElement.nativeElement).toHaveClass('inset-0');
+      // The image is not painted in until it loads.
+      expect(imgElement.nativeElement).toHaveClass('opacity-0');
+      expect(imgElement.nativeElement).not.toHaveClass('opacity-100');
+
+      imgElement.nativeElement.dispatchEvent(new Event('load'));
+      fixture.detectChanges();
+
+      expect(imgElement.nativeElement).toHaveClass('opacity-100');
+    });
+
+    it('sizes the img element to match zSize (sm 24 / default 32 / lg 40)', () => {
+      hostComponent.zSrc = 'test-url.jpg';
+
+      hostComponent.zSize = 'sm';
+      fixture.detectChanges();
+      let imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(imgElement.getAttribute('width')).toBe('24');
+      expect(imgElement.getAttribute('height')).toBe('24');
+
+      hostComponent.zSize = 'default';
+      fixture.detectChanges();
+      imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(imgElement.getAttribute('width')).toBe('32');
+      expect(imgElement.getAttribute('height')).toBe('32');
+
+      hostComponent.zSize = 'lg';
+      fixture.detectChanges();
+      imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(imgElement.getAttribute('width')).toBe('40');
+      expect(imgElement.getAttribute('height')).toBe('40');
+    });
+
+    it('loads the image eagerly instead of deferring the request', () => {
+      hostComponent.zSrc = 'test-url.jpg';
+      fixture.detectChanges();
+
+      const imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(imgElement.getAttribute('loading')).toBe('eager');
+    });
+
+    it('hides the fallback from assistive tech once the image has loaded', () => {
+      hostComponent.zFallback = 'ZA';
+      hostComponent.zSrc = 'test-url.jpg';
+      fixture.detectChanges();
+
+      let fallbackElement = fixture.debugElement.query(By.css('span.text-sm')).nativeElement;
+      expect(fallbackElement.getAttribute('aria-hidden')).toBeNull();
+
+      const imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      imgElement.dispatchEvent(new Event('load'));
+      fixture.detectChanges();
+
+      fallbackElement = fixture.debugElement.query(By.css('span.text-sm')).nativeElement;
+      expect(fallbackElement.getAttribute('aria-hidden')).toBe('true');
+    });
+
     it('should handle image load event correctly', () => {
       hostComponent.zSrc = 'valid-image.jpg';
       fixture.detectChanges();
@@ -269,7 +353,27 @@ describe('ZardAvatarComponent', () => {
     });
   });
 
-  describe('Effect behavior', () => {
+  describe('State reset on zSrc change (linkedSignal)', () => {
+    it('resets the loaded (opacity-100) state synchronously — no frame with the previous src still marked loaded', () => {
+      hostComponent.zSrc = 'valid-image.jpg';
+      fixture.detectChanges();
+
+      const imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      imgElement.dispatchEvent(new Event('load'));
+      fixture.detectChanges();
+
+      expect(imgElement).toHaveClass('opacity-100');
+
+      hostComponent.zSrc = 'another-image.jpg';
+      fixture.detectChanges();
+
+      // No extra tick/effect flush needed: the reset is synchronous with the src change,
+      // so the very next render already reflects the new (unloaded) image.
+      const newImgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(newImgElement).toHaveClass('opacity-0');
+      expect(newImgElement).not.toHaveClass('opacity-100');
+    });
+
     it('resets image error state when zSrc changes', () => {
       hostComponent.zSrc = 'invalid-image.jpg';
       fixture.detectChanges();

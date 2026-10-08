@@ -64,7 +64,8 @@ export class ZardSidebarProviderComponent implements OnInit {
 
   /**
    * Initial open state. Left unset, the persisted cookie decides, falling back to open.
-   * Set explicitly, it wins over the cookie — the demos rely on that to stay deterministic.
+   * Set explicitly, it wins over the cookie and the provider stops writing it — the demos and the
+   * blocks rely on that to stay deterministic without changing the state of other sidebars.
    */
   readonly zDefaultOpen = input<boolean | undefined, unknown>(undefined, {
     transform: value => (value === undefined ? undefined : booleanAttribute(value)),

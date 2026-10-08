@@ -7,6 +7,7 @@ export interface ApiProp {
 
 export interface ApiSection {
   selector: string;
-  description: string;
+  description?: string;
   props: ApiProp[];
+  outputs?: ApiProp[];
 }

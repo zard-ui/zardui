@@ -17,6 +17,8 @@ const SLOT_CLASSES =
   imports: [ZardInputOtpImports, ZardFieldImports, ZardCardImports, ZardButtonComponent, ReactiveFormsModule, NgIcon],
   template: `
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      @let codeControl = form.controls.code;
+      @let codeInvalid = codeControl.invalid && codeControl.touched;
       <z-card class="mx-auto max-w-md">
         <div z-card-header>
           <z-card-title zTitle="Verify your login" />
@@ -28,7 +30,7 @@ const SLOT_CLASSES =
         </div>
 
         <div z-card-content>
-          <div z-field>
+          <div z-field [attr.data-invalid]="codeInvalid || null">
             <div class="flex items-center justify-between">
               <label z-field-label for="otp-verification">Verification code</label>
               <button z-button type="button" zType="outline" zSize="xs">
@@ -36,7 +38,7 @@ const SLOT_CLASSES =
                 Resend Code
               </button>
             </div>
-            <z-input-otp id="otp-verification" [zMaxLength]="6" formControlName="code">
+            <z-input-otp id="otp-verification" [zMaxLength]="6" formControlName="code" [zInvalid]="codeInvalid">
               <z-input-otp-group [class]="slotClasses">
                 <z-input-otp-slot [zIndex]="0" />
                 <z-input-otp-slot [zIndex]="1" />
@@ -49,15 +51,25 @@ const SLOT_CLASSES =
                 <z-input-otp-slot [zIndex]="5" />
               </z-input-otp-group>
             </z-input-otp>
-            <p z-field-description>
-              <a href="#">I no longer have access to this email address.</a>
-            </p>
+            @if (codeInvalid) {
+              <z-field-error>
+                @if (codeControl.hasError('required')) {
+                  Enter the verification code.
+                } @else if (codeControl.hasError('minlength')) {
+                  The code must be 6 digits.
+                }
+              </z-field-error>
+            } @else {
+              <p z-field-description>
+                <a href="#">I no longer have access to this email address.</a>
+              </p>
+            }
           </div>
         </div>
 
         <div z-card-footer>
           <div z-field>
-            <button z-button type="submit" class="w-full" [disabled]="form.invalid">Verify</button>
+            <button z-button type="submit" class="w-full" [zDisabled]="form.invalid">Verify</button>
             <div class="text-muted-foreground text-sm">
               Having trouble signing in?
               <a href="#" class="hover:text-primary underline underline-offset-4 transition-colors">Contact support</a>
@@ -78,6 +90,8 @@ export class ZardDemoInputOtpFormComponent {
   });
 
   onSubmit(): void {
+    this.form.markAllAsTouched();
+
     if (this.form.valid) {
       console.log('Verification code:', this.form.value.code);
     }

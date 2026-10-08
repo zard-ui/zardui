@@ -46,3 +46,11 @@ npx zard-cli add dark-mode
 npx zard-cli --version
 npx zard-cli init --debug
 ```
+
+```bash title="Terminal" copyButton
+npx zard-cli add dashboard-01
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli add login-01 --path src/app/features/auth
+```

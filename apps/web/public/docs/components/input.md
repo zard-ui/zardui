@@ -188,6 +188,8 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 
 ### Basic
 
+Use `input[z-input]` on its own for a simple, unlabeled input.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -197,7 +199,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
   selector: 'z-demo-input-basic',
   imports: [ZardInputComponent],
   template: `
-    <input z-input placeholder="Enter text" class="w-72" />
+    <input z-input id="input-basic" placeholder="Enter text" class="w-72" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -206,7 +208,7 @@ export class ZardDemoInputBasicComponent {}
 
 ### Field
 
-Use `Field`, `FieldLabel`, and `FieldDescription` to create an input with a label and description.
+Wrap `input[z-input]` in `z-field` with a `z-field-label` and `z-field-description` to add a label and helper text.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -231,7 +233,7 @@ export class ZardDemoInputFieldComponent {}
 
 ### Field Group
 
-Use `FieldGroup` to show multiple `Field` blocks and to build forms.
+Stack multiple `z-field` blocks inside `z-field-group` to build a mini form, and set `zOrientation="horizontal"` on the last one to lay the action buttons out in a row.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -267,7 +269,7 @@ export class ZardDemoInputFieldGroupComponent {}
 
 ### Disabled
 
-Use the `disabled` prop to disable the input. To style the disabled state, add the `data-disabled` attribute to the `Field` component.
+Set the native `disabled` attribute on `input[z-input]`, and add `data-disabled="true"` to the surrounding `z-field` so its label and description dim along with the control.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -292,7 +294,7 @@ export class ZardDemoInputDisabledComponent {}
 
 ### Invalid
 
-Use the `aria-invalid` prop to mark the input as invalid. To style the invalid state, add the `data-invalid` attribute to the `Field` component.
+Set `aria-invalid="true"` on `input[z-input]` and `data-invalid="true"` on the surrounding `z-field` to mark the field as invalid; see the `form` example for wiring these attributes to a reactive form control.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -317,7 +319,7 @@ export class ZardDemoInputInvalidComponent {}
 
 ### File
 
-Use the `type="file"` prop to create a file input.
+Set `type="file"` on `input[z-input]` to create a file picker.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -342,7 +344,7 @@ export class ZardDemoInputFileComponent {}
 
 ### Inline
 
-Use `Field` with `orientation="horizontal"` to create an inline input. Pair with `Button` to create a search input with a button.
+Set `zOrientation="horizontal"` on `z-field` to lay the input and a `z-button` out in a row, for example to pair a search input with a submit button.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -356,7 +358,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
   imports: [ZardInputComponent, ZardButtonComponent, ...ZardFieldImports],
   template: `
     <div z-field zOrientation="horizontal" class="w-80">
-      <input z-input type="search" placeholder="Search..." />
+      <input z-input id="input-inline-search" type="search" placeholder="Search..." />
       <button type="button" z-button>Search</button>
     </div>
   `,
@@ -367,7 +369,7 @@ export class ZardDemoInputInlineComponent {}
 
 ### Grid
 
-Use a grid layout to place multiple inputs side by side.
+Use a grid layout class on `z-field-group` to place multiple `z-field`s side by side.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -397,7 +399,7 @@ export class ZardDemoInputGridComponent {}
 
 ### Required
 
-Use the `required` attribute to indicate required inputs.
+Set the native `required` attribute on `input[z-input]`, and add a visual required marker inside `z-field-label`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -425,7 +427,7 @@ export class ZardDemoInputRequiredComponent {}
 
 ### Badge
 
-Use `Badge` in the label to highlight a recommended field.
+Place a `z-badge` inside `z-field-label` to highlight a recommended field.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -453,7 +455,7 @@ export class ZardDemoInputBadgeComponent {}
 
 ### Input Group
 
-To add icons, text, or buttons inside an input, use the `InputGroup` component. See the Input Group component for more examples.
+To add icons, text or buttons inside the input, wrap it in `z-input-group`. See the Input Group component for more examples.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -490,7 +492,7 @@ export class ZardDemoInputInputGroupComponent {}
 
 ### Button Group
 
-To add buttons to an input, use the `ButtonGroup` component. See the Button Group component for more examples.
+To add a button next to the input, wrap both in `z-button-group`. See the Button Group component for more examples.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -519,10 +521,11 @@ export class ZardDemoInputButtonGroupComponent {}
 
 ### Form
 
-A full form example with multiple inputs, a select, and a button.
+A full reactive form built from `z-field-group` and `z-field`, with `z-select` for the country and a live validation message on the email field once it's touched and invalid.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
@@ -531,27 +534,46 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
   selector: 'z-demo-input-form',
-  imports: [ZardInputComponent, ZardButtonComponent, ZardSelectImports, ...ZardFieldImports],
+  imports: [ZardInputComponent, ZardButtonComponent, ZardSelectImports, ReactiveFormsModule, ...ZardFieldImports],
   template: `
-    <form class="w-full min-w-sm">
+    <form class="w-full min-w-sm" [formGroup]="form" (ngSubmit)="onSubmit()">
       <div z-field-group>
         <div z-field>
           <label z-field-label for="form-name">Name</label>
-          <input z-input id="form-name" type="text" placeholder="Evil Rabbit" required />
+          <input z-input id="form-name" type="text" placeholder="Evil Rabbit" formControlName="name" />
         </div>
-        <div z-field>
+        @let emailControl = form.controls.email;
+        @let emailInvalid = emailControl.invalid && emailControl.touched;
+        <div z-field [attr.data-invalid]="emailInvalid || null">
           <label z-field-label for="form-email">Email</label>
-          <input z-input id="form-email" type="email" placeholder="john@example.com" />
-          <p z-field-description>We'll never share your email with anyone.</p>
+          <input
+            z-input
+            id="form-email"
+            type="email"
+            placeholder="john@example.com"
+            formControlName="email"
+            [attr.aria-invalid]="emailInvalid || null"
+          />
+          @if (emailInvalid) {
+            <z-field-error>
+              @if (emailControl.hasError('required')) {
+                Email is required.
+              } @else if (emailControl.hasError('email')) {
+                Enter a valid email address.
+              }
+            </z-field-error>
+          } @else {
+            <p z-field-description>We'll never share your email with anyone.</p>
+          }
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div z-field>
             <label z-field-label for="form-phone">Phone</label>
-            <input z-input id="form-phone" type="tel" placeholder="+1 (555) 123-4567" />
+            <input z-input id="form-phone" type="tel" placeholder="+1 (555) 123-4567" formControlName="phone" />
           </div>
           <div z-field>
             <label z-field-label for="form-country">Country</label>
-            <z-select id="form-country" [(zValue)]="country">
+            <z-select id="form-country" formControlName="country">
               <z-select-item zValue="us">United States</z-select-item>
               <z-select-item zValue="uk">United Kingdom</z-select-item>
               <z-select-item zValue="ca">Canada</z-select-item>
@@ -560,32 +582,50 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
         </div>
         <div z-field>
           <label z-field-label for="form-address">Address</label>
-          <input z-input id="form-address" type="text" placeholder="123 Main St" />
+          <input z-input id="form-address" type="text" placeholder="123 Main St" formControlName="address" />
         </div>
         <div z-field zOrientation="horizontal">
-          <button z-button type="button" zType="outline">Cancel</button>
+          <button z-button type="button" zType="outline" (click)="onReset()">Cancel</button>
           <button z-button type="submit">Submit</button>
         </div>
       </div>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputFormComponent {
-  country = 'us';
+  readonly form = new FormGroup({
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    phone: new FormControl(''),
+    country: new FormControl('us'),
+    address: new FormControl(''),
+  });
+
+  onSubmit(): void {
+    this.form.markAllAsTouched();
+    if (this.form.valid) {
+      console.log('Form submitted:', this.form.getRawValue());
+    }
+  }
+
+  onReset(): void {
+    this.form.reset({ country: 'us' });
+  }
 }
 ```
 
 ## API Reference
 
-### z-input, input[z-input]
+### input[z-input]
 
-A form input field. Usable as a component or as a directive on a native input. All native HTML input attributes (placeholder, name, disabled, readonly, aria-invalid, etc.) are supported on the directive form.
+A directive that styles a native `<input>` element. All native HTML input attributes (`type`, `placeholder`, `disabled`, `required`, `readonly`, `aria-invalid`, etc.) keep working as-is.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[(value)]` | Input value (two-way binding) | `string` | `''` |
-| `[zType]` | Native input type (z-input only) | `string` | `'text'` |
+| `[value]` | Input value, two-way bindable | `string \| number \| null` | `null` |
+| `[(value)]` | Input value (two-way binding) | `string \| number \| null` | `null` |
 
 ---
 

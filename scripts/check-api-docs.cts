@@ -28,22 +28,21 @@ const COMPONENTS = path.resolve(__dirname, '../libs/zard/src/lib/shared/componen
  * Two kinds only:
  *   - wiring inputs the parent sets, never the consumer
  *   - shadcn-parity aliases that duplicate a `z*` input the table already
- *     documents. Dropdown accepts three names for one concept
- *     (`variant` / `zType` / `zVariant`); settling on one is a public-API
- *     decision, and until it is made the table documents `zType`.
+ *     documents. Dropdown accepts three names for one concept on its item
+ *     primitives (`variant` / `zType` / `zVariant`): `zType` is the decided
+ *     canonical name, documented as a row; `variant` and `zVariant` are
+ *     documented as aliases of `zType` in prose instead of a row each, so
+ *     they stay exempt here.
  */
 const UNDOCUMENTED_BY_DESIGN = new Set([
   'z-command-option.parentCommand',
   'z-command-option.commandGroup',
+  'z-dropdown-menu-item.variant',
   'z-dropdown-menu-item.zVariant',
-  'z-dropdown-menu-label.inset',
-  'z-dropdown-menu-checkbox-item.disabled',
   'z-dropdown-menu-checkbox-item.variant',
   'z-dropdown-menu-checkbox-item.zVariant',
-  'z-dropdown-menu-radio-item.disabled',
   'z-dropdown-menu-radio-item.variant',
   'z-dropdown-menu-radio-item.zVariant',
-  'button[z-input-group-button].zVariant',
 ]);
 
 interface Declared {

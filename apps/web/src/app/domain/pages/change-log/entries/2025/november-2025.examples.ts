@@ -1,10 +1,10 @@
 import { CAROUSEL_DEMO_PREVIEW } from '@generated/components/carousel/demo/preview';
-import { KBD_DEMO_DEFAULT } from '@generated/components/kbd/demo/default';
+import { KBD_DEMO_PREVIEW } from '@generated/components/kbd/demo/preview';
 import { CAROUSEL_CLI_ADD } from '@generated/installation/cli/add-carousel';
 import { KBD_CLI_ADD } from '@generated/installation/cli/add-kbd';
 
 import { ZardDemoCarouselPreviewComponent } from '@zard/components/carousel/demo/preview';
-import { ZardDemoKbdDefaultComponent } from '@zard/components/kbd/demo/default';
+import { ZardDemoKbdPreviewComponent } from '@zard/components/kbd/demo/preview';
 
 import { type ChangelogExample } from '../changelog-entry.interface';
 
@@ -19,11 +19,11 @@ export const NOVEMBER_2025_EXAMPLES: ChangelogExample[] = [
     cliAdd: CAROUSEL_CLI_ADD,
   },
   {
-    name: 'default',
+    name: 'preview',
     description: 'Display keyboard keys and shortcuts in a visually consistent way.',
-    component: ZardDemoKbdDefaultComponent,
+    component: ZardDemoKbdPreviewComponent,
     componentName: 'kbd',
-    codeData: KBD_DEMO_DEFAULT,
+    codeData: KBD_DEMO_PREVIEW,
     cliAdd: KBD_CLI_ADD,
   },
 ];

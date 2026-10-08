@@ -22,14 +22,18 @@ test.describe('Chart component', () => {
 
   test('shows the tooltip when the chart area is hovered', async ({ page }) => {
     const chart = demoPage.firstDemoBox.locator('z-chart').first();
-    const box = await chart.boundingBox();
-    if (!box) throw new Error('the chart has no layout box');
+    await expect(chart.locator('canvas').first()).toBeVisible();
 
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-
-    // ECharts appends its tooltip container to the chart element once it is shown.
+    // ECharts appends its tooltip container to the chart element once it is shown, but it binds
+    // the canvas pointer handlers asynchronously — so re-hover until the tooltip actually appears.
     const tooltip = chart.getByRole('tooltip').first();
-    await expect(tooltip).toBeVisible({ timeout: 10_000 });
+    await expect(async () => {
+      const box = await chart.boundingBox();
+      if (!box) throw new Error('the chart has no layout box');
+      await page.mouse.move(box.x + box.width * 0.3, box.y + box.height * 0.5, { steps: 4 });
+      await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.5, { steps: 4 });
+      await expect(tooltip).toBeVisible({ timeout: 1_500 });
+    }).toPass({ timeout: 15_000 });
   });
 
   test('clicking a legend item toggles the series', async () => {

@@ -2,11 +2,12 @@ import { installComponent, validateTargetPath } from '@cli/commands/add/componen
 import { selectComponents } from '@cli/commands/add/component-selector.js';
 import { updateProvideZardWithDarkMode } from '@cli/commands/add/dark-mode-setup.js';
 import {
-  getAllComponentNames,
+  getAllInstallableNames,
   getTargetDir,
   resolveDependencies,
   type ComponentMeta,
 } from '@cli/commands/add/dependency-resolver.js';
+import { setupTypeset, setupUtilities } from '@cli/commands/add/stylesheet-setup.js';
 import { runAddWizard } from '@cli/commands/add/wizard.js';
 import { indexHtmlFor } from '@cli/commands/init/project-kind.js';
 import { injectThemeScript } from '@cli/commands/init/theme-loader.js';
@@ -65,7 +66,7 @@ export const add = new Command()
     warnOnPrereleaseAngular(projectInfo.angularVersionRaw);
 
     const actions = {
-      loadNames: () => getAllComponentNames(),
+      loadNames: () => getAllInstallableNames(),
       resolve: async (names: string[]) => {
         const { componentsToInstall, dependenciesToInstall } = await resolveDependencies(
           names,
@@ -82,11 +83,14 @@ export const add = new Command()
       installComponent: (component: ComponentMeta) =>
         installComponent(component.name, getTargetDir(component, resolvedConfig, cwd, options.path), resolvedConfig, {
           customPath: Boolean(options.path),
+          isBlock: component.isBlock,
         }),
       setupDarkMode: async (indexHtml: string) => {
         await injectThemeScript(cwd, indexHtml);
         await updateProvideZardWithDarkMode(cwd, resolvedConfig);
       },
+      setupTypeset: () => setupTypeset(resolvedConfig.resolvedPaths.tailwindCss),
+      setupUtilities: () => setupUtilities(resolvedConfig.resolvedPaths.tailwindCss),
       defaultIndexHtml: indexHtmlFor(config.projectType, config.baseUrl),
     };
 
@@ -124,6 +128,8 @@ type AddActions = {
   installDependencies(packages: string[]): Promise<void>;
   installComponent(component: ComponentMeta): Promise<void>;
   setupDarkMode(indexHtml: string): Promise<void>;
+  setupTypeset(): Promise<void>;
+  setupUtilities(): Promise<void>;
   defaultIndexHtml: string;
 };
 
@@ -171,6 +177,14 @@ async function runHeadless(preselected: string[], options: AddOptions, actions: 
       componentSpinner.fail(component.name);
       logger.debug(`Failed to install ${component.name}: ${error instanceof Error ? error.message : error}`);
     }
+  }
+
+  if (installed.includes('typeset')) {
+    await actions.setupTypeset();
+  }
+
+  if (installed.includes('utilities')) {
+    await actions.setupUtilities();
   }
 
   if (components.some(component => component.name === 'dark-mode')) {

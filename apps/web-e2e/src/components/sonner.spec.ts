@@ -50,7 +50,7 @@ test.describe('Sonner (Toast) component', () => {
     const demo = demoPage.getDemoByName('with-dialog');
     await demo.locator('button[z-button]').first().click();
 
-    const dialog = page.locator('z-dialog');
+    const dialog = page.locator('.cdk-overlay-container z-dialog-panel');
     await expect(dialog).toBeVisible({ timeout: 5000 });
 
     await dialog.locator('button', { hasText: 'Save' }).click();

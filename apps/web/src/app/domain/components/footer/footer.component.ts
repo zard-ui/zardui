@@ -8,7 +8,7 @@ import { SOCIAL_MEDIAS } from '@doc/shared/constants/medias.constant';
   template: `
     <footer class="dark:bg-transparent">
       <div class="container mx-auto px-4 xl:px-6">
-        <div class="flex h-26 flex-col items-center justify-between gap-4 sm:h-14 sm:flex-row">
+        <div class="flex h-26 flex-col items-center justify-between gap-4 sm:h-24 sm:flex-row">
           <div class="flex items-center gap-1">
             @for (social of socialMedias(); track social.name) {
               <a

@@ -1,8 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { provideIcons } from '@ng-icons/core';
-import { lucidePlus } from '@ng-icons/lucide';
-
 import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
 
 @Component({
@@ -13,19 +10,17 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
       <z-avatar
         [zShowBadge]="true"
         zSrc="/images/avatar/imgs/avatar_image.jpg"
-        zAlt="Image"
-        zBadgeClass="bg-green-600 dark:bg-green-800"
+        zAlt="Online"
+        zBadgeClass="bg-green-600 dark:bg-green-500"
       />
       <z-avatar
-        class="grayscale"
         [zShowBadge]="true"
         zSrc="/images/avatar/imgs/avatar_image.jpg"
-        zAlt="Image"
-        zBadgeIcon="lucidePlus"
+        zAlt="Away"
+        zBadgeClass="bg-yellow-500 dark:bg-yellow-600"
       />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoAvatarBadgeComponent {}

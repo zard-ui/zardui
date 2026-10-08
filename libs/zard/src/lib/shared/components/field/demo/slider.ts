@@ -18,7 +18,7 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
         <z-slider
           class="mt-2 w-full"
           aria-label="Volume"
-          [zDefault]="value()"
+          [zValue]="value()"
           [zMin]="0"
           [zMax]="100"
           [zStep]="1"

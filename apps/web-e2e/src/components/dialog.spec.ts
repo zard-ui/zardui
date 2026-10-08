@@ -20,7 +20,7 @@ test.describe('Dialog component', () => {
     const trigger = demoPage.firstDemoBox.locator('button[z-button]').first();
     await trigger.click();
 
-    const dialog = page.locator('.cdk-overlay-container z-dialog');
+    const dialog = page.locator('.cdk-overlay-container z-dialog-panel');
     await expect(dialog).toBeVisible({ timeout: 5000 });
   });
 
@@ -28,7 +28,7 @@ test.describe('Dialog component', () => {
     const trigger = demoPage.firstDemoBox.locator('button[z-button]').first();
     await trigger.click();
 
-    const dialog = page.locator('.cdk-overlay-container z-dialog');
+    const dialog = page.locator('.cdk-overlay-container z-dialog-panel');
     await expect(dialog).toBeVisible({ timeout: 5000 });
 
     const inputs = dialog.locator('input[z-input]');
@@ -40,7 +40,7 @@ test.describe('Dialog component', () => {
     const trigger = demoPage.firstDemoBox.locator('button[z-button]').first();
     await trigger.click();
 
-    const dialog = page.locator('.cdk-overlay-container z-dialog');
+    const dialog = page.locator('.cdk-overlay-container z-dialog-panel');
     await expect(dialog).toBeVisible({ timeout: 5000 });
 
     await page.keyboard.press('Escape');
@@ -51,10 +51,11 @@ test.describe('Dialog component', () => {
     const trigger = demoPage.firstDemoBox.locator('button[z-button]').first();
     await trigger.click();
 
-    const dialog = page.locator('.cdk-overlay-container z-dialog');
+    const dialog = page.locator('.cdk-overlay-container z-dialog-panel');
     await expect(dialog).toBeVisible({ timeout: 5000 });
 
-    const cancelButton = dialog.locator('[data-testid="z-cancel-button"]');
+    // The preview's first tab is the declarative form, whose Cancel is a [z-dialog-close] button.
+    const cancelButton = dialog.getByRole('button', { name: 'Cancel' });
     await expect(cancelButton).toBeVisible();
     await cancelButton.click();
     await expect(dialog).not.toBeVisible({ timeout: 5000 });
@@ -63,7 +64,7 @@ test.describe('Dialog component', () => {
   test('passes accessibility checks when open', async ({ page }) => {
     const trigger = demoPage.firstDemoBox.locator('button[z-button]').first();
     await trigger.click();
-    await page.locator('.cdk-overlay-container z-dialog').waitFor({ state: 'visible', timeout: 5000 });
+    await page.locator('.cdk-overlay-container z-dialog-panel').waitFor({ state: 'visible', timeout: 5000 });
     await checkA11y(page, undefined, ['button-name', 'color-contrast', 'label', 'scrollable-region-focusable']);
   });
 });

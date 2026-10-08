@@ -4,11 +4,13 @@
 /blocks
 /charts
 /themes
+/typeset
 /docs/introduction
 /docs/components
 /docs/installation
 /docs/theming
 /docs/cli
+/docs/typeset
 /docs/skills
 /docs/registry
 /docs/mcp
@@ -17,6 +19,7 @@
 /docs/installation
 /docs/components-json
 /docs/theming
+/docs/typeset
 /docs/dark-mode
 /docs/cli
 /docs/monorepo
@@ -31,6 +34,8 @@
 /docs/forms/signal-forms
 /docs/forms/reactive-forms
 /docs/forms/template-driven-forms
+/docs/utils/scroll-fade
+/docs/utils/shimmer
 /docs/featured/youtube
 /docs/featured/articles
 /docs/components/accordion
@@ -82,6 +87,7 @@
 /docs/components/sidebar
 /docs/components/drawer
 /docs/components/bubble
+/docs/components/hover-card
 /docs/components/context-menu
 /docs/components/message
 /docs/components/marker

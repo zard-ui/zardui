@@ -1,3 +1,5 @@
+import { DEFAULT_CALENDAR_LABELS, DEFAULT_LOCALE, type ZardCalendarLabels } from '@/shared/core/i18n';
+
 import type { CalendarDay, CalendarDayConfig, CalendarMode, CalendarValue } from './calendar.types';
 
 export const calendarMonths = [
@@ -69,7 +71,7 @@ export function isDateDisabled(
  * Generates calendar days for a given month with all selection states
  */
 export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
-  const { year, month, mode, selectedDates, minDate, maxDate, disabled, disabledDates } = config;
+  const { year, month, mode, selectedDates, minDate, maxDate, disabled, disabledDates, weekStartsOn = 0 } = config;
 
   const today = new Date();
 
@@ -78,13 +80,16 @@ export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
   // Get last day of the month
   const lastDay = new Date(year, month + 1, 0);
 
-  // Get the first day of the week for the first day of the month
+  // Get the first day of the week for the first day of the month aligned with weekStartsOn
+  const startDiff = (firstDay.getDay() - weekStartsOn + 7) % 7;
   const startDate = new Date(firstDay);
-  startDate.setDate(startDate.getDate() - startDate.getDay());
+  startDate.setDate(startDate.getDate() - startDiff);
 
-  // Get the last day of the week for the last day of the month
+  // Get the last day of the week for the last day of the month aligned with weekStartsOn
+  const endOfWeekDay = (weekStartsOn + 6) % 7;
+  const endDiff = (endOfWeekDay - lastDay.getDay() + 7) % 7;
   const endDate = new Date(lastDay);
-  endDate.setDate(endDate.getDate() + (6 - endDate.getDay()));
+  endDate.setDate(endDate.getDate() + endDiff);
 
   const days: CalendarDay[] = [];
   const currentWeekDate = new Date(startDate);
@@ -178,26 +183,32 @@ export function getDayId(index: number, monthIndex = 0): string {
 /**
  * Generates an accessible ARIA label for a calendar day
  */
-export function getDayAriaLabel(day: CalendarDay): string {
-  const dateStr = day.date.toLocaleDateString('en-US', {
+export function getDayAriaLabel(
+  day: CalendarDay,
+  locale: string = DEFAULT_LOCALE,
+  labels?: Partial<ZardCalendarLabels>,
+): string {
+  const dateStr = day.date.toLocaleDateString(locale, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
 
-  const labels = [
+  const merged = { ...DEFAULT_CALENDAR_LABELS, ...labels };
+
+  const ariaLabels = [
     dateStr,
-    day.isToday && 'Today',
-    day.isSelected && 'Selected',
-    day.isRangeStart && 'Range start',
-    day.isRangeEnd && 'Range end',
-    day.isInRange && 'In range',
-    !day.isCurrentMonth && 'Outside month',
-    day.isDisabled && 'Disabled',
+    day.isToday && (merged.today ?? 'Today'),
+    day.isSelected && (merged.selected ?? 'Selected'),
+    day.isRangeStart && (merged.rangeStart ?? 'Range start'),
+    day.isRangeEnd && (merged.rangeEnd ?? 'Range end'),
+    day.isInRange && (merged.inRange ?? 'In range'),
+    !day.isCurrentMonth && (merged.outsideMonth ?? 'Outside month'),
+    day.isDisabled && (merged.disabled ?? 'Disabled'),
   ].filter(Boolean);
 
-  return labels.join(', ');
+  return ariaLabels.join(', ');
 }
 
 /**

@@ -76,7 +76,7 @@ describe('ThemingPage', () => {
 
   describe('token reference', () => {
     it('renders every documented token', () => {
-      expect(fixture.debugElement.queryAll(By.css('z-token-table tbody tr'))).toHaveLength(THEME_TOKENS.length);
+      expect(fixture.debugElement.queryAll(By.css('z-token-table li'))).toHaveLength(THEME_TOKENS.length);
     });
 
     it('announces the same count in the prose', () => {
@@ -99,12 +99,31 @@ describe('ThemingPage', () => {
     });
   });
 
-  describe('tables', () => {
-    it('gives every table a caption', () => {
-      const tables = fixture.debugElement.queryAll(By.css('table'));
+  describe('typeset', () => {
+    it('opts embedded code blocks out of typeset', () => {
+      const embedded = fixture.debugElement.queryAll(By.css('.typeset z-code-block'));
 
-      expect(tables.length).toBeGreaterThan(0);
-      for (const table of tables) {
+      expect(embedded.length).toBeGreaterThan(0);
+      for (const element of embedded) {
+        expect((element.nativeElement as HTMLElement).classList).toContain('not-typeset');
+      }
+    });
+  });
+
+  /*
+   * The reference data used to be tables, each carrying a <caption>. They are
+   * lists now — three columns forced a 768px minimum inside a docs column half
+   * that wide — so the equivalent guarantee is a name on every list.
+   */
+  describe('reference lists', () => {
+    it('names every list for screen readers', () => {
+      const lists = fixture.debugElement.queryAll(By.css('ul[aria-label]'));
+
+      expect(lists.length).toBeGreaterThan(0);
+    });
+
+    it('gives every table a caption, if any is left', () => {
+      for (const table of fixture.debugElement.queryAll(By.css('table'))) {
         expect(table.query(By.css('caption'))).toBeTruthy();
       }
     });

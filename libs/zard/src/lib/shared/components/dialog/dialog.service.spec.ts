@@ -4,14 +4,20 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { lucideCheck } from '@ng-icons/lucide';
 
+import { ZardDialogOptions } from './dialog-container.component';
 import { ZardDialogRef } from './dialog-ref';
-import { ZardDialogOptions } from './dialog.component';
 import { ZardDialogService } from './dialog.service';
 
 @Component({
   template: '<p>Test Content</p>',
 })
 class TestContentComponent {}
+
+@Component({
+  template: '<p>Own slot</p>',
+  host: { 'data-slot': 'custom-slot' },
+})
+class OwnSlotContentComponent {}
 
 describe('ZardDialogService', () => {
   let service: ZardDialogService;
@@ -85,7 +91,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       expect(okButton).toBeTruthy();
@@ -102,7 +108,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const cancelButton = dialogElement?.querySelector('[data-testid="z-cancel-button"]');
       expect(cancelButton).toBeTruthy();
@@ -120,7 +126,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       const cancelButton = dialogElement?.querySelector('[data-testid="z-cancel-button"]');
@@ -137,7 +143,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const footer = dialogElement?.querySelector('footer');
       expect(footer).toBeNull();
@@ -152,7 +158,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       expect(dialogElement?.getAttribute('style')).toContain('width: 500px');
     }));
@@ -166,7 +172,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       expect(okButton?.getAttribute('data-disabled')).toBe('true');
@@ -181,7 +187,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       expect(okButton?.className).toContain('destructive');
@@ -196,7 +202,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const closeButton = dialogElement?.querySelector('[data-testid="z-close-header-button"]');
       expect(closeButton).toBeNull();
@@ -211,7 +217,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const cancelButton = dialogElement?.querySelector('[data-testid="z-cancel-button"]');
       expect(cancelButton?.textContent?.trim()).toBe('Go Back');
@@ -226,7 +232,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       expect(okButton?.textContent?.trim()).toBe('Proceed');
@@ -241,7 +247,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const cancelButton = dialogElement?.querySelector('[data-testid="z-cancel-button"]');
       expect(cancelButton).toBeNull();
@@ -256,7 +262,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const okButton = dialogElement?.querySelector('[data-testid="z-ok-button"]');
       expect(okButton).toBeNull();
@@ -272,7 +278,7 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       const titleElement = dialogElement?.querySelector('[data-testid="z-title"]');
       expect(titleElement?.textContent?.trim()).toBe('Dialog Title');
@@ -289,10 +295,63 @@ describe('ZardDialogService', () => {
       tick();
 
       expect(dialogRef).toBeInstanceOf(ZardDialogRef);
-      const dialogElement = document.querySelector('z-dialog');
+      const dialogElement = document.querySelector('z-dialog-panel');
       expect(dialogElement).toBeTruthy();
       expect(dialogElement?.classList.contains('custom-class')).toBe(true);
       expect(dialogElement?.classList.contains('another-class')).toBe(true);
+    }));
+  });
+
+  /**
+   * The service renders the same panel as the declarative form, so its content has to sit in the
+   * panel grid the same way: no extra gap for a missing body, and the panel gap between whatever a
+   * content component renders (fields, a z-dialog-footer) instead of none.
+   */
+  describe('content layout', () => {
+    it('renders the content wrapper as display: contents so it adds no box of its own', fakeAsync(() => {
+      const config = new ZardDialogOptions();
+      config.zTitle = 'Title only';
+      config.zHideFooter = true;
+
+      service.create(config);
+      tick();
+
+      const main = document.querySelector('z-dialog-panel main');
+      expect(main?.classList.contains('contents')).toBe(true);
+      expect(main?.children.length).toBe(0);
+    }));
+
+    it('marks a component passed as zContent with the dialog-body slot', fakeAsync(() => {
+      const config = new ZardDialogOptions();
+      config.zContent = TestContentComponent;
+
+      service.create<TestContentComponent, unknown>(config);
+      tick();
+
+      const host = document.querySelector('z-dialog-panel main > [data-slot="dialog-body"]');
+      expect(host).toBeTruthy();
+      expect(host?.textContent).toContain('Test Content');
+    }));
+
+    it('keeps a data-slot the content component sets on its own host', fakeAsync(() => {
+      const config = new ZardDialogOptions();
+      config.zContent = OwnSlotContentComponent;
+
+      service.create<OwnSlotContentComponent, unknown>(config);
+      tick();
+
+      expect(document.querySelector('z-dialog-panel main > [data-slot="custom-slot"]')).toBeTruthy();
+      expect(document.querySelector('[data-slot="dialog-body"]')).toBeNull();
+    }));
+
+    it('leaves string content out of the dialog-body slot', fakeAsync(() => {
+      const config = new ZardDialogOptions();
+      config.zContent = 'Plain <b>text</b>';
+
+      service.create(config);
+      tick();
+
+      expect(document.querySelector('[data-testid="z-content"]')?.getAttribute('data-slot')).toBeNull();
     }));
   });
 

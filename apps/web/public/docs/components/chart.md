@@ -2596,6 +2596,323 @@ export const provideZardCharts = () =>
   provideEchartsCore({ echarts: () => import('./chart-echarts.registry').then(module => module.zardEcharts) });
 ```
 
+### Tooltip
+
+`z-chart-tooltip` declares the tooltip: `zLabelKey` and `zNameKey` pick the config keys used for the heading and each row, `zHideLabel` and `zHideIndicator` control what shows, and the tooltip ships the same three indicator shapes as shadcn/ui — `dot`, `line` and `dashed`.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardChartImports } from '@/shared/components/chart/chart.imports';
+import type { ZardChartConfig, ZardChartTooltipIndicator } from '@/shared/components/chart/chart.types';
+
+@Component({
+  selector: 'z-demo-chart-tooltip-indicators',
+  imports: [ZardCardImports, ZardChartImports],
+  template: `
+    <z-card class="w-full">
+      <z-card-header>
+        <z-card-title zTitle="Tooltip Indicators" />
+        <z-card-description zDescription="The three indicator shapes, side by side" />
+      </z-card-header>
+      <z-card-content>
+        <div class="grid gap-6 md:grid-cols-3">
+          @for (indicator of indicators; track indicator) {
+            <div class="flex flex-col gap-2">
+              <p class="text-muted-foreground text-xs">zIndicator="{{ indicator }}"</p>
+              <z-chart
+                zType="bar"
+                [zConfig]="chartConfig"
+                [zData]="chartData"
+                [zSeries]="series"
+                zXAxisKey="month"
+                [zXAxisFormatter]="shortMonth"
+                class="h-[180px] w-full"
+              >
+                <z-chart-tooltip [zIndicator]="indicator" [zDefaultIndex]="1" />
+              </z-chart>
+            </div>
+          }
+        </div>
+      </z-card-content>
+    </z-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoChartTooltipIndicatorsComponent {
+  protected readonly chartConfig: ZardChartConfig = {
+    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
+    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
+  };
+
+  protected readonly chartData = [
+    { month: 'January', desktop: 186, mobile: 80 },
+    { month: 'February', desktop: 305, mobile: 200 },
+    { month: 'March', desktop: 237, mobile: 120 },
+    { month: 'April', desktop: 73, mobile: 190 },
+    { month: 'May', desktop: 209, mobile: 130 },
+    { month: 'June', desktop: 214, mobile: 140 },
+  ];
+
+  protected readonly series = ['desktop', 'mobile'];
+
+  protected readonly indicators: ZardChartTooltipIndicator[] = ['dot', 'line', 'dashed'];
+
+  protected readonly shortMonth = (value: string) => value.slice(0, 3);
+}
+```
+
+### Legend
+
+`z-chart-legend` renders the shadcn markup below (or above) the chart and toggles a series on click when it is hovered or pressed. `zVerticalAlign` picks which side it sits on.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardChartImports } from '@/shared/components/chart/chart.imports';
+import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
+import type { ZardChartLegendAlignVariants } from '@/shared/components/chart/chart.variants';
+
+@Component({
+  selector: 'z-demo-chart-legend',
+  imports: [ZardCardImports, ZardChartImports],
+  template: `
+    <z-card class="w-full">
+      <z-card-header>
+        <z-card-title zTitle="Legend" />
+        <z-card-description zDescription="zVerticalAlign places z-chart-legend above or below the chart" />
+      </z-card-header>
+      <z-card-content>
+        <div class="grid gap-6 md:grid-cols-2">
+          @for (align of aligns; track align) {
+            <div class="flex flex-col gap-2">
+              <p class="text-muted-foreground text-xs">zVerticalAlign="{{ align }}"</p>
+              <z-chart
+                zType="bar"
+                [zConfig]="chartConfig"
+                [zData]="chartData"
+                [zSeries]="series"
+                zXAxisKey="month"
+                [zXAxisFormatter]="shortMonth"
+                class="h-[220px] w-full"
+              >
+                <z-chart-legend [zVerticalAlign]="align" />
+              </z-chart>
+            </div>
+          }
+        </div>
+      </z-card-content>
+    </z-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoChartLegendComponent {
+  protected readonly chartConfig: ZardChartConfig = {
+    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
+    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
+  };
+
+  protected readonly chartData = [
+    { month: 'January', desktop: 186, mobile: 80 },
+    { month: 'February', desktop: 305, mobile: 200 },
+    { month: 'March', desktop: 237, mobile: 120 },
+    { month: 'April', desktop: 73, mobile: 190 },
+    { month: 'May', desktop: 209, mobile: 130 },
+    { month: 'June', desktop: 214, mobile: 140 },
+  ];
+
+  protected readonly series = ['desktop', 'mobile'];
+
+  protected readonly aligns: ZardChartLegendAlignVariants[] = ['top', 'bottom'];
+
+  protected readonly shortMonth = (value: string) => value.slice(0, 3);
+}
+```
+
+### Accessibility
+
+`zAccessibility` (on by default) sets `role="img"` and a generated `aria-label` on the chart surface and turns on ECharts' own aria description. Turn it off only if an accessible summary is provided elsewhere.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardChartImports } from '@/shared/components/chart/chart.imports';
+import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
+import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
+
+@Component({
+  selector: 'z-demo-chart-accessibility',
+  imports: [ZardCardImports, ZardChartImports, ZardSwitchComponent],
+  template: `
+    <z-card class="w-full">
+      <z-card-header class="flex flex-row items-center justify-between gap-4">
+        <div>
+          <z-card-title zTitle="Accessibility" />
+          <z-card-description zDescription="zAccessibility puts an ARIA role and a generated label on the canvas" />
+        </div>
+        <z-switch zId="chart-accessibility" [(zChecked)]="accessible">zAccessibility</z-switch>
+      </z-card-header>
+      <z-card-content>
+        <z-chart
+          zType="bar"
+          [zConfig]="chartConfig"
+          [zData]="chartData"
+          [zSeries]="series"
+          zXAxisKey="month"
+          [zXAxisFormatter]="shortMonth"
+          [zAccessibility]="accessible()"
+          class="h-[220px] w-full"
+        />
+        <p class="text-muted-foreground mt-3 font-mono text-xs">
+          {{ accessible() ? 'role="img" aria-label="bar chart of Desktop, Mobile"' : 'role and aria-label removed' }}
+        </p>
+      </z-card-content>
+    </z-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoChartAccessibilityComponent {
+  protected readonly chartConfig: ZardChartConfig = {
+    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
+    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
+  };
+
+  protected readonly chartData = [
+    { month: 'January', desktop: 186, mobile: 80 },
+    { month: 'February', desktop: 305, mobile: 200 },
+    { month: 'March', desktop: 237, mobile: 120 },
+    { month: 'April', desktop: 73, mobile: 190 },
+    { month: 'May', desktop: 209, mobile: 130 },
+    { month: 'June', desktop: 214, mobile: 140 },
+  ];
+
+  protected readonly series = ['desktop', 'mobile'];
+
+  protected readonly accessible = signal(true);
+
+  protected readonly shortMonth = (value: string) => value.slice(0, 3);
+}
+```
+
+### Opt In Features
+
+ECharts features Recharts has no counterpart for are opt-in, so the default chart stays visually identical to shadcn/ui.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardChartImports } from '@/shared/components/chart/chart.imports';
+import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
+
+@Component({
+  selector: 'z-demo-chart-echarts-datazoom',
+  imports: [ZardCardImports, ZardChartImports],
+  template: `
+    <z-card class="w-full">
+      <z-card-header>
+        <z-card-title zTitle="ECharts Extras - Data Zoom" />
+        <z-card-description zDescription="Opt-in ECharts features Recharts has no counterpart for" />
+      </z-card-header>
+      <z-card-content>
+        <z-chart
+          zType="line"
+          [zConfig]="chartConfig"
+          [zData]="chartData"
+          [zSeries]="series"
+          zXAxisKey="date"
+          [zXAxisFormatter]="shortDate"
+          zDataZoom
+          zToolbox
+          class="w-full"
+        >
+          <z-chart-tooltip zIndicator="dot" />
+        </z-chart>
+      </z-card-content>
+    </z-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoChartEchartsDatazoomComponent {
+  protected readonly chartConfig: ZardChartConfig = {
+    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
+    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
+  };
+
+  protected readonly chartData = [
+    { date: '2024-06-01', desktop: 178, mobile: 200 },
+    { date: '2024-06-02', desktop: 470, mobile: 410 },
+    { date: '2024-06-03', desktop: 103, mobile: 160 },
+    { date: '2024-06-04', desktop: 439, mobile: 380 },
+    { date: '2024-06-05', desktop: 88, mobile: 140 },
+    { date: '2024-06-06', desktop: 294, mobile: 250 },
+    { date: '2024-06-07', desktop: 323, mobile: 370 },
+    { date: '2024-06-08', desktop: 385, mobile: 320 },
+    { date: '2024-06-09', desktop: 438, mobile: 480 },
+    { date: '2024-06-10', desktop: 155, mobile: 200 },
+    { date: '2024-06-11', desktop: 92, mobile: 150 },
+    { date: '2024-06-12', desktop: 492, mobile: 420 },
+    { date: '2024-06-13', desktop: 81, mobile: 130 },
+    { date: '2024-06-14', desktop: 426, mobile: 380 },
+    { date: '2024-06-15', desktop: 307, mobile: 350 },
+    { date: '2024-06-16', desktop: 371, mobile: 310 },
+    { date: '2024-06-17', desktop: 475, mobile: 520 },
+    { date: '2024-06-18', desktop: 107, mobile: 170 },
+    { date: '2024-06-19', desktop: 341, mobile: 290 },
+    { date: '2024-06-20', desktop: 408, mobile: 450 },
+    { date: '2024-06-21', desktop: 169, mobile: 210 },
+    { date: '2024-06-22', desktop: 317, mobile: 270 },
+    { date: '2024-06-23', desktop: 480, mobile: 530 },
+    { date: '2024-06-24', desktop: 132, mobile: 180 },
+    { date: '2024-06-25', desktop: 141, mobile: 190 },
+    { date: '2024-06-26', desktop: 434, mobile: 380 },
+    { date: '2024-06-27', desktop: 448, mobile: 490 },
+    { date: '2024-06-28', desktop: 149, mobile: 200 },
+    { date: '2024-06-29', desktop: 103, mobile: 160 },
+    { date: '2024-06-30', desktop: 446, mobile: 400 },
+  ];
+
+  protected readonly series: ZardChartSeries[] = [
+    { dataKey: 'desktop', smooth: true },
+    { dataKey: 'mobile', smooth: true },
+  ];
+
+  protected readonly shortDate = (value: string) =>
+    new Date(`${value}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+```
+
+### Escape Hatch
+
+Anything the inputs do not cover is one `[zOption]` away — it is deep-merged over the option.
+
+```angular-ts
+import type { ZardChartOptionOverride } from '@/shared/components/chart/chart.types';
+
+// `[zOption]` is deep-merged over the generated option and always wins, so any ECharts
+// feature is one property away. Arrays merge index by index: the object below patches
+// the first series instead of replacing the whole list.
+export const override: ZardChartOptionOverride = {
+  series: [{ label: { position: 'insideLeft', color: '#fff', formatter: '{b}' } }],
+  xAxis: { axisLabel: { rotate: 45 } },
+};
+```
+
+### Limitations
+
+Where ECharts and Recharts disagree, the chart delivers the closest equivalent. These are the differences worth knowing about.
+
+- **Curve interpolation** — Recharts distinguishes `natural`, `monotone` and `basis`; ECharts has a single `smooth` flag, so all three map to it. Pass a number between 0 and 1 to a series' `smooth` for finer control.
+- **Stack normalisation** — ECharts has none, so `zStackOffset="expand"` normalises the rows to 0-1 before they reach it and clamps the value axis. Format the ticks with `[zYAxisFormatter]`.
+- **Tick spacing** — Recharts drops ticks whose gap falls below a pixel threshold. The chart sets `axisLabel.hideOverlap` instead: labels stop colliding, but the threshold is not tunable.
+- **Legend** — the ECharts legend cannot reproduce the shadcn markup, so `z-chart-legend` renders real HTML. The native legend stays registered but hidden, because it is what toggles a series.
+- **Centre text and radial labels** — Recharts nests SVG inside the chart for both. Here they are drawn as `graphic` text, so `zCenterValue` and `zCenterLabel` are plain strings, and `zRadialLabel` lays a ring name out one glyph at a time.
+- **Rounded stacked bars** — only the outermost bar of a stack is rounded, matching Recharts. On negative bars ECharts still rounds the top corners rather than the outward end.
+- **Server-side rendering** — the server paints a static SVG and the browser swaps in the live chart on hydration. It cannot read CSS variables, so the SVG uses the light palette; set `[zSsrWidth]` and `[zSsrHeight]` to match your layout.
+
 ### Bar Multiple
 
 Pass more than one data key to `zSeries` to draw them side by side.
@@ -2611,6 +2928,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-bar-multiple',
   imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
@@ -2664,212 +2982,6 @@ export class ZardDemoChartBarMultipleComponent {
 }
 ```
 
-### Bar Stacked
-
-Use `zStacked` to stack every series on the same axis.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrendingUp } from '@ng-icons/lucide';
-
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
-
-@Component({
-  imports: [ZardCardImports, ZardChartImports, NgIcon],
-  template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Bar Chart - Stacked" />
-        <z-card-description zDescription="January - June 2024" />
-      </z-card-header>
-      <z-card-content>
-        <z-chart
-          zType="bar"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
-          [zSeries]="series"
-          zXAxisKey="month"
-          [zXAxisFormatter]="shortMonth"
-          zStacked
-          class="w-full"
-        >
-          <z-chart-tooltip zIndicator="dashed" />
-        </z-chart>
-      </z-card-content>
-      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
-        <div class="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="size-4" />
-        </div>
-        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
-      </z-card-footer>
-    </z-card>
-  `,
-  providers: [provideIcons({ lucideTrendingUp })],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoChartBarStackedComponent {
-  protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
-    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
-  };
-
-  protected readonly chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
-  ];
-
-  protected readonly series = ['desktop', 'mobile'];
-
-  protected readonly shortMonth = (value: string) => value.slice(0, 3);
-}
-```
-
-### Bar Horizontal
-
-Use `zHorizontal` to swap the category and value axes.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrendingUp } from '@ng-icons/lucide';
-
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
-
-@Component({
-  imports: [ZardCardImports, ZardChartImports, NgIcon],
-  template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Bar Chart - Horizontal" />
-        <z-card-description zDescription="January - June 2024" />
-      </z-card-header>
-      <z-card-content>
-        <z-chart
-          zType="bar"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
-          [zSeries]="series"
-          zXAxisKey="month"
-          [zXAxisFormatter]="shortMonth"
-          zHorizontal
-          zGrid="vertical"
-          class="w-full"
-        >
-          <z-chart-tooltip zIndicator="dashed" zHideLabel />
-        </z-chart>
-      </z-card-content>
-      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
-        <div class="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="size-4" />
-        </div>
-        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
-      </z-card-footer>
-    </z-card>
-  `,
-  providers: [provideIcons({ lucideTrendingUp })],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoChartBarHorizontalComponent {
-  protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
-  };
-
-  protected readonly chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
-  ];
-
-  protected readonly series = ['desktop'];
-
-  protected readonly shortMonth = (value: string) => value.slice(0, 3);
-}
-```
-
-### Bar Label
-
-Use `zLabel` to print the value on every data point — the `LabelList` equivalent.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrendingUp } from '@ng-icons/lucide';
-
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
-
-@Component({
-  imports: [ZardCardImports, ZardChartImports, NgIcon],
-  template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Bar Chart - Label" />
-        <z-card-description zDescription="January - June 2024" />
-      </z-card-header>
-      <z-card-content>
-        <z-chart
-          zType="bar"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
-          [zSeries]="series"
-          zXAxisKey="month"
-          [zXAxisFormatter]="shortMonth"
-          zLabel
-          class="w-full"
-        >
-          <z-chart-tooltip zIndicator="dashed" zHideLabel />
-        </z-chart>
-      </z-card-content>
-      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
-        <div class="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="size-4" />
-        </div>
-        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
-      </z-card-footer>
-    </z-card>
-  `,
-  providers: [provideIcons({ lucideTrendingUp })],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoChartBarLabelComponent {
-  protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
-  };
-
-  protected readonly chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
-  ];
-
-  protected readonly series = ['desktop'];
-
-  protected readonly shortMonth = (value: string) => value.slice(0, 3);
-}
-```
-
 ### Bar Interactive
 
 Series are plain inputs, so a `signal` is all it takes to make the chart interactive.
@@ -2882,6 +2994,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-bar-interactive',
   imports: [ZardCardImports, ZardChartImports],
   template: `
     <z-card class="w-full py-0">
@@ -3053,146 +3166,9 @@ export class ZardDemoChartBarInteractiveComponent {
 }
 ```
 
-### Area Default
-
-Use `zType="area"` and set `smooth` on the series for shadcn's natural curve.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrendingUp } from '@ng-icons/lucide';
-
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
-
-@Component({
-  imports: [ZardCardImports, ZardChartImports, NgIcon],
-  template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Area Chart" />
-        <z-card-description zDescription="Showing total visitors for the last 6 months" />
-      </z-card-header>
-      <z-card-content>
-        <z-chart
-          zType="area"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
-          [zSeries]="series"
-          zXAxisKey="month"
-          [zXAxisFormatter]="shortMonth"
-          class="w-full"
-        >
-          <z-chart-tooltip zIndicator="line" />
-        </z-chart>
-      </z-card-content>
-      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
-        <div class="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="size-4" />
-        </div>
-        <div class="text-muted-foreground leading-none">January - June 2024</div>
-      </z-card-footer>
-    </z-card>
-  `,
-  providers: [provideIcons({ lucideTrendingUp })],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoChartAreaDefaultComponent {
-  protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
-  };
-
-  protected readonly chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
-  ];
-
-  protected readonly series: ZardChartSeries[] = [{ dataKey: 'desktop', smooth: true }];
-
-  protected readonly shortMonth = (value: string) => value.slice(0, 3);
-}
-```
-
-### Area Stacked
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrendingUp } from '@ng-icons/lucide';
-
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
-
-@Component({
-  imports: [ZardCardImports, ZardChartImports, NgIcon],
-  template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Area Chart - Stacked" />
-        <z-card-description zDescription="Showing total visitors for the last 6 months" />
-      </z-card-header>
-      <z-card-content>
-        <z-chart
-          zType="area"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
-          [zSeries]="series"
-          zXAxisKey="month"
-          [zXAxisFormatter]="shortMonth"
-          zStacked
-          class="w-full"
-        >
-          <z-chart-tooltip zIndicator="dot" />
-        </z-chart>
-      </z-card-content>
-      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
-        <div class="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="size-4" />
-        </div>
-        <div class="text-muted-foreground leading-none">January - June 2024</div>
-      </z-card-footer>
-    </z-card>
-  `,
-  providers: [provideIcons({ lucideTrendingUp })],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoChartAreaStackedComponent {
-  protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
-    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
-  };
-
-  protected readonly chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
-  ];
-
-  protected readonly series: ZardChartSeries[] = [
-    { dataKey: 'mobile', smooth: true },
-    { dataKey: 'desktop', smooth: true },
-  ];
-
-  protected readonly shortMonth = (value: string) => value.slice(0, 3);
-}
-```
-
 ### Area Gradient
 
-Use `zGradient` to fill the band with a vertical gradient instead of a flat tint.
+Use `zGradient` to fill the area under a `zType="area"` series with a vertical gradient.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -3205,6 +3181,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-area-gradient',
   imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
@@ -3265,6 +3242,8 @@ export class ZardDemoChartAreaGradientComponent {
 
 ### Line Default
 
+The plainest line chart: one series, one axis.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -3276,6 +3255,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-line-default',
   imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
@@ -3328,207 +3308,6 @@ export class ZardDemoChartLineDefaultComponent {
 }
 ```
 
-### Line Dots
-
-Set `showSymbol` on the series to draw a dot on every data point.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrendingUp } from '@ng-icons/lucide';
-
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
-
-@Component({
-  imports: [ZardCardImports, ZardChartImports, NgIcon],
-  template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Line Chart - Dots" />
-        <z-card-description zDescription="January - June 2024" />
-      </z-card-header>
-      <z-card-content>
-        <z-chart
-          zType="line"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
-          [zSeries]="series"
-          zXAxisKey="month"
-          [zXAxisFormatter]="shortMonth"
-          class="w-full"
-        >
-          <z-chart-tooltip zIndicator="line" />
-        </z-chart>
-      </z-card-content>
-      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
-        <div class="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="size-4" />
-        </div>
-        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
-      </z-card-footer>
-    </z-card>
-  `,
-  providers: [provideIcons({ lucideTrendingUp })],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoChartLineDotsComponent {
-  protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
-  };
-
-  protected readonly chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
-  ];
-
-  protected readonly series: ZardChartSeries[] = [{ dataKey: 'desktop', smooth: true, showSymbol: true }];
-
-  protected readonly shortMonth = (value: string) => value.slice(0, 3);
-}
-```
-
-### Line Step
-
-Set `step` to `'start'`, `'middle'` or `'end'` for a stepped line.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrendingUp } from '@ng-icons/lucide';
-
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
-
-@Component({
-  imports: [ZardCardImports, ZardChartImports, NgIcon],
-  template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Line Chart - Step" />
-        <z-card-description zDescription="January - June 2024" />
-      </z-card-header>
-      <z-card-content>
-        <z-chart
-          zType="line"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
-          [zSeries]="series"
-          zXAxisKey="month"
-          [zXAxisFormatter]="shortMonth"
-          class="w-full"
-        >
-          <z-chart-tooltip zIndicator="line" />
-        </z-chart>
-      </z-card-content>
-      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
-        <div class="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="size-4" />
-        </div>
-        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
-      </z-card-footer>
-    </z-card>
-  `,
-  providers: [provideIcons({ lucideTrendingUp })],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoChartLineStepComponent {
-  protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
-  };
-
-  protected readonly chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
-  ];
-
-  protected readonly series: ZardChartSeries[] = [{ dataKey: 'desktop', step: 'middle' }];
-
-  protected readonly shortMonth = (value: string) => value.slice(0, 3);
-}
-```
-
-### Pie Label
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTrendingUp } from '@ng-icons/lucide';
-
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
-
-@Component({
-  imports: [ZardCardImports, ZardChartImports, NgIcon],
-  template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Pie Chart - Label" />
-        <z-card-description zDescription="January - June 2024" />
-      </z-card-header>
-      <z-card-content>
-        <z-chart
-          zType="pie"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
-          [zSeries]="series"
-          zNameKey="browser"
-          zLabel
-          class="mx-auto aspect-square h-[250px]"
-        >
-          <z-chart-tooltip zTrigger="item" zIndicator="dot" zHideLabel />
-        </z-chart>
-      </z-card-content>
-      <z-card-footer class="flex-col gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
-        <div class="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
-          <ng-icon name="lucideTrendingUp" class="size-4" />
-        </div>
-        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
-      </z-card-footer>
-    </z-card>
-  `,
-  providers: [provideIcons({ lucideTrendingUp })],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoChartPieLabelComponent {
-  protected readonly chartConfig: ZardChartConfig = {
-    visitors: { label: 'Visitors' },
-    chrome: { label: 'Chrome', color: 'var(--chart-1)' },
-    safari: { label: 'Safari', color: 'var(--chart-2)' },
-    firefox: { label: 'Firefox', color: 'var(--chart-3)' },
-    edge: { label: 'Edge', color: 'var(--chart-4)' },
-    other: { label: 'Other', color: 'var(--chart-5)' },
-  };
-
-  protected readonly chartData = [
-    { browser: 'chrome', visitors: 275 },
-    { browser: 'safari', visitors: 200 },
-    { browser: 'firefox', visitors: 187 },
-    { browser: 'edge', visitors: 173 },
-    { browser: 'other', visitors: 90 },
-  ];
-
-  protected readonly series = ['visitors'];
-}
-```
-
 ### Pie Donut Text
 
 Use `zInnerRadius` for the donut and `zCenterValue` / `zCenterLabel` for the text in the middle.
@@ -3544,6 +3323,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-pie-donut-text',
   imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
@@ -3602,6 +3382,8 @@ export class ZardDemoChartPieDonutTextComponent {
 
 ### Radar Default
 
+A radar chart with two series over the same set of indicators.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -3613,6 +3395,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-radar-default',
   imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
@@ -3664,6 +3447,8 @@ export class ZardDemoChartRadarDefaultComponent {
 
 ### Radial Simple
 
+A single radial bar, the simplest `zRadialVariant="bar"` chart.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -3675,6 +3460,7 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
+  selector: 'z-demo-chart-radial-simple',
   imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
@@ -3729,187 +3515,6 @@ export class ZardDemoChartRadialSimpleComponent {
   protected readonly series = ['visitors'];
 }
 ```
-
-### Tooltip Indicators
-
-The tooltip ships the same three indicator shapes as shadcn/ui: `dot`, `line` and `dashed`.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig, ZardChartTooltipIndicator } from '@/shared/components/chart/chart.types';
-
-@Component({
-  imports: [ZardCardImports, ZardChartImports],
-  template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Tooltip Indicators" />
-        <z-card-description zDescription="The three indicator shapes, side by side" />
-      </z-card-header>
-      <z-card-content>
-        <div class="grid gap-6 md:grid-cols-3">
-          @for (indicator of indicators; track indicator) {
-            <div class="flex flex-col gap-2">
-              <p class="text-muted-foreground text-xs">zIndicator="{{ indicator }}"</p>
-              <z-chart
-                zType="bar"
-                [zConfig]="chartConfig"
-                [zData]="chartData"
-                [zSeries]="series"
-                zXAxisKey="month"
-                [zXAxisFormatter]="shortMonth"
-                class="h-[180px] w-full"
-              >
-                <z-chart-tooltip [zIndicator]="indicator" [zDefaultIndex]="1" />
-              </z-chart>
-            </div>
-          }
-        </div>
-      </z-card-content>
-    </z-card>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoChartTooltipIndicatorsComponent {
-  protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
-    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
-  };
-
-  protected readonly chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
-  ];
-
-  protected readonly series = ['desktop', 'mobile'];
-
-  protected readonly indicators: ZardChartTooltipIndicator[] = ['dot', 'line', 'dashed'];
-
-  protected readonly shortMonth = (value: string) => value.slice(0, 3);
-}
-```
-
-### Opt In features
-
-ECharts features Recharts has no counterpart for are opt-in, so the default chart stays visually identical to shadcn/ui.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
-
-@Component({
-  imports: [ZardCardImports, ZardChartImports],
-  template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="ECharts Extras - Data Zoom" />
-        <z-card-description zDescription="Opt-in ECharts features Recharts has no counterpart for" />
-      </z-card-header>
-      <z-card-content>
-        <z-chart
-          zType="line"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
-          [zSeries]="series"
-          zXAxisKey="date"
-          [zXAxisFormatter]="shortDate"
-          zDataZoom
-          zToolbox
-          class="w-full"
-        >
-          <z-chart-tooltip zIndicator="dot" />
-        </z-chart>
-      </z-card-content>
-    </z-card>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoChartEchartsDatazoomComponent {
-  protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
-    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
-  };
-
-  protected readonly chartData = [
-    { date: '2024-06-01', desktop: 178, mobile: 200 },
-    { date: '2024-06-02', desktop: 470, mobile: 410 },
-    { date: '2024-06-03', desktop: 103, mobile: 160 },
-    { date: '2024-06-04', desktop: 439, mobile: 380 },
-    { date: '2024-06-05', desktop: 88, mobile: 140 },
-    { date: '2024-06-06', desktop: 294, mobile: 250 },
-    { date: '2024-06-07', desktop: 323, mobile: 370 },
-    { date: '2024-06-08', desktop: 385, mobile: 320 },
-    { date: '2024-06-09', desktop: 438, mobile: 480 },
-    { date: '2024-06-10', desktop: 155, mobile: 200 },
-    { date: '2024-06-11', desktop: 92, mobile: 150 },
-    { date: '2024-06-12', desktop: 492, mobile: 420 },
-    { date: '2024-06-13', desktop: 81, mobile: 130 },
-    { date: '2024-06-14', desktop: 426, mobile: 380 },
-    { date: '2024-06-15', desktop: 307, mobile: 350 },
-    { date: '2024-06-16', desktop: 371, mobile: 310 },
-    { date: '2024-06-17', desktop: 475, mobile: 520 },
-    { date: '2024-06-18', desktop: 107, mobile: 170 },
-    { date: '2024-06-19', desktop: 341, mobile: 290 },
-    { date: '2024-06-20', desktop: 408, mobile: 450 },
-    { date: '2024-06-21', desktop: 169, mobile: 210 },
-    { date: '2024-06-22', desktop: 317, mobile: 270 },
-    { date: '2024-06-23', desktop: 480, mobile: 530 },
-    { date: '2024-06-24', desktop: 132, mobile: 180 },
-    { date: '2024-06-25', desktop: 141, mobile: 190 },
-    { date: '2024-06-26', desktop: 434, mobile: 380 },
-    { date: '2024-06-27', desktop: 448, mobile: 490 },
-    { date: '2024-06-28', desktop: 149, mobile: 200 },
-    { date: '2024-06-29', desktop: 103, mobile: 160 },
-    { date: '2024-06-30', desktop: 446, mobile: 400 },
-  ];
-
-  protected readonly series: ZardChartSeries[] = [
-    { dataKey: 'desktop', smooth: true },
-    { dataKey: 'mobile', smooth: true },
-  ];
-
-  protected readonly shortDate = (value: string) =>
-    new Date(`${value}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}
-```
-
-### Escape Hatch
-
-Anything the inputs do not cover is one `[zOption]` away — it is deep-merged over the option.
-
-```angular-ts
-import type { ZardChartOptionOverride } from '@/shared/components/chart/chart.types';
-
-// `[zOption]` is deep-merged over the generated option and always wins, so any ECharts
-// feature is one property away. Arrays merge index by index: the object below patches
-// the first series instead of replacing the whole list.
-export const override: ZardChartOptionOverride = {
-  series: [{ label: { position: 'insideLeft', color: '#fff', formatter: '{b}' } }],
-  xAxis: { axisLabel: { rotate: 45 } },
-};
-```
-
-### Limitations
-
-Where ECharts and Recharts disagree, the chart delivers the closest equivalent. These are the differences worth knowing about.
-
-- **Curve interpolation** — Recharts distinguishes `natural`, `monotone` and `basis`; ECharts has a single `smooth` flag, so all three map to it. Pass a number between 0 and 1 to a series' `smooth` for finer control.
-- **Stack normalisation** — ECharts has none, so `zStackOffset="expand"` normalises the rows to 0-1 before they reach it and clamps the value axis. Format the ticks with `[zYAxisFormatter]`.
-- **Tick spacing** — Recharts drops ticks whose gap falls below a pixel threshold. The chart sets `axisLabel.hideOverlap` instead: labels stop colliding, but the threshold is not tunable.
-- **Legend** — the ECharts legend cannot reproduce the shadcn markup, so `z-chart-legend` renders real HTML. The native legend stays registered but hidden, because it is what toggles a series.
-- **Centre text and radial labels** — Recharts nests SVG inside the chart for both. Here they are drawn as `graphic` text, so `zCenterValue` and `zCenterLabel` are plain strings, and `zRadialLabel` lays a ring name out one glyph at a time.
-- **Rounded stacked bars** — only the outermost bar of a stack is rounded, matching Recharts. On negative bars ECharts still rounds the top corners rather than the outward end.
-- **Server-side rendering** — the server paints a static SVG and the browser swaps in the live chart on hydration. It cannot read CSS variables, so the SVG uses the light palette; set `[zSsrWidth]` and `[zSsrHeight]` to match your layout.
 
 ## API Reference
 

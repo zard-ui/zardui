@@ -35,6 +35,7 @@ export const configSchema = z.object({
     utils: z.string(),
     core: z.string(),
     services: z.string(),
+    blocks: z.string(),
   }),
 });
 
@@ -155,6 +156,7 @@ export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn'
       utils: answers.utilsAlias,
       core: `${sharedBase}/core`,
       services: `${sharedBase}/services`,
+      blocks: `${sharedBase}/blocks`,
     },
   });
 }

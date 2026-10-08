@@ -199,7 +199,7 @@ describe('ZardDropdownMenuItemComponent', () => {
 
       const itemElement = fixture.nativeElement.querySelector('z-dropdown-menu-item');
       expect(
-        Array.from(itemElement.classList as DOMTokenList).some(c => c.startsWith('pl-') || c.includes('inset')),
+        Array.from(itemElement.classList as DOMTokenList).some(c => c.startsWith('ps-') || c.includes('inset')),
       ).toBe(true);
     });
   });

@@ -4,6 +4,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
 import { ZardCommandImports } from '@/shared/components/command/command.imports';
 import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
+import { ZardKbdImports } from '@/shared/components/kbd/kbd.imports';
 
 @Component({
   selector: 'z-demo-command-basic-dialog',
@@ -34,13 +35,32 @@ class ZardDemoCommandBasicDialogComponent implements AfterViewInit {
 
 @Component({
   selector: 'z-demo-command-basic',
-  imports: [ZardButtonComponent],
+  imports: [ZardButtonComponent, ZardKbdImports],
   template: `
-    <button type="button" z-button zType="outline" (click)="open()">Open Menu</button>
+    <button type="button" z-button zType="outline" class="gap-4" (click)="open()">
+      Open Menu
+      <z-kbd-group>
+        <z-kbd>⌘</z-kbd>
+        <z-kbd>K</z-kbd>
+      </z-kbd-group>
+    </button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    // A command palette a reader cannot learn to open is half-documented:
+    // ⌘K / Ctrl+K opens the same dialog as clicking the button.
+    '(document:keydown)': 'onKeydown($event)',
+  },
 })
 export class ZardDemoCommandBasicComponent {
   private readonly dialogService = inject(ZardDialogService);
+
+  onKeydown(event: KeyboardEvent) {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      this.open();
+    }
+  }
 
   open() {
     this.dialogService.create({

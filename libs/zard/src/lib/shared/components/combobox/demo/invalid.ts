@@ -9,9 +9,9 @@ import type { ZardComboboxOption } from '../combobox.types';
   imports: [ZardComboboxImports, ZardFieldImports],
   template: `
     <div z-field class="w-full min-w-48" data-invalid="true">
-      <label z-field-label for="combobox-invalid">Framework</label>
+      <label z-field-label [for]="combobox.inputId">Framework</label>
 
-      <z-combobox id="combobox-invalid" zInvalid [(zValue)]="value">
+      <z-combobox #combobox="zCombobox" zInvalid [(zValue)]="value">
         <z-combobox-input placeholder="Select a framework" />
 
         <z-combobox-content>

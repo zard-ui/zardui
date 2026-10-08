@@ -33,7 +33,7 @@ import { type ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
-  buttonGroupDividerVariants,
+  buttonGroupSeparatorVariants,
   buttonGroupTextVariants,
   buttonGroupVariants,
   type ZardButtonGroupVariants,
@@ -72,7 +72,7 @@ export class ZardButtonGroupComponent {
 }
 
 @Component({
-  selector: 'z-button-group-divider',
+  selector: 'z-button-group-separator',
   imports: [ZardSeparatorComponent],
   template: `
     <z-separator [class]="classes()" aria-hidden="true" [zOrientation]="orientation()" />
@@ -83,9 +83,9 @@ export class ZardButtonGroupComponent {
     class: 'contents',
     'data-slot': 'button-group-separator',
   },
-  exportAs: 'zButtonGroupDivider',
+  exportAs: 'zButtonGroupSeparator',
 })
-export class ZardButtonGroupDividerComponent {
+export class ZardButtonGroupSeparatorComponent {
   readonly zOrientation = input<ZardSeparatorVariants['zOrientation']>(null);
   readonly class = input<ClassValue>('');
 
@@ -104,7 +104,7 @@ export class ZardButtonGroupDividerComponent {
 
   protected readonly classes = computed(() =>
     mergeClasses(
-      buttonGroupDividerVariants({
+      buttonGroupSeparatorVariants({
         zOrientation: this.orientation(),
       }),
       this.class(),
@@ -136,7 +136,7 @@ export const buttonGroupVariants = cva(
     variants: {
       zOrientation: {
         horizontal:
-          '[&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>z-select:not(:first-child)>button]:rounded-l-none [&>z-select:not(:first-child)>button]:border-l-0 [&>*:not(:last-child)]:rounded-r-none [&>z-select:not(:last-child)>button]:rounded-r-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-lg!',
+          '[&>*:not(:first-child)]:rounded-s-none [&>*:not(:first-child)]:border-s-0 [&>z-select:not(:first-child)>button]:rounded-s-none [&>z-select:not(:first-child)>button]:border-s-0 [&>*:not(:last-child)]:rounded-e-none [&>z-select:not(:last-child)>button]:rounded-e-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-e-lg!',
         vertical:
           'flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>z-select:not(:first-child)>button]:rounded-t-none [&>z-select:not(:first-child)>button]:border-t-0 [&>*:not(:last-child)]:rounded-b-none [&>z-select:not(:last-child)>button]:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg!',
       },
@@ -148,7 +148,7 @@ export const buttonGroupVariants = cva(
 );
 export type ZardButtonGroupVariants = VariantProps<typeof buttonGroupVariants>;
 
-export const buttonGroupDividerVariants = cva(
+export const buttonGroupSeparatorVariants = cva(
   'bg-input relative self-stretch grow-0 shrink-0 pointer-events-none select-none',
   {
     variants: {
@@ -173,14 +173,14 @@ export const buttonGroupTextVariants = cva(
  */
 import {
   ZardButtonGroupComponent,
-  ZardButtonGroupDividerComponent,
+  ZardButtonGroupSeparatorComponent,
   ZardButtonGroupTextDirective,
 } from '@/shared/components/button-group/button-group.component';
 
 /** Every part of the button-group component, for a template that uses more than one. */
 export const ZardButtonGroupImports = [
   ZardButtonGroupComponent,
-  ZardButtonGroupDividerComponent,
+  ZardButtonGroupSeparatorComponent,
   ZardButtonGroupTextDirective,
 ] as const;
 ```
@@ -343,32 +343,32 @@ export class ZardDemoButtonGroupNestedComponent {}
 
 ### Separator
 
-The `z-button-group-divider` component visually divides buttons within a group. Buttons with `zType="outline"` do not need a separator since they have a border.
+The `z-button-group-separator` component visually divides buttons within a group. Buttons with `zType="outline"` do not need a separator since they have a border.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardButtonGroupComponent, ZardButtonGroupDividerComponent } from '../button-group.component';
+import { ZardButtonGroupComponent, ZardButtonGroupSeparatorComponent } from '../button-group.component';
 
 @Component({
-  selector: 'z-demo-button-group-divider',
-  imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardButtonGroupDividerComponent],
+  selector: 'z-demo-button-group-separator',
+  imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardButtonGroupSeparatorComponent],
   template: `
     <z-button-group>
       <button type="button" z-button zSize="sm" zType="secondary">Copy</button>
-      <z-button-group-divider />
+      <z-button-group-separator />
       <button type="button" z-button zSize="sm" zType="secondary">Paste</button>
     </z-button-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoButtonGroupDividerComponent {}
+export class ZardDemoButtonGroupSeparatorComponent {}
 ```
 
 ### Split
 
-Create a split button group by adding two buttons separated by a `z-button-group-divider`.
+Create a split button group by adding two buttons separated by a `z-button-group-separator`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -379,16 +379,16 @@ import { lucidePlus } from '@ng-icons/lucide';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import {
   ZardButtonGroupComponent,
-  ZardButtonGroupDividerComponent,
+  ZardButtonGroupSeparatorComponent,
 } from '@/shared/components/button-group/button-group.component';
 
 @Component({
   selector: 'z-demo-button-group-split',
-  imports: [ZardButtonGroupComponent, ZardButtonGroupDividerComponent, ZardButtonComponent, NgIcon],
+  imports: [ZardButtonGroupComponent, ZardButtonGroupSeparatorComponent, ZardButtonComponent, NgIcon],
   template: `
     <z-button-group>
       <button type="button" z-button zType="secondary">Button</button>
-      <z-button-group-divider />
+      <z-button-group-separator />
       <button type="button" z-button zType="secondary" zSize="icon" aria-label="Add">
         <ng-icon name="lucidePlus" />
       </button>
@@ -716,6 +716,33 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
 export class ZardDemoButtonGroupPopoverComponent {}
 ```
 
+### Text
+
+Use `z-button-group-text` to display non-interactive text, such as a label, within the group.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import {
+  ZardButtonGroupComponent,
+  ZardButtonGroupTextDirective,
+} from '@/shared/components/button-group/button-group.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+
+@Component({
+  selector: 'z-demo-button-group-text',
+  imports: [ZardButtonGroupComponent, ZardButtonGroupTextDirective, ZardInputComponent],
+  template: `
+    <z-button-group>
+      <label z-button-group-text for="button-group-text-name">Text</label>
+      <input z-input id="button-group-text-name" placeholder="Type something here..." />
+    </z-button-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoButtonGroupTextComponent {}
+```
+
 ## API Reference
 
 ### z-button-group
@@ -727,18 +754,22 @@ A container that groups related buttons together with consistent styling.
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zOrientation]` | Orientation of the button group | `'horizontal' \| 'vertical'` | `'horizontal'` |
 
-### z-button-group-divider
+### z-button-group-separator
 
-A visual divider between buttons in a group.
+Visually divides buttons within a group. Buttons with `zType="outline"` do not need a separator since they have a border.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zOrientation]` | Override for divider orientation, by default it uses the parent's orientation | `'horizontal' \| 'vertical'` | `null` |
+| `[zOrientation]` | Override for the separator orientation, by default it uses the parent's orientation | `'horizontal' \| 'vertical'` | `null` |
 
-### z-button-group-text
+### [z-button-group-text]
 
 Applies styles to text elements so that they conform with the rest of the group, for example a label.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

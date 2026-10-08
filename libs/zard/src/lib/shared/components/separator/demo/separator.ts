@@ -30,16 +30,22 @@ export const SEPARATOR = {
   examples: [
     {
       name: 'vertical',
+      description:
+        'A vertical `z-separator` relies on `self-stretch` to fill the cross axis of its flex container — give the row `items-center` (or an explicit height) so it has something to stretch to, or it collapses to zero height. This one is decorative (the `zDecorative` default), so it renders `role="none"` and is not announced.',
       component: ZardDemoSeparatorVerticalComponent,
       codeData: SEPARATOR_DEMO_VERTICAL,
     },
     {
       name: 'menu',
+      description:
+        'These separators mark real boundaries between menu sections, so `[zDecorative]="false"` gives them `role="separator"` and `aria-orientation="vertical"` instead of the default decorative `role="none"`.',
       component: ZardDemoSeparatorMenuComponent,
       codeData: SEPARATOR_DEMO_MENU,
     },
     {
       name: 'list',
+      description:
+        'Horizontal separators between list rows are meaningful dividers here too, not decoration, so `[zDecorative]="false"` exposes `role="separator"` to assistive tech.',
       component: ZardDemoSeparatorListComponent,
       codeData: SEPARATOR_DEMO_LIST,
     },

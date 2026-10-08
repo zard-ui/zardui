@@ -232,7 +232,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 
 ### Size
 
-Use the `zSize` prop to change the size of the button.
+Use the `zSize` input to change the size of the button — `xs`, `sm`, `default` and `lg`, plus the square `icon-xs`, `icon-sm`, `icon` and `icon-lg` sizes for icon-only buttons.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -281,6 +281,8 @@ export class ZardDemoButtonSizeComponent {}
 
 ### Default
 
+The default button style, using `zType="default"`.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -298,6 +300,8 @@ export class ZardDemoButtonDefaultComponent {}
 ```
 
 ### Outline
+
+Use `zType="outline"` for a bordered button with a transparent background.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -317,6 +321,8 @@ export class ZardDemoButtonOutlineComponent {}
 
 ### Secondary
 
+Use `zType="secondary"` for a lower-emphasis alternative to the default button.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -334,6 +340,8 @@ export class ZardDemoButtonSecondaryComponent {}
 ```
 
 ### Ghost
+
+Use `zType="ghost"` for a button with no background or border until it is hovered or focused.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -353,6 +361,8 @@ export class ZardDemoButtonGhostComponent {}
 
 ### Destructive
 
+Use `zType="destructive"` to signal a dangerous or irreversible action.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -371,6 +381,8 @@ export class ZardDemoButtonDestructiveComponent {}
 
 ### Link
 
+Use `zType="link"` to render a button that looks like a text link.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -388,6 +400,8 @@ export class ZardDemoButtonLinkComponent {}
 ```
 
 ### Icon
+
+Use `zSize="icon"` for a square, icon-only button. Always add an `aria-label` since there is no visible text for screen readers.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -440,7 +454,7 @@ export class ZardDemoButtonWithIconComponent {}
 
 ### Rounded
 
-Use the `rounded-full` class to make the button rounded.
+Use `zShape="circle"` to render a fully rounded, icon-only button.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -454,8 +468,9 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-rounded',
   imports: [ZardButtonComponent, NgIcon],
   template: `
-    <div class="flex flex-col gap-8">
-      <button type="button" z-button zType="outline" zSize="icon" class="rounded-full" aria-label="Submit">
+    <div class="flex gap-2">
+      <button z-button zShape="circle">Get Started</button>
+      <button z-button zType="outline" zSize="icon" zShape="circle">
         <ng-icon name="lucideArrowUp" />
       </button>
     </div>
@@ -468,30 +483,28 @@ export class ZardDemoButtonRoundedComponent {}
 
 ### Spinner
 
-Use the `[zLoading]` prop to show a loading spinner before the label, or project an `<ng-icon name="lucideLoaderCircle" class="animate-spin" />` manually to control its position.
+Use the `[zLoading]` input to show a loading spinner before the label, or project a `<z-spinner>` manually to control its position within the button.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideLoaderCircle } from '@ng-icons/lucide';
+import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
 
 import { ZardButtonComponent } from '../button.component';
 
 @Component({
   selector: 'z-demo-button-spinner',
-  imports: [ZardButtonComponent, NgIcon],
+  imports: [ZardButtonComponent, ZardSpinnerComponent],
   template: `
     <div class="flex gap-2">
       <button type="button" z-button zType="outline" [zLoading]="true" [zDisabled]="true">Generating</button>
       <button type="button" z-button zType="secondary" [zDisabled]="true">
         Downloading
-        <ng-icon name="lucideLoaderCircle" class="animate-spin" />
+        <z-spinner data-icon="inline-start" />
       </button>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideLoaderCircle })],
 })
 export class ZardDemoButtonSpinnerComponent {}
 ```
@@ -630,9 +643,9 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
 export class ZardDemoButtonButtonGroupComponent {}
 ```
 
-### As Child
+### As Link
 
-Apply the `z-button` attribute selector to a different element (like `<a>`) to give it the button appearance. Here's an example of a link that looks like a button.
+Apply the `z-button` attribute selector to an `<a>` element to give it the button appearance. Here's a link that looks like a button.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -640,14 +653,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardButtonComponent } from '../button.component';
 
 @Component({
-  selector: 'z-demo-button-as-child',
+  selector: 'z-demo-button-as-link',
   imports: [ZardButtonComponent],
   template: `
-    <a z-button href="/login">Login</a>
+    <a z-button zSize="sm" zType="secondary" href="/login">Login</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoButtonAsChildComponent {}
+export class ZardDemoButtonAsLinkComponent {}
 ```
 
 ## API Reference

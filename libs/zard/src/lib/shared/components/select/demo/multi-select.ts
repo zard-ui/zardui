@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
-  selector: 'z-demo-multi-select-basic',
+  selector: 'z-demo-select-multi-select',
   imports: [ZardSelectImports],
   template: `
     <div class="flex h-100 w-75 flex-col gap-4">
@@ -28,6 +28,6 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoMultiSelectBasicComponent {
+export class ZardDemoSelectMultiSelectComponent {
   readonly selectedValues = signal<string[]>([]);
 }

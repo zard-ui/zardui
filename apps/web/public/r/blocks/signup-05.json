@@ -3,6 +3,15 @@
   "title": "Signup with social providers",
   "description": "A simple signup form with social providers.",
   "category": "Signup",
+  "registryDependencies": [
+    "button",
+    "field",
+    "input"
+  ],
+  "dependencies": [
+    "@ng-icons/core",
+    "@ng-icons/lucide"
+  ],
   "files": [
     {
       "name": "signup-05.component.html",

@@ -5,13 +5,13 @@
  */
 import {
   ZardButtonGroupComponent,
-  ZardButtonGroupDividerComponent,
+  ZardButtonGroupSeparatorComponent,
   ZardButtonGroupTextDirective,
 } from '@/shared/components/button-group/button-group.component';
 
 /** Every part of the button-group component, for a template that uses more than one. */
 export const ZardButtonGroupImports = [
   ZardButtonGroupComponent,
-  ZardButtonGroupDividerComponent,
+  ZardButtonGroupSeparatorComponent,
   ZardButtonGroupTextDirective,
 ] as const;

@@ -83,7 +83,7 @@ describe('ZardSheetComponent', () => {
 
   afterEach(() => {
     // Clean up any open sheets
-    const sheetElements = document.querySelectorAll('z-sheet');
+    const sheetElements = document.querySelectorAll('z-sheet-panel');
     sheetElements.forEach(sheet => sheet.remove());
   });
 
@@ -111,7 +111,7 @@ describe('ZardSheetComponent', () => {
     it('should create a sheet when the button is clicked', () => {
       openSheet();
 
-      const sheetElement = document.querySelector('z-sheet');
+      const sheetElement = document.querySelector('z-sheet-panel');
       if (isPlatformBrowser(platformId)) {
         expect(sheetElement).toBeTruthy();
         expect(sheetElement?.getAttribute('data-slot')).toBe('sheet-content');
@@ -123,7 +123,7 @@ describe('ZardSheetComponent', () => {
     it('should display the sheet title, description and content', () => {
       openSheet();
 
-      const sheetElement = document.querySelector('z-sheet');
+      const sheetElement = document.querySelector('z-sheet-panel');
 
       if (isPlatformBrowser(platformId)) {
         expect(sheetElement).toBeTruthy();
@@ -164,7 +164,7 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet');
+      const sheetElement = document.querySelector('z-sheet-panel');
       expect(sheetElement).toBeTruthy();
       expect(sheetElement?.querySelector('[data-slot="sheet-title"]')?.textContent).toContain('No content');
       expect(sheetElement?.querySelector('[data-testid="z-content"]')).toBeNull();
@@ -182,7 +182,7 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet');
+      const sheetElement = document.querySelector('z-sheet-panel');
       expect(sheetElement).toBeTruthy();
       expect(sheetElement?.querySelector('[data-testid="z-close-header-button"]')).toBeNull();
     });
@@ -193,7 +193,7 @@ describe('ZardSheetComponent', () => {
       openSheet();
 
       if (isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet');
+        const sheetElement = document.querySelector('z-sheet-panel');
         expect(sheetElement).toBeTruthy();
 
         const cancelButton = sheetElement?.querySelector<HTMLButtonElement>('[data-testid="z-cancel-button"]');
@@ -202,7 +202,7 @@ describe('ZardSheetComponent', () => {
         fixture.detectChanges();
 
         await new Promise(resolve => setTimeout(resolve, CLOSE_DELAY));
-        expect(document.querySelector('z-sheet')).toBeNull();
+        expect(document.querySelector('z-sheet-panel')).toBeNull();
       }
     });
 
@@ -210,7 +210,7 @@ describe('ZardSheetComponent', () => {
       openSheet();
 
       if (isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet');
+        const sheetElement = document.querySelector('z-sheet-panel');
         expect(sheetElement).toBeTruthy();
 
         const okButton = sheetElement?.querySelector<HTMLButtonElement>('[data-testid="z-ok-button"]');
@@ -219,7 +219,7 @@ describe('ZardSheetComponent', () => {
         fixture.detectChanges();
 
         await new Promise(resolve => setTimeout(resolve, CLOSE_DELAY));
-        expect(document.querySelector('z-sheet')).toBeNull();
+        expect(document.querySelector('z-sheet-panel')).toBeNull();
       }
     });
 
@@ -227,7 +227,7 @@ describe('ZardSheetComponent', () => {
       openSheet();
 
       if (isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet');
+        const sheetElement = document.querySelector('z-sheet-panel');
         expect(sheetElement).toBeTruthy();
 
         const closeButton = sheetElement?.querySelector<HTMLButtonElement>('[data-testid="z-close-header-button"]');
@@ -236,7 +236,7 @@ describe('ZardSheetComponent', () => {
         fixture.detectChanges();
 
         await new Promise(resolve => setTimeout(resolve, CLOSE_DELAY));
-        expect(document.querySelector('z-sheet')).toBeNull();
+        expect(document.querySelector('z-sheet-panel')).toBeNull();
       }
     });
 
@@ -247,14 +247,14 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+      const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
       component.lastSheetRef?.close();
       fixture.detectChanges();
 
-      expect(sheetElement.classList.contains('sheet-leave')).toBe(true);
+      expect(sheetElement.getAttribute('data-state')).toBe('closed');
 
       await new Promise(resolve => setTimeout(resolve, CLOSE_DELAY));
-      expect(document.querySelector('z-sheet')).toBeNull();
+      expect(document.querySelector('z-sheet-panel')).toBeNull();
     });
 
     it('should prevent multiple close() calls from queuing duplicate disposals', async () => {
@@ -271,7 +271,7 @@ describe('ZardSheetComponent', () => {
       fixture.detectChanges();
 
       await new Promise(resolve => setTimeout(resolve, CLOSE_DELAY));
-      expect(document.querySelector('z-sheet')).toBeNull();
+      expect(document.querySelector('z-sheet-panel')).toBeNull();
     });
   });
 
@@ -280,7 +280,7 @@ describe('ZardSheetComponent', () => {
       openSheetByIndex(2); // Right side sheet button
 
       if (isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet');
+        const sheetElement = document.querySelector('z-sheet-panel');
         expect(sheetElement).toBeTruthy();
         expect(sheetElement?.getAttribute('data-side')).toBe('right');
         expect(sheetElement?.classList.contains('right-0')).toBeTruthy();
@@ -295,7 +295,7 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet');
+      const sheetElement = document.querySelector('z-sheet-panel');
       expect(sheetElement?.getAttribute('data-side')).toBe('right');
       expect(sheetElement?.classList.contains('right-0')).toBeTruthy();
       expect(sheetElement?.classList.contains('border-l')).toBeTruthy();
@@ -313,7 +313,7 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+      const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
       expect(sheetElement.getAttribute('data-side')).toBe(side);
       for (const expectedClass of expectedClasses) {
         expect(sheetElement.classList.contains(expectedClass)).toBe(true);
@@ -327,7 +327,7 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+      const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
       // twMerge keeps the compound width and drops the base `w-3/4`.
       expect(sheetElement.classList.contains('w-1/2')).toBe(true);
       expect(sheetElement.classList.contains('w-3/4')).toBe(false);
@@ -341,7 +341,7 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+      const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
       expect(sheetElement.classList.contains('h-3/4')).toBe(true);
       expect(sheetElement.classList.contains('h-auto')).toBe(false);
     });
@@ -350,7 +350,7 @@ describe('ZardSheetComponent', () => {
       openSheetByIndex(3); // No footer sheet button
 
       if (isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet');
+        const sheetElement = document.querySelector('z-sheet-panel');
         expect(sheetElement).toBeTruthy();
 
         const footerElement = sheetElement?.querySelector('[data-slot="sheet-footer"]');
@@ -383,7 +383,7 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+      const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
       expect(sheetElement.classList.contains('gap-8')).toBe(true);
       expect(sheetElement.classList.contains('p-2')).toBe(true);
       expect(sheetElement.classList.contains('gap-4')).toBe(false);
@@ -398,7 +398,7 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+      const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
       expect(sheetElement).toBeTruthy();
       expect(sheetElement.getAttribute('role')).toBe('dialog');
       expect(sheetElement.getAttribute('aria-modal')).toBe('true');
@@ -411,7 +411,7 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+      const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
       const labelledBy = sheetElement.getAttribute('aria-labelledby');
       const describedBy = sheetElement.getAttribute('aria-describedby');
 
@@ -428,7 +428,7 @@ describe('ZardSheetComponent', () => {
         return;
       }
 
-      const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+      const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
       expect(sheetElement.getAttribute('aria-labelledby')).toBeNull();
       expect(sheetElement.getAttribute('aria-describedby')).toBeNull();
     });
@@ -439,7 +439,7 @@ describe('ZardSheetComponent', () => {
       openSheetByIndex(1); // Template sheet button
 
       if (isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet');
+        const sheetElement = document.querySelector('z-sheet-panel');
         expect(sheetElement).toBeTruthy();
 
         const templateContent = sheetElement?.querySelector('[data-testid="template-content"]');
@@ -454,7 +454,7 @@ describe('ZardSheetComponent', () => {
       openSheet();
 
       if (!isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet');
+        const sheetElement = document.querySelector('z-sheet-panel');
         expect(sheetElement).toBeNull();
         expect(component.lastSheetRef).toBeTruthy();
       }
@@ -474,7 +474,7 @@ describe('ZardSheetComponent', () => {
       expect(sheetRef).toBeTruthy();
 
       if (isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+        const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
         expect(sheetElement).toBeTruthy();
       }
     });
@@ -489,7 +489,7 @@ describe('ZardSheetComponent', () => {
       });
 
       if (isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+        const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
         expect(sheetElement).toBeTruthy();
 
         // Wait for change detection
@@ -509,7 +509,7 @@ describe('ZardSheetComponent', () => {
       });
 
       if (isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet') as HTMLElement;
+        const sheetElement = document.querySelector('z-sheet-panel') as HTMLElement;
         expect(sheetElement).toBeTruthy();
 
         // Wait for change detection
@@ -542,7 +542,7 @@ describe('ZardSheetComponent', () => {
       });
 
       if (isPlatformBrowser(platformId)) {
-        const sheetElement = document.querySelector('z-sheet');
+        const sheetElement = document.querySelector('z-sheet-panel');
         expect(sheetElement).toBeTruthy();
 
         const okButton = sheetElement?.querySelector<HTMLButtonElement>('[data-testid="z-ok-button"]');

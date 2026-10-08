@@ -13,7 +13,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   template: `
     <div class="grid w-full min-w-sm gap-4">
       <z-input-group>
-        <input z-input placeholder="Enter file name" />
+        <input z-input id="input-group-dropdown-filename" placeholder="Enter file name" />
         <z-input-group-addon zAlign="inline-end">
           <button
             type="button"
@@ -34,7 +34,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       </z-input-group>
 
       <z-input-group class="[--radius:1rem]">
-        <input z-input placeholder="Enter search query" />
+        <input z-input id="input-group-dropdown-search" placeholder="Enter search query" />
         <z-input-group-addon zAlign="inline-end">
           <button type="button" z-input-group-button class="pr-1.5! text-xs" z-dropdown [zDropdownMenu]="searchMenu">
             Search In...

@@ -124,7 +124,8 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
   readonly zItems = input<ZardToggleGroupItem[]>([]);
   readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly zSize = input<ZardToggleSizeVariants>('default');
-  readonly zSpacing = input(0);
+  /** Gap between items in spacing units; `0` joins them into one bar. */
+  readonly zSpacing = input(2);
   readonly zType = input<ZardToggleTypeVariants>('default');
   readonly zValue = input<string | string[]>();
 
@@ -230,7 +231,7 @@ export const toggleGroupVariants = cva(
 );
 
 export const toggleGroupItemVariants = cva(
-  'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pr-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:pl-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-l-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-r-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-l-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
+  'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pr-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:pl-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg ltr:group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
 );
 ```
 
@@ -246,11 +247,14 @@ import { ZardToggleGroupComponent } from '@/shared/components/toggle-group/toggl
 ```
 
 ```angular-html
-<z-toggle-group>
-  <z-toggle value="bold">Bold</z-toggle>
-  <z-toggle value="italic">Italic</z-toggle>
-  <z-toggle value="underline">Underline</z-toggle>
-</z-toggle-group>
+<z-toggle-group
+  zMode="single"
+  [zItems]="[
+    { value: 'a', label: 'A' },
+    { value: 'b', label: 'B' },
+    { value: 'c', label: 'C' },
+  ]"
+/>
 ```
 
 ## Examples
@@ -260,7 +264,7 @@ import { ZardToggleGroupComponent } from '@/shared/components/toggle-group/toggl
 Use `zType="outline"` for an outline style.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import {
   ZardToggleGroupComponent,
@@ -279,6 +283,7 @@ import {
       (valueChange)="onToggleChange($event)"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToggleGroupOutlineComponent {
   items: ZardToggleGroupItem[] = [
@@ -305,7 +310,7 @@ export class ZardDemoToggleGroupOutlineComponent {
 Use the `zSize` to change the size of the toggle group.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import {
   ZardToggleGroupComponent,
@@ -313,34 +318,30 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'z-demo-toggle-group-sizes',
+  selector: 'z-demo-toggle-group-size',
   imports: [ZardToggleGroupComponent],
   template: `
-    <div class="space-y-4">
-      <div>
-        <z-toggle-group
-          zDefaultValue="top"
-          zMode="single"
-          zSize="sm"
-          [zItems]="items"
-          zType="outline"
-          (valueChange)="onToggleChange($event)"
-        />
-      </div>
-      <div>
-        <z-toggle-group
-          zDefaultValue="top"
-          zMode="single"
-          zSize="lg"
-          [zItems]="items"
-          zType="outline"
-          (valueChange)="onToggleChange($event)"
-        />
-      </div>
+    <div class="flex flex-col gap-4">
+      <z-toggle-group
+        zDefaultValue="top"
+        zMode="single"
+        zSize="sm"
+        zType="outline"
+        [zItems]="items"
+        (valueChange)="onToggleChange($event)"
+      />
+      <z-toggle-group
+        zDefaultValue="top"
+        zMode="single"
+        zType="outline"
+        [zItems]="items"
+        (valueChange)="onToggleChange($event)"
+      />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoToggleGroupSizesComponent {
+export class ZardDemoToggleGroupSizeComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'top',
@@ -372,10 +373,10 @@ export class ZardDemoToggleGroupSizesComponent {
 
 ### Spacing
 
-Use `zSpacing` to add spacing between toggle group items.
+Use `zSpacing` to control the gap between items, in spacing units. The default is `2`; set it to `0` to join the items into a single bar.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import {
   ZardToggleGroupComponent,
@@ -390,12 +391,12 @@ import {
       zDefaultValue="top"
       zMode="single"
       zSize="sm"
-      zType="outline"
       [zItems]="items"
       [zSpacing]="2"
       (valueChange)="onToggleChange($event)"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToggleGroupSpacingComponent {
   items: ZardToggleGroupItem[] = [
@@ -432,7 +433,7 @@ export class ZardDemoToggleGroupSpacingComponent {
 Use `zOrientation="vertical"` for vertical toggle groups.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideBold, lucideItalic, lucideUnderline } from '@ng-icons/lucide';
@@ -449,12 +450,12 @@ import {
     <z-toggle-group
       zMode="multiple"
       zOrientation="vertical"
-      [zDefaultValue]="['bold', 'italic']"
       [zItems]="items"
       [zSpacing]="1"
       (valueChange)="onToggleChange($event)"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
       lucideBold,
@@ -490,8 +491,10 @@ export class ZardDemoToggleGroupVerticalComponent {
 
 ### Disabled
 
+Set `zDisabled` to disable every item in the group at once.
+
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideBold, lucideItalic, lucideUnderline } from '@ng-icons/lucide';
@@ -507,6 +510,7 @@ import {
   template: `
     <z-toggle-group [zDisabled]="true" zMode="multiple" [zItems]="items" (valueChange)="onToggleChange($event)" />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
       lucideBold,
@@ -567,6 +571,7 @@ import {
         zSize="lg"
         [zItems]="items()"
         [zSpacing]="2"
+        [zValue]="fontWeight()"
         (valueChange)="onToggleChange($event)"
       />
       <p z-field-description>
@@ -604,7 +609,7 @@ export class ZardDemoToggleGroupCustomComponent {
   readonly medium = viewChild<TemplateRef<void>>('medium');
   readonly bold = viewChild<TemplateRef<void>>('bold');
 
-  protected readonly fontWeight = signal<string>('');
+  protected readonly fontWeight = signal<string>('normal');
 
   readonly items = computed<ZardToggleGroupItem[]>(() => [
     {
@@ -650,17 +655,17 @@ A set of two-state buttons that can be pressed or released, with multiple select
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zDefaultValue]` | Default value | `string \| string[]` | `-` |
+| `[zDefaultValue]` | Uncontrolled initial value — a string when zMode is 'single', a string[] when 'multiple' | `string \| string[]` | `-` |
 | `[zDisabled]` | Whether the entire group is disabled | `boolean` | `false` |
 | `[zItemClass]` | Additional CSS classes for group item | `ClassValue` | `''` |
 | `[zItems]` | Array of toggle items to display | `ZardToggleGroupItem[]` | `[]` |
-| `[zMode]` | Selection mode — single allows one active toggle, multiple allows many | `'single' \| 'multiple'` | `'multiple'` |
+| `[zMode]` | Selection mode: 'single' binds a string value and allows one pressed item at a time; 'multiple' binds a string[] value and allows any number pressed | `'single' \| 'multiple'` | `'multiple'` |
 | `[zOrientation]` | Layout direction of the toggle group | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| `[zSize]` | Size variant of the toggle group | `'default' \| 'sm' \| 'lg'` | `'default'` |
-| `[zSpacing]` | Gap spacing between toggle items | `number` | `0` |
+| `[zSize]` | Size variant of the toggle group | `'sm' \| 'default' \| 'lg'` | `'default'` |
+| `[zSpacing]` | Gap between items in spacing units. `0` joins them into a single bar | `number` | `2` |
 | `[zType]` | Visual style variant | `'default' \| 'outline'` | `'default'` |
-| `[zValue]` | Controlled value of the toggle group | `string \| string[] \| undefined` | `-` |
-| `(valueChange)` | Emitted when toggle state changes, returns updated value | `output<string \| string[]>` | `-` |
+| `[zValue]` | Controlled value of the toggle group — a string when zMode is 'single', a string[] when 'multiple' | `string \| string[] \| undefined` | `-` |
+| `(valueChange)` | Emitted when toggle state changes, returns the updated value in the shape matching zMode | `EventEmitter<string \| string[]>` | `-` |
 
 ---
 

@@ -13,15 +13,15 @@ interface FileRow {
 }
 
 @Component({
-  selector: 'z-context-menu-table-rows-demo',
+  selector: 'z-demo-context-menu-table-rows',
   imports: [ZardContextMenuImports, ZardTableImports],
   template: `
     <div class="w-full max-w-md">
       <table z-table>
         <thead z-table-header>
           <tr z-table-row>
-            <th z-table-head>Name</th>
-            <th z-table-head class="text-right">Size</th>
+            <th z-table-head scope="col">Name</th>
+            <th z-table-head scope="col" class="text-right">Size</th>
           </tr>
         </thead>
         <tbody z-table-body>
@@ -55,7 +55,7 @@ interface FileRow {
   `,
   host: { class: 'contents' },
 })
-export class ZardContextMenuTableRowsDemoComponent {
+export class ZardDemoContextMenuTableRowsComponent {
   private readonly contextMenu = inject(ZardContextMenuService);
   private readonly rowMenu = viewChild.required<ZardDropdownMenuContentComponent>('rowMenu');
 

@@ -3,9 +3,11 @@ import path from 'node:path';
 
 import { generateSingleDemo } from './demo-writer';
 import { generateSingleFormDemo } from './forms-writer';
+import { generateSingleUtilsDemo } from './utils-writer';
 
 const COMPONENTS_PATH = path.resolve('libs/zard/src/lib/shared/components');
 const FORMS_PATH = path.resolve('apps/web/src/app/domain/pages/forms');
+const UTILS_PATH = path.resolve('apps/web/src/app/domain/pages/utils');
 const DEBOUNCE_MS = 300;
 
 type Timer = ReturnType<typeof setTimeout>;
@@ -70,20 +72,37 @@ export function startWatcher(onInstallationChange: () => Promise<void>): void {
     }
   });
 
-  if (!fs.existsSync(FORMS_PATH)) return;
+  if (fs.existsSync(FORMS_PATH)) {
+    fs.watch(FORMS_PATH, { persistent: true, recursive: true }, (eventType, fileName) => {
+      if (!fileName) return;
+      if (eventType !== 'change' && eventType !== 'rename') return;
 
-  fs.watch(FORMS_PATH, { persistent: true, recursive: true }, (eventType, fileName) => {
+      const normalized = fileName.replace(/\\/g, '/');
+      if (!normalized.endsWith('.ts')) return;
+      // Only the demo components and the snippet maps feed the generator.
+      if (!normalized.startsWith('demos/') && !normalized.endsWith('.snippets.ts')) return;
+
+      const fullPath = path.join(FORMS_PATH, fileName);
+      if (!fs.existsSync(fullPath)) return;
+
+      scheduleDemo(fullPath, `forms/${normalized}`, generateSingleFormDemo);
+    });
+  }
+
+  if (!fs.existsSync(UTILS_PATH)) return;
+
+  fs.watch(UTILS_PATH, { persistent: true, recursive: true }, (eventType, fileName) => {
     if (!fileName) return;
     if (eventType !== 'change' && eventType !== 'rename') return;
 
     const normalized = fileName.replace(/\\/g, '/');
     if (!normalized.endsWith('.ts')) return;
-    // Only the demo components and the snippet maps feed the generator.
-    if (!normalized.startsWith('demos/') && !normalized.endsWith('.snippets.ts')) return;
+    // The utilities are CSS-only, so the demo components are the whole pipeline.
+    if (!normalized.startsWith('demos/')) return;
 
-    const fullPath = path.join(FORMS_PATH, fileName);
+    const fullPath = path.join(UTILS_PATH, fileName);
     if (!fs.existsSync(fullPath)) return;
 
-    scheduleDemo(fullPath, `forms/${normalized}`, generateSingleFormDemo);
+    scheduleDemo(fullPath, `utils/${normalized}`, generateSingleUtilsDemo);
   });
 }

@@ -1,12 +1,10 @@
-import { NgOptimizedImage } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   input,
-  signal,
+  linkedSignal,
   ViewEncapsulation,
 } from '@angular/core';
 import type { SafeUrl } from '@angular/platform-browser';
@@ -24,24 +22,33 @@ import {
   type ZardAvatarSizeVariants,
 } from './avatar.variants';
 
+/** Rendered `<img>` size (px) per `zSize`, matching `size-6`/`size-8`/`size-10` in `avatarVariants`. */
+const AVATAR_IMAGE_SIZE: Record<ZardAvatarSizeVariants, number> = {
+  sm: 24,
+  default: 32,
+  lg: 40,
+};
+
 @Component({
   selector: 'z-avatar, [z-avatar]',
-  imports: [NgOptimizedImage, NgIcon],
+  imports: [NgIcon],
   template: `
-    @if (zFallback() && (!zSrc() || !imageLoaded())) {
-      <span [class]="fallbackClasses()">
+    @if (zFallback()) {
+      <span [class]="fallbackClasses()" [attr.aria-hidden]="imageLoaded() ? 'true' : null">
         {{ zFallback() }}
       </span>
     }
 
     @if (zSrc() && !imageError()) {
       <img
-        [width]="32"
-        [height]="32"
+        [width]="imgSize()"
+        [height]="imgSize()"
         [alt]="zAlt()"
         [class]="imgClasses()"
-        [ngSrc]="zSrc()"
-        [priority]="zPriority()"
+        [src]="imgSrc()"
+        [attr.fetchpriority]="zPriority() ? 'high' : 'auto'"
+        loading="eager"
+        decoding="async"
         (error)="onImageError()"
         (load)="onImageLoad()"
       />
@@ -75,17 +82,16 @@ export class ZardAvatarComponent {
   readonly zSrc = input<string | SafeUrl>('');
   readonly zShowBadge = input(false, { transform: booleanAttribute });
 
-  protected readonly imageError = signal(false);
-  protected readonly imageLoaded = signal(false);
+  // Keyed on zSrc so a source change resets synchronously — no stale frame between sources.
+  protected readonly imageError = linkedSignal(() => {
+    this.zSrc();
+    return false;
+  });
 
-  constructor() {
-    effect(() => {
-      // Reset image state when zSrc changes
-      this.zSrc();
-      this.imageError.set(false);
-      this.imageLoaded.set(false);
-    });
-  }
+  protected readonly imageLoaded = linkedSignal(() => {
+    this.zSrc();
+    return false;
+  });
 
   protected readonly avatarClasses = computed(() =>
     mergeClasses(avatarVariants({ zSize: this.zSize() }), this.class()),
@@ -95,7 +101,17 @@ export class ZardAvatarComponent {
 
   protected readonly badgeClasses = computed(() => mergeClasses(avatarBadgeVariants, this.zBadgeClass()));
 
-  protected readonly imgClasses = computed(() => imageVariants({ zSize: this.zSize() }));
+  protected readonly imgSize = computed(() => AVATAR_IMAGE_SIZE[this.zSize()]);
+
+  // `HTMLImageElement.src` is typed `string`; `SafeUrl` type-checks against `[ngSrc]` via
+  // `NgOptimizedImage.ngAcceptInputType_ngSrc`, but a plain `<img [src]>` has no such escape
+  // hatch under strictTemplates. The runtime binding still goes through Angular's URL
+  // sanitizer/SafeValue unwrapping regardless of this compile-time assertion.
+  protected readonly imgSrc = computed(() => this.zSrc() as string);
+
+  protected readonly imgClasses = computed(() =>
+    mergeClasses(imageVariants({ zSize: this.zSize() }), this.imageLoaded() && 'opacity-100'),
+  );
 
   protected onImageLoad(): void {
     this.imageLoaded.set(true);

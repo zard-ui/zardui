@@ -12,6 +12,7 @@ import {
   linkedSignal,
   model,
   numberAttribute,
+  type TemplateRef,
   viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
@@ -24,6 +25,7 @@ import { filter, map } from 'rxjs';
 import { ZardCalendarGridComponent } from '@/shared/components/calendar/calendar-grid.component';
 import { ZardCalendarNavigationComponent } from '@/shared/components/calendar/calendar-navigation.component';
 import type {
+  CalendarDayTemplateContext,
   CalendarMode,
   CalendarValue,
   ZardCalendarCaptionLayout,
@@ -43,6 +45,7 @@ import {
 import { mergeClasses } from '@/shared/utils/merge-classes';
 import { noopFn } from '@/shared/utils/noop';
 
+import { ZardCalendarI18nService } from './calendar-i18n.service';
 import type { ZardButtonTypeVariants } from '../button/button.variants';
 
 @Component({
@@ -73,6 +76,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
             [disabled]="disabled()"
             [zShowOutsideDays]="zShowOutsideDays()"
             [zMonthIndex]="i"
+            [zDayTemplate]="zDayTemplate()"
             (dateSelect)="onDateSelect($event)"
             (previousMonth)="onGridPreviousMonth($event)"
             (nextMonth)="onGridNextMonth($event)"
@@ -100,6 +104,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
 })
 export class ZardCalendarComponent implements ControlValueAccessor {
   private readonly injector = inject(Injector);
+  private readonly calendarI18n = inject(ZardCalendarI18nService);
   private readonly gridRefs = viewChildren(ZardCalendarGridComponent);
 
   /** The grid that owns the roving focus — always the first rendered month. */
@@ -133,6 +138,8 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
+  /** Renders each day button's content; receives the `CalendarDay` as the implicit context (`let-day`). */
+  readonly zDayTemplate = input<TemplateRef<CalendarDayTemplateContext> | null>(null);
 
   // Public outputs
   readonly dateChange = outputFromObservable(
@@ -196,6 +203,8 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     const selectedDates = getSelectedDatesArray(this.normalizedValue(), mode);
     const total = Math.max(1, this.zNumberOfMonths());
 
+    const weekStartsOn = this.calendarI18n.weekStartsOn();
+
     return Array.from({ length: total }, (_, offset) => {
       const monthDate = makeSafeDate(base.getFullYear(), base.getMonth() + offset, 1);
       const year = monthDate.getFullYear();
@@ -214,6 +223,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
           maxDate: this.maxDate(),
           disabled: this.disabled(),
           disabledDates: this.zDisabledDates(),
+          weekStartsOn,
         }),
       };
     });

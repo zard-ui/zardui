@@ -17,10 +17,10 @@ export interface Invoice {
       <caption z-table-caption>A list of your recent invoices.</caption>
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head>Invoice</th>
-          <th z-table-head>Status</th>
-          <th z-table-head>Method</th>
-          <th z-table-head class="text-right">Amount</th>
+          <th z-table-head scope="col">Invoice</th>
+          <th z-table-head scope="col">Status</th>
+          <th z-table-head scope="col">Method</th>
+          <th z-table-head scope="col" class="text-right">Amount</th>
         </tr>
       </thead>
       <tbody z-table-body>

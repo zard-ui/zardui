@@ -126,12 +126,28 @@ export const SIDEBAR = {
     codeData: SIDEBAR_DEMO_PREVIEW,
   },
   examples: [
+    // Reference — composition, the imperative API, the keyboard shortcut, sizing, theming and
+    // styling, and controlled mode. Mirrors shadcn's Structure / useSidebar / Theming / Styling /
+    // Controlled sections. See the gallery below for every collapsible mode, variant and slot.
     {
       name: 'structure',
       description:
         'The regions a sidebar is made of. Every one of them is optional, and they can be composed in any order.',
       component: ZardDemoSidebarStructureComponent,
       codeData: SIDEBAR_DEMO_STRUCTURE,
+    },
+    {
+      name: 'use-sidebar',
+      description:
+        "Inject `ZardSidebarService` from any component inside the provider — the Angular counterpart of shadcn's `useSidebar()` hook.",
+      component: ZardDemoSidebarUseSidebarComponent,
+      codeData: SIDEBAR_DEMO_USE_SIDEBAR,
+    },
+    {
+      name: 'keyboard-shortcut',
+      description: 'The provider registers `⌘/Ctrl + B` on the document while it is alive.',
+      component: ZardDemoSidebarKeyboardShortcutComponent,
+      codeData: SIDEBAR_DEMO_KEYBOARD_SHORTCUT,
     },
     {
       name: 'custom-width',
@@ -145,11 +161,30 @@ export const SIDEBAR = {
       },
     },
     {
-      name: 'keyboard-shortcut',
-      description: 'The provider registers `⌘/Ctrl + B` on the document while it is alive.',
-      component: ZardDemoSidebarKeyboardShortcutComponent,
-      codeData: SIDEBAR_DEMO_KEYBOARD_SHORTCUT,
+      name: 'theming',
+      description:
+        'The sidebar has its own colour scale so it can sit on a different background than the page it frames.',
+      codeData: SIDEBAR_SNIPPET_THEMING,
     },
+    {
+      name: 'styling',
+      description:
+        'The sidebar publishes its state through data attributes, so anything inside it can react with plain Tailwind variants.',
+      codeData: SIDEBAR_SNIPPET_STYLING,
+    },
+    {
+      name: 'ssr-cookie',
+      description:
+        'New in the Angular port: the open state is persisted in the `sidebar_state` cookie and read back on the server, so there is no layout flash on hydration. A provider with an explicit `zDefaultOpen` neither reads nor writes it.',
+      codeData: SIDEBAR_SNIPPET_SSR_COOKIE,
+    },
+    {
+      name: 'controlled',
+      description: 'Pass `zOpen` and listen to `zOpenChange` to own the state yourself.',
+      component: ZardDemoSidebarControlledComponent,
+      codeData: SIDEBAR_DEMO_CONTROLLED,
+    },
+    // Gallery — collapsible modes, side, variants, and the header/footer/group/menu slots.
     {
       name: 'side-right',
       description:
@@ -188,13 +223,6 @@ export const SIDEBAR = {
       description: 'Use `zCollapsible="none"` for a static column: no gap, no rail, no collapsing.',
       component: ZardDemoSidebarCollapsibleNoneComponent,
       codeData: SIDEBAR_DEMO_COLLAPSIBLE_NONE,
-    },
-    {
-      name: 'use-sidebar',
-      description:
-        "Inject `ZardSidebarService` from any component inside the provider — the Angular counterpart of shadcn's `useSidebar()` hook.",
-      component: ZardDemoSidebarUseSidebarComponent,
-      codeData: SIDEBAR_DEMO_USE_SIDEBAR,
     },
     {
       name: 'header',
@@ -257,30 +285,6 @@ export const SIDEBAR = {
       description: 'Use `button[z-sidebar-rail]` for the draggable-looking edge handle.',
       component: ZardDemoSidebarRailComponent,
       codeData: SIDEBAR_DEMO_RAIL,
-    },
-    {
-      name: 'controlled',
-      description: 'Pass `zOpen` and listen to `zOpenChange` to own the state yourself.',
-      component: ZardDemoSidebarControlledComponent,
-      codeData: SIDEBAR_DEMO_CONTROLLED,
-    },
-    {
-      name: 'theming',
-      description:
-        'The sidebar has its own colour scale so it can sit on a different background than the page it frames.',
-      codeData: SIDEBAR_SNIPPET_THEMING,
-    },
-    {
-      name: 'styling',
-      description:
-        'The sidebar publishes its state through data attributes, so anything inside it can react with plain Tailwind variants.',
-      codeData: SIDEBAR_SNIPPET_STYLING,
-    },
-    {
-      name: 'ssr-cookie',
-      description:
-        'New in the Angular port: the open state is persisted in the `sidebar_state` cookie and read back on the server, so there is no layout flash on hydration.',
-      codeData: SIDEBAR_SNIPPET_SSR_COOKIE,
     },
   ],
 };

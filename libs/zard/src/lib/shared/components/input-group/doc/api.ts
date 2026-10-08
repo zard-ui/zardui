@@ -21,9 +21,16 @@ export const INPUT_GROUP_API: ApiSection[] = [
   },
   {
     selector: 'button[z-input-group-button]',
-    description: 'Compact button styled to fit inside an InputGroup.',
+    description:
+      'Compact button styled to fit inside a `z-input-group-addon`, with its own narrowed size and variant scale.',
     props: [
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      {
+        name: '[zVariant]',
+        description: 'Visual variant of the button.',
+        type: "'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'",
+        default: "'ghost'",
+      },
       {
         name: '[zSize]',
         description: 'Button size',

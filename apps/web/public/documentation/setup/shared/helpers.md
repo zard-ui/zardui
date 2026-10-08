@@ -1,38 +1,27 @@
-```typescript title="utils/merge-classes.ts" expandable="true" copyButton showLineNumbers
+```typescript title="index.ts" copyButton showLineNumbers
+export * from './merge-classes';
+export * from './noop';
+export * from './number';
+```
+
+```typescript title="merge-classes.ts" copyButton showLineNumbers
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export type { ClassValue };
 
-export function mergeClasses(...inputs: ClassValue[]) {
+/** Merges CVA variants with a consumer's `class` input, last write winning. */
+export function mergeClasses(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
-
-export function transform(value: boolean | string): boolean {
-  return typeof value === 'string' ? value === '' : value;
-}
-
-export function generateId(prefix = ''): string {
-  const id = crypto.randomUUID();
-  return prefix ? `${prefix}-${id}` : id;
-}
-
-export const noopFn = () => void 0;
-
-export const isElementContentTruncated = (element: HTMLElement | undefined): boolean => {
-  if (!element) {
-    return false;
-  }
-  const range = document.createRange();
-  range.selectNodeContents(element);
-  const rangeWidth = range.getBoundingClientRect().width;
-  const elementWidth = element.getBoundingClientRect().width;
-
-  return rangeWidth > elementWidth;
-};
 ```
 
-```typescript title="utils/numbers.ts" expandable="true" copyButton showLineNumbers
+```typescript title="noop.ts" copyButton showLineNumbers
+/** Does nothing. Used as the initial value of a ControlValueAccessor callback. */
+export const noopFn = (): void => void 0;
+```
+
+```typescript title="number.ts" copyButton showLineNumbers
 function clamp(value: number, [min, max]: [number, number]): number {
   return Math.min(max, Math.max(min, value));
 }

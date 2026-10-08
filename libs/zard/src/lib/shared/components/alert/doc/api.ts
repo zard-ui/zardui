@@ -10,7 +10,8 @@ export const ALERT_API: ApiSection[] = [
       { name: '[zDescription]', description: 'Alert description', type: 'string | TemplateRef<void>', default: '-' },
       {
         name: '[zIcon]',
-        description: 'Alert icon. If not specified, default icon will be lucideCircleAlert',
+        description:
+          "Alert icon (an ng-icons name or a TemplateRef). When unset, defaults to 'lucideCircleAlert' for the 'destructive' zType; otherwise no icon renders.",
         type: 'TemplateRef<void> | string',
         default: '-',
       },

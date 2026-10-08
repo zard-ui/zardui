@@ -18,7 +18,8 @@ npx zard-cli@latest add progress
 ### Manual
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { Directionality } from '@angular/cdk/bidi';
+import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -48,6 +49,7 @@ import { progressVariants } from './progress.variants';
   exportAs: 'zProgress',
 })
 export class ZardProgressComponent {
+  private readonly directionality = inject(Directionality);
   readonly value = input(0);
   readonly class = input<ClassValue>('');
 
@@ -62,7 +64,12 @@ export class ZardProgressComponent {
     return v;
   });
 
-  protected readonly indicatorTransform = computed(() => `translateX(-${100 - this.clampedValue()}%)`);
+  /** The indicator slides in from the start edge: from the left in LTR, from the right in RTL. */
+  protected readonly indicatorTransform = computed(() => {
+    const remaining = 100 - this.clampedValue();
+
+    return this.directionality.valueSignal() === 'rtl' ? `translateX(${remaining}%)` : `translateX(-${remaining}%)`;
+  });
 
   protected readonly classes = computed(() => mergeClasses(progressVariants(), this.class()));
 }
@@ -91,7 +98,9 @@ import { ZardProgressComponent } from '@/shared/components/progress/progress.com
 
 ## Examples
 
-### Label
+### With Label And Value
+
+Compose `z-field-label` above `z-progress` to render a label and the numeric value together.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -100,7 +109,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardProgressComponent } from '@/shared/components/progress/progress.component';
 
 @Component({
-  selector: 'z-demo-progress-label',
+  selector: 'z-demo-progress-with-label-and-value',
   imports: [ZardProgressComponent, ...ZardFieldImports],
   template: `
     <z-field class="w-full min-w-sm">
@@ -113,10 +122,12 @@ import { ZardProgressComponent } from '@/shared/components/progress/progress.com
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoProgressLabelComponent {}
+export class ZardDemoProgressWithLabelAndValueComponent {}
 ```
 
 ### Controlled
+
+Bind `[value]` on `z-progress` to a `z-slider`'s `(zSlideIndexChange)` output for a controlled progress bar.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
@@ -130,7 +141,7 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
   template: `
     <div class="flex w-full min-w-sm flex-col gap-4">
       <z-progress [value]="value()[0]" />
-      <z-slider [zDefault]="value()" zMin="0" zMax="100" zStep="1" (zSlideIndexChange)="value.set($event)" />
+      <z-slider [zValue]="value()" zMin="0" zMax="100" zStep="1" (zSlideIndexChange)="value.set($event)" />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

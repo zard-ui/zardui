@@ -11,8 +11,9 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
+import { ZardDialogContainerComponent, ZardDialogOptions } from './dialog-container.component';
 import { ZardDialogRef } from './dialog-ref';
-import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
+import { DIALOG_BACKDROP_CLASSES } from './dialog.variants';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 
@@ -67,8 +68,9 @@ export class ZardDialogService {
     return this.overlay.create(
       new OverlayConfig({
         hasBackdrop: true,
-        backdropClass: ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'],
+        backdropClass: DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
+        scrollStrategy: this.overlay.scrollStrategies.block(),
       }),
     );
   }
@@ -82,18 +84,18 @@ export class ZardDialogService {
       ],
     });
 
-    const containerPortal = new ComponentPortal<ZardDialogComponent<T, U>>(
-      ZardDialogComponent,
+    const containerPortal = new ComponentPortal<ZardDialogContainerComponent<T, U>>(
+      ZardDialogContainerComponent,
       config.zViewContainerRef,
       injector,
     );
 
-    return overlayRef.attach<ZardDialogComponent<T, U>>(containerPortal).instance;
+    return overlayRef.attach<ZardDialogContainerComponent<T, U>>(containerPortal).instance;
   }
 
   private attachDialogContent<T, U>(
     componentOrTemplateRef: ContentType<T>,
-    dialogContainer: ZardDialogComponent<T, U>,
+    dialogContainer: ZardDialogContainerComponent<T, U>,
     overlayRef: OverlayRef,
     config: ZardDialogOptions<T, U>,
   ): ZardDialogRef<T> {
@@ -108,7 +110,7 @@ export class ZardDialogService {
     } else if (componentOrTemplateRef != null && typeof componentOrTemplateRef !== 'string') {
       // Guard against a missing `zContent`: without it, `undefined` reaches ComponentPortal and
       // Angular throws NG0919 (DEF_TYPE_UNDEFINED) while creating the component.
-      const injector = this.createInjector<T, U>(dialogRef, config);
+      const injector = this.createInjector<T, U>(dialogRef, config, dialogContainer);
       const contentRef = dialogContainer.attachComponentPortal<T>(
         new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector),
       );
@@ -118,9 +120,15 @@ export class ZardDialogService {
     return dialogRef;
   }
 
-  private createInjector<T, U>(dialogRef: ZardDialogRef<T>, config: ZardDialogOptions<T, U>): Injector {
+  private createInjector<T, U>(
+    dialogRef: ZardDialogRef<T>,
+    config: ZardDialogOptions<T, U>,
+    dialogContainer: ZardDialogContainerComponent<T, U>,
+  ): Injector {
+    // Parented to the container's element injector so the content can reach `ZardDialogHost`
+    // — that is what lets `[z-dialog-close]` work inside service-opened content too.
     return Injector.create({
-      parent: this.injector,
+      parent: dialogContainer.injector,
       providers: [
         { provide: ZardDialogRef, useValue: dialogRef },
         { provide: Z_MODAL_DATA, useValue: config.zData },

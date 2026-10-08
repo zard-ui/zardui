@@ -141,7 +141,7 @@ export class Sidebar14AppSidebarComponent {
     {
       name: 'sidebar-14.component.html',
       path: 'src/components/sidebar-14/sidebar-14.component.html',
-      content: `<z-sidebar-provider>
+      content: `<z-sidebar-provider zDefaultOpen="true">
   <main z-sidebar-inset>
     <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
       <z-breadcrumb>

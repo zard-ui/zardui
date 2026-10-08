@@ -394,6 +394,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/tooltip/demo/tooltip').then(m => m.TOOLTIP),
   },
   {
+    componentName: 'hover-card',
+    description: 'For sighted users to preview content available behind the link.',
+    category: 'Overlays & Dialogs',
+    loadData: () => import('@zard/components/hover-card/demo/hover-card').then(m => m.HOVER_CARD),
+  },
+  {
     componentName: 'aspect-ratio',
     description: 'Displays content within a desired ratio.',
     category: 'Layout & Navigation',

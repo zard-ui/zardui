@@ -243,7 +243,7 @@ export const tableRowVariants = cva(
 );
 
 export const tableHeadVariants = cva(
-  'h-10 px-2 text-left align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
+  'h-10 px-2 text-start align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},
@@ -351,6 +351,8 @@ z-table
 
 ### Footer
 
+Add a `tfoot[z-table-footer]` to render a summary row below the table body.
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
@@ -368,12 +370,13 @@ export interface Invoice {
   imports: [ZardTableImports],
   template: `
     <table z-table>
+      <caption z-table-caption>A list of your recent invoices.</caption>
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head>Invoice</th>
-          <th z-table-head>Status</th>
-          <th z-table-head>Method</th>
-          <th z-table-head class="text-end">Amount</th>
+          <th z-table-head scope="col">Invoice</th>
+          <th z-table-head scope="col">Status</th>
+          <th z-table-head scope="col">Method</th>
+          <th z-table-head scope="col" class="text-end">Amount</th>
         </tr>
       </thead>
       <tbody z-table-body>
@@ -447,7 +450,7 @@ export class ZardDemoTableFooterComponent {
 
 ### Actions
 
-A table showing actions for each row using a `<Dropdown />` component.
+A table showing actions for each row using a `z-dropdown` menu.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -468,12 +471,12 @@ interface Product {
   selector: 'z-demo-table-actions',
   imports: [ZardTableImports, ZardDropdownImports, NgIcon],
   template: `
-    <table z-table>
+    <table z-table aria-label="Products and their actions">
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head>Product</th>
-          <th z-table-head>Price</th>
-          <th z-table-head class="text-right">Actions</th>
+          <th z-table-head scope="col">Product</th>
+          <th z-table-head scope="col">Price</th>
+          <th z-table-head scope="col" class="text-right">Actions</th>
         </tr>
       </thead>
       <tbody z-table-body>
@@ -538,44 +541,142 @@ export class ZardDemoTableActionsComponent {
 }
 ```
 
+### Simple
+
+A minimal table with only a header and body — no footer or row actions.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardTableImports } from '@/shared/components/table/table.imports';
+
+interface Person {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+}
+
+@Component({
+  selector: 'z-demo-table-simple',
+  imports: [ZardTableImports],
+  template: `
+    <table z-table>
+      <caption z-table-caption>A list of registered users.</caption>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head scope="col">Name</th>
+          <th z-table-head scope="col">Age</th>
+          <th z-table-head scope="col">Address</th>
+        </tr>
+      </thead>
+      <tbody z-table-body>
+        @for (data of listOfData; track data.key) {
+          <tr z-table-row>
+            <td z-table-cell class="font-medium">{{ data.name }}</td>
+            <td z-table-cell>{{ data.age }}</td>
+            <td z-table-cell>{{ data.address }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'block w-full overflow-x-auto',
+  },
+})
+export class ZardDemoTableSimpleComponent {
+  listOfData: Person[] = [
+    {
+      key: '1',
+      name: 'John Brown',
+      age: 32,
+      address: 'New York No. 1 Lake Park',
+    },
+    {
+      key: '2',
+      name: 'Jim Green',
+      age: 42,
+      address: 'London No. 1 Lake Park',
+    },
+    {
+      key: '3',
+      name: 'Joe Black',
+      age: 32,
+      address: 'Sidney No. 1 Lake Park',
+    },
+  ];
+}
+```
+
 ## API Reference
 
-### [z-table]
+### table[z-table]
 
-A directive that accepts all properties supported by a native table. It automatically styles all nested table elements without requiring additional directives.
+The table root. Apply the `z-table` attribute to a native `<table>` — it styles nested cells and rows through descendant selectors, and picks up the full set of per-slot styles once you also apply the matching attribute to each native tag: `z-table-header`, `z-table-body`, `z-table-row`, `z-table-head`, `z-table-cell`, `z-table-caption`, `z-table-footer`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zType]` | Table type | `'default' \| 'striped' \| 'bordered'` | `'default'` |
-| `[zSize]` | Table size | `'default' \| 'compact' \| 'comfortable'` | `'default'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zType]` | Visual style of the table | `'default' \| 'striped' \| 'bordered'` | `'default'` |
+| `[zSize]` | Row and cell padding density | `'default' \| 'compact' \| 'comfortable'` | `'default'` |
 
-### [z-table-header]
+### thead[z-table-header]
 
-Applies styles to table header sections.
+The table header section. Apply the attribute to a native `<thead>`.
 
-### [z-table-body]
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
-Applies styles to table body sections.
+### tbody[z-table-body]
 
-### [z-table-row]
+The table body section. Apply the attribute to a native `<tbody>`; its last row renders without a bottom border.
 
-Applies styles to table rows.
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
-### [z-table-head]
+### tr[z-table-row]
 
-Applies styles to table header cells.
+A table row. Apply the attribute to a native `<tr>`; it highlights on hover and when `[data-state="selected"]` is set on the element.
 
-### [z-table-cell]
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
-Applies styles to table data cells.
+### th[z-table-head]
 
-### [z-table-caption]
+A header cell. Apply the attribute to a native `<th>`; set `scope="col"` (or `"row"`) on the element yourself so the table stays accessible.
 
-Applies styles to table captions.
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
-### [z-table-footer]
+### td[z-table-cell]
 
-Applies styles to table footer.
+A data cell. Apply the attribute to a native `<td>`.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+
+### caption[z-table-caption]
+
+The table caption, giving the table an accessible name for screen readers. Apply the attribute to a native `<caption>`.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+
+### tfoot[z-table-footer]
+
+The table footer section, typically a totals row. Apply the attribute to a native `<tfoot>`.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 
