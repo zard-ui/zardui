@@ -60,6 +60,7 @@
 ### Layout & Navigation
 
 - [Accordion](https://zardui.com/docs/components/accordion): A vertically stacked set of interactive headings that each reveal a section of content.
+- [Aspect Ratio](https://zardui.com/docs/components/aspect-ratio): Displays content within a desired ratio.
 - [Breadcrumb](https://zardui.com/docs/components/breadcrumb): Displays the path to the current resource using a hierarchy of links.
 - [Collapsible](https://zardui.com/docs/components/collapsible): An interactive component which expands and collapses a panel.
 - [Navigation Menu](https://zardui.com/docs/components/navigation-menu): A collection of links for navigating websites.

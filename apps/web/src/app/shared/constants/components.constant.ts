@@ -399,4 +399,10 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     category: 'Overlays & Dialogs',
     loadData: () => import('@zard/components/hover-card/demo/hover-card').then(m => m.HOVER_CARD),
   },
+  {
+    componentName: 'aspect-ratio',
+    description: 'Displays content within a desired ratio.',
+    category: 'Layout & Navigation',
+    loadData: () => import('@zard/components/aspect-ratio/demo/aspect-ratio').then(m => m.ASPECT_RATIO),
+  },
 ];

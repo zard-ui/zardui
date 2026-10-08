@@ -456,4 +456,8 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';`,
     templateCode: `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>`,
   },
+  'aspect-ratio': {
+    importCode: `import { ZardAspectRatioComponent } from '@/shared/components/aspect-ratio/aspect-ratio.component';`,
+    templateCode: `<z-aspect-ratio [zRatio]="16 / 9"></z-aspect-ratio>`,
+  },
 };
