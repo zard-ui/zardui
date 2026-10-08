@@ -21,7 +21,7 @@
  * Usage: npx tsx scripts/release-bump.cts [--from <ref>]
  */
 
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 
 import { parseCommit, type ParsedCommit } from './emoji-commit-mapper.cts';
 
@@ -45,18 +45,33 @@ export interface ReleaseCommit {
   body: string;
 }
 
+/** Runs git with its arguments passed as-is, never through a shell, so no ref can inject a command. */
+function git(...args: string[]): string {
+  return execFileSync('git', args, { encoding: 'utf-8' });
+}
+
 /** The newest stable release tag reachable from HEAD. */
 function lastStableReleaseTag(): string | null {
-  const tags = execSync('git tag --merged HEAD --list "v*" --sort=-v:refname', { encoding: 'utf-8' })
+  const tags = git('tag', '--merged', 'HEAD', '--list', 'v*', '--sort=-v:refname')
     .split('\n')
     .map(tag => tag.trim());
 
   return tags.find(tag => STABLE_TAG.test(tag)) ?? null;
 }
 
+/** Fails unless `ref` names an existing commit, so a typo cannot widen the range to the whole history. */
+function assertCommitRef(ref: string): void {
+  if (ref.startsWith('-')) throw new Error(`--from expects a git ref, got "${ref}"`);
+  try {
+    git('rev-parse', '--verify', '--quiet', `${ref}^{commit}`);
+  } catch {
+    throw new Error(`--from "${ref}" is not a commit in this repository`);
+  }
+}
+
 function commitsSince(ref: string | null): ReleaseCommit[] {
   const range = ref ? `${ref}..HEAD` : 'HEAD';
-  const output = execSync(`git log ${range} --no-merges --pretty=format:%s%x1f%b%x1e`, { encoding: 'utf-8' });
+  const output = git('log', range, '--no-merges', '--pretty=format:%s%x1f%b%x1e');
 
   return output
     .split(RECORD)
@@ -83,7 +98,19 @@ export function bumpFor(commits: readonly ReleaseCommit[]): Bump {
 
 if (require.main === module) {
   const fromIndex = process.argv.indexOf('--from');
-  const from = fromIndex > -1 ? process.argv[fromIndex + 1] : lastStableReleaseTag();
+  let from: string | null;
+
+  if (fromIndex > -1) {
+    const value = process.argv[fromIndex + 1];
+    if (!value) {
+      console.error('--from expects a git ref, e.g. --from v1.0.0');
+      process.exit(1);
+    }
+    assertCommitRef(value);
+    from = value;
+  } else {
+    from = lastStableReleaseTag();
+  }
 
   process.stdout.write(bumpFor(commitsSince(from)));
 }
