@@ -12,7 +12,7 @@ on:
         default: false
         type: boolean
       version:
-        description: 'Version bump type'
+        description: 'Version bump type (prerelease cuts the next beta; patch/minor/major cut a stable release)'
         required: false
         default: 'prerelease'
         type: choice
@@ -95,23 +95,62 @@ jobs:
           npx nx run cli:build
           npx nx run mcp:build
 
+      # A manual run uses the bump it was given. A push keeps cutting betas while the
+      # current version is a prerelease, so leaving beta stays a deliberate, manual
+      # step; once a stable version is out, the commits since the last release tag
+      # decide the bump (fix/perf → patch, feat → minor, `!` → major, docs/chore → none).
+      # See scripts/release-bump.cts for why Nx does not compute it itself.
+      - name: Resolve version specifier
+        id: specifier
+        run: |
+          CURRENT=$(node -p "require('./packages/cli/package.json').version")
+          if [ -n "${{ inputs.version }}" ]; then
+            SPECIFIER="${{ inputs.version }}"
+          elif [[ "$CURRENT" == *"-"* ]]; then
+            SPECIFIER="prerelease"
+          else
+            SPECIFIER=$(npx tsx scripts/release-bump.cts)
+          fi
+          if [ "$SPECIFIER" = "prerelease" ]; then PREID="--preid=beta"; else PREID=""; fi
+          {
+            echo "current=$CURRENT"
+            echo "specifier=$SPECIFIER"
+            echo "preid=$PREID"
+          } >> "$GITHUB_OUTPUT"
+          echo "📦 Current version: $CURRENT — bump: $SPECIFIER"
+
       - name: Release (Dry Run)
-        if: ${{ inputs.dry_run == true }}
-        run: npx nx release ${{ inputs.version || 'prerelease' }} --preid=beta ${{ inputs.first_release == true && '--first-release' || '' }} --skip-publish --dry-run
+        if: ${{ inputs.dry_run == true && steps.specifier.outputs.specifier != 'none' }}
+        run: npx nx release ${{ steps.specifier.outputs.specifier }} ${{ steps.specifier.outputs.preid }} ${{ inputs.first_release == true && '--first-release' || '' }} --skip-publish --dry-run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release Version
-        if: ${{ inputs.dry_run != true }}
-        run: npx nx release version ${{ inputs.version || 'prerelease' }} --preid=beta ${{ inputs.first_release == true && '--first-release' || '' }} --git-commit=false --git-tag=false
+        if: ${{ inputs.dry_run != true && steps.specifier.outputs.specifier != 'none' }}
+        run: npx nx release version ${{ steps.specifier.outputs.specifier }} ${{ steps.specifier.outputs.preid }} ${{ inputs.first_release == true && '--first-release' || '' }} --git-commit=false --git-tag=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Conventional commits can ask for no bump at all (only docs, chores, CI).
+      # Then there is nothing to publish, and every step below is skipped.
+      - name: Check for a new version
+        id: release
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          if [ "$VERSION" = "${{ steps.specifier.outputs.current }}" ]; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "ℹ️ No releasable commits since v$VERSION — nothing to publish."
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            echo "🔖 New version: $VERSION"
+          fi
 
       - name: Build Registry
         run: npm run build:registry
 
       - name: Release Changelog
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' }}
         run: |
           VERSION=$(node -p "require('./packages/cli/package.json').version")
           npx nx release changelog $VERSION ${{ inputs.first_release == true && '--first-release' || '' }} --git-commit=false --git-tag=false
@@ -119,7 +158,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit and Tag Release
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' }}
         run: |
           VERSION=$(node -p "require('./packages/cli/package.json').version")
           git add -A
@@ -127,11 +166,11 @@ jobs:
           git tag -a "v${VERSION}" -m "v${VERSION}"
 
       - name: Rebuild CLI for Publish
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' }}
         run: npx nx run cli:build
 
       - name: Publish to npm
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' }}
         run: |
           VERSION=$(node -p "require('./packages/cli/package.json').version")
           if [[ "$VERSION" == *"-"* ]]; then
@@ -142,11 +181,11 @@ jobs:
           cd packages/cli/dist && npm publish --provenance --access public --tag $TAG
 
       - name: Push changes
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' }}
         run: git push --follow-tags
 
       - name: Create GitHub Release
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' }}
         run: |
           VERSION=$(node -p "require('./packages/cli/package.json').version")
           gh release create "v${VERSION}" --title "v${VERSION}" --generate-notes --latest
@@ -154,7 +193,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Notify Discord
-        if: ${{ inputs.dry_run != true && success() }}
+        if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' && success() }}
         run: |
           if [ -z "$DEPLOY_WEBHOOK_URL" ]; then
             echo "⚠️ DEPLOY_WEBHOOK_URL not configured, skipping notification"

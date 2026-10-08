@@ -71,8 +71,10 @@ if (!existsSync(entry)) throw new Error(`tsc produced no ${entry}`);
 writeFileSync(entry, `#!/usr/bin/env node\n${readFileSync(entry, 'utf8')}`);
 chmodSync(entry, 0o755);
 
-// 4. the manifest the published package carries.
+// 4. the manifest and the README the published package carries; npm shows the
+//    README on the package page, and it has to sit next to the manifest it ships with.
 copyFileSync(join(MCP, args.package), join(DIST, 'package.json'));
+copyFileSync(join(MCP, 'README.md'), join(DIST, 'README.md'));
 
 // 5. in dev mode, register the binary globally.
 if (args.link) execSync('npm link', { cwd: DIST, stdio: 'inherit' });

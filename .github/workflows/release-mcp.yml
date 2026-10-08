@@ -9,11 +9,12 @@ on:
         default: false
         type: boolean
       version:
-        description: 'Version bump type'
+        description: 'Version bump type (none publishes the version already in packages/mcp/package.json)'
         required: false
         default: 'prerelease'
         type: choice
         options:
+          - none
           - prerelease
           - patch
           - minor
@@ -65,7 +66,9 @@ jobs:
           BUMP_TYPE="${{ inputs.version }}"
           cd packages/mcp
 
-          if [ "$BUMP_TYPE" = "prerelease" ]; then
+          if [ "$BUMP_TYPE" = "none" ]; then
+            echo "Keeping the version set in package.json"
+          elif [ "$BUMP_TYPE" = "prerelease" ]; then
             npm version prerelease --preid=alpha --no-git-tag-version
           else
             npm version "$BUMP_TYPE" --no-git-tag-version
@@ -91,7 +94,8 @@ jobs:
         run: |
           VERSION=${{ steps.bump.outputs.version }}
           git add packages/mcp/package.json
-          git commit -m "🔖 chore(release): publish mcp v${VERSION} [skip ci]"
+          # With `none` the version was set by hand and is already committed.
+          git diff --cached --quiet || git commit -m "🔖 chore(release): publish mcp v${VERSION} [skip ci]"
           git tag -a "mcp-v${VERSION}" -m "mcp-v${VERSION}"
 
       - name: Publish to npm

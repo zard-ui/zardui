@@ -80,7 +80,7 @@ args = ["-y", "zard-mcp"]
   "mcpServers": {
     "zard-ui": {
       "command": "npx",
-      "args": ["-y", "zard-mcp@1.0.0"]
+      "args": ["-y", "zard-mcp@1.0.2"]
     }
   }
 }
