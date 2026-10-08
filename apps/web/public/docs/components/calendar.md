@@ -1211,7 +1211,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
           [zDisabled]="isPreviousDisabled()"
           [attr.aria-label]="labels().previousMonth"
         >
-          <ng-icon name="lucideChevronLeft" class="size-4!" />
+          <ng-icon name="lucideChevronLeft" class="size-4! rtl:rotate-180" />
         </button>
       } @else {
         <div [class]="navSpacerClasses()" aria-hidden="true"></div>
@@ -1227,7 +1227,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
           [zDisabled]="isNextDisabled()"
           [attr.aria-label]="labels().nextMonth"
         >
-          <ng-icon name="lucideChevronRight" class="size-4!" />
+          <ng-icon name="lucideChevronRight" class="size-4! rtl:rotate-180" />
         </button>
       } @else {
         <div [class]="navSpacerClasses()" aria-hidden="true"></div>

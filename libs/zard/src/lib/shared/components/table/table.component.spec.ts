@@ -133,7 +133,7 @@ describe('TableComponents', () => {
       expect(screen.getByRole('columnheader', { name: 'Invoice' })).toHaveClass(
         'h-10',
         'px-2',
-        'text-left',
+        'text-start',
         'align-middle',
         'font-medium',
       );

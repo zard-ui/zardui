@@ -24,6 +24,7 @@ npx zard-cli@latest add carousel
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -35,6 +36,7 @@ import {
   viewChild,
   type InputSignal,
   type Signal,
+  inject,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -139,6 +141,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);
+  // Directionality instead of getComputedStyle: it is a signal, so Embla follows a change of `dir`,
+  // and it exists during SSR, where reading computed styles throws.
+  private readonly directionality = inject(Directionality);
 
   readonly class = input<ClassValue>('');
   readonly zOptions: InputSignal<EmblaOptionsType> = input<EmblaOptionsType>({ loop: false });
@@ -156,6 +161,7 @@ export class ZardCarouselComponent {
   protected readonly options: Signal<EmblaOptionsType> = computed(() => ({
     ...this.zOptions(),
     axis: this.zOrientation() === 'horizontal' ? 'x' : 'y',
+    direction: this.directionality.valueSignal(),
   }));
 
   protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
@@ -243,7 +249,7 @@ export const carouselVariants = cva('overflow-hidden', {
 export const carouselContentVariants = cva('flex', {
   variants: {
     zOrientation: {
-      horizontal: '-ml-4',
+      horizontal: '-ms-4',
       vertical: '-mt-4 flex-col',
     },
   },
@@ -255,7 +261,7 @@ export const carouselContentVariants = cva('flex', {
 export const carouselItemVariants = cva('min-w-0 shrink-0 grow-0 basis-full', {
   variants: {
     zOrientation: {
-      horizontal: 'pl-4',
+      horizontal: 'ps-4',
       vertical: 'pt-4',
     },
   },
@@ -267,7 +273,7 @@ export const carouselItemVariants = cva('min-w-0 shrink-0 grow-0 basis-full', {
 export const carouselPreviousButtonVariants = cva('absolute size-8 touch-manipulation rounded-full px-0', {
   variants: {
     zOrientation: {
-      horizontal: 'top-1/2 -left-12 -translate-y-1/2',
+      horizontal: 'top-1/2 ltr:-left-12 rtl:-right-12 -translate-y-1/2 rtl:rotate-180',
       vertical: '-top-12 left-1/2 -translate-x-1/2 rotate-90',
     },
   },
@@ -279,7 +285,7 @@ export const carouselPreviousButtonVariants = cva('absolute size-8 touch-manipul
 export const carouselNextButtonVariants = cva('absolute size-8 touch-manipulation rounded-full px-0', {
   variants: {
     zOrientation: {
-      horizontal: 'top-1/2 -right-12 -translate-y-1/2',
+      horizontal: 'top-1/2 ltr:-right-12 rtl:-left-12 -translate-y-1/2 rtl:rotate-180',
       vertical: '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
     },
   },

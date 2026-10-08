@@ -730,7 +730,7 @@ export const DIALOG_DURATION = 100;
         z-button
         zType="ghost"
         zSize="icon-sm"
-        class="absolute top-2 right-2"
+        class="absolute top-2 ltr:right-2 rtl:left-2"
         (click)="closeRequested.emit()"
       >
         <ng-icon name="lucideX" class="size-4!" />

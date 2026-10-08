@@ -1,3 +1,15 @@
+## 1.0.0-beta.128 (2026-10-08)
+
+### 🐛 Bug Fixes
+
+- add rtl support across components ([#746](https://github.com/zard-ui/zardui/pull/746))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+- Roman Mykhailiuk @JustDo1t90
+- Seyed Sadeq Shobeiry @shobeiry
+
 ## 1.0.0-beta.127 (2026-10-07)
 
 ### ✨ Features

@@ -195,7 +195,7 @@ export const bubbleContentVariants = cva(
   mergeClasses(
     'w-fit min-w-0 max-w-full overflow-hidden rounded-3xl border border-transparent px-3 py-2.5 text-sm/relaxed wrap-break-word',
     'group-data-[align=end]/bubble:self-end',
-    '[button]:text-left [button,a]:transition-colors [button,a]:outline-none',
+    '[button]:text-start [button,a]:transition-colors [button,a]:outline-none',
     '[button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-3 [button,a]:focus-visible:ring-ring/30',
   ),
 );
@@ -209,8 +209,8 @@ export const bubbleReactionsVariants = cva(
         bottom: 'bottom-0 translate-y-3/4',
       },
       zAlign: {
-        start: 'left-3',
-        end: 'right-3',
+        start: 'ltr:left-3 rtl:right-3',
+        end: 'ltr:right-3 rtl:left-3',
       },
     },
     defaultVariants: {

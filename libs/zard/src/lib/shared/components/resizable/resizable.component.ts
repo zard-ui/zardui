@@ -164,7 +164,12 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const currentPosition = this.getEventPosition(event);
     const delta = currentPosition - startPosition;
     const containerSize = this.getContainerSize();
-    const deltaPercentage = (delta / containerSize) * 100;
+    const isRtl = getComputedStyle(this.elementRef.nativeElement).direction === 'rtl';
+    let deltaPercentage = (delta / containerSize) * 100;
+
+    if (this.zLayout() !== 'vertical' && isRtl) {
+      deltaPercentage *= -1;
+    }
 
     const newSizes = [...startSizes];
     const panels = this.panels();
