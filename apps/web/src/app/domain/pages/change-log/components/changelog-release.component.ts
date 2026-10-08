@@ -85,11 +85,15 @@ export class ChangelogReleaseComponent {
 
   protected readonly playing = signal(false);
 
-  /** Out of the way while the clip plays; always visible once it is paused, so it can be resumed. */
+  /**
+   * Out of the way while the clip plays, on devices that can hover to reveal it;
+   * always visible on touch-only devices, which have no hover, and whenever the
+   * clip is paused, so it can be resumed.
+   */
   protected readonly toggleClasses = computed(
     () =>
       `absolute right-3 bottom-3 shadow-sm transition-opacity focus-visible:opacity-100 group-hover:opacity-100 ${
-        this.playing() ? 'opacity-0' : 'opacity-100'
+        this.playing() ? 'opacity-0 [@media(hover:none)]:opacity-100' : 'opacity-100'
       }`,
   );
 
