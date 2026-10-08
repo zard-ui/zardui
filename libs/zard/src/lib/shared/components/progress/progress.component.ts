@@ -1,12 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  ElementRef,
-  inject,
-  input,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Directionality } from '@angular/cdk/bidi';
+import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -36,7 +29,7 @@ import { progressVariants } from './progress.variants';
   exportAs: 'zProgress',
 })
 export class ZardProgressComponent {
-  private readonly elementRef = inject(ElementRef);
+  private readonly directionality = inject(Directionality);
   readonly value = input(0);
   readonly class = input<ClassValue>('');
 
@@ -51,13 +44,11 @@ export class ZardProgressComponent {
     return v;
   });
 
+  /** The indicator slides in from the start edge: from the left in LTR, from the right in RTL. */
   protected readonly indicatorTransform = computed(() => {
-    const dir = getComputedStyle(this.elementRef.nativeElement).direction;
-    let progress = 100 - this.clampedValue();
-    if (dir !== 'rtl') {
-      progress *= -1;
-    }
-    return `translateX(${progress}%)`;
+    const remaining = 100 - this.clampedValue();
+
+    return this.directionality.valueSignal() === 'rtl' ? `translateX(${remaining}%)` : `translateX(-${remaining}%)`;
   });
 
   protected readonly classes = computed(() => mergeClasses(progressVariants(), this.class()));

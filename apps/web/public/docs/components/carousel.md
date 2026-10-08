@@ -24,6 +24,7 @@ npx zard-cli@latest add carousel
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -36,7 +37,6 @@ import {
   type InputSignal,
   type Signal,
   inject,
-  ElementRef,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -141,7 +141,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);
-  private readonly elementRef = inject(ElementRef);
+  // Directionality instead of getComputedStyle: it is a signal, so Embla follows a change of `dir`,
+  // and it exists during SSR, where reading computed styles throws.
+  private readonly directionality = inject(Directionality);
 
   readonly class = input<ClassValue>('');
   readonly zOptions: InputSignal<EmblaOptionsType> = input<EmblaOptionsType>({ loop: false });
@@ -159,7 +161,7 @@ export class ZardCarouselComponent {
   protected readonly options: Signal<EmblaOptionsType> = computed(() => ({
     ...this.zOptions(),
     axis: this.zOrientation() === 'horizontal' ? 'x' : 'y',
-    direction: getComputedStyle(this.elementRef.nativeElement).direction === 'rtl' ? 'rtl' : 'ltr',
+    direction: this.directionality.valueSignal(),
   }));
 
   protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
