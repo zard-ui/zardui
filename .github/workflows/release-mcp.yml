@@ -108,9 +108,10 @@ jobs:
             TAG="latest"
           fi
           echo "📤 Publishing zard-mcp@${VERSION} with tag ${TAG}"
+          # Trusted publishing (OIDC), like the CLI in release.yml: the job's id-token
+          # authenticates to npm, so no NPM_TOKEN secret is needed. Requires zard-mcp to
+          # list this workflow (release-mcp.yml) as its trusted publisher on npmjs.com.
           cd packages/mcp/dist && npm publish --provenance --access public --tag $TAG
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Push changes
         if: ${{ inputs.dry_run != true }}
