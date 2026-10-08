@@ -1165,7 +1165,8 @@
       "name": "attachment",
       "type": "registry:component",
       "registryDependencies": [
-        "button"
+        "button",
+        "utilities"
       ],
       "icons": {
         "family": "lucide",
