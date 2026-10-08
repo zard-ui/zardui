@@ -10,6 +10,7 @@ Here you can find all the components available in the library. We are working on
 - [Accordion](/docs/components/accordion)
 - [Alert](/docs/components/alert)
 - [Alert Dialog](/docs/components/alert-dialog)
+- [Attachment](/docs/components/attachment)
 - [Avatar](/docs/components/avatar)
 - [Badge](/docs/components/badge)
 - [Breadcrumb](/docs/components/breadcrumb)

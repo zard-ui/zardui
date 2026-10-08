@@ -1615,4 +1615,14 @@ export const registry: ComponentRegistry[] = [
       },
     ],
   },
+  {
+    name: 'attachment',
+    registryDependencies: ['button'],
+    files: [
+      { name: 'attachment.component.ts', content: '' },
+      { name: 'attachment.variants.ts', content: '' },
+      { name: 'attachment.imports.ts', content: '' },
+      { name: 'index.ts', content: '' },
+    ],
+  },
 ];

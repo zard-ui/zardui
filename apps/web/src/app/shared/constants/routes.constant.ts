@@ -149,6 +149,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Message', path: '/docs/components/message', available: true },
     { name: 'Marker', path: '/docs/components/marker', available: true },
     { name: 'Aspect Ratio', path: '/docs/components/aspect-ratio', available: true },
+    { name: 'Attachment', path: '/docs/components/attachment', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 

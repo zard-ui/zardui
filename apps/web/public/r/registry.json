@@ -1160,6 +1160,28 @@
         "aspect-ratio.variants.ts",
         "index.ts"
       ]
+    },
+    {
+      "name": "attachment",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideLoaderCircle"
+        ],
+        "tokens": [
+          "loader-circle"
+        ]
+      },
+      "files": [
+        "attachment.component.ts",
+        "attachment.variants.ts",
+        "attachment.imports.ts",
+        "index.ts"
+      ]
     }
   ]
 }

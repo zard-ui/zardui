@@ -460,4 +460,19 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardAspectRatioComponent } from '@/shared/components/aspect-ratio/aspect-ratio.component';`,
     templateCode: `<z-aspect-ratio [zRatio]="16 / 9"></z-aspect-ratio>`,
   },
+  attachment: {
+    importCode: `import { ZardAttachmentImports } from '@/shared/components/attachment/attachment.imports';`,
+    templateCode: `<z-attachment>
+  <z-attachment-media><ng-icon name="lucideFileText" /></z-attachment-media>
+  <z-attachment-content>
+    <z-attachment-title>report.pdf</z-attachment-title>
+    <z-attachment-description>PDF · 1.2 MB</z-attachment-description>
+  </z-attachment-content>
+  <z-attachment-actions>
+    <button z-attachment-action aria-label="Remove report.pdf">
+      <ng-icon name="lucideX" />
+    </button>
+  </z-attachment-actions>
+</z-attachment>`,
+  },
 };

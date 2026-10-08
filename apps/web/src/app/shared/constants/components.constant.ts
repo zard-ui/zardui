@@ -405,4 +405,10 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     category: 'Layout & Navigation',
     loadData: () => import('@zard/components/aspect-ratio/demo/aspect-ratio').then(m => m.ASPECT_RATIO),
   },
+  {
+    componentName: 'attachment',
+    description: 'Composable file and image attachment',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/attachment/demo/attachment').then(m => m.ATTACHMENT),
+  },
 ];
