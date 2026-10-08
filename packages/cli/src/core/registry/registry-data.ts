@@ -1598,4 +1598,21 @@ export const registry: ComponentRegistry[] = [
       },
     ],
   },
+  {
+    name: 'aspect-ratio',
+    files: [
+      {
+        name: 'aspect-ratio.component.ts',
+        content: '',
+      },
+      {
+        name: 'aspect-ratio.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
 ];

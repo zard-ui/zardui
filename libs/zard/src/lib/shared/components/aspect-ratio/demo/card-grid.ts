@@ -17,7 +17,6 @@ interface GridCard {
 
 @Component({
   selector: 'z-demo-aspect-ratio-card-grid',
-  standalone: true,
   imports: [
     ZardAspectRatioComponent,
     ZardCardComponent,

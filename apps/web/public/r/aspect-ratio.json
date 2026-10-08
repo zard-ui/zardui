@@ -1,0 +1,28 @@
+{
+  "$schema": "https://zardui.com/schema/registry-item.json",
+  "name": "aspect-ratio",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "aspect-ratio.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\nimport { aspectRatioVariants } from './aspect-ratio.variants';\n\n@Component({\n  selector: 'z-aspect-ratio, [z-aspect-ratio]',\n  template: `\n    <ng-content />\n  `,\n  styles: `\n    :host {\n      display: block;\n    }\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    '[attr.data-slot]': '\"aspect-ratio\"',\n    '[style.aspectRatio]': 'zRatio()',\n    '[class]': 'classes()',\n  },\n  exportAs: 'zAspectRatio',\n})\nexport class ZardAspectRatioComponent {\n  readonly zRatio = input<number | string>(1);\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() => mergeClasses(aspectRatioVariants(), this.class()));\n}\n"
+    },
+    {
+      "name": "aspect-ratio.variants.ts",
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const aspectRatioVariants = cva('block');\nexport type ZardAspectRatioVariants = VariantProps<typeof aspectRatioVariants>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './aspect-ratio.component';\nexport * from './aspect-ratio.variants';\n"
+    }
+  ],
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
+    }
+  }
+}

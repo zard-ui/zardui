@@ -4,7 +4,6 @@ import { ZardAspectRatioComponent } from '../aspect-ratio.component';
 
 @Component({
   selector: 'z-demo-aspect-ratio-image',
-  standalone: true,
   imports: [ZardAspectRatioComponent],
   template: `
     <div z-aspect-ratio [zRatio]="16 / 9" class="w-full overflow-hidden rounded-lg md:w-94">
