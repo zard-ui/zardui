@@ -160,7 +160,7 @@ Whatever the registry serves ends up in the model's context, so trust a custom r
   "mcpServers": {
     "zard-ui": {
       "command": "npx",
-      "args": ["-y", "zard-mcp@1.0.0"]
+      "args": ["-y", "zard-mcp@1.0.2"]
     }
   }
 }
