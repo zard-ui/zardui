@@ -87,6 +87,8 @@ npx zard-cli add --all             # everything
 
 ## Project types
 
+The project type decides where the components live and what `init` configures. The paths below are the usual defaults: `init` derives the real ones from the project you pick, so an app outside the workspace root, or an Angular workspace that keeps its paths in `tsconfig.base.json`, gets those instead. Each path is also shown as an editable suggestion before anything is written.
+
 | Type              | Tailwind                               | TypeScript paths     | Providers                          |
 | ----------------- | -------------------------------------- | -------------------- | ---------------------------------- |
 | `angular`         | `.postcssrc.json` at the root          | `tsconfig.json`      | `src/app/app.config.ts`            |
