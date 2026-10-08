@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.128",
+  "version": "1.0.0-beta.130",
   "items": [
     {
       "name": "core",
@@ -1144,6 +1144,20 @@
         "chart-tooltip.formatter.ts",
         "chart-legend.component.ts",
         "chart.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "aspect-ratio",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "aspect-ratio.component.ts",
+        "aspect-ratio.variants.ts",
         "index.ts"
       ]
     },

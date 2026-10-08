@@ -1,3 +1,25 @@
+## 1.0.0-beta.130 (2026-10-08)
+
+### ✨ Features
+
+- **aspect-ratio:** add the aspect-ratio component ([#748](https://github.com/zard-ui/zardui/pull/748))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+- wajrock
+
+## 1.0.0-beta.129 (2026-10-08)
+
+### ✨ Features
+
+- **i18n:** implement DI-first localization for calendar and date-picker ([#745](https://github.com/zard-ui/zardui/pull/745))
+
+### ❤️ Thank You
+
+- JustDo1t90
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.128 (2026-10-08)
 
 ### 🐛 Bug Fixes
