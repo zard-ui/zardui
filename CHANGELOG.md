@@ -1,3 +1,310 @@
+# 1.0.0 (2026-10-08)
+
+### ✨ Features
+
+- implemeting style theme at the library (20) ([5eea7374](https://github.com/zard-ui/zardui/commit/5eea7374))
+- add button component ([2028c954](https://github.com/zard-ui/zardui/commit/2028c954))
+- create dynamic documentation ([968311e3](https://github.com/zard-ui/zardui/commit/968311e3))
+- add card component documentation and examples ([0d5cff9a](https://github.com/zard-ui/zardui/commit/0d5cff9a))
+- enhance layout and scrolling behavior in the application ([3394f78d](https://github.com/zard-ui/zardui/commit/3394f78d))
+- add checkbox component ([c0aa8903](https://github.com/zard-ui/zardui/commit/c0aa8903))
+- defining icon and font-family patterns ([beca0bd2](https://github.com/zard-ui/zardui/commit/beca0bd2))
+- upgrading dynamic documentation ([f545631d](https://github.com/zard-ui/zardui/commit/f545631d))
+- updating checkbox disabled to use input signals ([c17166cc](https://github.com/zard-ui/zardui/commit/c17166cc))
+- add disabled state support for checkbox component ([91912b41](https://github.com/zard-ui/zardui/commit/91912b41))
+- enhance checkbox component with improved accessibility and styling ([672f9cba](https://github.com/zard-ui/zardui/commit/672f9cba))
+- update footer text to enhance branding and open source visibility ([3495f1a8](https://github.com/zard-ui/zardui/commit/3495f1a8))
+- adding firebase deploy configuration on the app ([4701c32d](https://github.com/zard-ui/zardui/commit/4701c32d))
+- add badge component documentation and demos ([#39](https://github.com/zard-ui/zardui/pull/39))
+- adding environment variables on the doc ([bf2b55a9](https://github.com/zard-ui/zardui/commit/bf2b55a9))
+- updating layout components for be dynamic ([60211718](https://github.com/zard-ui/zardui/commit/60211718))
+- updating home sections for the project alpha ([6b196c2d](https://github.com/zard-ui/zardui/commit/6b196c2d))
+- (doc) add banner component ([33182b48](https://github.com/zard-ui/zardui/commit/33182b48))
+- add switch component ([#46](https://github.com/zard-ui/zardui/pull/46), [#49](https://github.com/zard-ui/zardui/issues/49))
+- adding dropdown component ([#59](https://github.com/zard-ui/zardui/pull/59))
+- update accordion component availability to true ([05480e42](https://github.com/zard-ui/zardui/commit/05480e42))
+- change default component from 'alert' to 'accordion' ([ca0a826b](https://github.com/zard-ui/zardui/commit/ca0a826b))
+- updating design and adding new plugins from prism.js ([1b6f6ded](https://github.com/zard-ui/zardui/commit/1b6f6ded))
+- doc mobile nav (improvised) ([e724fb9b](https://github.com/zard-ui/zardui/commit/e724fb9b))
+- adding new plugins and expand feature in markdown component ([54cc49c0](https://github.com/zard-ui/zardui/commit/54cc49c0))
+- add dialog component ([#89](https://github.com/zard-ui/zardui/pull/89))
+- add breadcrumb component ([#95](https://github.com/zard-ui/zardui/pull/95))
+- updating dev pipeline credentials params ([1c937164](https://github.com/zard-ui/zardui/commit/1c937164))
+- updating project social medias ([64ad0359](https://github.com/zard-ui/zardui/commit/64ad0359))
+- add progress bar component ([b5611195](https://github.com/zard-ui/zardui/commit/b5611195))
+- add menu component ([#197](https://github.com/zard-ui/zardui/pull/197))
+- creating the change.log page ([#232](https://github.com/zard-ui/zardui/pull/232))
+- add cli support to multi-runners ([#234](https://github.com/zard-ui/zardui/pull/234))
+- add theme selection for the cli ([#235](https://github.com/zard-ui/zardui/pull/235))
+- auto-detect prerelease versions and increment beta number ([2a5ddce9](https://github.com/zard-ui/zardui/commit/2a5ddce9))
+- adding ssr support to the documentation ([0c99875c](https://github.com/zard-ui/zardui/commit/0c99875c))
+- adding apphosting.yaml configuration to firebase app hosting ([1aff2f2b](https://github.com/zard-ui/zardui/commit/1aff2f2b))
+- adding dynamic meta tags for doc pages ([#266](https://github.com/zard-ui/zardui/pull/266))
+- updating doc style and fixing import bugs ([#302](https://github.com/zard-ui/zardui/pull/302))
+- adding preset, dark mode service improvements, prevent SSR flickering ([#384](https://github.com/zard-ui/zardui/pull/384))
+- ⚠️  pre-release docs review, declarative overlays and v1 polish ([#741](https://github.com/zard-ui/zardui/pull/741))
+- ⚠️  land the rest of the pre-release upgrade missing from #741 ([#742](https://github.com/zard-ui/zardui/pull/742), [#741](https://github.com/zard-ui/zardui/issues/741))
+- **CLI:** improving CLI to support index.html update and adding appearance service to support theme switching ([#369](https://github.com/zard-ui/zardui/pull/369))
+- **about:** redesign founders and maintainers cards ([#458](https://github.com/zard-ui/zardui/pull/458))
+- **about:** add sponsors section and rework credits hierarchy ([#672](https://github.com/zard-ui/zardui/pull/672))
+- **alert:** add alert component ([#53](https://github.com/zard-ui/zardui/pull/53))
+- **aspect-ratio:** add the aspect-ratio component ([#748](https://github.com/zard-ui/zardui/pull/748))
+- **attachment:** add file and image attachment component ([#747](https://github.com/zard-ui/zardui/pull/747))
+- **bubble:** add bubble component ([#708](https://github.com/zard-ui/zardui/pull/708))
+- **button-group:** add button group component ([#308](https://github.com/zard-ui/zardui/pull/308))
+- **calendar:** expand the year range using the min and max date validators ([#355](https://github.com/zard-ui/zardui/pull/355))
+- **card:** add header and body components ([#41](https://github.com/zard-ui/zardui/pull/41))
+- **carousel:** carousel component #61 ([#61](https://github.com/zard-ui/zardui/issues/61))
+- **chart:** chart component built on Apache ECharts ([#695](https://github.com/zard-ui/zardui/pull/695))
+- **cli:** traverse parent dirs for package.json and warn on deprecated name ([9fbd1a75](https://github.com/zard-ui/zardui/commit/9fbd1a75))
+- **context-menu:** adding context menu directive ([#381](https://github.com/zard-ui/zardui/pull/381))
+- **context-menu:** add context menu component ([#713](https://github.com/zard-ui/zardui/pull/713))
+- **core:** event manager plugins with CLI update ([#348](https://github.com/zard-ui/zardui/pull/348))
+- **divider:** add divider component ([#78](https://github.com/zard-ui/zardui/pull/78))
+- **drawer:** add drawer component with swipe and snap points ([#709](https://github.com/zard-ui/zardui/pull/709))
+- **empty:** add empty component ([#224](https://github.com/zard-ui/zardui/pull/224))
+- **generators:** add Nx component scaffold generator ([#457](https://github.com/zard-ui/zardui/pull/457))
+- **generators:** add block scaffold generator and sync script ([#459](https://github.com/zard-ui/zardui/pull/459))
+- **i18n:** implement DI-first localization for calendar and date-picker ([#745](https://github.com/zard-ui/zardui/pull/745))
+- **icons:** adding dark mode icon to Zard icons ([#371](https://github.com/zard-ui/zardui/pull/371))
+- **input:** create input and textarea components ([cd5b180e](https://github.com/zard-ui/zardui/commit/cd5b180e))
+- **input-group:** add input-group component ([#212](https://github.com/zard-ui/zardui/pull/212))
+- **layout:** add layout component system with header, footer, sidebar, and content ([#240](https://github.com/zard-ui/zardui/pull/240))
+- **loader:** add loader component ([#50](https://github.com/zard-ui/zardui/pull/50))
+- **marker:** add marker component ([#716](https://github.com/zard-ui/zardui/pull/716))
+- **mcp:** fuzzy search, did-you-mean errors, annotations, instructions ([#728](https://github.com/zard-ui/zardui/pull/728))
+- **message:** add message component ([#714](https://github.com/zard-ui/zardui/pull/714))
+- **radio:** add radio component ([#51](https://github.com/zard-ui/zardui/pull/51))
+- **registry:** let components depend on the utilities stylesheet ([#749](https://github.com/zard-ui/zardui/pull/749))
+- **release:** implement automated semantic versioning and release system ([#263](https://github.com/zard-ui/zardui/pull/263))
+- **select:** add multi-select mode for select component ([#285](https://github.com/zard-ui/zardui/pull/285))
+- **select:** internal compact mode and correct element width calculation ([#352](https://github.com/zard-ui/zardui/pull/352))
+- **sheet:** add sheet component ([#220](https://github.com/zard-ui/zardui/pull/220))
+- **sidebar:** documentation sidebar should scroll to active component ([#339](https://github.com/zard-ui/zardui/pull/339))
+- **sidebar:** align the sidebar blocks with shadcn, add dashboard-01 and rebuild the block viewer ([#715](https://github.com/zard-ui/zardui/pull/715))
+- **theme-generator:** customize zard/ui theme ([#380](https://github.com/zard-ui/zardui/pull/380))
+- **tooltip:** create tooltip component ([#69](https://github.com/zard-ui/zardui/pull/69))
+- **tree:** add tree component ([#449](https://github.com/zard-ui/zardui/pull/449))
+- **typeset:** a styling system for HTML and rendered markdown ([#720](https://github.com/zard-ui/zardui/pull/720))
+- **ui:** migrate icon component from lucide-angular to ng-icons ([#482](https://github.com/zard-ui/zardui/pull/482))
+- **utils:** add the scroll-fade and shimmer CSS utilities ([#721](https://github.com/zard-ui/zardui/pull/721))
+- **web:** enhance landing page hero interactions ([#475](https://github.com/zard-ui/zardui/pull/475))
+- **web:** sidebar sections, the zard skill, and two new pages ([#712](https://github.com/zard-ui/zardui/pull/712))
+- **web:** rebuild the landing with a wall of product cards ([#722](https://github.com/zard-ui/zardui/pull/722))
+
+### 🐛 Bug Fixes
+
+- just to release the v0.0.2 ([035a6402](https://github.com/zard-ui/zardui/commit/035a6402))
+- trying to release v0.0.2 ([4243c117](https://github.com/zard-ui/zardui/commit/4243c117))
+- test ([824600c7](https://github.com/zard-ui/zardui/commit/824600c7))
+- change package name ([bf60a991](https://github.com/zard-ui/zardui/commit/bf60a991))
+- try to release a version by CI ([2fa26a3f](https://github.com/zard-ui/zardui/commit/2fa26a3f))
+- try to release a version by CI ([ec3a1448](https://github.com/zard-ui/zardui/commit/ec3a1448))
+- changing the icons pattern entire application ([7fc1d0d4](https://github.com/zard-ui/zardui/commit/7fc1d0d4))
+- enhance accessibility for checkbox ([f68a14e2](https://github.com/zard-ui/zardui/commit/f68a14e2))
+- dynamic anchor component with enhanced scrolling behavior ([09cbd1d9](https://github.com/zard-ui/zardui/commit/09cbd1d9))
+- destructive button color on dark mode ([c70a0a15](https://github.com/zard-ui/zardui/commit/c70a0a15))
+- removing z-icon import ([1beae3e2](https://github.com/zard-ui/zardui/commit/1beae3e2))
+- fixing automatic deploy to dev ([d1a6628c](https://github.com/zard-ui/zardui/commit/d1a6628c))
+- fixing automatic deploy to dev ([#38](https://github.com/zard-ui/zardui/pull/38))
+- production flag ([14b225c6](https://github.com/zard-ui/zardui/commit/14b225c6))
+- updating discord invite url ([f38e0daf](https://github.com/zard-ui/zardui/commit/f38e0daf))
+- updating dev pipeline with new google credentials ([f3766f84](https://github.com/zard-ui/zardui/commit/f3766f84))
+- merging conflicts ([8a359bfd](https://github.com/zard-ui/zardui/commit/8a359bfd))
+- updating pipelines for all environments with node 20 ([74653edc](https://github.com/zard-ui/zardui/commit/74653edc))
+- Dialog import ([bf0a7293](https://github.com/zard-ui/zardui/commit/bf0a7293))
+- merge state signals to prevent de-sync ([#198](https://github.com/zard-ui/zardui/pull/198))
+- dropdown-trigger and tooltip.ts with wrong access-modifier ([#236](https://github.com/zard-ui/zardui/pull/236))
+- github username in funding.yml ([b0d6c1a7](https://github.com/zard-ui/zardui/commit/b0d6c1a7))
+- failing unit test for Sheet component ([#244](https://github.com/zard-ui/zardui/pull/244))
+- popover to remain open when scrolling ([#248](https://github.com/zard-ui/zardui/pull/248))
+- weird black border instead of a gray border ([#254](https://github.com/zard-ui/zardui/pull/254))
+- remove conflicting flag from nx release command ([7ea4e1e0](https://github.com/zard-ui/zardui/commit/7ea4e1e0))
+- handle first release and prevent interactive prompts in CI ([55538843](https://github.com/zard-ui/zardui/commit/55538843))
+- pass bump type to nx release and add detailed logging ([96d324ed](https://github.com/zard-ui/zardui/commit/96d324ed))
+- tabgroup memory leak fix and performance optimization ([#273](https://github.com/zard-ui/zardui/pull/273))
+- removing memory leaks ([#277](https://github.com/zard-ui/zardui/pull/277))
+- vertical tabs placement ([#278](https://github.com/zard-ui/zardui/pull/278))
+- add control value accessor and update navigation ([#353](https://github.com/zard-ui/zardui/pull/353))
+- light or dark colors for code  properly follow dark mode servi… ([#390](https://github.com/zard-ui/zardui/pull/390))
+- CLI component installer execution fix ([#393](https://github.com/zard-ui/zardui/pull/393))
+- route should not overlap with file name ([#396](https://github.com/zard-ui/zardui/pull/396))
+- input component - forms support fix ([#397](https://github.com/zard-ui/zardui/pull/397))
+- generateId replaced by ZardIdDirective to support SSR hydration ([#403](https://github.com/zard-ui/zardui/pull/403))
+- adjusting production errors ([c5ef1c09](https://github.com/zard-ui/zardui/commit/c5ef1c09))
+- dynamic og image generator ([60929c5b](https://github.com/zard-ui/zardui/commit/60929c5b))
+- update github links on roadmap page ([#493](https://github.com/zard-ui/zardui/pull/493))
+- remove icon component export ([02bac8de](https://github.com/zard-ui/zardui/commit/02bac8de))
+- v1 audit — hydration, keyboard and CLI install bugs ([#717](https://github.com/zard-ui/zardui/pull/717))
+- add rtl support across components ([#746](https://github.com/zard-ui/zardui/pull/746))
+- **ZardAlertDialogComponent:** Duplicate identifier 'ZardAlertDialogService' ([#294](https://github.com/zard-ui/zardui/pull/294))
+- **alert-dialog:** disable mask closable by default ([#628](https://github.com/zard-ui/zardui/pull/628))
+- **animation:** animation classes should be applied properly now ([#453](https://github.com/zard-ui/zardui/pull/453))
+- **blocks:** replace broken file tree with z-tree component ([#450](https://github.com/zard-ui/zardui/pull/450), [#454](https://github.com/zard-ui/zardui/pull/454))
+- **button:** clarify button click behavior with active scale animation ([#209](https://github.com/zard-ui/zardui/pull/209))
+- **calendar:** resolve invalid ARIA structure in calendar grid ([#734](https://github.com/zard-ui/zardui/pull/734))
+- **checkbox:** adding disabled state for reactive forms usage ([#407](https://github.com/zard-ui/zardui/pull/407))
+- **ci:** update package.json version from tag before build in release workflow ([42bd1f3d](https://github.com/zard-ui/zardui/commit/42bd1f3d))
+- **ci:** add [skip ci] to release commit to prevent release loop ([22a5f78a](https://github.com/zard-ui/zardui/commit/22a5f78a))
+- **cli:** add missing component dependencies in registry ([#264](https://github.com/zard-ui/zardui/pull/264))
+- **cli:** fix bin path and version resolution in published package ([ad57b287](https://github.com/zard-ui/zardui/commit/ad57b287))
+- **cli:** support custom component aliases for added component imports and dark mode setup ([#431](https://github.com/zard-ui/zardui/pull/431))
+- **cli:** correct bin path for published package ([93eedd08](https://github.com/zard-ui/zardui/commit/93eedd08))
+- **cli:** ensure tailwindcss-animate is installed ([2b1a2374](https://github.com/zard-ui/zardui/commit/2b1a2374))
+- **cli:** use cross-platform shebang injection ([63e51a49](https://github.com/zard-ui/zardui/commit/63e51a49))
+- **command:** focus input and show highlight on keyboard nav ([#690](https://github.com/zard-ui/zardui/pull/690))
+- **dark-mode:** add ngSkipHydration to dark mode page component ([#445](https://github.com/zard-ui/zardui/pull/445))
+- **dark-mode:** defer media query initialization to afterNextRenderer for SSR ([#446](https://github.com/zard-ui/zardui/pull/446))
+- **dialog:** implement angular animations for proper center zoom animation ([#256](https://github.com/zard-ui/zardui/pull/256))
+- **dialog:** migrate to Angular 20 CSS animation API ([#270](https://github.com/zard-ui/zardui/pull/270))
+- **dialog:** remove hardcoded max-width for dialog variants ([#503](https://github.com/zard-ui/zardui/pull/503))
+- **dialog:** match the service layout to the declarative form ([#744](https://github.com/zard-ui/zardui/pull/744))
+- **drawer:** resolve panel styles under ViewEncapsulation.None ([#731](https://github.com/zard-ui/zardui/pull/731))
+- **dropdown:** set aria-expanded only on active trigger ([#476](https://github.com/zard-ui/zardui/pull/476))
+- **flickering:** regression corrected ([#444](https://github.com/zard-ui/zardui/pull/444))
+- **input:** support number signal forms ([#598](https://github.com/zard-ui/zardui/pull/598))
+- **input-group:** correct ClassValue import path ([#223](https://github.com/zard-ui/zardui/pull/223))
+- **mcp:** exclude spec files from the tsc build ([b8f9600c](https://github.com/zard-ui/zardui/commit/b8f9600c))
+- **menu:** focus trigger element on hover ([#426](https://github.com/zard-ui/zardui/pull/426))
+- **og:** restore dynamic og image generation ([#696](https://github.com/zard-ui/zardui/pull/696))
+- **pagination:** implementation of a11y fixes ([#361](https://github.com/zard-ui/zardui/pull/361))
+- **progress:** progress container classes fix ([#367](https://github.com/zard-ui/zardui/pull/367))
+- **radio:** improve label positioning and accessibility with setDisabledState ([b69476f4](https://github.com/zard-ui/zardui/commit/b69476f4))
+- **registry:** fix reference to non-existent dialog.component.html file ([#228](https://github.com/zard-ui/zardui/pull/228))
+- **select:** fixed select to match shadcn/ui select component ([a3c7200d](https://github.com/zard-ui/zardui/commit/a3c7200d))
+- **select:** computed signal fix ([#307](https://github.com/zard-ui/zardui/pull/307))
+- **select:** add outsidePointerEvents ([#328](https://github.com/zard-ui/zardui/pull/328))
+- **select:** fixing visual and keyboard issues ([#363](https://github.com/zard-ui/zardui/pull/363))
+- **select:** fixes overflow of long text item element in select component ([#417](https://github.com/zard-ui/zardui/pull/417))
+- **select:** fixed select item rendering on items collection update ([#573](https://github.com/zard-ui/zardui/pull/573))
+- **select:** keep dropdown on screen when trigger is at viewport edge ([#692](https://github.com/zard-ui/zardui/pull/692))
+- **select:** prevent Escape from bubbling to parent overlays ([#732](https://github.com/zard-ui/zardui/pull/732))
+- **select:** return focus to trigger after option selection ([#738](https://github.com/zard-ui/zardui/pull/738))
+- **select:** prevent premature open on host focus in Safari ([#733](https://github.com/zard-ui/zardui/pull/733))
+- **sonner:** render toasts in the native top layer ([#711](https://github.com/zard-ui/zardui/pull/711))
+- **ssr:** updated platform checks to improve SSR compatibility across components ([#203](https://github.com/zard-ui/zardui/pull/203))
+- **tooltip:** update component lifecycle and rxjs usage ([#71](https://github.com/zard-ui/zardui/pull/71))
+- **tree:** emit zNodeClick on mouse click and refine node spacing ([#452](https://github.com/zard-ui/zardui/pull/452))
+- **ui:** rename disabled input to zDisabled and implement setDisabledState ([#494](https://github.com/zard-ui/zardui/pull/494))
+- **web:** skip prerender for llms.txt to avoid output collision ([#659](https://github.com/zard-ui/zardui/pull/659))
+- **web:** skip external nav items when generating prerender routes ([d9aa5569](https://github.com/zard-ui/zardui/commit/d9aa5569))
+
+### 📦 Code Refactoring
+
+- update home page content ([e516e3b6](https://github.com/zard-ui/zardui/commit/e516e3b6))
+- add core directive support and update CLI to version 1.0.0-beta.2 ([c84a07a8](https://github.com/zard-ui/zardui/commit/c84a07a8))
+- migrate to signals and control flow ([#194](https://github.com/zard-ui/zardui/pull/194))
+- enhance dialog component with generic data type support ([#218](https://github.com/zard-ui/zardui/pull/218))
+- nullish coalescing operator instead of logical OR ([#281](https://github.com/zard-ui/zardui/pull/281))
+- consistent type imports ([#283](https://github.com/zard-ui/zardui/pull/283))
+- review some components ([#282](https://github.com/zard-ui/zardui/pull/282))
+- resolve ID generation collision ([#297](https://github.com/zard-ui/zardui/pull/297))
+- breadcrumb code cleanup ([#322](https://github.com/zard-ui/zardui/pull/322), [#324](https://github.com/zard-ui/zardui/pull/324))
+- input group #288 ([#329](https://github.com/zard-ui/zardui/pull/329), [#288](https://github.com/zard-ui/zardui/issues/288))
+- improving tooltip ([#320](https://github.com/zard-ui/zardui/pull/320))
+- refactored string template outlet directive ([#333](https://github.com/zard-ui/zardui/pull/333))
+- fixed output event names for components ([#347](https://github.com/zard-ui/zardui/pull/347))
+- imports instead of modules #382 ([#383](https://github.com/zard-ui/zardui/pull/383), [#382](https://github.com/zard-ui/zardui/issues/382))
+- use Angular `booleanAttribute` instead of custom boolean transform. ([#427](https://github.com/zard-ui/zardui/pull/427))
+- migrate all @ngzard/ui references to zard-cli ([63d8a5c7](https://github.com/zard-ui/zardui/commit/63d8a5c7))
+- **accordion:** code improvement and added missing test ([#365](https://github.com/zard-ui/zardui/pull/365))
+- **button:** latest shadcn/ui button styling ([#428](https://github.com/zard-ui/zardui/pull/428))
+- **calendar:** minor code refactoring ([#398](https://github.com/zard-ui/zardui/pull/398))
+- **calendar:** revert functionality ([#400](https://github.com/zard-ui/zardui/pull/400))
+- **calendar:** code simplifications ([#415](https://github.com/zard-ui/zardui/pull/415))
+- **card:** synced with latest shadcn card implementation ([#375](https://github.com/zard-ui/zardui/pull/375))
+- **carousel:** template simplification ([#414](https://github.com/zard-ui/zardui/pull/414))
+- **cli:** modularize commands and reorganize structure ([d06485a7](https://github.com/zard-ui/zardui/commit/d06485a7))
+- **cli:** modularize CLI architecture and add pre-release Angular warning ([40b343bb](https://github.com/zard-ui/zardui/commit/40b343bb))
+- **combobox:** template simplification, test added ([#412](https://github.com/zard-ui/zardui/pull/412))
+- **core:** changed icon packs to lucide-angular ([#274](https://github.com/zard-ui/zardui/pull/274))
+- **empty:** update empty component to match shadcn style ([ba122fbb](https://github.com/zard-ui/zardui/commit/ba122fbb))
+- **empty:** use NgOptimizedImage for improved image performance ([#408](https://github.com/zard-ui/zardui/pull/408))
+- **home:** use composable card API in field-hear block ([6a5b1423](https://github.com/zard-ui/zardui/commit/6a5b1423))
+- **overlay:** migrate all overlay components to use outsidePointerEvents ([#258](https://github.com/zard-ui/zardui/pull/258))
+- **select:** template simplification ([#413](https://github.com/zard-ui/zardui/pull/413))
+- **switch:** modernize component to use model input and Angula… ([#422](https://github.com/zard-ui/zardui/pull/422))
+- **toast:** improve type safety and component configuration ([#505](https://github.com/zard-ui/zardui/pull/505))
+
+### 📝 Documentation
+
+- adding MIT license, adding github banner, adding CONTRUITING file ([bad57513](https://github.com/zard-ui/zardui/commit/bad57513))
+- updating overview files structure ([bb244194](https://github.com/zard-ui/zardui/commit/bb244194))
+- add SECURITY.md, CODE_OF_CONDUCT.md and update CONTRIBUTING.md ([c59a2b70](https://github.com/zard-ui/zardui/commit/c59a2b70))
+- accordion component API fix ([#318](https://github.com/zard-ui/zardui/pull/318))
+- **accordion:** update demos to attribute selector and card imports ([9e7d82b8](https://github.com/zard-ui/zardui/commit/9e7d82b8))
+- **button:** add link variant example ([#261](https://github.com/zard-ui/zardui/pull/261))
+- **toast:** add step to register the component ([#229](https://github.com/zard-ui/zardui/pull/229))
+
+### 🏗️ Build System
+
+- migrate to angular 20 ([#217](https://github.com/zard-ui/zardui/pull/217))
+- Reducing the number of warnings during installations and builds ([0f0e6066](https://github.com/zard-ui/zardui/commit/0f0e6066))
+- updatin package-lock ([55421d47](https://github.com/zard-ui/zardui/commit/55421d47))
+- changing ci flow to just run in prs ([b3a1a05c](https://github.com/zard-ui/zardui/commit/b3a1a05c))
+- bumping versions to 1.0.0-beta.43 ([e1cc7d50](https://github.com/zard-ui/zardui/commit/e1cc7d50))
+- **ci:** remove --first-release hardcoded and unify CI workflows ([8be3b2fe](https://github.com/zard-ui/zardui/commit/8be3b2fe))
+- **ci:** use RELEASE_TOKEN for protected branch push and restrict CI to PRs only ([962698b2](https://github.com/zard-ui/zardui/commit/962698b2))
+
+### 🧪 Tests
+
+- test failure fixed ([#343](https://github.com/zard-ui/zardui/pull/343))
+- **card:** fix card unit tests ([1e2df64b](https://github.com/zard-ui/zardui/commit/1e2df64b))
+- **checkbox:** creation of the spec file and unit tests of the checkbox ([#64](https://github.com/zard-ui/zardui/pull/64))
+- **checkbox:** add tests for reactiveform context ([#64](https://github.com/zard-ui/zardui/pull/64))
+- **dropdown:** adding unit tests ([#416](https://github.com/zard-ui/zardui/pull/416))
+- **e2e:** setup Playwright E2E tests for core components ([#435](https://github.com/zard-ui/zardui/pull/435))
+
+### ⚠️  Breaking Changes
+
+- land the rest of the pre-release upgrade missing from #741  ([#742](https://github.com/zard-ui/zardui/pull/742), [#741](https://github.com/zard-ui/zardui/issues/741))
+- pre-release docs review, declarative overlays and v1 polish  ([#741](https://github.com/zard-ui/zardui/pull/741))
+
+### ❤️ Thank You
+
+- Anton Strelkovskyy @Fortivera
+- Brener Batista Alves @Brenerr
+- Charizard
+- Chase Naples @cnaples79
+- David Vilaça
+- EdimarioJr
+- Ediongsenyene Joseph
+- Ekram Ullah Dewan @Ekram70
+- Elder Fonseca @elderfonseca
+- Fernando Malveira Aragão @fernandoarag
+- Florian Veltmann
+- Henrique Custódia @henriquecustodia
+- Igual @LucasHenriqueAbreu
+- Juliano Souza
+- JULIANO SOUZA
+- JustDo1t90
+- Kevin Valmorbida @KevinValmo
+- Lucas Fernandes
+- Lucas Henrique de Abreu
+- Lucas Silva @lucasluizss
+- Luis Fernando da Silva @Luiz1nn
+- luiz gomes
+- Luiz gomes @Luizgomess
+- Luiz Gomes
+- luizvidal @luizvidal
+- Matheus Ribeiro @ribeiromatheuss
+- matheus.silva
+- Michael Iskandarani @Noskilo
+- Mickey L.
+- Mickey Lazarevic @mikij
+- Miha J. Mulec
+- mihajm
+- Mohamed Ibn Khayat @ibnkhayatmed
+- Otabek @OlimjonovOtabek
+- Pavan Mollagavelli @neopavan
+- Ragul @ragul1697
+- Roman Mykhailiuk @JustDo1t90
+- Samuel Rizzon
+- Seyed Sadeq Shobeiry @shobeiry
+- Turach
+- viniciuscigma
+- wajrock
+
 ## 1.0.0-beta.134 (2026-10-08)
 
 This was a version bump only, there were no code changes.
