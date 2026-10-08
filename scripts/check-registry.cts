@@ -9,7 +9,8 @@
  *
  *   source pass  — every listed file exists, every source file is listed, and
  *                  `registryDependencies` names exactly the other items the
- *                  files import from.
+ *                  files import from, plus `utilities` when they use one of
+ *                  its classes.
  *   closure pass — for the JSON already written to `apps/web/public/r`, every
  *                  relative and aliased import resolves to a file that ships,
  *                  either in the item itself or in one of its dependencies.
@@ -24,6 +25,7 @@ import * as path from 'path';
 import { registry } from '../packages/cli/src/core/registry/registry-data';
 
 const LIB_PATH = path.resolve(__dirname, '../libs/zard/src/lib/shared');
+const UTILITIES_CSS = path.join(LIB_PATH, 'core/css/utilities.css');
 const REGISTRY_OUTPUT = path.resolve(__dirname, '../apps/web/public/r');
 
 /**
@@ -92,7 +94,50 @@ function importedBasePaths(dir: string, files: string[]): Set<string> {
   return imported;
 }
 
+/**
+ * Matches any class `utilities.css` defines, read from its `@utility` rules so a
+ * new utility is covered without touching this script. `scroll-fade-*` becomes a
+ * prefix; the lookarounds stop `shimmer` from matching inside `shimmering` while
+ * still matching it behind a variant such as `hover:shimmer`.
+ */
+function utilityClassPattern(): RegExp | null {
+  if (!fs.existsSync(UTILITIES_CSS)) return null;
+
+  const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const names = [...fs.readFileSync(UTILITIES_CSS, 'utf8').matchAll(/@utility ([a-z0-9-]+(?:-\*)?)/g)].map(m => m[1]);
+  if (!names.length) return null;
+
+  const alternatives = names.map(name =>
+    name.endsWith('-*') ? `${escape(name.slice(0, -1))}[a-z0-9-]+` : escape(name),
+  );
+  return new RegExp(`(?<![\\w-])(?:${alternatives.join('|')})(?![\\w-])`);
+}
+
+/**
+ * Whether the item's own files use a class from `utilities.css`.
+ *
+ * Those classes reach a component through a stylesheet, not an import, so the
+ * import scan cannot see them. A component that uses one depends on the
+ * `utilities` item exactly as it would on an imported one: `add` installs it
+ * alongside and wires its `@import`. Comments are dropped first, so prose that
+ * mentions a utility does not count as using it.
+ */
+function usesUtilities(dir: string, files: string[], pattern: RegExp | null): boolean {
+  if (!pattern) return false;
+
+  return files.some(file => {
+    if (!file.endsWith('.ts')) return false;
+    const source = fs
+      .readFileSync(path.join(dir, file), 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/(^|[^:])\/\/.*$/gm, '$1');
+    return pattern.test(source);
+  });
+}
+
 function checkSourcePass(): void {
+  const utilityPattern = utilityClassPattern();
+
   const itemNameOfBasePath = new Map(registry.map(item => [item.basePath ?? item.name, item.name]));
 
   /*
@@ -134,8 +179,9 @@ function checkSourcePass(): void {
 
     const expected = [...needed]
       .map(basePath => itemNameOfBasePath.get(basePath) ?? basePath)
-      .filter(name => !IMPLICIT_ITEMS.has(name))
-      .sort();
+      .filter(name => !IMPLICIT_ITEMS.has(name));
+    if (item.name !== 'utilities' && usesUtilities(dir, actual, utilityPattern)) expected.push('utilities');
+    expected.sort();
     const declared = [...(item.registryDependencies ?? [])].sort();
 
     for (const dep of expected) {
