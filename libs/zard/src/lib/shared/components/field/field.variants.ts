@@ -43,7 +43,7 @@ export const fieldTitleVariants = cva(
 );
 
 export const fieldDescriptionVariants = cva([
-  'text-left text-sm/normal font-normal text-muted-foreground',
+  'text-start text-sm/normal font-normal text-muted-foreground',
   'group-has-data-horizontal/field:text-balance',
   '[[data-variant=legend]+&]:-mt-1.5',
   'last:mt-0 nth-last-2:-mt-1',

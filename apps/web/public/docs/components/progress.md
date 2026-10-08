@@ -18,7 +18,8 @@ npx zard-cli@latest add progress
 ### Manual
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { Directionality } from '@angular/cdk/bidi';
+import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -48,6 +49,7 @@ import { progressVariants } from './progress.variants';
   exportAs: 'zProgress',
 })
 export class ZardProgressComponent {
+  private readonly directionality = inject(Directionality);
   readonly value = input(0);
   readonly class = input<ClassValue>('');
 
@@ -62,7 +64,12 @@ export class ZardProgressComponent {
     return v;
   });
 
-  protected readonly indicatorTransform = computed(() => `translateX(-${100 - this.clampedValue()}%)`);
+  /** The indicator slides in from the start edge: from the left in LTR, from the right in RTL. */
+  protected readonly indicatorTransform = computed(() => {
+    const remaining = 100 - this.clampedValue();
+
+    return this.directionality.valueSignal() === 'rtl' ? `translateX(${remaining}%)` : `translateX(-${remaining}%)`;
+  });
 
   protected readonly classes = computed(() => mergeClasses(progressVariants(), this.class()));
 }
