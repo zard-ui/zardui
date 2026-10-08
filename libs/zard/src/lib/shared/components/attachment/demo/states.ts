@@ -13,8 +13,8 @@ import {
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
+import { ZardAttachmentImports } from '../attachment.imports';
 import type { ZardAttachmentStateVariants } from '../attachment.variants';
-import { ZardAttachmentImports } from '../imports';
 
 @Component({
   selector: 'z-demo-attachment-states',

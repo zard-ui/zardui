@@ -110,7 +110,7 @@ export class ZardAttachmentTitleComponent {
   private readonly attachment = inject(ZardAttachmentComponent, { optional: true });
   readonly class = input<ClassValue>('');
   protected readonly classes = computed(() =>
-    mergeClasses(attachmentTitleVariants(), this.attachment?.busy() && 'shimmer', this.class()),
+    mergeClasses(attachmentTitleVariants(), this.attachment?.busy() && 'motion-safe:animate-pulse', this.class()),
   );
 }
 

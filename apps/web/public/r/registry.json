@@ -1179,7 +1179,7 @@
       "files": [
         "attachment.component.ts",
         "attachment.variants.ts",
-        "imports.ts",
+        "attachment.imports.ts",
         "index.ts"
       ]
     }

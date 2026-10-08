@@ -5,8 +5,8 @@ import { lucideExternalLink, lucideFileText } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
+import { ZardAttachmentImports } from '../attachment.imports';
 import type { ZardAttachmentSizeVariants } from '../attachment.variants';
-import { ZardAttachmentImports } from '../imports';
 
 @Component({
   selector: 'z-demo-attachment-sizes',

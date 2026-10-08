@@ -5,7 +5,7 @@ import { lucideDownload, lucideFileText, lucideX } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
-import { ZardAttachmentImports } from '../imports';
+import { ZardAttachmentImports } from '../attachment.imports';
 
 @Component({
   selector: 'z-demo-attachment-trigger',

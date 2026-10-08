@@ -31,7 +31,7 @@ export const ATTACHMENT_API: ApiSection[] = [
   },
   {
     selector: 'z-attachment-title',
-    description: 'Title; shimmers only while the nearest attachment is busy.',
+    description: 'Title; pulses only while the nearest attachment is busy, unless the user prefers reduced motion.',
     props: [{ name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" }],
   },
   {

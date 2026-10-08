@@ -1621,7 +1621,7 @@ export const registry: ComponentRegistry[] = [
     files: [
       { name: 'attachment.component.ts', content: '' },
       { name: 'attachment.variants.ts', content: '' },
-      { name: 'imports.ts', content: '' },
+      { name: 'attachment.imports.ts', content: '' },
       { name: 'index.ts', content: '' },
     ],
   },

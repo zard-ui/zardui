@@ -56,7 +56,7 @@ export const attachmentTriggerVariants = cva(
   'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
 );
 export const attachmentGroupVariants = cva(
-  'flex w-full min-w-0 gap-3 overflow-x-auto snap-x snap-mandatory scroll-fade-x scroll-px-1 scrollbar-none py-1 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+  'flex w-full min-w-0 gap-3 overflow-x-auto snap-x snap-mandatory scroll-px-1 scrollbar-none py-1 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
 );
 
 export type ZardAttachmentStateVariants = NonNullable<VariantProps<typeof attachmentVariants>['zState']>;

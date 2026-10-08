@@ -5,10 +5,10 @@ import { lucideFileText, lucideX } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
-import { ZardAttachmentImports } from '../imports';
+import { ZardAttachmentImports } from '../attachment.imports';
 
 @Component({
-  selector: 'z-demo-attachment-default',
+  selector: 'z-demo-attachment-preview',
   imports: [NgIcon, ZardButtonComponent, ...ZardAttachmentImports],
   template: `
     <div class="mx-auto flex w-full max-w-sm flex-col gap-4 py-6">
@@ -35,6 +35,6 @@ import { ZardAttachmentImports } from '../imports';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideFileText, lucideX })],
 })
-export class ZardDemoAttachmentDefaultComponent {
+export class ZardDemoAttachmentPreviewComponent {
   readonly removed = signal(false);
 }

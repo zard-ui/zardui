@@ -461,7 +461,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-aspect-ratio [zRatio]="16 / 9"></z-aspect-ratio>`,
   },
   attachment: {
-    importCode: `import { ZardAttachmentImports } from '@/shared/components/attachment/imports';`,
+    importCode: `import { ZardAttachmentImports } from '@/shared/components/attachment/attachment.imports';`,
     templateCode: `<z-attachment>
   <z-attachment-media><ng-icon name="lucideFileText" /></z-attachment-media>
   <z-attachment-content>

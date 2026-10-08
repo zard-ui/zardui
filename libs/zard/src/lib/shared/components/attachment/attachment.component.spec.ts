@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/angular';
 
+import { ZardAttachmentImports } from './attachment.imports';
 import type {
   ZardAttachmentMediaVariantVariants,
   ZardAttachmentOrientationVariants,
@@ -11,7 +12,6 @@ import type {
   ZardAttachmentStateVariants,
 } from './attachment.variants';
 import { ATTACHMENT_API } from './doc/api';
-import { ZardAttachmentImports } from './imports';
 import { ZardAttachmentActionComponent, ZardAttachmentGroupComponent } from './index';
 
 @Component({
@@ -100,12 +100,14 @@ describe('attachment composition', () => {
             expect(container.querySelector('z-attachment-media')).toHaveClass(
               media === 'image' ? 'size-16' : 'size-10',
             );
-            expect(title.classList.contains('shimmer')).toBe(state === 'uploading' || state === 'processing');
+            expect(title.classList.contains('motion-safe:animate-pulse')).toBe(
+              state === 'uploading' || state === 'processing',
+            );
             expect(root.getAttribute('aria-busy')).toBe(
               state === 'uploading' || state === 'processing' ? 'true' : null,
             );
-            expect(screen.getByText('Nested.txt')).not.toHaveClass('shimmer');
-            expect(screen.getByText('Sibling.txt')).not.toHaveClass('shimmer');
+            expect(screen.getByText('Nested.txt')).not.toHaveClass('motion-safe:animate-pulse');
+            expect(screen.getByText('Sibling.txt')).not.toHaveClass('motion-safe:animate-pulse');
           }
         }
       }

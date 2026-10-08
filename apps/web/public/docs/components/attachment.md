@@ -130,7 +130,7 @@ export class ZardAttachmentTitleComponent {
   private readonly attachment = inject(ZardAttachmentComponent, { optional: true });
   readonly class = input<ClassValue>('');
   protected readonly classes = computed(() =>
-    mergeClasses(attachmentTitleVariants(), this.attachment?.busy() && 'shimmer', this.class()),
+    mergeClasses(attachmentTitleVariants(), this.attachment?.busy() && 'motion-safe:animate-pulse', this.class()),
   );
 }
 
@@ -358,7 +358,7 @@ export const attachmentTriggerVariants = cva(
   'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
 );
 export const attachmentGroupVariants = cva(
-  'flex w-full min-w-0 gap-3 overflow-x-auto snap-x snap-mandatory scroll-fade-x scroll-px-1 scrollbar-none py-1 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+  'flex w-full min-w-0 gap-3 overflow-x-auto snap-x snap-mandatory scroll-px-1 scrollbar-none py-1 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
 );
 
 export type ZardAttachmentStateVariants = NonNullable<VariantProps<typeof attachmentVariants>['zState']>;
@@ -396,13 +396,13 @@ export const ZardAttachmentImports = [
 ```angular-ts
 export * from './attachment.component';
 export * from './attachment.variants';
-export * from './imports';
+export * from './attachment.imports';
 ```
 
 ## Usage
 
 ```angular-ts
-import { ZardAttachmentImports } from '@/shared/components/attachment/imports';
+import { ZardAttachmentImports } from '@/shared/components/attachment/attachment.imports';
 ```
 
 ```angular-html
@@ -422,51 +422,6 @@ import { ZardAttachmentImports } from '@/shared/components/attachment/imports';
 
 ## Examples
 
-### Default
-
-```angular-ts
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideFileText, lucideX } from '@ng-icons/lucide';
-
-import { ZardButtonComponent } from '@/shared/components/button/button.component';
-
-import { ZardAttachmentImports } from '../imports';
-
-@Component({
-  selector: 'z-demo-attachment-default',
-  imports: [NgIcon, ZardButtonComponent, ...ZardAttachmentImports],
-  template: `
-    <div class="mx-auto flex w-full max-w-sm flex-col gap-4 py-6">
-      @if (!removed()) {
-        <z-attachment class="w-full">
-          <z-attachment-media aria-hidden="true">
-            <ng-icon name="lucideFileText" class="size-4" />
-          </z-attachment-media>
-          <z-attachment-content>
-            <z-attachment-title>Project notes.pdf</z-attachment-title>
-            <z-attachment-description>PDF · 240 KB · Ready</z-attachment-description>
-          </z-attachment-content>
-          <z-attachment-actions>
-            <button type="button" z-attachment-action aria-label="Remove Project notes.pdf" (click)="removed.set(true)">
-              <ng-icon name="lucideX" class="size-3.5" />
-            </button>
-          </z-attachment-actions>
-        </z-attachment>
-      } @else {
-        <button type="button" z-button zType="outline" class="w-fit" (click)="removed.set(false)">Restore file</button>
-      }
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideFileText, lucideX })],
-})
-export class ZardDemoAttachmentDefaultComponent {
-  readonly removed = signal(false);
-}
-```
-
 ### Image
 
 ```angular-ts
@@ -477,7 +432,7 @@ import { lucideX } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
-import { ZardAttachmentImports } from '../imports';
+import { ZardAttachmentImports } from '../attachment.imports';
 
 @Component({
   selector: 'z-demo-attachment-image',
@@ -534,8 +489,8 @@ import {
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
+import { ZardAttachmentImports } from '../attachment.imports';
 import type { ZardAttachmentStateVariants } from '../attachment.variants';
-import { ZardAttachmentImports } from '../imports';
 
 @Component({
   selector: 'z-demo-attachment-states',
@@ -653,8 +608,8 @@ import { lucideExternalLink, lucideFileText } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
+import { ZardAttachmentImports } from '../attachment.imports';
 import type { ZardAttachmentSizeVariants } from '../attachment.variants';
-import { ZardAttachmentImports } from '../imports';
 
 @Component({
   selector: 'z-demo-attachment-sizes',
@@ -724,7 +679,7 @@ import { lucideFileCode, lucideFileText, lucideImage, lucideX } from '@ng-icons/
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
-import { ZardAttachmentImports } from '../imports';
+import { ZardAttachmentImports } from '../attachment.imports';
 
 @Component({
   selector: 'z-demo-attachment-group',
@@ -793,7 +748,7 @@ import { lucideDownload, lucideFileText, lucideX } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
-import { ZardAttachmentImports } from '../imports';
+import { ZardAttachmentImports } from '../attachment.imports';
 
 @Component({
   selector: 'z-demo-attachment-trigger',
@@ -877,7 +832,7 @@ Projected text container.
 
 ### z-attachment-title
 
-Title; shimmers only while the nearest attachment is busy.
+Title; pulses only while the nearest attachment is busy, unless the user prefers reduced motion.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

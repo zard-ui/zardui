@@ -12,7 +12,8 @@ test.describe('Attachment', () => {
   });
 
   test('hydrates all six demos and operates independent file/image removal', async () => {
-    for (const name of ['default', 'image', 'states', 'sizes', 'group', 'trigger']) {
+    await expect(demos.firstDemoBox.locator('[data-slot="attachment"]').first()).toBeVisible();
+    for (const name of ['image', 'states', 'sizes', 'group', 'trigger']) {
       await expect(
         demos.getDemoByName(name).locator('[data-slot="attachment"], [data-slot="attachment-group"]').first(),
       ).toBeVisible();
@@ -37,10 +38,10 @@ test.describe('Attachment', () => {
       await expect(card).toHaveAttribute('data-state', state);
       if (state === 'uploading' || state === 'processing') {
         await expect(card).toHaveAttribute('aria-busy', 'true');
-        await expect(card.locator('[data-slot="attachment-title"]')).toHaveClass(/shimmer/);
+        await expect(card.locator('[data-slot="attachment-title"]')).toHaveClass(/animate-pulse/);
       } else {
         await expect(card).not.toHaveAttribute('aria-busy');
-        await expect(card.locator('[data-slot="attachment-title"]')).not.toHaveClass(/shimmer/);
+        await expect(card.locator('[data-slot="attachment-title"]')).not.toHaveClass(/animate-pulse/);
       }
       await expect(states.locator('[data-slot="attachment"]').last()).toHaveAttribute('data-state', 'done');
     }
@@ -144,23 +145,13 @@ test.describe('Attachment', () => {
         const title = states.locator('[data-slot="attachment-title"]').first();
         const paint = await title.evaluate(el => {
           const css = getComputedStyle(el);
-          return {
-            fill: css.webkitTextFillColor,
-            color: css.color,
-            background: css.backgroundImage,
-            animation: css.animationName,
-          };
+          return { fill: css.webkitTextFillColor, color: css.color, animation: css.animationName };
         });
         expect(paint.color).not.toBe('rgba(0, 0, 0, 0)');
-        if (reducedMotion === 'reduce') {
-          expect(paint.animation).toBe('none');
-          expect(paint.background).toBe('none');
-          expect(paint.fill).toBe(paint.color);
-        } else {
-          expect(paint.background).not.toBe('none');
-          expect(paint.animation).toContain('tw-shimmer');
-        }
-        for (const name of ['default', 'image', 'states', 'sizes', 'group', 'trigger']) {
+        expect(paint.fill).toBe(paint.color);
+        expect(paint.animation).toBe(reducedMotion === 'reduce' ? 'none' : 'pulse');
+        await checkA11y(page, '#overview z-demo-attachment-preview');
+        for (const name of ['image', 'states', 'sizes', 'group', 'trigger']) {
           await checkA11y(page, `#${name} z-demo-attachment-${name}`);
         }
       });
