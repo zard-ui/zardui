@@ -33,7 +33,7 @@
     },
     {
       "name": "dialog.imports.ts",
-      "content": "export {\n  ZardDialogCloseDirective,\n  ZardDialogComponent,\n  ZardDialogDescriptionComponent,\n  ZardDialogFooterComponent,\n  ZardDialogHeaderComponent,\n  ZardDialogTitleComponent,\n} from './dialog.component';\n\nimport {\n  ZardDialogCloseDirective,\n  ZardDialogComponent,\n  ZardDialogDescriptionComponent,\n  ZardDialogFooterComponent,\n  ZardDialogHeaderComponent,\n  ZardDialogTitleComponent,\n} from './dialog.component';\n\n/** Every part of the declarative dialog, for a template that composes one. */\nexport const ZardDialogImports = [\n  ZardDialogComponent,\n  ZardDialogHeaderComponent,\n  ZardDialogTitleComponent,\n  ZardDialogDescriptionComponent,\n  ZardDialogFooterComponent,\n  ZardDialogCloseDirective,\n] as const;\n"
+      "content": "import {\n  ZardDialogCloseDirective,\n  ZardDialogComponent,\n  ZardDialogDescriptionComponent,\n  ZardDialogFooterComponent,\n  ZardDialogHeaderComponent,\n  ZardDialogTitleComponent,\n} from '@/shared/components/dialog/dialog.component';\n\n/** Every part of the declarative dialog, for a template that composes one. */\nexport const ZardDialogImports = [\n  ZardDialogComponent,\n  ZardDialogHeaderComponent,\n  ZardDialogTitleComponent,\n  ZardDialogDescriptionComponent,\n  ZardDialogFooterComponent,\n  ZardDialogCloseDirective,\n] as const;\n"
     },
     {
       "name": "index.ts",

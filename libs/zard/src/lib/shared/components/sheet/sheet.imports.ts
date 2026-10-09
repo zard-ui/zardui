@@ -1,12 +1,3 @@
-export {
-  ZardSheetCloseDirective,
-  ZardSheetComponent,
-  ZardSheetDescriptionComponent,
-  ZardSheetFooterComponent,
-  ZardSheetHeaderComponent,
-  ZardSheetTitleComponent,
-} from './sheet.component';
-
 import {
   ZardSheetCloseDirective,
   ZardSheetComponent,
@@ -14,7 +5,7 @@ import {
   ZardSheetFooterComponent,
   ZardSheetHeaderComponent,
   ZardSheetTitleComponent,
-} from './sheet.component';
+} from '@/shared/components/sheet/sheet.component';
 
 /** Every part of the declarative sheet, for a template that composes one. */
 export const ZardSheetImports = [

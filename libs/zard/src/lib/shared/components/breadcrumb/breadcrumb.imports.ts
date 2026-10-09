@@ -1,12 +1,3 @@
-export {
-  ZardBreadcrumbComponent,
-  ZardBreadcrumbEllipsisComponent,
-  ZardBreadcrumbItemComponent,
-  ZardBreadcrumbLinkComponent,
-  ZardBreadcrumbPageComponent,
-  ZardBreadcrumbSeparatorComponent,
-} from './breadcrumb.component';
-
 import {
   ZardBreadcrumbComponent,
   ZardBreadcrumbEllipsisComponent,
@@ -14,7 +5,7 @@ import {
   ZardBreadcrumbLinkComponent,
   ZardBreadcrumbPageComponent,
   ZardBreadcrumbSeparatorComponent,
-} from './breadcrumb.component';
+} from '@/shared/components/breadcrumb/breadcrumb.component';
 
 export const ZardBreadcrumbImports = [
   ZardBreadcrumbComponent,

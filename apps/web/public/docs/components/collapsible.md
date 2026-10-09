@@ -178,17 +178,11 @@ export type ZardCollapsibleContentVariants = VariantProps<typeof collapsibleCont
 ```
 
 ```angular-ts
-export {
-  ZardCollapsibleDirective,
-  ZardCollapsibleContentComponent,
-  ZardCollapsibleTriggerDirective,
-} from './collapsible.component';
-
 import {
   ZardCollapsibleDirective,
   ZardCollapsibleContentComponent,
   ZardCollapsibleTriggerDirective,
-} from './collapsible.component';
+} from '@/shared/components/collapsible/collapsible.component';
 
 export const ZardCollapsibleImports = [
   ZardCollapsibleDirective,

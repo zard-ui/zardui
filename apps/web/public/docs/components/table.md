@@ -276,17 +276,6 @@ export * from './table.variants';
 ```
 
 ```angular-ts
-export {
-  ZardTableComponent,
-  ZardTableHeaderComponent,
-  ZardTableBodyComponent,
-  ZardTableRowComponent,
-  ZardTableHeadComponent,
-  ZardTableCellComponent,
-  ZardTableCaptionComponent,
-  ZardTableFooterComponent,
-} from './table.component';
-
 import {
   ZardTableComponent,
   ZardTableHeaderComponent,
@@ -296,7 +285,7 @@ import {
   ZardTableCellComponent,
   ZardTableCaptionComponent,
   ZardTableFooterComponent,
-} from './table.component';
+} from '@/shared/components/table/table.component';
 
 export const ZardTableImports = [
   ZardTableComponent,

@@ -1121,36 +1121,6 @@ export const ZARD_SIDEBAR_MOBILE_BREAKPOINT = '(max-width: 767.98px)';
 ```
 
 ```angular-ts
-export {
-  ZardSidebarMenuActionComponent,
-  ZardSidebarMenuBadgeComponent,
-  ZardSidebarMenuButtonComponent,
-  ZardSidebarMenuComponent,
-  ZardSidebarMenuItemComponent,
-  ZardSidebarMenuSkeletonComponent,
-  ZardSidebarMenuSubButtonComponent,
-  ZardSidebarMenuSubComponent,
-  ZardSidebarMenuSubItemComponent,
-} from './sidebar-menu.component';
-export {
-  ZardSidebarContentComponent,
-  ZardSidebarFooterComponent,
-  ZardSidebarGroupActionComponent,
-  ZardSidebarGroupComponent,
-  ZardSidebarGroupContentComponent,
-  ZardSidebarGroupLabelComponent,
-  ZardSidebarHeaderComponent,
-  ZardSidebarInputDirective,
-  ZardSidebarSeparatorComponent,
-} from './sidebar-primitives.component';
-export {
-  ZardSidebarComponent,
-  ZardSidebarInsetComponent,
-  ZardSidebarProviderComponent,
-  ZardSidebarRailComponent,
-  ZardSidebarTriggerComponent,
-} from './sidebar.component';
-
 import {
   ZardSidebarMenuActionComponent,
   ZardSidebarMenuBadgeComponent,
@@ -1161,7 +1131,7 @@ import {
   ZardSidebarMenuSubButtonComponent,
   ZardSidebarMenuSubComponent,
   ZardSidebarMenuSubItemComponent,
-} from './sidebar-menu.component';
+} from '@/shared/components/sidebar/sidebar-menu.component';
 import {
   ZardSidebarContentComponent,
   ZardSidebarFooterComponent,
@@ -1172,14 +1142,14 @@ import {
   ZardSidebarHeaderComponent,
   ZardSidebarInputDirective,
   ZardSidebarSeparatorComponent,
-} from './sidebar-primitives.component';
+} from '@/shared/components/sidebar/sidebar-primitives.component';
 import {
   ZardSidebarComponent,
   ZardSidebarInsetComponent,
   ZardSidebarProviderComponent,
   ZardSidebarRailComponent,
   ZardSidebarTriggerComponent,
-} from './sidebar.component';
+} from '@/shared/components/sidebar/sidebar.component';
 
 export const ZardSidebarImports = [
   ZardSidebarProviderComponent,

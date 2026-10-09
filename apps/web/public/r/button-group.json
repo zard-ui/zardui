@@ -5,7 +5,7 @@
   "files": [
     {
       "name": "button-group.imports.ts",
-      "content": "export {\n  ZardButtonGroupComponent,\n  ZardButtonGroupSeparatorComponent,\n  ZardButtonGroupTextDirective,\n} from './button-group.component';\n\n/*\n * The alias, not a relative path: the Angular compiler re-emits these imports from\n * whichever module spreads the array, and it can only do that for a specifier the\n * consumer can resolve too. A relative path here fails with NG3004.\n */\nimport {\n  ZardButtonGroupComponent,\n  ZardButtonGroupSeparatorComponent,\n  ZardButtonGroupTextDirective,\n} from './button-group.component';\n\n/** Every part of the button-group component, for a template that uses more than one. */\nexport const ZardButtonGroupImports = [\n  ZardButtonGroupComponent,\n  ZardButtonGroupSeparatorComponent,\n  ZardButtonGroupTextDirective,\n] as const;\n"
+      "content": "/*\n * The alias, not a relative path: the Angular compiler re-emits these imports from\n * whichever module spreads the array, and it can only do that for a specifier the\n * consumer can resolve too. A relative path here fails with NG3004.\n */\nimport {\n  ZardButtonGroupComponent,\n  ZardButtonGroupSeparatorComponent,\n  ZardButtonGroupTextDirective,\n} from '@/shared/components/button-group/button-group.component';\n\n/** Every part of the button-group component, for a template that uses more than one. */\nexport const ZardButtonGroupImports = [\n  ZardButtonGroupComponent,\n  ZardButtonGroupSeparatorComponent,\n  ZardButtonGroupTextDirective,\n] as const;\n"
     },
     {
       "name": "button-group.component.ts",

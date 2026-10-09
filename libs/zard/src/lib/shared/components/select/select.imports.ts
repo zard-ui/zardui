@@ -1,18 +1,10 @@
-export {
-  ZardSelectGroupComponent,
-  ZardSelectLabelComponent,
-  ZardSelectSeparatorComponent,
-} from './select-group.component';
-export { ZardSelectItemComponent } from './select-item.component';
-export { ZardSelectComponent } from './select.component';
-
 import {
   ZardSelectGroupComponent,
   ZardSelectLabelComponent,
   ZardSelectSeparatorComponent,
-} from './select-group.component';
-import { ZardSelectItemComponent } from './select-item.component';
-import { ZardSelectComponent } from './select.component';
+} from '@/shared/components/select/select-group.component';
+import { ZardSelectItemComponent } from '@/shared/components/select/select-item.component';
+import { ZardSelectComponent } from '@/shared/components/select/select.component';
 
 export const ZardSelectImports = [
   ZardSelectComponent,

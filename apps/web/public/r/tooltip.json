@@ -17,7 +17,7 @@
     },
     {
       "name": "tooltip.imports.ts",
-      "content": "export { ZardTooltipComponent, ZardTooltipDirective } from './tooltip';\n\nimport { OverlayModule } from '@angular/cdk/overlay';\n\nimport { ZardTooltipComponent, ZardTooltipDirective } from './tooltip';\n\nexport const ZardTooltipImports = [ZardTooltipComponent, ZardTooltipDirective, OverlayModule] as const;\n"
+      "content": "import { OverlayModule } from '@angular/cdk/overlay';\n\nimport { ZardTooltipComponent, ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';\n\nexport const ZardTooltipImports = [ZardTooltipComponent, ZardTooltipDirective, OverlayModule] as const;\n"
     },
     {
       "name": "index.ts",

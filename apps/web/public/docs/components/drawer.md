@@ -1445,15 +1445,6 @@ export function drawerDepth(panel: object): Signal<number> {
 ```
 
 ```angular-ts
-export {
-  ZardDrawerCloseDirective,
-  ZardDrawerComponent,
-  ZardDrawerDescriptionComponent,
-  ZardDrawerFooterComponent,
-  ZardDrawerHeaderComponent,
-  ZardDrawerTitleComponent,
-} from './drawer.component';
-
 import {
   ZardDrawerCloseDirective,
   ZardDrawerComponent,
@@ -1461,7 +1452,7 @@ import {
   ZardDrawerFooterComponent,
   ZardDrawerHeaderComponent,
   ZardDrawerTitleComponent,
-} from './drawer.component';
+} from '@/shared/components/drawer/drawer.component';
 
 export const ZardDrawerImports = [
   ZardDrawerComponent,

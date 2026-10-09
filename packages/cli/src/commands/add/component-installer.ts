@@ -1,4 +1,4 @@
-import { isLibraryKind } from '@cli/commands/init/project-kind.js';
+import { isPublishableLibrary } from '@cli/commands/init/library-peers.js';
 import { Config } from '@cli/utils/config';
 import { CliError, InstallError } from '@cli/utils/errors.js';
 import { logger } from '@cli/utils/logger.js';
@@ -54,14 +54,14 @@ export async function installComponent(
 }
 
 /**
- * In a library, the directory each alias stands for — `null` in an application.
+ * In a publishable library, the directory each alias stands for — `null` anywhere else.
  *
  * Applications keep the aliases, which their own build resolves. A library is
  * bundled by ng-packagr, which leaves aliased imports external: see
  * `relativizeImports`.
  */
 function libraryTargets(config: Config & { resolvedPaths: Record<string, string> }): Record<string, string> | null {
-  if (!isLibraryKind(config.projectType)) return null;
+  if (!isPublishableLibrary(config, config.resolvedPaths['baseUrl'])) return null;
 
   return Object.fromEntries(
     (['components', 'utils', 'core', 'services', 'blocks'] as const).map(key => [

@@ -368,18 +368,6 @@ export type ZardAttachmentMediaVariantVariants = NonNullable<VariantProps<typeof
 ```
 
 ```angular-ts
-export {
-  ZardAttachmentComponent,
-  ZardAttachmentMediaComponent,
-  ZardAttachmentContentComponent,
-  ZardAttachmentTitleComponent,
-  ZardAttachmentDescriptionComponent,
-  ZardAttachmentActionsComponent,
-  ZardAttachmentActionComponent,
-  ZardAttachmentTriggerDirective,
-  ZardAttachmentGroupComponent,
-} from './attachment.component';
-
 import {
   ZardAttachmentComponent,
   ZardAttachmentMediaComponent,

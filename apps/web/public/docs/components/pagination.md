@@ -330,16 +330,6 @@ export * from './pagination.variants';
 ```
 
 ```angular-ts
-export {
-  ZardPaginationButtonComponent,
-  ZardPaginationComponent,
-  ZardPaginationContentComponent,
-  ZardPaginationEllipsisComponent,
-  ZardPaginationItemComponent,
-  ZardPaginationNextComponent,
-  ZardPaginationPreviousComponent,
-} from './pagination.component';
-
 import {
   ZardPaginationButtonComponent,
   ZardPaginationComponent,
@@ -348,7 +338,7 @@ import {
   ZardPaginationItemComponent,
   ZardPaginationNextComponent,
   ZardPaginationPreviousComponent,
-} from './pagination.component';
+} from '@/shared/components/pagination/pagination.component';
 
 export const ZardPaginationImports = [
   ZardPaginationContentComponent,

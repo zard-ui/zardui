@@ -29,7 +29,7 @@
     },
     {
       "name": "sheet.imports.ts",
-      "content": "export {\n  ZardSheetCloseDirective,\n  ZardSheetComponent,\n  ZardSheetDescriptionComponent,\n  ZardSheetFooterComponent,\n  ZardSheetHeaderComponent,\n  ZardSheetTitleComponent,\n} from './sheet.component';\n\nimport {\n  ZardSheetCloseDirective,\n  ZardSheetComponent,\n  ZardSheetDescriptionComponent,\n  ZardSheetFooterComponent,\n  ZardSheetHeaderComponent,\n  ZardSheetTitleComponent,\n} from './sheet.component';\n\n/** Every part of the declarative sheet, for a template that composes one. */\nexport const ZardSheetImports = [\n  ZardSheetComponent,\n  ZardSheetHeaderComponent,\n  ZardSheetTitleComponent,\n  ZardSheetDescriptionComponent,\n  ZardSheetFooterComponent,\n  ZardSheetCloseDirective,\n] as const;\n"
+      "content": "import {\n  ZardSheetCloseDirective,\n  ZardSheetComponent,\n  ZardSheetDescriptionComponent,\n  ZardSheetFooterComponent,\n  ZardSheetHeaderComponent,\n  ZardSheetTitleComponent,\n} from '@/shared/components/sheet/sheet.component';\n\n/** Every part of the declarative sheet, for a template that composes one. */\nexport const ZardSheetImports = [\n  ZardSheetComponent,\n  ZardSheetHeaderComponent,\n  ZardSheetTitleComponent,\n  ZardSheetDescriptionComponent,\n  ZardSheetFooterComponent,\n  ZardSheetCloseDirective,\n] as const;\n"
     },
     {
       "name": "sheet.service.ts",

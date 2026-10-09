@@ -57,7 +57,7 @@
     },
     {
       "name": "chart.imports.ts",
-      "content": "export { ZardChartLegendComponent } from './chart-legend.component';\nexport { ZardChartTooltipComponent } from './chart-tooltip.component';\nexport { ZardChartComponent } from './chart.component';\n\nimport { ZardChartLegendComponent } from './chart-legend.component';\nimport { ZardChartTooltipComponent } from './chart-tooltip.component';\nimport { ZardChartComponent } from './chart.component';\n\nexport const ZardChartImports = [ZardChartComponent, ZardChartTooltipComponent, ZardChartLegendComponent] as const;\n"
+      "content": "import { ZardChartLegendComponent } from '@/shared/components/chart/chart-legend.component';\nimport { ZardChartTooltipComponent } from '@/shared/components/chart/chart-tooltip.component';\nimport { ZardChartComponent } from '@/shared/components/chart/chart.component';\n\nexport const ZardChartImports = [ZardChartComponent, ZardChartTooltipComponent, ZardChartLegendComponent] as const;\n"
     },
     {
       "name": "index.ts",

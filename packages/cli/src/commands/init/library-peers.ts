@@ -46,6 +46,22 @@ export async function syncLibraryPeerDependencies(cwd: string, config: Config, p
   await writeFile(libraryPackageJson, `${JSON.stringify(library, null, 2)}\n`, 'utf8');
 }
 
+/**
+ * Whether the project is a library ng-packagr bundles — one with an `ng-package.json`.
+ *
+ * Only that kind needs relative imports: ng-packagr leaves aliased imports
+ * external. A non-buildable Nx library is compiled from source by the app that
+ * uses it, through the same aliases — and in a Vite build, reaching one file
+ * by alias and by relative path loads it twice, so rewriting there would only
+ * add risk. `baseUrl` is absolute; the library root sits two levels above it.
+ */
+export function isPublishableLibrary(config: { projectType?: Config['projectType'] }, baseUrl: string): boolean {
+  return (
+    Boolean(config.projectType && isLibraryKind(config.projectType)) &&
+    existsSync(path.resolve(baseUrl, '..', '..', 'ng-package.json'))
+  );
+}
+
 /** `@angular/cdk@^22` → `@angular/cdk`; the `@` that opens a scope is not a version. */
 function packageName(spec: string): string {
   const separator = spec.lastIndexOf('@');

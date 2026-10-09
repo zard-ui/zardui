@@ -9,7 +9,7 @@
     },
     {
       "name": "table.imports.ts",
-      "content": "export {\n  ZardTableComponent,\n  ZardTableHeaderComponent,\n  ZardTableBodyComponent,\n  ZardTableRowComponent,\n  ZardTableHeadComponent,\n  ZardTableCellComponent,\n  ZardTableCaptionComponent,\n  ZardTableFooterComponent,\n} from './table.component';\n\nimport {\n  ZardTableComponent,\n  ZardTableHeaderComponent,\n  ZardTableBodyComponent,\n  ZardTableRowComponent,\n  ZardTableHeadComponent,\n  ZardTableCellComponent,\n  ZardTableCaptionComponent,\n  ZardTableFooterComponent,\n} from './table.component';\n\nexport const ZardTableImports = [\n  ZardTableComponent,\n  ZardTableHeaderComponent,\n  ZardTableBodyComponent,\n  ZardTableRowComponent,\n  ZardTableHeadComponent,\n  ZardTableCellComponent,\n  ZardTableCaptionComponent,\n  ZardTableFooterComponent,\n] as const;\n"
+      "content": "import {\n  ZardTableComponent,\n  ZardTableHeaderComponent,\n  ZardTableBodyComponent,\n  ZardTableRowComponent,\n  ZardTableHeadComponent,\n  ZardTableCellComponent,\n  ZardTableCaptionComponent,\n  ZardTableFooterComponent,\n} from '@/shared/components/table/table.component';\n\nexport const ZardTableImports = [\n  ZardTableComponent,\n  ZardTableHeaderComponent,\n  ZardTableBodyComponent,\n  ZardTableRowComponent,\n  ZardTableHeadComponent,\n  ZardTableCellComponent,\n  ZardTableCaptionComponent,\n  ZardTableFooterComponent,\n] as const;\n"
     },
     {
       "name": "table.variants.ts",
