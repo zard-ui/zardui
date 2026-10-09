@@ -175,7 +175,7 @@ import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.com
 Set `zInvalid` on `z-checkbox` (which sets `aria-invalid`) and `data-invalid` on `z-field` to show the invalid styles.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
@@ -192,6 +192,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCheckboxInvalidComponent {
   terms = false;
@@ -203,7 +204,7 @@ export class ZardDemoCheckboxInvalidComponent {
 Pair `z-checkbox` with `z-field` and `z-field-label` for proper layout and labeling.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
@@ -220,6 +221,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCheckboxBasicComponent {
   terms = false;
@@ -231,7 +233,7 @@ export class ZardDemoCheckboxBasicComponent {
 Use `z-field-content` and `z-field-description` for helper text.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
@@ -251,6 +253,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCheckboxDescriptionComponent {
   terms = true;
@@ -288,7 +291,7 @@ export class ZardDemoCheckboxDisabledComponent {}
 Use multiple `z-field` rows inside a `fieldset[z-field-set]` to create a checkbox list.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
@@ -327,6 +330,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
       </div>
     </fieldset>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCheckboxGroupComponent {
   hardDisks = true;

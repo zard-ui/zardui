@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideLayers2, lucideSparkles, lucideUsers, lucideZap } from '@ng-icons/lucide';
@@ -48,6 +48,7 @@ interface FeatureCard {
       </div>
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   viewProviders: [
     provideIcons({
       lucideSparkles,

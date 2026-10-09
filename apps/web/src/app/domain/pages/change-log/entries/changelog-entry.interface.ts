@@ -12,14 +12,7 @@ export interface ChangelogEntryMeta {
 
 /** Closed set of highlight icons; the page maps each one to a Lucide icon. */
 export type ChangelogHighlightIcon =
-  | 'zap'
-  | 'terminal'
-  | 'moon'
-  | 'package'
-  | 'rocket'
-  | 'shield'
-  | 'code'
-  | 'settings';
+  'zap' | 'terminal' | 'moon' | 'package' | 'rocket' | 'shield' | 'code' | 'settings';
 
 export interface ChangelogHighlight {
   title: string;

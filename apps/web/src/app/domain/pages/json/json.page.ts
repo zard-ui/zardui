@@ -1,4 +1,4 @@
-import { Component, inject, type OnInit } from '@angular/core';
+import { Component, inject, type OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
@@ -40,6 +40,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     JsonAliasesSectionComponent,
     JsonCurrentStructureSectionComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <z-content
       [title]="title"

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
@@ -20,6 +20,7 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       </z-dropdown-menu-radio-group>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDropdownRadioGroupComponent {
   selected = 'bottom';

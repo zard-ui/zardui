@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
@@ -59,6 +59,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
       </section>
     </z-content>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     EnvCardComponent,
     DocContentComponent,

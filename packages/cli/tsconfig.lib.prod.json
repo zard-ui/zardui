@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "@cli/*": ["src/*"]
-    }
+    },
+    "ignoreDeprecations": "6.0"
   },
   "exclude": ["**/*.spec.ts", "**/*.test.ts", "jest.config.ts", "src/test-setup.ts"]
 }

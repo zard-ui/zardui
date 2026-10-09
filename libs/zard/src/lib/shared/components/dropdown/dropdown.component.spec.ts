@@ -1,5 +1,5 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { Component, type DebugElement } from '@angular/core';
+import { Component, type DebugElement, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -16,6 +16,7 @@ import { ZardDropdownMenuComponent } from './dropdown.component';
       <div z-dropdown-menu-item>Item 2</div>
     </z-dropdown-menu>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   disabled = false;
@@ -31,6 +32,7 @@ class TestComponent {
       <div z-dropdown-menu-item>Item 2</div>
     </z-dropdown-menu>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class OpenChangeOutputTestComponent {
   openChangeEmitted = false;
@@ -51,6 +53,7 @@ class OpenChangeOutputTestComponent {
       <div z-dropdown-menu-item>Item 2</div>
     </z-dropdown-menu>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TemplateRefTestComponent {}
 

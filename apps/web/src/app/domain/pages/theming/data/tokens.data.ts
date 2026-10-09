@@ -332,15 +332,13 @@ export const THEME_TOKENS: ThemeToken[] = [
   },
 
   // ── Charts ────────────────────────────────────────────────────────────────
-  ...([1, 2, 3, 4, 5] as const).map(
-    (n): ThemeToken => ({
-      name: `chart-${n}`,
-      group: 'chart',
-      description: `Categorical series ${n} for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet.`,
-      utilities: [],
-      usedBy: [],
-    }),
-  ),
+  ...([1, 2, 3, 4, 5] as const).map((n): ThemeToken => ({
+    name: `chart-${n}`,
+    group: 'chart',
+    description: `Categorical series ${n} for data visualization. Defined for parity with shadcn chart blocks — no ZardUI component consumes it yet.`,
+    utilities: [],
+    usedBy: [],
+  })),
 
   // ── Sidebar ───────────────────────────────────────────────────────────────
   {

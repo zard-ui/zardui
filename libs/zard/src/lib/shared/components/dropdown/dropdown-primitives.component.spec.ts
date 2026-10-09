@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { fakeAsync, flush, type ComponentFixture, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -34,6 +34,7 @@ import { ZardDropdownService } from './dropdown.service';
       <z-dropdown-menu-shortcut>⌘S</z-dropdown-menu-shortcut>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class DropdownPrimitivesHostComponent {
   statusBar = true;

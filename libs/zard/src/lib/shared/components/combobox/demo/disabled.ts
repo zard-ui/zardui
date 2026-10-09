@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
@@ -39,6 +39,7 @@ import type { ZardComboboxOption } from '../combobox.types';
       </z-combobox>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxDisabledComponent {
   readonly value = signal<string | string[] | null>(null);

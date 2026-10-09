@@ -7,14 +7,13 @@ test('digitar num input atualiza o estado e renderiza', () => {
   const term = createMockTerminal({ size: { cols: 44, rows: 8 } });
   const ui = createScreen({ terminal: term, handleExitSignals: false });
   const st = { name: '' };
-  ui.setView(
-    (): Node =>
-      screen(
-        panel(
-          { title: 'x', border: 'round', padding: 1 },
-          input({ key: 'name', label: 'name', value: st.name, onChange: v => (st.name = v) }),
-        ),
+  ui.setView((): Node =>
+    screen(
+      panel(
+        { title: 'x', border: 'round', padding: 1 },
+        input({ key: 'name', label: 'name', value: st.name, onChange: v => (st.name = v) }),
       ),
+    ),
   );
   ui.mount();
   term.feed('zard'); // 4 teclas numa rajada
@@ -28,15 +27,14 @@ test('TAB navega e space alterna checkbox', () => {
   const term = createMockTerminal({ size: { cols: 44, rows: 10 } });
   const ui = createScreen({ terminal: term, handleExitSignals: false });
   const st = { name: '', checked: false };
-  ui.setView(
-    (): Node =>
-      screen(
-        column(
-          {},
-          input({ key: 'name', value: st.name, onChange: v => (st.name = v) }),
-          checkbox({ key: 'ts', label: 'ts', checked: st.checked, onChange: v => (st.checked = v) }),
-        ),
+  ui.setView((): Node =>
+    screen(
+      column(
+        {},
+        input({ key: 'name', value: st.name, onChange: v => (st.name = v) }),
+        checkbox({ key: 'ts', label: 'ts', checked: st.checked, onChange: v => (st.checked = v) }),
       ),
+    ),
   );
   ui.mount();
   assert.equal(ui.focus.activeKey, 'name');
@@ -51,20 +49,19 @@ test('select responds to the arrow keys', () => {
   const term = createMockTerminal({ size: { cols: 44, rows: 8 } });
   const ui = createScreen({ terminal: term, handleExitSignals: false });
   const st = { pm: 'npm' };
-  ui.setView(
-    (): Node =>
-      screen(
-        select({
-          key: 'pm',
-          value: st.pm,
-          options: [
-            { label: 'npm', value: 'npm' },
-            { label: 'pnpm', value: 'pnpm' },
-            { label: 'bun', value: 'bun' },
-          ],
-          onChange: v => (st.pm = v),
-        }),
-      ),
+  ui.setView((): Node =>
+    screen(
+      select({
+        key: 'pm',
+        value: st.pm,
+        options: [
+          { label: 'npm', value: 'npm' },
+          { label: 'pnpm', value: 'pnpm' },
+          { label: 'bun', value: 'bun' },
+        ],
+        onChange: v => (st.pm = v),
+      }),
+    ),
   );
   ui.mount();
   term.feed('\x1b[B'); // down → pnpm

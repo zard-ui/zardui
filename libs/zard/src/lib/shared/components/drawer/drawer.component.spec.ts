@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardDrawerRef } from './drawer-ref';
@@ -26,6 +26,7 @@ const panel = () => document.querySelector('z-drawer-panel');
       </z-drawer-footer>
     </z-drawer>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class DrawerHostComponent {
   readonly visible = signal(false);
@@ -37,6 +38,7 @@ class DrawerHostComponent {
   template: `
     <p data-testid="service-content">Service content</p>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class DrawerServiceContentComponent {
   readonly drawerRef = inject(ZardDrawerRef, { optional: true });
@@ -53,6 +55,7 @@ class DrawerServiceContentComponent {
       <z-drawer-title>Inner</z-drawer-title>
     </z-drawer>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class DrawerNestedComponent {
   readonly outer = signal(false);
@@ -68,6 +71,7 @@ class DrawerNestedComponent {
       </z-drawer-header>
     </z-drawer>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class DrawerInitiallyOpenComponent {
   readonly snapPoints = ['20rem', 1];

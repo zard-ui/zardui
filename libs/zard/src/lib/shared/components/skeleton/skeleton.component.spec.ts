@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { ZardSkeletonComponent } from './skeleton.component';
   template: `
     <z-skeleton class="size-4 rounded-sm" />
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestSkeletonHostComponent {}
 

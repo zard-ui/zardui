@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardAlertDialogImports } from './alert-dialog.imports';
@@ -24,6 +24,7 @@ const panel = () => document.querySelector('z-alert-dialog-panel');
       </z-alert-dialog-footer>
     </z-alert-dialog>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class AlertDialogHostComponent {
   readonly visible = signal(false);

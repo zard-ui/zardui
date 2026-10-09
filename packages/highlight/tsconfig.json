@@ -10,7 +10,8 @@
     "experimentalDecorators": true,
     "paths": {
       "@highlight/*": ["./src/*"]
-    }
+    },
+    "ignoreDeprecations": "6.0"
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["../../node_modules", "../../dist"]

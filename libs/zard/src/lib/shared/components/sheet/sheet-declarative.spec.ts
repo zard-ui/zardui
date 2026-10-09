@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import type { ZardSheetSide } from './sheet-panel.component';
@@ -25,6 +25,7 @@ const panel = () => document.querySelector('z-sheet-panel');
       </z-sheet-footer>
     </z-sheet>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class SheetHostComponent {
   readonly visible = signal(false);

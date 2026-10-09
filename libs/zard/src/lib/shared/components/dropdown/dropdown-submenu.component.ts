@@ -206,7 +206,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'ArrowRight' && event.key !== 'Enter' && event.key !== ' ') return;
+    if (event.key !== 'ArrowRight' && event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
 
     event.preventDefault();
     event.stopPropagation();

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { JSON_INIT_COMMAND } from '@generated/documentation/json/init-command';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
@@ -41,6 +41,7 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
       <p class="text-muted-foreground text-sm sm:text-base">See the CLI section for more information.</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   viewProviders: [provideIcons({ lucideInfo })],
 })
 export class JsonIntroductionSectionComponent {

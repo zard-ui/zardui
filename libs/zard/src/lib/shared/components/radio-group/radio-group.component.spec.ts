@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -14,6 +14,7 @@ import { ZardRadioComponent, ZardRadioGroupComponent } from './radio-group.compo
       <button z-radio value="system" [zDisabled]="true">System</button>
     </z-radio-group>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {
   readonly groupDisabled = signal(false);
@@ -27,6 +28,7 @@ class TestHostComponent {
       <button z-radio value="dark">Dark</button>
     </z-radio-group>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostWithNgModelComponent {
   theme = 'light';
@@ -42,6 +44,7 @@ class TestHostWithNgModelComponent {
       </z-radio-group>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostWithReactiveFormComponent {
   readonly form = new FormGroup({ theme: new FormControl('dark') });
@@ -120,6 +123,7 @@ describe('ZardRadioGroupComponent', () => {
       template: `
         <button z-radio value="a">Orphan</button>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class OrphanHostComponent {}
 

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 
-import { Component, signal, viewChild } from '@angular/core';
+import { Component, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
@@ -21,6 +21,7 @@ import { ZardDropdownService } from './dropdown.service';
       </z-dropdown-menu-sub-content>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   readonly menu = viewChild.required<ZardDropdownMenuContentComponent>('menu');

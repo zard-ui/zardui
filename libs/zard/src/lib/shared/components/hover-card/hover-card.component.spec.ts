@@ -1,5 +1,12 @@
 import { type FlexibleConnectedPositionStrategy, OverlayModule, type OverlayRef } from '@angular/cdk/overlay';
-import { type AfterViewInit, Component, PLATFORM_ID, signal, type WritableSignal } from '@angular/core';
+import {
+  type AfterViewInit,
+  Component,
+  PLATFORM_ID,
+  signal,
+  type WritableSignal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { fireEvent, render, screen } from '@testing-library/angular';
@@ -18,6 +25,7 @@ const CARD_CONTENT = 'The React Framework - created and maintained by @vercel.';
       <z-hover-card>{{ cardContent }}</z-hover-card>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class AfterViewInitVisibleHost implements AfterViewInit {
   protected readonly cardContent = CARD_CONTENT;
@@ -357,9 +365,9 @@ describe('ZardHoverCardDirective', () => {
 
     await hoverTrigger(0);
 
-    const overlayRef = (directive as unknown as { overlayRef: OverlayRef }).overlayRef;
+    const { overlayRef } = directive as unknown as { overlayRef: OverlayRef };
     const positionStrategy = overlayRef.getConfig().positionStrategy as FlexibleConnectedPositionStrategy;
-    const positions = positionStrategy.positions;
+    const { positions } = positionStrategy;
 
     expect(overlayRef.hasAttached()).toBe(true);
     expect(positions.length).toBeGreaterThan(1);

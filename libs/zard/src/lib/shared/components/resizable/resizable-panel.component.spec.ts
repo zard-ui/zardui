@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -19,6 +19,7 @@ import { ZardResizablePanelComponent } from './resizable-panel.component';
       <div>Panel Content</div>
     </z-resizable-panel>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestPanelHostComponent {
   defaultSize: number | string | undefined = 50;
@@ -272,5 +273,6 @@ describe('ZardResizablePanelComponent', () => {
       <button type="button">Action Button</button>
     </z-resizable-panel>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class ComplexContentHostComponent {}

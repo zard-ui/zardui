@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -14,6 +14,7 @@ import { ZardKbdComponent } from './kbd.component';
       <z-kbd>X</z-kbd>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class KbdTestHostComponent {}
 

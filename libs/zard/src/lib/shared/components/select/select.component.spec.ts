@@ -1,4 +1,4 @@
-import { Component, signal, type TemplateRef, viewChild } from '@angular/core';
+import { Component, signal, type TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
@@ -28,6 +28,7 @@ import { ZardSheetService } from '../sheet/sheet.service';
       <z-select-item zValue="option3">Option 3</z-select-item>
     </z-select>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {
   readonly value = signal('');
@@ -47,6 +48,7 @@ class TestHostComponent {
       <z-select-item zValue="orange">Orange</z-select-item>
     </z-select>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostWithFormControlComponent {
   control = new FormControl('');
@@ -65,6 +67,7 @@ class TestHostWithFormControlComponent {
       <z-select-item zValue="banana">Banana</z-select-item>
     </z-select>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestApiHostComponent {
   readonly value = signal<string | string[]>('');
@@ -657,6 +660,7 @@ describe('ZardSelectComponent', () => {
           }
         </z-select>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class DynamicHostComponent {
       readonly items = signal<{ value: string; label: string }[]>([
@@ -796,6 +800,7 @@ describe('ZardSelectComponent', () => {
           <z-select-separator />
         </z-select>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class GroupedHostComponent {
       readonly value = signal('');
@@ -871,6 +876,7 @@ describe('ZardSelectComponent', () => {
           </z-select-group>
         </z-select>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class GroupedScrollableHostComponent {
       readonly value = signal('');
@@ -888,6 +894,7 @@ describe('ZardSelectComponent', () => {
           <z-select-item zValue="hst">Hawaii Standard Time</z-select-item>
         </z-select>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class ScrollableHostComponent {
       readonly value = signal('');
@@ -1227,6 +1234,7 @@ describe('ZardSelectComponent', () => {
           <z-select-item zValue="option4">OptionFour</z-select-item>
         </z-select>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestMultiselectHostComponent {
       readonly value = signal<string[]>([]);
@@ -1368,6 +1376,7 @@ describe('ZardSelectComponent', () => {
           </z-select>
         </ng-template>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class OverlayWithSelectHostComponent {
       readonly overlayTemplate = viewChild.required<TemplateRef<void>>('overlayTemplate');

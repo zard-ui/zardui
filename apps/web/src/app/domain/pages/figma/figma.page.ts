@@ -1,4 +1,4 @@
-import { Component, inject, type OnInit } from '@angular/core';
+import { Component, inject, type OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideInfo } from '@ng-icons/lucide';
@@ -17,6 +17,7 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
   selector: 'z-figma',
   templateUrl: './figma.page.html',
   viewProviders: [provideIcons({ lucideInfo })],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DocContentComponent,
     DocHeadingComponent,

@@ -1,4 +1,4 @@
-import { Component, input, inputBinding, signal } from '@angular/core';
+import { Component, input, inputBinding, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { render, screen } from '@testing-library/angular';
 
@@ -100,6 +100,7 @@ describe('ButtonGroup', () => {
         template: `
           <z-button-group [zOrientation]="orientation()"><z-button-group-separator /></z-button-group>
         `,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class TestComponent {
         readonly orientation = input<'horizontal' | 'vertical'>('vertical');
@@ -157,6 +158,7 @@ describe('ButtonGroup', () => {
           <label for="test-input" z-button-group-text [class]="customClass()">Text</label>
           <input id="test-input" />
         `,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class TestComponent {
         readonly customClass = input<string>('');

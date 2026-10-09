@@ -1110,7 +1110,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'ArrowRight' && event.key !== 'Enter' && event.key !== ' ') return;
+    if (event.key !== 'ArrowRight' && event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
 
     event.preventDefault();
     event.stopPropagation();
@@ -1673,7 +1675,7 @@ export class ZardDropdownService {
       return;
     }
 
-    const width = (triggerElement.nativeElement as HTMLElement).getBoundingClientRect().width;
+    const { width } = (triggerElement.nativeElement as HTMLElement).getBoundingClientRect();
     this.overlayRef.hostElement.style.setProperty('--z-dropdown-menu-trigger-width', `${width}px`);
   }
 
@@ -2111,7 +2113,7 @@ export class ZardDemoDropdownIconsComponent {
 Use `z-dropdown-menu-checkbox-item` for toggles.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
@@ -2128,6 +2130,7 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       <z-dropdown-menu-checkbox-item [(zChecked)]="panel">Panel</z-dropdown-menu-checkbox-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDropdownCheckboxesComponent {
   statusBar = true;
@@ -2186,7 +2189,7 @@ export class ZardDemoDropdownCheckboxesIconsComponent {
 Use `z-dropdown-menu-radio-group` for exclusive choices.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
@@ -2208,6 +2211,7 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       </z-dropdown-menu-radio-group>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDropdownRadioGroupComponent {
   selected = 'bottom';

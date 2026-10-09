@@ -1,4 +1,4 @@
-import { Component, type Type } from '@angular/core';
+import { Component, type Type, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { render } from '@testing-library/angular';
@@ -17,6 +17,7 @@ const getHostComponent = (orientation: 'horizontal' | 'vertical' = 'horizontal')
         <z-tab label="Third">Third content</z-tab>
       </z-tab-group>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
   })
   class TestHostComponent {
     orientation = orientation;
@@ -117,6 +118,7 @@ describe('ZardTabGroupComponent', () => {
           <z-tab label="D">D</z-tab>
         </z-tab-group>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TwoGroupsHostComponent {}
 
@@ -199,6 +201,7 @@ describe('ZardTabGroupComponent', () => {
           <z-tab label="Second">Second</z-tab>
         </z-tab-group>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -220,6 +223,7 @@ describe('ZardTabGroupComponent', () => {
           <z-tab label="Second">Second</z-tab>
         </z-tab-group>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -241,6 +245,7 @@ describe('ZardTabGroupComponent', () => {
           <z-tab label="Disabled" [zDisabled]="true">B</z-tab>
         </z-tab-group>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -261,6 +266,7 @@ describe('ZardTabGroupComponent', () => {
           <z-tab label="Two">B</z-tab>
         </z-tab-group>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -281,6 +287,7 @@ describe('ZardTabComponent', () => {
       template: `
         <z-tab label="Test">Content</z-tab>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -297,6 +304,7 @@ describe('ZardTabComponent', () => {
       template: `
         <z-tab label="My Tab">Content</z-tab>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { render } from '@testing-library/angular';
@@ -28,6 +28,7 @@ const getHostComponent = (
         <z-accordion-item zValue="item-3">Text 3</z-accordion-item>
       </z-accordion>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
   })
   class TestHostComponent {
     type: 'single' | 'multiple' = mode;

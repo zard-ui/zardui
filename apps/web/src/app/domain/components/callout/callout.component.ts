@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -66,6 +66,7 @@ export type CalloutVariant = VariantProps<typeof calloutVariants>['variant'];
 
 @Component({
   selector: 'z-callout',
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div [class]="calloutClasses()">
       <div class="flex items-start gap-4">

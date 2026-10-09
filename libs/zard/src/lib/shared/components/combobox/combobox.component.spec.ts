@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
@@ -48,6 +48,7 @@ const testGroups: ZardComboboxGroup[] = [
       (zComboSelected)="selectedOptions.push($event)"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class ShorthandHostComponent {
   readonly options = signal<ZardComboboxOption[]>(testOptions);
@@ -88,6 +89,7 @@ class ShorthandHostComponent {
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class ComposableHostComponent {
   readonly value = signal<string | string[] | null>(null);
@@ -127,6 +129,7 @@ class ComposableHostComponent {
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class ChipsHostComponent {
   readonly value = signal<string | string[] | null>(['apple']);
@@ -154,6 +157,7 @@ class ChipsHostComponent {
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class FormHostComponent {
   readonly multiple = signal(false);
@@ -180,6 +184,7 @@ class FormHostComponent {
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class PopupHostComponent {
   readonly value = signal<string | string[] | null>(null);
@@ -204,6 +209,7 @@ class PopupHostComponent {
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class LabelledHostComponent {
   readonly value = signal<string | string[] | null>(null);

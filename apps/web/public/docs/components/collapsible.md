@@ -347,7 +347,7 @@ interface FileTreeItem {
   template: `
     <z-card zSize="sm" class="mx-auto w-full max-w-[16rem] gap-2">
       <z-card-header>
-        <z-tab-group class="w-full [&_[role=tablist]]:w-full">
+        <z-tab-group class="w-full **:[[role=tablist]]:w-full">
           <z-tab label="Explorer" />
           <z-tab label="Outline" />
         </z-tab-group>

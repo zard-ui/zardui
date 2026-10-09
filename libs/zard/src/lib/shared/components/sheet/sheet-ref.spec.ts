@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { Component, inject, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardSheetService } from './sheet.service';
@@ -13,6 +13,7 @@ const CLOSE_DELAY = 250;
   template: `
     <button type="button" z-button zType="outline" (click)="openSheet()">Open sheet</button>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class SheetRefTestHostComponent {
   private readonly sheetService = inject(ZardSheetService);

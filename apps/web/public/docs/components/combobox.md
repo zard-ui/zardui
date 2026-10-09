@@ -1988,7 +1988,7 @@ import { ZardComboboxImports } from '@/shared/components/combobox/combobox.impor
 `zMultiple` turns the combobox into a multi-select. Selected values render as removable `z-combobox-chip`s inside `z-combobox-chips`, backed by an `input[z-combobox-chips-input]` that also opens the popup on focus; the popup stays open after each pick. Paired here with `zAutoHighlight` so `Enter` selects the top match without an extra arrow key press.
 
 ```angular-ts
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
@@ -2017,6 +2017,7 @@ import type { ZardComboboxOption } from '../combobox.types';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxMultipleComponent {
   readonly value = signal<string | string[] | null>(['angular']);
@@ -2046,7 +2047,7 @@ export class ZardDemoComboboxMultipleComponent {
 `zShowClear` on `z-combobox-input` adds a `button[z-combobox-clear]` next to the chevron once a value is selected. It clears the selection and the query and returns focus to the input.
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
@@ -2069,6 +2070,7 @@ import type { ZardComboboxOption } from '../combobox.types';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxClearComponent {
   readonly value = signal<string | string[] | null>('angular');
@@ -2233,7 +2235,7 @@ export class ZardDemoComboboxCustomItemsComponent {
 `zInvalid` on `z-combobox` marks it invalid, setting `data-invalid` on the host and `aria-invalid` on the input. Composed here inside `z-field` with `z-field-label` and `z-field-error` for the full validation pattern.
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardFieldImports } from '../../field/field.imports';
 import { ZardComboboxImports } from '../combobox.imports';
@@ -2263,6 +2265,7 @@ import type { ZardComboboxOption } from '../combobox.types';
       <z-field-error>Please select a framework.</z-field-error>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxInvalidComponent {
   readonly value = signal<string | string[] | null>(null);
@@ -2283,7 +2286,7 @@ export class ZardDemoComboboxInvalidComponent {
 `zDisabled` on `z-combobox` disables the whole control; `zDisabled` on an individual `z-combobox-item` disables just that option while leaving the rest selectable.
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
@@ -2324,6 +2327,7 @@ import type { ZardComboboxOption } from '../combobox.types';
       </z-combobox>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxDisabledComponent {
   readonly value = signal<string | string[] | null>(null);
@@ -2349,7 +2353,7 @@ export class ZardDemoComboboxDisabledComponent {
 `zAutoHighlight` highlights the first matching, selectable item as soon as the query changes, so pressing `Enter` selects it without navigating with the arrow keys first. Compare with `popup`, where the popup itself — not the highlight — is the thing being customised.
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
@@ -2372,6 +2376,7 @@ import type { ZardComboboxOption } from '../combobox.types';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxAutoHighlightComponent {
   readonly value = signal<string | string[] | null>(null);
@@ -2392,7 +2397,7 @@ export class ZardDemoComboboxAutoHighlightComponent {
 zard-only shorthand: pass `[options]` (or `[groups]`) straight to `z-combobox` and project nothing. With no `z-combobox-content` in the template, the root renders its own input and popup from the option list — no `z-combobox-input`, `z-combobox-item` or `z-combobox-content` markup needed. `(zComboSelected)` reports the option that was chosen. Trades the composition every other example uses for brevity.
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardComboboxComponent } from '../combobox.component';
 import type { ZardComboboxOption } from '../combobox.types';
@@ -2413,6 +2418,7 @@ import type { ZardComboboxOption } from '../combobox.types';
       <p class="text-muted-foreground text-sm">Selected: {{ selected()?.label ?? 'none' }}</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxShorthandComponent {
   readonly selected = signal<ZardComboboxOption | null>(null);

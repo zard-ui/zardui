@@ -1,4 +1,4 @@
-import { Component, inject, signal, viewChild } from '@angular/core';
+import { Component, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 import { ZardContextMenuService } from '@/shared/components/context-menu/context-menu.service';
@@ -53,6 +53,7 @@ interface FileRow {
       <z-dropdown-menu-item zType="destructive" (click)="remove()">Delete</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoContextMenuTableRowsComponent {

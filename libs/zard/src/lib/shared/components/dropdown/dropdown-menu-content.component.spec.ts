@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
@@ -10,6 +10,7 @@ import { ZardDropdownMenuContentComponent } from './dropdown-menu-content.compon
       <div>Menu Content</div>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   customClass = '';

@@ -1,4 +1,4 @@
-import { Component, inputBinding, outputBinding, signal } from '@angular/core';
+import { Component, inputBinding, outputBinding, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
@@ -13,6 +13,7 @@ import { toggleVariants } from './toggle.variants';
   template: `
     <z-toggle zAriaLabel="Bold" [formControl]="control">Bold</z-toggle>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class ToggleFormHostComponent {
   control = new FormControl(false);

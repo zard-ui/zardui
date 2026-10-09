@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
@@ -11,6 +11,7 @@ export interface CategoryTab {
 @Component({
   selector: 'z-category-tabs',
   imports: [RouterLink, RouterLinkActive, ZardButtonComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './category-tabs.component.html',
 })
 export class CategoryTabsComponent {

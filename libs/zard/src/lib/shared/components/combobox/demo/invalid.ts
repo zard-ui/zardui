@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardFieldImports } from '../../field/field.imports';
 import { ZardComboboxImports } from '../combobox.imports';
@@ -28,6 +28,7 @@ import type { ZardComboboxOption } from '../combobox.types';
       <z-field-error>Please select a framework.</z-field-error>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxInvalidComponent {
   readonly value = signal<string | string[] | null>(null);

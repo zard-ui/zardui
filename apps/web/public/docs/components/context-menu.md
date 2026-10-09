@@ -315,7 +315,7 @@ div[z-context-menu]
 A few actions, one of them disabled. Right click the area to open the menu.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
@@ -337,6 +337,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       <z-dropdown-menu-item (click)="log('Reload')">Reload</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoContextMenuBasicComponent {
@@ -351,7 +352,7 @@ export class ZardDemoContextMenuBasicComponent {
 Use `z-dropdown-menu-sub-trigger` with a `z-dropdown-menu-sub-content` to nest secondary actions.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
@@ -389,6 +390,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       </z-dropdown-menu-sub-content>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoContextMenuSubmenuComponent {
@@ -403,7 +405,7 @@ export class ZardDemoContextMenuSubmenuComponent {
 Add `z-dropdown-menu-shortcut` to show keyboard hints.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
@@ -443,6 +445,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoContextMenuShortcutsComponent {
@@ -457,7 +460,7 @@ export class ZardDemoContextMenuShortcutsComponent {
 Group related actions and separate them with dividers.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
@@ -506,6 +509,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       </z-dropdown-menu-group>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoContextMenuGroupsComponent {
@@ -520,7 +524,7 @@ export class ZardDemoContextMenuGroupsComponent {
 Combine icons with labels for quick scanning.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideClipboardPaste, lucideCopy, lucideScissors, lucideTrash2 } from '@ng-icons/lucide';
@@ -559,6 +563,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideClipboardPaste, lucideCopy, lucideScissors, lucideTrash2 })],
   host: { class: 'contents' },
 })
@@ -574,7 +579,7 @@ export class ZardDemoContextMenuIconsComponent {
 Use `z-dropdown-menu-checkbox-item` for toggles.
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
@@ -598,6 +603,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       </z-dropdown-menu-checkbox-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoContextMenuCheckboxesComponent {
@@ -612,7 +618,7 @@ export class ZardDemoContextMenuCheckboxesComponent {
 Use `z-dropdown-menu-radio-item` for exclusive choices.
 
 ```angular-ts
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
@@ -643,6 +649,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       </z-dropdown-menu-radio-group>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoContextMenuRadioComponent {
@@ -656,7 +663,7 @@ export class ZardDemoContextMenuRadioComponent {
 Use `zType="destructive"` to style the row as destructive.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePencil, lucideShare, lucideTrash2 } from '@ng-icons/lucide';
@@ -691,6 +698,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePencil, lucideShare, lucideTrash2 })],
   host: { class: 'contents' },
 })
@@ -706,7 +714,7 @@ export class ZardDemoContextMenuDestructiveComponent {
 One menu serving many rows: inject `ZardContextMenuService` and call `create($event, menu)` from the row that was clicked.
 
 ```angular-ts
-import { Component, inject, signal, viewChild } from '@angular/core';
+import { Component, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 import { ZardContextMenuService } from '@/shared/components/context-menu/context-menu.service';
@@ -761,6 +769,7 @@ interface FileRow {
       <z-dropdown-menu-item zType="destructive" (click)="remove()">Delete</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoContextMenuTableRowsComponent {
@@ -815,7 +824,7 @@ export class ZardDemoContextMenuTableRowsComponent {
 With `zDisabled` the trigger stands down and the browser shows its own menu.
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
@@ -837,6 +846,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       <z-dropdown-menu-item>Reload</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoContextMenuDisabledComponent {}

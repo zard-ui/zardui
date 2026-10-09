@@ -15,7 +15,8 @@
       "@doc/*": ["../../apps/web/src/app/*"]
     },
     "module": "preserve",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "ignoreDeprecations": "6.0"
   },
   "files": [],
   "include": [],

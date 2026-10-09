@@ -1,4 +1,4 @@
-import { Component, type TemplateRef, viewChild } from '@angular/core';
+import { Component, type TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import {
@@ -106,6 +106,7 @@ describe('string template outlet', () => {
     <ng-template #emptyTpl>Empty Template</ng-template>
     <ng-template #dataTimeTpl let-data let-time="time">The data is {{ data }}, The time is {{ time }}</ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class StringTemplateOutletTestComponent {
   readonly stringTpl = viewChild<TemplateRef<void>>('stringTpl');

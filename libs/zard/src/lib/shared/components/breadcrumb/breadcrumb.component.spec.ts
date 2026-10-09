@@ -1,4 +1,4 @@
-import { Component, type TemplateRef, viewChild } from '@angular/core';
+import { Component, type TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 
@@ -45,6 +45,7 @@ const getSeparators = (container: HTMLElement) =>
       <span data-testid="template-separator">::</span>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TemplateSeparatorHost {
   readonly customSeparator = viewChild.required<TemplateRef<void>>('customSeparator');
@@ -60,6 +61,7 @@ class TemplateSeparatorHost {
       <z-breadcrumb-item>Current</z-breadcrumb-item>
     </z-breadcrumb>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class VariantsHost {
   align: 'start' | 'center' | 'end' = 'start';
@@ -79,6 +81,7 @@ class VariantsHost {
       <z-breadcrumb-item>Current</z-breadcrumb-item>
     </z-breadcrumb>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class EllipsisColorHost {
   color: 'muted' | 'strong' = 'muted';

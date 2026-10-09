@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
@@ -37,6 +37,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
       </div>
     </fieldset>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCheckboxGroupComponent {
   hardDisks = true;

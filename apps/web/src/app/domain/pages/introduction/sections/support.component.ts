@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 
 @Component({
   selector: 'z-introduction-support-section',
   imports: [ZardButtonComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="flex flex-col gap-8">
       <div class="border-border relative overflow-hidden rounded-lg border border-dashed p-8">

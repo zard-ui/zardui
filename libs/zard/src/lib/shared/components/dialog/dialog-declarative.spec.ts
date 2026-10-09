@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardDialogImports } from './dialog.imports';
@@ -24,6 +24,7 @@ const panel = () => document.querySelector('z-dialog-panel');
       </z-dialog-footer>
     </z-dialog>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class DialogHostComponent {
   readonly visible = signal(false);

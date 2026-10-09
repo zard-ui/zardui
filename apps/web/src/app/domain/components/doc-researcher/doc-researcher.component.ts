@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDialogService } from '@zard/components/dialog/dialog.service';
@@ -8,6 +8,7 @@ import { CommandDocComponent } from '../doc-command/doc-command.component';
 @Component({
   selector: 'z-doc-researcher',
   imports: [ZardButtonComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <button
       z-button

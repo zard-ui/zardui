@@ -233,7 +233,7 @@ export class ZardDropdownService {
       return;
     }
 
-    const width = (triggerElement.nativeElement as HTMLElement).getBoundingClientRect().width;
+    const { width } = (triggerElement.nativeElement as HTMLElement).getBoundingClientRect();
     this.overlayRef.hostElement.style.setProperty('--z-dropdown-menu-trigger-width', `${width}px`);
   }
 

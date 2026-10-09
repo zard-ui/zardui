@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -12,6 +12,7 @@ import { SeoService } from '@doc/shared/services/seo.service';
 @Component({
   selector: 'z-install',
   templateUrl: './install.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [StepsComponent, DocContentComponent, DocHeadingComponent],
 })
 export class InstallPage implements OnInit {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { provideIcons } from '@ng-icons/core';
@@ -90,6 +90,7 @@ describe('ZardEmptyComponent', () => {
           <svg viewBox="0 0 10 10"></svg>
         </ng-template>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -112,6 +113,7 @@ describe('ZardEmptyComponent', () => {
           <span>Title</span>
         </ng-template>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -133,6 +135,7 @@ describe('ZardEmptyComponent', () => {
           <span class="text-orange-400">Description</span>
         </ng-template>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -155,6 +158,7 @@ describe('ZardEmptyComponent', () => {
           <button z-button type="button">Action</button>
         </ng-template>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 

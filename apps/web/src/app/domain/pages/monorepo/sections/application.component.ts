@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { TABS_0, BLOCK_1, BLOCK_2, BLOCK_3 } from '@generated/pages/monorepo/application';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
@@ -8,6 +8,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
 @Component({
   selector: 'z-monorepo-application-section',
   imports: [CodeBlockComponent, CodeTabsComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
       Nx application

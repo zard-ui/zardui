@@ -1,7 +1,7 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideExternalLink, lucideFigma, lucideTwitter } from '@ng-icons/lucide';
+import { lucideExternalLink } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import type { ZardBadgeTypeVariants } from '@zard/components/badge/badge.variants';
@@ -18,6 +18,14 @@ export interface ResourceBadge {
   variant: 'premium' | 'free' | 'license';
 }
 
+/*
+ * Lucide dropped its brand icons, and @ng-icons/lucide 36 no longer exports them.
+ * These are the same drawings the package shipped up to v33, registered by hand so
+ * the links keep their logos.
+ */
+const lucideFigma = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:var(--ng-icon__stroke-width, 2)"><path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5z"></path><path d="M12 2h3.5a3.5 3.5 0 1 1 0 7H12V2z"></path><path d="M12 12.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 1 1-7 0z"></path><path d="M5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 1 1-7 0z"></path><path d="M5 12.5A3.5 3.5 0 0 1 8.5 9H12v7H8.5A3.5 3.5 0 0 1 5 12.5z"></path></svg>`;
+const lucideTwitter = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:var(--ng-icon__stroke-width, 2)"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>`;
+
 /** Maps a link's icon to the lucide name that draws it. */
 const LINK_ICONS: Record<ResourceLink['icon'], string> = {
   figma: 'lucideFigma',
@@ -29,6 +37,7 @@ const LINK_ICONS: Record<ResourceLink['icon'], string> = {
   selector: 'z-resource-card',
   imports: [ZardBadgeComponent, NgIcon],
   viewProviders: [provideIcons({ lucideExternalLink, lucideFigma, lucideTwitter })],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <!--
       Header, prose, then a strip of links. What identifies the kit sits on one

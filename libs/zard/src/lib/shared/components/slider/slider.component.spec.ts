@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -25,6 +25,7 @@ import {
       [zDefault]="default"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {
   min = 0;
@@ -358,6 +359,7 @@ describe('ZardSliderComponent (zSlideIndexChange output)', () => {
     template: `
       <z-slider [zMin]="0" [zMax]="100" [zStep]="10" [zValue]="[40]" (zSlideIndexChange)="onSlide($event)" />
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
   })
   class TestSliderOutputHostComponent {
     lastEmitted: number[] | null = null;

@@ -131,16 +131,14 @@ export class ZardCarouselComponent implements OnInit, AfterViewInit {
   readonly itemWidth = computed(() => 100 / this.itemsPerView());
 
   // Embla options
-  readonly emblaOptions = computed(
-    (): EmblaOptionsType => ({
-      loop: this.infinite(),
-      axis: this.orientation() === 'vertical' ? 'y' : 'x',
-      slidesToScroll: 1,
-      containScroll: 'trimSnaps',
-      dragFree: false,
-      skipSnaps: false,
-    }),
-  );
+  readonly emblaOptions = computed((): EmblaOptionsType => ({
+    loop: this.infinite(),
+    axis: this.orientation() === 'vertical' ? 'y' : 'x',
+    slidesToScroll: 1,
+    containScroll: 'trimSnaps',
+    dragFree: false,
+    skipSnaps: false,
+  }));
 
   // Navigation state
   readonly canScrollPrev = signal(false);

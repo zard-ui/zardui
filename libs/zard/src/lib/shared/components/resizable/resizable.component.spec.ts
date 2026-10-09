@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -28,6 +28,7 @@ import { ZardResizableComponent, type ZardResizeEvent } from './resizable.compon
       </z-resizable-panel>
     </z-resizable>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestResizableHostComponent {
   layout: 'horizontal' | 'vertical' = 'horizontal';
@@ -162,6 +163,7 @@ describe('ZardResizableComponent', () => {
             <z-resizable-panel zDefaultSize="40%">Panel 2</z-resizable-panel>
           </z-resizable>
         `,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class TestPercentageHostComponent {}
 
@@ -201,6 +203,7 @@ describe('ZardResizableComponent', () => {
             <z-resizable-panel zDefaultSize="200px">Panel 2</z-resizable-panel>
           </z-resizable>
         `,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class TestPixelHostComponent {}
 

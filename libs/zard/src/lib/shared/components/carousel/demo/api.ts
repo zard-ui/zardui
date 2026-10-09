@@ -45,7 +45,9 @@ export class ZardDemoCarouselApiComponent {
   }
 
   onSelected(): void {
-    if (!this.#emblaApi) return;
+    if (!this.#emblaApi) {
+      return;
+    }
     this.current.set(this.#emblaApi.selectedScrollSnap() + 1);
   }
 }

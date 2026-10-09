@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { Component, inject, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { lucideCheck, lucideX } from '@ng-icons/lucide';
@@ -15,6 +15,7 @@ import { ZardDialogService } from './dialog.service';
   template: `
     <button type="button" z-button zType="outline" (click)="openDialog()">Open dialog</button>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class DialogTestHostComponent {
   private dialogService = inject(ZardDialogService);
@@ -33,6 +34,7 @@ class DialogTestHostComponent {
   template: `
     <button type="button" z-button zType="outline" (click)="openDialogWithIcons()">Open dialog with icons</button>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class DialogWithIconsTestHostComponent {
   private dialogService = inject(ZardDialogService);
@@ -55,6 +57,7 @@ class DialogWithIconsTestHostComponent {
   template: `
     <button type="button" z-button zType="outline" (click)="openDialogNoFooter()">Open dialog</button>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class DialogNoFooterTestHostComponent {
   private dialogService = inject(ZardDialogService);

@@ -1,6 +1,6 @@
 import { ComponentType } from '@angular/cdk/overlay';
 import { NgComponentOutlet } from '@angular/common';
-import { Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
+import { Component, computed, input, signal, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CopyButtonComponent } from '@highlight/components/copy-button/copy-button.component';
@@ -22,6 +22,7 @@ import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
     AnchorDirective,
   ],
   templateUrl: './zard-code-box.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardCodeBoxComponent {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
@@ -6,6 +6,7 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 @Component({
   selector: 'z-cli-update-section',
   imports: [ZardAlertComponent, RouterLink],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="flex flex-col gap-6">
       <div class="flex flex-col gap-3">

@@ -4,7 +4,6 @@
   "release": {
     "projects": ["packages/cli", "libs/zard"],
     "projectsRelationship": "fixed",
-    "releaseTagPattern": "v{version}",
     "changelog": {
       "automaticFromRef": true,
       "workspaceChangelog": {
@@ -100,6 +99,9 @@
           }
         }
       }
+    },
+    "releaseTag": {
+      "pattern": "v{version}"
     }
   },
   "namedInputs": {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, type FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
@@ -13,6 +13,7 @@ import { ZardCheckboxComponent } from './checkbox.component';
     <span z-checkbox>Default</span>
     <span z-checkbox zDisabled="true">Disabled</span>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {}
 
@@ -21,6 +22,7 @@ class TestHostComponent {}
   template: `
     <span z-checkbox [(ngModel)]="checked">Checked</span>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostWithNgModelComponent {
   checked = false;
@@ -35,6 +37,7 @@ class TestHostWithNgModelComponent {
       <span z-checkbox formControlName="privacyCheckbox">Accept Privacy Policy</span>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostWithReactiveFormsComponent {
   private fb = inject(FormBuilder);

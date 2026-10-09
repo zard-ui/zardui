@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -14,6 +14,7 @@ import { ZardAlertComponent } from './alert.component';
     <ng-template #iconTemplate><ng-icon name="lucideInfo" /></ng-template>
     <z-alert zTitle="Test Title" zDescription="Test Description" [zIcon]="iconTemplate" class="w-1/2" />
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   viewProviders: [provideIcons({ lucideInfo })],
 })
 class TestHostComponent {}
@@ -69,6 +70,7 @@ describe('ZardAlertComponent', () => {
       template: `
         <z-alert zDescription="Only description provided" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostDescriptionOnly {}
 
@@ -91,6 +93,7 @@ describe('ZardAlertComponent', () => {
       template: `
         <z-alert zTitle="Only title provided" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostTitleOnly {}
 
@@ -113,6 +116,7 @@ describe('ZardAlertComponent', () => {
       template: `
         <z-alert zTitle="" zDescription="Description with empty title" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostEmptyTitle {}
 
@@ -135,6 +139,7 @@ describe('ZardAlertComponent', () => {
       template: `
         <z-alert zTitle="Title with empty description" zDescription="" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostEmptyDescription {}
 
@@ -157,6 +162,7 @@ describe('ZardAlertComponent', () => {
       template: `
         <z-alert zTitle="No icon" zDescription="Alert without icon" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostNoIcon {}
 
@@ -176,6 +182,7 @@ describe('ZardAlertComponent', () => {
       template: `
         <z-alert zType="destructive" zTitle="Error" zDescription="Something went wrong" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostDestructive {}
 
@@ -198,6 +205,7 @@ describe('ZardAlertComponent', () => {
         <ng-template #actionTemplate><button type="button">Action</button></ng-template>
         <z-alert zTitle="Title" zDescription="Description" [zAction]="actionTemplate" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostAction {}
 
@@ -221,6 +229,7 @@ describe('ZardAlertComponent', () => {
       template: `
         <z-alert zTitle="Title" zDescription="Description" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostNoAction {}
 

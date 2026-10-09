@@ -1,4 +1,4 @@
-import { Component, computed, type TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, type TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
@@ -408,6 +408,7 @@ describe('ZardToggleGroupComponent', () => {
       <span>Label B</span>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {
   readonly templateA = viewChild.required<TemplateRef<void>>('templateA');

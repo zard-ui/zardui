@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -40,6 +40,7 @@ const SEARCH_DEBOUNCE_MS = 150;
       </z-command-list>
     </z-command>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {}
 
@@ -49,6 +50,7 @@ class TestHostComponent {}
   template: `
     <z-command-divider />
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class StandaloneTestComponent {}
 

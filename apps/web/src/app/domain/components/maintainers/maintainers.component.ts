@@ -39,7 +39,11 @@ export interface MaintainerData {
             <span
               class="text-muted-foreground group-hover:text-foreground inline-flex min-w-0 items-center gap-1.5 text-xs transition-colors"
             >
-              <img [src]="githubData?.icon" [alt]="githubData?.iconAlt" class="h-3 shrink-0 dark:invert" />
+              <img
+                [src]="$safeNavigationMigration(githubData?.icon)"
+                [alt]="$safeNavigationMigration(githubData?.iconAlt)"
+                class="h-3 shrink-0 dark:invert"
+              />
               <span class="truncate font-mono">{{ maintainer.login }}</span>
             </span>
           </div>

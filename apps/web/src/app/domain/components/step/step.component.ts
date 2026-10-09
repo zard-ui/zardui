@@ -26,13 +26,19 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
               {{ stepProps()?.subtitle }}
 
               @if (stepProps()?.url && stepProps()?.url?.external) {
-                <a z-button zType="link" class="p-0" [href]="stepProps()?.url?.href" target="_blank">
+                <a
+                  z-button
+                  zType="link"
+                  class="p-0"
+                  [href]="$safeNavigationMigration(stepProps()?.url?.href)"
+                  target="_blank"
+                >
                   {{ stepProps()?.url?.text }}
                 </a>
               }
 
               @if (stepProps()?.url && !stepProps()?.url?.external) {
-                <a z-button zType="link" class="p-0" [routerLink]="stepProps()?.url?.href">
+                <a z-button zType="link" class="p-0" [routerLink]="$safeNavigationMigration(stepProps()?.url?.href)">
                   {{ stepProps()?.url?.text }}
                 </a>
               }

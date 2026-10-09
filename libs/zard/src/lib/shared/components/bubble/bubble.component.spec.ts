@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { render, screen } from '@testing-library/angular';
 
@@ -23,6 +23,7 @@ import { ZardBubbleImports } from './bubble.imports';
       </z-bubble>
     </z-bubble-group>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestBubbleHost {}
 

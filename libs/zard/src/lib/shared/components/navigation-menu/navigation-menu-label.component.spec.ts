@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { screen } from '@testing-library/angular';
@@ -10,6 +10,7 @@ import { ZardNavigationMenuLabelComponent } from './navigation-menu-label.compon
   template: `
     <z-navigation-menu-label [inset]="inset" [class]="customClass">Menu Label</z-navigation-menu-label>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   inset: boolean | undefined = false;

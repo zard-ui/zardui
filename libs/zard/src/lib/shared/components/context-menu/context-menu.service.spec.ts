@@ -1,4 +1,4 @@
-import { Component, inject, viewChild } from '@angular/core';
+import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import type { ZardDropdownMenuContentComponent } from '@/shared/components/dropdown/dropdown-menu-content.component';
@@ -15,6 +15,7 @@ import { ZardContextMenuService } from './context-menu.service';
       <z-dropdown-menu-item>Rename</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   readonly contextMenu = inject(ZardContextMenuService);

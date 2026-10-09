@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { render, screen } from '@testing-library/angular';
 import type { EChartsOption } from 'echarts';
@@ -147,6 +147,7 @@ function optionOf(chart: ZardChartComponent): EChartsOption {
       <z-chart-legend />
     </z-chart>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class ChartHostComponent {
   readonly config = CHART_CONFIG;
@@ -211,6 +212,7 @@ describe('ZardChartComponent', () => {
       template: `
         <z-chart [zConfig]="config" [zData]="data" [zSeries]="series" zXAxisKey="month" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class ThemedHostComponent {
       readonly config = themedConfig;
