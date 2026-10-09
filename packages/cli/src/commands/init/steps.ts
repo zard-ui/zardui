@@ -203,7 +203,13 @@ async function exportStylesheet(libraryRoot: string, fileName: string): Promise<
   // `"exports": "./index.js"` (or an array of fallbacks) is shorthand for the
   // package root; spreading it would turn the string into one key per character.
   const current = packageJson.exports;
-  const exportsMap = typeof current === 'string' || Array.isArray(current) ? { '.': current } : { ...(current ?? {}) };
+  // The same goes for a map of conditions (`{ import, require }`): Node rejects
+  // one that mixes condition keys with subpaths, so they move under `.` too.
+  const isRootShorthand =
+    typeof current === 'string' ||
+    Array.isArray(current) ||
+    (current && typeof current === 'object' && Object.keys(current).some(name => !name.startsWith('.')));
+  const exportsMap = isRootShorthand ? { '.': current } : { ...(current ?? {}) };
 
   if (exportsMap[key]) return;
 

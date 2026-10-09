@@ -144,6 +144,13 @@ describe('library package.json exports', () => {
     await expect(runWithExports('./index.js')).resolves.toEqual({ '.': './index.js', ...styles });
   });
 
+  // Node rejects a map that mixes condition keys with subpaths.
+  it('should move root conditions under "."', async () => {
+    const conditions = { import: './index.mjs', require: './index.cjs' };
+
+    await expect(runWithExports(conditions)).resolves.toEqual({ '.': conditions, ...styles });
+  });
+
   it('should leave an existing theme export alone', async () => {
     const declared = { '.': './index.js', './styles.css': './dist/theme.css' };
 

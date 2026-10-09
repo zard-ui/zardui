@@ -207,7 +207,9 @@ async function readNxProjects(workspaceRoot: string): Promise<WorkspaceProject[]
         if (isOtherEcosystem(build.tool)) return null;
 
         // `@nx/vite:build` builds any Vite app; an Analog one gives itself away in its Vite config.
-        const viteAnalog = build.tool.startsWith('@nx/vite:') ? await usesAnalogPlugin(dir) : null;
+        const viteAnalog = build.tool.startsWith('@nx/vite:')
+          ? await usesAnalogPlugin(workspaceRoot, dir, config.targets?.build?.options?.configFile)
+          : null;
         if (viteAnalog === false) return null;
 
         return {
@@ -272,9 +274,23 @@ const OTHER_ECOSYSTEM_BUILDERS = [
 ];
 
 /** Whether a project built by `@nx/vite` is an Analog app — the only Angular one that executor builds. */
-async function usesAnalogPlugin(projectDir: string): Promise<boolean> {
-  for (const file of ['vite.config.ts', 'vite.config.mts', 'vite.config.js', 'vite.config.mjs']) {
-    const candidate = path.join(projectDir, file);
+async function usesAnalogPlugin(workspaceRoot: string, projectDir: string, configFile?: unknown): Promise<boolean> {
+  // The build target can name its own config; Nx resolves that path from the workspace root.
+  const candidates =
+    typeof configFile === 'string'
+      ? [
+          path.resolve(
+            workspaceRoot,
+            configFile
+              .replace('{workspaceRoot}', '.')
+              .replace('{projectRoot}', path.relative(workspaceRoot, projectDir)),
+          ),
+        ]
+      : ['vite.config.ts', 'vite.config.mts', 'vite.config.js', 'vite.config.mjs'].map(file =>
+          path.join(projectDir, file),
+        );
+
+  for (const candidate of candidates) {
     if (await pathExists(candidate)) return (await readFile(candidate, 'utf8')).includes('@analogjs/');
   }
 
