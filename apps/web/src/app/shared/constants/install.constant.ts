@@ -359,7 +359,7 @@ export const installations: Installation[] = [
       {
         title: 'Wire it up in the consuming app',
         subtitle:
-          'The application that installs this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: @tailwindcss/postcss and this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme with @import "<your-library>/styles.css", and imports the components from the library entry point — export them from public-api.ts. Inside the library the CLI writes relative imports, so the published package resolves without the @/ alias.',
+          'The application that installs this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme with @import "<your-library>/styles.css", and imports the components from the library entry point — export them from public-api.ts. Inside the library the CLI writes relative imports, so the published package resolves without the @/ alias.',
         codeBlockData: SETUP_SHARED_POSTCSS,
       },
     ],
@@ -399,7 +399,7 @@ export const installations: Installation[] = [
       {
         title: 'Wire it up in the consuming app',
         subtitle:
-          'The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: @tailwindcss/postcss and this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts and imports the theme from the library styles.css.',
+          'The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts and imports the theme from the library styles.css.',
         codeBlockData: SETUP_SHARED_POSTCSS,
       },
     ],

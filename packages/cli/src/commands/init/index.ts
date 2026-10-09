@@ -283,9 +283,9 @@ function nextStepsFor(config: Config): string[] {
   }
 
   return [
-    'The consuming app still needs the Tailwind PostCSS pipeline (@tailwindcss/postcss',
-    'and a .postcssrc.json), to register provideZard() in its app.config.ts and to',
-    `import the theme tokens from this library's ${path.basename(config.tailwind.css)}.`,
+    'The consuming app still needs the Tailwind PostCSS pipeline (tailwindcss, @tailwindcss/postcss,',
+    'postcss, tailwindcss-animate and a .postcssrc.json), to register provideZard() in its',
+    `app.config.ts and to import the theme tokens from this library's ${path.basename(config.tailwind.css)}.`,
     '',
     'You can now add components using:',
   ];

@@ -200,9 +200,14 @@ async function exportStylesheet(libraryRoot: string, fileName: string): Promise<
   const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf8'));
   const key = `./${fileName}`;
 
-  if (packageJson.exports?.[key]) return;
+  // `"exports": "./index.js"` (or an array of fallbacks) is shorthand for the
+  // package root; spreading it would turn the string into one key per character.
+  const current = packageJson.exports;
+  const exportsMap = typeof current === 'string' || Array.isArray(current) ? { '.': current } : { ...(current ?? {}) };
 
-  packageJson.exports = { ...packageJson.exports, [key]: { style: key, default: key } };
+  if (exportsMap[key]) return;
+
+  packageJson.exports = { ...exportsMap, [key]: { style: key, default: key } };
   await writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`, 'utf8');
 }
 

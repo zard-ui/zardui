@@ -109,3 +109,44 @@ describe('ng-package.json step', () => {
     await expect(runAssetStep(null)).resolves.toBeNull();
   });
 });
+
+describe('library package.json exports', () => {
+  /** Runs the ng-package.json step on a library whose package.json declares `exports`. */
+  async function runWithExports(exports: unknown): Promise<unknown> {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-exports-'));
+    const libraryRoot = path.join(cwd, 'projects', 'ui');
+    await mkdir(libraryRoot, { recursive: true });
+    await writeFile(
+      path.join(libraryRoot, 'ng-package.json'),
+      JSON.stringify({ lib: { entryFile: 'src/public-api.ts' } }),
+    );
+    await writeFile(
+      path.join(libraryRoot, 'package.json'),
+      JSON.stringify(exports === undefined ? { name: 'ui' } : { name: 'ui', exports }),
+    );
+
+    const step = buildInitSteps(cwd, buildConfig(answers, 'npm'), projectInfo, false).find(
+      candidate => candidate.label === 'ng-package.json',
+    );
+    await step?.run();
+
+    return JSON.parse(await readFile(path.join(libraryRoot, 'package.json'), 'utf8')).exports;
+  }
+
+  const styles = { './styles.css': { style: './styles.css', default: './styles.css' } };
+
+  it('should export the theme so the consumer can import it by package name', async () => {
+    await expect(runWithExports(undefined)).resolves.toEqual(styles);
+  });
+
+  // `"exports": "./index.js"` is shorthand for the root; spreading it would split the string.
+  it('should keep a string-form root export as "."', async () => {
+    await expect(runWithExports('./index.js')).resolves.toEqual({ '.': './index.js', ...styles });
+  });
+
+  it('should leave an existing theme export alone', async () => {
+    const declared = { '.': './index.js', './styles.css': './dist/theme.css' };
+
+    await expect(runWithExports(declared)).resolves.toEqual(declared);
+  });
+});

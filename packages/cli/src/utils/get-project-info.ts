@@ -206,12 +206,16 @@ async function readNxProjects(workspaceRoot: string): Promise<WorkspaceProject[]
         const build = readBuildTarget(config.targets);
         if (isOtherEcosystem(build.tool)) return null;
 
+        // `@nx/vite:build` builds any Vite app; an Analog one gives itself away in its Vite config.
+        const viteAnalog = build.tool.startsWith('@nx/vite:') ? await usesAnalogPlugin(dir) : null;
+        if (viteAnalog === false) return null;
+
         return {
           name,
           projectType: nxProjectType(config),
           root,
           sourceRoot: config.sourceRoot ?? `${root}/src`,
-          flavor: flavorOf(build.tool),
+          flavor: viteAnalog ? 'analog' : flavorOf(build.tool),
           styles: build.styles,
           index: build.index,
         };
@@ -266,6 +270,16 @@ const OTHER_ECOSYSTEM_BUILDERS = [
   '@nx/react-native:',
   '@nx/nest:',
 ];
+
+/** Whether a project built by `@nx/vite` is an Analog app — the only Angular one that executor builds. */
+async function usesAnalogPlugin(projectDir: string): Promise<boolean> {
+  for (const file of ['vite.config.ts', 'vite.config.mts', 'vite.config.js', 'vite.config.mjs']) {
+    const candidate = path.join(projectDir, file);
+    if (await pathExists(candidate)) return (await readFile(candidate, 'utf8')).includes('@analogjs/');
+  }
+
+  return false;
+}
 
 function isOtherEcosystem(tool: string): boolean {
   return OTHER_ECOSYSTEM_BUILDERS.some(prefix => tool.startsWith(prefix));

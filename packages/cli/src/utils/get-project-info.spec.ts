@@ -70,6 +70,23 @@ describe('getProjectInfo em workspaces Nx', () => {
     expect(info.projects.map(project => project.name)).toEqual(['shop', 'ui']);
   });
 
+  // @nx/vite builds any Vite app — only the Analog ones are Angular.
+  it('should keep @nx/vite applications only when they are Analog', async () => {
+    const vite = { build: { executor: '@nx/vite:build', options: {} }, serve: {} };
+    const cwd = await workspace({
+      'package.json': nxPackageJson,
+      'nx.json': {},
+      'apps/blog/project.json': { name: 'blog', projectType: 'application', targets: vite },
+      'apps/blog/vite.config.ts': "import analog from '@analogjs/platform';\nexport default { plugins: [analog()] };",
+      'apps/react/project.json': { name: 'react', projectType: 'application', targets: vite },
+      'apps/react/vite.config.ts': "import react from '@vitejs/plugin-react';\nexport default { plugins: [react()] };",
+    });
+
+    const info = await getProjectInfo(cwd);
+
+    expect(info.projects.map(project => [project.name, project.flavor])).toEqual([['blog', 'analog']]);
+  });
+
   // Renaming the project does not change what it is; the runner config gives it away.
   it('should recognise an e2e project by its runner config, not only by name', async () => {
     const cwd = await workspace({
