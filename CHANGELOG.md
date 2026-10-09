@@ -1,3 +1,13 @@
+## 1.0.1 (2026-10-09)
+
+### 🐛 Bug Fixes
+
+- **cli:** working init, publishable libraries and flags for every prompt ([#753](https://github.com/zard-ui/zardui/pull/753))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 # 1.0.0 (2026-10-08)
 
 ### ✨ Features
