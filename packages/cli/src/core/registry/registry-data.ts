@@ -954,6 +954,23 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'hover-card',
+    files: [
+      {
+        name: 'hover-card.component.ts',
+        content: '',
+      },
+      {
+        name: 'hover-card.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'breadcrumb',
     files: [
       {

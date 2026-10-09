@@ -53,6 +53,36 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-p, --project &lt;name&gt;</code>
       — Which workspace project to configure, when more than one is compatible
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--css &lt;path&gt;</code>
+      — The global stylesheet that receives the theme (in a library, the file init creates)
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--app-config &lt;path&gt;</code>
+      — The app.config.ts that receives provideZard(); ignored for libraries
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--base-color &lt;color&gt;</code>
+      — Theme base color:
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">neutral</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">stone</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zinc</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">gray</code>
+      or
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">slate</code>
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--components-alias &lt;alias&gt;</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--utils-alias &lt;alias&gt;</code>
+      — Import aliases, defaults to
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;/shared/components</code>
+      and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;/shared/utils</code>
+    </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Every question the wizard asks has a flag. In a terminal they fill the answers in advance; headless (CI, pipes)
+      they are the answers.
     </p>
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
@@ -134,6 +164,9 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-p, --path &lt;path&gt;</code>
       — Write the components somewhere other than the configured alias
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--index-html &lt;path&gt;</code>
+      — The index.html that receives the dark-mode theme script
     </p>
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
@@ -166,7 +199,9 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">index.html</code>
       and registers the initializer, so the chosen theme is applied before the first paint instead of flashing. It asks
       where the file is, suggesting the right path for your project type — at the root for Analog, under the app for Nx.
-      This step needs an interactive terminal.
+      Headless, it uses
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--index-html</code>
+      or that suggested path.
     </p>
     <z-code-block [data]="addDarkMode" />
 

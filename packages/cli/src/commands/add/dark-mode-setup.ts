@@ -1,3 +1,4 @@
+import { isPublishableLibrary } from '@cli/commands/init/library-peers.js';
 import { type Config } from '@cli/utils/config.js';
 import { logger } from '@cli/utils/logger.js';
 import { withImport } from '@cli/utils/source-file.js';
@@ -9,11 +10,37 @@ function getDarkModeImport(servicesAlias?: string): string {
   return `import { ZardDarkMode } from '${servicesAlias ?? '@/shared/services'}/dark-mode';`;
 }
 
+/**
+ * How providezard.ts reaches the services folder.
+ *
+ * An application keeps the alias. A library imports it relatively: ng-packagr
+ * leaves aliased imports external, and the published package would point at a
+ * path only the library's workspace maps — see `relativizeImports`.
+ */
+function servicesSpecifier(
+  provideZardPath: string,
+  resolvedConfig: {
+    resolvedPaths: { services: string; baseUrl: string };
+    aliases?: Config['aliases'];
+    projectType?: Config['projectType'];
+  },
+): string | undefined {
+  if (!isPublishableLibrary(resolvedConfig, resolvedConfig.resolvedPaths.baseUrl)) {
+    return resolvedConfig.aliases?.services;
+  }
+
+  return path.relative(path.dirname(provideZardPath), resolvedConfig.resolvedPaths.services).split(path.sep).join('/');
+}
+
 const DARK_MODE_INITIALIZER = 'provideAppInitializer(() => inject(ZardDarkMode).init())';
 
 export async function updateProvideZardWithDarkMode(
   cwd: string,
-  resolvedConfig: { resolvedPaths: { core: string; services: string }; aliases?: Config['aliases'] },
+  resolvedConfig: {
+    resolvedPaths: { core: string; services: string; baseUrl: string };
+    aliases?: Config['aliases'];
+    projectType?: Config['projectType'];
+  },
 ): Promise<void> {
   const provideZardPath = path.join(resolvedConfig.resolvedPaths.core, 'provider/providezard.ts');
 
@@ -43,7 +70,7 @@ export async function updateProvideZardWithDarkMode(
     );
   }
 
-  content = withImport(content, getDarkModeImport(resolvedConfig.aliases?.services));
+  content = withImport(content, getDarkModeImport(servicesSpecifier(provideZardPath, resolvedConfig)));
 
   content = content.replace(/return makeEnvironmentProviders\(\[(.*?)\]\);/s, (match, providers) => {
     const trimmedProviders = providers.trim();

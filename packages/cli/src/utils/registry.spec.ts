@@ -10,9 +10,11 @@ import {
   fetchComponentFromRegistry,
   fetchRegistryIndex,
   invalidateRegistryCache,
+  relativizeImports,
   transformContent,
   validateRegistryUrl,
 } from '@cli/utils/registry.js';
+import * as path from 'node:path';
 
 const mockFetchJson = fetchJson as jest.MockedFunction<typeof fetchJson>;
 
@@ -230,6 +232,22 @@ describe('transformContent', () => {
     expect(result).toBe(`import { ButtonComponent } from '@/shared/components/button/button.component'`);
   });
 
+  it('should keep a relative import that stays inside the item', () => {
+    const content = `import type { ZardI18nInterface } from '../i18n.types';`;
+
+    const result = transformContent(content, fakeConfig, { fileName: 'i18n/locales/en-us.ts' });
+
+    expect(result).toBe(content);
+  });
+
+  it('should alias a relative import from a nested file that leaves the item', () => {
+    const content = `import { ButtonComponent } from '../../button/button.component';`;
+
+    const result = transformContent(content, fakeConfig, { fileName: 'demo/default.ts' });
+
+    expect(result).toBe(`import { ButtonComponent } from '@/shared/components/button/button.component';`);
+  });
+
   it('should replace ClassValue import from class-variance-authority/dist/types', () => {
     const content = `import { ClassValue } from 'class-variance-authority/dist/types'`;
 
@@ -290,5 +308,48 @@ describe('transformContent', () => {
         `import { ZardButtonComponent } from '~/components/button';`,
       ].join('\n'),
     );
+  });
+});
+
+describe('relativizeImports', () => {
+  const lib = path.join('/ws', 'projects', 'ui', 'src', 'lib', 'shared');
+  const targets = {
+    '@/shared/components': path.join(lib, 'components'),
+    '@/shared/utils': path.join(lib, 'utils'),
+    '@/shared/core': path.join(lib, 'core'),
+  };
+
+  it('should turn aliased imports into paths relative to the file', () => {
+    const content = [
+      `import { mergeClasses } from '@/shared/utils/merge-classes';`,
+      `import { ZardIdDirective } from '@/shared/core';`,
+      `import { ZardButtonComponent } from '@/shared/components/button/button.component';`,
+    ].join('\n');
+
+    const result = relativizeImports(content, path.join(lib, 'components', 'card', 'card.component.ts'), targets);
+
+    expect(result).toBe(
+      [
+        `import { mergeClasses } from '../../utils/merge-classes';`,
+        `import { ZardIdDirective } from '../../core';`,
+        `import { ZardButtonComponent } from '../button/button.component';`,
+      ].join('\n'),
+    );
+  });
+
+  // The aliases are whatever components.json declares, not the defaults.
+  it('should follow custom aliases', () => {
+    const custom = { '~ui/components': path.join(lib, 'components'), '~ui/utils': path.join(lib, 'utils') };
+    const content = `import { mergeClasses } from '~ui/utils/merge-classes';`;
+
+    const result = relativizeImports(content, path.join(lib, 'components', 'badge', 'badge.component.ts'), custom);
+
+    expect(result).toBe(`import { mergeClasses } from '../../utils/merge-classes';`);
+  });
+
+  it('should leave package imports and relative imports alone', () => {
+    const content = `import { Component } from '@angular/core';\nimport { x } from './x';`;
+
+    expect(relativizeImports(content, path.join(lib, 'components', 'a', 'a.ts'), targets)).toBe(content);
   });
 });

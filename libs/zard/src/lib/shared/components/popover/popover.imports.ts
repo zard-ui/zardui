@@ -4,7 +4,7 @@ export {
   ZardPopoverDirective,
   ZardPopoverHeaderComponent,
   ZardPopoverTitleComponent,
-} from '@/shared/components/popover/popover.component';
+} from './popover.component';
 
 import {
   ZardPopoverComponent,
@@ -12,7 +12,7 @@ import {
   ZardPopoverDirective,
   ZardPopoverHeaderComponent,
   ZardPopoverTitleComponent,
-} from '@/shared/components/popover/popover.component';
+} from './popover.component';
 
 export const ZardPopoverImports = [
   ZardPopoverDirective,

@@ -193,6 +193,7 @@ async function findProjectDirs(baseDir: string, depth: number): Promise<string[]
 async function readNxProjects(workspaceRoot: string): Promise<WorkspaceProject[]> {
   const searchRoots = await nxSearchRoots(workspaceRoot);
   const dirs = (await Promise.all(searchRoots.map(dir => findProjectDirs(path.join(workspaceRoot, dir), 2)))).flat();
+  const targetDefaults = await readTargetDefaults(workspaceRoot);
 
   const projects = await Promise.all(
     dirs.map(async (dir): Promise<WorkspaceProject | null> => {
@@ -204,13 +205,20 @@ async function readNxProjects(workspaceRoot: string): Promise<WorkspaceProject[]
         if (await isE2eProject(dir, name)) return null;
 
         const build = readBuildTarget(config.targets);
+        if (isOtherEcosystem(build.tool)) return null;
+
+        // `@nx/vite:build` builds any Vite app; an Analog one gives itself away in its Vite config.
+        const viteAnalog = build.tool.startsWith('@nx/vite:')
+          ? await usesAnalogPlugin(workspaceRoot, dir, effectiveConfigFile(config.targets?.build, targetDefaults))
+          : null;
+        if (viteAnalog === false) return null;
 
         return {
           name,
           projectType: nxProjectType(config),
           root,
           sourceRoot: config.sourceRoot ?? `${root}/src`,
-          flavor: flavorOf(build.tool),
+          flavor: viteAnalog ? 'analog' : flavorOf(build.tool),
           styles: build.styles,
           index: build.index,
         };
@@ -239,6 +247,80 @@ function nxProjectType(config: any): 'application' | 'library' {
   }
 
   return config.targets?.serve ? 'application' : 'library';
+}
+
+/**
+ * Builders that never produce an Angular project.
+ *
+ * The Angular template of `create-nx-workspace` ships an Express API next to the
+ * app (`apps/api`, built with `@nx/esbuild`). Listed as an application, it came
+ * first in alphabetical order, and the headless `init` chose it — failing on a
+ * global CSS a Node server does not have. Angular projects build with
+ * `@angular/*`, `@nx/angular:*` or `@analogjs/*`; a library with no build target
+ * at all is kept, since a non-buildable Nx library is a valid target.
+ */
+const OTHER_ECOSYSTEM_BUILDERS = [
+  '@nx/esbuild:',
+  '@nx/node:',
+  '@nx/js:',
+  '@nx/webpack:',
+  '@nx/rspack:',
+  '@nx/rollup:',
+  '@nx/next:',
+  '@nx/react:',
+  '@nx/remix:',
+  '@nx/expo:',
+  '@nx/react-native:',
+  '@nx/nest:',
+];
+
+/** `targetDefaults` from nx.json — options Nx applies to a target the project does not override. */
+async function readTargetDefaults(workspaceRoot: string): Promise<Record<string, any>> {
+  try {
+    return (await readJson(path.join(workspaceRoot, 'nx.json'))).targetDefaults ?? {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * The Vite config the build target uses: its own option, else the default Nx
+ * applies to its executor, else the one for the `build` target name.
+ */
+function effectiveConfigFile(build: any, targetDefaults: Record<string, any>): unknown {
+  return (
+    build?.options?.configFile ??
+    targetDefaults[build?.executor]?.options?.configFile ??
+    targetDefaults['build']?.options?.configFile
+  );
+}
+
+/** Whether a project built by `@nx/vite` is an Analog app — the only Angular one that executor builds. */
+async function usesAnalogPlugin(workspaceRoot: string, projectDir: string, configFile?: unknown): Promise<boolean> {
+  // The build target can name its own config; Nx resolves that path from the workspace root.
+  const candidates =
+    typeof configFile === 'string'
+      ? [
+          path.resolve(
+            workspaceRoot,
+            configFile
+              .replace('{workspaceRoot}', '.')
+              .replace('{projectRoot}', path.relative(workspaceRoot, projectDir)),
+          ),
+        ]
+      : ['vite.config.ts', 'vite.config.mts', 'vite.config.js', 'vite.config.mjs'].map(file =>
+          path.join(projectDir, file),
+        );
+
+  for (const candidate of candidates) {
+    if (await pathExists(candidate)) return (await readFile(candidate, 'utf8')).includes('@analogjs/');
+  }
+
+  return false;
+}
+
+function isOtherEcosystem(tool: string): boolean {
+  return OTHER_ECOSYSTEM_BUILDERS.some(prefix => tool.startsWith(prefix));
 }
 
 /** Configuration files that only exist in an end-to-end test project. */

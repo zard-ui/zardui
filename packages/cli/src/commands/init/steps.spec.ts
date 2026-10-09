@@ -72,24 +72,31 @@ describe('ng-package.json step', () => {
   it('should publish the theme at the package root', async () => {
     const result = await runAssetStep(base);
 
-    expect(result?.assets).toEqual([{ glob: 'styles.css', input: 'src', output: '/' }]);
+    expect(result?.assets).toEqual([{ glob: '**/*.css', input: 'src', output: '/' }]);
   });
 
   it('should keep assets the library already declared', async () => {
     const result = await runAssetStep({ ...base, assets: ['./src/assets/logo.svg'] });
 
-    expect(result?.assets).toEqual(['./src/assets/logo.svg', { glob: 'styles.css', input: 'src', output: '/' }]);
+    expect(result?.assets).toEqual(['./src/assets/logo.svg', { glob: '**/*.css', input: 'src', output: '/' }]);
   });
 
   // Um init repetido publicaria o mesmo CSS duas vezes, em dois lugares.
   it('should replace an older entry for the same file instead of adding another', async () => {
     const result = await runAssetStep({ ...base, assets: ['./src/styles.css'] });
 
-    expect(result?.assets).toEqual([{ glob: 'styles.css', input: 'src', output: '/' }]);
+    expect(result?.assets).toEqual([{ glob: '**/*.css', input: 'src', output: '/' }]);
+  });
+
+  // The theme imports the core's zard.css, and add writes typeset.css and utilities.css beside it.
+  it('should migrate the entry that published the theme alone', async () => {
+    const result = await runAssetStep({ ...base, assets: [{ glob: 'styles.css', input: 'src', output: '/' }] });
+
+    expect(result?.assets).toEqual([{ glob: '**/*.css', input: 'src', output: '/' }]);
   });
 
   it('should be a no-op when the entry is already correct', async () => {
-    const assets = [{ glob: 'styles.css', input: 'src', output: '/' }];
+    const assets = [{ glob: '**/*.css', input: 'src', output: '/' }];
     const result = await runAssetStep({ ...base, assets });
 
     expect(result?.assets).toEqual(assets);
@@ -100,5 +107,53 @@ describe('ng-package.json step', () => {
   // the whole install.
   it('should not fail when the library has no ng-package.json', async () => {
     await expect(runAssetStep(null)).resolves.toBeNull();
+  });
+});
+
+describe('library package.json exports', () => {
+  /** Runs the ng-package.json step on a library whose package.json declares `exports`. */
+  async function runWithExports(exports: unknown): Promise<unknown> {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-exports-'));
+    const libraryRoot = path.join(cwd, 'projects', 'ui');
+    await mkdir(libraryRoot, { recursive: true });
+    await writeFile(
+      path.join(libraryRoot, 'ng-package.json'),
+      JSON.stringify({ lib: { entryFile: 'src/public-api.ts' } }),
+    );
+    await writeFile(
+      path.join(libraryRoot, 'package.json'),
+      JSON.stringify(exports === undefined ? { name: 'ui' } : { name: 'ui', exports }),
+    );
+
+    const step = buildInitSteps(cwd, buildConfig(answers, 'npm'), projectInfo, false).find(
+      candidate => candidate.label === 'ng-package.json',
+    );
+    await step?.run();
+
+    return JSON.parse(await readFile(path.join(libraryRoot, 'package.json'), 'utf8')).exports;
+  }
+
+  const styles = { './styles.css': { style: './styles.css', default: './styles.css' } };
+
+  it('should export the theme so the consumer can import it by package name', async () => {
+    await expect(runWithExports(undefined)).resolves.toEqual(styles);
+  });
+
+  // `"exports": "./index.js"` is shorthand for the root; spreading it would split the string.
+  it('should keep a string-form root export as "."', async () => {
+    await expect(runWithExports('./index.js')).resolves.toEqual({ '.': './index.js', ...styles });
+  });
+
+  // Node rejects a map that mixes condition keys with subpaths.
+  it('should move root conditions under "."', async () => {
+    const conditions = { import: './index.mjs', require: './index.cjs' };
+
+    await expect(runWithExports(conditions)).resolves.toEqual({ '.': conditions, ...styles });
+  });
+
+  it('should leave an existing theme export alone', async () => {
+    const declared = { '.': './index.js', './styles.css': './dist/theme.css' };
+
+    await expect(runWithExports(declared)).resolves.toEqual(declared);
   });
 });

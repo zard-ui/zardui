@@ -17,7 +17,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export * from './breadcrumb.component';\nexport * from './breadcrumb.variants';\n"
+      "content": "export * from './breadcrumb.component';\nexport * from './breadcrumb.variants';\nexport * from './breadcrumb.imports';\n"
     }
   ],
   "icons": {

@@ -541,6 +541,7 @@ export const ZardBreadcrumbImports = [
 ```angular-ts
 export * from './breadcrumb.component';
 export * from './breadcrumb.variants';
+export * from './breadcrumb.imports';
 ```
 
 ## Usage

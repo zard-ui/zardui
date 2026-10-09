@@ -17,7 +17,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export * from './card.component';\nexport * from './card.variants';\n"
+      "content": "export * from './card.component';\nexport * from './card.variants';\nexport * from './card.imports';\n"
     }
   ],
   "icons": {

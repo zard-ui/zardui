@@ -29,6 +29,8 @@ const DOCS_FOR: Record<string, string[]> = {
   core: [
     'core-directives.md',
     'core-overlay.md',
+    'core-i18n.md',
+    'core-i18n-locales.md',
     'core-event-manager.md',
     'core-provider.md',
     'core-css.md',

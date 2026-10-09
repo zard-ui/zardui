@@ -1,3 +1,4 @@
+import { syncLibraryPeerDependencies } from '@cli/commands/init/library-peers.js';
 import { bundlerFor, isLibraryKind } from '@cli/commands/init/project-kind.js';
 import { iconPackagesFor } from '@cli/core/icons/index.js';
 import { pinAllForAngular } from '@cli/utils/angular-compat.js';
@@ -42,11 +43,13 @@ export async function installDependencies(cwd: string, config: Config, projectIn
 
   if (!missingDeps.length && !missingDevDeps.length) {
     logger.info('All dependencies are already installed.');
-    return;
+  } else {
+    await installPackagesWithRetry(missingDeps, cwd, config.packageManager, false);
+    await installPackagesWithRetry(missingDevDeps, cwd, config.packageManager, true);
   }
 
-  await installPackagesWithRetry(missingDeps, cwd, config.packageManager, false);
-  await installPackagesWithRetry(missingDevDeps, cwd, config.packageManager, true);
+  // A library's components import these, and the theme it ships loads Tailwind and its plugin.
+  await syncLibraryPeerDependencies(cwd, config, [...deps, ...tailwindPackages(config.projectType)]);
 }
 
 /**

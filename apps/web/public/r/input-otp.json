@@ -41,7 +41,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export * from './input-otp.component';\nexport * from './input-otp-signal.component';\nexport * from './input-otp-slot.component';\nexport * from './input-otp-group.component';\nexport * from './input-otp-separator.component';\nexport * from './input-otp.imports';\nexport * from './input-otp.tokens';\nexport * from './input-otp.variants';\n"
+      "content": "export * from './input-otp.component';\nexport * from './input-otp-signal.component';\nexport * from './input-otp-slot.component';\nexport * from './input-otp-group.component';\nexport * from './input-otp-separator.component';\nexport * from './input-otp.imports';\nexport * from './input-otp.tokens';\nexport * from './input-otp.variants';\nexport { REGEXP_ONLY_CHARS, REGEXP_ONLY_DIGITS, REGEXP_ONLY_DIGITS_AND_CHARS } from './input-otp.utils';\n"
     }
   ],
   "icons": {

@@ -191,6 +191,14 @@ function checkSourcePass(): void {
       if (!expected.includes(dep)) report(item.name, `declares "${dep}" but never imports from it`);
     }
   }
+
+  // A component the docs publish but the registry leaves out answers
+  // `zard-cli add <name>` with "not found in registry" — hover-card shipped like that.
+  const componentsDir = path.join(LIB_PATH, 'components');
+  for (const name of fs.readdirSync(componentsDir).sort()) {
+    if (!fs.existsSync(path.join(componentsDir, name, 'index.ts'))) continue;
+    if (!itemNameOfBasePath.has(name)) report(name, 'component exists in the library but is not in the registry');
+  }
 }
 
 interface PublishedItem {

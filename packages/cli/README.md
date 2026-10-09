@@ -55,8 +55,13 @@ npx zard-cli init
 | `-c, --cwd <cwd>`      | Working directory, defaults to the current one                             |
 | `-t, --type <type>`    | Project type: `angular`, `angular-library`, `nx`, `nx-library` or `analog` |
 | `-p, --project <name>` | Which workspace project to configure, when more than one is compatible     |
+| `--css <path>`         | The global stylesheet that receives the theme                              |
+| `--app-config <path>`  | The app.config.ts that receives `provideZard()` (ignored for libraries)    |
+| `--base-color <color>` | Theme base color: `neutral`, `stone`, `zinc`, `gray` or `slate`            |
+| `--components-alias`   | Import alias for components, defaults to `@/shared/components`             |
+| `--utils-alias`        | Import alias for utils, defaults to `@/shared/utils`                       |
 
-Outside a terminal (CI, pipes) pass `--yes`, and `--type` to answer the first question:
+Every question the wizard asks has a flag. Outside a terminal (CI, pipes) pass `--yes`, and the flags answer the questions:
 
 ```bash
 npx zard-cli init --yes --type nx --project web
@@ -70,13 +75,14 @@ Adds components, blocks and utilities, resolving their dependencies.
 npx zard-cli add [components...]
 ```
 
-| Option              | Description                                                    |
-| ------------------- | -------------------------------------------------------------- |
-| `-y, --yes`         | Skip the confirmation prompt                                   |
-| `-o, --overwrite`   | Overwrite existing files                                       |
-| `-c, --cwd <cwd>`   | Working directory, defaults to the current one                 |
-| `-a, --all`         | Add every available component                                  |
-| `-p, --path <path>` | Write the components somewhere other than the configured alias |
+| Option                | Description                                                    |
+| --------------------- | -------------------------------------------------------------- |
+| `-y, --yes`           | Skip the confirmation prompt                                   |
+| `-o, --overwrite`     | Overwrite existing files                                       |
+| `-c, --cwd <cwd>`     | Working directory, defaults to the current one                 |
+| `-a, --all`           | Add every available component                                  |
+| `-p, --path <path>`   | Write the components somewhere other than the configured alias |
+| `--index-html <path>` | The index.html that receives the dark-mode theme script        |
 
 ```bash
 npx zard-cli add dialog            # one component

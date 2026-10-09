@@ -6,6 +6,7 @@ import { fetchJson } from '@cli/utils/http-client.js';
 import { iconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger } from '@cli/utils/logger.js';
 import { assertSupportedSchema } from '@cli/utils/schema-version.js';
+import * as path from 'node:path';
 
 export const DEFAULT_REGISTRY_URL =
   process.env['ZARD_REGISTRY_URL'] ||
@@ -217,6 +218,15 @@ export interface TransformOptions {
    * not in. `utils` and `core` stay on the alias, because `init` installed them.
    */
   readonly siblingComponents?: boolean;
+  /**
+   * Where the file sits inside its registry item (`i18n/locales/en-us.ts`).
+   *
+   * A `../` only points at another component when it climbs out of the item.
+   * From a nested file it can stay inside — `core/i18n/locales/en-us.ts`
+   * importing `../i18n.types` — and turning that into the components alias made
+   * every fresh `init` ship imports that do not resolve.
+   */
+  readonly fileName?: string;
 }
 
 export function transformContent(content: string, config: Config, options: TransformOptions = {}): string {
@@ -240,9 +250,14 @@ export function transformContent(content: string, config: Config, options: Trans
     (_match, quote: string, subpath: string) => `${quote}${aliases.components}/${subpath}${quote}`,
   );
 
-  // Replace relative component imports with aliased imports
-  const componentImportRegex = /from ['"]\.\.\/([\w-/.]+)['"]/g;
-  transformed = transformed.replace(componentImportRegex, `from '${aliases.components}/$1'`);
+  // Replace relative imports that leave the item (`../button/button.component`)
+  // with the components alias; the ones that stay inside it are left relative.
+  const fileDir = path.posix.dirname(options.fileName ?? '');
+  transformed = transformed.replace(/from ['"](\.\.\/[\w\-/.]+)['"]/g, (match, specifier: string) => {
+    const resolved = path.posix.normalize(path.posix.join(fileDir, specifier));
+
+    return resolved.startsWith('../') ? `from '${aliases.components}/${resolved.slice(3)}'` : match;
+  });
 
   // Replace ClassValue imports
   transformed = transformed.replace(
@@ -267,6 +282,37 @@ export function transformContent(content: string, config: Config, options: Trans
     const regex = new RegExp(`(['"])@\\/shared\\/${key}(\\/[\\w\\-\\/.]+)?\\1`, 'g');
     transformed = transformed.replace(regex, (_match, quote: string, subpath?: string) => {
       return `${quote}${value}${subpath ?? ''}${quote}`;
+    });
+  }
+
+  return transformed;
+}
+
+/**
+ * Rewrites aliased imports as paths relative to the file that holds them.
+ *
+ * A library cannot ship `@/shared/...`: ng-packagr leaves non-relative imports
+ * external, so the published bundle kept importing a path that only the
+ * library's own workspace maps — and every app installing it from npm failed to
+ * resolve them. Relative imports get bundled, and keep working inside the
+ * workspace too.
+ *
+ * `targets` pairs each alias with the directory it stands for. The longest
+ * alias goes first, so `@/shared/components` is not taken for a shorter prefix.
+ */
+export function relativizeImports(content: string, filePath: string, targets: Record<string, string>): string {
+  const fileDir = path.dirname(filePath);
+  let transformed = content;
+
+  for (const [alias, dir] of Object.entries(targets).sort(([a], [b]) => b.length - a.length)) {
+    const escaped = trimSlashes(alias).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(['"])${escaped}(\\/[\\w\\-\\/.]+)?\\1`, 'g');
+
+    transformed = transformed.replace(regex, (_match, quote: string, subpath?: string) => {
+      const target = path.join(dir, ...(subpath ?? '').split('/').filter(Boolean));
+      const relative = path.relative(fileDir, target).split(path.sep).join('/') || '.';
+
+      return `${quote}${relative.startsWith('.') ? relative : `./${relative}`}${quote}`;
     });
   }
 
@@ -309,7 +355,7 @@ export async function fetchComponent(
 
   const transformedFiles = item.files.map(file => {
     const retargeted = retargetIcons(
-      transformContent(file.content, config, options),
+      transformContent(file.content, config, { ...options, fileName: file.name }),
       sourceFamily,
       config.icons,
       iconCatalog(),
