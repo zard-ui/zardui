@@ -108,6 +108,24 @@ describe('getProjectInfo em workspaces Nx', () => {
     expect(info.projects.map(project => [project.name, project.flavor])).toEqual([['blog', 'analog']]);
   });
 
+  // Nx applies targetDefaults to targets that do not set the option themselves.
+  it('should honour a configFile inherited from targetDefaults', async () => {
+    const cwd = await workspace({
+      'package.json': nxPackageJson,
+      'nx.json': { targetDefaults: { '@nx/vite:build': { options: { configFile: '{projectRoot}/vite.app.mts' } } } },
+      'apps/blog/project.json': {
+        name: 'blog',
+        projectType: 'application',
+        targets: { build: { executor: '@nx/vite:build', options: {} }, serve: {} },
+      },
+      'apps/blog/vite.app.mts': "import analog from '@analogjs/platform';\nexport default {};",
+    });
+
+    const info = await getProjectInfo(cwd);
+
+    expect(info.projects.map(project => project.name)).toEqual(['blog']);
+  });
+
   // Renaming the project does not change what it is; the runner config gives it away.
   it('should recognise an e2e project by its runner config, not only by name', async () => {
     const cwd = await workspace({

@@ -193,6 +193,7 @@ async function findProjectDirs(baseDir: string, depth: number): Promise<string[]
 async function readNxProjects(workspaceRoot: string): Promise<WorkspaceProject[]> {
   const searchRoots = await nxSearchRoots(workspaceRoot);
   const dirs = (await Promise.all(searchRoots.map(dir => findProjectDirs(path.join(workspaceRoot, dir), 2)))).flat();
+  const targetDefaults = await readTargetDefaults(workspaceRoot);
 
   const projects = await Promise.all(
     dirs.map(async (dir): Promise<WorkspaceProject | null> => {
@@ -208,7 +209,7 @@ async function readNxProjects(workspaceRoot: string): Promise<WorkspaceProject[]
 
         // `@nx/vite:build` builds any Vite app; an Analog one gives itself away in its Vite config.
         const viteAnalog = build.tool.startsWith('@nx/vite:')
-          ? await usesAnalogPlugin(workspaceRoot, dir, config.targets?.build?.options?.configFile)
+          ? await usesAnalogPlugin(workspaceRoot, dir, effectiveConfigFile(config.targets?.build, targetDefaults))
           : null;
         if (viteAnalog === false) return null;
 
@@ -272,6 +273,27 @@ const OTHER_ECOSYSTEM_BUILDERS = [
   '@nx/react-native:',
   '@nx/nest:',
 ];
+
+/** `targetDefaults` from nx.json — options Nx applies to a target the project does not override. */
+async function readTargetDefaults(workspaceRoot: string): Promise<Record<string, any>> {
+  try {
+    return (await readJson(path.join(workspaceRoot, 'nx.json'))).targetDefaults ?? {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * The Vite config the build target uses: its own option, else the default Nx
+ * applies to its executor, else the one for the `build` target name.
+ */
+function effectiveConfigFile(build: any, targetDefaults: Record<string, any>): unknown {
+  return (
+    build?.options?.configFile ??
+    targetDefaults[build?.executor]?.options?.configFile ??
+    targetDefaults['build']?.options?.configFile
+  );
+}
 
 /** Whether a project built by `@nx/vite` is an Analog app — the only Angular one that executor builds. */
 async function usesAnalogPlugin(workspaceRoot: string, projectDir: string, configFile?: unknown): Promise<boolean> {
