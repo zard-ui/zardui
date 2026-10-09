@@ -10,7 +10,10 @@
     "skipLibCheck": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "ignoreDeprecations": "6.0"
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["../../node_modules", "dist", "./src/**/*.spec.ts"]

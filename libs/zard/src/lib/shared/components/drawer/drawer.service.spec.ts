@@ -1,4 +1,4 @@
-import { Component, inject, type TemplateRef, viewChild } from '@angular/core';
+import { Component, inject, type TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardDrawerRef } from './drawer-ref';
@@ -21,6 +21,7 @@ const pressEscape = () => document.body.dispatchEvent(new KeyboardEvent('keydown
       <button type="button" data-testid="tpl-close" (click)="ref.close('tpl-result')">Close</button>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class HostComponent {
   readonly tpl = viewChild.required<TemplateRef<void>>('tpl');
@@ -30,6 +31,7 @@ class HostComponent {
   template: `
     <p data-testid="data">{{ data.label }}</p>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class DataContentComponent {
   readonly data = injectDrawerData<{ label: string }>();

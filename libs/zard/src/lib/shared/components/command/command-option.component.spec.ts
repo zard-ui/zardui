@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -20,6 +20,7 @@ import { ZardCommandOptionComponent } from './command-option.component';
       variant="default"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   viewProviders: [provideIcons({ lucideSearch })],
 })
 class TestHostComponent {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -21,6 +21,7 @@ import { makeSafeDate } from './calendar.utils';
       (navigateYear)="onNavigateYear($event)"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {
   calendarDays: CalendarDay[] = [];

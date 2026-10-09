@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, effect, inject, OnDestroy, signal, viewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  effect,
+  inject,
+  OnDestroy,
+  signal,
+  viewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { type IconName, NgIcon, provideIcons } from '@ng-icons/core';
@@ -105,6 +114,7 @@ const COPY_OKLCH_PREFIX = 'copy-oklch:';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   viewProviders: [provideIcons({ lucideArrowRight, lucideCircleDashed, lucideCornerDownLeft })],
 })
 export class CommandDocComponent implements AfterViewInit, OnDestroy {

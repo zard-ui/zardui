@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import {
@@ -28,6 +28,7 @@ import { ZardInputComponent } from '../input/input.component';
       </z-input-group-addon>
     </z-input-group>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {}
 

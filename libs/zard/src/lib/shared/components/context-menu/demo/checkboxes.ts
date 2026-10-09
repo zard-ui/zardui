@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardContextMenuImports } from '@/shared/components/context-menu/context-menu.imports';
 
@@ -22,6 +22,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       </z-dropdown-menu-checkbox-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
 export class ZardDemoContextMenuCheckboxesComponent {

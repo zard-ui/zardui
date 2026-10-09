@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -24,6 +24,7 @@ import { ZardAvatarComponent } from './avatar.component';
       [class]="customClass"
     />
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   viewProviders: [provideIcons({ lucideCheck })],
 })
 class TestHostComponent {

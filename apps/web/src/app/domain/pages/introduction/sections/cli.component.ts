@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 interface CLIFeature {
   title: string;
@@ -7,6 +7,7 @@ interface CLIFeature {
 
 @Component({
   selector: 'z-introduction-cli-section',
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-2">

@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, inject, PLATFORM_ID, type TemplateRef, ViewChild } from '@angular/core';
+import { Component, inject, PLATFORM_ID, type TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { type ZardSheetRef } from './sheet-ref';
@@ -24,6 +24,7 @@ const CLOSE_DELAY = 250;
       </div>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class SheetTestHostComponent {
   private sheetService = inject(ZardSheetService);

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { render } from '@testing-library/angular';
@@ -23,6 +23,7 @@ describe('ZardFieldComponent', () => {
       template: `
         <z-field>content</z-field>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -42,6 +43,7 @@ describe('ZardFieldComponent', () => {
       template: `
         <z-field zOrientation="horizontal">content</z-field>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -61,6 +63,7 @@ describe('ZardFieldSetComponent', () => {
       template: `
         <fieldset z-field-set>content</fieldset>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -80,6 +83,7 @@ describe('ZardFieldLegendComponent', () => {
       template: `
         <legend z-field-legend>Legend</legend>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -96,6 +100,7 @@ describe('ZardFieldLegendComponent', () => {
       template: `
         <legend z-field-legend zVariant="label">Legend</legend>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -114,6 +119,7 @@ describe('ZardFieldErrorComponent', () => {
       template: `
         <z-field-error [zErrors]="errors" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {
       errors = [{ message: 'Required field' }];
@@ -133,6 +139,7 @@ describe('ZardFieldErrorComponent', () => {
       template: `
         <z-field-error [zErrors]="errors" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {
       errors = [{ message: 'Too short' }, { message: 'Too short' }, { message: 'Must be a number' }];
@@ -154,6 +161,7 @@ describe('ZardFieldErrorComponent', () => {
       template: `
         <z-field-error>Custom message</z-field-error>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -172,6 +180,7 @@ describe('ZardFieldSeparatorComponent', () => {
       template: `
         <z-field-separator />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -189,6 +198,7 @@ describe('ZardFieldSeparatorComponent', () => {
       template: `
         <z-field-separator zContent="or" />
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 
@@ -221,6 +231,7 @@ describe('Field accessory components', () => {
           <div z-field-title>Title</div>
         </div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {}
 

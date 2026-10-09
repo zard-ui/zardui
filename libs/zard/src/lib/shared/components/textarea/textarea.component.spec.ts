@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -12,6 +12,7 @@ import { ZardTextareaComponent } from './textarea.component';
   template: `
     <textarea z-textarea [class]="extraClass()"></textarea>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {
   readonly extraClass = signal('');
@@ -22,6 +23,7 @@ class TestHostComponent {
   template: `
     <textarea z-textarea [(ngModel)]="comment"></textarea>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostWithNgModelComponent {
   comment = 'initial';
@@ -34,6 +36,7 @@ class TestHostWithNgModelComponent {
       <textarea z-textarea formControlName="bio"></textarea>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostWithReactiveFormComponent {
   readonly form = new FormGroup({ bio: new FormControl('typed') });
@@ -46,6 +49,7 @@ class TestHostWithReactiveFormComponent {
       <textarea z-textarea></textarea>
     </z-input-group>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostInsideGroupComponent {}
 

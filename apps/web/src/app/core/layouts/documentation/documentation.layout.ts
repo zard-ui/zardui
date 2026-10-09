@@ -1,4 +1,12 @@
-import { Component, computed, inject, signal, afterNextRender, DestroyRef } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  afterNextRender,
+  DestroyRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { SidebarComponent } from '@doc/domain/components/sidebar/sidebar.component';
@@ -22,6 +30,7 @@ import { DarkModeOptions, ZardDarkMode } from '@zard/services/dark-mode';
     </main>
     <z-sonner [theme]="currentTheme()" />
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterModule, SidebarComponent, ZardSonnerComponent],
 })
 export class DocumentationLayout {

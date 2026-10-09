@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { JSON_CURRENT_STRUCTURE_EXAMPLE } from '@generated/documentation/json/current-structure-example';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
@@ -7,6 +7,7 @@ import type { CodeBlockData } from '@highlight/types';
 @Component({
   selector: 'z-json-current-structure-section',
   imports: [CodeBlockComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="current-structure" id="current-structure">
       <div class="flex flex-col gap-4 sm:gap-6">

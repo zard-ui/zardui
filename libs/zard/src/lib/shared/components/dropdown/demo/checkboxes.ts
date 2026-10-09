@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
@@ -15,6 +15,7 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
       <z-dropdown-menu-checkbox-item [(zChecked)]="panel">Panel</z-dropdown-menu-checkbox-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDropdownCheckboxesComponent {
   statusBar = true;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { screen } from '@testing-library/angular';
@@ -10,6 +10,7 @@ import { ZardNavigationMenuShortcutComponent } from './navigation-menu-shortcut.
   template: `
     <z-navigation-menu-shortcut [class]="customClass">Ctrl+S</z-navigation-menu-shortcut>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   customClass = '';

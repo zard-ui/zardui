@@ -16,7 +16,9 @@ describe('attachment variants', () => {
     ['done', 'border-border'],
   ] as const)('styles state %s', (zState, expected) => {
     expect(attachmentVariants({ zState })).toContain(expected);
-    if (zState !== 'error') expect(attachmentVariants({ zState })).not.toContain('text-destructive');
+    if (zState !== 'error') {
+      expect(attachmentVariants({ zState })).not.toContain('text-destructive');
+    }
   });
 
   it.each([

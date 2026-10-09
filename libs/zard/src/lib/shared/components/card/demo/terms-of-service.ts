@@ -13,7 +13,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
         <z-card-description zDescription="Review the terms before accepting the agreement." />
       </z-card-header>
       <z-card-content class="-mb-4">
-        <div class="bg-muted/50 -mx-4 max-h-48 space-y-4 overflow-y-auto border-t px-4 py-4 text-sm leading-relaxed">
+        <div class="bg-muted/50 -mx-4 max-h-48 space-y-4 overflow-y-auto border-t p-4 text-sm/relaxed">
           <p>
             These terms govern your use of the workspace, including access to shared documents, project files, and
             collaboration tools.

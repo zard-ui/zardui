@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { BLOCK_0, BLOCK_1, BLOCK_2 } from '@generated/pages/registry/local-development';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
@@ -7,6 +7,7 @@ import type { CodeBlockData } from '@highlight/types';
 @Component({
   selector: 'z-registry-local-development-section',
   imports: [CodeBlockComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
       Running the registry locally

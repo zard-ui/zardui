@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
@@ -24,6 +24,7 @@ import { ZardMarkerImports } from './marker.imports';
       <z-marker-content>Today</z-marker-content>
     </z-marker>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestMarkerHost {}
 
@@ -39,6 +40,7 @@ class TestMarkerHost {}
       <z-marker-content>Revert this change</z-marker-content>
     </button>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestInteractiveMarkerHost {
   clicks = 0;

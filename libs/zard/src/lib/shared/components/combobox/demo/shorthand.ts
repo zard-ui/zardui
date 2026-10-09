@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardComboboxComponent } from '../combobox.component';
 import type { ZardComboboxOption } from '../combobox.types';
@@ -19,6 +19,7 @@ import type { ZardComboboxOption } from '../combobox.types';
       <p class="text-muted-foreground text-sm">Selected: {{ selected()?.label ?? 'none' }}</p>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxShorthandComponent {
   readonly selected = signal<ZardComboboxOption | null>(null);

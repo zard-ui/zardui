@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { JSON_ALIASES_BLOCKS_EXAMPLE } from '@generated/documentation/json/aliases-blocks-example';
 import { JSON_ALIASES_COMPONENTS_EXAMPLE } from '@generated/documentation/json/aliases-components-example';
@@ -11,6 +11,7 @@ import type { CodeBlockData } from '@highlight/types';
 @Component({
   selector: 'z-json-aliases-section',
   imports: [CodeBlockComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="aliases" id="aliases">
       <div class="flex flex-col gap-4 sm:gap-6">

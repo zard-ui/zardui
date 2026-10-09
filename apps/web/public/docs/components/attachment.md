@@ -289,10 +289,15 @@ export class ZardAttachmentGroupComponent {
       event.ctrlKey ||
       event.metaKey ||
       event.shiftKey
-    )
+    ) {
       return;
-    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-    if (!host.children.length || host.clientWidth <= 0 || host.scrollWidth <= host.clientWidth) return;
+    }
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+      return;
+    }
+    if (!host.children.length || host.clientWidth <= 0 || host.scrollWidth <= host.clientWidth) {
+      return;
+    }
     event.preventDefault();
     host.scrollBy({ left: event.key === 'ArrowRight' ? host.clientWidth : -host.clientWidth, behavior: 'auto' });
   }

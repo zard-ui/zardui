@@ -1,5 +1,5 @@
 import { Overlay } from '@angular/cdk/overlay';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { lucideCheck } from '@ng-icons/lucide';
@@ -10,11 +10,13 @@ import { ZardDialogService } from './dialog.service';
 
 @Component({
   template: '<p>Test Content</p>',
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestContentComponent {}
 
 @Component({
   template: '<p>Own slot</p>',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: { 'data-slot': 'custom-slot' },
 })
 class OwnSlotContentComponent {}

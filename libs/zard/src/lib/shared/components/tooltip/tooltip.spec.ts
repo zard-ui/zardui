@@ -1,5 +1,5 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { Component, type ElementRef, viewChild } from '@angular/core';
+import { Component, type ElementRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
@@ -17,6 +17,7 @@ import { type ZardTooltipDirective } from './tooltip';
     <div #leftTooltip zTooltip="Test Click" zPosition="left" #leftDir="zTooltip"></div>
     <div #rightTooltip zTooltip="Test Click" zPosition="right" #rightDir="zTooltip"></div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {
   readonly hoverTooltip = viewChild.required<ElementRef>('hoverTooltip');

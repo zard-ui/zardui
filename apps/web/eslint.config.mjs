@@ -27,6 +27,10 @@ export default [
           suffixes: ['Page', 'Component', 'Layout', 'Dialog'],
         },
       ],
+      // angular-eslint 22 turns this on. Angular 22's change-detection-eager migration
+      // marked the docs components that relied on the old default as `Eager`, which keeps
+      // them behaving exactly as before; moving each one to OnPush is a separate review.
+      '@angular-eslint/prefer-on-push-component-change-detection': 'off',
     },
   },
   {

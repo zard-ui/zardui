@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { render, screen } from '@testing-library/angular';
 
@@ -29,6 +29,7 @@ import { ZardItemImports } from './item.imports';
       </z-item>
     </z-item-group>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestItemHost {}
 

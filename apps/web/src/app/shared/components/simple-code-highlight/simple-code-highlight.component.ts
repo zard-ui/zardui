@@ -1,10 +1,11 @@
-import { Component, input, signal, effect, inject } from '@angular/core';
+import { Component, input, signal, effect, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { CodeHighlightService } from '../../services/code-highlight.service';
 
 @Component({
   selector: 'z-simple-code-highlight',
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div class="relative">
       @if (showCopyButton()) {

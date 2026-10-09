@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { render, screen } from '@testing-library/angular';
 
@@ -26,6 +26,7 @@ import { ZardMessageImports } from './message.imports';
       </z-message>
     </z-message-group>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestMessageHost {}
 
@@ -46,6 +47,7 @@ class TestMessageHost {}
       </z-message-content>
     </z-message>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestMessageTemplatesHost {}
 

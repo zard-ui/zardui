@@ -22,12 +22,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 import { sonnerVariants } from './sonner.variants';
 
 export type ZardSonnerPosition =
-  | 'top-left'
-  | 'top-center'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-center'
-  | 'bottom-right';
+  'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
 
 const DEFAULT_STYLE: Record<string, string> = {
   '--normal-bg': 'var(--popover)',

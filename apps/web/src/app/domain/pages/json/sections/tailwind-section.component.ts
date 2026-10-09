@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { JSON_TAILWIND_BASECOLOR_EXAMPLE } from '@generated/documentation/json/tailwind-basecolor-example';
@@ -9,6 +9,7 @@ import type { CodeBlockData } from '@highlight/types';
 @Component({
   selector: 'z-json-tailwind-section',
   imports: [CodeBlockComponent, RouterLink],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="tailwind" id="tailwind">
       <div class="flex flex-col gap-4 sm:gap-6">

@@ -1,5 +1,5 @@
 import { isPlatformBrowser, Location, TitleCasePipe, ViewportScroller } from '@angular/common';
-import { Component, DOCUMENT, inject, input, PLATFORM_ID } from '@angular/core';
+import { Component, DOCUMENT, inject, input, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 
 import { getHeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
@@ -18,6 +18,7 @@ export interface NavigationConfig {
 @Component({
   selector: 'z-dynamic-anchor',
   imports: [TitleCasePipe, HyphenToSpacePipe],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './dynamic-anchor.component.html',
 })
 export class DynamicAnchorComponent {

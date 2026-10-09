@@ -1,5 +1,5 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { Component, type DebugElement, type TemplateRef, viewChild } from '@angular/core';
+import { Component, type DebugElement, type TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -49,6 +49,7 @@ function queryPopover(): HTMLElement | null {
       </z-popover>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   readonly popoverContent = viewChild.required<TemplateRef<unknown>>('popoverContent');
@@ -595,6 +596,7 @@ describe('Popover composition parts', () => {
       </z-popover>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class HoverTestComponent {
   readonly popoverContent = viewChild.required<TemplateRef<unknown>>('popoverContent');

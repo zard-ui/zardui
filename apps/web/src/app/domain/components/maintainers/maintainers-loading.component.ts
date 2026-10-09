@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardSkeletonComponent } from '@zard/components/skeleton/skeleton.component';
 
 @Component({
   selector: 'z-maintainers-loading',
   imports: [ZardSkeletonComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
       @for (item of [1, 2, 3]; track $index) {

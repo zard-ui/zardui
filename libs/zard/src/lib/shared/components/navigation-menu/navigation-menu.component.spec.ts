@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -39,6 +39,7 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
       <z-navigation-menu-indicator />
     </z-navigation-menu>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   viewport = true;

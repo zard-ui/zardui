@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
@@ -27,6 +27,7 @@ import type { ZardComboboxOption } from '../combobox.types';
       </z-combobox-content>
     </z-combobox>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoComboboxMultipleComponent {
   readonly value = signal<string | string[] | null>(['angular']);

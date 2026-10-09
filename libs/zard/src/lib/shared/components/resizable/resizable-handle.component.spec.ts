@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -27,6 +27,7 @@ import { ZardResizableComponent, type ZardResizeEvent } from './resizable.compon
       </z-resizable-panel>
     </z-resizable>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHandleHostComponent {
   layout: 'horizontal' | 'vertical' = 'horizontal';

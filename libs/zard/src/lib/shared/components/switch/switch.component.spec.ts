@@ -1,4 +1,4 @@
-import { Component, inject, inputBinding, signal } from '@angular/core';
+import { Component, inject, inputBinding, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, type FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { render, screen } from '@testing-library/angular';
@@ -17,6 +17,7 @@ import { switchVariants } from './switch.variants';
 
     <z-switch [zChecked]="true" zDisabled="true">Disabled Switch</z-switch>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestVariantsComponent {}
 
@@ -26,6 +27,7 @@ class TestVariantsComponent {}
     <z-switch [(zChecked)]="checked">Toggle</z-switch>
     <p>Status: {{ checked ? 'on' : 'off' }}</p>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestNgModelComponent {
   checked = true;
@@ -40,6 +42,7 @@ class TestNgModelComponent {
       <z-switch formControlName="switch3">Auto Save</z-switch>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestReactiveFormsComponent {
   private fb = inject(FormBuilder);

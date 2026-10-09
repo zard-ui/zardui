@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { render, screen } from '@testing-library/angular';
 
@@ -27,6 +27,7 @@ describe('ZardCardComponent', () => {
       selector: 'test-host',
       imports: [ZardCardComponent],
       template: '<div z-card>Projected content</div>',
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -52,6 +53,7 @@ describe('ZardCardHeaderComponent', () => {
       template: `
         <div z-card><div z-card-header>Header</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -68,6 +70,7 @@ describe('ZardCardHeaderComponent', () => {
       template: `
         <div z-card><div z-card-header [zHeaderBorder]="true">Header</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -83,6 +86,7 @@ describe('ZardCardHeaderComponent', () => {
       template: `
         <div z-card><div z-card-header>Header</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -100,6 +104,7 @@ describe('ZardCardTitleComponent', () => {
       template: `
         <div z-card><div z-card-title zTitle="Test Title"></div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -119,6 +124,7 @@ describe('ZardCardTitleComponent', () => {
           </div>
         </div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -134,6 +140,7 @@ describe('ZardCardTitleComponent', () => {
       template: `
         <div z-card><div z-card-title zTitle="Title"></div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -149,6 +156,7 @@ describe('ZardCardTitleComponent', () => {
       template: `
         <div z-card><div z-card-title zTitle="Title" class="w-full"></div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -166,6 +174,7 @@ describe('ZardCardDescriptionComponent', () => {
       template: `
         <div z-card><div z-card-description zDescription="Test Desc"></div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -185,6 +194,7 @@ describe('ZardCardDescriptionComponent', () => {
           </div>
         </div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -200,6 +210,7 @@ describe('ZardCardDescriptionComponent', () => {
       template: `
         <div z-card><div z-card-description zDescription="Desc"></div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -217,6 +228,7 @@ describe('ZardCardActionComponent', () => {
       template: `
         <div z-card><div z-card-action>Action label</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -232,6 +244,7 @@ describe('ZardCardActionComponent', () => {
       template: `
         <div z-card><div z-card-action>Edit</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -247,6 +260,7 @@ describe('ZardCardActionComponent', () => {
       template: `
         <div z-card><div z-card-action class="w-full">Edit</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -264,6 +278,7 @@ describe('ZardCardContentComponent', () => {
       template: `
         <div z-card><div z-card-content>Body</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -279,6 +294,7 @@ describe('ZardCardContentComponent', () => {
       template: `
         <div z-card><div z-card-content class="w-full">Body</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -294,6 +310,7 @@ describe('ZardCardContentComponent', () => {
       template: `
         <div z-card><div z-card-content>Projected body</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -311,6 +328,7 @@ describe('ZardCardFooterComponent', () => {
       template: `
         <div z-card><div z-card-footer>Footer</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -327,6 +345,7 @@ describe('ZardCardFooterComponent', () => {
       template: `
         <div z-card><div z-card-footer [zFooterBorder]="true">Footer</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -342,6 +361,7 @@ describe('ZardCardFooterComponent', () => {
       template: `
         <div z-card><div z-card-footer class="w-full">Footer</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 
@@ -357,6 +377,7 @@ describe('ZardCardFooterComponent', () => {
       template: `
         <div z-card><div z-card-footer>Footer content</div></div>
       `,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class TestHostComponent {}
 

@@ -15,7 +15,10 @@
     "esModuleInterop": true,
     "paths": {
       "@zardui/generators": ["./tools/generators/component/index.ts"]
-    }
+    },
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"]
   },
   "exclude": ["./node_modules", "./tmp"]
 }

@@ -1,5 +1,5 @@
 import { PARENT_OR_NEW_MENU_STACK_PROVIDER } from '@angular/cdk/menu';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -12,6 +12,7 @@ import { ZardNavigationMenuLinkDirective } from './navigation-menu-link.directiv
       Menu Item
     </button>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   disabled = false;

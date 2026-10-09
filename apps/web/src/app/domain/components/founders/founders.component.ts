@@ -47,7 +47,11 @@ export interface FounderData {
           <span
             class="bg-muted/60 text-muted-foreground group-hover:bg-muted group-hover:text-foreground inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs transition-colors"
           >
-            <img [src]="githubData?.icon" [alt]="githubData?.iconAlt" class="h-3.5 shrink-0 dark:invert" />
+            <img
+              [src]="$safeNavigationMigration(githubData?.icon)"
+              [alt]="$safeNavigationMigration(githubData?.iconAlt)"
+              class="h-3.5 shrink-0 dark:invert"
+            />
             <span class="truncate font-mono">{{ founder.login }}</span>
           </span>
         </a>

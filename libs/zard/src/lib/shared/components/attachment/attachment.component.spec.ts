@@ -1,4 +1,4 @@
-import { Component, reflectComponentType, signal } from '@angular/core';
+import { Component, reflectComponentType, signal, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import '@testing-library/jest-dom';
@@ -34,6 +34,7 @@ import { ZardAttachmentActionComponent, ZardAttachmentGroupComponent } from './i
       <z-attachment-title>Sibling.txt</z-attachment-title>
     </z-attachment>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class Composition {
   readonly state = signal<ZardAttachmentStateVariants>('done');
@@ -114,7 +115,9 @@ describe('attachment composition', () => {
 
   it('documents every reflected input and the inherited action API without weakening the validator', () => {
     for (const part of ZardAttachmentImports) {
-      if (part.name.endsWith('Directive')) continue;
+      if (part.name.endsWith('Directive')) {
+        continue;
+      }
       const metadata = reflectComponentType(part)!;
       const selector = metadata.selector.split(',')[0].trim();
       const section = ATTACHMENT_API.find(section => section.selector === selector)!;
@@ -216,6 +219,7 @@ describe('attachment composition', () => {
       </z-attachment-actions>
     </z-attachment>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class NativeActions {
   readonly nativeDisabled = signal(false);

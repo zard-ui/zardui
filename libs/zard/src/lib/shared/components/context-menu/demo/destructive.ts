@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePencil, lucideShare, lucideTrash2 } from '@ng-icons/lucide';
@@ -33,6 +33,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucidePencil, lucideShare, lucideTrash2 })],
   host: { class: 'contents' },
 })

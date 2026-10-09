@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardContextMenuImports } from './context-menu.imports';
@@ -24,6 +24,7 @@ import { ZardContextMenuService } from './context-menu.service';
       <z-dropdown-menu-item zDisabled data-testid="disabled-item">Forward</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   readonly disabled = signal(false);

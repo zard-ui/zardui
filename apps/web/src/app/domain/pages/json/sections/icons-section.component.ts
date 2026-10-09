@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { JSON_ICONS_EXAMPLE } from '@generated/documentation/json/icons-example';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
@@ -7,6 +7,7 @@ import type { CodeBlockData } from '@highlight/types';
 @Component({
   selector: 'z-json-icons-section',
   imports: [CodeBlockComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="icons" id="icons">
       <div class="flex flex-col gap-4 sm:gap-6">

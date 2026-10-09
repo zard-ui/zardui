@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
       <p class="mt-2 font-medium first-letter:uppercase">{{ name() }}</p>
     </a>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterModule],
 })
 export class EnvCardComponent {

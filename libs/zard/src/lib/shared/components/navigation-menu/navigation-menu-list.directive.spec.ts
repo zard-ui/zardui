@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -12,6 +12,7 @@ import { ZardNavigationMenuListDirective } from './navigation-menu-list.directiv
       <li z-navigation-menu-item [class]="itemClass">Item</li>
     </ul>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   listClass = '';

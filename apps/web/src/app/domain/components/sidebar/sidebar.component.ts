@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { SIDEBAR_PATHS, type NavSection } from '@doc/shared/constants/routes.constant';
@@ -79,6 +79,7 @@ import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
   // aside's own height by the grid's `items-start`) leaves the sticky no travel
   // room and the sidebar scrolls away instead of sticking.
   host: { class: 'contents' },
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterModule, ZardBadgeComponent],
 })
 export class SidebarComponent {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { render, screen, within } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
@@ -11,6 +11,7 @@ import { ZardPaginationComponent } from './pagination.component';
     <z-pagination [(zPageIndex)]="pageIndex" [zTotal]="totalPages" zSize="icon" [class]="customClass" />
     <p data-testid="page-index">Page: {{ pageIndex }}</p>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {
   pageIndex = 1;

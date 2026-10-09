@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -11,6 +11,7 @@ import { ZardAspectRatioComponent } from './aspect-ratio.component';
       <img data-testid="content" src="/cover.png" alt="Cover" class="size-full object-cover" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestHostComponent {
   zRatio: number | string = 16 / 9;
@@ -24,6 +25,7 @@ class TestHostComponent {
       <span data-testid="content">content</span>
     </z-aspect-ratio>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestElementHostComponent {
   zRatio: number | string = '1';

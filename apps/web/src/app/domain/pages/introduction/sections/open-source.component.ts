@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBan, lucideCircleCheck, lucideCircleDollarSign, lucideX, lucideZap } from '@ng-icons/lucide';
@@ -75,6 +75,7 @@ interface StandAgainstItem {
       </div>
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   viewProviders: [
     provideIcons({
       lucideCircleCheck,

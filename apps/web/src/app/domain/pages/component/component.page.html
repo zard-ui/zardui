@@ -133,7 +133,7 @@
             [class.overflow-hidden]="activeTab() !== 'manual'"
             [class.pointer-events-none]="activeTab() !== 'manual'"
           >
-            <z-steps [steps]="installGuide()?.manual"></z-steps>
+            <z-steps [steps]="$safeNavigationMigration(installGuide()?.manual)"></z-steps>
           </section>
         </div>
       </header>

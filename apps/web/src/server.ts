@@ -20,7 +20,10 @@ import {
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
-const angularApp = new AngularNodeAppEngine();
+const angularApp = new AngularNodeAppEngine({
+  // TODO: This is a security-sensitive option. Remove if not needed. For more information, see https://angular.dev/best-practices/security#configuring-trusted-proxy-headers
+  trustProxyHeaders: ['x-forwarded-host', 'x-forwarded-proto'],
+});
 
 function getAvailableRoutes(): Array<{ path: string; priority: number; changefreq: string }> {
   const routes: Array<{ path: string; priority: number; changefreq: string }> = [];

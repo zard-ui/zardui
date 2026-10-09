@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { fakeAsync, flush, type ComponentFixture, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -21,6 +21,7 @@ import { ZardDropdownService } from './dropdown.service';
       {{ text }}
     </z-dropdown-menu-item>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   variant: 'default' | 'destructive' = 'default';
@@ -37,6 +38,7 @@ class TestComponent {
   template: `
     <button type="button" z-dropdown-menu-item variant="destructive" inset disabled>Delete project</button>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class AttributeSelectorTestComponent {}
 

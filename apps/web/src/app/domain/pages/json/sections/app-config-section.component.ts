@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { JSON_APP_CONFIG_EXAMPLE } from '@generated/documentation/json/app-config-example';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
@@ -7,6 +7,7 @@ import type { CodeBlockData } from '@highlight/types';
 @Component({
   selector: 'z-json-app-config-section',
   imports: [CodeBlockComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="app-config" id="app-config">
       <div class="flex flex-col gap-4 sm:gap-6">

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { environment } from '@doc/env/environment';
@@ -10,6 +10,7 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 @Component({
   selector: 'z-mobile-nav',
   templateUrl: './mobile-nav.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent],
 })
 export class MobileMenuComponent {

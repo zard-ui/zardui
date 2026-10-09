@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { JSON_PACKAGE_MANAGER_EXAMPLE } from '@generated/documentation/json/package-manager-example';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
@@ -7,6 +7,7 @@ import type { CodeBlockData } from '@highlight/types';
 @Component({
   selector: 'z-json-package-manager-section',
   imports: [CodeBlockComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="package-manager" id="package-manager">
       <div class="flex flex-col gap-4 sm:gap-6">

@@ -1,4 +1,4 @@
-import { Component, type TemplateRef, viewChild } from '@angular/core';
+import { Component, type TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -16,6 +16,7 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
     <ng-template #content />
   `,
   providers: [ZardNavigationMenuService],
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   readonly content = viewChild.required<TemplateRef<void>>('content');

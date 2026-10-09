@@ -1,4 +1,4 @@
-import { Component, inject, type OnInit } from '@angular/core';
+import { Component, inject, type OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
@@ -24,6 +24,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     IntroductionOpenSourceSectionComponent,
     IntroductionSupportSectionComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <z-content
       [title]="title"

@@ -1,5 +1,12 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { Component, viewChild, ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  viewChild,
+  ElementRef,
+  TemplateRef,
+  ViewContainerRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -29,6 +36,7 @@ import { ZardDropdownService } from './dropdown.service';
       <div>Menu Item 2</div>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestComponent {
   triggerMode: 'click' | 'hover' = 'click';
@@ -304,6 +312,7 @@ describe('ZardDropdownDirective', () => {
       <div>Menu Item 2</div>
     </z-dropdown-menu-content>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class MultipleDropdownsTestComponent {
   readonly menuContent1 = viewChild.required<ZardDropdownMenuContentComponent>('menuContent1');
