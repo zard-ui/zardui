@@ -204,6 +204,7 @@ async function readNxProjects(workspaceRoot: string): Promise<WorkspaceProject[]
         if (await isE2eProject(dir, name)) return null;
 
         const build = readBuildTarget(config.targets);
+        if (isOtherEcosystem(build.tool)) return null;
 
         return {
           name,
@@ -239,6 +240,35 @@ function nxProjectType(config: any): 'application' | 'library' {
   }
 
   return config.targets?.serve ? 'application' : 'library';
+}
+
+/**
+ * Builders that never produce an Angular project.
+ *
+ * The Angular template of `create-nx-workspace` ships an Express API next to the
+ * app (`apps/api`, built with `@nx/esbuild`). Listed as an application, it came
+ * first in alphabetical order, and the headless `init` chose it — failing on a
+ * global CSS a Node server does not have. Angular projects build with
+ * `@angular/*`, `@nx/angular:*` or `@analogjs/*`; a library with no build target
+ * at all is kept, since a non-buildable Nx library is a valid target.
+ */
+const OTHER_ECOSYSTEM_BUILDERS = [
+  '@nx/esbuild:',
+  '@nx/node:',
+  '@nx/js:',
+  '@nx/webpack:',
+  '@nx/rspack:',
+  '@nx/rollup:',
+  '@nx/next:',
+  '@nx/react:',
+  '@nx/remix:',
+  '@nx/expo:',
+  '@nx/react-native:',
+  '@nx/nest:',
+];
+
+function isOtherEcosystem(tool: string): boolean {
+  return OTHER_ECOSYSTEM_BUILDERS.some(prefix => tool.startsWith(prefix));
 }
 
 /** Configuration files that only exist in an end-to-end test project. */

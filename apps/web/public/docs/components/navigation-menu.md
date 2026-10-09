@@ -1029,13 +1029,14 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
     this.trackOverlayState();
 
-    if (this.shouldRenderChevron()) {
+    if (this.shouldRenderChevron() && isPlatformBrowser(this.platformId)) {
       // Deferred, not called here: `renderChevron` appends a node the template does not
       // declare, and on the server that node lands in the serialized HTML. Hydration then
       // walks the host's children expecting only the declared ones, fails on the extra
       // `<ng-icon>`, and gives up on the whole subtree — which leaves
       // `zNavigationMenuTriggerFor` unset (NG0950) and the menu dead to hover.
-      // `afterNextRender` never runs on the server and runs after hydration in the browser.
+      // `afterNextRender` runs after hydration in the browser. The platform check is not
+      // redundant: Analog's SSR renderer does run `afterNextRender` on the server.
       afterNextRender(() => this.renderChevron(), { injector: this.injector });
     }
 
@@ -1658,17 +1659,29 @@ export class ZardNavigationMenuViewportComponent {
 ```
 
 ```angular-ts
-import { ZardContextMenuDirective } from '@/shared/components/navigation-menu/context-menu.directive';
-import { ZardNavigationMenuContentDirective } from '@/shared/components/navigation-menu/navigation-menu-content.directive';
-import { ZardNavigationMenuIndicatorComponent } from '@/shared/components/navigation-menu/navigation-menu-indicator.component';
-import { ZardNavigationMenuItemDirective } from '@/shared/components/navigation-menu/navigation-menu-item.directive';
-import { ZardNavigationMenuLabelComponent } from '@/shared/components/navigation-menu/navigation-menu-label.component';
-import { ZardNavigationMenuLinkDirective } from '@/shared/components/navigation-menu/navigation-menu-link.directive';
-import { ZardNavigationMenuListDirective } from '@/shared/components/navigation-menu/navigation-menu-list.directive';
-import { ZardNavigationMenuShortcutComponent } from '@/shared/components/navigation-menu/navigation-menu-shortcut.component';
-import { ZardNavigationMenuTriggerDirective } from '@/shared/components/navigation-menu/navigation-menu-trigger.directive';
-import { ZardNavigationMenuViewportComponent } from '@/shared/components/navigation-menu/navigation-menu-viewport.component';
-import { ZardNavigationMenuComponent } from '@/shared/components/navigation-menu/navigation-menu.component';
+export { ZardContextMenuDirective } from './context-menu.directive';
+export { ZardNavigationMenuContentDirective } from './navigation-menu-content.directive';
+export { ZardNavigationMenuIndicatorComponent } from './navigation-menu-indicator.component';
+export { ZardNavigationMenuItemDirective } from './navigation-menu-item.directive';
+export { ZardNavigationMenuLabelComponent } from './navigation-menu-label.component';
+export { ZardNavigationMenuLinkDirective } from './navigation-menu-link.directive';
+export { ZardNavigationMenuListDirective } from './navigation-menu-list.directive';
+export { ZardNavigationMenuShortcutComponent } from './navigation-menu-shortcut.component';
+export { ZardNavigationMenuTriggerDirective } from './navigation-menu-trigger.directive';
+export { ZardNavigationMenuViewportComponent } from './navigation-menu-viewport.component';
+export { ZardNavigationMenuComponent } from './navigation-menu.component';
+
+import { ZardContextMenuDirective } from './context-menu.directive';
+import { ZardNavigationMenuContentDirective } from './navigation-menu-content.directive';
+import { ZardNavigationMenuIndicatorComponent } from './navigation-menu-indicator.component';
+import { ZardNavigationMenuItemDirective } from './navigation-menu-item.directive';
+import { ZardNavigationMenuLabelComponent } from './navigation-menu-label.component';
+import { ZardNavigationMenuLinkDirective } from './navigation-menu-link.directive';
+import { ZardNavigationMenuListDirective } from './navigation-menu-list.directive';
+import { ZardNavigationMenuShortcutComponent } from './navigation-menu-shortcut.component';
+import { ZardNavigationMenuTriggerDirective } from './navigation-menu-trigger.directive';
+import { ZardNavigationMenuViewportComponent } from './navigation-menu-viewport.component';
+import { ZardNavigationMenuComponent } from './navigation-menu.component';
 
 export const ZardNavigationMenuImports = [
   ZardNavigationMenuComponent,

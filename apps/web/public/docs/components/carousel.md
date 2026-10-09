@@ -471,9 +471,13 @@ export class ZardCarouselPluginsService {
 ```
 
 ```angular-ts
-import { ZardCarouselContentComponent } from '@/shared/components/carousel/carousel-content.component';
-import { ZardCarouselItemComponent } from '@/shared/components/carousel/carousel-item.component';
-import { ZardCarouselComponent } from '@/shared/components/carousel/carousel.component';
+export { ZardCarouselContentComponent } from './carousel-content.component';
+export { ZardCarouselItemComponent } from './carousel-item.component';
+export { ZardCarouselComponent } from './carousel.component';
+
+import { ZardCarouselContentComponent } from './carousel-content.component';
+import { ZardCarouselItemComponent } from './carousel-item.component';
+import { ZardCarouselComponent } from './carousel.component';
 
 export const ZardCarouselImports = [
   ZardCarouselComponent,

@@ -225,6 +225,16 @@ export const cardFooterVariants = cva('flex items-center rounded-b-xl bg-muted/5
 ```
 
 ```angular-ts
+export {
+  ZardCardActionComponent,
+  ZardCardComponent,
+  ZardCardContentComponent,
+  ZardCardDescriptionComponent,
+  ZardCardFooterComponent,
+  ZardCardHeaderComponent,
+  ZardCardTitleComponent,
+} from './card.component';
+
 import {
   ZardCardActionComponent,
   ZardCardComponent,
@@ -233,7 +243,7 @@ import {
   ZardCardFooterComponent,
   ZardCardHeaderComponent,
   ZardCardTitleComponent,
-} from '@/shared/components/card/card.component';
+} from './card.component';
 
 export const ZardCardImports = [
   ZardCardComponent,
@@ -249,6 +259,7 @@ export const ZardCardImports = [
 ```angular-ts
 export * from './card.component';
 export * from './card.variants';
+export * from './card.imports';
 ```
 
 ## Usage

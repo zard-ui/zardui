@@ -1,3 +1,12 @@
+export {
+  ZardDialogCloseDirective,
+  ZardDialogComponent,
+  ZardDialogDescriptionComponent,
+  ZardDialogFooterComponent,
+  ZardDialogHeaderComponent,
+  ZardDialogTitleComponent,
+} from './dialog.component';
+
 import {
   ZardDialogCloseDirective,
   ZardDialogComponent,
@@ -5,7 +14,7 @@ import {
   ZardDialogFooterComponent,
   ZardDialogHeaderComponent,
   ZardDialogTitleComponent,
-} from '@/shared/components/dialog/dialog.component';
+} from './dialog.component';
 
 /** Every part of the declarative dialog, for a template that composes one. */
 export const ZardDialogImports = [

@@ -13,7 +13,7 @@
     },
     {
       "name": "popover.imports.ts",
-      "content": "export {\n  ZardPopoverComponent,\n  ZardPopoverDescriptionComponent,\n  ZardPopoverDirective,\n  ZardPopoverHeaderComponent,\n  ZardPopoverTitleComponent,\n} from '@/shared/components/popover/popover.component';\n\nimport {\n  ZardPopoverComponent,\n  ZardPopoverDescriptionComponent,\n  ZardPopoverDirective,\n  ZardPopoverHeaderComponent,\n  ZardPopoverTitleComponent,\n} from '@/shared/components/popover/popover.component';\n\nexport const ZardPopoverImports = [\n  ZardPopoverDirective,\n  ZardPopoverComponent,\n  ZardPopoverHeaderComponent,\n  ZardPopoverTitleComponent,\n  ZardPopoverDescriptionComponent,\n] as const;\n"
+      "content": "export {\n  ZardPopoverComponent,\n  ZardPopoverDescriptionComponent,\n  ZardPopoverDirective,\n  ZardPopoverHeaderComponent,\n  ZardPopoverTitleComponent,\n} from './popover.component';\n\nimport {\n  ZardPopoverComponent,\n  ZardPopoverDescriptionComponent,\n  ZardPopoverDirective,\n  ZardPopoverHeaderComponent,\n  ZardPopoverTitleComponent,\n} from './popover.component';\n\nexport const ZardPopoverImports = [\n  ZardPopoverDirective,\n  ZardPopoverComponent,\n  ZardPopoverHeaderComponent,\n  ZardPopoverTitleComponent,\n  ZardPopoverDescriptionComponent,\n] as const;\n"
     },
     {
       "name": "index.ts",

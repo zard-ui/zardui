@@ -579,6 +579,7 @@ export * from './input-otp-separator.component';
 export * from './input-otp.imports';
 export * from './input-otp.tokens';
 export * from './input-otp.variants';
+export { REGEXP_ONLY_CHARS, REGEXP_ONLY_DIGITS, REGEXP_ONLY_DIGITS_AND_CHARS } from './input-otp.utils';
 ```
 
 ```angular-ts
@@ -898,11 +899,17 @@ export class ZardInputOtpSlotComponent {
 ```
 
 ```angular-ts
-import { ZardInputOtpGroupComponent } from '@/shared/components/input-otp/input-otp-group.component';
-import { ZardInputOtpSeparatorComponent } from '@/shared/components/input-otp/input-otp-separator.component';
-import { ZardInputOtpSignalComponent } from '@/shared/components/input-otp/input-otp-signal.component';
-import { ZardInputOtpSlotComponent } from '@/shared/components/input-otp/input-otp-slot.component';
-import { ZardInputOtpComponent } from '@/shared/components/input-otp/input-otp.component';
+export { ZardInputOtpGroupComponent } from './input-otp-group.component';
+export { ZardInputOtpSeparatorComponent } from './input-otp-separator.component';
+export { ZardInputOtpSignalComponent } from './input-otp-signal.component';
+export { ZardInputOtpSlotComponent } from './input-otp-slot.component';
+export { ZardInputOtpComponent } from './input-otp.component';
+
+import { ZardInputOtpGroupComponent } from './input-otp-group.component';
+import { ZardInputOtpSeparatorComponent } from './input-otp-separator.component';
+import { ZardInputOtpSignalComponent } from './input-otp-signal.component';
+import { ZardInputOtpSlotComponent } from './input-otp-slot.component';
+import { ZardInputOtpComponent } from './input-otp.component';
 
 export const ZardInputOtpImports = [
   ZardInputOtpComponent,

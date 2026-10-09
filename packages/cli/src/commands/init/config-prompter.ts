@@ -122,6 +122,25 @@ export function defaultAnswers(
  * does not treat `\` as a separator, so a Windows-style path collapsed to `.`
  * and silently fell back to `src/app`.
  */
+/** The answers a flag can give up front: `--css`, `--app-config`, `--base-color` and the two aliases. */
+export type PresetAnswers = Partial<
+  Pick<InitAnswers, 'globalCss' | 'appConfig' | 'theme' | 'componentsAlias' | 'utilsAlias'>
+>;
+
+/**
+ * The defaults with whatever the flags already answered on top.
+ *
+ * Headless, that is the whole answer; in the wizard, it is what each question
+ * opens filled with. A library has no app.config, so `--app-config` does not
+ * apply there — writing it would register providers in a file init never edits.
+ */
+export function withPresets(answers: InitAnswers, presets: PresetAnswers = {}): InitAnswers {
+  const defined = Object.fromEntries(Object.entries(presets).filter(([, value]) => value)) as PresetAnswers;
+  if (isLibraryKind(answers.kind)) delete defined.appConfig;
+
+  return { ...answers, ...defined };
+}
+
 export function deriveBaseUrl(appConfigFile: string): string {
   const dir = path.posix.dirname(appConfigFile.replace(/\\/g, '/'));
   return dir === '.' ? 'src/app' : dir;

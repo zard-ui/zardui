@@ -1,7 +1,8 @@
+import { isLibraryKind } from '@cli/commands/init/project-kind.js';
 import { Config } from '@cli/utils/config';
 import { CliError, InstallError } from '@cli/utils/errors.js';
 import { logger } from '@cli/utils/logger.js';
-import { fetchComponent, RegistryItem } from '@cli/utils/registry.js';
+import { fetchComponent, RegistryItem, relativizeImports } from '@cli/utils/registry.js';
 import { promises as fs } from 'node:fs';
 import * as path from 'node:path';
 
@@ -33,7 +34,7 @@ export async function installComponent(
 
   try {
     for (const file of component.files) {
-      const filePath = await installComponentFile(file, targetDir);
+      const filePath = await installComponentFile(file, targetDir, libraryTargets(config));
       writtenFiles.push(filePath);
     }
   } catch (error) {
@@ -52,12 +53,35 @@ export async function installComponent(
   }
 }
 
-async function installComponentFile(file: RegistryItem['files'][0], targetDir: string): Promise<string> {
+/**
+ * In a library, the directory each alias stands for — `null` in an application.
+ *
+ * Applications keep the aliases, which their own build resolves. A library is
+ * bundled by ng-packagr, which leaves aliased imports external: see
+ * `relativizeImports`.
+ */
+function libraryTargets(config: Config & { resolvedPaths: Record<string, string> }): Record<string, string> | null {
+  if (!isLibraryKind(config.projectType)) return null;
+
+  return Object.fromEntries(
+    (['components', 'utils', 'core', 'services', 'blocks'] as const).map(key => [
+      config.aliases[key],
+      config.resolvedPaths[key],
+    ]),
+  );
+}
+
+async function installComponentFile(
+  file: RegistryItem['files'][0],
+  targetDir: string,
+  targets: Record<string, string> | null,
+): Promise<string> {
   const filePath = path.join(targetDir, file.name);
   const fileDir = path.dirname(filePath);
+  const content = targets ? relativizeImports(file.content, filePath, targets) : file.content;
 
   await fs.mkdir(fileDir, { recursive: true });
-  await fs.writeFile(filePath, file.content, 'utf8');
+  await fs.writeFile(filePath, content, 'utf8');
 
   return filePath;
 }

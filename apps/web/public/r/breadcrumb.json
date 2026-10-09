@@ -9,7 +9,7 @@
     },
     {
       "name": "breadcrumb.imports.ts",
-      "content": "import {\n  ZardBreadcrumbComponent,\n  ZardBreadcrumbEllipsisComponent,\n  ZardBreadcrumbItemComponent,\n  ZardBreadcrumbLinkComponent,\n  ZardBreadcrumbPageComponent,\n  ZardBreadcrumbSeparatorComponent,\n} from '@/shared/components/breadcrumb/breadcrumb.component';\n\nexport const ZardBreadcrumbImports = [\n  ZardBreadcrumbComponent,\n  ZardBreadcrumbItemComponent,\n  ZardBreadcrumbLinkComponent,\n  ZardBreadcrumbPageComponent,\n  ZardBreadcrumbSeparatorComponent,\n  ZardBreadcrumbEllipsisComponent,\n] as const;\n"
+      "content": "export {\n  ZardBreadcrumbComponent,\n  ZardBreadcrumbEllipsisComponent,\n  ZardBreadcrumbItemComponent,\n  ZardBreadcrumbLinkComponent,\n  ZardBreadcrumbPageComponent,\n  ZardBreadcrumbSeparatorComponent,\n} from './breadcrumb.component';\n\nimport {\n  ZardBreadcrumbComponent,\n  ZardBreadcrumbEllipsisComponent,\n  ZardBreadcrumbItemComponent,\n  ZardBreadcrumbLinkComponent,\n  ZardBreadcrumbPageComponent,\n  ZardBreadcrumbSeparatorComponent,\n} from './breadcrumb.component';\n\nexport const ZardBreadcrumbImports = [\n  ZardBreadcrumbComponent,\n  ZardBreadcrumbItemComponent,\n  ZardBreadcrumbLinkComponent,\n  ZardBreadcrumbPageComponent,\n  ZardBreadcrumbSeparatorComponent,\n  ZardBreadcrumbEllipsisComponent,\n] as const;\n"
     },
     {
       "name": "breadcrumb.variants.ts",
@@ -17,7 +17,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export * from './breadcrumb.component';\nexport * from './breadcrumb.variants';\n"
+      "content": "export * from './breadcrumb.component';\nexport * from './breadcrumb.variants';\nexport * from './breadcrumb.imports';\n"
     }
   ],
   "icons": {

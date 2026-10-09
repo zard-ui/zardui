@@ -29,6 +29,8 @@ import { SETUP_SHARED_CLI_INIT } from '@generated/documentation/setup/shared/cli
 import { SETUP_SHARED_CORE_CSS } from '@generated/documentation/setup/shared/core-css';
 import { SETUP_SHARED_CORE_DIRECTIVES } from '@generated/documentation/setup/shared/core-directives';
 import { SETUP_SHARED_CORE_EVENT_MANAGER } from '@generated/documentation/setup/shared/core-event-manager';
+import { SETUP_SHARED_CORE_I18N } from '@generated/documentation/setup/shared/core-i18n';
+import { SETUP_SHARED_CORE_I18N_LOCALES } from '@generated/documentation/setup/shared/core-i18n-locales';
 import { SETUP_SHARED_CORE_INDEX } from '@generated/documentation/setup/shared/core-index';
 import { SETUP_SHARED_CORE_OVERLAY } from '@generated/documentation/setup/shared/core-overlay';
 import { SETUP_SHARED_CORE_PROVIDER } from '@generated/documentation/setup/shared/core-provider';
@@ -74,7 +76,7 @@ const COMPONENTS_NOTE = {
   external: false,
 };
 
-/** The six files the `core` registry item ships, one step per destination folder. */
+/** The files the `core` registry item ships, one step per destination folder. */
 function coreManualSteps(corePath: string): Step[] {
   return [
     {
@@ -86,6 +88,16 @@ function coreManualSteps(corePath: string): Step[] {
       title: 'Add the overlay stack',
       subtitle: `Create ${corePath}/overlay/ with:`,
       codeBlockData: SETUP_SHARED_CORE_OVERLAY,
+    },
+    {
+      title: 'Add the i18n service',
+      subtitle: `Create ${corePath}/i18n/ with:`,
+      codeBlockData: SETUP_SHARED_CORE_I18N,
+    },
+    {
+      title: 'Add the i18n locales',
+      subtitle: `Create ${corePath}/i18n/locales/ with:`,
+      codeBlockData: SETUP_SHARED_CORE_I18N_LOCALES,
     },
     {
       title: 'Add the event manager plugins',
@@ -347,7 +359,8 @@ export const installations: Installation[] = [
       {
         title: 'Wire it up in the consuming app',
         subtitle:
-          'The application that installs this library still has to register provideZard() in its app.config.ts and import the theme from the library styles.css.',
+          'The application that installs this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: @tailwindcss/postcss and this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts and imports the theme from the library styles.css.',
+        codeBlockData: SETUP_SHARED_POSTCSS,
       },
     ],
   },
@@ -386,7 +399,8 @@ export const installations: Installation[] = [
       {
         title: 'Wire it up in the consuming app',
         subtitle:
-          'The application that imports this library still has to register provideZard() in its app.config.ts and import the theme from the library styles.css.',
+          'The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: @tailwindcss/postcss and this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts and imports the theme from the library styles.css.',
+        codeBlockData: SETUP_SHARED_POSTCSS,
       },
     ],
   },

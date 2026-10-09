@@ -72,24 +72,31 @@ describe('ng-package.json step', () => {
   it('should publish the theme at the package root', async () => {
     const result = await runAssetStep(base);
 
-    expect(result?.assets).toEqual([{ glob: 'styles.css', input: 'src', output: '/' }]);
+    expect(result?.assets).toEqual([{ glob: '**/*.css', input: 'src', output: '/' }]);
   });
 
   it('should keep assets the library already declared', async () => {
     const result = await runAssetStep({ ...base, assets: ['./src/assets/logo.svg'] });
 
-    expect(result?.assets).toEqual(['./src/assets/logo.svg', { glob: 'styles.css', input: 'src', output: '/' }]);
+    expect(result?.assets).toEqual(['./src/assets/logo.svg', { glob: '**/*.css', input: 'src', output: '/' }]);
   });
 
   // Um init repetido publicaria o mesmo CSS duas vezes, em dois lugares.
   it('should replace an older entry for the same file instead of adding another', async () => {
     const result = await runAssetStep({ ...base, assets: ['./src/styles.css'] });
 
-    expect(result?.assets).toEqual([{ glob: 'styles.css', input: 'src', output: '/' }]);
+    expect(result?.assets).toEqual([{ glob: '**/*.css', input: 'src', output: '/' }]);
+  });
+
+  // The theme imports the core's zard.css, and add writes typeset.css and utilities.css beside it.
+  it('should migrate the entry that published the theme alone', async () => {
+    const result = await runAssetStep({ ...base, assets: [{ glob: 'styles.css', input: 'src', output: '/' }] });
+
+    expect(result?.assets).toEqual([{ glob: '**/*.css', input: 'src', output: '/' }]);
   });
 
   it('should be a no-op when the entry is already correct', async () => {
-    const assets = [{ glob: 'styles.css', input: 'src', output: '/' }];
+    const assets = [{ glob: '**/*.css', input: 'src', output: '/' }];
     const result = await runAssetStep({ ...base, assets });
 
     expect(result?.assets).toEqual(assets);

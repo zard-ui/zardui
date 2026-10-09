@@ -166,6 +166,12 @@ export const buttonGroupTextVariants = cva(
 ```
 
 ```angular-ts
+export {
+  ZardButtonGroupComponent,
+  ZardButtonGroupSeparatorComponent,
+  ZardButtonGroupTextDirective,
+} from './button-group.component';
+
 /*
  * The alias, not a relative path: the Angular compiler re-emits these imports from
  * whichever module spreads the array, and it can only do that for a specifier the
@@ -175,7 +181,7 @@ import {
   ZardButtonGroupComponent,
   ZardButtonGroupSeparatorComponent,
   ZardButtonGroupTextDirective,
-} from '@/shared/components/button-group/button-group.component';
+} from './button-group.component';
 
 /** Every part of the button-group component, for a template that uses more than one. */
 export const ZardButtonGroupImports = [

@@ -159,21 +159,51 @@ async function registerStylesAsset(cwd: string, config: Config): Promise<void> {
 
   const relative = path.relative(libraryRoot, path.resolve(cwd, config.tailwind.css)).split(path.sep).join('/');
   const input = path.posix.dirname(relative);
-  const glob = path.posix.basename(relative);
-  const entry = { glob, input, output: '/' };
+  // Every stylesheet under the theme's folder, not just the theme: it imports
+  // the core's `zard.css` from `lib/shared/core/css`, and `add` writes
+  // `typeset.css` and `utilities.css` beside it. Shipping the theme alone left
+  // the published package with imports pointing at files it did not contain.
+  const entry = { glob: '**/*.css', input, output: '/' };
 
   const ngPackage = JSON.parse(await readFile(ngPackagePath, 'utf8'));
   const assets: unknown[] = Array.isArray(ngPackage.assets) ? ngPackage.assets : [];
 
-  // Old entries pointing at the same file are replaced, not accumulated: a
-  // repeated init would otherwise publish the CSS twice, in two places.
-  const others = assets.filter(asset => !describesSameFile(asset, relative, entry));
+  // Old entries pointing at the same files are replaced, not accumulated: a
+  // repeated init would otherwise publish the CSS twice, in two places. That
+  // includes the entry earlier versions wrote for the theme file alone.
+  const legacy = { glob: path.posix.basename(relative), input };
+  const others = assets.filter(
+    asset => !describesSameFile(asset, relative, entry) && !describesSameFile(asset, relative, legacy),
+  );
   const alreadyCorrect = assets.length === others.length + 1 && hasEntry(assets, entry);
 
-  if (alreadyCorrect) return;
+  if (!alreadyCorrect) {
+    ngPackage.assets = [...others, entry];
+    await writeFile(ngPackagePath, `${JSON.stringify(ngPackage, null, 2)}\n`, 'utf8');
+  }
 
-  ngPackage.assets = [...others, entry];
-  await writeFile(ngPackagePath, `${JSON.stringify(ngPackage, null, 2)}\n`, 'utf8');
+  await exportStylesheet(libraryRoot, path.posix.basename(relative));
+}
+
+/**
+ * Lets the consumer import the theme by the package name (`@import 'ui/styles.css'`).
+ *
+ * ng-packagr writes an `exports` map, and a package with one allows no subpath
+ * it does not list — the shipped file existed, but the consumer's build refused
+ * to resolve it. Entries declared in the library's `package.json` are merged
+ * into that map.
+ */
+async function exportStylesheet(libraryRoot: string, fileName: string): Promise<void> {
+  const packageJsonPath = path.join(libraryRoot, 'package.json');
+  if (!existsSync(packageJsonPath)) return;
+
+  const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf8'));
+  const key = `./${fileName}`;
+
+  if (packageJson.exports?.[key]) return;
+
+  packageJson.exports = { ...packageJson.exports, [key]: { style: key, default: key } };
+  await writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`, 'utf8');
 }
 
 /** Whether an already-declared asset publishes exactly the same file. */

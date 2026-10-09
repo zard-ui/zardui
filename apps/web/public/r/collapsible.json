@@ -13,7 +13,7 @@
     },
     {
       "name": "collapsible.imports.ts",
-      "content": "import {\n  ZardCollapsibleDirective,\n  ZardCollapsibleContentComponent,\n  ZardCollapsibleTriggerDirective,\n} from '@/shared/components/collapsible/collapsible.component';\n\nexport const ZardCollapsibleImports = [\n  ZardCollapsibleDirective,\n  ZardCollapsibleTriggerDirective,\n  ZardCollapsibleContentComponent,\n] as const;\n"
+      "content": "export {\n  ZardCollapsibleDirective,\n  ZardCollapsibleContentComponent,\n  ZardCollapsibleTriggerDirective,\n} from './collapsible.component';\n\nimport {\n  ZardCollapsibleDirective,\n  ZardCollapsibleContentComponent,\n  ZardCollapsibleTriggerDirective,\n} from './collapsible.component';\n\nexport const ZardCollapsibleImports = [\n  ZardCollapsibleDirective,\n  ZardCollapsibleTriggerDirective,\n  ZardCollapsibleContentComponent,\n] as const;\n"
     },
     {
       "name": "index.ts",

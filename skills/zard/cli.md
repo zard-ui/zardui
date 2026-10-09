@@ -32,12 +32,17 @@ Initialises the project: writes `components.json`, installs dependencies, config
 npx zard-cli init
 ```
 
-| Flag                   | Default           | Purpose                                                                                                        |
-| ---------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------- |
-| `-y, --yes`            | `false`           | Skip the confirmation. **Required** without an interactive terminal, because `init` overwrites the global CSS. |
-| `-c, --cwd <cwd>`      | current directory | The working directory.                                                                                         |
-| `-t, --type <type>`    | asked             | The project type: `angular`, `angular-library`, `nx`, `nx-library`, `analog`.                                  |
-| `-p, --project <name>` | first compatible  | The workspace project to configure.                                                                            |
+| Flag                   | Default               | Purpose                                                                                                        |
+| ---------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `-y, --yes`            | `false`               | Skip the confirmation. **Required** without an interactive terminal, because `init` overwrites the global CSS. |
+| `-c, --cwd <cwd>`      | current directory     | The working directory.                                                                                         |
+| `-t, --type <type>`    | asked                 | The project type: `angular`, `angular-library`, `nx`, `nx-library`, `analog`.                                  |
+| `-p, --project <name>` | first compatible      | The workspace project to configure.                                                                            |
+| `--css <path>`         | the project's         | The global stylesheet that receives the theme (in a library, the file init creates).                           |
+| `--app-config <path>`  | the project's         | The `app.config.ts` that receives `provideZard()`. Ignored for libraries.                                      |
+| `--base-color <color>` | `neutral`             | `neutral`, `stone`, `zinc`, `gray` or `slate`. Anything else is refused.                                       |
+| `--components-alias`   | `@/shared/components` | Import alias for components; core, services and blocks sit beside it.                                          |
+| `--utils-alias`        | `@/shared/utils`      | Import alias for utils.                                                                                        |
 
 Running `init` in a project that already has a `components.json` re-initialises it — the `.postcssrc.json` is rewritten on purpose, which is how a leftover configuration gets fixed.
 
@@ -99,7 +104,7 @@ Notes:
 
 - `add` requires `components.json`. Without it, it stops and tells you to run `init`.
 - Dependencies already present in the project are filtered out, so a repeated `add` does not pay for a full dependency-tree revalidation.
-- `add dark-mode` needs an `index.html` path, which it asks for. Headless, it warns instead: run it interactively to configure it.
+- `add dark-mode` needs an `index.html` path, which it asks for. Headless, `--index-html <path>` answers it; without the flag it uses the suggested path, and if that file does not exist it still registers the provider and warns that the script must be added by hand.
 - A pre-release Angular (`-rc`, `-next`, `-canary`) gets a compatibility warning, not a refusal.
 - Headless, the component names must come from arguments or `--all` — there is no list to pick from.
 - A block id (`dashboard-01`, `login-01` …) is accepted the same way as a component name — `add dashboard-01` pulls in the block and every component it uses, writing it under `aliases.blocks` instead of `aliases.components`. See [registry.md](./registry.md).

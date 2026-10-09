@@ -21,7 +21,7 @@
     },
     {
       "name": "select.imports.ts",
-      "content": "import {\n  ZardSelectGroupComponent,\n  ZardSelectLabelComponent,\n  ZardSelectSeparatorComponent,\n} from '@/shared/components/select/select-group.component';\nimport { ZardSelectItemComponent } from '@/shared/components/select/select-item.component';\nimport { ZardSelectComponent } from '@/shared/components/select/select.component';\n\nexport const ZardSelectImports = [\n  ZardSelectComponent,\n  ZardSelectGroupComponent,\n  ZardSelectItemComponent,\n  ZardSelectLabelComponent,\n  ZardSelectSeparatorComponent,\n] as const;\n"
+      "content": "export {\n  ZardSelectGroupComponent,\n  ZardSelectLabelComponent,\n  ZardSelectSeparatorComponent,\n} from './select-group.component';\nexport { ZardSelectItemComponent } from './select-item.component';\nexport { ZardSelectComponent } from './select.component';\n\nimport {\n  ZardSelectGroupComponent,\n  ZardSelectLabelComponent,\n  ZardSelectSeparatorComponent,\n} from './select-group.component';\nimport { ZardSelectItemComponent } from './select-item.component';\nimport { ZardSelectComponent } from './select.component';\n\nexport const ZardSelectImports = [\n  ZardSelectComponent,\n  ZardSelectGroupComponent,\n  ZardSelectItemComponent,\n  ZardSelectLabelComponent,\n  ZardSelectSeparatorComponent,\n] as const;\n"
     },
     {
       "name": "index.ts",

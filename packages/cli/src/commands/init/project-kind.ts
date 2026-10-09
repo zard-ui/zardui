@@ -93,7 +93,7 @@ const TRAITS: Record<ProjectKind, KindTraits> = {
 };
 
 export function isLibraryKind(kind: ProjectKind): boolean {
-  return TRAITS[kind].isLibrary;
+  return TRAITS[kind]?.isLibrary ?? false;
 }
 
 /** Where the TypeScript paths have to be written for the project to see them. */

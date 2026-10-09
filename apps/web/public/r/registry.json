@@ -665,6 +665,20 @@
       ]
     },
     {
+      "name": "hover-card",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "hover-card.component.ts",
+        "hover-card.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "breadcrumb",
       "type": "registry:component",
       "icons": {

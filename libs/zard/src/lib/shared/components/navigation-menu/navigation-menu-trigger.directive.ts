@@ -148,13 +148,14 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
     this.trackOverlayState();
 
-    if (this.shouldRenderChevron()) {
+    if (this.shouldRenderChevron() && isPlatformBrowser(this.platformId)) {
       // Deferred, not called here: `renderChevron` appends a node the template does not
       // declare, and on the server that node lands in the serialized HTML. Hydration then
       // walks the host's children expecting only the declared ones, fails on the extra
       // `<ng-icon>`, and gives up on the whole subtree — which leaves
       // `zNavigationMenuTriggerFor` unset (NG0950) and the menu dead to hover.
-      // `afterNextRender` never runs on the server and runs after hydration in the browser.
+      // `afterNextRender` runs after hydration in the browser. The platform check is not
+      // redundant: Analog's SSR renderer does run `afterNextRender` on the server.
       afterNextRender(() => this.renderChevron(), { injector: this.injector });
     }
 

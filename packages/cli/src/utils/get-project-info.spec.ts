@@ -47,6 +47,29 @@ describe('getProjectInfo em workspaces Nx', () => {
     expect(info.projects.map(project => project.name)).toEqual(['web']);
   });
 
+  // The Angular template of create-nx-workspace ships an Express API in apps/api.
+  it('should leave applications from other ecosystems out of the workspace', async () => {
+    const cwd = await workspace({
+      'package.json': nxPackageJson,
+      'nx.json': {},
+      'apps/api/project.json': {
+        name: 'api',
+        projectType: 'application',
+        targets: { build: { executor: '@nx/esbuild:esbuild', options: { platform: 'node' } }, serve: {} },
+      },
+      'apps/shop/project.json': {
+        name: 'shop',
+        projectType: 'application',
+        targets: { build: { executor: '@angular/build:application', options: {} }, serve: {} },
+      },
+      'libs/ui/project.json': { name: 'ui', projectType: 'library', targets: { lint: {} } },
+    });
+
+    const info = await getProjectInfo(cwd);
+
+    expect(info.projects.map(project => project.name)).toEqual(['shop', 'ui']);
+  });
+
   // Renaming the project does not change what it is; the runner config gives it away.
   it('should recognise an e2e project by its runner config, not only by name', async () => {
     const cwd = await workspace({

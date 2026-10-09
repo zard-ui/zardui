@@ -41,7 +41,7 @@
     },
     {
       "name": "drawer.imports.ts",
-      "content": "import {\n  ZardDrawerCloseDirective,\n  ZardDrawerComponent,\n  ZardDrawerDescriptionComponent,\n  ZardDrawerFooterComponent,\n  ZardDrawerHeaderComponent,\n  ZardDrawerTitleComponent,\n} from '@/shared/components/drawer/drawer.component';\n\nexport const ZardDrawerImports = [\n  ZardDrawerComponent,\n  ZardDrawerHeaderComponent,\n  ZardDrawerTitleComponent,\n  ZardDrawerDescriptionComponent,\n  ZardDrawerFooterComponent,\n  ZardDrawerCloseDirective,\n] as const;\n"
+      "content": "export {\n  ZardDrawerCloseDirective,\n  ZardDrawerComponent,\n  ZardDrawerDescriptionComponent,\n  ZardDrawerFooterComponent,\n  ZardDrawerHeaderComponent,\n  ZardDrawerTitleComponent,\n} from './drawer.component';\n\nimport {\n  ZardDrawerCloseDirective,\n  ZardDrawerComponent,\n  ZardDrawerDescriptionComponent,\n  ZardDrawerFooterComponent,\n  ZardDrawerHeaderComponent,\n  ZardDrawerTitleComponent,\n} from './drawer.component';\n\nexport const ZardDrawerImports = [\n  ZardDrawerComponent,\n  ZardDrawerHeaderComponent,\n  ZardDrawerTitleComponent,\n  ZardDrawerDescriptionComponent,\n  ZardDrawerFooterComponent,\n  ZardDrawerCloseDirective,\n] as const;\n"
     },
     {
       "name": "index.ts",

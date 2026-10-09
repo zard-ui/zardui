@@ -1,3 +1,4 @@
+import { isLibraryKind } from '@cli/commands/init/project-kind.js';
 import { resolveAliasToPath, type Config } from '@cli/utils/config.js';
 import { getThemeContent } from '@cli/utils/theme-selector.js';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -44,9 +45,23 @@ function coreImportPath(cwd: string, config: Config): string {
   return relative.startsWith('.') ? relative : `./${relative}`;
 }
 
+/**
+ * Where the consumer's Tailwind finds the classes a library's components use.
+ *
+ * Tailwind skips `node_modules` when it detects sources, so an app installing
+ * the published library generated none of the utilities its components need.
+ * `./` is relative to this stylesheet: in the package that is its root, beside
+ * the bundled JavaScript; in the workspace, the library's own `src`. It goes
+ * after the `@plugin` line so the `@import`s `add` appends stay first.
+ */
+function withLibrarySource(themeContent: string): string {
+  return themeContent.replace(/^(@plugin [^\n]*;)$/m, `$1\n@source './';`);
+}
+
 export async function applyThemeToStyles(cwd: string, config: Config): Promise<void> {
   const stylesPath = path.join(cwd, config.tailwind.css);
-  const themeContent = getThemeContent(config.tailwind.baseColor, coreImportPath(cwd, config));
+  const baseTheme = getThemeContent(config.tailwind.baseColor, coreImportPath(cwd, config));
+  const themeContent = isLibraryKind(config.projectType) ? withLibrarySource(baseTheme) : baseTheme;
 
   // In a library that file usually does not exist — init creates it, so the
   // library can expose the tokens to whoever consumes it.

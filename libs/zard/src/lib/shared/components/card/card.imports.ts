@@ -1,3 +1,13 @@
+export {
+  ZardCardActionComponent,
+  ZardCardComponent,
+  ZardCardContentComponent,
+  ZardCardDescriptionComponent,
+  ZardCardFooterComponent,
+  ZardCardHeaderComponent,
+  ZardCardTitleComponent,
+} from './card.component';
+
 import {
   ZardCardActionComponent,
   ZardCardComponent,
@@ -6,7 +16,7 @@ import {
   ZardCardFooterComponent,
   ZardCardHeaderComponent,
   ZardCardTitleComponent,
-} from '@/shared/components/card/card.component';
+} from './card.component';
 
 export const ZardCardImports = [
   ZardCardComponent,

@@ -9,7 +9,7 @@
     },
     {
       "name": "card.imports.ts",
-      "content": "import {\n  ZardCardActionComponent,\n  ZardCardComponent,\n  ZardCardContentComponent,\n  ZardCardDescriptionComponent,\n  ZardCardFooterComponent,\n  ZardCardHeaderComponent,\n  ZardCardTitleComponent,\n} from '@/shared/components/card/card.component';\n\nexport const ZardCardImports = [\n  ZardCardComponent,\n  ZardCardHeaderComponent,\n  ZardCardTitleComponent,\n  ZardCardDescriptionComponent,\n  ZardCardActionComponent,\n  ZardCardContentComponent,\n  ZardCardFooterComponent,\n] as const;\n"
+      "content": "export {\n  ZardCardActionComponent,\n  ZardCardComponent,\n  ZardCardContentComponent,\n  ZardCardDescriptionComponent,\n  ZardCardFooterComponent,\n  ZardCardHeaderComponent,\n  ZardCardTitleComponent,\n} from './card.component';\n\nimport {\n  ZardCardActionComponent,\n  ZardCardComponent,\n  ZardCardContentComponent,\n  ZardCardDescriptionComponent,\n  ZardCardFooterComponent,\n  ZardCardHeaderComponent,\n  ZardCardTitleComponent,\n} from './card.component';\n\nexport const ZardCardImports = [\n  ZardCardComponent,\n  ZardCardHeaderComponent,\n  ZardCardTitleComponent,\n  ZardCardDescriptionComponent,\n  ZardCardActionComponent,\n  ZardCardContentComponent,\n  ZardCardFooterComponent,\n] as const;\n"
     },
     {
       "name": "card.variants.ts",
@@ -17,7 +17,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export * from './card.component';\nexport * from './card.variants';\n"
+      "content": "export * from './card.component';\nexport * from './card.variants';\nexport * from './card.imports';\n"
     }
   ],
   "icons": {

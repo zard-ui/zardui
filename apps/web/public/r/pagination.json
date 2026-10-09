@@ -9,7 +9,7 @@
     },
     {
       "name": "pagination.imports.ts",
-      "content": "import {\n  ZardPaginationButtonComponent,\n  ZardPaginationComponent,\n  ZardPaginationContentComponent,\n  ZardPaginationEllipsisComponent,\n  ZardPaginationItemComponent,\n  ZardPaginationNextComponent,\n  ZardPaginationPreviousComponent,\n} from '@/shared/components/pagination/pagination.component';\n\nexport const ZardPaginationImports = [\n  ZardPaginationContentComponent,\n  ZardPaginationItemComponent,\n  ZardPaginationButtonComponent,\n  ZardPaginationPreviousComponent,\n  ZardPaginationNextComponent,\n  ZardPaginationEllipsisComponent,\n  ZardPaginationComponent,\n] as const;\n"
+      "content": "export {\n  ZardPaginationButtonComponent,\n  ZardPaginationComponent,\n  ZardPaginationContentComponent,\n  ZardPaginationEllipsisComponent,\n  ZardPaginationItemComponent,\n  ZardPaginationNextComponent,\n  ZardPaginationPreviousComponent,\n} from './pagination.component';\n\nimport {\n  ZardPaginationButtonComponent,\n  ZardPaginationComponent,\n  ZardPaginationContentComponent,\n  ZardPaginationEllipsisComponent,\n  ZardPaginationItemComponent,\n  ZardPaginationNextComponent,\n  ZardPaginationPreviousComponent,\n} from './pagination.component';\n\nexport const ZardPaginationImports = [\n  ZardPaginationContentComponent,\n  ZardPaginationItemComponent,\n  ZardPaginationButtonComponent,\n  ZardPaginationPreviousComponent,\n  ZardPaginationNextComponent,\n  ZardPaginationEllipsisComponent,\n  ZardPaginationComponent,\n] as const;\n"
     },
     {
       "name": "pagination.variants.ts",

@@ -519,6 +519,15 @@ export type ZardBreadcrumbEllipsisColorVariants = NonNullable<
 ```
 
 ```angular-ts
+export {
+  ZardBreadcrumbComponent,
+  ZardBreadcrumbEllipsisComponent,
+  ZardBreadcrumbItemComponent,
+  ZardBreadcrumbLinkComponent,
+  ZardBreadcrumbPageComponent,
+  ZardBreadcrumbSeparatorComponent,
+} from './breadcrumb.component';
+
 import {
   ZardBreadcrumbComponent,
   ZardBreadcrumbEllipsisComponent,
@@ -526,7 +535,7 @@ import {
   ZardBreadcrumbLinkComponent,
   ZardBreadcrumbPageComponent,
   ZardBreadcrumbSeparatorComponent,
-} from '@/shared/components/breadcrumb/breadcrumb.component';
+} from './breadcrumb.component';
 
 export const ZardBreadcrumbImports = [
   ZardBreadcrumbComponent,
@@ -541,6 +550,7 @@ export const ZardBreadcrumbImports = [
 ```angular-ts
 export * from './breadcrumb.component';
 export * from './breadcrumb.variants';
+export * from './breadcrumb.imports';
 ```
 
 ## Usage

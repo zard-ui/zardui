@@ -821,6 +821,16 @@ export class ZardAlertDialogRef<T = unknown> extends ZardOverlayRefBase<T, void>
 ```
 
 ```angular-ts
+export {
+  ZardAlertDialogCloseDirective,
+  ZardAlertDialogComponent,
+  ZardAlertDialogDescriptionComponent,
+  ZardAlertDialogFooterComponent,
+  ZardAlertDialogHeaderComponent,
+  ZardAlertDialogMediaComponent,
+  ZardAlertDialogTitleComponent,
+} from './alert-dialog.component';
+
 import {
   ZardAlertDialogCloseDirective,
   ZardAlertDialogComponent,
@@ -829,7 +839,7 @@ import {
   ZardAlertDialogHeaderComponent,
   ZardAlertDialogMediaComponent,
   ZardAlertDialogTitleComponent,
-} from '@/shared/components/alert-dialog/alert-dialog.component';
+} from './alert-dialog.component';
 
 /** Every part of the declarative alert dialog, for a template that composes one. */
 export const ZardAlertDialogImports = [

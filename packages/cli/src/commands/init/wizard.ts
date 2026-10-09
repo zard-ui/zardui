@@ -1,4 +1,11 @@
-import { buildConfig, defaultAnswers, inspectCssFile, type InitAnswers } from '@cli/commands/init/config-prompter.js';
+import {
+  buildConfig,
+  defaultAnswers,
+  inspectCssFile,
+  withPresets,
+  type InitAnswers,
+  type PresetAnswers,
+} from '@cli/commands/init/config-prompter.js';
 import { candidateProjects, isLibraryKind, PROJECT_KINDS, type ProjectKind } from '@cli/commands/init/project-kind.js';
 import { type InitStep } from '@cli/commands/init/steps.js';
 import {
@@ -247,6 +254,8 @@ export interface InitWizardOptions {
   readonly presetKind?: ProjectKind;
   /** O projeto pedido em `--project`, pelo mesmo motivo. */
   readonly presetProjectRoot?: string;
+  /** What `--css`, `--app-config`, `--base-color` and the alias flags answered — each question opens filled with it. */
+  readonly presetAnswers?: PresetAnswers;
   /** Execution steps, built only once the config is ready. */
   buildSteps(config: Config): InitStep[];
 }
@@ -261,7 +270,9 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
   // suggests: the choice is the user's, and a cursor already parked on another
   // item would turn a CLI guess into the answer they confirm without reading.
   const firstKind = options.presetKind ?? (PROJECT_KINDS[0] as (typeof PROJECT_KINDS)[number]).value;
-  const answers = defaultAnswers(options.projectInfo, firstKind, options.presetProjectRoot);
+  const defaultsFor = (kind: ProjectKind, projectRoot?: string): InitAnswers =>
+    withPresets(defaultAnswers(options.projectInfo, kind, projectRoot), options.presetAnswers);
+  const answers = defaultsFor(firstKind, options.presetProjectRoot);
   const state: State = {
     // Re-initializing overwrites existing configuration: the confirmation comes
     // before any question and is not skipped by --yes.
@@ -393,7 +404,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     // is preserved because it does not depend on the type.
     if (step.id === 'kind') {
       const kind = value as ProjectKind;
-      state.answers = { ...defaultAnswers(options.projectInfo, kind), theme: state.answers.theme };
+      state.answers = { ...defaultsFor(kind), theme: state.answers.theme };
       state.steps = baseSteps(options.projectInfo, kind);
       state.kindChosen = true;
       advance(ctx);
@@ -405,7 +416,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     // one would make init write into the wrong app.
     if (step.id === 'projectRoot') {
       state.answers = {
-        ...defaultAnswers(options.projectInfo, state.answers.kind, value),
+        ...defaultsFor(state.answers.kind, value),
         theme: state.answers.theme,
       };
       advance(ctx);

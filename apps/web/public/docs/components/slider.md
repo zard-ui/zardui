@@ -544,6 +544,13 @@ export * from './slider.variants';
 ```
 
 ```angular-ts
+export {
+  ZardSliderComponent,
+  ZardSliderRangeComponent,
+  ZardSliderThumbComponent,
+  ZardSliderTrackComponent,
+} from './slider.component';
+
 /*
  * The alias, not a relative path: the Angular compiler re-emits these imports from
  * whichever module spreads the array, and it can only do that for a specifier the
@@ -554,7 +561,7 @@ import {
   ZardSliderRangeComponent,
   ZardSliderThumbComponent,
   ZardSliderTrackComponent,
-} from '@/shared/components/slider/slider.component';
+} from './slider.component';
 
 /** Every part of the slider component, for a template that uses more than one. */
 export const ZardSliderImports = [

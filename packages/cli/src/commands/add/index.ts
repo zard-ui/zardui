@@ -9,6 +9,7 @@ import {
 } from '@cli/commands/add/dependency-resolver.js';
 import { setupTypeset, setupUtilities } from '@cli/commands/add/stylesheet-setup.js';
 import { runAddWizard } from '@cli/commands/add/wizard.js';
+import { syncLibraryPeerDependencies } from '@cli/commands/init/library-peers.js';
 import { indexHtmlFor } from '@cli/commands/init/project-kind.js';
 import { injectThemeScript } from '@cli/commands/init/theme-loader.js';
 import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
@@ -32,6 +33,7 @@ interface AddOptions {
   cwd: string;
   all: boolean;
   path?: string;
+  indexHtml?: string;
 }
 
 export const add = new Command()
@@ -43,6 +45,7 @@ export const add = new Command()
   .option('-c, --cwd <cwd>', 'the working directory. defaults to the current directory.', process.cwd())
   .option('-a, --all', 'add all available components', false)
   .option('-p, --path <path>', 'the path to add the component to.')
+  .option('--index-html <path>', 'the index.html that receives the dark-mode theme script.')
   .action(async (components: string[], options: AddOptions) => {
     const cwd = path.resolve(options.cwd);
 
@@ -79,19 +82,31 @@ export const add = new Command()
           dependencies: pinAllForAngular(dependenciesToInstall, projectInfo.angularVersion),
         };
       },
-      installDependencies: (packages: string[]) => installDependencies(packages, cwd, config.packageManager),
+      installDependencies: async (packages: string[]) => {
+        await installDependencies(packages, cwd, config.packageManager);
+        await syncLibraryPeerDependencies(cwd, config, packages);
+      },
       installComponent: (component: ComponentMeta) =>
         installComponent(component.name, getTargetDir(component, resolvedConfig, cwd, options.path), resolvedConfig, {
           customPath: Boolean(options.path),
           isBlock: component.isBlock,
         }),
       setupDarkMode: async (indexHtml: string) => {
-        await injectThemeScript(cwd, indexHtml);
+        // A library has no index.html of its own — it belongs to the consuming app —
+        // so a missing file is a note, not a reason to abort the whole install.
+        if (existsSync(path.resolve(cwd, indexHtml))) {
+          await injectThemeScript(cwd, indexHtml);
+        } else {
+          logger.warn(
+            `${indexHtml} not found: add the dark-mode theme script to the app's index.html by hand, ` +
+              'or run `zard-cli add dark-mode --overwrite --index-html <path>`.',
+          );
+        }
         await updateProvideZardWithDarkMode(cwd, resolvedConfig);
       },
       setupTypeset: () => setupTypeset(resolvedConfig.resolvedPaths.tailwindCss),
       setupUtilities: () => setupUtilities(resolvedConfig.resolvedPaths.tailwindCss),
-      defaultIndexHtml: indexHtmlFor(config.projectType, config.baseUrl),
+      defaultIndexHtml: options.indexHtml ?? indexHtmlFor(config.projectType, config.baseUrl),
     };
 
     if (!isInteractive()) {
@@ -187,8 +202,9 @@ async function runHeadless(preselected: string[], options: AddOptions, actions: 
     await actions.setupUtilities();
   }
 
-  if (components.some(component => component.name === 'dark-mode')) {
-    logger.warn('Dark mode needs an index.html path; run `zard-cli add dark-mode` interactively to configure it.');
+  // `--index-html` answers what the wizard asks; without it, the project's own index.html.
+  if (installed.includes('dark-mode')) {
+    await actions.setupDarkMode(actions.defaultIndexHtml);
   }
 
   if (failed.length) {

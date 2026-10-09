@@ -25,7 +25,7 @@
     },
     {
       "name": "carousel.imports.ts",
-      "content": "import { ZardCarouselContentComponent } from '@/shared/components/carousel/carousel-content.component';\nimport { ZardCarouselItemComponent } from '@/shared/components/carousel/carousel-item.component';\nimport { ZardCarouselComponent } from '@/shared/components/carousel/carousel.component';\n\nexport const ZardCarouselImports = [\n  ZardCarouselComponent,\n  ZardCarouselContentComponent,\n  ZardCarouselItemComponent,\n] as const;\n"
+      "content": "export { ZardCarouselContentComponent } from './carousel-content.component';\nexport { ZardCarouselItemComponent } from './carousel-item.component';\nexport { ZardCarouselComponent } from './carousel.component';\n\nimport { ZardCarouselContentComponent } from './carousel-content.component';\nimport { ZardCarouselItemComponent } from './carousel-item.component';\nimport { ZardCarouselComponent } from './carousel.component';\n\nexport const ZardCarouselImports = [\n  ZardCarouselComponent,\n  ZardCarouselContentComponent,\n  ZardCarouselItemComponent,\n] as const;\n"
     },
     {
       "name": "index.ts",
