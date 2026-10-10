@@ -4,6 +4,7 @@ import { MESSAGE_DEMO_AVATAR } from '@generated/components/message/demo/avatar';
 import { MESSAGE_DEMO_GROUP } from '@generated/components/message/demo/group';
 import { MESSAGE_DEMO_HEADER_AND_FOOTER } from '@generated/components/message/demo/header-and-footer';
 import { MESSAGE_DEMO_PREVIEW } from '@generated/components/message/demo/preview';
+import { MESSAGE_DEMO_RTL } from '@generated/components/message/demo/rtl';
 import { MESSAGE_DEMO_SHORTHAND } from '@generated/components/message/demo/shorthand';
 import { MESSAGE_CLI_ADD } from '@generated/installation/cli/add-message';
 import { MESSAGE_MANUAL_CODE } from '@generated/installation/manual/message';
@@ -15,6 +16,7 @@ import { ZardDemoMessageAvatarComponent } from './avatar';
 import { ZardDemoMessageGroupComponent } from './group';
 import { ZardDemoMessageHeaderAndFooterComponent } from './header-and-footer';
 import { ZardDemoMessagePreviewComponent } from './preview';
+import { ZardDemoMessageRtlComponent } from './rtl';
 import { ZardDemoMessageShorthandComponent } from './shorthand';
 import { MESSAGE_API } from '../doc/api';
 
@@ -75,6 +77,13 @@ export const MESSAGE = {
         'A zard-only shorthand: a `z-message` with no projected `z-message-content` builds the avatar, bubble and header/footer itself from `zSrc`/`zFallback`, `zVariant`, `zHeader` and `zFooter`, so a plain turn is one tag. Project the explicit `z-message-content` (with `z-message-header`/`z-message-footer` around a `z-bubble`) when the turn needs a custom composition.',
       component: ZardDemoMessageShorthandComponent,
       codeData: MESSAGE_DEMO_SHORTHAND,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoMessageRtlComponent,
+      codeData: MESSAGE_DEMO_RTL,
     },
   ],
 };

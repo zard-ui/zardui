@@ -2,6 +2,7 @@ import { KBD_DEMO_BUTTON } from '@generated/components/kbd/demo/button';
 import { KBD_DEMO_GROUP } from '@generated/components/kbd/demo/group';
 import { KBD_DEMO_INPUT_GROUP } from '@generated/components/kbd/demo/input-group';
 import { KBD_DEMO_PREVIEW } from '@generated/components/kbd/demo/preview';
+import { KBD_DEMO_RTL } from '@generated/components/kbd/demo/rtl';
 import { KBD_DEMO_TOOLTIP } from '@generated/components/kbd/demo/tooltip';
 import { KBD_CLI_ADD } from '@generated/installation/cli/add-kbd';
 import { KBD_MANUAL_CODE } from '@generated/installation/manual/kbd';
@@ -12,6 +13,7 @@ import { ZardDemoKbdButtonComponent } from '@/shared/components/kbd/demo/button'
 import { ZardDemoKbdGroupComponent } from './group';
 import { ZardDemoKbdInputGroupComponent } from './input-group';
 import { ZardDemoKbdPreviewComponent } from './preview';
+import { ZardDemoKbdRtlComponent } from './rtl';
 import { ZardDemoKbdTooltipComponent } from './tooltip';
 import { KBD_API } from '../doc/api';
 
@@ -63,6 +65,13 @@ export const KBD = {
       component: ZardDemoKbdInputGroupComponent,
       column: true,
       codeData: KBD_DEMO_INPUT_GROUP,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoKbdRtlComponent,
+      codeData: KBD_DEMO_RTL,
     },
   ],
 };

@@ -1,5 +1,6 @@
 import { PROGRESS_DEMO_CONTROLLED } from '@generated/components/progress/demo/controlled';
 import { PROGRESS_DEMO_PREVIEW } from '@generated/components/progress/demo/preview';
+import { PROGRESS_DEMO_RTL } from '@generated/components/progress/demo/rtl';
 import { PROGRESS_DEMO_WITH_LABEL_AND_VALUE } from '@generated/components/progress/demo/with-label-and-value';
 import { PROGRESS_CLI_ADD } from '@generated/installation/cli/add-progress';
 import { PROGRESS_MANUAL_CODE } from '@generated/installation/manual/progress';
@@ -7,6 +8,7 @@ import { PROGRESS_USAGE_CODE, PROGRESS_USAGE_IMPORT } from '@generated/usage/pro
 
 import { ZardDemoProgressControlledComponent } from './controlled';
 import { ZardDemoProgressPreviewComponent } from './preview';
+import { ZardDemoProgressRtlComponent } from './rtl';
 import { ZardDemoProgressWithLabelAndValueComponent } from './with-label-and-value';
 import { PROGRESS_API } from '../doc/api';
 
@@ -38,6 +40,13 @@ export const PROGRESS = {
         "Bind `[value]` on `z-progress` to a `z-slider`'s `(zSlideIndexChange)` output for a controlled progress bar.",
       component: ZardDemoProgressControlledComponent,
       codeData: PROGRESS_DEMO_CONTROLLED,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoProgressRtlComponent,
+      codeData: PROGRESS_DEMO_RTL,
     },
   ],
 };

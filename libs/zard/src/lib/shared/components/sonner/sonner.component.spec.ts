@@ -1,6 +1,9 @@
+import { Directionality } from '@angular/cdk/bidi';
+import { signal } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { toast } from 'ngx-sonner';
+import { Subject } from 'rxjs';
 
 import { ZardSonnerComponent } from './sonner.component';
 
@@ -84,5 +87,23 @@ describe('ZardSonnerComponent', () => {
 
     expect(host.hasAttribute('popover')).toBe(false);
     expect(openedPopovers).not.toContain(host);
+  });
+
+  it('resolves the auto direction from the CDK Directionality and keeps explicit values', () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      imports: [ZardSonnerComponent],
+      providers: [
+        { provide: Directionality, useValue: { value: 'rtl', valueSignal: signal('rtl'), change: new Subject() } },
+      ],
+    });
+    const rtlFixture = TestBed.createComponent(ZardSonnerComponent);
+    rtlFixture.detectChanges();
+
+    const component = rtlFixture.componentInstance as unknown as { resolvedDir: () => string };
+    expect(component.resolvedDir()).toBe('rtl');
+
+    rtlFixture.componentRef.setInput('dir', 'ltr');
+    expect(component.resolvedDir()).toBe('ltr');
   });
 });

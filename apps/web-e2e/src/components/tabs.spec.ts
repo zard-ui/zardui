@@ -66,4 +66,27 @@ test.describe('Tabs component', () => {
     // strips role="tab" from tab buttons, leaving orphaned aria-selected/aria-controls attributes
     await checkA11y(page, '#overview', ['button-name', 'aria-allowed-attr', 'aria-required-children']);
   });
+
+  test('RTL example moves in visual order with the arrow keys', async ({ page }) => {
+    const demoPage = new ComponentDemoPage(page, 'tabs');
+    await demoPage.goto();
+
+    const rtlDemo = demoPage.getDemoByName('rtl');
+    await rtlDemo.scrollIntoViewIfNeeded();
+    const preview = rtlDemo.locator('[data-slot="preview"]');
+    await expect(preview).toHaveAttribute('dir', 'rtl');
+    const tabs = preview.locator('[role="tablist"] button');
+    const firstBox = await tabs.nth(0).boundingBox();
+    const secondBox = await tabs.nth(1).boundingBox();
+    expect(firstBox!.x).toBeGreaterThan(secondBox!.x);
+
+    await tabs.nth(0).focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
+    await expect(tabs.nth(1)).toBeFocused();
+    await page.keyboard.press('ArrowRight');
+    await expect(tabs.nth(0)).toHaveAttribute('aria-selected', 'true');
+
+    await checkA11y(page, '[id="rtl"]', ['button-name', 'aria-allowed-attr', 'aria-required-children']);
+  });
 });
