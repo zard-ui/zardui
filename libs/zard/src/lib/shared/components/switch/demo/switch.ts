@@ -5,6 +5,7 @@ import { SWITCH_DEMO_DISABLED } from '@generated/components/switch/demo/disabled
 import { SWITCH_DEMO_INVALID } from '@generated/components/switch/demo/invalid';
 import { SWITCH_DEMO_PREVIEW } from '@generated/components/switch/demo/preview';
 import { SWITCH_DEMO_REACTIVE_FORMS } from '@generated/components/switch/demo/reactive-forms';
+import { SWITCH_DEMO_RTL } from '@generated/components/switch/demo/rtl';
 import { SWITCH_DEMO_SIZE } from '@generated/components/switch/demo/size';
 import { SWITCH_CLI_ADD } from '@generated/installation/cli/add-switch';
 import { SWITCH_MANUAL_CODE } from '@generated/installation/manual/switch';
@@ -17,6 +18,7 @@ import { ZardDemoSwitchDisabledComponent } from './disabled';
 import { ZardDemoSwitchInvalidComponent } from './invalid';
 import { ZardDemoSwitchPreviewComponent } from './preview';
 import { ZardDemoSwitchReactiveFormsComponent } from './reactive-forms';
+import { ZardDemoSwitchRtlComponent } from './rtl';
 import { ZardDemoSwitchSizeComponent } from './size';
 import { SWITCH_API } from '../doc/api';
 
@@ -83,6 +85,13 @@ export const SWITCH = {
         'Bind `z-switch` with `formControlName`; a control created with `disabled: true` renders the switch disabled and keeps it in sync.',
       component: ZardDemoSwitchReactiveFormsComponent,
       codeData: SWITCH_DEMO_REACTIVE_FORMS,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoSwitchRtlComponent,
+      codeData: SWITCH_DEMO_RTL,
     },
   ],
 };
