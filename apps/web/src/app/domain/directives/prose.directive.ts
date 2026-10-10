@@ -55,11 +55,12 @@ function renderList(lines: string[]): string {
   return `<ul>${items}</ul>`;
 }
 
-/** The inline subset: `code`, **bold**, and nothing else. */
+/** The inline subset: `code`, **bold** and [links](/docs/rtl) to this site or to an https address. */
 function renderText(value: string): string {
   return escapeHtml(value)
     .replace(/`([^`]+)`/g, (_, raw: string) => `<code>${raw}</code>`)
-    .replace(/\*\*([^*]+)\*\*/g, (_, raw: string) => `<strong>${raw}</strong>`);
+    .replace(/\*\*([^*]+)\*\*/g, (_, raw: string) => `<strong>${raw}</strong>`)
+    .replace(/\[([^\]]+)\]\((\/[^)\s]*|https:\/\/[^)\s]+)\)/g, '<a href="$2">$1</a>');
 }
 
 function escapeHtml(value: string): string {

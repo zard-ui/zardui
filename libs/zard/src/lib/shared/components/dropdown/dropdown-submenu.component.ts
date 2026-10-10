@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -6,6 +7,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   effect,
   ElementRef,
   inject,
@@ -18,6 +20,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronRight } from '@ng-icons/lucide';
@@ -109,6 +112,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly destroyRef = inject(DestroyRef);
+  // Optional: the direction of the row, which is where the submenu takes its `dir` from.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   private overlayRef?: OverlayRef;
   private closeTimeout?: ReturnType<typeof setTimeout>;
@@ -140,6 +146,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 
       this.close();
     });
+
+    // A `[dir]` switch while the submenu is open closes it: it reopens with the new direction.
+    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.close());
   }
 
   ngOnDestroy(): void {
@@ -206,13 +215,26 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'ArrowRight' && event.key !== 'Enter' && event.key !== ' ') {
+    // The submenu opens on the inline-end side, so the arrow that opens it follows the direction.
+    if (event.key !== this.openKey() && event.key !== 'Enter' && event.key !== ' ') {
       return;
     }
 
     event.preventDefault();
     event.stopPropagation();
     this.open(true);
+  }
+
+  private isRtl(): boolean {
+    return this.directionality?.value === 'rtl';
+  }
+
+  private openKey(): string {
+    return this.isRtl() ? 'ArrowLeft' : 'ArrowRight';
+  }
+
+  private closeKey(): string {
+    return this.isRtl() ? 'ArrowRight' : 'ArrowLeft';
   }
 
   protected onMouseEnter(): void {
@@ -276,6 +298,7 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
+      direction: this.directionality?.value ?? 'ltr',
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
@@ -331,7 +354,6 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
         event.preventDefault();
         items[this.focusedIndex]?.click();
         return;
-      case 'ArrowLeft':
       case 'Escape':
         event.preventDefault();
         event.stopPropagation();
@@ -340,6 +362,13 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
       case 'Tab':
         this.dropdownService.close();
         return;
+    }
+
+    if (event.key === this.closeKey()) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.close(true);
+      return;
     }
 
     if (!isTypeaheadKey(event)) {

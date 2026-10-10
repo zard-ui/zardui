@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -25,7 +26,7 @@ import {
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import { filter, takeUntil } from 'rxjs';
 
 import { ZardStringTemplateOutletDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
@@ -92,6 +93,8 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
 })
 export class ZardAlertDialogComponent extends ZardAlertDialogHost {
   private readonly overlay = inject(Overlay);
+  // Optional: the direction of the declaration site, which is where the overlay content takes its dir from.
+  private readonly directionality = inject(Directionality, { optional: true });
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
@@ -160,6 +163,7 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
 
     const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: this.directionality?.value ?? 'ltr',
         hasBackdrop: true,
         backdropClass: ALERT_DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -168,6 +172,11 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
       }),
     );
     this.overlayRef = overlayRef;
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    this.directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? 'ltr'));
 
     overlayRef.attach(new TemplatePortal(this.panel(), this.viewContainerRef));
 
