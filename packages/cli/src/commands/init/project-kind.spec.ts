@@ -223,6 +223,7 @@ describe('buildConfig', () => {
     globalCss: 'projects/ui/src/styles.css',
     componentsAlias: '@/shared/components',
     utilsAlias: '@/shared/utils',
+    rtl: false,
   };
 
   it('should derive baseUrl from the library root, not from app.config', () => {
@@ -251,7 +252,13 @@ describe('buildConfig', () => {
 
 describe('buildInitSteps', () => {
   const answersFor = (kind: ProjectKind): InitAnswers => {
-    const shared = { kind, theme: 'neutral', componentsAlias: '@/shared/components', utilsAlias: '@/shared/utils' };
+    const shared = {
+      kind,
+      theme: 'neutral',
+      componentsAlias: '@/shared/components',
+      utilsAlias: '@/shared/utils',
+      rtl: false,
+    };
 
     if (isLibraryKind(kind)) {
       const root = kind === 'nx-library' ? 'libs/ui' : 'projects/ui';

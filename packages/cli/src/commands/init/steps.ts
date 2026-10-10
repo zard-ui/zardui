@@ -1,6 +1,13 @@
 import { installComponent } from '@cli/commands/add/component-installer.js';
 import { installDependencies } from '@cli/commands/init/dependencies.js';
-import { bundlerFor, isLibraryKind, projectRootOf, tsconfigFileFor } from '@cli/commands/init/project-kind.js';
+import {
+  bundlerFor,
+  indexHtmlFor,
+  isLibraryKind,
+  projectRootOf,
+  tsconfigFileFor,
+} from '@cli/commands/init/project-kind.js';
+import { setupRtlDirection } from '@cli/commands/init/rtl-setup.js';
 import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { updateAngularConfig } from '@cli/commands/init/update-angular-config.js';
@@ -78,6 +85,19 @@ export function buildInitSteps(
     });
   }
 
+  // Libraries have no index.html (the consuming app owns it), so there is
+  // nothing to set there; `rtl: true` in components.json is still recorded.
+  if (config.rtl && !isLibrary) {
+    const indexFile = indexHtmlOf(config, projectInfo);
+    steps.push({
+      label: indexFile,
+      note: 'dir="rtl" on <html>',
+      run: async () => {
+        await setupRtlDirection(cwd, indexFile);
+      },
+    });
+  }
+
   steps.push(
     {
       label: tsconfigFile,
@@ -92,6 +112,19 @@ export function buildInitSteps(
   );
 
   return steps;
+}
+
+/**
+ * The app's index.html: the one its build target declares, else the layout's default.
+ *
+ * The declared `index` wins because it is what the build really reads; the default
+ * is only a guess from the project type and where app.config lives.
+ */
+function indexHtmlOf(config: Config, projectInfo: ProjectInfo): string {
+  const root = projectRootOf(config.baseUrl);
+  const declared = projectInfo.projects.find(project => (project.root || '.') === root)?.index;
+
+  return declared ?? indexHtmlFor(config.projectType, config.baseUrl);
 }
 
 /**
