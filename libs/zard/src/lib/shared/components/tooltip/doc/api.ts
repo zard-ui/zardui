@@ -13,8 +13,9 @@ export const TOOLTIP_API: ApiSection[] = [
       },
       {
         name: '[zPosition]',
-        description: 'Side of the trigger the tooltip opens on (shadcn calls this input `side`)',
-        type: "'top' | 'bottom' | 'left' | 'right'",
+        description:
+          'Side of the trigger the tooltip opens on (shadcn calls this input `side`). `left` and `right` are physical sides; `inline-start` and `inline-end` follow the direction of the trigger, so they flip in RTL.',
+        type: "'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end'",
         default: "'top'",
       },
       {

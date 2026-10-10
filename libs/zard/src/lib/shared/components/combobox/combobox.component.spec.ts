@@ -1,7 +1,10 @@
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Directionality, type Direction } from '@angular/cdk/bidi';
+import { Component, signal, ChangeDetectionStrategy, type WritableSignal } from '@angular/core';
 import { type ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+
+import { Subject } from 'rxjs';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
@@ -931,4 +934,89 @@ describe('ZardComboboxComponent', () => {
       expect(inputOf(fixture).disabled).toBe(false);
     }));
   });
+});
+
+describe('ZardComboboxComponent direction', () => {
+  let fixture: ComponentFixture<ShorthandHostComponent>;
+  let combobox: ZardComboboxComponent;
+  let valueSignal: WritableSignal<Direction>;
+  let change: Subject<Direction>;
+
+  function setup(initial: Direction) {
+    valueSignal = signal(initial);
+    change = new Subject<Direction>();
+    TestBed.configureTestingModule({
+      imports: [ShorthandHostComponent],
+      providers: [
+        ...providers(),
+        {
+          provide: Directionality,
+          useValue: {
+            get value() {
+              return valueSignal();
+            },
+            valueSignal,
+            change,
+          },
+        },
+      ],
+    });
+    fixture = TestBed.createComponent(ShorthandHostComponent);
+    fixture.detectChanges();
+    combobox = comboboxOf(fixture);
+  }
+
+  function open() {
+    combobox.openPanel();
+    fixture.detectChanges();
+    flush();
+    fixture.detectChanges();
+  }
+
+  afterEach(() => {
+    fixture.destroy();
+    document.querySelector('.cdk-overlay-container')?.replaceChildren();
+    TestBed.resetTestingModule();
+  });
+
+  it('passes the trigger direction to the overlay', fakeAsync(() => {
+    setup('rtl');
+    open();
+    expect(document.querySelector('.cdk-overlay-container [dir="rtl"]')).not.toBeNull();
+    expect(document.querySelector('.cdk-overlay-container [dir="ltr"]')).toBeNull();
+  }));
+
+  it('keeps the overlay ltr when the trigger is ltr', fakeAsync(() => {
+    setup('ltr');
+    open();
+    expect(document.querySelector('.cdk-overlay-container [dir="ltr"]')).not.toBeNull();
+  }));
+
+  it('mirrors the transform origin of an inline-start aligned panel', fakeAsync(() => {
+    setup('rtl');
+    open();
+    const content = document.querySelector<HTMLElement>('[data-slot="combobox-content"]');
+    // The start edge is the physical right in RTL.
+    expect(content?.style.getPropertyValue('--z-combobox-transform-origin')).toBe('top right');
+  }));
+
+  it('uses the physical left as the transform origin in LTR', fakeAsync(() => {
+    setup('ltr');
+    open();
+    const content = document.querySelector<HTMLElement>('[data-slot="combobox-content"]');
+    expect(content?.style.getPropertyValue('--z-combobox-transform-origin')).toBe('top left');
+  }));
+
+  it('closes an open panel when the direction changes', fakeAsync(() => {
+    setup('rtl');
+    open();
+    expect(combobox.open()).toBe(true);
+
+    valueSignal.set('ltr');
+    change.next('ltr');
+    fixture.detectChanges();
+    flush();
+
+    expect(combobox.open()).toBe(false);
+  }));
 });

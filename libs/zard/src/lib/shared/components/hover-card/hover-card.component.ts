@@ -43,6 +43,19 @@ import { hoverCardVariants } from './hover-card.variants';
 /** Supported positions for a hover card relative to its trigger. */
 export type ZardHoverCardPlacement = 'top' | 'bottom' | 'left' | 'right';
 
+/** Physical placements plus the logical ones, which follow the direction of the trigger. */
+export type ZardHoverCardSide = ZardHoverCardPlacement | 'inline-start' | 'inline-end';
+
+function resolveSide(side: ZardHoverCardSide, rtl: boolean): ZardHoverCardPlacement {
+  if (side === 'inline-start') {
+    return rtl ? 'right' : 'left';
+  }
+  if (side === 'inline-end') {
+    return rtl ? 'left' : 'right';
+  }
+  return side;
+}
+
 const HOVER_CARD_POSITIONS: Record<ZardHoverCardPlacement, ConnectedPosition> = {
   top: {
     originX: 'center',
@@ -126,7 +139,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   });
 
   /** Preferred placement relative to the trigger. */
-  readonly zPlacement = input<ZardHoverCardPlacement>('bottom');
+  readonly zPlacement = input<ZardHoverCardSide>('bottom');
 
   /** Delay in milliseconds before the hover card opens. */
   readonly zOpenDelay = input(700, { transform: numberAttribute });
@@ -315,9 +328,9 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     return this.directionality?.value ?? 'ltr';
   }
 
-  private getPositions(placement = this.zPlacement()): ConnectedPosition[] {
+  private getPositions(placement: ZardHoverCardSide = this.zPlacement()): ConnectedPosition[] {
     const rtl = this.direction() === 'rtl';
-    return HOVER_CARD_FALLBACKS[placement].map(fallback => positionFor(fallback, rtl));
+    return HOVER_CARD_FALLBACKS[resolveSide(placement, rtl)].map(fallback => positionFor(fallback, rtl));
   }
 
   private createOverlay(): void {
@@ -368,7 +381,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
 
     this.overlayRef.attach(portal);
     this.setupOverlayListeners();
-    this.updateContentSide(this.zPlacement());
+    this.updateContentSide(resolveSide(this.zPlacement(), this.direction() === 'rtl'));
     this.isOpen.set(true);
     this.zVisibleChange.emit(true);
   }

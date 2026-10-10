@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { type FlexibleConnectedPositionStrategy, OverlayModule, type OverlayRef } from '@angular/cdk/overlay';
 import {
   type AfterViewInit,
@@ -11,6 +12,7 @@ import { By } from '@angular/platform-browser';
 
 import { fireEvent, render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { Subject } from 'rxjs';
 
 import { ZardHoverCardComponent, ZardHoverCardDirective } from './hover-card.component';
 
@@ -399,5 +401,91 @@ describe('ZardHoverCardDirective', () => {
     expect(hoverCardTrigger).toHaveAttribute('aria-expanded', 'true');
     expect(controlledId).toBeTruthy();
     expect(document.getElementById(controlledId!)).toBeInTheDocument();
+  });
+});
+
+describe('ZardHoverCardDirective direction', () => {
+  let direction: 'ltr' | 'rtl';
+  let change: Subject<'ltr' | 'rtl'>;
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+    change = new Subject();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
+  async function setupDirection(initial: 'ltr' | 'rtl', placement: 'top' | 'bottom' | 'left' | 'right' = 'bottom') {
+    direction = initial;
+    const result = await render(
+      `
+        <button type="button" [zHoverCard]="content" [zOpenDelay]="0" [zPlacement]="placement">Hover Here</button>
+        <ng-template #content><z-hover-card>${CARD_CONTENT}</z-hover-card></ng-template>
+      `,
+      {
+        imports: [OverlayModule, ZardHoverCardDirective, ZardHoverCardComponent],
+        componentProperties: { placement },
+        providers: [
+          {
+            provide: Directionality,
+            useValue: {
+              get value() {
+                return direction;
+              },
+              change,
+            },
+          },
+        ],
+      },
+    );
+    const directive = result.fixture.debugElement
+      .query(By.directive(ZardHoverCardDirective))
+      .injector.get(ZardHoverCardDirective);
+    return { ...result, directive: directive as unknown as { overlayRef: OverlayRef } };
+  }
+
+  it('passes the trigger direction to the overlay', async () => {
+    const { directive } = await setupDirection('rtl');
+    await hoverTrigger(0);
+
+    expect(directive.overlayRef.getConfig().direction).toBe('rtl');
+    expect(document.querySelector('.cdk-overlay-container [dir="rtl"]')).not.toBeNull();
+  });
+
+  it('keeps the overlay ltr when the trigger is ltr', async () => {
+    const { directive } = await setupDirection('ltr');
+    await hoverTrigger(0);
+
+    expect(directive.overlayRef.getConfig().direction).toBe('ltr');
+  });
+
+  it.each([
+    { placement: 'left', originX: 'end', overlayX: 'start', offsetX: -8 },
+    { placement: 'right', originX: 'start', overlayX: 'end', offsetX: 8 },
+  ] as const)(
+    'mirrors the physical $placement side in RTL and keeps the offset physical',
+    async ({ placement, originX, overlayX, offsetX }) => {
+      const { directive } = await setupDirection('rtl', placement);
+      await hoverTrigger(0);
+
+      const strategy = directive.overlayRef.getConfig().positionStrategy as FlexibleConnectedPositionStrategy;
+      expect(strategy.positions[0]).toMatchObject({ originX, overlayX, offsetX });
+    },
+  );
+
+  it('closes an open card when the direction changes', async () => {
+    const { directive } = await setupDirection('rtl');
+    await hoverTrigger(0);
+    expect(directive.overlayRef.hasAttached()).toBe(true);
+
+    direction = 'ltr';
+    change.next('ltr');
+    jest.advanceTimersByTime(500);
+
+    expect(directive.overlayRef.getDirection()).toBe('ltr');
+    expect(directive.overlayRef.hasAttached()).toBe(false);
   });
 });

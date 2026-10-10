@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { CdkConnectedOverlay, type ConnectedPosition, Overlay } from '@angular/cdk/overlay';
 import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
 import {
@@ -88,6 +89,7 @@ const OVERLAY_POSITIONS: ConnectedPosition[] = [
 })
 export class ZardNavigationMenuViewportComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly directionality = inject(Directionality, { optional: true });
   private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly injector = inject(Injector);
@@ -145,6 +147,7 @@ export class ZardNavigationMenuViewportComponent {
     // Changing which edge to line up with has to re-run the offset maths.
     effect(() => {
       this.align();
+      this.directionality?.valueSignal();
 
       untracked(() => {
         if (this.isOpen()) {
@@ -222,23 +225,27 @@ export class ZardNavigationMenuViewportComponent {
     const trigger = active.element.getBoundingClientRect();
     const bar = root.getBoundingClientRect();
 
+    // `start`/`end` are inline edges: in RTL the popup's start edge is its right edge.
+    const rtl = (this.directionality?.value ?? 'ltr') === 'rtl';
     let left: number;
     switch (this.align()) {
       case 'center':
         left = trigger.left + trigger.width / 2 - width / 2;
         break;
       case 'end':
-        left = trigger.right - width;
+        left = rtl ? trigger.left : trigger.right - width;
         break;
       default:
-        left = trigger.left;
+        left = rtl ? trigger.right - width : trigger.left;
     }
 
     const rightmost = view.innerWidth - WINDOW_MARGIN - width;
     const clamped = Math.max(WINDOW_MARGIN, Math.min(left, rightmost));
 
-    // The pane already sits at the bar's left edge, so the offset is relative to it.
-    this.offsetX.set(Math.round(clamped - bar.left));
+    // The pane sits at the bar's inline-start edge: its left edge in LTR, and in RTL its right edge, so the pane's left
+    // edge is `bar.right - width`. The translate is physical either way.
+    const paneLeft = rtl ? bar.right - width : bar.left;
+    this.offsetX.set(Math.round(clamped - paneLeft));
   }
 
   /** Keeps the morph honest when the rendered content resizes after being mounted. */

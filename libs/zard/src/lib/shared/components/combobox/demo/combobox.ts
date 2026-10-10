@@ -8,6 +8,7 @@ import { COMBOBOX_DEMO_INVALID } from '@generated/components/combobox/demo/inval
 import { COMBOBOX_DEMO_MULTIPLE } from '@generated/components/combobox/demo/multiple';
 import { COMBOBOX_DEMO_POPUP } from '@generated/components/combobox/demo/popup';
 import { COMBOBOX_DEMO_PREVIEW } from '@generated/components/combobox/demo/preview';
+import { COMBOBOX_DEMO_RTL } from '@generated/components/combobox/demo/rtl';
 import { COMBOBOX_DEMO_SHORTHAND } from '@generated/components/combobox/demo/shorthand';
 import { COMBOBOX_CLI_ADD } from '@generated/installation/cli/add-combobox';
 import { COMBOBOX_MANUAL_CODE } from '@generated/installation/manual/combobox';
@@ -23,6 +24,7 @@ import { ZardDemoComboboxInvalidComponent } from './invalid';
 import { ZardDemoComboboxMultipleComponent } from './multiple';
 import { ZardDemoComboboxPopupComponent } from './popup';
 import { ZardDemoComboboxPreviewComponent } from './preview';
+import { ZardDemoComboboxRtlComponent } from './rtl';
 import { ZardDemoComboboxShorthandComponent } from './shorthand';
 import { COMBOBOX_API } from '../doc/api';
 
@@ -111,6 +113,13 @@ export const COMBOBOX = {
         'A `z-input-group-addon` projected into `z-combobox-input` adds a leading icon to the real `z-input-group` the input renders internally, shown together with grouped options.',
       component: ZardDemoComboboxInputGroupComponent,
       codeData: COMBOBOX_DEMO_INPUT_GROUP,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoComboboxRtlComponent,
+      codeData: COMBOBOX_DEMO_RTL,
     },
   ],
 };

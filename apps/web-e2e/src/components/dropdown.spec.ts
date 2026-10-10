@@ -178,4 +178,75 @@ test.describe('Dropdown component', () => {
     await page.locator('[role="menu"]').waitFor({ state: 'visible', timeout: 5000 });
     await checkA11y(page, undefined, ['button-name', 'color-contrast', 'scrollable-region-focusable']);
   });
+
+  test('RTL example mirrors the menu, the shortcut and the submenu', async ({ page }) => {
+    await loadExamples();
+
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.scrollIntoViewIfNeeded();
+    await expect(demo.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'rtl');
+
+    const trigger = demo.locator('[z-dropdown]');
+    await trigger.click();
+
+    const menu = page.locator('.cdk-overlay-container [role="menu"]').first();
+    await expect(menu).toBeVisible({ timeout: 5000 });
+    // The panel is portalled out of the preview: it still carries the direction of its trigger.
+    await expect(menu.locator('xpath=ancestor::*[@dir][1]')).toHaveAttribute('dir', 'rtl');
+
+    // Aligned to the trigger's inline-start (right) edge.
+    const triggerBox = await trigger.boundingBox();
+    const menuBox = await menu.boundingBox();
+    expect(menuBox!.x + menuBox!.width).toBeCloseTo(triggerBox!.x + triggerBox!.width, -1);
+
+    // The shortcut sits on the inline-end (left) side of its row.
+    const row = menu.locator('[role="menuitem"]', { has: page.locator('[data-slot="dropdown-menu-shortcut"]') });
+    const rowBox = await row.boundingBox();
+    const shortcutBox = await row.locator('[data-slot="dropdown-menu-shortcut"]').boundingBox();
+    expect(shortcutBox!.x + shortcutBox!.width / 2).toBeLessThan(rowBox!.x + rowBox!.width / 2);
+
+    // ArrowLeft opens the submenu to the left of its parent, ArrowRight closes it.
+    const submenuTrigger = menu.locator('[data-slot="dropdown-menu-sub-trigger"]').first();
+    await submenuTrigger.focus();
+    await page.keyboard.press('ArrowLeft');
+    const menus = page.locator('.cdk-overlay-container [role="menu"]');
+    await expect(menus).toHaveCount(2, { timeout: 5000 });
+    const subMenuBox = await menus.nth(1).boundingBox();
+    expect(subMenuBox!.x + subMenuBox!.width).toBeLessThanOrEqual(menuBox!.x + 8);
+    await expect(menus.nth(1).locator('xpath=ancestor::*[@dir][1]')).toHaveAttribute('dir', 'rtl');
+
+    await page.keyboard.press('ArrowRight');
+    await expect(menus).toHaveCount(1, { timeout: 5000 });
+  });
+
+  test('keeps each panel on the direction of its own trigger on one page', async ({ page }) => {
+    await loadExamples();
+
+    const rtlDemo = demoPage.getDemoByName('rtl');
+    await rtlDemo.scrollIntoViewIfNeeded();
+    await rtlDemo.locator('[z-dropdown]').click();
+    const rtlMenu = page.locator('.cdk-overlay-container [role="menu"]').first();
+    await expect(rtlMenu).toBeVisible({ timeout: 5000 });
+    await expect(rtlMenu.locator('xpath=ancestor::*[@dir][1]')).toHaveAttribute('dir', 'rtl');
+    await page.keyboard.press('Escape');
+    await expect(rtlMenu).toBeHidden({ timeout: 5000 });
+
+    const ltrDemo = demoPage.getDemoByName('basic');
+    await ltrDemo.scrollIntoViewIfNeeded();
+    await expect(ltrDemo.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'ltr');
+    await ltrDemo.locator('[z-dropdown]').click();
+    const ltrMenu = page.locator('.cdk-overlay-container [role="menu"]').first();
+    await expect(ltrMenu).toBeVisible({ timeout: 5000 });
+    await expect(ltrMenu.locator('xpath=ancestor::*[@dir][1]')).toHaveAttribute('dir', 'ltr');
+  });
+
+  test('RTL example passes accessibility checks when open', async ({ page }) => {
+    await loadExamples();
+
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.scrollIntoViewIfNeeded();
+    await demo.locator('[z-dropdown]').click();
+    await page.locator('[role="menu"]').first().waitFor({ state: 'visible', timeout: 5000 });
+    await checkA11y(page, undefined, ['button-name', 'color-contrast', 'scrollable-region-focusable']);
+  });
 });

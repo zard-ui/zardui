@@ -119,7 +119,7 @@ export class ZardDropdownMenuShortcutComponent {
 @Component({
   selector: 'z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item]',
   template: `
-    <span class="pointer-events-none absolute flex size-3.5 items-center justify-center ltr:left-2 rtl:right-2">
+    <span class="pointer-events-none absolute start-2 flex size-3.5 items-center justify-center">
       @if (zChecked()) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="size-4">
           <path d="M20 6 9 17l-5-5" />
@@ -206,7 +206,7 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
 @Component({
   selector: 'z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
   template: `
-    <span class="pointer-events-none absolute flex size-3.5 items-center justify-center ltr:left-2 rtl:right-2">
+    <span class="pointer-events-none absolute start-2 flex size-3.5 items-center justify-center">
       @if (isChecked()) {
         <span class="size-2 rounded-full bg-current"></span>
       }
