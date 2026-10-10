@@ -9,6 +9,7 @@ import { CHART_DEMO_PIE_DONUT_TEXT } from '@generated/components/chart/demo/pie-
 import { CHART_DEMO_PREVIEW } from '@generated/components/chart/demo/preview';
 import { CHART_DEMO_RADAR_DEFAULT } from '@generated/components/chart/demo/radar-default';
 import { CHART_DEMO_RADIAL_SIMPLE } from '@generated/components/chart/demo/radial-simple';
+import { CHART_DEMO_RTL } from '@generated/components/chart/demo/rtl';
 import { CHART_DEMO_TOOLTIP_INDICATORS } from '@generated/components/chart/demo/tooltip-indicators';
 import {
   CHART_SNIPPET_CHART_CONFIG,
@@ -37,6 +38,7 @@ import { ZardDemoChartRadarDefaultComponent } from '@/shared/components/chart/de
 import { ZardDemoChartRadialSimpleComponent } from '@/shared/components/chart/demo/radial-simple';
 import { ZardDemoChartTooltipIndicatorsComponent } from '@/shared/components/chart/demo/tooltip-indicators';
 
+import { ZardDemoChartRtlComponent } from './rtl';
 import { CHART_API } from '../doc/api';
 
 export const CHART = {
@@ -181,6 +183,14 @@ export const CHART = {
       description: 'A single radial bar, the simplest `zRadialVariant="bar"` chart.',
       component: ZardDemoChartRadialSimpleComponent,
       codeData: CHART_DEMO_RADIAL_SIMPLE,
+    },
+    {
+      name: 'rtl',
+      description:
+        'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl). The category axis keeps its left-to-right order in RTL; the legend, tooltip text and surrounding layout mirror.',
+      type: 'rtl' as const,
+      component: ZardDemoChartRtlComponent,
+      codeData: CHART_DEMO_RTL,
     },
   ],
 };

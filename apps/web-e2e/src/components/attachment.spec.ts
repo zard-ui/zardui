@@ -169,3 +169,36 @@ test.describe('Attachment', () => {
     }
   }
 });
+
+test.describe('Attachment RTL', () => {
+  test('renders the rtl example mirrored', async ({ page }) => {
+    const demoPage = new ComponentDemoPage(page, 'attachment');
+    await demoPage.goto();
+
+    const rtl = demoPage.getDemoByName('rtl');
+    await rtl.scrollIntoViewIfNeeded();
+    const preview = rtl.locator('[data-slot="preview"]');
+    await expect(preview).toHaveAttribute('dir', 'rtl');
+    await expect(preview).toHaveAttribute('data-lang', 'ar');
+
+    const group = preview.locator('z-attachment-group');
+    await expect(group).toBeVisible();
+    const scrolls = await group.evaluate(el => el.scrollWidth > el.clientWidth);
+    expect(scrolls).toBe(true);
+    const first = await group.locator('z-attachment').first().boundingBox();
+    const box = await group.boundingBox();
+    // The group starts at the right edge in RTL.
+    expect(first!.x + first!.width).toBeGreaterThan(box!.x + box!.width - 20);
+
+    await group.focus();
+    const start = await group.evaluate(el => el.scrollLeft);
+    // Arrow keys follow the visual direction: ArrowLeft reveals the later (left-hand) attachments.
+    await page.keyboard.press('ArrowLeft');
+    await expect.poll(() => group.evaluate(el => el.scrollLeft)).toBeLessThan(start);
+    const moved = await group.evaluate(el => el.scrollLeft);
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(() => group.evaluate(el => el.scrollLeft)).toBeGreaterThan(moved);
+
+    await checkA11y(page, '#rtl z-demo-attachment-rtl', ['color-contrast', 'button-name']);
+  });
+});

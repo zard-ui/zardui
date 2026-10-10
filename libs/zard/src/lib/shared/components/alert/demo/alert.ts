@@ -3,6 +3,7 @@ import { ALERT_DEMO_BASIC } from '@generated/components/alert/demo/basic';
 import { ALERT_DEMO_CUSTOM_COLORS } from '@generated/components/alert/demo/custom-colors';
 import { ALERT_DEMO_DESTRUCTIVE } from '@generated/components/alert/demo/destructive';
 import { ALERT_DEMO_PREVIEW } from '@generated/components/alert/demo/preview';
+import { ALERT_DEMO_RTL } from '@generated/components/alert/demo/rtl';
 import { ALERT_CLI_ADD } from '@generated/installation/cli/add-alert';
 import { ALERT_MANUAL_CODE } from '@generated/installation/manual/alert';
 import { ALERT_USAGE_IMPORT, ALERT_USAGE_CODE } from '@generated/usage/alert';
@@ -12,6 +13,7 @@ import { ZardDemoAlertBasicComponent } from './basic';
 import { ZardDemoAlertCustomColorsComponent } from './custom-colors';
 import { ZardDemoAlertDestructiveComponent } from './destructive';
 import { ZardDemoAlertPreviewComponent } from './preview';
+import { ZardDemoAlertRtlComponent } from './rtl';
 import { ALERT_API } from '../doc/api';
 
 export const ALERT = {
@@ -56,6 +58,13 @@ export const ALERT = {
       description: 'Override the `class` input on `z-alert` to customize its border, background, and text colors.',
       component: ZardDemoAlertCustomColorsComponent,
       codeData: ALERT_DEMO_CUSTOM_COLORS,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoAlertRtlComponent,
+      codeData: ALERT_DEMO_RTL,
     },
   ],
 };
