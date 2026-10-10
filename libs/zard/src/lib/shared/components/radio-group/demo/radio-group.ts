@@ -5,6 +5,7 @@ import { RADIO_GROUP_DEMO_FIELDSET } from '@generated/components/radio-group/dem
 import { RADIO_GROUP_DEMO_INVALID } from '@generated/components/radio-group/demo/invalid';
 import { RADIO_GROUP_DEMO_PREVIEW } from '@generated/components/radio-group/demo/preview';
 import { RADIO_GROUP_DEMO_REACTIVE_FORMS } from '@generated/components/radio-group/demo/reactive-forms';
+import { RADIO_GROUP_DEMO_RTL } from '@generated/components/radio-group/demo/rtl';
 import { RADIO_GROUP_CLI_ADD } from '@generated/installation/cli/add-radio-group';
 import { RADIO_GROUP_MANUAL_CODE } from '@generated/installation/manual/radio-group';
 import { RADIO_GROUP_USAGE_CODE, RADIO_GROUP_USAGE_IMPORT } from '@generated/usage/radio-group';
@@ -16,6 +17,7 @@ import { ZardDemoRadioGroupFieldsetComponent } from './fieldset';
 import { ZardDemoRadioGroupInvalidComponent } from './invalid';
 import { ZardDemoRadioGroupPreviewComponent } from './preview';
 import { ZardDemoRadioGroupReactiveFormsComponent } from './reactive-forms';
+import { ZardDemoRadioGroupRtlComponent } from './rtl';
 import { RADIO_GROUP_API } from '../doc/api';
 
 export const RADIO_GROUP = {
@@ -76,6 +78,13 @@ export const RADIO_GROUP = {
         'Bind `z-radio-group` with `formControlName`; the disabled state of a `FormControl` is respected out of the box.',
       component: ZardDemoRadioGroupReactiveFormsComponent,
       codeData: RADIO_GROUP_DEMO_REACTIVE_FORMS,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoRadioGroupRtlComponent,
+      codeData: RADIO_GROUP_DEMO_RTL,
     },
   ],
 };
