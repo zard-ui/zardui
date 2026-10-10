@@ -81,6 +81,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/dark-mode/dark-mode.page').then(c => c.DarkModePage),
       },
       {
+        path: 'rtl',
+        loadComponent: () => import('./domain/pages/rtl/rtl.page').then(c => c.RtlPage),
+      },
+      {
         path: 'cli',
         loadComponent: () => import('./domain/pages/cli/cli.page').then(c => c.CliPage),
       },
