@@ -1,5 +1,6 @@
 import { SHEET_DEMO_NO_CLOSE_BUTTON } from '@generated/components/sheet/demo/no-close-button';
 import { SHEET_DEMO_PREVIEW } from '@generated/components/sheet/demo/preview';
+import { SHEET_DEMO_RTL } from '@generated/components/sheet/demo/rtl';
 import { SHEET_DEMO_SIDE } from '@generated/components/sheet/demo/side';
 import { SHEET_CLI_ADD } from '@generated/installation/cli/add-sheet';
 import { SHEET_MANUAL_CODE } from '@generated/installation/manual/sheet';
@@ -8,6 +9,7 @@ import type { CodeBlockData } from '@highlight/types';
 
 import { ZardDemoSheetNoCloseButtonComponent } from './no-close-button';
 import { ZardDemoSheetPreviewComponent } from './preview';
+import { ZardDemoSheetRtlComponent } from './rtl';
 import { ZardDemoSheetSideComponent } from './side';
 import { SHEET_API } from '../doc/api';
 
@@ -66,6 +68,13 @@ export const SHEET = {
         'Set `[zClosable]="false"` in the template, or `zClosable: false` in the options, to hide the close button; press Escape or click outside the sheet to close it.',
       component: ZardDemoSheetNoCloseButtonComponent,
       codeData: SHEET_DEMO_NO_CLOSE_BUTTON,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoSheetRtlComponent,
+      codeData: SHEET_DEMO_RTL,
     },
   ],
 };

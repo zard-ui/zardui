@@ -116,7 +116,7 @@ export class ZardSheetComponent extends ZardSheetHost {
   readonly zWidth = input<string | undefined>(undefined);
   /** Explicit height, for top/bottom sheets. */
   readonly zHeight = input<string | undefined>(undefined);
-  /** Renders the close button in the top-right corner. */
+  /** Renders the close button in the top corner on the inline-end side. */
   readonly zClosable = input(true, { transform: booleanAttribute });
   /** Whether a click on the mask closes the sheet. */
   readonly zMaskClosable = input(true, { transform: booleanAttribute });

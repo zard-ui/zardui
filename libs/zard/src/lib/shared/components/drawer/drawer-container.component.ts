@@ -119,7 +119,7 @@ export class ZardDrawerOptions<T, U> {
             z-button
             zType="ghost"
             zSize="icon-sm"
-            class="absolute top-3 right-3"
+            class="absolute end-3 top-3"
             (click)="cancelTriggered.emit()"
           >
             <ng-icon name="lucideX" class="size-4!" />
