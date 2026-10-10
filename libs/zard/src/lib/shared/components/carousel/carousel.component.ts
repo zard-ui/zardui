@@ -108,8 +108,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   ],
   host: {
     'data-slot': 'carousel',
-    '(keydown.arrowleft.prevent)': 'slidePrevious()',
-    '(keydown.arrowright.prevent)': 'slideNext()',
+    '(keydown.arrowleft.prevent)': 'onArrowLeft()',
+    '(keydown.arrowright.prevent)': 'onArrowRight()',
   },
   exportAs: 'zCarousel',
 })
@@ -155,6 +155,23 @@ export class ZardCarouselComponent {
     if (type === 'select' && emblaApi.selectedScrollSnap() !== this.#index) {
       this.checkNavigation(emblaApi);
       this.zSelected.emit();
+    }
+  }
+
+  /** Horizontal arrow keys follow the visual order: in RTL the next slide is on the left. */
+  protected onArrowLeft(): void {
+    if (this.directionality.value === 'rtl') {
+      this.slideNext();
+    } else {
+      this.slidePrevious();
+    }
+  }
+
+  protected onArrowRight(): void {
+    if (this.directionality.value === 'rtl') {
+      this.slidePrevious();
+    } else {
+      this.slideNext();
     }
   }
 

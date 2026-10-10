@@ -2,6 +2,7 @@ import { CAROUSEL_DEMO_API } from '@generated/components/carousel/demo/api';
 import { CAROUSEL_DEMO_ORIENTATION } from '@generated/components/carousel/demo/orientation';
 import { CAROUSEL_DEMO_PLUGINS } from '@generated/components/carousel/demo/plugins';
 import { CAROUSEL_DEMO_PREVIEW } from '@generated/components/carousel/demo/preview';
+import { CAROUSEL_DEMO_RTL } from '@generated/components/carousel/demo/rtl';
 import { CAROUSEL_DEMO_SIZES } from '@generated/components/carousel/demo/sizes';
 import { CAROUSEL_DEMO_SPACING } from '@generated/components/carousel/demo/spacing';
 import {
@@ -20,6 +21,7 @@ import { ZardDemoCarouselApiComponent } from '@/shared/components/carousel/demo/
 import { ZardDemoCarouselOrientationComponent } from '@/shared/components/carousel/demo/orientation';
 import { ZardDemoCarouselPluginsComponent } from '@/shared/components/carousel/demo/plugins';
 import { ZardDemoCarouselPreviewComponent } from '@/shared/components/carousel/demo/preview';
+import { ZardDemoCarouselRtlComponent } from '@/shared/components/carousel/demo/rtl';
 import { ZardDemoCarouselSizesComponent } from '@/shared/components/carousel/demo/sizes';
 import { ZardDemoCarouselSpacingComponent } from '@/shared/components/carousel/demo/spacing';
 
@@ -83,6 +85,13 @@ export const CAROUSEL = {
         'Use `ZardCarouselPluginsService` to create an Embla plugin, such as autoplay, and pass it to `[zPlugins]`.',
       component: ZardDemoCarouselPluginsComponent,
       codeData: CAROUSEL_DEMO_PLUGINS,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoCarouselRtlComponent,
+      codeData: CAROUSEL_DEMO_RTL,
     },
   ],
 };

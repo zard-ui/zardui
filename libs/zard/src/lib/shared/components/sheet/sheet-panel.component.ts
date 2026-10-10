@@ -47,7 +47,7 @@ export type ZardSheetSize = NonNullable<ZardSheetVariants['zSize']>;
         z-button
         zType="ghost"
         zSize="icon-sm"
-        class="absolute top-3 right-3"
+        class="absolute end-3 top-3"
         (click)="closeRequested.emit()"
       >
         <ng-icon name="lucideX" class="size-4!" />
@@ -134,7 +134,7 @@ export class ZardSheetPanelComponent {
   readonly zWidth = input<string | undefined>(undefined);
   /** Explicit height, for top/bottom sheets. */
   readonly zHeight = input<string | undefined>(undefined);
-  /** Renders the close button in the top-right corner. */
+  /** Renders the close button in the top corner on the inline-end side. */
   readonly zClosable = input(true, { transform: booleanAttribute });
   /** How long the enter and leave transitions run, in ms. */
   readonly zDuration = input(SHEET_DURATION);
