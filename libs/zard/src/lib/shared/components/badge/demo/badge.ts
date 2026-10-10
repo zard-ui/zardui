@@ -1,6 +1,7 @@
 import { BADGE_DEMO_CUSTOM_COLORS } from '@generated/components/badge/demo/custom-colors';
 import { BADGE_DEMO_LINK } from '@generated/components/badge/demo/link';
 import { BADGE_DEMO_PREVIEW } from '@generated/components/badge/demo/preview';
+import { BADGE_DEMO_RTL } from '@generated/components/badge/demo/rtl';
 import { BADGE_DEMO_VARIANTS } from '@generated/components/badge/demo/variants';
 import { BADGE_DEMO_WITH_ICON } from '@generated/components/badge/demo/with-icon';
 import { BADGE_DEMO_WITH_SPINNER } from '@generated/components/badge/demo/with-spinner';
@@ -14,6 +15,7 @@ import { ZardDemoBadgeWithIconComponent } from '@/shared/components/badge/demo/w
 import { ZardDemoBadgeWithSpinnerComponent } from '@/shared/components/badge/demo/with-spinner';
 
 import { ZardDemoBadgePreviewComponent } from './preview';
+import { ZardDemoBadgeRtlComponent } from './rtl';
 import { ZardDemoBadgeVariantsComponent } from './variants';
 import { BADGE_API } from '../doc/api';
 
@@ -63,6 +65,13 @@ export const BADGE = {
       description: 'Override the default colors by passing custom classes through `class`.',
       component: ZardDemoBadgeCustomColorsComponent,
       codeData: BADGE_DEMO_CUSTOM_COLORS,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoBadgeRtlComponent,
+      codeData: BADGE_DEMO_RTL,
     },
   ],
 };

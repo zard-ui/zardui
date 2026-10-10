@@ -375,4 +375,17 @@ describe('ZardBreadcrumbComponent', () => {
 
     expect(ellipsis).toHaveClass('text-foreground');
   });
+
+  it('flips the default chevron separator in RTL and leaves custom separators alone', async () => {
+    const { container } = await renderBreadcrumb(`
+      <z-breadcrumb>
+        <z-breadcrumb-item>Home</z-breadcrumb-item>
+        <z-breadcrumb-item>Docs</z-breadcrumb-item>
+        <z-breadcrumb-item>Current</z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    const icon = getSeparators(container)[0].querySelector('ng-icon');
+    expect(icon).toHaveClass('rtl:rotate-180');
+  });
 });

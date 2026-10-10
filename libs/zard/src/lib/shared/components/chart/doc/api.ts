@@ -3,7 +3,8 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const CHART_API: ApiSection[] = [
   {
     selector: 'z-chart',
-    description: 'A chart container built on Apache ECharts through ngx-echarts.',
+    description:
+      'A chart container built on Apache ECharts through ngx-echarts. In right-to-left layouts the category axis does not mirror (series order carries meaning and time reads left to right, as in Recharts and the ECharts defaults); the legend, the tooltip text and the surrounding layout follow the document direction.',
     props: [
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       {
@@ -271,7 +272,8 @@ export const CHART_API: ApiSection[] = [
   },
   {
     selector: 'z-chart-legend',
-    description: 'Renders the shadcn legend markup below (or above) the chart and toggles series on click.',
+    description:
+      'Renders the shadcn legend markup below (or above) the chart and toggles series on click. Entries follow the inherited direction, so the legend reads right to left in an RTL layout.',
     props: [
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       {

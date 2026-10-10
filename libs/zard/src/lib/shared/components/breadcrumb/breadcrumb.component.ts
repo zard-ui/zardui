@@ -276,7 +276,7 @@ export class ZardBreadcrumbLinkComponent {
   imports: [NgIcon],
   template: `
     <ng-content>
-      <ng-icon name="lucideChevronRight" />
+      <ng-icon name="lucideChevronRight" class="rtl:rotate-180" />
     </ng-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -340,7 +340,7 @@ export class ZardBreadcrumbSeparatorComponent {
         } @else if (separator()) {
           {{ separator() }}
         } @else {
-          <ng-icon name="lucideChevronRight" />
+          <ng-icon name="lucideChevronRight" class="rtl:rotate-180" />
         }
       </span>
     }
