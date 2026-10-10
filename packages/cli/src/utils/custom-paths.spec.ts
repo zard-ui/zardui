@@ -643,6 +643,7 @@ describe('buildConfig', () => {
     globalCss: 'src/styles.css',
     componentsAlias: '@/shared/components',
     utilsAlias: '@/shared/utils',
+    rtl: false,
     ...over,
   });
 

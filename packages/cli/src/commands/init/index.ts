@@ -39,6 +39,8 @@ export const init = new Command()
   .option('--base-color <color>', `the theme base color: ${getAvailableThemes().join(', ')}.`)
   .option('--components-alias <alias>', 'the import alias for components. defaults to @/shared/components.')
   .option('--utils-alias <alias>', 'the import alias for utils. defaults to @/shared/utils.')
+  .option('--rtl', 'the project reads right to left: sets dir="rtl" on <html> in index.html.')
+  .option('--no-rtl', 'the project reads left to right (the default).')
   .action(async options => {
     const cwd = path.resolve(options.cwd);
 
@@ -163,6 +165,7 @@ function resolvePresets(options: {
   baseColor?: string;
   componentsAlias?: string;
   utilsAlias?: string;
+  rtl?: boolean;
 }): PresetAnswers {
   if (options.baseColor && !getAvailableThemes().includes(options.baseColor)) {
     throw new CliError(
@@ -177,6 +180,7 @@ function resolvePresets(options: {
     theme: options.baseColor,
     componentsAlias: options.componentsAlias,
     utilsAlias: options.utilsAlias,
+    rtl: options.rtl,
   };
 }
 

@@ -49,6 +49,8 @@ export interface InitAnswers {
   globalCss: string;
   componentsAlias: string;
   utilsAlias: string;
+  /** Whether the project reads right to left — always the user's answer, never inferred. */
+  rtl: boolean;
 }
 
 /**
@@ -90,6 +92,8 @@ export function defaultAnswers(
     theme: 'neutral',
     componentsAlias: '@/shared/components',
     utilsAlias: '@/shared/utils',
+    // Off unless the user says otherwise (`--rtl` or the wizard's question).
+    rtl: false,
   };
 
   if (isLibraryKind(kind)) {
@@ -124,7 +128,7 @@ export function defaultAnswers(
  */
 /** The answers a flag can give up front: `--css`, `--app-config`, `--base-color` and the two aliases. */
 export type PresetAnswers = Partial<
-  Pick<InitAnswers, 'globalCss' | 'appConfig' | 'theme' | 'componentsAlias' | 'utilsAlias'>
+  Pick<InitAnswers, 'globalCss' | 'appConfig' | 'theme' | 'componentsAlias' | 'utilsAlias' | 'rtl'>
 >;
 
 /**
@@ -157,11 +161,12 @@ export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn'
   return configSchema.parse({
     $schema: SCHEMA_URL,
     style: 'css',
-    // Neither is asked in the wizard: today there is only one icon family, and
-    // RTL does not change what init writes. They go into the file with their
-    // default so they can be edited later, which is what makes them configurable.
+    // The icon family is not asked in the wizard: today there is only one. It goes
+    // into the file with its default so it can be edited later. RTL is asked (or
+    // given by `--rtl`): the components are direction-agnostic, so it only decides
+    // whether init sets `dir="rtl"` on the app's index.html.
     icons: SOURCE_ICON_FAMILY,
-    rtl: false,
+    rtl: answers.rtl,
     projectType: answers.kind,
     appConfigFile: answers.appConfig,
     packageManager,

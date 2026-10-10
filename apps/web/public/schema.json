@@ -24,7 +24,7 @@
     "rtl": {
       "type": "boolean",
       "default": false,
-      "description": "Whether the project reads right to left. Does not change what the CLI installs yet; it records the intent for when the components ship right-to-left variants."
+      "description": "Whether the project reads right to left. The components are direction-agnostic (logical classes and the CDK Directionality), so the files the CLI installs are identical either way. `zard-cli init --rtl` records true here and sets dir=\"rtl\" on <html> in the app's index.html."
     },
     "projectType": {
       "type": "string",
