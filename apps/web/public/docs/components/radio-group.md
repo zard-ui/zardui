@@ -18,11 +18,13 @@ npx zard-cli@latest add radio-group
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   forwardRef,
   inject,
   input,
@@ -60,10 +62,14 @@ type OnChangeType = (value: unknown) => void;
     'data-slot': 'radio-group',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
     '[class]': 'classes()',
+    '(keydown)': 'onKeydown($event)',
   },
   exportAs: 'zRadioGroup',
 })
 export class ZardRadioGroupComponent implements ControlValueAccessor {
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly directionality = inject(Directionality, { optional: true });
+
   readonly class = input<ClassValue>('');
   readonly value = model<unknown>(null);
   readonly zDisabled = input(false, { transform: booleanAttribute });
@@ -75,6 +81,44 @@ export class ZardRadioGroupComponent implements ControlValueAccessor {
 
   private onChange: OnChangeType = noopFn;
   private onTouched: OnTouchedType = noopFn;
+
+  /**
+   * Arrow keys move the selection. Down/Up always move to the next/previous radio; Right/Left follow the reading
+   * direction, so in RTL ArrowLeft goes to the next radio and ArrowRight to the previous one.
+   */
+  protected onKeydown(event: KeyboardEvent): void {
+    const rtl = this.directionality?.value === 'rtl';
+    let step = 0;
+    switch (event.key) {
+      case 'ArrowDown':
+        step = 1;
+        break;
+      case 'ArrowUp':
+        step = -1;
+        break;
+      case 'ArrowRight':
+        step = rtl ? -1 : 1;
+        break;
+      case 'ArrowLeft':
+        step = rtl ? 1 : -1;
+        break;
+      default:
+        return;
+    }
+
+    const radios = Array.from(
+      this.elementRef.nativeElement.querySelectorAll<HTMLButtonElement>('button[role="radio"]'),
+    ).filter(radio => !radio.disabled);
+    const current = radios.indexOf(event.target as HTMLButtonElement);
+    if (current === -1 || radios.length === 0) {
+      return;
+    }
+
+    event.preventDefault();
+    const target = radios[(current + step + radios.length) % radios.length];
+    target.focus();
+    target.click();
+  }
 
   select(value: unknown): void {
     if (this.isDisabled()) {
@@ -473,11 +517,90 @@ export class ZardDemoRadioGroupReactiveFormsComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{
+  defaultLabel: string;
+  defaultDesc: string;
+  comfortableLabel: string;
+  comfortableDesc: string;
+}> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      defaultLabel: 'Default',
+      defaultDesc: 'Standard spacing for most use cases.',
+      comfortableLabel: 'Comfortable',
+      comfortableDesc: 'More space between elements.',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      defaultLabel: 'افتراضي',
+      defaultDesc: 'تباعد قياسي لمعظم حالات الاستخدام.',
+      comfortableLabel: 'مريح',
+      comfortableDesc: 'مساحة أكبر بين العناصر.',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      defaultLabel: 'ברירת מחדל',
+      defaultDesc: 'ריווח סטנדרטי לרוב המקרים.',
+      comfortableLabel: 'נוח',
+      comfortableDesc: 'יותר מרחב בין האלמנטים.',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-radio-group-rtl',
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
+  template: `
+    <z-radio-group value="comfortable" class="w-fit">
+      <div z-field zOrientation="horizontal">
+        <z-radio zId="rtl-r1" value="default" />
+        <div z-field-content>
+          <label z-field-label for="rtl-r1">{{ i18n.t().defaultLabel }}</label>
+          <p z-field-description>{{ i18n.t().defaultDesc }}</p>
+        </div>
+      </div>
+      <div z-field zOrientation="horizontal">
+        <z-radio zId="rtl-r2" value="comfortable" />
+        <div z-field-content>
+          <label z-field-label for="rtl-r2">{{ i18n.t().comfortableLabel }}</label>
+          <p z-field-description>{{ i18n.t().comfortableDesc }}</p>
+        </div>
+      </div>
+    </z-radio-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoRadioGroupRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
+```
+
 ## API Reference
 
 ### z-radio-group
 
-Wrapper that groups radio items and manages the selected value.
+Wrapper that groups radio items and manages the selected value. Arrow keys move the selection; ArrowLeft/ArrowRight follow the reading direction, so they swap in RTL.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

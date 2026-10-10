@@ -132,19 +132,46 @@ export class ZardDemoAspectRatioPortraitComponent {}
 
 ### Rtl
 
-The box keeps its ratio in a right-to-left layout; only the surrounding content mirrors.
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 
 ```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
 import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardAspectRatioComponent } from '../aspect-ratio.component';
+import { ZardAspectRatioComponent } from '@/shared/components/aspect-ratio/aspect-ratio.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ caption: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      caption: 'Beautiful landscape',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      caption: 'منظر طبيعي جميل',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      caption: 'נוף יפהפה',
+    },
+  },
+};
 
 @Component({
   selector: 'z-demo-aspect-ratio-rtl',
   imports: [ZardAspectRatioComponent, NgOptimizedImage],
   template: `
-    <figure class="w-full max-w-sm" dir="rtl">
+    <figure class="w-full max-w-sm">
       <z-aspect-ratio [zRatio]="16 / 9" class="bg-muted rounded-lg">
         <img
           ngSrc="https://avatar.vercel.sh/shadcn1"
@@ -153,13 +180,15 @@ import { ZardAspectRatioComponent } from '../aspect-ratio.component';
           class="rounded-lg object-cover grayscale dark:brightness-20"
         />
       </z-aspect-ratio>
-      <figcaption class="text-muted-foreground mt-2 text-center text-sm">منظر طبيعي جميل</figcaption>
+      <figcaption class="text-muted-foreground mt-2 text-center text-sm">{{ i18n.t().caption }}</figcaption>
     </figure>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
-export class ZardDemoAspectRatioRtlComponent {}
+export class ZardDemoAspectRatioRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
 ```
 
 ## API Reference

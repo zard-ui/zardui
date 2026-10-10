@@ -20,6 +20,7 @@
 - [Typeset](https://zardui.com/docs/typeset): One CSS file that styles HTML and rendered markdown, governed by size, leading and flow.
 - [Pre-processors](https://zardui.com/docs/pre-processors): Understanding SCSS/Sass integration with Tailwind v4 - risks, limitations, and alternatives.
 - [Dark Mode](https://zardui.com/docs/dark-mode): Implementing dark mode in your Angular application.
+- [RTL](https://zardui.com/docs/rtl): Right-to-left support for Arabic, Hebrew and other RTL languages — direction, fonts, animations and migration.
 - [CLI](https://zardui.com/docs/cli): Command-line tool for installing and managing Zard UI components.
 - [Figma](https://zardui.com/docs/figma): Figma design resources and component library.
 - [Changelog](https://zardui.com/docs/changelog): Release notes, version history, and updates.

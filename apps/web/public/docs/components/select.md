@@ -18,6 +18,7 @@ npx zard-cli@latest add select
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import {
   type ConnectedPosition,
   type FlexibleConnectedPositionStrategy,
@@ -220,6 +221,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewportRuler = inject(ViewportRuler);
+  // Optional: the direction of the trigger, which is where the overlay content takes its `dir` from.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<void>>('dropdownTemplate');
   readonly optionsViewport = viewChild<ElementRef<HTMLElement>>('optionsViewport');
@@ -265,6 +268,14 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     });
 
     effect(() => this.updateItems(this.selectItems()));
+
+    // A `[dir]` switch while the list is open closes it: it reopens with the new direction.
+    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.overlayRef?.setDirection(this.directionality?.value ?? 'ltr');
+      if (this.isOpen()) {
+        this.close(false);
+      }
+    });
   }
 
   protected readonly hasValue = computed(() => {
@@ -661,6 +672,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       this.overlayRef.detach();
     }
 
+    this.overlayRef.setDirection(this.directionality?.value ?? 'ltr');
     this.overlayRef.updatePositionStrategy(this.createPositionStrategy());
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
 
@@ -880,6 +892,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
 
         this.overlayRef = this.overlay.create({
           positionStrategy,
+          direction: this.directionality?.value ?? 'ltr',
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
           maxHeight: MAX_CONTENT_HEIGHT,
@@ -1194,8 +1207,8 @@ export const selectItemVariants = cva(
         lg: 'py-2 text-base',
       },
       zMode: {
-        normal: 'pr-8 pl-2',
-        compact: 'pr-8 pl-2',
+        normal: 'pe-8 ps-2',
+        compact: 'pe-8 ps-2',
       },
     },
     defaultVariants: {
@@ -1223,8 +1236,8 @@ export const selectItemIconVariants = cva('absolute flex size-3.5 items-center j
       lg: '',
     },
     zMode: {
-      normal: 'right-2',
-      compact: 'right-2',
+      normal: 'end-2',
+      compact: 'end-2',
     },
   },
   defaultVariants: {
@@ -1783,6 +1796,117 @@ export class ZardDemoSelectReactiveFormsComponent {
     fruit: ['banana'],
     toppings: [['chocolate', 'nuts'] as string[]],
   });
+}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardSelectImports } from '@/shared/components/select/select.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface SelectRtlValues {
+  selectFruit: string;
+  fruits: string;
+  apple: string;
+  banana: string;
+  blueberry: string;
+  grapes: string;
+  pineapple: string;
+  vegetables: string;
+  carrot: string;
+  broccoli: string;
+  spinach: string;
+}
+
+const translations: ZardRtlTranslations<SelectRtlValues> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      selectFruit: 'Select a fruit',
+      fruits: 'Fruits',
+      apple: 'Apple',
+      banana: 'Banana',
+      blueberry: 'Blueberry',
+      grapes: 'Grapes',
+      pineapple: 'Pineapple',
+      vegetables: 'Vegetables',
+      carrot: 'Carrot',
+      broccoli: 'Broccoli',
+      spinach: 'Spinach',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      selectFruit: 'اختر فاكهة',
+      fruits: 'الفواكه',
+      apple: 'تفاح',
+      banana: 'موز',
+      blueberry: 'توت أزرق',
+      grapes: 'عنب',
+      pineapple: 'أناناس',
+      vegetables: 'الخضروات',
+      carrot: 'جزر',
+      broccoli: 'بروكلي',
+      spinach: 'سبانخ',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      selectFruit: 'בחר פרי',
+      fruits: 'פירות',
+      apple: 'תפוח',
+      banana: 'בננה',
+      blueberry: 'אוכמניה',
+      grapes: 'ענבים',
+      pineapple: 'אננס',
+      vegetables: 'ירקות',
+      carrot: 'גזר',
+      broccoli: 'ברוקולי',
+      spinach: 'תרד',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-select-rtl',
+  imports: [ZardSelectImports],
+  template: `
+    <z-select class="w-48" [zPlaceholder]="i18n.t().selectFruit" [(zValue)]="selected">
+      <z-select-group>
+        <z-select-label>{{ i18n.t().fruits }}</z-select-label>
+        <z-select-item zValue="apple">{{ i18n.t().apple }}</z-select-item>
+        <z-select-item zValue="banana">{{ i18n.t().banana }}</z-select-item>
+        <z-select-item zValue="blueberry">{{ i18n.t().blueberry }}</z-select-item>
+        <z-select-item zValue="grapes">{{ i18n.t().grapes }}</z-select-item>
+        <z-select-item zValue="pineapple">{{ i18n.t().pineapple }}</z-select-item>
+      </z-select-group>
+      <z-select-separator />
+      <z-select-group>
+        <z-select-label>{{ i18n.t().vegetables }}</z-select-label>
+        <z-select-item zValue="carrot">{{ i18n.t().carrot }}</z-select-item>
+        <z-select-item zValue="broccoli">{{ i18n.t().broccoli }}</z-select-item>
+        <z-select-item zValue="spinach">{{ i18n.t().spinach }}</z-select-item>
+      </z-select-group>
+    </z-select>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSelectRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly selected = signal('');
 }
 ```
 

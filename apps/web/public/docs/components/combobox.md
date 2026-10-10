@@ -814,7 +814,7 @@ import { ZardComboboxRoot } from './combobox.types';
     type: 'button',
     tabindex: '-1',
     // Bound instead of static so it wins over the `data-slot` of a co-located `z-button`.
-    // The `has-data-[slot=combobox-chip-remove]:pr-0` rule on the chip depends on it.
+    // The `has-data-[slot=combobox-chip-remove]:pe-0` rule on the chip depends on it.
     '[attr.data-slot]': '"combobox-chip-remove"',
     '[attr.aria-label]': '"Remove " + zValue()',
     '[class]': 'classes()',
@@ -973,6 +973,7 @@ export class ZardComboboxChipsComponent {
 ```
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import {
   type ConnectedPosition,
   type FlexibleConnectedPositionStrategy,
@@ -1116,6 +1117,8 @@ export class ZardComboboxContentComponent implements OnDestroy {
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewContainerRef = inject(ViewContainerRef);
+  // Optional: the direction of the anchor, which is where the overlay content takes its `dir` from.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   readonly class = input<ClassValue>('');
   readonly zAnchor = input<ElementRef<HTMLElement> | HTMLElement | null>(null);
@@ -1151,7 +1154,8 @@ export class ZardComboboxContentComponent implements OnDestroy {
   protected readonly transformOrigin = computed(() => {
     const block = this.resolvedSide() === 'bottom' ? 'top' : 'bottom';
     const align = this.alignValue();
-    const inline = align === 'center' ? 'center' : align === 'start' ? 'left' : 'right';
+    // `start`/`end` are logical: the start edge is the physical right in RTL.
+    const inline = align === 'center' ? 'center' : (align === 'start') !== this.isRtl() ? 'left' : 'right';
     return `${block} ${inline}`;
   });
 
@@ -1165,6 +1169,23 @@ export class ZardComboboxContentComponent implements OnDestroy {
         this.detach();
       }
     });
+
+    // A `[dir]` switch while the panel is open closes it: it reopens with the new direction.
+    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.overlayRef?.setDirection(this.direction());
+      if (this.root.open()) {
+        this.root.closePanel();
+      }
+    });
+  }
+
+  private direction(): 'ltr' | 'rtl' {
+    // The signal keeps `transformOrigin` (a computed) in step with a `[dir]` switch.
+    return this.directionality?.valueSignal() ?? 'ltr';
+  }
+
+  private isRtl(): boolean {
+    return this.direction() === 'rtl';
   }
 
   ngOnDestroy(): void {
@@ -1197,6 +1218,7 @@ export class ZardComboboxContentComponent implements OnDestroy {
       return;
     }
 
+    this.overlayRef.setDirection(this.direction());
     this.positionStrategy?.setOrigin(anchor).withPositions(this.connectedPositions());
     this.updateMeasurements();
 
@@ -1224,6 +1246,7 @@ export class ZardComboboxContentComponent implements OnDestroy {
 
     this.overlayRef = this.overlay.create({
       positionStrategy: this.positionStrategy,
+      direction: this.direction(),
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
@@ -1255,7 +1278,8 @@ export class ZardComboboxContentComponent implements OnDestroy {
     const align = this.alignValue();
     const x = align === 'center' ? 'center' : align === 'end' ? 'end' : 'start';
     const sideOffset = this.sideOffsetValue();
-    const alignOffset = this.alignOffsetValue();
+    // `offsetX` is physical while `start`/`end` follow the direction, so the align offset is mirrored.
+    const alignOffset = this.isRtl() ? -this.alignOffsetValue() : this.alignOffsetValue();
 
     const below: ConnectedPosition = {
       originX: x,
@@ -1290,7 +1314,9 @@ export class ZardComboboxContentComponent implements OnDestroy {
     const align = this.alignValue();
 
     const height = this.resolvedSide() === 'bottom' ? viewportHeight - rect.bottom - offset : rect.top - offset;
-    const width = align === 'start' ? viewportWidth - rect.left : align === 'end' ? rect.right : viewportWidth;
+    // The start edge is the physical right in RTL, so the room it grows into is measured from the other side.
+    const growsRight = (align === 'start') !== this.isRtl();
+    const width = align === 'center' ? viewportWidth : growsRight ? viewportWidth - rect.left : rect.right;
 
     this.anchorWidth.set(`${Math.round(anchor.offsetWidth || rect.width)}px`);
     this.availableHeight.set(`${Math.max(Math.round(height), 0)}px`);
@@ -2577,6 +2603,123 @@ export class ZardDemoComboboxInputGroupComponent {
       ],
     },
   ];
+}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+
+import { ZardComboboxImports } from '@/shared/components/combobox/combobox.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const categories = ['technology', 'design', 'business', 'marketing', 'education', 'health'] as const;
+
+interface ComboboxRtlValues {
+  label: string;
+  placeholder: string;
+  empty: string;
+  technology: string;
+  design: string;
+  business: string;
+  marketing: string;
+  education: string;
+  health: string;
+}
+
+const translations: ZardRtlTranslations<ComboboxRtlValues> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      label: 'Categories',
+      placeholder: 'Add categories',
+      empty: 'No categories found.',
+      technology: 'Technology',
+      design: 'Design',
+      business: 'Business',
+      marketing: 'Marketing',
+      education: 'Education',
+      health: 'Health',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      label: 'الفئات',
+      placeholder: 'أضف فئات',
+      empty: 'لم يتم العثور على فئات.',
+      technology: 'التكنولوجيا',
+      design: 'التصميم',
+      business: 'الأعمال',
+      marketing: 'التسويق',
+      education: 'التعليم',
+      health: 'الصحة',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      label: 'קטגוריות',
+      placeholder: 'הוסף קטגוריות',
+      empty: 'לא נמצאו קטגוריות.',
+      technology: 'טכנולוגיה',
+      design: 'עיצוב',
+      business: 'עסקים',
+      marketing: 'שיווק',
+      education: 'חינוך',
+      health: 'בריאות',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-combobox-rtl',
+  imports: [ZardComboboxImports],
+  template: `
+    <div class="mx-auto grid w-full max-w-xs gap-2">
+      <span class="text-sm font-medium">{{ i18n.t().label }}</span>
+
+      <z-combobox zMultiple zAutoHighlight zWidth="full" [(zValue)]="value">
+        <z-combobox-chips class="w-full">
+          @for (selected of selectedValues(); track selected) {
+            <z-combobox-chip [zValue]="selected">{{ i18n.t()[selected] }}</z-combobox-chip>
+          }
+
+          <input z-combobox-chips-input [placeholder]="i18n.t().placeholder" />
+        </z-combobox-chips>
+
+        <z-combobox-content>
+          <z-combobox-empty>{{ i18n.t().empty }}</z-combobox-empty>
+
+          <z-combobox-list>
+            @for (category of categories; track category) {
+              <z-combobox-item [zValue]="category">{{ i18n.t()[category] }}</z-combobox-item>
+            }
+          </z-combobox-list>
+        </z-combobox-content>
+      </z-combobox>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoComboboxRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly categories = categories;
+  protected readonly value = signal<string | string[] | null>([categories[0]]);
+
+  protected readonly selectedValues = computed(() => {
+    const value = this.value();
+    return (Array.isArray(value) ? value : value ? [value] : []) as (typeof categories)[number][];
+  });
 }
 ```
 

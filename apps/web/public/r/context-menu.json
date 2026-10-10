@@ -29,14 +29,19 @@
     "tokens": [],
     "demos": {
       "symbols": [
+        "lucideArrowLeft",
+        "lucideArrowRight",
         "lucideClipboardPaste",
         "lucideCopy",
         "lucidePencil",
+        "lucideRotateCw",
         "lucideScissors",
         "lucideShare",
         "lucideTrash2"
       ],
       "tokens": [
+        "arrow-left",
+        "arrow-right",
         "clipboard-paste",
         "copy",
         "pencil",

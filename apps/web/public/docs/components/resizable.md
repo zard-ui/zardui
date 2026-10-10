@@ -18,6 +18,7 @@ npx zard-cli@latest add resizable
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
@@ -67,6 +68,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly document = inject(DOCUMENT);
+  private readonly directionality = inject(Directionality);
 
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly isResizing = signal(false);
@@ -184,7 +186,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const currentPosition = this.getEventPosition(event);
     const delta = currentPosition - startPosition;
     const containerSize = this.getContainerSize();
-    const isRtl = getComputedStyle(this.elementRef.nativeElement).direction === 'rtl';
+    const isRtl = this.directionality.value === 'rtl';
     let deltaPercentage = (delta / containerSize) * 100;
 
     if (this.zLayout() !== 'vertical' && isRtl) {
@@ -401,6 +403,7 @@ export * from './resizable.variants';
 ```
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -451,6 +454,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 })
 export class ZardResizableHandleComponent {
   private readonly resizable = inject(ZardResizableComponent, { optional: true });
+  // Optional: only horizontal arrow keys depend on it. In RTL the first panel sits on the right.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   readonly zWithHandle = input(false, { transform: booleanAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
@@ -537,16 +542,18 @@ export class ZardResizableHandleComponent {
 
     let delta = 0;
     const step = shiftKey ? 10 : 1;
+    // The first panel is on the right in RTL, so ArrowLeft grows it (and ArrowRight shrinks it).
+    const horizontalStep = this.directionality?.value === 'rtl' ? -step : step;
 
     switch (key) {
       case 'ArrowLeft':
         if (layout === 'vertical') {
-          delta = -step;
+          delta = -horizontalStep;
         }
         break;
       case 'ArrowRight':
         if (layout === 'vertical') {
-          delta = step;
+          delta = horizontalStep;
         }
         break;
       case 'ArrowUp':
@@ -841,6 +848,64 @@ import { ZardResizableImports } from '@/shared/components/resizable/resizable.im
 export class ZardDemoResizableHandleComponent {}
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ one: string; two: string; three: string }> = {
+  en: { dir: 'ltr', values: { one: 'One', two: 'Two', three: 'Three' } },
+  ar: { dir: 'rtl', values: { one: 'واحد', two: 'اثنان', three: 'ثلاثة' } },
+  he: { dir: 'rtl', values: { one: 'אחד', two: 'שניים', three: 'שלושה' } },
+};
+
+@Component({
+  selector: 'z-demo-resizable-rtl',
+  imports: [...ZardResizableImports],
+  template: `
+    @let t = i18n.t();
+    <!-- In RTL the first panel sits on the right, and ArrowLeft on the handle grows it. -->
+    <z-resizable class="h-60 w-80 rounded-lg border sm:w-96">
+      <z-resizable-panel [zDefaultSize]="50">
+        <div class="flex h-full items-center justify-center p-6">
+          <span class="font-semibold">{{ t.one }}</span>
+        </div>
+      </z-resizable-panel>
+      <z-resizable-handle zWithHandle />
+      <z-resizable-panel [zDefaultSize]="50">
+        <z-resizable zLayout="vertical">
+          <z-resizable-panel [zDefaultSize]="25">
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">{{ t.two }}</span>
+            </div>
+          </z-resizable-panel>
+          <z-resizable-handle zWithHandle />
+          <z-resizable-panel [zDefaultSize]="75">
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">{{ t.three }}</span>
+            </div>
+          </z-resizable-panel>
+        </z-resizable>
+      </z-resizable-panel>
+    </z-resizable>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoResizableRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
+```
+
 ## API Reference
 
 ### z-resizable
@@ -872,7 +937,7 @@ A single panel inside a `z-resizable` group. Sizes are percentages of the group 
 
 ### z-resizable-handle
 
-The draggable divider between two `z-resizable-panel`s. Renders `role="separator"` with `aria-orientation` (perpendicular to the group's `zLayout`) and is keyboard-operable: arrow keys resize by 1% (10% with Shift) in the axis matching the layout, Home/End jump the adjacent panels to their min/max, and Enter/Space toggles collapse when either neighboring panel is `zCollapsible`.
+The draggable divider between two `z-resizable-panel`s. Renders `role="separator"` with `aria-orientation` (perpendicular to the group's `zLayout`) and is keyboard-operable: arrow keys resize by 1% (10% with Shift) in the axis matching the layout, Home/End jump the adjacent panels to their min/max, and Enter/Space toggles collapse when either neighboring panel is `zCollapsible`. In a right-to-left layout the first panel sits on the right, so ArrowLeft grows it and ArrowRight shrinks it; the direction is read from the CDK `Directionality`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
