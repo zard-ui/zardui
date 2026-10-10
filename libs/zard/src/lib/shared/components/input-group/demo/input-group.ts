@@ -8,6 +8,7 @@ import { INPUT_GROUP_DEMO_INLINE_END } from '@generated/components/input-group/d
 import { INPUT_GROUP_DEMO_INLINE_START } from '@generated/components/input-group/demo/inline-start';
 import { INPUT_GROUP_DEMO_KBD } from '@generated/components/input-group/demo/kbd';
 import { INPUT_GROUP_DEMO_PREVIEW } from '@generated/components/input-group/demo/preview';
+import { INPUT_GROUP_DEMO_RTL } from '@generated/components/input-group/demo/rtl';
 import { INPUT_GROUP_DEMO_SPINNER } from '@generated/components/input-group/demo/spinner';
 import { INPUT_GROUP_DEMO_TEXT } from '@generated/components/input-group/demo/text';
 import { INPUT_GROUP_DEMO_TEXTAREA } from '@generated/components/input-group/demo/textarea';
@@ -25,6 +26,7 @@ import { ZardDemoInputGroupInlineEndComponent } from './inline-end';
 import { ZardDemoInputGroupInlineStartComponent } from './inline-start';
 import { ZardDemoInputGroupKbdComponent } from './kbd';
 import { ZardDemoInputGroupPreviewComponent } from './preview';
+import { ZardDemoInputGroupRtlComponent } from './rtl';
 import { ZardDemoInputGroupSpinnerComponent } from './spinner';
 import { ZardDemoInputGroupTextComponent } from './text';
 import { ZardDemoInputGroupTextareaComponent } from './textarea';
@@ -125,6 +127,13 @@ export const INPUT_GROUP = {
         'Add the `data-slot="input-group-control"` attribute to your own control to opt it into the group\'s styling and focus-state handling without using `input[z-input]`.',
       component: ZardDemoInputGroupCustomInputComponent,
       codeData: INPUT_GROUP_DEMO_CUSTOM_INPUT,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoInputGroupRtlComponent,
+      codeData: INPUT_GROUP_DEMO_RTL,
     },
   ],
 };

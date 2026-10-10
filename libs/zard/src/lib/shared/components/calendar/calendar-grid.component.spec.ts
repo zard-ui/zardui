@@ -1,6 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Directionality } from '@angular/cdk/bidi';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+
+import { Subject } from 'rxjs';
 
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
@@ -553,5 +556,60 @@ describe('ZardCalendarGridComponent', () => {
 
     const grid = fixture.debugElement.query(By.css('[role="grid"]'));
     expect(grid).toBeTruthy();
+  });
+});
+
+describe('ZardCalendarGridComponent (RTL)', () => {
+  let fixture: ComponentFixture<TestHostComponent>;
+  let host: TestHostComponent;
+
+  const days = (count: number): CalendarDay[] =>
+    Array.from({ length: count }, (_, i) => ({
+      date: new Date(2024, 7, 1 + i),
+      isCurrentMonth: true,
+      isToday: false,
+      isSelected: false,
+      isDisabled: false,
+    }));
+
+  const press = (key: string) => {
+    const grid = fixture.debugElement.query(By.css('z-calendar-grid')).nativeElement as HTMLElement;
+    grid.dispatchEvent(new KeyboardEvent('keydown', { key }));
+    fixture.detectChanges();
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestHostComponent],
+      providers: [
+        { provide: Directionality, useValue: { value: 'rtl', valueSignal: signal('rtl'), change: new Subject() } },
+        { provide: EVENT_MANAGER_PLUGINS, useClass: ZardEventManagerPlugin, multi: true },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    host.calendarDays = days(35);
+    fixture.detectChanges();
+  });
+
+  it('ArrowLeft goes to the next day, so the first day does not leave the month', () => {
+    press('ArrowLeft');
+    expect(host.onPreviousMonth).not.toHaveBeenCalled();
+    expect(host.onNextMonth).not.toHaveBeenCalled();
+  });
+
+  it('ArrowRight at the first day goes to the previous month', () => {
+    press('ArrowRight');
+    expect(host.onPreviousMonth).toHaveBeenCalledWith({ position: 'last', dayOfWeek: -1 });
+  });
+
+  it('ArrowLeft past the last day goes to the next month', () => {
+    host.calendarDays = days(7);
+    fixture.detectChanges();
+    for (let i = 0; i < 7; i++) {
+      press('ArrowLeft');
+    }
+    expect(host.onNextMonth).toHaveBeenCalledWith({ position: 'first', dayOfWeek: -1 });
   });
 });

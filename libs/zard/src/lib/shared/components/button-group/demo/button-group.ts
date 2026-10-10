@@ -5,6 +5,7 @@ import { BUTTON_GROUP_DEMO_NESTED } from '@generated/components/button-group/dem
 import { BUTTON_GROUP_DEMO_ORIENTATION } from '@generated/components/button-group/demo/orientation';
 import { BUTTON_GROUP_DEMO_POPOVER } from '@generated/components/button-group/demo/popover';
 import { BUTTON_GROUP_DEMO_PREVIEW } from '@generated/components/button-group/demo/preview';
+import { BUTTON_GROUP_DEMO_RTL } from '@generated/components/button-group/demo/rtl';
 import { BUTTON_GROUP_DEMO_SELECT } from '@generated/components/button-group/demo/select';
 import { BUTTON_GROUP_DEMO_SEPARATOR } from '@generated/components/button-group/demo/separator';
 import { BUTTON_GROUP_DEMO_SIZE } from '@generated/components/button-group/demo/size';
@@ -21,6 +22,7 @@ import { ZardDemoButtonGroupNestedComponent } from './nested';
 import { ZardDemoButtonGroupOrientationComponent } from './orientation';
 import { ZardDemoButtonGroupPopoverComponent } from './popover';
 import { ZardDemoButtonGroupPreviewComponent } from './preview';
+import { ZardDemoButtonGroupRtlComponent } from './rtl';
 import { ZardDemoButtonGroupSelectComponent } from './select';
 import { ZardDemoButtonGroupSeparatorComponent } from './separator';
 import { ZardDemoButtonGroupSizeComponent } from './size';
@@ -111,6 +113,13 @@ export const BUTTON_GROUP = {
       description: 'Use `z-button-group-text` to display non-interactive text, such as a label, within the group.',
       component: ZardDemoButtonGroupTextComponent,
       codeData: BUTTON_GROUP_DEMO_TEXT,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoButtonGroupRtlComponent,
+      codeData: BUTTON_GROUP_DEMO_RTL,
     },
   ],
 };

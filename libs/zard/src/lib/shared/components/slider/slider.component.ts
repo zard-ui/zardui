@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import {
   type AfterViewInit,
   booleanAttribute,
@@ -95,12 +96,23 @@ export class ZardSliderRangeComponent {
 
   protected readonly classes = computed(() => mergeClasses(sliderRangeVariants(), this.class()));
 
+  private readonly directionality = inject(Directionality, { optional: true });
+
   protected readonly segments = computed(() => {
     const p = this.percent();
     const isHorizontal = this.orientation() === 'horizontal';
+    const isRtl = (this.directionality?.valueSignal() ?? 'ltr') === 'rtl';
 
-    const make = (left: string, right: string) =>
-      isHorizontal ? { left, right, bottom: null, top: null } : { left: null, right: null, bottom: left, top: right };
+    // `start` is the inset from the inline-start edge, `end` from the inline-end edge
+    // (left/right in LTR, right/left in RTL), so the filled range grows from the reading start.
+    const make = (start: string, end: string) => {
+      if (!isHorizontal) {
+        return { left: null, right: null, bottom: start, top: end };
+      }
+      return isRtl
+        ? { left: end, right: start, bottom: null, top: null }
+        : { left: start, right: end, bottom: null, top: null };
+    };
 
     if (p.length === 0) {
       return [make('0', '100%')];
@@ -137,8 +149,9 @@ export class ZardSliderRangeComponent {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'orientationClasses()',
-    '[style.left]': 'orientation() === "horizontal" ? "calc(" + percent() + "% + " + offset() + "px)" : null',
-    '[style.bottom]': 'orientation() === "vertical" ? "calc(" + percent() + "% + " + offset() + "px)" : null',
+    '[style.left]': 'orientation() === "horizontal" && !isRtl() ? position() : null',
+    '[style.right]': 'orientation() === "horizontal" && isRtl() ? position() : null',
+    '[style.bottom]': 'orientation() === "vertical" ? position() : null',
   },
   exportAs: 'zSliderThumb',
 })
@@ -154,6 +167,12 @@ export class ZardSliderThumbComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(sliderThumbVariants(), this.class()));
+
+  private readonly directionality = inject(Directionality, { optional: true });
+
+  protected readonly isRtl = computed(() => (this.directionality?.valueSignal() ?? 'ltr') === 'rtl');
+
+  protected readonly position = computed(() => `calc(${this.percent()}% + ${this.offset()}px)`);
 
   protected readonly orientationClasses = computed(() =>
     mergeClasses(sliderOrientationVariants({ zOrientation: this.orientation() })),
@@ -214,6 +233,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   private readonly destroyRef = inject(DestroyRef);
   private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly directionality = inject(Directionality, { optional: true });
 
   readonly zMin = input(0, { transform: numberAttribute });
   readonly zMax = input(100, { transform: numberAttribute });
@@ -387,10 +407,15 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
         newValue = max;
         break;
       case 'ArrowLeft':
+      case 'ArrowRight': {
+        // horizontal keys follow the reading direction: in RTL the value grows towards the left
+        const towardsEnd = (key === 'ArrowRight') !== this.isRtl();
+        newValue = towardsEnd ? Math.min(currentValue + this.zStep(), max) : Math.max(currentValue - this.zStep(), min);
+        break;
+      }
       case 'ArrowDown':
         newValue = Math.max(currentValue - this.zStep(), min);
         break;
-      case 'ArrowRight':
       case 'ArrowUp':
         newValue = Math.min(currentValue + this.zStep(), max);
         break;
@@ -455,8 +480,12 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       const relativeY = (clientCoord - rect.top) / rect.height;
       return clamp(1 - relativeY, [0, 1]);
     }
-    const relativeX = (clientCoord - rect.left) / rect.width;
+    const relativeX = this.isRtl() ? (rect.right - clientCoord) / rect.width : (clientCoord - rect.left) / rect.width;
     return clamp(relativeX, [0, 1]);
+  }
+
+  private isRtl(): boolean {
+    return this.directionality?.value === 'rtl';
   }
 
   private setInitialValue(): void {
