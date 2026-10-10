@@ -1,5 +1,8 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { Subject } from 'rxjs';
 
 import type { ZardDropdownMenuContentComponent } from '@/shared/components/dropdown/dropdown-menu-content.component';
 
@@ -87,5 +90,70 @@ describe('ZardContextMenuService', () => {
     const template = fixture.componentInstance.menu().contentTemplate();
 
     expect(() => service.create({ x: 0, y: 0 }, template)).toThrow(/viewContainerRef/);
+  });
+});
+
+describe('ZardContextMenuService direction', () => {
+  let fixture: ComponentFixture<TestComponent>;
+  let service: ZardContextMenuService;
+  let direction: 'ltr' | 'rtl';
+  let change: Subject<'ltr' | 'rtl'>;
+
+  function setup(initial: 'ltr' | 'rtl') {
+    direction = initial;
+    change = new Subject();
+    TestBed.configureTestingModule({
+      imports: [TestComponent],
+      providers: [
+        {
+          provide: Directionality,
+          useValue: {
+            get value() {
+              return direction;
+            },
+            change,
+          },
+        },
+      ],
+    });
+    fixture = TestBed.createComponent(TestComponent);
+    fixture.detectChanges();
+    service = TestBed.inject(ZardContextMenuService);
+  }
+
+  afterEach(() => {
+    service.close();
+    fixture.destroy();
+    document.querySelector('.cdk-overlay-container')?.replaceChildren();
+  });
+
+  it('opens the menu with the direction of the place it is declared in', () => {
+    setup('rtl');
+    service.create({ x: 120, y: 40 }, fixture.componentInstance.menu());
+    fixture.detectChanges();
+
+    expect(document.querySelector('.cdk-overlay-container [dir="rtl"]')).not.toBeNull();
+    expect(document.querySelector('.cdk-overlay-container [dir="ltr"]')).toBeNull();
+  });
+
+  it('keeps the menu ltr when the declaring place is ltr', () => {
+    setup('ltr');
+    service.create({ x: 120, y: 40 }, fixture.componentInstance.menu());
+    fixture.detectChanges();
+
+    expect(document.querySelector('.cdk-overlay-container [dir="ltr"]')).not.toBeNull();
+  });
+
+  it('closes the open menu when the direction changes', () => {
+    setup('rtl');
+    service.create({ x: 120, y: 40 }, fixture.componentInstance.menu());
+    fixture.detectChanges();
+    expect(service.isOpen()).toBe(true);
+
+    direction = 'ltr';
+    change.next('ltr');
+    fixture.detectChanges();
+
+    expect(service.isOpen()).toBe(false);
   });
 });

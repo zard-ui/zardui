@@ -5,6 +5,7 @@ import { POPOVER_DEMO_FORM } from '@generated/components/popover/demo/form';
 import { POPOVER_DEMO_HOVER } from '@generated/components/popover/demo/hover';
 import { POPOVER_DEMO_PLACEMENT } from '@generated/components/popover/demo/placement';
 import { POPOVER_DEMO_PREVIEW } from '@generated/components/popover/demo/preview';
+import { POPOVER_DEMO_RTL } from '@generated/components/popover/demo/rtl';
 import { POPOVER_CLI_ADD } from '@generated/installation/cli/add-popover';
 import { POPOVER_MANUAL_CODE } from '@generated/installation/manual/popover';
 import { POPOVER_USAGE_CODE, POPOVER_USAGE_IMPORT } from '@generated/usage/popover';
@@ -18,6 +19,8 @@ import { ZardDemoPopoverHoverComponent } from '@/shared/components/popover/demo/
 import { ZardDemoPopoverPlacementComponent } from '@/shared/components/popover/demo/placement';
 import { ZardDemoPopoverPreviewComponent } from '@/shared/components/popover/demo/preview';
 import { POPOVER_API } from '@/shared/components/popover/doc/api';
+
+import { ZardDemoPopoverRtlComponent } from './rtl';
 
 const POPOVER_COMPOSITION_CODE = `button[zPopover]
 └── ng-template
@@ -95,6 +98,13 @@ export const POPOVER = {
         'Read the `zPopover` directive with `viewChild` and call `hide()` to close the popover programmatically — for example, after an in-panel action like a save button completes.',
       component: ZardDemoPopoverCloseOnActionComponent,
       codeData: POPOVER_DEMO_CLOSE_ON_ACTION,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoPopoverRtlComponent,
+      codeData: POPOVER_DEMO_RTL,
     },
   ],
 };

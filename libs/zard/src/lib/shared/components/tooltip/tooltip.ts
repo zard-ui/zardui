@@ -36,7 +36,11 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { filter, map, of, Subject, switchMap, tap, timer } from 'rxjs';
 
-import { getTooltipPosition } from '@/shared/components/tooltip/tooltip-positions';
+import {
+  getTooltipPosition,
+  resolveTooltipSide,
+  type ZardTooltipSide,
+} from '@/shared/components/tooltip/tooltip-positions';
 import {
   tooltipPositionVariants,
   tooltipVariants,
@@ -95,7 +99,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private positionStrategy?: FlexibleConnectedPositionStrategy;
 
   readonly zHideDelay = input(100, { transform: numberAttribute });
-  readonly zPosition = input<ZardTooltipPositionVariants>('top');
+  readonly zPosition = input<ZardTooltipSide>('top');
   readonly zPositionOffset = input(4);
   readonly zShowDelay = input(150, { transform: numberAttribute });
   readonly zTrigger = input<ZardTooltipTriggers>('hover');
@@ -271,7 +275,10 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
       this.componentRef = undefined;
     });
     this.componentRef?.instance.state.set('open');
-    this.componentRef?.instance.setProps(this.tooltipText(), this.zPosition());
+    this.componentRef?.instance.setProps(
+      this.tooltipText(),
+      resolveTooltipSide(this.zPosition(), this.direction() === 'rtl'),
+    );
     runInInjectionContext(this.injector, () => {
       this.ariaEffectRef = effect(() => {
         const tooltipId = this.componentRef?.instance.uniqueId()?.id();
