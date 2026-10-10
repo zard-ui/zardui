@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import {
   type ConnectedPosition,
   type FlexibleConnectedPositionStrategy,
@@ -200,6 +201,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewportRuler = inject(ViewportRuler);
+  // Optional: the direction of the trigger, which is where the overlay content takes its `dir` from.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<void>>('dropdownTemplate');
   readonly optionsViewport = viewChild<ElementRef<HTMLElement>>('optionsViewport');
@@ -245,6 +248,14 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     });
 
     effect(() => this.updateItems(this.selectItems()));
+
+    // A `[dir]` switch while the list is open closes it: it reopens with the new direction.
+    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.overlayRef?.setDirection(this.directionality?.value ?? 'ltr');
+      if (this.isOpen()) {
+        this.close(false);
+      }
+    });
   }
 
   protected readonly hasValue = computed(() => {
@@ -641,6 +652,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       this.overlayRef.detach();
     }
 
+    this.overlayRef.setDirection(this.directionality?.value ?? 'ltr');
     this.overlayRef.updatePositionStrategy(this.createPositionStrategy());
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
 
@@ -860,6 +872,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
 
         this.overlayRef = this.overlay.create({
           positionStrategy,
+          direction: this.directionality?.value ?? 'ltr',
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
           maxHeight: MAX_CONTENT_HEIGHT,

@@ -1,5 +1,8 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { Subject } from 'rxjs';
 
 import type { ZardSheetSide } from './sheet-panel.component';
 import { ZardSheetImports } from './sheet.imports';
@@ -120,5 +123,56 @@ describe('ZardSheetComponent', () => {
     await settle();
 
     expect(host.visible()).toBe(false);
+  });
+});
+
+describe('ZardSheetComponent direction', () => {
+  const change = new Subject<'ltr' | 'rtl'>();
+  let direction: 'ltr' | 'rtl';
+
+  afterEach(() => {
+    document.querySelectorAll('.cdk-overlay-container').forEach(node => node.remove());
+  });
+
+  async function openIn(initial: 'ltr' | 'rtl') {
+    direction = initial;
+    await TestBed.configureTestingModule({
+      imports: [SheetHostComponent],
+      providers: [
+        {
+          provide: Directionality,
+          useValue: {
+            get value() {
+              return direction;
+            },
+            change,
+          },
+        },
+      ],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(SheetHostComponent);
+    fixture.detectChanges();
+    fixture.componentInstance.visible.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    return fixture;
+  }
+
+  it('opens the overlay with the direction of where the sheet is declared', async () => {
+    await openIn('rtl');
+
+    expect(document.querySelector('.cdk-overlay-container [dir="rtl"]')).not.toBeNull();
+    expect(document.querySelector('.cdk-overlay-container [dir="ltr"]')).toBeNull();
+  });
+
+  it('updates an open sheet in place when the direction changes', async () => {
+    await openIn('rtl');
+
+    direction = 'ltr';
+    change.next('ltr');
+
+    expect(document.querySelector('.cdk-overlay-container [dir="ltr"]')).not.toBeNull();
+    expect(document.querySelector('.cdk-overlay-container [dir="rtl"]')).toBeNull();
+    expect(panel()).toBeTruthy();
   });
 });

@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -10,6 +11,8 @@ import {
   TemplateRef,
   type ViewContainerRef,
 } from '@angular/core';
+
+import { takeUntil } from 'rxjs';
 
 import { ZardDialogContainerComponent, ZardDialogOptions } from './dialog-container.component';
 import { ZardDialogRef } from './dialog-ref';
@@ -38,6 +41,8 @@ export class ZardDialogService {
   private readonly overlay = inject(Overlay);
   private readonly injector = inject(Injector);
   private readonly platformId = inject(PLATFORM_ID);
+  // Optional: the direction of <html>, used when the caller gives no zViewContainerRef to inherit one from.
+  private readonly rootDirectionality = inject(Directionality, { optional: true });
 
   /**
    * Opens a dialog with the given configuration.
@@ -50,7 +55,7 @@ export class ZardDialogService {
       return new ZardDialogRef<T>(null, config, null, this.platformId);
     }
 
-    const overlayRef = this.createOverlay();
+    const overlayRef = this.createOverlay(config);
     const dialogContainer = this.attachDialogContainer<T, U>(overlayRef, config);
     const dialogRef = this.attachDialogContent<T, U>(
       config.zContent as ContentType<T>,
@@ -64,15 +69,29 @@ export class ZardDialogService {
     return dialogRef;
   }
 
-  private createOverlay(): OverlayRef {
-    return this.overlay.create(
+  private createOverlay<T, U>(config: ZardDialogOptions<T, U>): OverlayRef {
+    const directionality = this.directionalityFor(config.zViewContainerRef);
+    const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: directionality?.value ?? 'ltr',
         hasBackdrop: true,
         backdropClass: DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
         scrollStrategy: this.overlay.scrollStrategies.block(),
       }),
     );
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(directionality.value));
+
+    return overlayRef;
+  }
+
+  /** The direction of where the overlay was requested from (zViewContainerRef), falling back to <html>. */
+  private directionalityFor(viewContainerRef?: ViewContainerRef): Directionality | null {
+    return viewContainerRef?.injector.get(Directionality, null) ?? this.rootDirectionality;
   }
 
   private attachDialogContainer<T, U>(overlayRef: OverlayRef, config: ZardDialogOptions<T, U>) {

@@ -45,6 +45,7 @@ export const ASPECT_RATIO = {
     {
       name: 'rtl',
       description: 'The box keeps its ratio in a right-to-left layout; only the surrounding content mirrors.',
+      type: 'rtl' as const,
       component: ZardDemoAspectRatioRtlComponent,
       codeData: ASPECT_RATIO_DEMO_RTL,
     },

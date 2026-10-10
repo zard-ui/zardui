@@ -37,10 +37,19 @@ export interface CodeSnippet {
   codeData: CodeBlockData;
 }
 
+/**
+ * Special rendering modes of an example. `'rtl'` renders it in the RTL preview: a header bar with the language
+ * selector, the preview wrapped in `dir` + `data-lang`, and the explanatory comment above the code.
+ *
+ * In a demo registration write `type: 'rtl' as const`: the registration is an untyped object literal, so without
+ * `as const` TypeScript widens the value to `string` and it no longer fits this union.
+ */
+export type ExampleType = 'rtl';
+
 export interface ExampleData {
   name: string;
   description?: string;
-  type?: string;
+  type?: ExampleType;
   column?: boolean;
   /** Optional: when omitted, the example renders as a code-only block (no live preview). */
   component?: ComponentType<unknown>;

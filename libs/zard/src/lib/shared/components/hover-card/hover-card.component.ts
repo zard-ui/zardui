@@ -1,3 +1,4 @@
+import { Directionality, type Direction } from '@angular/cdk/bidi';
 import {
   type FlexibleConnectedPositionStrategy,
   Overlay,
@@ -12,6 +13,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   Directive,
   ElementRef,
   effect,
@@ -29,6 +31,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import type { ClassValue } from 'clsx';
 import type { Subscription } from 'rxjs';
@@ -70,6 +73,23 @@ const HOVER_CARD_POSITIONS: Record<ZardHoverCardPlacement, ConnectedPosition> = 
     offsetX: 8,
   },
 };
+
+/**
+ * `left`/`right` are physical sides, while CDK `start`/`end` follow the overlay direction: in RTL the physical
+ * left is `end`. The signed offset is physical and keeps pointing away from the trigger.
+ */
+function positionFor(placement: ZardHoverCardPlacement, rtl: boolean): ConnectedPosition {
+  const position = HOVER_CARD_POSITIONS[placement];
+  if (!rtl || (placement !== 'left' && placement !== 'right')) {
+    return position;
+  }
+  const onLeft = placement === 'left';
+  return {
+    ...position,
+    originX: onLeft ? 'end' : 'start',
+    overlayX: onLeft ? 'start' : 'end',
+  };
+}
 
 const HOVER_CARD_FALLBACKS: Record<ZardHoverCardPlacement, readonly ZardHoverCardPlacement[]> = {
   top: ['top', 'bottom', 'right', 'left'],
@@ -131,6 +151,9 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly renderer = inject(Renderer2);
+  private readonly destroyRef = inject(DestroyRef);
+  // Optional: the direction of the trigger, which is where the overlay content takes its `dir` from.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   private overlayRef?: OverlayRef;
   private positionChangesSubscription?: Subscription;
@@ -152,9 +175,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
         return;
       }
 
-      this.positionStrategy.withPositions(
-        HOVER_CARD_FALLBACKS[placement].map(fallback => HOVER_CARD_POSITIONS[fallback]),
-      );
+      this.positionStrategy.withPositions(this.getPositions(placement));
 
       if (this.overlayRef?.hasAttached()) {
         this.overlayRef.updatePosition();
@@ -290,8 +311,13 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     }
   }
 
-  private getPositions(): ConnectedPosition[] {
-    return HOVER_CARD_FALLBACKS[this.zPlacement()].map(placement => HOVER_CARD_POSITIONS[placement]);
+  private direction(): Direction {
+    return this.directionality?.value ?? 'ltr';
+  }
+
+  private getPositions(placement = this.zPlacement()): ConnectedPosition[] {
+    const rtl = this.direction() === 'rtl';
+    return HOVER_CARD_FALLBACKS[placement].map(fallback => positionFor(fallback, rtl));
   }
 
   private createOverlay(): void {
@@ -308,6 +334,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
 
     this.overlayRef = this.overlay.create({
       positionStrategy: this.positionStrategy,
+      direction: this.direction(),
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
@@ -317,6 +344,13 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
       this.updateContentSide(this.getSideFromPosition(change.connectionPair));
     });
     this.overlayReady.set(true);
+
+    // The direction changed (a `[dir]` switch): close the card, it reopens with the new direction.
+    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.overlayRef?.setDirection(this.direction());
+      this.positionStrategy?.withPositions(this.getPositions());
+      this.closeNow();
+    });
   }
 
   private openNow(): void {
@@ -328,6 +362,9 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     }
 
     const portal = new TemplatePortal(this.zContent(), this.viewContainerRef);
+
+    this.overlayRef.setDirection(this.direction());
+    this.positionStrategy?.withPositions(this.getPositions());
 
     this.overlayRef.attach(portal);
     this.setupOverlayListeners();
@@ -408,11 +445,9 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
       return 'top';
     }
 
-    if (position.originX === 'end' && position.overlayX === 'start') {
-      return 'right';
-    }
-
-    return 'left';
+    // CDK start/end follow the overlay direction; `left`/`right` are physical.
+    const cdkEnd = position.originX === 'end' && position.overlayX === 'start';
+    return cdkEnd !== (this.direction() === 'rtl') ? 'right' : 'left';
   }
 
   private updateContentSide(side: ZardHoverCardPlacement): void {
