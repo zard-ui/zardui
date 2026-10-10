@@ -1,0 +1,215 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <!-- Overview Section -->
+  <z-doc-heading
+    title="RTL"
+    description="Right-to-left support for ZardUI components."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm sm:text-base">
+      ZardUI components have first-class support for right-to-left (RTL) layouts. Text alignment, positioning and
+      directional styles adapt for languages like Arabic, Hebrew and Persian, and so do the overlays they open.
+    </p>
+
+    <z-code-box type="rtl" [dynamicComponent]="cardDemo" [onlyDemo]="true" />
+
+    <p class="text-muted-foreground text-sm sm:text-base">
+      Pick a language in the preview above: the card is the same component in every language, only the text and the
+      direction change. Every component page also has an
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">RTL</code>
+      example you can switch the same way.
+    </p>
+  </div>
+
+  <!-- Get Started Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="get-started" id="get-started">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Get started
+      </h2>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        RTL is a matter of setting the direction of the document, or of the part of the page that needs it. There is no
+        provider to wrap your app in.
+      </p>
+    </div>
+
+    <z-steps [steps]="getStartedSteps" />
+
+    <div class="bg-muted/30 rounded-lg border p-4 sm:p-6">
+      <p class="text-muted-foreground text-xs sm:text-sm">
+        <strong>No zard wrapper for direction.</strong>
+        Components read the direction through the CDK
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">Directionality</code>
+        service, which is already a peer dependency, and the CDK
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">Dir</code>
+        directive is the way to change it for a subtree. A zard-specific provider would only duplicate it. See
+        <a routerLink="/docs/cli" class="text-foreground font-medium underline underline-offset-4">the CLI page</a>
+        and
+        <a routerLink="/docs/components-json" class="text-foreground font-medium underline underline-offset-4">
+          components.json
+        </a>
+        for the rest of the init options.
+      </p>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="how-it-works" id="how-it-works">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        How it works
+      </h2>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        The components are direction-agnostic: the files you install are the same in LTR and RTL projects, and nothing
+        is rewritten when you add them. Three things make that work.
+      </p>
+    </div>
+
+    <div class="bg-card flex flex-col gap-5 rounded-lg border p-4 sm:p-6">
+      <div class="flex flex-col gap-1">
+        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">Logical classes</h3>
+        <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+          Component styles use TailwindCSS logical utilities instead of physical ones:
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ms-*</code>
+          /
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">me-*</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ps-*</code>
+          /
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">pe-*</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">start-*</code>
+          /
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">end-*</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">text-start</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">border-s</code>
+          and
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">rounded-s</code>
+          . Utilities that have no logical form get an
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">rtl:</code>
+          pair, and icons that point along the reading direction use
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">rtl:rotate-180</code>
+          . Use the same classes in your own markup.
+        </p>
+      </div>
+      <z-code-block [data]="logicalPhysicalBlock" />
+      <z-code-block [data]="logicalLogicalBlock" />
+
+      <div class="flex flex-col gap-1">
+        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">The CDK Directionality</h3>
+        <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+          Whatever CSS cannot express is decided in code: arrow keys that move inline, slider and carousel math,
+          positions computed in JavaScript. Those components inject
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">Directionality</code>
+          and read its
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">value</code>
+          , or its
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">valueSignal()</code>
+          inside computed values so they follow a direction switch.
+        </p>
+      </div>
+      <z-code-block [data]="directionalityBlock" />
+
+      <div class="flex flex-col gap-1">
+        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Overlays inherit from their trigger</h3>
+        <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+          Popovers, tooltips, dropdown menus, selects, dialogs and sheets render in a portal outside your
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">dir</code>
+          subtree. They take the direction of the trigger, or of the caller that opened them, and set it on the overlay
+          itself, so an Arabic section on an English page opens Arabic menus. Inline placements such as
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">inline-start</code>
+          and
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">inline-end</code>
+          mirror with the direction; physical ones like
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">left</code>
+          and
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">right</code>
+          keep their meaning.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Why there is no install-time transform</h3>
+        <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+          Some libraries rewrite physical classes into logical ones while installing components for an RTL project.
+          ZardUI ships the logical version to everybody, so the CLI has nothing to transform and switching direction
+          later is a change to one attribute, not a re-install.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Font Recommendations Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="font-recommendations" id="font-recommendations">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Font recommendations
+      </h2>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        For the best RTL experience, use a font with proper support for your language.
+        <a
+          href="https://fonts.google.com/noto"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-foreground font-medium underline underline-offset-4"
+        >
+          Noto
+        </a>
+        is a good family for it and pairs well with Inter and Geist. This site loads
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;fontsource-variable/noto-sans-arabic</code>
+        and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;fontsource-variable/noto-sans-hebrew</code>
+        for the RTL previews.
+      </p>
+    </div>
+
+    <z-steps [steps]="fontSteps" />
+  </section>
+
+  <!-- Animations Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="animations" id="animations">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Animations</h2>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        Enter and exit animations of overlays slide away from their trigger, so the physical slide classes were replaced
+        by logical ones, for example
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">slide-in-from-right</code>
+        became
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">slide-in-from-end</code>
+        . Where the animation utilities have no logical form, an
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">rtl:</code>
+        pair covers the other direction. Because the overlay carries the direction of its trigger, you do not need to
+        set
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">dir</code>
+        on the panel yourself.
+      </p>
+    </div>
+
+    <z-code-block [data]="animationsPhysicalBlock" />
+    <z-code-block [data]="animationsLogicalBlock" />
+  </section>
+
+  <!-- Migrating Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="migrating" id="migrating">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Migrating existing components
+      </h2>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        If you installed components before RTL support, update them with the CLI, then handle the few places that carry
+        your own code.
+      </p>
+    </div>
+
+    <z-steps [steps]="migrateSteps" />
+  </section>
+</z-content>

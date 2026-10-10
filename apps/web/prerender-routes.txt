@@ -21,6 +21,7 @@
 /docs/theming
 /docs/typeset
 /docs/dark-mode
+/docs/rtl
 /docs/cli
 /docs/monorepo
 /docs/skills
