@@ -221,7 +221,7 @@ export interface ZardFieldErrorEntry {
     @if (errs.length === 1) {
       {{ errs[0].message }}
     } @else if (errs.length > 1) {
-      <ul class="ml-4 flex list-disc flex-col gap-1">
+      <ul class="ms-4 flex list-disc flex-col gap-1">
         @for (error of errs; track $index) {
           @if (error.message) {
             <li>{{ error.message }}</li>

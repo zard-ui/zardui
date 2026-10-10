@@ -1,7 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Directionality } from '@angular/cdk/bidi';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+
+import { Subject } from 'rxjs';
 
 import { ZardInputOtpGroupComponent } from './input-otp-group.component';
 import { ZardInputOtpSeparatorComponent } from './input-otp-separator.component';
@@ -416,5 +419,50 @@ describe('ZardInputOtpComponent', () => {
 
     expect(component.control.value).toBe('');
     expect(otp.allSelected()).toBe(false);
+  });
+});
+
+describe('ZardInputOtpComponent (RTL)', () => {
+  let fixture: ComponentFixture<TestHostComponent>;
+
+  const slotInputs = (): HTMLInputElement[] =>
+    fixture.debugElement.queryAll(By.css('[data-slot] input')).map(d => d.nativeElement);
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestHostComponent],
+      providers: [
+        { provide: Directionality, useValue: { value: 'rtl', valueSignal: signal('rtl'), change: new Subject() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+  });
+
+  it('moves forward on ArrowLeft and backward on ArrowRight', () => {
+    const inputs = slotInputs();
+    inputs[0].focus();
+
+    const left = new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true });
+    inputs[0].dispatchEvent(left);
+    expect(document.activeElement).toBe(inputs[1]);
+    expect(left.defaultPrevented).toBe(true);
+
+    inputs[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+    expect(document.activeElement).toBe(inputs[0]);
+  });
+
+  it('does not leave the first slot on ArrowRight', () => {
+    const inputs = slotInputs();
+    inputs[0].focus();
+
+    inputs[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+    expect(document.activeElement).toBe(inputs[0]);
+  });
+
+  it('draws the divider between slots on the inline-end border', () => {
+    expect(slotInputs()[0].className).toContain('border-e');
+    expect(slotInputs()[0].className.split(' ')).not.toContain('border-r');
   });
 });

@@ -3,6 +3,7 @@ import { SLIDER_DEMO_DISABLED } from '@generated/components/slider/demo/disabled
 import { SLIDER_DEMO_MULTIPLE } from '@generated/components/slider/demo/multiple';
 import { SLIDER_DEMO_PREVIEW } from '@generated/components/slider/demo/preview';
 import { SLIDER_DEMO_RANGE } from '@generated/components/slider/demo/range';
+import { SLIDER_DEMO_RTL } from '@generated/components/slider/demo/rtl';
 import { SLIDER_DEMO_VERTICAL } from '@generated/components/slider/demo/vertical';
 import { SLIDER_CLI_ADD } from '@generated/installation/cli/add-slider';
 import { SLIDER_MANUAL_CODE } from '@generated/installation/manual/slider';
@@ -14,6 +15,7 @@ import { ZardDemoSliderRangeComponent } from '@/shared/components/slider/demo/ra
 
 import { ZardDemoSliderDisabledComponent } from './disabled';
 import { ZardDemoSliderPreviewComponent } from './preview';
+import { ZardDemoSliderRtlComponent } from './rtl';
 import { ZardDemoSliderVerticalComponent } from './vertical';
 import { SLIDER_API } from '../doc/api';
 
@@ -61,6 +63,13 @@ export const SLIDER = {
       description: 'Use the `zDisabled` input to disable slider interaction.',
       component: ZardDemoSliderDisabledComponent,
       codeData: SLIDER_DEMO_DISABLED,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoSliderRtlComponent,
+      codeData: SLIDER_DEMO_RTL,
     },
   ],
 };

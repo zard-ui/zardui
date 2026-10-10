@@ -79,6 +79,7 @@ const RANGE_SEPARATOR = ' - ';
           [zMode]="zMode()"
           [zCaptionLayout]="zCaptionLayout()"
           [zNumberOfMonths]="zNumberOfMonths()"
+          [zLocale]="zLocale()"
           [zDisabledDates]="zDisabledDates()"
           [zShowOutsideDays]="zShowOutsideDays()"
           [value]="value()"
@@ -130,6 +131,11 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
+  /**
+   * BCP 47 locale for the calendar and the trigger label (for example `ar`, `he`, `fr-FR`).
+   * Falls back to the application locale.
+   */
+  readonly zLocale = input<string | undefined>(undefined);
   readonly zAlign = input<ZardPopoverAlign>('start');
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
@@ -205,7 +211,17 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
   }
 
   private formatDate(date: Date, format: string): string {
-    return this.datePipe.transform(date, format) ?? '';
+    const locale = this.zLocale();
+    if (!locale) {
+      return this.datePipe.transform(date, format) ?? '';
+    }
+
+    try {
+      return this.datePipe.transform(date, format, undefined, locale) ?? '';
+    } catch {
+      // Angular only formats locales whose data was registered with registerLocaleData; Intl covers the rest.
+      return new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(date);
+    }
   }
 
   writeValue(value: CalendarValue): void {

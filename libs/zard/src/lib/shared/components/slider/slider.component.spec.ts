@@ -1,6 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Directionality } from '@angular/cdk/bidi';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+
+import { Subject } from 'rxjs';
 
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
@@ -570,5 +573,78 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
     thumbHost.dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }));
     fixture.detectChanges();
     expect(thumbHost.querySelector('span')?.getAttribute('aria-valuenow')).toBe('100');
+  });
+});
+
+describe('ZardSliderComponent (RTL)', () => {
+  let fixture: ComponentFixture<TestHostComponent>;
+  let component: TestHostComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestHostComponent],
+      providers: [
+        { provide: Directionality, useValue: { value: 'rtl', valueSignal: signal('rtl'), change: new Subject() } },
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestHostComponent);
+    component = fixture.componentInstance;
+    component.value = [40];
+    fixture.detectChanges();
+  });
+
+  const thumbHost = () =>
+    fixture.debugElement.query(By.directive(ZardSliderThumbComponent)).nativeElement as HTMLElement;
+  const ariaNow = () => +thumbHost().querySelector('span')!.getAttribute('aria-valuenow')!;
+
+  it('ArrowRight decreases and ArrowLeft increases the value', () => {
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(30);
+
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(50);
+  });
+
+  it('keeps ArrowUp/ArrowDown and Home/End unchanged', () => {
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(50);
+
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(0);
+  });
+
+  it('positions the thumb from the right edge', () => {
+    expect(thumbHost().style.right).toContain('%');
+    expect(thumbHost().style.left).toBe('');
+  });
+
+  it('fills the range from the right edge', () => {
+    const range = fixture.nativeElement.querySelector('[data-slot="slider-range"]') as HTMLElement;
+    expect(range.style.left).toBe('60%');
+    expect(range.style.right).toBe('0px');
+  });
+
+  it('maps the pointer position from the right edge of the track', () => {
+    const track = fixture.nativeElement.querySelector('[data-slot="slider-track"]') as HTMLElement;
+    track.getBoundingClientRect = () =>
+      ({ left: 0, right: 200, width: 200, top: 0, bottom: 4, height: 4, x: 0, y: 0 }) as DOMRect;
+
+    track.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: 150 }));
+    fixture.detectChanges();
+
+    // 150px from the left of a 200px track is 25% from the right edge
+    expect(ariaNow()).toBe(30);
   });
 });

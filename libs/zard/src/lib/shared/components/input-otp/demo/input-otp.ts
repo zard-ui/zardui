@@ -6,6 +6,7 @@ import { INPUT_OTP_DEMO_FOUR_DIGITS } from '@generated/components/input-otp/demo
 import { INPUT_OTP_DEMO_INVALID } from '@generated/components/input-otp/demo/invalid';
 import { INPUT_OTP_DEMO_PATTERN } from '@generated/components/input-otp/demo/pattern';
 import { INPUT_OTP_DEMO_PREVIEW } from '@generated/components/input-otp/demo/preview';
+import { INPUT_OTP_DEMO_RTL } from '@generated/components/input-otp/demo/rtl';
 import { INPUT_OTP_DEMO_SEPARATOR } from '@generated/components/input-otp/demo/separator';
 import { INPUT_OTP_SNIPPET_PATTERN_DIGITS_ONLY } from '@generated/components/input-otp/snippets';
 import { INPUT_OTP_CLI_ADD } from '@generated/installation/cli/add-input-otp';
@@ -20,6 +21,7 @@ import { ZardDemoInputOtpFourDigitsComponent } from './four-digits';
 import { ZardDemoInputOtpInvalidComponent } from './invalid';
 import { ZardDemoInputOtpPatternComponent } from './pattern';
 import { ZardDemoInputOtpPreviewComponent } from './preview';
+import { ZardDemoInputOtpRtlComponent } from './rtl';
 import { ZardDemoInputOtpSeparatorComponent } from './separator';
 import { INPUT_OTP_API } from '../doc/api';
 
@@ -96,6 +98,13 @@ export const INPUT_OTP = {
       component: ZardDemoInputOtpFormComponent,
       column: true,
       codeData: INPUT_OTP_DEMO_FORM,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoInputOtpRtlComponent,
+      codeData: INPUT_OTP_DEMO_RTL,
     },
   ],
 };

@@ -16,9 +16,9 @@ export const datePickerVariants = cva('flex w-[212px] flex-col');
 export const datePickerTriggerVariants = cva('w-full font-normal data-[empty=true]:text-muted-foreground', {
   variants: {
     zIcon: {
-      chevron: 'justify-between text-left',
-      calendar: 'justify-start text-left',
-      none: 'justify-start text-left',
+      chevron: 'justify-between text-start',
+      calendar: 'justify-start text-start',
+      none: 'justify-start text-start',
     },
   },
   defaultVariants: {
