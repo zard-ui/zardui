@@ -66,7 +66,7 @@ export const itemTitleVariants = cva(
 
 export const itemDescriptionVariants = cva(
   mergeClasses(
-    'line-clamp-2 text-left text-sm/normal font-normal text-muted-foreground',
+    'line-clamp-2 text-start text-sm/normal font-normal text-muted-foreground',
     'group-data-[size=xs]/item:text-xs',
     '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
   ),

@@ -1,6 +1,7 @@
 import { TABLE_DEMO_ACTIONS } from '@generated/components/table/demo/actions';
 import { TABLE_DEMO_FOOTER } from '@generated/components/table/demo/footer';
 import { TABLE_DEMO_PREVIEW } from '@generated/components/table/demo/preview';
+import { TABLE_DEMO_RTL } from '@generated/components/table/demo/rtl';
 import { TABLE_DEMO_SIMPLE } from '@generated/components/table/demo/simple';
 import { TABLE_CLI_ADD } from '@generated/installation/cli/add-table';
 import { TABLE_MANUAL_CODE } from '@generated/installation/manual/table';
@@ -10,6 +11,7 @@ import type { CodeBlockData } from '@highlight/types';
 import { ZardDemoTableActionsComponent } from '@/shared/components/table/demo/actions';
 import { ZardDemoTableFooterComponent } from '@/shared/components/table/demo/footer';
 import { ZardDemoTablePreviewComponent } from '@/shared/components/table/demo/preview';
+import { ZardDemoTableRtlComponent } from '@/shared/components/table/demo/rtl';
 import { ZardDemoTableSimpleComponent } from '@/shared/components/table/demo/simple';
 import { TABLE_API } from '@/shared/components/table/doc/api';
 
@@ -81,6 +83,13 @@ export const TABLE = {
       description: 'A minimal table with only a header and body — no footer or row actions.',
       component: ZardDemoTableSimpleComponent,
       codeData: TABLE_DEMO_SIMPLE,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoTableRtlComponent,
+      codeData: TABLE_DEMO_RTL,
     },
   ],
 };

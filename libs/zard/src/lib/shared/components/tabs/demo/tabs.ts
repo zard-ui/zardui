@@ -2,6 +2,7 @@ import { TABS_DEMO_DISABLED } from '@generated/components/tabs/demo/disabled';
 import { TABS_DEMO_ICONS } from '@generated/components/tabs/demo/icons';
 import { TABS_DEMO_LINE } from '@generated/components/tabs/demo/line';
 import { TABS_DEMO_PREVIEW } from '@generated/components/tabs/demo/preview';
+import { TABS_DEMO_RTL } from '@generated/components/tabs/demo/rtl';
 import { TABS_DEMO_VERTICAL } from '@generated/components/tabs/demo/vertical';
 import { TABS_CLI_ADD } from '@generated/installation/cli/add-tabs';
 import { TABS_MANUAL_CODE } from '@generated/installation/manual/tabs';
@@ -11,6 +12,7 @@ import { ZardDemoTabsDisabledComponent } from './disabled';
 import { ZardDemoTabsIconsComponent } from './icons';
 import { ZardDemoTabsLineComponent } from './line';
 import { ZardDemoTabsPreviewComponent } from './preview';
+import { ZardDemoTabsRtlComponent } from './rtl';
 import { ZardDemoTabsVerticalComponent } from './vertical';
 import { TABS_API } from '../doc/api';
 
@@ -54,6 +56,13 @@ export const TABS = {
       description: 'Set `zIcon` on a `z-tab` to render an `ng-icon` before the label.',
       component: ZardDemoTabsIconsComponent,
       codeData: TABS_DEMO_ICONS,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoTabsRtlComponent,
+      codeData: TABS_DEMO_RTL,
     },
   ],
 };

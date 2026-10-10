@@ -24,7 +24,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
         <z-input-group-addon zAlign="block-end">
           <z-spinner />
           Validating...
-          <button type="button" z-input-group-button zVariant="default" zSize="icon-xs" class="ml-auto">
+          <button type="button" z-input-group-button zVariant="default" zSize="icon-xs" class="ms-auto">
             <ng-icon name="lucideArrowUp" />
             <span class="sr-only">Send</span>
           </button>
