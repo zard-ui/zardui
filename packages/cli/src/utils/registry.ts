@@ -365,13 +365,14 @@ export async function fetchComponent(
     return { name: file.name, content: retargeted.content };
   });
 
-  // An icon with no equivalent in the chosen family keeps its original symbol,
-  // and its import no longer resolves. Failing the whole install over that would
-  // be worse: the rest of the component is correct and the fix is one line.
+  // An icon with no equivalent in the chosen family keeps its source symbol,
+  // imported from the package it came from — which `add` installs alongside, so
+  // the component compiles. Failing the whole install over that would be worse:
+  // the rest of the component is correct and swapping the icon is one line.
   if (missing.size > 0) {
     logger.warn(
       `"${componentName}" uses icons that ${config.icons} does not provide: ${[...missing].sort().join(', ')}. ` +
-        'They were left untouched — replace them by hand.',
+        `They keep their ${sourceFamily} import, which still works — swap them by hand if you want them in the new set.`,
     );
   }
 

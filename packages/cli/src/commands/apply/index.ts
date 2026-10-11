@@ -108,8 +108,7 @@ export async function runApply(options: ApplyOptions): Promise<void> {
     done.push(describe(config.tailwind.css, 'font imports and --font-sans / --font-heading', result));
   }
 
-  await updateComponentsJson(cwd, preset, parts, isFull);
-  done.push('components.json');
+  if ((await updateComponentsJson(cwd, preset, parts, isFull)) === 'updated') done.push('components.json');
 
   const packages = packagesFor(design, parts, isFull);
   if (packages.length > 0) {
@@ -162,7 +161,7 @@ async function updateComponentsJson(
   preset: AppliedPreset,
   parts: readonly ApplyPart[],
   isFull: boolean,
-): Promise<void> {
+): Promise<StyleWrite> {
   const file = path.resolve(cwd, 'components.json');
   const original = await readFile(file, 'utf8');
   const json = JSON.parse(original) as Record<string, unknown>;
@@ -183,5 +182,10 @@ async function updateComponentsJson(
 
   const eol = original.includes('\r\n') ? '\r\n' : '\n';
   const trailing = /\r?\n$/.test(original) ? eol : '';
-  await writeFile(file, JSON.stringify(json, null, 2).replace(/\n/g, eol) + trailing, 'utf8');
+  const updated = JSON.stringify(json, null, 2).replace(/\n/g, eol) + trailing;
+
+  if (updated === original) return 'unchanged';
+
+  await writeFile(file, updated, 'utf8');
+  return 'updated';
 }

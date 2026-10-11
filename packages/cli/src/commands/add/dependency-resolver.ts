@@ -228,7 +228,10 @@ function addComponentDependencies(
     // registry files are written in has to be there as well or the component would not compile.
     const catalog = iconCatalog();
     const sourceFamily = component.icons.family;
-    const hasGap = (component.icons.tokens ?? []).some(token => symbolFor(token, iconFamily, catalog) === undefined);
+    const hasGap =
+      (component.icons.tokens ?? []).some(token => symbolFor(token, iconFamily, catalog) === undefined) ||
+      // a symbol the table does not know at all (no token) cannot be translated either
+      component.icons.symbols.length > (component.icons.tokens ?? []).length;
     if (hasGap && sourceFamily && sourceFamily !== iconFamily) {
       iconPackagesFor(sourceFamily, catalog).forEach(pkg => dependenciesToInstall.add(pkg));
     }
