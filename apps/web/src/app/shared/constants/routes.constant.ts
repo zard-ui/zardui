@@ -35,6 +35,7 @@ export const SECTIONS: NavSection = {
     { name: 'Components', path: '/docs/components', available: true },
     { name: 'Installation', path: '/docs/installation', available: true },
     { name: 'Theming', path: '/docs/theming', available: true },
+    { name: 'RTL', path: '/docs/rtl', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
     { name: 'Typeset', path: '/docs/typeset', available: true },
     { name: 'Skills', path: '/docs/skills', available: true },
