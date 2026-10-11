@@ -16,6 +16,7 @@ import {
   ICON_CORE_PACKAGE,
   ICON_FAMILIES,
   SOURCE_ICON_FAMILY,
+  importSpecifier,
   type IconFamily,
   type IconFamilyInfo,
 } from './families.js';
@@ -25,6 +26,7 @@ export {
   ICON_CORE_PACKAGE,
   ICON_FAMILIES,
   SOURCE_ICON_FAMILY,
+  importSpecifier,
   type IconFamily,
   type IconFamilyInfo,
 } from './families.js';
@@ -142,10 +144,14 @@ export function missingTokensFor(family: IconFamily, catalog: IconCatalog = LOCA
  * several, with a leading `type` or aliased. What matters is the package (which
  * gives the family) and the names imported from it.
  */
-const ICON_IMPORT = /import\s*(?:type\s+)?\{([^}]*)\}\s*from\s*['"]@ng-icons\/([a-z0-9-]+)['"]/g;
+const ICON_IMPORT = /import\s*(?:type\s+)?\{([^}]*)\}\s*from\s*['"]@ng-icons\/([a-z0-9-]+(?:\/[a-z0-9-]+)*)['"]/g;
 
+/** The family whose symbols are imported from `@ng-icons/<suffix>` (a subpath counts: `phosphor-icons/regular`). */
 function familyByPackageSuffix(suffix: string, catalog: IconCatalog): IconFamily | undefined {
-  return Object.keys(catalog.families).find(name => catalog.families[name]?.package === `@ng-icons/${suffix}`);
+  return Object.keys(catalog.families).find(name => {
+    const info = catalog.families[name];
+    return info !== undefined && importSpecifier(info) === `@ng-icons/${suffix}`;
+  });
 }
 
 /**
@@ -265,7 +271,10 @@ export function retargetIcons(
 
   if (replacements.size === 0) return { content: source, missing };
 
-  return { content: rewriteIcons(source, origin.package, target.package, replacements), missing };
+  return {
+    content: rewriteIcons(source, importSpecifier(origin), importSpecifier(target), replacements, new Set(missing)),
+    missing,
+  };
 }
 
 /**
@@ -280,6 +289,7 @@ export function rewriteIcons(
   fromPackage: string,
   toPackage: string,
   replacements: ReadonlyMap<string, string>,
+  keep: ReadonlySet<string> = new Set(),
 ): string {
   if (replacements.size === 0) return source;
 
@@ -288,12 +298,47 @@ export function rewriteIcons(
   // and only the trailing `\b` would save it — cheaper not to rely on that.
   const pattern = new RegExp(`\\b(${[...replacements.keys()].sort((a, b) => b.length - a.length).join('|')})\\b`, 'g');
 
-  return source
-    .replace(
-      new RegExp(`(['"])${escapeRegExp(fromPackage)}\\1`, 'g'),
-      (_match, quote: string) => `${quote}${toPackage}${quote}`,
-    )
-    .replace(pattern, symbol => replacements.get(symbol) ?? symbol);
+  const swapped =
+    keep.size === 0
+      ? source.replace(
+          new RegExp(`(['"])${escapeRegExp(fromPackage)}\\1`, 'g'),
+          (_match, quote: string) => `${quote}${toPackage}${quote}`,
+        )
+      : swapImports(source, fromPackage, toPackage, keep);
+
+  return swapped.replace(pattern, symbol => replacements.get(symbol) ?? symbol);
+}
+
+/**
+ * Moves each import of the source package to the target, except for the symbols in `keep`.
+ *
+ * Those are the ones the target family has no equivalent for. Pointing them at the target package
+ * would break the import, so they stay on a line of their own from the source package — the
+ * component keeps compiling, and the warning says which icons to swap by hand.
+ */
+function swapImports(source: string, fromPackage: string, toPackage: string, keep: ReadonlySet<string>): string {
+  const statement = new RegExp(
+    `import(\\s*(?:type\\s+)?)\\{([^}]*)\\}(\\s*from\\s*)(['"])${escapeRegExp(fromPackage)}\\4`,
+    'g',
+  );
+
+  return source.replace(statement, (match, type: string, names: string, from: string, quote: string) => {
+    const specifiers = names
+      .split(',')
+      .map(name => name.trim())
+      .filter(Boolean);
+    const nameOf = (specifier: string): string => (specifier.replace(/^type\s+/, '').split(/\s+as\s+/)[0] ?? '').trim();
+    const kept = specifiers.filter(specifier => keep.has(nameOf(specifier)));
+    const moved = specifiers.filter(specifier => !keep.has(nameOf(specifier)));
+
+    if (kept.length === 0) return `import${type}{${names}}${from}${quote}${toPackage}${quote}`;
+    if (moved.length === 0) return match;
+
+    return (
+      `import${type}{ ${moved.join(', ')} }${from}${quote}${toPackage}${quote};\n` +
+      `import${type}{ ${kept.join(', ')} }${from}${quote}${fromPackage}${quote}`
+    );
+  });
 }
 
 function escapeRegExp(value: string): string {

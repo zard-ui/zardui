@@ -1,7 +1,7 @@
 import { existsSync } from 'fs';
 import * as path from 'path';
 
-import { iconPackagesFor } from '../../core/icons/index.js';
+import { iconPackagesFor, symbolFor } from '../../core/icons/index.js';
 import { Config } from '../../utils/config.js';
 import { iconCatalog } from '../../utils/icon-catalog.js';
 import { logger } from '../../utils/logger.js';
@@ -223,6 +223,15 @@ function addComponentDependencies(
 
   if (component.icons?.symbols?.length) {
     iconPackagesFor(iconFamily, iconCatalog()).forEach(pkg => dependenciesToInstall.add(pkg));
+
+    // An icon the chosen family has no equivalent for keeps its original import, so the package the
+    // registry files are written in has to be there as well or the component would not compile.
+    const catalog = iconCatalog();
+    const sourceFamily = component.icons.family;
+    const hasGap = (component.icons.tokens ?? []).some(token => symbolFor(token, iconFamily, catalog) === undefined);
+    if (hasGap && sourceFamily && sourceFamily !== iconFamily) {
+      iconPackagesFor(sourceFamily, catalog).forEach(pkg => dependenciesToInstall.add(pkg));
+    }
   }
 }
 
