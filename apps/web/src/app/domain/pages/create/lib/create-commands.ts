@@ -16,7 +16,7 @@ const RUNNERS: Record<PackageManager, string> = {
   npm: 'npx zard-cli@latest',
   pnpm: 'pnpm dlx zard-cli@latest',
   yarn: 'yarn dlx zard-cli@latest',
-  bun: 'bunx --bun zard-cli@latest',
+  bun: 'bunx zard-cli@latest',
 };
 
 export function runnerFor(manager: PackageManager): string {

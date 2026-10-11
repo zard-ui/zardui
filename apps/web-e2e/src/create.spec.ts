@@ -262,13 +262,13 @@ test.describe('Create builder', () => {
       await dialog.locator('[data-manager="yarn"]').first().click();
       await expect(command).toContainText('yarn dlx zard-cli@latest create');
       await dialog.locator('[data-manager="bun"]').first().click();
-      await expect(command).toContainText('bunx --bun zard-cli@latest create');
+      await expect(command).toContainText('bunx zard-cli@latest create');
 
       await page.reload();
       await ready(page);
       await page.getByRole('button', { name: 'Get Code' }).first().click();
       await expect(page.getByRole('dialog', { name: 'Get Code' }).getByTestId('command').first()).toContainText(
-        'bunx --bun',
+        'bunx zard-cli@latest',
       );
     });
 

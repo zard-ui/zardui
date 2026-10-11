@@ -7,7 +7,7 @@ describe('create commands', () => {
     ['npm', 'npx zard-cli@latest create --preset Z3k --template angular'],
     ['pnpm', 'pnpm dlx zard-cli@latest create --preset Z3k --template angular'],
     ['yarn', 'yarn dlx zard-cli@latest create --preset Z3k --template angular'],
-    ['bun', 'bunx --bun zard-cli@latest create --preset Z3k --template angular'],
+    ['bun', 'bunx zard-cli@latest create --preset Z3k --template angular'],
   ] as const)('prints the new-project command for %s', (manager, command) => {
     expect(newProjectCommand({ ...base, manager })).toBe(command);
   });
@@ -29,7 +29,7 @@ describe('create commands', () => {
       'pnpm dlx zard-cli@latest apply --preset Z3k --only theme',
     );
     expect(existingProjectCommand({ manager: 'bun', preset: 'Z3k', scope: 'font' })).toBe(
-      'bunx --bun zard-cli@latest apply --preset Z3k --only font',
+      'bunx zard-cli@latest apply --preset Z3k --only font',
     );
   });
 
