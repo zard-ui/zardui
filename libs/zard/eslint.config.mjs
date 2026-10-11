@@ -24,7 +24,8 @@ const betterTailwindBase = {
     'better-tailwindcss/no-unknown-classes': [
       'error',
       {
-        ignore: ['animate-spinner', 'no-scrollbar', 'toaster'],
+        // `cn-*` are style markers, resolved per style by `core/css/styles/` and by the CLI at install time.
+        ignore: ['animate-spinner', 'no-scrollbar', 'toaster', '^cn-'],
       },
     ],
   },
@@ -38,7 +39,7 @@ export default [
       '@nx/dependency-checks': [
         'error',
         {
-          ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs}'],
+          ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs}', '{projectRoot}/jest-style-transformer.cjs'],
         },
       ],
     },
