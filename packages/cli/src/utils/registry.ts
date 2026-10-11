@@ -353,10 +353,14 @@ function blockAsRegistryItem(block: BlockItem): RegistryItem {
  * A file with no `styled` has no markers, which is every block and every file
  * from a registry that predates styles.
  */
-export function styledContent(file: RegistryItem['files'][number], config: Pick<Config, 'style'>): string {
-  if (file.styled === undefined || resolveStyle(config.style) === DEFAULT_STYLE) return file.content;
+export function styledContent(
+  file: RegistryItem['files'][number],
+  config: Pick<Config, 'style' | 'menuColor' | 'menuAppearance'>,
+): string {
+  const defaultMenu = (config.menuColor ?? 'default') === 'default' && (config.menuAppearance ?? 'solid') === 'solid';
+  if (file.styled === undefined || (resolveStyle(config.style) === DEFAULT_STYLE && defaultMenu)) return file.content;
 
-  return transformStyle(file.styled, config.style, styleCatalog());
+  return transformStyle(file.styled, config.style, styleCatalog(), config);
 }
 
 export async function fetchComponent(

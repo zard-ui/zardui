@@ -89,7 +89,7 @@ describe('transformStyle', () => {
     const source = `const v = cva('cn-box inline-flex', { variants: { size: { sm: 'cn-box-size-sm' } } });`;
 
     expect(transformStyle(source, 'nova', catalog)).toBe(
-      "const v = cva('h-8 rounded-lg px-2.5 inline-flex', { variants: { size: { sm: 'h-7 [&_svg:not([class*=\\'size-\\'])]:size-3.5' } } });",
+      `const v = cva('h-8 rounded-lg px-2.5 inline-flex', { variants: { size: { sm: "h-7 [&_svg:not([class*='size-'])]:size-3.5" } } });`,
     );
   });
 
@@ -111,7 +111,7 @@ describe('transformStyle', () => {
     const double = transformStyle('const c = "cn-box-size-sm";', 'nova', catalog);
     const template = transformStyle('const c = `cn-box-size-sm`;', 'nova', catalog);
 
-    expect(single).toBe("const c = 'h-7 [&_svg:not([class*=\\'size-\\'])]:size-3.5';");
+    expect(single).toBe(`const c = "h-7 [&_svg:not([class*='size-'])]:size-3.5";`);
     expect(double).toBe(`const c = "h-7 [&_svg:not([class*='size-'])]:size-3.5";`);
     expect(template).toBe("const c = `h-7 [&_svg:not([class*='size-'])]:size-3.5`;");
   });

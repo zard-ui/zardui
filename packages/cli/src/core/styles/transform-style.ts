@@ -19,6 +19,7 @@
 
 import { DEFAULT_STYLE, resolveStyle, type StyleId, type StyleSelection } from './ids.js';
 import { LOCAL_STYLE_CATALOG } from './local-catalog.js';
+import { menuMarkers, type MenuOptions } from './menu.js';
 import type { StyleMarkers } from './parse-style-sheet.js';
 
 /** Every style's markers. A catalog may hold only some of the styles. */
@@ -50,6 +51,8 @@ function mapStringLiterals(source: string, visit: (body: string, quote: Quote) =
   // Brace depth of each open `${ … }`, so the `}` that closes it resumes the template.
   const templates: number[] = [];
   let depth = 0;
+  // Whether the literal just read had a marker resolved in it.
+  let changed = false;
 
   const readString = (quote: Quote): void => {
     let body = '';
@@ -64,8 +67,9 @@ function mapStringLiterals(source: string, visit: (body: string, quote: Quote) =
       }
       if (char === quote) break;
       if (quote === '`' && char === '$' && source[i + 1] === '{') {
-        out += visit(body, quote);
-        out += '${';
+        const visited = visit(body, quote);
+        changed ||= visited !== body;
+        out += visited + '${';
         i += 2;
         templates.push(depth);
         depth += 1;
@@ -77,7 +81,9 @@ function mapStringLiterals(source: string, visit: (body: string, quote: Quote) =
       i += 1;
     }
 
-    out += visit(body, quote);
+    const visited = visit(body, quote);
+    changed ||= visited !== body;
+    out += visited;
     if (source[i] === quote) {
       out += quote;
       i += 1;
@@ -99,9 +105,25 @@ function mapStringLiterals(source: string, visit: (body: string, quote: Quote) =
       out += source.slice(i, stop);
       i = stop;
     } else if (char === "'" || char === '"' || char === '`') {
+      const start = out.length;
+      changed = false;
       out += char;
       i += 1;
       readString(char);
+
+      // A class with a quote of its own (`[class*='size-']`) in a single-quoted literal
+      // reads better double-quoted than escaped — what a formatter would do anyway.
+      const literal = out.slice(start);
+      if (
+        changed &&
+        char === "'" &&
+        literal.length > 1 &&
+        literal.endsWith("'") &&
+        literal.includes("\\'") &&
+        !literal.includes('"')
+      ) {
+        out = out.slice(0, start) + `"${literal.slice(1, -1).replace(/\\'/g, "'")}"`;
+      }
     } else if (char === '{') {
       depth += 1;
       out += char;
@@ -144,10 +166,12 @@ export function transformStyleReport(
   content: string,
   style: StyleSelection,
   catalog: StyleCatalog = LOCAL_STYLE_CATALOG,
+  menu: MenuOptions = {},
 ): StyleTransformResult {
   const id = resolveStyle(style);
-  const chosen = catalog[id] ?? {};
-  const known = new Set<string>();
+  // The menu look is not part of any style: it is resolved from `menuColor` / `menuAppearance`.
+  const chosen: StyleMarkers = { ...(catalog[id] ?? {}), ...menuMarkers(menu) };
+  const known = new Set<string>(Object.keys(menuMarkers()));
   for (const markers of Object.values(catalog)) for (const marker of Object.keys(markers ?? {})) known.add(marker);
   const unknown = new Set<string>();
 
@@ -180,8 +204,9 @@ export function transformStyle(
   content: string,
   style: StyleSelection = DEFAULT_STYLE,
   catalog: StyleCatalog = LOCAL_STYLE_CATALOG,
+  menu: MenuOptions = {},
 ): string {
-  return transformStyleReport(content, style, catalog).content;
+  return transformStyleReport(content, style, catalog, menu).content;
 }
 
 /** The markers a source uses, in order of appearance. */

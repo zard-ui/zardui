@@ -19,6 +19,8 @@ import * as path from 'path';
 
 import {
   DEFAULT_STYLE,
+  MENU_TARGET_MARKER,
+  MENU_TRANSLUCENT_MARKER,
   STYLE_IDS,
   buildStyleCatalog,
   extractMarkers,
@@ -154,7 +156,11 @@ export function checkStyleSheets(sources: Array<{ item: string; file: string; so
   const used = new Map<string, string>();
 
   for (const { item, file, source } of sources) {
-    for (const marker of extractMarkers(source)) if (!used.has(marker)) used.set(marker, `${item}/${file}`);
+    for (const marker of extractMarkers(source)) {
+      // The menu markers are resolved from `menuColor` / `menuAppearance`, not by a sheet.
+      if (marker === MENU_TARGET_MARKER || marker === MENU_TRANSLUCENT_MARKER) continue;
+      if (!used.has(marker)) used.set(marker, `${item}/${file}`);
+    }
   }
 
   for (const [marker, where] of used) {

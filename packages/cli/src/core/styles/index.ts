@@ -30,6 +30,13 @@ export {
   type StyleSelection,
 } from './ids.js';
 export { LOCAL_STYLE_CATALOG } from './local-catalog.js';
+export {
+  MENU_TARGET_MARKER,
+  MENU_TRANSLUCENT_CLASSES,
+  MENU_TRANSLUCENT_MARKER,
+  menuMarkers,
+  type MenuOptions,
+} from './menu.js';
 export { parseStyleSheet, type StyleMarkers } from './parse-style-sheet.js';
 export {
   extractMarkers,
