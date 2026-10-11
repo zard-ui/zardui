@@ -17,7 +17,13 @@ import { DomSanitizer, type SafeResourceUrl } from '@angular/platform-browser';
 import { ZardSkeletonComponent } from '@zard/components/skeleton/skeleton.component';
 
 import { serializeCreateParams } from '../lib/create-url';
-import { CREATE_CHANNEL, isCanvasItem, isCreateMessage, type DesignMessage } from '../lib/create.protocol';
+import {
+  CREATE_CHANNEL,
+  isCanvasItem,
+  isCreateMessage,
+  type DesignMessage,
+  type ItemMessage,
+} from '../lib/create.protocol';
 import { CreateStateService } from '../services/create-state.service';
 
 const SWITCHER = [
@@ -28,9 +34,9 @@ const SWITCHER = [
 /**
  * The preview: an iframe on the bare `/create/preview/:item` route.
  *
- * The iframe only reloads when the item changes. Everything else — the committed design, a hover preview, the
- * light/dark mode — is a `design` message, so scroll position and open overlays inside the iframe survive every
- * change. The source is computed from the item alone; the design it carries is only the one the page opened with.
+ * The iframe loads once. A new design or light/dark mode is a `design` message and a new item an `item` message the
+ * preview routes to in place, so switching never pays for booting the app again. The source is only the item and
+ * design the page opened with.
  */
 @Component({
   selector: 'z-create-preview',
@@ -44,14 +50,7 @@ const SWITCHER = [
     <div class="relative z-0 mx-auto flex w-full flex-1 flex-col overflow-hidden">
       <div class="bg-muted dark:bg-muted/30 absolute inset-0"></div>
       @if (src(); as src) {
-        <iframe
-          #frame
-          class="z-10 size-full flex-1"
-          title="Preview"
-          [src]="src"
-          [attr.data-item]="state.item()"
-          (load)="onLoad()"
-        ></iframe>
+        <iframe #frame class="z-10 size-full flex-1" title="Preview" [src]="src" (load)="onLoad()"></iframe>
       }
       @if (!loaded()) {
         <z-skeleton class="absolute inset-0 z-20 rounded-none" data-testid="preview-skeleton" />
@@ -92,33 +91,25 @@ export class CreatePreviewComponent {
 
   private ready = false;
   private lastSent = '';
+  private lastItem = '';
 
   /**
-   * The iframe's address. It reads the design without tracking it: a new design must not become a new `src`, because
-   * that is a reload. Only the item is a dependency.
+   * The iframe's address, read once: a new `src` is a reload, so neither the design nor the item is tracked. Later
+   * changes reach the iframe as messages.
    */
-  protected readonly src = computed<SafeResourceUrl | null>(() => {
-    const item = this.state.item();
-    const design = untracked(() => this.state.design());
+  protected readonly src = computed<SafeResourceUrl | null>(() =>
+    untracked(() => {
+      const item = this.state.item();
+      const query = new URLSearchParams(serializeCreateParams(this.state.design(), item));
+      query.delete('item');
+      this.lastItem = item;
+      const path = `/create/preview/${encodeURIComponent(item)}?${query.toString()}`;
 
-    const query = new URLSearchParams(serializeCreateParams(design, item));
-    query.delete('item');
-    const path = `/create/preview/${encodeURIComponent(item)}?${query.toString()}`;
-
-    return this.sanitizer.bypassSecurityTrustResourceUrl(path);
-  });
+      return this.sanitizer.bypassSecurityTrustResourceUrl(path);
+    }),
+  );
 
   constructor() {
-    // A new item is a new document: it has not loaded, has not announced itself and has received nothing.
-    effect(() => {
-      this.state.item();
-      untracked(() => {
-        this.loaded.set(false);
-        this.ready = false;
-        this.lastSent = '';
-      });
-    });
-
     if (!this.isBrowser) return;
 
     const view = this.document.defaultView;
@@ -131,6 +122,7 @@ export class CreatePreviewComponent {
         this.ready = true;
         this.lastSent = '';
         this.send();
+        this.sendItem();
       } else if (event.data.type === 'action') {
         this.state.run(event.data.action);
       }
@@ -139,11 +131,16 @@ export class CreatePreviewComponent {
     view?.addEventListener('message', onMessage);
     inject(DestroyRef).onDestroy(() => view?.removeEventListener('message', onMessage));
 
-    // Every committed change, hover preview and mode switch lands here.
+    // Every committed change and mode switch lands here.
     effect(() => {
-      this.state.effectiveDesign();
+      this.state.design();
       this.state.dark();
       this.send();
+    });
+
+    effect(() => {
+      this.state.item();
+      this.sendItem();
     });
   }
 
@@ -161,7 +158,7 @@ export class CreatePreviewComponent {
     const message: DesignMessage = {
       channel: CREATE_CHANNEL,
       type: 'design',
-      design: this.state.effectiveDesign(),
+      design: this.state.design(),
       dark: this.state.dark(),
     };
 
@@ -169,6 +166,17 @@ export class CreatePreviewComponent {
     if (key === this.lastSent) return;
 
     this.lastSent = key;
+    frame.postMessage(message, view.location.origin);
+  }
+
+  private sendItem(): void {
+    const frame = this.frame()?.nativeElement.contentWindow;
+    const view = this.document.defaultView;
+    const item = this.state.item();
+    if (!frame || !view || !this.ready || item === this.lastItem) return;
+
+    this.lastItem = item;
+    const message: ItemMessage = { channel: CREATE_CHANNEL, type: 'item', item };
     frame.postMessage(message, view.location.origin);
   }
 }

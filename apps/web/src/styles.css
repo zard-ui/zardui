@@ -307,6 +307,16 @@
   .scroll-locked z-footer {
     display: none;
   }
+
+  /*
+   * The /create preview iframe scrolls inside its own `main`, on both axes: a
+   * second, document-level scroll would put the horizontal bar of a wide canvas
+   * at the far bottom of the page, under the vertical one.
+   */
+  .create-preview-document,
+  .create-preview-document body {
+    overflow: hidden;
+  }
 }
 
 code[data-line-numbers] {

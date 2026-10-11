@@ -88,6 +88,19 @@ test.describe('Create builder', () => {
       .toContain('Lora');
   });
 
+  test('the heading font reaches the card titles', async ({ page }) => {
+    await choose(page, 'Heading', 'Playfair Display');
+
+    await expect
+      .poll(
+        async () =>
+          await previewFrame(page).evaluate(
+            () => getComputedStyle(document.querySelector('[data-slot="card-title"]') as Element).fontFamily,
+          ),
+      )
+      .toContain('Playfair Display');
+  });
+
   test('the constraints grey out what the design cannot hold', async ({ page }) => {
     await choose(page, 'Style', 'Rhea');
     const radius = await open(page, 'Radius');
@@ -175,7 +188,8 @@ test.describe('Create builder', () => {
     await expect.poll(() => presetOf(page)).toBe(target);
   });
 
-  test('Navigate previews one component alone and reloads the iframe', async ({ page }) => {
+  test('Navigate previews one component alone, in the same iframe document', async ({ page }) => {
+    await previewFrame(page).evaluate(() => ((window as unknown as { __kept: boolean }).__kept = true));
     await page.locator('body').click({ position: { x: 5, y: 5 } });
     await page.keyboard.press('Control+p');
 
@@ -184,13 +198,27 @@ test.describe('Create builder', () => {
 
     await expect.poll(() => new URL(page.url()).searchParams.get('item')).toBe('component:dropdown');
     await expect.poll(() => previewFrame(page).url()).toContain('/create/preview/component');
+    await expect(previewFrame(page).locator('main[data-item="component:dropdown"] section').first()).toBeVisible();
+    expect(await previewFrame(page).evaluate(() => (window as unknown as { __kept?: boolean }).__kept)).toBe(true);
   });
 
-  test('switching canvases changes the iframe', async ({ page }) => {
+  test('switching canvases swaps the content without reloading the iframe', async ({ page }) => {
+    await previewFrame(page).evaluate(() => ((window as unknown as { __kept: boolean }).__kept = true));
     await page.getByRole('button', { name: '02', exact: true }).click();
 
     await expect.poll(() => new URL(page.url()).searchParams.get('item')).toBe('preview-02');
     await expect.poll(() => previewFrame(page).url()).toContain('preview-02');
+    await expect(previewFrame(page).locator('[data-canvas="preview-02"]')).toBeVisible();
+    expect(await previewFrame(page).evaluate(() => (window as unknown as { __kept?: boolean }).__kept)).toBe(true);
+  });
+
+  test('the preview scrolls in one container, on both axes', async ({ page }) => {
+    const overflow = await previewFrame(page).evaluate(() => ({
+      html: getComputedStyle(document.documentElement).overflow,
+      body: getComputedStyle(document.body).overflow,
+      main: getComputedStyle(document.querySelector('main[data-item]') as Element).overflow,
+    }));
+    expect(overflow).toEqual({ html: 'hidden', body: 'hidden', main: 'auto' });
   });
 
   test('Copy puts --preset <code> on the clipboard and says Copied', async ({ page, context }) => {

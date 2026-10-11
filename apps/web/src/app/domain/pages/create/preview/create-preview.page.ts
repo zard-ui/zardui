@@ -7,15 +7,17 @@ import {
   DestroyRef,
   DOCUMENT,
   effect,
+  ElementRef,
   inject,
   Injector,
   PLATFORM_ID,
   signal,
+  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Meta } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { map } from 'rxjs';
 
@@ -43,12 +45,21 @@ interface DemoExample {
   readonly component: NonNullable<ExampleData['component']>;
 }
 
+/** What is on screen. It only changes once the next item's demos or block have loaded, so a switch never blanks. */
+type Shown =
+  | { readonly kind: 'canvas-1' | 'canvas-2'; readonly item: string }
+  | { readonly kind: 'component'; readonly item: string; readonly examples: readonly DemoExample[] }
+  | { readonly kind: 'block'; readonly item: string; readonly block: Block };
+
+/** The document's own scroll is off: `main` is the one scroll container, on both axes. */
+const PREVIEW_DOCUMENT_CLASS = 'create-preview-document';
+
 /**
  * The document the `/create` page loads in its iframe: one canvas, one component's demos or one block, with the
  * design applied from outside.
  *
  * It is a bare route (no header, no footer). It reads the initial design from its own query string so the very
- * first paint is right, then follows `design` messages from the host without ever reloading.
+ * first paint is right, then follows `design` and `item` messages from the host without ever reloading.
  */
 @Component({
   selector: 'z-create-preview-page',
@@ -58,14 +69,19 @@ interface DemoExample {
   styleUrl: '../create-fonts.css',
   host: { '(click)': 'swallowAnchorNavigation($event)' },
   template: `
-    <main class="bg-muted dark:bg-muted/30 text-foreground min-h-svh overflow-auto" [attr.data-item]="item()">
-      @switch (kind()) {
-        @case ('canvas-1') {
-          <z-create-canvas-01 />
-        }
-        @case ('canvas-2') {
-          <z-create-canvas-02 />
-        }
+    <main
+      #scroller
+      class="bg-muted dark:bg-muted/30 text-foreground h-svh overflow-auto overscroll-none"
+      [attr.data-item]="shown()?.item"
+    >
+      <!-- A canvas stays mounted once seen: switching back is a toggle, not a rebuild of hundreds of components. -->
+      @if (mounted().has('canvas-1')) {
+        <z-create-canvas-01 [hidden]="shown()?.kind !== 'canvas-1'" />
+      }
+      @if (mounted().has('canvas-2')) {
+        <z-create-canvas-02 [hidden]="shown()?.kind !== 'canvas-2'" />
+      }
+      @switch (shown()?.kind) {
         @case ('component') {
           <div class="mx-auto flex max-w-3xl flex-col gap-10 p-8">
             @for (example of examples(); track example.name) {
@@ -99,36 +115,38 @@ export class CreatePreviewPage {
   private readonly injector = inject(Injector);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly darkMode = inject(ZardDarkMode);
+  private readonly router = inject(Router);
+  private readonly scroller = viewChild<ElementRef<HTMLElement>>('scroller');
 
   protected readonly item = toSignal(this.route.paramMap.pipe(map(params => params.get('item') ?? 'preview-01')), {
     initialValue: 'preview-01',
   });
 
-  protected readonly kind = computed(() => {
-    const item = this.item();
-    if (item === 'preview-02') return 'canvas-2';
-    if (item.startsWith(COMPONENT_ITEM_PREFIX)) return 'component';
-    if (item.startsWith(BLOCK_ITEM_PREFIX)) return 'block';
-    return 'canvas-1';
+  protected readonly shown = signal<Shown | null>(null);
+  protected readonly mounted = signal<ReadonlySet<Shown['kind']>>(new Set());
+
+  protected readonly examples = computed(() => {
+    const shown = this.shown();
+    return shown?.kind === 'component' ? shown.examples : [];
   });
 
-  protected readonly block = signal<Block | undefined>(undefined);
-
-  protected readonly examples = signal<readonly DemoExample[]>([]);
+  protected readonly block = computed(() => {
+    const shown = this.shown();
+    return shown?.kind === 'block' ? shown.block : undefined;
+  });
 
   private applier: DesignApplier | null = null;
 
   constructor() {
     inject(Meta).updateTag({ name: 'robots', content: 'noindex' });
 
-    // Component items load their demos on demand; the registry only holds loaders.
-    effect(() => {
-      const item = this.item();
-      if (item.startsWith(COMPONENT_ITEM_PREFIX)) void this.loadExamples(item.slice(COMPONENT_ITEM_PREFIX.length));
-      if (item.startsWith(BLOCK_ITEM_PREFIX)) void this.loadBlock(item.slice(BLOCK_ITEM_PREFIX.length));
-    });
+    // Component and block items load on demand; the registry only holds loaders.
+    effect(() => void this.show(this.item()));
 
     if (!this.isBrowser) return;
+
+    this.document.documentElement.classList.add(PREVIEW_DOCUMENT_CLASS);
+    this.destroyRef.onDestroy(() => this.document.documentElement.classList.remove(PREVIEW_DOCUMENT_CLASS));
 
     afterNextRender(() => {
       const view = this.document.defaultView;
@@ -146,10 +164,18 @@ export class CreatePreviewPage {
 
       const onMessage = (event: MessageEvent): void => {
         if (event.origin !== view.location.origin || event.source !== view.parent) return;
-        if (!isCreateMessage(event.data) || event.data.type !== 'design') return;
+        if (!isCreateMessage(event.data)) return;
 
-        this.context.design.set(event.data.design);
-        applier.apply(event.data.design, event.data.dark);
+        if (event.data.type === 'item') {
+          // In place: the same document, so nothing boots again. Replacing keeps the host's history clean.
+          void this.router.navigate(['/create/preview', event.data.item], {
+            queryParamsHandling: 'preserve',
+            replaceUrl: true,
+          });
+        } else if (event.data.type === 'design') {
+          this.context.design.set(event.data.design);
+          applier.apply(event.data.design, event.data.dark);
+        }
       };
 
       const onKeydown = (event: KeyboardEvent): void => {
@@ -176,23 +202,42 @@ export class CreatePreviewPage {
     });
   }
 
-  /** The blocks' registry carries every block's code, so it is only fetched when a block is asked for. */
-  private async loadBlock(id: string): Promise<void> {
-    const { BlocksService } = await import('@doc/domain/services/blocks.service');
-    this.block.set(
-      this.injector
-        .get(BlocksService)
-        .getAllBlocks()
-        .find(block => block.id === id),
-    );
+  /** Loads what `item` needs, then swaps it in at once and starts it from the top-left corner. */
+  private async show(item: string): Promise<void> {
+    const next = await this.resolve(item);
+    // A newer item was asked for while this one loaded.
+    if (!next || this.item() !== item) return;
+
+    this.shown.set(next);
+    if (!this.mounted().has(next.kind)) this.mounted.update(kinds => new Set([...kinds, next.kind]));
+    if (this.isBrowser) this.scroller()?.nativeElement.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }
 
-  private async loadExamples(name: string): Promise<void> {
-    const data = await COMPONENTS_REGISTRY.find(entry => entry.componentName === name)?.loadData();
-    if (!data) return;
+  private async resolve(item: string): Promise<Shown | null> {
+    if (item === 'preview-02') return { kind: 'canvas-2', item };
 
-    const all = [...(data.preview ? [data.preview] : []), ...data.examples];
-    this.examples.set(all.filter((example): example is DemoExample => Boolean(example.component)));
+    if (item.startsWith(COMPONENT_ITEM_PREFIX)) {
+      const name = item.slice(COMPONENT_ITEM_PREFIX.length);
+      const data = await COMPONENTS_REGISTRY.find(entry => entry.componentName === name)?.loadData();
+      if (!data) return null;
+
+      const all = [...(data.preview ? [data.preview] : []), ...data.examples];
+      const examples = all.filter((example): example is DemoExample => Boolean(example.component));
+      return { kind: 'component', item, examples };
+    }
+
+    if (item.startsWith(BLOCK_ITEM_PREFIX)) {
+      // The blocks' registry carries every block's code, so it is only fetched when a block is asked for.
+      const id = item.slice(BLOCK_ITEM_PREFIX.length);
+      const { BlocksService } = await import('@doc/domain/services/blocks.service');
+      const block = this.injector
+        .get(BlocksService)
+        .getAllBlocks()
+        .find(candidate => candidate.id === id);
+      return block ? { kind: 'block', item, block } : null;
+    }
+
+    return { kind: 'canvas-1', item };
   }
 
   /** Blocks and demos ship placeholder `href="#"` links; a click would navigate the preview away. */
