@@ -68,7 +68,7 @@ export class ZardDropdownMenuSeparatorComponent {
   // `block` is not decoration: on the `z-dropdown-menu-separator` element form the default
   // `display: inline` swallows `h-px` and the negative margins, and the divider renders as a gap
   // with no line in it.
-  protected readonly classes = computed(() => mergeClasses('bg-border -mx-1 my-1 block h-px', this.class()));
+  protected readonly classes = computed(() => mergeClasses('cn-dropdown-menu-separator', this.class()));
 }
 
 @Component({
@@ -111,15 +111,13 @@ export class ZardDropdownMenuLabelComponent {
 export class ZardDropdownMenuShortcutComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() =>
-    mergeClasses('text-muted-foreground ms-auto text-xs tracking-widest', this.class()),
-  );
+  protected readonly classes = computed(() => mergeClasses('cn-dropdown-menu-shortcut', this.class()));
 }
 
 @Component({
   selector: 'z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item]',
   template: `
-    <span class="pointer-events-none absolute start-2 flex size-3.5 items-center justify-center">
+    <span class="cn-dropdown-menu-item-indicator pointer-events-none">
       @if (zChecked()) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="size-4">
           <path d="M20 6 9 17l-5-5" />
@@ -206,9 +204,9 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
 @Component({
   selector: 'z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
   template: `
-    <span class="pointer-events-none absolute start-2 flex size-3.5 items-center justify-center">
+    <span class="cn-dropdown-menu-item-indicator pointer-events-none">
       @if (isChecked()) {
-        <span class="size-2 rounded-full bg-current"></span>
+        <span class="cn-dropdown-menu-radio-dot"></span>
       }
     </span>
     <ng-content />

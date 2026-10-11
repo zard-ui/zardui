@@ -1,21 +1,17 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const dropdownContentVariants = cva([
-  'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground',
-  'shadow-md outline-none animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
-]);
+export const dropdownContentVariants = cva('cn-dropdown-menu-content cn-menu-target cn-menu-translucent outline-none');
 
 export const dropdownItemVariants = cva(
-  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'cn-dropdown-menu-item select-none outline-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
         default: '',
-        destructive:
-          'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
+        destructive: 'cn-dropdown-menu-item-variant-destructive',
       },
       inset: {
-        true: 'ps-8',
+        true: 'cn-dropdown-menu-item-inset-true',
         false: '',
       },
     },
@@ -26,17 +22,16 @@ export const dropdownItemVariants = cva(
   },
 );
 
-export const dropdownSubContentVariants = cva([
-  'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground',
-  'shadow-lg outline-none animate-in fade-in-0 zoom-in-95',
-]);
+export const dropdownSubContentVariants = cva(
+  'cn-dropdown-menu-sub-content cn-menu-target cn-menu-translucent outline-none',
+);
 
 export const dropdownSubTriggerVariants = cva(
-  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'cn-dropdown-menu-sub-trigger select-none outline-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       inset: {
-        true: 'ps-8',
+        true: 'cn-dropdown-menu-sub-trigger-inset-true',
         false: '',
       },
     },
@@ -46,20 +41,17 @@ export const dropdownSubTriggerVariants = cva(
   },
 );
 
-export const dropdownLabelVariants = cva(
-  'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
-  {
-    variants: {
-      inset: {
-        true: 'ps-8',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      inset: false,
+export const dropdownLabelVariants = cva('cn-dropdown-menu-label', {
+  variants: {
+    inset: {
+      true: 'cn-dropdown-menu-label-inset-true',
+      false: '',
     },
   },
-);
+  defaultVariants: {
+    inset: false,
+  },
+});
 
 export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>;
 export type ZardDropdownItemTypeVariants = NonNullable<ZardDropdownItemVariants['variant']>;

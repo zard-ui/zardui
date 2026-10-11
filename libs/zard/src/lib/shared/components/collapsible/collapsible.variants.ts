@@ -5,7 +5,7 @@ export const collapsibleVariants = cva('', {
     // `z-collapsible` is a custom element and would default to `display: inline`. As an attribute on
     // an existing element (the `asChild` case) the host's own display has to win instead.
     isElement: {
-      true: 'block',
+      true: 'cn-collapsible-is-element-true',
       false: '',
     },
   },
@@ -14,11 +14,11 @@ export const collapsibleVariants = cva('', {
   },
 });
 
-export const collapsibleContentVariants = cva('grid transition-[grid-template-rows,visibility] duration-200 ease-out', {
+export const collapsibleContentVariants = cva('cn-collapsible-content', {
   variants: {
     isOpen: {
-      true: 'visible grid-rows-[1fr]',
-      false: 'invisible grid-rows-[0fr]',
+      true: 'cn-collapsible-content-is-open-true',
+      false: 'cn-collapsible-content-is-open-false',
     },
   },
   defaultVariants: {

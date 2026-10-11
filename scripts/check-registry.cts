@@ -78,7 +78,8 @@ function sourceFilesOf(dir: string, relative = ''): string[] {
   const files: string[] = [];
 
   for (const entry of fs.readdirSync(dir).sort()) {
-    if (entry === 'demo' || entry === 'doc') continue;
+    // The style sheets (`core/css/styles`) are the style system's source, not a registry item's files.
+    if (entry === 'demo' || entry === 'doc' || (entry === 'styles' && (relative === 'css' || relative === ''))) continue;
 
     const absolute = path.join(dir, entry);
     if (fs.statSync(absolute).isDirectory()) {
@@ -419,6 +420,8 @@ function checkDesignPass(): void {
         }
       }
     }
+  }
+}
 
 /*
  * The style sheets cover every marker the sources use, and what the registry

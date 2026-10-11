@@ -322,13 +322,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     <ng-container *zStringTemplateOutlet="tooltipText()" zardId="tooltip" #z="zardId">{{ tooltipText() }}</ng-container>
 
     <span [class]="arrowClasses()">
-      <svg
-        class="bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px]"
-        width="10"
-        height="5"
-        viewBox="0 0 30 10"
-        preserveAspectRatio="none"
-      >
+      <svg class="cn-tooltip-arrow" width="10" height="5" viewBox="0 0 30 10" preserveAspectRatio="none">
         <polygon points="0,0 30,0 15,10" />
       </svg>
     </span>

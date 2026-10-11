@@ -17,6 +17,7 @@
 @import '../../../libs/zard/src/lib/shared/core/css/styles/style-luma.css' layer(components);
 @import '../../../libs/zard/src/lib/shared/core/css/styles/style-sera.css' layer(components);
 @import '../../../libs/zard/src/lib/shared/core/css/styles/style-rhea.css' layer(components);
+@import '../../../libs/zard/src/lib/shared/core/css/styles/menu.css' layer(components);
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource-variable/geist';
 @import '@fontsource-variable/noto-sans-arabic';

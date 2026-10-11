@@ -184,13 +184,10 @@ export class ZardFieldDescriptionComponent {
   selector: 'z-field-separator',
   imports: [ZardStringTemplateOutletDirective],
   template: `
-    <div class="bg-border absolute inset-0 top-1/2 h-px"></div>
+    <div class="cn-field-separator-line"></div>
     @let content = zContent();
     @if (content) {
-      <span
-        class="bg-background text-muted-foreground relative mx-auto block w-fit px-2"
-        data-slot="field-separator-content"
-      >
+      <span class="cn-field-separator-content" data-slot="field-separator-content">
         <ng-container *zStringTemplateOutlet="content">{{ content }}</ng-container>
       </span>
     }
