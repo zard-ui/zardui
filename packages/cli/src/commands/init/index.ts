@@ -66,6 +66,8 @@ export interface InitOptions {
   /** A preset code, `--preset <code>` or a whole pasted command. */
   preset?: string;
   pointer?: boolean;
+  /** Never mount the full-screen wizard, even in a terminal: the caller has every answer already. */
+  headless?: boolean;
 }
 
 /**
@@ -100,7 +102,7 @@ export async function runInit(options: InitOptions): Promise<void> {
   const buildSteps = (config: Config): InitStep[] =>
     buildInitSteps(cwd, config, projectInfo, isReInitializing, { pointer: options.pointer });
 
-  if (!isInteractive()) {
+  if (options.headless || !isInteractive()) {
     logHeadlessReason();
     await runHeadless({
       cwd,
@@ -152,7 +154,7 @@ export async function runInit(options: InitOptions): Promise<void> {
  * template). The rest are the flags `init` itself takes.
  */
 export function initWithPreset(options: InitOptions & { cwd: string; preset: string; type: string }): Promise<void> {
-  return runInit({ yes: true, ...options });
+  return runInit({ yes: true, headless: true, ...options });
 }
 
 /** Flags that contradict each other are refused up front, naming both. */
