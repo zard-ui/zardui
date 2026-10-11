@@ -1,4 +1,5 @@
 import { add } from '@cli/commands/add/index.js';
+import { apply } from '@cli/commands/apply/index.js';
 import { init } from '@cli/commands/init/index.js';
 import { APP_VERSION } from '@cli/constants/app.constants.js';
 import { style } from '@cli/ui/style.js';
@@ -30,7 +31,7 @@ async function main() {
       }
     });
 
-  program.addCommand(init).addCommand(add);
+  program.addCommand(init).addCommand(add).addCommand(apply);
 
   // parseAsync, not parse: the actions are async, and only this way does a
   // failure inside them reach the handler below instead of becoming an

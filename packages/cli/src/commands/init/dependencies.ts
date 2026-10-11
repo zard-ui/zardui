@@ -1,4 +1,5 @@
 import { syncLibraryPeerDependencies } from '@cli/commands/init/library-peers.js';
+import { fontPackagesFor } from '@cli/commands/init/preset.js';
 import { bundlerFor, isLibraryKind } from '@cli/commands/init/project-kind.js';
 import { iconPackagesFor } from '@cli/core/icons/index.js';
 import { pinAllForAngular } from '@cli/utils/angular-compat.js';
@@ -25,6 +26,8 @@ export async function installDependencies(cwd: string, config: Config, projectIn
       'clsx',
       'tailwind-merge',
       ...iconPackagesFor(config.icons, iconCatalog()),
+      // The fonts a preset chose; the stylesheet imports them, so they have to be installed.
+      ...fontPackagesFor(config),
     ],
     info.angularVersion,
   );

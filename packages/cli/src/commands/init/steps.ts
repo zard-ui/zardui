@@ -1,5 +1,6 @@
 import { installComponent } from '@cli/commands/add/component-installer.js';
 import { installDependencies } from '@cli/commands/init/dependencies.js';
+import { fontPackagesFor } from '@cli/commands/init/preset.js';
 import {
   bundlerFor,
   indexHtmlFor,
@@ -33,11 +34,17 @@ export interface InitStep {
   run(): Promise<void>;
 }
 
+export interface InitStepOptions {
+  /** Add the cursor-pointer rule for buttons to the theme (`--pointer`). Only meaningful with a preset. */
+  pointer?: boolean;
+}
+
 export function buildInitSteps(
   cwd: string,
   config: Config,
   projectInfo: ProjectInfo,
   isReInitializing: boolean,
+  options: InitStepOptions = {},
 ): InitStep[] {
   const kind = config.projectType;
   const isLibrary = isLibraryKind(kind);
@@ -54,7 +61,9 @@ export function buildInitSteps(
     },
     {
       label: 'dependencies',
-      note: `CDK, CVA, tailwind-merge, ng-icons (${iconFamily(config.icons, iconCatalog())?.label ?? config.icons})`,
+      note: `CDK, CVA, tailwind-merge, ng-icons (${iconFamily(config.icons, iconCatalog())?.label ?? config.icons})${
+        fontPackagesFor(config).length > 0 ? ', fonts' : ''
+      }`,
       run: () => installDependencies(cwd, config, projectInfo),
     },
   ];
@@ -73,8 +82,10 @@ export function buildInitSteps(
 
   steps.push({
     label: config.tailwind.css,
-    note: `theme tokens (${config.tailwind.baseColor})`,
-    run: () => applyThemeToStyles(cwd, config),
+    note: config.preset
+      ? `preset ${config.preset}: theme, fonts, radius (${config.tailwind.baseColor})`
+      : `theme tokens (${config.tailwind.baseColor})`,
+    run: () => applyThemeToStyles(cwd, config, { pointer: options.pointer }),
   });
 
   if (isLibrary) {
