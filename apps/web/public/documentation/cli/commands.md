@@ -54,3 +54,34 @@ npx zard-cli add dashboard-01
 ```bash title="Terminal" copyButton
 npx zard-cli add login-01 --path src/app/features/auth
 ```
+
+
+```bash title="Terminal" copyButton
+npx zard-cli create [name]
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli create
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli create my-app --template nx --preset Z6F9MtstG --pointer --rtl --package-manager pnpm
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli create my-app --template angular --yes
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli init --preset Z6F9MtstG --pointer
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli apply --preset <code> [--only theme|font]
+```
+
+```bash title="Terminal" copyButton
+npx zard-cli apply --preset Z6F9MtstG
+npx zard-cli apply --preset Z6F9MtstG --only theme
+npx zard-cli apply --preset Z6F9MtstG --only font
+```

@@ -11,7 +11,7 @@ Install and configure zard/ui for an application inside an Nx workspace.
 
 ### Create project
 
-Create an Nx workspace with an Angular application. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
+Create an Nx workspace with an Angular application. Or skip this step and the next in one command: npx zard-cli@latest create my-app --template nx scaffolds the workspace and configures it from a design preset. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
 
 ```bash
 Terminal

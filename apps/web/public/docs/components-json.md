@@ -21,6 +21,8 @@ You can create a `components.json` file in your project by running the following
 npx zard-cli init
 ```
 
+Starting from scratch? `npx zard-cli create my-app` scaffolds the project and writes this file for you, from a design preset.
+
 See the CLI section for more information.
 
 ## $schema
@@ -35,19 +37,27 @@ The `$schema` property provides JSON schema validation for your `components.json
 
 ## Style
 
-The style for your components. Currently, **Zard/ui only supports the "css" style** .
+The style of your design: the look a preset picks for spacing, radius, density and typography.
+
+**Supported values:**`vega` , `nova` , `maia` , `lyra` , `mira` , `luma` , `sera` , `rhea` or the legacy `css` .
 
 ```
 {
-  "style": "css"
+  "style": "nova"
 }
 ```
+
+The eight named styles are written by `zard-cli init --preset` , `zard-cli apply` and `zard-cli create` — pick one on the [create page](/create) . The default is `nova` .
+
+`css` is what every project initialized before styles existed carries. It keeps working and is read as the current look, so nothing needs to change in an existing project.
+
+For now the value is recorded, and the components the CLI installs are the same whichever style it names. Everything else a preset chooses is applied: theme, fonts, radius, menu look and icon library.
 
 ## Icons
 
 The `icons` property names the icon set the components are written against. Every component draws through `ng-icons` , which stays the dependency either way — this picks which of its packages comes along ( `@ng-icons/lucide` ) and which names the components import.
 
-**Supported values:**`lucide`
+**Supported values:**`lucide` , `tabler` , `hugeicons` , `phosphor` or `remixicon`
 
 components.json
 
@@ -57,7 +67,9 @@ components.json
 }
 ```
 
-Lucide is the only set supported today, so this is the only value the CLI accepts — writing anything else makes `add` reject the file. The property exists ahead of the sets that will follow: every entry in the registry already carries the icons it draws, in the component and in its examples, so supporting another one is a matter of translating names rather than rewriting components.
+Each value brings its own `ng-icons` package — `@ng-icons/lucide` , `@ng-icons/tabler-icons` , `@ng-icons/huge-icons` , `@ng-icons/phosphor-icons` and `@ng-icons/remixicon` — and every component you add afterwards is written with that set's names. `zard-cli init --preset` , `apply` and `create` write it from the preset; the valid values are the ones the registry publishes, and the CLI lists them if you write one it does not know.
+
+When a set has no equivalent for an icon, the CLI reports it as missing when you add the component and keeps the lucide import, so the build still passes.
 
 A `components.json` written before this property existed is read as `lucide` .
 
@@ -73,7 +85,39 @@ components.json
 }
 ```
 
-Turning it on does not change what the CLI installs yet — the components are the same either way. It is the place where that preference will live once they ship right-to-left variants, and it is in the file now so that a project can record the intent before then.
+The components are direction-agnostic, so the files the CLI installs are identical either way. `zard-cli init --rtl` and `zard-cli create --rtl` record `true` here and set `dir="rtl"` on `<html>` in the app's `index.html` . They leave `lang` alone — set it to your content's language ( `ar` , `he` , `fa` …) yourself.
+
+## Menu
+
+Three properties describe how menus, popovers and dropdowns look. They are written by `zard-cli init --preset` , `apply` and `create` , and absent from a project without a preset, which then has the defaults.
+
+components.json
+
+```
+{
+  "menuColor": "default",
+  "menuAppearance": "solid",
+  "menuAccent": "subtle"
+}
+```
+
+- `menuColor` — `default` or `inverted` (dark in light mode and light in dark mode).
+- `menuAppearance` — `solid` or `translucent` (with a backdrop blur). A translucent menu always uses the subtle accent.
+- `menuAccent` — `subtle` (a neutral wash) or `bold` (the primary color) for the focused or hovered item.
+
+## Preset
+
+The `preset` property holds the preset code the project was last fully configured from — the short `Z…` code built on the [create page](/create) .
+
+components.json
+
+```
+{
+  "preset": "Z6F9MtstG"
+}
+```
+
+It is informational: it records the design and nothing reads it to decide what to install, so a code from a newer CLI never makes `add` fail. It is written by a full `init --preset` , `create` or `apply` ; a partial `apply --only` leaves it alone.
 
 ## Project Type
 
@@ -135,14 +179,14 @@ Path to the CSS file that imports Tailwind CSS into your project.
 
 ### tailwind.baseColor
 
-This is used to generate the default color palette for your components. **This cannot be changed after initialization.** (but if u want u can change manually, all the themes exist into the [theming page](/docs/theming) )
+This is used to generate the default color palette for your components. **Editing this value does not repaint the theme.** To change it afterwards run `zard-cli apply --preset <code> --only theme` , or copy the tokens by hand — all the themes exist in the [theming page](/docs/theming) .
 
-Currently supported base colors:
+Currently supported base colors ( `mauve` , `olive` , `mist` and `taupe` come with presets):
 
 ```
 {
   "tailwind": {
-    "baseColor": "gray" | "neutral" | "slate" | "stone" | "zinc"
+    "baseColor": "neutral" | "stone" | "zinc" | "mauve" | "olive" | "mist" | "taupe" | "gray" | "slate"
   }
 }
 ```

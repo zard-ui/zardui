@@ -201,7 +201,8 @@ export const installations: Installation[] = [
     description: 'Install and configure zard/ui for Angular.',
     cli: cliSteps({
       create: SETUP_ANGULAR_CREATE,
-      createSubtitle: 'Start the cli and create an application that uses Tailwind as default styling.',
+      createSubtitle:
+        'Start the cli and create an application that uses Tailwind as default styling. Or skip this step and the next in one command: npx zard-cli@latest create my-app --template angular scaffolds the app and configures it from a design preset.',
       initSubtitle: 'Prepare your entire project using the zard/ui cli. Pick "Angular" on the first question:',
     }),
     manual: [
@@ -237,7 +238,8 @@ export const installations: Installation[] = [
     description: 'Install and configure zard/ui for an application inside an Nx workspace.',
     cli: cliSteps({
       create: SETUP_NX_CREATE,
-      createSubtitle: 'Create an Nx workspace with an Angular application.',
+      createSubtitle:
+        'Create an Nx workspace with an Angular application. Or skip this step and the next in one command: npx zard-cli@latest create my-app --template nx scaffolds the workspace and configures it from a design preset.',
       initSubtitle:
         'Run the cli at the workspace root. Pick "Nx" on the first question, then the app that receives the components:',
     }),
@@ -281,7 +283,7 @@ export const installations: Installation[] = [
     cli: cliSteps({
       create: SETUP_ANALOG_CREATE,
       createSubtitle:
-        'Create an Analog.js application. When asked to add Tailwind, answer No — the steps below configure it.',
+        'Create an Analog.js application. When asked to add Tailwind, answer No — the steps below configure it. Or skip this step and the next in one command: npx zard-cli@latest create my-app --template analog scaffolds the app and configures it from a design preset.',
       initSubtitle: 'Prepare your entire project using the zard/ui cli. Pick "Analog.js" on the first question:',
     }),
     manual: [

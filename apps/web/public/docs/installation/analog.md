@@ -11,7 +11,7 @@ Install and configure zard/ui for Analog.js.
 
 ### Create project
 
-Create an Analog.js application. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
+Create an Analog.js application. Or skip this step and the next in one command: npx zard-cli@latest create my-app --template analog scaffolds the app and configures it from a design preset. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
 
 ```bash
 Terminal

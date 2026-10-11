@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { TABS_0, BLOCK_1, BLOCK_2, BLOCK_3, TABS_4, BLOCK_5 } from '@generated/pages/cli/installation';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
@@ -7,7 +8,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
 @Component({
   selector: 'z-cli-installation-section',
-  imports: [CodeBlockComponent, CodeTabsComponent],
+  imports: [CodeBlockComponent, CodeTabsComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">
@@ -58,6 +59,16 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       usually — show how long they have been running, so a spinner is never mistaken for a stuck process.
     </p>
     <z-code-block [data]="initRun" />
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Starting a new project? Skip creating it by hand:
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">npx zard-cli@latest create my-app</code>
+      scaffolds an Angular, Nx or Analog app and configures it with a design preset in one command — see the
+      <a class="text-foreground underline underline-offset-4" routerLink="/create">create page</a>
+      and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">create</code>
+      under Commands below.
+    </p>
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Step 2: Add components</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
