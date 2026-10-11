@@ -36,7 +36,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
       {{ zTitle() }}
       <ng-icon
         name="lucideChevronDown"
-        class="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
+        class="cn-accordion-trigger-icon pointer-events-none shrink-0"
         [class]="isOpen() ? 'rotate-180' : ''"
       />
     </button>
@@ -50,7 +50,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         [class]="contentClasses()"
       >
         <div class="overflow-hidden">
-          <div class="pt-0 pb-4">
+          <div class="cn-accordion-content-inner">
             <ng-content />
           </div>
         </div>

@@ -1,4 +1,4 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const skeletonVariants = cva('bg-muted animate-pulse rounded-md');
+export const skeletonVariants = cva('cn-skeleton');
 export type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;

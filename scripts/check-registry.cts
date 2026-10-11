@@ -37,6 +37,7 @@ import {
 } from '../packages/cli/src/core/design/index';
 import { ICON_FAMILIES, ICON_MAP } from '../packages/cli/src/core/icons/index';
 import { registry } from '../packages/cli/src/core/registry/registry-data';
+import { checkPublishedItems, checkStyleSheets } from './styles-registry.cts';
 
 const LIB_PATH = path.resolve(__dirname, '../libs/zard/src/lib/shared');
 const UTILITIES_CSS = path.join(LIB_PATH, 'core/css/utilities.css');
@@ -77,7 +78,8 @@ function sourceFilesOf(dir: string, relative = ''): string[] {
   const files: string[] = [];
 
   for (const entry of fs.readdirSync(dir).sort()) {
-    if (entry === 'demo' || entry === 'doc') continue;
+    // The style sheets (`core/css/styles`) are the style system's source, not a registry item's files.
+    if (entry === 'demo' || entry === 'doc' || (entry === 'styles' && (relative === 'css' || relative === ''))) continue;
 
     const absolute = path.join(dir, entry);
     if (fs.statSync(absolute).isDirectory()) {
@@ -421,9 +423,43 @@ function checkDesignPass(): void {
   }
 }
 
+/*
+ * The style sheets cover every marker the sources use, and what the registry
+ * published is what the default style makes of the marked sources (ADR-0002).
+ * The checks live in `styles-registry.cts`, next to the code that publishes.
+ */
+function checkStylePass(): void {
+  const sources: Array<{ item: string; file: string; source: string }> = [];
+
+  for (const item of registry) {
+    const dir = sourceDirOf(item.name, item.basePath);
+    for (const file of item.files) {
+      if (!file.name.endsWith('.ts')) continue;
+      const absolute = path.join(dir, file.name);
+      if (fs.existsSync(absolute)) {
+        sources.push({ item: item.name, file: file.name, source: fs.readFileSync(absolute, 'utf8').replace(/\r\n/g, '\n') });
+      }
+    }
+  }
+
+  problems.push(...checkStyleSheets(sources));
+
+  if (fs.existsSync(REGISTRY_OUTPUT)) {
+    const published = fs
+      .readdirSync(REGISTRY_OUTPUT)
+      .filter(file => file.endsWith('.json') && file !== 'registry.json' && file !== 'icons.json')
+      .map(file => JSON.parse(fs.readFileSync(path.join(REGISTRY_OUTPUT, file), 'utf8')))
+      .filter(item => Array.isArray(item.files));
+
+    problems.push(...checkPublishedItems(published));
+  }
+}
+
 checkSourcePass();
 checkClosurePass();
 checkDesignPass();
+
+checkStylePass();
 
 if (problems.length > 0) {
   console.error(`\n✖ registry is not self-consistent — ${problems.length} problem(s):\n`);

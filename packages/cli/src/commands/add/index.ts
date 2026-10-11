@@ -21,19 +21,22 @@ import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/package-manager.js';
 import { getRegistryUrl } from '@cli/utils/registry.js';
+import { loadStyleCatalog } from '@cli/utils/style-catalog.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
 
 type ResolvedConfig = Awaited<ReturnType<typeof resolveConfigPaths>>;
 
-interface AddOptions {
+export interface AddOptions {
   yes: boolean;
   overwrite: boolean;
   cwd: string;
   all: boolean;
   path?: string;
   indexHtml?: string;
+  /** Never mount the full-screen wizard, even in a terminal: the caller has every answer already. */
+  headless?: boolean;
 }
 
 export const add = new Command()
@@ -46,96 +49,104 @@ export const add = new Command()
   .option('-a, --all', 'add all available components', false)
   .option('-p, --path <path>', 'the path to add the component to.')
   .option('--index-html <path>', 'the index.html that receives the dark-mode theme script.')
-  .action(async (components: string[], options: AddOptions) => {
-    const cwd = path.resolve(options.cwd);
+  .action((components: string[], options: AddOptions) => runAdd(components, options));
 
-    validateWorkingDirectory(cwd);
+/**
+ * Adds components to the project in `options.cwd`. The action of `zard-cli add`, and the entry `create`
+ * calls to install `button` once the project is initialized.
+ */
+export async function runAdd(components: string[], options: AddOptions): Promise<void> {
+  const cwd = path.resolve(options.cwd);
 
-    if (options.path) {
-      validateTargetPath(path.resolve(cwd, options.path), cwd);
-    }
+  validateWorkingDirectory(cwd);
 
-    const config = await loadConfiguration(cwd);
-    const projectInfo = await validateProject(cwd);
-    const resolvedConfig: ResolvedConfig = await resolveConfigPaths(cwd, config);
+  if (options.path) {
+    validateTargetPath(path.resolve(cwd, options.path), cwd);
+  }
 
-    // The catalog decides whether `icons` is a valid value and how to translate
-    // the symbols on install, so it comes before resolving any component.
-    await loadIconCatalog(getRegistryUrl(config));
-    assertIconFamily(config.icons);
+  const config = await loadConfiguration(cwd);
+  const projectInfo = await validateProject(cwd);
+  const resolvedConfig: ResolvedConfig = await resolveConfigPaths(cwd, config);
 
-    const preselected = await selectComponents(components, options.all);
+  // The catalog decides whether `icons` is a valid value and how to translate
+  // the symbols on install, so it comes before resolving any component.
+  await loadIconCatalog(getRegistryUrl(config));
+  assertIconFamily(config.icons);
+  // The style the files are written in: its table resolves the markers in the sources.
+  await loadStyleCatalog(getRegistryUrl(config), config.style);
 
-    warnOnPrereleaseAngular(projectInfo.angularVersionRaw);
+  const preselected = await selectComponents(components, options.all);
 
-    const actions = {
-      loadNames: () => getAllInstallableNames(),
-      resolve: async (names: string[]) => {
-        const { componentsToInstall, dependenciesToInstall } = await resolveDependencies(
-          names,
-          resolvedConfig,
-          cwd,
-          options,
-        );
-        return {
-          components: componentsToInstall,
-          dependencies: pinAllForAngular(dependenciesToInstall, projectInfo.angularVersion),
-        };
-      },
-      installDependencies: async (packages: string[]) => {
-        await installDependencies(packages, cwd, config.packageManager);
-        await syncLibraryPeerDependencies(cwd, config, packages);
-      },
-      installComponent: (component: ComponentMeta) =>
-        installComponent(component.name, getTargetDir(component, resolvedConfig, cwd, options.path), resolvedConfig, {
-          customPath: Boolean(options.path),
-          isBlock: component.isBlock,
-        }),
-      setupDarkMode: async (indexHtml: string) => {
-        // A library has no index.html of its own — it belongs to the consuming app —
-        // so a missing file is a note, not a reason to abort the whole install.
-        if (existsSync(path.resolve(cwd, indexHtml))) {
-          await injectThemeScript(cwd, indexHtml);
-        } else {
-          logger.warn(
-            `${indexHtml} not found: add the dark-mode theme script to the app's index.html by hand, ` +
-              'or run `zard-cli add dark-mode --overwrite --index-html <path>`.',
-          );
-        }
-        await updateProvideZardWithDarkMode(cwd, resolvedConfig);
-      },
-      setupTypeset: () => setupTypeset(resolvedConfig.resolvedPaths.tailwindCss),
-      setupUtilities: () => setupUtilities(resolvedConfig.resolvedPaths.tailwindCss),
-      defaultIndexHtml: options.indexHtml ?? indexHtmlFor(config.projectType, config.baseUrl),
-    };
+  warnOnPrereleaseAngular(projectInfo.angularVersionRaw);
 
-    if (!isInteractive()) {
-      // See the note in `init`: without this, falling back to text mode is
-      // indistinguishable from the interface not existing.
-      logger.debug(
-        `No terminal to draw on (stdin TTY: ${Boolean(process.stdin.isTTY)}, ` +
-          `stdout TTY: ${Boolean(process.stdout.isTTY)}, controlling terminal: unreachable) — running headless.`,
+  const actions = {
+    loadNames: () => getAllInstallableNames(),
+    resolve: async (names: string[]) => {
+      const { componentsToInstall, dependenciesToInstall } = await resolveDependencies(
+        names,
+        resolvedConfig,
+        cwd,
+        options,
       );
-      await runHeadless(preselected, options, actions);
-      return;
-    }
-
-    try {
-      const { installed, logs } = await runAddWizard({
-        preselected,
-        skipConfirmation: options.yes,
-        ...actions,
-      });
-
-      reportSuccess(installed, logs);
-    } catch (error) {
-      if (error instanceof WizardCancelledError) {
-        printReport({ status: 'cancelled', headline: error.message, notes: ['No files were written.'] });
-        process.exit(0);
+      return {
+        components: componentsToInstall,
+        dependencies: pinAllForAngular(dependenciesToInstall, projectInfo.angularVersion),
+      };
+    },
+    installDependencies: async (packages: string[]) => {
+      await installDependencies(packages, cwd, config.packageManager);
+      await syncLibraryPeerDependencies(cwd, config, packages);
+    },
+    installComponent: (component: ComponentMeta) =>
+      installComponent(component.name, getTargetDir(component, resolvedConfig, cwd, options.path), resolvedConfig, {
+        customPath: Boolean(options.path),
+        isBlock: component.isBlock,
+      }),
+    setupDarkMode: async (indexHtml: string) => {
+      // A library has no index.html of its own — it belongs to the consuming app —
+      // so a missing file is a note, not a reason to abort the whole install.
+      if (existsSync(path.resolve(cwd, indexHtml))) {
+        await injectThemeScript(cwd, indexHtml);
+      } else {
+        logger.warn(
+          `${indexHtml} not found: add the dark-mode theme script to the app's index.html by hand, ` +
+            'or run `zard-cli add dark-mode --overwrite --index-html <path>`.',
+        );
       }
-      throw error;
+      await updateProvideZardWithDarkMode(cwd, resolvedConfig);
+    },
+    setupTypeset: () => setupTypeset(resolvedConfig.resolvedPaths.tailwindCss),
+    setupUtilities: () => setupUtilities(resolvedConfig.resolvedPaths.tailwindCss),
+    defaultIndexHtml: options.indexHtml ?? indexHtmlFor(config.projectType, config.baseUrl),
+  };
+
+  if (options.headless || !isInteractive()) {
+    // See the note in `init`: without this, falling back to text mode is
+    // indistinguishable from the interface not existing.
+    logger.debug(
+      `No terminal to draw on (stdin TTY: ${Boolean(process.stdin.isTTY)}, ` +
+        `stdout TTY: ${Boolean(process.stdout.isTTY)}, controlling terminal: unreachable) — running headless.`,
+    );
+    await runHeadless(preselected, options, actions);
+    return;
+  }
+
+  try {
+    const { installed, logs } = await runAddWizard({
+      preselected,
+      skipConfirmation: options.yes,
+      ...actions,
+    });
+
+    reportSuccess(installed, logs);
+  } catch (error) {
+    if (error instanceof WizardCancelledError) {
+      printReport({ status: 'cancelled', headline: error.message, notes: ['No files were written.'] });
+      process.exit(0);
     }
-  });
+    throw error;
+  }
+}
 
 type AddActions = {
   loadNames(): Promise<string[]>;
