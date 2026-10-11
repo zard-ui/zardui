@@ -11,7 +11,7 @@ Install and configure zard/ui for Angular.
 
 ### Create project
 
-Start the cli and create an application that uses Tailwind as default styling. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
+Start the cli and create an application that uses Tailwind as default styling. Or skip this step and the next in one command: npx zard-cli@latest create my-app --template angular scaffolds the app and configures it from a design preset. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
 
 ```bash
 Terminal

@@ -77,6 +77,8 @@ Terminal
    ╰───────────────────────────────────────────────╯
 ```
 
+Starting a new project? Skip creating it by hand: `npx zard-cli@latest create my-app` scaffolds an Angular, Nx or Analog app and configures it with a design preset in one command — see the [create page](/create) and `create` under Commands below.
+
 ### Step 2: Add components
 
 Add one component, several at once, or every available one. Dependencies between components are resolved for you: asking for a component pulls in whatever it needs.
@@ -145,6 +147,13 @@ npx zard-cli init
 `-c, --cwd <cwd>` — Working directory, defaults to the current one
 `-t, --type <type>` — Project type: `angular` , `angular-library` , `nx` , `nx-library` or `analog`
 `-p, --project <name>` — Which workspace project to configure, when more than one is compatible
+`--css <path>` — The global stylesheet that receives the theme (in a library, the file init creates)
+`--app-config <path>` — The app.config.ts that receives provideZard(); ignored for libraries
+`--base-color <color>` — Theme base color: `neutral` , `stone` , `zinc` , `gray` , `slate` , `mauve` , `olive` , `mist` or `taupe`
+`--components-alias <alias>` , `--utils-alias <alias>` — Import aliases, defaults to `@/shared/components` and `@/shared/utils`
+`--rtl` — The project reads right to left: records `"rtl": true` and sets `dir="rtl"` on `<html>` in `index.html` . `--no-rtl` is the default
+`--preset <code>` — Apply a design preset (style, base color, theme, fonts, icons, radius, menu). Build one at [zardui.com/create](/create)
+`--pointer` — Use the pointer cursor on buttons. Only with `--preset`
 
 **What it does:**
 
@@ -169,6 +178,16 @@ Terminal
 ```
 npx zard-cli init --yes --type nx --project web
 ```
+
+**With a preset:** `--preset` configures a project that already exists with a whole design in one go — the style, base color, theme and chart colors, fonts, icon library, radius and menu look. Any of the five project types accepts it, libraries included. It writes the same `components.json` and theme tokens as a plain init, plus the font packages with their imports, the icon library's `ng-icons` package and the `preset` key. It cannot be combined with `--base-color` , since the preset already chooses it.
+
+Terminal
+
+```
+npx zard-cli init --preset Z6F9MtstG --pointer
+```
+
+A preset code starts with `Z` and is built on the [create page](/create) . The CLI decodes it locally and rejects a malformed code, or one that comes from another tool, before it touches a single file. Components you add afterwards are installed with the preset's icon library; components already in the project keep their current look until you add them again with `--overwrite` .
 
 ### add
 
@@ -225,6 +244,95 @@ Terminal
 ```
 npx zard-cli add dark-mode
 ```
+
+### create
+
+Create a new project with the framework's own generator, already configured with a design preset. It is the one-command alternative to creating the project yourself and then running `init` .
+
+Terminal
+
+```
+npx zard-cli create [name]
+```
+
+**Options:**
+
+`[name]` — The name of the project and of the directory it is created in: lowercase letters, digits and dashes, starting with a letter
+`--template <template>` — The project to scaffold: `angular` , `nx` or `analog`
+`--preset <code>` — The design preset. Build one at [zardui.com/create](/create)
+`--pointer` — Use the pointer cursor on buttons
+`--rtl` — The project reads right to left. `--no-rtl` is the default
+`--package-manager <manager>` — `npm` , `pnpm` , `yarn` or `bun` . Defaults to the one that ran the CLI, else npm
+`-c, --cwd <cwd>` — The directory the project is created in, defaults to the current one
+`-y, --yes` — Skip confirmations and use the default design when no preset is given
+
+**What it does:**
+
+- scaffolds the project: `ng new` for Angular, `create-nx-workspace` plus the Angular application generator for Nx, `create-analog` for Analog — every prompt answered by a flag, with plain CSS styles
+- runs `init --preset` on the new project, as the type that matches the template
+- installs `button` , so there is a component to start from
+
+`create` only creates applications. For a library, or a project that already exists, use `init --preset` .
+
+**Interactive:** with no flags, the command asks for the template first — the cursor starts on the first item, it is never chosen for you — then the name, then the preset. The preset question lists the default design and a curated set; `Custom…` prints the link to the create page so you can design one and paste its code.
+
+Terminal
+
+```
+npx zard-cli create
+```
+
+Whatever you pass as a flag is not asked again, so a command copied from the create page runs without a single question:
+
+Terminal
+
+```
+npx zard-cli create my-app --template nx --preset Z6F9MtstG --pointer --rtl --package-manager pnpm
+```
+
+**Non-interactive use:** outside a terminal — CI, pipes — nobody can be asked, so the name and `--template` are always required, and the preset must come from `--preset` or from `--yes` , which accepts the default design. Errors name the flag or the preset that is wrong.
+
+Terminal
+
+```
+npx zard-cli create my-app --template angular --yes
+```
+
+**Safe by design:** every flag, the preset, the project name and the registry are checked before anything is written. A name that already exists in the target directory is refused — `create` never writes into an existing directory — and an unreachable registry stops it before the scaffold starts, so a failure leaves no half-created project. If configuring fails after the scaffold, the project is kept and the message tells you how to resume with `init --preset` .
+
+**Right to left:** `--rtl` sets `dir="rtl"` on `<html>` and nothing else. `lang` stays `"en"` , because direction does not say which language the content is in — set it yourself to the right one ( `ar` , `he` , `fa` …).
+
+### apply
+
+Apply a design preset to a project that is already initialized, without running init again. It never prompts and never touches components.
+
+Terminal
+
+```
+npx zard-cli apply --preset <code> [--only theme|font]
+```
+
+**Options:**
+
+`--preset <code>` — The preset to apply (required)
+`--only <parts>` — Apply only part of it: `theme` or `font` , comma-separated for both. Defaults to all of it
+`--pointer` — Add the pointer cursor rule for buttons to the theme
+`--no-pointer` — Remove it
+`-c, --cwd <cwd>` — Working directory, defaults to the current one
+
+- **Full preset** (no `--only` ) — theme tokens, fonts, icon library and the `style` , `icons` , `menuColor` , `menuAppearance` , `menuAccent` and `preset` keys of `components.json`
+- **theme** — the base color, theme and chart colors, radius, menu look and base layer in your stylesheet, and the matching keys in `components.json`
+- **font** — the font packages, their imports and `--font-sans` / `--font-heading`
+
+Terminal
+
+```
+npx zard-cli apply --preset Z6F9MtstG
+npx zard-cli apply --preset Z6F9MtstG --only theme
+npx zard-cli apply --preset Z6F9MtstG --only font
+```
+
+Rules of your own below the theme block in the stylesheet survive, and so do the aliases and every other key of `components.json` . Components already in your project keep their current style and icons; add them again with `--overwrite` to follow the preset.
 
 ### Global options
 

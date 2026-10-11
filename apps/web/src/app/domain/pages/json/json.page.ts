@@ -8,7 +8,9 @@ import { JsonBaseUrlSectionComponent } from './sections/base-url-section.compone
 import { JsonCurrentStructureSectionComponent } from './sections/current-structure-section.component';
 import { JsonIconsSectionComponent } from './sections/icons-section.component';
 import { JsonIntroductionSectionComponent } from './sections/introduction-section.component';
+import { JsonMenuSectionComponent } from './sections/menu-section.component';
 import { JsonPackageManagerSectionComponent } from './sections/package-manager-section.component';
+import { JsonPresetSectionComponent } from './sections/preset-section.component';
 import { JsonProjectTypeSectionComponent } from './sections/project-type-section.component';
 import { JsonRtlSectionComponent } from './sections/rtl-section.component';
 import { JsonSchemaSectionComponent } from './sections/schema-section.component';
@@ -32,6 +34,8 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     JsonStyleSectionComponent,
     JsonIconsSectionComponent,
     JsonRtlSectionComponent,
+    JsonMenuSectionComponent,
+    JsonPresetSectionComponent,
     JsonProjectTypeSectionComponent,
     JsonAppConfigSectionComponent,
     JsonPackageManagerSectionComponent,
@@ -61,6 +65,8 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
       <z-json-style-section />
       <z-json-icons-section />
       <z-json-rtl-section />
+      <z-json-menu-section />
+      <z-json-preset-section />
       <z-json-project-type-section />
       <z-json-app-config-section />
       <z-json-package-manager-section />
@@ -83,6 +89,8 @@ export class JsonPage implements OnInit {
       { id: 'style', label: 'Style', type: 'custom' },
       { id: 'icons', label: 'Icons', type: 'custom' },
       { id: 'rtl', label: 'RTL', type: 'custom' },
+      { id: 'menu', label: 'Menu', type: 'custom' },
+      { id: 'preset', label: 'Preset', type: 'custom' },
       { id: 'project-type', label: 'Project Type', type: 'custom' },
       { id: 'app-config', label: 'App Config', type: 'custom' },
       { id: 'package-manager', label: 'Package Manager', type: 'custom' },

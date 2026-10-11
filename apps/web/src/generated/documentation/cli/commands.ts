@@ -85,6 +85,48 @@ export const CLI_COMMANDS: CodeTabData = {
       "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> login-01</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --path</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> src/app/features/auth</span></span></code></pre>",
       "code": "npx zard-cli add login-01 --path src/app/features/auth",
       "language": "bash"
+    },
+    {
+      "label": "bash",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> create</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> [name]</span></span></code></pre>",
+      "code": "npx zard-cli create [name]",
+      "language": "bash"
+    },
+    {
+      "label": "bash",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> create</span></span></code></pre>",
+      "code": "npx zard-cli create",
+      "language": "bash"
+    },
+    {
+      "label": "bash",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> create</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> my-app</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --template</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> nx</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --preset</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> Z6F9MtstG</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --pointer</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --rtl</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --package-manager</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> pnpm</span></span></code></pre>",
+      "code": "npx zard-cli create my-app --template nx --preset Z6F9MtstG --pointer --rtl --package-manager pnpm",
+      "language": "bash"
+    },
+    {
+      "label": "bash",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> create</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> my-app</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --template</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> angular</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --yes</span></span></code></pre>",
+      "code": "npx zard-cli create my-app --template angular --yes",
+      "language": "bash"
+    },
+    {
+      "label": "bash",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> init</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --preset</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> Z6F9MtstG</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --pointer</span></span></code></pre>",
+      "code": "npx zard-cli init --preset Z6F9MtstG --pointer",
+      "language": "bash"
+    },
+    {
+      "label": "bash",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> apply</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --preset</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\"> &#x3C;</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">cod</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">e</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">></span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> [--only </span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">theme</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">|</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">font]</span></span></code></pre>",
+      "code": "npx zard-cli apply --preset <code> [--only theme|font]",
+      "language": "bash"
+    },
+    {
+      "label": "bash",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> apply</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --preset</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> Z6F9MtstG</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> apply</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --preset</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> Z6F9MtstG</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --only</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> theme</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> apply</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --preset</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> Z6F9MtstG</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> --only</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> font</span></span></code></pre>",
+      "code": "npx zard-cli apply --preset Z6F9MtstG\nnpx zard-cli apply --preset Z6F9MtstG --only theme\nnpx zard-cli apply --preset Z6F9MtstG --only font",
+      "language": "bash"
     }
   ]
 };

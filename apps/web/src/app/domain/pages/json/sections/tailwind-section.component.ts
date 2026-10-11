@@ -49,12 +49,26 @@ import type { CodeBlockData } from '@highlight/types';
           <div class="flex flex-col gap-3">
             <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
               This is used to generate the default color palette for your components.
-              <strong>This cannot be changed after initialization.</strong>
-              (but if u want u can change manually, all the themes exist into the
+              <strong>Editing this value does not repaint the theme.</strong>
+              To change it afterwards run
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">
+                zard-cli apply --preset &lt;code&gt; --only theme
+              </code>
+              , or copy the tokens by hand — all the themes exist in the
               <a class="text-blue-500" routerLink="/docs/theming">theming page</a>
-              )
+              .
             </p>
-            <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">Currently supported base colors:</p>
+            <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+              Currently supported base colors (
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">mauve</code>
+              ,
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">olive</code>
+              ,
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">mist</code>
+              and
+              <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">taupe</code>
+              come with presets):
+            </p>
           </div>
           <z-code-block [data]="tailwindBasecolorExample" />
         </div>
