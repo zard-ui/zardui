@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { computed, DestroyRef, effect, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -19,9 +19,6 @@ import { parseCreateParams, serializeCreateParams } from '../lib/create-url';
 import type { CreateAction } from '../lib/create.protocol';
 import { PresetHistory } from '../lib/preset-history';
 
-/** How long the pointer must settle on an option before the preview applies it. */
-export const PREVIEW_DEBOUNCE_MS = 50;
-
 /** The options a lock protects. `menu` holds both the color and the appearance of the menu. */
 export type LockKey =
   | 'style'
@@ -36,8 +33,8 @@ export type LockKey =
   | 'menuAccent';
 
 /**
- * Everything the `/create` page knows: the committed design (read from, and written to, the URL), the hover
- * preview laid over it, the locks, the undo history and the open/closed state of the dialogs.
+ * Everything the `/create` page knows: the design (read from, and written to, the URL), the locks, the undo history
+ * and the open/closed state of the dialogs.
  *
  * The URL is the single source of truth for the committed design: every change navigates, and the design signal
  * follows the query string. That is what makes the browser's back and forward buttons and a pasted link work with
@@ -57,13 +54,6 @@ export class CreateStateService {
   readonly item = computed(() => this.url().item);
   readonly preset = computed(() => encodePreset(this.design()));
 
-  /** The committed design with the hover preview laid over it — what the iframe shows. */
-  readonly previewOverride = signal<Partial<DesignConfig> | null>(null);
-  readonly effectiveDesign = computed(() => {
-    const override = this.previewOverride();
-    return override ? normalizeDesign({ ...this.design(), ...override }) : this.design();
-  });
-
   readonly dark = computed(() => this.darkMode.themeMode() === 'dark');
   readonly constraints = computed(() => designConstraints(this.design(), { dark: this.dark() }));
 
@@ -81,11 +71,8 @@ export class CreateStateService {
   /** The newest design, ahead of the URL while a navigation is still in flight. */
   private latest: DesignConfig = this.design();
   private lastSolidAccent: MenuAccentId = 'subtle';
-  private previewTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
-    inject(DestroyRef).onDestroy(() => this.cancelPreview());
-
     effect(() => {
       const { design, item, needsCanonicalization } = this.url();
       this.latest = design;
@@ -106,7 +93,6 @@ export class CreateStateService {
     if (designsEqual(next, this.latest)) return;
 
     this.latest = next;
-    this.cancelPreview();
     this.navigate(next, this.item(), false);
   }
 
@@ -152,26 +138,6 @@ export class CreateStateService {
 
   toggleDark(): void {
     this.darkMode.toggleTheme();
-  }
-
-  // --- Hover preview -----------------------------------------------------------------------------
-
-  /**
-   * Previews an option without committing it. Every call re-arms a trailing timer, so nothing applies while the
-   * pointer is still moving; the URL and the history are never touched.
-   */
-  preview(partial: Partial<DesignConfig>): void {
-    this.cancelPreview();
-    this.previewTimer = setTimeout(() => {
-      this.previewTimer = null;
-      this.previewOverride.set(partial);
-    }, PREVIEW_DEBOUNCE_MS);
-  }
-
-  /** Clearing is never debounced: leaving or closing reverts at once. */
-  clearPreview(): void {
-    this.cancelPreview();
-    if (this.previewOverride() !== null) this.previewOverride.set(null);
   }
 
   // --- Locks -------------------------------------------------------------------------------------
@@ -240,7 +206,6 @@ export class CreateStateService {
 
     const { design } = parseCreateParams({ keys: ['preset'], get: name => (name === 'preset' ? code : null) });
     this.latest = design;
-    this.cancelPreview();
     this.navigate(design, this.item(), true);
   }
 
@@ -263,12 +228,5 @@ export class CreateStateService {
       queryParams: serializeCreateParams(design, item),
       replaceUrl,
     });
-  }
-
-  private cancelPreview(): void {
-    if (this.previewTimer !== null) {
-      clearTimeout(this.previewTimer);
-      this.previewTimer = null;
-    }
   }
 }

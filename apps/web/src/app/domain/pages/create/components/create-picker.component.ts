@@ -24,9 +24,8 @@ export type { PickerEvent, PickerOption, PickerSection } from '../lib/picker.typ
  * One row of the customizer: what the option is, what it currently holds, a glyph, and a dark glass radio menu
  * that opens beside the card (above it on a phone).
  *
- * Hovering or arrowing onto an item emits `hovered` so the page can preview it without committing; `cleared` fires
- * when the pointer leaves the menu or it closes. A lock toggle sits beside the glyph and protects the option from
- * Shuffle.
+ * An option applies when it is clicked (or chosen with Enter); hovering and arrowing only move the highlight. A lock
+ * toggle sits beside the glyph and protects the option from Shuffle.
  */
 @Component({
   selector: 'z-create-picker',
@@ -78,7 +77,6 @@ export type { PickerEvent, PickerOption, PickerSection } from '../lib/picker.typ
       <z-popover
         class="dark max-h-96 w-52 gap-0 overflow-y-auto rounded-xl border-0 bg-neutral-950/80 p-1.5 text-neutral-100 ring-1 ring-neutral-950/80 backdrop-blur-xl max-md:w-[calc(100vw-3rem)] dark:bg-neutral-800/90 dark:ring-neutral-700/50"
         [attr.aria-label]="label()"
-        (mouseleave)="cleared.emit()"
       >
         <div role="menu" [attr.aria-label]="label()" (keydown)="onKeydown($event)">
           @for (section of sections(); track $index) {
@@ -96,8 +94,6 @@ export type { PickerEvent, PickerOption, PickerSection } from '../lib/picker.typ
                   [attr.aria-checked]="option.value === section.value"
                   [attr.data-value]="option.value"
                   [disabled]="option.disabled"
-                  (mousemove)="hover(section.id, option)"
-                  (focus)="hover(section.id, option)"
                   (click)="pick(section.id, option)"
                 >
                   <span class="truncate">{{ option.label }}</span>
@@ -127,7 +123,7 @@ export class CreatePickerComponent {
   readonly sections = input.required<readonly PickerSection[]>();
   readonly disabled = input(false, { transform: booleanAttribute });
 
-  /** On a phone the menu opens above the whole card, anchored to it, and hover preview is off. */
+  /** On a phone the menu opens above the whole card, anchored to it, and closes on a pick. */
   readonly mobile = input(false, { transform: booleanAttribute });
   readonly anchor = input<HTMLElement | undefined>(undefined);
   protected readonly origin = computed(() => {
@@ -139,8 +135,6 @@ export class CreatePickerComponent {
   readonly locked = input(false, { transform: booleanAttribute });
 
   readonly picked = output<PickerEvent>();
-  readonly hovered = output<PickerEvent>();
-  readonly cleared = output<void>();
   readonly lockToggled = output<void>();
 
   protected readonly open = signal(false);
@@ -148,12 +142,6 @@ export class CreatePickerComponent {
   protected onVisible(open: boolean): void {
     this.open.set(open);
     if (open) this.focusOpenMenu();
-    else this.cleared.emit();
-  }
-
-  protected hover(section: string, option: PickerOption): void {
-    if (this.mobile() || option.disabled) return;
-    this.hovered.emit({ section, value: option.value });
   }
 
   protected pick(section: string, option: PickerOption): void {
@@ -180,7 +168,7 @@ export class CreatePickerComponent {
     setTimeout(() => {
       const menu = this.document.querySelector<HTMLElement>('.cdk-overlay-container [role="menu"]');
       const checked = menu?.querySelector<HTMLElement>('[aria-checked="true"]:not(:disabled)');
-      // Focusing an item would preview it; the checked one is the committed value, so it previews nothing.
+      // Start on the committed value, so the arrows move from where the user is.
       (checked ?? menu?.querySelector<HTMLElement>('[role="menuitemradio"]:not(:disabled)'))?.focus();
     });
   }

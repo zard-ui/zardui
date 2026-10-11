@@ -65,8 +65,6 @@ const COPIED_MS = 2000;
           [mobile]="mobile()"
           [anchor]="card"
           (picked)="pick('style', $event)"
-          (hovered)="hover('style', $event)"
-          (cleared)="state.clearPreview()"
           (lockToggled)="state.toggleLock('style')"
         >
           <z-create-glyph slot="glyph" kind="style" [value]="design().style" />
@@ -81,8 +79,6 @@ const COPIED_MS = 2000;
           [mobile]="mobile()"
           [anchor]="card"
           (picked)="pick('baseColor', $event)"
-          (hovered)="hover('baseColor', $event)"
-          (cleared)="state.clearPreview()"
           (lockToggled)="state.toggleLock('baseColor')"
         >
           <z-create-glyph slot="glyph" kind="dot" [value]="dot('base', design().baseColor)" />
@@ -95,8 +91,6 @@ const COPIED_MS = 2000;
           [mobile]="mobile()"
           [anchor]="card"
           (picked)="pick('theme', $event)"
-          (hovered)="hover('theme', $event)"
-          (cleared)="state.clearPreview()"
           (lockToggled)="state.toggleLock('theme')"
         >
           <z-create-glyph slot="glyph" kind="dot" [value]="dot('theme', design().theme)" />
@@ -109,8 +103,6 @@ const COPIED_MS = 2000;
           [mobile]="mobile()"
           [anchor]="card"
           (picked)="pick('chartColor', $event)"
-          (hovered)="hover('chartColor', $event)"
-          (cleared)="state.clearPreview()"
           (lockToggled)="state.toggleLock('chartColor')"
         >
           <z-create-glyph slot="glyph" kind="dot" [value]="dot('chart', design().chartColor)" />
@@ -125,8 +117,6 @@ const COPIED_MS = 2000;
           [mobile]="mobile()"
           [anchor]="card"
           (picked)="pick('fontHeading', $event)"
-          (hovered)="hover('fontHeading', $event)"
-          (cleared)="state.clearPreview()"
           (lockToggled)="state.toggleLock('fontHeading')"
         >
           <z-create-glyph slot="glyph" kind="aa" [value]="headingGlyph()" />
@@ -139,8 +129,6 @@ const COPIED_MS = 2000;
           [mobile]="mobile()"
           [anchor]="card"
           (picked)="pick('font', $event)"
-          (hovered)="hover('font', $event)"
-          (cleared)="state.clearPreview()"
           (lockToggled)="state.toggleLock('font')"
         >
           <z-create-glyph slot="glyph" kind="aa" [value]="fontGlyph()" />
@@ -155,8 +143,6 @@ const COPIED_MS = 2000;
           [mobile]="mobile()"
           [anchor]="card"
           (picked)="pick('iconLibrary', $event)"
-          (hovered)="hover('iconLibrary', $event)"
-          (cleared)="state.clearPreview()"
           (lockToggled)="state.toggleLock('iconLibrary')"
         >
           <z-create-glyph slot="glyph" kind="icons" [value]="design().iconLibrary" />
@@ -170,8 +156,6 @@ const COPIED_MS = 2000;
           [mobile]="mobile()"
           [anchor]="card"
           (picked)="pick('radius', $event)"
-          (hovered)="hover('radius', $event)"
-          (cleared)="state.clearPreview()"
           (lockToggled)="state.toggleLock('radius')"
         >
           <z-create-glyph slot="glyph" kind="radius" />
@@ -186,8 +170,6 @@ const COPIED_MS = 2000;
           [mobile]="mobile()"
           [anchor]="card"
           (picked)="pick('menu', $event)"
-          (hovered)="hover('menu', $event)"
-          (cleared)="state.clearPreview()"
           (lockToggled)="state.toggleLock('menu')"
         >
           <z-create-glyph slot="glyph" kind="menu" />
@@ -201,8 +183,6 @@ const COPIED_MS = 2000;
           [mobile]="mobile()"
           [anchor]="card"
           (picked)="pick('menuAccent', $event)"
-          (hovered)="hover('menuAccent', $event)"
-          (cleared)="state.clearPreview()"
           (lockToggled)="state.toggleLock('menuAccent')"
         >
           <z-create-glyph slot="glyph" kind="accent" [value]="design().menuAccent" />
@@ -251,7 +231,7 @@ export class CreateCustomizerComponent {
   protected readonly shell = inject(CreateShellService);
   private readonly document = inject(DOCUMENT);
 
-  /** Whether the customizer is the phone-sized row: menus open above, and hover preview is off. */
+  /** Whether the customizer is the phone-sized row: menus open above the card. */
   readonly mobile = input(false);
 
   protected readonly design = this.state.design;
@@ -295,10 +275,6 @@ export class CreateCustomizerComponent {
 
   protected pick(picker: PickerId, event: PickerEvent): void {
     this.state.commit(changeFor(picker, event));
-  }
-
-  protected hover(picker: PickerId, event: PickerEvent): void {
-    this.state.preview(changeFor(picker, event));
   }
 
   protected async copyPreset(): Promise<void> {

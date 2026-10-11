@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { DEFAULT_DESIGN, encodePreset, normalizeDesign, parsePresetInput, SHUFFLE_PRESETS } from '@zard/design';
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
-import { CreateStateService, PREVIEW_DEBOUNCE_MS } from './create-state.service';
+import { CreateStateService } from './create-state.service';
 
 function paramMap(params: Record<string, string>) {
   return {
@@ -141,56 +141,6 @@ describe('CreateStateService', () => {
       service.commit({ style: 'mira' });
 
       expect(navigate.mock.calls[0][1].queryParams).toEqual({ preset: code({ style: 'mira' }), item: 'preview-02' });
-    });
-  });
-
-  describe('hover preview', () => {
-    it('applies after the debounce and never touches the URL', () => {
-      const service = createService();
-
-      service.preview({ style: 'luma' });
-      expect(service.effectiveDesign().style).toBe('nova');
-
-      jest.advanceTimersByTime(PREVIEW_DEBOUNCE_MS);
-      expect(service.effectiveDesign().style).toBe('luma');
-      expect(service.design().style).toBe('nova');
-      expect(navigate).not.toHaveBeenCalled();
-    });
-
-    it('re-arms the timer on every move, so nothing applies while the pointer is moving', () => {
-      const service = createService();
-
-      service.preview({ style: 'luma' });
-      jest.advanceTimersByTime(PREVIEW_DEBOUNCE_MS - 10);
-      service.preview({ style: 'maia' });
-      jest.advanceTimersByTime(PREVIEW_DEBOUNCE_MS - 10);
-      expect(service.effectiveDesign().style).toBe('nova');
-
-      jest.advanceTimersByTime(10);
-      expect(service.effectiveDesign().style).toBe('maia');
-    });
-
-    it('clears at once and drops a pending preview', () => {
-      const service = createService();
-
-      service.preview({ style: 'luma' });
-      jest.advanceTimersByTime(PREVIEW_DEBOUNCE_MS);
-      service.clearPreview();
-      expect(service.effectiveDesign().style).toBe('nova');
-
-      service.preview({ style: 'maia' });
-      service.clearPreview();
-      jest.advanceTimersByTime(PREVIEW_DEBOUNCE_MS * 2);
-      expect(service.effectiveDesign().style).toBe('nova');
-    });
-
-    it('normalizes a previewed combination like a committed one', () => {
-      const service = createService();
-
-      service.preview({ style: 'lyra' });
-      jest.advanceTimersByTime(PREVIEW_DEBOUNCE_MS);
-
-      expect(service.effectiveDesign().radius).toBe('none');
     });
   });
 

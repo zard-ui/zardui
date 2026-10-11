@@ -64,17 +64,19 @@ test.describe('Create builder', () => {
     expect(await previewFrame(page).evaluate(() => (window as unknown as { __kept?: boolean }).__kept)).toBe(true);
   });
 
-  test('hovering previews an option without touching the URL, and leaving reverts it', async ({ page }) => {
+  test('hovering an option changes nothing; only a click applies it', async ({ page }) => {
     const before = page.url();
     const menu = await open(page, 'Style');
 
-    await menu.getByRole('menuitemradio', { name: 'Maia', exact: true }).hover();
-    await expect.poll(async () => await bodyClasses(page), { timeout: 15_000 }).toContain('style-maia');
+    const maia = menu.getByRole('menuitemradio', { name: 'Maia', exact: true });
+    await maia.hover();
+    await page.waitForTimeout(300);
+    expect(await bodyClasses(page)).not.toContain('style-maia');
     expect(page.url()).toBe(before);
 
-    await page.keyboard.press('Escape');
-    await expect.poll(async () => await bodyClasses(page)).toContain('style-nova');
-    expect(page.url()).toBe(before);
+    await maia.click();
+    await expect.poll(async () => await bodyClasses(page), { timeout: 15_000 }).toContain('style-maia');
+    expect(page.url()).not.toBe(before);
   });
 
   test('the font reaches the iframe', async ({ page }) => {
