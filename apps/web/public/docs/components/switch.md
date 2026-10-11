@@ -61,7 +61,7 @@ type OnChangeType = (value: boolean) => void;
         <span
           [attr.data-size]="zSize()"
           [attr.data-state]="status()"
-          class="bg-background dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground pointer-events-none block rounded-full ring-0 transition-transform data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)]"
+          class="bg-background block rounded-full ring-0 transition-transform dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] pointer-events-none"
         ></span>
       </button>
 
@@ -134,20 +134,17 @@ export class ZardSwitchComponent implements ControlValueAccessor {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const switchVariants = cva(
-  'peer relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 disabled:cursor-not-allowed disabled:opacity-50',
-  {
-    variants: {
-      zSize: {
-        default: 'h-[18.4px] w-[32px]',
-        sm: 'h-[14px] w-[24px]',
-      },
-    },
-    defaultVariants: {
-      zSize: 'default',
+export const switchVariants = cva('relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 disabled:cursor-not-allowed peer outline-none disabled:opacity-50', {
+  variants: {
+    zSize: {
+      default: 'h-[18.4px] w-[32px]',
+      sm: 'h-[14px] w-[24px]',
     },
   },
-);
+  defaultVariants: {
+    zSize: 'default',
+  },
+});
 
 export type ZardSwitchSizeVariants = NonNullable<VariantProps<typeof switchVariants>['zSize']>;
 ```

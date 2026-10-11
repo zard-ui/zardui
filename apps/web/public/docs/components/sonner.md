@@ -54,7 +54,7 @@ const DEFAULT_STYLE: Record<string, string> = {
 
 const DEFAULT_TOAST_OPTIONS: ToasterProps['toastOptions'] = {
   classes: {
-    toast: 'cn-toast',
+    toast: '',
   },
 };
 

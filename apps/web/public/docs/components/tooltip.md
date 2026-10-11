@@ -342,13 +342,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     <ng-container *zStringTemplateOutlet="tooltipText()" zardId="tooltip" #z="zardId">{{ tooltipText() }}</ng-container>
 
     <span [class]="arrowClasses()">
-      <svg
-        class="bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px]"
-        width="10"
-        height="5"
-        viewBox="0 0 30 10"
-        preserveAspectRatio="none"
-      >
+      <svg class="bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px]" width="10" height="5" viewBox="0 0 30 10" preserveAspectRatio="none">
         <polygon points="0,0 30,0 15,10" />
       </svg>
     </span>
@@ -389,9 +383,7 @@ export class ZardTooltipComponent {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const tooltipVariants = cva(
-  'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
-);
+export const tooltipVariants = cva('z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95');
 export type ZardTooltipVariants = VariantProps<typeof tooltipVariants>;
 
 export const tooltipPositionVariants = cva('absolute', {

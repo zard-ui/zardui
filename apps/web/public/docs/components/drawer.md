@@ -415,39 +415,32 @@ import { cva, type VariantProps } from 'class-variance-authority';
  * so the page stays visible around it. `m-2` is that inset — the enter/exit
  * transform in the component adds it back so the drawer still leaves the screen.
  */
-export const drawerVariants = cva(
-  [
-    'group/drawer pointer-events-auto fixed z-50 m-2 flex min-h-0 flex-col',
-    'rounded-3xl border border-popover bg-popover text-sm text-popover-foreground shadow-xl dark:border-border',
-    'outline-none select-none will-change-transform',
-  ],
-  {
-    variants: {
-      zPlacement: {
-        top: 'inset-x-0 top-0 origin-top',
-        right: 'inset-y-0 right-0 w-3/4 origin-right flex-row sm:w-96',
-        bottom: 'inset-x-0 bottom-0 origin-bottom',
-        left: 'inset-y-0 left-0 w-3/4 origin-left flex-row sm:w-96',
-      },
-      /**
-       * A drawer with snap points is laid out at full height and only translated, so
-       * the content-driven height that caps a plain vertical drawer has to go.
-       */
-      zSnapping: {
-        true: '',
-        false: '',
-      },
+export const drawerVariants = cva('fixed z-50 m-2 flex min-h-0 flex-col rounded-3xl border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform dark:border-border group/drawer pointer-events-auto outline-none select-none', {
+  variants: {
+    zPlacement: {
+      top: 'inset-x-0 top-0 origin-top',
+      right: 'inset-y-0 right-0 w-3/4 origin-right flex-row sm:w-96',
+      bottom: 'inset-x-0 bottom-0 origin-bottom',
+      left: 'inset-y-0 left-0 w-3/4 origin-left flex-row sm:w-96',
     },
-    compoundVariants: [
-      { zPlacement: ['top', 'bottom'], zSnapping: false, class: 'max-h-[calc(100dvh-6rem)]' },
-      { zPlacement: ['top', 'bottom'], zSnapping: true, class: 'h-dvh' },
-    ],
-    defaultVariants: {
-      zPlacement: 'bottom',
-      zSnapping: false,
+    /**
+     * A drawer with snap points is laid out at full height and only translated, so
+     * the content-driven height that caps a plain vertical drawer has to go.
+     */
+    zSnapping: {
+      true: '',
+      false: '',
     },
   },
-);
+  compoundVariants: [
+    { zPlacement: ['top', 'bottom'], zSnapping: false, class: 'max-h-[calc(100dvh-6rem)]' },
+    { zPlacement: ['top', 'bottom'], zSnapping: true, class: 'h-dvh' },
+  ],
+  defaultVariants: {
+    zPlacement: 'bottom',
+    zSnapping: false,
+  },
+});
 
 /**
  * The grab strip. It only reserves space — the pill itself is an `::after` drawn by
@@ -468,13 +461,9 @@ export const drawerHandleVariants = cva('relative z-10 flex shrink-0 cursor-grab
 });
 
 /** Everything the consumer projects, kept scrollable and clipped by the panel radius. */
-export const drawerBodyVariants = cva(
-  'flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit] select-text',
-);
+export const drawerBodyVariants = cva('flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit] select-text');
 
-export const drawerHeaderVariants = cva(
-  'flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start',
-);
+export const drawerHeaderVariants = cva('flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start');
 
 export const drawerTitleVariants = cva('text-base font-medium text-foreground wrap-anywhere');
 

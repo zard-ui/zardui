@@ -111,13 +111,13 @@ export class ZardAccordionComponent implements AfterContentInit {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const accordionItemVariants = cva('border-b last:border-b-0 flex flex-1 flex-col', {
+export const accordionItemVariants = cva('border-b flex flex-1 flex-col last:border-b-0', {
   variants: {},
   defaultVariants: {},
 });
 
 export const accordionTriggerVariants = cva(
-  'cursor-pointer group flex flex-1 items-start justify-between gap-4 rounded-md py-2.5 text-start text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 w-full',
+  'cursor-pointer flex flex-1 items-start justify-between gap-4 rounded-md py-2.5 text-start text-sm font-medium transition-all w-full hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] group outline-none disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {},
     defaultVariants: {},
@@ -180,7 +180,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
       {{ zTitle() }}
       <ng-icon
         name="lucideChevronDown"
-        class="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
+        class="text-muted-foreground size-4 translate-y-0.5 transition-transform duration-200 pointer-events-none shrink-0"
         [class]="isOpen() ? 'rotate-180' : ''"
       />
     </button>

@@ -520,8 +520,6 @@ export class ZardCalendarComponent implements ControlValueAccessor {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
 /**
  * Every measurement of the calendar derives from two CSS variables declared on the root:
  *
@@ -532,12 +530,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
  * `class="[--cell-size:--spacing(12)]"`.
  */
 export const calendarVariants = cva(
-  mergeClasses(
-    // `block` because these classes land on the `<z-calendar>` host, which is inline by default.
-    'group/calendar block w-fit bg-background p-2',
-    '[--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)]',
-    'in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
-  ),
+  // `block` because these classes land on the `<z-calendar>` host, which is inline by default.
+  'block w-fit bg-background p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent group/calendar',
 );
 
 /** Wraps every rendered month. Stacks on small screens and sits side by side from `md` up. */
@@ -558,9 +552,7 @@ export const calendarNavSpacerVariants = cva('size-(--cell-size)');
 
 export const calendarCaptionVariants = cva('flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)');
 
-export const calendarDropdownsVariants = cva(
-  'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
-);
+export const calendarDropdownsVariants = cva('flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium');
 
 export const calendarCaptionLabelVariants = cva('font-medium select-none', {
   variants: {
@@ -581,21 +573,14 @@ export const calendarCaptionLabelVariants = cva('font-medium select-none', {
  * so the browser owns the popup while the label owns the looks — the same trick shadcn uses.
  * The focus ring therefore has to come from the select, through `has-[:focus-visible]`.
  */
-export const calendarDropdownRootVariants = cva(
-  mergeClasses('relative isolate', 'has-disabled:pointer-events-none has-disabled:opacity-50'),
-);
+export const calendarDropdownRootVariants = cva('relative isolate has-disabled:pointer-events-none has-disabled:opacity-50');
 
 /** The native select itself: invisible, but on top and still clickable. */
 export const calendarDropdownVariants = cva('absolute inset-0 z-10 cursor-pointer bg-popover opacity-0');
 
 export const calendarWeekdaysVariants = cva('grid w-full grid-cols-7');
 
-export const calendarWeekdayVariants = cva(
-  mergeClasses(
-    'flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center',
-    'rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none',
-  ),
-);
+export const calendarWeekdayVariants = cva('flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none');
 
 /** The container for the day rows. */
 export const calendarWeeksVariants = cva('mt-2 flex w-full flex-col gap-y-2');
@@ -606,12 +591,8 @@ export const calendarWeekVariants = cva('mt-2 grid w-full grid-cols-7 gap-x-0 ga
 export const calendarRowVariants = cva('grid w-full grid-cols-7 gap-x-0');
 
 export const calendarDayVariants = cva(
-  mergeClasses(
-    'group/day relative aspect-square size-full rounded-(--cell-radius) p-0 text-center select-none',
-    // Round the range rail at both ends of every week row (supports both nested rows and flat grid).
-    'first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius)',
-    'last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
-  ),
+  // Round the range rail at both ends of every week row (supports both nested rows and flat grid).
+  'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius) group/day select-none',
   {
     variants: {
       selected: {
@@ -623,12 +604,8 @@ export const calendarDayVariants = cva(
         false: '',
       },
       rangeStart: {
-        true: mergeClasses(
-          'relative isolate z-0 rounded-s-(--cell-radius) bg-muted',
-          'after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-muted',
-          // No neighbour to bridge to at the end of a week — do not bleed outside the grid.
-          '[&:last-child]:after:hidden [&:nth-child(7n)]:after:hidden',
-        ),
+        // No neighbour to bridge to at the end of a week — do not bleed outside the grid.
+        true: 'relative isolate z-0 rounded-s-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-muted [&:last-child]:after:hidden [&:nth-child(7n)]:after:hidden',
         false: '',
       },
       rangeMiddle: {
@@ -636,11 +613,7 @@ export const calendarDayVariants = cva(
         false: '',
       },
       rangeEnd: {
-        true: mergeClasses(
-          'relative isolate z-0 rounded-e-(--cell-radius) bg-muted',
-          'after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-muted',
-          '[&:first-child]:after:hidden [&:nth-child(7n+1)]:after:hidden',
-        ),
+        true: 'relative isolate z-0 rounded-e-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-muted [&:first-child]:after:hidden [&:nth-child(7n+1)]:after:hidden',
         false: '',
       },
     },
@@ -671,61 +644,50 @@ export const calendarDayVariants = cva(
   },
 );
 
-export const calendarDayButtonVariants = cva(
-  mergeClasses(
-    'relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1',
-    'rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal',
-    'transition-colors outline-none',
-    'hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 dark:hover:text-foreground',
-    'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
-    'disabled:pointer-events-none disabled:opacity-50',
-    '[&>span]:text-xs [&>span]:opacity-70',
-  ),
-  {
-    variants: {
-      selected: {
-        true: 'bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
-        false: '',
-      },
-      rangeStart: {
-        true: 'rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
-        false: '',
-      },
-      rangeEnd: {
-        true: 'rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
-        false: '',
-      },
-      rangeMiddle: {
-        true: 'rounded-none bg-muted text-foreground hover:bg-muted hover:text-foreground',
-        false: '',
-      },
-      outside: {
-        true: 'text-muted-foreground aria-selected:text-muted-foreground',
-        false: '',
-      },
-      disabled: {
-        true: 'text-muted-foreground opacity-50 cursor-not-allowed',
-        false: '',
-      },
+export const calendarDayButtonVariants = cva('relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1 rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal transition-colors hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 dark:hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50 [&>span]:text-xs [&>span]:opacity-70 outline-none disabled:pointer-events-none', {
+  variants: {
+    selected: {
+      true: 'bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
+      false: '',
     },
-    compoundVariants: [
-      {
-        // A one-day range renders as a regular selected day.
-        rangeStart: true,
-        rangeEnd: true,
-        className: 'rounded-(--cell-radius) bg-primary text-primary-foreground',
-      },
-    ],
-    defaultVariants: {
-      selected: false,
-      rangeStart: false,
-      rangeEnd: false,
-      rangeMiddle: false,
-      outside: false,
-      disabled: false,
+    rangeStart: {
+      true: 'rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
+      false: '',
+    },
+    rangeEnd: {
+      true: 'rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
+      false: '',
+    },
+    rangeMiddle: {
+      true: 'rounded-none bg-muted text-foreground hover:bg-muted hover:text-foreground',
+      false: '',
+    },
+    outside: {
+      true: 'text-muted-foreground aria-selected:text-muted-foreground',
+      false: '',
+    },
+    disabled: {
+      true: 'text-muted-foreground opacity-50 cursor-not-allowed',
+      false: '',
     },
   },
-);
+  compoundVariants: [
+    {
+      // A one-day range renders as a regular selected day.
+      rangeStart: true,
+      rangeEnd: true,
+      className: 'rounded-(--cell-radius) bg-primary text-primary-foreground',
+    },
+  ],
+  defaultVariants: {
+    selected: false,
+    rangeStart: false,
+    rangeEnd: false,
+    rangeMiddle: false,
+    outside: false,
+    disabled: false,
+  },
+});
 
 export type ZardCalendarCaptionLabelVariants = NonNullable<VariantProps<typeof calendarCaptionLabelVariants>['layout']>;
 ```
