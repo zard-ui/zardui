@@ -1,11 +1,11 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const breadcrumbVariants = cva('w-full', {
+export const breadcrumbVariants = cva('cn-breadcrumb', {
   variants: {
     zSize: {
-      sm: 'text-xs',
-      md: 'text-sm',
-      lg: 'text-base',
+      sm: 'cn-breadcrumb-size-sm',
+      md: 'cn-breadcrumb-size-md',
+      lg: 'cn-breadcrumb-size-lg',
     },
   },
   defaultVariants: {
@@ -14,48 +14,43 @@ export const breadcrumbVariants = cva('w-full', {
 });
 export type ZardBreadcrumbSizeVariants = NonNullable<VariantProps<typeof breadcrumbVariants>['zSize']>;
 
-export const breadcrumbListVariants = cva(
-  'text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word sm:gap-2.5',
-  {
-    variants: {
-      zAlign: {
-        start: 'justify-start',
-        center: 'justify-center',
-        end: 'justify-end',
-      },
-      zWrap: {
-        wrap: 'flex-wrap',
-        nowrap: 'flex-nowrap',
-      },
+export const breadcrumbListVariants = cva('cn-breadcrumb-list', {
+  variants: {
+    zAlign: {
+      start: 'cn-breadcrumb-list-align-start',
+      center: 'cn-breadcrumb-list-align-center',
+      end: 'cn-breadcrumb-list-align-end',
     },
-    defaultVariants: {
-      zAlign: 'start',
-      zWrap: 'wrap',
+    zWrap: {
+      wrap: 'cn-breadcrumb-list-wrap-wrap',
+      nowrap: 'cn-breadcrumb-list-wrap-nowrap',
     },
   },
-);
+  defaultVariants: {
+    zAlign: 'start',
+    zWrap: 'wrap',
+  },
+});
 export type ZardBreadcrumbAlignVariants = NonNullable<VariantProps<typeof breadcrumbListVariants>['zAlign']>;
 export type ZardBreadcrumbWrapVariants = NonNullable<VariantProps<typeof breadcrumbListVariants>['zWrap']>;
 
-export const breadcrumbItemVariants = cva('inline-flex items-center gap-1.5');
+export const breadcrumbItemVariants = cva('cn-breadcrumb-item');
 export type ZardBreadcrumbItemVariants = VariantProps<typeof breadcrumbItemVariants>;
 
-export const breadcrumbLinkVariants = cva('transition-colors hover:text-foreground');
+export const breadcrumbLinkVariants = cva('cn-breadcrumb-link');
 export type ZardBreadcrumbLinkVariants = VariantProps<typeof breadcrumbLinkVariants>;
 
-export const breadcrumbPageVariants = cva('font-normal text-foreground');
+export const breadcrumbPageVariants = cva('cn-breadcrumb-page');
 export type ZardBreadcrumbPageVariants = VariantProps<typeof breadcrumbPageVariants>;
 
-export const breadcrumbSeparatorVariants = cva(
-  'text-muted-foreground [&_svg]:size-3.5 [&_ng-icon]:flex! [&_ng-icon]:items-center! [&_ng-icon]:size-3.5!',
-);
+export const breadcrumbSeparatorVariants = cva('cn-breadcrumb-separator');
 export type ZardBreadcrumbSeparatorVariants = VariantProps<typeof breadcrumbSeparatorVariants>;
 
-export const breadcrumbEllipsisVariants = cva('flex size-9 items-center justify-center', {
+export const breadcrumbEllipsisVariants = cva('cn-breadcrumb-ellipsis', {
   variants: {
     zColor: {
-      muted: 'text-muted-foreground',
-      strong: 'text-foreground',
+      muted: 'cn-breadcrumb-ellipsis-color-muted',
+      strong: 'cn-breadcrumb-ellipsis-color-strong',
     },
   },
   defaultVariants: {

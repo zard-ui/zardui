@@ -7,18 +7,18 @@ import type { ZardButtonSizeVariants } from '@/shared/components/button/button.v
  * `class="w-44"` on `<z-date-picker />` resizes the whole thing, and dropping it
  * into a `<div z-field>` lets the field own the width instead.
  */
-export const datePickerVariants = cva('flex w-[212px] flex-col');
+export const datePickerVariants = cva('cn-date-picker');
 
 /**
  * Trigger button. Everything else (height, colors, focus ring) comes from
  * `buttonVariants` through `<button z-button>`, so only the delta lives here.
  */
-export const datePickerTriggerVariants = cva('w-full font-normal data-[empty=true]:text-muted-foreground', {
+export const datePickerTriggerVariants = cva('cn-date-picker-trigger', {
   variants: {
     zIcon: {
-      chevron: 'justify-between text-start',
-      calendar: 'justify-start text-start',
-      none: 'justify-start text-start',
+      chevron: 'cn-date-picker-trigger-icon-chevron',
+      calendar: 'cn-date-picker-trigger-icon-calendar',
+      none: 'cn-date-picker-trigger-icon-none',
     },
   },
   defaultVariants: {

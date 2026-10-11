@@ -1,11 +1,13 @@
 import { DEFAULT_REGISTRY_URL as BUILD_REGISTRY_URL } from '@cli/config/registry-config.js';
 import { isIconFamily, retargetIcons, SOURCE_ICON_FAMILY, type IconFamily } from '@cli/core/icons/index.js';
+import { resolveStyle, transformStyle, DEFAULT_STYLE } from '@cli/core/styles/index.js';
 import type { Config } from '@cli/utils/config.js';
 import { ConfigError } from '@cli/utils/errors.js';
 import { fetchJson } from '@cli/utils/http-client.js';
 import { iconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger } from '@cli/utils/logger.js';
 import { assertSupportedSchema } from '@cli/utils/schema-version.js';
+import { styleCatalog } from '@cli/utils/style-catalog.js';
 import * as path from 'node:path';
 
 export const DEFAULT_REGISTRY_URL =
@@ -33,7 +35,13 @@ export interface RegistryItem {
   basePath?: string;
   files: Array<{
     name: string;
+    /** The file as the default style (nova) writes it — what readers that predate styles install. */
     content: string;
+    /**
+     * The same file with its style markers unresolved (`cn-button`), when it has
+     * any. `add` resolves it into the style `components.json` names.
+     */
+    styled?: string;
   }>;
   dependencies?: string[];
   devDependencies?: string[];
@@ -336,6 +344,25 @@ function blockAsRegistryItem(block: BlockItem): RegistryItem {
   };
 }
 
+/**
+ * The file's source in the style `components.json` names.
+ *
+ * `content` is already the default style resolved, so that one needs no work —
+ * and keeps working when the style tables the CLI carries are older than the
+ * registry's. Any other style starts from `styled`, the source with its markers.
+ * A file with no `styled` has no markers, which is every block and every file
+ * from a registry that predates styles.
+ */
+export function styledContent(
+  file: RegistryItem['files'][number],
+  config: Pick<Config, 'style' | 'menuColor' | 'menuAppearance'>,
+): string {
+  const defaultMenu = (config.menuColor ?? 'default') === 'default' && (config.menuAppearance ?? 'solid') === 'solid';
+  if (file.styled === undefined || (resolveStyle(config.style) === DEFAULT_STYLE && defaultMenu)) return file.content;
+
+  return transformStyle(file.styled, config.style, styleCatalog(), config);
+}
+
 export async function fetchComponent(
   componentName: string,
   config: Config,
@@ -355,7 +382,7 @@ export async function fetchComponent(
 
   const transformedFiles = item.files.map(file => {
     const retargeted = retargetIcons(
-      transformContent(file.content, config, { ...options, fileName: file.name }),
+      transformContent(styledContent(file, config), config, { ...options, fileName: file.name }),
       sourceFamily,
       config.icons,
       iconCatalog(),

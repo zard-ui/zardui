@@ -1,35 +1,25 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const buttonGroupVariants = cva(
-  'group/button-group flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 [&>input]:flex-1',
-  {
-    variants: {
-      zOrientation: {
-        horizontal:
-          '[&>*:not(:first-child)]:rounded-s-none [&>*:not(:first-child)]:border-s-0 [&>z-select:not(:first-child)>button]:rounded-s-none [&>z-select:not(:first-child)>button]:border-s-0 [&>*:not(:last-child)]:rounded-e-none [&>z-select:not(:last-child)>button]:rounded-e-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-e-lg!',
-        vertical:
-          'flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>z-select:not(:first-child)>button]:rounded-t-none [&>z-select:not(:first-child)>button]:border-t-0 [&>*:not(:last-child)]:rounded-b-none [&>z-select:not(:last-child)>button]:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg!',
-      },
-    },
-    defaultVariants: {
-      zOrientation: 'horizontal',
+export const buttonGroupVariants = cva('cn-button-group group/button-group', {
+  variants: {
+    zOrientation: {
+      horizontal: 'cn-button-group-orientation-horizontal',
+      vertical: 'cn-button-group-orientation-vertical',
     },
   },
-);
+  defaultVariants: {
+    zOrientation: 'horizontal',
+  },
+});
 export type ZardButtonGroupVariants = VariantProps<typeof buttonGroupVariants>;
 
-export const buttonGroupSeparatorVariants = cva(
-  'bg-input relative self-stretch grow-0 shrink-0 pointer-events-none select-none',
-  {
-    variants: {
-      zOrientation: {
-        horizontal: 'mx-px w-auto',
-        vertical: 'my-px h-auto',
-      },
+export const buttonGroupSeparatorVariants = cva('cn-button-group-separator pointer-events-none select-none', {
+  variants: {
+    zOrientation: {
+      horizontal: 'cn-button-group-separator-orientation-horizontal',
+      vertical: 'cn-button-group-separator-orientation-vertical',
     },
   },
-);
+});
 
-export const buttonGroupTextVariants = cva(
-  "bg-muted flex items-center gap-2 rounded-lg border px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
-);
+export const buttonGroupTextVariants = cva('cn-button-group-text [&_svg]:pointer-events-none');

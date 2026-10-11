@@ -1,10 +1,10 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const carouselVariants = cva('overflow-hidden', {
+export const carouselVariants = cva('cn-carousel', {
   variants: {
     zOrientation: {
       horizontal: '',
-      vertical: 'h-full',
+      vertical: 'cn-carousel-orientation-vertical',
     },
     zControls: {
       none: '',
@@ -17,11 +17,11 @@ export const carouselVariants = cva('overflow-hidden', {
   },
 });
 
-export const carouselContentVariants = cva('flex', {
+export const carouselContentVariants = cva('cn-carousel-content', {
   variants: {
     zOrientation: {
-      horizontal: '-ms-4',
-      vertical: '-mt-4 flex-col',
+      horizontal: 'cn-carousel-content-orientation-horizontal',
+      vertical: 'cn-carousel-content-orientation-vertical',
     },
   },
   defaultVariants: {
@@ -29,11 +29,11 @@ export const carouselContentVariants = cva('flex', {
   },
 });
 
-export const carouselItemVariants = cva('min-w-0 shrink-0 grow-0 basis-full', {
+export const carouselItemVariants = cva('cn-carousel-item', {
   variants: {
     zOrientation: {
-      horizontal: 'ps-4',
-      vertical: 'pt-4',
+      horizontal: 'cn-carousel-item-orientation-horizontal',
+      vertical: 'cn-carousel-item-orientation-vertical',
     },
   },
   defaultVariants: {
@@ -41,11 +41,11 @@ export const carouselItemVariants = cva('min-w-0 shrink-0 grow-0 basis-full', {
   },
 });
 
-export const carouselPreviousButtonVariants = cva('absolute size-8 touch-manipulation rounded-full px-0', {
+export const carouselPreviousButtonVariants = cva('cn-carousel-previous-button touch-manipulation', {
   variants: {
     zOrientation: {
-      horizontal: 'top-1/2 -start-12 -translate-y-1/2 rtl:rotate-180',
-      vertical: '-top-12 left-1/2 -translate-x-1/2 rotate-90',
+      horizontal: 'cn-carousel-previous-button-orientation-horizontal',
+      vertical: 'cn-carousel-previous-button-orientation-vertical',
     },
   },
   defaultVariants: {
@@ -53,11 +53,11 @@ export const carouselPreviousButtonVariants = cva('absolute size-8 touch-manipul
   },
 });
 
-export const carouselNextButtonVariants = cva('absolute size-8 touch-manipulation rounded-full px-0', {
+export const carouselNextButtonVariants = cva('cn-carousel-next-button touch-manipulation', {
   variants: {
     zOrientation: {
-      horizontal: 'top-1/2 -end-12 -translate-y-1/2 rtl:rotate-180',
-      vertical: '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
+      horizontal: 'cn-carousel-next-button-orientation-horizontal',
+      vertical: 'cn-carousel-next-button-orientation-vertical',
     },
   },
   defaultVariants: {

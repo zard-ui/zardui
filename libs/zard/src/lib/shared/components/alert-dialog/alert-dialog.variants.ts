@@ -1,56 +1,29 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const alertDialogVariants = cva(
-  [
-    'group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full -translate-1/2 gap-4',
-    'rounded-xl bg-popover p-4 text-popover-foreground ring-1 ring-foreground/10 outline-none',
-    'data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm',
-  ],
-  {
-    variants: {
-      zSize: {
-        default: '',
-        sm: '',
-      },
-    },
-    defaultVariants: {
-      zSize: 'default',
+export const alertDialogVariants = cva('cn-alert-dialog group/alert-dialog-content outline-none', {
+  variants: {
+    zSize: {
+      default: '',
+      sm: '',
     },
   },
-);
+  defaultVariants: {
+    zSize: 'default',
+  },
+});
 
 /** Classes of the mask behind an alert dialog, shared by the declarative form and the service. */
 export const ALERT_DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
 
-export const alertDialogHeaderVariants = cva([
-  'grid grid-rows-[auto_1fr] place-items-center gap-1.5 text-center',
-  'has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] has-data-[slot=alert-dialog-media]:gap-x-4',
-  'sm:group-data-[size=default]/alert-dialog-content:place-items-start',
-  'sm:group-data-[size=default]/alert-dialog-content:text-start',
-  'sm:group-data-[size=default]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr]',
-]);
+export const alertDialogHeaderVariants = cva('cn-alert-dialog-header');
 
-export const alertDialogTitleVariants = cva([
-  'text-base font-medium wrap-anywhere',
-  'sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
-]);
+export const alertDialogTitleVariants = cva('cn-alert-dialog-title');
 
-export const alertDialogDescriptionVariants = cva([
-  'text-sm text-balance text-muted-foreground wrap-anywhere md:text-pretty',
-  '[&_a]:underline [&_a]:underline-offset-[3px] [&_a]:hover:text-foreground',
-]);
+export const alertDialogDescriptionVariants = cva('cn-alert-dialog-description');
 
-export const alertDialogFooterVariants = cva([
-  '-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4',
-  'group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2',
-  'sm:flex-row sm:justify-end',
-]);
+export const alertDialogFooterVariants = cva('cn-alert-dialog-footer');
 
-export const alertDialogMediaVariants = cva([
-  'mb-2 inline-flex size-10 items-center justify-center rounded-md bg-muted',
-  'sm:group-data-[size=default]/alert-dialog-content:row-span-2',
-  "*:[svg:not([class*='size-'])]:size-6",
-]);
+export const alertDialogMediaVariants = cva('cn-alert-dialog-media');
 
 export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 export type ZardAlertDialogSizeVariants = NonNullable<VariantProps<typeof alertDialogVariants>['zSize']>;
