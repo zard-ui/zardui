@@ -463,7 +463,7 @@ export const SHEET_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:
 
 export const sheetHeaderVariants = cva('flex flex-col gap-0.5 p-4');
 
-export const sheetTitleVariants = cva('text-base font-medium text-foreground wrap-anywhere');
+export const sheetTitleVariants = cva('text-base font-medium text-foreground wrap-anywhere font-heading');
 
 export const sheetDescriptionVariants = cva('text-sm text-muted-foreground wrap-anywhere');
 

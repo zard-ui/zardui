@@ -622,6 +622,10 @@
     @apply text-lg font-semibold tracking-wider uppercase;
   }
 
+  .cn-font-heading {
+    @apply font-heading;
+  }
+
   .cn-card-description {
     @apply text-sm text-muted-foreground leading-relaxed;
   }

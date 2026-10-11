@@ -16,7 +16,7 @@ export const emptyIconVariants = cva('cn-empty-icon [&_svg]:pointer-events-none 
   variants: {},
 });
 
-export const emptyTitleVariants = cva('cn-empty-title', {
+export const emptyTitleVariants = cva('cn-empty-title cn-font-heading', {
   variants: {},
 });
 

@@ -48,6 +48,10 @@ Markers follow shadcn's names so its own sheets map onto ours: `cn-<component>[-
 (`cn-button-variant-outline`, `cn-card-header`, `cn-dropdown-menu-item`). A part zard has and shadcn does not gets a name in
 the same shape (`cn-calendar-day-button`).
 
+One marker is not a component part: `cn-font-heading`, on the titles shadcn gives the heading font (card, dialog,
+alert-dialog, sheet, drawer, empty). Every sheet resolves it to `font-heading`, which reads `--font-heading` — the
+variable a preset's Heading font sets (`zard-cli init --preset`). A project without it keeps the inherited font.
+
 ## Adding or changing a component
 
 1. Put the structure in the source and the look in markers; name them as above.

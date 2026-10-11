@@ -384,6 +384,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
     'cn-field-title': 'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+    'cn-font-heading': 'font-heading',
     'cn-hover-card':
       'z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
@@ -1075,6 +1076,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-4 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
     'cn-field-title': 'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+    'cn-font-heading': 'font-heading',
     'cn-hover-card':
       'z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
@@ -1763,6 +1765,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
     'cn-field-title': 'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+    'cn-font-heading': 'font-heading',
     'cn-hover-card':
       'z-50 border bg-popover p-4 text-popover-foreground origin-(--z-hover-card-transform-origin) ring-foreground/5 w-72 rounded-2xl shadow-2xl data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
@@ -2453,6 +2456,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-4 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
     'cn-field-title': 'flex w-fit items-center gap-2 text-xs/relaxed group-data-[disabled=true]/field:opacity-50',
+    'cn-font-heading': 'font-heading',
     'cn-hover-card':
       'z-50 w-64 border bg-popover text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) rounded-none p-2.5 text-xs/relaxed data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
@@ -3148,6 +3152,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-field-set': 'flex flex-col gap-4 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
     'cn-field-title':
       'flex w-fit items-center gap-2 font-medium text-xs/relaxed group-data-[disabled=true]/field:opacity-50',
+    'cn-font-heading': 'font-heading',
     'cn-hover-card':
       'z-50 rounded-md border bg-popover text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) w-72 p-2.5 text-xs/relaxed data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
@@ -3841,6 +3846,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
     'cn-field-title': 'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+    'cn-font-heading': 'font-heading',
     'cn-hover-card':
       'z-50 border bg-popover p-4 text-popover-foreground origin-(--z-hover-card-transform-origin) ring-foreground/5 w-72 rounded-3xl shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10',
     'cn-input':
@@ -4533,6 +4539,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-field-set': 'flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
     'cn-field-title':
       'flex w-fit items-center gap-2 font-semibold uppercase text-xs group-data-[disabled=true]/field:opacity-50 in-data-[slot=field-label]:font-semibold',
+    'cn-font-heading': 'font-heading',
     'cn-hover-card':
       'z-50 rounded-md border bg-popover p-4 text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) w-72 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
@@ -5223,6 +5230,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
     'cn-field-title': 'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+    'cn-font-heading': 'font-heading',
     'cn-hover-card':
       'z-50 border bg-popover p-4 text-popover-foreground origin-(--z-hover-card-transform-origin) ring-foreground/5 w-72 rounded-3xl shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10',
     'cn-input':

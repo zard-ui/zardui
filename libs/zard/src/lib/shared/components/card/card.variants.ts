@@ -13,7 +13,7 @@ export type ZardCardSizeType = NonNullable<VariantProps<typeof cardVariants>['zS
 
 export const cardHeaderVariants = cva('cn-card-header group/card-header @container/card-header');
 
-export const cardTitleVariants = cva('cn-card-title');
+export const cardTitleVariants = cva('cn-card-title cn-font-heading');
 
 export const cardDescriptionVariants = cva('cn-card-description');
 

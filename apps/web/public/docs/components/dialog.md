@@ -402,7 +402,7 @@ export const DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter
 
 export const dialogHeaderVariants = cva('flex flex-col gap-2');
 
-export const dialogTitleVariants = cva('text-base leading-none font-medium wrap-anywhere');
+export const dialogTitleVariants = cva('text-base leading-none font-medium wrap-anywhere font-heading');
 
 export const dialogDescriptionVariants = cva('text-sm text-muted-foreground wrap-anywhere *:[a]:underline *:[a]:underline-offset-[3px] *:[a]:hover:text-foreground');
 

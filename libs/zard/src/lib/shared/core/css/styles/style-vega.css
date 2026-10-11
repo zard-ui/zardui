@@ -618,6 +618,10 @@
     @apply font-medium text-base leading-normal;
   }
 
+  .cn-font-heading {
+    @apply font-heading;
+  }
+
   .cn-card-description {
     @apply text-sm text-muted-foreground;
   }

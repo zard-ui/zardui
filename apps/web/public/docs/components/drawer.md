@@ -465,7 +465,7 @@ export const drawerBodyVariants = cva('flex min-h-0 w-full flex-1 flex-col overf
 
 export const drawerHeaderVariants = cva('flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start');
 
-export const drawerTitleVariants = cva('text-base font-medium text-foreground wrap-anywhere');
+export const drawerTitleVariants = cva('text-base font-medium text-foreground wrap-anywhere font-heading');
 
 export const drawerDescriptionVariants = cva('text-sm text-balance text-muted-foreground wrap-anywhere');
 

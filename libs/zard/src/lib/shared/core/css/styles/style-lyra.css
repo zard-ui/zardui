@@ -618,6 +618,10 @@
     @apply text-base/snug font-medium;
   }
 
+  .cn-font-heading {
+    @apply font-heading;
+  }
+
   .cn-card-description {
     @apply text-muted-foreground text-xs/relaxed;
   }

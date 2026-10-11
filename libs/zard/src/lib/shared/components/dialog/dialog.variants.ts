@@ -7,7 +7,7 @@ export const DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter
 
 export const dialogHeaderVariants = cva('cn-dialog-header');
 
-export const dialogTitleVariants = cva('cn-dialog-title');
+export const dialogTitleVariants = cva('cn-dialog-title cn-font-heading');
 
 export const dialogDescriptionVariants = cva('cn-dialog-description');
 

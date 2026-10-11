@@ -620,6 +620,10 @@
   @apply text-base/snug font-medium;
 }
 
+.cn-font-heading:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply font-heading;
+}
+
 .cn-card-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply text-sm text-muted-foreground;
 }

@@ -135,7 +135,7 @@ export const emptyIconVariants = cva("bg-muted text-foreground mb-2 flex size-8 
   variants: {},
 });
 
-export const emptyTitleVariants = cva('text-sm font-medium tracking-tight', {
+export const emptyTitleVariants = cva('text-sm font-medium tracking-tight font-heading', {
   variants: {},
 });
 

@@ -55,7 +55,7 @@ export const drawerBodyVariants = cva('cn-drawer-body select-text');
 
 export const drawerHeaderVariants = cva('cn-drawer-header');
 
-export const drawerTitleVariants = cva('cn-drawer-title');
+export const drawerTitleVariants = cva('cn-drawer-title cn-font-heading');
 
 export const drawerDescriptionVariants = cva('cn-drawer-description');
 

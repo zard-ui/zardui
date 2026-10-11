@@ -54,7 +54,7 @@ export const SHEET_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:
 
 export const sheetHeaderVariants = cva('cn-sheet-header');
 
-export const sheetTitleVariants = cva('cn-sheet-title');
+export const sheetTitleVariants = cva('cn-sheet-title cn-font-heading');
 
 export const sheetDescriptionVariants = cva('cn-sheet-description');
 

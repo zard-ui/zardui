@@ -17,7 +17,7 @@ export const ALERT_DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-
 
 export const alertDialogHeaderVariants = cva('cn-alert-dialog-header');
 
-export const alertDialogTitleVariants = cva('cn-alert-dialog-title');
+export const alertDialogTitleVariants = cva('cn-alert-dialog-title cn-font-heading');
 
 export const alertDialogDescriptionVariants = cva('cn-alert-dialog-description');
 

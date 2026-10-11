@@ -120,6 +120,14 @@
   --selection-foreground: oklch(0.205 0 0);
 }
 
+/*
+ * The titles' heading font (`cn-font-heading` → `font-heading`). Not inline: the
+ * utility must read the variable at runtime, so the /create preview can swap it.
+ */
+@theme {
+  --font-heading: var(--font-sans);
+}
+
 @theme inline {
   --breakpoint-3xl: 1600px;
   --breakpoint-4xl: 2000px;
