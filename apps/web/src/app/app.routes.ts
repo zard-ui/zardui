@@ -155,6 +155,20 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'create/preview/:item',
+    loadComponent: () => import('./domain/pages/create/preview/create-preview.page').then(c => c.CreatePreviewPage),
+  },
+  {
+    path: 'create',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./domain/pages/create/create.page').then(c => c.CreatePage),
+      },
+    ],
+  },
+  {
     path: 'typeset/preview',
     loadComponent: () => import('./domain/pages/typeset/preview/typeset-preview.page').then(c => c.TypesetPreviewPage),
   },

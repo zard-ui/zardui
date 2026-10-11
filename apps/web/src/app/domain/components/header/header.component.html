@@ -35,6 +35,9 @@
           <ng-icon name="darkMode" class="size-4.5!" />
           <span class="sr-only">Toggle theme</span>
         </button>
+        @if (showGetCode()) {
+          <button z-button class="hidden md:inline-flex" (click)="openGetCode()">Get Code</button>
+        }
       </aside>
     </menu>
   </nav>
