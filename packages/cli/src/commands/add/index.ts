@@ -21,6 +21,7 @@ import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/package-manager.js';
 import { getRegistryUrl } from '@cli/utils/registry.js';
+import { loadStyleCatalog } from '@cli/utils/style-catalog.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
@@ -63,6 +64,8 @@ export const add = new Command()
     // the symbols on install, so it comes before resolving any component.
     await loadIconCatalog(getRegistryUrl(config));
     assertIconFamily(config.icons);
+    // The style the files are written in: its table resolves the markers in the sources.
+    await loadStyleCatalog(getRegistryUrl(config), config.style);
 
     const preselected = await selectComponents(components, options.all);
 

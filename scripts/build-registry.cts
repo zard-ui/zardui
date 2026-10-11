@@ -3,6 +3,7 @@ import * as path from 'path';
 import { buildDesignDocument } from '../packages/cli/src/core/design/index';
 import { ICON_FAMILIES, ICON_MAP, collectIcons, type ComponentIcons } from '../packages/cli/src/core/icons/index';
 import { registry, type ComponentRegistry } from '../packages/cli/src/core/registry/registry-data';
+import { readStyleCatalog, splitStyledFile, writeStyleArtifacts } from './styles-registry.cts';
 
 /**
  * The shape of the published files. It goes up when a change breaks a reader — a
@@ -14,12 +15,18 @@ const SCHEMA_VERSION = 1;
 const LIB_PATH = path.resolve(__dirname, '../libs/zard/src/lib/shared');
 const OUTPUT_PATH = path.resolve(__dirname, '../apps/web/public/r');
 
+/** The style tables, read once: `content` is resolved against them, `styled` is left for the CLI. */
+const STYLE_CATALOG = readStyleCatalog();
+
 const BLOCKS_PATH = path.resolve(__dirname, '../libs/blocks/src/lib');
 const BLOCKS_OUTPUT_PATH = path.resolve(OUTPUT_PATH, 'blocks');
 
 interface RegistryFile {
   name: string;
+  /** The file as the default style writes it; what readers that predate styles install. */
   content: string;
+  /** The source with its style markers, present when it has any (ADR-0002). */
+  styled?: string;
 }
 
 interface RegistryItem {
@@ -152,7 +159,7 @@ function buildComponentJson(component: ComponentRegistry): RegistryItem | null {
   for (const file of component.files) {
     files.push({
       name: file.name,
-      content: readComponentFile(component.name, basePath, file.name),
+      ...splitStyledFile(readComponentFile(component.name, basePath, file.name), STYLE_CATALOG),
     });
   }
 
@@ -339,6 +346,8 @@ async function main() {
     `   🎛️  Design data: ${design.fonts.length} fonts, ${Object.keys(design.baseColorTokens).length} base colors, ` +
       `${Object.keys(design.accentTokens).length} themes`,
   );
+
+  writeStyleArtifacts(OUTPUT_PATH);
 
   console.log('\n' + '='.repeat(50));
   console.log(`✅ Registry built successfully!`);
