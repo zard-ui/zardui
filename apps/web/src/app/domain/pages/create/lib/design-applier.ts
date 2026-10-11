@@ -1,20 +1,9 @@
-import { INHERIT_FONT, renderTokenBlocks, resolveFonts, resolveTokens } from '@zard/design';
+import { INHERIT_FONT, renderTokenBlocks, resolveFonts } from '@zard/design';
 import type { DesignConfig, IconLibraryId, StyleId } from '@zard/design';
 
 import { IconSwapper } from './icon-families';
 
 const THEME_STYLE_ID = 'zard-create-theme';
-
-/** The floating surfaces the "Menu" options restyle. They live in the CDK overlay, outside the canvas. */
-const MENU_SURFACES = [
-  "[data-slot='popover-content']",
-  "[data-slot='hover-card-content']",
-  "[data-slot='select-content']",
-  "[data-slot='dropdown-menu-content']",
-  "[data-slot='dropdown-menu-sub-content']",
-  "[data-slot='combobox-content']",
-  "[data-slot='tooltip-content']",
-].join(', ');
 
 const STYLE_CLASS_PREFIX = 'style-';
 
@@ -30,6 +19,8 @@ const STYLE_CLASS_PREFIX = 'style-';
 export class DesignApplier {
   private readonly icons: IconSwapper;
   private iconLibrary: IconLibraryId | null = null;
+  private inverted = false;
+  private menuObserver: MutationObserver | null = null;
 
   constructor(private readonly document: Document) {
     this.icons = new IconSwapper(document);
@@ -48,12 +39,33 @@ export class DesignApplier {
       void this.icons.setFamily(design.iconLibrary);
     }
 
+    this.setInvertedMenus(design.menuColor === 'inverted' && !dark);
     body.dataset['style'] = design.style;
   }
 
   destroy(): void {
     this.icons.destroy();
+    this.menuObserver?.disconnect();
     this.document.getElementById(THEME_STYLE_ID)?.remove();
+  }
+
+  /**
+   * An inverted menu reads the dark tokens, which needs a `dark` class on the surface itself — CSS cannot add it.
+   * Overlays appear and disappear, so an observer keeps every `.cn-menu-target` in step while it is on.
+   */
+  private setInvertedMenus(on: boolean): void {
+    this.inverted = on;
+    this.sync();
+
+    const view = this.document.defaultView;
+    if (!view || this.menuObserver) return;
+
+    this.menuObserver = new view.MutationObserver(() => this.sync());
+    this.menuObserver.observe(this.document.body, { childList: true, subtree: true });
+  }
+
+  private sync(): void {
+    this.document.querySelectorAll('.cn-menu-target').forEach(node => node.classList.toggle('dark', this.inverted));
   }
 
   private applyBodyClasses(design: DesignConfig, dark: boolean): void {
@@ -78,17 +90,7 @@ export class DesignApplier {
       this.document.head.appendChild(element);
     }
 
-    const dark = resolveTokens(design).dark;
-    const inverted = Object.entries(dark)
-      .filter(([key]) => key !== 'radius')
-      .map(([key, value]) => `  --${key}: ${value};`)
-      .join('\n');
-
-    element.textContent = [
-      renderTokenBlocks(design),
-      `body.menu-inverted :is(${MENU_SURFACES}) {\n${inverted}\n  color-scheme: dark;\n}`,
-      `body.menu-translucent :is(${MENU_SURFACES}) {\n  background-color: color-mix(in oklab, var(--popover) 80%, transparent);\n  backdrop-filter: blur(16px);\n}`,
-    ].join('\n\n');
+    element.textContent = renderTokenBlocks(design);
   }
 
   private applyFonts(design: DesignConfig): void {

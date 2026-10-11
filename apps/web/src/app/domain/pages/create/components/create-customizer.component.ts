@@ -215,6 +215,7 @@ const COPIED_MS = 2000;
           z-button
           zType="outline"
           class="hover:bg-muted! min-w-0 flex-1 bg-transparent! px-2! text-sm! md:flex-none"
+          data-testid="copy-preset"
           [attr.title]="copyLabel()"
           (click)="copyPreset()"
         >
@@ -301,7 +302,8 @@ export class CreateCustomizerComponent {
   }
 
   protected async copyPreset(): Promise<void> {
-    if (!(await copyText(this.document, `--preset ${this.state.preset()}`))) return;
+    const ok = await copyText(this.document, `--preset ${this.state.preset()}`);
+    if (!ok) return;
 
     this.copied.set(true);
     if (this.copiedTimer) clearTimeout(this.copiedTimer);
