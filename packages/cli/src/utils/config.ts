@@ -1,3 +1,4 @@
+import { CONFIG_STYLES, MENU_ACCENT_IDS, MENU_APPEARANCE_IDS, MENU_COLOR_IDS } from '@cli/core/design/options.js';
 import { SOURCE_ICON_FAMILY } from '@cli/core/icons/index.js';
 import { ConfigError } from '@cli/utils/errors.js';
 import { access, readFile } from 'node:fs/promises';
@@ -21,7 +22,9 @@ async function readJson(filePath: string): Promise<any> {
 const configSchema = z.object({
   $schema: z.string().optional(),
   appConfigFile: z.string().default('src/app/app.config.ts'),
-  style: z.enum(['css']).default('css'),
+  // `css` is what every project initialized before styles existed carries; it is read as the
+  // current look. The eight style ids are what `init --preset` and `apply` write.
+  style: z.enum(CONFIG_STYLES).default('css'),
   // The icon family the components are written in. Absent from files written
   // before the property existed — and lucide is what those use.
   //
@@ -40,6 +43,14 @@ const configSchema = z.object({
   projectType: z.enum(['angular', 'angular-library', 'nx', 'nx-library', 'analog']).default('angular'),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']).default('npm'),
   registryUrl: z.string().optional(),
+  // Written by `init --preset` / `apply`: how menus and popovers look. Absent means the defaults
+  // (default, solid, subtle), which is also what every project without a preset has.
+  menuColor: z.enum(MENU_COLOR_IDS).optional(),
+  menuAppearance: z.enum(MENU_APPEARANCE_IDS).optional(),
+  menuAccent: z.enum(MENU_ACCENT_IDS).optional(),
+  // The preset code the project was last fully configured from. Informational: nothing reads it to
+  // decide what to install, so a code from a newer zard-cli cannot make `add` fail.
+  preset: z.string().optional(),
   tailwind: z
     .object({
       css: z.string().default('src/styles.css'),

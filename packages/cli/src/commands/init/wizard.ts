@@ -4,6 +4,7 @@ import {
   inspectCssFile,
   withPresets,
   type InitAnswers,
+  type AppliedPreset,
   type PresetAnswers,
 } from '@cli/commands/init/config-prompter.js';
 import { candidateProjects, isLibraryKind, PROJECT_KINDS, type ProjectKind } from '@cli/commands/init/project-kind.js';
@@ -161,7 +162,7 @@ function projectStep(projects: WorkspaceProject[], kind: ProjectKind): Step {
   };
 }
 
-function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind): Step[] {
+function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind, askTheme = true): Step[] {
   const candidates = candidateProjects(kind, projectInfo);
   const chooseProject = candidates.length > 1 ? [projectStep(candidates, kind)] : [];
 
@@ -169,7 +170,7 @@ function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind): Step[] {
     return [
       kindStep(),
       ...chooseProject,
-      themeStep(),
+      ...(askTheme ? [themeStep()] : []),
       {
         id: 'globalCss',
         kind: 'text',
@@ -205,7 +206,7 @@ function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind): Step[] {
       label: 'app.config.ts',
       detail: 'zard/ui registers its global providers in this file.',
     },
-    themeStep(),
+    ...(askTheme ? [themeStep()] : []),
     {
       id: 'globalCss',
       kind: 'text',
@@ -273,6 +274,11 @@ export interface InitWizardOptions {
   readonly presetProjectRoot?: string;
   /** What `--css`, `--app-config`, `--base-color` and the alias flags answered — each question opens filled with it. */
   readonly presetAnswers?: PresetAnswers;
+  /**
+   * A preset given with `--preset`. It decides the base color, style, icons and menu, so the wizard
+   * does not ask for the theme: an answer there would contradict what the preset already says.
+   */
+  readonly preset?: AppliedPreset;
   /** Execution steps, built only once the config is ready. */
   buildSteps(config: Config): InitStep[];
 }
@@ -294,7 +300,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     // Re-initializing overwrites existing configuration: the confirmation comes
     // before any question and is not skipped by --yes.
     phase: options.isReInitializing ? 'reinit' : 'prompting',
-    steps: baseSteps(options.projectInfo, firstKind),
+    steps: baseSteps(options.projectInfo, firstKind, !options.preset),
     stepIndex: 0,
     answers,
     kindChosen: false,
@@ -338,7 +344,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
   enterStep();
 
   const startExecution = (ctx: WizardContext<Config>): void => {
-    const resolved = buildConfig(state.answers, options.packageManager);
+    const resolved = buildConfig(state.answers, options.packageManager, options.preset);
     config = resolved;
 
     const steps = options.buildSteps(resolved);
@@ -423,7 +429,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     if (step.id === 'kind') {
       const kind = value as ProjectKind;
       state.answers = { ...defaultsFor(kind), theme: state.answers.theme, rtl: state.answers.rtl };
-      state.steps = baseSteps(options.projectInfo, kind);
+      state.steps = baseSteps(options.projectInfo, kind, !options.preset);
       state.kindChosen = true;
       advance(ctx);
       return;

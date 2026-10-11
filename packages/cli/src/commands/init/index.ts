@@ -3,8 +3,10 @@ import {
   defaultAnswers,
   inspectCssFile,
   withPresets,
+  type AppliedPreset,
   type PresetAnswers,
 } from '@cli/commands/init/config-prompter.js';
+import { resolvePreset } from '@cli/commands/init/preset.js';
 import {
   candidateProjects,
   detectProjectKind,
@@ -16,9 +18,10 @@ import { buildInitSteps, type InitStep } from '@cli/commands/init/steps.js';
 import { runInitWizard } from '@cli/commands/init/wizard.js';
 import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
 import { type Config } from '@cli/utils/config.js';
+import { loadDesignData } from '@cli/utils/design-catalog.js';
 import { CliError } from '@cli/utils/errors.js';
 import { getProjectInfo, type ProjectInfo } from '@cli/utils/get-project-info.js';
-import { loadIconCatalog } from '@cli/utils/icon-catalog.js';
+import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager, suggestedRunner } from '@cli/utils/package-manager.js';
 import { getRegistryUrl } from '@cli/utils/registry.js';
@@ -41,69 +44,133 @@ export const init = new Command()
   .option('--utils-alias <alias>', 'the import alias for utils. defaults to @/shared/utils.')
   .option('--rtl', 'the project reads right to left: sets dir="rtl" on <html> in index.html.')
   .option('--no-rtl', 'the project reads left to right (the default).')
-  .action(async options => {
-    const cwd = path.resolve(options.cwd);
+  .option(
+    '--preset <code>',
+    'apply a design preset (style, base color, theme, fonts, icons, radius, menu). build one at https://zardui.com/create.',
+  )
+  .option('--pointer', 'use the pointer cursor on buttons. only with --preset.')
+  .action(options => runInit(options));
 
-    validateWorkingDirectory(cwd);
+/** What `zard-cli init` takes — the Commander options, and the programmatic entry's input. */
+export interface InitOptions {
+  yes?: boolean;
+  cwd?: string;
+  type?: string;
+  project?: string;
+  css?: string;
+  appConfig?: string;
+  baseColor?: string;
+  componentsAlias?: string;
+  utilsAlias?: string;
+  rtl?: boolean;
+  /** A preset code, `--preset <code>` or a whole pasted command. */
+  preset?: string;
+  pointer?: boolean;
+  /** Never mount the full-screen wizard, even in a terminal: the caller has every answer already. */
+  headless?: boolean;
+}
 
-    const projectInfo = await getProjectInfo(cwd);
-    validateAngularProject(projectInfo);
+/**
+ * Initializes the project in `options.cwd`. The action of `zard-cli init`, and the entry `create`
+ * calls once the framework's generator has produced the project.
+ */
+export async function runInit(options: InitOptions): Promise<void> {
+  // First: a bad preset is an error that names it, before anything is read or written.
+  const preset = options.preset !== undefined ? resolvePreset(options.preset) : undefined;
+  validateFlagCombination(options, preset);
 
-    const kind = resolveKind(options.type);
-    const presets = resolvePresets(options);
-    const projectRoot = resolveProjectRoot(options.project, kind ?? detectProjectKind(projectInfo), projectInfo);
+  const cwd = path.resolve(options.cwd ?? process.cwd());
 
-    const isReInitializing = existsSync(path.resolve(cwd, 'components.json'));
-    const packageManager = await detectPackageManager(cwd);
+  validateWorkingDirectory(cwd);
 
-    // Before any step: the catalog is what says which icon package to install,
-    // and it comes from the registry so it does not depend on the CLI version.
-    await loadIconCatalog(getRegistryUrl());
+  const projectInfo = await getProjectInfo(cwd);
+  validateAngularProject(projectInfo);
 
-    const buildSteps = (config: Config): InitStep[] => buildInitSteps(cwd, config, projectInfo, isReInitializing);
+  const kind = resolveKind(options.type);
+  const presets = resolvePresets(options);
+  const projectRoot = resolveProjectRoot(options.project, kind ?? detectProjectKind(projectInfo), projectInfo);
 
-    if (!isInteractive()) {
-      logHeadlessReason();
-      await runHeadless({
-        cwd,
-        projectInfo,
-        packageManager,
-        isReInitializing,
-        buildSteps,
-        yes: options.yes,
-        kind,
-        projectRoot,
-        presets,
+  const isReInitializing = existsSync(path.resolve(cwd, 'components.json'));
+  const packageManager = await detectPackageManager(cwd);
+
+  // Before any step: the catalog is what says which icon package to install,
+  // and it comes from the registry so it does not depend on the CLI version.
+  await loadIconCatalog(getRegistryUrl());
+  await loadDesignData(getRegistryUrl());
+  if (preset) assertIconFamily(preset.design.iconLibrary);
+
+  const buildSteps = (config: Config): InitStep[] =>
+    buildInitSteps(cwd, config, projectInfo, isReInitializing, { pointer: options.pointer });
+
+  if (options.headless || !isInteractive()) {
+    logHeadlessReason();
+    await runHeadless({
+      cwd,
+      projectInfo,
+      packageManager,
+      isReInitializing,
+      buildSteps,
+      yes: options.yes ?? false,
+      kind,
+      projectRoot,
+      presets,
+      preset,
+    });
+    return;
+  }
+
+  try {
+    const { config, logs } = await runInitWizard({
+      cwd,
+      projectInfo,
+      packageManager,
+      isReInitializing,
+      skipConfirmation: options.yes ?? false,
+      buildSteps,
+      presetKind: kind,
+      presetProjectRoot: projectRoot,
+      presetAnswers: presets,
+      preset,
+    });
+
+    reportSuccess(config, buildSteps(config), logs);
+  } catch (error) {
+    if (error instanceof WizardCancelledError) {
+      printReport({
+        status: 'cancelled',
+        headline: error.message,
+        notes: ['Nothing was changed in your project.'],
       });
-      return;
+      process.exit(0);
     }
+    throw error;
+  }
+}
 
-    try {
-      const { config, logs } = await runInitWizard({
-        cwd,
-        projectInfo,
-        packageManager,
-        isReInitializing,
-        skipConfirmation: options.yes,
-        buildSteps,
-        presetKind: kind,
-        presetProjectRoot: projectRoot,
-        presetAnswers: presets,
-      });
+/**
+ * Initializes a project with a preset, headless — what `create` runs after scaffolding.
+ *
+ * `type` is required: nothing here guesses the project kind (the user chose it when picking the
+ * template). The rest are the flags `init` itself takes.
+ */
+export function initWithPreset(options: InitOptions & { cwd: string; preset: string; type: string }): Promise<void> {
+  return runInit({ yes: true, headless: true, ...options });
+}
 
-      reportSuccess(config, buildSteps(config), logs);
-    } catch (error) {
-      if (error instanceof WizardCancelledError) {
-        printReport({
-          status: 'cancelled',
-          headline: error.message,
-          notes: ['Nothing was changed in your project.'],
-        });
-        process.exit(0);
-      }
-      throw error;
-    }
-  });
+/** Flags that contradict each other are refused up front, naming both. */
+function validateFlagCombination(options: InitOptions, preset: AppliedPreset | undefined): void {
+  if (preset && options.baseColor) {
+    throw new CliError(
+      `--base-color "${options.baseColor}" conflicts with --preset ${preset.code}: the preset already ` +
+        `chooses the base color (${preset.design.baseColor}). Drop one of them.`,
+      'CONFLICTING_FLAGS',
+    );
+  }
+
+  if (options.pointer && !preset) {
+    throw new CliError('--pointer needs --preset: it is part of what a preset writes.', 'CONFLICTING_FLAGS');
+  }
+}
 
 /**
  * Why the full screen was not mounted.
@@ -214,6 +281,8 @@ interface HeadlessOptions {
   projectRoot?: string;
   /** The answers the other flags gave. */
   presets: PresetAnswers;
+  /** The design `--preset` resolved to. */
+  preset?: AppliedPreset;
   buildSteps(config: Config): InitStep[];
 }
 
@@ -244,7 +313,7 @@ async function runHeadless(options: HeadlessOptions): Promise<void> {
     );
   }
 
-  const config = buildConfig(answers, options.packageManager);
+  const config = buildConfig(answers, options.packageManager, options.preset);
   const steps = options.buildSteps(config);
 
   logger.info(options.isReInitializing ? 'Re-initializing zard/ui...' : 'Initializing zard/ui...');
@@ -282,11 +351,16 @@ function reportSuccess(config: Config, steps: readonly InitStep[], logs: readonl
  * notice the user only finds out when the components do not render.
  */
 function nextStepsFor(config: Config): string[] {
+  const presetNote = config.preset
+    ? [`Preset ${config.preset} applied: components you add follow "${config.style}" with ${config.icons} icons.`, '']
+    : [];
+
   if (!isLibraryKind(config.projectType)) {
-    return ['You can now add components using:'];
+    return [...presetNote, 'You can now add components using:'];
   }
 
   return [
+    ...presetNote,
     'The consuming app still needs the Tailwind PostCSS pipeline (tailwindcss, @tailwindcss/postcss,',
     'postcss, tailwindcss-animate and a .postcssrc.json), to register provideZard() in its',
     `app.config.ts and to import the theme tokens from this library's ${path.basename(config.tailwind.css)}.`,

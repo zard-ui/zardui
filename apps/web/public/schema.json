@@ -11,15 +11,15 @@
     },
     "style": {
       "type": "string",
-      "enum": ["css"],
+      "enum": ["css", "vega", "nova", "maia", "lyra", "mira", "luma", "sera", "rhea"],
       "default": "css",
-      "description": "How the components are styled. CSS is the only option today."
+      "description": "The look the components are installed with. `css` is what projects initialized before styles existed carry and is read as the current look (nova); the eight names are written by `zard-cli init --preset` and `zard-cli apply`, which install the matching spacing, radius and typography."
     },
     "icons": {
       "type": "string",
       "default": "lucide",
-      "examples": ["lucide"],
-      "description": "The icon set the components are written against. Every component draws through ng-icons, which stays the dependency either way; this picks which of its packages comes along. The valid values are the ones the registry publishes in icons.json — `lucide` is the only one today, and the CLI lists the others if you write something it does not know."
+      "examples": ["lucide", "tabler", "hugeicons", "phosphor", "remixicon"],
+      "description": "The icon set the components are written against. Every component draws through ng-icons, which stays the dependency either way; this picks which of its packages comes along. The valid values are the ones the registry publishes in icons.json — lucide, tabler, hugeicons, phosphor and remixicon today — and the CLI lists them if you write something it does not know. An icon a set has no equivalent for is reported when you add the component and keeps its lucide import."
     },
     "rtl": {
       "type": "boolean",
@@ -42,6 +42,29 @@
       "enum": ["npm", "yarn", "pnpm", "bun"],
       "default": "npm",
       "description": "The package manager used to install dependencies."
+    },
+    "menuColor": {
+      "type": "string",
+      "enum": ["default", "inverted"],
+      "default": "default",
+      "description": "Whether menus, popovers and dropdowns take the inverted palette (dark in light mode, light in dark mode). Written by `zard-cli init --preset` and `zard-cli apply`."
+    },
+    "menuAppearance": {
+      "type": "string",
+      "enum": ["solid", "translucent"],
+      "default": "solid",
+      "description": "Whether menus and popovers are opaque or translucent with a backdrop blur. A translucent menu always uses the subtle accent."
+    },
+    "menuAccent": {
+      "type": "string",
+      "enum": ["subtle", "bold"],
+      "default": "subtle",
+      "description": "How the focused or hovered menu item is painted: a neutral wash (subtle) or the primary color (bold)."
+    },
+    "preset": {
+      "type": "string",
+      "examples": ["Z0"],
+      "description": "The preset code the project was last fully configured from, as built on https://zardui.com/create. Informational: it records the design, nothing reads it to decide what to install."
     },
     "registryUrl": {
       "type": "string",

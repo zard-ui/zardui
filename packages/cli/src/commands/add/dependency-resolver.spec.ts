@@ -294,3 +294,52 @@ describe('blocks', () => {
     expect(second).not.toBe(first);
   });
 });
+
+/*
+ * An icon the chosen family has no equivalent for keeps its source import, so the package the
+ * registry files are written in has to be installed alongside — otherwise the component would not
+ * compile — and only then.
+ */
+describe('icon packages', () => {
+  const iconItem = (tokens: string[], symbols: string[]) => ({
+    name: 'icon-card',
+    type: 'registry:component',
+    basePath: 'icon-card',
+    dependencies: [],
+    devDependencies: [],
+    registryDependencies: [],
+    files: ['icon-card.component.ts'],
+    icons: { family: 'lucide', symbols, tokens },
+  });
+
+  const resolveWith = async (icons: string, item: ReturnType<typeof iconItem>) => {
+    mockFetchRegistryIndex.mockReset();
+    mockFetchRegistryIndex.mockResolvedValue({ ...fakeRegistryIndex, items: [item] } as any);
+    mockExistsSync.mockReturnValue(false);
+
+    return resolveDependencies(['icon-card'], { ...fakeResolvedConfig, icons }, '/project', { overwrite: true });
+  };
+
+  it('installs the package of the chosen family', async () => {
+    const result = await resolveWith('phosphor', iconItem(['check'], ['lucideCheck']));
+
+    expect([...result.dependenciesToInstall].sort()).toEqual(['@ng-icons/core', '@ng-icons/phosphor-icons']);
+  });
+
+  it('also installs the source family when an icon has no equivalent in the chosen one', async () => {
+    // hugeicons has no waves
+    const result = await resolveWith('hugeicons', iconItem(['check', 'waves'], ['lucideCheck', 'lucideWaves']));
+
+    expect([...result.dependenciesToInstall].sort()).toEqual([
+      '@ng-icons/core',
+      '@ng-icons/huge-icons',
+      '@ng-icons/lucide',
+    ]);
+  });
+
+  it('does not install lucide for a family that covers everything the component draws', async () => {
+    const result = await resolveWith('hugeicons', iconItem(['check'], ['lucideCheck']));
+
+    expect(result.dependenciesToInstall.has('@ng-icons/lucide')).toBe(false);
+  });
+});

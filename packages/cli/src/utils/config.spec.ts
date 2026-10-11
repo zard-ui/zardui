@@ -93,6 +93,60 @@ describe('getConfig', () => {
     expect(mockValidateRegistryUrl).not.toHaveBeenCalled();
   });
 
+  describe('styles and presets', () => {
+    async function load(json: object) {
+      mockAccess.mockResolvedValueOnce(undefined);
+      mockReadFile.mockResolvedValueOnce(JSON.stringify(json) as any);
+      return getConfig('/project');
+    }
+
+    it.each(['css', 'vega', 'nova', 'maia', 'lyra', 'mira', 'luma', 'sera', 'rhea'])(
+      'should accept style "%s"',
+      async style => {
+        expect((await load({ style }))!.style).toBe(style);
+      },
+    );
+
+    it('should reject a style that does not exist', async () => {
+      await expect(load({ style: 'brutalist' })).rejects.toThrow(ConfigError);
+    });
+
+    it('should keep reading a legacy file as css, with no menu settings or preset', async () => {
+      const result = await load({ icons: 'lucide' });
+
+      expect(result!.style).toBe('css');
+      expect(result!.menuColor).toBeUndefined();
+      expect(result!.preset).toBeUndefined();
+    });
+
+    it('should read the menu settings and the preset a preset init writes', async () => {
+      const result = await load({
+        style: 'lyra',
+        icons: 'phosphor',
+        menuColor: 'inverted',
+        menuAppearance: 'translucent',
+        menuAccent: 'subtle',
+        preset: 'Z6KtfCaQt',
+      });
+
+      expect(result).toMatchObject({
+        style: 'lyra',
+        icons: 'phosphor',
+        menuColor: 'inverted',
+        menuAppearance: 'translucent',
+        preset: 'Z6KtfCaQt',
+      });
+    });
+
+    it('should not read the preset code: one from a newer CLI must not break add', async () => {
+      expect((await load({ preset: 'Zzzzzzzzzz' }))!.preset).toBe('Zzzzzzzzzz');
+    });
+
+    it('should reject a menu setting that does not exist', async () => {
+      await expect(load({ menuAccent: 'loud' })).rejects.toThrow(ConfigError);
+    });
+  });
+
   it('should re-throw ConfigError from validateRegistryUrl', async () => {
     mockAccess.mockResolvedValue(undefined);
     mockReadFile.mockResolvedValue(

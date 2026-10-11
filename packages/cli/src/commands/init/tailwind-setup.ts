@@ -1,5 +1,8 @@
+import { designOfConfig } from '@cli/commands/init/preset.js';
 import { isLibraryKind } from '@cli/commands/init/project-kind.js';
+import { renderStylesheet } from '@cli/core/design/css.js';
 import { resolveAliasToPath, type Config } from '@cli/utils/config.js';
+import { designData } from '@cli/utils/design-catalog.js';
 import { getThemeContent } from '@cli/utils/theme-selector.js';
 import { mkdir, writeFile } from 'node:fs/promises';
 import * as path from 'path';
@@ -58,9 +61,20 @@ function withLibrarySource(themeContent: string): string {
   return themeContent.replace(/^(@plugin [^\n]*;)$/m, `$1\n@source './';`);
 }
 
-export async function applyThemeToStyles(cwd: string, config: Config): Promise<void> {
+export async function applyThemeToStyles(
+  cwd: string,
+  config: Config,
+  options: { pointer?: boolean } = {},
+): Promise<void> {
   const stylesPath = path.join(cwd, config.tailwind.css);
-  const baseTheme = getThemeContent(config.tailwind.baseColor, coreImportPath(cwd, config));
+  const corePath = coreImportPath(cwd, config);
+
+  // A preset writes the whole stylesheet from its design — theme, fonts and all; without one, the
+  // base color picks one of the hand-written themes, exactly as before presets existed.
+  const design = designOfConfig(config);
+  const baseTheme = design
+    ? renderStylesheet(design, { corePath, pointer: options.pointer, data: designData() }).trim()
+    : getThemeContent(config.tailwind.baseColor, corePath);
   const themeContent = isLibraryKind(config.projectType) ? withLibrarySource(baseTheme) : baseTheme;
 
   // In a library that file usually does not exist — init creates it, so the

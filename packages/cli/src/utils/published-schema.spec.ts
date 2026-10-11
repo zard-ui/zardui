@@ -20,9 +20,18 @@ describe('the published components.json schema', () => {
       properties: Record<string, { properties?: Record<string, unknown> }>;
     };
 
-    // `$schema` and `registryUrl` are not in the default: the first is written by
-    // init, the second only exists for someone pointing at another registry.
-    const written = [...Object.keys(DEFAULT_CONFIG), '$schema', 'registryUrl'].sort();
+    // Not in the default config: `$schema` is written by init, `registryUrl` only exists for someone
+    // pointing at another registry, and the menu settings and `preset` are written only by
+    // `init --preset` / `apply`.
+    const written = [
+      ...Object.keys(DEFAULT_CONFIG),
+      '$schema',
+      'registryUrl',
+      'menuColor',
+      'menuAppearance',
+      'menuAccent',
+      'preset',
+    ].sort();
 
     expect(Object.keys(schema.properties).sort()).toEqual(written);
   });

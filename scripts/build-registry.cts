@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { buildDesignDocument } from '../packages/cli/src/core/design/index';
 import { ICON_FAMILIES, ICON_MAP, collectIcons, type ComponentIcons } from '../packages/cli/src/core/icons/index';
 import { registry, type ComponentRegistry } from '../packages/cli/src/core/registry/registry-data';
 
@@ -328,6 +329,15 @@ async function main() {
   fs.writeJsonSync(iconsFile, buildIconCatalog(), { spaces: 2 });
   console.log(
     `   🎨 Icon catalog: ${Object.keys(ICON_FAMILIES).length} family(ies), ${Object.keys(ICON_MAP).length} icons`,
+  );
+
+  // Everything the CLI needs to resolve a preset code — see `core/design/document.ts`.
+  const designFile = path.join(OUTPUT_PATH, 'design.json');
+  const design = buildDesignDocument(SCHEMA_VERSION);
+  fs.writeJsonSync(designFile, design, { spaces: 2 });
+  console.log(
+    `   🎛️  Design data: ${design.fonts.length} fonts, ${Object.keys(design.baseColorTokens).length} base colors, ` +
+      `${Object.keys(design.accentTokens).length} themes`,
   );
 
   console.log('\n' + '='.repeat(50));

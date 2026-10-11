@@ -7,356 +7,904 @@
       "label": "Lucide",
       "package": "@ng-icons/lucide",
       "prefix": "lucide"
+    },
+    "tabler": {
+      "value": "tabler",
+      "label": "Tabler Icons",
+      "package": "@ng-icons/tabler-icons",
+      "prefix": "tabler"
+    },
+    "hugeicons": {
+      "value": "hugeicons",
+      "label": "HugeIcons",
+      "package": "@ng-icons/huge-icons",
+      "prefix": "huge"
+    },
+    "phosphor": {
+      "value": "phosphor",
+      "label": "Phosphor Icons",
+      "package": "@ng-icons/phosphor-icons",
+      "importFrom": "@ng-icons/phosphor-icons/regular",
+      "prefix": "phosphor"
+    },
+    "remixicon": {
+      "value": "remixicon",
+      "label": "Remix Icon",
+      "package": "@ng-icons/remixicon",
+      "prefix": "remix"
     }
   },
   "icons": {
     "alert-triangle": {
-      "lucide": "lucideAlertTriangle"
+      "lucide": "lucideAlertTriangle",
+      "tabler": "tablerAlertTriangle",
+      "hugeicons": "hugeAlert02",
+      "phosphor": "phosphorWarning",
+      "remixicon": "remixAlertLine"
     },
     "app-window": {
-      "lucide": "lucideAppWindow"
+      "lucide": "lucideAppWindow",
+      "tabler": "tablerAppWindow",
+      "hugeicons": "hugeAppStore",
+      "phosphor": "phosphorAppWindow",
+      "remixicon": "remixWindowLine"
     },
     "archive": {
-      "lucide": "lucideArchive"
+      "lucide": "lucideArchive",
+      "tabler": "tablerArchive",
+      "hugeicons": "hugeArchive",
+      "phosphor": "phosphorArchive",
+      "remixicon": "remixArchiveLine"
     },
     "arrow-left": {
-      "lucide": "lucideArrowLeft"
+      "lucide": "lucideArrowLeft",
+      "tabler": "tablerArrowLeft",
+      "hugeicons": "hugeArrowLeft01",
+      "phosphor": "phosphorArrowLeft",
+      "remixicon": "remixArrowLeftLine"
     },
     "arrow-right": {
-      "lucide": "lucideArrowRight"
+      "lucide": "lucideArrowRight",
+      "tabler": "tablerArrowRight",
+      "hugeicons": "hugeArrowRight01",
+      "phosphor": "phosphorArrowRight",
+      "remixicon": "remixArrowRightLine"
     },
     "arrow-up": {
-      "lucide": "lucideArrowUp"
+      "lucide": "lucideArrowUp",
+      "tabler": "tablerArrowUp",
+      "hugeicons": "hugeArrowUp01",
+      "phosphor": "phosphorArrowUp",
+      "remixicon": "remixArrowUpLine"
     },
     "arrow-up-right": {
-      "lucide": "lucideArrowUpRight"
+      "lucide": "lucideArrowUpRight",
+      "tabler": "tablerArrowUpRight",
+      "hugeicons": "hugeArrowUpRight01",
+      "phosphor": "phosphorArrowUpRight",
+      "remixicon": "remixArrowRightUpLine"
     },
     "audio-lines": {
-      "lucide": "lucideAudioLines"
+      "lucide": "lucideAudioLines",
+      "tabler": "tablerWaveSine",
+      "hugeicons": "hugeVoice",
+      "phosphor": "phosphorWaveform",
+      "remixicon": "remixVoiceprintLine"
     },
     "badge-check": {
-      "lucide": "lucideBadgeCheck"
+      "lucide": "lucideBadgeCheck",
+      "tabler": "tablerRosetteDiscountCheck",
+      "hugeicons": "hugeCheckmarkBadge01",
+      "phosphor": "phosphorSealCheck",
+      "remixicon": "remixVerifiedBadgeLine"
     },
     "bell": {
-      "lucide": "lucideBell"
+      "lucide": "lucideBell",
+      "tabler": "tablerBell",
+      "hugeicons": "hugeNotification01",
+      "phosphor": "phosphorBell",
+      "remixicon": "remixNotificationLine"
     },
     "bluetooth": {
-      "lucide": "lucideBluetooth"
+      "lucide": "lucideBluetooth",
+      "tabler": "tablerBluetooth",
+      "hugeicons": "hugeBluetooth",
+      "phosphor": "phosphorBluetooth",
+      "remixicon": "remixBluetoothLine"
     },
     "bold": {
-      "lucide": "lucideBold"
+      "lucide": "lucideBold",
+      "tabler": "tablerBold",
+      "hugeicons": "hugeTextBold",
+      "phosphor": "phosphorTextB",
+      "remixicon": "remixBold"
+    },
+    "book-open": {
+      "lucide": "lucideBookOpen",
+      "tabler": "tablerBook",
+      "hugeicons": "hugeBookOpen01",
+      "phosphor": "phosphorBookOpen",
+      "remixicon": "remixBookOpenLine"
     },
     "book-open-check": {
-      "lucide": "lucideBookOpenCheck"
+      "lucide": "lucideBookOpenCheck",
+      "tabler": "tablerBook2",
+      "hugeicons": "hugeBookOpen01",
+      "phosphor": "phosphorBookOpenText",
+      "remixicon": "remixBookOpenLine"
     },
     "bookmark": {
-      "lucide": "lucideBookmark"
+      "lucide": "lucideBookmark",
+      "tabler": "tablerBookmark",
+      "hugeicons": "hugeBookmark01",
+      "phosphor": "phosphorBookmark",
+      "remixicon": "remixBookmarkLine"
     },
     "bot": {
-      "lucide": "lucideBot"
+      "lucide": "lucideBot",
+      "tabler": "tablerRobot",
+      "hugeicons": "hugeBot",
+      "phosphor": "phosphorRobot",
+      "remixicon": "remixRobot2Line"
     },
     "building-2": {
-      "lucide": "lucideBuilding2"
+      "lucide": "lucideBuilding2",
+      "tabler": "tablerBuilding",
+      "hugeicons": "hugeBuilding03",
+      "phosphor": "phosphorBuildings",
+      "remixicon": "remixBuilding2Line"
     },
     "calculator": {
-      "lucide": "lucideCalculator"
+      "lucide": "lucideCalculator",
+      "tabler": "tablerCalculator",
+      "hugeicons": "hugeCalculator",
+      "phosphor": "phosphorCalculator",
+      "remixicon": "remixCalculatorLine"
     },
     "calendar": {
-      "lucide": "lucideCalendar"
+      "lucide": "lucideCalendar",
+      "tabler": "tablerCalendar",
+      "hugeicons": "hugeCalendar01",
+      "phosphor": "phosphorCalendar",
+      "remixicon": "remixCalendarLine"
     },
     "calendar-plus": {
-      "lucide": "lucideCalendarPlus"
+      "lucide": "lucideCalendarPlus",
+      "tabler": "tablerCalendarPlus",
+      "hugeicons": "hugeCalendarAdd01",
+      "phosphor": "phosphorCalendarPlus",
+      "remixicon": "remixCalendarEventLine"
     },
     "check": {
-      "lucide": "lucideCheck"
+      "lucide": "lucideCheck",
+      "tabler": "tablerCheck",
+      "hugeicons": "hugeTick02",
+      "phosphor": "phosphorCheck",
+      "remixicon": "remixCheckLine"
     },
     "chevron-down": {
-      "lucide": "lucideChevronDown"
+      "lucide": "lucideChevronDown",
+      "tabler": "tablerChevronDown",
+      "hugeicons": "hugeArrowDown01",
+      "phosphor": "phosphorCaretDown",
+      "remixicon": "remixArrowDownSLine"
     },
     "chevron-left": {
-      "lucide": "lucideChevronLeft"
+      "lucide": "lucideChevronLeft",
+      "tabler": "tablerChevronLeft",
+      "hugeicons": "hugeArrowLeft01",
+      "phosphor": "phosphorCaretLeft",
+      "remixicon": "remixArrowLeftSLine"
     },
     "chevron-right": {
-      "lucide": "lucideChevronRight"
+      "lucide": "lucideChevronRight",
+      "tabler": "tablerChevronRight",
+      "hugeicons": "hugeArrowRight01",
+      "phosphor": "phosphorCaretRight",
+      "remixicon": "remixArrowRightSLine"
     },
     "chevron-up": {
-      "lucide": "lucideChevronUp"
+      "lucide": "lucideChevronUp",
+      "tabler": "tablerChevronUp",
+      "hugeicons": "hugeArrowUp01",
+      "phosphor": "phosphorCaretUp",
+      "remixicon": "remixArrowUpSLine"
     },
     "chevrons-left": {
-      "lucide": "lucideChevronsLeft"
+      "lucide": "lucideChevronsLeft",
+      "tabler": "tablerChevronsLeft",
+      "hugeicons": "hugeArrowLeftDouble",
+      "phosphor": "phosphorCaretDoubleLeft",
+      "remixicon": "remixArrowLeftDoubleLine"
     },
     "chevrons-right": {
-      "lucide": "lucideChevronsRight"
+      "lucide": "lucideChevronsRight",
+      "tabler": "tablerChevronsRight",
+      "hugeicons": "hugeArrowRightDouble",
+      "phosphor": "phosphorCaretDoubleRight",
+      "remixicon": "remixArrowRightDoubleLine"
     },
     "chevrons-up-down": {
-      "lucide": "lucideChevronsUpDown"
+      "lucide": "lucideChevronsUpDown",
+      "tabler": "tablerSelector",
+      "hugeicons": "hugeUnfoldMore",
+      "phosphor": "phosphorCaretUpDown",
+      "remixicon": "remixExpandUpDownLine"
     },
     "circle-alert": {
-      "lucide": "lucideCircleAlert"
+      "lucide": "lucideCircleAlert",
+      "tabler": "tablerAlertCircle",
+      "hugeicons": "hugeAlertCircle",
+      "phosphor": "phosphorWarningCircle",
+      "remixicon": "remixErrorWarningLine"
     },
     "circle-check": {
-      "lucide": "lucideCircleCheck"
+      "lucide": "lucideCircleCheck",
+      "tabler": "tablerCircleCheck",
+      "hugeicons": "hugeCheckmarkCircle02",
+      "phosphor": "phosphorCheckCircle",
+      "remixicon": "remixCheckboxCircleLine"
     },
     "circle-dashed": {
-      "lucide": "lucideCircleDashed"
+      "lucide": "lucideCircleDashed",
+      "tabler": "tablerCircleDashed",
+      "hugeicons": "hugeCircle",
+      "phosphor": "phosphorCircleDashed",
+      "remixicon": "remixCircleLine"
     },
     "circle-fading-arrow-up": {
-      "lucide": "lucideCircleFadingArrowUp"
+      "lucide": "lucideCircleFadingArrowUp",
+      "tabler": "tablerCircleArrowUp",
+      "hugeicons": "hugeCircleArrowUp01",
+      "phosphor": "phosphorArrowCircleUp",
+      "remixicon": "remixArrowUpCircleLine"
     },
     "circle-fading-plus": {
-      "lucide": "lucideCircleFadingPlus"
+      "lucide": "lucideCircleFadingPlus",
+      "tabler": "tablerCirclePlus",
+      "hugeicons": "hugeAddCircle",
+      "phosphor": "phosphorPlusCircle",
+      "remixicon": "remixAddCircleLine"
     },
     "circle-help": {
-      "lucide": "lucideCircleHelp"
+      "lucide": "lucideCircleHelp",
+      "tabler": "tablerHelpCircle",
+      "hugeicons": "hugeHelpCircle",
+      "phosphor": "phosphorQuestion",
+      "remixicon": "remixQuestionLine"
     },
     "circle-small": {
-      "lucide": "lucideCircleSmall"
+      "lucide": "lucideCircleSmall",
+      "tabler": "tablerPoint",
+      "hugeicons": "hugeCircle",
+      "phosphor": "phosphorDot",
+      "remixicon": "remixCircleLine"
     },
     "clipboard-paste": {
-      "lucide": "lucideClipboardPaste"
+      "lucide": "lucideClipboardPaste",
+      "tabler": "tablerClipboard",
+      "hugeicons": "hugeClipboard",
+      "phosphor": "phosphorClipboardText",
+      "remixicon": "remixClipboardLine"
     },
     "clock": {
-      "lucide": "lucideClock"
+      "lucide": "lucideClock",
+      "tabler": "tablerClock",
+      "hugeicons": "hugeClock01",
+      "phosphor": "phosphorClock",
+      "remixicon": "remixTimeLine"
     },
     "clock-2": {
-      "lucide": "lucideClock2"
+      "lucide": "lucideClock2",
+      "tabler": "tablerClock",
+      "hugeicons": "hugeClock02",
+      "phosphor": "phosphorClockAfternoon",
+      "remixicon": "remixTimeLine"
     },
     "cloud": {
-      "lucide": "lucideCloud"
+      "lucide": "lucideCloud",
+      "tabler": "tablerCloud",
+      "hugeicons": "hugeCloud",
+      "phosphor": "phosphorCloud",
+      "remixicon": "remixCloudLine"
     },
     "code": {
-      "lucide": "lucideCode"
+      "lucide": "lucideCode",
+      "tabler": "tablerCode",
+      "hugeicons": "hugeSourceCode",
+      "phosphor": "phosphorCode",
+      "remixicon": "remixCodeLine"
     },
     "copy": {
-      "lucide": "lucideCopy"
+      "lucide": "lucideCopy",
+      "tabler": "tablerCopy",
+      "hugeicons": "hugeCopy01",
+      "phosphor": "phosphorCopy",
+      "remixicon": "remixFileCopyLine"
     },
     "corner-down-left": {
-      "lucide": "lucideCornerDownLeft"
+      "lucide": "lucideCornerDownLeft",
+      "tabler": "tablerCornerDownLeft",
+      "hugeicons": "hugeArrowTurnBackward",
+      "phosphor": "phosphorArrowBendDownLeft",
+      "remixicon": "remixCornerDownLeftLine"
     },
     "credit-card": {
-      "lucide": "lucideCreditCard"
+      "lucide": "lucideCreditCard",
+      "tabler": "tablerCreditCard",
+      "hugeicons": "hugeCreditCard",
+      "phosphor": "phosphorCreditCard",
+      "remixicon": "remixBankCardLine"
     },
     "dot": {
-      "lucide": "lucideDot"
+      "lucide": "lucideDot",
+      "tabler": "tablerPoint",
+      "hugeicons": "hugeCircle",
+      "phosphor": "phosphorDot",
+      "remixicon": "remixCircleFill"
     },
     "download": {
-      "lucide": "lucideDownload"
+      "lucide": "lucideDownload",
+      "tabler": "tablerDownload",
+      "hugeicons": "hugeDownload01",
+      "phosphor": "phosphorDownload",
+      "remixicon": "remixDownloadLine"
     },
     "ellipsis": {
-      "lucide": "lucideEllipsis"
+      "lucide": "lucideEllipsis",
+      "tabler": "tablerDots",
+      "hugeicons": "hugeMoreHorizontal",
+      "phosphor": "phosphorDotsThree",
+      "remixicon": "remixMoreLine"
     },
     "external-link": {
-      "lucide": "lucideExternalLink"
+      "lucide": "lucideExternalLink",
+      "tabler": "tablerExternalLink",
+      "hugeicons": "hugeLinkSquare01",
+      "phosphor": "phosphorArrowSquareOut",
+      "remixicon": "remixExternalLinkLine"
     },
     "eye-off": {
-      "lucide": "lucideEyeOff"
+      "lucide": "lucideEyeOff",
+      "tabler": "tablerEyeOff",
+      "hugeicons": "hugeViewOff",
+      "phosphor": "phosphorEyeSlash",
+      "remixicon": "remixEyeOffLine"
     },
     "file": {
-      "lucide": "lucideFile"
+      "lucide": "lucideFile",
+      "tabler": "tablerFile",
+      "hugeicons": "hugeFile01",
+      "phosphor": "phosphorFile",
+      "remixicon": "remixFileLine"
     },
     "file-code": {
-      "lucide": "lucideFileCode"
+      "lucide": "lucideFileCode",
+      "tabler": "tablerFileCode",
+      "hugeicons": "hugeDocumentCode",
+      "phosphor": "phosphorFileCode",
+      "remixicon": "remixFileCodeLine"
     },
     "file-code-2": {
-      "lucide": "lucideFileCode2"
+      "lucide": "lucideFileCode2",
+      "tabler": "tablerFileCode2",
+      "hugeicons": "hugeDocumentCode",
+      "phosphor": "phosphorFileCode",
+      "remixicon": "remixFileCodeLine"
     },
     "file-text": {
-      "lucide": "lucideFileText"
+      "lucide": "lucideFileText",
+      "tabler": "tablerFileText",
+      "hugeicons": "hugeFile02",
+      "phosphor": "phosphorFileText",
+      "remixicon": "remixFileTextLine"
     },
     "folder": {
-      "lucide": "lucideFolder"
+      "lucide": "lucideFolder",
+      "tabler": "tablerFolder",
+      "hugeicons": "hugeFolder01",
+      "phosphor": "phosphorFolder",
+      "remixicon": "remixFolderLine"
     },
     "folder-code": {
-      "lucide": "lucideFolderCode"
+      "lucide": "lucideFolderCode",
+      "tabler": "tablerFolderCode",
+      "hugeicons": "hugeCodeFolder",
+      "phosphor": "phosphorFolderSimple",
+      "remixicon": "remixFolderLine"
     },
     "folder-plus": {
-      "lucide": "lucideFolderPlus"
+      "lucide": "lucideFolderPlus",
+      "tabler": "tablerFolderPlus",
+      "hugeicons": "hugeFolderAdd",
+      "phosphor": "phosphorFolderPlus",
+      "remixicon": "remixFolderAddLine"
     },
     "footprints": {
-      "lucide": "lucideFootprints"
+      "lucide": "lucideFootprints",
+      "tabler": "tablerWalk",
+      "phosphor": "phosphorFootprints",
+      "remixicon": "remixFootprintLine"
+    },
+    "forward": {
+      "lucide": "lucideForward",
+      "tabler": "tablerArrowForward",
+      "hugeicons": "hugeForward01",
+      "phosphor": "phosphorShareFat",
+      "remixicon": "remixShareForwardLine"
+    },
+    "frame": {
+      "lucide": "lucideFrame",
+      "tabler": "tablerFrame",
+      "phosphor": "phosphorFrameCorners",
+      "remixicon": "remixCropLine"
     },
     "gallery-vertical-end": {
-      "lucide": "lucideGalleryVerticalEnd"
+      "lucide": "lucideGalleryVerticalEnd",
+      "tabler": "tablerCarouselVertical",
+      "hugeicons": "hugeCarouselVertical",
+      "phosphor": "phosphorRows",
+      "remixicon": "remixGalleryView2"
     },
     "git-branch": {
-      "lucide": "lucideGitBranch"
+      "lucide": "lucideGitBranch",
+      "tabler": "tablerGitBranch",
+      "hugeicons": "hugeGitBranch",
+      "phosphor": "phosphorGitBranch",
+      "remixicon": "remixGitBranchLine"
     },
     "globe": {
-      "lucide": "lucideGlobe"
+      "lucide": "lucideGlobe",
+      "tabler": "tablerWorld",
+      "hugeicons": "hugeGlobe",
+      "phosphor": "phosphorGlobe",
+      "remixicon": "remixGlobeLine"
     },
     "house": {
-      "lucide": "lucideHouse"
+      "lucide": "lucideHouse",
+      "tabler": "tablerHome",
+      "hugeicons": "hugeHome01",
+      "phosphor": "phosphorHouse",
+      "remixicon": "remixHomeLine"
     },
     "image": {
-      "lucide": "lucideImage"
+      "lucide": "lucideImage",
+      "tabler": "tablerPhoto",
+      "hugeicons": "hugeImage01",
+      "phosphor": "phosphorImage",
+      "remixicon": "remixImageLine"
     },
     "inbox": {
-      "lucide": "lucideInbox"
+      "lucide": "lucideInbox",
+      "tabler": "tablerInbox",
+      "hugeicons": "hugeInbox",
+      "phosphor": "phosphorTray",
+      "remixicon": "remixInboxLine"
     },
     "info": {
-      "lucide": "lucideInfo"
+      "lucide": "lucideInfo",
+      "tabler": "tablerInfoCircle",
+      "hugeicons": "hugeInformationCircle",
+      "phosphor": "phosphorInfo",
+      "remixicon": "remixInformationLine"
     },
     "italic": {
-      "lucide": "lucideItalic"
+      "lucide": "lucideItalic",
+      "tabler": "tablerItalic",
+      "hugeicons": "hugeTextItalic",
+      "phosphor": "phosphorTextItalic",
+      "remixicon": "remixItalic"
     },
     "keyboard": {
-      "lucide": "lucideKeyboard"
+      "lucide": "lucideKeyboard",
+      "tabler": "tablerKeyboard",
+      "hugeicons": "hugeKeyboard",
+      "phosphor": "phosphorKeyboard",
+      "remixicon": "remixKeyboardLine"
     },
     "layout-grid": {
-      "lucide": "lucideLayoutGrid"
+      "lucide": "lucideLayoutGrid",
+      "tabler": "tablerLayoutGrid",
+      "hugeicons": "hugeLayoutGrid",
+      "phosphor": "phosphorSquaresFour",
+      "remixicon": "remixLayoutGridLine"
     },
     "lightbulb": {
-      "lucide": "lucideLightbulb"
+      "lucide": "lucideLightbulb",
+      "tabler": "tablerBulb",
+      "hugeicons": "hugeIdea",
+      "phosphor": "phosphorLightbulb",
+      "remixicon": "remixLightbulbLine"
     },
     "lightbulb-off": {
-      "lucide": "lucideLightbulbOff"
+      "lucide": "lucideLightbulbOff",
+      "tabler": "tablerBulbOff",
+      "hugeicons": "hugeBulb",
+      "phosphor": "phosphorLightbulbFilament",
+      "remixicon": "remixLightbulbLine"
     },
     "list": {
-      "lucide": "lucideList"
+      "lucide": "lucideList",
+      "tabler": "tablerList",
+      "hugeicons": "hugeLeftToRightListBullet",
+      "phosphor": "phosphorList",
+      "remixicon": "remixListUnordered"
     },
     "list-filter": {
-      "lucide": "lucideListFilter"
+      "lucide": "lucideListFilter",
+      "tabler": "tablerFilter",
+      "hugeicons": "hugeFilterHorizontal",
+      "phosphor": "phosphorFunnel",
+      "remixicon": "remixFilterLine"
     },
     "list-filter-plus": {
-      "lucide": "lucideListFilterPlus"
+      "lucide": "lucideListFilterPlus",
+      "tabler": "tablerFilterPlus",
+      "hugeicons": "hugeFilterAdd",
+      "phosphor": "phosphorFunnelSimple",
+      "remixicon": "remixFilter2Line"
     },
     "loader": {
-      "lucide": "lucideLoader"
+      "lucide": "lucideLoader",
+      "tabler": "tablerLoader",
+      "hugeicons": "hugeLoading03",
+      "phosphor": "phosphorSpinner",
+      "remixicon": "remixLoaderLine"
     },
     "loader-2": {
-      "lucide": "lucideLoader2"
+      "lucide": "lucideLoader2",
+      "tabler": "tablerLoader2",
+      "hugeicons": "hugeLoading03",
+      "phosphor": "phosphorSpinnerGap",
+      "remixicon": "remixLoader2Line"
     },
     "loader-circle": {
-      "lucide": "lucideLoaderCircle"
+      "lucide": "lucideLoaderCircle",
+      "tabler": "tablerLoader2",
+      "hugeicons": "hugeLoading03",
+      "phosphor": "phosphorCircleNotch",
+      "remixicon": "remixLoader4Line"
     },
     "log-out": {
-      "lucide": "lucideLogOut"
+      "lucide": "lucideLogOut",
+      "tabler": "tablerLogout",
+      "hugeicons": "hugeLogout01",
+      "phosphor": "phosphorSignOut",
+      "remixicon": "remixLogoutBoxLine"
     },
     "mail": {
-      "lucide": "lucideMail"
+      "lucide": "lucideMail",
+      "tabler": "tablerMail",
+      "hugeicons": "hugeMail01",
+      "phosphor": "phosphorEnvelope",
+      "remixicon": "remixMailLine"
     },
     "mail-check": {
-      "lucide": "lucideMailCheck"
+      "lucide": "lucideMailCheck",
+      "tabler": "tablerMailCheck",
+      "hugeicons": "hugeMailValidation01",
+      "phosphor": "phosphorEnvelopeSimple",
+      "remixicon": "remixMailCheckLine"
+    },
+    "map": {
+      "lucide": "lucideMap",
+      "tabler": "tablerMap",
+      "hugeicons": "hugeMapsLocation01",
+      "phosphor": "phosphorMapTrifold",
+      "remixicon": "remixMapLine"
     },
     "maximize": {
-      "lucide": "lucideMaximize"
+      "lucide": "lucideMaximize",
+      "tabler": "tablerMaximize",
+      "hugeicons": "hugeMaximize01",
+      "phosphor": "phosphorArrowsOut",
+      "remixicon": "remixFullscreenLine"
     },
     "message-square": {
-      "lucide": "lucideMessageSquare"
+      "lucide": "lucideMessageSquare",
+      "tabler": "tablerMessage",
+      "hugeicons": "hugeMessage01",
+      "phosphor": "phosphorChatText",
+      "remixicon": "remixMessageLine"
     },
     "minimize": {
-      "lucide": "lucideMinimize"
+      "lucide": "lucideMinimize",
+      "tabler": "tablerMinimize",
+      "hugeicons": "hugeMinimize01",
+      "phosphor": "phosphorArrowsIn",
+      "remixicon": "remixFullscreenExitLine"
     },
     "minus": {
-      "lucide": "lucideMinus"
+      "lucide": "lucideMinus",
+      "tabler": "tablerMinus",
+      "hugeicons": "hugeMinusSign",
+      "phosphor": "phosphorMinus",
+      "remixicon": "remixSubtractLine"
     },
     "monitor": {
-      "lucide": "lucideMonitor"
+      "lucide": "lucideMonitor",
+      "tabler": "tablerDeviceDesktop",
+      "hugeicons": "hugeComputer",
+      "phosphor": "phosphorMonitor",
+      "remixicon": "remixComputerLine"
     },
     "more-horizontal": {
-      "lucide": "lucideMoreHorizontal"
+      "lucide": "lucideMoreHorizontal",
+      "tabler": "tablerDots",
+      "hugeicons": "hugeMoreHorizontal",
+      "phosphor": "phosphorDotsThree",
+      "remixicon": "remixMoreLine"
     },
     "octagon-x": {
-      "lucide": "lucideOctagonX"
+      "lucide": "lucideOctagonX",
+      "tabler": "tablerAlertOctagon",
+      "hugeicons": "hugeCancelCircle",
+      "phosphor": "phosphorWarningOctagon",
+      "remixicon": "remixCloseCircleLine"
     },
     "panel-left": {
-      "lucide": "lucidePanelLeft"
+      "lucide": "lucidePanelLeft",
+      "tabler": "tablerLayoutSidebar",
+      "hugeicons": "hugeSidebarLeft",
+      "phosphor": "phosphorSidebar",
+      "remixicon": "remixLayoutLeftLine"
     },
     "pencil": {
-      "lucide": "lucidePencil"
+      "lucide": "lucidePencil",
+      "tabler": "tablerPencil",
+      "hugeicons": "hugePencil",
+      "phosphor": "phosphorPencil",
+      "remixicon": "remixPencilLine"
+    },
+    "pie-chart": {
+      "lucide": "lucidePieChart",
+      "tabler": "tablerChartPie",
+      "hugeicons": "hugePieChart",
+      "phosphor": "phosphorChartPie",
+      "remixicon": "remixPieChartLine"
     },
     "plus": {
-      "lucide": "lucidePlus"
+      "lucide": "lucidePlus",
+      "tabler": "tablerPlus",
+      "hugeicons": "hugePlusSign",
+      "phosphor": "phosphorPlus",
+      "remixicon": "remixAddLine"
     },
     "refresh-ccw": {
-      "lucide": "lucideRefreshCcw"
+      "lucide": "lucideRefreshCcw",
+      "tabler": "tablerRefresh",
+      "hugeicons": "hugeRefresh",
+      "phosphor": "phosphorArrowsCounterClockwise",
+      "remixicon": "remixAnticlockwiseLine"
     },
     "refresh-cw": {
-      "lucide": "lucideRefreshCw"
+      "lucide": "lucideRefreshCw",
+      "tabler": "tablerRefresh",
+      "hugeicons": "hugeReload",
+      "phosphor": "phosphorArrowsClockwise",
+      "remixicon": "remixRestartLine"
     },
     "rotate-ccw": {
-      "lucide": "lucideRotateCcw"
+      "lucide": "lucideRotateCcw",
+      "tabler": "tablerRotate",
+      "hugeicons": "hugeRotateLeft01",
+      "phosphor": "phosphorArrowCounterClockwise",
+      "remixicon": "remixAnticlockwise2Line"
+    },
+    "rotate-cw": {
+      "lucide": "lucideRotateCw",
+      "tabler": "tablerRotateClockwise",
+      "hugeicons": "hugeRotateClockwise",
+      "phosphor": "phosphorArrowClockwise",
+      "remixicon": "remixClockwiseLine"
     },
     "save": {
-      "lucide": "lucideSave"
+      "lucide": "lucideSave",
+      "tabler": "tablerDeviceFloppy",
+      "hugeicons": "hugeFloppyDisk",
+      "phosphor": "phosphorFloppyDisk",
+      "remixicon": "remixSaveLine"
     },
     "scissors": {
-      "lucide": "lucideScissors"
+      "lucide": "lucideScissors",
+      "tabler": "tablerScissors",
+      "hugeicons": "hugeScissor",
+      "phosphor": "phosphorScissors",
+      "remixicon": "remixScissorsLine"
     },
     "search": {
-      "lucide": "lucideSearch"
+      "lucide": "lucideSearch",
+      "tabler": "tablerSearch",
+      "hugeicons": "hugeSearch01",
+      "phosphor": "phosphorMagnifyingGlass",
+      "remixicon": "remixSearchLine"
     },
     "settings": {
-      "lucide": "lucideSettings"
+      "lucide": "lucideSettings",
+      "tabler": "tablerSettings",
+      "hugeicons": "hugeSettings01",
+      "phosphor": "phosphorGear",
+      "remixicon": "remixSettingsLine"
+    },
+    "settings-2": {
+      "lucide": "lucideSettings2",
+      "tabler": "tablerSettings2",
+      "hugeicons": "hugeSettings02",
+      "phosphor": "phosphorSliders",
+      "remixicon": "remixSettings2Line"
     },
     "share": {
-      "lucide": "lucideShare"
+      "lucide": "lucideShare",
+      "tabler": "tablerShare",
+      "hugeicons": "hugeShare01",
+      "phosphor": "phosphorShareNetwork",
+      "remixicon": "remixShareLine"
     },
     "shield-alert": {
-      "lucide": "lucideShieldAlert"
+      "lucide": "lucideShieldAlert",
+      "tabler": "tablerShieldExclamation",
+      "phosphor": "phosphorShieldWarning",
+      "remixicon": "remixShieldLine"
     },
     "smartphone": {
-      "lucide": "lucideSmartphone"
+      "lucide": "lucideSmartphone",
+      "tabler": "tablerDeviceMobile",
+      "hugeicons": "hugeSmartPhone01",
+      "phosphor": "phosphorDeviceMobile",
+      "remixicon": "remixSmartphoneLine"
     },
     "smile": {
-      "lucide": "lucideSmile"
+      "lucide": "lucideSmile",
+      "tabler": "tablerMoodSmile",
+      "hugeicons": "hugeSmile",
+      "phosphor": "phosphorSmiley",
+      "remixicon": "remixEmotionHappyLine"
+    },
+    "sparkles": {
+      "lucide": "lucideSparkles",
+      "tabler": "tablerSparkles",
+      "hugeicons": "hugeSparkles",
+      "phosphor": "phosphorSparkle",
+      "remixicon": "remixSparklingLine"
+    },
+    "square-terminal": {
+      "lucide": "lucideSquareTerminal",
+      "tabler": "tablerTerminal2",
+      "hugeicons": "hugeCommandLine",
+      "phosphor": "phosphorTerminalWindow",
+      "remixicon": "remixTerminalBoxLine"
     },
     "star": {
-      "lucide": "lucideStar"
+      "lucide": "lucideStar",
+      "tabler": "tablerStar",
+      "hugeicons": "hugeStar",
+      "phosphor": "phosphorStar",
+      "remixicon": "remixStarLine"
     },
     "sun": {
-      "lucide": "lucideSun"
+      "lucide": "lucideSun",
+      "tabler": "tablerSun",
+      "hugeicons": "hugeSun01",
+      "phosphor": "phosphorSun",
+      "remixicon": "remixSunLine"
     },
     "tag": {
-      "lucide": "lucideTag"
+      "lucide": "lucideTag",
+      "tabler": "tablerTag",
+      "hugeicons": "hugeTag01",
+      "phosphor": "phosphorTag",
+      "remixicon": "remixPriceTag3Line"
     },
     "terminal": {
-      "lucide": "lucideTerminal"
+      "lucide": "lucideTerminal",
+      "tabler": "tablerTerminal",
+      "hugeicons": "hugeCommandLine",
+      "phosphor": "phosphorTerminal",
+      "remixicon": "remixTerminalBoxLine"
     },
     "thumbs-down": {
-      "lucide": "lucideThumbsDown"
+      "lucide": "lucideThumbsDown",
+      "tabler": "tablerThumbDown",
+      "hugeicons": "hugeThumbsDown",
+      "phosphor": "phosphorThumbsDown",
+      "remixicon": "remixThumbDownLine"
     },
     "thumbs-up": {
-      "lucide": "lucideThumbsUp"
+      "lucide": "lucideThumbsUp",
+      "tabler": "tablerThumbUp",
+      "hugeicons": "hugeThumbsUp",
+      "phosphor": "phosphorThumbsUp",
+      "remixicon": "remixThumbUpLine"
     },
     "trash": {
-      "lucide": "lucideTrash"
+      "lucide": "lucideTrash",
+      "tabler": "tablerTrash",
+      "hugeicons": "hugeDelete02",
+      "phosphor": "phosphorTrash",
+      "remixicon": "remixDeleteBinLine"
     },
     "trash-2": {
-      "lucide": "lucideTrash2"
+      "lucide": "lucideTrash2",
+      "tabler": "tablerTrash",
+      "hugeicons": "hugeDelete01",
+      "phosphor": "phosphorTrashSimple",
+      "remixicon": "remixDeleteBin6Line"
     },
     "trending-up": {
-      "lucide": "lucideTrendingUp"
+      "lucide": "lucideTrendingUp",
+      "tabler": "tablerTrendingUp",
+      "hugeicons": "hugeAnalyticsUp",
+      "phosphor": "phosphorTrendUp",
+      "remixicon": "remixLineChartLine"
     },
     "triangle-alert": {
-      "lucide": "lucideTriangleAlert"
+      "lucide": "lucideTriangleAlert",
+      "tabler": "tablerAlertTriangle",
+      "hugeicons": "hugeAlert02",
+      "phosphor": "phosphorWarning",
+      "remixicon": "remixAlertLine"
     },
     "underline": {
-      "lucide": "lucideUnderline"
+      "lucide": "lucideUnderline",
+      "tabler": "tablerUnderline",
+      "hugeicons": "hugeTextUnderline",
+      "phosphor": "phosphorTextUnderline",
+      "remixicon": "remixUnderline"
     },
     "user": {
-      "lucide": "lucideUser"
+      "lucide": "lucideUser",
+      "tabler": "tablerUser",
+      "hugeicons": "hugeUser",
+      "phosphor": "phosphorUser",
+      "remixicon": "remixUserLine"
     },
     "user-round-x": {
-      "lucide": "lucideUserRoundX"
+      "lucide": "lucideUserRoundX",
+      "tabler": "tablerUserX",
+      "hugeicons": "hugeUserRemove01",
+      "phosphor": "phosphorUserMinus",
+      "remixicon": "remixUserForbidLine"
     },
     "volume-off": {
-      "lucide": "lucideVolumeOff"
+      "lucide": "lucideVolumeOff",
+      "tabler": "tablerVolumeOff",
+      "hugeicons": "hugeVolumeOff",
+      "phosphor": "phosphorSpeakerSlash",
+      "remixicon": "remixVolumeMuteLine"
     },
     "wallet": {
-      "lucide": "lucideWallet"
+      "lucide": "lucideWallet",
+      "tabler": "tablerWallet",
+      "hugeicons": "hugeWallet01",
+      "phosphor": "phosphorWallet",
+      "remixicon": "remixWalletLine"
     },
     "waves": {
-      "lucide": "lucideWaves"
+      "lucide": "lucideWaves",
+      "tabler": "tablerWaveSine",
+      "phosphor": "phosphorWaves",
+      "remixicon": "remixWaterFlashLine"
     },
     "x": {
-      "lucide": "lucideX"
+      "lucide": "lucideX",
+      "tabler": "tablerX",
+      "hugeicons": "hugeCancel01",
+      "phosphor": "phosphorX",
+      "remixicon": "remixCloseLine"
     },
     "zoom-in": {
-      "lucide": "lucideZoomIn"
+      "lucide": "lucideZoomIn",
+      "tabler": "tablerZoomIn",
+      "hugeicons": "hugeSearchAdd",
+      "phosphor": "phosphorMagnifyingGlassPlus",
+      "remixicon": "remixZoomInLine"
     },
     "zoom-out": {
-      "lucide": "lucideZoomOut"
+      "lucide": "lucideZoomOut",
+      "tabler": "tablerZoomOut",
+      "hugeicons": "hugeSearchMinus",
+      "phosphor": "phosphorMagnifyingGlassMinus",
+      "remixicon": "remixZoomOutLine"
     }
   }
 }

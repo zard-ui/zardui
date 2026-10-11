@@ -1,78 +1,26 @@
-export const availableThemes: string[] = ['neutral', 'stone', 'zinc', 'gray', 'slate'];
+import { DEFAULT_DESIGN } from '../design/config.js';
+import { INLINE_THEME, layerBase as renderLayerBase, renderTokenBlocks, tailwindHead } from '../design/css.js';
+import { type BaseColorId } from '../design/options.js';
 
-const getTailwindConfiguration = (corePath: string): string => {
-  return `
-@layer ng-icon, theme, base, components, utilities;
-@import 'tailwindcss';
-@import '${corePath}/css/zard';
-@plugin "tailwindcss-animate";
+/**
+ * Every base color `init` can write. `gray` and `slate` are kept for projects that already use
+ * them; the other seven are the ones the design system (and its preset code) knows.
+ */
+export const availableThemes: string[] = [
+  'neutral',
+  'stone',
+  'zinc',
+  'gray',
+  'slate',
+  'mauve',
+  'olive',
+  'mist',
+  'taupe',
+];
 
-@custom-variant dark (&:is(.dark *));
-`;
-};
-
-const inlineTheme = `
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-`;
-
-const layerBase = `
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield; /* Added for general compatibility */
-  }
-}
-`;
+const getTailwindConfiguration = tailwindHead;
+const inlineTheme = INLINE_THEME;
+const layerBase = renderLayerBase();
 
 export const neutral = (corePath: string) => `
 ${getTailwindConfiguration(corePath)}
@@ -463,3 +411,23 @@ ${getTailwindConfiguration(corePath)}
 ${inlineTheme}
 ${layerBase}
 `;
+
+/**
+ * A base color the design system defines, laid out like the hand-written themes above: its own
+ * tokens, its own chart ramp, the default radius.
+ */
+const fromDesignData =
+  (baseColor: BaseColorId) =>
+  (corePath: string): string => `
+${getTailwindConfiguration(corePath)}
+
+${renderTokenBlocks({ ...DEFAULT_DESIGN, baseColor, theme: baseColor, chartColor: baseColor })}
+
+${inlineTheme}
+${layerBase}
+`;
+
+export const mauve = fromDesignData('mauve');
+export const olive = fromDesignData('olive');
+export const mist = fromDesignData('mist');
+export const taupe = fromDesignData('taupe');

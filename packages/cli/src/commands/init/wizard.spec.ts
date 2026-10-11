@@ -10,6 +10,7 @@
 
 jest.mock('@antfu/ni', () => ({ detect: jest.fn() }));
 
+import { resolvePreset } from '@cli/commands/init/preset.js';
 import { runInitWizard, type InitWizardOptions } from '@cli/commands/init/wizard.js';
 import { fakeTty, KEY, type FakeTty } from '@cli/ui/testing/fake-tty.js';
 import type { Config } from '@cli/utils/config.js';
@@ -354,5 +355,42 @@ describe('runInitWizard', () => {
     } finally {
       run.tty.restore();
     }
+  });
+  describe('with --preset', () => {
+    const preset = resolvePreset('Z6KtfCaQt');
+
+    it('should not ask for the theme: the preset already chose the base color', async () => {
+      const run = await startWizard(await workspaceOnDisk(), { presetKind: 'nx-library', preset });
+
+      try {
+        await run.reach([KEY.enter], PROMPTS.themeCss);
+
+        expect(run.screen()).not.toContain(onScreen(PROMPTS.theme));
+      } finally {
+        run.tty.restore();
+      }
+    });
+
+    it('should write the preset into the config the wizard returns', async () => {
+      const run = await startWizard(await workspaceOnDisk(), { presetKind: 'nx-library', preset });
+
+      try {
+        await run.reach([KEY.enter], PROMPTS.themeCss);
+        await run.reach([KEY.enter], PROMPTS.components);
+        await run.reach([KEY.enter], PROMPTS.utils);
+        await run.reach([KEY.enter], PROMPTS.rtl);
+        await run.reach([KEY.enter], PROMPTS.done);
+        run.press([KEY.enter]);
+
+        expect(await run.config).toMatchObject({
+          style: 'lyra',
+          icons: 'phosphor',
+          preset: 'Z6KtfCaQt',
+          tailwind: { baseColor: 'mauve' },
+        });
+      } finally {
+        run.tty.restore();
+      }
+    });
   });
 });
