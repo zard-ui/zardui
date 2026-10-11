@@ -62,17 +62,16 @@ const NOTICE_STORAGE_KEY = 'zard-themes-cli-create-notice-dismissed';
             class="mb-6"
             zType="default"
             zIcon="lucideTriangleAlert"
-            zTitle="This customizer is moving into the CLI"
+            zTitle="Looking for the full builder?"
             [zDescription]="noticeDescription"
             [zAction]="noticeAction"
           />
 
           <ng-template #noticeDescription>
+            <a routerLink="/create">/create</a>
+            picks a style, colors, fonts, icons and radius together and hands you one
             <code>zard-cli create</code>
-            will bring a deeper, project-level theme customization flow. It has not shipped yet — keep using this page
-            to build and export your theme in the meantime.
-            <a routerLink="/docs/roadmap" fragment="zard-cli-create">See it on the roadmap</a>
-            .
+            command. This page stays as the advanced token editor.
           </ng-template>
 
           <ng-template #noticeAction>
