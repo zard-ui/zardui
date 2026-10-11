@@ -324,8 +324,9 @@ describe('ZardTabComponent', () => {
     });
 
     const press = (fixture: { nativeElement: HTMLElement; detectChanges: () => void }, key: string) => {
-      const nav = fixture.nativeElement.querySelector('[role="tablist"]') as HTMLElement;
-      nav.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+      // keys reach the component from the focused tab, which is the active one
+      const activeTab = fixture.nativeElement.querySelector('[role="tab"][tabindex="0"]') as HTMLElement;
+      activeTab.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
       fixture.detectChanges();
     };
     const selected = (fixture: { nativeElement: HTMLElement }) =>

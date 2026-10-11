@@ -153,8 +153,8 @@ const translations: ZardRtlTranslations<ContextMenuRtlValues> = {
     </z-dropdown-menu-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'contents' },
   viewProviders: [provideIcons({ lucideArrowLeft, lucideArrowRight, lucideRotateCw })],
+  host: { class: 'contents' },
 })
 export class ZardDemoContextMenuRtlComponent {
   protected readonly i18n = injectRtlTranslation(translations);

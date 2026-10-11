@@ -35,9 +35,11 @@ export const ZARD_RTL_DEFAULT_LANGUAGE: ZardRtlLanguage = 'ar';
 
 /**
  * Provided by the RTL preview of the docs site (`z-code-box`) with the language chosen in its header.
- * Outside of it the token is absent and {@link injectRtlTranslation} falls back to Arabic.
+ * Outside of it the token falls back to {@link ZARD_RTL_DEFAULT_LANGUAGE} (Arabic).
  */
-export const ZARD_RTL_LANGUAGE = new InjectionToken<Signal<ZardRtlLanguage>>('ZARD_RTL_LANGUAGE');
+export const ZARD_RTL_LANGUAGE = new InjectionToken<Signal<ZardRtlLanguage>>('ZARD_RTL_LANGUAGE', {
+  factory: () => signal(ZARD_RTL_DEFAULT_LANGUAGE),
+});
 
 export interface ZardRtlTranslationRef<T> {
   /** The selected language. */
@@ -56,7 +58,7 @@ export interface ZardRtlTranslationRef<T> {
  * // template: {{ i18n.t().title }}
  */
 export function injectRtlTranslation<T>(translations: ZardRtlTranslations<T>): ZardRtlTranslationRef<T> {
-  const language = inject(ZARD_RTL_LANGUAGE, { optional: true }) ?? signal(ZARD_RTL_DEFAULT_LANGUAGE);
+  const language = inject(ZARD_RTL_LANGUAGE);
 
   return {
     language,

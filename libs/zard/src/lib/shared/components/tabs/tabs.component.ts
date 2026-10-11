@@ -58,7 +58,6 @@ export class ZardTabComponent {
       role="tablist"
       [attr.aria-orientation]="zOrientation()"
       [attr.data-variant]="zVariant()"
-      (keydown)="onKeydown($event)"
     >
       @for (tab of tabs(); track $index; let index = $index) {
         <button
@@ -71,6 +70,7 @@ export class ZardTabComponent {
           [attr.aria-controls]="panelId(index)"
           [disabled]="zDisabled() || tab.zDisabled()"
           (click)="setActiveTab(index)"
+          (keydown)="onKeydown($event)"
           [class]="buttonClasses()"
         >
           @if (tab.zIcon()) {
@@ -183,7 +183,8 @@ export class ZardTabGroupComponent {
 
     event.preventDefault();
     this.setActiveTab(target);
-    const buttons = (event.currentTarget as HTMLElement).querySelectorAll<HTMLButtonElement>(':scope > button');
+    const buttons =
+      (event.currentTarget as HTMLElement).parentElement?.querySelectorAll<HTMLButtonElement>(':scope > button') ?? [];
     buttons[target]?.focus();
   }
 
