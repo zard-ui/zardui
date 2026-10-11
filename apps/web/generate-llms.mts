@@ -62,7 +62,9 @@ function renderComponents(): string {
   return lines.join('\n');
 }
 
-const source = readFileSync(LLMS_PATH, 'utf8');
+// A Windows checkout may carry CRLF; the section markers below are matched with LF.
+const source = readFileSync(LLMS_PATH, 'utf8').replace(/\r\n/g, '\n');
+
 const start = source.indexOf('## Components\n');
 
 if (start === -1) {
