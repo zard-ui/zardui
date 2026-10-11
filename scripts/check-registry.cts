@@ -22,6 +22,20 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+import {
+  ACCENT_COLOR_IDS,
+  BASE_COLOR_IDS,
+  DEFAULT_PRESET_CODE,
+  FONTS,
+  ICON_LIBRARY_IDS,
+  PRESET_TABLES,
+  STYLE_IDS,
+  decodePreset,
+  designDataFrom,
+  encodePreset,
+  resolveTokens,
+} from '../packages/cli/src/core/design/index';
+import { ICON_FAMILIES, ICON_MAP } from '../packages/cli/src/core/icons/index';
 import { registry } from '../packages/cli/src/core/registry/registry-data';
 
 const LIB_PATH = path.resolve(__dirname, '../libs/zard/src/lib/shared');
@@ -223,7 +237,7 @@ function checkClosurePass(): void {
 
   const items = new Map<string, PublishedItem>();
   for (const file of fs.readdirSync(REGISTRY_OUTPUT)) {
-    if (!file.endsWith('.json') || file === 'registry.json' || file === 'icons.json') continue;
+    if (!file.endsWith('.json') || ['registry.json', 'icons.json', 'design.json'].includes(file)) continue;
     const item = JSON.parse(fs.readFileSync(path.join(REGISTRY_OUTPUT, file), 'utf8')) as PublishedItem;
     if (item.files) items.set(item.name, item);
   }
@@ -289,8 +303,127 @@ function checkClosurePass(): void {
   }
 }
 
+/**
+ * The design half of the registry: what the CLI needs to resolve a preset code.
+ *
+ *   icons.json   — every family declared, with a column in the table for each, and the table agrees
+ *                  with the bundled copy.
+ *   design.json  — the option lists agree with the codec tables (a font or style in one and not the
+ *                  other is a code that cannot be written or read), every color has a complete token
+ *                  set, and the curated presets decode.
+ */
+function checkDesignPass(): void {
+  // Source side: the lists a picker shows and the tables a code is made of must be the same set.
+  const sameSet = (name: string, shown: readonly string[], coded: readonly string[]) => {
+    const missingFromCodec = shown.filter(id => !coded.includes(id));
+    const missingFromOptions = coded.filter(id => !shown.includes(id));
+    for (const id of missingFromCodec)
+      report('design', `${name} "${id}" is offered but the preset codec has no index for it`);
+    for (const id of missingFromOptions) report('design', `${name} "${id}" is in the preset codec but not offered`);
+  };
+  sameSet('style', STYLE_IDS, PRESET_TABLES.style);
+  sameSet('base color', BASE_COLOR_IDS, PRESET_TABLES.baseColor);
+  sameSet('theme', [...BASE_COLOR_IDS, ...ACCENT_COLOR_IDS], PRESET_TABLES.theme);
+  sameSet(
+    'font',
+    FONTS.map(font => font.id),
+    PRESET_TABLES.font,
+  );
+  sameSet('icon library', ICON_LIBRARY_IDS, PRESET_TABLES.iconLibrary);
+  sameSet('icon family', Object.keys(ICON_FAMILIES), PRESET_TABLES.iconLibrary);
+
+  if (decodePreset(DEFAULT_PRESET_CODE).style !== 'nova')
+    report('design', 'the default preset does not decode to nova');
+  for (const field of Object.keys(PRESET_TABLES) as Array<keyof typeof PRESET_TABLES>) {
+    if (PRESET_TABLES[field].length === 0) report('design', `the codec table for ${field} is empty`);
+  }
+
+  if (!fs.existsSync(REGISTRY_OUTPUT)) {
+    console.log('· no built registry in apps/web/public/r — skipping the published design files');
+    return;
+  }
+
+  // Published side.
+  const read = (name: string) => {
+    const file = path.join(REGISTRY_OUTPUT, name);
+    if (!fs.existsSync(file)) {
+      report(name, 'is not published');
+      return undefined;
+    }
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  };
+
+  const icons = read('icons.json');
+  if (icons) {
+    for (const family of ICON_LIBRARY_IDS) {
+      if (!icons.families?.[family]) report('icons.json', `declares no "${family}" family`);
+    }
+    const tokens = Object.keys(icons.icons ?? {});
+    if (tokens.length !== Object.keys(ICON_MAP).length)
+      report('icons.json', 'does not match the bundled table; rebuild the registry');
+    for (const family of ICON_LIBRARY_IDS) {
+      const covered = tokens.filter(token => icons.icons[token]?.[family]).length;
+      // Gaps are allowed (the CLI reports them), but a family with most of the table empty is a mistake.
+      if (covered < tokens.length * 0.9)
+        report('icons.json', `"${family}" covers only ${covered}/${tokens.length} icons`);
+    }
+  }
+
+  const design = read('design.json');
+  if (design) {
+    if (design.schemaVersion !== 1) report('design.json', `unexpected schemaVersion ${design.schemaVersion}`);
+    if (design.defaultPreset !== DEFAULT_PRESET_CODE)
+      report('design.json', 'defaultPreset is out of date; rebuild the registry');
+    if ((design.fonts ?? []).length !== FONTS.length)
+      report('design.json', 'font list is out of date; rebuild the registry');
+
+    for (const font of design.fonts ?? []) {
+      if (!font.package || !font.family) report('design.json', `font "${font.id}" has no package or family`);
+    }
+
+    for (const id of [...(design.presets?.shuffle ?? []), ...Object.values<string>(design.presets?.reset ?? {})]) {
+      try {
+        if (encodePreset(decodePreset(id)) !== id) report('design.json', `curated preset ${id} is not canonical`);
+      } catch (error) {
+        report('design.json', `curated preset ${id} does not decode: ${(error as Error).message}`);
+      }
+    }
+    if ((design.presets?.shuffle ?? []).length !== 25) report('design.json', 'expected 25 curated shuffle presets');
+
+    // A design resolved from the published data must render for every base color and theme.
+    const data = designDataFrom(design);
+    for (const baseColor of BASE_COLOR_IDS) {
+      for (const theme of [baseColor, ...ACCENT_COLOR_IDS]) {
+        try {
+          const { light, dark } = resolveTokens(
+            decodePreset(encodePreset({ baseColor, theme, chartColor: theme })),
+            data,
+          );
+          for (const key of [
+            'background',
+            'foreground',
+            'primary',
+            'primary-foreground',
+            'destructive-foreground',
+            'chart-1',
+            'chart-5',
+            'sidebar',
+            'ring',
+          ]) {
+            if (!light[key] || !dark[key])
+              report('design.json', `${baseColor}/${theme} lacks --${key} in light or dark`);
+          }
+        } catch (error) {
+          report('design.json', `${baseColor}/${theme}: ${(error as Error).message}`);
+        }
+      }
+    }
+  }
+}
+
 checkSourcePass();
 checkClosurePass();
+checkDesignPass();
 
 if (problems.length > 0) {
   console.error(`\n✖ registry is not self-consistent — ${problems.length} problem(s):\n`);
