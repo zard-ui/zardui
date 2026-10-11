@@ -51,7 +51,7 @@ For anything the file does not answer — what exists, what a component's API is
 - **`appConfigFile`** → where `provideZard()` is registered. **Empty in a library** — there the consuming app registers it.
 - **`tailwind.css`** → the global CSS file holding the theme tokens. Always edit this file; never create a second one.
 - **`tailwind.baseColor`** → the theme preset: `neutral`, `stone`, `zinc`, `gray`, `slate`, `mauve`, `olive`, `mist`, or `taupe`.
-- **`style`** → `vega`, `nova`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, or the legacy `css` (read as the current look). Written by a preset; recorded, but the installed component files do not yet differ per style.
+- **`style`** → `vega`, `nova`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, or the legacy `css` (read as the current look). Written by a preset; `add` installs components in that style (resolved to plain classes at install time). Existing files change only when re-added with `--overwrite`.
 - **`icons`** → the icon family the components are written with: `lucide`, `tabler`, `hugeicons`, `phosphor`, or `remixicon`. Decides the `@ng-icons/*` package and the symbol names. See [rules/icons.md](./rules/icons.md).
 - **`menuColor`, `menuAppearance`, `menuAccent`** → how menus and popovers look (`default`/`inverted`, `solid`/`translucent`, `subtle`/`bold`). Written by a preset; absent means the defaults.
 - **`preset`** → the `Z…` preset code the project was last fully configured from (built at https://zardui.com/create). Informational; nothing reads it to decide what to install.

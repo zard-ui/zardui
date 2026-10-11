@@ -61,8 +61,12 @@ import type { CodeBlockData } from '@highlight/types';
           look, so nothing needs to change in an existing project.
         </p>
         <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
-          For now the value is recorded, and the components the CLI installs are the same whichever style it names.
-          Everything else a preset chooses is applied: theme, fonts, radius, menu look and icon library.
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli add</code>
+          installs each component in this style: the CLI resolves the style markers in the sources at install time, so
+          your files hold plain Tailwind classes and no runtime style switch. Changing the style affects components
+          added afterwards — re-add the others with
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--overwrite</code>
+          to restyle them.
         </p>
       </div>
     </section>

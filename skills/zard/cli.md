@@ -90,7 +90,7 @@ A preset is a short code starting with `Z` (default `Z0`) that carries a whole d
 npx zard-cli init --preset Z6F9MtstG --type angular --yes
 ```
 
-`init --preset` works on every project type, libraries included. On top of a normal init it writes the theme (base color, theme, chart, radius, menu look, optional pointer rule), the font packages with their `@import`s and `--font-sans` / `--font-heading`, the icon family's `ng-icons` package, and `style`, `icons`, `menuColor`, `menuAppearance`, `menuAccent` and `preset` in `components.json`. Later `add` runs install components with that icon library. The `style` is recorded; the component files do not yet differ per style.
+`init --preset` works on every project type, libraries included. On top of a normal init it writes the theme (base color, theme, chart, radius, menu look, optional pointer rule), the font packages with their `@import`s and `--font-sans` / `--font-heading`, the icon family's `ng-icons` package, and `style`, `icons`, `menuColor`, `menuAppearance`, `menuAccent` and `preset` in `components.json`. Later `add` runs install components in that style (markers resolved to plain Tailwind classes at install time), with that icon library and menu look.
 
 ---
 

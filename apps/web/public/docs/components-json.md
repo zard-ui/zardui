@@ -51,7 +51,7 @@ The eight named styles are written by `zard-cli init --preset` , `zard-cli apply
 
 `css` is what every project initialized before styles existed carries. It keeps working and is read as the current look, so nothing needs to change in an existing project.
 
-For now the value is recorded, and the components the CLI installs are the same whichever style it names. Everything else a preset chooses is applied: theme, fonts, radius, menu look and icon library.
+`zard-cli add` installs each component in this style: the CLI resolves the style markers in the sources at install time, so your files hold plain Tailwind classes and no runtime style switch. Changing `style` affects components added afterwards — re-add the others with `--overwrite` to restyle them.
 
 ## Icons
 
