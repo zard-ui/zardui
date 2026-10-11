@@ -46,6 +46,18 @@ export const ALIASES: Record<string, string[]> = {
  * site's llms.txt, so an alias only applies when its guide is published there.
  */
 export const GUIDE_ALIASES: Record<string, string[]> = {
+  cli: [
+    'create',
+    'create project',
+    'create app',
+    'new project',
+    'new app',
+    'scaffold',
+    'starter',
+    'bootstrap',
+    'preset',
+    'zard-cli create',
+  ],
   rtl: ['right-to-left', 'right to left', 'arabic', 'hebrew', 'persian', 'farsi', 'direction', 'bidi', 'dir'],
 };
 

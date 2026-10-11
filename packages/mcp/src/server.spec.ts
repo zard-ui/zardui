@@ -32,6 +32,7 @@ const LLMS = `# Zard UI
 
 - [Theming](https://zardui.com/docs/theming): Design tokens in OKLCH.
 - [RTL](https://zardui.com/docs/rtl): Right-to-left support.
+- [CLI](https://zardui.com/docs/cli): The command line.
 - [Changelog](https://zardui.com/docs/changelog): Release notes.
 
 ## Forms
@@ -105,6 +106,7 @@ const fetchMock = jest.fn((url: string) => {
   if (url.endsWith('/docs/theming.md'))
     return respond('# Theming\n\n## Colors\n\n--primary\n\n## Radius\n\n--radius', 200, 'text/markdown');
   if (url.endsWith('/docs/rtl.md')) return respond('# RTL', 200, 'text/markdown');
+  if (url.endsWith('/docs/cli.md')) return respond('# CLI', 200, 'text/markdown');
   if (url.endsWith('/docs/forms/signal-forms.md')) return respond('# Signal Forms', 200, 'text/markdown');
   // The site answers unknown paths with its HTML shell, not 404.
   if (url.includes('/docs/components/')) return respond('<!doctype html><html></html>', 200, 'text/html');
@@ -230,6 +232,7 @@ describe('zard-mcp over the protocol', () => {
     expect(guides.map((g: { topic: string }) => g.topic)).toEqual([
       'theming',
       'rtl',
+      'cli',
       'forms/signal-forms',
       'utils/shimmer',
     ]);
@@ -263,6 +266,15 @@ describe('zard-mcp over the protocol', () => {
       const res = await call('get-docs', { topic });
       expect(res.isError).toBe(false);
       expect(res.text).toBe('# RTL');
+    },
+  );
+
+  it.each(['create', 'create project', 'new project', 'scaffold', 'zard-cli create'])(
+    'finds the CLI guide for the topic %s',
+    async topic => {
+      const res = await call('get-docs', { topic });
+      expect(res.isError).toBe(false);
+      expect(res.text).toBe('# CLI');
     },
   );
 
