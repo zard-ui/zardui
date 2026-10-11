@@ -54,7 +54,7 @@ The name in the template is the imported symbol's name as a string. They must ma
 
 ## The family comes from `components.json`
 
-Read `icons` before importing anything. Today the registry publishes `lucide`, whose package is `@ng-icons/lucide` and whose symbols are prefixed `lucide` — but the catalogue is served by the registry at run time precisely so a new family works with a CLI that is already installed. Hardcoding the assumption is what breaks first.
+Read `icons` before importing anything. Today the registry publishes `lucide` (`@ng-icons/lucide`, symbols prefixed `lucide`), `tabler` (`@ng-icons/tabler-icons`, `tabler`), `hugeicons` (`@ng-icons/huge-icons`, `huge`), `phosphor` (`@ng-icons/phosphor-icons`, `phosphor`) and `remixicon` (`@ng-icons/remixicon`, `remix`) — and the catalogue is served by the registry at run time precisely so a new family works with a CLI that is already installed. Hardcoding the assumption is what breaks first.
 
 ```json
 { "icons": "lucide" }
