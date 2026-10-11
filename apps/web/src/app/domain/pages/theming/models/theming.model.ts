@@ -26,7 +26,7 @@ export interface ThemeToken {
   pairedWith?: TokenName;
 }
 
-/** One of the five presets the CLI can write into `src/styles.css`. */
+/** One of the presets the CLI can write into `src/styles.css`. */
 export interface BaseColorTheme {
   id: 'neutral' | 'stone' | 'zinc' | 'gray' | 'slate' | 'mauve' | 'olive' | 'mist' | 'taupe';
   label: string;

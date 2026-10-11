@@ -149,8 +149,12 @@ describe('RoadmapPage', () => {
       ]);
     });
 
-    it('keeps the zard-cli-create id so the /themes notice link still resolves', () => {
-      expect(component.phases.some(phase => phase.id === 'zard-cli-create')).toBe(true);
+    it('keeps the zard-cli-create phase, now completed, with every deliverable shipped', () => {
+      const phase = component.phases.find(candidate => candidate.id === 'zard-cli-create');
+
+      expect(phase?.status).toBe('completed');
+      expect(phase?.progress).toBe(100);
+      expect(phase?.deliverables.every(deliverable => deliverable.completed)).toBe(true);
     });
   });
 

@@ -1,0 +1,35 @@
+/*
+ * The font catalog of the /create builder, latin subset: the 23 families /typeset already declares plus the three
+ * display faces it leaves out (Playfair Display, EB Garamond, Instrument Serif). The .woff2 files are only fetched
+ * once a family is used by rendered text — the option lists render each name in its own face, and the preview applies
+ * the chosen one.
+ */
+@import '../typeset/typeset-fonts.css';
+
+@font-face {
+  font-family: 'Playfair Display Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url('@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2')
+    format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'EB Garamond Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 800;
+  src: url('@fontsource-variable/eb-garamond/files/eb-garamond-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
+}

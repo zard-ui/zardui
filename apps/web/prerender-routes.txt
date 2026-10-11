@@ -5,6 +5,7 @@
 /charts
 /themes
 /typeset
+/create
 /docs/introduction
 /docs/components
 /docs/installation

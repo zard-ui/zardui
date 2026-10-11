@@ -1,11 +1,14 @@
-import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, inject, viewChild, ChangeDetectionStrategy, computed, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideGalleryHorizontal } from '@ng-icons/lucide';
+import { filter } from 'rxjs';
 
 import { DocResearcherComponent } from '@doc/domain/components/doc-researcher/doc-researcher.component';
 import { MobileMenuComponent } from '@doc/domain/components/mobile-nav/mobile-nav.component';
+import { CreateShellService } from '@doc/domain/pages/create/services/create-shell.service';
 import { SOCIAL_MEDIAS } from '@doc/shared/constants/medias.constant';
 import { HEADER_PATHS } from '@doc/shared/constants/routes.constant';
 import { GithubService } from '@doc/shared/services/github.service';
@@ -55,7 +58,25 @@ export class HeaderComponent {
   readonly githubData = SOCIAL_MEDIAS.find(m => m.name === 'GitHub') ?? null;
   private readonly githubService = inject(GithubService);
   private readonly darkModeService = inject(ZardDarkMode);
+  private readonly router = inject(Router);
+  private readonly createShell = inject(CreateShellService);
+  private readonly path = signal(this.router.url.split('?')[0]);
+  /** "Get Code" only means something on the /create builder, and the builder hides it on phones. */
+  protected readonly showGetCode = computed(() => this.path() === '/create');
   readonly repoStars = this.githubService.starsCountFormatted;
+
+  constructor() {
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(event => this.path.set(event.urlAfterRedirects.split('?')[0]));
+  }
+
+  openGetCode(): void {
+    this.createShell.openGetCode();
+  }
 
   toggleTheme(): void {
     this.darkModeService.toggleTheme();

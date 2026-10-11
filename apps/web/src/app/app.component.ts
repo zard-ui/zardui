@@ -22,7 +22,9 @@ import { getHeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
 
 const LOADING_TIMEOUT = 1000;
 /** Routes that render their content alone, with no header and no footer. */
-const PREVIEW_URL_PREFIXES = ['/blocks/preview/', '/typeset/preview'];
+const PREVIEW_URL_PREFIXES = ['/blocks/preview/', '/typeset/preview', '/create/preview/'];
+/** Full-viewport tools that keep the header but have no room, and no use, for a footer. */
+const NO_FOOTER_URL_PREFIXES = ['/create'];
 
 @Component({
   imports: [RouterModule, HeaderComponent, FooterComponent],
@@ -32,7 +34,7 @@ const PREVIEW_URL_PREFIXES = ['/blocks/preview/', '/typeset/preview'];
       <z-header></z-header>
     }
     <router-outlet></router-outlet>
-    @if (!isPreviewRoute()) {
+    @if (!isPreviewRoute() && !hidesFooter()) {
       <z-footer></z-footer>
     }
   `,
@@ -49,6 +51,10 @@ export class AppComponent {
   private readonly currentUrl = signal(this.resolveInitialUrl());
   protected readonly isPreviewRoute = computed(() =>
     PREVIEW_URL_PREFIXES.some(prefix => this.currentUrl().startsWith(prefix)),
+  );
+
+  protected readonly hidesFooter = computed(() =>
+    NO_FOOTER_URL_PREFIXES.some(prefix => this.currentUrl().split('?')[0] === prefix),
   );
 
   private resolveInitialUrl(): string {
