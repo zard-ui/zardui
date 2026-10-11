@@ -13,7 +13,7 @@ There are three ways to get a theme:
 
 - **Run the CLI.**`zard-cli init` writes the whole file and asks which base color you want — see [Installation](/docs/installation) .
 - **Copy the CSS.** The complete stylesheet is in How it works , explained line by line.
-- **Build your own.** The [theme generator](/themes) gives you every token with a live preview and exports finished CSS.
+- **Build your own.** [Create](/create) lets you pick colors, fonts and radius with a live preview and copies the finished CSS.
 
 ## How it works
 
@@ -415,7 +415,7 @@ Destructive
 
 Muted copy, for the text that supports the rest.
 
-[Build your own theme →](/themes)
+[Build your own theme →](/create)
 
 src/styles.css
 

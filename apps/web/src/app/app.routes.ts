@@ -144,16 +144,7 @@ export const appRoutes: Route[] = [
       },
     ],
   },
-  {
-    path: 'themes',
-    component: ShellLayout,
-    children: [
-      {
-        path: '',
-        loadComponent: () => import('./domain/pages/themes/themes.page').then(c => c.ThemesPage),
-      },
-    ],
-  },
+  { path: 'themes', redirectTo: 'create', pathMatch: 'full' },
   {
     path: 'create/preview/:item',
     loadComponent: () => import('./domain/pages/create/preview/create-preview.page').then(c => c.CreatePreviewPage),

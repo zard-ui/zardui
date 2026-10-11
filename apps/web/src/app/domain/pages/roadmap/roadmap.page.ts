@@ -188,7 +188,7 @@ export class RoadmapPage implements OnInit {
         { text: 'Preset codes: styles, colors, fonts, icon libraries, radius and menu', completed: true },
         { text: 'init --preset and apply --only theme|font for existing projects', completed: true },
         { text: '/create builder with live preview, shuffle, undo and shareable URLs', completed: true },
-        { text: '/themes kept as the advanced token editor, pointing to /create', completed: true },
+        { text: '/themes retired: /create is the one theme builder', completed: true },
       ],
     },
     {

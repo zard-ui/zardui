@@ -27,7 +27,6 @@ const BARE_SELECTOR = /^\s*::-webkit-scrollbar/m;
 const MUST_NOT_CONTAIN_BARE_SELECTOR = [
   'packages/cli/src/core/themes/theme-definitions.ts',
   'apps/web/public/documentation/setup/shared/styles.md',
-  'apps/web/src/app/domain/pages/themes/services/theme-generator.service.ts',
   'apps/web/src/styles.css',
 ];
 

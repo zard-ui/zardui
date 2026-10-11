@@ -19,7 +19,6 @@ export const HEADER_PATHS: NavItem[] = [
   { name: 'Components', path: '/docs/components', available: true },
   { name: 'Blocks', path: '/blocks', available: true },
   { name: 'Charts', path: '/charts', available: true },
-  { name: 'Themes', path: '/themes', available: true },
   { name: 'Typeset', path: '/typeset', available: true },
   { name: 'Create', path: '/create', available: true },
 ];
