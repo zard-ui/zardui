@@ -1,0 +1,14 @@
+/*
+ * The seven non-default looks, for the /create preview only. Built as its own bundle
+ * (`create-styles`, not injected) and linked by `DesignApplier` inside the preview iframe,
+ * so the rest of the site does not download them. Nova stays in `styles.css`.
+ */
+@reference './styles.css';
+
+@import '../../../libs/zard/src/lib/shared/core/css/styles/style-vega.css' layer(components);
+@import '../../../libs/zard/src/lib/shared/core/css/styles/style-maia.css' layer(components);
+@import '../../../libs/zard/src/lib/shared/core/css/styles/style-lyra.css' layer(components);
+@import '../../../libs/zard/src/lib/shared/core/css/styles/style-mira.css' layer(components);
+@import '../../../libs/zard/src/lib/shared/core/css/styles/style-luma.css' layer(components);
+@import '../../../libs/zard/src/lib/shared/core/css/styles/style-sera.css' layer(components);
+@import '../../../libs/zard/src/lib/shared/core/css/styles/style-rhea.css' layer(components);

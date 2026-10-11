@@ -5,12 +5,16 @@ import { IconSwapper } from './icon-families';
 
 const THEME_STYLE_ID = 'zard-create-theme';
 
+/** The seven non-default looks, a separate bundle (`create-styles` in `project.json`) only the preview loads. */
+const STYLES_LINK_ID = 'zard-create-styles';
+const STYLES_HREF = '/create-styles.css';
+
 const STYLE_CLASS_PREFIX = 'style-';
 
 /**
  * Applies a design to a document without reloading it. The `/create` preview calls this on every `design` message.
  *
- *  - style: `style-<id>` on `<body>` (the contract the style CSS keys off)
+ *  - style: `style-<id>` on `<body>` (the contract the style CSS keys off), with the non-default sheets linked once
  *  - colors and radius: an injected `<style>` holding the `:root` and `.dark` token blocks
  *  - fonts: `--font-sans` (and the docs' own `--font-geist-sans`) and `--font-heading`
  *  - menu: `menu-inverted` / `menu-translucent` on `<body>`, with the rules to match in the injected `<style>`
@@ -24,6 +28,7 @@ export class DesignApplier {
 
   constructor(private readonly document: Document) {
     this.icons = new IconSwapper(document);
+    this.linkStyleSheets();
   }
 
   apply(design: DesignConfig, dark: boolean): void {
@@ -47,6 +52,16 @@ export class DesignApplier {
     this.icons.destroy();
     this.menuObserver?.disconnect();
     this.document.getElementById(THEME_STYLE_ID)?.remove();
+  }
+
+  private linkStyleSheets(): void {
+    if (this.document.getElementById(STYLES_LINK_ID)) return;
+
+    const link = this.document.createElement('link');
+    link.id = STYLES_LINK_ID;
+    link.rel = 'stylesheet';
+    link.href = STYLES_HREF;
+    this.document.head.appendChild(link);
   }
 
   /**

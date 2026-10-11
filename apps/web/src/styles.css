@@ -7,16 +7,11 @@
  * The looks. Components carry style markers (`cn-button`); these sheets say what each
  * stands for. No `style-*` class on <body> (or any ancestor) is the default look, nova;
  * `style-vega`, `style-lyra`... switch it live. See core/css/styles/README.md.
+ * Only nova ships on every page; the other seven live in `create-styles.css`, a separate
+ * bundle the /create preview links on demand (together they are ~1.6 MB of CSS).
  * In the components layer, so a `class` on a component still wins over its style.
  */
 @import '../../../libs/zard/src/lib/shared/core/css/styles/style-nova.css' layer(components);
-@import '../../../libs/zard/src/lib/shared/core/css/styles/style-vega.css' layer(components);
-@import '../../../libs/zard/src/lib/shared/core/css/styles/style-maia.css' layer(components);
-@import '../../../libs/zard/src/lib/shared/core/css/styles/style-lyra.css' layer(components);
-@import '../../../libs/zard/src/lib/shared/core/css/styles/style-mira.css' layer(components);
-@import '../../../libs/zard/src/lib/shared/core/css/styles/style-luma.css' layer(components);
-@import '../../../libs/zard/src/lib/shared/core/css/styles/style-sera.css' layer(components);
-@import '../../../libs/zard/src/lib/shared/core/css/styles/style-rhea.css' layer(components);
 @import '../../../libs/zard/src/lib/shared/core/css/styles/menu.css' layer(components);
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource-variable/geist';

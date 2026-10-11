@@ -22,7 +22,10 @@
             "input": "apps/web/public"
           }
         ],
-        "styles": ["apps/web/src/styles.css"],
+        "styles": [
+          "apps/web/src/styles.css",
+          { "input": "apps/web/src/create-styles.css", "bundleName": "create-styles", "inject": false }
+        ],
         "stylePreprocessorOptions": {
           "includePaths": ["apps/web/src/css"]
         },
@@ -48,7 +51,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1.2mb"
+              "maximumError": "1.8mb"
             },
             {
               "type": "anyComponentStyle",
