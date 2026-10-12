@@ -267,10 +267,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   });
 
   protected readonly percentages = computed(() => {
-    if (this.zMax() > 1) {
-      return this.values();
-    }
-    const [min, max] = [this.zMin(), this.zMax()];
+    const [min, max] = this.getMinMax();
     return this.values().map(v => convertValueToPercentage(v, min, max));
   });
 
@@ -306,13 +303,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
         if (isTrack) {
           const coord = this.zOrientation() === 'vertical' ? event.clientY : event.clientX;
           const clickPercentage = this.calculatePercentage(coord);
-          let clickValue: number;
-          if (this.zMax() <= 1) {
-            const [userMin, userMax] = [this.zMin(), this.zMax()];
-            clickValue = userMin + (userMax - userMin) * clickPercentage;
-          } else {
-            clickValue = clamp(clickPercentage * 100, this.getMinMax());
-          }
+          const [min, max] = this.getMinMax();
+          const clickValue = clamp(min + (max - min) * clickPercentage, [min, max]);
 
           const currentValues = this.values();
           const closestIndex = currentValues.reduce(
@@ -443,15 +435,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 
   private updateThumbFromPercentage(percentage: number, thumbIndex: number): void {
     const [min, max] = this.getMinMax();
-    let value: number;
-
-    if (this.zMax() <= 1) {
-      const [userMin, userMax] = [this.zMin(), this.zMax()];
-      value = roundToStep(userMin + (userMax - userMin) * clamp(percentage, [0, 1]), userMin, this.zStep());
-      value = clamp(value, [min, max]);
-    } else {
-      value = roundToStep(clamp(percentage * 100, [min, max]), min, this.zStep());
-    }
+    let value = clamp(roundToStep(min + (max - min) * clamp(percentage, [0, 1]), min, this.zStep()), [min, max]);
 
     const currentValues = [...this.values()];
 
@@ -511,6 +495,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   }
 
   private getMinMax(): [number, number] {
-    return [Math.max(this.zMin(), 0), Math.min(this.zMax(), 100)];
+    return [this.zMin(), this.zMax()];
   }
 }
