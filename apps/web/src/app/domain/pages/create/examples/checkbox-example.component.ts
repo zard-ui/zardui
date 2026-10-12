@@ -115,7 +115,7 @@ const DESKTOP_ITEMS = [
 
       <z-example zTitle="Group">
         <div z-field>
-          <label z-field-label>Show these items on the desktop:</label>
+          <z-field-label>Show these items on the desktop:</z-field-label>
           @for (item of desktopItems; track item.id) {
             <div z-field zOrientation="horizontal">
               <z-checkbox [zId]="item.id" />

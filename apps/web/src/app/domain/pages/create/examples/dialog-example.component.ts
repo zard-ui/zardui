@@ -188,8 +188,14 @@ const TAB_PANEL_CLASSES =
                   <fieldset z-field-set>
                     <div z-field-group>
                       <div z-field zOrientation="horizontal">
-                        <label z-field-label>Theme</label>
-                        <z-select zPlaceholder="Select" zPosition="popper" zAlign="end" [(zValue)]="theme">
+                        <label for="dialog-theme-191" z-field-label>Theme</label>
+                        <z-select
+                          id="dialog-theme-191"
+                          zPlaceholder="Select"
+                          zPosition="popper"
+                          zAlign="end"
+                          [(zValue)]="theme"
+                        >
                           <z-select-group>
                             <z-select-item zValue="light">Light</z-select-item>
                             <z-select-item zValue="dark">Dark</z-select-item>
@@ -199,8 +205,14 @@ const TAB_PANEL_CLASSES =
                       </div>
                       <z-field-separator />
                       <div z-field zOrientation="horizontal">
-                        <label z-field-label>Accent Color</label>
-                        <z-select zPlaceholder="Select" zPosition="popper" zAlign="end" [(zValue)]="accentColor">
+                        <label for="dialog-accent-color-202" z-field-label>Accent Color</label>
+                        <z-select
+                          id="dialog-accent-color-202"
+                          zPlaceholder="Select"
+                          zPosition="popper"
+                          zAlign="end"
+                          [(zValue)]="accentColor"
+                        >
                           <z-select-group>
                             @for (color of accentColors; track color.value) {
                               <z-select-item [zValue]="color.value">
@@ -214,13 +226,14 @@ const TAB_PANEL_CLASSES =
                       <z-field-separator />
                       <div z-field zOrientation="responsive">
                         <div z-field-content>
-                          <label z-field-label>Spoken Language</label>
+                          <label for="dialog-spoken-language-217" z-field-label>Spoken Language</label>
                           <p z-field-description>
                             For best results, select the language you mainly speak. If it's not listed, it may still be
                             supported via auto-detection.
                           </p>
                         </div>
                         <z-select
+                          id="dialog-spoken-language-217"
                           zPlaceholder="Select"
                           zPosition="item-aligned"
                           zAlign="end"
@@ -239,8 +252,14 @@ const TAB_PANEL_CLASSES =
                       </div>
                       <z-field-separator />
                       <div z-field zOrientation="horizontal">
-                        <label z-field-label>Voice</label>
-                        <z-select zPlaceholder="Select" zPosition="item-aligned" zAlign="end" [(zValue)]="voice">
+                        <label for="dialog-voice-242" z-field-label>Voice</label>
+                        <z-select
+                          id="dialog-voice-242"
+                          zPlaceholder="Select"
+                          zPosition="item-aligned"
+                          zAlign="end"
+                          [(zValue)]="voice"
+                        >
                           <z-select-group>
                             @for (item of voices; track item.value) {
                               <z-select-item [zValue]="item.value">{{ item.label }}</z-select-item>
@@ -257,28 +276,28 @@ const TAB_PANEL_CLASSES =
                 <div [class]="tabPanelClasses">
                   <div z-field-group>
                     <fieldset z-field-set>
-                      <label z-field-label>Responses</label>
+                      <label for="dialog-responses-260" z-field-label>Responses</label>
                       <p z-field-description>
                         Get notified when ChatGPT responds to requests that take time, like research or image
                         generation.
                       </p>
                       <div z-field-group data-slot="checkbox-group">
                         <div z-field zOrientation="horizontal">
-                          <z-checkbox zId="push" [ngModel]="true" zDisabled />
+                          <z-checkbox id="dialog-responses-260" zId="push" [ngModel]="true" zDisabled />
                           <label z-field-label for="push" class="font-normal">Push notifications</label>
                         </div>
                       </div>
                     </fieldset>
                     <z-field-separator />
                     <fieldset z-field-set>
-                      <label z-field-label>Tasks</label>
+                      <label for="dialog-tasks-274" z-field-label>Tasks</label>
                       <p z-field-description>
                         Get notified when tasks you've created have updates.
                         <a href="#" (click)="$event.preventDefault()">Manage tasks</a>
                       </p>
                       <div z-field-group data-slot="checkbox-group">
                         <div z-field zOrientation="horizontal">
-                          <z-checkbox zId="push-tasks" />
+                          <z-checkbox id="dialog-tasks-274" zId="push-tasks" />
                           <label z-field-label for="push-tasks" class="font-normal">Push notifications</label>
                         </div>
                         <div z-field zOrientation="horizontal">
@@ -321,7 +340,7 @@ const TAB_PANEL_CLASSES =
                       ></textarea>
                     </div>
                     <z-field-separator />
-                    <label z-field-label>
+                    <z-field-label>
                       <div z-field zOrientation="horizontal">
                         <div z-field-content>
                           <label z-field-label for="customization">Enable customizations</label>
@@ -329,7 +348,7 @@ const TAB_PANEL_CLASSES =
                         </div>
                         <z-switch zId="customization" [zChecked]="true" />
                       </div>
-                    </label>
+                    </z-field-label>
                   </div>
                 </div>
               </z-tab>

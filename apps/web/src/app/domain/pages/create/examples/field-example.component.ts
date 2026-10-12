@@ -174,8 +174,8 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
       <z-example zTitle="Select Fields">
         <div z-field-group>
           <div z-field>
-            <label z-field-label>Basic Select</label>
-            <z-select zPlaceholder="Choose an option" zPosition="popper">
+            <label for="field-basic-select-177" z-field-label>Basic Select</label>
+            <z-select id="field-basic-select-177" zPlaceholder="Choose an option" zPosition="popper">
               <z-select-group>
                 @for (option of options; track option.value) {
                   <z-select-item [zValue]="option.value">{{ option.label }}</z-select-item>
@@ -184,8 +184,8 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             </z-select>
           </div>
           <div z-field>
-            <label z-field-label>Country</label>
-            <z-select zPlaceholder="Select your country" zPosition="popper">
+            <label for="field-country-187" z-field-label>Country</label>
+            <z-select id="field-country-187" zPlaceholder="Select your country" zPosition="popper">
               <z-select-group>
                 @for (country of countries; track country.value) {
                   <z-select-item [zValue]="country.value">{{ country.label }}</z-select-item>
@@ -195,9 +195,9 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             <p z-field-description>Select the country where you currently reside.</p>
           </div>
           <div z-field>
-            <label z-field-label>Timezone</label>
+            <label for="field-timezone-198" z-field-label>Timezone</label>
             <p z-field-description>Choose your local timezone for accurate scheduling.</p>
-            <z-select zPlaceholder="Select timezone" zPosition="popper">
+            <z-select id="field-timezone-198" zPlaceholder="Select timezone" zPosition="popper">
               <z-select-group>
                 @for (timezone of timezones; track timezone.value) {
                   <z-select-item [zValue]="timezone.value">{{ timezone.label }}</z-select-item>
@@ -206,8 +206,8 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             </z-select>
           </div>
           <div z-field data-invalid>
-            <label z-field-label>Invalid Select</label>
-            <z-select zPlaceholder="This field has an error" zPosition="popper" zInvalid>
+            <label for="field-invalid-select-209" z-field-label>Invalid Select</label>
+            <z-select id="field-invalid-select-209" zPlaceholder="This field has an error" zPosition="popper" zInvalid>
               <z-select-group>
                 @for (option of options; track option.value) {
                   <z-select-item [zValue]="option.value">{{ option.label }}</z-select-item>
@@ -217,8 +217,8 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             <p z-field-description>This field contains validation errors.</p>
           </div>
           <div z-field data-disabled>
-            <label z-field-label>Disabled Field</label>
-            <z-select zPlaceholder="Cannot select" zPosition="popper" zDisabled>
+            <label for="field-disabled-field-220" z-field-label>Disabled Field</label>
+            <z-select id="field-disabled-field-220" zPlaceholder="Cannot select" zPosition="popper" zDisabled>
               <z-select-group>
                 @for (option of options; track option.value) {
                   <z-select-item [zValue]="option.value">{{ option.label }}</z-select-item>
@@ -374,7 +374,7 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             </div>
           </div>
           <div z-field>
-            <label z-field-label>Privacy Settings</label>
+            <z-field-label>Privacy Settings</z-field-label>
             <p z-field-description>Manage your privacy preferences.</p>
             <div z-field zOrientation="horizontal">
               <z-switch zId="switch-profile" [zChecked]="true" />
@@ -581,10 +581,10 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
           </div>
           <div z-field zOrientation="horizontal">
             <div z-field-content>
-              <label z-field-label>Favorite Fruit</label>
+              <label for="field-favorite-fruit-584" z-field-label>Favorite Fruit</label>
               <p z-field-description>Choose your favorite fruit.</p>
             </div>
-            <z-select zPlaceholder="Select a fruit" zPosition="popper">
+            <z-select id="field-favorite-fruit-584" zPlaceholder="Select a fruit" zPosition="popper">
               <z-select-group>
                 @for (fruit of fruits; track fruit.value) {
                   <z-select-item [zValue]="fruit.value">{{ fruit.label }}</z-select-item>

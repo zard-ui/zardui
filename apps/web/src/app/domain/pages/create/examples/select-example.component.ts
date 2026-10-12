@@ -197,8 +197,8 @@ const PLANS = [
 
       <z-example zTitle="With Field">
         <div z-field>
-          <label z-field-label>Favorite Fruit</label>
-          <z-select class="w-fit" zPlaceholder="Select a fruit">
+          <label for="select-favorite-fruit-200" z-field-label>Favorite Fruit</label>
+          <z-select id="select-favorite-fruit-200" class="w-fit" zPlaceholder="Select a fruit">
             <z-select-group>
               <z-select-item zValue="apple">Apple</z-select-item>
               <z-select-item zValue="banana">Banana</z-select-item>
@@ -223,8 +223,8 @@ const PLANS = [
             </z-select-group>
           </z-select>
           <div z-field data-invalid="true">
-            <label z-field-label>Favorite Fruit</label>
-            <z-select class="w-fit" zPlaceholder="Select a fruit" zInvalid>
+            <label for="select-favorite-fruit-226" z-field-label>Favorite Fruit</label>
+            <z-select id="select-favorite-fruit-226" class="w-fit" zPlaceholder="Select a fruit" zInvalid>
               <z-select-group>
                 <z-select-item zValue="apple">Apple</z-select-item>
                 <z-select-item zValue="banana">Banana</z-select-item>

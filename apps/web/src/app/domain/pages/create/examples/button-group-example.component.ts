@@ -326,7 +326,7 @@ import { ExampleImports } from './example.component';
 
       <z-example zTitle="Text Alignment">
         <div z-field>
-          <label z-field-label id="alignment-label">Text Alignment</label>
+          <z-field-label id="alignment-label">Text Alignment</z-field-label>
           <z-button-group aria-labelledby="alignment-label">
             <button z-button zType="outline" zSize="sm">Left</button>
             <button z-button zType="outline" zSize="sm">Center</button>

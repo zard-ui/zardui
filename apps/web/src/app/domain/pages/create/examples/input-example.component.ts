@@ -119,8 +119,8 @@ import { ExampleImports } from './example.component';
                 <input z-input id="form-phone" type="tel" placeholder="+1 (555) 123-4567" />
               </div>
               <div z-field>
-                <label z-field-label>Country</label>
-                <z-select zValue="us">
+                <label for="input-country-122" z-field-label>Country</label>
+                <z-select id="input-country-122" zValue="us">
                   <z-select-group>
                     <z-select-item zValue="us">United States</z-select-item>
                     <z-select-item zValue="uk">United Kingdom</z-select-item>

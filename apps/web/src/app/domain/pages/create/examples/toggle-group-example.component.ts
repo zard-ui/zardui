@@ -186,7 +186,7 @@ const VERTICAL_FILTERS: readonly ZardToggleGroupItem[] = [
 
       <z-example zTitle="Font Weight Selector">
         <div z-field>
-          <label z-field-label>Font Weight</label>
+          <z-field-label>Font Weight</z-field-label>
           <z-toggle-group
             zMode="single"
             zType="outline"
