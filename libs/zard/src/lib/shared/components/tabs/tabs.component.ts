@@ -6,7 +6,9 @@ import {
   Component,
   computed,
   contentChildren,
+  forwardRef,
   inject,
+  InjectionToken,
   input,
   isDevMode,
   output,
@@ -28,6 +30,9 @@ import {
 import { ZardIdDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+/** The group a tab belongs to: the nearest `z-tab-group` around it, so a nested group keeps its own tabs. */
+const ZARD_TAB_GROUP = new InjectionToken<object>('ZardTabGroup');
+
 @Component({
   selector: 'z-tab',
   template: `
@@ -47,6 +52,7 @@ export class ZardTabComponent {
   readonly zIcon = input<string | undefined>(undefined);
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('content');
+  readonly group = inject(ZARD_TAB_GROUP, { optional: true });
 }
 
 @Component({
@@ -104,6 +110,7 @@ export class ZardTabComponent {
     '[attr.data-orientation]': 'zOrientation()',
   },
   hostDirectives: [ZardIdDirective],
+  providers: [{ provide: ZARD_TAB_GROUP, useExisting: forwardRef(() => ZardTabGroupComponent) }],
   exportAs: 'zTabGroup',
 })
 export class ZardTabGroupComponent {
@@ -114,7 +121,8 @@ export class ZardTabGroupComponent {
 
   private readonly tabComponents = contentChildren(ZardTabComponent, { descendants: true });
 
-  protected readonly tabs = computed(() => this.tabComponents());
+  // Descendants, so tabs inside wrappers count; but a nested group's tabs are its own, not this group's.
+  protected readonly tabs = computed(() => this.tabComponents().filter(tab => tab.group === this));
   protected readonly activeTabIndex = signal<number>(0);
 
   protected tabId(index: number): string {

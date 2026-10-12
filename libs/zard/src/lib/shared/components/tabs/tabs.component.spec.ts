@@ -137,6 +137,34 @@ describe('ZardTabGroupComponent', () => {
     }
   });
 
+  it('leaves a nested group its own tabs', async () => {
+    @Component({
+      imports: [ZardTabGroupComponent, ZardTabComponent],
+      template: `
+        <z-tab-group data-testid="outer">
+          <z-tab label="Outer A">
+            <z-tab-group>
+              <z-tab label="Inner 1">1</z-tab>
+              <z-tab label="Inner 2">2</z-tab>
+            </z-tab-group>
+          </z-tab>
+          <z-tab label="Outer B">B</z-tab>
+        </z-tab-group>
+      `,
+      changeDetection: ChangeDetectionStrategy.Eager,
+    })
+    class NestedGroupsHostComponent {}
+
+    const { container } = await render(NestedGroupsHostComponent);
+
+    const outerList = container.querySelector('[data-testid="outer"] > [role="tablist"]');
+    const outerTabs = [...(outerList?.querySelectorAll(':scope > [role="tab"]') ?? [])].map(tab =>
+      tab.textContent?.trim(),
+    );
+    expect(outerTabs).toEqual(['Outer A', 'Outer B']);
+    expect(container.querySelectorAll('[role="tab"]')).toHaveLength(4);
+  });
+
   it('applies horizontal layout classes by default', async () => {
     const { fixture } = await render(getHostComponent('horizontal'));
     fixture.detectChanges();
