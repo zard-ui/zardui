@@ -22,6 +22,15 @@
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant fixed (&:is(.layout-fixed *));
+/* `style-lyra:rounded-none` and the like: shadcn/ui's per-style tweaks, used by the /create preview's examples. */
+@custom-variant style-vega (&:is(.style-vega *));
+@custom-variant style-nova (&:is(.style-nova *));
+@custom-variant style-maia (&:is(.style-maia *));
+@custom-variant style-lyra (&:is(.style-lyra *));
+@custom-variant style-mira (&:is(.style-mira *));
+@custom-variant style-luma (&:is(.style-luma *));
+@custom-variant style-sera (&:is(.style-sera *));
+@custom-variant style-rhea (&:is(.style-rhea *));
 
 :root {
   --header-height: calc(var(--spacing) * 16);

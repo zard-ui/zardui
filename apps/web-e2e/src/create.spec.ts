@@ -196,12 +196,22 @@ test.describe('Create builder', () => {
     await page.keyboard.press('Control+p');
 
     await page.getByRole('combobox', { name: 'Search commands' }).fill('dropdown');
-    await page.getByRole('option', { name: 'Dropdown', exact: true }).click();
+    await page.getByRole('option', { name: 'Dropdown Menu', exact: true }).click();
 
-    await expect.poll(() => new URL(page.url()).searchParams.get('item')).toBe('component:dropdown');
+    await expect.poll(() => new URL(page.url()).searchParams.get('item')).toBe('component:dropdown-menu');
     await expect.poll(() => previewFrame(page).url()).toContain('/create/preview/component');
-    await expect(previewFrame(page).locator('main[data-item="component:dropdown"] section').first()).toBeVisible();
+    await expect(
+      previewFrame(page).locator('main[data-item="component:dropdown-menu"] [data-slot="example"]').first(),
+    ).toBeVisible();
     expect(await previewFrame(page).evaluate(() => (window as unknown as { __kept?: boolean }).__kept)).toBe(true);
+  });
+
+  test('Navigate lists the overview once, as Preview, ahead of the components', async ({ page }) => {
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('Control+p');
+
+    await expect(page.getByRole('option', { name: 'Preview', exact: true })).toHaveCount(1);
+    await expect(page.getByRole('option', { name: /Overview/ })).toHaveCount(0);
   });
 
   test('switching canvases swaps the content without reloading the iframe', async ({ page }) => {

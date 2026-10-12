@@ -20,7 +20,7 @@ import { ZardDrawerImports } from '@zard/components/drawer/drawer.imports';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 
 import { injectIsMobile } from '../../typeset/utils/inject-is-mobile';
-import { CANVAS_LIST, COMPONENT_LIST, loadBlockItems, type CreateItem } from '../lib/create-items';
+import { COMPONENT_LIST, loadBlockItems, PREVIEW_ITEM, type CreateItem } from '../lib/create-items';
 import { CreateStateService } from '../services/create-state.service';
 
 const WELCOME_KEY = 'zard-create-welcome';
@@ -55,9 +55,9 @@ export class CreateNavigateContentComponent implements AfterViewInit {
   private readonly blocks = signal<readonly CreateItem[]>([]);
 
   protected readonly groups = computed(() => [
-    { title: 'Canvas', items: CANVAS_LIST },
+    // shadcn/ui's order: the blocks (the overview first), then the components.
+    { title: 'Blocks', items: [PREVIEW_ITEM, ...this.blocks()] },
     { title: 'Components', items: COMPONENT_LIST },
-    ...(this.blocks().length ? [{ title: 'Blocks', items: this.blocks() }] : []),
   ]);
 
   constructor() {

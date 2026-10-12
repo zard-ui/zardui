@@ -12,6 +12,7 @@ import {
   Injector,
   PLATFORM_ID,
   signal,
+  type Type,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -22,12 +23,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 
 import type { Block } from '@doc/domain/components/block-container/block-container.component';
-import { COMPONENTS_REGISTRY, type ExampleData } from '@doc/shared/constants/components.constant';
 
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
 import { CanvasOneComponent } from '../canvas/canvas-01.component';
 import { CanvasTwoComponent } from '../canvas/canvas-02.component';
+import { CREATE_EXAMPLES } from '../lib/create-examples';
 import { shortcutAction } from '../lib/create-shortcuts';
 import { parseCreateParams } from '../lib/create-url';
 import {
@@ -40,22 +41,17 @@ import {
 import { DesignApplier } from '../lib/design-applier';
 import { PreviewDesignContext } from '../lib/preview-design.context';
 
-interface DemoExample {
-  readonly name: string;
-  readonly component: NonNullable<ExampleData['component']>;
-}
-
-/** What is on screen. It only changes once the next item's demos or block have loaded, so a switch never blanks. */
+/** What is on screen. It only changes once the next item's examples or block have loaded, so a switch never blanks. */
 type Shown =
   | { readonly kind: 'canvas-1' | 'canvas-2'; readonly item: string }
-  | { readonly kind: 'component'; readonly item: string; readonly examples: readonly DemoExample[] }
+  | { readonly kind: 'component'; readonly item: string; readonly component: Type<unknown> }
   | { readonly kind: 'block'; readonly item: string; readonly block: Block };
 
 /** The document's own scroll is off: `main` is the one scroll container, on both axes. */
 const PREVIEW_DOCUMENT_CLASS = 'create-preview-document';
 
 /**
- * The document the `/create` page loads in its iframe: one canvas, one component's demos or one block, with the
+ * The document the `/create` page loads in its iframe: one canvas, one component's examples or one block, with the
  * design applied from outside.
  *
  * It is a bare route (no header, no footer). It reads the initial design from its own query string so the very
@@ -71,30 +67,31 @@ const PREVIEW_DOCUMENT_CLASS = 'create-preview-document';
   template: `
     <main
       #scroller
-      class="bg-muted dark:bg-muted/30 text-foreground h-svh overflow-auto overscroll-none"
+      class="bg-background text-foreground h-svh overflow-auto overscroll-none"
       [attr.data-item]="shown()?.item"
     >
       <!-- A canvas stays mounted once seen: switching back is a toggle, not a rebuild of hundreds of components. -->
+      <!-- An idle canvas is skipped with content-visibility, which keeps its rendering state: showing it again does not
+           restyle and relayout thousands of nodes or resize every chart, as display: none would. -->
       @if (mounted().has('canvas-1')) {
-        <z-create-canvas-01 [hidden]="shown()?.kind !== 'canvas-1'" />
+        <z-create-canvas-01
+          class="block"
+          [class]="shown()?.kind === 'canvas-1' ? '' : idleCanvasClass"
+          [inert]="shown()?.kind !== 'canvas-1'"
+        />
       }
       @if (mounted().has('canvas-2')) {
-        <z-create-canvas-02 [hidden]="shown()?.kind !== 'canvas-2'" />
+        <z-create-canvas-02
+          class="block"
+          [class]="shown()?.kind === 'canvas-2' ? '' : idleCanvasClass"
+          [inert]="shown()?.kind !== 'canvas-2'"
+        />
       }
       @switch (shown()?.kind) {
         @case ('component') {
-          <div class="mx-auto flex max-w-3xl flex-col gap-10 p-8">
-            @for (example of examples(); track example.name) {
-              <section class="flex flex-col gap-3">
-                <h2 class="text-muted-foreground text-sm font-medium capitalize">{{ example.name }}</h2>
-                <div
-                  class="bg-background ring-foreground/10 flex min-h-40 items-center justify-center rounded-xl p-8 ring-1"
-                >
-                  <ng-container *ngComponentOutlet="example.component" />
-                </div>
-              </section>
-            }
-          </div>
+          @if (example(); as component) {
+            <ng-container *ngComponentOutlet="component" />
+          }
         }
         @case ('block') {
           @if (block(); as b) {
@@ -122,12 +119,13 @@ export class CreatePreviewPage {
     initialValue: 'preview-01',
   });
 
+  protected readonly idleCanvasClass = '[content-visibility:hidden]';
   protected readonly shown = signal<Shown | null>(null);
   protected readonly mounted = signal<ReadonlySet<Shown['kind']>>(new Set());
 
-  protected readonly examples = computed(() => {
+  protected readonly example = computed(() => {
     const shown = this.shown();
-    return shown?.kind === 'component' ? shown.examples : [];
+    return shown?.kind === 'component' ? shown.component : undefined;
   });
 
   protected readonly block = computed(() => {
@@ -209,8 +207,25 @@ export class CreatePreviewPage {
     if (!next || this.item() !== item) return;
 
     this.shown.set(next);
-    if (!this.mounted().has(next.kind)) this.mounted.update(kinds => new Set([...kinds, next.kind]));
-    if (this.isBrowser) this.scroller()?.nativeElement.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    this.mount(next.kind);
+    if (!this.isBrowser) return;
+
+    this.scroller()?.nativeElement.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    // Each canvas takes seconds to build. The other one is built while the page is idle, so 01/02 is only a toggle.
+    if (next.kind === 'canvas-1' || next.kind === 'canvas-2') {
+      this.whenIdle(() => this.mount(next.kind === 'canvas-1' ? 'canvas-2' : 'canvas-1'));
+    }
+  }
+
+  private mount(kind: Shown['kind']): void {
+    if (!this.mounted().has(kind)) this.mounted.update(kinds => new Set([...kinds, kind]));
+  }
+
+  private whenIdle(callback: () => void): void {
+    const view = this.document.defaultView;
+    if (!view) return;
+    if (typeof view.requestIdleCallback === 'function') view.requestIdleCallback(callback, { timeout: 4000 });
+    else view.setTimeout(callback, 1500);
   }
 
   private async resolve(item: string): Promise<Shown | null> {
@@ -218,12 +233,8 @@ export class CreatePreviewPage {
 
     if (item.startsWith(COMPONENT_ITEM_PREFIX)) {
       const name = item.slice(COMPONENT_ITEM_PREFIX.length);
-      const data = await COMPONENTS_REGISTRY.find(entry => entry.componentName === name)?.loadData();
-      if (!data) return null;
-
-      const all = [...(data.preview ? [data.preview] : []), ...data.examples];
-      const examples = all.filter((example): example is DemoExample => Boolean(example.component));
-      return { kind: 'component', item, examples };
+      const component = await CREATE_EXAMPLES.find(example => example.name === name)?.load();
+      return component ? { kind: 'component', item, component } : null;
     }
 
     if (item.startsWith(BLOCK_ITEM_PREFIX)) {

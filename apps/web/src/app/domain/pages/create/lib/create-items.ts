@@ -1,31 +1,22 @@
-import { COMPONENTS_REGISTRY } from '@doc/shared/constants/components.constant';
-
-import { BLOCK_ITEM_PREFIX, CANVAS_ITEMS, COMPONENT_ITEM_PREFIX } from './create.protocol';
+import { CREATE_EXAMPLES } from './create-examples';
+import { BLOCK_ITEM_PREFIX, CANVAS_ITEMS, COMPONENT_ITEM_PREFIX, isCanvasItem } from './create.protocol';
 
 export interface CreateItem {
   /** The value of the `item` URL param. */
   readonly id: string;
   readonly label: string;
-  readonly group: 'Canvas' | 'Components' | 'Blocks';
+  readonly group: 'Components' | 'Blocks';
 }
 
-const words = (slug: string): string =>
-  slug
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+/** The overview is one item, as on shadcn/ui; its two canvases are picked with the 01/02 switcher, not here. */
+export const PREVIEW_ITEM: CreateItem = { id: CANVAS_ITEMS[0], label: 'Preview', group: 'Blocks' };
 
-export const CANVAS_LIST: readonly CreateItem[] = [
-  { id: CANVAS_ITEMS[0], label: 'Overview 01', group: 'Canvas' },
-  { id: CANVAS_ITEMS[1], label: 'Overview 02', group: 'Canvas' },
-];
-
-/** Every component of the docs, each previewable alone. */
-export const COMPONENT_LIST: readonly CreateItem[] = COMPONENTS_REGISTRY.map(entry => ({
-  id: `${COMPONENT_ITEM_PREFIX}${entry.componentName}`,
-  label: words(entry.componentName),
+/** Every component shadcn/ui has an examples page for and zard has too, each previewable alone. */
+export const COMPONENT_LIST: readonly CreateItem[] = CREATE_EXAMPLES.map(example => ({
+  id: `${COMPONENT_ITEM_PREFIX}${example.name}`,
+  label: example.title,
   group: 'Components' as const,
-})).sort((a, b) => a.label.localeCompare(b.label));
+}));
 
 /** The blocks, loaded on demand: their registry pulls every block's code in with it. */
 export async function loadBlockItems(): Promise<readonly CreateItem[]> {
@@ -37,5 +28,6 @@ export async function loadBlockItems(): Promise<readonly CreateItem[]> {
 }
 
 export function itemLabel(id: string, blocks: readonly CreateItem[] = []): string {
-  return [...CANVAS_LIST, ...COMPONENT_LIST, ...blocks].find(item => item.id === id)?.label ?? id;
+  if (isCanvasItem(id)) return PREVIEW_ITEM.label;
+  return [...COMPONENT_LIST, ...blocks].find(item => item.id === id)?.label ?? id;
 }
