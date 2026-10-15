@@ -890,6 +890,26 @@
       ]
     },
     {
+      "name": "color-picker",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "input",
+        "popover"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "color-picker.component.ts",
+        "color-picker.utils.ts",
+        "color-picker.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "pagination",
       "type": "registry:component",
       "registryDependencies": [
