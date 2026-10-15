@@ -103,6 +103,16 @@ export abstract class ZardOverlayRefBase<T = unknown, R = unknown> {
   }
 
   /**
+   * What the footer callbacks receive.
+   *
+   * The content component's instance, so a form can be read before it closes.
+   * Alert-dialog has no content component and hands over its `zData` instead.
+   */
+  protected callbackArgument(): T {
+    return this._componentInstance() as T;
+  }
+
+  /**
    * Wires the overlay up and registers it as the topmost one.
    *
    * Called by the subclass rather than by this constructor: the outputs come from
@@ -206,12 +216,12 @@ export abstract class ZardOverlayRefBase<T = unknown, R = unknown> {
     const callback = action === ZardOverlayTrigger.OK ? this.overlayOptions.zOnOk : this.overlayOptions.zOnCancel;
 
     if (callback instanceof EventEmitter) {
-      callback.emit(this._componentInstance() as T);
+      callback.emit(this.callbackArgument());
       return;
     }
 
     if (typeof callback === 'function') {
-      const result = callback(this._componentInstance() as T) as R | false;
+      const result = callback(this.callbackArgument()) as R | false;
       // `false` keeps the overlay open — a form that failed validation stays up.
       if (result !== false) {
         this.close(this.forwardsCallbackResult() ? (result as R) : undefined);
