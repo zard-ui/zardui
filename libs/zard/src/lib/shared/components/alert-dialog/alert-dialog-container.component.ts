@@ -37,7 +37,8 @@ export class ZardAlertDialogOptions<T> {
   zCancelText?: string | null;
   zClosable?: boolean;
   zCustomClasses?: ClassValue;
-  zData?: object;
+  /** Passed to `zOnOk` and `zOnCancel`, e.g. the id of the record being confirmed. */
+  zData?: T;
   /** Description text. Inline markup (a link, emphasis) is rendered; scripts and handlers are stripped. */
   zDescription?: string;
   /** Animation duration (ms) used when opening and closing. Defaults to 100 (matches CSS transition). */
