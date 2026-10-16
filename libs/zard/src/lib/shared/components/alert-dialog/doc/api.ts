@@ -121,7 +121,12 @@ export const ALERT_DIALOG_API: ApiSection[] = [
         type: 'ClassValue',
         default: '-',
       },
-      { name: '[zData]', description: 'Data to pass to custom content components', type: 'object', default: '-' },
+      {
+        name: '[zData]',
+        description: 'Data handed to `zOnOk` and `zOnCancel`, e.g. the id of the record being confirmed',
+        type: 'T',
+        default: '-',
+      },
       {
         name: '[zOkText]',
         description: 'OK button text, null to hide button',
@@ -164,13 +169,13 @@ export const ALERT_DIALOG_API: ApiSection[] = [
       },
       {
         name: '[zOnOk]',
-        description: 'OK button click handler',
+        description: 'OK button click handler. Receives `zData`; return `false` to keep the dialog open',
         type: 'EventEmitter<T> | OnClickCallback<T>',
         default: '-',
       },
       {
         name: '[zOnCancel]',
-        description: 'Cancel button click handler',
+        description: 'Cancel button click handler. Receives `zData`; return `false` to keep the dialog open',
         type: 'EventEmitter<T> | OnClickCallback<T>',
         default: '-',
       },
