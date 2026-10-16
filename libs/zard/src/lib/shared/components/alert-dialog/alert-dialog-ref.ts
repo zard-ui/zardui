@@ -40,4 +40,9 @@ export class ZardAlertDialogRef<T = unknown> extends ZardOverlayRefBase<T, void>
   protected override forwardsCallbackResult(): boolean {
     return false;
   }
+
+  /** There is no content component to hand over, so the callbacks get the dialog's `zData`. */
+  protected override callbackArgument(): T {
+    return this.config.zData as T;
+  }
 }

@@ -486,7 +486,8 @@ export class ZardAlertDialogOptions<T> {
   zCancelText?: string | null;
   zClosable?: boolean;
   zCustomClasses?: ClassValue;
-  zData?: object;
+  /** Passed to `zOnOk` and `zOnCancel`, e.g. the id of the record being confirmed. */
+  zData?: T;
   /** Description text. Inline markup (a link, emphasis) is rendered; scripts and handlers are stripped. */
   zDescription?: string;
   /** Animation duration (ms) used when opening and closing. Defaults to 100 (matches CSS transition). */
@@ -798,6 +799,11 @@ export class ZardAlertDialogRef<T = unknown> extends ZardOverlayRefBase<T, void>
 
   protected override forwardsCallbackResult(): boolean {
     return false;
+  }
+
+  /** There is no content component to hand over, so the callbacks get the dialog's `zData`. */
+  protected override callbackArgument(): T {
+    return this.config.zData as T;
   }
 }
 ```
@@ -1534,7 +1540,7 @@ Opens the same alert dialog from code. `create()`, `confirm()`, `warning()` and 
 | `[zDescription]` | Dialog description/body text | `string` | `-` |
 | `[zMedia]` | Template rendered as a media slot above the title (e.g. an icon) | `TemplateRef<void>` | `-` |
 | `[zMediaClass]` | Extra classes applied to the media slot wrapper (e.g. tinted backgrounds for destructive) | `ClassValue` | `-` |
-| `[zData]` | Data to pass to custom content components | `object` | `-` |
+| `[zData]` | Data handed to `zOnOk` and `zOnCancel`, e.g. the id of the record being confirmed | `T` | `-` |
 | `[zOkText]` | OK button text, null to hide button | `string \| null` | `'Continue'` |
 | `[zCancelText]` | Cancel button text, null to hide button | `string \| null` | `'Cancel'` |
 | `[zOkDestructive]` | Whether OK button should have destructive styling | `boolean` | `false` |
@@ -1545,8 +1551,8 @@ Opens the same alert dialog from code. `create()`, `confirm()`, `warning()` and 
 | `[zWidth]` | Custom width (e.g., '400px', '50%') | `string` | `-` |
 | `[zCustomClasses]` | Additional CSS classes to apply | `ClassValue` | `-` |
 | `[zDuration]` | Animation duration (ms) used when closing. Matches the CSS transition | `number` | `100` |
-| `[zOnOk]` | OK button click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `[zOnCancel]` | Cancel button click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zOnOk]` | OK button click handler. Receives `zData`; return `false` to keep the dialog open | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zOnCancel]` | Cancel button click handler. Receives `zData`; return `false` to keep the dialog open | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
 | `[zViewContainerRef]` | View container for rendering custom content | `ViewContainerRef` | `-` |
 
 ---
