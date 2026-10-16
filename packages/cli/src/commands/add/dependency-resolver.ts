@@ -2,7 +2,9 @@ import { existsSync } from 'fs';
 import * as path from 'path';
 
 import { iconPackagesFor } from '../../core/icons/index.js';
+import { angularMajorOf } from '../../utils/angular-compat.js';
 import { Config } from '../../utils/config.js';
+import { CliError } from '../../utils/errors.js';
 import { iconCatalog } from '../../utils/icon-catalog.js';
 import { logger } from '../../utils/logger.js';
 import {
@@ -10,6 +12,7 @@ import {
   fetchRegistryIndex,
   getAvailableBlocks,
   invalidateRegistryCache,
+  type RegistryBuild,
   type RegistryIcons,
   type RegistryIndex,
 } from '../../utils/registry.js';
@@ -91,12 +94,59 @@ export interface ComponentMeta {
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
+  build?: RegistryBuild;
+  minAngularMajor?: number;
   icons?: RegistryIcons;
 }
 
 export interface ResolvedDependencies {
   componentsToInstall: ComponentMeta[];
   dependenciesToInstall: Set<string>;
+  /** Packages only the type checker needs, e.g. `@types/geojson`. Installed with `--save-dev`. */
+  devDependenciesToInstall: Set<string>;
+}
+
+/** An installed item that asks something of the build, with the directory its files were written to. */
+export interface BuildRequirement {
+  name: string;
+  build: RegistryBuild;
+  dir: string;
+}
+
+/**
+ * The `build` requirements of the items the user asked for and of everything they pull in.
+ *
+ * Unlike the install list this includes items that were already on disk: the wiring is idempotent and cheap, and
+ * a project where the stylesheet or the build assets were lost (or never reached, because an earlier run stopped)
+ * is repaired by running `add` again instead of by `--overwrite`.
+ */
+export async function collectBuildRequirements(
+  names: readonly string[],
+  resolvedConfig: Config & { resolvedPaths: any },
+  cwd: string,
+  options: { path?: string; skip?: readonly string[] },
+): Promise<BuildRequirement[]> {
+  const seen = new Set<string>(options.skip ?? []);
+  const queue = [...names];
+  const found: BuildRequirement[] = [];
+
+  while (queue.length) {
+    const name = queue.shift() as string;
+    if (seen.has(name)) continue;
+    seen.add(name);
+
+    const meta = await getComponentMeta(name);
+    if (!meta) continue;
+
+    // Walked outwards from what was asked, so each find goes in front: what an item builds on is wired first.
+    queue.push(...(meta.registryDependencies ?? []));
+
+    if (meta.build) {
+      found.unshift({ name: meta.name, build: meta.build, dir: getTargetDir(meta, resolvedConfig, cwd, options.path) });
+    }
+  }
+
+  return found;
 }
 
 export async function getRegistryIndex(forceRefresh = false): Promise<RegistryIndex> {
@@ -121,6 +171,8 @@ export async function getComponentMeta(name: string): Promise<ComponentMeta | un
     dependencies: item.dependencies,
     devDependencies: item.devDependencies,
     registryDependencies: item.registryDependencies,
+    build: item.build,
+    minAngularMajor: item.minAngularMajor,
     icons: item.icons,
   };
 }
@@ -175,6 +227,7 @@ export async function resolveDependencies(
   }
 
   const dependenciesToInstall = new Set<string>();
+  const devDependenciesToInstall = new Set<string>();
   const componentsToInstall: ComponentMeta[] = [];
 
   for (const component of componentMetas) {
@@ -185,13 +238,14 @@ export async function resolveDependencies(
     }
 
     componentsToInstall.push(component);
-    addComponentDependencies(component, dependenciesToInstall, resolvedConfig.icons);
+    addComponentDependencies(component, dependenciesToInstall, devDependenciesToInstall, resolvedConfig.icons);
 
     if (component.registryDependencies && !options.all) {
       await resolveRegistryDependencies(
         component,
         componentsToInstall,
         dependenciesToInstall,
+        devDependenciesToInstall,
         resolvedConfig,
         cwd,
         options,
@@ -202,6 +256,7 @@ export async function resolveDependencies(
   return {
     componentsToInstall,
     dependenciesToInstall,
+    devDependenciesToInstall,
   };
 }
 
@@ -217,9 +272,11 @@ export async function resolveDependencies(
 function addComponentDependencies(
   component: ComponentMeta,
   dependenciesToInstall: Set<string>,
+  devDependenciesToInstall: Set<string>,
   iconFamily: Config['icons'],
 ): void {
   component.dependencies?.forEach(dep => dependenciesToInstall.add(dep));
+  component.devDependencies?.forEach(dep => devDependenciesToInstall.add(dep));
 
   if (component.icons?.symbols?.length) {
     iconPackagesFor(iconFamily, iconCatalog()).forEach(pkg => dependenciesToInstall.add(pkg));
@@ -230,6 +287,7 @@ async function resolveRegistryDependencies(
   component: ComponentMeta,
   componentsToInstall: ComponentMeta[],
   dependenciesToInstall: Set<string>,
+  devDependenciesToInstall: Set<string>,
   resolvedConfig: Config & { resolvedPaths: any },
   cwd: string,
   options: { path?: string; overwrite?: boolean },
@@ -252,13 +310,14 @@ async function resolveRegistryDependencies(
 
     if (!isItemInstalled(depTargetDir, depComponent.files ?? []) || options.overwrite) {
       componentsToInstall.push(depComponent);
-      addComponentDependencies(depComponent, dependenciesToInstall, resolvedConfig.icons);
+      addComponentDependencies(depComponent, dependenciesToInstall, devDependenciesToInstall, resolvedConfig.icons);
 
       if (depComponent.registryDependencies) {
         await resolveRegistryDependencies(
           depComponent,
           componentsToInstall,
           dependenciesToInstall,
+          devDependenciesToInstall,
           resolvedConfig,
           cwd,
           options,
@@ -266,4 +325,26 @@ async function resolveRegistryDependencies(
       }
     }
   }
+}
+
+/**
+ * Stops before anything is written when an item cannot compile on the project's Angular.
+ *
+ * `ng-mapcn` ships one line per Angular major, and the lines are not the same API: the files of the `map` item
+ * import names that only exist from the 22 line on, so on Angular 21 the install "worked" and the build failed
+ * with a dozen missing exports in code the user never wrote.
+ */
+export function assertAngularSupported(components: readonly ComponentMeta[], angularVersion: string | null): void {
+  const major = angularMajorOf(angularVersion);
+  if (major === null) return;
+
+  const unsupported = components.filter(component => (component.minAngularMajor ?? 0) > major);
+  if (!unsupported.length) return;
+
+  const needed = Math.max(...unsupported.map(component => component.minAngularMajor ?? 0));
+  throw new CliError(
+    `${unsupported.map(component => component.name).join(', ')} requires Angular ${needed} or newer, ` +
+      `and this project is on Angular ${major}. Nothing was installed.`,
+    'ANGULAR_VERSION_UNSUPPORTED',
+  );
 }

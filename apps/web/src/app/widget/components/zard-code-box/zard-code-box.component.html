@@ -43,15 +43,23 @@
     >
       @if (dynamicComponent()) {
         <div
+          #lazy="lazyRender"
+          [lazyRender]="lazyRender()"
           [class]="previewClasses()"
-          [style.min-height]="previewHeight() || null"
+          [style.min-height]="lazy.reservedHeight() ? lazy.reservedHeight() + 'px' : previewHeight() || null"
           [class.items-center]="flexAlign() === 'center'"
           [class.items-start]="flexAlign() === 'start'"
           [class.items-end]="flexAlign() === 'end'"
           [class.flex-col]="column()"
           [class.gap-4]="true"
         >
-          <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
+          @if (!lazy.visible()) {
+            <z-map-state />
+          } @else if (unsupported()) {
+            <z-map-state state="unsupported" />
+          } @else {
+            <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
+          }
         </div>
       }
 

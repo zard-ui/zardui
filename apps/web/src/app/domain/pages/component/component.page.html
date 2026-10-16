@@ -12,6 +12,11 @@
       <p class="text-muted-foreground text-[1.05rem] sm:text-base sm:text-balance md:max-w-[80%]">
         {{ data.description }}
       </p>
+      @if (data.headerAction; as headerAction) {
+        <div class="mt-2 w-full max-w-64">
+          <ng-container *ngComponentOutlet="headerAction" />
+        </div>
+      }
       <z-assist></z-assist>
       @if (data.preview) {
         <z-code-box
@@ -21,6 +26,9 @@
           [column]="data.preview.column || false"
           [codeHeight]="data.preview.codeHeight"
           [previewHeight]="data.preview.previewHeight"
+          [lazyRender]="data.preview.lazyRender"
+          [requiresWebgl2]="data.preview.requiresWebgl2"
+          [compact]="data.preview.compact"
           [fillContainer]="fillsContainer(data.componentName)"
         ></z-code-box>
       } @else {
@@ -52,6 +60,30 @@
             </a>
           }
         </p>
+        @if (about.links?.length) {
+          <ul class="text-muted-foreground flex list-disc flex-col gap-1.5 pl-5 leading-relaxed">
+            @for (credit of about.links; track credit.href) {
+              <li>
+                <a
+                  [href]="credit.href"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-foreground font-medium underline underline-offset-4"
+                >
+                  {{ credit.label }}
+                </a>
+                @if (credit.description) {
+                  <span>{{ credit.description }}</span>
+                }
+              </li>
+            }
+          </ul>
+        }
+        @if (about.note) {
+          <p class="text-muted-foreground bg-muted/50 rounded-lg border px-3 py-2 text-sm leading-relaxed">
+            {{ about.note }}
+          </p>
+        }
       </section>
     }
 
@@ -181,11 +213,79 @@
             [fullScreen]="item.fullScreen"
             [onlyDemo]="item.onlyDemo"
             [column]="item.column"
+            [lazyRender]="item.lazyRender"
+            [requiresWebgl2]="item.requiresWebgl2"
+            [compact]="item.compact"
             [fillContainer]="fillsContainer(data.componentName)"
           ></z-code-box>
         }
       </section>
     </div>
+
+    @for (section of data.sections; track section.id) {
+      <section class="flex flex-col gap-4" [scrollSpyItem]="section.id" [attr.id]="section.id">
+        <h2 class="font-heading mt-10 scroll-m-28 text-xl font-medium tracking-tight lg:mt-12">{{ section.title }}</h2>
+        @if (section.description) {
+          <div class="leading-relaxed text-pretty" [prose]="section.description"></div>
+        }
+        @if (section.table; as table) {
+          <div class="overflow-x-auto rounded-lg border">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-muted/50 text-muted-foreground text-xs">
+                <tr>
+                  @for (column of table.columns; track column) {
+                    <th scope="col" class="px-4 py-2.5 font-medium whitespace-nowrap">{{ column }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody class="[&>tr:not(:last-child)]:border-b">
+                @for (row of table.rows; track $index) {
+                  <tr>
+                    @for (cell of row; track $index; let first = $first) {
+                      <td class="px-4 py-3 align-top" [class.font-medium]="first" [class.whitespace-nowrap]="first">
+                        @if (isLink(cell)) {
+                          <a
+                            [href]="cell.href"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="underline underline-offset-4"
+                          >
+                            {{ cell.text }}
+                          </a>
+                        } @else {
+                          <span [prose]="cell"></span>
+                        }
+                      </td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+        @for (item of section.examples; track $index) {
+          <z-code-box
+            [scrollSpyItem]="item.name"
+            [attr.id]="item.name"
+            [componentType]="item.name"
+            [demoDescription]="item.description"
+            [codeData]="item.codeData"
+            [codeBefore]="item.codeBefore"
+            [codeAfter]="item.codeAfter"
+            [codeHeight]="item.codeHeight"
+            [previewHeight]="item.previewHeight"
+            [dynamicComponent]="item.component"
+            [fullScreen]="item.fullScreen"
+            [onlyDemo]="item.onlyDemo"
+            [column]="item.column"
+            [lazyRender]="item.lazyRender"
+            [requiresWebgl2]="item.requiresWebgl2"
+            [compact]="item.compact"
+            [fillContainer]="fillsContainer(data.componentName)"
+          ></z-code-box>
+        }
+      </section>
+    }
 
     <footer scrollSpyItem="api" id="api">
       @if (data.api) {

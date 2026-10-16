@@ -19,6 +19,7 @@ export const HEADER_PATHS: NavItem[] = [
   { name: 'Components', path: '/docs/components', available: true },
   { name: 'Blocks', path: '/blocks', available: true },
   { name: 'Charts', path: '/charts', available: true },
+  { name: 'Maps', path: '/maps', available: true },
   { name: 'Themes', path: '/themes', available: true },
   { name: 'Typeset', path: '/typeset', available: true },
 ];
@@ -147,6 +148,9 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Hover Card', path: '/docs/components/hover-card', available: true },
     { name: 'Context Menu', path: '/docs/components/context-menu', available: true },
     { name: 'Message', path: '/docs/components/message', available: true },
+    { name: 'Map', path: '/docs/components/map', available: true },
+    { name: 'Map Draw', path: '/docs/components/map-draw', available: true },
+    { name: 'Map Style Select', path: '/docs/components/map-style-select', available: true },
     { name: 'Marker', path: '/docs/components/marker', available: true },
     { name: 'Aspect Ratio', path: '/docs/components/aspect-ratio', available: true },
     { name: 'Attachment', path: '/docs/components/attachment', available: true },

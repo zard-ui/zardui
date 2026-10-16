@@ -48,6 +48,36 @@ describe('pinForAngular', () => {
   });
 });
 
+describe('pinForAngular with versioned registry dependencies', () => {
+  it('finds the package by name when the registry item already carries a version', () => {
+    // Before the version was split off, the lookup was for the string "ng-mapcn@22.0.0-beta.7" and matched nothing.
+    expect(pinForAngular('ng-mapcn@22.0.0-beta.7', 21)).toBe('ng-mapcn@21.0.0-beta.7');
+    expect(pinForAngular('ng-mapcn@22.0.0-beta.7', 19)).toBe('ng-mapcn@18.0.0-beta.4');
+    expect(pinForAngular('maplibre-gl@^6.11.2', 21)).toBe('maplibre-gl@^5.16.0');
+  });
+
+  it("keeps the item's own version on the Angular major it was written for", () => {
+    expect(pinForAngular('ng-mapcn@22.0.0-beta.7', 22)).toBe('ng-mapcn@22.0.0-beta.7');
+    expect(pinForAngular('maplibre-gl@^6.11.2', 22)).toBe('maplibre-gl@^6.11.2');
+  });
+
+  it('does not rewrite a tracked package that names its own version', () => {
+    expect(pinForAngular('@angular/cdk@^20.1.0', 21)).toBe('@angular/cdk@^20.1.0');
+  });
+
+  it('does not mistake the scope marker for a version', () => {
+    expect(pinForAngular('@angular/cdk', 21)).toBe('@angular/cdk@^21');
+  });
+
+  it('pins a batch that mixes bare and versioned names', () => {
+    expect(pinAllForAngular(['ng-mapcn@22.0.0-beta.7', 'maplibre-gl@^6.11.2', 'clsx'], '21.2.0')).toEqual([
+      'ng-mapcn@21.0.0-beta.7',
+      'maplibre-gl@^5.16.0',
+      'clsx',
+    ]);
+  });
+});
+
 describe('pinAllForAngular', () => {
   it('keeps the order it was given', () => {
     expect(pinAllForAngular(['clsx', '@angular/cdk', '@ng-icons/core'], '21.2.0')).toEqual([

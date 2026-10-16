@@ -1162,6 +1162,98 @@
       ]
     },
     {
+      "name": "map",
+      "type": "registry:component",
+      "dependencies": [
+        "ng-mapcn@22.0.0-beta.7",
+        "maplibre-gl@^6.11.2"
+      ],
+      "devDependencies": [
+        "@types/geojson"
+      ],
+      "build": {
+        "styles": [
+          {
+            "import": "maplibre-gl/dist/maplibre-gl.css"
+          },
+          {
+            "file": "map.css"
+          }
+        ],
+        "assets": [
+          {
+            "glob": "maplibre-gl-worker.mjs",
+            "input": "node_modules/maplibre-gl/dist",
+            "output": "/"
+          },
+          {
+            "glob": "maplibre-gl-shared.mjs",
+            "input": "node_modules/maplibre-gl/dist",
+            "output": "/"
+          }
+        ]
+      },
+      "minAngularMajor": 22,
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "map.imports.ts",
+        "map.provider.ts",
+        "map-styles.ts",
+        "map-style.service.ts",
+        "map.css",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "map-style-select",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "input",
+        "map",
+        "select"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideKeyRound"
+        ],
+        "tokens": [
+          "key-round"
+        ]
+      },
+      "files": [
+        "map-style-select.component.ts",
+        "map-style-select.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "map-draw",
+      "type": "registry:component",
+      "dependencies": [
+        "terra-draw@^1.37.0",
+        "terra-draw-maplibre-gl-adapter@^1.5.0"
+      ],
+      "registryDependencies": [
+        "map"
+      ],
+      "minAngularMajor": 22,
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "map-draw.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "aspect-ratio",
       "type": "registry:component",
       "icons": {

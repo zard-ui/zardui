@@ -2,6 +2,7 @@ import { logger } from '@cli/utils/logger.js';
 import { lineEndingOf } from '@cli/utils/source-file.js';
 import { existsSync } from 'fs';
 import * as fsPromises from 'fs/promises';
+import * as path from 'path';
 
 /**
  * The same text with every CSS comment blanked out.
@@ -26,11 +27,12 @@ function withoutComments(content: string): string {
  * are other files, and taking them for ours would leave ours unimported.
  */
 function alreadyImports(content: string, fileName: string): boolean {
-  return cssImports(withoutComments(content)).some(match => {
-    const target = importTarget(match[0]);
+  return importsTarget(content, fileName) || importsTarget(content, `./${fileName}`);
+}
 
-    return target === fileName || target === `./${fileName}`;
-  });
+/** Whether a real `@import` points at exactly this target (a package specifier or a relative path). */
+function importsTarget(content: string, wanted: string): boolean {
+  return cssImports(withoutComments(content)).some(match => importTarget(match[0]) === wanted);
 }
 
 /** The path an `@import` rule points at, whether quoted or wrapped in `url(...)`. */
@@ -97,6 +99,71 @@ async function importIntoGlobalCss(tailwindCssPath: string, fileName: string, la
 
   await fsPromises.writeFile(tailwindCssPath, updated, 'utf8');
   logger.info(`${label} imported in your global stylesheet.`);
+}
+
+/**
+ * Where a stylesheet sits, as an `@import` target relative to the global CSS.
+ *
+ * Always POSIX and always starting with `./` or `../`: a bare `components/map/map.css` would be read as a package.
+ */
+export function relativeImportTarget(globalCssPath: string, stylesheetPath: string): string {
+  const relative = path.relative(path.dirname(globalCssPath), stylesheetPath).split(path.sep).join('/');
+
+  return relative.startsWith('.') ? relative : `./${relative}`;
+}
+
+export type StyleImportResult = 'added' | 'present' | 'manual';
+
+/**
+ * Imports several stylesheets into the global CSS, in the order given.
+ *
+ * The order is part of the contract: MapLibre's own sheet has to come before the one that styles over it. A target
+ * the file already imports stays where it is; a missing one goes just before the next target that is already there
+ * (so the order holds), or after the last `@import` when none follows. A second call changes nothing.
+ *
+ * When the file cannot be edited safely — missing, or with no `@import` to anchor to — nothing is written and the
+ * exact lines to paste are logged.
+ */
+export async function importStylesIntoGlobalCss(
+  globalCssPath: string,
+  targets: readonly string[],
+): Promise<StyleImportResult> {
+  const lines = targets.map(target => `@import '${target}';`);
+
+  if (!existsSync(globalCssPath)) {
+    logger.warn(`${globalCssPath} not found. Add these to your global stylesheet, in this order:\n${lines.join('\n')}`);
+    return 'manual';
+  }
+
+  let content = await fsPromises.readFile(globalCssPath, 'utf8');
+  const eol = lineEndingOf(content);
+  let changed = false;
+
+  for (let index = 0; index < targets.length; index++) {
+    if (importsTarget(content, targets[index])) continue;
+
+    const imports = cssImports(withoutComments(content));
+    const last = imports[imports.length - 1];
+
+    if (!last) {
+      logger.warn(
+        `No @import found in ${globalCssPath}. Add these to it manually, after any other @import:\n${lines.join('\n')}`,
+      );
+      return 'manual';
+    }
+
+    const next = imports.find(match => targets.slice(index + 1).includes(importTarget(match[0]) ?? ''));
+
+    content = next
+      ? content.slice(0, next.index) + lines[index] + eol + content.slice(next.index)
+      : content.slice(0, last.index + last[0].length) + eol + lines[index] + content.slice(last.index + last[0].length);
+    changed = true;
+  }
+
+  if (!changed) return 'present';
+
+  await fsPromises.writeFile(globalCssPath, content, 'utf8');
+  return 'added';
 }
 
 export function setupTypeset(tailwindCssPath: string): Promise<void> {

@@ -1,9 +1,35 @@
+/**
+ * What an item needs from the project's build beyond npm packages and its own files.
+ *
+ * Declared by the item, applied by `zard-cli add`: nothing in the CLI knows which
+ * item needs it. Shipped in registry.json and in the item's own file.
+ */
+export type RegistryBuild = {
+  /**
+   * Imports the global stylesheet needs, in this order and unlayered. `import` is a
+   * specifier resolved from node_modules (`maplibre-gl/dist/maplibre-gl.css`); `file`
+   * is one of the item's own files, imported by its path relative to the stylesheet.
+   */
+  styles?: Array<{ import: string } | { file: string }>;
+  /**
+   * Static files the build has to copy to the output root, in the shape of an
+   * Angular build `assets` entry. `input` is relative to the workspace root.
+   */
+  assets?: Array<{ glob: string; input: string; output: string }>;
+};
+
 export type ComponentRegistry = {
   name: string;
   basePath?: string;
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
+  build?: RegistryBuild;
+  /**
+   * The lowest Angular major the item's source compiles on. `add` stops with a message below it, instead of
+   * installing files that fail to build (the map item is written for ng-mapcn 22, which peers on Angular 22).
+   */
+  minAngularMajor?: number;
   files: {
     name: string;
     content: string;
@@ -1607,6 +1633,80 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'chart.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'map',
+    dependencies: ['ng-mapcn@22.0.0-beta.7', 'maplibre-gl@^6.11.2'],
+    devDependencies: ['@types/geojson'],
+    minAngularMajor: 22,
+    // MapLibre 6 loads its worker from the site root, and its stylesheet has to come before map.css.
+    build: {
+      styles: [{ import: 'maplibre-gl/dist/maplibre-gl.css' }, { file: 'map.css' }],
+      assets: [
+        { glob: 'maplibre-gl-worker.mjs', input: 'node_modules/maplibre-gl/dist', output: '/' },
+        { glob: 'maplibre-gl-shared.mjs', input: 'node_modules/maplibre-gl/dist', output: '/' },
+      ],
+    },
+    files: [
+      {
+        name: 'map.imports.ts',
+        content: '',
+      },
+      {
+        name: 'map.provider.ts',
+        content: '',
+      },
+      {
+        name: 'map-styles.ts',
+        content: '',
+      },
+      {
+        name: 'map-style.service.ts',
+        content: '',
+      },
+      {
+        name: 'map.css',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'map-style-select',
+    registryDependencies: ['button', 'input', 'map', 'select'],
+    files: [
+      {
+        name: 'map-style-select.component.ts',
+        content: '',
+      },
+      {
+        name: 'map-style-select.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'map-draw',
+    dependencies: ['terra-draw@^1.37.0', 'terra-draw-maplibre-gl-adapter@^1.5.0'],
+    registryDependencies: ['map'],
+    minAngularMajor: 22,
+    files: [
+      {
+        name: 'map-draw.imports.ts',
         content: '',
       },
       {

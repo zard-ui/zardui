@@ -452,6 +452,30 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   How can I help you today?
 </z-message>`,
   },
+  map: {
+    importCode: `import { ZardMapImports } from '@/shared/components/map/map.imports';`,
+    templateCode: `<div class="h-96 overflow-hidden rounded-xl border">
+  <ng-map [center]="[-46.63, -23.55]" [zoom]="10">
+    <ng-map-controls />
+    <ng-map-marker [longitude]="-46.63" [latitude]="-23.55">
+      <ng-marker-content />
+      <ng-marker-popup>São Paulo</ng-marker-popup>
+    </ng-map-marker>
+  </ng-map>
+</div>`,
+  },
+  'map-draw': {
+    importCode: `import { ZardMapDrawImports } from '@/shared/components/map-draw/map-draw.imports';`,
+    templateCode: `<div class="h-96 overflow-hidden rounded-xl border">
+  <ng-map [center]="[-73.97, 40.78]" [zoom]="12">
+    <ng-map-draw [(features)]="features" [(mode)]="mode" [modes]="['point', 'line', 'polygon']" />
+  </ng-map>
+</div>`,
+  },
+  'map-style-select': {
+    importCode: `import { ZardMapStyleSelectComponent } from '@/shared/components/map-style-select/map-style-select.component';`,
+    templateCode: `<z-map-style-select />`,
+  },
   marker: {
     importCode: `import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';`,
     templateCode: `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>`,

@@ -9,6 +9,9 @@ const COMPONENTS_PATH = path.resolve('libs/zard/src/lib/shared/components');
 const OUTPUT_PATH = path.resolve('apps/web/src/generated/installation');
 const SKIPPED_DIRS = ['styles', 'core', 'components.ts'];
 
+/** Components whose npm dependencies are read from every source file, not just `<name>.component.ts`. */
+const INCLUDE_ALL_SOURCES = new Set(['map', 'map-draw']);
+
 const BASIC_DEPENDENCIES = [
   '@angular/cdk',
   'class-variance-authority',
@@ -39,6 +42,23 @@ export const appConfig: ApplicationConfig = {
     provideZardCharts(),
   ],
 };`,
+  },
+  map: {
+    title: 'app.routes.ts',
+    language: 'angular-ts',
+    highlightLines: [2, 10],
+    code: `import { Routes } from '@angular/router';
+import { provideZardMap } from '@/shared/components/map/map.provider';
+
+export const routes: Routes = [
+  {
+    path: 'map',
+    loadComponent: () => import('./map.page').then(m => m.MapPage),
+    // Register it on the lazy route that renders the maps: ng-mapcn pulls in all of MapLibre (about 1 MB),
+    // so keep it out of app.config.ts and the initial bundle of every other route.
+    providers: [provideZardMap({ persist: true })],
+  },
+];`,
   },
   sonner: {
     title: 'app.component.ts',
@@ -234,7 +254,7 @@ async function buildComponentCodeBlocks(componentDir: string, componentName: str
   // Additional files (services, templates, etc.)
   const additionalFiles = fs.readdirSync(componentDir).filter(file => {
     return (
-      (file.endsWith('.ts') || file.endsWith('.html')) &&
+      (file.endsWith('.ts') || file.endsWith('.html') || file.endsWith('.css')) &&
       !file.includes('.spec.') &&
       !file.startsWith('demo') &&
       !primaryFiles.includes(file)
@@ -246,7 +266,7 @@ async function buildComponentCodeBlocks(componentDir: string, componentName: str
     if (!fs.statSync(filePath).isFile()) continue;
 
     const code = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
-    const language = fileName.endsWith('.html') ? 'angular-html' : 'angular-ts';
+    const language = languageOf(fileName);
     const html = await highlightCode(code, language);
 
     blocks.push({
@@ -264,12 +284,40 @@ async function buildComponentCodeBlocks(componentDir: string, componentName: str
   return blocks;
 }
 
+function languageOf(fileName: string): string {
+  if (fileName.endsWith('.css')) return 'css';
+  return fileName.endsWith('.html') ? 'angular-html' : 'angular-ts';
+}
+
+/**
+ * The version a peer dependency is pinned to in the library manifest, so the install command can never drift from
+ * what the registry installs. `ng-mapcn` is a pre-1.0 package that ships betas only, hence the exact pin.
+ */
+function pinnedPeer(packageName: string): string {
+  try {
+    const manifest = JSON.parse(fs.readFileSync(path.resolve('libs/zard/package.json'), 'utf-8')) as {
+      peerDependencies?: Record<string, string>;
+    };
+    const version = manifest.peerDependencies?.[packageName];
+    return version && /^\d/.test(version) ? `${packageName}@${version}` : packageName;
+  } catch {
+    return packageName;
+  }
+}
+
 function analyzeComponentDependencies(componentDir: string, componentName: string): ComponentDependency[] {
   const deps: ComponentDependency[] = [];
 
   const filesToCheck = [
     path.join(componentDir, `${componentName}.component.ts`),
     path.join(componentDir, `${componentName}.variants.ts`),
+    // The map has no component of its own: it is a bundle of ng-mapcn imports, a provider and a style catalogue.
+    ...(INCLUDE_ALL_SOURCES.has(componentName)
+      ? fs
+          .readdirSync(componentDir)
+          .filter(file => file.endsWith('.ts') && !file.includes('.spec.'))
+          .map(file => path.join(componentDir, file))
+      : []),
   ];
 
   let content = '';
@@ -301,6 +349,18 @@ function analyzeComponentDependencies(componentDir: string, componentName: strin
     // That is intentional: the chart needs the wrapper and the engine.
     { pattern: 'ngx-echarts', name: 'ngx-echarts', npmPackage: 'ngx-echarts', type: 'external' },
     { pattern: 'echarts', name: 'echarts', npmPackage: 'echarts', type: 'external' },
+    // The map is a layer over ng-mapcn, pinned to the exact beta the registry installs. MapLibre is its peer and
+    // `@types/geojson` types the GeoJSON props. Terra-draw only comes with `ng-mapcn/draw`, never with the core map.
+    { pattern: "from 'ng-mapcn'", name: 'ng-mapcn', npmPackage: pinnedPeer('ng-mapcn'), type: 'external' },
+    { pattern: "'maplibre-gl'", name: 'maplibre-gl', npmPackage: 'maplibre-gl@6', type: 'external' },
+    { pattern: "from 'ng-mapcn'", name: '@types/geojson', npmPackage: '@types/geojson', type: 'external' },
+    { pattern: "'ng-mapcn/draw'", name: 'terra-draw', npmPackage: 'terra-draw@1', type: 'external' },
+    {
+      pattern: "'ng-mapcn/draw'",
+      name: 'terra-draw-maplibre-gl-adapter',
+      npmPackage: 'terra-draw-maplibre-gl-adapter@1',
+      type: 'external',
+    },
   ];
 
   for (const check of checks) {

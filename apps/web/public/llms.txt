@@ -51,6 +51,7 @@
 - [Input](https://zardui.com/docs/components/input): Displays a form input field or a component that looks like an input field.
 - [Input Group](https://zardui.com/docs/components/input-group): Groups input elements together with addons.
 - [Input OTP](https://zardui.com/docs/components/input-otp): Accessible one-time password component with copy-paste functionality.
+- [Map Style Select](https://zardui.com/docs/components/map-style-select): Picks the basemap of every map on the page, live. Presets are grouped by provider.
 - [Radio Group](https://zardui.com/docs/components/radio-group): A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked at a time.
 - [Select](https://zardui.com/docs/components/select): Displays a list of options for the user to pick from — triggered by a button.
 - [Slider](https://zardui.com/docs/components/slider): An input where the user selects a value from within a given range.
@@ -101,6 +102,8 @@
 - [Card](https://zardui.com/docs/components/card): Displays a card with header, content, and footer.
 - [Carousel](https://zardui.com/docs/components/carousel): A carousel with motion and swipe built using Embla.
 - [Chart](https://zardui.com/docs/components/chart): Beautiful charts built with Apache ECharts. Copy and paste into your apps.
+- [Map](https://zardui.com/docs/components/map): Beautiful maps built on MapLibre GL, themed with zard. Copy and paste into your apps.
+- [Map Draw](https://zardui.com/docs/components/map-draw): Draw, select and edit points, lines and polygons on a map. An optional addition to the map.
 - [Marker](https://zardui.com/docs/components/marker): Displays an inline status, system note, bordered row, or labeled separator in a conversation.
 - [Message](https://zardui.com/docs/components/message): Displays a message in a conversation, with optional avatar, header, footer, and alignment.
 - [Table](https://zardui.com/docs/components/table): A responsive table component.

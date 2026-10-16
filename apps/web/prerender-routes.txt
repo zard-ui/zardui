@@ -3,6 +3,7 @@
 /docs/components
 /blocks
 /charts
+/maps
 /themes
 /typeset
 /docs/introduction
@@ -90,6 +91,9 @@
 /docs/components/hover-card
 /docs/components/context-menu
 /docs/components/message
+/docs/components/map
+/docs/components/map-draw
+/docs/components/map-style-select
 /docs/components/marker
 /docs/components/aspect-ratio
 /docs/components/attachment
@@ -104,6 +108,10 @@
 /docs/contribute/workflow
 /docs/contribute/release
 /docs/contribute/faq
+/maps/logistics
+/maps/data
+/maps/3d
+/maps/draw
 /docs/installation/angular
 /docs/installation/angular-library
 /docs/installation/nx

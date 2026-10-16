@@ -1,7 +1,13 @@
 import type { CodeBlockData } from '@highlight/types';
 
 import type { ApiSection } from '@doc/domain/components/api-reference/api-reference.types';
-import type { ComponentData, CodeSnippet, ExampleData } from '@doc/shared/constants/components.constant';
+import type {
+  CodeSnippet,
+  ComponentData,
+  ComponentSection,
+  ExampleData,
+  SectionTableLink,
+} from '@doc/shared/constants/components.constant';
 
 const BASE_URL = 'https://zardui.com';
 
@@ -152,6 +158,7 @@ export function serializeComponentToMarkdown(data: ComponentData): string {
     section('Usage', serializeUsage(data)),
     section('Composition', codeBlock(data.composition)),
     section('Examples', serializeExamples(data.examples)),
+    ...(data.sections ?? []).map(extra => section(extra.title, serializeSection(extra))),
     section('API Reference', serializeApi(data.api)),
     `---\n\n[Open in browser](${BASE_URL}/docs/components/${data.componentName})`,
   ];
@@ -164,6 +171,38 @@ function serializeAbout(data: ComponentData): string {
   if (!about) return '';
   const parts: string[] = [about.description];
   if (about.link) parts.push(`[${about.link.label}](${about.link.href})`);
+  if (about.links?.length) {
+    parts.push(
+      about.links
+        .map(credit => `- [${credit.label}](${credit.href})${credit.description ? `: ${credit.description}` : ''}`)
+        .join('\n'),
+    );
+  }
+  if (about.note) parts.push(about.note);
+  return parts.join('\n\n');
+}
+
+/** A titled extra block: its prose, its table, then its examples one level below the heading. */
+function serializeSection(extra: ComponentSection): string {
+  const parts: string[] = [];
+  if (extra.description) parts.push(extra.description);
+
+  if (extra.table) {
+    const { columns, rows } = extra.table;
+    const text = (value: string | SectionTableLink) =>
+      cell(typeof value === 'string' ? value : `[${value.text}](${value.href})`);
+    parts.push(
+      [
+        `| ${columns.map(cell).join(' | ')} |`,
+        `| ${columns.map(() => '---').join(' | ')} |`,
+        ...rows.map(row => `| ${row.map(text).join(' | ')} |`),
+      ].join('\n'),
+    );
+  }
+
+  const examples = serializeExamples(extra.examples);
+  if (examples) parts.push(examples);
+
   return parts.join('\n\n');
 }
 

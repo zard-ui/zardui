@@ -1,0 +1,45 @@
+<section class="container flex flex-col items-center gap-2 py-8 text-center md:py-16 lg:py-20 xl:gap-4">
+  <h1
+    class="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter"
+  >
+    Beautiful Maps for the Web
+  </h1>
+  <p class="text-foreground max-w-3xl text-base text-balance sm:text-lg">
+    Ready-made maps built on MapLibre GL and ng-mapcn, themed with zard. Dashboards, trackers, 3D and drawing. Copy and
+    paste into your apps. Open Source. Free forever.
+  </p>
+  <section class="flex w-full items-center justify-center gap-2 pt-2 **:data-[slot=button]:shadow-none">
+    <a z-button href="/maps#maps" class="h-[35px] rounded-[26px] px-3">Browse Maps</a>
+    <a z-button zType="ghost" routerLink="/docs/components/map" class="h-9 rounded-[26px] px-3">Map docs</a>
+  </section>
+
+  <div class="flex w-full max-w-xs flex-col items-start gap-1.5 pt-6 text-left">
+    <span class="text-muted-foreground text-xs font-medium" id="maps-style-label">Map style</span>
+    <!-- The shipped picker: it drives every map on this page, and the choice follows you to the docs. -->
+    <z-map-style-select class="min-w-0" />
+  </div>
+</section>
+
+<z-category-tabs [tabs]="categoryTabs" />
+
+<section id="maps" class="container mx-auto min-h-svh px-4 pt-8 pb-16">
+  <div class="mb-8 flex flex-col gap-1">
+    <h2 class="text-xl font-semibold tracking-tight">{{ categoryCopy[currentCategory()].label }}</h2>
+    <p class="text-muted-foreground text-sm">{{ categoryCopy[currentCategory()].description }}</p>
+  </div>
+
+  @if (blocks().length > 0) {
+    <div class="grid grid-cols-1 items-stretch gap-10">
+      @for (block of blocks(); track block.id) {
+        <z-map-card [block]="block" />
+      }
+    </div>
+  } @else {
+    <div class="border-border bg-muted/20 flex min-h-svh items-center justify-center rounded-lg border">
+      <div class="space-y-2 text-center">
+        <p class="text-muted-foreground text-lg font-medium">No maps available yet</p>
+        <p class="text-muted-foreground text-sm">Maps will be added soon for this category</p>
+      </div>
+    </div>
+  }
+</section>

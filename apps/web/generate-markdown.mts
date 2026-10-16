@@ -17,7 +17,16 @@ import '@angular/compiler';
 
 import { Window } from 'happy-dom';
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { registerHooks } from 'node:module';
 import { join, resolve } from 'node:path';
+
+// MapLibre and terra-draw are browser engines Node cannot load. The map demos import them, so stub them out.
+const stubbed = new Set(['maplibre-gl', 'terra-draw', 'terra-draw-maplibre-gl-adapter']);
+const stub = new URL('./src/generate-stubs/empty.mjs', import.meta.url).href;
+registerHooks({
+  resolve: (specifier, context, nextResolve) =>
+    stubbed.has(specifier) ? { url: stub, shortCircuit: true } : nextResolve(specifier, context),
+});
 
 // Angular's partially-compiled component modules touch browser globals at load
 // time. Provide the few Node lacks before importing anything Angular.

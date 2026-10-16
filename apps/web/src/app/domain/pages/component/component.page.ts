@@ -1,3 +1,4 @@
+import { NgComponentOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,9 +11,10 @@ import { ApiReferenceComponent } from '@doc/domain/components/api-reference/api-
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { StepsComponent } from '@doc/domain/components/steps/steps.component';
+import { ProseDirective } from '@doc/domain/directives/prose.directive';
 import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
-import { ComponentData, COMPONENTS_REGISTRY } from '@doc/shared/constants/components.constant';
+import { ComponentData, COMPONENTS_REGISTRY, type SectionTableLink } from '@doc/shared/constants/components.constant';
 import { Step } from '@doc/shared/constants/install.constant';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 import { DynamicInstallationService } from '@doc/shared/services/dynamic-installation.service';
@@ -20,7 +22,7 @@ import { SeoService } from '@doc/shared/services/seo.service';
 import { ZardCodeBoxComponent } from '@doc/widget/components/zard-code-box/zard-code-box.component';
 
 /** Components whose demos are only readable at the full width of the preview. */
-const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar'];
+const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar', 'map'];
 
 @Component({
   selector: 'z-component',
@@ -31,16 +33,19 @@ const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar'];
     CodeBlockComponent,
     CodeTabsComponent,
     DocContentComponent,
+    ProseDirective,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
     StepsComponent,
     ZardCodeBoxComponent,
     HyphenToSpacePipe,
+    NgComponentOutlet,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComponentPage implements OnInit {
   protected readonly fillsContainer = (componentName: string) => FULL_WIDTH_PREVIEWS.includes(componentName);
+  protected readonly isLink = (cell: string | SectionTableLink): cell is SectionTableLink => typeof cell !== 'string';
 
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
@@ -108,7 +113,9 @@ export class ComponentPage implements OnInit {
   }
 
   private async loadData() {
-    const componentName = this.activatedRoute.snapshot.paramMap.get('componentName');
+    // A component with its own lazy route (the map, which brings its own providers) names itself in the route data.
+    const { paramMap, data } = this.activatedRoute.snapshot;
+    const componentName = paramMap.get('componentName') ?? (data['componentName'] as string | undefined);
     if (!componentName) {
       this.router.navigateByUrl('/');
       return;
@@ -147,6 +154,16 @@ export class ComponentPage implements OnInit {
           type: 'core',
           children: exampleNavigationItems,
         },
+        ...(component.sections ?? []).map(section => ({
+          id: section.id,
+          label: section.title,
+          type: 'core' as const,
+          children: (section.examples ?? []).map(example => ({
+            id: example.name,
+            label: example.name,
+            type: 'custom' as const,
+          })),
+        })),
         { id: 'api', label: 'API', type: 'core' },
       ],
     };

@@ -19,6 +19,8 @@ jest.mock('fs', () => ({
 }));
 
 import {
+  assertAngularSupported,
+  collectBuildRequirements,
   getComponentMeta,
   getTargetDir,
   isItemInstalled,
@@ -292,5 +294,104 @@ describe('blocks', () => {
 
     expect(first).toBe(path.join(path.resolve('/project', 'src/ui'), 'login-01'));
     expect(second).not.toBe(first);
+  });
+});
+
+describe('items that ask something of the build', () => {
+  const mapIndex = {
+    ...fakeRegistryIndex,
+    items: [
+      ...fakeRegistryIndex.items,
+      {
+        name: 'map',
+        type: 'registry:component',
+        dependencies: ['ng-mapcn@22.0.0-beta.7', 'maplibre-gl@^6.11.2'],
+        devDependencies: ['@types/geojson'],
+        minAngularMajor: 22,
+        build: {
+          styles: [{ import: 'maplibre-gl/dist/maplibre-gl.css' }, { file: 'map.css' }],
+          assets: [{ glob: 'maplibre-gl-worker.mjs', input: 'node_modules/maplibre-gl/dist', output: '/' }],
+        },
+        files: ['map.imports.ts', 'map.css'],
+      },
+      {
+        name: 'map-draw',
+        type: 'registry:component',
+        dependencies: ['terra-draw@^1.37.0'],
+        registryDependencies: ['map'],
+        minAngularMajor: 22,
+        files: ['map-draw.imports.ts'],
+      },
+    ],
+  };
+
+  beforeEach(() => {
+    mockFetchRegistryIndex.mockReset();
+    mockFetchRegistryIndex.mockResolvedValue(mapIndex as any);
+    mockExistsSync.mockReturnValue(false);
+  });
+
+  it('keeps dev dependencies apart from the runtime ones', async () => {
+    const result = await resolveDependencies(['map'], fakeResolvedConfig, '/project', { overwrite: true });
+
+    expect([...result.dependenciesToInstall]).toEqual(['ng-mapcn@22.0.0-beta.7', 'maplibre-gl@^6.11.2']);
+    expect([...result.devDependenciesToInstall]).toEqual(['@types/geojson']);
+  });
+
+  it('pulls the map in, with its dependencies, when only map-draw is asked for', async () => {
+    const result = await resolveDependencies(['map-draw'], fakeResolvedConfig, '/project', { overwrite: true });
+
+    expect(result.componentsToInstall.map(component => component.name)).toEqual(['map-draw', 'map']);
+    expect(result.dependenciesToInstall).toEqual(
+      new Set(['terra-draw@^1.37.0', 'ng-mapcn@22.0.0-beta.7', 'maplibre-gl@^6.11.2']),
+    );
+  });
+
+  it('collects the build requirements of what was asked for and of what it depends on', async () => {
+    const found = await collectBuildRequirements(['map-draw'], fakeResolvedConfig, '/project', {});
+
+    expect(found.map(item => item.name)).toEqual(['map']);
+    expect(found[0].dir).toBe(path.resolve('/project/src/app/shared/components/map'));
+    expect(found[0].build.assets).toHaveLength(1);
+  });
+
+  it('still reports them when the item is already installed, so a re-run can repair the wiring', async () => {
+    mockExistsSync.mockReturnValue(true);
+
+    const resolved = await resolveDependencies(['map'], fakeResolvedConfig, '/project', { overwrite: false });
+    const found = await collectBuildRequirements(['map'], fakeResolvedConfig, '/project', {});
+
+    expect(resolved.componentsToInstall).toEqual([]);
+    expect(found.map(item => item.name)).toEqual(['map']);
+  });
+
+  it('leaves out an item that failed to install', async () => {
+    const found = await collectBuildRequirements(['map'], fakeResolvedConfig, '/project', { skip: ['map'] });
+
+    expect(found).toEqual([]);
+  });
+
+  it('does not report items without a build requirement', async () => {
+    const found = await collectBuildRequirements(['dialog'], fakeResolvedConfig, '/project', {});
+
+    expect(found).toEqual([]);
+  });
+
+  describe('assertAngularSupported', () => {
+    const map = { name: 'map', minAngularMajor: 22 };
+
+    it('stops before installing on an Angular older than the item supports', () => {
+      expect(() => assertAngularSupported([map], '21.2.0')).toThrow(/map requires Angular 22 or newer.*Angular 21/);
+    });
+
+    it('lets the supported majors through, and what declares no minimum', () => {
+      expect(() => assertAngularSupported([map], '22.0.0')).not.toThrow();
+      expect(() => assertAngularSupported([map], '23.1.0')).not.toThrow();
+      expect(() => assertAngularSupported([{ name: 'button' }], '19.0.0')).not.toThrow();
+    });
+
+    it('does not guess when the Angular version could not be read', () => {
+      expect(() => assertAngularSupported([map], null)).not.toThrow();
+    });
   });
 });

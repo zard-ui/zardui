@@ -23,6 +23,8 @@ const REGISTRY = {
     { name: 'sonner', type: 'registry:component', files: ['sonner.ts'], dependencies: ['ngx-sonner'] },
     { name: 'combobox', type: 'registry:component', files: ['combobox.ts'], registryDependencies: ['command'] },
     { name: 'date-picker', type: 'registry:component', files: ['date-picker.ts'] },
+    { name: 'map', type: 'registry:component', files: ['map.imports.ts'], dependencies: ['ng-mapcn@22.0.0-beta.7'] },
+    { name: 'map-draw', type: 'registry:component', files: ['map-draw.imports.ts'], registryDependencies: ['map'] },
   ],
 };
 
@@ -157,6 +159,14 @@ describe('zard-mcp over the protocol', () => {
     ['datepicker', 'date-picker'],
     ['buton', 'button'],
     ['Date Picker', 'date-picker'],
+    ['map', 'map'],
+    ['maps', 'map'],
+    ['geo', 'map'],
+    ['location', 'map'],
+    ['maplibre', 'map'],
+    ['markers', 'map'],
+    ['heatmap', 'map'],
+    ['draw polygon', 'map-draw'],
   ])('search "%s" puts %s first', async (query, expected) => {
     const { matches } = (await call('search-components', { query })).data();
     expect(matches[0].name).toBe(expected);

@@ -1,0 +1,225 @@
+/*
+ * Global styles for the map. Load it together with `maplibre-gl/dist/maplibre-gl.css`:
+ *
+ *   @import 'maplibre-gl/dist/maplibre-gl.css';
+ *   @import './map.css';
+ *
+ * Both imports stay unlayered. MapLibre's own sheet then wins over Tailwind's preflight (which would
+ * otherwise reset its buttons and images), and the `.ng-*` rules below live in `@layer components`, so a
+ * Tailwind utility on a popup or a marker label still overrides them.
+ *
+ * ng-mapcn renders its popups, tooltips and labels as plain DOM inside MapLibre, outside Angular's
+ * component styles. This file styles them with the zard tokens so they look like a `z-popover`.
+ */
+
+/* MapLibre's popup chrome is neutralised: the card below is the only visible surface. */
+.maplibregl-popup-content {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  max-width: none !important;
+}
+
+.maplibregl-popup-tip {
+  display: none !important;
+}
+
+/* Attribution follows the theme. It must stay visible: the basemaps require it. */
+.maplibregl-ctrl-attrib.maplibregl-compact,
+.maplibregl-ctrl-attrib {
+  background-color: color-mix(in oklab, var(--background) 75%, transparent) !important;
+  color: var(--muted-foreground) !important;
+  font-size: 11px;
+}
+
+.maplibregl-ctrl-attrib a {
+  color: inherit !important;
+}
+
+.maplibregl-ctrl-attrib a:hover {
+  color: var(--foreground) !important;
+}
+
+.maplibregl-ctrl-attrib-button {
+  filter: none !important;
+}
+
+.dark .maplibregl-ctrl-attrib-button {
+  filter: invert(1) !important;
+}
+
+.maplibregl-map {
+  font-family: inherit;
+}
+
+@layer components {
+  /* Popup card: the same surface as z-popover (radius, bg-popover, ring and shadow-md). */
+  .ng-popup-card {
+    min-width: 180px;
+    max-width: 320px;
+    padding: calc(var(--spacing, 0.25rem) * 2.5);
+    border-radius: var(--radius-lg, var(--radius, 0.625rem));
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--foreground) 10%, transparent),
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+    animation: ng-popup-enter 0.1s ease-out;
+  }
+
+  .ng-popup-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm, 4px);
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+  }
+
+  .ng-popup-close:hover {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  .ng-popup-close:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  /* Tooltip: the zard tooltip is an inverted pill (foreground on background). */
+  .ng-tooltip-pill {
+    padding: 0.375rem 0.625rem;
+    border-radius: var(--radius-md, 6px);
+    background-color: var(--foreground);
+    color: var(--background);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.4;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+    animation: ng-tooltip-enter 0.1s ease-out;
+  }
+
+  .ng-marker-label {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2px 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm, 4px);
+    background: var(--background);
+    color: var(--foreground);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  .ng-marker-label--top {
+    bottom: calc(100% + 6px);
+  }
+
+  .ng-marker-label--bottom {
+    top: calc(100% + 6px);
+  }
+
+  .ng-marker-content {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .ng-marker-default-icon {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--background);
+    border-radius: 9999px;
+    background: var(--primary);
+    box-shadow:
+      0 4px 6px rgb(0 0 0 / 0.1),
+      0 2px 4px rgb(0 0 0 / 0.1);
+  }
+
+  /* The dot of a marker with no <ng-marker-content>: the marker element itself, or an empty child of it. */
+  .maplibregl-marker:empty,
+  .maplibregl-marker > div:empty {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--background);
+    border-radius: 9999px;
+    background: var(--primary);
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.25);
+    cursor: pointer;
+    transition:
+      transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .maplibregl-marker > div:empty:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 8px rgb(0 0 0 / 0.35);
+  }
+
+  .ng-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* `className="ng-popup-passthrough"` makes a popup ignore the pointer (hover tooltips on layers). */
+  .maplibregl-popup:has(.ng-popup-passthrough),
+  .maplibregl-popup:has(.ng-popup-passthrough) .maplibregl-popup-content {
+    pointer-events: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ng-popup-card,
+    .ng-tooltip-pill {
+      animation: none;
+    }
+  }
+}
+
+@keyframes ng-popup-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ng-tooltip-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-2px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

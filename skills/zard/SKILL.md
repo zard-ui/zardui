@@ -156,6 +156,7 @@ protected readonly classes = computed(() => mergeClasses(cardVariants(), this.cl
 | Nested / tree list | `z-collapsible`, nested — a folder tree is a `z-collapsible` inside a `z-collapsible-content`, not a dedicated tree component. See the composition rule.  |
 | Layout          | `z-sidebar` (with `z-sidebar-provider` and `z-sidebar-inset`), `z-separator`, `z-resizable`, `z-accordion`, `z-carousel`                                     |
 | Overlays        | `z-dialog` (modal), `z-drawer` (bottom/side sheet), `z-sheet` (side panel), `z-alert-dialog` (confirmation) — each also from code via its service —, `z-popover`, `z-tooltip`, `z-dropdown` |
+| Maps            | `ng-map` (and its `ng-map-*` children) from `ng-mapcn`, via `ZardMapImports`; `z-map-style-select`. `zard-cli add map` wires MapLibre. Register `provideZardMap()` on the lazy route that renders maps, never in `app.config.ts`. `add map-draw` for drawing |
 | Command palette | `z-command`                                                                                                                                                  |
 | Feedback        | `ZardSonnerService` (toast), `z-alert`, `z-progress`, `z-skeleton`, `z-spinner`                                                                              |
 | Empty states    | `z-empty`                                                                                                                                                    |

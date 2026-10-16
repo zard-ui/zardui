@@ -127,6 +127,9 @@
     "code": {
       "lucide": "lucideCode"
     },
+    "coffee": {
+      "lucide": "lucideCoffee"
+    },
     "copy": {
       "lucide": "lucideCopy"
     },
@@ -199,8 +202,14 @@
     "italic": {
       "lucide": "lucideItalic"
     },
+    "key-round": {
+      "lucide": "lucideKeyRound"
+    },
     "keyboard": {
       "lucide": "lucideKeyboard"
+    },
+    "landmark": {
+      "lucide": "lucideLandmark"
     },
     "layout-grid": {
       "lucide": "lucideLayoutGrid"
@@ -238,6 +247,9 @@
     "mail-check": {
       "lucide": "lucideMailCheck"
     },
+    "map-pin": {
+      "lucide": "lucideMapPin"
+    },
     "maximize": {
       "lucide": "lucideMaximize"
     },
@@ -259,11 +271,23 @@
     "octagon-x": {
       "lucide": "lucideOctagonX"
     },
+    "package": {
+      "lucide": "lucidePackage"
+    },
     "panel-left": {
       "lucide": "lucidePanelLeft"
     },
+    "pause": {
+      "lucide": "lucidePause"
+    },
     "pencil": {
       "lucide": "lucidePencil"
+    },
+    "phone": {
+      "lucide": "lucidePhone"
+    },
+    "play": {
+      "lucide": "lucidePlay"
     },
     "plus": {
       "lucide": "lucidePlus"
@@ -330,6 +354,9 @@
     },
     "triangle-alert": {
       "lucide": "lucideTriangleAlert"
+    },
+    "truck": {
+      "lucide": "lucideTruck"
     },
     "underline": {
       "lucide": "lucideUnderline"

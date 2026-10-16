@@ -380,3 +380,115 @@ describe('filterInstalledPackages', () => {
     await expect(filterInstalledPackages(['clsx'], '/project')).resolves.toEqual(['clsx']);
   });
 });
+
+describe('exact pins', () => {
+  let mod: typeof import('@cli/utils/package-manager.js');
+
+  beforeEach(() => {
+    jest.resetModules();
+    mockExeca.mockReset();
+    mockExeca.mockResolvedValue({});
+    mockExistsSync.mockReset();
+    mockReadFile.mockReset();
+    mod = getModuleFresh();
+  });
+
+  it('tells a pinned release from a range, a tag and a bare name', () => {
+    expect(mod.isExactSpec('ng-mapcn@22.0.0-beta.7')).toBe(true);
+    expect(mod.isExactSpec('@scope/pkg@1.2.3')).toBe(true);
+    expect(mod.isExactSpec('maplibre-gl@^6.11.2')).toBe(false);
+    expect(mod.isExactSpec('clsx@latest')).toBe(false);
+    expect(mod.isExactSpec('clsx')).toBe(false);
+    expect(mod.isExactSpec('@angular/cdk')).toBe(false);
+  });
+
+  it('saves a pinned release exactly, in a batch of its own', async () => {
+    await mod.installPackagesWithRetry(['ng-mapcn@22.0.0-beta.7', 'maplibre-gl@^6.11.2'], '/project', 'npm');
+
+    expect(mockExeca).toHaveBeenCalledTimes(2);
+    expect(mockExeca.mock.calls[0][1]).toEqual(expect.arrayContaining(['maplibre-gl@^6.11.2']));
+    expect(mockExeca.mock.calls[0][1]).not.toContain('--save-exact');
+    expect(mockExeca.mock.calls[1][1]).toEqual(expect.arrayContaining(['ng-mapcn@22.0.0-beta.7', '--save-exact']));
+  });
+
+  it("uses each manager's own flag", async () => {
+    await mod.installPackagesWithRetry(['ng-mapcn@22.0.0-beta.7'], '/project', 'bun');
+    await mod.installPackagesWithRetry(['ng-mapcn@22.0.0-beta.7'], '/project', 'yarn');
+    await mod.installPackagesWithRetry(['ng-mapcn@22.0.0-beta.7'], '/project', 'pnpm');
+
+    expect(mockExeca.mock.calls[0][1]).toContain('--exact');
+    expect(mockExeca.mock.calls[1][1]).toContain('--exact');
+    expect(mockExeca.mock.calls[2][1]).toContain('--save-exact');
+  });
+
+  it('adds no flag when nothing is pinned', async () => {
+    await mod.installPackagesWithRetry(['clsx', '@angular/cdk@^21'], '/project', 'npm');
+
+    expect(mockExeca).toHaveBeenCalledTimes(1);
+    expect(mockExeca.mock.calls[0][1]).not.toContain('--save-exact');
+  });
+
+  describe('filterInstalledPackages', () => {
+    const declared = (dependencies: Record<string, string>) => {
+      mockReadFile.mockResolvedValue(JSON.stringify({ dependencies }));
+      mockExistsSync.mockReturnValue(true);
+    };
+
+    it('keeps a package declared below the release asked for within the same major', async () => {
+      declared({ 'maplibre-gl': '^6.0.0' });
+
+      await expect(mod.filterInstalledPackages(['maplibre-gl@^6.11.2'], '/project')).resolves.toEqual([
+        'maplibre-gl@^6.11.2',
+      ]);
+    });
+
+    it('keeps a package declared on an older major (MapLibre 5 where 6 is needed)', async () => {
+      declared({ 'maplibre-gl': '^5.2.0' });
+
+      await expect(mod.filterInstalledPackages(['maplibre-gl@^6.11.2'], '/project')).resolves.toEqual([
+        'maplibre-gl@^6.11.2',
+      ]);
+    });
+
+    it('drops a package that already meets the release, and a pin already saved exact or with a caret', async () => {
+      declared({ 'maplibre-gl': '^6.12.0', 'ng-mapcn': '22.0.0-beta.7' });
+
+      await expect(
+        mod.filterInstalledPackages(['maplibre-gl@^6.11.2', 'ng-mapcn@22.0.0-beta.7'], '/project'),
+      ).resolves.toEqual([]);
+
+      declared({ 'ng-mapcn': '^22.0.0-beta.7' });
+      await expect(mod.filterInstalledPackages(['ng-mapcn@22.0.0-beta.7'], '/project')).resolves.toEqual([]);
+    });
+
+    it('keeps a pin that is declared at another pre-release', async () => {
+      declared({ 'ng-mapcn': '22.0.0-beta.5' });
+
+      await expect(mod.filterInstalledPackages(['ng-mapcn@22.0.0-beta.7'], '/project')).resolves.toEqual([
+        'ng-mapcn@22.0.0-beta.7',
+      ]);
+    });
+  });
+
+  describe('findOutdatedInstalls', () => {
+    it('reports a package installed on an older major than the one asked for', async () => {
+      mockReadFile.mockResolvedValue(JSON.stringify({ version: '5.16.0' }));
+
+      await expect(mod.findOutdatedInstalls(['maplibre-gl@^6.11.2', 'clsx'], '/project')).resolves.toEqual([
+        { name: 'maplibre-gl', wanted: '^6.11.2', installed: '5.16.0' },
+      ]);
+    });
+
+    it('accepts a package on the major asked for, or newer', async () => {
+      mockReadFile.mockResolvedValue(JSON.stringify({ version: '6.11.2' }));
+
+      await expect(mod.findOutdatedInstalls(['maplibre-gl@^6.11.2', 'x@^5'], '/project')).resolves.toEqual([]);
+    });
+
+    it('says nothing about a package it cannot find', async () => {
+      mockReadFile.mockRejectedValue(new Error('ENOENT'));
+
+      await expect(mod.findOutdatedInstalls(['maplibre-gl@^6.11.2'], '/project')).resolves.toEqual([]);
+    });
+  });
+});

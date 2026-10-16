@@ -1,0 +1,32 @@
+{
+  "$schema": "https://zardui.com/schema/registry-item.json",
+  "name": "map-draw",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "map-draw.imports.ts",
+      "content": "import { MapDrawComponent } from 'ng-mapcn/draw';\n\nimport { ZardMapImports } from '@/shared/components/map/map.imports';\n\n/**\n * Everything to draw on a map: the map bundle plus `ng-map-draw`. Drawing is optional because it needs `terra-draw`\n * and `terra-draw-maplibre-gl-adapter`, which the core `map` item never loads.\n */\nexport const ZardMapDrawImports = [...ZardMapImports, MapDrawComponent] as const;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from 'ng-mapcn/draw';\nexport * from './map-draw.imports';\n"
+    }
+  ],
+  "dependencies": [
+    "terra-draw@^1.37.0",
+    "terra-draw-maplibre-gl-adapter@^1.5.0"
+  ],
+  "registryDependencies": [
+    "map"
+  ],
+  "minAngularMajor": 22,
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
+    }
+  }
+}

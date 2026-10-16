@@ -20,4 +20,8 @@ const envRoutes = [...envContent.matchAll(/path:\s*'(\/docs\/installation\/[^']+
   m => m[1],
 );
 
-writeFileSync(join(__dirname, 'prerender-routes.txt'), ['/', ...routes, ...envRoutes].join('\n'));
+// Gallery category pages (/maps/logistics, ...) are routes of their own with their own title and description, but
+// they are not nav items, so they are listed here. The first category lives at /maps itself.
+const mapCategories = ['logistics', 'data', '3d', 'draw'].map(category => `/maps/${category}`);
+
+writeFileSync(join(__dirname, 'prerender-routes.txt'), ['/', ...routes, ...mapCategories, ...envRoutes].join('\n'));

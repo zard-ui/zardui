@@ -39,6 +39,8 @@ export const ALIASES: Record<string, string[]> = {
   chart: ['graph', 'plot', 'visualization'],
   progress: ['progress bar', 'meter'],
   field: ['form', 'label', 'validation'],
+  map: ['maps', 'geo', 'location', 'maplibre', 'markers', 'heatmap'],
+  'map-draw': ['draw polygon', 'drawing', 'draw on map'],
 };
 
 /** Components known under this other name: `toast` → `sonner`, `modal` → `dialog`, `alert-dialog`. */

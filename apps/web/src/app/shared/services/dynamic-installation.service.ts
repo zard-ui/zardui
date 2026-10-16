@@ -64,8 +64,8 @@ export class DynamicInstallationService {
 
       for (const block of files) {
         steps.push({
-          title: `Add ${block.title ?? 'file'}`,
-          subtitle: `Create the following file in your project.`,
+          title: block.step?.title ?? `Add ${block.title ?? 'file'}`,
+          subtitle: block.step?.subtitle ?? `Create the following file in your project.`,
           codeBlockData: block,
         });
       }

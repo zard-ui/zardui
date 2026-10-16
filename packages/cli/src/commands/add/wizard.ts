@@ -61,16 +61,24 @@ export interface AddWizardOptions {
   readonly preselected: readonly string[];
   /** Loads the available names; only called when there is a selection to make. */
   loadNames(): Promise<string[]>;
-  resolve(names: string[]): Promise<{ components: ComponentMeta[]; dependencies: string[] }>;
+  resolve(
+    names: string[],
+  ): Promise<{ components: ComponentMeta[]; dependencies: string[]; devDependencies?: string[] }>;
   /** Skips the confirmation (`--yes`). */
   readonly skipConfirmation: boolean;
-  installDependencies(packages: string[]): Promise<void>;
+  installDependencies(packages: string[], dev?: boolean): Promise<void>;
   installComponent(component: ComponentMeta): Promise<void>;
   /** Only called when dark-mode is part of the install. */
   setupDarkMode(indexHtml: string): Promise<void>;
   /** Only called when typeset is part of the install. */
   setupTypeset(): Promise<void>;
   setupUtilities(): Promise<void>;
+  /**
+   * Wires the global stylesheet and the build for the items that declare it (`build` in the registry).
+   * Called with what was asked for and what failed to install; it also runs when everything was already there,
+   * since the wiring is idempotent and may be the part that is missing.
+   */
+  setupBuild?(names: string[], failed: string[]): Promise<void>;
   /**
    * Where index.html should be, according to the configured project type.
    *
@@ -180,9 +188,10 @@ export async function runAddWizard(options: AddWizardOptions): Promise<AddWizard
     state.phase = 'resolving';
     ctx.refresh();
 
-    const { components, dependencies } = await options.resolve(names);
+    const { components, dependencies, devDependencies = [] } = await options.resolve(names);
 
     if (components.length === 0) {
+      await options.setupBuild?.(names, []);
       state.phase = 'done';
       state.installed = [];
       ctx.refresh();
@@ -192,7 +201,7 @@ export async function runAddWizard(options: AddWizardOptions): Promise<AddWizard
     }
 
     state.componentCount = components.length;
-    state.dependencyCount = dependencies.length;
+    state.dependencyCount = dependencies.length + devDependencies.length;
 
     if (!options.skipConfirmation) {
       state.phase = 'confirming';
@@ -201,20 +210,26 @@ export async function runAddWizard(options: AddWizardOptions): Promise<AddWizard
         ctx.cancel();
         return;
       }
-      state.transcript.push(['install', `${components.length} component(s), ${dependencies.length} dependencies`]);
+      state.transcript.push([
+        'install',
+        `${components.length} component(s), ${dependencies.length + devDependencies.length} dependencies`,
+      ]);
     }
 
     state.phase = 'installing';
     state.tasks = [
-      ...(dependencies.length ? [{ label: 'dependencies', note: dependencies.join(', ') }] : []),
+      ...(dependencies.length || devDependencies.length
+        ? [{ label: 'dependencies', note: [...dependencies, ...devDependencies].join(', ') }]
+        : []),
       ...components.map(component => ({ label: component.name, note: 'component source' })),
     ];
     state.tasksDone = 0;
     state.taskStartedAt = Date.now();
     ctx.refresh();
 
-    if (dependencies.length) {
-      await options.installDependencies(dependencies);
+    if (dependencies.length || devDependencies.length) {
+      if (dependencies.length) await options.installDependencies(dependencies);
+      if (devDependencies.length) await options.installDependencies(devDependencies, true);
       state.tasksDone++;
       state.taskStartedAt = Date.now();
       ctx.refresh();
@@ -243,6 +258,8 @@ export async function runAddWizard(options: AddWizardOptions): Promise<AddWizard
     if (state.installed.includes(UTILITIES)) {
       await options.setupUtilities();
     }
+
+    await options.setupBuild?.(names, failed);
 
     if (components.some(component => component.name === DARK_MODE)) {
       state.phase = 'darkMode';

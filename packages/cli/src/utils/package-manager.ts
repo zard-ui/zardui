@@ -118,11 +118,16 @@ export async function installPackages(
   packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
   isDev = false,
   legacyPeerDeps = false,
+  saveExact = false,
 ): Promise<void> {
   const { execa } = await import('execa');
   const installCmd = await getInstallCommand(packageManager, isDev);
 
   const args = [...installCmd, ...packages, ...speedFlags(packageManager)];
+
+  if (saveExact) {
+    args.push(packageManager === 'yarn' || packageManager === 'bun' ? '--exact' : '--save-exact');
+  }
 
   if (legacyPeerDeps && packageManager === 'npm') {
     args.push('--legacy-peer-deps');
@@ -194,18 +199,45 @@ export async function installPackagesWithRetry(
 ): Promise<void> {
   if (packages.length === 0) return;
 
+  // `name@1.2.3` asks for that release and nothing else, but the managers save it as `^1.2.3` unless told
+  // otherwise — which lets a pre-1.0 package drift on the next install. The flag is per command, not per
+  // package, so the exact ones go in a batch of their own.
+  const exact = packages.filter(isExactSpec);
+  const ranged = packages.filter(spec => !isExactSpec(spec));
+
+  if (exact.length && ranged.length) {
+    await installBatch(ranged, cwd, packageManager, isDev, false);
+    await installBatch(exact, cwd, packageManager, isDev, true);
+    return;
+  }
+
+  await installBatch(packages, cwd, packageManager, isDev, exact.length > 0);
+}
+
+/** A spec that names one release (`ng-mapcn@22.0.0-beta.7`), as opposed to a range or a dist-tag. */
+export function isExactSpec(spec: string): boolean {
+  return /^(?:@[^/@]+\/)?[^/@]+@\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(spec);
+}
+
+async function installBatch(
+  packages: string[],
+  cwd: string,
+  packageManager: PackageManager,
+  isDev: boolean,
+  saveExact: boolean,
+): Promise<void> {
   if (peerRelaxationEngaged) {
-    await installPackages(packages, cwd, packageManager, isDev, true);
+    await installPackages(packages, cwd, packageManager, isDev, true, saveExact);
     return;
   }
 
   try {
-    await installPackages(packages, cwd, packageManager, isDev);
+    await installPackages(packages, cwd, packageManager, isDev, false, saveExact);
   } catch (error) {
     if (!canRelaxPeers(packageManager)) throw error;
 
     logger.warn('Installation failed, retrying with relaxed peer dependency resolution...');
-    await installPackages(packages, cwd, packageManager, isDev, true);
+    await installPackages(packages, cwd, packageManager, isDev, true, saveExact);
     peerRelaxationEngaged = true;
   }
 }
@@ -233,9 +265,78 @@ export async function filterInstalledPackages(packages: string[], cwd: string): 
     if (!declaredRange) return true;
     if (!isResolvable(name, cwd)) return true;
     if (range && majorOf(range) !== majorOf(declaredRange)) return true;
+    // Same major, older release: `maplibre-gl@^6.11.2` is not met by a declared `^6.0.0`, and a pinned
+    // `ng-mapcn@22.0.0-beta.7` is not met by `22.0.0-beta.5`.
+    if (range && isBelow(declaredRange, range)) return true;
 
     return false;
   });
+}
+
+/** The numeric `major.minor.patch` a range starts at, ignoring operators and pre-release tags. */
+function floorOf(range: string): [number, number, number] | null {
+  const match = /(\d+)(?:\.(\d+))?(?:\.(\d+))?/.exec(range);
+  return match ? [Number(match[1]), Number(match[2] ?? 0), Number(match[3] ?? 0)] : null;
+}
+
+/** Whether what the project declares starts below what is wanted — within the same major, or at all. */
+function isBelow(declaredRange: string, wantedRange: string): boolean {
+  const declared = floorOf(declaredRange);
+  const wanted = floorOf(wantedRange);
+  if (!declared || !wanted) return false;
+
+  for (let index = 0; index < 3; index++) {
+    if (declared[index] !== wanted[index]) return declared[index] < wanted[index];
+  }
+
+  // Same numbers: only a pre-release tag can still tell them apart, and only an exact pin cares.
+  return isExactSpec(`x@${wantedRange}`) && declaredRange.replace(/^[\^~]/, '') !== wantedRange;
+}
+
+export interface OutdatedInstall {
+  name: string;
+  wanted: string;
+  installed: string;
+}
+
+/**
+ * The packages whose installed release has an older major than the one asked for.
+ *
+ * The package manager can "succeed" and still leave the old one: a peer conflict relaxed by the retry, or a
+ * lockfile that wins. For most packages that is a warning in the build; for the ones an item cannot work without
+ * (MapLibre 5 where ng-mapcn 22 needs 6) it is a blank screen, so the caller stops with a message instead.
+ */
+export async function findOutdatedInstalls(specs: readonly string[], cwd: string): Promise<OutdatedInstall[]> {
+  const outdated: OutdatedInstall[] = [];
+
+  for (const spec of specs) {
+    const { name, range } = parseSpec(spec);
+    const wantedMajor = range ? Number(majorOf(range)) : NaN;
+    if (Number.isNaN(wantedMajor)) continue;
+
+    const installed = await readInstalledVersion(name, cwd);
+    if (installed && Number(majorOf(installed)) < wantedMajor)
+      outdated.push({ name, wanted: range as string, installed });
+  }
+
+  return outdated;
+}
+
+async function readInstalledVersion(name: string, cwd: string): Promise<string | null> {
+  let dir = path.resolve(cwd);
+
+  for (;;) {
+    try {
+      const manifest = JSON.parse(await readFile(path.join(dir, 'node_modules', name, 'package.json'), 'utf8'));
+      if (typeof manifest.version === 'string') return manifest.version;
+    } catch {
+      // Not here: look one level up, where a workspace hoists it.
+    }
+
+    const parent = path.dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
+  }
 }
 
 function parseSpec(spec: string): { name: string; range: string | null } {

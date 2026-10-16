@@ -15,6 +15,30 @@ export interface AboutData {
   title?: string;
   description: string;
   link?: { label: string; href: string };
+  /** More credits, listed under the description. */
+  links?: { label: string; href: string; description?: string }[];
+  /** A short caveat shown under the credits, such as a pre-1.0 warning. */
+  note?: string;
+}
+
+export interface SectionTableLink {
+  text: string;
+  href: string;
+}
+
+/** A plain table. Cells take `code` and **bold** like any description, or a link. */
+export interface SectionTable {
+  columns: string[];
+  rows: (string | SectionTableLink)[][];
+}
+
+/** A titled block between the examples and the API, with its own anchor in the page navigation. */
+export interface ComponentSection {
+  id: string;
+  title: string;
+  description?: string;
+  table?: SectionTable;
+  examples?: ExampleData[];
 }
 
 export interface ComponentData {
@@ -28,6 +52,10 @@ export interface ComponentData {
   composition?: CodeBlockData;
   fullWidth?: boolean;
   api?: ApiSection[];
+  /** Extra blocks after the examples, such as the "Map styles" section of the map. */
+  sections?: ComponentSection[];
+  /** A component rendered at the right of the page title, for a control that drives every demo on the page. */
+  headerAction?: ComponentType<unknown>;
 }
 
 /** A standalone code block with an optional heading/description, shown around (or instead of) a demo. */
@@ -57,6 +85,15 @@ export interface ExampleData {
   fullScreen?: boolean;
   fullWidth?: boolean;
   flexAlign?: 'start' | 'center' | 'end';
+  /**
+   * Renders the demo only while it is on (or near) the screen, and removes it again once it is far away. For demos
+   * that hold a WebGL context: a page with dozens of maps would otherwise run out of contexts.
+   */
+  lazyRender?: boolean;
+  /** Shows a message instead of the demo when the browser has no WebGL2. */
+  requiresWebgl2?: boolean;
+  /** Less padding around the demo, for demos that are a frame of their own, such as a map. */
+  compact?: boolean;
 }
 
 /** The groups the components are listed under, in `llms.txt` and anywhere else that needs them. */
@@ -247,6 +284,24 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Displays a keyboard key or shortcut.',
     category: 'Misc',
     loadData: () => import('@zard/components/kbd/demo/kbd').then(m => m.KBD),
+  },
+  {
+    componentName: 'map',
+    description: 'Beautiful maps built on MapLibre GL, themed with zard. Copy and paste into your apps.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/map/demo/map').then(m => m.MAP),
+  },
+  {
+    componentName: 'map-draw',
+    description: 'Draw, select and edit points, lines and polygons on a map. An optional addition to the map.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/map-draw/demo/map-draw').then(m => m.MAP_DRAW),
+  },
+  {
+    componentName: 'map-style-select',
+    description: 'Picks the basemap of every map on the page, live. Presets are grouped by provider.',
+    category: 'Form & Input',
+    loadData: () => import('@zard/components/map-style-select/demo/map-style-select').then(m => m.MAP_STYLE_SELECT),
   },
   {
     componentName: 'marker',

@@ -31,6 +31,8 @@ export * from './lib/shared/components/input-otp';
 export * from './lib/shared/components/item';
 export * from './lib/shared/components/kbd';
 export * from './lib/shared/components/marker';
+export * from './lib/shared/components/map';
+export * from './lib/shared/components/map-style-select';
 export * from './lib/shared/components/message';
 export * from './lib/shared/components/navigation-menu';
 export * from './lib/shared/components/pagination';

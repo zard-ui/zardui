@@ -18,6 +18,8 @@
     "embla-carousel-wheel-gestures": "^8.1.0",
     "@ng-icons/core": ">=33.1.0 <37.0.0",
     "@ng-icons/lucide": ">=33.1.0 <37.0.0",
+    "maplibre-gl": "^6.11.2",
+    "ng-mapcn": "22.0.0-beta.7",
     "ngx-echarts": "^21.0.0 || ^22.0.0",
     "ngx-sonner": "^3.1.0",
     "rxjs": "^7.8.2",
