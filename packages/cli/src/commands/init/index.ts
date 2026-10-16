@@ -290,6 +290,8 @@ function nextStepsFor(config: Config): string[] {
     'The consuming app still needs the Tailwind PostCSS pipeline (tailwindcss, @tailwindcss/postcss,',
     'postcss, tailwindcss-animate and a .postcssrc.json), to register provideZard() in its',
     `app.config.ts and to import the theme tokens from this library's ${path.basename(config.tailwind.css)}.`,
+    // A library has no index.html, so `--rtl` could not set the direction anywhere.
+    ...(config.rtl ? ['It also needs dir="rtl" on the <html> tag of its index.html to read right to left.'] : []),
     '',
     'You can now add components using:',
   ];
