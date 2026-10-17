@@ -15,6 +15,16 @@ export interface ZardMapStyles {
   readonly dark: ZardMapStyleValue;
 }
 
+/** The few colors the picker's mini-map swatch is drawn with: land, water, a park, minor roads and a major road. */
+export interface ZardMapSwatchPalette {
+  readonly land: string;
+  readonly water: string;
+  readonly park: string;
+  readonly road: string;
+  readonly casing: string;
+  readonly major: string;
+}
+
 export interface ZardMapPreset {
   /** Stable id: what `provideZardMap({ style })` takes and what `persist` stores. */
   readonly id: string;
@@ -30,8 +40,8 @@ export interface ZardMapPreset {
   readonly devOnly: boolean;
   /** Attribution the basemap requires. MapLibre prints it in the corner of every map, keep it visible. */
   readonly attribution: string;
-  /** Representative colors of the two variants, for the small swatch next to the label. */
-  readonly swatch: { readonly light: string; readonly dark: string };
+  /** What the basemap looks like in light and dark, as the colors of the mini-map swatch next to the label. */
+  readonly swatch: { readonly light: ZardMapSwatchPalette; readonly dark: ZardMapSwatchPalette };
   /**
    * The light and dark styles. Key-based presets get the key; the keyless ones ignore it. Keep the returned objects
    * referentially stable for the same input: `<ng-map>` compares styles by identity before it calls `setStyle`.
@@ -162,7 +172,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: false,
     devOnly: false,
     attribution: CARTO_ATTRIBUTION,
-    swatch: { light: '#f1f1ef', dark: '#1f1f1f' },
+    swatch: {
+      light: {
+        land: '#fafaf8',
+        water: '#d4dadc',
+        park: '#e9ede4',
+        road: '#ffffff',
+        casing: '#e0e0e0',
+        major: '#ffffff',
+      },
+      dark: {
+        land: '#161616',
+        water: '#2e3a42',
+        park: '#1c241c',
+        road: '#3a3a3a',
+        casing: '#0c0c0c',
+        major: '#5c5c5c',
+      },
+    },
     styles: keyless({ light: carto('positron'), dark: carto('dark-matter') }),
   },
   {
@@ -174,7 +201,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: false,
     devOnly: false,
     attribution: CARTO_ATTRIBUTION,
-    swatch: { light: '#ede5d3', dark: '#1f1f1f' },
+    swatch: {
+      light: {
+        land: '#f3eee4',
+        water: '#a8cfe0',
+        park: '#cfe3c0',
+        road: '#ffffff',
+        casing: '#e0d6c4',
+        major: '#f9d99a',
+      },
+      dark: {
+        land: '#161616',
+        water: '#2e3a42',
+        park: '#1c241c',
+        road: '#3a3a3a',
+        casing: '#0c0c0c',
+        major: '#5c5c5c',
+      },
+    },
     styles: keyless({ light: carto('voyager'), dark: carto('dark-matter') }),
   },
   {
@@ -186,7 +230,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
-    swatch: { light: '#d4e3c6', dark: '#1e232b' },
+    swatch: {
+      light: {
+        land: '#f2f3ec',
+        water: '#9ec9e2',
+        park: '#cfe5bd',
+        road: '#ffffff',
+        casing: '#d9d9d9',
+        major: '#fcd6a4',
+      },
+      dark: {
+        land: '#17181c',
+        water: '#24384a',
+        park: '#1d281d',
+        road: '#3a3d44',
+        casing: '#0e0f12',
+        major: '#5d6170',
+      },
+    },
     styles: keyless({ light: openFreeMap('liberty'), dark: openFreeMap('dark') }),
   },
   {
@@ -198,7 +259,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
-    swatch: { light: '#f3ead7', dark: '#1e232b' },
+    swatch: {
+      light: {
+        land: '#f5efe0',
+        water: '#a3d1f0',
+        park: '#c8e6b0',
+        road: '#ffffff',
+        casing: '#e3d6b8',
+        major: '#ffc97a',
+      },
+      dark: {
+        land: '#17181c',
+        water: '#24384a',
+        park: '#1d281d',
+        road: '#3a3d44',
+        casing: '#0e0f12',
+        major: '#5d6170',
+      },
+    },
     styles: keyless({ light: openFreeMap('bright'), dark: openFreeMap('dark') }),
   },
   {
@@ -210,7 +288,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
-    swatch: { light: '#eceae6', dark: '#1e232b' },
+    swatch: {
+      light: {
+        land: '#f2f3f0',
+        water: '#c2c8ca',
+        park: '#e3e8de',
+        road: '#ffffff',
+        casing: '#d9d9d9',
+        major: '#ffffff',
+      },
+      dark: {
+        land: '#17181c',
+        water: '#24384a',
+        park: '#1d281d',
+        road: '#3a3d44',
+        casing: '#0e0f12',
+        major: '#5d6170',
+      },
+    },
     styles: keyless({ light: openFreeMap('positron'), dark: openFreeMap('dark') }),
   },
   {
@@ -222,7 +317,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
-    swatch: { light: '#1e232b', dark: '#1e232b' },
+    swatch: {
+      light: {
+        land: '#17181c',
+        water: '#24384a',
+        park: '#1d281d',
+        road: '#3a3d44',
+        casing: '#0e0f12',
+        major: '#5d6170',
+      },
+      dark: {
+        land: '#17181c',
+        water: '#24384a',
+        park: '#1d281d',
+        road: '#3a3d44',
+        casing: '#0e0f12',
+        major: '#5d6170',
+      },
+    },
     styles: keyless({ light: openFreeMap('dark'), dark: openFreeMap('dark') }),
   },
   {
@@ -234,7 +346,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
-    swatch: { light: '#45516e', dark: '#45516e' },
+    swatch: {
+      light: {
+        land: '#45516e',
+        water: '#2f3c58',
+        park: '#4a5b70',
+        road: '#5b6a88',
+        casing: '#333e58',
+        major: '#7a89a6',
+      },
+      dark: {
+        land: '#45516e',
+        water: '#2f3c58',
+        park: '#4a5b70',
+        road: '#5b6a88',
+        casing: '#333e58',
+        major: '#7a89a6',
+      },
+    },
     styles: keyless({ light: openFreeMap('fiord'), dark: openFreeMap('fiord') }),
   },
   {
@@ -246,7 +375,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: false,
     devOnly: true,
     attribution: OSM_ATTRIBUTION,
-    swatch: { light: '#e7e3d8', dark: '#3d3b36' },
+    swatch: {
+      light: {
+        land: '#f2efe9',
+        water: '#aad3df',
+        park: '#c8facc',
+        road: '#ffffff',
+        casing: '#d6c9b6',
+        major: '#fcd6a4',
+      },
+      dark: {
+        land: '#3d3b36',
+        water: '#2f4a52',
+        park: '#3a4a3a',
+        road: '#55524b',
+        casing: '#2a2926',
+        major: '#7a6a4f',
+      },
+    },
     styles: () => OSM_STYLES,
   },
   {
@@ -258,7 +404,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: true,
     devOnly: false,
     attribution: MAPTILER_ATTRIBUTION,
-    swatch: { light: '#f1efe9', dark: '#262a31' },
+    swatch: {
+      light: {
+        land: '#f8f4f0',
+        water: '#9ec7ef',
+        park: '#d4e6c3',
+        road: '#ffffff',
+        casing: '#e2d6c8',
+        major: '#ffd37f',
+      },
+      dark: {
+        land: '#1f242b',
+        water: '#14324d',
+        park: '#21332a',
+        road: '#3a4250',
+        casing: '#12161b',
+        major: '#9a7238',
+      },
+    },
     styles: keyed(key => ({ light: mapTiler('streets-v4', key), dark: mapTiler('streets-v4-dark', key) })),
   },
   {
@@ -270,7 +433,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: true,
     devOnly: false,
     attribution: MAPTILER_ATTRIBUTION,
-    swatch: { light: '#e8ecee', dark: '#24292e' },
+    swatch: {
+      light: {
+        land: '#e8ecee',
+        water: '#c4d3dc',
+        park: '#dde6dc',
+        road: '#ffffff',
+        casing: '#d3d9dc',
+        major: '#f0e4c8',
+      },
+      dark: {
+        land: '#24292e',
+        water: '#16222d',
+        park: '#263029',
+        road: '#3a4048',
+        casing: '#181c20',
+        major: '#5a636c',
+      },
+    },
     styles: keyed(key => ({ light: mapTiler('dataviz-v4', key), dark: mapTiler('dataviz-v4-dark', key) })),
   },
   {
@@ -282,7 +462,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: true,
     devOnly: false,
     attribution: MAPTILER_ATTRIBUTION,
-    swatch: { light: '#3f5a3b', dark: '#3f5a3b' },
+    swatch: {
+      light: {
+        land: '#3f5a3b',
+        water: '#1c3a52',
+        park: '#2f4a2c',
+        road: '#c9c3a8',
+        casing: '#2b2f26',
+        major: '#e6d9a8',
+      },
+      dark: {
+        land: '#3f5a3b',
+        water: '#1c3a52',
+        park: '#2f4a2c',
+        road: '#c9c3a8',
+        casing: '#2b2f26',
+        major: '#e6d9a8',
+      },
+    },
     styles: keyed(key => ({ light: mapTiler('hybrid', key), dark: mapTiler('hybrid', key) })),
   },
   {
@@ -294,7 +491,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: true,
     devOnly: false,
     attribution: MAPTILER_ATTRIBUTION,
-    swatch: { light: '#dfe6cf', dark: '#2a3128' },
+    swatch: {
+      light: {
+        land: '#dfe6cf',
+        water: '#a5cbe0',
+        park: '#c2dca8',
+        road: '#ffffff',
+        casing: '#cbc6b0',
+        major: '#f5c77a',
+      },
+      dark: {
+        land: '#2a3128',
+        water: '#14324d',
+        park: '#21332a',
+        road: '#3f4a40',
+        casing: '#151a14',
+        major: '#8a7040',
+      },
+    },
     styles: keyed(key => ({ light: mapTiler('outdoor-v4', key), dark: mapTiler('outdoor-v4-dark', key) })),
   },
   {
@@ -306,7 +520,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: true,
     devOnly: false,
     attribution: STADIA_ATTRIBUTION,
-    swatch: { light: '#eeeeec', dark: '#23252b' },
+    swatch: {
+      light: {
+        land: '#f4f4f1',
+        water: '#b6d0e0',
+        park: '#dbe7d4',
+        road: '#ffffff',
+        casing: '#e1e1dc',
+        major: '#f2e3c6',
+      },
+      dark: {
+        land: '#2a2c31',
+        water: '#16181b',
+        park: '#2c3a30',
+        road: '#44474d',
+        casing: '#1c1e21',
+        major: '#62666d',
+      },
+    },
     styles: keyed(key => ({ light: stadia('alidade_smooth', key), dark: stadia('alidade_smooth_dark', key) })),
   },
   {
@@ -318,7 +549,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: true,
     devOnly: false,
     attribution: STADIA_ATTRIBUTION,
-    swatch: { light: '#d9e6c8', dark: '#d9e6c8' },
+    swatch: {
+      light: {
+        land: '#e4ead6',
+        water: '#a9cfe3',
+        park: '#c9e0b0',
+        road: '#ffffff',
+        casing: '#d2d0bd',
+        major: '#f5d28a',
+      },
+      dark: {
+        land: '#e4ead6',
+        water: '#a9cfe3',
+        park: '#c9e0b0',
+        road: '#ffffff',
+        casing: '#d2d0bd',
+        major: '#f5d28a',
+      },
+    },
     styles: keyed(key => ({ light: stadia('outdoors', key), dark: stadia('outdoors', key) })),
   },
   {
@@ -330,7 +578,24 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     requiresKey: true,
     devOnly: false,
     attribution: STADIA_ATTRIBUTION,
-    swatch: { light: '#f3efe6', dark: '#f3efe6' },
+    swatch: {
+      light: {
+        land: '#f3efe6',
+        water: '#a8d3e8',
+        park: '#c8e2b8',
+        road: '#ffffff',
+        casing: '#d9cdb8',
+        major: '#fbc77d',
+      },
+      dark: {
+        land: '#f3efe6',
+        water: '#a8d3e8',
+        park: '#c8e2b8',
+        road: '#ffffff',
+        casing: '#d9cdb8',
+        major: '#fbc77d',
+      },
+    },
     styles: keyed(key => ({ light: stadia('osm_bright', key), dark: stadia('osm_bright', key) })),
   },
 ];

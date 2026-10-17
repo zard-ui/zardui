@@ -5,7 +5,7 @@ import { lucideMapPin, lucideSearch } from '@ng-icons/lucide';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
-import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardCardComponent } from '@/shared/components/card/card.component';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardMapImports } from '@/shared/components/map/map.imports';
 
@@ -98,15 +98,58 @@ const HOME: [number, number] = [13.405, 52.52];
 
 @Component({
   selector: 'z-demo-map-block-store-locator',
-  imports: [ZardMapImports, ZardCardImports, ZardBadgeComponent, ZardInputComponent, NgIcon],
+  imports: [ZardMapImports, ZardBadgeComponent, ZardCardComponent, ZardInputComponent, NgIcon],
   template: `
-    <div class="grid w-full gap-4 lg:grid-cols-3">
-      <z-card class="gap-3 lg:h-136">
-        <z-card-header>
-          <z-card-title zTitle="Find a store" />
-          <z-card-description zDescription="{{ results().length }} stores in Berlin" />
-        </z-card-header>
-        <z-card-content class="flex min-h-0 flex-1 flex-col gap-3">
+    <div class="bg-background @container relative size-full overflow-hidden">
+      <ng-map [center]="home" [zoom]="11.8" [options]="mapOptions" (mapReady)="map = $event">
+        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        @for (store of results(); track store.id) {
+          <ng-map-marker
+            [longitude]="store.lng"
+            [latitude]="store.lat"
+            [ariaLabel]="store.name"
+            (markerClick)="select(store)"
+          >
+            <ng-marker-content>
+              <div
+                class="border-background flex size-8 items-center justify-center rounded-full border-2 shadow-md transition-transform"
+                [class]="
+                  selected()?.id === store.id
+                    ? 'bg-primary text-primary-foreground scale-110'
+                    : 'bg-background text-foreground'
+                "
+              >
+                <ng-icon name="lucideMapPin" class="size-4" aria-hidden="true" />
+              </div>
+            </ng-marker-content>
+          </ng-map-marker>
+        }
+        @if (selected(); as store) {
+          <ng-map-popup
+            [longitude]="store.lng"
+            [latitude]="store.lat"
+            [offset]="28"
+            [closeButton]="true"
+            [closeOnClick]="false"
+            (popupClose)="selected.set(null)"
+          >
+            <div class="flex flex-col gap-1 pr-4">
+              <p class="font-medium">{{ store.name }}</p>
+              <p class="text-muted-foreground text-xs">{{ store.address }}</p>
+              <p class="text-xs">{{ store.hours }}</p>
+            </div>
+          </ng-map-popup>
+        }
+      </ng-map>
+
+      <z-card
+        class="bg-card/90 absolute inset-x-3 bottom-3 z-10 h-80 gap-0 py-0 shadow-sm backdrop-blur-sm @3xl:inset-y-4 @3xl:right-auto @3xl:left-4 @3xl:h-auto @3xl:w-80"
+      >
+        <div class="flex flex-col gap-3 border-b p-3">
+          <div>
+            <p class="text-sm font-semibold">Find a store</p>
+            <p class="text-muted-foreground text-xs">{{ results().length }} stores in Berlin</p>
+          </div>
           <label class="relative block">
             <span class="sr-only">Search stores</span>
             <ng-icon
@@ -122,86 +165,55 @@ const HOME: [number, number] = [13.405, 52.52];
               (input)="onSearch($event)"
             />
           </label>
+        </div>
 
-          <ul class="-mx-1 flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-1" aria-label="Stores">
-            @for (store of results(); track store.id) {
-              <li>
-                <button
-                  type="button"
-                  class="hover:bg-muted focus-visible:ring-ring flex w-full flex-col gap-1 rounded-lg border p-3 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none"
-                  [class.bg-muted]="selected()?.id === store.id"
-                  [attr.aria-pressed]="selected()?.id === store.id"
-                  (click)="select(store)"
-                >
-                  <span class="flex items-center justify-between gap-2">
-                    <span class="text-sm font-medium">{{ store.name }}</span>
-                    <z-badge [zType]="store.open ? 'secondary' : 'outline'">
-                      {{ store.open ? 'Open' : 'Closed' }}
-                    </z-badge>
-                  </span>
-                  <span class="text-muted-foreground text-xs">
-                    {{ store.address }} · {{ distance(store) }} km from the center
-                  </span>
-                  <span class="text-muted-foreground text-xs">{{ store.hours }}</span>
-                </button>
-              </li>
-            } @empty {
-              <li class="text-muted-foreground py-8 text-center text-sm">No store matches your search.</li>
-            }
-          </ul>
-        </z-card-content>
-      </z-card>
-
-      <div class="relative h-96 overflow-hidden rounded-xl border lg:col-span-2 lg:h-136">
-        <ng-map [center]="home" [zoom]="11.2" (mapReady)="map = $event">
-          <ng-map-controls />
+        <ul class="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-2" aria-label="Stores">
           @for (store of results(); track store.id) {
-            <ng-map-marker
-              [longitude]="store.lng"
-              [latitude]="store.lat"
-              [ariaLabel]="store.name"
-              (markerClick)="select(store)"
-            >
-              <ng-marker-content>
-                <div
-                  class="border-background flex size-8 items-center justify-center rounded-full border-2 shadow-md transition-transform"
-                  [class]="
-                    selected()?.id === store.id
-                      ? 'bg-primary text-primary-foreground scale-110'
-                      : 'bg-background text-foreground'
-                  "
-                >
-                  <ng-icon name="lucideMapPin" class="size-4" aria-hidden="true" />
-                </div>
-              </ng-marker-content>
-            </ng-map-marker>
+            <li>
+              <button
+                type="button"
+                class="hover:bg-accent focus-visible:ring-ring flex w-full flex-col gap-1 rounded-lg border p-3 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none"
+                [class.bg-accent]="selected()?.id === store.id"
+                [attr.aria-pressed]="selected()?.id === store.id"
+                (click)="select(store)"
+              >
+                <span class="flex items-center justify-between gap-2">
+                  <span class="text-sm font-medium">{{ store.name }}</span>
+                  <z-badge [zType]="store.open ? 'secondary' : 'outline'">
+                    {{ store.open ? 'Open' : 'Closed' }}
+                  </z-badge>
+                </span>
+                <span class="text-muted-foreground text-xs">
+                  {{ store.address }} · {{ distance(store) }} km from the center
+                </span>
+                <span class="text-muted-foreground text-xs">{{ store.hours }}</span>
+              </button>
+            </li>
+          } @empty {
+            <li class="text-muted-foreground py-8 text-center text-sm">No store matches your search.</li>
           }
-          @if (selected(); as store) {
-            <ng-map-popup
-              [longitude]="store.lng"
-              [latitude]="store.lat"
-              [offset]="28"
-              [closeButton]="true"
-              [closeOnClick]="false"
-              (popupClose)="selected.set(null)"
-            >
-              <div class="flex flex-col gap-1 pr-4">
-                <p class="font-medium">{{ store.name }}</p>
-                <p class="text-muted-foreground text-xs">{{ store.address }}</p>
-                <p class="text-xs">{{ store.hours }}</p>
-              </div>
-            </ng-map-popup>
-          }
-        </ng-map>
-      </div>
+        </ul>
+      </z-card>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideMapPin, lucideSearch })],
+  host: { class: 'block size-full' },
 })
 export class ZardDemoMapBlockStoreLocatorComponent {
   protected map: MapLibreMap | null = null;
   protected readonly home = HOME;
+
+  /**
+   * The camera is padded by the panel over the map, so the city is centered in what is left of the frame: the panel
+   * is on the left of a wide frame, and at the bottom of a narrow one.
+   */
+  protected readonly mapOptions = {
+    scrollZoom: false,
+    padding: globalThis.matchMedia?.('(min-width: 816px)').matches
+      ? { left: 340, top: 16, bottom: 16, right: 16 }
+      : { bottom: 332, top: 16, left: 16, right: 16 },
+  };
 
   protected readonly query = signal('');
   protected readonly selected = signal<Store | null>(null);

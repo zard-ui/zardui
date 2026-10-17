@@ -1212,18 +1212,21 @@
       "name": "map-style-select",
       "type": "registry:component",
       "registryDependencies": [
+        "badge",
         "button",
         "input",
         "map",
-        "select"
+        "popover"
       ],
       "icons": {
         "family": "lucide",
         "symbols": [
-          "lucideKeyRound"
+          "lucideCheck",
+          "lucideChevronsUpDown"
         ],
         "tokens": [
-          "key-round"
+          "check",
+          "chevrons-up-down"
         ]
       },
       "files": [

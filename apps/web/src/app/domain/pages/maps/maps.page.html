@@ -5,41 +5,29 @@
     Beautiful Maps for the Web
   </h1>
   <p class="text-foreground max-w-3xl text-base text-balance sm:text-lg">
-    Ready-made maps built on MapLibre GL and ng-mapcn, themed with zard. Dashboards, trackers, 3D and drawing. Copy and
-    paste into your apps. Open Source. Free forever.
+    Ready-made map blocks built with MapLibre GL and ng-mapcn. Copy and paste into your apps. Works with all Angular
+    Ecosystem. Open Source. Free forever.
   </p>
   <section class="flex w-full items-center justify-center gap-2 pt-2 **:data-[slot=button]:shadow-none">
     <a z-button href="/maps#maps" class="h-[35px] rounded-[26px] px-3">Browse Maps</a>
     <a z-button zType="ghost" routerLink="/docs/components/map" class="h-9 rounded-[26px] px-3">Map docs</a>
   </section>
-
-  <div class="flex w-full max-w-xs flex-col items-start gap-1.5 pt-6 text-left">
-    <span class="text-muted-foreground text-xs font-medium" id="maps-style-label">Map style</span>
-    <!-- The shipped picker: it drives every map on this page, and the choice follows you to the docs. -->
-    <z-map-style-select class="min-w-0" />
-  </div>
 </section>
 
-<z-category-tabs [tabs]="categoryTabs" />
+<!-- The tabs, like the charts page, with the map style picker at the right end of the row (under them, at the start, on a phone). -->
+<div class="relative" data-slot="maps-toolbar">
+  <z-category-tabs [tabs]="categoryTabs" />
 
-<section id="maps" class="container mx-auto min-h-svh px-4 pt-8 pb-16">
-  <div class="mb-8 flex flex-col gap-1">
-    <h2 class="text-xl font-semibold tracking-tight">{{ categoryCopy[currentCategory()].label }}</h2>
-    <p class="text-muted-foreground text-sm">{{ categoryCopy[currentCategory()].description }}</p>
+  <div
+    class="container mt-6 flex justify-start md:pointer-events-none md:absolute md:inset-x-0 md:top-1/2 md:mt-0 md:-translate-y-1/2 md:justify-end"
+  >
+    <!-- The shipped picker: it drives every map on this page, and the choice follows you to the docs. -->
+    <z-map-style-select class="md:pointer-events-auto" [zAlign]="isMobile() ? 'start' : 'end'" />
   </div>
+</div>
 
-  @if (blocks().length > 0) {
-    <div class="grid grid-cols-1 items-stretch gap-10">
-      @for (block of blocks(); track block.id) {
-        <z-map-card [block]="block" />
-      }
-    </div>
-  } @else {
-    <div class="border-border bg-muted/20 flex min-h-svh items-center justify-center rounded-lg border">
-      <div class="space-y-2 text-center">
-        <p class="text-muted-foreground text-lg font-medium">No maps available yet</p>
-        <p class="text-muted-foreground text-sm">Maps will be added soon for this category</p>
-      </div>
-    </div>
+<section id="maps" class="container flex min-h-svh flex-col gap-10 pt-8 pb-24">
+  @for (block of blocks(); track block.id) {
+    <z-map-block [block]="block" />
   }
 </section>

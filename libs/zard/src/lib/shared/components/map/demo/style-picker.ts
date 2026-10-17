@@ -17,7 +17,7 @@ import { ZardMapStyleSelectComponent } from '@/shared/components/map-style-selec
       </ng-map>
 
       <!-- The picker is plain HTML, so it can sit over a corner of the map, in a toolbar or in your app header. -->
-      <z-map-style-select class="absolute top-3 left-3 w-60" />
+      <z-map-style-select class="absolute top-3 left-3" />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

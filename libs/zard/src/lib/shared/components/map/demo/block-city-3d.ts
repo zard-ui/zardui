@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, effect, signal } from '@angular/cor
 
 import type { MapViewport } from 'ng-mapcn';
 
-import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardCardComponent } from '@/shared/components/card/card.component';
 import { ZARD_MAP_DEFAULT_STYLES } from '@/shared/components/map/map-styles';
 import { ZardMapImports } from '@/shared/components/map/map.imports';
 import { ZardSliderComponent } from '@/shared/components/slider/slider.component';
@@ -22,15 +22,29 @@ const CITIES: Record<City, MapViewport> = {
 
 @Component({
   selector: 'z-demo-map-block-city-3d',
-  imports: [ZardMapImports, ZardCardImports, ZardSliderComponent, ZardSwitchComponent, ZardToggleGroupComponent],
+  imports: [ZardMapImports, ZardCardComponent, ZardSliderComponent, ZardSwitchComponent, ZardToggleGroupComponent],
   template: `
-    <div class="grid w-full gap-4 lg:grid-cols-4">
-      <z-card class="gap-4">
-        <z-card-header>
-          <z-card-title zTitle="3D city" />
-          <z-card-description zDescription="Buildings rise from the basemap, taller means darker" />
-        </z-card-header>
-        <z-card-content class="flex flex-col gap-5">
+    <div class="bg-background relative size-full overflow-hidden">
+      <!-- The extrusions read Carto's building layer: pin Carto so a global preset does not take it away. -->
+      <ng-map
+        [styles]="carto"
+        [viewport]="viewport()"
+        [options]="{ scrollZoom: false }"
+        (viewportChange)="viewport.set($event)"
+      >
+        <ng-map-controls class="[&_.ng-controls]:bottom-2!" [showCompass]="true" />
+        <ng-map-fill-extrusion [color]="color" [opacity]="0.9" />
+      </ng-map>
+
+      <z-card
+        class="bg-card/90 absolute top-3 left-3 z-10 w-[calc(100%-1.5rem)] max-w-72 gap-4 shadow-sm backdrop-blur-sm md:top-5 md:left-5"
+      >
+        <div class="px-4">
+          <p class="text-sm font-semibold">3D city</p>
+          <p class="text-muted-foreground text-xs">Buildings rise from the basemap, taller means darker</p>
+        </div>
+
+        <div class="flex flex-col gap-4 px-4">
           <z-toggle-group
             class="flex-wrap"
             zMode="single"
@@ -48,10 +62,8 @@ const CITIES: Record<City, MapViewport> = {
             </div>
             <z-slider
               aria-labelledby="city-pitch"
-              [zMin]="0"
-              [zMax]="75"
-              [zValue]="[viewport().pitch]"
-              (zSlideIndexChange)="patch({ pitch: $event[0] })"
+              [zValue]="[(viewport().pitch / MAX_PITCH) * 100]"
+              (zSlideIndexChange)="patch({ pitch: ($event[0] / 100) * MAX_PITCH })"
             />
           </div>
 
@@ -62,29 +74,23 @@ const CITIES: Record<City, MapViewport> = {
             </div>
             <z-slider
               aria-labelledby="city-bearing"
-              [zMin]="-180"
-              [zMax]="180"
-              [zValue]="[normalized(viewport().bearing)]"
-              (zSlideIndexChange)="patch({ bearing: $event[0] })"
+              [zValue]="[((normalized(viewport().bearing) + 180) / 360) * 100]"
+              (zSlideIndexChange)="patch({ bearing: ($event[0] / 100) * 360 - 180 })"
             />
           </div>
 
           <z-switch [(zChecked)]="rotating">Rotate</z-switch>
-        </z-card-content>
+        </div>
       </z-card>
-
-      <div class="h-96 overflow-hidden rounded-xl border lg:col-span-3 lg:h-136">
-        <!-- The extrusions read Carto's building layer: pin Carto so a global preset does not take it away. -->
-        <ng-map [styles]="carto" [viewport]="viewport()" (viewportChange)="viewport.set($event)">
-          <ng-map-controls [showCompass]="true" />
-          <ng-map-fill-extrusion [color]="color" [opacity]="0.9" />
-        </ng-map>
-      </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block size-full' },
 })
 export class ZardDemoMapBlockCity3dComponent {
+  /** The sliders run from 0 to 100, so the tilt and the heading are mapped onto them. */
+  protected readonly MAX_PITCH = 75;
+
   protected readonly carto = ZARD_MAP_DEFAULT_STYLES;
   protected readonly viewport = signal<MapViewport>(CITIES['new-york']);
   protected readonly city = signal<City>('new-york');
@@ -96,19 +102,22 @@ export class ZardDemoMapBlockCity3dComponent {
     { value: 'frankfurt', label: 'Frankfurt' },
   ];
 
-  /** Height in meters to color: low buildings are pale, towers are deep indigo. */
+  /**
+   * Height in meters to color: low buildings are pale, towers are deep blue. MapLibre paints with colors, not CSS
+   * variables, so these are the blues of the `--chart-*` tokens.
+   */
   protected readonly color = [
     'interpolate',
     ['linear'],
     ['coalesce', ['get', 'render_height'], 0],
     0,
-    '#c7d2fe',
+    '#bedbff',
     60,
-    '#818cf8',
+    '#51a2ff',
     180,
-    '#4f46e5',
+    '#155dfc',
     350,
-    '#312e81',
+    '#1c398e',
   ];
 
   constructor() {

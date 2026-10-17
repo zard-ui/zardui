@@ -6,9 +6,8 @@ import type { MapDrawFeature, MapDrawFeatureCollection, MapDrawMode } from 'ng-m
 
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardCardComponent } from '@/shared/components/card/card.component';
 import { ZardMapDrawImports } from '@/shared/components/map-draw/map-draw.imports';
-import { ZardTableImports } from '@/shared/components/table/table.imports';
 import {
   ZardToggleGroupComponent,
   type ZardToggleGroupItem,
@@ -55,40 +54,77 @@ function describe(feature: MapDrawFeature): { kind: string; value: string } {
   }
 }
 
+const SAMPLE: MapDrawFeatureCollection = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      id: '39594839-ed7c-4a68-92c4-e7bcd8612044',
+      type: 'Feature',
+      properties: { mode: 'polygon' },
+      geometry: {
+        type: 'Polygon',
+        coordinates: [
+          [
+            [-73.9814, 40.7681],
+            [-73.9581, 40.8003],
+            [-73.9498, 40.7968],
+            [-73.973, 40.7644],
+            [-73.9814, 40.7681],
+          ],
+        ],
+      },
+    },
+    {
+      id: '9fb5609a-7a67-457f-94e9-3004db0ae156',
+      type: 'Feature',
+      properties: { mode: 'line' },
+      geometry: {
+        type: 'LineString',
+        coordinates: [
+          [-73.9819, 40.7681],
+          [-73.9855, 40.758],
+          [-73.9772, 40.7527],
+        ],
+      },
+    },
+    {
+      id: 'a4595c68-99e0-4b5a-8c07-abf4a6efd3bf',
+      type: 'Feature',
+      properties: { mode: 'point' },
+      geometry: { type: 'Point', coordinates: [-73.9632, 40.7794] },
+    },
+  ],
+};
+
 @Component({
   selector: 'z-demo-map-block-draw',
   imports: [
     ZardMapDrawImports,
-    ZardCardImports,
     ZardBadgeComponent,
     ZardButtonComponent,
-    ZardTableImports,
+    ZardCardComponent,
     ZardToggleGroupComponent,
     NgIcon,
   ],
   template: `
-    <div class="grid w-full gap-4 lg:grid-cols-4">
-      <div class="h-96 overflow-hidden rounded-xl border lg:col-span-3 lg:h-136">
-        <ng-map [center]="[-73.9654, 40.7829]" [zoom]="12.8">
-          <ng-map-controls />
-          <ng-map-draw
-            [(mode)]="mode"
-            [(features)]="features"
-            [modes]="['point', 'line', 'polygon']"
-            [editable]="true"
-          />
-        </ng-map>
-      </div>
+    <div class="bg-background @container relative size-full overflow-hidden">
+      <ng-map [center]="[-73.97, 40.775]" [zoom]="12.4" [options]="mapOptions">
+        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map-draw [(mode)]="mode" [(features)]="features" [modes]="['point', 'line', 'polygon']" [editable]="true" />
+      </ng-map>
 
-      <z-card class="gap-4">
-        <z-card-header>
-          <z-card-title zTitle="Draw on the map" />
-          <z-card-description zDescription="Sketch an area, a route or a few points of interest" />
-          <z-card-action>
-            <z-badge zType="secondary">{{ features().features.length }}</z-badge>
-          </z-card-action>
-        </z-card-header>
-        <z-card-content class="flex flex-col gap-4">
+      <z-card
+        class="bg-card/90 absolute top-3 left-3 z-10 w-[calc(100%-1.5rem)] max-w-80 gap-3 shadow-sm backdrop-blur-sm md:top-5 md:left-5"
+      >
+        <div class="flex items-start justify-between gap-3 px-4">
+          <div>
+            <p class="text-sm font-semibold">Draw on the map</p>
+            <p class="text-muted-foreground text-xs">Sketch an area, a route or a few points of interest</p>
+          </div>
+          <z-badge zType="secondary" class="shrink-0">{{ features().features.length }}</z-badge>
+        </div>
+
+        <div class="px-4">
           <z-toggle-group
             class="flex-wrap"
             zMode="single"
@@ -98,56 +134,59 @@ function describe(feature: MapDrawFeature): { kind: string; value: string } {
             [zValue]="mode()"
             (valueChange)="onModeChange($event)"
           />
+        </div>
 
-          <table z-table>
-            <caption z-table-caption class="sr-only">Drawn features</caption>
-            <tbody z-table-body>
-              @for (item of rows(); track item.id) {
-                <tr z-table-row>
-                  <td z-table-cell class="font-medium">{{ item.kind }}</td>
-                  <td z-table-cell class="text-right tabular-nums">{{ item.value }}</td>
-                  <td z-table-cell class="w-10 text-right">
-                    <button
-                      z-button
-                      zType="ghost"
-                      zSize="icon-sm"
-                      type="button"
-                      [attr.aria-label]="'Delete ' + item.kind.toLowerCase()"
-                      (click)="remove(item.id)"
-                    >
-                      <ng-icon name="lucideTrash2" />
-                    </button>
-                  </td>
-                </tr>
-              } @empty {
-                <tr z-table-row>
-                  <td z-table-cell colspan="3" class="text-muted-foreground h-20 text-center text-xs">
-                    Pick a tool, then click the map. Double-click or press Enter to finish a shape.
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
+        <ul class="hidden flex-col px-2 @3xl:flex" aria-label="Drawn features">
+          @for (item of rows(); track item.id) {
+            <li class="flex items-center gap-2 rounded-md py-0.5 pr-1 pl-2 text-sm">
+              <span class="flex-1 font-medium">{{ item.kind }}</span>
+              <span class="text-muted-foreground text-xs tabular-nums">{{ item.value }}</span>
+              <button
+                z-button
+                zType="ghost"
+                zSize="icon-sm"
+                type="button"
+                [attr.aria-label]="'Delete ' + item.kind.toLowerCase()"
+                (click)="remove(item.id)"
+              >
+                <ng-icon name="lucideTrash2" />
+              </button>
+            </li>
+          } @empty {
+            <li class="text-muted-foreground px-2 py-3 text-xs">
+              Pick a tool, then click the map. Double-click or press Enter to finish a shape.
+            </li>
+          }
+        </ul>
 
-          <div class="flex gap-2">
-            <button z-button zType="outline" zSize="sm" type="button" [disabled]="!rows().length" (click)="copy()">
-              <ng-icon name="lucideCopy" />
-              {{ copied() ? 'Copied' : 'Copy GeoJSON' }}
-            </button>
-            <button z-button zType="ghost" zSize="sm" type="button" [disabled]="!rows().length" (click)="clear()">
-              Clear
-            </button>
-          </div>
-        </z-card-content>
+        <div class="flex gap-2 px-4">
+          <button z-button zType="outline" zSize="sm" type="button" [disabled]="!rows().length" (click)="copy()">
+            <ng-icon name="lucideCopy" />
+            {{ copied() ? 'Copied' : 'Copy GeoJSON' }}
+          </button>
+          <button z-button zType="ghost" zSize="sm" type="button" [disabled]="!rows().length" (click)="clear()">
+            Clear
+          </button>
+        </div>
       </z-card>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCopy, lucideTrash2 })],
+  host: { class: 'block size-full' },
 })
 export class ZardDemoMapBlockDrawComponent {
-  protected readonly mode = signal<MapDrawMode>('polygon');
-  protected readonly features = signal<MapDrawFeatureCollection>({ type: 'FeatureCollection', features: [] });
+  /** The camera is padded by the card over the map, so the sample shapes sit in what is left of the frame. */
+  protected readonly mapOptions = {
+    scrollZoom: false,
+    padding: globalThis.matchMedia?.('(min-width: 816px)').matches
+      ? { left: 360, top: 16, bottom: 16, right: 16 }
+      : { top: 260, bottom: 16, left: 16, right: 16 },
+  };
+
+  protected readonly mode = signal<MapDrawMode>('select');
+  /** A few shapes to start with, so the block is not an empty map. Clear them, or draw your own. */
+  protected readonly features = signal<MapDrawFeatureCollection>(SAMPLE);
   protected readonly copied = signal(false);
 
   protected readonly rows = computed(() =>

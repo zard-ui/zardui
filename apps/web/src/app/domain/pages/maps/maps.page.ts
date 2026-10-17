@@ -3,45 +3,34 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, type On
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
+import { injectIsMobile } from '@doc/domain/pages/typeset/utils/inject-is-mobile';
 import { CategoryTabsComponent, type CategoryTab } from '@doc/shared/components/category-tabs/category-tabs.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardMapStyleSelectComponent } from '@zard/components/map-style-select/map-style-select.component';
 
-import { MapCardComponent } from './map-card/map-card.component';
+import { MapBlockComponent } from './map-block/map-block.component';
 import type { MapBlock } from '../../config/maps-registry';
-import { MapsService, type MapCategory } from '../../services/maps.service';
+import { MAP_CATEGORIES, MapsService, type MapCategory } from '../../services/maps.service';
 
-const DEFAULT_CATEGORY: MapCategory = 'analytics';
+const DEFAULT_CATEGORY: MapCategory = MAP_CATEGORIES[0].id;
 
 /** What each category is called in a title and a description. */
-const CATEGORY_COPY: Record<MapCategory, { label: string; description: string }> = {
+const CATEGORY_SEO: Record<MapCategory, { title: string; about: string }> = {
   analytics: {
-    label: 'Analytics Maps',
-    description: 'Dashboards that put numbers on a map: visitors by region, a choropleth and an uptime monitor.',
+    title: 'Analytics Maps',
+    about: 'analytics dashboards with a world map, a choropleth and an uptime monitor',
   },
-  logistics: {
-    label: 'Logistics Maps',
-    description: 'A delivery tracker, a freight network and a store locator, built from routes, arcs and markers.',
-  },
-  data: {
-    label: 'Data Maps',
-    description: 'Heatmaps, clusters and flight arcs for datasets with thousands of points.',
-  },
-  '3d': {
-    label: '3D Maps',
-    description: 'Extruded buildings and terrain with hillshade, with the camera in your hands.',
-  },
-  draw: {
-    label: 'Draw Maps',
-    description: 'Draw, select and edit points, lines and polygons, and read the measurements back.',
-  },
+  logistics: { title: 'Logistics Maps', about: 'a delivery tracker, a logistics network and a store locator' },
+  data: { title: 'Data Maps', about: 'heatmaps, clusters and flights' },
+  '3d': { title: '3D Maps', about: 'a 3D city and terrain' },
+  draw: { title: 'Map Drawing', about: 'drawing and editing shapes on a map' },
 };
 
 @Component({
   selector: 'z-maps',
-  imports: [CategoryTabsComponent, MapCardComponent, RouterLink, ZardButtonComponent, ZardMapStyleSelectComponent],
+  imports: [CategoryTabsComponent, MapBlockComponent, RouterLink, ZardButtonComponent, ZardMapStyleSelectComponent],
   templateUrl: './maps.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -52,26 +41,25 @@ export class MapsPage implements OnInit {
   private readonly seoService = inject(SeoService);
   private readonly viewportScroller = inject(ViewportScroller);
 
+  /** On a phone the picker sits at the start of its row, so its list opens to the right of it. */
+  protected readonly isMobile = injectIsMobile();
   protected readonly blocks = signal<MapBlock[]>([]);
   protected readonly currentCategory = signal<MapCategory>(DEFAULT_CATEGORY);
-  protected readonly categoryCopy = CATEGORY_COPY;
 
-  protected readonly categoryTabs: CategoryTab[] = [
-    { label: 'Analytics', route: '/maps' },
-    { label: 'Logistics', route: '/maps/logistics' },
-    { label: 'Data', route: '/maps/data' },
-    { label: '3D', route: '/maps/3d' },
-    { label: 'Draw', route: '/maps/draw' },
-  ];
+  /** One tab and one page per group of blocks: `/maps`, `/maps/logistics`, ... */
+  protected readonly categoryTabs: CategoryTab[] = MAP_CATEGORIES.map(category => ({
+    label: category.label,
+    route: category.id === DEFAULT_CATEGORY ? '/maps' : `/maps/${category.id}`,
+  }));
 
   /** Every category is its own page: it deserves its own title, description and canonical URL. */
   private setSeo(category: MapCategory): void {
-    const { label, description } = CATEGORY_COPY[category];
+    const { title, about } = CATEGORY_SEO[category];
     const path = category === DEFAULT_CATEGORY ? '/maps' : `/maps/${category}`;
 
     this.seoService.setDocsSeo(
-      `${label} for the Web`,
-      `${description} Built with MapLibre GL and ng-mapcn, themed with zard. Copy and paste into your apps. Works with all Angular ecosystems. Open Source. Free forever.`,
+      `Beautiful ${title} for the Web`,
+      `Ready-made map blocks: ${about}. Built with MapLibre GL and ng-mapcn, themed with zard. Copy and paste into your apps. Works with all Angular ecosystems. Open Source. Free forever.`,
       path,
       'og-blockspage.jpg',
     );

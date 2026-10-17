@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 
 import type { Map as MapLibreMap } from 'maplibre-gl';
 
-import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardCardComponent } from '@/shared/components/card/card.component';
 import { ZardMapImports } from '@/shared/components/map/map.imports';
 import { ZardSliderComponent } from '@/shared/components/slider/slider.component';
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
@@ -38,15 +38,29 @@ const PEAKS: Record<
 
 @Component({
   selector: 'z-demo-map-block-terrain',
-  imports: [ZardMapImports, ZardCardImports, ZardSliderComponent, ZardSwitchComponent, ZardToggleGroupComponent],
+  imports: [ZardMapImports, ZardCardComponent, ZardSliderComponent, ZardSwitchComponent, ZardToggleGroupComponent],
   template: `
-    <div class="grid w-full gap-4 lg:grid-cols-4">
-      <z-card class="gap-4">
-        <z-card-header>
-          <z-card-title [zTitle]="peak().name" />
-          <z-card-description [zDescription]="peak().elevation" />
-        </z-card-header>
-        <z-card-content class="flex flex-col gap-5">
+    <div class="bg-background relative size-full overflow-hidden">
+      <ng-map
+        [center]="start.center"
+        [zoom]="start.zoom"
+        [options]="{ pitch: start.pitch, bearing: start.bearing, maxPitch: 80, scrollZoom: false }"
+        (mapReady)="map = $event"
+      >
+        <ng-map-controls class="[&_.ng-controls]:bottom-2!" [showCompass]="true" />
+        <!-- Elevation comes from public Terrarium tiles. Apply it with one element, relief included. -->
+        <ng-map-terrain [exaggeration]="exaggeration()" [hillshade]="hillshade()" />
+      </ng-map>
+
+      <z-card
+        class="bg-card/90 absolute top-3 left-3 z-10 w-[calc(100%-1.5rem)] max-w-72 gap-4 shadow-sm backdrop-blur-sm md:top-5 md:left-5"
+      >
+        <div class="px-4">
+          <p class="text-sm font-semibold">{{ peak().name }}</p>
+          <p class="text-muted-foreground text-xs">{{ peak().elevation }}</p>
+        </div>
+
+        <div class="flex flex-col gap-4 px-4">
           <z-toggle-group
             class="flex-wrap"
             zMode="single"
@@ -64,34 +78,21 @@ const PEAKS: Record<
             </div>
             <z-slider
               aria-labelledby="terrain-exaggeration"
-              [zMin]="1"
-              [zMax]="3"
-              [zStep]="0.1"
-              [zValue]="[exaggeration()]"
-              (zSlideIndexChange)="exaggeration.set($event[0])"
+              [zValue]="[slider()]"
+              (zSlideIndexChange)="setExaggeration($event[0])"
             />
           </div>
 
           <z-switch [(zChecked)]="hillshade">Hillshade</z-switch>
-          <p class="text-muted-foreground text-xs">Hold right-click and drag, or Ctrl and drag, to tilt and turn.</p>
-        </z-card-content>
+          <p class="text-muted-foreground hidden text-xs md:block">
+            Hold right-click and drag, or Ctrl and drag, to tilt and turn.
+          </p>
+        </div>
       </z-card>
-
-      <div class="h-96 overflow-hidden rounded-xl border lg:col-span-3 lg:h-136">
-        <ng-map
-          [center]="start.center"
-          [zoom]="start.zoom"
-          [options]="{ pitch: start.pitch, bearing: start.bearing, maxPitch: 80 }"
-          (mapReady)="map = $event"
-        >
-          <ng-map-controls [showCompass]="true" />
-          <!-- Elevation comes from public Terrarium tiles. Apply it with one element, relief included. -->
-          <ng-map-terrain [exaggeration]="exaggeration()" [hillshade]="hillshade()" />
-        </ng-map>
-      </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block size-full' },
 })
 export class ZardDemoMapBlockTerrainComponent {
   protected map: MapLibreMap | null = null;
@@ -99,6 +100,8 @@ export class ZardDemoMapBlockTerrainComponent {
 
   protected readonly selected = signal<Peak>('matterhorn');
   protected readonly exaggeration = signal(1.6);
+  /** The slider runs from 0 to 100, so a range of values is mapped onto it. */
+  protected readonly slider = computed(() => ((this.exaggeration() - 1) / 2) * 100);
   protected readonly hillshade = signal(true);
 
   protected readonly peaks: ZardToggleGroupItem[] = [
@@ -108,6 +111,10 @@ export class ZardDemoMapBlockTerrainComponent {
   ];
 
   protected readonly peak = computed(() => PEAKS[this.selected()]);
+
+  protected setExaggeration(percent: number): void {
+    this.exaggeration.set(Math.round((1 + (percent / 100) * 2) * 10) / 10);
+  }
 
   protected onPeakChange(value: string | string[]): void {
     if (value === 'matterhorn' || value === 'fuji' || value === 'grand-canyon') {

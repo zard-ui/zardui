@@ -6,7 +6,6 @@ import type { MapGeoJSONEvent } from 'ng-mapcn';
 
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardMapImports } from '@/shared/components/map/map.imports';
-import { ZardTableImports } from '@/shared/components/table/table.imports';
 import {
   ZardToggleGroupComponent,
   type ZardToggleGroupItem,
@@ -25,6 +24,12 @@ type Metric = 'population' | 'gdp';
 const COUNTRIES =
   'https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_110m_admin_0_countries.geojson';
 
+/**
+ * The blues of the `--chart-1` to `--chart-5` tokens. MapLibre paints with colors, not CSS variables, so the ramp is
+ * written out here; change it to match your theme.
+ */
+const RAMP = ['#dbeafe', '#8ec5ff', '#2b7fff', '#155dfc', '#193cb8'];
+
 const METRICS: Record<
   Metric,
   { label: string; property: keyof Country; steps: [number, string][]; format: (value: number) => string }
@@ -33,23 +38,24 @@ const METRICS: Record<
     label: 'Population',
     property: 'POP_EST',
     steps: [
-      [0, '#dbeafe'],
-      [1e7, '#93c5fd'],
-      [5e7, '#60a5fa'],
-      [1e8, '#3b82f6'],
-      [3e8, '#1d4ed8'],
+      [0, RAMP[0]],
+      [1e7, RAMP[1]],
+      [5e7, RAMP[2]],
+      [1e8, RAMP[3]],
+      [3e8, RAMP[4]],
     ],
-    format: value => (value >= 1e9 ? `${(value / 1e9).toFixed(2)} B` : `${(value / 1e6).toFixed(1)} M`),
+    format: value =>
+      value === 0 ? '0' : value >= 1e9 ? `${(value / 1e9).toFixed(2)} B` : `${(value / 1e6).toFixed(1)} M`,
   },
   gdp: {
     label: 'GDP',
     property: 'GDP_MD',
     steps: [
-      [0, '#dcfce7'],
-      [5e4, '#86efac'],
-      [3e5, '#4ade80'],
-      [1e6, '#16a34a'],
-      [5e6, '#166534'],
+      [0, RAMP[0]],
+      [5e4, RAMP[1]],
+      [3e5, RAMP[2]],
+      [1e6, RAMP[3]],
+      [5e6, RAMP[4]],
     ],
     // GDP_MD is in millions of US dollars.
     format: value => (value >= 1e6 ? `$${(value / 1e6).toFixed(1)} T` : `$${(value / 1e3).toFixed(0)} B`),
@@ -60,13 +66,35 @@ const EMPTY: FeatureCollection<Geometry, Country> = { type: 'FeatureCollection',
 
 @Component({
   selector: 'z-demo-map-block-choropleth',
-  imports: [ZardMapImports, ZardCardImports, ZardTableImports, ZardToggleGroupComponent],
+  imports: [ZardMapImports, ZardCardImports, ZardToggleGroupComponent],
   template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Countries at a glance" />
-        <z-card-description zDescription="Color the map by one measure and hover a country" />
-        <z-card-action>
+    <div class="bg-background relative size-full overflow-hidden">
+      <ng-map
+        [blank]="true"
+        [center]="[12, 28]"
+        [zoom]="compact ? 0.3 : 1.35"
+        [options]="{ scrollZoom: false, dragRotate: false }"
+      >
+        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map-geojson
+          [data]="data()"
+          promoteId="ADM0_A3"
+          [interactive]="true"
+          [fillPaint]="fillPaint()"
+          [fillHoverPaint]="{ 'fill-opacity': 1 }"
+          [linePaint]="{ 'line-color': '#94a3b8', 'line-width': 0.4, 'line-opacity': 0.6 }"
+          (featureHover)="onHover($event)"
+        />
+      </ng-map>
+
+      <z-card
+        class="bg-card/85 absolute top-3 left-3 z-10 w-[calc(100%-1.5rem)] max-w-72 gap-3 shadow-sm backdrop-blur-sm md:top-5 md:left-5"
+      >
+        <z-card-header>
+          <z-card-title zTitle="Countries at a glance" />
+          <z-card-description zDescription="Color the map by one measure" />
+        </z-card-header>
+        <z-card-content class="flex flex-col gap-3">
           <z-toggle-group
             zMode="single"
             zType="outline"
@@ -75,78 +103,55 @@ const EMPTY: FeatureCollection<Geometry, Country> = { type: 'FeatureCollection',
             [zDefaultValue]="metric()"
             (valueChange)="onMetricChange($event)"
           />
-        </z-card-action>
-      </z-card-header>
-
-      <z-card-content class="grid gap-6 lg:grid-cols-5">
-        <div class="relative h-80 overflow-hidden rounded-lg border lg:col-span-3 lg:h-104">
-          <ng-map [blank]="true" [center]="[12, 28]" [zoom]="1.35">
-            <ng-map-controls />
-            <ng-map-geojson
-              [data]="data()"
-              promoteId="ADM0_A3"
-              [interactive]="true"
-              [fillPaint]="fillPaint()"
-              [fillHoverPaint]="{ 'fill-color': '#f97316' }"
-              [linePaint]="{ 'line-color': '#94a3b8', 'line-width': 0.5 }"
-              (featureHover)="onHover($event)"
-            />
-          </ng-map>
-
-          <div
-            class="bg-popover text-popover-foreground ring-foreground/10 absolute top-3 left-3 rounded-lg px-3 py-2 text-sm shadow-md ring-1"
-            aria-live="polite"
-          >
+          <p class="min-h-5 text-sm" aria-live="polite">
             @if (hovered(); as country) {
               <span class="font-medium">{{ country.NAME }}</span>
               <span class="text-muted-foreground">· {{ format(country) }}</span>
             } @else {
               <span class="text-muted-foreground">Hover a country</span>
             }
-          </div>
+          </p>
+        </z-card-content>
+      </z-card>
 
-          <ul
-            class="bg-popover text-popover-foreground ring-foreground/10 absolute bottom-3 left-3 flex flex-wrap gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-xs shadow-md ring-1"
-            [attr.aria-label]="active().label + ' legend'"
-          >
-            @for (step of active().steps; track step[0]) {
-              <li class="flex items-center gap-1.5">
-                <span class="size-3 rounded-sm" [style.background]="step[1]"></span>
-                {{ active().format(step[0]) }}{{ $last ? '+' : '' }}
-              </li>
-            }
-          </ul>
-        </div>
+      <z-card class="bg-card/85 absolute top-5 right-5 z-10 hidden w-64 gap-2 shadow-sm backdrop-blur-sm md:flex">
+        <p class="px-4 text-sm font-medium">Top five by {{ active().label }}</p>
+        <ol class="flex flex-col px-2" [attr.aria-label]="'Top five countries by ' + active().label">
+          @for (country of top(); track country.ADM0_A3; let i = $index) {
+            <li class="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm">
+              <span class="text-muted-foreground w-4 text-xs tabular-nums">{{ i + 1 }}</span>
+              <span class="flex-1 truncate">{{ country.NAME }}</span>
+              <span class="text-muted-foreground tabular-nums">{{ format(country) }}</span>
+            </li>
+          } @empty {
+            <li class="text-muted-foreground px-2 py-3 text-sm">Loading countries...</li>
+          }
+        </ol>
+      </z-card>
 
-        <div class="lg:col-span-2">
-          <table z-table>
-            <caption z-table-caption class="sr-only">Top five countries by {{ active().label }}</caption>
-            <thead z-table-header>
-              <tr z-table-row>
-                <th z-table-head scope="col">Country</th>
-                <th z-table-head scope="col" class="text-right">{{ active().label }}</th>
-              </tr>
-            </thead>
-            <tbody z-table-body>
-              @for (country of top(); track country.ADM0_A3) {
-                <tr z-table-row>
-                  <td z-table-cell class="font-medium">{{ country.NAME }}</td>
-                  <td z-table-cell class="text-right tabular-nums">{{ format(country) }}</td>
-                </tr>
-              } @empty {
-                <tr z-table-row>
-                  <td z-table-cell colspan="2" class="text-muted-foreground h-24 text-center">Loading countries...</td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      </z-card-content>
-    </z-card>
+      <div
+        class="bg-card/85 ring-foreground/10 absolute bottom-3 left-3 z-10 flex flex-col gap-1.5 rounded-lg px-3 py-2 text-xs shadow-sm ring-1 backdrop-blur-sm md:bottom-5 md:left-5"
+        role="group"
+        [attr.aria-label]="active().label + ' legend'"
+      >
+        <span class="text-muted-foreground font-medium">{{ active().label }}</span>
+        <ul class="flex flex-wrap gap-x-3 gap-y-1">
+          @for (step of active().steps; track step[0]) {
+            <li class="flex items-center gap-1.5">
+              <span class="size-3 rounded-sm" [style.background]="step[1]"></span>
+              {{ active().format(step[0]) }}{{ $last ? '+' : '' }}
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block size-full' },
 })
 export class ZardDemoMapBlockChoroplethComponent {
+  /** A phone shows the whole world small; a wide frame zooms in. */
+  protected readonly compact = !globalThis.matchMedia?.('(min-width: 816px)').matches;
   protected readonly metric = signal<Metric>('population');
   protected readonly data = signal<FeatureCollection<Geometry, Country>>(EMPTY);
   protected readonly hovered = signal<Country | null>(null);
@@ -163,7 +168,7 @@ export class ZardDemoMapBlockChoroplethComponent {
     const [first, ...rest] = steps;
     const expression = ['step', ['get', property], first[1], ...rest.flat()] as ExpressionSpecification;
 
-    return { 'fill-color': expression, 'fill-opacity': 0.88 };
+    return { 'fill-color': expression, 'fill-opacity': 0.85 };
   });
 
   protected readonly top = computed(() => {

@@ -1,117 +1,135 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import type { FeatureCollection, Point } from 'geojson';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
-import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardChartImports } from '@/shared/components/chart/chart.imports';
+import { ZardCardComponent } from '@/shared/components/card/card.component';
+import { ZardChartComponent } from '@/shared/components/chart/chart.component';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 import { ZardMapImports } from '@/shared/components/map/map.imports';
 
-const CITIES: [number, number, number][] = [
-  [-0.1276, 51.5072, 9],
-  [2.3522, 48.8566, 8],
-  [13.405, 52.52, 7],
-  [-3.7038, 40.4168, 6],
-  [12.4964, 41.9028, 6],
-  [4.9041, 52.3676, 5],
-  [18.0686, 59.3293, 3],
-  [21.0122, 52.2297, 4],
+/*
+ * After the analytics card of ng-mapcn (MIT): a headline metric floating over a world map. The countries are drawn
+ * from GeoJSON on a blank basemap, and the bubbles use the chart tokens, so the block follows the theme.
+ */
+
+interface Visitor {
+  city: string;
+  lng: number;
+  lat: number;
+  visitors: number;
+}
+
+const VISITORS: Visitor[] = [
+  { city: 'San Francisco', lng: -122.4194, lat: 37.7749, visitors: 62 },
+  { city: 'New York', lng: -74.006, lat: 40.7128, visitors: 58 },
+  { city: 'Mexico City', lng: -99.1332, lat: 19.4326, visitors: 22 },
+  { city: 'Sao Paulo', lng: -46.6333, lat: -23.5505, visitors: 30 },
+  { city: 'London', lng: -0.1276, lat: 51.5074, visitors: 48 },
+  { city: 'Berlin', lng: 13.405, lat: 52.52, visitors: 28 },
+  { city: 'Madrid', lng: -3.7038, lat: 40.4168, visitors: 18 },
+  { city: 'Lagos', lng: 3.3792, lat: 6.5244, visitors: 16 },
+  { city: 'Dubai', lng: 55.2708, lat: 25.2048, visitors: 24 },
+  { city: 'Mumbai', lng: 72.8777, lat: 19.076, visitors: 40 },
+  { city: 'Singapore', lng: 103.8198, lat: 1.3521, visitors: 21 },
+  { city: 'Tokyo', lng: 139.6917, lat: 35.6895, visitors: 38 },
+  { city: 'Seoul', lng: 126.978, lat: 37.5665, visitors: 26 },
+  { city: 'Sydney', lng: 151.2093, lat: -33.8688, visitors: 17 },
 ];
 
-/** A small seeded generator, so the card shows the same sessions on every load. */
-function random(seed: number): () => number {
-  return () => {
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+const WEEK = [
+  { day: 'Mon', visitors: 51 },
+  { day: 'Tue', visitors: 58 },
+  { day: 'Wed', visitors: 55 },
+  { day: 'Thu', visitors: 67 },
+  { day: 'Fri', visitors: 72 },
+  { day: 'Sat', visitors: 61 },
+  { day: 'Sun', visitors: 78 },
+];
 
-function createSessions(): FeatureCollection<Point> {
-  const next = random(11);
-
-  return {
-    type: 'FeatureCollection',
-    features: CITIES.flatMap(([lng, lat, weight]) =>
-      Array.from({ length: weight * 14 }, () => {
-        const angle = next() * Math.PI * 2;
-        const spread = 0.6 * next() ** 2;
-
-        return {
-          type: 'Feature' as const,
-          properties: {},
-          geometry: {
-            type: 'Point' as const,
-            coordinates: [lng + Math.cos(angle) * spread * 1.4, lat + Math.sin(angle) * spread],
-          },
-        };
-      }),
-    ),
-  };
-}
+/** Natural Earth countries (public domain). Swap in your own GeoJSON to change the regions. */
+const COUNTRIES =
+  'https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@v5.1.2/geojson/ne_110m_admin_0_countries.geojson';
 
 @Component({
   selector: 'z-demo-map-block-analytics-card',
-  imports: [ZardMapImports, ZardCardImports, ZardBadgeComponent, ZardChartImports],
+  imports: [NgIcon, ZardBadgeComponent, ZardCardComponent, ZardChartComponent, ZardMapImports],
   template: `
-    <z-card class="mx-auto w-full max-w-xl gap-0 overflow-hidden py-0">
-      <div class="relative h-56">
-        <!-- A heatmap of today's sessions, without controls: the card is the interface. -->
-        <ng-map
-          [center]="[8, 49]"
-          [zoom]="3.3"
-          [options]="{ interactive: false, attributionControl: { compact: true } }"
-        >
-          <ng-map-heatmap [data]="sessions" [radius]="22" [intensity]="1.3" [opacity]="0.85" />
-        </ng-map>
-        <z-badge zType="secondary" class="absolute top-3 left-3 shadow-sm">
-          <span class="size-1.5 rounded-full bg-emerald-500"></span>
-          Live
-        </z-badge>
-      </div>
+    <div class="bg-background relative size-full overflow-hidden">
+      <ng-map
+        [blank]="true"
+        [center]="[10, 24]"
+        [zoom]="compact ? 0.3 : 1.5"
+        [options]="mapOptions"
+        class="[&_.maplibregl-canvas]:cursor-default! [&_.maplibregl-canvas-container]:cursor-default!"
+      >
+        <ng-map-geojson [data]="countries" [linePaint]="false" />
+        @for (visitor of visitors; track visitor.city) {
+          <ng-map-marker [longitude]="visitor.lng" [latitude]="visitor.lat">
+            <ng-marker-content>
+              <span
+                class="bg-chart-2/70 ring-chart-2/40 block cursor-default rounded-full ring-4"
+                [style.width.px]="size(visitor.visitors)"
+                [style.height.px]="size(visitor.visitors)"
+              ></span>
+            </ng-marker-content>
+            <ng-marker-tooltip>{{ visitor.city }} · {{ visitor.visitors }}K visitors</ng-marker-tooltip>
+          </ng-map-marker>
+        }
+      </ng-map>
 
-      <z-card-header class="pt-5">
-        <z-card-title zTitle="12,480 visitors" />
-        <z-card-description zDescription="Europe, last 7 days" />
-        <z-card-action>
-          <z-badge zType="outline" class="text-emerald-600 dark:text-emerald-400">+8.2%</z-badge>
-        </z-card-action>
-      </z-card-header>
+      <z-card class="bg-card/85 absolute top-3 left-3 z-10 w-64 gap-3 shadow-sm backdrop-blur-sm md:top-5 md:left-5">
+        <div class="flex items-start justify-between gap-3 px-4">
+          <div>
+            <p class="text-muted-foreground text-sm">Visitors</p>
+            <p class="text-3xl leading-tight font-semibold tabular-nums">418.2K</p>
+          </div>
+          <z-badge zType="outline" class="mt-0.5 gap-1">
+            <ng-icon name="lucideTrendingUp" aria-hidden="true" />
+            +12% growth
+          </z-badge>
+        </div>
 
-      <z-card-content class="pb-5">
         <z-chart
-          zType="bar"
-          class="aspect-auto h-28 w-full"
-          [zConfig]="chartConfig"
-          [zData]="chartData"
+          zType="area"
+          class="aspect-auto h-16 w-full px-1"
+          [zConfig]="config"
+          [zData]="week"
           [zSeries]="series"
           zXAxisKey="day"
-        >
-          <z-chart-tooltip zIndicator="dot" zHideLabel />
-        </z-chart>
-      </z-card-content>
-    </z-card>
+          [zXAxis]="false"
+          [zGrid]="false"
+          [zGradient]="true"
+          [zSsrHeight]="64"
+        />
+        <p class="text-muted-foreground px-4 text-xs">Last 7 days, in thousands of visitors</p>
+      </z-card>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideTrendingUp })],
+  host: { class: 'block size-full' },
 })
 export class ZardDemoMapBlockAnalyticsCardComponent {
-  protected readonly sessions = createSessions();
+  /** A phone shows the whole world small; a wide frame zooms in. */
+  protected readonly compact = !globalThis.matchMedia?.('(min-width: 816px)').matches;
+  protected readonly countries = COUNTRIES;
+  protected readonly visitors = VISITORS;
+  protected readonly week = WEEK;
 
-  protected readonly chartConfig: ZardChartConfig = {
-    visitors: { label: 'Visitors', color: 'var(--chart-1)' },
-  };
-
-  protected readonly chartData = [
-    { day: 'Mon', visitors: 1480 },
-    { day: 'Tue', visitors: 1720 },
-    { day: 'Wed', visitors: 1650 },
-    { day: 'Thu', visitors: 1910 },
-    { day: 'Fri', visitors: 2140 },
-    { day: 'Sat', visitors: 1790 },
-    { day: 'Sun', visitors: 1790 },
+  protected readonly config = { visitors: { label: 'Visitors', color: 'var(--chart-2)' } } satisfies ZardChartConfig;
+  protected readonly series: ZardChartSeries[] = [
+    { dataKey: 'visitors', smooth: true, strokeWidth: 1.5, showSymbol: false },
   ];
 
-  protected readonly series: ZardChartSeries[] = [{ dataKey: 'visitors', radius: 4 }];
+  /** A decorative card: the map neither pans nor zooms. */
+  protected readonly mapOptions = {
+    interactive: false,
+    attributionControl: { compact: true },
+  };
+
+  protected size(visitors: number): number {
+    return Math.round(14 + Math.sqrt(visitors) * 4);
+  }
 }

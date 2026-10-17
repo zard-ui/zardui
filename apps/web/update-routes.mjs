@@ -20,8 +20,11 @@ const envRoutes = [...envContent.matchAll(/path:\s*'(\/docs\/installation\/[^']+
   m => m[1],
 );
 
-// Gallery category pages (/maps/logistics, ...) are routes of their own with their own title and description, but
-// they are not nav items, so they are listed here. The first category lives at /maps itself.
-const mapCategories = ['logistics', 'data', '3d', 'draw'].map(category => `/maps/${category}`);
+// Every map category is a page of its own (/maps/logistics, ...). The first one is /maps itself, already listed above.
+// The ids are read from MAP_CATEGORIES so a new category is prerendered without touching this file.
+const mapsFile = join(__dirname, 'src/app/domain/services/maps.service.ts');
+const mapsContent = readFileSync(mapsFile, 'utf-8');
+const categoriesBlock = mapsContent.match(/MAP_CATEGORIES[^=]*=\s*\[([\s\S]*?)\n\];/)?.[1] ?? '';
+const mapRoutes = [...categoriesBlock.matchAll(/id:\s*'([^']+)'/g)].slice(1).map(m => `/maps/${m[1]}`);
 
-writeFileSync(join(__dirname, 'prerender-routes.txt'), ['/', ...routes, ...mapCategories, ...envRoutes].join('\n'));
+writeFileSync(join(__dirname, 'prerender-routes.txt'), ['/', ...routes, ...mapRoutes, ...envRoutes].join('\n'));

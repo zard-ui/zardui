@@ -62,8 +62,8 @@ test.describe('Map component', () => {
     await expect(demoPage.firstDemoBox.locator('canvas.maplibregl-canvas')).toBeVisible(READY);
 
     const picker = page.locator('z-map-style-select').first();
-    await picker.getByRole('combobox').click();
-    await page.getByRole('option', { name: /Liberty/ }).click();
+    await picker.getByRole('button', { name: /Map style/ }).click();
+    await page.getByRole('radio', { name: /Liberty/ }).click();
 
     await expect.poll(() => requests.styles.some(url => url.includes('openfreemap.org/styles/liberty'))).toBe(true);
     await expect.poll(() => page.evaluate(() => localStorage.getItem('zard-map-style'))).toBe('openfreemap-liberty');
@@ -77,10 +77,11 @@ test.describe('Map component', () => {
     const before = requests.styles.length;
 
     const picker = page.locator('z-map-style-select').first();
-    await picker.getByRole('combobox').click();
-    await page.getByRole('option', { name: /Streets/ }).click();
+    await picker.getByRole('button', { name: /Map style/ }).click();
+    await page.getByRole('radio', { name: /Streets/ }).click();
 
-    await expect(picker.getByLabel(/MapTiler API key/)).toBeVisible();
+    // The key is asked for inside the popover, under the list.
+    await expect(page.getByLabel(/MapTiler API key/)).toBeVisible();
     await expect(picker).toContainText('Carto', READY);
     expect(requests.styles.length).toBe(before);
   });

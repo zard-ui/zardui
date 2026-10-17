@@ -48,50 +48,42 @@ const TRIP_MS = 45_000;
   selector: 'z-demo-map-block-delivery-tracker',
   imports: [ZardMapImports, ZardCardImports, ZardBadgeComponent, ZardButtonComponent, ZardProgressComponent, NgIcon],
   template: `
-    <div class="grid w-full gap-4 lg:grid-cols-3">
-      <div class="relative h-96 overflow-hidden rounded-xl border lg:col-span-2 lg:h-136">
-        <ng-map [center]="[-122.4185, 37.7965]" [zoom]="13.2" [fitBounds]="{ padding: 60, maxZoom: 15 }">
-          <ng-map-controls />
-          <ng-map-route
-            [coordinates]="route"
-            [width]="5"
-            [opacity]="0.35"
-            [progress]="progress()"
-            [interactive]="false"
-          >
-            <ng-route-progress color="#2563eb" />
-            <ng-route-marker at="start">
-              <ng-marker-content>
-                <div
-                  class="bg-background text-foreground flex size-8 items-center justify-center rounded-full border shadow-md"
-                >
-                  <ng-icon name="lucidePackage" class="size-4" aria-hidden="true" />
-                </div>
-              </ng-marker-content>
-              <ng-marker-tooltip>Warehouse</ng-marker-tooltip>
-            </ng-route-marker>
-            <ng-route-marker at="end">
-              <ng-marker-content>
-                <div
-                  class="bg-primary text-primary-foreground border-background size-4 rounded-full border-2 shadow-md"
-                ></div>
-              </ng-marker-content>
-              <ng-marker-label position="bottom">Delivery address</ng-marker-label>
-            </ng-route-marker>
-            <ng-route-marker at="progress">
-              <ng-marker-content>
-                <div
-                  class="bg-primary text-primary-foreground border-background flex size-9 items-center justify-center rounded-full border-2 shadow-lg"
-                >
-                  <ng-icon name="lucideTruck" class="size-4" aria-hidden="true" />
-                </div>
-              </ng-marker-content>
-            </ng-route-marker>
-          </ng-map-route>
-        </ng-map>
-      </div>
+    <div class="bg-background @container relative size-full overflow-hidden">
+      <ng-map [center]="[-122.4185, 37.7965]" [zoom]="13.2" [fitBounds]="fit" [options]="{ scrollZoom: false }">
+        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map-route [coordinates]="route" [width]="5" [opacity]="0.35" [progress]="progress()" [interactive]="false">
+          <ng-route-progress color="#155dfc" />
+          <ng-route-marker at="start">
+            <ng-marker-content>
+              <div
+                class="bg-background text-foreground flex size-8 items-center justify-center rounded-full border shadow-md"
+              >
+                <ng-icon name="lucidePackage" class="size-4" aria-hidden="true" />
+              </div>
+            </ng-marker-content>
+            <ng-marker-tooltip>Warehouse</ng-marker-tooltip>
+          </ng-route-marker>
+          <ng-route-marker at="end">
+            <ng-marker-content>
+              <div class="bg-primary border-background size-4 rounded-full border-2 shadow-md"></div>
+            </ng-marker-content>
+            <ng-marker-label position="bottom">Delivery address</ng-marker-label>
+          </ng-route-marker>
+          <ng-route-marker at="progress">
+            <ng-marker-content>
+              <div
+                class="bg-chart-3 border-background flex size-9 items-center justify-center rounded-full border-2 text-white shadow-lg"
+              >
+                <ng-icon name="lucideTruck" class="size-4" aria-hidden="true" />
+              </div>
+            </ng-marker-content>
+          </ng-route-marker>
+        </ng-map-route>
+      </ng-map>
 
-      <z-card class="gap-4">
+      <z-card
+        class="bg-card/90 absolute inset-x-3 bottom-3 z-10 gap-3 shadow-sm backdrop-blur-sm @3xl:inset-y-4 @3xl:right-auto @3xl:bottom-auto @3xl:left-4 @3xl:w-96"
+      >
         <z-card-header>
           <z-card-title zTitle="Order #48213" />
           <z-card-description zDescription="Two items · Leaves from Embarcadero" />
@@ -102,7 +94,7 @@ const TRIP_MS = 45_000;
           </z-card-action>
         </z-card-header>
 
-        <z-card-content class="flex flex-col gap-5">
+        <z-card-content class="flex flex-col gap-4 @3xl:gap-5">
           <div class="flex flex-col gap-2">
             <div class="flex items-baseline justify-between">
               <span class="text-3xl font-semibold tabular-nums">{{ eta() }}</span>
@@ -114,7 +106,7 @@ const TRIP_MS = 45_000;
             <z-progress [value]="progress() * 100" class="h-2" />
           </div>
 
-          <ol class="flex flex-col gap-3" aria-label="Delivery progress">
+          <ol class="hidden flex-col gap-3 @3xl:flex" aria-label="Delivery progress">
             @for (step of steps; track step.title) {
               <li class="flex items-center gap-3 text-sm" [class.text-muted-foreground]="progress() < step.at">
                 <span
@@ -148,11 +140,21 @@ const TRIP_MS = 45_000;
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCheck, lucideClock, lucidePackage, lucidePhone, lucideTruck })],
+  host: { class: 'block size-full' },
 })
 export class ZardDemoMapBlockDeliveryTrackerComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly route = ROUTE;
+
+  /** The route is framed to the right of the order card on a wide frame, and above it on a narrow one. */
+  protected readonly fit = {
+    padding: globalThis.matchMedia?.('(min-width: 816px)').matches
+      ? { top: 70, right: 70, bottom: 70, left: 470 }
+      : { top: 50, right: 40, bottom: 300, left: 40 },
+    maxZoom: 15,
+  };
+
   protected readonly steps = STEPS;
   protected readonly progress = signal(0.12);
 

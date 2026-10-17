@@ -86,7 +86,6 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
   inbox: { lucide: 'lucideInbox' },
   info: { lucide: 'lucideInfo' },
   italic: { lucide: 'lucideItalic' },
-  'key-round': { lucide: 'lucideKeyRound' },
   keyboard: { lucide: 'lucideKeyboard' },
   landmark: { lucide: 'lucideLandmark' },
   'layout-grid': { lucide: 'lucideLayoutGrid' },

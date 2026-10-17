@@ -5,9 +5,8 @@ import type { Map as MapLibreMap } from 'maplibre-gl';
 import type { ClusterPointClickEvent } from 'ng-mapcn';
 
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
-import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardCardComponent } from '@/shared/components/card/card.component';
 import { ZardMapImports } from '@/shared/components/map/map.imports';
-import { ZardTableImports } from '@/shared/components/table/table.imports';
 
 interface Customer {
   id: number;
@@ -65,75 +64,76 @@ function createCustomers(): FeatureCollection<Point, Customer> {
 
 @Component({
   selector: 'z-demo-map-block-clusters',
-  imports: [ZardMapImports, ZardCardImports, ZardBadgeComponent, ZardTableImports],
+  imports: [ZardMapImports, ZardBadgeComponent, ZardCardComponent],
   template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Customers worldwide" />
-        <z-card-description zDescription="Click a cluster to zoom in, or a dot for the customer" />
-        <z-card-action>
-          <z-badge zType="secondary">{{ customers.features.length }} customers</z-badge>
-        </z-card-action>
-      </z-card-header>
+    <div class="bg-background @container relative size-full overflow-hidden">
+      <ng-map
+        [center]="[15, 25]"
+        [zoom]="compact ? 0.4 : 1.6"
+        [options]="{ scrollZoom: false, dragRotate: false }"
+        (mapReady)="map = $event"
+      >
+        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <!-- MapLibre paints with colors, not CSS variables: these are the blues of --chart-1 to --chart-5. -->
+        <ng-map-cluster-layer
+          [data]="customers"
+          [clusterColors]="['#8ec5ff', '#2b7fff', '#155dfc']"
+          [clusterThresholds]="[50, 200]"
+          [clusterRadius]="55"
+          pointColor="#193cb8"
+          (pointClick)="onPointClick($event)"
+        />
+      </ng-map>
 
-      <z-card-content class="grid gap-6 lg:grid-cols-5">
-        <div class="relative h-80 overflow-hidden rounded-lg border lg:col-span-3 lg:h-104">
-          <ng-map [center]="[15, 25]" [zoom]="1.5" (mapReady)="map = $event">
-            <ng-map-controls />
-            <ng-map-cluster-layer
-              [data]="customers"
-              [clusterColors]="['#60a5fa', '#3b82f6', '#1d4ed8']"
-              [clusterThresholds]="[50, 200]"
-              [clusterRadius]="55"
-              pointColor="#f97316"
-              (pointClick)="onPointClick($event)"
-            />
-          </ng-map>
-        </div>
-
-        <div class="flex flex-col gap-4 lg:col-span-2">
-          <div class="rounded-lg border p-4" aria-live="polite">
-            @if (selected(); as customer) {
-              <p class="text-sm font-medium">Customer #{{ customer.id }}</p>
-              <p class="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
-                {{ customer.city }}
-                <z-badge zType="outline">{{ customer.plan }}</z-badge>
-              </p>
-            } @else {
-              <p class="text-muted-foreground text-sm">Select a customer on the map to see the details.</p>
-            }
+      <z-card
+        class="bg-card/90 absolute top-3 left-3 z-10 w-[calc(100%-1.5rem)] max-w-80 gap-3 shadow-sm backdrop-blur-sm md:top-5 md:left-5"
+      >
+        <div class="flex items-start justify-between gap-3 px-4">
+          <div>
+            <p class="text-sm font-semibold">Customers worldwide</p>
+            <p class="text-muted-foreground text-xs">Click a cluster to zoom in, or a dot for the customer</p>
           </div>
-
-          <table z-table>
-            <caption z-table-caption class="sr-only">Customers by city</caption>
-            <thead z-table-header>
-              <tr z-table-row>
-                <th z-table-head scope="col">City</th>
-                <th z-table-head scope="col" class="text-right">Customers</th>
-              </tr>
-            </thead>
-            <tbody z-table-body>
-              @for (city of cities; track city.name) {
-                <tr
-                  z-table-row
-                  class="cursor-pointer"
-                  tabindex="0"
-                  (click)="focusOn(city)"
-                  (keydown.enter)="focusOn(city)"
-                >
-                  <td z-table-cell class="font-medium">{{ city.name }}</td>
-                  <td z-table-cell class="text-right tabular-nums">{{ city.weight * 60 }}</td>
-                </tr>
-              }
-            </tbody>
-          </table>
+          <z-badge zType="secondary" class="shrink-0">{{ customers.features.length }}</z-badge>
         </div>
-      </z-card-content>
-    </z-card>
+
+        <div class="mx-4 rounded-lg border p-3" aria-live="polite">
+          @if (selected(); as customer) {
+            <p class="text-sm font-medium">Customer #{{ customer.id }}</p>
+            <p class="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
+              {{ customer.city }}
+              <z-badge zType="outline">{{ customer.plan }}</z-badge>
+            </p>
+          } @else {
+            <p class="text-muted-foreground text-sm">Select a customer on the map to see the details.</p>
+          }
+        </div>
+      </z-card>
+
+      <z-card class="bg-card/90 absolute top-5 right-5 z-10 hidden w-56 gap-2 shadow-sm backdrop-blur-sm @3xl:flex">
+        <p class="px-4 text-sm font-medium">Customers by city</p>
+        <ul class="flex flex-col px-2" aria-label="Customers by city">
+          @for (city of cities; track city.name) {
+            <li>
+              <button
+                type="button"
+                class="hover:bg-accent focus-visible:ring-ring flex w-full items-center justify-between gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors focus-visible:ring-2 focus-visible:outline-none"
+                (click)="focusOn(city)"
+              >
+                <span class="truncate">{{ city.name }}</span>
+                <span class="text-muted-foreground tabular-nums">{{ city.weight * 60 }}</span>
+              </button>
+            </li>
+          }
+        </ul>
+      </z-card>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block size-full' },
 })
 export class ZardDemoMapBlockClustersComponent {
+  /** A phone shows the whole world small; a wide frame zooms in. */
+  protected readonly compact = !globalThis.matchMedia?.('(min-width: 816px)').matches;
   protected map: MapLibreMap | null = null;
   protected readonly customers = createCustomers();
   protected readonly cities = [...CITIES].sort((a, b) => b.weight - a.weight);

@@ -1683,7 +1683,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'map-style-select',
-    registryDependencies: ['button', 'input', 'map', 'select'],
+    registryDependencies: ['badge', 'button', 'input', 'map', 'popover'],
     files: [
       {
         name: 'map-style-select.component.ts',
