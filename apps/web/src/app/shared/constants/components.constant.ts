@@ -61,12 +61,7 @@ export interface ExampleData {
 
 /** The groups the components are listed under, in `llms.txt` and anywhere else that needs them. */
 export type ComponentCategory =
-  | 'Form & Input'
-  | 'Layout & Navigation'
-  | 'Overlays & Dialogs'
-  | 'Feedback & Status'
-  | 'Display & Media'
-  | 'Misc';
+  'Form & Input' | 'Layout & Navigation' | 'Overlays & Dialogs' | 'Feedback & Status' | 'Display & Media' | 'Misc';
 
 export interface ComponentRegistryEntry {
   componentName: string;
