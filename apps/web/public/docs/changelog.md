@@ -7,6 +7,165 @@ description: Latest updates, new components, and improvements to ZardUI.
 
 Latest updates, new components, and improvements to ZardUI.
 
+## October 2026
+
+We made every component read right to left, so Arabic, Hebrew and Persian apps get the same library as everyone else. Turn it on when you run zard-cli init, or set dir="rtl" on your html tag, and see the RTL guide for fonts and migration.
+
+### Right to left
+
+#### card
+
+## Run the CLI
+
+Use the CLI to add card to your project.
+
+```
+npx zard-cli@latest add card
+```
+
+The same card in Arabic, Hebrew and English: pick a language and the layout mirrors with it.
+
+تسجيل الدخول إلى حسابك
+
+أدخل بريدك الإلكتروني أدناه لتسجيل الدخول إلى حسابك
+
+إنشاء حساب
+
+البريد الإلكتروني
+
+كلمة المرور
+
+نسيت كلمة المرور؟
+
+تسجيل الدخول
+
+تسجيل الدخول باستخدام Google
+
+```
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface CardRtlValues {
+  title: string;
+  description: string;
+  signUp: string;
+  email: string;
+  emailPlaceholder: string;
+  password: string;
+  forgotPassword: string;
+  login: string;
+  loginWithGoogle: string;
+}
+
+const translations: ZardRtlTranslations<CardRtlValues> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      title: 'Login to your account',
+      description: 'Enter your email below to login to your account',
+      signUp: 'Sign Up',
+      email: 'Email',
+      emailPlaceholder: 'm@example.com',
+      password: 'Password',
+      forgotPassword: 'Forgot your password?',
+      login: 'Login',
+      loginWithGoogle: 'Login with Google',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      title: 'تسجيل الدخول إلى حسابك',
+      description: 'أدخل بريدك الإلكتروني أدناه لتسجيل الدخول إلى حسابك',
+      signUp: 'إنشاء حساب',
+      email: 'البريد الإلكتروني',
+      emailPlaceholder: 'm@example.com',
+      password: 'كلمة المرور',
+      forgotPassword: 'نسيت كلمة المرور؟',
+      login: 'تسجيل الدخول',
+      loginWithGoogle: 'تسجيل الدخول باستخدام Google',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      title: 'התחבר לחשבון שלך',
+      description: 'הזן את האימייל שלך למטה כדי להתחבר לחשבון שלך',
+      signUp: 'הירשם',
+      email: 'אימייל',
+      emailPlaceholder: 'm@example.com',
+      password: 'סיסמה',
+      forgotPassword: 'שכחת את הסיסמה?',
+      login: 'התחבר',
+      loginWithGoogle: 'התחבר עם Google',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-card-rtl',
+  imports: [ZardCardImports, ZardButtonComponent, ...ZardFieldImports, ZardInputComponent],
+  template: `
+    <z-card class="w-full md:w-94">
+      <z-card-header>
+        <z-card-title [zTitle]="i18n.t().title" />
+        <z-card-description [zDescription]="i18n.t().description" />
+        <z-card-action>
+          <a z-button zType="link" href="#">{{ i18n.t().signUp }}</a>
+        </z-card-action>
+      </z-card-header>
+      <z-card-content>
+        <div z-field-group>
+          <div z-field>
+            <label z-field-label for="card-rtl-email">{{ i18n.t().email }}</label>
+            <input z-input id="card-rtl-email" type="email" [placeholder]="i18n.t().emailPlaceholder" required />
+          </div>
+          <div z-field>
+            <div class="flex items-center">
+              <label z-field-label for="card-rtl-password">{{ i18n.t().password }}</label>
+              <a href="#" class="ms-auto text-sm underline-offset-4 hover:underline">{{ i18n.t().forgotPassword }}</a>
+            </div>
+            <input z-input id="card-rtl-password" type="password" required />
+          </div>
+        </div>
+      </z-card-content>
+      <z-card-footer class="flex-col gap-2">
+        <z-button class="w-full">{{ i18n.t().login }}</z-button>
+        <z-button zType="outline" class="w-full">{{ i18n.t().loginWithGoogle }}</z-button>
+      </z-card-footer>
+    </z-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCardRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
+```
+
+## Zard UI v1.0 is here
+
+Alpha, Beta, and Release Candidate converge into a stable 1.0: the component API, the CLI, and the registry format are now covered by semantic versioning, and breaking changes only ship behind a major bump from here on.
+
+## September 2026
+
+The month v1.0.0 ships — see the announcement above for what a stable 1.0 means.
+
+### Highlights
+
+#### Dialog, sheet and alert dialog in the template
+
+The three overlays gain the declarative form the drawer already had: compose z-dialog, z-sheet or z-alert-dialog with [(zVisible)] and header, title, description and footer children, or keep opening the same panel from code through the service. Every example on their pages now shows both.
+
 ## August 2026
 
 One-time passwords land this month. We added the Input OTP component, with grouped slots, separators, pattern validation, and paste support out of the box.
@@ -26,7 +185,7 @@ npx zard-cli@latest add input-otp
 Accessible one-time password input with grouped slots, custom separators, and copy-paste support.
 
 ```
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
@@ -46,6 +205,7 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
       </z-input-otp-group>
     </z-input-otp>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputOtpPreviewComponent {
   value = '123456';
@@ -118,7 +278,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
 
 @Component({
-  selector: 'z-demo-field-default',
+  selector: 'z-demo-field-preview',
   imports: [
     ...ZardFieldImports,
     ZardButtonComponent,
@@ -230,7 +390,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoFieldDefaultComponent {
+export class ZardDemoFieldPreviewComponent {
   protected sameAsShipping = true;
 }
 ```
@@ -263,7 +423,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardItemImports } from '@/shared/components/item/item.imports';
 
 @Component({
-  selector: 'z-demo-item-default',
+  selector: 'z-demo-item-preview',
   imports: [ZardButtonComponent, NgIcon, ...ZardItemImports],
   template: `
     <div class="flex w-full min-w-md flex-col gap-6">
@@ -293,7 +453,7 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideBadgeCheck, lucideChevronRight })],
 })
-export class ZardDemoItemDefaultComponent {}
+export class ZardDemoItemPreviewComponent {}
 ```
 
 #### textarea
@@ -314,14 +474,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
 
 @Component({
-  selector: 'z-demo-textarea-default',
+  selector: 'z-demo-textarea-preview',
   imports: [ZardTextareaComponent],
   template: `
-    <textarea z-textarea placeholder="Type your message here." class="w-72"></textarea>
+    <textarea z-textarea id="textarea-preview" placeholder="Type your message here." class="w-72"></textarea>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoTextareaDefaultComponent {}
+export class ZardDemoTextareaPreviewComponent {}
 ```
 
 #### sonner
@@ -343,14 +503,14 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({
-  selector: 'z-demo-sonner-default',
+  selector: 'z-demo-sonner-preview',
   imports: [ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" (click)="show()">Show Toast</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSonnerDefaultComponent {
+export class ZardDemoSonnerPreviewComponent {
   private readonly sonner = inject(ZardSonnerService);
 
   show() {
@@ -381,6 +541,26 @@ The input directive now reads and writes real numbers for `type="number"` and `t
 
 zMaskClosable: true
 
+## April 2026
+
+A thin month — two releases, no new components. One quietly narrows the Avatar `zSize` API to named sizes only; the other makes Select track option lists that keep changing after render.
+
+### Highlights
+
+#### Avatar drops numeric sizes
+
+`zSize` on `z-avatar` only takes `sm`, `default`, `md`, `lg` and `xl` now: the numeric option is gone. Swap a number for the closest name (32, 40, 48, 56 and 64 px) or for a `size-*` class. Its exported types were renamed too.
+
+- `ZardAvatarVariants` → `ZardAvatarSizeVariants`
+- `ZardImageVariants` → `ZardAvatarShapeVariants`
+- `ZardAvatarGroupVariants` → `ZardAvatarGroupOrientationVariants`
+
+<z-avatar zSize="sm" />
+
+#### Select follows dynamic option lists
+
+Options added to a `z-select` after it renders, from a signal or a reactive list, are now selectable. The current value survives new options, and removing the selected one falls back to the raw value. No input or output changed.
+
 ## March 2026
 
 Complete icon system migration! We replaced the custom `ZardIconComponent` with `@ng-icons/lucide`, bringing better tree-shaking, a wider icon selection, and a simpler API across all components.
@@ -400,6 +580,91 @@ Icons are now provided at component level using `provideIcons()` in `viewProvide
 The `lucide-angular` dependency has been replaced by `@ng-icons/core` and `@ng-icons/lucide`. The CLI `init` command now installs these automatically.
 
 npm install @ng-icons/core @ng-icons/lucide
+
+## February 2026
+
+The busiest month of the year outside August — 77 commits, most of them release automation. Underneath that: the CLI is renamed to `zard-cli` and hardened for monorepos, dark mode becomes safe under SSR, Button is restyled to match the latest shadcn/ui, Switch moves to a breaking model-input API, and Tree lands (it was removed again in August, see that entry).
+
+### Highlights
+
+#### CLI package renamed to zard-cli
+
+The package moves from `@ngzard/ui` to `zard-cli`, and the binary from `ngzard` to `zard-cli`. The old package now prints a deprecation warning instead of doing anything. `components.json` and components you already installed are unaffected.
+
+npx zard-cli@latest init
+
+#### Tree component
+
+A new `z-tree` shipped this month — expand/collapse, single and checkbox selection with propagation and indeterminate state, CDK virtual scroll, keyboard navigation, and a custom node template. It was removed again in August 2026, so there is no install command or demo for it here; mentioned for the record.
+
+#### Switch moves to a model input
+
+`z-switch` is now a component driven by `[(zChecked)]` and `zDisabled` instead of an attribute directive. The `(checkChange)` output and the bare `[z-switch]` selector are gone. Migrate `(checkChange)` to `(zCheckedChange)` or `[(zChecked)]`, `<button z-switch>` to `<z-switch>`, and a bare `disabled` attribute to `[zDisabled]`.
+
+<z-switch [(zChecked)]="enabled" [zDisabled]="locked">Label</z-switch>
+
+#### Button matches the latest shadcn/ui
+
+New `zSize` values (`xs`, `icon`, `icon-xs`, `icon-sm`, `icon-lg`), every existing size 4px shorter, a `rounded-lg` base radius, and a tinted rather than solid `destructive` variant. Not an API break, but layouts shift — reinstall `button` (and `date-picker`, which picked up the same size scale) to pick up the new styles.
+
+#### Dark mode service works under SSR
+
+`ZardDarkMode` no longer touches `matchMedia` in its constructor, so it no longer throws on the server and no longer flashes the wrong theme on first paint. It initialises after first render and keeps tracking OS changes while in `system` mode.
+
+npx zard-cli@latest add dark-mode
+
+#### CLI add is monorepo- and Angular-aware
+
+`zard-cli add` now walks up to find the right `package.json`, pins `embla-carousel-angular` to your Angular major, retries with `--legacy-peer-deps` when needed, warns on Angular pre-releases, and rewrites `@/shared/*` imports using the aliases in `components.json`.
+
+## January 2026
+
+A quiet month by commit count but not by API surface: Angular 21 becomes the floor, every generated id moves to a new `ZardIdDirective` so server and client stop disagreeing, and both the input directive and Checkbox learn to honour the Reactive Forms disabled state.
+
+### Highlights
+
+#### Angular 21 is now required
+
+Peer dependencies move to `^21.0.0` for `@angular/core`, `common`, `forms`, `router`, `platform-browser`, and `cdk` (previously pinned to 20.3.14), with `embla-carousel-angular` on `^21` and `tailwind-merge` on `^3.4`. Apps still on Angular 20 need to update before installing new components.
+
+ng update @angular/core@21 @angular/cli@21 @angular/cdk@21
+
+#### SSR-stable ids with ZardIdDirective
+
+Alert Dialog, Card, Checkbox, Input Group, Radio, Switch, Tooltip, and Menu now generate their ids through the public `ZardIdDirective` instead of `crypto.randomUUID()`, so the id is deterministic and the server and browser render the same markup — no more hydration mismatch. `generateId` from `@/shared/utils/merge-classes` is gone; use `ZardIdDirective` from `@/shared/core` instead.
+
+<label zardId="email" #e="zardId" [for]="e.id()">Email</label>
+
+#### ZardTooltipModule replaced by ZardTooltipImports
+
+The tooltip module is gone. Import `ZardTooltipImports` (or the standalone directive/component directly) instead.
+
+imports: [ZardTooltipImports]
+
+#### Input directive is a ControlValueAccessor
+
+The `input[z-input]` and `textarea[z-input]` directives now register `NG_VALUE_ACCESSOR`: `setValue`/`patchValue` work, `control.disable()` disables the field, and blur marks it touched. A new signal-form demo shows it wired through `[formField]` from `@angular/forms/signals`.
+
+#### Checkbox: zDisabled input and form disabled state
+
+The `disabled` input is renamed to `zDisabled`, `setDisabledState` is implemented so reactive forms can disable a checkbox directly, and `checked` is now a signal. The outer `<span>` wrapper is gone — the host itself carries the layout and `aria-disabled`.
+
+<span z-checkbox [zDisabled]="true">Disabled</span>
+
+#### Avatar and Empty render images with NgOptimizedImage
+
+Avatar gains a `zPriority` input and accepts a `SafeUrl` for `zSrc`; the image fills its container and lazy-loads unless marked priority. Empty renders its `zImage` at 64×64 by default. Both reject `data:`/`blob:` URLs in dev mode.
+
+<z-avatar zSrc="/me.png" zPriority />
+
+#### Variant helper types renamed
+
+Several exported variant types were renamed or split for consistency. `ZardAlertIconVariants`, `ZardAlertTitleVariants`, `ZardAlertDescriptionVariants` and `ZardCheckLabelVariants` were removed with no replacement.
+
+- `ZardAlertVariants` → `ZardAlertTypeVariants`
+- `ZardBadgeVariants` → `ZardBadgeTypeVariants, ZardBadgeShapeVariants`
+- `ZardCheckboxVariants` → `ZardCheckboxTypeVariants, ZardCheckboxSizeVariants, ZardCheckboxShapeVariants`
+- `ZardIconVariants` → `ZardIconSizeVariants`
 
 ## December 2025
 
@@ -458,6 +723,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
+  selector: 'z-demo-carousel-preview',
   imports: [ZardCarouselImports, ZardCardImports],
   template: `
     <div class="w-full max-w-48 sm:max-w-xs">
@@ -508,7 +774,7 @@ import { ZardKbdGroupComponent } from '@/shared/components/kbd/kbd-group.compone
 import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
 
 @Component({
-  selector: 'z-demo-kbd-default',
+  selector: 'z-demo-kbd-preview',
   imports: [ZardKbdComponent, ZardKbdGroupComponent],
   template: `
     <div class="flex flex-col items-center justify-center gap-4">
@@ -527,7 +793,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoKbdDefaultComponent {}
+export class ZardDemoKbdPreviewComponent {}
 ```
 
 ## October 2025
@@ -549,27 +815,28 @@ npx zard-cli@latest add sheet
 A versatile sheet component for side panels and overlays with customizable positioning and smooth transitions.
 
 ```
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardInputComponent } from '@/shared/components/input';
 import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
 import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
 
+/** Content the service renders inside the sheet. */
 @Component({
   selector: 'z-demo-sheet-preview-form',
-  imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
+  imports: [ReactiveFormsModule, ZardInputComponent],
   template: `
     <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
       <div class="grid gap-3">
-        <label for="sheet-demo-name" class="text-sm leading-none font-medium select-none">Name</label>
-        <input z-input id="sheet-demo-name" formControlName="name" />
+        <label for="sheet-service-name" class="text-sm leading-none font-medium select-none">Name</label>
+        <input z-input id="sheet-service-name" formControlName="name" />
       </div>
-
       <div class="grid gap-3">
-        <label for="sheet-demo-username" class="text-sm leading-none font-medium select-none">Username</label>
-        <input z-input id="sheet-demo-username" formControlName="username" />
+        <label for="sheet-service-username" class="text-sm leading-none font-medium select-none">Username</label>
+        <input z-input id="sheet-service-username" formControlName="username" />
       </div>
     </form>
   `,
@@ -577,21 +844,63 @@ import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
   exportAs: 'zardDemoSheetPreviewForm',
 })
 export class ZardDemoSheetPreviewFormComponent {
-  form = new FormGroup({
+  readonly form = new FormGroup({
     name: new FormControl('Pedro Duarte'),
     username: new FormControl('@peduarte'),
   });
 }
 
 @Component({
-  imports: [ZardButtonComponent, ZardSheetImports],
+  selector: 'z-demo-sheet-preview',
+  imports: [ZardButtonComponent, ZardInputComponent, ZardSheetImports, ZardTabsImports, ReactiveFormsModule],
   template: `
-    <button type="button" z-button zType="outline" (click)="openSheet()">Open</button>
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Open</button>
+
+        <z-sheet [(zVisible)]="visible">
+          <z-sheet-header>
+            <z-sheet-title>Edit profile</z-sheet-title>
+            <z-sheet-description>Make changes to your profile here. Click save when you're done.</z-sheet-description>
+          </z-sheet-header>
+          <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
+            <div class="grid gap-3">
+              <label for="sheet-name" class="text-sm leading-none font-medium select-none">Name</label>
+              <input z-input id="sheet-name" formControlName="name" />
+            </div>
+            <div class="grid gap-3">
+              <label for="sheet-username" class="text-sm leading-none font-medium select-none">Username</label>
+              <input z-input id="sheet-username" formControlName="username" />
+            </div>
+          </form>
+          <z-sheet-footer>
+            <button type="button" z-button (click)="save()">Save changes</button>
+            <button type="button" z-button zType="outline" z-sheet-close>Close</button>
+          </z-sheet-footer>
+        </z-sheet>
+      </z-tab>
+
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="openSheet()">Open</button>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSheetPreviewComponent {
   private readonly sheetService = inject(ZardSheetService);
+
+  readonly visible = signal(false);
+
+  readonly form = new FormGroup({
+    name: new FormControl('Pedro Duarte'),
+    username: new FormControl('@peduarte'),
+  });
+
+  save() {
+    console.log('Form submitted:', this.form.value);
+    this.visible.set(false);
+  }
 
   openSheet() {
     this.sheetService.create({
@@ -727,10 +1036,10 @@ Loading placeholder component for better perceived performance during content lo
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardSkeletonComponent } from '../skeleton.component';
+import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';
 
 @Component({
-  selector: 'z-demo-skeleton-default',
+  selector: 'z-demo-skeleton-preview',
   imports: [ZardSkeletonComponent],
   template: `
     <div class="flex items-center space-x-4">
@@ -743,7 +1052,7 @@ import { ZardSkeletonComponent } from '../skeleton.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSkeletonDefaultComponent {}
+export class ZardDemoSkeletonPreviewComponent {}
 ```
 
 #### spinner
@@ -764,7 +1073,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
 
 @Component({
-  selector: 'z-demo-spinner-customization',
+  selector: 'z-demo-spinner-custom-icon',
   imports: [ZardSpinnerComponent],
   template: `
     <div class="flex items-center gap-4">
@@ -795,7 +1104,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSpinnerCustomizationComponent {}
+export class ZardDemoSpinnerCustomIconComponent {}
 ```
 
 ## August 2025
@@ -894,15 +1203,15 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardBreadcrumbImports } from '../breadcrumb.imports';
 
 @Component({
-  selector: 'z-demo-breadcrumb-default',
+  selector: 'z-demo-breadcrumb-basic',
   imports: [ZardBreadcrumbImports],
   template: `
-    <z-breadcrumb zLabel="Default breadcrumb">
+    <z-breadcrumb zLabel="Basic breadcrumb">
       <z-breadcrumb-item>
-        <a z-breadcrumb-link [routerLink]="['/']">Home</a>
+        <a z-breadcrumb-link href="/">Home</a>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
-        <a z-breadcrumb-link [routerLink]="['/docs/components']">Components</a>
+        <a z-breadcrumb-link href="/docs/components">Components</a>
       </z-breadcrumb-item>
       <z-breadcrumb-item>
         <span z-breadcrumb-page>Breadcrumb</span>
@@ -911,7 +1220,7 @@ import { ZardBreadcrumbImports } from '../breadcrumb.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoBreadcrumbDefaultComponent {}
+export class ZardDemoBreadcrumbBasicComponent {}
 ```
 
 ## July 2025
@@ -964,7 +1273,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
-  selector: 'z-demo-tabs-default',
+  selector: 'z-demo-tabs-preview',
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardCardImports],
   template: `
     <z-tab-group class="w-[400px]">
@@ -1016,7 +1325,7 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoTabsDefaultComponent {}
+export class ZardDemoTabsPreviewComponent {}
 ```
 
 #### accordion
@@ -1087,14 +1396,14 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
 
 @Component({
-  selector: 'z-demo-tooltip-hover',
+  selector: 'z-demo-tooltip-preview',
   imports: [ZardButtonComponent, ZardTooltipImports],
   template: `
     <button type="button" z-button zType="outline" zTooltip="Tooltip content">Hover</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoTooltipHoverComponent {}
+export class ZardDemoTooltipPreviewComponent {}
 ```
 
 ## June 2025
@@ -1116,72 +1425,115 @@ npx zard-cli@latest add dialog
 Modal dialog component for displaying important content that requires user attention with backdrop overlay.
 
 ```
-import { ChangeDetectionStrategy, Component, inject, type AfterViewInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, signal, type AfterViewInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
+import { Z_MODAL_DATA, ZardDialogService } from '@/shared/components/dialog/dialog.service';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
 
-import { ZardInputComponent } from '../../input/input.component';
-import { Z_MODAL_DATA, ZardDialogService } from '../dialog.service';
-
-interface iDialogData {
+interface DialogData {
   name: string;
   username: string;
 }
 
+/** Content the service renders inside the dialog; reads what was passed through `zData`. */
 @Component({
-  selector: 'z-demo-dialog-basic',
-  imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
+  selector: 'z-demo-dialog-preview-content',
+  imports: [ReactiveFormsModule, ZardInputComponent],
   template: `
     <form [formGroup]="form" class="grid gap-4">
       <div class="grid gap-3">
-        <label for="name" class="text-sm leading-none font-medium select-none">Name</label>
-        <input z-input id="name" formControlName="name" />
+        <label for="dialog-service-name" class="text-sm leading-none font-medium select-none">Name</label>
+        <input z-input id="dialog-service-name" formControlName="name" />
       </div>
-
       <div class="grid gap-3">
-        <label for="username" class="text-sm leading-none font-medium select-none">Username</label>
-        <input z-input id="username" formControlName="username" />
+        <label for="dialog-service-username" class="text-sm leading-none font-medium select-none">Username</label>
+        <input z-input id="dialog-service-username" formControlName="username" />
       </div>
     </form>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  exportAs: 'zardDemoDialogBasic',
+  exportAs: 'zardDemoDialogPreviewContent',
 })
-export class ZardDemoDialogBasicInputComponent implements AfterViewInit {
-  private zData = inject(Z_MODAL_DATA) as iDialogData;
+export class ZardDemoDialogPreviewContentComponent implements AfterViewInit {
+  private readonly data = inject(Z_MODAL_DATA) as DialogData;
 
-  form = new FormGroup({
+  readonly form = new FormGroup({
     name: new FormControl('Pedro Duarte'),
     username: new FormControl('@peduarte'),
   });
 
   ngAfterViewInit(): void {
-    if (this.zData) {
-      this.form.patchValue(this.zData);
+    if (this.data) {
+      this.form.patchValue(this.data);
     }
   }
 }
 
 @Component({
-  imports: [ZardDialogImports],
+  selector: 'z-demo-dialog-preview',
+  imports: [ZardButtonComponent, ZardDialogImports, ZardInputComponent, ZardTabsImports, ReactiveFormsModule],
   template: `
-    <button type="button" z-button zType="outline" (click)="openDialog()">Edit profile</button>
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Edit profile</button>
+
+        <z-dialog [(zVisible)]="visible">
+          <z-dialog-header>
+            <z-dialog-title>Edit profile</z-dialog-title>
+            <z-dialog-description>Make changes to your profile here. Click save when you're done.</z-dialog-description>
+          </z-dialog-header>
+          <form [formGroup]="form" class="grid gap-4">
+            <div class="grid gap-3">
+              <label for="dialog-name" class="text-sm leading-none font-medium select-none">Name</label>
+              <input z-input id="dialog-name" formControlName="name" />
+            </div>
+            <div class="grid gap-3">
+              <label for="dialog-username" class="text-sm leading-none font-medium select-none">Username</label>
+              <input z-input id="dialog-username" formControlName="username" />
+            </div>
+          </form>
+          <z-dialog-footer>
+            <button type="button" z-button zType="outline" z-dialog-close>Cancel</button>
+            <button type="button" z-button (click)="save()">Save changes</button>
+          </z-dialog-footer>
+        </z-dialog>
+      </z-tab>
+
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="openDialog()">Edit profile</button>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoDialogBasicComponent {
-  private dialogService = inject(ZardDialogService);
+export class ZardDemoDialogPreviewComponent {
+  private readonly dialogService = inject(ZardDialogService);
+
+  readonly visible = signal(false);
+
+  readonly form = new FormGroup({
+    name: new FormControl('Samuel Rizzon'),
+    username: new FormControl('@samuelrizzondev'),
+  });
+
+  save() {
+    console.log('Form submitted:', this.form.value);
+    this.visible.set(false);
+  }
 
   openDialog() {
     this.dialogService.create({
-      zTitle: 'Edit Profile',
+      zTitle: 'Edit profile',
       zDescription: `Make changes to your profile here. Click save when you're done.`,
-      zContent: ZardDemoDialogBasicInputComponent,
+      zContent: ZardDemoDialogPreviewContentComponent,
       zData: {
         name: 'Samuel Rizzon',
         username: '@samuelrizzondev',
-      } as iDialogData,
+      } satisfies DialogData,
       zOkText: 'Save changes',
       zOnOk: instance => {
         console.log('Form submitted:', instance.form.value);
@@ -1266,21 +1618,46 @@ npx zard-cli@latest add alert-dialog
 Confirmation dialog for critical actions requiring explicit user confirmation with cancel and confirm options.
 
 ```
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
+import { ZardAlertDialogImports } from '@/shared/components/alert-dialog/alert-dialog.imports';
 import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
 
 @Component({
-  selector: 'z-demo-alert-dialog-default',
-  imports: [ZardButtonComponent],
+  selector: 'z-demo-alert-dialog-preview',
+  imports: [ZardAlertDialogImports, ZardButtonComponent, ZardTabsImports],
   template: `
-    <button type="button" z-button zType="outline" (click)="open()">Show Dialog</button>
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Show Dialog</button>
+
+        <z-alert-dialog [(zVisible)]="visible">
+          <z-alert-dialog-header>
+            <z-alert-dialog-title>Are you absolutely sure?</z-alert-dialog-title>
+            <z-alert-dialog-description>
+              This action cannot be undone. This will permanently delete your account from our servers.
+            </z-alert-dialog-description>
+          </z-alert-dialog-header>
+          <z-alert-dialog-footer>
+            <button type="button" z-button zType="outline" z-alert-dialog-close>Cancel</button>
+            <button type="button" z-button (click)="visible.set(false)">Continue</button>
+          </z-alert-dialog-footer>
+        </z-alert-dialog>
+      </z-tab>
+
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="open()">Show Dialog</button>
+      </z-tab>
+    </z-tab-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoAlertDialogDefaultComponent {
+export class ZardDemoAlertDialogPreviewComponent {
   private readonly alertDialogService = inject(ZardAlertDialogService);
+
+  readonly visible = signal(false);
 
   open() {
     this.alertDialogService.create({
@@ -1312,21 +1689,23 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
 
 @Component({
-  selector: 'z-demo-dropdown-default',
+  selector: 'z-demo-dropdown-basic',
   imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open menu</button>
 
     <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-48">
+      <z-dropdown-menu-label>My Account</z-dropdown-menu-label>
       <z-dropdown-menu-item (click)="log('Profile')">Profile</z-dropdown-menu-item>
       <z-dropdown-menu-item (click)="log('Billing')">Billing</z-dropdown-menu-item>
       <z-dropdown-menu-item (click)="log('Team')">Team</z-dropdown-menu-item>
+      <z-dropdown-menu-separator />
       <z-dropdown-menu-item [disabled]="true">Subscription</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoDropdownDefaultComponent {
+export class ZardDemoDropdownBasicComponent {
   log(item: string) {
     console.log(`${item} clicked`);
   }
@@ -1357,7 +1736,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
-  selector: 'z-demo-select-default',
+  selector: 'z-demo-select-preview',
   imports: [ZardSelectImports],
   template: `
     <z-select class="w-full min-w-48" zPlaceholder="Select a fruit" [(zValue)]="selectedFruit">
@@ -1371,7 +1750,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSelectDefaultComponent {
+export class ZardDemoSelectPreviewComponent {
   readonly selectedFruit = signal('');
 }
 ```
@@ -1397,14 +1776,14 @@ Enable notifications
 Enable notifications You can enable or disable notifications at any time.
 
 ```
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 
 @Component({
-  selector: 'z-demo-checkbox-default',
+  selector: 'z-demo-checkbox-preview',
   imports: [ZardCheckboxComponent, ...ZardFieldImports, FormsModule],
   template: `
     <div z-field-group class="min-w-sm">
@@ -1423,7 +1802,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
         <z-checkbox zId="toggle-checkbox" zDisabled />
         <label z-field-label for="toggle-checkbox">Enable notifications</label>
       </div>
-      <label z-field-label>
+      <label z-field-label for="toggle-checkbox-2">
         <div z-field zOrientation="horizontal">
           <z-checkbox zId="toggle-checkbox-2" [(ngModel)]="notifications" />
           <div z-field-content>
@@ -1434,8 +1813,9 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
       </label>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoCheckboxDefaultComponent {
+export class ZardDemoCheckboxPreviewComponent {
   terms = false;
   termsWithDesc = true;
   notifications = false;
@@ -1461,15 +1841,14 @@ Comfortable
 Compact
 
 ```
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
 
 @Component({
-  selector: 'z-demo-radio-group-default',
-  imports: [...ZardRadioGroupImports, ...ZardFieldImports, FormsModule],
+  selector: 'z-demo-radio-group-preview',
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
   template: `
     <z-radio-group [(value)]="selected" class="w-fit">
       <div class="flex items-center gap-3">
@@ -1486,8 +1865,9 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
       </div>
     </z-radio-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoRadioGroupDefaultComponent {
+export class ZardDemoRadioGroupPreviewComponent {
   selected: unknown = 'comfortable';
 }
 ```
@@ -1512,14 +1892,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
 
 @Component({
-  selector: 'z-demo-switch',
+  selector: 'z-demo-switch-preview',
   imports: [ZardSwitchComponent],
   template: `
     <z-switch zId="airplane-mode">Airplane Mode</z-switch>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSwitchDefaultComponent {}
+export class ZardDemoSwitchPreviewComponent {}
 ```
 
 #### slider
@@ -1540,7 +1920,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardSliderComponent } from '../slider.component';
 
 @Component({
-  selector: 'z-demo-slider-default',
+  selector: 'z-demo-slider-preview',
   imports: [ZardSliderComponent],
   template: `
     <div class="flex min-h-50 w-full items-center p-10">
@@ -1549,7 +1929,7 @@ import { ZardSliderComponent } from '../slider.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSliderDefaultComponent {}
+export class ZardDemoSliderPreviewComponent {}
 ```
 
 ## April 2025
@@ -1581,7 +1961,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 
 @Component({
-  selector: 'z-demo-input-default',
+  selector: 'z-demo-input-preview',
   imports: [ZardInputComponent, ...ZardFieldImports],
   template: `
     <div z-field class="w-72">
@@ -1592,7 +1972,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoInputDefaultComponent {}
+export class ZardDemoInputPreviewComponent {}
 ```
 
 ## March 2025
@@ -1645,6 +2025,8 @@ Login to your account
 
 Enter your email below to login to your account
 
+Sign up
+
 Email
 
 Password
@@ -1660,69 +2042,45 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardCardImports } from '@/shared/components/card/card.imports';
-import { ZardIdDirective } from '@/shared/core';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
 
 @Component({
-  selector: 'z-demo-card-default',
-  imports: [ZardCardImports, ZardButtonComponent, ZardIdDirective],
+  selector: 'z-demo-card-preview',
+  imports: [ZardCardImports, ZardButtonComponent, ...ZardFieldImports, ZardInputComponent],
   template: `
     <z-card class="w-full md:w-94">
-      <div z-card-header>
+      <z-card-header>
         <z-card-title zTitle="Login to your account" />
         <z-card-description zDescription="Enter your email below to login to your account" />
         <z-card-action>
-          <button z-button type="button" zType="link" (click)="onSignUp()">Sign up</button>
+          <a z-button zType="link" href="#">Sign up</a>
         </z-card-action>
-      </div>
-      <div z-card-content>
-        <div class="space-y-4">
-          <div class="space-y-2" zardId="email" #e="zardId">
-            <label
-              [for]="e.id()"
-              class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Email
-            </label>
-            <input
-              [id]="e.id()"
-              type="email"
-              placeholder="m@example.com"
-              class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              required
-            />
+      </z-card-header>
+      <z-card-content>
+        <div z-field-group>
+          <div z-field>
+            <label z-field-label for="card-login-email">Email</label>
+            <input z-input id="card-login-email" type="email" placeholder="m@example.com" required />
           </div>
-          <div class="space-y-2">
-            <div class="flex items-center" zardId="password" #p="zardId">
-              <label
-                [for]="p.id()"
-                class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Password
-              </label>
-              <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
+          <div z-field>
+            <div class="flex items-center">
+              <label z-field-label for="card-login-password">Password</label>
+              <a href="#" class="ms-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
             </div>
-            <input
-              [id]="p.id()"
-              type="password"
-              class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              required
-            />
+            <input z-input id="card-login-password" type="password" required />
           </div>
         </div>
-      </div>
-      <div z-card-footer class="flex-col gap-2">
-        <z-button zType="default" class="w-full">Login</z-button>
+      </z-card-content>
+      <z-card-footer class="flex-col gap-2">
+        <z-button class="w-full">Login</z-button>
         <z-button zType="outline" class="w-full">Login with Google</z-button>
-      </div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoCardDefaultComponent {
-  protected onSignUp(): void {
-    alert('Redirect to Sign Up');
-  }
-}
+export class ZardDemoCardPreviewComponent {}
 ```
 
 #### badge
@@ -1747,13 +2105,15 @@ Outline
 
 Ghost
 
+Link
+
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '../badge.component';
 
 @Component({
-  selector: 'z-demo-badge-default',
+  selector: 'z-demo-badge-variants',
   imports: [ZardBadgeComponent],
   template: `
     <div class="flex flex-col items-center gap-2">
@@ -1763,12 +2123,13 @@ import { ZardBadgeComponent } from '../badge.component';
         <z-badge zType="destructive">Destructive</z-badge>
         <z-badge zType="outline">Outline</z-badge>
         <z-badge zType="ghost">Ghost</z-badge>
+        <z-badge zType="link">Link</z-badge>
       </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoBadgeDefaultComponent {}
+export class ZardDemoBadgeVariantsComponent {}
 ```
 
 #### alert
@@ -1797,7 +2158,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { provideIcons } from '@ng-icons/core';
 import { lucideCircleCheck, lucideInfo } from '@ng-icons/lucide';
 
-import { ZardAlertComponent } from '../alert.component';
+import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
 
 @Component({
   selector: 'z-demo-alert-basic',
@@ -1842,7 +2203,7 @@ Data table component with sorting, filtering, pagination, and customizable colum
 | Joe Black | 32 | Sidney No. 1 Lake Park |
 
 ```
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardTableImports } from '@/shared/components/table/table.imports';
 
@@ -1858,12 +2219,12 @@ interface Person {
   imports: [ZardTableImports],
   template: `
     <table z-table>
-      <caption z-table-caption>A list of your recent invoices.</caption>
+      <caption z-table-caption>A list of registered users.</caption>
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head>Name</th>
-          <th z-table-head>Age</th>
-          <th z-table-head>Address</th>
+          <th z-table-head scope="col">Name</th>
+          <th z-table-head scope="col">Age</th>
+          <th z-table-head scope="col">Address</th>
         </tr>
       </thead>
       <tbody z-table-body>
@@ -1877,6 +2238,10 @@ interface Person {
       </tbody>
     </table>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'block w-full overflow-x-auto',
+  },
 })
 export class ZardDemoTableSimpleComponent {
   listOfData: Person[] = [

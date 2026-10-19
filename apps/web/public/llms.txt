@@ -156,7 +156,7 @@ Then copy component code from the documentation.
 
 ## Tech Stack
 
-- Angular 19+
+- Angular 20+
 - TypeScript
 - TailwindCSS v4
 - Class Variance Authority (CVA)
