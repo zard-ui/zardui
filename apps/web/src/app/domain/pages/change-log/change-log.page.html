@@ -93,7 +93,10 @@
     -->
       @if (entry.loadExamples) {
         @defer (when examplesOf(entry.meta.id); hydrate when examplesOf(entry.meta.id)) {
-          <z-changelog-examples [examples]="examplesOf(entry.meta.id) ?? []" />
+          <z-changelog-examples
+            [examples]="examplesOf(entry.meta.id) ?? []"
+            [title]="entry.examplesTitle ?? 'New Components'"
+          />
         }
       }
     </div>

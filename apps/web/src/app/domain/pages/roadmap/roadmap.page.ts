@@ -238,7 +238,7 @@ export class RoadmapPage implements OnInit {
   ngOnInit(): void {
     this.seoService.setDocsSeo(
       'Roadmap',
-      'Zard UI shipped V1.0. See the journey that got us here, and the plan for what is next: keeping v1 stable, RTL, zard-cli create, the AI SDK, and continuous docs and bug fixes.',
+      'Zard UI shipped V1.0. See the journey that got us here, and the plan for what is next: keeping v1 stable, zard-cli create, the AI SDK, and continuous docs and bug fixes.',
       '/docs/roadmap',
       'og-roadmap.jpg',
     );

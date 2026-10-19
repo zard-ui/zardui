@@ -35,11 +35,14 @@ describe('CHANGELOG_ENTRIES', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('carries the release banner data on exactly one entry, the newest', () => {
+  it('carries the release banner data on exactly one entry', () => {
     const withRelease = CHANGELOG_ENTRIES.filter(entry => entry.release);
     expect(withRelease).toHaveLength(1);
     expect(withRelease[0].meta.id).toBe('09-2026');
-    expect(CHANGELOG_ENTRIES[0].meta.id).toBe('09-2026');
+  });
+
+  it('lists the newest month first, even when it is newer than the release', () => {
+    expect(CHANGELOG_ENTRIES[0].meta.id).toBe('10-2026');
   });
 
   it('every highlight icon is one of the eight values the closed union allows', () => {
