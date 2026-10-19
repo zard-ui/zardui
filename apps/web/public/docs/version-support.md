@@ -11,11 +11,11 @@ Zard UI is built with modern Angular features like signal inputs, standalone com
 
 ## Support Policy
 
-Zard UI maintains backward compatibility with **Angular 19 and above** . When a new major Angular version is released, we update Zard UI to support it while maintaining compatibility with recent versions.
+Zard UI maintains backward compatibility with **Angular 20 and above** . When a new major Angular version is released, we update Zard UI to support it while maintaining compatibility with recent versions.
 
-Why Angular 19+?
+Why Angular 20+?
 
-Maintaining backward compatibility with Angular 19 and above gives teams enough time to plan and execute their Angular upgrades without losing access to Zard UI updates and new components. This approach balances stability with our ability to adopt new Angular features quickly.
+Maintaining backward compatibility with Angular 20 and above gives teams enough time to plan and execute their Angular upgrades without losing access to Zard UI updates and new components. This approach balances stability with our ability to adopt new Angular features quickly.
 
 ## Current Support Status
 
@@ -37,13 +37,7 @@ Angular 20
 
 ✅ Active
 
-Supported. Bug fixes and security patches are applied to maintain compatibility.
-
-Angular 19
-
-✅ Active
-
-Minimum supported Angular version. We recommend upgrading to Angular 20 or later for the best experience.
+Minimum supported Angular version. We recommend upgrading to Angular 21 or later for the best experience.
 
 ## Upgrade Process
 
