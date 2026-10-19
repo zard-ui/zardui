@@ -201,7 +201,7 @@ export const avatarGroupVariants = cva(
   {
     variants: {
       zOrientation: {
-        horizontal: 'flex-row -space-x-2 rtl:space-x-reverse',
+        horizontal: 'flex-row -space-x-2',
         vertical: 'flex-col -space-y-2',
       },
     },
