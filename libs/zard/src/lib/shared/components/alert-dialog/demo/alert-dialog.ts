@@ -2,6 +2,7 @@ import { ALERT_DIALOG_DEMO_BASIC } from '@generated/components/alert-dialog/demo
 import { ALERT_DIALOG_DEMO_DESTRUCTIVE } from '@generated/components/alert-dialog/demo/destructive';
 import { ALERT_DIALOG_DEMO_MEDIA } from '@generated/components/alert-dialog/demo/media';
 import { ALERT_DIALOG_DEMO_PREVIEW } from '@generated/components/alert-dialog/demo/preview';
+import { ALERT_DIALOG_DEMO_RTL } from '@generated/components/alert-dialog/demo/rtl';
 import { ALERT_DIALOG_DEMO_SMALL } from '@generated/components/alert-dialog/demo/small';
 import { ALERT_DIALOG_DEMO_SMALL_WITH_MEDIA } from '@generated/components/alert-dialog/demo/small-with-media';
 import { ALERT_DIALOG_CLI_ADD } from '@generated/installation/cli/add-alert-dialog';
@@ -13,6 +14,7 @@ import { ZardDemoAlertDialogBasicComponent } from './basic';
 import { ZardDemoAlertDialogDestructiveComponent } from './destructive';
 import { ZardDemoAlertDialogMediaComponent } from './media';
 import { ZardDemoAlertDialogPreviewComponent } from './preview';
+import { ZardDemoAlertDialogRtlComponent } from './rtl';
 import { ZardDemoAlertDialogSmallComponent } from './small';
 import { ZardDemoAlertDialogSmallWithMediaComponent } from './small-with-media';
 import { ALERT_DIALOG_API } from '../doc/api';
@@ -92,6 +94,13 @@ export const ALERT_DIALOG = {
         'A destructive action: tint the media slot (`class` on `z-alert-dialog-media`, or `zMediaClass`) and make the confirm button destructive (`zType="destructive"`, or `zOkDestructive: true`).',
       component: ZardDemoAlertDialogDestructiveComponent,
       codeData: ALERT_DIALOG_DEMO_DESTRUCTIVE,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoAlertDialogRtlComponent,
+      codeData: ALERT_DIALOG_DEMO_RTL,
     },
   ],
 };

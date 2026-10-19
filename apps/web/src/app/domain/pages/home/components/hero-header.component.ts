@@ -19,9 +19,9 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
         <div
           class="container flex flex-col items-center gap-2 px-6 pt-8 pb-8 text-center md:pt-16 md:pb-8 lg:pt-20 lg:pb-12 xl:gap-4"
         >
-          <a z-badge routerLink="/docs/installation" zType="secondary" class="bg-muted">
-            Build your design system in the browser
-            <ng-icon name="lucideArrowRight" class="size-3" />
+          <a z-badge routerLink="/docs/rtl" zType="secondary" class="bg-muted">
+            New: RTL support for every component
+            <ng-icon name="lucideArrowRight" class="size-3 rtl:rotate-180" />
           </a>
 
           <h1

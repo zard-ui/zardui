@@ -3,7 +3,8 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const RADIO_GROUP_API: ApiSection[] = [
   {
     selector: 'z-radio-group',
-    description: 'Wrapper that groups radio items and manages the selected value.',
+    description:
+      'Wrapper that groups radio items and manages the selected value. Arrow keys move the selection; ArrowLeft/ArrowRight follow the reading direction, so they swap in RTL.',
     props: [
       { name: '[value]', description: 'Selected value, two-way bindable', type: 'unknown', default: 'null' },
       { name: '[(value)]', description: 'Selected value (two-way binding)', type: 'unknown', default: 'null' },

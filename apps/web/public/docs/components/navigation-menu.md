@@ -144,7 +144,9 @@ export const navigationMenuContentVariants = cva(
     'data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out',
     'data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out',
     'data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52',
+    'rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52',
     'data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52',
+    'rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52',
   ],
   {
     variants: {
@@ -191,17 +193,17 @@ export const navigationMenuViewportVariants = cva([
 
 export const navigationMenuLinkVariants = cva(
   [
-    'relative flex w-full cursor-default select-none items-center gap-2 rounded-md p-2 text-left text-sm',
+    'relative flex w-full cursor-default select-none items-center gap-2 rounded-md p-2 text-start text-sm',
     'transition-all outline-none hover:bg-muted focus:bg-muted',
     'focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1',
     'data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted',
     'data-disabled:pointer-events-none data-disabled:opacity-50',
-    "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 [&>i]:mr-2 [&>z-icon]:mr-2 [&>ng-icon]:shrink-0",
+    "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 [&>i]:me-2 [&>z-icon]:me-2 [&>ng-icon]:shrink-0",
   ],
   {
     variants: {
       inset: {
-        true: 'pl-8',
+        true: 'ps-8',
         false: '',
       },
       zType: {
@@ -222,7 +224,7 @@ export const navigationMenuIndicatorVariants = cva([
 ]);
 
 export const navigationMenuSubmenuArrowVariants = cva([
-  'ml-auto opacity-60 transition-opacity duration-150',
+  'ms-auto opacity-60 transition-opacity duration-150',
   'text-muted-foreground dark:text-gray-400',
   'group-hover:opacity-100 group-focus:opacity-100',
 ]);
@@ -232,7 +234,7 @@ export const navigationMenuLabelVariants = cva(
   {
     variants: {
       inset: {
-        true: 'pl-8',
+        true: 'ps-8',
         false: '',
       },
     },
@@ -242,7 +244,7 @@ export const navigationMenuLabelVariants = cva(
   },
 );
 
-export const navigationMenuShortcutVariants = cva('ml-auto text-xs tracking-widest text-muted-foreground');
+export const navigationMenuShortcutVariants = cva('ms-auto text-xs tracking-widest text-muted-foreground');
 
 export type ZardNavigationMenuLinkTypeVariants = NonNullable<VariantProps<typeof navigationMenuLinkVariants>['zType']>;
 
@@ -848,6 +850,31 @@ export type ZardNavigationMenuPlacement =
   | 'rightTop'
   | 'rightCenter'
   | 'rightBottom';
+
+const SWAP_X = { start: 'end', end: 'start', center: 'center' } as const;
+
+/**
+ * Resolves the connected positions of a placement for the given direction.
+ *
+ * `top*` and `bottom*` placements align to the trigger's inline edges (`Left` is the inline-start edge, `Right` the
+ * inline-end edge), so CDK `start`/`end` already do the right thing in both directions. `left*` and `right*` place the
+ * popup on a physical side of the trigger: CDK resolves `start`/`end` through the overlay direction, so in RTL the
+ * origin and overlay edges swap while the signed `offsetX` (always physical) keeps pointing away from the trigger.
+ */
+export function getNavigationMenuPositions(placement: ZardNavigationMenuPlacement, rtl: boolean): ConnectedPosition[] {
+  const positions = NAVIGATION_MENU_POSITIONS_MAP[placement] ?? NAVIGATION_MENU_POSITIONS_MAP['bottomLeft'];
+  const physicalSide = placement.startsWith('left') || placement.startsWith('right');
+
+  if (!rtl || !physicalSide) {
+    return positions;
+  }
+
+  return positions.map(position => ({
+    ...position,
+    originX: SWAP_X[position.originX],
+    overlayX: SWAP_X[position.overlayX],
+  }));
+}
 ```
 
 ```angular-ts
@@ -879,9 +906,9 @@ export class ZardNavigationMenuShortcutComponent {
 ```
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import type { ConnectedPosition } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import {
   afterNextRender,
@@ -914,7 +941,7 @@ import {
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardNavigationMenuManagerService } from './navigation-menu-manager.service';
-import { NAVIGATION_MENU_POSITIONS_MAP, type ZardNavigationMenuPlacement } from './navigation-menu-positions';
+import { getNavigationMenuPositions, type ZardNavigationMenuPlacement } from './navigation-menu-positions';
 import { ZardNavigationMenuService } from './navigation-menu.service';
 
 export type ZardNavigationMenuTriggerMode = 'click' | 'hover';
@@ -959,6 +986,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly injector = inject(Injector);
+  private readonly directionality = inject(Directionality, { optional: true });
   /** Absent when the trigger is used outside a `<z-navigation-menu>`, which forces overlay mode. */
   private readonly service = inject(ZardNavigationMenuService, { optional: true });
 
@@ -994,7 +1022,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     this.isViewportMode() ? (this.service?.isActive(this.index) ?? false) : this.overlayOpen(),
   );
 
-  private readonly menuPositions = computed(() => this.getPositionsByPlacement(this.zPlacement()));
+  private readonly menuPositions = computed(() =>
+    getNavigationMenuPositions(this.zPlacement(), (this.directionality?.valueSignal() ?? 'ltr') === 'rtl'),
+  );
 
   constructor() {
     effect(() => {
@@ -1157,10 +1187,6 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
       },
       { injector: this.injector },
     );
-  }
-
-  private getPositionsByPlacement(placement: ZardNavigationMenuPlacement): ConnectedPosition[] {
-    return NAVIGATION_MENU_POSITIONS_MAP[placement] || NAVIGATION_MENU_POSITIONS_MAP['bottomLeft'];
   }
 
   /**
@@ -1373,6 +1399,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 ```
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { CdkConnectedOverlay, type ConnectedPosition, Overlay } from '@angular/cdk/overlay';
 import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
 import {
@@ -1463,6 +1490,7 @@ const OVERLAY_POSITIONS: ConnectedPosition[] = [
 })
 export class ZardNavigationMenuViewportComponent {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly directionality = inject(Directionality, { optional: true });
   private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly injector = inject(Injector);
@@ -1520,6 +1548,7 @@ export class ZardNavigationMenuViewportComponent {
     // Changing which edge to line up with has to re-run the offset maths.
     effect(() => {
       this.align();
+      this.directionality?.valueSignal();
 
       untracked(() => {
         if (this.isOpen()) {
@@ -1597,23 +1626,27 @@ export class ZardNavigationMenuViewportComponent {
     const trigger = active.element.getBoundingClientRect();
     const bar = root.getBoundingClientRect();
 
+    // `start`/`end` are inline edges: in RTL the popup's start edge is its right edge.
+    const rtl = (this.directionality?.value ?? 'ltr') === 'rtl';
     let left: number;
     switch (this.align()) {
       case 'center':
         left = trigger.left + trigger.width / 2 - width / 2;
         break;
       case 'end':
-        left = trigger.right - width;
+        left = rtl ? trigger.left : trigger.right - width;
         break;
       default:
-        left = trigger.left;
+        left = rtl ? trigger.right - width : trigger.left;
     }
 
     const rightmost = view.innerWidth - WINDOW_MARGIN - width;
     const clamped = Math.max(WINDOW_MARGIN, Math.min(left, rightmost));
 
-    // The pane already sits at the bar's left edge, so the offset is relative to it.
-    this.offsetX.set(Math.round(clamped - bar.left));
+    // The pane sits at the bar's inline-start edge: its left edge in LTR, and in RTL its right edge, so the pane's left
+    // edge is `bar.right - width`. The translate is physical either way.
+    const paneLeft = rtl ? bar.right - width : bar.left;
+    this.offsetX.set(Math.round(clamped - paneLeft));
   }
 
   /** Keeps the morph honest when the rendered content resizes after being mounted. */
@@ -1994,6 +2027,271 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu';
 export class ZardDemoNavigationMenuNoViewportComponent {}
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCircleAlert, lucideCircleCheck, lucideCircleDashed } from '@ng-icons/lucide';
+
+import { navigationMenuTriggerVariants, ZardNavigationMenuImports } from '@/shared/components/navigation-menu';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface NavigationMenuRtlValues {
+  gettingStarted: string;
+  introduction: string;
+  introductionDesc: string;
+  installation: string;
+  installationDesc: string;
+  typography: string;
+  typographyDesc: string;
+  components: string;
+  alertDialog: string;
+  alertDialogDesc: string;
+  hoverCard: string;
+  hoverCardDesc: string;
+  progress: string;
+  progressDesc: string;
+  scrollArea: string;
+  scrollAreaDesc: string;
+  tabs: string;
+  tabsDesc: string;
+  tooltip: string;
+  tooltipDesc: string;
+  withIcon: string;
+  backlog: string;
+  toDo: string;
+  done: string;
+  docs: string;
+}
+
+type ComponentKey = 'alertDialog' | 'hoverCard' | 'progress' | 'scrollArea' | 'tabs' | 'tooltip';
+
+const translations: ZardRtlTranslations<NavigationMenuRtlValues> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      gettingStarted: 'Getting started',
+      introduction: 'Introduction',
+      introductionDesc: 'Re-usable components built with Tailwind CSS.',
+      installation: 'Installation',
+      installationDesc: 'How to install dependencies and structure your app.',
+      typography: 'Typography',
+      typographyDesc: 'Styles for headings, paragraphs, lists...etc',
+      components: 'Components',
+      alertDialog: 'Alert Dialog',
+      alertDialogDesc: 'A modal dialog that interrupts the user with important content and expects a response.',
+      hoverCard: 'Hover Card',
+      hoverCardDesc: 'For sighted users to preview content available behind a link.',
+      progress: 'Progress',
+      progressDesc:
+        'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
+      scrollArea: 'Scroll-area',
+      scrollAreaDesc: 'Visually or semantically separates content.',
+      tabs: 'Tabs',
+      tabsDesc: 'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
+      tooltip: 'Tooltip',
+      tooltipDesc:
+        'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+      withIcon: 'With Icon',
+      backlog: 'Backlog',
+      toDo: 'To Do',
+      done: 'Done',
+      docs: 'Docs',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      gettingStarted: 'البدء',
+      introduction: 'مقدمة',
+      introductionDesc: 'مكونات قابلة لإعادة الاستخدام مبنية باستخدام Tailwind CSS.',
+      installation: 'التثبيت',
+      installationDesc: 'كيفية تثبيت التبعيات وتنظيم تطبيقك.',
+      typography: 'الطباعة',
+      typographyDesc: 'أنماط للعناوين والفقرات والقوائم...إلخ',
+      components: 'المكونات',
+      alertDialog: 'حوار التنبيه',
+      alertDialogDesc: 'حوار نافذة يقطع المستخدم بمحتوى مهم ويتوقع استجابة.',
+      hoverCard: 'بطاقة التحويم',
+      hoverCardDesc: 'للمستخدمين المبصرين لمعاينة المحتوى المتاح خلف الرابط.',
+      progress: 'التقدم',
+      progressDesc: 'يعرض مؤشرًا يوضح تقدم إتمام المهمة، عادةً يتم عرضه كشريط تقدم.',
+      scrollArea: 'منطقة التمرير',
+      scrollAreaDesc: 'يفصل المحتوى بصريًا أو دلاليًا.',
+      tabs: 'التبويبات',
+      tabsDesc: 'مجموعة من أقسام المحتوى المتعددة الطبقات—المعروفة بألواح التبويب—التي يتم عرضها واحدة في كل مرة.',
+      tooltip: 'تلميح',
+      tooltipDesc:
+        'نافذة منبثقة تعرض معلومات متعلقة بعنصر عندما يتلقى العنصر التركيز على لوحة المفاتيح أو عند تحويم الماوس فوقه.',
+      withIcon: 'مع أيقونة',
+      backlog: 'قائمة الانتظار',
+      toDo: 'المهام',
+      done: 'منجز',
+      docs: 'الوثائق',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      gettingStarted: 'התחלה',
+      introduction: 'הקדמה',
+      introductionDesc: 'רכיבים לשימוש חוזר שנבנו עם Tailwind CSS.',
+      installation: 'התקנה',
+      installationDesc: 'כיצד להתקין תלויות ולבנות את האפליקציה שלך.',
+      typography: 'טיפוגרפיה',
+      typographyDesc: "סגנונות לכותרות, פסקאות, רשימות...וכו'",
+      components: 'רכיבים',
+      alertDialog: 'דיאלוג התראה',
+      alertDialogDesc: 'דיאלוג מודאלי שמפריע למשתמש עם תוכן חשוב ומצפה לתגובה.',
+      hoverCard: 'כרטיס ריחוף',
+      hoverCardDesc: 'למשתמשים רואים כדי להציג תצוגה מקדימה של תוכן זמין מאחורי קישור.',
+      progress: 'התקדמות',
+      progressDesc: 'מציג אינדיקטור המציג את התקדמות ההשלמה של משימה, בדרך כלל מוצג כסרגל התקדמות.',
+      scrollArea: 'אזור גלילה',
+      scrollAreaDesc: 'מפריד תוכן חזותית או סמנטית.',
+      tabs: 'כרטיסיות',
+      tabsDesc: 'קבוצה של חלקי תוכן מרובדים—המכונים לוחות כרטיסיות—המוצגים אחד בכל פעם.',
+      tooltip: 'טולטיפ',
+      tooltipDesc: 'חלון קופץ המציג מידע הקשור לאלמנט כאשר האלמנט מקבל מיקוד מקלדת או כאשר העכבר מרחף מעליו.',
+      withIcon: 'עם אייקון',
+      backlog: 'רשימת המתנה',
+      toDo: 'לעשות',
+      done: 'הושלם',
+      docs: 'תיעוד',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-navigation-menu-rtl',
+  imports: [ZardNavigationMenuImports, NgIcon],
+  template: `
+    <nav aria-label="Main" class="contents">
+      <z-navigation-menu>
+        <ul z-navigation-menu-list>
+          <li z-navigation-menu-item>
+            <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="gettingStarted">
+              {{ i18n.t().gettingStarted }}
+            </button>
+
+            <ng-template #gettingStarted>
+              <div z-navigation-menu-content>
+                <ul class="w-96">
+                  <li>
+                    <a z-navigation-menu-link href="#">
+                      <div class="flex flex-col gap-1 text-sm">
+                        <div class="leading-none font-medium">{{ i18n.t().introduction }}</div>
+                        <div class="text-muted-foreground line-clamp-2">{{ i18n.t().introductionDesc }}</div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a z-navigation-menu-link href="#">
+                      <div class="flex flex-col gap-1 text-sm">
+                        <div class="leading-none font-medium">{{ i18n.t().installation }}</div>
+                        <div class="text-muted-foreground line-clamp-2">{{ i18n.t().installationDesc }}</div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a z-navigation-menu-link href="#">
+                      <div class="flex flex-col gap-1 text-sm">
+                        <div class="leading-none font-medium">{{ i18n.t().typography }}</div>
+                        <div class="text-muted-foreground line-clamp-2">{{ i18n.t().typographyDesc }}</div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </ng-template>
+          </li>
+
+          <li z-navigation-menu-item class="hidden md:flex">
+            <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="componentsMenu">
+              {{ i18n.t().components }}
+            </button>
+
+            <ng-template #componentsMenu>
+              <div z-navigation-menu-content>
+                <ul class="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                  @for (component of components; track component.key) {
+                    <li>
+                      <a z-navigation-menu-link href="#">
+                        <div class="flex flex-col gap-1 text-sm">
+                          <div class="leading-none font-medium">{{ i18n.t()[component.key] }}</div>
+                          <div class="text-muted-foreground line-clamp-2">{{ i18n.t()[component.description] }}</div>
+                        </div>
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </ng-template>
+          </li>
+
+          <li z-navigation-menu-item>
+            <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="withIcon">
+              {{ i18n.t().withIcon }}
+            </button>
+
+            <ng-template #withIcon>
+              <div z-navigation-menu-content>
+                <ul class="grid w-[200px]">
+                  <li>
+                    <a z-navigation-menu-link href="#" class="flex-row items-center gap-2">
+                      <ng-icon name="lucideCircleAlert" />
+                      {{ i18n.t().backlog }}
+                    </a>
+                    <a z-navigation-menu-link href="#" class="flex-row items-center gap-2">
+                      <ng-icon name="lucideCircleDashed" />
+                      {{ i18n.t().toDo }}
+                    </a>
+                    <a z-navigation-menu-link href="#" class="flex-row items-center gap-2">
+                      <ng-icon name="lucideCircleCheck" />
+                      {{ i18n.t().done }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </ng-template>
+          </li>
+
+          <li z-navigation-menu-item>
+            <a z-navigation-menu-link href="#" [class]="triggerClass">{{ i18n.t().docs }}</a>
+          </li>
+        </ul>
+      </z-navigation-menu>
+    </nav>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCircleAlert, lucideCircleCheck, lucideCircleDashed })],
+})
+export class ZardDemoNavigationMenuRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  /** A plain link styled like a trigger, so it lines up with the rest of the bar. */
+  protected readonly triggerClass = navigationMenuTriggerVariants();
+
+  protected readonly components: { key: ComponentKey; description: `${ComponentKey}Desc` }[] = [
+    { key: 'alertDialog', description: 'alertDialogDesc' },
+    { key: 'hoverCard', description: 'hoverCardDesc' },
+    { key: 'progress', description: 'progressDesc' },
+    { key: 'scrollArea', description: 'scrollAreaDesc' },
+    { key: 'tabs', description: 'tabsDesc' },
+    { key: 'tooltip', description: 'tooltipDesc' },
+  ];
+}
+```
+
 ## API Reference
 
 ### z-navigation-menu
@@ -2033,7 +2331,7 @@ Opens the content it points to. Inside a root it opens on hover; standalone it o
 | `[zDisabled]` | Whether the trigger is disabled | `boolean` | `false` |
 | `[zTrigger]` | How the content is opened | `'click' \| 'hover'` | `'hover' inside a root, 'click' standalone` |
 | `[zHoverDelay]` | Delay in ms before closing on hover exit | `number` | `100` |
-| `[zPlacement]` | Popup position relative to the trigger. Overlay mode only | `ZardNavigationMenuPlacement` | `'bottomLeft'` |
+| `[zPlacement]` | Popup position relative to the trigger. Overlay mode only. `bottom*` and `top*` placements align to the inline edges of the trigger (`Left` is the inline-start edge), so they mirror in RTL; `left*` and `right*` place the popup on a physical side and swap automatically in RTL | `ZardNavigationMenuPlacement` | `'bottomLeft'` |
 | `[zShowChevron]` | Render the built-in chevron | `boolean` | `true inside a root, false standalone` |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
 

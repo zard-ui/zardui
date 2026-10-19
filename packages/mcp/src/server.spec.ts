@@ -31,6 +31,7 @@ const LLMS = `# Zard UI
 ## Get Started
 
 - [Theming](https://zardui.com/docs/theming): Design tokens in OKLCH.
+- [RTL](https://zardui.com/docs/rtl): Right-to-left support.
 - [Changelog](https://zardui.com/docs/changelog): Release notes.
 
 ## Forms
@@ -103,6 +104,7 @@ const fetchMock = jest.fn((url: string) => {
   if (url.endsWith('/docs/components/button.md')) return respond(BUTTON_MD, 200, 'text/markdown');
   if (url.endsWith('/docs/theming.md'))
     return respond('# Theming\n\n## Colors\n\n--primary\n\n## Radius\n\n--radius', 200, 'text/markdown');
+  if (url.endsWith('/docs/rtl.md')) return respond('# RTL', 200, 'text/markdown');
   if (url.endsWith('/docs/forms/signal-forms.md')) return respond('# Signal Forms', 200, 'text/markdown');
   // The site answers unknown paths with its HTML shell, not 404.
   if (url.includes('/docs/components/')) return respond('<!doctype html><html></html>', 200, 'text/html');
@@ -225,7 +227,12 @@ describe('zard-mcp over the protocol', () => {
 
   it('lists only the guides for using the library', async () => {
     const { guides } = (await call('get-docs')).data();
-    expect(guides.map((g: { topic: string }) => g.topic)).toEqual(['theming', 'forms/signal-forms', 'utils/shimmer']);
+    expect(guides.map((g: { topic: string }) => g.topic)).toEqual([
+      'theming',
+      'rtl',
+      'forms/signal-forms',
+      'utils/shimmer',
+    ]);
   });
 
   it('reads a nested guide, tolerating a /docs/ prefix', async () => {
@@ -249,6 +256,15 @@ describe('zard-mcp over the protocol', () => {
   it('accepts a topic written with spaces', async () => {
     expect((await call('get-docs', { topic: 'Forms/Signal Forms' })).isError).toBe(false);
   });
+
+  it.each(['rtl', 'right-to-left', 'Right to Left', 'arabic', 'hebrew', 'direction'])(
+    'finds the RTL guide for the topic %s',
+    async topic => {
+      const res = await call('get-docs', { topic });
+      expect(res.isError).toBe(false);
+      expect(res.text).toBe('# RTL');
+    },
+  );
 
   it('suggests a guide for a misspelled topic', async () => {
     const res = await call('get-docs', { topic: 'theme' });

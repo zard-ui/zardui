@@ -179,10 +179,10 @@ export const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
       },
       zSize: {
-        default: 'h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
-        xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        lg: 'h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
+        default: 'h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
+        xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+        lg: 'h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
         icon: 'size-8',
         'icon-xs':
           "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
@@ -661,6 +661,81 @@ import { ZardButtonComponent } from '../button.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoButtonAsLinkComponent {}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowRight, lucideGitBranch, lucidePlus } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ submit: string; learnMore: string; newBranch: string; add: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      submit: 'Submit',
+      learnMore: 'Learn more',
+      newBranch: 'New branch',
+      add: 'Add',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      submit: 'إرسال',
+      learnMore: 'اعرف المزيد',
+      newBranch: 'فرع جديد',
+      add: 'إضافة',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      submit: 'שליחה',
+      learnMore: 'למידע נוסף',
+      newBranch: 'ענף חדש',
+      add: 'הוספה',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-button-rtl',
+  imports: [ZardButtonComponent, NgIcon],
+  template: `
+    <div class="flex flex-wrap items-center gap-2">
+      <button type="button" z-button>{{ i18n.t().submit }}</button>
+      <button type="button" z-button zType="outline">
+        {{ i18n.t().learnMore }}
+        <ng-icon name="lucideArrowRight" data-icon="inline-end" class="rtl:rotate-180" />
+      </button>
+      <button type="button" z-button zType="secondary">
+        <ng-icon name="lucideGitBranch" data-icon="inline-start" />
+        {{ i18n.t().newBranch }}
+      </button>
+      <button type="button" z-button zType="outline" zSize="icon" [attr.aria-label]="i18n.t().add">
+        <ng-icon name="lucidePlus" />
+      </button>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideArrowRight, lucideGitBranch, lucidePlus })],
+})
+export class ZardDemoButtonRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
 ```
 
 ## API Reference

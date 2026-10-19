@@ -18,6 +18,7 @@ npx zard-cli@latest add input-otp
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import {
   type AfterContentInit,
   afterNextRender,
@@ -135,6 +136,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   };
 
   private readonly injector = inject(Injector);
+  private readonly directionality = inject(Directionality, { optional: true });
 
   ngAfterContentInit(): void {
     if (this.slots().length > 0) {
@@ -156,11 +158,11 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     const extras: string[] = [];
 
     if (index === 0) {
-      extras.push('rounded-l-lg border-l');
+      extras.push('rounded-s-lg border-s');
     }
 
     if (index === this.effectiveMaxLength() - 1) {
-      extras.push('rounded-r-lg');
+      extras.push('rounded-e-lg');
     }
 
     return mergeClasses(inputOtpSlotVariants({ zSize: this.zSize() }), extras);
@@ -375,7 +377,12 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 
     switch (event.key) {
       case 'ArrowLeft':
-        this.moveToPrev(event);
+        // slots are laid out in reading order, so in RTL the left arrow moves forward
+        if (this.isRtl()) {
+          this.moveToNext(event);
+        } else {
+          this.moveToPrev(event);
+        }
         event.preventDefault();
         break;
 
@@ -395,7 +402,11 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
         break;
 
       case 'ArrowRight':
-        this.moveToNext(event);
+        if (this.isRtl()) {
+          this.moveToPrev(event);
+        } else {
+          this.moveToNext(event);
+        }
         event.preventDefault();
         break;
 
@@ -416,6 +427,10 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
         break;
       }
     }
+  }
+
+  private isRtl(): boolean {
+    return this.directionality?.value === 'rtl';
   }
 
   /** Handles the modifier shortcuts the component owns; everything else falls through to the browser. */
@@ -531,11 +546,11 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const inputOtpVariants = cva('flex items-center has-disabled:opacity-50');
 
 export const inputOtpGroupVariants = cva(
-  'flex items-center rounded-lg has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 [&>z-input-otp-slot:first-child_input]:rounded-l-lg [&>z-input-otp-slot:first-child_input]:border-l [&>z-input-otp-slot:last-child_input]:rounded-r-lg dark:has-aria-invalid:ring-destructive/40',
+  'flex items-center rounded-lg has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 [&>z-input-otp-slot:first-child_input]:rounded-s-lg [&>z-input-otp-slot:first-child_input]:border-s [&>z-input-otp-slot:last-child_input]:rounded-e-lg dark:has-aria-invalid:ring-destructive/40',
 );
 
 export const inputOtpSlotVariants = cva(
-  'relative flex items-center justify-center border-y border-r border-input bg-transparent text-center transition-all outline-none focus:z-10 focus:border-ring focus:ring-3 focus:ring-ring/50 disabled:cursor-not-allowed aria-invalid:border-destructive data-active:z-10 data-active:border-ring data-active:ring-3 data-active:ring-ring/50 data-active:aria-invalid:border-destructive data-active:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-active:aria-invalid:ring-destructive/40',
+  'relative flex items-center justify-center border-y border-e border-input bg-transparent text-center transition-all outline-none focus:z-10 focus:border-ring focus:ring-3 focus:ring-ring/50 disabled:cursor-not-allowed aria-invalid:border-destructive data-active:z-10 data-active:border-ring data-active:ring-3 data-active:ring-ring/50 data-active:aria-invalid:border-destructive data-active:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-active:aria-invalid:ring-destructive/40',
   {
     variants: {
       zSize: {
@@ -1329,9 +1344,79 @@ export class ZardDemoInputOtpFormComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ label: string; description: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      label: 'Verification code',
+      description: 'Enter the 6-digit code we sent to your phone.',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      label: 'رمز التحقق',
+      description: 'أدخل الرمز المكون من 6 أرقام الذي أرسلناه إلى هاتفك.',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      label: 'קוד אימות',
+      description: 'הזינו את הקוד בן 6 הספרות ששלחנו לטלפון שלכם.',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-input-otp-rtl',
+  imports: [...ZardInputOtpImports],
+  template: `
+    <div class="flex flex-col items-start gap-2">
+      <span class="text-sm font-medium">{{ i18n.t().label }}</span>
+      <z-input-otp [zMaxLength]="6">
+        <z-input-otp-group>
+          <z-input-otp-slot [zIndex]="0" />
+          <z-input-otp-slot [zIndex]="1" />
+          <z-input-otp-slot [zIndex]="2" />
+        </z-input-otp-group>
+        <z-input-otp-separator />
+        <z-input-otp-group>
+          <z-input-otp-slot [zIndex]="3" />
+          <z-input-otp-slot [zIndex]="4" />
+          <z-input-otp-slot [zIndex]="5" />
+        </z-input-otp-group>
+      </z-input-otp>
+      <p class="text-muted-foreground text-sm">{{ i18n.t().description }}</p>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoInputOtpRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
+```
+
 ## API Reference
 
 ### z-input-otp
+
+In RTL (CDK `Directionality`) the slots run right to left: typing advances focus to the left, ArrowLeft moves to the next slot and ArrowRight to the previous one, and the group rounds and borders its inline-start/end slots.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

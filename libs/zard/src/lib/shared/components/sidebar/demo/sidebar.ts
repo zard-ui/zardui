@@ -15,6 +15,7 @@ import { SIDEBAR_DEMO_MENU_SKELETON } from '@generated/components/sidebar/demo/m
 import { SIDEBAR_DEMO_MENU_SUB } from '@generated/components/sidebar/demo/menu-sub';
 import { SIDEBAR_DEMO_PREVIEW } from '@generated/components/sidebar/demo/preview';
 import { SIDEBAR_DEMO_RAIL } from '@generated/components/sidebar/demo/rail';
+import { SIDEBAR_DEMO_RTL } from '@generated/components/sidebar/demo/rtl';
 import { SIDEBAR_DEMO_SIDE_RIGHT } from '@generated/components/sidebar/demo/side-right';
 import { SIDEBAR_DEMO_STRUCTURE } from '@generated/components/sidebar/demo/structure';
 import { SIDEBAR_DEMO_USE_SIDEBAR } from '@generated/components/sidebar/demo/use-sidebar';
@@ -48,6 +49,7 @@ import { ZardDemoSidebarMenuSkeletonComponent } from './menu-skeleton';
 import { ZardDemoSidebarMenuSubComponent } from './menu-sub';
 import { ZardDemoSidebarPreviewComponent } from './preview';
 import { ZardDemoSidebarRailComponent } from './rail';
+import { ZardDemoSidebarRtlComponent } from './rtl';
 import { ZardDemoSidebarSideRightComponent } from './side-right';
 import { ZardDemoSidebarStructureComponent } from './structure';
 import { ZardDemoSidebarUseSidebarComponent } from './use-sidebar';
@@ -285,6 +287,15 @@ export const SIDEBAR = {
       description: 'Use `button[z-sidebar-rail]` for the draggable-looking edge handle.',
       component: ZardDemoSidebarRailComponent,
       codeData: SIDEBAR_DEMO_RAIL,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      // A full application shell, so the preview box is tall instead of cramming it.
+      previewHeight: '36rem',
+      component: ZardDemoSidebarRtlComponent,
+      codeData: SIDEBAR_DEMO_RTL,
     },
   ],
 };

@@ -4,6 +4,7 @@ import { ACCORDION_DEMO_CARD } from '@generated/components/accordion/demo/card';
 import { ACCORDION_DEMO_DISABLED } from '@generated/components/accordion/demo/disabled';
 import { ACCORDION_DEMO_MULTIPLE } from '@generated/components/accordion/demo/multiple';
 import { ACCORDION_DEMO_PREVIEW } from '@generated/components/accordion/demo/preview';
+import { ACCORDION_DEMO_RTL } from '@generated/components/accordion/demo/rtl';
 import { ACCORDION_CLI_ADD } from '@generated/installation/cli/add-accordion';
 import { ACCORDION_MANUAL_CODE } from '@generated/installation/manual/accordion';
 import { ACCORDION_USAGE_IMPORT, ACCORDION_USAGE_CODE } from '@generated/usage/accordion';
@@ -14,6 +15,7 @@ import { ZardDemoAccordionCardComponent } from './card';
 import { ZardDemoAccordionDisabledComponent } from './disabled';
 import { ZardDemoAccordionMultipleComponent } from './multiple';
 import { ZardDemoAccordionPreviewComponent } from './preview';
+import { ZardDemoAccordionRtlComponent } from './rtl';
 import { ACCORDION_API } from '../doc/api';
 
 export const ACCORDION = {
@@ -68,6 +70,13 @@ export const ACCORDION = {
       component: ZardDemoAccordionCardComponent,
       column: true,
       codeData: ACCORDION_DEMO_CARD,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoAccordionRtlComponent,
+      codeData: ACCORDION_DEMO_RTL,
     },
   ],
 };

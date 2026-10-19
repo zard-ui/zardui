@@ -18,6 +18,7 @@ npx zard-cli@latest add sonner
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -72,7 +73,7 @@ const DEFAULT_TOAST_OPTIONS: ToasterProps['toastOptions'] = {
       [visibleToasts]="visibleToasts()"
       [closeButton]="closeButton()"
       [toastOptions]="resolvedToastOptions()"
-      [dir]="dir()"
+      [dir]="resolvedDir()"
     >
       <ng-icon loading-icon name="lucideLoader2" class="size-4 [&>svg]:animate-spin" />
       <ng-icon success-icon name="lucideCircleCheck" class="size-4" />
@@ -129,6 +130,14 @@ export class ZardSonnerComponent {
    * and would otherwise cover them regardless of `z-index`.
    */
   readonly topLayer = input(true, { transform: booleanAttribute });
+
+  private readonly directionality = inject(Directionality, { optional: true });
+
+  /** `auto` follows the CDK `Directionality` at the toaster's injection point (the `<html dir>` or a `Dir` subtree). */
+  protected readonly resolvedDir = computed<'ltr' | 'rtl' | 'auto'>(() => {
+    const dir = this.dir();
+    return dir === 'auto' ? (this.directionality?.valueSignal() ?? 'auto') : dir;
+  });
 
   protected readonly classes = computed(() => mergeClasses(sonnerVariants(), this.class()));
   protected readonly resolvedStyle = computed(() => ({ ...DEFAULT_STYLE, ...(this.style() ?? {}) }));
@@ -554,6 +563,77 @@ export class ZardDemoSonnerWithDialogComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ trigger: string; message: string; description: string; undo: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      trigger: 'Show Toast',
+      message: 'Event has been created',
+      description: 'Sunday, December 03, 2023 at 9:00 AM',
+      undo: 'Undo',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      trigger: 'إظهار الإشعار',
+      message: 'تم إنشاء الحدث',
+      description: 'الأحد، 03 ديسمبر 2023 الساعة 9:00 صباحًا',
+      undo: 'تراجع',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      trigger: 'הצג התראה',
+      message: 'האירוע נוצר',
+      description: 'יום ראשון, 03 בדצמבר 2023 בשעה 9:00',
+      undo: 'בטל',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-sonner-rtl',
+  imports: [ZardButtonComponent],
+  template: `
+    <button type="button" z-button zType="outline" (click)="show()">{{ i18n.t().trigger }}</button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSonnerRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+  private readonly sonner = inject(ZardSonnerService);
+
+  protected show() {
+    const t = this.i18n.t();
+    // The toaster is mounted once at the app root, outside this preview wrapper, so the direction is applied to the
+    // toast itself. Its position stays physical (top-left, bottom-right, ...) in every direction.
+    this.sonner.show(t.message, {
+      description: t.description,
+      class: this.i18n.dir() === 'rtl' ? '[direction:rtl]' : '[direction:ltr]',
+      action: { label: t.undo, onClick: () => undefined },
+    });
+  }
+}
+```
+
 ## API Reference
 
 ### z-sonner
@@ -571,7 +651,7 @@ Container that renders toast notifications. Place once at the root of your app.
 | `[visibleToasts]` | Maximum number of toasts visible at the same time. | `number` | `3` |
 | `[closeButton]` | Shows a close button on each toast. | `boolean` | `false` |
 | `[toastOptions]` | Default options applied to every toast (classes, duration, descriptions, etc). | `ToasterProps['toastOptions']` | `{}` |
-| `[dir]` | Text direction for toasts. | `'ltr' \| 'rtl' \| 'auto'` | `'auto'` |
+| `[dir]` | Text direction for toasts. `auto` follows the CDK `Directionality` (the `dir` of `<html>` or a `Dir` subtree). Toast positions such as `top-left` are physical by design and do not mirror; to change the direction of a single toast, pass `class: "[direction:rtl]"` in its options. | `'ltr' \| 'rtl' \| 'auto'` | `'auto'` |
 | `[topLayer]` | Renders the toaster in the native top layer so toasts stay above dialogs, drawers and sheets. Disable it only if the app opts out of the CDK top layer. | `boolean` | `true` |
 | `[class]` | Additional Tailwind / utility classes merged into the host. | `ClassValue` | `''` |
 

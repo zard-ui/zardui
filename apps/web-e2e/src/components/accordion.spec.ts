@@ -72,3 +72,35 @@ test.describe('Accordion component', () => {
     await checkA11y(page, '#overview', ['button-name']);
   });
 });
+
+test.describe('Accordion RTL', () => {
+  test('renders the rtl example mirrored', async ({ page }) => {
+    const demoPage = new ComponentDemoPage(page, 'accordion');
+    await demoPage.goto();
+
+    const rtl = demoPage.getDemoByName('rtl');
+    await rtl.scrollIntoViewIfNeeded();
+    const preview = rtl.locator('[data-slot="preview"]');
+    await expect(preview).toHaveAttribute('dir', 'rtl');
+    await expect(preview).toHaveAttribute('data-lang', 'ar');
+
+    const triggers = preview.locator('z-accordion-item button');
+    await expect(triggers.first()).toBeVisible();
+    const box = await preview.locator('[z-accordion]').boundingBox();
+    const trigger = await triggers.first().boundingBox();
+    const icon = await triggers.first().locator('ng-icon').boundingBox();
+    // The title sits on the inline start (right) and the vertical chevron on the inline end (left).
+    expect(icon!.x + icon!.width / 2).toBeLessThan(box!.x + box!.width / 2);
+    expect(trigger!.width).toBeGreaterThan(0);
+    // The chevron is vertical: a closed item keeps it unrotated, RTL never flips it.
+    const closed = preview.locator('z-accordion-item [role="region"][data-state="closed"]').first();
+    await expect(closed).toBeAttached();
+    const rotate = await triggers
+      .nth(1)
+      .locator('ng-icon')
+      .evaluate(el => getComputedStyle(el).rotate);
+    expect(rotate).toBe('none');
+
+    await checkA11y(page, '#rtl z-demo-accordion-rtl', ['color-contrast', 'button-name']);
+  });
+});

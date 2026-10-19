@@ -40,7 +40,13 @@ export const SIDEBAR_API: ApiSection[] = [
     selector: 'z-sidebar',
     description: 'The sidebar itself. Renders as a fixed panel on desktop, as a drawer on mobile.',
     props: [
-      { name: '[zSide]', description: 'Which edge the sidebar docks to', type: "'left' | 'right'", default: "'left'" },
+      {
+        name: '[zSide]',
+        description:
+          'Which physical edge the sidebar docks to. It stays physical in RTL: use `right` for the natural right-to-left layout. The tooltip of a collapsed menu button opens on the opposite edge',
+        type: "'left' | 'right'",
+        default: "'left'",
+      },
       {
         name: '[zVariant]',
         description: 'Visual treatment of the panel',

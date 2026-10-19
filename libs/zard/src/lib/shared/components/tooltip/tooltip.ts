@@ -1,4 +1,10 @@
-import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
+import { Directionality, type Direction } from '@angular/cdk/bidi';
+import {
+  type FlexibleConnectedPositionStrategy,
+  Overlay,
+  OverlayPositionBuilder,
+  type OverlayRef,
+} from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -30,7 +36,11 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { filter, map, of, Subject, switchMap, tap, timer } from 'rxjs';
 
-import { TOOLTIP_POSITIONS_MAP } from '@/shared/components/tooltip/tooltip-positions';
+import {
+  getTooltipPosition,
+  resolveTooltipSide,
+  type ZardTooltipSide,
+} from '@/shared/components/tooltip/tooltip-positions';
 import {
   tooltipPositionVariants,
   tooltipVariants,
@@ -77,6 +87,8 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly renderer = inject(Renderer2);
+  // Optional: the direction of the trigger, which is where the overlay content takes its `dir` from.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   private ariaEffectRef?: ReturnType<typeof effect>;
   private componentRef?: ComponentRef<ZardTooltipComponent>;
@@ -84,9 +96,10 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private detachTimeoutId?: ReturnType<typeof setTimeout>;
   private listenersRefs: (() => void)[] = [];
   private overlayRef?: OverlayRef;
+  private positionStrategy?: FlexibleConnectedPositionStrategy;
 
   readonly zHideDelay = input(100, { transform: numberAttribute });
-  readonly zPosition = input<ZardTooltipPositionVariants>('top');
+  readonly zPosition = input<ZardTooltipSide>('top');
   readonly zPositionOffset = input(4);
   readonly zShowDelay = input(150, { transform: numberAttribute });
   readonly zTrigger = input<ZardTooltipTriggers>('hover');
@@ -107,17 +120,20 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      const position = TOOLTIP_POSITIONS_MAP[this.zPosition()];
-      const positionOffset = this.zPositionOffset();
-      if (this.zPosition() === 'top' || this.zPosition() === 'bottom') {
-        position.offsetY = this.zPosition() === 'top' ? -positionOffset : positionOffset;
-      } else {
-        position.offsetX = this.zPosition() === 'left' ? -positionOffset : positionOffset;
-      }
       const positionStrategy = this.overlayPositionBuilder
         .flexibleConnectedTo(this.elementRef)
-        .withPositions([position]);
-      this.overlayRef = this.overlay.create({ positionStrategy });
+        .withPositions([this.getPosition()]);
+      this.positionStrategy = positionStrategy;
+      this.overlayRef = this.overlay.create({ positionStrategy, direction: this.direction() });
+
+      // The direction changed (a `[dir]` switch): drop the tooltip, it reopens with the new direction.
+      this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+        this.overlayRef?.setDirection(this.direction());
+        this.positionStrategy?.withPositions([this.getPosition()]);
+        if (this.componentRef) {
+          this.delay(false, 0);
+        }
+      });
 
       runInInjectionContext(this.injector, () => {
         toObservable(this.zTrigger)
@@ -152,6 +168,14 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.delaySubject?.complete();
     this.cleanupTriggerEvents();
     this.overlayRef?.dispose();
+  }
+
+  private direction(): Direction {
+    return this.directionality?.value ?? 'ltr';
+  }
+
+  private getPosition() {
+    return getTooltipPosition(this.zPosition(), this.zPositionOffset(), this.direction() === 'rtl');
   }
 
   private initTriggers() {
@@ -251,7 +275,10 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
       this.componentRef = undefined;
     });
     this.componentRef?.instance.state.set('open');
-    this.componentRef?.instance.setProps(this.tooltipText(), this.zPosition());
+    this.componentRef?.instance.setProps(
+      this.tooltipText(),
+      resolveTooltipSide(this.zPosition(), this.direction() === 'rtl'),
+    );
     runInInjectionContext(this.injector, () => {
       this.ariaEffectRef = effect(() => {
         const tooltipId = this.componentRef?.instance.uniqueId()?.id();

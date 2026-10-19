@@ -115,7 +115,7 @@ import { ZardProgressComponent } from '@/shared/components/progress/progress.com
     <z-field class="w-full min-w-sm">
       <z-field-label for="progress-upload">
         <span>Upload progress</span>
-        <span class="ml-auto">66%</span>
+        <span class="ms-auto">66%</span>
       </z-field-label>
       <z-progress id="progress-upload" [value]="66" />
     </z-field>
@@ -148,6 +148,62 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
 })
 export class ZardDemoProgressControlledComponent {
   protected readonly value = signal([50]);
+}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardProgressComponent } from '@/shared/components/progress/progress.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ label: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      label: 'Upload progress',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      label: 'تقدم الرفع',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      label: 'התקדמות ההעלאה',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-progress-rtl',
+  imports: [ZardProgressComponent, ...ZardFieldImports],
+  template: `
+    <z-field class="w-full min-w-sm">
+      <z-field-label for="progress-upload-rtl">
+        <span>{{ i18n.t().label }}</span>
+        <span class="ms-auto">66%</span>
+      </z-field-label>
+      <z-progress id="progress-upload-rtl" [value]="66" />
+    </z-field>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoProgressRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
 }
 ```
 

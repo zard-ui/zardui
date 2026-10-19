@@ -11,7 +11,7 @@ export const inputGroupVariants = cva(
     'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto',
     'dark:bg-input/30 dark:has-disabled:bg-input/80 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40',
     'has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3',
-    'has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5',
+    'has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5',
     // Input/textarea overrides when used as input-group-control
     '*:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0!',
     '[&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0!',

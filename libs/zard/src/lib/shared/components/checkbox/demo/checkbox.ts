@@ -6,6 +6,7 @@ import { CHECKBOX_DEMO_GROUP } from '@generated/components/checkbox/demo/group';
 import { CHECKBOX_DEMO_INVALID } from '@generated/components/checkbox/demo/invalid';
 import { CHECKBOX_DEMO_PREVIEW } from '@generated/components/checkbox/demo/preview';
 import { CHECKBOX_DEMO_REACTIVE_FORMS } from '@generated/components/checkbox/demo/reactive-forms';
+import { CHECKBOX_DEMO_RTL } from '@generated/components/checkbox/demo/rtl';
 import { CHECKBOX_DEMO_TABLE } from '@generated/components/checkbox/demo/table';
 import { CHECKBOX_CLI_ADD } from '@generated/installation/cli/add-checkbox';
 import { CHECKBOX_MANUAL_CODE } from '@generated/installation/manual/checkbox';
@@ -19,6 +20,7 @@ import { ZardDemoCheckboxGroupComponent } from './group';
 import { ZardDemoCheckboxInvalidComponent } from './invalid';
 import { ZardDemoCheckboxPreviewComponent } from './preview';
 import { ZardDemoCheckboxReactiveFormsComponent } from './reactive-forms';
+import { ZardDemoCheckboxRtlComponent } from './rtl';
 import { ZardDemoCheckboxTableComponent } from './table';
 import { CHECKBOX_API } from '../doc/api';
 
@@ -90,6 +92,13 @@ export const CHECKBOX = {
         'Bind `z-checkbox` with `formControlName`; the disabled state of a `FormControl` is respected out of the box.',
       component: ZardDemoCheckboxReactiveFormsComponent,
       codeData: CHECKBOX_DEMO_REACTIVE_FORMS,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoCheckboxRtlComponent,
+      codeData: CHECKBOX_DEMO_RTL,
     },
   ],
 };

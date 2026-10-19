@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import {
   type AfterContentInit,
   afterNextRender,
@@ -115,6 +116,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   };
 
   private readonly injector = inject(Injector);
+  private readonly directionality = inject(Directionality, { optional: true });
 
   ngAfterContentInit(): void {
     if (this.slots().length > 0) {
@@ -136,11 +138,11 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     const extras: string[] = [];
 
     if (index === 0) {
-      extras.push('rounded-l-lg border-l');
+      extras.push('rounded-s-lg border-s');
     }
 
     if (index === this.effectiveMaxLength() - 1) {
-      extras.push('rounded-r-lg');
+      extras.push('rounded-e-lg');
     }
 
     return mergeClasses(inputOtpSlotVariants({ zSize: this.zSize() }), extras);
@@ -355,7 +357,12 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 
     switch (event.key) {
       case 'ArrowLeft':
-        this.moveToPrev(event);
+        // slots are laid out in reading order, so in RTL the left arrow moves forward
+        if (this.isRtl()) {
+          this.moveToNext(event);
+        } else {
+          this.moveToPrev(event);
+        }
         event.preventDefault();
         break;
 
@@ -375,7 +382,11 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
         break;
 
       case 'ArrowRight':
-        this.moveToNext(event);
+        if (this.isRtl()) {
+          this.moveToPrev(event);
+        } else {
+          this.moveToNext(event);
+        }
         event.preventDefault();
         break;
 
@@ -396,6 +407,10 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
         break;
       }
     }
+  }
+
+  private isRtl(): boolean {
+    return this.directionality?.value === 'rtl';
   }
 
   /** Handles the modifier shortcuts the component owns; everything else falls through to the browser. */

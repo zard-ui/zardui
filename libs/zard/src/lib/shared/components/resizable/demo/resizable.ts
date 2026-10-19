@@ -1,5 +1,6 @@
 import { RESIZABLE_DEMO_HANDLE } from '@generated/components/resizable/demo/handle';
 import { RESIZABLE_DEMO_PREVIEW } from '@generated/components/resizable/demo/preview';
+import { RESIZABLE_DEMO_RTL } from '@generated/components/resizable/demo/rtl';
 import { RESIZABLE_DEMO_VERTICAL } from '@generated/components/resizable/demo/vertical';
 import { RESIZABLE_CLI_ADD } from '@generated/installation/cli/add-resizable';
 import { RESIZABLE_MANUAL_CODE } from '@generated/installation/manual/resizable';
@@ -9,6 +10,7 @@ import { ZardDemoResizableHandleComponent } from '@/shared/components/resizable/
 import { ZardDemoResizableVerticalComponent } from '@/shared/components/resizable/demo/vertical';
 
 import { ZardDemoResizablePreviewComponent } from './preview';
+import { ZardDemoResizableRtlComponent } from './rtl';
 import { RESIZABLE_API } from '../doc/api';
 
 export const RESIZABLE = {
@@ -39,6 +41,13 @@ export const RESIZABLE = {
       description: 'Use the `zWithHandle` input on `z-resizable-handle` to show a visible handle.',
       component: ZardDemoResizableHandleComponent,
       codeData: RESIZABLE_DEMO_HANDLE,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoResizableRtlComponent,
+      codeData: RESIZABLE_DEMO_RTL,
     },
   ],
 };

@@ -147,7 +147,7 @@ export const inputGroupVariants = cva(
     'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto',
     'dark:bg-input/30 dark:has-disabled:bg-input/80 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40',
     'has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3',
-    'has-[>[data-align=inline-end]]:[&>input]:pr-1.5 has-[>[data-align=inline-start]]:[&>input]:pl-1.5',
+    'has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5',
     // Input/textarea overrides when used as input-group-control
     '*:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0!',
     '[&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0!',
@@ -870,6 +870,100 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   viewProviders: [provideIcons({ lucidePencil })],
 })
 export class ZardDemoInputGroupCustomInputComponent {}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch } from '@ng-icons/lucide';
+
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{
+  search: string;
+  results: string;
+  url: string;
+  scheme: string;
+  domain: string;
+}> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      search: 'Search...',
+      results: '12 results',
+      url: 'example',
+      scheme: 'https://',
+      domain: '.com',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      search: 'بحث...',
+      results: '١٢ نتيجة',
+      url: 'مثال',
+      scheme: 'https://',
+      domain: '.com',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      search: 'חיפוש...',
+      results: '12 תוצאות',
+      url: 'דוגמה',
+      scheme: 'https://',
+      domain: '.com',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-input-group-rtl',
+  imports: [ZardInputComponent, NgIcon, ...ZardInputGroupImports],
+  template: `
+    <div class="flex w-full min-w-xs flex-col gap-4">
+      <z-input-group>
+        <input z-input id="input-group-rtl-search" [placeholder]="i18n.t().search" />
+        <z-input-group-addon>
+          <ng-icon name="lucideSearch" />
+        </z-input-group-addon>
+        <z-input-group-addon zAlign="inline-end">{{ i18n.t().results }}</z-input-group-addon>
+      </z-input-group>
+
+      <z-input-group>
+        <z-input-group-addon>
+          <z-input-group-text>
+            <bdi>{{ i18n.t().scheme }}</bdi>
+          </z-input-group-text>
+        </z-input-group-addon>
+        <input z-input id="input-group-rtl-url" [placeholder]="i18n.t().url" />
+        <z-input-group-addon zAlign="inline-end">
+          <z-input-group-text>
+            <bdi>{{ i18n.t().domain }}</bdi>
+          </z-input-group-text>
+        </z-input-group-addon>
+      </z-input-group>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideSearch })],
+})
+export class ZardDemoInputGroupRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
 ```
 
 ## API Reference

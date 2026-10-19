@@ -53,6 +53,18 @@ test.describe('Checkbox component', () => {
     }
   });
 
+  test('rtl example puts the checkbox on the inline-start (right) side of its label', async ({ page }) => {
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.scrollIntoViewIfNeeded();
+    await expect(demo.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'rtl');
+
+    const checkboxBox = (await demo.locator('input[type="checkbox"], [role="checkbox"]').first().boundingBox())!;
+    const labelBox = (await demo.locator('[z-field-label]').boundingBox())!;
+    expect(checkboxBox.x).toBeGreaterThan(labelBox.x);
+
+    await checkA11y(page, '#rtl', ['color-contrast']);
+  });
+
   test('passes accessibility checks', async ({ page }) => {
     // button-name + label: demo has icon-only buttons and checkbox inputs without <label> elements
     await checkA11y(page, '#overview', ['button-name', 'label']);

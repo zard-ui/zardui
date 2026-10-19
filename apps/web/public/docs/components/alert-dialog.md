@@ -18,6 +18,7 @@ npx zard-cli@latest add alert-dialog
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -45,7 +46,7 @@ import {
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import { filter, takeUntil } from 'rxjs';
 
 import { ZardStringTemplateOutletDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
@@ -112,6 +113,8 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
 })
 export class ZardAlertDialogComponent extends ZardAlertDialogHost {
   private readonly overlay = inject(Overlay);
+  // Optional: the direction of the declaration site, which is where the overlay content takes its dir from.
+  private readonly directionality = inject(Directionality, { optional: true });
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
@@ -180,6 +183,7 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
 
     const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: this.directionality?.value ?? 'ltr',
         hasBackdrop: true,
         backdropClass: ALERT_DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -188,6 +192,11 @@ export class ZardAlertDialogComponent extends ZardAlertDialogHost {
       }),
     );
     this.overlayRef = overlayRef;
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    this.directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? 'ltr'));
 
     overlayRef.attach(new TemplatePortal(this.panel(), this.viewContainerRef));
 
@@ -850,10 +859,13 @@ export const ZardAlertDialogImports = [
 ```
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID } from '@angular/core';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, type ViewContainerRef } from '@angular/core';
+
+import { takeUntil } from 'rxjs';
 
 import { ZardAlertDialogContainerComponent, ZardAlertDialogOptions } from './alert-dialog-container.component';
 import { ZardAlertDialogRef } from './alert-dialog-ref';
@@ -880,6 +892,8 @@ export class ZardAlertDialogService {
   private readonly overlay = inject(Overlay);
   private readonly injector = inject(Injector);
   private readonly platformId = inject(PLATFORM_ID);
+  // Optional: the direction of <html>, used when the caller gives no zViewContainerRef to inherit one from.
+  private readonly rootDirectionality = inject(Directionality, { optional: true });
 
   /**
    * Opens an alert dialog with the given configuration.
@@ -892,7 +906,7 @@ export class ZardAlertDialogService {
       return new ZardAlertDialogRef<T>(null, config, null, this.platformId);
     }
 
-    const overlayRef = this.createOverlay();
+    const overlayRef = this.createOverlay(config);
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
     const alertDialogRef = new ZardAlertDialogRef<T>(overlayRef, config, alertDialogContainer, this.platformId);
 
@@ -931,15 +945,29 @@ export class ZardAlertDialogService {
     });
   }
 
-  private createOverlay(): OverlayRef {
-    return this.overlay.create(
+  private createOverlay<T>(config: ZardAlertDialogOptions<T>): OverlayRef {
+    const directionality = this.directionalityFor(config.zViewContainerRef);
+    const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: directionality?.value ?? 'ltr',
         hasBackdrop: true,
         backdropClass: ALERT_DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
         scrollStrategy: this.overlay.scrollStrategies.block(),
       }),
     );
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(directionality.value));
+
+    return overlayRef;
+  }
+
+  /** The direction of where the overlay was requested from (zViewContainerRef), falling back to <html>. */
+  private directionalityFor(viewContainerRef?: ViewContainerRef): Directionality | null {
+    return viewContainerRef?.injector.get(Directionality, null) ?? this.rootDirectionality;
   }
 
   private attachAlertDialogContainer<T>(overlayRef: OverlayRef, config: ZardAlertDialogOptions<T>) {
@@ -1340,11 +1368,137 @@ export class ZardDemoAlertDialogDestructiveComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBluetooth } from '@ng-icons/lucide';
+
+import { ZardAlertDialogImports } from '@/shared/components/alert-dialog/alert-dialog.imports';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface AlertDialogRtlStrings {
+  showDialog: string;
+  showDialogSm: string;
+  title: string;
+  description: string;
+  cancel: string;
+  continue: string;
+  smallTitle: string;
+  smallDescription: string;
+  dontAllow: string;
+  allow: string;
+}
+
+const translations: ZardRtlTranslations<AlertDialogRtlStrings> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      showDialog: 'Show Dialog',
+      showDialogSm: 'Show Dialog (sm)',
+      title: 'Are you absolutely sure?',
+      description: 'This action cannot be undone. This will permanently delete your account from our servers.',
+      cancel: 'Cancel',
+      continue: 'Continue',
+      smallTitle: 'Allow accessory to connect?',
+      smallDescription: 'Do you want to allow the USB accessory to connect to this device?',
+      dontAllow: "Don't allow",
+      allow: 'Allow',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      showDialog: 'إظهار الحوار',
+      showDialogSm: 'إظهار الحوار (صغير)',
+      title: 'هل أنت متأكد تمامًا؟',
+      description: 'لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف حسابك نهائيًا من خوادمنا.',
+      cancel: 'إلغاء',
+      continue: 'متابعة',
+      smallTitle: 'السماح للملحق بالاتصال؟',
+      smallDescription: 'هل تريد السماح لملحق USB بالاتصال بهذا الجهاز؟',
+      dontAllow: 'عدم السماح',
+      allow: 'السماح',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      showDialog: 'הצג דיאלוג',
+      showDialogSm: 'הצג דיאלוג (קטן)',
+      title: 'האם אתה בטוח לחלוטין?',
+      description: 'פעולה זו לא ניתנת לביטול. זה ימחק לצמיתות את החשבון שלך מהשרתים שלנו.',
+      cancel: 'ביטול',
+      continue: 'המשך',
+      smallTitle: 'לאפשר להתקן להתחבר?',
+      smallDescription: 'האם אתה רוצה לאפשר להתקן USB להתחבר למכשיר זה?',
+      dontAllow: 'אל תאפשר',
+      allow: 'אפשר',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-alert-dialog-rtl',
+  imports: [ZardAlertDialogImports, ZardButtonComponent, NgIcon],
+  template: `
+    @let t = i18n.t();
+    <div class="flex gap-4">
+      <button type="button" z-button zType="outline" (click)="visible.set(true)">{{ t.showDialog }}</button>
+      <button type="button" z-button zType="outline" (click)="smallVisible.set(true)">{{ t.showDialogSm }}</button>
+    </div>
+
+    <z-alert-dialog [(zVisible)]="visible">
+      <z-alert-dialog-header>
+        <z-alert-dialog-title>{{ t.title }}</z-alert-dialog-title>
+        <z-alert-dialog-description>{{ t.description }}</z-alert-dialog-description>
+      </z-alert-dialog-header>
+      <z-alert-dialog-footer>
+        <button type="button" z-button zType="outline" z-alert-dialog-close>{{ t.cancel }}</button>
+        <button type="button" z-button (click)="visible.set(false)">{{ t.continue }}</button>
+      </z-alert-dialog-footer>
+    </z-alert-dialog>
+
+    <z-alert-dialog [(zVisible)]="smallVisible" zSize="sm">
+      <z-alert-dialog-header>
+        <z-alert-dialog-media>
+          <ng-icon name="lucideBluetooth" />
+        </z-alert-dialog-media>
+        <z-alert-dialog-title>{{ t.smallTitle }}</z-alert-dialog-title>
+        <z-alert-dialog-description>{{ t.smallDescription }}</z-alert-dialog-description>
+      </z-alert-dialog-header>
+      <z-alert-dialog-footer>
+        <button type="button" z-button zType="outline" z-alert-dialog-close>{{ t.dontAllow }}</button>
+        <button type="button" z-button (click)="smallVisible.set(false)">{{ t.allow }}</button>
+      </z-alert-dialog-footer>
+    </z-alert-dialog>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideBluetooth })],
+})
+export class ZardDemoAlertDialogRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly visible = signal(false);
+  protected readonly smallVisible = signal(false);
+}
+```
+
 ## API Reference
 
 ### z-alert-dialog
 
-Root of a declarative alert dialog. Holds the open state and projects its content into the panel (`role="alertdialog"`), which exposes `data-size` and `data-state` (`open` | `closed`) while the enter and leave transitions run.
+Root of a declarative alert dialog. Holds the open state and projects its content into the panel (`role="alertdialog"`), which exposes `data-size` and `data-state` (`open` | `closed`) while the enter and leave transitions run. The overlay takes the direction of where the alert dialog is declared: in RTL the footer buttons mirror while the panel stays centered.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

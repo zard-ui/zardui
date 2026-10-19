@@ -127,9 +127,9 @@ export class ZardPaginationButtonComponent {
       [zSize]="zSize()"
       [zDisabled]="zDisabled()"
     >
-      <span class="sr-only">To previous page</span>
+      <span class="sr-only">{{ label() }}</span>
       <ng-icon name="lucideChevronLeft" aria-hidden="true" class="rtl:rotate-180" />
-      <span class="hidden sm:block" aria-hidden="true">Previous</span>
+      <span class="hidden sm:block" aria-hidden="true">{{ zText() }}</span>
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -141,8 +141,11 @@ export class ZardPaginationPreviousComponent {
   readonly class = input<ClassValue>('');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zSize = input<PaginationNavSizeType>('default');
+  /** Visible label. Also the accessible name once it differs from the English default. */
+  readonly zText = input('Previous');
 
   protected readonly classes = computed(() => mergeClasses(paginationPreviousVariants(), this.class()));
+  protected readonly label = computed(() => (this.zText() === 'Previous' ? 'To previous page' : this.zText()));
 }
 
 @Component({
@@ -157,8 +160,8 @@ export class ZardPaginationPreviousComponent {
       [zDisabled]="zDisabled()"
       [zSize]="zSize()"
     >
-      <span class="sr-only">To next page</span>
-      <span class="hidden sm:block" aria-hidden="true">Next</span>
+      <span class="sr-only">{{ label() }}</span>
+      <span class="hidden sm:block" aria-hidden="true">{{ zText() }}</span>
       <ng-icon name="lucideChevronRight" aria-hidden="true" class="rtl:rotate-180" />
     </button>
   `,
@@ -171,8 +174,11 @@ export class ZardPaginationNextComponent {
   readonly class = input<ClassValue>('');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zSize = input<PaginationNavSizeType>('default');
+  /** Visible label. Also the accessible name once it differs from the English default. */
+  readonly zText = input('Next');
 
   protected readonly classes = computed(() => mergeClasses(paginationNextVariants(), this.class()));
+  protected readonly label = computed(() => (this.zText() === 'Next' ? 'To next page' : this.zText()));
 }
 
 @Component({
@@ -216,6 +222,7 @@ export class ZardPaginationEllipsisComponent {
             @let pagePrevious = Math.max(1, clampedIndex() - 1);
             <z-pagination-previous
               [zSize]="navSize()"
+              [zText]="zPreviousText()"
               [zDisabled]="zDisabled() || clampedIndex() === 1"
               (click)="goToPage(pagePrevious)"
             />
@@ -246,6 +253,7 @@ export class ZardPaginationEllipsisComponent {
             @let pageNext = Math.min(clampedIndex() + 1, zTotal());
             <z-pagination-next
               [zSize]="navSize()"
+              [zText]="zNextText()"
               [zDisabled]="zDisabled() || clampedIndex() === zTotal()"
               (click)="goToPage(pageNext)"
             />
@@ -268,7 +276,9 @@ export class ZardPaginationComponent {
   readonly zAriaLabel = input('Pagination');
   readonly zContent = input<TemplateRef<void> | undefined>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zNextText = input('Next');
   readonly zPageIndex = model<number>(1);
+  readonly zPreviousText = input('Previous');
   readonly zSimple = input(false, { transform: booleanAttribute });
   readonly zSize = input<PaginationItemSizeType>('icon');
   readonly zTotal = input<number>(1);
@@ -312,9 +322,9 @@ import { cva } from 'class-variance-authority';
 
 export const paginationContentVariants = cva('flex items-center gap-0.5');
 
-export const paginationPreviousVariants = cva('pl-1.5!');
+export const paginationPreviousVariants = cva('ps-1.5!');
 
-export const paginationNextVariants = cva('pr-1.5!');
+export const paginationNextVariants = cva('pe-1.5!');
 
 export const paginationEllipsisVariants = cva(
   'flex size-8 items-center justify-center [&_svg:not([class*="size-"])]:size-4',
@@ -556,6 +566,100 @@ export class ZardDemoPaginationRoutingComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+import { ZardPaginationImports } from '../pagination.imports';
+
+const translations: ZardRtlTranslations<{ previous: string; next: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      previous: 'Previous',
+      next: 'Next',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      previous: 'السابق',
+      next: 'التالي',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      previous: 'הקודם',
+      next: 'הבא',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-pagination-rtl',
+  imports: [...ZardPaginationImports],
+  template: `
+    <z-pagination [zTotal]="3" [(zPageIndex)]="currentPage" [zContent]="content" />
+
+    <ng-template #content>
+      <ul z-pagination-content>
+        <li z-pagination-item>
+          <z-pagination-previous
+            [zText]="i18n.t().previous"
+            [zDisabled]="currentPage() === 1"
+            (click)="go(currentPage() - 1)"
+          />
+        </li>
+
+        @for (page of pages; track page) {
+          <li z-pagination-item>
+            <button type="button" z-pagination-button [zActive]="page === currentPage()" (click)="go(page)">
+              {{ page }}
+            </button>
+          </li>
+        }
+
+        <li z-pagination-item>
+          <z-pagination-ellipsis />
+        </li>
+
+        <li z-pagination-item>
+          <z-pagination-next
+            [zText]="i18n.t().next"
+            [zDisabled]="currentPage() === 3"
+            (click)="go(currentPage() + 1)"
+          />
+        </li>
+      </ul>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoPaginationRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly pages = [1, 2, 3];
+  protected readonly currentPage = signal(2);
+
+  protected go(page: number) {
+    if (page >= 1 && page <= 3) {
+      this.currentPage.set(page);
+    }
+  }
+}
+```
+
 ## API Reference
 
 ### z-pagination
@@ -568,6 +672,8 @@ Renders as a `role="group"` element (not a `<nav>` landmark) with an `[zAriaLabe
 | `[zAriaLabel]` | Accessible name for the pagination element, rendered as its aria-label. | `string` | `'Pagination'` |
 | `[zContent]` | Custom pagination structure, replacing the built-in previous/numbers/next markup. | `TemplateRef<void> \| undefined` | `undefined` |
 | `[zDisabled]` | Disables pagination interaction | `boolean` | `false` |
+| `[zNextText]` | Visible label (and accessible name) of the built-in next button. Pass a translation for RTL languages. | `string` | `'Next'` |
+| `[zPreviousText]` | Visible label (and accessible name) of the built-in previous button. Pass a translation for RTL languages. | `string` | `'Previous'` |
 | `[zPageIndex]` | Current page, two-way bindable | `number` | `1` |
 | `[(zPageIndex)]` | Current page index | `number` | `1` |
 | `[zSimple]` | A simple pagination with only page numbers. | `boolean` | `false` |
@@ -599,23 +705,25 @@ A single page button, styled via an internal z-button. Also usable as `a[z-pagin
 
 ### z-pagination-previous
 
-Button to navigate to the previous page. Its "Previous" text and "To previous page" screen-reader label are fixed, not exposed as an input — for a translated or custom label, build the previous button yourself with a `[zContent]` template instead.
+Button to navigate to the previous page. The chevron flips automatically in right-to-left layouts, so it always points outward. Use `[zText]` to translate the label.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
 | `[zDisabled]` | Whether the button is disabled | `boolean` | `false` |
 | `[zSize]` | Button size | `'default' \| 'xs' \| 'sm' \| 'lg'` | `'default'` |
+| `[zText]` | Visible label. Also the accessible name once it differs from the English default. | `string` | `'Previous'` |
 
 ### z-pagination-next
 
-Button to navigate to the next page. Its "Next" text and "To next page" screen-reader label are fixed, not exposed as an input — for a translated or custom label, build the next button yourself with a `[zContent]` template instead.
+Button to navigate to the next page. The chevron flips automatically in right-to-left layouts, so it always points outward. Use `[zText]` to translate the label.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
 | `[zDisabled]` | Whether the button is disabled | `boolean` | `false` |
 | `[zSize]` | Button size | `'default' \| 'xs' \| 'sm' \| 'lg'` | `'default'` |
+| `[zText]` | Visible label. Also the accessible name once it differs from the English default. | `string` | `'Next'` |
 
 ### z-pagination-ellipsis
 

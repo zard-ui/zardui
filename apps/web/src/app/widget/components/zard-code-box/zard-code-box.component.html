@@ -41,8 +41,58 @@
       class="group/code-box relative flex w-full flex-col overflow-hidden rounded-xl border"
       [class.mb-12]="!onlyDemo() && codeData()"
     >
+      @if (dynamicComponent() && isRtl()) {
+        <div class="flex h-16 shrink-0 items-center justify-between border-b px-4" data-slot="rtl-preview-header">
+          <!-- The selector stays LTR so it does not flip with the language it controls. -->
+          <z-select
+            dir="ltr"
+            zSize="sm"
+            class="w-44"
+            aria-label="Language"
+            [zValue]="language()"
+            (zSelectionChange)="onLanguageChange($event)"
+          >
+            @for (item of rtlLanguages; track item.code) {
+              <z-select-item [zValue]="item.code">{{ item.label }}</z-select-item>
+            }
+          </z-select>
+
+          <button
+            type="button"
+            z-button
+            zType="ghost"
+            zSize="icon"
+            zPopover
+            zPlacement="bottom"
+            zAlign="end"
+            aria-label="About the translations"
+            [zContent]="aiNote"
+          >
+            <ng-icon name="lucideInfo" aria-hidden="true" />
+          </button>
+
+          <ng-template #aiNote>
+            <z-popover class="flex w-80 flex-col gap-3">
+              @for (note of rtlNotes; track note.lang) {
+                <p class="text-sm" [attr.dir]="note.dir" [attr.lang]="note.lang" [attr.data-lang]="note.lang">
+                  {{ note.text }}
+                </p>
+              }
+            </z-popover>
+          </ng-template>
+        </div>
+      }
+
       @if (dynamicComponent()) {
+        <!--
+          Every preview gets an explicit dir: the CDK Dir directive feeds Directionality, so the components inside and
+          the overlays they open take it from here instead of from <html>. Ordinary previews are ltr; the RTL one
+          follows the language of the header, and data-lang selects the Noto face for it.
+        -->
         <div
+          data-slot="preview"
+          [dir]="previewDir()"
+          [attr.data-lang]="isRtl() ? language() : null"
           [class]="previewClasses()"
           [style.min-height]="previewHeight() || null"
           [class.items-center]="flexAlign() === 'center'"

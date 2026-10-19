@@ -46,6 +46,9 @@
     "bold": {
       "lucide": "lucideBold"
     },
+    "book-open": {
+      "lucide": "lucideBookOpen"
+    },
     "book-open-check": {
       "lucide": "lucideBookOpenCheck"
     },
@@ -175,6 +178,12 @@
     "footprints": {
       "lucide": "lucideFootprints"
     },
+    "forward": {
+      "lucide": "lucideForward"
+    },
+    "frame": {
+      "lucide": "lucideFrame"
+    },
     "gallery-vertical-end": {
       "lucide": "lucideGalleryVerticalEnd"
     },
@@ -238,6 +247,9 @@
     "mail-check": {
       "lucide": "lucideMailCheck"
     },
+    "map": {
+      "lucide": "lucideMap"
+    },
     "maximize": {
       "lucide": "lucideMaximize"
     },
@@ -265,6 +277,9 @@
     "pencil": {
       "lucide": "lucidePencil"
     },
+    "pie-chart": {
+      "lucide": "lucidePieChart"
+    },
     "plus": {
       "lucide": "lucidePlus"
     },
@@ -276,6 +291,9 @@
     },
     "rotate-ccw": {
       "lucide": "lucideRotateCcw"
+    },
+    "rotate-cw": {
+      "lucide": "lucideRotateCw"
     },
     "save": {
       "lucide": "lucideSave"
@@ -289,6 +307,9 @@
     "settings": {
       "lucide": "lucideSettings"
     },
+    "settings-2": {
+      "lucide": "lucideSettings2"
+    },
     "share": {
       "lucide": "lucideShare"
     },
@@ -300,6 +321,12 @@
     },
     "smile": {
       "lucide": "lucideSmile"
+    },
+    "sparkles": {
+      "lucide": "lucideSparkles"
+    },
+    "square-terminal": {
+      "lucide": "lucideSquareTerminal"
     },
     "star": {
       "lucide": "lucideStar"

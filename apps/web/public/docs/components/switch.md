@@ -398,6 +398,65 @@ export class ZardDemoSwitchReactiveFormsComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ label: string; description: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      label: 'Share across devices',
+      description: 'Focus is shared across devices, and turns off when you leave the app.',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      label: 'المشاركة عبر الأجهزة',
+      description: 'تتم مشاركة التركيز عبر الأجهزة، ويتوقف عند مغادرة التطبيق.',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      label: 'שיתוף בין מכשירים',
+      description: 'המיקוד משותף בין מכשירים, ומתבטל כשעוזבים את האפליקציה.',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-switch-rtl',
+  imports: [...ZardFieldImports, ZardSwitchComponent],
+  template: `
+    <div z-field zOrientation="horizontal" class="max-w-sm">
+      <div z-field-content>
+        <label z-field-label for="switch-rtl">{{ i18n.t().label }}</label>
+        <p z-field-description>{{ i18n.t().description }}</p>
+      </div>
+      <z-switch zId="switch-rtl" />
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSwitchRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
+```
+
 ## API Reference
 
 ### z-switch

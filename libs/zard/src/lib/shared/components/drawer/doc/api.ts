@@ -10,7 +10,7 @@ export const DRAWER_API: ApiSection[] = [
       {
         name: '[zPlacement]',
         description:
-          'Edge of the screen the drawer slides from. Also sets the swipe axis: top/bottom drag vertically, left/right drag horizontally',
+          'Edge of the screen the drawer slides from. Also sets the swipe axis: top/bottom drag vertically, left/right drag horizontally. Both stay physical in RTL',
         type: "'top' | 'right' | 'bottom' | 'left'",
         default: "'bottom'",
       },

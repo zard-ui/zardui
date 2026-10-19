@@ -9,6 +9,7 @@ import { DROPDOWN_DEMO_ICONS } from '@generated/components/dropdown/demo/icons';
 import { DROPDOWN_DEMO_PREVIEW } from '@generated/components/dropdown/demo/preview';
 import { DROPDOWN_DEMO_RADIO_GROUP } from '@generated/components/dropdown/demo/radio-group';
 import { DROPDOWN_DEMO_RADIO_ICONS } from '@generated/components/dropdown/demo/radio-icons';
+import { DROPDOWN_DEMO_RTL } from '@generated/components/dropdown/demo/rtl';
 import { DROPDOWN_DEMO_SHORTCUTS } from '@generated/components/dropdown/demo/shortcuts';
 import { DROPDOWN_DEMO_SUBMENU } from '@generated/components/dropdown/demo/submenu';
 import { DROPDOWN_CLI_ADD } from '@generated/installation/cli/add-dropdown';
@@ -29,6 +30,7 @@ import { ZardDemoDropdownShortcutsComponent } from '@/shared/components/dropdown
 import { ZardDemoDropdownSubmenuComponent } from '@/shared/components/dropdown/demo/submenu';
 
 import { ZardDemoDropdownPreviewComponent } from './preview';
+import { ZardDemoDropdownRtlComponent } from './rtl';
 import { DROPDOWN_API } from '../doc/api';
 
 export const DROPDOWN = {
@@ -118,6 +120,13 @@ export const DROPDOWN = {
       description: 'Use `zTrigger="hover"` when the menu should open on pointer hover.',
       component: ZardDemoDropdownHoverComponent,
       codeData: DROPDOWN_DEMO_HOVER,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoDropdownRtlComponent,
+      codeData: DROPDOWN_DEMO_RTL,
     },
   ],
 };

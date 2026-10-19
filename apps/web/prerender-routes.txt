@@ -9,6 +9,7 @@
 /docs/components
 /docs/installation
 /docs/theming
+/docs/rtl
 /docs/cli
 /docs/typeset
 /docs/skills
@@ -21,6 +22,7 @@
 /docs/theming
 /docs/typeset
 /docs/dark-mode
+/docs/rtl
 /docs/cli
 /docs/monorepo
 /docs/skills

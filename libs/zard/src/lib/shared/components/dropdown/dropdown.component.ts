@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -6,6 +7,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -18,6 +20,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import type { ClassValue } from 'clsx';
 
@@ -78,6 +81,9 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private viewContainerRef = inject(ViewContainerRef);
   private platformId = inject(PLATFORM_ID);
+  private destroyRef = inject(DestroyRef);
+  // Optional: the direction of the trigger, which is where the overlay content takes its `dir` from.
+  private directionality = inject(Directionality, { optional: true });
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<unknown>>('dropdownTemplate');
   readonly triggerContainer = viewChild.required<ElementRef<HTMLElement>>('triggerContainer');
@@ -98,6 +104,16 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
+
+  constructor() {
+    // A `[dir]` switch while the menu is open closes it: it reopens with the new direction.
+    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.overlayRef?.setDirection(this.directionality?.value ?? 'ltr');
+      if (this.isOpen()) {
+        this.close();
+      }
+    });
+  }
 
   ngOnDestroy() {
     this.destroyOverlay();
@@ -178,6 +194,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
     }
 
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
+    this.overlayRef.setDirection(this.directionality?.value ?? 'ltr');
     this.overlayRef.attach(this.portal);
     this.isOpen.set(true);
     this.openChange.emit(true);
@@ -225,6 +242,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 
         this.overlayRef = this.overlay.create({
           positionStrategy,
+          direction: this.directionality?.value ?? 'ltr',
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
           minWidth: 200,

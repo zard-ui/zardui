@@ -2,6 +2,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
 import { docsService, sectionOf } from '../services/docs.service.js';
+import { guidesAliasedAs } from '../utils/aliases.js';
 import { didYouMean } from '../utils/fuzzy.js';
 import { errorMessage, fail, json, text } from '../utils/result.js';
 
@@ -11,13 +12,15 @@ export function registerGetDocs(server: McpServer): void {
     {
       title: 'Get guide',
       description:
-        'Read a Zard UI guide as markdown: installation, theming (CSS variables, colors), dark mode, forms (signal, reactive, template-driven), components.json, CLI and utilities. ' +
+        'Read a Zard UI guide as markdown: installation, theming (CSS variables, colors), dark mode, right-to-left (RTL) support, forms (signal, reactive, template-driven), components.json, CLI and utilities. ' +
         'Call without a topic to list the guides. For a single component, use get-component-docs instead.',
       inputSchema: {
         topic: z
           .string()
           .optional()
-          .describe('Guide slug from the list (e.g. "theming", "dark-mode", "forms/signal-forms"). Omit to list them.'),
+          .describe(
+            'Guide slug from the list (e.g. "theming", "dark-mode", "rtl", "forms/signal-forms"). Omit to list them.',
+          ),
         section: z
           .string()
           .optional()
@@ -34,12 +37,16 @@ export function registerGetDocs(server: McpServer): void {
             guides: [...guides].map(([slug, entry]) => ({ topic: slug, ...entry })),
           });
         }
-        const slug = topic
+        const requested = topic
           .trim()
           .toLowerCase()
           .replace(/^\/?(docs\/)?/, '')
           .replace(/\.md$/, '')
           .replace(/\s+/g, '-');
+        // `arabic` or `right-to-left` find the RTL guide, as `toast` finds sonner.
+        const slug = guides.has(requested)
+          ? requested
+          : (guidesAliasedAs(requested).find(candidate => guides.has(candidate)) ?? requested);
         const markdown = await docsService.getGuideMarkdown(slug);
         if (markdown === null) {
           const hint = didYouMean(slug, [...guides.keys()]) || ' Call get-docs without a topic to list the guides.';

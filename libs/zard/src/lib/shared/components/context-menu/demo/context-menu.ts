@@ -6,6 +6,7 @@ import { CONTEXT_MENU_DEMO_GROUPS } from '@generated/components/context-menu/dem
 import { CONTEXT_MENU_DEMO_ICONS } from '@generated/components/context-menu/demo/icons';
 import { CONTEXT_MENU_DEMO_PREVIEW } from '@generated/components/context-menu/demo/preview';
 import { CONTEXT_MENU_DEMO_RADIO } from '@generated/components/context-menu/demo/radio';
+import { CONTEXT_MENU_DEMO_RTL } from '@generated/components/context-menu/demo/rtl';
 import { CONTEXT_MENU_DEMO_SHORTCUTS } from '@generated/components/context-menu/demo/shortcuts';
 import { CONTEXT_MENU_DEMO_SUBMENU } from '@generated/components/context-menu/demo/submenu';
 import { CONTEXT_MENU_DEMO_TABLE_ROWS } from '@generated/components/context-menu/demo/table-rows';
@@ -26,6 +27,7 @@ import { ZardDemoContextMenuSubmenuComponent } from '@/shared/components/context
 import { ZardDemoContextMenuTableRowsComponent } from '@/shared/components/context-menu/demo/table-rows';
 
 import { ZardDemoContextMenuPreviewComponent } from './preview';
+import { ZardDemoContextMenuRtlComponent } from './rtl';
 import { CONTEXT_MENU_API } from '../doc/api';
 
 const CONTEXT_MENU_COMPOSITION_CODE = `div[z-context-menu]
@@ -139,6 +141,13 @@ export const CONTEXT_MENU = {
       description: 'With `zDisabled` the trigger stands down and the browser shows its own menu.',
       component: ZardDemoContextMenuDisabledComponent,
       codeData: CONTEXT_MENU_DEMO_DISABLED,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoContextMenuRtlComponent,
+      codeData: CONTEXT_MENU_DEMO_RTL,
     },
   ],
 };

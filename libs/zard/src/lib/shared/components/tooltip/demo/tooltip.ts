@@ -2,6 +2,7 @@ import { TOOLTIP_DEMO_CLICK } from '@generated/components/tooltip/demo/click';
 import { TOOLTIP_DEMO_DISABLED_BUTTON } from '@generated/components/tooltip/demo/disabled-button';
 import { TOOLTIP_DEMO_ON_SHOW_HIDE } from '@generated/components/tooltip/demo/on-show-hide';
 import { TOOLTIP_DEMO_PREVIEW } from '@generated/components/tooltip/demo/preview';
+import { TOOLTIP_DEMO_RTL } from '@generated/components/tooltip/demo/rtl';
 import { TOOLTIP_DEMO_SIDE } from '@generated/components/tooltip/demo/side';
 import { TOOLTIP_DEMO_WITH_KBD } from '@generated/components/tooltip/demo/with-kbd';
 import { TOOLTIP_CLI_ADD } from '@generated/installation/cli/add-tooltip';
@@ -14,6 +15,7 @@ import { ZardDemoTooltipWithKbdComponent } from '@/shared/components/tooltip/dem
 import { ZardDemoTooltipClickComponent } from './click';
 import { ZardDemoTooltipOnShowHideComponent } from './on-show-hide';
 import { ZardDemoTooltipPreviewComponent } from './preview';
+import { ZardDemoTooltipRtlComponent } from './rtl';
 import { ZardDemoTooltipSideComponent } from './side';
 import { TOOLTIP_API } from '../doc/api';
 
@@ -67,6 +69,13 @@ export const TOOLTIP = {
         'Listen to `(zShow)` and `(zHide)` to react to the tooltip opening and closing, for example to sync external state.',
       component: ZardDemoTooltipOnShowHideComponent,
       codeData: TOOLTIP_DEMO_ON_SHOW_HIDE,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoTooltipRtlComponent,
+      codeData: TOOLTIP_DEMO_RTL,
     },
   ],
 };

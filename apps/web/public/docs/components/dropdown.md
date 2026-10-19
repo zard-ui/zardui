@@ -18,6 +18,7 @@ npx zard-cli@latest add dropdown
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -26,6 +27,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -38,6 +40,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import type { ClassValue } from 'clsx';
 
@@ -98,6 +101,9 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private viewContainerRef = inject(ViewContainerRef);
   private platformId = inject(PLATFORM_ID);
+  private destroyRef = inject(DestroyRef);
+  // Optional: the direction of the trigger, which is where the overlay content takes its `dir` from.
+  private directionality = inject(Directionality, { optional: true });
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<unknown>>('dropdownTemplate');
   readonly triggerContainer = viewChild.required<ElementRef<HTMLElement>>('triggerContainer');
@@ -118,6 +124,16 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
+
+  constructor() {
+    // A `[dir]` switch while the menu is open closes it: it reopens with the new direction.
+    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.overlayRef?.setDirection(this.directionality?.value ?? 'ltr');
+      if (this.isOpen()) {
+        this.close();
+      }
+    });
+  }
 
   ngOnDestroy() {
     this.destroyOverlay();
@@ -198,6 +214,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
     }
 
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
+    this.overlayRef.setDirection(this.directionality?.value ?? 'ltr');
     this.overlayRef.attach(this.portal);
     this.isOpen.set(true);
     this.openChange.emit(true);
@@ -245,6 +262,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 
         this.overlayRef = this.overlay.create({
           positionStrategy,
+          direction: this.directionality?.value ?? 'ltr',
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
           minWidth: 200,
@@ -565,10 +583,13 @@ export class ZardDropdownMenuContentComponent {
 ```angular-ts
 import type { ConnectedPosition } from '@angular/cdk/overlay';
 
-/** Which edge of the trigger the menu is anchored to. Mirrors Radix's `side`. */
-export type ZardDropdownSide = 'top' | 'right' | 'bottom' | 'left';
+/**
+ * Which edge of the trigger the menu is anchored to. Mirrors Radix's `side`: `left`/`right` are physical,
+ * `inline-start`/`inline-end` follow the direction of the trigger (a submenu opens on `inline-end`).
+ */
+export type ZardDropdownSide = 'top' | 'right' | 'bottom' | 'left' | 'inline-start' | 'inline-end';
 
-/** How the menu is aligned along that edge. Mirrors Radix's `align`. */
+/** How the menu is aligned along that edge. Mirrors Radix's `align`; `start`/`end` follow the direction. */
 export type ZardDropdownAlign = 'start' | 'center' | 'end';
 
 /** The side the menu flips to when the preferred one does not fit. */
@@ -577,41 +598,55 @@ const OPPOSITE_SIDE: Record<ZardDropdownSide, ZardDropdownSide> = {
   bottom: 'top',
   left: 'right',
   right: 'left',
+  'inline-start': 'inline-end',
+  'inline-end': 'inline-start',
 };
 
 const isVertical = (side: ZardDropdownSide) => side === 'top' || side === 'bottom';
+
+/** Whether the menu ends up on the physical left of the trigger. */
+export function isDropdownSideLeft(side: ZardDropdownSide, rtl: boolean): boolean {
+  if (side === 'left') return true;
+  if (side === 'right') return false;
+  return (side === 'inline-start') !== rtl;
+}
 
 /**
  * Translates a Radix-style `side`/`align` pair into a CDK connected position.
  *
  * `side` decides the axis the menu is pushed along, `align` decides where it sits on the other axis
  * — the same split Radix uses, so a shadcn snippet can be transcribed one to one.
+ *
+ * CDK `start`/`end` follow the overlay direction, while `offsetX` is always physical: `rtl` swaps the
+ * physical sides and mirrors the offset so the menu stays on the requested side with the gap pointing away.
  */
-function toConnectedPosition(side: ZardDropdownSide, align: ZardDropdownAlign, offset: number): ConnectedPosition {
-  const alignPair = {
-    start: 'start',
-    center: 'center',
-    end: 'end',
-  } as const;
-
+function toConnectedPosition(
+  side: ZardDropdownSide,
+  align: ZardDropdownAlign,
+  offset: number,
+  rtl: boolean,
+): ConnectedPosition {
   if (isVertical(side)) {
     return {
-      originX: alignPair[align],
+      originX: align,
       originY: side === 'bottom' ? 'bottom' : 'top',
-      overlayX: alignPair[align],
+      overlayX: align,
       overlayY: side === 'bottom' ? 'top' : 'bottom',
       offsetY: side === 'bottom' ? offset : -offset,
     };
   }
 
   const verticalAlign = { start: 'top', center: 'center', end: 'bottom' } as const;
+  const onLeft = isDropdownSideLeft(side, rtl);
+  // CDK `start` is the physical left in LTR and the physical right in RTL.
+  const cdkStart = onLeft !== rtl;
 
   return {
-    originX: side === 'right' ? 'end' : 'start',
+    originX: cdkStart ? 'start' : 'end',
     originY: verticalAlign[align],
-    overlayX: side === 'right' ? 'start' : 'end',
+    overlayX: cdkStart ? 'end' : 'start',
     overlayY: verticalAlign[align],
-    offsetX: side === 'right' ? offset : -offset,
+    offsetX: onLeft ? -offset : offset,
   };
 }
 
@@ -623,14 +658,15 @@ export function buildDropdownPositions(
   side: ZardDropdownSide,
   align: ZardDropdownAlign,
   offset: number,
+  rtl = false,
 ): ConnectedPosition[] {
   const fallbackAligns: ZardDropdownAlign[] = (['start', 'center', 'end'] as const).filter(value => value !== align);
 
   return [
-    toConnectedPosition(side, align, offset),
-    toConnectedPosition(OPPOSITE_SIDE[side], align, offset),
-    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(side, fallbackAlign, offset)),
-    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(OPPOSITE_SIDE[side], fallbackAlign, offset)),
+    toConnectedPosition(side, align, offset, rtl),
+    toConnectedPosition(OPPOSITE_SIDE[side], align, offset, rtl),
+    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(side, fallbackAlign, offset, rtl)),
+    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(OPPOSITE_SIDE[side], fallbackAlign, offset, rtl)),
   ];
 }
 ```
@@ -757,7 +793,7 @@ export class ZardDropdownMenuShortcutComponent {
 @Component({
   selector: 'z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item]',
   template: `
-    <span class="pointer-events-none absolute flex size-3.5 items-center justify-center ltr:left-2 rtl:right-2">
+    <span class="pointer-events-none absolute start-2 flex size-3.5 items-center justify-center">
       @if (zChecked()) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="size-4">
           <path d="M20 6 9 17l-5-5" />
@@ -844,7 +880,7 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
 @Component({
   selector: 'z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
   template: `
-    <span class="pointer-events-none absolute flex size-3.5 items-center justify-center ltr:left-2 rtl:right-2">
+    <span class="pointer-events-none absolute start-2 flex size-3.5 items-center justify-center">
       @if (isChecked()) {
         <span class="size-2 rounded-full bg-current"></span>
       }
@@ -902,6 +938,7 @@ export class ZardDropdownMenuRadioItemComponent {
 ```
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -910,6 +947,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   effect,
   ElementRef,
   inject,
@@ -922,6 +960,7 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronRight } from '@ng-icons/lucide';
@@ -1013,6 +1052,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly destroyRef = inject(DestroyRef);
+  // Optional: the direction of the row, which is where the submenu takes its `dir` from.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   private overlayRef?: OverlayRef;
   private closeTimeout?: ReturnType<typeof setTimeout>;
@@ -1044,6 +1086,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 
       this.close();
     });
+
+    // A `[dir]` switch while the submenu is open closes it: it reopens with the new direction.
+    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.close());
   }
 
   ngOnDestroy(): void {
@@ -1110,13 +1155,26 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'ArrowRight' && event.key !== 'Enter' && event.key !== ' ') {
+    // The submenu opens on the inline-end side, so the arrow that opens it follows the direction.
+    if (event.key !== this.openKey() && event.key !== 'Enter' && event.key !== ' ') {
       return;
     }
 
     event.preventDefault();
     event.stopPropagation();
     this.open(true);
+  }
+
+  private isRtl(): boolean {
+    return this.directionality?.value === 'rtl';
+  }
+
+  private openKey(): string {
+    return this.isRtl() ? 'ArrowLeft' : 'ArrowRight';
+  }
+
+  private closeKey(): string {
+    return this.isRtl() ? 'ArrowRight' : 'ArrowLeft';
   }
 
   protected onMouseEnter(): void {
@@ -1180,6 +1238,7 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
+      direction: this.directionality?.value ?? 'ltr',
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
@@ -1235,7 +1294,6 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
         event.preventDefault();
         items[this.focusedIndex]?.click();
         return;
-      case 'ArrowLeft':
       case 'Escape':
         event.preventDefault();
         event.stopPropagation();
@@ -1244,6 +1302,13 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
       case 'Tab':
         this.dropdownService.close();
         return;
+    }
+
+    if (event.key === this.closeKey()) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.close(true);
+      return;
     }
 
     if (!isTypeaheadKey(event)) {
@@ -1440,6 +1505,7 @@ export const ZardDropdownImports = [
 ```
 
 ```angular-ts
+import { Directionality, type Direction } from '@angular/cdk/bidi';
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -1486,6 +1552,8 @@ export class ZardDropdownService {
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly rendererFactory = inject(RendererFactory2);
+  // Optional: the direction of <html>, used when the caller's view container has no closer one.
+  private readonly rootDirectionality = inject(Directionality, { optional: true });
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -1506,6 +1574,7 @@ export class ZardDropdownService {
   private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
   private keydownSubscription?: Subscription;
+  private directionSubscription?: Subscription;
   private unlisten: Array<() => void> = [];
 
   readonly isOpen = signal(false);
@@ -1540,7 +1609,9 @@ export class ZardDropdownService {
     this.triggerElement = triggerElement;
     this.outsideClickExempt = triggerElement;
     this.skipFirstAuxClick = false;
-    this.createOverlay(triggerElement, placement);
+    const directionality = this.directionalityOf(viewContainerRef);
+    this.createOverlay(triggerElement, placement, directionality?.value ?? 'ltr');
+    this.watchDirection(directionality);
     this.attach(template, viewContainerRef);
   }
 
@@ -1562,8 +1633,21 @@ export class ZardDropdownService {
     this.triggerElement = focusOrigin;
     this.outsideClickExempt = undefined;
     this.skipFirstAuxClick = true;
-    this.createPointOverlay(origin);
+    const directionality = this.directionalityOf(viewContainerRef);
+    this.createPointOverlay(origin, directionality?.value ?? 'ltr');
+    this.watchDirection(directionality);
     this.attach(template, viewContainerRef);
+  }
+
+  /** The direction of the place the menu is declared in — the trigger — never the one of `<html>`. */
+  private directionalityOf(viewContainerRef: ViewContainerRef): Directionality | null {
+    return viewContainerRef.injector.get(Directionality, null) ?? this.rootDirectionality;
+  }
+
+  /** A `[dir]` switch while the menu is open closes it: it reopens with the new direction. */
+  private watchDirection(directionality: Directionality | null) {
+    this.directionSubscription?.unsubscribe();
+    this.directionSubscription = directionality?.change.subscribe(() => this.close());
   }
 
   private attach(template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
@@ -1642,7 +1726,11 @@ export class ZardDropdownService {
     trigger?.nativeElement.focus();
   }
 
-  private createOverlay(triggerElement: ElementRef, placement?: ZardDropdownPlacement) {
+  private createOverlay(
+    triggerElement: ElementRef,
+    placement: ZardDropdownPlacement | undefined,
+    direction: Direction,
+  ) {
     if (this.overlayRef) {
       this.destroyOverlay();
     }
@@ -1650,12 +1738,18 @@ export class ZardDropdownService {
     const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(triggerElement)
       .withPositions(
-        buildDropdownPositions(placement?.side ?? 'bottom', placement?.align ?? 'start', placement?.sideOffset ?? 4),
+        buildDropdownPositions(
+          placement?.side ?? 'bottom',
+          placement?.align ?? 'start',
+          placement?.sideOffset ?? 4,
+          direction === 'rtl',
+        ),
       )
       .withPush(false);
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
+      direction,
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
       minWidth: 200,
@@ -1684,7 +1778,7 @@ export class ZardDropdownService {
    * grow into, so the menu flips instead of spilling out of the viewport, and `close()` as the
    * scroll strategy matches every native context menu: scrolling dismisses it.
    */
-  private createPointOverlay(origin: ZardMenuOrigin) {
+  private createPointOverlay(origin: ZardMenuOrigin, direction: Direction) {
     if (this.overlayRef) {
       this.destroyOverlay();
     }
@@ -1702,6 +1796,7 @@ export class ZardDropdownService {
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
+      direction,
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.close(),
     });
@@ -1713,6 +1808,8 @@ export class ZardDropdownService {
     this.outsideClickSubscription?.unsubscribe();
     this.keydownSubscription?.unsubscribe();
     this.keydownSubscription = undefined;
+    this.directionSubscription?.unsubscribe();
+    this.directionSubscription = undefined;
   }
 
   private setupKeyboardNavigation() {
@@ -2503,6 +2600,229 @@ export class ZardDemoDropdownHoverComponent {
   onLogout() {
     console.log('Log out clicked');
   }
+}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCreditCard, lucideSettings, lucideUser } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface DropdownRtlValues {
+  open: string;
+  account: string;
+  profile: string;
+  billing: string;
+  settings: string;
+  team: string;
+  inviteUsers: string;
+  email: string;
+  message: string;
+  more: string;
+  calendar: string;
+  chat: string;
+  webhook: string;
+  advanced: string;
+  newTeam: string;
+  view: string;
+  statusBar: string;
+  activityBar: string;
+  panel: string;
+  position: string;
+  top: string;
+  bottom: string;
+  right: string;
+  left: string;
+  logout: string;
+}
+
+const translations: ZardRtlTranslations<DropdownRtlValues> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      open: 'Open',
+      account: 'Account',
+      profile: 'Profile',
+      billing: 'Billing',
+      settings: 'Settings',
+      team: 'Team',
+      inviteUsers: 'Invite users',
+      email: 'Email',
+      message: 'Message',
+      more: 'More',
+      calendar: 'Calendar',
+      chat: 'Chat',
+      webhook: 'Webhook',
+      advanced: 'Advanced...',
+      newTeam: 'New Team',
+      view: 'View',
+      statusBar: 'Status Bar',
+      activityBar: 'Activity Bar',
+      panel: 'Panel',
+      position: 'Position',
+      top: 'Top',
+      bottom: 'Bottom',
+      right: 'Right',
+      left: 'Left',
+      logout: 'Log out',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      open: 'افتح القائمة',
+      account: 'الحساب',
+      profile: 'الملف الشخصي',
+      billing: 'الفوترة',
+      settings: 'الإعدادات',
+      team: 'الفريق',
+      inviteUsers: 'دعوة المستخدمين',
+      email: 'البريد الإلكتروني',
+      message: 'رسالة',
+      more: 'المزيد',
+      calendar: 'تقويم',
+      chat: 'دردشة',
+      webhook: 'خطاف ويب',
+      advanced: 'متقدم...',
+      newTeam: 'فريق جديد',
+      view: 'عرض',
+      statusBar: 'شريط الحالة',
+      activityBar: 'شريط النشاط',
+      panel: 'اللوحة',
+      position: 'الموضع',
+      top: 'أعلى',
+      bottom: 'أسفل',
+      right: 'يمين',
+      left: 'يسار',
+      logout: 'تسجيل الخروج',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      open: 'פתח תפריט',
+      account: 'חשבון',
+      profile: 'פרופיל',
+      billing: 'חיוב',
+      settings: 'הגדרות',
+      team: 'הצוות',
+      inviteUsers: 'הזמן משתמשים',
+      email: 'אימייל',
+      message: 'הודעה',
+      more: 'עוד',
+      calendar: 'יומן',
+      chat: "צ'אט",
+      webhook: 'Webhook',
+      advanced: 'מתקדם...',
+      newTeam: 'צוות חדש',
+      view: 'תצוגה',
+      statusBar: 'שורת סטטוס',
+      activityBar: 'שורת פעילות',
+      panel: 'לוח',
+      position: 'מיקום',
+      top: 'למעלה',
+      bottom: 'למטה',
+      right: 'ימין',
+      left: 'שמאל',
+      logout: 'התנתק',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-dropdown-rtl',
+  imports: [ZardDropdownImports, ZardButtonComponent, NgIcon],
+  template: `
+    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">{{ i18n.t().open }}</button>
+
+    <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-44">
+      <z-dropdown-menu-sub-trigger [zSubMenu]="account">{{ i18n.t().account }}</z-dropdown-menu-sub-trigger>
+      <z-dropdown-menu-sub-content #account="zDropdownMenuSubContent" class="w-44">
+        <z-dropdown-menu-item>
+          <ng-icon name="lucideUser" class="size-4" />
+          {{ i18n.t().profile }}
+        </z-dropdown-menu-item>
+        <z-dropdown-menu-item>
+          <ng-icon name="lucideCreditCard" class="size-4" />
+          {{ i18n.t().billing }}
+        </z-dropdown-menu-item>
+        <z-dropdown-menu-item>
+          <ng-icon name="lucideSettings" class="size-4" />
+          {{ i18n.t().settings }}
+        </z-dropdown-menu-item>
+      </z-dropdown-menu-sub-content>
+
+      <z-dropdown-menu-separator />
+
+      <z-dropdown-menu-label>{{ i18n.t().team }}</z-dropdown-menu-label>
+      <z-dropdown-menu-item>{{ i18n.t().team }}</z-dropdown-menu-item>
+      <z-dropdown-menu-sub-trigger [zSubMenu]="invite">{{ i18n.t().inviteUsers }}</z-dropdown-menu-sub-trigger>
+      <z-dropdown-menu-sub-content #invite="zDropdownMenuSubContent" class="w-44">
+        <z-dropdown-menu-item>{{ i18n.t().email }}</z-dropdown-menu-item>
+        <z-dropdown-menu-item>{{ i18n.t().message }}</z-dropdown-menu-item>
+        <z-dropdown-menu-sub-trigger [zSubMenu]="more">{{ i18n.t().more }}</z-dropdown-menu-sub-trigger>
+        <z-dropdown-menu-sub-content #more="zDropdownMenuSubContent" class="w-44">
+          <z-dropdown-menu-item>{{ i18n.t().calendar }}</z-dropdown-menu-item>
+          <z-dropdown-menu-item>{{ i18n.t().chat }}</z-dropdown-menu-item>
+          <z-dropdown-menu-separator />
+          <z-dropdown-menu-item>{{ i18n.t().webhook }}</z-dropdown-menu-item>
+        </z-dropdown-menu-sub-content>
+        <z-dropdown-menu-separator />
+        <z-dropdown-menu-item>{{ i18n.t().advanced }}</z-dropdown-menu-item>
+      </z-dropdown-menu-sub-content>
+      <z-dropdown-menu-item>
+        {{ i18n.t().newTeam }}
+        <z-dropdown-menu-shortcut>⌘+T</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+
+      <z-dropdown-menu-separator />
+
+      <z-dropdown-menu-label>{{ i18n.t().view }}</z-dropdown-menu-label>
+      <z-dropdown-menu-checkbox-item [(zChecked)]="statusBar">{{ i18n.t().statusBar }}</z-dropdown-menu-checkbox-item>
+      <z-dropdown-menu-checkbox-item [(zChecked)]="activityBar">
+        {{ i18n.t().activityBar }}
+      </z-dropdown-menu-checkbox-item>
+      <z-dropdown-menu-checkbox-item [(zChecked)]="panel">{{ i18n.t().panel }}</z-dropdown-menu-checkbox-item>
+
+      <z-dropdown-menu-separator />
+
+      <z-dropdown-menu-label>{{ i18n.t().position }}</z-dropdown-menu-label>
+      <z-dropdown-menu-radio-group [(zValue)]="position">
+        <z-dropdown-menu-radio-item zValue="top">{{ i18n.t().top }}</z-dropdown-menu-radio-item>
+        <z-dropdown-menu-radio-item zValue="bottom">{{ i18n.t().bottom }}</z-dropdown-menu-radio-item>
+        <z-dropdown-menu-radio-item zValue="right">{{ i18n.t().right }}</z-dropdown-menu-radio-item>
+        <z-dropdown-menu-radio-item zValue="left">{{ i18n.t().left }}</z-dropdown-menu-radio-item>
+      </z-dropdown-menu-radio-group>
+
+      <z-dropdown-menu-separator />
+
+      <z-dropdown-menu-item zType="destructive">{{ i18n.t().logout }}</z-dropdown-menu-item>
+    </z-dropdown-menu-content>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideUser, lucideCreditCard, lucideSettings })],
+})
+export class ZardDemoDropdownRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected statusBar = true;
+  protected activityBar = false;
+  protected panel = false;
+  protected position = 'bottom';
 }
 ```
 

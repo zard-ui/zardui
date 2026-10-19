@@ -5,6 +5,8 @@
 @import '../../../libs/zard/src/lib/shared/core/css/typeset.css';
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource-variable/geist';
+@import '@fontsource-variable/noto-sans-arabic';
+@import '@fontsource-variable/noto-sans-hebrew';
 
 @plugin 'tailwindcss-animate';
 
@@ -15,7 +17,9 @@
   --header-height: calc(var(--spacing) * 16);
   --footer-height: calc(var(--spacing) * 14);
   --sidebar-width: calc(var(--spacing) * 72);
-  --font-geist-sans: 'Geist Variable', sans-serif;
+  /* Geist has no Arabic or Hebrew glyphs: the Noto subsets (unicode-range, loaded on demand) only fill in those,
+     so overlays portalled out of a [data-lang] preview still get a proper face. Nothing else changes. */
+  --font-geist-sans: 'Geist Variable', 'Noto Sans Arabic Variable', 'Noto Sans Hebrew Variable', sans-serif;
   --font-geist-mono: 'Geist Mono Variable', monospace;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -195,6 +199,15 @@
     -moz-appearance: textfield;
     appearance: textfield; /* Added for general compatibility */
   }
+}
+
+/* RTL previews: the language chosen in the code box picks the face for the whole preview. */
+[data-lang='ar'] {
+  font-family: 'Noto Sans Arabic Variable', var(--font-geist-sans);
+}
+
+[data-lang='he'] {
+  font-family: 'Noto Sans Hebrew Variable', var(--font-geist-sans);
 }
 
 @utility border-grid {

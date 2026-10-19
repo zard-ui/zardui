@@ -129,4 +129,22 @@ describe('ZardPaginationComponent', () => {
 
     expect(pagination).toHaveClass('custom-pagination-class');
   });
+
+  it('renders the translated previous and next labels', async () => {
+    await render(`<z-pagination [zTotal]="5" [zPageIndex]="2" zPreviousText="السابق" zNextText="التالي" />`, {
+      imports: [ZardPaginationComponent],
+    });
+
+    expect(screen.getByRole('button', { name: 'السابق' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'التالي' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /To previous page/ })).not.toBeInTheDocument();
+  });
+
+  it('flips the chevrons in RTL', async () => {
+    const { container } = await render(`<z-pagination [zTotal]="3" />`, { imports: [ZardPaginationComponent] });
+
+    const chevrons = container.querySelectorAll('ng-icon');
+    expect(chevrons.length).toBe(2);
+    chevrons.forEach(icon => expect(icon.classList.contains('rtl:rotate-180')).toBe(true));
+  });
 });

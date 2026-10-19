@@ -31,8 +31,9 @@ const configSchema = z.object({
   // remote catalog exists to avoid. `assertIconFamily` validates the value
   // against the catalog, with a message that names the options.
   icons: z.string().default(SOURCE_ICON_FAMILY),
-  // Layout direction. It does not change what gets installed yet: it exists so
-  // the project can declare the intent, and so a reader knows the field is ours.
+  // Whether the project reads right to left. Components are direction-agnostic
+  // (logical classes + CDK Directionality), so installed files are identical
+  // either way; `init --rtl` sets `dir="rtl"` on <html> in index.html.
   rtl: z.boolean().default(false),
   // Absent from components.json files written before the project-type menu; an
   // Angular application is what those describe.

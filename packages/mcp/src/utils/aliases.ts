@@ -41,6 +41,27 @@ export const ALIASES: Record<string, string[]> = {
   field: ['form', 'label', 'validation'],
 };
 
+/**
+ * Words people use for a guide under a different name. Guides come from the
+ * site's llms.txt, so an alias only applies when its guide is published there.
+ */
+export const GUIDE_ALIASES: Record<string, string[]> = {
+  rtl: ['right-to-left', 'right to left', 'arabic', 'hebrew', 'persian', 'farsi', 'direction', 'bidi', 'dir'],
+};
+
+/** Guides known under this other name: `right-to-left` → `rtl`. */
+export function guidesAliasedAs(input: string): string[] {
+  const normalize = (value: string): string =>
+    value
+      .toLowerCase()
+      .replace(/[-_\s]+/g, ' ')
+      .trim();
+  const wanted = normalize(input);
+  return Object.keys(GUIDE_ALIASES).filter(
+    slug => slug === wanted || GUIDE_ALIASES[slug].some(alias => normalize(alias) === wanted),
+  );
+}
+
 /** Components known under this other name: `toast` → `sonner`, `modal` → `dialog`, `alert-dialog`. */
 export function componentsAliasedAs(input: string): string[] {
   const wanted = input.toLowerCase().replace(/[-_]+/g, ' ').trim();

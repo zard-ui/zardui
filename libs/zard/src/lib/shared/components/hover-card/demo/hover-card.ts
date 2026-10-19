@@ -1,5 +1,6 @@
 import { HOVER_CARD_DEMO_DELAY } from '@generated/components/hover-card/demo/delay';
 import { HOVER_CARD_DEMO_PREVIEW } from '@generated/components/hover-card/demo/preview';
+import { HOVER_CARD_DEMO_RTL } from '@generated/components/hover-card/demo/rtl';
 import { HOVER_CARD_DEMO_SIDES } from '@generated/components/hover-card/demo/sides';
 import { HOVER_CARD_CLI_ADD } from '@generated/installation/cli/add-hover-card';
 import { HOVER_CARD_MANUAL_CODE } from '@generated/installation/manual/hover-card';
@@ -8,6 +9,7 @@ import type { CodeBlockData } from '@highlight/types';
 
 import { ZardDemoHoverCardDelayComponent } from './delay';
 import { ZardDemoHoverCardPreviewComponent } from './preview';
+import { ZardDemoHoverCardRtlComponent } from './rtl';
 import { ZardDemoHoverCardSidesComponent } from './sides';
 import { HOVER_CARD_API } from '../doc/api';
 
@@ -59,6 +61,13 @@ export const HOVER_CARD = {
         'Hover intent defaults to a 700ms open delay and a 300ms close delay — long enough to ignore a passing cursor, unlike a tooltip. Override either with the `zOpenDelay` and `zCloseDelay` inputs, in milliseconds.',
       component: ZardDemoHoverCardDelayComponent,
       codeData: HOVER_CARD_DEMO_DELAY,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoHoverCardRtlComponent,
+      codeData: HOVER_CARD_DEMO_RTL,
     },
   ],
 };

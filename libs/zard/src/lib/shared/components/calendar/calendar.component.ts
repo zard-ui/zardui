@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   forwardRef,
   inject,
   Injector,
@@ -87,6 +88,8 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
     </div>
   `,
   providers: [
+    // One i18n service per calendar so `zLocale` only affects this instance
+    ZardCalendarI18nService,
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ZardCalendarComponent),
@@ -106,6 +109,10 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   private readonly injector = inject(Injector);
   private readonly calendarI18n = inject(ZardCalendarI18nService);
   private readonly gridRefs = viewChildren(ZardCalendarGridComponent);
+
+  constructor() {
+    effect(() => this.calendarI18n.localeOverride.set(this.zLocale() ?? null));
+  }
 
   /** The grid that owns the roving focus — always the first rendered month. */
   private gridRef(): ZardCalendarGridComponent | undefined {
@@ -138,6 +145,11 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
+  /**
+   * BCP 47 locale for month names, weekday names and labels (for example `ar`, `he`, `fr-FR`).
+   * Falls back to the application locale of `ZardI18nService`.
+   */
+  readonly zLocale = input<string | undefined>(undefined);
   /** Renders each day button's content; receives the `CalendarDay` as the implicit context (`let-day`). */
   readonly zDayTemplate = input<TemplateRef<CalendarDayTemplateContext> | null>(null);
 

@@ -18,6 +18,7 @@ npx zard-cli@latest add sheet
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -45,7 +46,7 @@ import {
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import { filter, takeUntil } from 'rxjs';
 
 import { ZardStringTemplateOutletDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
@@ -118,6 +119,8 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
 })
 export class ZardSheetComponent extends ZardSheetHost {
   private readonly overlay = inject(Overlay);
+  // Optional: the direction of the declaration site, which is where the overlay content takes its dir from.
+  private readonly directionality = inject(Directionality, { optional: true });
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
@@ -133,7 +136,7 @@ export class ZardSheetComponent extends ZardSheetHost {
   readonly zWidth = input<string | undefined>(undefined);
   /** Explicit height, for top/bottom sheets. */
   readonly zHeight = input<string | undefined>(undefined);
-  /** Renders the close button in the top-right corner. */
+  /** Renders the close button in the top corner on the inline-end side. */
   readonly zClosable = input(true, { transform: booleanAttribute });
   /** Whether a click on the mask closes the sheet. */
   readonly zMaskClosable = input(true, { transform: booleanAttribute });
@@ -192,6 +195,7 @@ export class ZardSheetComponent extends ZardSheetHost {
 
     const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: this.directionality?.value ?? 'ltr',
         hasBackdrop: true,
         backdropClass: SHEET_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -200,6 +204,11 @@ export class ZardSheetComponent extends ZardSheetHost {
       }),
     );
     this.overlayRef = overlayRef;
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    this.directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? 'ltr'));
 
     overlayRef.attach(new TemplatePortal(this.panel(), this.viewContainerRef));
 
@@ -788,7 +797,7 @@ export type ZardSheetSize = NonNullable<ZardSheetVariants['zSize']>;
         z-button
         zType="ghost"
         zSize="icon-sm"
-        class="absolute top-3 right-3"
+        class="absolute end-3 top-3"
         (click)="closeRequested.emit()"
       >
         <ng-icon name="lucideX" class="size-4!" />
@@ -875,7 +884,7 @@ export class ZardSheetPanelComponent {
   readonly zWidth = input<string | undefined>(undefined);
   /** Explicit height, for top/bottom sheets. */
   readonly zHeight = input<string | undefined>(undefined);
-  /** Renders the close button in the top-right corner. */
+  /** Renders the close button in the top corner on the inline-end side. */
   readonly zClosable = input(true, { transform: booleanAttribute });
   /** How long the enter and leave transitions run, in ms. */
   readonly zDuration = input(SHEET_DURATION);
@@ -968,6 +977,7 @@ export const ZardSheetImports = [
 ```
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -980,6 +990,8 @@ import {
   TemplateRef,
   type ViewContainerRef,
 } from '@angular/core';
+
+import { takeUntil } from 'rxjs';
 
 import { ZardSheetContainerComponent, ZardSheetOptions } from './sheet-container.component';
 import { ZardSheetRef } from './sheet-ref';
@@ -1008,6 +1020,8 @@ export class ZardSheetService {
   private readonly overlay = inject(Overlay);
   private readonly injector = inject(Injector);
   private readonly platformId = inject(PLATFORM_ID);
+  // Optional: the direction of <html>, used when the caller gives no zViewContainerRef to inherit one from.
+  private readonly rootDirectionality = inject(Directionality, { optional: true });
 
   /**
    * Opens a sheet with the given configuration.
@@ -1020,7 +1034,7 @@ export class ZardSheetService {
       return new ZardSheetRef<T>(null, config, null, this.platformId);
     }
 
-    const overlayRef = this.createOverlay();
+    const overlayRef = this.createOverlay(config);
     const sheetContainer = this.attachSheetContainer<T, U>(overlayRef, config);
     const sheetRef = this.attachSheetContent<T, U>(
       config.zContent as ContentType<T>,
@@ -1034,15 +1048,29 @@ export class ZardSheetService {
     return sheetRef;
   }
 
-  private createOverlay(): OverlayRef {
-    return this.overlay.create(
+  private createOverlay<T, U>(config: ZardSheetOptions<T, U>): OverlayRef {
+    const directionality = this.directionalityFor(config.zViewContainerRef);
+    const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: directionality?.value ?? 'ltr',
         hasBackdrop: true,
         backdropClass: SHEET_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
         scrollStrategy: this.overlay.scrollStrategies.block(),
       }),
     );
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(directionality.value));
+
+    return overlayRef;
+  }
+
+  /** The direction of where the overlay was requested from (zViewContainerRef), falling back to <html>. */
+  private directionalityFor(viewContainerRef?: ViewContainerRef): Directionality | null {
+    return viewContainerRef?.injector.get(Directionality, null) ?? this.rootDirectionality;
   }
 
   private attachSheetContainer<T, U>(overlayRef: OverlayRef, config: ZardSheetOptions<T, U>) {
@@ -1307,6 +1335,114 @@ export class ZardDemoSheetNoCloseButtonComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface SheetRtlStrings {
+  open: string;
+  editProfile: string;
+  description: string;
+  name: string;
+  username: string;
+  save: string;
+  close: string;
+}
+
+const translations: ZardRtlTranslations<SheetRtlStrings> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      open: 'Open',
+      editProfile: 'Edit profile',
+      description: "Make changes to your profile here. Click save when you're done.",
+      name: 'Name',
+      username: 'Username',
+      save: 'Save changes',
+      close: 'Close',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      open: 'فتح',
+      editProfile: 'تعديل الملف الشخصي',
+      description: 'قم بإجراء تغييرات على ملفك الشخصي هنا. انقر حفظ عند الانتهاء.',
+      name: 'الاسم',
+      username: 'اسم المستخدم',
+      save: 'حفظ التغييرات',
+      close: 'إغلاق',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      open: 'פתח',
+      editProfile: 'עריכת פרופיל',
+      description: 'בצע שינויים בפרופיל שלך כאן. לחץ שמור כשתסיים.',
+      name: 'שם',
+      username: 'שם משתמש',
+      save: 'שמור שינויים',
+      close: 'סגור',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-sheet-rtl',
+  imports: [ZardButtonComponent, ZardInputComponent, ZardSheetImports],
+  template: `
+    @let t = i18n.t();
+    <button type="button" z-button zType="outline" (click)="visible.set(true)">{{ t.open }}</button>
+
+    <!-- zSide stays physical: in RTL the sheet opens from the left, as it opens from the right in LTR. -->
+    <z-sheet [(zVisible)]="visible" [zSide]="i18n.dir() === 'rtl' ? 'left' : 'right'">
+      <z-sheet-header>
+        <z-sheet-title>{{ t.editProfile }}</z-sheet-title>
+        <z-sheet-description>{{ t.description }}</z-sheet-description>
+      </z-sheet-header>
+
+      <div class="grid gap-4 px-4">
+        <div class="grid gap-3">
+          <label for="sheet-rtl-name" class="text-sm leading-none font-medium select-none">{{ t.name }}</label>
+          <input z-input id="sheet-rtl-name" value="Pedro Duarte" />
+        </div>
+        <div class="grid gap-3">
+          <label for="sheet-rtl-username" class="text-sm leading-none font-medium select-none">
+            {{ t.username }}
+          </label>
+          <input z-input id="sheet-rtl-username" value="peduarte" />
+        </div>
+      </div>
+
+      <z-sheet-footer>
+        <button type="button" z-button z-sheet-close>{{ t.save }}</button>
+        <button type="button" z-button zType="outline" z-sheet-close>{{ t.close }}</button>
+      </z-sheet-footer>
+    </z-sheet>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSheetRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly visible = signal(false);
+}
+```
+
 ## API Reference
 
 ### z-sheet
@@ -1316,7 +1452,7 @@ Root of a declarative sheet. Holds the open state and projects its content into 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zVisible]` | Open state, two-way bound | `boolean` | `false` |
-| `[zSide]` | Edge of the screen the sheet slides from | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
+| `[zSide]` | Edge of the screen the sheet slides from. Physical in RTL too: pick `left` to open from the inline-start edge of a right-to-left page | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
 | `[zSize]` | Preset width (left/right) or height (top/bottom). Ignored once `zWidth` or `zHeight` is set | `'default' \| 'sm' \| 'lg'` | `'default'` |
 | `[zWidth]` | Explicit width, for left/right sheets | `string` | `-` |
 | `[zHeight]` | Explicit height, for top/bottom sheets | `string` | `-` |

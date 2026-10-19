@@ -62,7 +62,8 @@ export const NAVIGATION_MENU_API: ApiSection[] = [
       },
       {
         name: '[zPlacement]',
-        description: 'Popup position relative to the trigger. Overlay mode only',
+        description:
+          'Popup position relative to the trigger. Overlay mode only. `bottom*` and `top*` placements align to the inline edges of the trigger (`Left` is the inline-start edge), so they mirror in RTL; `left*` and `right*` place the popup on a physical side and swap automatically in RTL',
         type: 'ZardNavigationMenuPlacement',
         default: "'bottomLeft'",
       },

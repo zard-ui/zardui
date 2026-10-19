@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
@@ -69,6 +70,7 @@ export class ZardTabComponent {
           [attr.aria-controls]="panelId(index)"
           [disabled]="zDisabled() || tab.zDisabled()"
           (click)="setActiveTab(index)"
+          (keydown)="onKeydown($event)"
           [class]="buttonClasses()"
         >
           @if (tab.zIcon()) {
@@ -107,6 +109,8 @@ export class ZardTabComponent {
 export class ZardTabGroupComponent {
   /** Scopes the tab and panel ids, which repeat for every group on the page when built from the index alone. */
   private readonly uniqueId = inject(ZardIdDirective);
+
+  private readonly directionality = inject(Directionality, { optional: true });
 
   private readonly tabComponents = contentChildren(ZardTabComponent, { descendants: true });
 
@@ -166,6 +170,58 @@ export class ZardTabGroupComponent {
   protected readonly navClasses = computed(() => tabNavVariants({ zVariant: this.zVariant() }));
 
   protected readonly buttonClasses = computed(() => tabButtonVariants());
+
+  /**
+   * Roving arrow-key navigation. In a horizontal list the keys follow the visual order, so ArrowRight moves to the
+   * previous tab in RTL. Moving focus also activates the tab (automatic activation).
+   */
+  protected onKeydown(event: KeyboardEvent): void {
+    const target = this.nextTabIndex(event.key);
+    if (target === undefined) {
+      return;
+    }
+
+    event.preventDefault();
+    this.setActiveTab(target);
+    const buttons =
+      (event.currentTarget as HTMLElement).parentElement?.querySelectorAll<HTMLButtonElement>(':scope > button') ?? [];
+    buttons[target]?.focus();
+  }
+
+  private nextTabIndex(key: string): number | undefined {
+    const tabs = this.tabs();
+    if (this.zDisabled()) {
+      return undefined;
+    }
+    const enabled = tabs.map((_, index) => index).filter(index => !tabs[index].zDisabled());
+    if (enabled.length === 0) {
+      return undefined;
+    }
+
+    if (key === 'Home') {
+      return enabled[0];
+    }
+    if (key === 'End') {
+      return enabled[enabled.length - 1];
+    }
+
+    const rtl = this.directionality?.value === 'rtl';
+    let step = 0;
+    if (this.zOrientation() === 'vertical') {
+      step = key === 'ArrowDown' ? 1 : key === 'ArrowUp' ? -1 : 0;
+    } else if (key === 'ArrowRight') {
+      step = rtl ? -1 : 1;
+    } else if (key === 'ArrowLeft') {
+      step = rtl ? 1 : -1;
+    }
+    if (step === 0) {
+      return undefined;
+    }
+
+    const position = enabled.indexOf(this.activeTabIndex());
+    const from = position === -1 ? (step > 0 ? -1 : 0) : position;
+    return enabled[(from + step + enabled.length) % enabled.length];
+  }
 
   selectTabByIndex(index: number): void {
     if (index >= 0 && index < this.tabs().length) {

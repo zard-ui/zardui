@@ -24,6 +24,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   forwardRef,
   inject,
   Injector,
@@ -107,6 +108,8 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
     </div>
   `,
   providers: [
+    // One i18n service per calendar so `zLocale` only affects this instance
+    ZardCalendarI18nService,
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ZardCalendarComponent),
@@ -126,6 +129,10 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   private readonly injector = inject(Injector);
   private readonly calendarI18n = inject(ZardCalendarI18nService);
   private readonly gridRefs = viewChildren(ZardCalendarGridComponent);
+
+  constructor() {
+    effect(() => this.calendarI18n.localeOverride.set(this.zLocale() ?? null));
+  }
 
   /** The grid that owns the roving focus — always the first rendered month. */
   private gridRef(): ZardCalendarGridComponent | undefined {
@@ -158,6 +165,11 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
+  /**
+   * BCP 47 locale for month names, weekday names and labels (for example `ar`, `he`, `fr-FR`).
+   * Falls back to the application locale of `ZardI18nService`.
+   */
+  readonly zLocale = input<string | undefined>(undefined);
   /** Renders each day button's content; receives the `CalendarDay` as the implicit context (`let-day`). */
   readonly zDayTemplate = input<TemplateRef<CalendarDayTemplateContext> | null>(null);
 
@@ -719,6 +731,7 @@ export type ZardCalendarCaptionLabelVariants = NonNullable<VariantProps<typeof c
 ```
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
@@ -817,6 +830,7 @@ import {
 })
 export class ZardCalendarGridComponent {
   private readonly calendarI18n = inject(ZardCalendarI18nService);
+  private readonly directionality = inject(Directionality, { optional: true });
   private readonly gridContainer = viewChild.required<ElementRef<HTMLElement>>('gridContainer');
 
   // Inputs
@@ -952,11 +966,12 @@ export class ZardCalendarGridComponent {
     let newIndex: number | null = null;
 
     switch (event.key) {
+      // Days are laid out in reading order: in RTL the left arrow moves to the next day
       case 'ArrowLeft':
-        newIndex = this.navigate(currentIndex, -1, days);
+        newIndex = this.navigate(currentIndex, this.isRtl() ? 1 : -1, days);
         break;
       case 'ArrowRight':
-        newIndex = this.navigate(currentIndex, 1, days);
+        newIndex = this.navigate(currentIndex, this.isRtl() ? -1 : 1, days);
         break;
       case 'ArrowUp':
         newIndex = this.navigate(currentIndex, -7, days);
@@ -1010,6 +1025,10 @@ export class ZardCalendarGridComponent {
     }
   }
 
+  private isRtl(): boolean {
+    return this.directionality?.value === 'rtl';
+  }
+
   private navigate(currentIndex: number, step: number, days: CalendarDay[]): number | null {
     const targetIndex = currentIndex + step;
 
@@ -1022,10 +1041,10 @@ export class ZardCalendarGridComponent {
     const dayOfWeek = currentIndex % 7;
 
     if (step === -1) {
-      // Going left - navigate to previous month, focus last day
+      // Going to the previous day - navigate to previous month, focus last day
       this.previousMonth.emit({ position: 'last', dayOfWeek: -1 });
     } else if (step === 1) {
-      // Going right - navigate to next month, focus first day
+      // Going to the next day - navigate to next month, focus first day
       this.nextMonth.emit({ position: 'first', dayOfWeek: -1 });
     } else if (step === -7) {
       // Going up - navigate to previous month, preserve column
@@ -1086,13 +1105,14 @@ export class ZardCalendarGridComponent {
 ```
 
 ```angular-ts
-import { computed, inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 
 import {
   DEFAULT_CALENDAR_I18N,
   DEFAULT_CALENDAR_LABELS,
   type ZardCalendarI18n,
   type ZardCalendarLabels,
+  getPresetLocale,
   type ZardDayOfWeek,
   ZardI18nService,
 } from '@/shared/core/i18n';
@@ -1112,9 +1132,20 @@ export function capitalize(str: string, locale?: string): string {
 export class ZardCalendarI18nService {
   private readonly i18n = inject(ZardI18nService);
 
-  private readonly calendarData = this.i18n.getLocaleData<ZardCalendarI18n>('calendar', DEFAULT_CALENDAR_I18N);
+  private readonly globalCalendarData = this.i18n.getLocaleData<ZardCalendarI18n>('calendar', DEFAULT_CALENDAR_I18N);
 
-  readonly locale = this.i18n.locale;
+  /** Per-calendar locale (`zLocale`). When set it wins over the application-wide ZardI18nService locale. */
+  readonly localeOverride = signal<string | null>(null);
+
+  readonly locale = computed(() => this.localeOverride() || this.i18n.locale());
+
+  private readonly calendarData = computed<ZardCalendarI18n>(() => {
+    const override = this.localeOverride();
+    if (!override) {
+      return this.globalCalendarData();
+    }
+    return getPresetLocale(override)?.calendar ?? DEFAULT_CALENDAR_I18N;
+  });
 
   readonly weekStartsOn = computed<ZardDayOfWeek>(() => {
     const data = this.calendarData();
@@ -2262,6 +2293,56 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardCalendarComponent } from '@/shared/components/calendar/calendar.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ locale: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      locale: 'en',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      locale: 'ar',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      locale: 'he',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-calendar-rtl',
+  imports: [ZardCalendarComponent],
+  template: `
+    <z-calendar zMode="single" class="rounded-lg border" [zLocale]="i18n.t().locale" [(value)]="selectedDate" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCalendarRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+  protected readonly selectedDate = signal<Date | null>(new Date());
+}
+```
+
 ## API Reference
 
 ### z-calendar
@@ -2281,6 +2362,7 @@ A calendar component that allows users to select a date or a range of dates, wit
 | `[zShowOutsideDays]` | Whether the days of the surrounding months are visible. When false they are hidden but keep their grid cell, so the layout never shifts | `boolean` | `true` |
 | `[zDisabledDates]` | Individual days that cannot be selected, on top of the minDate/maxDate range. Each day still keeps its grid cell and is marked with `data-disabled="true"` | `Date[]` | `[]` |
 | `[zNumberOfMonths]` | How many months are rendered side by side. They stack vertically below the `md` breakpoint, and only the first and the last month carry the navigation arrows | `number` | `1` |
+| `[zLocale]` | BCP 47 locale (for example `ar`, `he`, `fr-FR`) used for month names, weekday names and ARIA labels of this calendar only. Falls back to the application locale of `ZardI18nService`. The grid follows the reading direction: in RTL the weeks run right to left, the navigation chevrons flip and ArrowLeft moves to the next day (direction comes from CDK `Directionality`, i.e. `<html dir="rtl">` or the `Dir` directive) | `string` | `-` |
 | `[zDayTemplate]` | Template rendered inside every day button instead of the plain day number. The `CalendarDay` is the implicit context (`let-day`), so the template can read `date`, `isCurrentMonth`, `isSelected` and the range flags. A second `<span>` inside the button is styled as a small caption | `TemplateRef<CalendarDayTemplateContext> \| null` | `null` |
 | `(dateChange)` | Emitted when date selection changes | `EventEmitter<Date \| Date[]>` | `-` |
 | `resetNavigation()` | Public method that moves the visible month back to the selected value and clears the roving focus | `() => void` | `-` |

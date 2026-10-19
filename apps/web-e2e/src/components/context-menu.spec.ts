@@ -94,4 +94,51 @@ test.describe('Context menu component', () => {
     // `button-name` covers the unlabelled copy-page control in the page header, not this component.
     await checkA11y(page, '#overview', ['color-contrast', 'button-name']);
   });
+
+  test('RTL example opens a mirrored menu with the submenu on the left', async ({ page }) => {
+    await demoPage.page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.waitFor({ state: 'attached', timeout: 15_000 });
+    await demo.scrollIntoViewIfNeeded();
+    await expect(demo.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'rtl');
+
+    const trigger = demo.locator('[z-context-menu]');
+    const box = await trigger.boundingBox();
+    if (!box) throw new Error('context menu trigger has no layout box');
+    const pointerX = Math.round(box.x + box.width / 2);
+    await page.mouse.click(pointerX, Math.round(box.y + 20), { button: 'right' });
+
+    const menus = page.locator('.cdk-overlay-container [role="menu"]');
+    await expect(menus.first()).toBeVisible({ timeout: 5000 });
+    await expect(menus.first().locator('xpath=ancestor::*[@dir][1]')).toHaveAttribute('dir', 'rtl');
+
+    // Like a native RTL context menu, it grows to the left of the pointer.
+    const menuBox = await menus.first().boundingBox();
+    expect(menuBox!.x + menuBox!.width).toBeCloseTo(pointerX, -1);
+
+    // The submenu opens on the inline-end (left) side, with a chevron that points left.
+    const submenuTrigger = menus.first().locator('[data-slot="dropdown-menu-sub-trigger"]').first();
+    await submenuTrigger.hover();
+    await expect(menus).toHaveCount(2, { timeout: 5000 });
+    const subBox = await menus.nth(1).boundingBox();
+    expect(subBox!.x + subBox!.width).toBeLessThanOrEqual(menuBox!.x + 8);
+    await expect(submenuTrigger.locator('ng-icon')).toHaveClass(/rtl:rotate-180/);
+  });
+
+  test('RTL example passes accessibility checks when open', async ({ page }) => {
+    await demoPage.page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.waitFor({ state: 'attached', timeout: 15_000 });
+    await demo.scrollIntoViewIfNeeded();
+
+    // A right-click that lands before hydration (or before the scroll settles) opens nothing: retry it.
+    const menu = page.locator('.cdk-overlay-container [role="menu"]').first();
+    await expect(async () => {
+      const box = await demo.locator('[z-context-menu]').boundingBox();
+      if (!box) throw new Error('context menu trigger has no layout box');
+      await page.mouse.click(Math.round(box.x + 20), Math.round(box.y + 20), { button: 'right' });
+      await menu.waitFor({ state: 'visible', timeout: 2000 });
+    }).toPass({ timeout: 15_000 });
+    await checkA11y(page, undefined, ['button-name', 'color-contrast', 'scrollable-region-focusable']);
+  });
 });
