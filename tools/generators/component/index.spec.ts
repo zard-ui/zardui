@@ -28,4 +28,10 @@ describe('findLiteralClose', () => {
 
     expect(findLiteralClose(content, 0, '[', ']')).toBe(content.length - 1);
   });
+
+  it('closes a string after an even number of backslashes', () => {
+    const content = String.raw`['two backslashes: \\', 'bracket: ]']`;
+
+    expect(findLiteralClose(content, 0, '[', ']')).toBe(content.length - 1);
+  });
 });
