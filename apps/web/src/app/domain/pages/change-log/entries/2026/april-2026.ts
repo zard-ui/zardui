@@ -16,14 +16,19 @@ export const APRIL_2026: ChangelogEntry = {
     {
       title: 'Avatar drops numeric sizes',
       description:
-        '`zSize` on `z-avatar` now only accepts `sm | default | md | lg | xl` — the `number` option is gone. Replace a numeric size with the closest named variant (sm=32, default=40, md=48, lg=56, xl=64) or a `size-*` class. The exported types also renamed: `ZardAvatarVariants` → `ZardAvatarSizeVariants`, `ZardImageVariants` → `ZardAvatarShapeVariants`, `ZardAvatarGroupVariants` → `ZardAvatarGroupOrientationVariants`.',
+        '`zSize` on `z-avatar` only takes `sm`, `default`, `md`, `lg` and `xl` now: the numeric option is gone. Swap a number for the closest name (32, 40, 48, 56 and 64 px) or for a `size-*` class. Its exported types were renamed too.',
       icon: 'shield',
       code: '<z-avatar zSize="sm" />',
+      renames: [
+        { from: 'ZardAvatarVariants', to: ['ZardAvatarSizeVariants'] },
+        { from: 'ZardImageVariants', to: ['ZardAvatarShapeVariants'] },
+        { from: 'ZardAvatarGroupVariants', to: ['ZardAvatarGroupOrientationVariants'] },
+      ],
     },
     {
       title: 'Select follows dynamic option lists',
       description:
-        '`z-select` now wires its projected `z-select-item`s through an effect on `contentChildren` instead of `ngAfterContentInit`, so options added later from a signal or reactive collection become selectable, the current value survives additions, and removing the selected item falls back to the raw value. No input or output changed.',
+        'Options added to a `z-select` after it renders, from a signal or a reactive list, are now selectable. The current value survives new options, and removing the selected one falls back to the raw value. No input or output changed.',
       icon: 'code',
     },
   ],

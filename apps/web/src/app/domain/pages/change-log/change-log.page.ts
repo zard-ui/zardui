@@ -111,6 +111,11 @@ export class ChangeLogPage implements OnInit {
     }
   }
 
+  /** Splits a description on `backticks` so code reads as code instead of raw markdown. */
+  segmentsOf(text: string): { text: string; code: boolean }[] {
+    return text.split('`').map((part, index) => ({ text: part, code: index % 2 === 1 }));
+  }
+
   iconOf(icon: ChangelogHighlightIcon): IconName {
     return HIGHLIGHT_ICONS[icon];
   }

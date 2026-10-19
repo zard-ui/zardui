@@ -74,7 +74,31 @@
                   </div>
                   <h4 class="font-semibold">{{ highlight.title }}</h4>
                 </div>
-                <p class="text-muted-foreground text-sm">{{ highlight.description }}</p>
+                <p class="text-muted-foreground text-sm leading-relaxed">
+                  <!-- Text segments sit in spans too: a bare interpolation picks up the template's line breaks as spaces. -->
+                  @for (segment of segmentsOf(highlight.description); track $index) {
+                    <!-- textContent, not {{ }}: template line breaks would add a space around each segment. -->
+                    @if (segment.code) {
+                      <code
+                        class="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-xs"
+                        [textContent]="segment.text"
+                      ></code>
+                    } @else {
+                      <span [textContent]="segment.text"></span>
+                    }
+                  }
+                </p>
+                @if (highlight.renames?.length) {
+                  <ul class="mt-4 divide-y rounded-md border text-xs">
+                    @for (rename of highlight.renames; track rename.from) {
+                      <li class="flex flex-wrap items-center gap-x-2 gap-y-1 px-3 py-2 font-mono">
+                        <code class="text-muted-foreground line-through">{{ rename.from }}</code>
+                        <span class="text-muted-foreground" aria-hidden="true" [textContent]="' → '"></span>
+                        <code class="text-foreground">{{ rename.to.join(', ') }}</code>
+                      </li>
+                    }
+                  </ul>
+                }
                 @if (highlight.code) {
                   <div class="mt-4">
                     <code class="bg-muted rounded px-2 py-1 font-mono text-xs">{{ highlight.code }}</code>

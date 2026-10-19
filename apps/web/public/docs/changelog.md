@@ -549,13 +549,17 @@ A thin month — two releases, no new components. One quietly narrows the Avatar
 
 #### Avatar drops numeric sizes
 
-`zSize` on `z-avatar` now only accepts `sm | default | md | lg | xl` — the `number` option is gone. Replace a numeric size with the closest named variant (sm=32, default=40, md=48, lg=56, xl=64) or a `size-*` class. The exported types also renamed: `ZardAvatarVariants` → `ZardAvatarSizeVariants`, `ZardImageVariants` → `ZardAvatarShapeVariants`, `ZardAvatarGroupVariants` → `ZardAvatarGroupOrientationVariants`.
+`zSize` on `z-avatar` only takes `sm`, `default`, `md`, `lg` and `xl` now: the numeric option is gone. Swap a number for the closest name (32, 40, 48, 56 and 64 px) or for a `size-*` class. Its exported types were renamed too.
+
+- `ZardAvatarVariants` → `ZardAvatarSizeVariants`
+- `ZardImageVariants` → `ZardAvatarShapeVariants`
+- `ZardAvatarGroupVariants` → `ZardAvatarGroupOrientationVariants`
 
 <z-avatar zSize="sm" />
 
 #### Select follows dynamic option lists
 
-`z-select` now wires its projected `z-select-item`s through an effect on `contentChildren` instead of `ngAfterContentInit`, so options added later from a signal or reactive collection become selectable, the current value survives additions, and removing the selected item falls back to the raw value. No input or output changed.
+Options added to a `z-select` after it renders, from a signal or a reactive list, are now selectable. The current value survives new options, and removing the selected one falls back to the raw value. No input or output changed.
 
 ## March 2026
 
@@ -655,7 +659,12 @@ Avatar gains a `zPriority` input and accepts a `SafeUrl` for `zSrc`; the image f
 
 #### Variant helper types renamed
 
-Several exported variant types split or renamed for consistency: `ZardAlertVariants` → `ZardAlertTypeVariants`; `ZardBadgeVariants` → `ZardBadgeTypeVariants` and `ZardBadgeShapeVariants`; `ZardCheckboxVariants` → `ZardCheckboxTypeVariants`, `SizeVariants`, and `ShapeVariants`; `ZardIconVariants` → `ZardIconSizeVariants`. `ZardAlertIconVariants`, `ZardAlertTitleVariants`, `ZardAlertDescriptionVariants`, and `ZardCheckLabelVariants` are removed without replacement.
+Several exported variant types were renamed or split for consistency. `ZardAlertIconVariants`, `ZardAlertTitleVariants`, `ZardAlertDescriptionVariants` and `ZardCheckLabelVariants` were removed with no replacement.
+
+- `ZardAlertVariants` → `ZardAlertTypeVariants`
+- `ZardBadgeVariants` → `ZardBadgeTypeVariants, ZardBadgeShapeVariants`
+- `ZardCheckboxVariants` → `ZardCheckboxTypeVariants, ZardCheckboxSizeVariants, ZardCheckboxShapeVariants`
+- `ZardIconVariants` → `ZardIconSizeVariants`
 
 ## December 2025
 

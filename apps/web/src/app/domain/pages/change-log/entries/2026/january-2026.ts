@@ -57,8 +57,17 @@ export const JANUARY_2026: ChangelogEntry = {
     {
       title: 'Variant helper types renamed',
       description:
-        'Several exported variant types split or renamed for consistency: `ZardAlertVariants` → `ZardAlertTypeVariants`; `ZardBadgeVariants` → `ZardBadgeTypeVariants` and `ZardBadgeShapeVariants`; `ZardCheckboxVariants` → `ZardCheckboxTypeVariants`, `SizeVariants`, and `ShapeVariants`; `ZardIconVariants` → `ZardIconSizeVariants`. `ZardAlertIconVariants`, `ZardAlertTitleVariants`, `ZardAlertDescriptionVariants`, and `ZardCheckLabelVariants` are removed without replacement.',
+        'Several exported variant types were renamed or split for consistency. `ZardAlertIconVariants`, `ZardAlertTitleVariants`, `ZardAlertDescriptionVariants` and `ZardCheckLabelVariants` were removed with no replacement.',
       icon: 'code',
+      renames: [
+        { from: 'ZardAlertVariants', to: ['ZardAlertTypeVariants'] },
+        { from: 'ZardBadgeVariants', to: ['ZardBadgeTypeVariants', 'ZardBadgeShapeVariants'] },
+        {
+          from: 'ZardCheckboxVariants',
+          to: ['ZardCheckboxTypeVariants', 'ZardCheckboxSizeVariants', 'ZardCheckboxShapeVariants'],
+        },
+        { from: 'ZardIconVariants', to: ['ZardIconSizeVariants'] },
+      ],
     },
   ],
 };

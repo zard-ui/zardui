@@ -16,11 +16,18 @@ export interface ChangelogEntryMeta {
 export type ChangelogHighlightIcon =
   'zap' | 'terminal' | 'moon' | 'package' | 'rocket' | 'shield' | 'code' | 'settings';
 
+/** A public symbol that changed name; `to` holds several names when it was split. */
+export interface ChangelogRename {
+  from: string;
+  to: string[];
+}
+
 export interface ChangelogHighlight {
   title: string;
-  description: string;
+  description: string; // `backticks` render as inline code
   icon: ChangelogHighlightIcon;
   code?: string; // Optional snippet to display (e.g. a CLI command)
+  renames?: ChangelogRename[]; // Listed as "old → new" under the description
 }
 
 /**
