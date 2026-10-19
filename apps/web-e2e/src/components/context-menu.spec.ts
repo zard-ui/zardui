@@ -131,10 +131,14 @@ test.describe('Context menu component', () => {
     await demo.waitFor({ state: 'attached', timeout: 15_000 });
     await demo.scrollIntoViewIfNeeded();
 
-    const box = await demo.locator('[z-context-menu]').boundingBox();
-    if (!box) throw new Error('context menu trigger has no layout box');
-    await page.mouse.click(Math.round(box.x + 20), Math.round(box.y + 20), { button: 'right' });
-    await page.locator('.cdk-overlay-container [role="menu"]').first().waitFor({ state: 'visible', timeout: 5000 });
+    // A right-click that lands before hydration (or before the scroll settles) opens nothing: retry it.
+    const menu = page.locator('.cdk-overlay-container [role="menu"]').first();
+    await expect(async () => {
+      const box = await demo.locator('[z-context-menu]').boundingBox();
+      if (!box) throw new Error('context menu trigger has no layout box');
+      await page.mouse.click(Math.round(box.x + 20), Math.round(box.y + 20), { button: 'right' });
+      await menu.waitFor({ state: 'visible', timeout: 2000 });
+    }).toPass({ timeout: 15_000 });
     await checkA11y(page, undefined, ['button-name', 'color-contrast', 'scrollable-region-focusable']);
   });
 });

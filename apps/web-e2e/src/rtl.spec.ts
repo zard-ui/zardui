@@ -68,7 +68,10 @@ test.describe('RTL guide (/docs/rtl)', () => {
   });
 
   test('is reachable from the sidebar', async ({ page }) => {
-    await expect(page.locator('z-sidebar').getByRole('link', { name: 'RTL', exact: true })).toBeVisible();
+    // Listed under both "Sections" and "Get Started" on purpose (see routes.constant.ts).
+    const links = page.locator('z-sidebar').getByRole('link', { name: 'RTL', exact: true });
+    await expect(links).toHaveCount(2);
+    await expect(links.first()).toBeVisible();
   });
 
   test('serves the markdown version of the page', async ({ request }) => {

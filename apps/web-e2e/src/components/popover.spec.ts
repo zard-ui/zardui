@@ -39,9 +39,11 @@ test.describe('Popover component', () => {
     await expect(panel).toHaveAttribute('data-side', 'inline-start');
 
     // inline-start is the physical right in RTL.
+    // Measured after the enter animation, which slides the panel a few pixels.
     const triggerBox = await inlineStart.boundingBox();
-    const panelBox = await panel.boundingBox();
-    expect(panelBox!.x).toBeGreaterThanOrEqual(triggerBox!.x + triggerBox!.width - 1);
+    await expect
+      .poll(async () => (await panel.boundingBox())!.x)
+      .toBeGreaterThanOrEqual(triggerBox!.x + triggerBox!.width - 1);
 
     await page.keyboard.press('Escape');
     await expect(panel).toBeHidden({ timeout: 5000 });
@@ -50,8 +52,12 @@ test.describe('Popover component', () => {
     await inlineEnd.click();
     await expect(panel).toBeVisible({ timeout: 5000 });
     const endTrigger = await inlineEnd.boundingBox();
-    const endPanel = await panel.boundingBox();
-    expect(endPanel!.x + endPanel!.width).toBeLessThanOrEqual(endTrigger!.x + 1);
+    await expect
+      .poll(async () => {
+        const endPanel = (await panel.boundingBox())!;
+        return endPanel.x + endPanel.width;
+      })
+      .toBeLessThanOrEqual(endTrigger!.x + 1);
   });
 
   test('an ordinary example next to the RTL one keeps its own direction', async ({ page }) => {
