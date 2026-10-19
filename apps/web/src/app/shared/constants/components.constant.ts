@@ -61,7 +61,12 @@ export interface ExampleData {
 
 /** The groups the components are listed under, in `llms.txt` and anywhere else that needs them. */
 export type ComponentCategory =
-  'Form & Input' | 'Layout & Navigation' | 'Overlays & Dialogs' | 'Feedback & Status' | 'Display & Media' | 'Misc';
+  | 'Form & Input'
+  | 'Layout & Navigation'
+  | 'Overlays & Dialogs'
+  | 'Feedback & Status'
+  | 'Display & Media'
+  | 'Misc';
 
 export interface ComponentRegistryEntry {
   componentName: string;
@@ -405,5 +410,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Composable file and image attachment',
     category: 'Display & Media',
     loadData: () => import('@zard/components/attachment/demo/attachment').then(m => m.ATTACHMENT),
+  },
+  {
+    componentName: 'questionnaire',
+    description: 'A multi-step questionnaire with single-choice, multiple-choice, freeform, and skippable questions.',
+    category: 'Form & Input',
+    loadData: () => import('@zard/components/questionnaire/demo/questionnaire').then(m => m.QUESTIONNAIRE),
   },
 ];
