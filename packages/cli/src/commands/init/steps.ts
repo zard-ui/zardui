@@ -12,7 +12,7 @@ import { setupRtlDirection } from '@cli/commands/init/rtl-setup.js';
 import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { updateAngularConfig } from '@cli/commands/init/update-angular-config.js';
-import { setupCssTarget, setupVitePlugin } from '@cli/commands/init/vite-setup.js';
+import { setupCssTarget, setupViteAlias, setupVitePlugin } from '@cli/commands/init/vite-setup.js';
 import { iconFamily } from '@cli/core/icons/index.js';
 import { resolveConfigPaths, type Config } from '@cli/utils/config.js';
 import { type ProjectInfo } from '@cli/utils/get-project-info.js';
@@ -77,7 +77,7 @@ export function buildInitSteps(
       run: () => updateAngularConfig(cwd, config),
     });
 
-    steps.push(tailwindPipelineStep(cwd, projectRoot, kind, projectInfo, isReInitializing));
+    steps.push(tailwindPipelineStep(cwd, projectRoot, config, projectInfo, isReInitializing));
   }
 
   steps.push({
@@ -150,17 +150,20 @@ function indexHtmlOf(config: Config, projectInfo: ProjectInfo): string {
 function tailwindPipelineStep(
   cwd: string,
   projectRoot: string,
-  kind: Config['projectType'],
+  config: Config,
   projectInfo: ProjectInfo,
   isReInitializing: boolean,
 ): InitStep {
+  const kind = config.projectType;
+
   if (bundlerFor(kind) === 'vite') {
     return {
       label: 'vite.config.ts',
-      note: 'Tailwind Vite plugin, cssTarget (logical CSS for RTL)',
+      note: 'Tailwind Vite plugin, cssTarget (logical CSS for RTL), @ alias',
       run: async () => {
         await setupVitePlugin(cwd);
         await setupCssTarget(cwd);
+        await setupViteAlias(cwd, config);
       },
     };
   }

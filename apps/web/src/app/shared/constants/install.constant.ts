@@ -308,7 +308,7 @@ export const installations: Installation[] = [
       {
         title: 'Configure the Tailwind pipeline',
         subtitle:
-          'Analog builds with Vite, so Tailwind is a Vite plugin and a .postcssrc.json would never be read. Register it in vite.config.ts, and set build.cssTarget: without it Vite lowers the logical CSS the components use to left/right rules chosen by the lang attribute, and right-to-left layouts break.',
+          'Analog builds with Vite, so Tailwind is a Vite plugin and a .postcssrc.json would never be read. Register it in vite.config.ts, and set build.cssTarget: without it Vite lowers the logical CSS the components use to left/right rules chosen by the lang attribute, and right-to-left layouts break. Also alias @ to an absolute path: on Windows Analog resolves the tsconfig @/ paths with backslashes and relative imports with forward slashes, so Vite bundles each component twice and anything that injects a parent component (input-otp, context-menu, chart) stops working.',
         codeBlockData: SETUP_ANALOG_VITE,
       },
       tsconfigStep('tsconfig.json', SETUP_ANALOG_TSCONFIG),
