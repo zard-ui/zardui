@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, PendingTasks, PLATFORM_ID, signal } from '@angular/core';
 
 import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
@@ -47,6 +47,7 @@ const HIGHLIGHT_ICONS: Record<ChangelogHighlightIcon, IconName> = {
     DocContentComponent,
     DocHeadingComponent,
     NgIcon,
+    NgTemplateOutlet,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
     ViewportEnterDirective,
@@ -78,8 +79,14 @@ export class ChangeLogPage implements OnInit {
 
   readonly entries = this.changelogService.entries;
 
+  private readonly releaseEntry = this.entries.find(entry => entry.release);
+
   /** The current release banner, if any entry carries one. At most one exists at a time. */
-  readonly release = this.entries.find(entry => entry.release)?.release;
+  readonly release = this.releaseEntry?.release;
+
+  /** Months newer than the release lead the page, above its banner; the rest follow it. */
+  readonly entriesAboveRelease = this.entries.filter(entry => this.isAfterRelease(entry));
+  readonly entriesBelowRelease = this.entries.filter(entry => !this.isAfterRelease(entry));
 
   readonly navigationConfig: NavigationConfig = {
     items: [
@@ -104,6 +111,11 @@ export class ChangeLogPage implements OnInit {
     }
   }
 
+  /** Splits a description on `backticks` so code reads as code instead of raw markdown. */
+  segmentsOf(text: string): { text: string; code: boolean }[] {
+    return text.split('`').map((part, index) => ({ text: part, code: index % 2 === 1 }));
+  }
+
   iconOf(icon: ChangelogHighlightIcon): IconName {
     return HIGHLIGHT_ICONS[icon];
   }
@@ -114,5 +126,9 @@ export class ChangeLogPage implements OnInit {
 
   onEntryApproaching(entry: ChangelogEntry) {
     void this.changelogService.load(entry);
+  }
+
+  private isAfterRelease(entry: ChangelogEntry): boolean {
+    return !!this.releaseEntry && entry.meta.date > this.releaseEntry.meta.date;
   }
 }

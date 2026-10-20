@@ -16,7 +16,7 @@ import { type ChangelogExample } from '../entries/changelog-entry.interface';
   imports: [StepsComponent, ZardCodeBoxComponent],
   template: `
     <section class="mb-8">
-      <h3 class="mb-4 text-xl font-semibold">New Components</h3>
+      <h3 class="mb-4 text-xl font-semibold">{{ title() }}</h3>
 
       @for (item of items(); track item.example.componentName) {
         <div class="mb-8">
@@ -33,6 +33,7 @@ import { type ChangelogExample } from '../entries/changelog-entry.interface';
             [codeData]="item.example.codeData"
             [dynamicComponent]="item.example.component"
             [fillContainer]="item.example.fillContainer"
+            [type]="item.example.type"
           ></z-code-box>
         </div>
       }
@@ -42,6 +43,7 @@ import { type ChangelogExample } from '../entries/changelog-entry.interface';
 })
 export class ChangelogExamplesComponent {
   readonly examples = input.required<ChangelogExample[]>();
+  readonly title = input('New Components');
 
   /** Pairs each example with its install steps once, keeping the `z-steps` input stable. */
   readonly items = computed(() => this.examples().map(example => ({ example, steps: buildInstallSteps(example) })));

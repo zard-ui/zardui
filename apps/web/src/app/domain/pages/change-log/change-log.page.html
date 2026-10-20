@@ -12,70 +12,24 @@
     id="overview"
   />
 
+  <!-- Months newer than the release lead the page, above its banner. -->
+  @if (entriesAboveRelease.length > 0) {
+    <div class="mt-8 space-y-16">
+      @for (entry of entriesAboveRelease; track entry.meta.id) {
+        <ng-container [ngTemplateOutlet]="month" [ngTemplateOutletContext]="{ $implicit: entry }" />
+      }
+    </div>
+  }
+
   @if (release; as currentRelease) {
-    <div class="mt-8 mb-12">
+    <div class="mt-12 mb-12">
       <z-changelog-release [release]="currentRelease" />
     </div>
   }
 
   <div class="mt-8 space-y-16">
-    @for (entry of entries; track entry.meta.id) {
-      <!-- Month Block -->
-      <div
-        [id]="entry.meta.id"
-        scrollSpyItem
-        [scrollSpyItem]="entry.meta.id"
-        class="scroll-mt-20"
-        (viewportEnter)="onEntryApproaching(entry)"
-      >
-        <!-- Month Header -->
-        <div class="mb-8">
-          <div class="mb-4 flex items-center justify-between">
-            <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
-              {{ entry.meta.month }}
-            </h2>
-          </div>
-          <p class="text-muted-foreground">{{ entry.overview }}</p>
-        </div>
-
-        <!-- Highlights Section (for structural improvements) -->
-        @if (entry.highlights && entry.highlights.length > 0) {
-          <section class="mb-8">
-            <h3 class="mb-4 text-xl font-semibold">Highlights</h3>
-            <div class="grid gap-4">
-              @for (highlight of entry.highlights; track highlight.title) {
-                <div class="group bg-card hover:border-primary/50 relative rounded-lg border p-6 transition-colors">
-                  <div class="mb-3 flex items-center gap-3">
-                    <div
-                      class="bg-primary/10 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-                    >
-                      <ng-icon [name]="iconOf(highlight.icon)" class="size-5!" />
-                    </div>
-                    <h4 class="font-semibold">{{ highlight.title }}</h4>
-                  </div>
-                  <p class="text-muted-foreground text-sm">{{ highlight.description }}</p>
-                  @if (highlight.code) {
-                    <div class="mt-4">
-                      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">{{ highlight.code }}</code>
-                    </div>
-                  }
-                </div>
-              }
-            </div>
-          </section>
-        }
-
-        <!--
-          New Components. Rendered in full on the server; in the browser the month's
-          payload is imported when it approaches the viewport and only then does the
-          block hydrate, so the server HTML it replaces always matches.
-        -->
-        @if (entry.loadExamples) {
-          @defer (when examplesOf(entry.meta.id); hydrate when examplesOf(entry.meta.id)) {
-            <z-changelog-examples [examples]="examplesOf(entry.meta.id) ?? []" />
-          }
-        }
-      </div>
+    @for (entry of entriesBelowRelease; track entry.meta.id) {
+      <ng-container [ngTemplateOutlet]="month" [ngTemplateOutletContext]="{ $implicit: entry }" />
     }
     @if (entries.length === 0) {
       <z-alert
@@ -86,4 +40,89 @@
       />
     }
   </div>
+  <ng-template #month let-entry>
+    <!-- Month Block -->
+    <div
+      [id]="entry.meta.id"
+      scrollSpyItem
+      [scrollSpyItem]="entry.meta.id"
+      class="scroll-mt-20"
+      (viewportEnter)="onEntryApproaching(entry)"
+    >
+      <!-- Month Header -->
+      <div class="mb-8">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+            {{ entry.meta.month }}
+          </h2>
+        </div>
+        <p class="text-muted-foreground">{{ entry.overview }}</p>
+      </div>
+
+      <!-- Highlights Section (for structural improvements) -->
+      @if (entry.highlights && entry.highlights.length > 0) {
+        <section class="mb-8">
+          <h3 class="mb-4 text-xl font-semibold">Highlights</h3>
+          <div class="grid gap-4">
+            @for (highlight of entry.highlights; track highlight.title) {
+              <div class="group bg-card hover:border-primary/50 relative rounded-lg border p-6 transition-colors">
+                <div class="mb-3 flex items-center gap-3">
+                  <div
+                    class="bg-primary/10 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+                  >
+                    <ng-icon [name]="iconOf(highlight.icon)" class="size-5!" />
+                  </div>
+                  <h4 class="font-semibold">{{ highlight.title }}</h4>
+                </div>
+                <p class="text-muted-foreground text-sm leading-relaxed">
+                  <!-- Text segments sit in spans too: a bare interpolation picks up the template's line breaks as spaces. -->
+                  @for (segment of segmentsOf(highlight.description); track $index) {
+                    <!-- textContent, not {{ }}: template line breaks would add a space around each segment. -->
+                    @if (segment.code) {
+                      <code
+                        class="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-xs"
+                        [textContent]="segment.text"
+                      ></code>
+                    } @else {
+                      <span [textContent]="segment.text"></span>
+                    }
+                  }
+                </p>
+                @if (highlight.renames?.length) {
+                  <ul class="mt-4 divide-y rounded-md border text-xs">
+                    @for (rename of highlight.renames; track rename.from) {
+                      <li class="flex flex-wrap items-center gap-x-2 gap-y-1 px-3 py-2 font-mono">
+                        <code class="text-muted-foreground line-through">{{ rename.from }}</code>
+                        <span class="text-muted-foreground" aria-hidden="true" [textContent]="' → '"></span>
+                        <code class="text-foreground">{{ rename.to.join(', ') }}</code>
+                      </li>
+                    }
+                  </ul>
+                }
+                @if (highlight.code) {
+                  <div class="mt-4">
+                    <code class="bg-muted rounded px-2 py-1 font-mono text-xs">{{ highlight.code }}</code>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!--
+      New Components. Rendered in full on the server; in the browser the month's
+      payload is imported when it approaches the viewport and only then does the
+      block hydrate, so the server HTML it replaces always matches.
+    -->
+      @if (entry.loadExamples) {
+        @defer (when examplesOf(entry.meta.id); hydrate when examplesOf(entry.meta.id)) {
+          <z-changelog-examples
+            [examples]="examplesOf(entry.meta.id) ?? []"
+            [title]="entry.examplesTitle ?? 'New Components'"
+          />
+        }
+      }
+    </div>
+  </ng-template>
 </z-content>
