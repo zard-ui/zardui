@@ -172,7 +172,7 @@ describe('ZardColorPickerComponent', () => {
     });
 
     it('should disable the trigger', () => {
-      setInput('disabled', true);
+      setInput('zDisabled', true);
 
       expect(trigger().disabled).toBe(true);
     });
@@ -182,7 +182,7 @@ describe('ZardColorPickerComponent', () => {
       await open();
       const hue = overlay('[data-slot="color-picker-hue"]') as HTMLElement;
 
-      setInput('disabled', true);
+      setInput('zDisabled', true);
       await fixture.whenStable();
       // The panel closes after the render that disabled it; the trigger reflects that on the next one.
       fixture.detectChanges();
@@ -767,5 +767,34 @@ describe('ZardColorPickerComponent in RTL', () => {
 
   it('should keep color codes left-to-right inside the right-to-left layout', () => {
     expect(overlay('input[aria-label="Color value"]')?.getAttribute('dir')).toBe('ltr');
+  });
+});
+
+@Component({
+  imports: [ZardColorPickerComponent, ReactiveFormsModule],
+  template: `
+    <z-color-picker zDisabled />
+    <z-color-picker [formControl]="control" [zDisabled]="false" />
+  `,
+})
+class DisabledHostComponent {
+  readonly control = new FormControl<string | null>({ value: '#ff0000', disabled: true });
+}
+
+describe('ZardColorPickerComponent disabled sources', () => {
+  it('should read a static zDisabled attribute and keep a form-disabled control disabled', async () => {
+    await TestBed.configureTestingModule({ imports: [DisabledHostComponent], providers }).compileComponents();
+    const fixture = TestBed.createComponent(DisabledHostComponent);
+    fixture.detectChanges();
+
+    const [staticAttribute, formDisabled] = Array.from(
+      (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('z-color-picker > button'),
+    );
+    expect(staticAttribute.disabled).toBe(true);
+    expect(formDisabled.disabled).toBe(true);
+
+    fixture.componentInstance.control.enable();
+    fixture.detectChanges();
+    expect(formDisabled.disabled).toBe(false);
   });
 });

@@ -20,7 +20,8 @@ export const COLOR_PICKER_API: ApiSection[] = [
       },
       {
         name: '[value]',
-        description: 'Selected color, written in `zFormat`. `null` while nothing is picked',
+        description:
+          'Selected color, written in `zFormat`. `null` while nothing is picked. Supports two-way binding through [(value)]',
         type: 'string | null',
         default: 'null',
       },
@@ -74,7 +75,12 @@ export const COLOR_PICKER_API: ApiSection[] = [
         type: 'boolean',
         default: 'true',
       },
-      { name: '[disabled]', description: 'Whether the color picker is disabled', type: 'boolean', default: 'false' },
+      {
+        name: '[zDisabled]',
+        description: 'Disables the color picker. A disabled form control disables it too, whatever this input says',
+        type: 'boolean',
+        default: 'false',
+      },
       {
         name: '(zColorChange)',
         description: 'Emitted with the new value whenever the user changes the color, including every frame of a drag',

@@ -170,7 +170,8 @@ test.describe('Color Picker (RTL)', () => {
     rtl = demos.getDemoByName('rtl');
     await rtl.scrollIntoViewIfNeeded();
     await expect(rtl.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'rtl');
-    await rtl.locator('[data-slot="color-picker"] button').first().click();
+    // The translated label names the trigger (Arabic is the preview's default language).
+    await rtl.getByRole('button', { name: 'لون العلامة التجارية' }).click();
     await waitForPanel(page);
   });
 

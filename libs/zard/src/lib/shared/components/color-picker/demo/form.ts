@@ -8,7 +8,7 @@ import { ZardColorPickerComponent } from '../color-picker.component';
 
 @Component({
   selector: 'z-demo-color-picker-form',
-  imports: [ZardColorPickerComponent, ...ZardFieldImports, ReactiveFormsModule, JsonPipe],
+  imports: [ZardColorPickerComponent, ZardFieldImports, ReactiveFormsModule, JsonPipe],
   template: `
     <form [formGroup]="form">
       <div z-field-group class="mx-auto w-60">

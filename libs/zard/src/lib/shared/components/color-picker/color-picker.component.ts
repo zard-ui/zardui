@@ -316,7 +316,11 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   readonly zPlaceholder = input<string>('Pick a color');
   readonly zAlign = input<ZardPopoverAlign>('start');
   readonly value = model<string | null>(null);
-  readonly disabled = model<boolean>(false);
+  readonly zDisabled = input(false, { transform: booleanAttribute });
+
+  /** Kept apart from `zDisabled`, so a `[zDisabled]="false"` binding cannot re-enable a control the form disabled. */
+  private readonly disabledByForm = signal(false);
+  protected readonly disabled = computed(() => this.zDisabled() || this.disabledByForm());
 
   /** Every change, including each frame of a drag. */
   readonly zColorChange = output<string>();
@@ -698,6 +702,6 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    this.disabledByForm.set(isDisabled);
   }
 }

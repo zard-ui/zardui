@@ -336,7 +336,11 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   readonly zPlaceholder = input<string>('Pick a color');
   readonly zAlign = input<ZardPopoverAlign>('start');
   readonly value = model<string | null>(null);
-  readonly disabled = model<boolean>(false);
+  readonly zDisabled = input(false, { transform: booleanAttribute });
+
+  /** Kept apart from `zDisabled`, so a `[zDisabled]="false"` binding cannot re-enable a control the form disabled. */
+  private readonly disabledByForm = signal(false);
+  protected readonly disabled = computed(() => this.zDisabled() || this.disabledByForm());
 
   /** Every change, including each frame of a drag. */
   readonly zColorChange = output<string>();
@@ -718,7 +722,7 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    this.disabledByForm.set(isDisabled);
   }
 }
 ```
@@ -1431,7 +1435,7 @@ import { ZardColorPickerComponent } from '../color-picker.component';
 
 @Component({
   selector: 'z-demo-color-picker-form',
-  imports: [ZardColorPickerComponent, ...ZardFieldImports, ReactiveFormsModule, JsonPipe],
+  imports: [ZardColorPickerComponent, ZardFieldImports, ReactiveFormsModule, JsonPipe],
   template: `
     <form [formGroup]="form">
       <div z-field-group class="mx-auto w-60">
@@ -1515,6 +1519,7 @@ To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardColorPickerComponent } from '@/shared/components/color-picker/color-picker.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
 
 const translations: ZardRtlTranslations<{ label: string; placeholder: string }> = {
@@ -1543,11 +1548,18 @@ const translations: ZardRtlTranslations<{ label: string; placeholder: string }> 
 
 @Component({
   selector: 'z-demo-color-picker-rtl',
-  imports: [ZardColorPickerComponent],
+  imports: [ZardColorPickerComponent, ZardFieldImports],
   template: `
-    <div class="flex flex-col gap-2">
-      <span class="text-sm font-medium">{{ i18n.t().label }}</span>
-      <z-color-picker zShowValue zAlpha [zPlaceholder]="i18n.t().placeholder" [zPresets]="presets" [(value)]="color" />
+    <div z-field class="mx-auto w-60">
+      <label z-field-label for="color-picker-rtl">{{ i18n.t().label }}</label>
+      <z-color-picker
+        zId="color-picker-rtl"
+        zShowValue
+        zAlpha
+        [zPlaceholder]="i18n.t().placeholder"
+        [zPresets]="presets"
+        [(value)]="color"
+      />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -1569,7 +1581,7 @@ A swatch button that opens a panel in a popover: a saturation/brightness area, a
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes on the host. Also where the trigger width is overridden with `zShowValue` | `ClassValue` | `''` |
 | `[zId]` | Applied to the trigger button, so a `<label for="…">` points at something focusable | `string` | `''` |
-| `[value]` | Selected color, written in `zFormat`. `null` while nothing is picked | `string \| null` | `null` |
+| `[value]` | Selected color, written in `zFormat`. `null` while nothing is picked. Supports two-way binding through [(value)] | `string \| null` | `null` |
 | `[zFormat]` | Format of the emitted value and of the text field. `oklch` is written like Tailwind CSS v4 tokens (`oklch(0.628 0.25768 29.23)`), with enough decimals to read back as the same color | `'hex' \| 'rgb' \| 'hsl' \| 'oklch'` | `'hex'` |
 | `[zAlpha]` | Shows the alpha slider and includes alpha in the value when the color is not opaque | `boolean` | `false` |
 | `[zPresets]` | Preset swatches shown below the panel. Invalid colors are skipped | `string[]` | `[]` |
@@ -1578,7 +1590,7 @@ A swatch button that opens a panel in a popover: a saturation/brightness area, a
 | `[zPlaceholder]` | Text shown in the trigger while no color is picked | `string` | `'Pick a color'` |
 | `[zAlign]` | Alignment of the panel relative to the trigger | `'start' \| 'center' \| 'end'` | `'start'` |
 | `[zShowFormatToggle]` | Shows HEX / RGB / HSL / OKLCH tabs above the text field. Only the text changes: the value is still emitted in `zFormat` | `boolean` | `true` |
-| `[disabled]` | Whether the color picker is disabled | `boolean` | `false` |
+| `[zDisabled]` | Disables the color picker. A disabled form control disables it too, whatever this input says | `boolean` | `false` |
 | `(zColorChange)` | Emitted with the new value whenever the user changes the color, including every frame of a drag | `EventEmitter<string>` | `-` |
 | `(zColorCommit)` | Emitted once the change settles: when a drag ends, on each key press, and when a preset, the text field or the eyedropper sets the color. Use it to save or call an API without debouncing | `EventEmitter<string>` | `-` |
 

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardColorPickerComponent } from '@/shared/components/color-picker/color-picker.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
 
 const translations: ZardRtlTranslations<{ label: string; placeholder: string }> = {
@@ -29,11 +30,18 @@ const translations: ZardRtlTranslations<{ label: string; placeholder: string }> 
 
 @Component({
   selector: 'z-demo-color-picker-rtl',
-  imports: [ZardColorPickerComponent],
+  imports: [ZardColorPickerComponent, ZardFieldImports],
   template: `
-    <div class="flex flex-col gap-2">
-      <span class="text-sm font-medium">{{ i18n.t().label }}</span>
-      <z-color-picker zShowValue zAlpha [zPlaceholder]="i18n.t().placeholder" [zPresets]="presets" [(value)]="color" />
+    <div z-field class="mx-auto w-60">
+      <label z-field-label for="color-picker-rtl">{{ i18n.t().label }}</label>
+      <z-color-picker
+        zId="color-picker-rtl"
+        zShowValue
+        zAlpha
+        [zPlaceholder]="i18n.t().placeholder"
+        [zPresets]="presets"
+        [(value)]="color"
+      />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
