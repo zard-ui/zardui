@@ -1,6 +1,8 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import {
   ElementRef,
+  Injector,
   PLATFORM_ID,
   type Renderer2,
   RendererFactory2,
@@ -8,6 +10,8 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
+import { Subject } from 'rxjs';
 
 import { ZardDropdownService } from './dropdown.service';
 
@@ -94,6 +98,49 @@ describe('ZardDropdownService', () => {
     expect(service.isOpen()).toBe(false);
   });
 
+  describe('direction', () => {
+    const triggerElement = new ElementRef(document.createElement('button'));
+    const templateRef = { elementRef: new ElementRef(document.createElement('div')) } as TemplateRef<unknown>;
+
+    /** A view container whose injector yields the given mocked Directionality, like a trigger inside a `[dir]`. */
+    function viewContainerWith(directionality: Partial<Directionality>): ViewContainerRef {
+      return {
+        createEmbeddedView: jest.fn(),
+        clear: jest.fn(),
+        element: new ElementRef(document.createElement('div')),
+        injector: Injector.create({ providers: [{ provide: Directionality, useValue: directionality }] }),
+      } as unknown as ViewContainerRef;
+    }
+
+    it('opens the overlay with the direction of the trigger', () => {
+      service.toggle(triggerElement, templateRef, viewContainerWith({ value: 'rtl', change: new Subject() }));
+
+      expect(mockOverlay.create).toHaveBeenCalledWith(expect.objectContaining({ direction: 'rtl' }));
+    });
+
+    it('mirrors a physical side in RTL', () => {
+      service.toggle(triggerElement, templateRef, viewContainerWith({ value: 'rtl', change: new Subject() }), {
+        side: 'left',
+        sideOffset: 4,
+      });
+
+      const withPositions = mockOverlayPositionBuilder.flexibleConnectedTo.mock.results[0].value.withPositions;
+      const [primary] = withPositions.mock.calls[0][0];
+      // In RTL the physical left is CDK `end`, and the gap still pushes away to the left.
+      expect(primary).toEqual(expect.objectContaining({ originX: 'end', overlayX: 'start', offsetX: -4 }));
+    });
+
+    it('closes an open menu when the direction changes', () => {
+      const change = new Subject<'ltr' | 'rtl'>();
+      service.toggle(triggerElement, templateRef, viewContainerWith({ value: 'rtl', change }));
+      expect(service.isOpen()).toBe(true);
+
+      change.next('ltr');
+
+      expect(service.isOpen()).toBe(false);
+    });
+  });
+
   describe('toggle', () => {
     let triggerElement: ElementRef;
     let templateRef: TemplateRef<unknown>;
@@ -106,7 +153,7 @@ describe('ZardDropdownService', () => {
         createEmbeddedView: jest.fn(),
         clear: jest.fn(),
         element: new ElementRef(document.createElement('div')),
-        injector: TestBed.inject(PLATFORM_ID),
+        injector: TestBed.inject(Injector),
       } as unknown as ViewContainerRef;
     });
 
@@ -138,7 +185,7 @@ describe('ZardDropdownService', () => {
         createEmbeddedView: jest.fn(),
         clear: jest.fn(),
         element: new ElementRef(document.createElement('div')),
-        injector: TestBed.inject(PLATFORM_ID),
+        injector: TestBed.inject(Injector),
       } as unknown as ViewContainerRef;
 
       service.toggle(triggerElement, templateRef, viewContainerRef);
@@ -214,7 +261,7 @@ describe('ZardDropdownService', () => {
         createEmbeddedView: jest.fn(),
         clear: jest.fn(),
         element: new ElementRef(document.createElement('div')),
-        injector: TestBed.inject(PLATFORM_ID),
+        injector: TestBed.inject(Injector),
       } as unknown as ViewContainerRef;
 
       menuElement = document.createElement('div');
@@ -340,7 +387,7 @@ describe('ZardDropdownService', () => {
         createEmbeddedView: jest.fn(),
         clear: jest.fn(),
         element: new ElementRef(document.createElement('div')),
-        injector: TestBed.inject(PLATFORM_ID),
+        injector: TestBed.inject(Injector),
       } as unknown as ViewContainerRef;
     });
 
@@ -372,7 +419,7 @@ describe('ZardDropdownService', () => {
         createEmbeddedView: jest.fn(),
         clear: jest.fn(),
         element: new ElementRef(document.createElement('div')),
-        injector: TestBed.inject(PLATFORM_ID),
+        injector: TestBed.inject(Injector),
       } as unknown as ViewContainerRef;
     });
 
@@ -481,7 +528,7 @@ describe('ZardDropdownService - server platform behavior', () => {
       createEmbeddedView: jest.fn(),
       clear: jest.fn(),
       element: new ElementRef(document.createElement('div')),
-      injector: TestBed.inject(PLATFORM_ID),
+      injector: TestBed.inject(Injector),
     } as unknown as ViewContainerRef;
   });
 

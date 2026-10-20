@@ -4,7 +4,7 @@ export const CAROUSEL_API: ApiSection[] = [
   {
     selector: 'z-carousel',
     description:
-      'A carousel component with slide controls and swipe gesture support. Add `#ref="zCarousel"` on the element to call its public methods.',
+      'A carousel component with slide controls and swipe gesture support. Add `#ref="zCarousel"` on the element to call its public methods. It follows the direction of the page or of a CDK `Dir` subtree: in RTL the arrows swap sides and ArrowLeft goes to the next slide.',
     props: [
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
       {

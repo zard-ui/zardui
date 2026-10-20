@@ -3,6 +3,7 @@ import { SONNER_DEMO_DESCRIPTION } from '@generated/components/sonner/demo/descr
 import { SONNER_DEMO_POSITION } from '@generated/components/sonner/demo/position';
 import { SONNER_DEMO_PREVIEW } from '@generated/components/sonner/demo/preview';
 import { SONNER_DEMO_PROMISE } from '@generated/components/sonner/demo/promise';
+import { SONNER_DEMO_RTL } from '@generated/components/sonner/demo/rtl';
 import { SONNER_DEMO_TYPES } from '@generated/components/sonner/demo/types';
 import { SONNER_DEMO_WITH_DIALOG } from '@generated/components/sonner/demo/with-dialog';
 import { SONNER_CLI_ADD } from '@generated/installation/cli/add-sonner';
@@ -16,6 +17,7 @@ import { ZardDemoSonnerDescriptionComponent } from './description';
 import { ZardDemoSonnerPositionComponent } from './position';
 import { ZardDemoSonnerPreviewComponent } from './preview';
 import { ZardDemoSonnerPromiseComponent } from './promise';
+import { ZardDemoSonnerRtlComponent } from './rtl';
 import { ZardDemoSonnerTypesComponent } from './types';
 import { ZardDemoSonnerWithDialogComponent } from './with-dialog';
 import { SONNER_API } from '../doc/api';
@@ -74,6 +76,13 @@ export const SONNER = {
       description: 'Toasts are rendered in the top layer, so they stay above dialogs, drawers and sheets.',
       component: ZardDemoSonnerWithDialogComponent,
       codeData: SONNER_DEMO_WITH_DIALOG,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoSonnerRtlComponent,
+      codeData: SONNER_DEMO_RTL,
     },
   ],
 };

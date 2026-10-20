@@ -134,8 +134,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   ],
   host: {
     'data-slot': 'carousel',
-    '(keydown.arrowleft.prevent)': 'slidePrevious()',
-    '(keydown.arrowright.prevent)': 'slideNext()',
+    '(keydown.arrowleft.prevent)': 'onArrowLeft()',
+    '(keydown.arrowright.prevent)': 'onArrowRight()',
   },
   exportAs: 'zCarousel',
 })
@@ -181,6 +181,23 @@ export class ZardCarouselComponent {
     if (type === 'select' && emblaApi.selectedScrollSnap() !== this.#index) {
       this.checkNavigation(emblaApi);
       this.zSelected.emit();
+    }
+  }
+
+  /** Horizontal arrow keys follow the visual order: in RTL the next slide is on the left. */
+  protected onArrowLeft(): void {
+    if (this.directionality.value === 'rtl') {
+      this.slideNext();
+    } else {
+      this.slidePrevious();
+    }
+  }
+
+  protected onArrowRight(): void {
+    if (this.directionality.value === 'rtl') {
+      this.slidePrevious();
+    } else {
+      this.slideNext();
     }
   }
 
@@ -273,7 +290,7 @@ export const carouselItemVariants = cva('min-w-0 shrink-0 grow-0 basis-full', {
 export const carouselPreviousButtonVariants = cva('absolute size-8 touch-manipulation rounded-full px-0', {
   variants: {
     zOrientation: {
-      horizontal: 'top-1/2 ltr:-left-12 rtl:-right-12 -translate-y-1/2 rtl:rotate-180',
+      horizontal: 'top-1/2 -start-12 -translate-y-1/2 rtl:rotate-180',
       vertical: '-top-12 left-1/2 -translate-x-1/2 rotate-90',
     },
   },
@@ -285,7 +302,7 @@ export const carouselPreviousButtonVariants = cva('absolute size-8 touch-manipul
 export const carouselNextButtonVariants = cva('absolute size-8 touch-manipulation rounded-full px-0', {
   variants: {
     zOrientation: {
-      horizontal: 'top-1/2 ltr:-right-12 rtl:-left-12 -translate-y-1/2 rtl:rotate-180',
+      horizontal: 'top-1/2 -end-12 -translate-y-1/2 rtl:rotate-180',
       vertical: '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
     },
   },
@@ -792,11 +809,69 @@ export class ZardDemoCarouselPluginsComponent implements OnInit {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+/** The carousel has no text of its own; each language only picks the numerals of the slides. */
+const translations: ZardRtlTranslations<{ locale: string }> = {
+  en: { dir: 'ltr', values: { locale: 'en-US' } },
+  ar: { dir: 'rtl', values: { locale: 'ar-EG' } },
+  he: { dir: 'rtl', values: { locale: 'he-IL' } },
+};
+
+@Component({
+  selector: 'z-demo-carousel-rtl',
+  imports: [ZardCarouselImports, ZardCardImports],
+  template: `
+    <!-- Embla and the arrows follow the direction: ArrowLeft goes to the next slide in RTL. -->
+    <div class="w-full max-w-48 sm:max-w-xs">
+      <z-carousel>
+        <z-carousel-content>
+          @for (slide of slides(); track slide.index) {
+            <z-carousel-item>
+              <div class="p-1">
+                <z-card>
+                  <z-card-content class="flex aspect-square items-center justify-center p-6">
+                    <span class="text-4xl font-semibold">{{ slide.label }}</span>
+                  </z-card-content>
+                </z-card>
+              </div>
+            </z-carousel-item>
+          }
+        </z-carousel-content>
+      </z-carousel>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCarouselRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly slides = computed(() => {
+    const formatter = new Intl.NumberFormat(this.i18n.t().locale);
+    return Array.from({ length: 5 }, (_, index) => ({ index, label: formatter.format(index + 1) }));
+  });
+}
+```
+
 ## API Reference
 
 ### z-carousel
 
-A carousel component with slide controls and swipe gesture support. Add `#ref="zCarousel"` on the element to call its public methods.
+A carousel component with slide controls and swipe gesture support. Add `#ref="zCarousel"` on the element to call its public methods. It follows the direction of the page or of a CDK `Dir` subtree: in RTL the arrows swap sides and ArrowLeft goes to the next slide.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

@@ -41,7 +41,7 @@ export const commandItemVariants = cva(
 export const commandSeparatorVariants = cva('-mx-1 my-1 h-px bg-border');
 
 export const commandShortcutVariants = cva(
-  'ml-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground',
+  'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground',
 );
 
 export type ZardCommandItemVariants = NonNullable<VariantProps<typeof commandItemVariants>['variant']>;

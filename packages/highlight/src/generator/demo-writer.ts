@@ -9,6 +9,23 @@ const COMPONENTS_PATH = path.resolve('libs/zard/src/lib/shared/components');
 const OUTPUT_PATH = path.resolve('apps/web/src/generated/components');
 const SKIPPED_DIRS = ['styles', 'core'];
 
+/**
+ * The RTL examples (`demo/rtl.ts`) are shown in the RTL preview, which wraps them in `dir` and `data-lang` and feeds
+ * them the language picked in its header. Their code gets this note first, so nobody copies the translations helper
+ * thinking the component needs it.
+ */
+const RTL_DEMO_NAME = 'rtl';
+const RTL_CODE_NOTE = `// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+`;
+
+function prepareDemoCode(code: string, fileName: string): string {
+  return path.basename(fileName, '.ts') === RTL_DEMO_NAME ? RTL_CODE_NOTE + code : code;
+}
+
 export async function generateDemoFiles(): Promise<number> {
   let count = 0;
   const componentDirs = fs.readdirSync(COMPONENTS_PATH);
@@ -33,7 +50,7 @@ export async function generateDemoFiles(): Promise<number> {
       if (isConfigFile(file, componentName)) continue;
 
       const filePath = path.join(demoDir, file);
-      const code = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
+      const code = prepareDemoCode(fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n'), file);
       const html = await highlightCode(code, 'angular-ts');
 
       const data: CodeBlockData = {
@@ -73,7 +90,7 @@ export async function generateSingleDemo(filePath: string): Promise<void> {
   if (isConfigFile(fileName, componentName)) return;
   if (path.extname(fileName) !== '.ts') return;
 
-  const code = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
+  const code = prepareDemoCode(fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n'), fileName);
   const html = await highlightCode(code, 'angular-ts');
 
   const data: CodeBlockData = {

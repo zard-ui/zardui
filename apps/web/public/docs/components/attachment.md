@@ -299,6 +299,8 @@ export class ZardAttachmentGroupComponent {
       return;
     }
     event.preventDefault();
+    // Arrow keys follow the visual direction (like native scrolling), and scrollBy's `left` is physical:
+    // ArrowRight always moves the viewport to the right edge, which is the start of an RTL group.
     host.scrollBy({ left: event.key === 'ArrowRight' ? host.clientWidth : -host.clientWidth, behavior: 'auto' });
   }
 }
@@ -354,7 +356,7 @@ export const attachmentDescriptionVariants = cva(
   'text-muted-foreground text-xs group-data-[state=error]/attachment:text-destructive/80',
 );
 export const attachmentActionsVariants = cva(
-  'relative z-20 flex shrink-0 items-center gap-1 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-2.5 group-data-[orientation=vertical]/attachment:right-2.5',
+  'relative z-20 flex shrink-0 items-center gap-1 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-2.5 group-data-[orientation=vertical]/attachment:end-2.5',
 );
 export const attachmentActionVariants = cva(
   'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background',
@@ -383,7 +385,7 @@ import {
   ZardAttachmentActionComponent,
   ZardAttachmentTriggerDirective,
   ZardAttachmentGroupComponent,
-} from './attachment.component';
+} from '@/shared/components/attachment/attachment.component';
 
 export const ZardAttachmentImports = [
   ZardAttachmentComponent,
@@ -805,6 +807,117 @@ export class ZardDemoAttachmentTriggerComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideFileCode, lucideFileText, lucideImage, lucideX } from '@ng-icons/lucide';
+
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+import { ZardAttachmentImports } from '../attachment.imports';
+
+interface AttachmentRtlValues {
+  attached: string;
+  ready: string;
+  remove: string;
+  notes: string;
+  photo: string;
+  budget: string;
+  archive: string;
+}
+
+const translations: ZardRtlTranslations<AttachmentRtlValues> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      attached: 'Attached files',
+      ready: 'Ready · 24 KB',
+      remove: 'Remove',
+      notes: 'Notes.pdf',
+      photo: 'Photo.png',
+      budget: 'Budget.csv',
+      archive: 'Archive.zip',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      attached: 'الملفات المرفقة',
+      ready: 'جاهز · 24 كيلوبايت',
+      remove: 'إزالة',
+      notes: 'ملاحظات.pdf',
+      photo: 'صورة.png',
+      budget: 'الميزانية.csv',
+      archive: 'أرشيف.zip',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      attached: 'קבצים מצורפים',
+      ready: 'מוכן · 24 ק״ב',
+      remove: 'הסר',
+      notes: 'הערות.pdf',
+      photo: 'תמונה.png',
+      budget: 'תקציב.csv',
+      archive: 'ארכיון.zip',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-attachment-rtl',
+  imports: [NgIcon, ...ZardAttachmentImports],
+  template: `
+    <div class="mx-auto flex w-full max-w-sm flex-col gap-4 py-6">
+      <z-attachment-group [attr.aria-label]="i18n.t().attached" class="max-w-sm">
+        @for (file of files(); track file.name) {
+          <z-attachment class="w-64">
+            <z-attachment-media aria-hidden="true">
+              <ng-icon [name]="file.icon" class="size-4" />
+            </z-attachment-media>
+            <z-attachment-content>
+              <z-attachment-title>{{ file.name }}</z-attachment-title>
+              <z-attachment-description>{{ i18n.t().ready }}</z-attachment-description>
+            </z-attachment-content>
+            <z-attachment-actions>
+              <button type="button" z-attachment-action [attr.aria-label]="i18n.t().remove + ' ' + file.name">
+                <ng-icon name="lucideX" class="size-3.5" />
+              </button>
+            </z-attachment-actions>
+          </z-attachment>
+        }
+      </z-attachment-group>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideFileCode, lucideFileText, lucideImage, lucideX })],
+})
+export class ZardDemoAttachmentRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly files = computed(() => {
+    const t = this.i18n.t();
+    return [
+      { name: t.notes, icon: 'lucideFileText' },
+      { name: t.photo, icon: 'lucideImage' },
+      { name: t.budget, icon: 'lucideFileText' },
+      { name: t.archive, icon: 'lucideFileCode' },
+    ];
+  });
+}
+```
+
 ## API Reference
 
 ### z-attachment
@@ -886,7 +999,7 @@ Also a[z-attachment-trigger]. Project a named native overlay button or link alon
 
 ### z-attachment-group
 
-Horizontal snapping group. Provide aria-label or aria-labelledby. Host arrow keys scroll one current viewport; descendant controls keep their keys.
+Horizontal snapping group. Provide aria-label or aria-labelledby. Host arrow keys scroll one current viewport; descendant controls keep their keys. ArrowLeft and ArrowRight scroll toward the visual left and right in both directions, and the group starts at the right edge in RTL.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

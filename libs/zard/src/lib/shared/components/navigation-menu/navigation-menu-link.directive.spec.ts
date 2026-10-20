@@ -79,14 +79,14 @@ describe('ZardNavigationMenuLinkDirective', () => {
     component.inset = true;
     fixture.detectChanges();
 
-    expect(element.className).toContain('pl-8');
+    expect(element.className).toContain('ps-8');
   });
 
   it('should not apply inset classes when inset is false', () => {
     component.inset = false;
     fixture.detectChanges();
 
-    expect(element.className).not.toContain('pl-8');
+    expect(element.className).not.toContain('ps-8');
   });
 
   it('should merge custom classes', () => {

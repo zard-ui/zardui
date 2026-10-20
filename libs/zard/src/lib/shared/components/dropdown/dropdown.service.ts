@@ -1,3 +1,4 @@
+import { Directionality, type Direction } from '@angular/cdk/bidi';
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -44,6 +45,8 @@ export class ZardDropdownService {
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly rendererFactory = inject(RendererFactory2);
+  // Optional: the direction of <html>, used when the caller's view container has no closer one.
+  private readonly rootDirectionality = inject(Directionality, { optional: true });
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -64,6 +67,7 @@ export class ZardDropdownService {
   private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
   private keydownSubscription?: Subscription;
+  private directionSubscription?: Subscription;
   private unlisten: Array<() => void> = [];
 
   readonly isOpen = signal(false);
@@ -98,7 +102,9 @@ export class ZardDropdownService {
     this.triggerElement = triggerElement;
     this.outsideClickExempt = triggerElement;
     this.skipFirstAuxClick = false;
-    this.createOverlay(triggerElement, placement);
+    const directionality = this.directionalityOf(viewContainerRef);
+    this.createOverlay(triggerElement, placement, directionality?.value ?? 'ltr');
+    this.watchDirection(directionality);
     this.attach(template, viewContainerRef);
   }
 
@@ -120,8 +126,21 @@ export class ZardDropdownService {
     this.triggerElement = focusOrigin;
     this.outsideClickExempt = undefined;
     this.skipFirstAuxClick = true;
-    this.createPointOverlay(origin);
+    const directionality = this.directionalityOf(viewContainerRef);
+    this.createPointOverlay(origin, directionality?.value ?? 'ltr');
+    this.watchDirection(directionality);
     this.attach(template, viewContainerRef);
+  }
+
+  /** The direction of the place the menu is declared in — the trigger — never the one of `<html>`. */
+  private directionalityOf(viewContainerRef: ViewContainerRef): Directionality | null {
+    return viewContainerRef.injector.get(Directionality, null) ?? this.rootDirectionality;
+  }
+
+  /** A `[dir]` switch while the menu is open closes it: it reopens with the new direction. */
+  private watchDirection(directionality: Directionality | null) {
+    this.directionSubscription?.unsubscribe();
+    this.directionSubscription = directionality?.change.subscribe(() => this.close());
   }
 
   private attach(template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
@@ -200,7 +219,11 @@ export class ZardDropdownService {
     trigger?.nativeElement.focus();
   }
 
-  private createOverlay(triggerElement: ElementRef, placement?: ZardDropdownPlacement) {
+  private createOverlay(
+    triggerElement: ElementRef,
+    placement: ZardDropdownPlacement | undefined,
+    direction: Direction,
+  ) {
     if (this.overlayRef) {
       this.destroyOverlay();
     }
@@ -208,12 +231,18 @@ export class ZardDropdownService {
     const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(triggerElement)
       .withPositions(
-        buildDropdownPositions(placement?.side ?? 'bottom', placement?.align ?? 'start', placement?.sideOffset ?? 4),
+        buildDropdownPositions(
+          placement?.side ?? 'bottom',
+          placement?.align ?? 'start',
+          placement?.sideOffset ?? 4,
+          direction === 'rtl',
+        ),
       )
       .withPush(false);
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
+      direction,
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
       minWidth: 200,
@@ -242,7 +271,7 @@ export class ZardDropdownService {
    * grow into, so the menu flips instead of spilling out of the viewport, and `close()` as the
    * scroll strategy matches every native context menu: scrolling dismisses it.
    */
-  private createPointOverlay(origin: ZardMenuOrigin) {
+  private createPointOverlay(origin: ZardMenuOrigin, direction: Direction) {
     if (this.overlayRef) {
       this.destroyOverlay();
     }
@@ -260,6 +289,7 @@ export class ZardDropdownService {
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
+      direction,
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.close(),
     });
@@ -271,6 +301,8 @@ export class ZardDropdownService {
     this.outsideClickSubscription?.unsubscribe();
     this.keydownSubscription?.unsubscribe();
     this.keydownSubscription = undefined;
+    this.directionSubscription?.unsubscribe();
+    this.directionSubscription = undefined;
   }
 
   private setupKeyboardNavigation() {

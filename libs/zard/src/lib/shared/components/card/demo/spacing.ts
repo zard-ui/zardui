@@ -47,7 +47,7 @@ const SPACING_OPTIONS = [
             <div z-field>
               <div class="flex items-center">
                 <label z-field-label for="card-spacing-password">Password</label>
-                <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
+                <a href="#" class="ms-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
               </div>
               <input z-input id="card-spacing-password" type="password" required />
             </div>

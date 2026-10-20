@@ -7,6 +7,7 @@ import { CALENDAR_DEMO_MULTIPLE } from '@generated/components/calendar/demo/mult
 import { CALENDAR_DEMO_PRESETS } from '@generated/components/calendar/demo/presets';
 import { CALENDAR_DEMO_PREVIEW } from '@generated/components/calendar/demo/preview';
 import { CALENDAR_DEMO_RANGE } from '@generated/components/calendar/demo/range';
+import { CALENDAR_DEMO_RTL } from '@generated/components/calendar/demo/rtl';
 import { CALENDAR_DEMO_WITH_CONSTRAINTS } from '@generated/components/calendar/demo/with-constraints';
 import { CALENDAR_DEMO_WITH_TIME } from '@generated/components/calendar/demo/with-time';
 import { CALENDAR_SNIPPET_I18N_APP_CONFIG } from '@generated/components/calendar/snippets';
@@ -23,6 +24,7 @@ import { ZardDemoCalendarMultipleComponent } from './multiple';
 import { ZardDemoCalendarPresetsComponent } from './presets';
 import { ZardDemoCalendarPreviewComponent } from './preview';
 import { ZardDemoCalendarRangeComponent } from './range';
+import { ZardDemoCalendarRtlComponent } from './rtl';
 import { ZardDemoCalendarWithConstraintsComponent } from './with-constraints';
 import { ZardDemoCalendarWithTimeComponent } from './with-time';
 import { CALENDAR_API } from '../doc/api';
@@ -112,6 +114,13 @@ export const CALENDAR = {
           'By default, `provideZardI18n()` uses the existing `LOCALE_ID` locale code from `@angular/core` or `en-US`. If you want to override it, provide a new value for the locale code:',
         codeData: CALENDAR_SNIPPET_I18N_APP_CONFIG,
       },
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoCalendarRtlComponent,
+      codeData: CALENDAR_DEMO_RTL,
     },
   ],
 };

@@ -231,7 +231,7 @@ export const toggleGroupVariants = cva(
 );
 
 export const toggleGroupItemVariants = cva(
-  'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pr-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:pl-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg ltr:group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
+  'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
 );
 ```
 
@@ -643,6 +643,70 @@ export class ZardDemoToggleGroupCustomComponent {
     }
     this.fontWeight.set(weight);
   }
+}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
+
+import {
+  ZardToggleGroupComponent,
+  type ZardToggleGroupItem,
+} from '@/shared/components/toggle-group/toggle-group.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ list: string; grid: string; table: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      list: 'List',
+      grid: 'Grid',
+      table: 'Table',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      list: 'قائمة',
+      grid: 'شبكة',
+      table: 'جدول',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      list: 'רשימה',
+      grid: 'רשת',
+      table: 'טבלה',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-toggle-group-rtl',
+  imports: [ZardToggleGroupComponent],
+  template: `
+    <z-toggle-group zMode="single" zType="outline" zDefaultValue="list" [zSpacing]="0" [zItems]="items()" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoToggleGroupRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly items = computed<ZardToggleGroupItem[]>(() => [
+    { value: 'list', label: this.i18n.t().list },
+    { value: 'grid', label: this.i18n.t().grid },
+    { value: 'table', label: this.i18n.t().table },
+  ]);
 }
 ```
 

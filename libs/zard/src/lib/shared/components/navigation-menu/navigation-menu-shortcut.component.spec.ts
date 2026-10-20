@@ -37,7 +37,7 @@ describe('ZardNavigationMenuShortcutComponent', () => {
   it('applies default menu shortcut styling', () => {
     const shortcut = screen.getByText('Ctrl+S');
 
-    expect(shortcut).toHaveClass('ml-auto');
+    expect(shortcut).toHaveClass('ms-auto');
     expect(shortcut).toHaveClass('text-xs');
     expect(shortcut).toHaveClass('tracking-widest');
     expect(shortcut).toHaveClass('text-muted-foreground');
@@ -50,6 +50,6 @@ describe('ZardNavigationMenuShortcutComponent', () => {
     const shortcut = screen.getByText('Ctrl+S');
 
     expect(shortcut).toHaveClass('custom-shortcut');
-    expect(shortcut).toHaveClass('ml-auto');
+    expect(shortcut).toHaveClass('ms-auto');
   });
 });

@@ -2,6 +2,8 @@ import { Type } from '@angular/core';
 
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
+import type { ExampleType } from '@doc/shared/constants/components.constant';
+
 export interface ChangelogEntryMeta {
   month: string; // 'November 2025'
   year: number;
@@ -14,11 +16,18 @@ export interface ChangelogEntryMeta {
 export type ChangelogHighlightIcon =
   'zap' | 'terminal' | 'moon' | 'package' | 'rocket' | 'shield' | 'code' | 'settings';
 
+/** A public symbol that changed name; `to` holds several names when it was split. */
+export interface ChangelogRename {
+  from: string;
+  to: string[];
+}
+
 export interface ChangelogHighlight {
   title: string;
-  description: string;
+  description: string; // `backticks` render as inline code
   icon: ChangelogHighlightIcon;
   code?: string; // Optional snippet to display (e.g. a CLI command)
+  renames?: ChangelogRename[]; // Listed as "old → new" under the description
 }
 
 /**
@@ -38,6 +47,8 @@ export interface ChangelogExample {
    * themselves from their parent (the slider collapses to zero width without it).
    */
   fillContainer?: boolean;
+  /** `'rtl'` shows the demo in the RTL preview, with its language selector. */
+  type?: ExampleType;
 }
 
 /**
@@ -66,6 +77,7 @@ export interface ChangelogEntry {
   overview: string; // Summary of the month's changes
   highlights?: ChangelogHighlight[]; // Structural/DX improvements (no visual component)
   loadExamples?: () => Promise<ChangelogExample[]>; // Present when the month ships components
+  examplesTitle?: string; // Heading of the examples block; defaults to 'New Components'
   /**
    * Present only on the entry for the month a major version ships. The page renders
    * `z-changelog-release` above the timeline for it — a release moment, not a card

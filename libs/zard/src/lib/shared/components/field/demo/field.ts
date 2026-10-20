@@ -6,6 +6,7 @@ import { FIELD_DEMO_INPUT } from '@generated/components/field/demo/input';
 import { FIELD_DEMO_INVALID } from '@generated/components/field/demo/invalid';
 import { FIELD_DEMO_PREVIEW } from '@generated/components/field/demo/preview';
 import { FIELD_DEMO_RADIO } from '@generated/components/field/demo/radio';
+import { FIELD_DEMO_RTL } from '@generated/components/field/demo/rtl';
 import { FIELD_DEMO_SELECT } from '@generated/components/field/demo/select';
 import { FIELD_DEMO_SLIDER } from '@generated/components/field/demo/slider';
 import { FIELD_DEMO_SWITCH } from '@generated/components/field/demo/switch';
@@ -22,6 +23,7 @@ import { ZardDemoFieldInputComponent } from './input';
 import { ZardDemoFieldInvalidComponent } from './invalid';
 import { ZardDemoFieldPreviewComponent } from './preview';
 import { ZardDemoFieldRadioComponent } from './radio';
+import { ZardDemoFieldRtlComponent } from './rtl';
 import { ZardDemoFieldSelectComponent } from './select';
 import { ZardDemoFieldSliderComponent } from './slider';
 import { ZardDemoFieldSwitchComponent } from './switch';
@@ -123,6 +125,13 @@ export const FIELD = {
         "Bind the `data-invalid` attribute on `z-field` and `aria-invalid` on the control to a reactive form control's `invalid && touched` state, then render the message from `control.hasError(...)` inside `z-field-error` — the pattern every other invalid-state demo in the library builds on.",
       component: ZardDemoFieldInvalidComponent,
       codeData: FIELD_DEMO_INVALID,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoFieldRtlComponent,
+      codeData: FIELD_DEMO_RTL,
     },
   ],
 };

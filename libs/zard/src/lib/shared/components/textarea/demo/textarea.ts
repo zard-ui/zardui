@@ -4,6 +4,7 @@ import { TEXTAREA_DEMO_FIELD } from '@generated/components/textarea/demo/field';
 import { TEXTAREA_DEMO_FORM } from '@generated/components/textarea/demo/form';
 import { TEXTAREA_DEMO_INVALID } from '@generated/components/textarea/demo/invalid';
 import { TEXTAREA_DEMO_PREVIEW } from '@generated/components/textarea/demo/preview';
+import { TEXTAREA_DEMO_RTL } from '@generated/components/textarea/demo/rtl';
 import { TEXTAREA_CLI_ADD } from '@generated/installation/cli/add-textarea';
 import { TEXTAREA_MANUAL_CODE } from '@generated/installation/manual/textarea';
 import { TEXTAREA_USAGE_CODE, TEXTAREA_USAGE_IMPORT } from '@generated/usage/textarea';
@@ -14,6 +15,7 @@ import { ZardDemoTextareaFieldComponent } from './field';
 import { ZardDemoTextareaFormComponent } from './form';
 import { ZardDemoTextareaInvalidComponent } from './invalid';
 import { ZardDemoTextareaPreviewComponent } from './preview';
+import { ZardDemoTextareaRtlComponent } from './rtl';
 import { TEXTAREA_API } from '../doc/api';
 
 export const TEXTAREA = {
@@ -66,6 +68,13 @@ export const TEXTAREA = {
         "A reactive form built from `z-field` and `formControlName`, with a live validation message on the feedback textarea once it's touched and invalid.",
       component: ZardDemoTextareaFormComponent,
       codeData: TEXTAREA_DEMO_FORM,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoTextareaRtlComponent,
+      codeData: TEXTAREA_DEMO_RTL,
     },
   ],
 };

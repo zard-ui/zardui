@@ -1,7 +1,10 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID } from '@angular/core';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, type ViewContainerRef } from '@angular/core';
+
+import { takeUntil } from 'rxjs';
 
 import { ZardAlertDialogContainerComponent, ZardAlertDialogOptions } from './alert-dialog-container.component';
 import { ZardAlertDialogRef } from './alert-dialog-ref';
@@ -28,6 +31,8 @@ export class ZardAlertDialogService {
   private readonly overlay = inject(Overlay);
   private readonly injector = inject(Injector);
   private readonly platformId = inject(PLATFORM_ID);
+  // Optional: the direction of <html>, used when the caller gives no zViewContainerRef to inherit one from.
+  private readonly rootDirectionality = inject(Directionality, { optional: true });
 
   /**
    * Opens an alert dialog with the given configuration.
@@ -40,7 +45,7 @@ export class ZardAlertDialogService {
       return new ZardAlertDialogRef<T>(null, config, null, this.platformId);
     }
 
-    const overlayRef = this.createOverlay();
+    const overlayRef = this.createOverlay(config);
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
     const alertDialogRef = new ZardAlertDialogRef<T>(overlayRef, config, alertDialogContainer, this.platformId);
 
@@ -79,15 +84,29 @@ export class ZardAlertDialogService {
     });
   }
 
-  private createOverlay(): OverlayRef {
-    return this.overlay.create(
+  private createOverlay<T>(config: ZardAlertDialogOptions<T>): OverlayRef {
+    const directionality = this.directionalityFor(config.zViewContainerRef);
+    const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: directionality?.value ?? 'ltr',
         hasBackdrop: true,
         backdropClass: ALERT_DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
         scrollStrategy: this.overlay.scrollStrategies.block(),
       }),
     );
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(directionality.value));
+
+    return overlayRef;
+  }
+
+  /** The direction of where the overlay was requested from (zViewContainerRef), falling back to <html>. */
+  private directionalityFor(viewContainerRef?: ViewContainerRef): Directionality | null {
+    return viewContainerRef?.injector.get(Directionality, null) ?? this.rootDirectionality;
   }
 
   private attachAlertDialogContainer<T>(overlayRef: OverlayRef, config: ZardAlertDialogOptions<T>) {

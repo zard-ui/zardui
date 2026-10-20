@@ -77,8 +77,8 @@ export const selectItemVariants = cva(
         lg: 'py-2 text-base',
       },
       zMode: {
-        normal: 'pr-8 pl-2',
-        compact: 'pr-8 pl-2',
+        normal: 'pe-8 ps-2',
+        compact: 'pe-8 ps-2',
       },
     },
     defaultVariants: {
@@ -106,8 +106,8 @@ export const selectItemIconVariants = cva('absolute flex size-3.5 items-center j
       lg: '',
     },
     zMode: {
-      normal: 'right-2',
-      compact: 'right-2',
+      normal: 'end-2',
+      compact: 'end-2',
     },
   },
   defaultVariants: {

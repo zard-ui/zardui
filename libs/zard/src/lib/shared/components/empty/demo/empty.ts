@@ -4,6 +4,7 @@ import { EMPTY_DEMO_BACKGROUND } from '@generated/components/empty/demo/backgrou
 import { EMPTY_DEMO_INPUT_GROUP } from '@generated/components/empty/demo/input-group';
 import { EMPTY_DEMO_OUTLINE } from '@generated/components/empty/demo/outline';
 import { EMPTY_DEMO_PREVIEW } from '@generated/components/empty/demo/preview';
+import { EMPTY_DEMO_RTL } from '@generated/components/empty/demo/rtl';
 import { EMPTY_CLI_ADD } from '@generated/installation/cli/add-empty';
 import { EMPTY_MANUAL_CODE } from '@generated/installation/manual/empty';
 import { EMPTY_USAGE_IMPORT, EMPTY_USAGE_CODE } from '@generated/usage/empty';
@@ -14,6 +15,7 @@ import { ZardDemoEmptyBackgroundComponent } from './background';
 import { ZardDemoEmptyInputGroupComponent } from './input-group';
 import { ZardDemoEmptyOutlineComponent } from './outline';
 import { ZardDemoEmptyPreviewComponent } from './preview';
+import { ZardDemoEmptyRtlComponent } from './rtl';
 import { EMPTY_API } from '../doc/api';
 
 export const EMPTY = {
@@ -62,6 +64,13 @@ export const EMPTY = {
       description: 'Compose a `z-input-group` to add a search field to the empty state.',
       component: ZardDemoEmptyInputGroupComponent,
       codeData: EMPTY_DEMO_INPUT_GROUP,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoEmptyRtlComponent,
+      codeData: EMPTY_DEMO_RTL,
     },
   ],
 };

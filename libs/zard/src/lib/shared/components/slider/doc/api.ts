@@ -4,7 +4,7 @@ export const SLIDER_API: ApiSection[] = [
   {
     selector: 'z-slider',
     description:
-      'A flexible and accessible component that allows users to select a numeric value from within a configurable range using pointer or keyboard interaction. The value is always an array of numbers, one entry per thumb: a single-element array renders one thumb, two elements render a range (see the `range` example), and three or more render that many independent thumbs (see the `multiple-thumbs` example) — values must be provided in ascending order. Implements Angular’s `ControlValueAccessor`, so `formControlName` and `[(ngModel)]` also work.',
+      'A flexible and accessible component that allows users to select a numeric value from within a configurable range using pointer or keyboard interaction. The value is always an array of numbers, one entry per thumb: a single-element array renders one thumb, two elements render a range (see the `range` example), and three or more render that many independent thumbs (see the `multiple-thumbs` example) — values must be provided in ascending order. Implements Angular’s `ControlValueAccessor`, so `formControlName` and `[(ngModel)]` also work. In RTL (CDK `Directionality`) the range fills from the right, ArrowRight decreases and ArrowLeft increases the value, and dragging follows the pointer.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       { name: '[zMin]', description: 'Minimum selectable value', type: 'number', default: '0' },

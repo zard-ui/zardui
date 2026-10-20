@@ -4,7 +4,7 @@ export const ALERT_DIALOG_API: ApiSection[] = [
   {
     selector: 'z-alert-dialog',
     description:
-      'Root of a declarative alert dialog. Holds the open state and projects its content into the panel (`role="alertdialog"`), which exposes `data-size` and `data-state` (`open` | `closed`) while the enter and leave transitions run.',
+      'Root of a declarative alert dialog. Holds the open state and projects its content into the panel (`role="alertdialog"`), which exposes `data-size` and `data-state` (`open` | `closed`) while the enter and leave transitions run. The overlay takes the direction of where the alert dialog is declared: in RTL the footer buttons mirror while the panel stays centered.',
     props: [
       { name: '[zVisible]', description: 'Open state, two-way bound', type: 'boolean', default: 'false' },
       {

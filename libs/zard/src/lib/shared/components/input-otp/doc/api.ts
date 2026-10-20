@@ -3,6 +3,8 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const INPUT_OTP_API: ApiSection[] = [
   {
     selector: 'z-input-otp',
+    description:
+      'In RTL (CDK `Directionality`) the slots run right to left: typing advances focus to the left, ArrowLeft moves to the next slot and ArrowRight to the previous one, and the group rounds and borders its inline-start/end slots.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {

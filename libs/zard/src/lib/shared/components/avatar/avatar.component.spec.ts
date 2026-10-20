@@ -282,7 +282,7 @@ describe('ZardAvatarComponent', () => {
 
       const badgeElement = fixture.debugElement.query(By.css('[data-slot="avatar"] > div')).nativeElement;
       expect(badgeElement).toHaveClass('absolute');
-      expect(badgeElement).toHaveClass('right-0');
+      expect(badgeElement).toHaveClass('end-0');
       expect(badgeElement).toHaveClass('bottom-0');
       expect(badgeElement).toHaveClass('z-10');
     });

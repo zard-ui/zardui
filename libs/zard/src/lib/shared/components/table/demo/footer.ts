@@ -35,7 +35,7 @@ export interface Invoice {
               {{ invoice.method }}
             </td>
             <td z-table-cell>
-              <div class="text-right font-medium">{{ formatCurrency(invoice.amount) }}</div>
+              <div class="text-end font-medium">{{ formatCurrency(invoice.amount) }}</div>
             </td>
           </tr>
         } @empty {
@@ -47,7 +47,7 @@ export interface Invoice {
       <tfoot z-table-footer>
         <tr z-table-row>
           <td z-table-cell colspan="3">Total</td>
-          <td z-table-cell class="text-right">{{ formatCurrency(total()) }}</td>
+          <td z-table-cell class="text-end">{{ formatCurrency(total()) }}</td>
         </tr>
       </tfoot>
     </table>

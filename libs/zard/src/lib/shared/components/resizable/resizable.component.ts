@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
@@ -47,6 +48,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly document = inject(DOCUMENT);
+  private readonly directionality = inject(Directionality);
 
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly isResizing = signal(false);
@@ -164,7 +166,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const currentPosition = this.getEventPosition(event);
     const delta = currentPosition - startPosition;
     const containerSize = this.getContainerSize();
-    const isRtl = getComputedStyle(this.elementRef.nativeElement).direction === 'rtl';
+    const isRtl = this.directionality.value === 'rtl';
     let deltaPercentage = (delta / containerSize) * 100;
 
     if (this.zLayout() !== 'vertical' && isRtl) {

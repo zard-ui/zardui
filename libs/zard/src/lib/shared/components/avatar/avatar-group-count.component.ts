@@ -14,7 +14,7 @@ import { avatarGroupCountVariants, type ZardAvatarSizeVariants } from './avatar.
 @Component({
   selector: 'z-avatar-group-count, [z-avatar-group-count]',
   template: `
-    +{{ zCount() }}
+    <bdi>+{{ zCount() }}</bdi>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

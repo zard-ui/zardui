@@ -73,6 +73,13 @@ export const CALENDAR_API: ApiSection[] = [
         default: '1',
       },
       {
+        name: '[zLocale]',
+        description:
+          'BCP 47 locale (for example `ar`, `he`, `fr-FR`) used for month names, weekday names and ARIA labels of this calendar only. Falls back to the application locale of `ZardI18nService`. The grid follows the reading direction: in RTL the weeks run right to left, the navigation chevrons flip and ArrowLeft moves to the next day (direction comes from CDK `Directionality`, i.e. `<html dir="rtl">` or the `Dir` directive)',
+        type: 'string',
+        default: '-',
+      },
+      {
         name: '[zDayTemplate]',
         description:
           'Template rendered inside every day button instead of the plain day number. The `CalendarDay` is the implicit context (`let-day`), so the template can read `date`, `isCurrentMonth`, `isSelected` and the range flags. A second `<span>` inside the button is styled as a small caption',

@@ -279,6 +279,8 @@ export class ZardAttachmentGroupComponent {
       return;
     }
     event.preventDefault();
+    // Arrow keys follow the visual direction (like native scrolling), and scrollBy's `left` is physical:
+    // ArrowRight always moves the viewport to the right edge, which is the start of an RTL group.
     host.scrollBy({ left: event.key === 'ArrowRight' ? host.clientWidth : -host.clientWidth, behavior: 'auto' });
   }
 }

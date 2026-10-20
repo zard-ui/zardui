@@ -14,8 +14,9 @@ export const HOVER_CARD_API: ApiSection[] = [
       },
       {
         name: '[zPlacement]',
-        description: 'Preferred position relative to the trigger',
-        type: "'top' | 'bottom' | 'left' | 'right'",
+        description:
+          'Preferred position relative to the trigger. `left` and `right` are physical sides; `inline-start` and `inline-end` follow the direction of the trigger, so they flip in RTL.',
+        type: "'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end'",
         default: "'bottom'",
       },
       {

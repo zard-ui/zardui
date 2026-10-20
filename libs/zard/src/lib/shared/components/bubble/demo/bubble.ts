@@ -5,6 +5,7 @@ import { BUBBLE_DEMO_LINKS_AND_BUTTONS } from '@generated/components/bubble/demo
 import { BUBBLE_DEMO_POPOVER } from '@generated/components/bubble/demo/popover';
 import { BUBBLE_DEMO_PREVIEW } from '@generated/components/bubble/demo/preview';
 import { BUBBLE_DEMO_REACTIONS } from '@generated/components/bubble/demo/reactions';
+import { BUBBLE_DEMO_RTL } from '@generated/components/bubble/demo/rtl';
 import { BUBBLE_DEMO_SHORTHAND } from '@generated/components/bubble/demo/shorthand';
 import { BUBBLE_DEMO_TOOLTIP } from '@generated/components/bubble/demo/tooltip';
 import { BUBBLE_DEMO_VARIANTS } from '@generated/components/bubble/demo/variants';
@@ -19,6 +20,7 @@ import { ZardDemoBubbleLinksAndButtonsComponent } from './links-and-buttons';
 import { ZardDemoBubblePopoverComponent } from './popover';
 import { ZardDemoBubblePreviewComponent } from './preview';
 import { ZardDemoBubbleReactionsComponent } from './reactions';
+import { ZardDemoBubbleRtlComponent } from './rtl';
 import { ZardDemoBubbleShorthandComponent } from './shorthand';
 import { ZardDemoBubbleTooltipComponent } from './tooltip';
 import { ZardDemoBubbleVariantsComponent } from './variants';
@@ -103,6 +105,13 @@ export const BUBBLE = {
         'Pair a bubble reaction with `[zPopover]` to surface more information on demand, such as the full error message behind a failed action.',
       component: ZardDemoBubblePopoverComponent,
       codeData: BUBBLE_DEMO_POPOVER,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoBubbleRtlComponent,
+      codeData: BUBBLE_DEMO_RTL,
     },
   ],
 };

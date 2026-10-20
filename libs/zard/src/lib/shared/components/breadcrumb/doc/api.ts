@@ -66,7 +66,7 @@ export const BREADCRUMB_API: ApiSection[] = [
   {
     selector: 'z-breadcrumb',
     description:
-      'Displays the path to the current resource using a hierarchy of links. Renders a labelled `<nav>` wrapping an ordered list; separators render automatically unless explicit separators are projected.',
+      'Displays the path to the current resource using a hierarchy of links. Renders a labelled `<nav>` wrapping an ordered list; separators render automatically unless explicit separators are projected. The default chevron separator flips in right-to-left layouts; a custom separator is rendered as given.',
     props: [
       CLASS_PROP,
       {

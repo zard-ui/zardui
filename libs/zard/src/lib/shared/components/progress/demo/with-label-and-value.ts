@@ -10,7 +10,7 @@ import { ZardProgressComponent } from '@/shared/components/progress/progress.com
     <z-field class="w-full min-w-sm">
       <z-field-label for="progress-upload">
         <span>Upload progress</span>
-        <span class="ml-auto">66%</span>
+        <span class="ms-auto">66%</span>
       </z-field-label>
       <z-progress id="progress-upload" [value]="66" />
     </z-field>

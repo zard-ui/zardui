@@ -1,5 +1,6 @@
 import { CARD_DEMO_IMAGE } from '@generated/components/card/demo/image';
 import { CARD_DEMO_PREVIEW } from '@generated/components/card/demo/preview';
+import { CARD_DEMO_RTL } from '@generated/components/card/demo/rtl';
 import { CARD_DEMO_SIZE } from '@generated/components/card/demo/size';
 import { CARD_DEMO_SPACING } from '@generated/components/card/demo/spacing';
 import { CARD_DEMO_TERMS_OF_SERVICE } from '@generated/components/card/demo/terms-of-service';
@@ -13,6 +14,7 @@ import { ZardDemoCardSizeComponent } from '@/shared/components/card/demo/size';
 import { ZardDemoCardSpacingComponent } from '@/shared/components/card/demo/spacing';
 import { ZardDemoCardTermsOfServiceComponent } from '@/shared/components/card/demo/terms-of-service';
 
+import { ZardDemoCardRtlComponent } from './rtl';
 import { CARD_API } from '../doc/api';
 
 export const CARD = {
@@ -59,6 +61,13 @@ export const CARD = {
       description: 'Add an image before the card header to create a card with an image.',
       component: ZardDemoCardImageComponent,
       codeData: CARD_DEMO_IMAGE,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoCardRtlComponent,
+      codeData: CARD_DEMO_RTL,
     },
   ],
 };

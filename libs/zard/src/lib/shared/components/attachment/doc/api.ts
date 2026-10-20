@@ -97,7 +97,7 @@ export const ATTACHMENT_API: ApiSection[] = [
   {
     selector: 'z-attachment-group',
     description:
-      'Horizontal snapping group. Provide aria-label or aria-labelledby. Host arrow keys scroll one current viewport; descendant controls keep their keys.',
+      'Horizontal snapping group. Provide aria-label or aria-labelledby. Host arrow keys scroll one current viewport; descendant controls keep their keys. ArrowLeft and ArrowRight scroll toward the visual left and right in both directions, and the group starts at the right edge in RTL.',
     props: [{ name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" }],
   },
 ];

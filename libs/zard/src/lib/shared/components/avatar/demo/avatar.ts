@@ -6,6 +6,7 @@ import { AVATAR_DEMO_GROUP } from '@generated/components/avatar/demo/group';
 import { AVATAR_DEMO_GROUP_COUNT } from '@generated/components/avatar/demo/group-count';
 import { AVATAR_DEMO_GROUP_WITH_ICON } from '@generated/components/avatar/demo/group-with-icon';
 import { AVATAR_DEMO_PREVIEW } from '@generated/components/avatar/demo/preview';
+import { AVATAR_DEMO_RTL } from '@generated/components/avatar/demo/rtl';
 import { AVATAR_DEMO_SIZES } from '@generated/components/avatar/demo/sizes';
 import { AVATAR_CLI_ADD } from '@generated/installation/cli/add-avatar';
 import { AVATAR_MANUAL_CODE } from '@generated/installation/manual/avatar';
@@ -19,6 +20,7 @@ import { ZardDemoAvatarGroupComponent } from './group';
 import { ZardDemoAvatarGroupCountComponent } from './group-count';
 import { ZardDemoAvatarGroupWithIconComponent } from './group-with-icon';
 import { ZardDemoAvatarPreviewComponent } from './preview';
+import { ZardDemoAvatarRtlComponent } from './rtl';
 import { ZardDemoAvatarSizesComponent } from './sizes';
 import { AVATAR_API } from '../doc/api';
 
@@ -88,6 +90,13 @@ export const AVATAR = {
         'Use an avatar as a `[z-dropdown]` trigger to open a `z-dropdown-menu-content` with account actions.',
       component: ZardDemoAvatarDropdownComponent,
       codeData: AVATAR_DEMO_DROPDOWN,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoAvatarRtlComponent,
+      codeData: AVATAR_DEMO_RTL,
     },
   ],
 };

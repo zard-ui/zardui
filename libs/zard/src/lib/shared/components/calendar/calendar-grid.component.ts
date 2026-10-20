@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
@@ -96,6 +97,7 @@ import {
 })
 export class ZardCalendarGridComponent {
   private readonly calendarI18n = inject(ZardCalendarI18nService);
+  private readonly directionality = inject(Directionality, { optional: true });
   private readonly gridContainer = viewChild.required<ElementRef<HTMLElement>>('gridContainer');
 
   // Inputs
@@ -231,11 +233,12 @@ export class ZardCalendarGridComponent {
     let newIndex: number | null = null;
 
     switch (event.key) {
+      // Days are laid out in reading order: in RTL the left arrow moves to the next day
       case 'ArrowLeft':
-        newIndex = this.navigate(currentIndex, -1, days);
+        newIndex = this.navigate(currentIndex, this.isRtl() ? 1 : -1, days);
         break;
       case 'ArrowRight':
-        newIndex = this.navigate(currentIndex, 1, days);
+        newIndex = this.navigate(currentIndex, this.isRtl() ? -1 : 1, days);
         break;
       case 'ArrowUp':
         newIndex = this.navigate(currentIndex, -7, days);
@@ -289,6 +292,10 @@ export class ZardCalendarGridComponent {
     }
   }
 
+  private isRtl(): boolean {
+    return this.directionality?.value === 'rtl';
+  }
+
   private navigate(currentIndex: number, step: number, days: CalendarDay[]): number | null {
     const targetIndex = currentIndex + step;
 
@@ -301,10 +308,10 @@ export class ZardCalendarGridComponent {
     const dayOfWeek = currentIndex % 7;
 
     if (step === -1) {
-      // Going left - navigate to previous month, focus last day
+      // Going to the previous day - navigate to previous month, focus last day
       this.previousMonth.emit({ position: 'last', dayOfWeek: -1 });
     } else if (step === 1) {
-      // Going right - navigate to next month, focus first day
+      // Going to the next day - navigate to next month, focus first day
       this.nextMonth.emit({ position: 'first', dayOfWeek: -1 });
     } else if (step === -7) {
       // Going up - navigate to previous month, preserve column

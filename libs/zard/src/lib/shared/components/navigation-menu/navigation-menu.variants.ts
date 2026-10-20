@@ -28,7 +28,9 @@ export const navigationMenuContentVariants = cva(
     'data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out',
     'data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out',
     'data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52',
+    'rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52',
     'data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52',
+    'rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52',
   ],
   {
     variants: {
@@ -75,17 +77,17 @@ export const navigationMenuViewportVariants = cva([
 
 export const navigationMenuLinkVariants = cva(
   [
-    'relative flex w-full cursor-default select-none items-center gap-2 rounded-md p-2 text-left text-sm',
+    'relative flex w-full cursor-default select-none items-center gap-2 rounded-md p-2 text-start text-sm',
     'transition-all outline-none hover:bg-muted focus:bg-muted',
     'focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1',
     'data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted',
     'data-disabled:pointer-events-none data-disabled:opacity-50',
-    "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 [&>i]:mr-2 [&>z-icon]:mr-2 [&>ng-icon]:shrink-0",
+    "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 [&>i]:me-2 [&>z-icon]:me-2 [&>ng-icon]:shrink-0",
   ],
   {
     variants: {
       inset: {
-        true: 'pl-8',
+        true: 'ps-8',
         false: '',
       },
       zType: {
@@ -106,7 +108,7 @@ export const navigationMenuIndicatorVariants = cva([
 ]);
 
 export const navigationMenuSubmenuArrowVariants = cva([
-  'ml-auto opacity-60 transition-opacity duration-150',
+  'ms-auto opacity-60 transition-opacity duration-150',
   'text-muted-foreground dark:text-gray-400',
   'group-hover:opacity-100 group-focus:opacity-100',
 ]);
@@ -116,7 +118,7 @@ export const navigationMenuLabelVariants = cva(
   {
     variants: {
       inset: {
-        true: 'pl-8',
+        true: 'ps-8',
         false: '',
       },
     },
@@ -126,7 +128,7 @@ export const navigationMenuLabelVariants = cva(
   },
 );
 
-export const navigationMenuShortcutVariants = cva('ml-auto text-xs tracking-widest text-muted-foreground');
+export const navigationMenuShortcutVariants = cva('ms-auto text-xs tracking-widest text-muted-foreground');
 
 export type ZardNavigationMenuLinkTypeVariants = NonNullable<VariantProps<typeof navigationMenuLinkVariants>['zType']>;
 

@@ -4,6 +4,7 @@ import { DRAWER_DEMO_NON_MODAL } from '@generated/components/drawer/demo/non-mod
 import { DRAWER_DEMO_POSITION } from '@generated/components/drawer/demo/position';
 import { DRAWER_DEMO_PREVIEW } from '@generated/components/drawer/demo/preview';
 import { DRAWER_DEMO_RESPONSIVE } from '@generated/components/drawer/demo/responsive';
+import { DRAWER_DEMO_RTL } from '@generated/components/drawer/demo/rtl';
 import { DRAWER_DEMO_SNAP_POINTS } from '@generated/components/drawer/demo/snap-points';
 import { DRAWER_DEMO_SWIPE_HANDLE } from '@generated/components/drawer/demo/swipe-handle';
 import { DRAWER_CLI_ADD } from '@generated/installation/cli/add-drawer';
@@ -17,6 +18,7 @@ import { ZardDemoDrawerNonModalComponent } from './non-modal';
 import { ZardDemoDrawerPositionComponent } from './position';
 import { ZardDemoDrawerPreviewComponent } from './preview';
 import { ZardDemoDrawerResponsiveComponent } from './responsive';
+import { ZardDemoDrawerRtlComponent } from './rtl';
 import { ZardDemoDrawerSnapPointsComponent } from './snap-points';
 import { ZardDemoDrawerSwipeHandleComponent } from './swipe-handle';
 import { DRAWER_API } from '../doc/api';
@@ -109,6 +111,13 @@ export const DRAWER = {
         'You can combine the Dialog and Drawer components to create a responsive dialog. This renders a Dialog on desktop and a Drawer on mobile.',
       component: ZardDemoDrawerResponsiveComponent,
       codeData: DRAWER_DEMO_RESPONSIVE,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoDrawerRtlComponent,
+      codeData: DRAWER_DEMO_RTL,
     },
   ],
 };

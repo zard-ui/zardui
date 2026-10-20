@@ -15,7 +15,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
           <z-card-title zTitle="Pie Chart - Interactive" />
           <z-card-description zDescription="January - June 2024" />
         </div>
-        <z-select class="ml-auto h-7 w-[130px] rounded-lg pl-2.5" [(zValue)]="active">
+        <z-select class="ms-auto h-7 w-[130px] rounded-lg ps-2.5" [(zValue)]="active">
           @for (row of chartData; track row.month) {
             <z-select-item [zValue]="row.month" class="rounded-lg">
               <span class="flex items-center gap-2 text-xs">

@@ -2,6 +2,7 @@ import { TOGGLE_DEMO_CONTROLLED } from '@generated/components/toggle/demo/contro
 import { TOGGLE_DEMO_DISABLED } from '@generated/components/toggle/demo/disabled';
 import { TOGGLE_DEMO_OUTLINE } from '@generated/components/toggle/demo/outline';
 import { TOGGLE_DEMO_PREVIEW } from '@generated/components/toggle/demo/preview';
+import { TOGGLE_DEMO_RTL } from '@generated/components/toggle/demo/rtl';
 import { TOGGLE_DEMO_SIZE } from '@generated/components/toggle/demo/size';
 import { TOGGLE_DEMO_WITH_TEXT } from '@generated/components/toggle/demo/with-text';
 import { TOGGLE_CLI_ADD } from '@generated/installation/cli/add-toggle';
@@ -12,6 +13,7 @@ import { ZardDemoToggleControlledComponent } from './controlled';
 import { ZardDemoToggleDisabledComponent } from './disabled';
 import { ZardDemoToggleOutlineComponent } from './outline';
 import { ZardDemoTogglePreviewComponent } from './preview';
+import { ZardDemoToggleRtlComponent } from './rtl';
 import { ZardDemoToggleSizeComponent } from './size';
 import { ZardDemoToggleWithTextComponent } from './with-text';
 import { TOGGLE_API } from '../doc/api';
@@ -62,6 +64,13 @@ export const TOGGLE = {
       description: 'Bind `[(zValue)]` two-way to drive the toggle from, and read it back into, external state.',
       component: ZardDemoToggleControlledComponent,
       codeData: TOGGLE_DEMO_CONTROLLED,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoToggleRtlComponent,
+      codeData: TOGGLE_DEMO_RTL,
     },
   ],
 };

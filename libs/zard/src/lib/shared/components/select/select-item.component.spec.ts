@@ -101,8 +101,8 @@ describe('ZardSelectItemComponent', () => {
       fixture.detectChanges();
 
       const hostElement = fixture.nativeElement as HTMLElement;
-      expect(hostElement).toHaveClass('pr-8');
-      expect(hostElement).toHaveClass('pl-2');
+      expect(hostElement).toHaveClass('pe-8');
+      expect(hostElement).toHaveClass('ps-2');
     });
 
     it('applies correct classes for compact mode', () => {
@@ -110,8 +110,8 @@ describe('ZardSelectItemComponent', () => {
       fixture.detectChanges();
 
       const hostElement = fixture.nativeElement as HTMLElement;
-      expect(hostElement).toHaveClass('pr-8');
-      expect(hostElement).toHaveClass('pl-2');
+      expect(hostElement).toHaveClass('pe-8');
+      expect(hostElement).toHaveClass('ps-2');
       expect(hostElement).not.toHaveClass('pl-6.5');
     });
   });
@@ -158,8 +158,8 @@ describe('ZardSelectItemComponent', () => {
       expect(text).toBeTruthy();
       expect(indicator).toBeTruthy();
       expect(indicator.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-      expect(indicator).toHaveClass('right-2');
-      expect(indicator.className).not.toContain('left-2');
+      expect(indicator).toHaveClass('end-2');
+      expect(indicator.className).not.toContain('start-2');
     });
 
     it('keeps the selected indicator color aligned with the item text', () => {

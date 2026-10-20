@@ -18,6 +18,7 @@ npx zard-cli@latest add slider
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import {
   type AfterViewInit,
   booleanAttribute,
@@ -115,12 +116,23 @@ export class ZardSliderRangeComponent {
 
   protected readonly classes = computed(() => mergeClasses(sliderRangeVariants(), this.class()));
 
+  private readonly directionality = inject(Directionality, { optional: true });
+
   protected readonly segments = computed(() => {
     const p = this.percent();
     const isHorizontal = this.orientation() === 'horizontal';
+    const isRtl = (this.directionality?.valueSignal() ?? 'ltr') === 'rtl';
 
-    const make = (left: string, right: string) =>
-      isHorizontal ? { left, right, bottom: null, top: null } : { left: null, right: null, bottom: left, top: right };
+    // `start` is the inset from the inline-start edge, `end` from the inline-end edge
+    // (left/right in LTR, right/left in RTL), so the filled range grows from the reading start.
+    const make = (start: string, end: string) => {
+      if (!isHorizontal) {
+        return { left: null, right: null, bottom: start, top: end };
+      }
+      return isRtl
+        ? { left: end, right: start, bottom: null, top: null }
+        : { left: start, right: end, bottom: null, top: null };
+    };
 
     if (p.length === 0) {
       return [make('0', '100%')];
@@ -157,8 +169,9 @@ export class ZardSliderRangeComponent {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'orientationClasses()',
-    '[style.left]': 'orientation() === "horizontal" ? "calc(" + percent() + "% + " + offset() + "px)" : null',
-    '[style.bottom]': 'orientation() === "vertical" ? "calc(" + percent() + "% + " + offset() + "px)" : null',
+    '[style.left]': 'orientation() === "horizontal" && !isRtl() ? position() : null',
+    '[style.right]': 'orientation() === "horizontal" && isRtl() ? position() : null',
+    '[style.bottom]': 'orientation() === "vertical" ? position() : null',
   },
   exportAs: 'zSliderThumb',
 })
@@ -174,6 +187,12 @@ export class ZardSliderThumbComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(sliderThumbVariants(), this.class()));
+
+  private readonly directionality = inject(Directionality, { optional: true });
+
+  protected readonly isRtl = computed(() => (this.directionality?.valueSignal() ?? 'ltr') === 'rtl');
+
+  protected readonly position = computed(() => `calc(${this.percent()}% + ${this.offset()}px)`);
 
   protected readonly orientationClasses = computed(() =>
     mergeClasses(sliderOrientationVariants({ zOrientation: this.orientation() })),
@@ -234,6 +253,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   private readonly destroyRef = inject(DestroyRef);
   private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly directionality = inject(Directionality, { optional: true });
 
   readonly zMin = input(0, { transform: numberAttribute });
   readonly zMax = input(100, { transform: numberAttribute });
@@ -407,10 +427,15 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
         newValue = max;
         break;
       case 'ArrowLeft':
+      case 'ArrowRight': {
+        // horizontal keys follow the reading direction: in RTL the value grows towards the left
+        const towardsEnd = (key === 'ArrowRight') !== this.isRtl();
+        newValue = towardsEnd ? Math.min(currentValue + this.zStep(), max) : Math.max(currentValue - this.zStep(), min);
+        break;
+      }
       case 'ArrowDown':
         newValue = Math.max(currentValue - this.zStep(), min);
         break;
-      case 'ArrowRight':
       case 'ArrowUp':
         newValue = Math.min(currentValue + this.zStep(), max);
         break;
@@ -475,8 +500,12 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       const relativeY = (clientCoord - rect.top) / rect.height;
       return clamp(1 - relativeY, [0, 1]);
     }
-    const relativeX = (clientCoord - rect.left) / rect.width;
+    const relativeX = this.isRtl() ? (rect.right - clientCoord) / rect.width : (clientCoord - rect.left) / rect.width;
     return clamp(relativeX, [0, 1]);
+  }
+
+  private isRtl(): boolean {
+    return this.directionality?.value === 'rtl';
   }
 
   private setInitialValue(): void {
@@ -527,7 +556,7 @@ export const sliderThumbVariants = cva(
 export const sliderOrientationVariants = cva('absolute', {
   variants: {
     zOrientation: {
-      horizontal: 'translate-x-[-50%]',
+      horizontal: 'translate-x-[-50%] rtl:translate-x-[50%]',
       vertical: 'translate-y-[50%]',
     },
   },
@@ -710,11 +739,72 @@ import { ZardSliderComponent } from '../slider.component';
 export class ZardDemoSliderDisabledComponent {}
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardSliderComponent } from '@/shared/components/slider/slider.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ volume: string; range: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      volume: 'Volume',
+      range: 'Price range',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      volume: 'مستوى الصوت',
+      range: 'نطاق السعر',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      volume: 'עוצמת קול',
+      range: 'טווח מחירים',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-slider-rtl',
+  imports: [ZardSliderComponent],
+  template: `
+    <div class="flex w-full max-w-xs flex-col gap-6">
+      <div class="flex flex-col gap-3">
+        <span class="text-sm font-medium">{{ i18n.t().volume }}</span>
+        <z-slider [zDefault]="[75]" />
+      </div>
+      <div class="flex flex-col gap-3">
+        <span class="text-sm font-medium">{{ i18n.t().range }}</span>
+        <z-slider [zDefault]="[20, 60]" />
+      </div>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSliderRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
+```
+
 ## API Reference
 
 ### z-slider
 
-A flexible and accessible component that allows users to select a numeric value from within a configurable range using pointer or keyboard interaction. The value is always an array of numbers, one entry per thumb: a single-element array renders one thumb, two elements render a range (see the `range` example), and three or more render that many independent thumbs (see the `multiple-thumbs` example) — values must be provided in ascending order. Implements Angular’s `ControlValueAccessor`, so `formControlName` and `[(ngModel)]` also work.
+A flexible and accessible component that allows users to select a numeric value from within a configurable range using pointer or keyboard interaction. The value is always an array of numbers, one entry per thumb: a single-element array renders one thumb, two elements render a range (see the `range` example), and three or more render that many independent thumbs (see the `multiple-thumbs` example) — values must be provided in ascending order. Implements Angular’s `ControlValueAccessor`, so `formControlName` and `[(ngModel)]` also work. In RTL (CDK `Directionality`) the range fills from the right, ArrowRight decreases and ArrowLeft increases the value, and dragging follows the pointer.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

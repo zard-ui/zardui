@@ -46,6 +46,29 @@ test.describe('Button component', () => {
     await expect(iconOnlyButton).toBeEnabled();
   });
 
+  test('rtl example mirrors the directional arrow and keeps icons on the logical sides', async ({ page }) => {
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.scrollIntoViewIfNeeded();
+    await expect(demo.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'rtl');
+
+    const buttons = demo.locator('[data-slot="preview"] button[z-button]');
+    const learnMore = buttons.nth(1);
+    const arrow = learnMore.locator('ng-icon[data-icon="inline-end"]');
+    await expect(arrow).toHaveCSS('rotate', '180deg');
+
+    // the inline-end icon sits on the physical left of the label, the inline-start icon on the right
+    const learnBox = (await learnMore.boundingBox())!;
+    const arrowBox = (await arrow.boundingBox())!;
+    expect(arrowBox.x + arrowBox.width / 2).toBeLessThan(learnBox.x + learnBox.width / 2);
+
+    const branch = buttons.nth(2);
+    const branchBox = (await branch.boundingBox())!;
+    const branchIconBox = (await branch.locator('ng-icon[data-icon="inline-start"]').boundingBox())!;
+    expect(branchIconBox.x + branchIconBox.width / 2).toBeGreaterThan(branchBox.x + branchBox.width / 2);
+
+    await checkA11y(page, '#rtl', ['color-contrast']);
+  });
+
   test('passes accessibility checks', async ({ page }) => {
     // button-name: icon-only variant buttons in the demo lack discernible text
     // color-contrast: Shiki syntax highlighting has insufficient contrast (4.3:1)

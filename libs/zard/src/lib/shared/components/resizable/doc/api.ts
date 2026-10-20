@@ -87,7 +87,7 @@ export const RESIZABLE_API: ApiSection[] = [
   {
     selector: 'z-resizable-handle',
     description:
-      'The draggable divider between two `z-resizable-panel`s. Renders `role="separator"` with `aria-orientation` (perpendicular to the group\'s `zLayout`) and is keyboard-operable: arrow keys resize by 1% (10% with Shift) in the axis matching the layout, Home/End jump the adjacent panels to their min/max, and Enter/Space toggles collapse when either neighboring panel is `zCollapsible`.',
+      'The draggable divider between two `z-resizable-panel`s. Renders `role="separator"` with `aria-orientation` (perpendicular to the group\'s `zLayout`) and is keyboard-operable: arrow keys resize by 1% (10% with Shift) in the axis matching the layout, Home/End jump the adjacent panels to their min/max, and Enter/Space toggles collapse when either neighboring panel is `zCollapsible`. In a right-to-left layout the first panel sits on the right, so ArrowLeft grows it and ArrowRight shrinks it; the direction is read from the CDK `Directionality`.',
     props: [
       {
         name: '[zWithHandle]',

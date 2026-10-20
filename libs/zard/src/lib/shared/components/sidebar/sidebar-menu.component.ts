@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -35,7 +36,7 @@ import {
 } from '@/shared/components/sidebar/sidebar.variants';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';
 import { ZardTooltipComponent } from '@/shared/components/tooltip/tooltip';
-import { TOOLTIP_POSITIONS_MAP } from '@/shared/components/tooltip/tooltip-positions';
+import { getTooltipPosition } from '@/shared/components/tooltip/tooltip-positions';
 import { ZardIdDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -119,6 +120,8 @@ export class ZardSidebarMenuButtonComponent {
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  // Optional: the tooltip overlay takes the direction of the button it points at.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   private overlayRef?: OverlayRef;
   private tooltipRef?: ComponentRef<ZardTooltipComponent>;
@@ -173,15 +176,30 @@ export class ZardSidebarMenuButtonComponent {
       return;
     }
 
-    this.overlayRef ??= this.overlay.create({
-      positionStrategy: this.overlayPositionBuilder
-        .flexibleConnectedTo(this.elementRef)
-        .withPositions([{ ...TOOLTIP_POSITIONS_MAP['right'] }]),
-    });
+    const rtl = this.directionality?.value === 'rtl';
+    // The tooltip opens on the inner edge of the sidebar: right of a `left` sidebar, left of a `right` one
+    // (the natural choice in RTL). `getTooltipPosition` resolves that physical side against the direction.
+    const side = this.sidebarSide() === 'right' ? 'left' : 'right';
+    const positionStrategy = this.overlayPositionBuilder
+      .flexibleConnectedTo(this.elementRef)
+      .withPositions([getTooltipPosition(side, 4, rtl)]);
+
+    if (this.overlayRef) {
+      this.overlayRef.updatePositionStrategy(positionStrategy);
+    } else {
+      this.overlayRef = this.overlay.create({ positionStrategy });
+    }
+    this.overlayRef.setDirection(rtl ? 'rtl' : 'ltr');
 
     this.tooltipRef = this.overlayRef.attach(new ComponentPortal(ZardTooltipComponent));
     this.tooltipRef.instance.state.set('open');
-    this.tooltipRef.instance.setProps(this.resolvedTooltip(), 'right');
+    this.tooltipRef.instance.setProps(this.resolvedTooltip(), side);
+  }
+
+  /** The physical side of the sidebar this button lives in, read from the `data-side` it publishes. */
+  private sidebarSide(): 'left' | 'right' {
+    const host = (this.elementRef.nativeElement as HTMLElement).closest('[data-slot="sidebar"][data-side]');
+    return host?.getAttribute('data-side') === 'right' ? 'right' : 'left';
   }
 
   protected hideTooltip(): void {

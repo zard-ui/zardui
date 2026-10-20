@@ -4,6 +4,7 @@ import { SPINNER_DEMO_CUSTOM_ICON } from '@generated/components/spinner/demo/cus
 import { SPINNER_DEMO_EMPTY } from '@generated/components/spinner/demo/empty';
 import { SPINNER_DEMO_INPUT_GROUP } from '@generated/components/spinner/demo/input-group';
 import { SPINNER_DEMO_PREVIEW } from '@generated/components/spinner/demo/preview';
+import { SPINNER_DEMO_RTL } from '@generated/components/spinner/demo/rtl';
 import { SPINNER_DEMO_SIZE } from '@generated/components/spinner/demo/size';
 import { SPINNER_CLI_ADD } from '@generated/installation/cli/add-spinner';
 import { SPINNER_MANUAL_CODE } from '@generated/installation/manual/spinner';
@@ -15,6 +16,7 @@ import { ZardDemoSpinnerCustomIconComponent } from './custom-icon';
 import { ZardDemoSpinnerEmptyComponent } from './empty';
 import { ZardDemoSpinnerInputGroupComponent } from './input-group';
 import { ZardDemoSpinnerPreviewComponent } from './preview';
+import { ZardDemoSpinnerRtlComponent } from './rtl';
 import { ZardDemoSpinnerSizeComponent } from './size';
 import { SPINNER_API } from '../doc/api';
 
@@ -76,6 +78,13 @@ export const SPINNER = {
         "Project `<z-spinner>` into `z-empty`'s `[zImage]` media slot to show a busy state while content loads, alongside `zTitle`, `zDescription` and a cancel action passed to `[zActions]`.",
       component: ZardDemoSpinnerEmptyComponent,
       codeData: SPINNER_DEMO_EMPTY,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoSpinnerRtlComponent,
+      codeData: SPINNER_DEMO_RTL,
     },
   ],
 };

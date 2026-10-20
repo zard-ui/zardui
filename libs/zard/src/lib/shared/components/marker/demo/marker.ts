@@ -1,6 +1,7 @@
 import { MARKER_DEMO_BORDER } from '@generated/components/marker/demo/border';
 import { MARKER_DEMO_LINKS_AND_BUTTONS } from '@generated/components/marker/demo/links-and-buttons';
 import { MARKER_DEMO_PREVIEW } from '@generated/components/marker/demo/preview';
+import { MARKER_DEMO_RTL } from '@generated/components/marker/demo/rtl';
 import { MARKER_DEMO_SEPARATOR } from '@generated/components/marker/demo/separator';
 import { MARKER_DEMO_SHIMMER } from '@generated/components/marker/demo/shimmer';
 import { MARKER_DEMO_SHORTHAND } from '@generated/components/marker/demo/shorthand';
@@ -14,6 +15,7 @@ import { MARKER_USAGE_CODE, MARKER_USAGE_IMPORT } from '@generated/usage/marker'
 import { ZardDemoMarkerBorderComponent } from './border';
 import { ZardDemoMarkerLinksAndButtonsComponent } from './links-and-buttons';
 import { ZardDemoMarkerPreviewComponent } from './preview';
+import { ZardDemoMarkerRtlComponent } from './rtl';
 import { ZardDemoMarkerSeparatorComponent } from './separator';
 import { ZardDemoMarkerShimmerComponent } from './shimmer';
 import { ZardDemoMarkerShorthandComponent } from './shorthand';
@@ -93,6 +95,13 @@ export const MARKER = {
         'A zard-only shorthand: a `z-marker` with no projected `z-marker-content` builds the row itself, so `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>` is one tag. Project the explicit `z-marker-content` (and `z-marker-icon`) slots when you need a class override such as `shimmer`, or an icon that is a whole component like `z-spinner`.',
       component: ZardDemoMarkerShorthandComponent,
       codeData: MARKER_DEMO_SHORTHAND,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoMarkerRtlComponent,
+      codeData: MARKER_DEMO_RTL,
     },
   ],
 };

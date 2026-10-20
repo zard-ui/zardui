@@ -1,6 +1,7 @@
 import { COMMAND_DEMO_BASIC } from '@generated/components/command/demo/basic';
 import { COMMAND_DEMO_GROUPS } from '@generated/components/command/demo/groups';
 import { COMMAND_DEMO_PREVIEW } from '@generated/components/command/demo/preview';
+import { COMMAND_DEMO_RTL } from '@generated/components/command/demo/rtl';
 import { COMMAND_DEMO_SCROLLABLE } from '@generated/components/command/demo/scrollable';
 import { COMMAND_DEMO_SHORTCUTS } from '@generated/components/command/demo/shortcuts';
 import { COMMAND_CLI_ADD } from '@generated/installation/cli/add-command';
@@ -10,6 +11,7 @@ import { COMMAND_USAGE_CODE, COMMAND_USAGE_IMPORT } from '@generated/usage/comma
 import { ZardDemoCommandBasicComponent } from './basic';
 import { ZardDemoCommandGroupsComponent } from './groups';
 import { ZardDemoCommandPreviewComponent } from './preview';
+import { ZardDemoCommandRtlComponent } from './rtl';
 import { ZardDemoCommandScrollableComponent } from './scrollable';
 import { ZardDemoCommandShortcutsComponent } from './shortcuts';
 import { COMMAND_API } from '../doc/api';
@@ -58,6 +60,13 @@ export const COMMAND = {
         'A `z-command-list` with more options than fit the `max-h-72` viewport scrolls internally. Arrow-key navigation calls `scrollIntoView()` on the active `z-command-option`, so the highlighted row stays visible while keyboard focus remains on `z-command-input`.',
       component: ZardDemoCommandScrollableComponent,
       codeData: COMMAND_DEMO_SCROLLABLE,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoCommandRtlComponent,
+      codeData: COMMAND_DEMO_RTL,
     },
   ],
 };

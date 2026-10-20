@@ -152,21 +152,21 @@ export class RoadmapPage implements OnInit {
     {
       id: 'rtl',
       title: 'RTL Support',
-      period: 'Planned',
-      status: 'planned',
-      progress: 0,
+      period: 'October 2026',
+      status: 'completed',
+      progress: 100,
       description:
-        'The rtl flag in components.json already records intent — set today, it does not change what the CLI installs. This phase gives it real behaviour: right-to-left variants for the components whose layout depends on direction.',
-      goals: ['Directional component variants', 'RTL-aware CLI output', 'RTL documentation and demos'],
+        'Every component reads right to left. Components ship direction-agnostic source (logical classes and CDK Directionality), so one copy serves LTR and RTL and the CLI needs no separate RTL variant.',
+      goals: ['Direction-aware components', 'RTL-aware CLI', 'RTL documentation and demos'],
       deliverables: [
-        { text: 'rtl flag recorded in components.json today (intent only, no behaviour yet)', completed: true },
-        { text: 'Audit of components that need directional (RTL) variants', completed: false },
+        { text: 'Audit of every component for physical, direction-dependent styles', completed: true },
         {
-          text: 'RTL variants for layout-sensitive components (drawer, sidebar, carousel, and more)',
-          completed: false,
+          text: 'Logical classes, mirrored keyboard navigation and direction-aware overlays across all components',
+          completed: true,
         },
-        { text: 'CLI installs the matching variant based on the rtl flag', completed: false },
-        { text: 'RTL demos and documentation', completed: false },
+        { text: 'zard-cli init --rtl sets dir="rtl" and records the rtl flag in components.json', completed: true },
+        { text: 'RTL example on every component page, in English, Arabic and Hebrew', completed: true },
+        { text: 'RTL guide at /docs/rtl', completed: true },
       ],
     },
     {
@@ -238,7 +238,7 @@ export class RoadmapPage implements OnInit {
   ngOnInit(): void {
     this.seoService.setDocsSeo(
       'Roadmap',
-      'Zard UI shipped V1.0. See the journey that got us here, and the plan for what is next: keeping v1 stable, RTL, zard-cli create, the AI SDK, and continuous docs and bug fixes.',
+      'Zard UI shipped V1.0. See the journey that got us here, and the plan for what is next: keeping v1 stable, zard-cli create, the AI SDK, and continuous docs and bug fixes.',
       '/docs/roadmap',
       'og-roadmap.jpg',
     );

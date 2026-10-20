@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -10,6 +11,8 @@ import {
   TemplateRef,
   type ViewContainerRef,
 } from '@angular/core';
+
+import { takeUntil } from 'rxjs';
 
 import { ZardDrawerContainerComponent, ZardDrawerOptions } from './drawer-container.component';
 import { ZardDrawerHost } from './drawer-host';
@@ -40,6 +43,8 @@ export class ZardDrawerService {
   private readonly overlay = inject(Overlay);
   private readonly injector = inject(Injector);
   private readonly platformId = inject(PLATFORM_ID);
+  // Optional: the direction of <html>, used when the caller gives no zViewContainerRef to inherit one from.
+  private readonly rootDirectionality = inject(Directionality, { optional: true });
 
   /**
    * Opens a drawer with the given configuration.
@@ -60,13 +65,15 @@ export class ZardDrawerService {
   }
 
   private createOverlay<T, U>(config: ZardDrawerOptions<T, U>): OverlayRef {
+    const directionality = this.directionalityFor(config.zViewContainerRef);
     const modal = config.zMask ?? true;
     // A drawer opening on top of another one gets a see-through mask: the drawer
     // underneath dims itself instead, so masks never stack up into a black screen.
     const nested = hasOpenDrawer();
 
-    return this.overlay.create(
+    const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: directionality?.value ?? 'ltr',
         hasBackdrop: modal,
         backdropClass: nested ? ['bg-transparent'] : DRAWER_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -74,6 +81,18 @@ export class ZardDrawerService {
         disposeOnNavigation: true,
       }),
     );
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(directionality.value));
+
+    return overlayRef;
+  }
+
+  /** The direction of where the overlay was requested from (zViewContainerRef), falling back to <html>. */
+  private directionalityFor(viewContainerRef?: ViewContainerRef): Directionality | null {
+    return viewContainerRef?.injector.get(Directionality, null) ?? this.rootDirectionality;
   }
 
   private attachContainer<T, U>(overlayRef: OverlayRef, config: ZardDrawerOptions<T, U>) {

@@ -60,7 +60,7 @@ describe('ZardNavigationMenuLabelComponent', () => {
 
     const label = screen.getByText('Menu Label');
 
-    expect(label).toHaveClass('pl-8');
+    expect(label).toHaveClass('ps-8');
     expect(label).toHaveAttribute('data-inset', 'true');
   });
 
@@ -70,7 +70,7 @@ describe('ZardNavigationMenuLabelComponent', () => {
 
     const label = screen.getByText('Menu Label');
 
-    expect(label).not.toHaveClass('pl-8');
+    expect(label).not.toHaveClass('ps-8');
     expect(label).not.toHaveAttribute('data-inset');
   });
 
@@ -90,7 +90,7 @@ describe('ZardNavigationMenuLabelComponent', () => {
 
     const label = screen.getByText('Menu Label');
 
-    expect(label).toHaveClass('pl-8');
+    expect(label).toHaveClass('ps-8');
     expect(label).toHaveAttribute('data-inset', 'true');
   });
 });

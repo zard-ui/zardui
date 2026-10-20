@@ -71,6 +71,21 @@ const OVERWRITE_STEP: Step = {
   danger: 'Choosing No cancels the installation. This step is essential for zard/ui to work.',
 };
 
+/**
+ * RTL is the user's call, never inferred from the project: the question opens on
+ * No (or on what `--rtl` already said) and nothing is written until it is answered.
+ */
+function rtlStep(): Step {
+  return {
+    id: 'rtl',
+    kind: 'confirm',
+    prompt: 'Does your app read right to left (Arabic, Hebrew…)?',
+    label: 'right to left',
+    detail: 'Sets dir="rtl" on <html> in index.html. The components work in both directions either way.',
+    confirmDefault: false,
+  };
+}
+
 function themeStep(): Step {
   const themes = getAvailableThemes();
   return {
@@ -176,6 +191,7 @@ function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind): Step[] {
         label: 'utils alias',
         detail: 'Home of the class-merging helpers shared by every component.',
       },
+      rtlStep(),
     ];
   }
 
@@ -211,6 +227,7 @@ function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind): Step[] {
       label: 'utils alias',
       detail: 'Home of the class-merging helpers shared by every component.',
     },
+    rtlStep(),
   ];
 }
 
@@ -298,6 +315,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
 
   const answerOf = (step: Step): string => {
     if (step.id === 'overwriteCss') return 'yes';
+    if (step.id === 'rtl') return state.answers.rtl ? 'yes' : 'no';
     return state.answers[step.id];
   };
 
@@ -311,7 +329,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
       const values = step.values ?? [];
       state.choiceIndex = Math.max(0, values.indexOf(answerOf(step)));
     } else {
-      state.confirmValue = step.confirmDefault ?? true;
+      state.confirmValue = step.id === 'rtl' ? state.answers.rtl : (step.confirmDefault ?? true);
     }
   };
 
@@ -404,7 +422,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     // is preserved because it does not depend on the type.
     if (step.id === 'kind') {
       const kind = value as ProjectKind;
-      state.answers = { ...defaultsFor(kind), theme: state.answers.theme };
+      state.answers = { ...defaultsFor(kind), theme: state.answers.theme, rtl: state.answers.rtl };
       state.steps = baseSteps(options.projectInfo, kind);
       state.kindChosen = true;
       advance(ctx);
@@ -418,7 +436,14 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
       state.answers = {
         ...defaultsFor(state.answers.kind, value),
         theme: state.answers.theme,
+        rtl: state.answers.rtl,
       };
+      advance(ctx);
+      return;
+    }
+
+    if (step.id === 'rtl') {
+      state.answers.rtl = value === 'yes';
       advance(ctx);
       return;
     }
@@ -612,6 +637,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
 
 function displayValue(step: Step, state: State): string {
   if (step.id === 'overwriteCss') return 'yes';
+  if (step.id === 'rtl') return state.answers.rtl ? 'yes' : 'no';
   const value = state.answers[step.id];
   if (step.kind === 'select') {
     const index = (step.values ?? []).indexOf(value);

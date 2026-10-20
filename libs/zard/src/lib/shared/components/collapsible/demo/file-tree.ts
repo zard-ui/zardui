@@ -48,7 +48,7 @@ interface FileTreeItem {
             <ng-icon name="lucideFolder" />
             {{ item.name }}
           </button>
-          <z-collapsible-content class="ml-5 data-[state=open]:mt-1">
+          <z-collapsible-content class="ms-5 data-[state=open]:mt-1">
             <div class="flex flex-col gap-1">
               @for (child of item.items; track child.name) {
                 <ng-container *ngTemplateOutlet="node; context: { $implicit: child }" />

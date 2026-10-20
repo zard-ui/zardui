@@ -1,7 +1,9 @@
-import { Component, type Type, ChangeDetectionStrategy } from '@angular/core';
+import { Directionality } from '@angular/cdk/bidi';
+import { Component, type Type, ChangeDetectionStrategy, signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { render } from '@testing-library/angular';
+import { Subject } from 'rxjs';
 
 import { noopFn } from '@/shared/utils';
 
@@ -313,5 +315,57 @@ describe('ZardTabComponent', () => {
 
     const tabComponent = fixture.debugElement.query(By.directive(ZardTabComponent)).componentInstance;
     expect(tabComponent.label()).toBe('My Tab');
+  });
+
+  describe('keyboard navigation', () => {
+    const directionality = (value: 'ltr' | 'rtl') => ({
+      provide: Directionality,
+      useValue: { value, valueSignal: signal(value), change: new Subject() },
+    });
+
+    const press = (fixture: { nativeElement: HTMLElement; detectChanges: () => void }, key: string) => {
+      // keys reach the component from the focused tab, which is the active one
+      const activeTab = fixture.nativeElement.querySelector('[role="tab"][tabindex="0"]') as HTMLElement;
+      activeTab.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+      fixture.detectChanges();
+    };
+    const selected = (fixture: { nativeElement: HTMLElement }) =>
+      Array.from(fixture.nativeElement.querySelectorAll('[role="tab"]')).findIndex(
+        tab => tab.getAttribute('aria-selected') === 'true',
+      );
+
+    it('moves with ArrowRight to the next tab in LTR', async () => {
+      const { fixture } = await render(getHostComponent(), { providers: [directionality('ltr')] });
+      press(fixture, 'ArrowRight');
+      expect(selected(fixture)).toBe(1);
+      press(fixture, 'ArrowLeft');
+      expect(selected(fixture)).toBe(0);
+    });
+
+    it('moves with ArrowLeft to the next tab in RTL (visual order)', async () => {
+      const { fixture } = await render(getHostComponent(), { providers: [directionality('rtl')] });
+      press(fixture, 'ArrowLeft');
+      expect(selected(fixture)).toBe(1);
+      press(fixture, 'ArrowRight');
+      expect(selected(fixture)).toBe(0);
+    });
+
+    it('wraps around and supports Home and End', async () => {
+      const { fixture } = await render(getHostComponent(), { providers: [directionality('ltr')] });
+      press(fixture, 'ArrowLeft');
+      expect(selected(fixture)).toBe(2);
+      press(fixture, 'Home');
+      expect(selected(fixture)).toBe(0);
+      press(fixture, 'End');
+      expect(selected(fixture)).toBe(2);
+    });
+
+    it('uses ArrowDown and ArrowUp in a vertical list regardless of direction', async () => {
+      const { fixture } = await render(getHostComponent('vertical'), { providers: [directionality('rtl')] });
+      press(fixture, 'ArrowDown');
+      expect(selected(fixture)).toBe(1);
+      press(fixture, 'ArrowRight');
+      expect(selected(fixture)).toBe(1);
+    });
   });
 });

@@ -1,7 +1,10 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { Component, signal, type TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+
+import { Subject } from 'rxjs';
 
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
@@ -1565,4 +1568,86 @@ describe('ZardSelectComponent', () => {
       expect(document.activeElement).toBe(trigger);
     });
   });
+});
+
+describe('ZardSelectComponent direction', () => {
+  const change = new Subject<'ltr' | 'rtl'>();
+  let direction: 'ltr' | 'rtl';
+  let fixture: ComponentFixture<TestHostComponent>;
+  let select: ZardSelectComponent;
+
+  function setup(initial: 'ltr' | 'rtl') {
+    direction = initial;
+    TestBed.configureTestingModule({
+      imports: [TestHostComponent],
+      providers: [
+        { provide: EVENT_MANAGER_PLUGINS, useClass: ZardEventManagerPlugin, multi: true },
+        {
+          provide: Directionality,
+          useValue: {
+            get value() {
+              return direction;
+            },
+            change,
+          },
+        },
+      ],
+    });
+    fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+    select = fixture.debugElement.query(By.directive(ZardSelectComponent)).componentInstance;
+  }
+
+  function open() {
+    fixture.debugElement
+      .query(By.directive(ZardSelectComponent))
+      .nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter' }));
+    fixture.detectChanges();
+  }
+
+  afterEach(() => {
+    fixture.destroy();
+    document.querySelector('.cdk-overlay-container')?.replaceChildren();
+    TestBed.resetTestingModule();
+  });
+
+  it('passes the trigger direction to the overlay', fakeAsync(() => {
+    setup('rtl');
+    open();
+    flush();
+    expect(select.isOpen()).toBe(true);
+    expect(document.querySelector('.cdk-overlay-container [dir="rtl"]')).not.toBeNull();
+    expect(document.querySelector('.cdk-overlay-container [dir="ltr"]')).toBeNull();
+  }));
+
+  it('keeps the overlay ltr when the trigger is ltr', fakeAsync(() => {
+    setup('ltr');
+    open();
+    flush();
+    expect(document.querySelector('.cdk-overlay-container [dir="ltr"]')).not.toBeNull();
+  }));
+
+  it('lays the content out with the same logical edges in both directions', fakeAsync(() => {
+    setup('rtl');
+    open();
+    flush();
+    const item = document.querySelector<HTMLElement>('.cdk-overlay-container z-select-item');
+    expect(item?.className).toContain('ps-2');
+    expect(item?.className).toContain('pe-8');
+    expect(item?.className).not.toMatch(/(^|\s)p[lr]-/);
+  }));
+
+  it('closes an open list and updates the overlay direction when the direction changes', fakeAsync(() => {
+    setup('rtl');
+    open();
+    flush();
+    expect(select.isOpen()).toBe(true);
+
+    direction = 'ltr';
+    change.next('ltr');
+    flush();
+    fixture.detectChanges();
+
+    expect(select.isOpen()).toBe(false);
+  }));
 });

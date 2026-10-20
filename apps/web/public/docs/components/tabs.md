@@ -18,6 +18,7 @@ npx zard-cli@latest add tabs
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
@@ -89,6 +90,7 @@ export class ZardTabComponent {
           [attr.aria-controls]="panelId(index)"
           [disabled]="zDisabled() || tab.zDisabled()"
           (click)="setActiveTab(index)"
+          (keydown)="onKeydown($event)"
           [class]="buttonClasses()"
         >
           @if (tab.zIcon()) {
@@ -127,6 +129,8 @@ export class ZardTabComponent {
 export class ZardTabGroupComponent {
   /** Scopes the tab and panel ids, which repeat for every group on the page when built from the index alone. */
   private readonly uniqueId = inject(ZardIdDirective);
+
+  private readonly directionality = inject(Directionality, { optional: true });
 
   private readonly tabComponents = contentChildren(ZardTabComponent, { descendants: true });
 
@@ -186,6 +190,58 @@ export class ZardTabGroupComponent {
   protected readonly navClasses = computed(() => tabNavVariants({ zVariant: this.zVariant() }));
 
   protected readonly buttonClasses = computed(() => tabButtonVariants());
+
+  /**
+   * Roving arrow-key navigation. In a horizontal list the keys follow the visual order, so ArrowRight moves to the
+   * previous tab in RTL. Moving focus also activates the tab (automatic activation).
+   */
+  protected onKeydown(event: KeyboardEvent): void {
+    const target = this.nextTabIndex(event.key);
+    if (target === undefined) {
+      return;
+    }
+
+    event.preventDefault();
+    this.setActiveTab(target);
+    const buttons =
+      (event.currentTarget as HTMLElement).parentElement?.querySelectorAll<HTMLButtonElement>(':scope > button') ?? [];
+    buttons[target]?.focus();
+  }
+
+  private nextTabIndex(key: string): number | undefined {
+    const tabs = this.tabs();
+    if (this.zDisabled()) {
+      return undefined;
+    }
+    const enabled = tabs.map((_, index) => index).filter(index => !tabs[index].zDisabled());
+    if (enabled.length === 0) {
+      return undefined;
+    }
+
+    if (key === 'Home') {
+      return enabled[0];
+    }
+    if (key === 'End') {
+      return enabled[enabled.length - 1];
+    }
+
+    const rtl = this.directionality?.value === 'rtl';
+    let step = 0;
+    if (this.zOrientation() === 'vertical') {
+      step = key === 'ArrowDown' ? 1 : key === 'ArrowUp' ? -1 : 0;
+    } else if (key === 'ArrowRight') {
+      step = rtl ? -1 : 1;
+    } else if (key === 'ArrowLeft') {
+      step = rtl ? 1 : -1;
+    }
+    if (step === 0) {
+      return undefined;
+    }
+
+    const position = enabled.indexOf(this.activeTabIndex());
+    const from = position === -1 ? (step > 0 ? -1 : 0) : position;
+    return enabled[(from + step + enabled.length) % enabled.length];
+  }
 
   selectTabByIndex(index: number): void {
     if (index >= 0 && index < this.tabs().length) {
@@ -250,7 +306,7 @@ export const tabButtonVariants = cva([
   'dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground',
   'after:absolute after:bg-foreground after:opacity-0 after:transition-opacity',
   'group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5',
-  'group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:w-0.5',
+  'group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5',
   'group-data-[variant=line]/tabs-list:data-active:after:opacity-100',
 ]);
 
@@ -400,11 +456,109 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 export class ZardDemoTabsIconsComponent {}
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
+
+const translations: ZardRtlTranslations<{
+  overview: string;
+  analytics: string;
+  reports: string;
+  overviewText: string;
+  analyticsText: string;
+  reportsText: string;
+}> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      overview: 'Overview',
+      analytics: 'Analytics',
+      reports: 'Reports',
+      overviewText: 'You have 12 active projects and 3 pending tasks.',
+      analyticsText: 'Page views are up 25% compared to last month.',
+      reportsText: 'Your weekly report is ready to download.',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      overview: 'نظرة عامة',
+      analytics: 'التحليلات',
+      reports: 'التقارير',
+      overviewText: 'لديك 12 مشروعًا نشطًا و3 مهام معلقة.',
+      analyticsText: 'ارتفعت مشاهدات الصفحة بنسبة 25٪ مقارنة بالشهر الماضي.',
+      reportsText: 'تقريرك الأسبوعي جاهز للتنزيل.',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      overview: 'סקירה',
+      analytics: 'ניתוח נתונים',
+      reports: 'דוחות',
+      overviewText: 'יש לך 12 פרויקטים פעילים ו-3 משימות ממתינות.',
+      analyticsText: 'צפיות בדף עלו ב-25% בהשוואה לחודש שעבר.',
+      reportsText: 'הדוח השבועי שלך מוכן להורדה.',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-tabs-rtl',
+  imports: [ZardTabComponent, ZardTabGroupComponent, ZardCardImports],
+  template: `
+    <z-tab-group class="w-[400px]">
+      <z-tab [label]="i18n.t().overview">
+        <z-card>
+          <z-card-header>
+            <z-card-title [zTitle]="i18n.t().overview" />
+          </z-card-header>
+          <p z-card-content class="text-muted-foreground text-sm">{{ i18n.t().overviewText }}</p>
+        </z-card>
+      </z-tab>
+      <z-tab [label]="i18n.t().analytics">
+        <z-card>
+          <z-card-header>
+            <z-card-title [zTitle]="i18n.t().analytics" />
+          </z-card-header>
+          <p z-card-content class="text-muted-foreground text-sm">{{ i18n.t().analyticsText }}</p>
+        </z-card>
+      </z-tab>
+      <z-tab [label]="i18n.t().reports">
+        <z-card>
+          <z-card-header>
+            <z-card-title [zTitle]="i18n.t().reports" />
+          </z-card-header>
+          <p z-card-content class="text-muted-foreground text-sm">{{ i18n.t().reportsText }}</p>
+        </z-card>
+      </z-tab>
+    </z-tab-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoTabsRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
+```
+
 ## API Reference
 
 ### z-tab-group
 
-A set of layered sections of content — known as tab panels — displayed one at a time.
+A set of layered sections of content — known as tab panels — displayed one at a time. Arrow keys, Home and End move between enabled tabs; in right-to-left layouts the horizontal arrows follow the visual order (ArrowRight moves to the previous tab).
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

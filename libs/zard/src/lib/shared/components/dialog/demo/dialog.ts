@@ -1,6 +1,7 @@
 import { DIALOG_DEMO_CUSTOM_CLOSE } from '@generated/components/dialog/demo/custom-close';
 import { DIALOG_DEMO_NO_CLOSE_BUTTON } from '@generated/components/dialog/demo/no-close-button';
 import { DIALOG_DEMO_PREVIEW } from '@generated/components/dialog/demo/preview';
+import { DIALOG_DEMO_RTL } from '@generated/components/dialog/demo/rtl';
 import { DIALOG_DEMO_SCROLLABLE_CONTENT } from '@generated/components/dialog/demo/scrollable-content';
 import { DIALOG_DEMO_STICKY_FOOTER } from '@generated/components/dialog/demo/sticky-footer';
 import { DIALOG_CLI_ADD } from '@generated/installation/cli/add-dialog';
@@ -11,6 +12,7 @@ import type { CodeBlockData } from '@highlight/types';
 import { ZardDemoDialogCustomCloseComponent } from './custom-close';
 import { ZardDemoDialogNoCloseButtonComponent } from './no-close-button';
 import { ZardDemoDialogPreviewComponent } from './preview';
+import { ZardDemoDialogRtlComponent } from './rtl';
 import { ZardDemoDialogScrollableContentComponent } from './scrollable-content';
 import { ZardDemoDialogStickyFooterComponent } from './sticky-footer';
 import { DIALOG_API } from '../doc/api';
@@ -82,6 +84,13 @@ export const DIALOG = {
       description: 'Long content can scroll while the header stays in view.',
       component: ZardDemoDialogScrollableContentComponent,
       codeData: DIALOG_DEMO_SCROLLABLE_CONTENT,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoDialogRtlComponent,
+      codeData: DIALOG_DEMO_RTL,
     },
   ],
 };

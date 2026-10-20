@@ -75,6 +75,13 @@ export const DATE_PICKER_API: ApiSection[] = [
         default: '1',
       },
       {
+        name: '[zLocale]',
+        description:
+          'BCP 47 locale (for example `ar`, `he`) for the calendar and the trigger label. Falls back to the application locale. Direction (RTL) comes from CDK `Directionality`: the popover and the calendar mirror automatically',
+        type: 'string',
+        default: '-',
+      },
+      {
         name: '[zDisabledDates]',
         description: 'Individual days that cannot be selected, on top of the minDate/maxDate range',
         type: 'Date[]',

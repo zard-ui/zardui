@@ -18,6 +18,7 @@ npx zard-cli@latest add drawer
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -45,7 +46,7 @@ import {
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import { filter, takeUntil } from 'rxjs';
 
 import { ZardStringTemplateOutletDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
@@ -118,6 +119,8 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
 })
 export class ZardDrawerComponent extends ZardDrawerHost {
   private readonly overlay = inject(Overlay);
+  // Optional: the direction of the declaration site, which is where the overlay content takes its dir from.
+  private readonly directionality = inject(Directionality, { optional: true });
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
@@ -199,6 +202,7 @@ export class ZardDrawerComponent extends ZardDrawerHost {
 
     const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: this.directionality?.value ?? 'ltr',
         hasBackdrop: modal,
         backdropClass: nested ? ['bg-transparent'] : DRAWER_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -207,6 +211,11 @@ export class ZardDrawerComponent extends ZardDrawerHost {
       }),
     );
     this.overlayRef = overlayRef;
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    this.directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? 'ltr'));
 
     overlayRef.attach(new TemplatePortal(this.panel(), this.viewContainerRef));
 
@@ -608,7 +617,7 @@ export class ZardDrawerOptions<T, U> {
             z-button
             zType="ghost"
             zSize="icon-sm"
-            class="absolute top-3 right-3"
+            class="absolute end-3 top-3"
             (click)="cancelTriggered.emit()"
           >
             <ng-icon name="lucideX" class="size-4!" />
@@ -1465,6 +1474,7 @@ export const ZardDrawerImports = [
 ```
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -1477,6 +1487,8 @@ import {
   TemplateRef,
   type ViewContainerRef,
 } from '@angular/core';
+
+import { takeUntil } from 'rxjs';
 
 import { ZardDrawerContainerComponent, ZardDrawerOptions } from './drawer-container.component';
 import { ZardDrawerHost } from './drawer-host';
@@ -1507,6 +1519,8 @@ export class ZardDrawerService {
   private readonly overlay = inject(Overlay);
   private readonly injector = inject(Injector);
   private readonly platformId = inject(PLATFORM_ID);
+  // Optional: the direction of <html>, used when the caller gives no zViewContainerRef to inherit one from.
+  private readonly rootDirectionality = inject(Directionality, { optional: true });
 
   /**
    * Opens a drawer with the given configuration.
@@ -1527,13 +1541,15 @@ export class ZardDrawerService {
   }
 
   private createOverlay<T, U>(config: ZardDrawerOptions<T, U>): OverlayRef {
+    const directionality = this.directionalityFor(config.zViewContainerRef);
     const modal = config.zMask ?? true;
     // A drawer opening on top of another one gets a see-through mask: the drawer
     // underneath dims itself instead, so masks never stack up into a black screen.
     const nested = hasOpenDrawer();
 
-    return this.overlay.create(
+    const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: directionality?.value ?? 'ltr',
         hasBackdrop: modal,
         backdropClass: nested ? ['bg-transparent'] : DRAWER_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -1541,6 +1557,18 @@ export class ZardDrawerService {
         disposeOnNavigation: true,
       }),
     );
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(directionality.value));
+
+    return overlayRef;
+  }
+
+  /** The direction of where the overlay was requested from (zViewContainerRef), falling back to <html>. */
+  private directionalityFor(viewContainerRef?: ViewContainerRef): Directionality | null {
+    return viewContainerRef?.injector.get(Directionality, null) ?? this.rootDirectionality;
   }
 
   private attachContainer<T, U>(overlayRef: OverlayRef, config: ZardDrawerOptions<T, U>) {
@@ -2415,6 +2443,163 @@ export class ZardDemoDrawerResponsiveComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+
+import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
+import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface DrawerRtlStrings {
+  trigger: string;
+  title: string;
+  description: string;
+  confirm: string;
+  cancel: string;
+  asapLabel: string;
+  asapDescription: string;
+  asapBadge: string;
+  slot500Label: string;
+  slot500Description: string;
+  slot530Label: string;
+  slot530Description: string;
+  slot600Label: string;
+  slot600Description: string;
+}
+
+const translations: ZardRtlTranslations<DrawerRtlStrings> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      trigger: 'Open Drawer',
+      title: 'Pick a delivery time',
+      description: "We'll prepare your order as soon as possible.",
+      confirm: 'Confirm Delivery Time',
+      cancel: 'Cancel',
+      asapLabel: 'Standard delivery',
+      asapDescription: '25–35 min · Driver assigned now',
+      asapBadge: 'Fastest',
+      slot500Label: '5:00 PM – 5:15 PM',
+      slot500Description: 'Prep starts at 4:45 PM',
+      slot530Label: '5:30 PM – 5:45 PM',
+      slot530Description: "Good if you're heading home",
+      slot600Label: '6:00 PM – 6:15 PM',
+      slot600Description: 'Most popular · High demand',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      trigger: 'فتح الدرج',
+      title: 'اختر وقت التوصيل',
+      description: 'سنجهز طلبك في أقرب وقت ممكن.',
+      confirm: 'تأكيد وقت التوصيل',
+      cancel: 'إلغاء',
+      asapLabel: 'توصيل قياسي',
+      asapDescription: '25–35 دقيقة · تم تعيين السائق الآن',
+      asapBadge: 'الأسرع',
+      slot500Label: '5:00 م – 5:15 م',
+      slot500Description: 'يبدأ التحضير في 4:45 م',
+      slot530Label: '5:30 م – 5:45 م',
+      slot530Description: 'مناسب إذا كنت في الطريق إلى المنزل',
+      slot600Label: '6:00 م – 6:15 م',
+      slot600Description: 'الأكثر شيوعًا · طلب مرتفع',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      trigger: 'פתח מגירה',
+      title: 'בחר זמן משלוח',
+      description: 'נכין את ההזמנה שלך בהקדם האפשרי.',
+      confirm: 'אשר זמן משלוח',
+      cancel: 'בטל',
+      asapLabel: 'משלוח רגיל',
+      asapDescription: '25–35 דק׳ · נהג הוקצה כעת',
+      asapBadge: 'הכי מהיר',
+      slot500Label: '17:00 – 17:15',
+      slot500Description: 'ההכנה מתחילה ב-16:45',
+      slot530Label: '17:30 – 17:45',
+      slot530Description: 'מתאים אם אתה בדרך הביתה',
+      slot600Label: '18:00 – 18:15',
+      slot600Description: 'הפופולרי ביותר · ביקוש גבוה',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-drawer-rtl',
+  imports: [ZardBadgeComponent, ZardButtonComponent, ZardDrawerImports, ZardRadioGroupImports],
+  template: `
+    @let t = i18n.t();
+    <button type="button" z-button zType="secondary" (click)="visible.set(true)">{{ t.trigger }}</button>
+
+    <!-- zPlacement and the swipe-to-close axis stay physical, whatever the direction. -->
+    <z-drawer [(zVisible)]="visible" zPlacement="right">
+      <z-drawer-header>
+        <z-drawer-title>{{ t.title }}</z-drawer-title>
+        <z-drawer-description>{{ t.description }}</z-drawer-description>
+      </z-drawer-header>
+
+      <div class="flex-1 overflow-y-auto p-4">
+        <z-radio-group [(value)]="deliveryTime" class="gap-2">
+          @for (slot of slots(); track slot.value) {
+            <label
+              [attr.for]="'drawer-rtl-' + slot.value"
+              class="has-[[data-state=checked]]:border-primary flex items-start gap-3 rounded-lg border p-3 text-sm"
+            >
+              <z-radio [zId]="'drawer-rtl-' + slot.value" [value]="slot.value" />
+              <span class="grid flex-1 gap-1">
+                <span class="flex items-center gap-2 font-medium">
+                  {{ slot.label }}
+                  @if (slot.badge) {
+                    <z-badge zType="secondary">{{ slot.badge }}</z-badge>
+                  }
+                </span>
+                <span class="text-muted-foreground text-xs">{{ slot.description }}</span>
+              </span>
+            </label>
+          }
+        </z-radio-group>
+      </div>
+
+      <z-drawer-footer>
+        <button type="button" z-button (click)="visible.set(false)">{{ t.confirm }}</button>
+        <button type="button" z-button zType="outline" z-drawer-close>{{ t.cancel }}</button>
+      </z-drawer-footer>
+    </z-drawer>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDrawerRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly visible = signal(false);
+  protected readonly deliveryTime = signal<string>('asap');
+
+  protected readonly slots = computed(() => {
+    const t = this.i18n.t();
+    return [
+      { value: 'asap', label: t.asapLabel, description: t.asapDescription, badge: t.asapBadge },
+      { value: '5-00', label: t.slot500Label, description: t.slot500Description, badge: '' },
+      { value: '5-30', label: t.slot530Label, description: t.slot530Description, badge: '' },
+      { value: '6-00', label: t.slot600Label, description: t.slot600Description, badge: '' },
+    ];
+  });
+}
+```
+
 ## API Reference
 
 ### z-drawer
@@ -2424,7 +2609,7 @@ Root of a declarative drawer. Holds the open state and hosts the projected conte
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zVisible]` | Open state, two-way bound | `boolean` | `false` |
-| `[zPlacement]` | Edge of the screen the drawer slides from. Also sets the swipe axis: top/bottom drag vertically, left/right drag horizontally | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
+| `[zPlacement]` | Edge of the screen the drawer slides from. Also sets the swipe axis: top/bottom drag vertically, left/right drag horizontally. Both stay physical in RTL | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
 | `[zSnapPoints]` | Sizes the drawer rests at. 0–1 is a fraction of the viewport, above that pixels, strings keep their CSS unit | `(number \| string)[]` | `-` |
 | `[zSnapPoint]` | Active snap point, two-way bound through [(zSnapPoint)]. Defaults to the first one | `number \| string` | `-` |
 | `[zDismissible]` | Whether swiping, the mask and Escape can close the drawer | `boolean` | `true` |

@@ -8,6 +8,7 @@ import { BUTTON_DEMO_LINK } from '@generated/components/button/demo/link';
 import { BUTTON_DEMO_OUTLINE } from '@generated/components/button/demo/outline';
 import { BUTTON_DEMO_PREVIEW } from '@generated/components/button/demo/preview';
 import { BUTTON_DEMO_ROUNDED } from '@generated/components/button/demo/rounded';
+import { BUTTON_DEMO_RTL } from '@generated/components/button/demo/rtl';
 import { BUTTON_DEMO_SECONDARY } from '@generated/components/button/demo/secondary';
 import { BUTTON_DEMO_SIZE } from '@generated/components/button/demo/size';
 import { BUTTON_DEMO_SPINNER } from '@generated/components/button/demo/spinner';
@@ -26,6 +27,7 @@ import { ZardDemoButtonLinkComponent } from './link';
 import { ZardDemoButtonOutlineComponent } from './outline';
 import { ZardDemoButtonPreviewComponent } from './preview';
 import { ZardDemoButtonRoundedComponent } from './rounded';
+import { ZardDemoButtonRtlComponent } from './rtl';
 import { ZardDemoButtonSecondaryComponent } from './secondary';
 import { ZardDemoButtonSizeComponent } from './size';
 import { ZardDemoButtonSpinnerComponent } from './spinner';
@@ -131,6 +133,13 @@ export const BUTTON = {
         "Apply the `z-button` attribute selector to an `<a>` element to give it the button appearance. Here's a link that looks like a button.",
       component: ZardDemoButtonAsLinkComponent,
       codeData: BUTTON_DEMO_AS_LINK,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoButtonRtlComponent,
+      codeData: BUTTON_DEMO_RTL,
     },
   ],
 };

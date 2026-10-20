@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import {
   type ConnectedPosition,
   type FlexibleConnectedPositionStrategy,
@@ -141,6 +142,8 @@ export class ZardComboboxContentComponent implements OnDestroy {
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewContainerRef = inject(ViewContainerRef);
+  // Optional: the direction of the anchor, which is where the overlay content takes its `dir` from.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   readonly class = input<ClassValue>('');
   readonly zAnchor = input<ElementRef<HTMLElement> | HTMLElement | null>(null);
@@ -176,7 +179,8 @@ export class ZardComboboxContentComponent implements OnDestroy {
   protected readonly transformOrigin = computed(() => {
     const block = this.resolvedSide() === 'bottom' ? 'top' : 'bottom';
     const align = this.alignValue();
-    const inline = align === 'center' ? 'center' : align === 'start' ? 'left' : 'right';
+    // `start`/`end` are logical: the start edge is the physical right in RTL.
+    const inline = align === 'center' ? 'center' : (align === 'start') !== this.isRtl() ? 'left' : 'right';
     return `${block} ${inline}`;
   });
 
@@ -190,6 +194,23 @@ export class ZardComboboxContentComponent implements OnDestroy {
         this.detach();
       }
     });
+
+    // A `[dir]` switch while the panel is open closes it: it reopens with the new direction.
+    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.overlayRef?.setDirection(this.direction());
+      if (this.root.open()) {
+        this.root.closePanel();
+      }
+    });
+  }
+
+  private direction(): 'ltr' | 'rtl' {
+    // The signal keeps `transformOrigin` (a computed) in step with a `[dir]` switch.
+    return this.directionality?.valueSignal() ?? 'ltr';
+  }
+
+  private isRtl(): boolean {
+    return this.direction() === 'rtl';
   }
 
   ngOnDestroy(): void {
@@ -222,6 +243,7 @@ export class ZardComboboxContentComponent implements OnDestroy {
       return;
     }
 
+    this.overlayRef.setDirection(this.direction());
     this.positionStrategy?.setOrigin(anchor).withPositions(this.connectedPositions());
     this.updateMeasurements();
 
@@ -249,6 +271,7 @@ export class ZardComboboxContentComponent implements OnDestroy {
 
     this.overlayRef = this.overlay.create({
       positionStrategy: this.positionStrategy,
+      direction: this.direction(),
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
@@ -280,7 +303,8 @@ export class ZardComboboxContentComponent implements OnDestroy {
     const align = this.alignValue();
     const x = align === 'center' ? 'center' : align === 'end' ? 'end' : 'start';
     const sideOffset = this.sideOffsetValue();
-    const alignOffset = this.alignOffsetValue();
+    // `offsetX` is physical while `start`/`end` follow the direction, so the align offset is mirrored.
+    const alignOffset = this.isRtl() ? -this.alignOffsetValue() : this.alignOffsetValue();
 
     const below: ConnectedPosition = {
       originX: x,
@@ -315,7 +339,9 @@ export class ZardComboboxContentComponent implements OnDestroy {
     const align = this.alignValue();
 
     const height = this.resolvedSide() === 'bottom' ? viewportHeight - rect.bottom - offset : rect.top - offset;
-    const width = align === 'start' ? viewportWidth - rect.left : align === 'end' ? rect.right : viewportWidth;
+    // The start edge is the physical right in RTL, so the room it grows into is measured from the other side.
+    const growsRight = (align === 'start') !== this.isRtl();
+    const width = align === 'center' ? viewportWidth : growsRight ? viewportWidth - rect.left : rect.right;
 
     this.anchorWidth.set(`${Math.round(anchor.offsetWidth || rect.width)}px`);
     this.availableHeight.set(`${Math.max(Math.round(height), 0)}px`);

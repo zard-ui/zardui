@@ -72,8 +72,8 @@ export const bubbleReactionsVariants = cva(
         bottom: 'bottom-0 translate-y-3/4',
       },
       zAlign: {
-        start: 'ltr:left-3 rtl:right-3',
-        end: 'ltr:right-3 rtl:left-3',
+        start: 'start-3',
+        end: 'end-3',
       },
     },
     defaultVariants: {

@@ -145,9 +145,9 @@ export const toggleVariants = cva(
         outline: 'border border-input bg-transparent',
       },
       zSize: {
-        default: 'h-8 min-w-8 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
-        sm: "h-7 min-w-7 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        lg: 'h-9 min-w-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
+        default: 'h-8 min-w-8 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
+        sm: "h-7 min-w-7 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+        lg: 'h-9 min-w-9 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
       },
     },
     defaultVariants: {
@@ -314,6 +314,71 @@ export class ZardDemoToggleControlledComponent {
   protected readonly lightOn = signal(false);
   protected readonly bulb = computed(() => (this.lightOn() ? 'lucideLightbulb' : 'lucideLightbulbOff'));
   protected readonly state = computed(() => (this.lightOn() ? 'on' : 'off'));
+}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBold, lucideItalic } from '@ng-icons/lucide';
+
+import { ZardToggleComponent } from '@/shared/components/toggle/toggle.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ bold: string; italic: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      bold: 'Bold',
+      italic: 'Italic',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      bold: 'غامق',
+      italic: 'مائل',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      bold: 'מודגש',
+      italic: 'נטוי',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-toggle-rtl',
+  imports: [ZardToggleComponent, NgIcon],
+  template: `
+    <div class="flex items-center gap-2">
+      <z-toggle zType="outline" [zAriaLabel]="i18n.t().bold">
+        <ng-icon name="lucideBold" />
+        {{ i18n.t().bold }}
+      </z-toggle>
+      <z-toggle zType="outline" [zAriaLabel]="i18n.t().italic">
+        <ng-icon name="lucideItalic" />
+        {{ i18n.t().italic }}
+      </z-toggle>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideBold, lucideItalic })],
+})
+export class ZardDemoToggleRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
 }
 ```
 

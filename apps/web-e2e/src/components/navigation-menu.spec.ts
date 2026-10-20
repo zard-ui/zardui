@@ -175,4 +175,41 @@ test.describe('Navigation Menu component', () => {
 
     await checkA11y(page, '#overview', ['button-name', 'color-contrast', 'scrollable-region-focusable']);
   });
+
+  test('RTL example lines the viewport up with the inline-start edge of the trigger', async ({ page }) => {
+    await loadExamples();
+
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.scrollIntoViewIfNeeded();
+    await expect(demo.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'rtl');
+
+    const triggers = demo.locator('[data-slot="preview"] [z-navigation-menu-trigger]');
+    await expect(triggers).toHaveCount(3);
+
+    for (const index of [0, 2]) {
+      const trigger = triggers.nth(index);
+      await trigger.hover();
+      await viewport(page).waitFor({ state: 'visible', timeout: 5000 });
+      // The viewport morphs and slides to its trigger, so wait for it to settle.
+      await page.waitForTimeout(800);
+
+      await expect(viewport(page).locator('xpath=ancestor::*[@dir][1]')).toHaveAttribute('dir', 'rtl');
+
+      const triggerBox = await trigger.boundingBox();
+      const viewportBox = await viewport(page).boundingBox();
+      // Inline-start in RTL is the right edge, unless the clamp against the window has to push it in.
+      expect(viewportBox!.x + viewportBox!.width).toBeCloseTo(triggerBox!.x + triggerBox!.width, -1);
+    }
+  });
+
+  test('RTL example passes accessibility checks when open', async ({ page }) => {
+    await loadExamples();
+
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.scrollIntoViewIfNeeded();
+    await demo.locator('[data-slot="preview"] [z-navigation-menu-trigger]').first().hover();
+    await viewport(page).waitFor({ state: 'visible', timeout: 5000 });
+
+    await checkA11y(page, '[id="rtl"]', ['button-name', 'color-contrast', 'scrollable-region-focusable']);
+  });
 });

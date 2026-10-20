@@ -58,3 +58,36 @@ test.describe('Avatar component', () => {
     await checkA11y(page, '#overview', ['color-contrast']);
   });
 });
+
+test.describe('Avatar RTL', () => {
+  test('renders the rtl example mirrored', async ({ page }) => {
+    const demoPage = new ComponentDemoPage(page, 'avatar');
+    await demoPage.goto();
+
+    const rtl = demoPage.getDemoByName('rtl');
+    await rtl.scrollIntoViewIfNeeded();
+    const preview = rtl.locator('[data-slot="preview"]');
+    await expect(preview).toHaveAttribute('dir', 'rtl');
+    await expect(preview).toHaveAttribute('data-lang', 'ar');
+
+    const avatars = preview.locator('z-avatar-group z-avatar');
+    await expect(avatars).toHaveCount(3);
+    const first = await avatars.nth(0).boundingBox();
+    const second = await avatars.nth(1).boundingBox();
+    // The stack overlaps toward the inline end: the first avatar is the right-most one.
+    expect(first!.x).toBeGreaterThan(second!.x);
+    expect(second!.x + second!.width).toBeGreaterThan(first!.x);
+    // Tailwind v4 `space-x` already uses logical margins: every pair overlaps and the stack stays inside the group.
+    const third = await avatars.nth(2).boundingBox();
+    expect(third!.x + third!.width).toBeGreaterThan(second!.x);
+    const group = await preview.locator('z-avatar-group').first().boundingBox();
+    expect(first!.x + first!.width).toBeLessThanOrEqual(group!.x + group!.width + 1);
+    const badged = preview.locator('z-avatar').nth(1);
+    const badge = await badged.locator(':scope > div').boundingBox();
+    const host = await badged.boundingBox();
+    // The status badge sits on the inline end (left) edge.
+    expect(badge!.x + badge!.width / 2).toBeLessThan(host!.x + host!.width / 2);
+
+    await checkA11y(page, '#rtl z-demo-avatar-rtl', ['color-contrast', 'button-name']);
+  });
+});

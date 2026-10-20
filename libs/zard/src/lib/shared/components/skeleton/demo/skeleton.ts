@@ -2,6 +2,7 @@ import { SKELETON_DEMO_AVATAR } from '@generated/components/skeleton/demo/avatar
 import { SKELETON_DEMO_CARD } from '@generated/components/skeleton/demo/card';
 import { SKELETON_DEMO_FORM } from '@generated/components/skeleton/demo/form';
 import { SKELETON_DEMO_PREVIEW } from '@generated/components/skeleton/demo/preview';
+import { SKELETON_DEMO_RTL } from '@generated/components/skeleton/demo/rtl';
 import { SKELETON_DEMO_TABLE } from '@generated/components/skeleton/demo/table';
 import { SKELETON_DEMO_TEXT } from '@generated/components/skeleton/demo/text';
 import { SKELETON_CLI_ADD } from '@generated/installation/cli/add-skeleton';
@@ -12,6 +13,7 @@ import { ZardDemoSkeletonAvatarComponent } from './avatar';
 import { ZardDemoSkeletonCardComponent } from './card';
 import { ZardDemoSkeletonFormComponent } from './form';
 import { ZardDemoSkeletonPreviewComponent } from './preview';
+import { ZardDemoSkeletonRtlComponent } from './rtl';
 import { ZardDemoSkeletonTableComponent } from './table';
 import { ZardDemoSkeletonTextComponent } from './text';
 import { SKELETON_API } from '../doc/api';
@@ -68,6 +70,13 @@ export const SKELETON = {
         'A `z-table` body: five rows, each with a flexible primary-column bar and two fixed-width bars for secondary columns.',
       component: ZardDemoSkeletonTableComponent,
       codeData: SKELETON_DEMO_TABLE,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoSkeletonRtlComponent,
+      codeData: SKELETON_DEMO_RTL,
     },
   ],
 };

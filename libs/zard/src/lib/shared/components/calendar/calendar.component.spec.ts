@@ -478,6 +478,37 @@ describe('ZardCalendarComponent', () => {
   });
 });
 
+describe('ZardCalendarComponent zLocale', () => {
+  let fixture: ComponentFixture<ZardCalendarComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ZardCalendarComponent],
+      providers: [{ provide: EVENT_MANAGER_PLUGINS, useClass: ZardEventManagerPlugin, multi: true }],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ZardCalendarComponent);
+    fixture.componentRef.setInput('value', new Date(2024, 7, 15));
+  });
+
+  it('renders month and weekday names in the given locale without touching the app locale', () => {
+    fixture.componentRef.setInput('zLocale', 'ar');
+    fixture.detectChanges();
+
+    const host = fixture.nativeElement as HTMLElement;
+    const caption = host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim();
+    expect(caption).toBe(`${new Intl.DateTimeFormat('ar', { month: 'long' }).format(new Date(2024, 7, 15))} 2024`);
+    expect(host.querySelector('[role="columnheader"]')?.textContent?.trim()).not.toBe('Sun');
+    expect(TestBed.inject(ZardI18nService).locale()).toBe('en-US');
+  });
+
+  it('falls back to the application locale when zLocale is not set', () => {
+    fixture.detectChanges();
+    const caption = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar-caption"]');
+    expect(caption?.textContent?.trim()).toBe('August 2024');
+  });
+});
+
 describe('Calendar Utility Functions', () => {
   describe('isSameDay', () => {
     it('should correctly identify same day', () => {

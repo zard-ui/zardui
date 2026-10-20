@@ -1,6 +1,7 @@
 import { PAGINATION_DEMO_ICONS_ONLY } from '@generated/components/pagination/demo/icons-only';
 import { PAGINATION_DEMO_PREVIEW } from '@generated/components/pagination/demo/preview';
 import { PAGINATION_DEMO_ROUTING } from '@generated/components/pagination/demo/routing';
+import { PAGINATION_DEMO_RTL } from '@generated/components/pagination/demo/rtl';
 import { PAGINATION_DEMO_SIMPLE } from '@generated/components/pagination/demo/simple';
 import { PAGINATION_CLI_ADD } from '@generated/installation/cli/add-pagination';
 import { PAGINATION_MANUAL_CODE } from '@generated/installation/manual/pagination';
@@ -10,6 +11,7 @@ import { ZardDemoPaginationIconsOnlyComponent } from '@/shared/components/pagina
 
 import { ZardDemoPaginationPreviewComponent } from './preview';
 import { ZardDemoPaginationRoutingComponent } from './routing';
+import { ZardDemoPaginationRtlComponent } from './rtl';
 import { ZardDemoPaginationSimpleComponent } from './simple';
 import { PAGINATION_API } from '../doc/api';
 
@@ -48,6 +50,13 @@ export const PAGINATION = {
         'Wire `a[z-pagination-button]` to Angular `RouterLink` with `[queryParams]` and `queryParamsHandling="merge"` so page links drive real router navigation — the URL updates and the page is bookmarkable, with no full reload.',
       component: ZardDemoPaginationRoutingComponent,
       codeData: PAGINATION_DEMO_ROUTING,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoPaginationRtlComponent,
+      codeData: PAGINATION_DEMO_RTL,
     },
   ],
 };

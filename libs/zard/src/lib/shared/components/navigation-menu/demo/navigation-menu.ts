@@ -1,6 +1,7 @@
 import { NAVIGATION_MENU_DEMO_LINK } from '@generated/components/navigation-menu/demo/link';
 import { NAVIGATION_MENU_DEMO_NO_VIEWPORT } from '@generated/components/navigation-menu/demo/no-viewport';
 import { NAVIGATION_MENU_DEMO_PREVIEW } from '@generated/components/navigation-menu/demo/preview';
+import { NAVIGATION_MENU_DEMO_RTL } from '@generated/components/navigation-menu/demo/rtl';
 import { NAVIGATION_MENU_DEMO_SIMPLE } from '@generated/components/navigation-menu/demo/simple';
 import { NAVIGATION_MENU_CLI_ADD } from '@generated/installation/cli/add-navigation-menu';
 import { NAVIGATION_MENU_MANUAL_CODE } from '@generated/installation/manual/navigation-menu';
@@ -12,6 +13,7 @@ import { ZardDemoNavigationMenuNoViewportComponent } from '@/shared/components/n
 import { ZardDemoNavigationMenuPreviewComponent } from '@/shared/components/navigation-menu/demo/preview';
 import { ZardDemoNavigationMenuSimpleComponent } from '@/shared/components/navigation-menu/demo/simple';
 
+import { ZardDemoNavigationMenuRtlComponent } from './rtl';
 import { NAVIGATION_MENU_API } from '../doc/api';
 
 const NAVIGATION_MENU_COMPOSITION_CODE = `z-navigation-menu
@@ -77,6 +79,13 @@ export const NAVIGATION_MENU = {
         'Set `[zViewport]="false"` so each item opens its own popup, with its own background and ring, instead of sharing the animated viewport. The markup is the same in both modes — only the input changes.',
       component: ZardDemoNavigationMenuNoViewportComponent,
       codeData: NAVIGATION_MENU_DEMO_NO_VIEWPORT,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoNavigationMenuRtlComponent,
+      codeData: NAVIGATION_MENU_DEMO_RTL,
     },
   ],
 };

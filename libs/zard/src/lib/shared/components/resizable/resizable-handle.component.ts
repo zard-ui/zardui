@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -48,6 +49,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 })
 export class ZardResizableHandleComponent {
   private readonly resizable = inject(ZardResizableComponent, { optional: true });
+  // Optional: only horizontal arrow keys depend on it. In RTL the first panel sits on the right.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   readonly zWithHandle = input(false, { transform: booleanAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
@@ -134,16 +137,18 @@ export class ZardResizableHandleComponent {
 
     let delta = 0;
     const step = shiftKey ? 10 : 1;
+    // The first panel is on the right in RTL, so ArrowLeft grows it (and ArrowRight shrinks it).
+    const horizontalStep = this.directionality?.value === 'rtl' ? -step : step;
 
     switch (key) {
       case 'ArrowLeft':
         if (layout === 'vertical') {
-          delta = -step;
+          delta = -horizontalStep;
         }
         break;
       case 'ArrowRight':
         if (layout === 'vertical') {
-          delta = step;
+          delta = horizontalStep;
         }
         break;
       case 'ArrowUp':

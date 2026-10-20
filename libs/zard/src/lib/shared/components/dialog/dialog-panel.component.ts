@@ -44,7 +44,7 @@ export const DIALOG_DURATION = 100;
         z-button
         zType="ghost"
         zSize="icon-sm"
-        class="absolute top-2 ltr:right-2 rtl:left-2"
+        class="absolute end-2 top-2"
         (click)="closeRequested.emit()"
       >
         <ng-icon name="lucideX" class="size-4!" />
@@ -100,7 +100,7 @@ export class ZardDialogPanelComponent {
   private readonly focusTrapFactory = inject(FocusTrapFactory);
   private readonly destroyRef = inject(DestroyRef);
 
-  /** Renders the close button in the top-right corner. */
+  /** Renders the close button in the top corner on the inline-end side. */
   readonly zClosable = input(true, { transform: booleanAttribute });
   /** Explicit width; leave unset for the responsive default. */
   readonly zWidth = input<string | undefined>(undefined);

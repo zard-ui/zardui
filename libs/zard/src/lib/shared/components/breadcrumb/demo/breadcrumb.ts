@@ -4,6 +4,7 @@ import { BREADCRUMB_DEMO_CUSTOM_SEPARATOR } from '@generated/components/breadcru
 import { BREADCRUMB_DEMO_DROPDOWN } from '@generated/components/breadcrumb/demo/dropdown';
 import { BREADCRUMB_DEMO_LINK } from '@generated/components/breadcrumb/demo/link';
 import { BREADCRUMB_DEMO_PREVIEW } from '@generated/components/breadcrumb/demo/preview';
+import { BREADCRUMB_DEMO_RTL } from '@generated/components/breadcrumb/demo/rtl';
 import { BREADCRUMB_CLI_ADD } from '@generated/installation/cli/add-breadcrumb';
 import { BREADCRUMB_MANUAL_CODE } from '@generated/installation/manual/breadcrumb';
 import { BREADCRUMB_USAGE_IMPORT, BREADCRUMB_USAGE_CODE } from '@generated/usage/breadcrumb';
@@ -14,6 +15,7 @@ import { ZardDemoBreadcrumbCustomSeparatorComponent } from './custom-separator';
 import { ZardDemoBreadcrumbDropdownComponent } from './dropdown';
 import { ZardDemoBreadcrumbLinkComponent } from './link';
 import { ZardDemoBreadcrumbPreviewComponent } from './preview';
+import { ZardDemoBreadcrumbRtlComponent } from './rtl';
 import { BREADCRUMB_API } from '../doc/api';
 
 export const BREADCRUMB = {
@@ -65,6 +67,13 @@ export const BREADCRUMB = {
         'Bind `[routerLink]` on `z-breadcrumb-link` to navigate through the Angular `Router` instead of a full page reload.',
       component: ZardDemoBreadcrumbLinkComponent,
       codeData: BREADCRUMB_DEMO_LINK,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoBreadcrumbRtlComponent,
+      codeData: BREADCRUMB_DEMO_RTL,
     },
   ],
 };

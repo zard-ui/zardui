@@ -15,6 +15,7 @@ import { JANUARY_2026 } from './2026/january-2026';
 import { JULY_2026 } from './2026/july-2026';
 import { MARCH_2026 } from './2026/march-2026';
 import { MAY_2026 } from './2026/may-2026';
+import { OCTOBER_2026 } from './2026/october-2026';
 import { SEPTEMBER_2026 } from './2026/september-2026';
 import { type ChangelogEntry } from './changelog-entry.interface';
 
@@ -30,6 +31,7 @@ import { type ChangelogEntry } from './changelog-entry.interface';
  * so there is nothing to curate. Do not add an empty placeholder for it.
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
+  OCTOBER_2026,
   SEPTEMBER_2026,
   AUGUST_2026,
   JULY_2026,

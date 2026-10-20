@@ -31,7 +31,7 @@ import { ZardComboboxRoot } from './combobox.types';
     type: 'button',
     tabindex: '-1',
     // Bound instead of static so it wins over the `data-slot` of a co-located `z-button`.
-    // The `has-data-[slot=combobox-chip-remove]:pr-0` rule on the chip depends on it.
+    // The `has-data-[slot=combobox-chip-remove]:pe-0` rule on the chip depends on it.
     '[attr.data-slot]': '"combobox-chip-remove"',
     '[attr.aria-label]': '"Remove " + zValue()',
     '[class]': 'classes()',

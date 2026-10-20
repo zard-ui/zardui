@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 
+import { checkA11y } from '../utils/axe-helper';
 import { ComponentDemoPage } from '../utils/component-page';
 
 test.describe('Sonner (Toast) component', () => {
@@ -70,5 +71,22 @@ test.describe('Sonner (Toast) component', () => {
     );
 
     expect(isTopmost).toBe(true);
+  });
+
+  test('RTL example shows a toast with the RTL direction', async ({ page }) => {
+    const demoPage = new ComponentDemoPage(page, 'sonner');
+    await demoPage.goto();
+
+    const rtlDemo = demoPage.getDemoByName('rtl');
+    await rtlDemo.scrollIntoViewIfNeeded();
+    const preview = rtlDemo.locator('[data-slot="preview"]');
+    await expect(preview).toHaveAttribute('dir', 'rtl');
+    await preview.locator('button[z-button]').click();
+    const toast = page.locator('[data-sonner-toast]').first();
+    await expect(toast).toBeVisible({ timeout: 5000 });
+    await expect(toast).toContainText('تم إنشاء الحدث');
+    await expect.poll(() => toast.evaluate(el => getComputedStyle(el).direction)).toBe('rtl');
+
+    await checkA11y(page, '[id="rtl"]', ['color-contrast']);
   });
 });

@@ -63,7 +63,7 @@ describe('ZardBubbleComponent', () => {
     expect(reactions?.getAttribute('data-side')).toBe('top');
     expect(reactions?.getAttribute('data-align')).toBe('start');
     expect(reactions?.className).toContain('top-0');
-    expect(reactions?.className).toContain('left-3');
+    expect(reactions?.className).toContain('start-3');
   });
 
   it('defaults the reactions row to the bottom end corner', async () => {

@@ -1,6 +1,7 @@
 import { ATTACHMENT_DEMO_GROUP } from '@generated/components/attachment/demo/group';
 import { ATTACHMENT_DEMO_IMAGE } from '@generated/components/attachment/demo/image';
 import { ATTACHMENT_DEMO_PREVIEW } from '@generated/components/attachment/demo/preview';
+import { ATTACHMENT_DEMO_RTL } from '@generated/components/attachment/demo/rtl';
 import { ATTACHMENT_DEMO_SIZES } from '@generated/components/attachment/demo/sizes';
 import { ATTACHMENT_DEMO_STATES } from '@generated/components/attachment/demo/states';
 import { ATTACHMENT_DEMO_TRIGGER } from '@generated/components/attachment/demo/trigger';
@@ -11,6 +12,7 @@ import { ATTACHMENT_USAGE_CODE, ATTACHMENT_USAGE_IMPORT } from '@generated/usage
 import { ZardDemoAttachmentGroupComponent } from './group';
 import { ZardDemoAttachmentImageComponent } from './image';
 import { ZardDemoAttachmentPreviewComponent } from './preview';
+import { ZardDemoAttachmentRtlComponent } from './rtl';
 import { ZardDemoAttachmentSizesComponent } from './sizes';
 import { ZardDemoAttachmentStatesComponent } from './states';
 import { ZardDemoAttachmentTriggerComponent } from './trigger';
@@ -37,5 +39,12 @@ export const ATTACHMENT = {
     { name: 'sizes', component: ZardDemoAttachmentSizesComponent, codeData: ATTACHMENT_DEMO_SIZES },
     { name: 'group', component: ZardDemoAttachmentGroupComponent, codeData: ATTACHMENT_DEMO_GROUP },
     { name: 'trigger', component: ZardDemoAttachmentTriggerComponent, codeData: ATTACHMENT_DEMO_TRIGGER },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoAttachmentRtlComponent,
+      codeData: ATTACHMENT_DEMO_RTL,
+    },
   ],
 };

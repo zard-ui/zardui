@@ -1,6 +1,6 @@
+import { Directionality } from '@angular/cdk/bidi';
 import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import type { ConnectedPosition } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import {
   afterNextRender,
@@ -33,7 +33,7 @@ import {
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardNavigationMenuManagerService } from './navigation-menu-manager.service';
-import { NAVIGATION_MENU_POSITIONS_MAP, type ZardNavigationMenuPlacement } from './navigation-menu-positions';
+import { getNavigationMenuPositions, type ZardNavigationMenuPlacement } from './navigation-menu-positions';
 import { ZardNavigationMenuService } from './navigation-menu.service';
 
 export type ZardNavigationMenuTriggerMode = 'click' | 'hover';
@@ -78,6 +78,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly injector = inject(Injector);
+  private readonly directionality = inject(Directionality, { optional: true });
   /** Absent when the trigger is used outside a `<z-navigation-menu>`, which forces overlay mode. */
   private readonly service = inject(ZardNavigationMenuService, { optional: true });
 
@@ -113,7 +114,9 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
     this.isViewportMode() ? (this.service?.isActive(this.index) ?? false) : this.overlayOpen(),
   );
 
-  private readonly menuPositions = computed(() => this.getPositionsByPlacement(this.zPlacement()));
+  private readonly menuPositions = computed(() =>
+    getNavigationMenuPositions(this.zPlacement(), (this.directionality?.valueSignal() ?? 'ltr') === 'rtl'),
+  );
 
   constructor() {
     effect(() => {
@@ -276,10 +279,6 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
       },
       { injector: this.injector },
     );
-  }
-
-  private getPositionsByPlacement(placement: ZardNavigationMenuPlacement): ConnectedPosition[] {
-    return NAVIGATION_MENU_POSITIONS_MAP[placement] || NAVIGATION_MENU_POSITIONS_MAP['bottomLeft'];
   }
 
   /**

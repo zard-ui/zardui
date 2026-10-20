@@ -17,7 +17,7 @@ export const sliderThumbVariants = cva(
 export const sliderOrientationVariants = cva('absolute', {
   variants: {
     zOrientation: {
-      horizontal: 'translate-x-[-50%]',
+      horizontal: 'translate-x-[-50%] rtl:translate-x-[50%]',
       vertical: 'translate-y-[50%]',
     },
   },

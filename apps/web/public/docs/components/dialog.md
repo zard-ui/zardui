@@ -18,6 +18,7 @@ npx zard-cli@latest add dialog
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -45,7 +46,7 @@ import {
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import { filter, takeUntil } from 'rxjs';
 
 import { ZardStringTemplateOutletDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
@@ -110,6 +111,8 @@ const ESCAPE_KEYS = ['Escape', 'Esc'];
 })
 export class ZardDialogComponent extends ZardDialogHost {
   private readonly overlay = inject(Overlay);
+  // Optional: the direction of the declaration site, which is where the overlay content takes its dir from.
+  private readonly directionality = inject(Directionality, { optional: true });
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
@@ -117,7 +120,7 @@ export class ZardDialogComponent extends ZardDialogHost {
 
   /** Open state, two-way bound. */
   readonly zVisible = model(false);
-  /** Renders the close button in the top-right corner. */
+  /** Renders the close button in the top corner on the inline-end side. */
   readonly zClosable = input(true, { transform: booleanAttribute });
   /** Whether a click on the mask closes the dialog. */
   readonly zMaskClosable = input(true, { transform: booleanAttribute });
@@ -178,6 +181,7 @@ export class ZardDialogComponent extends ZardDialogHost {
 
     const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: this.directionality?.value ?? 'ltr',
         hasBackdrop: true,
         backdropClass: DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
@@ -186,6 +190,11 @@ export class ZardDialogComponent extends ZardDialogHost {
       }),
     );
     this.overlayRef = overlayRef;
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    this.directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(this.directionality?.value ?? 'ltr'));
 
     overlayRef.attach(new TemplatePortal(this.panel(), this.viewContainerRef));
 
@@ -730,7 +739,7 @@ export const DIALOG_DURATION = 100;
         z-button
         zType="ghost"
         zSize="icon-sm"
-        class="absolute top-2 ltr:right-2 rtl:left-2"
+        class="absolute end-2 top-2"
         (click)="closeRequested.emit()"
       >
         <ng-icon name="lucideX" class="size-4!" />
@@ -786,7 +795,7 @@ export class ZardDialogPanelComponent {
   private readonly focusTrapFactory = inject(FocusTrapFactory);
   private readonly destroyRef = inject(DestroyRef);
 
-  /** Renders the close button in the top-right corner. */
+  /** Renders the close button in the top corner on the inline-end side. */
   readonly zClosable = input(true, { transform: booleanAttribute });
   /** Explicit width; leave unset for the responsive default. */
   readonly zWidth = input<string | undefined>(undefined);
@@ -877,6 +886,7 @@ export const ZardDialogImports = [
 ```
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -889,6 +899,8 @@ import {
   TemplateRef,
   type ViewContainerRef,
 } from '@angular/core';
+
+import { takeUntil } from 'rxjs';
 
 import { ZardDialogContainerComponent, ZardDialogOptions } from './dialog-container.component';
 import { ZardDialogRef } from './dialog-ref';
@@ -917,6 +929,8 @@ export class ZardDialogService {
   private readonly overlay = inject(Overlay);
   private readonly injector = inject(Injector);
   private readonly platformId = inject(PLATFORM_ID);
+  // Optional: the direction of <html>, used when the caller gives no zViewContainerRef to inherit one from.
+  private readonly rootDirectionality = inject(Directionality, { optional: true });
 
   /**
    * Opens a dialog with the given configuration.
@@ -929,7 +943,7 @@ export class ZardDialogService {
       return new ZardDialogRef<T>(null, config, null, this.platformId);
     }
 
-    const overlayRef = this.createOverlay();
+    const overlayRef = this.createOverlay(config);
     const dialogContainer = this.attachDialogContainer<T, U>(overlayRef, config);
     const dialogRef = this.attachDialogContent<T, U>(
       config.zContent as ContentType<T>,
@@ -943,15 +957,29 @@ export class ZardDialogService {
     return dialogRef;
   }
 
-  private createOverlay(): OverlayRef {
-    return this.overlay.create(
+  private createOverlay<T, U>(config: ZardDialogOptions<T, U>): OverlayRef {
+    const directionality = this.directionalityFor(config.zViewContainerRef);
+    const overlayRef = this.overlay.create(
       new OverlayConfig({
+        direction: directionality?.value ?? 'ltr',
         hasBackdrop: true,
         backdropClass: DIALOG_BACKDROP_CLASSES,
         positionStrategy: this.overlay.position().global(),
         scrollStrategy: this.overlay.scrollStrategies.block(),
       }),
     );
+
+    // A [dir] switch while the overlay is open updates it in place: the panel keeps its content and mirrors.
+    directionality?.change
+      .pipe(takeUntil(overlayRef.detachments()))
+      .subscribe(() => overlayRef.setDirection(directionality.value));
+
+    return overlayRef;
+  }
+
+  /** The direction of where the overlay was requested from (zViewContainerRef), falling back to <html>. */
+  private directionalityFor(viewContainerRef?: ViewContainerRef): Directionality | null {
+    return viewContainerRef?.injector.get(Directionality, null) ?? this.rootDirectionality;
   }
 
   private attachDialogContainer<T, U>(overlayRef: OverlayRef, config: ZardDialogOptions<T, U>) {
@@ -1360,11 +1388,118 @@ export class ZardDemoDialogScrollableContentComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface DialogRtlStrings {
+  openDialog: string;
+  editProfile: string;
+  description: string;
+  name: string;
+  username: string;
+  cancel: string;
+  saveChanges: string;
+}
+
+const translations: ZardRtlTranslations<DialogRtlStrings> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      openDialog: 'Open Dialog',
+      editProfile: 'Edit profile',
+      description: "Make changes to your profile here. Click save when you're done.",
+      name: 'Name',
+      username: 'Username',
+      cancel: 'Cancel',
+      saveChanges: 'Save changes',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      openDialog: 'فتح الحوار',
+      editProfile: 'تعديل الملف الشخصي',
+      description: 'قم بإجراء تغييرات على ملفك الشخصي هنا. انقر فوق حفظ عند الانتهاء.',
+      name: 'الاسم',
+      username: 'اسم المستخدم',
+      cancel: 'إلغاء',
+      saveChanges: 'حفظ التغييرات',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      openDialog: 'פתח דיאלוג',
+      editProfile: 'ערוך פרופיל',
+      description: 'בצע שינויים בפרופיל שלך כאן. לחץ על שמור כשתסיים.',
+      name: 'שם',
+      username: 'שם משתמש',
+      cancel: 'בטל',
+      saveChanges: 'שמור שינויים',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-dialog-rtl',
+  imports: [ZardButtonComponent, ZardDialogImports, ZardInputComponent],
+  template: `
+    @let t = i18n.t();
+    <button type="button" z-button zType="outline" (click)="visible.set(true)">{{ t.openDialog }}</button>
+
+    <z-dialog [(zVisible)]="visible">
+      <z-dialog-header>
+        <z-dialog-title>{{ t.editProfile }}</z-dialog-title>
+        <z-dialog-description>{{ t.description }}</z-dialog-description>
+      </z-dialog-header>
+
+      <div class="grid gap-4">
+        <div class="grid gap-3">
+          <label for="dialog-rtl-name" class="text-sm leading-none font-medium select-none">{{ t.name }}</label>
+          <input z-input id="dialog-rtl-name" value="Pedro Duarte" />
+        </div>
+        <div class="grid gap-3">
+          <label for="dialog-rtl-username" class="text-sm leading-none font-medium select-none">
+            {{ t.username }}
+          </label>
+          <input z-input id="dialog-rtl-username" value="&#64;peduarte" />
+        </div>
+      </div>
+
+      <z-dialog-footer>
+        <button type="button" z-button zType="outline" z-dialog-close>{{ t.cancel }}</button>
+        <button type="button" z-button (click)="visible.set(false)">{{ t.saveChanges }}</button>
+      </z-dialog-footer>
+    </z-dialog>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDialogRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly visible = signal(false);
+}
+```
+
 ## API Reference
 
 ### z-dialog
 
-Root of a declarative dialog. Holds the open state and projects its content into the panel, which exposes `data-state` (`open` | `closed`) while the enter and leave transitions run.
+Root of a declarative dialog. Holds the open state and projects its content into the panel, which exposes `data-state` (`open` | `closed`) while the enter and leave transitions run. The overlay takes the direction of where the dialog is declared: in RTL the close button moves to the left corner and the footer buttons mirror, while the panel stays centered.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

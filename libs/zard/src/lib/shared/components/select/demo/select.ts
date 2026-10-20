@@ -5,6 +5,7 @@ import { SELECT_DEMO_INVALID } from '@generated/components/select/demo/invalid';
 import { SELECT_DEMO_MULTI_SELECT } from '@generated/components/select/demo/multi-select';
 import { SELECT_DEMO_PREVIEW } from '@generated/components/select/demo/preview';
 import { SELECT_DEMO_REACTIVE_FORMS } from '@generated/components/select/demo/reactive-forms';
+import { SELECT_DEMO_RTL } from '@generated/components/select/demo/rtl';
 import { SELECT_DEMO_SCROLLABLE } from '@generated/components/select/demo/scrollable';
 import { SELECT_CLI_ADD } from '@generated/installation/cli/add-select';
 import { SELECT_MANUAL_CODE } from '@generated/installation/manual/select';
@@ -18,6 +19,7 @@ import { ZardDemoSelectInvalidComponent } from './invalid';
 import { ZardDemoSelectMultiSelectComponent } from './multi-select';
 import { ZardDemoSelectPreviewComponent } from './preview';
 import { ZardDemoSelectReactiveFormsComponent } from './reactive-forms';
+import { ZardDemoSelectRtlComponent } from './rtl';
 import { ZardDemoSelectScrollableComponent } from './scrollable';
 import { SELECT_API } from '../doc/api';
 
@@ -112,6 +114,13 @@ export const SELECT = {
         "`formControlName` binds through `z-select`'s `ControlValueAccessor`, for both a single select and a `zMultiple` one — the multiselect control just carries a `string[]` value.",
       component: ZardDemoSelectReactiveFormsComponent,
       codeData: SELECT_DEMO_REACTIVE_FORMS,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoSelectRtlComponent,
+      codeData: SELECT_DEMO_RTL,
     },
   ],
 };

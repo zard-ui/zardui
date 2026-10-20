@@ -9,7 +9,8 @@ export const SHEET_API: ApiSection[] = [
       { name: '[zVisible]', description: 'Open state, two-way bound', type: 'boolean', default: 'false' },
       {
         name: '[zSide]',
-        description: 'Edge of the screen the sheet slides from',
+        description:
+          'Edge of the screen the sheet slides from. Physical in RTL too: pick `left` to open from the inline-start edge of a right-to-left page',
         type: "'top' | 'right' | 'bottom' | 'left'",
         default: "'right'",
       },

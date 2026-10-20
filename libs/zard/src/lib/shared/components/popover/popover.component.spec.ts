@@ -1,9 +1,11 @@
-import { OverlayModule } from '@angular/cdk/overlay';
+import { Directionality } from '@angular/cdk/bidi';
+import { type ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
 import { Component, type DebugElement, type TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { type ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { render, screen } from '@testing-library/angular';
+import { Subject } from 'rxjs';
 import '@testing-library/jest-dom';
 
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
@@ -636,4 +638,88 @@ describe('ZardPopoverComponent with hover trigger', () => {
       overlayContainer.innerHTML = '';
     }
   });
+});
+
+describe('ZardPopoverDirective direction', () => {
+  const change = new Subject<'ltr' | 'rtl'>();
+  let direction: 'ltr' | 'rtl';
+  let fixture: ComponentFixture<TestComponent>;
+
+  function setup(initial: 'ltr' | 'rtl', placement: ZardPopoverPlacement = 'bottom') {
+    direction = initial;
+    TestBed.configureTestingModule({
+      imports: [OverlayModule, TestComponent],
+      providers: [
+        { provide: EVENT_MANAGER_PLUGINS, useClass: ZardEventManagerPlugin, multi: true },
+        {
+          provide: Directionality,
+          useValue: {
+            get value() {
+              return direction;
+            },
+            change,
+          },
+        },
+      ],
+    });
+    fixture = TestBed.createComponent(TestComponent);
+    fixture.componentInstance.placement = placement;
+    fixture.detectChanges();
+  }
+
+  function open() {
+    fixture.debugElement.query(By.css('button')).nativeElement.click();
+    fixture.detectChanges();
+  }
+
+  function primaryPosition(): ConnectedPosition {
+    const directive = fixture.debugElement.query(By.directive(ZardPopoverDirective)).injector.get(ZardPopoverDirective);
+    return (directive as unknown as { getPositions(): ConnectedPosition[] }).getPositions()[0];
+  }
+
+  afterEach(() => {
+    fixture.destroy();
+    document.querySelector('.cdk-overlay-container')?.replaceChildren();
+  });
+
+  it('passes the trigger direction to the overlay', () => {
+    setup('rtl');
+    open();
+    expect(document.querySelector('.cdk-overlay-container [dir="rtl"]')).not.toBeNull();
+    expect(document.querySelector('.cdk-overlay-container [dir="ltr"]')).toBeNull();
+  });
+
+  it('keeps the overlay ltr when the trigger is ltr', () => {
+    setup('ltr');
+    open();
+    expect(document.querySelector('.cdk-overlay-container [dir="ltr"]')).not.toBeNull();
+  });
+
+  it('keeps a physical side on the left in RTL, with the gap pushing left', () => {
+    setup('rtl', 'left');
+    const primary = primaryPosition();
+    // In RTL the physical left is CDK `end`.
+    expect(primary.originX).toBe('end');
+    expect(primary.overlayX).toBe('start');
+    expect(primary.offsetX).toBe(-4);
+  });
+
+  it('places inline-start on the physical right in RTL', () => {
+    setup('rtl', 'inline-start');
+    const primary = primaryPosition();
+    expect(primary.originX).toBe('start');
+    expect(primary.offsetX).toBe(4);
+  });
+
+  it('closes an open panel when the direction changes', fakeAsync(() => {
+    setup('rtl');
+    open();
+    expect(queryPopover()).not.toBeNull();
+
+    direction = 'ltr';
+    change.next('ltr');
+    fixture.detectChanges();
+    tick(ZARD_POPOVER_ANIMATION_DURATION);
+    expect(queryPopover()).toBeNull();
+  }));
 });

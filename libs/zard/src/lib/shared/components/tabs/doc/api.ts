@@ -3,7 +3,8 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const TABS_API: ApiSection[] = [
   {
     selector: 'z-tab-group',
-    description: 'A set of layered sections of content — known as tab panels — displayed one at a time.',
+    description:
+      'A set of layered sections of content — known as tab panels — displayed one at a time. Arrow keys, Home and End move between enabled tabs; in right-to-left layouts the horizontal arrows follow the visual order (ArrowRight moves to the previous tab).',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {

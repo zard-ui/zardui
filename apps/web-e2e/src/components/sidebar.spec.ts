@@ -124,3 +124,59 @@ test.describe('Sidebar component', () => {
     await checkA11y(page, '#overview', ['button-name', 'color-contrast']);
   });
 });
+
+test.describe('Sidebar component RTL', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.context().clearCookies();
+  });
+
+  test('docks on the right, flips the trigger icon and opens the tooltip towards the content', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    const demoPage = new ComponentDemoPage(page, 'sidebar');
+    await demoPage.goto();
+
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.scrollIntoViewIfNeeded();
+    await expect(demo.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'rtl');
+
+    const sidebar = demo.locator('[data-slot="sidebar"]');
+    await expect(sidebar).toHaveAttribute('data-side', 'right');
+    await expect(sidebar).toHaveAttribute('dir', 'rtl');
+
+    const wrapperBox = (await demo.locator('[data-slot="sidebar-wrapper"]').boundingBox())!;
+    const panelBox = (await sidebar.locator('[data-slot="sidebar-container"]').boundingBox())!;
+    expect(panelBox.x + panelBox.width / 2).toBeGreaterThan(wrapperBox.x + wrapperBox.width / 2);
+
+    const triggerIcon = demo.locator('[data-slot="sidebar-trigger"] ng-icon').first();
+    expect(await triggerIcon.evaluate(el => getComputedStyle(el).rotate)).toBe('180deg');
+
+    // Collapsed to icons: the tooltip of a button opens on the physical left of a right-hand sidebar.
+    await demo.locator('[data-slot="sidebar-trigger"]').click();
+    await expect(sidebar).toHaveAttribute('data-state', 'collapsed');
+    await demo.locator('[z-collapsible-trigger]').first().hover();
+    const tooltip = page.locator('[data-slot="tooltip-content"]');
+    await expect(tooltip).toBeVisible();
+    await expect(tooltip).toHaveAttribute('data-side', 'left');
+
+    await checkA11y(page, '#rtl', ['button-name', 'color-contrast']);
+  });
+
+  test('opens the mobile drawer from the right, with dir rtl', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    const demoPage = new ComponentDemoPage(page, 'sidebar');
+    await demoPage.goto();
+
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.scrollIntoViewIfNeeded();
+    await demo.locator('[data-slot="sidebar-trigger"]').click();
+
+    const drawer = demo.locator('[data-sidebar="sidebar"][data-mobile="true"]');
+    await expect(drawer).toHaveAttribute('data-state', 'open');
+    await expect(drawer).toHaveAttribute('data-side', 'right');
+    expect(await drawer.evaluate(el => getComputedStyle(el).direction)).toBe('rtl');
+
+    const box = (await drawer.boundingBox())!;
+    const viewport = page.viewportSize()!;
+    expect(box.x + box.width / 2).toBeGreaterThan(viewport.width / 2);
+  });
+});

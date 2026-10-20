@@ -147,4 +147,54 @@ test.describe('Select component', () => {
     const triggerBox = await select.locator('[role="combobox"]').boundingBox();
     expect(listboxBox!.y + listboxBox!.height).toBeLessThanOrEqual(triggerBox!.y + 1);
   });
+
+  test('RTL example opens a panel with the direction of its trigger and the check on the inline-end side', async ({
+    page,
+  }) => {
+    await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.waitFor({ state: 'attached', timeout: 15_000 });
+    await demo.scrollIntoViewIfNeeded();
+    await expect(demo.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'rtl');
+
+    const trigger = demo.locator('[data-slot="preview"] z-select [role="combobox"]');
+    await trigger.click();
+
+    const listbox = page.locator('[data-slot="select-content"][role="listbox"]').last();
+    await expect(listbox).toBeVisible({ timeout: 5000 });
+    await expect(listbox.locator('xpath=ancestor::*[@dir][1]')).toHaveAttribute('dir', 'rtl');
+
+    // Aligned to the trigger's inline-start (right) edge, with the item padding on logical edges.
+    const triggerBox = await trigger.boundingBox();
+    const listboxBox = await listbox.boundingBox();
+    expect(listboxBox!.x + listboxBox!.width).toBeCloseTo(triggerBox!.x + triggerBox!.width, -1);
+
+    await listbox.locator('z-select-item').nth(1).click();
+    await trigger.click();
+    const selected = listbox
+      .locator('z-select-item[aria-selected="true"], z-select-item[data-selected="true"]')
+      .first();
+    await expect(selected).toBeVisible({ timeout: 5000 });
+    const itemBox = await selected.boundingBox();
+    const checkBox = await selected.locator('[data-testid="check-icon"]').boundingBox();
+    // The selection check sits on the inline-end (left) side in RTL.
+    expect(checkBox!.x + checkBox!.width / 2).toBeLessThan(itemBox!.x + itemBox!.width / 2);
+  });
+
+  test('RTL example passes accessibility checks when open', async ({ page }) => {
+    await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.waitFor({ state: 'attached', timeout: 15_000 });
+    await demo.scrollIntoViewIfNeeded();
+    await demo.locator('[data-slot="preview"] z-select [role="combobox"]').click();
+    await expect(page.locator('[data-slot="select-content"][role="listbox"]').last()).toBeVisible({ timeout: 5000 });
+    // `aria-required-children` is the grouped-listbox structure (a `role=separator` inside the listbox) shared with the
+    // groups demo: it is not specific to the RTL example.
+    await checkA11y(page, undefined, [
+      'button-name',
+      'color-contrast',
+      'scrollable-region-focusable',
+      'aria-required-children',
+    ]);
+  });
 });

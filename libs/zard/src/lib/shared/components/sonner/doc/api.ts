@@ -51,7 +51,8 @@ export const SONNER_API: ApiSection[] = [
       },
       {
         name: '[dir]',
-        description: 'Text direction for toasts.',
+        description:
+          'Text direction for toasts. `auto` follows the CDK `Directionality` (the `dir` of `<html>` or a `Dir` subtree). Toast positions such as `top-left` are physical by design and do not mirror; to change the direction of a single toast, pass `class: "[direction:rtl]"` in its options.',
         type: "'ltr' | 'rtl' | 'auto'",
         default: "'auto'",
       },

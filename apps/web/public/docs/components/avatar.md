@@ -190,7 +190,7 @@ export const imageVariants = cva(
 );
 
 export const avatarBadgeVariants = mergeClasses(
-  'absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground bg-blend-color ring-2 ring-background select-none',
+  'absolute end-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground bg-blend-color ring-2 ring-background select-none',
   'group-data-[size=sm]/avatar:size-2 group-data-[size=sm]/avatar:[&>svg]:hidden',
   'group-data-[size=default]/avatar:size-2.5 group-data-[size=default]/avatar:[&>svg]:size-2',
   'group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg]:size-2',
@@ -252,7 +252,7 @@ import { avatarGroupCountVariants, type ZardAvatarSizeVariants } from './avatar.
 @Component({
   selector: 'z-avatar-group-count, [z-avatar-group-count]',
   template: `
-    +{{ zCount() }}
+    <bdi>+{{ zCount() }}</bdi>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -609,6 +609,56 @@ export class ZardDemoAvatarDropdownComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardAvatarGroupCountComponent } from '@/shared/components/avatar/avatar-group-count.component';
+import { ZardAvatarGroupComponent } from '@/shared/components/avatar/avatar-group.component';
+import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ online: string; user: string }> = {
+  en: { dir: 'ltr', values: { online: 'Online', user: 'User' } },
+  ar: { dir: 'rtl', values: { online: 'متصل', user: 'مستخدم' } },
+  he: { dir: 'rtl', values: { online: 'מחובר', user: 'משתמש' } },
+};
+
+@Component({
+  selector: 'z-demo-avatar-rtl',
+  imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardAvatarGroupCountComponent],
+  template: `
+    <div class="flex flex-row flex-wrap items-center gap-6 md:gap-12">
+      <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" [zAlt]="i18n.t().user" zFallback="RS" class="grayscale" />
+      <z-avatar
+        zFallback="LG"
+        [zAlt]="i18n.t().online"
+        [zShowBadge]="true"
+        zBadgeClass="bg-green-600 dark:bg-green-800"
+      />
+      <z-avatar-group class="grayscale">
+        <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" [zAlt]="i18n.t().user" zFallback="RS" />
+        <z-avatar zFallback="SR" />
+        <z-avatar zFallback="MR" />
+        <z-avatar-group-count [zCount]="3" />
+      </z-avatar-group>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoAvatarRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
+```
+
 ## API Reference
 
 ### z-avatar
@@ -629,7 +679,7 @@ An image element with a fallback for representing the user.
 
 ### z-avatar-group
 
-A group container for displaying multiple avatars.
+A group container for displaying multiple avatars. The overlap stacks toward the inline end, so it mirrors in RTL.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

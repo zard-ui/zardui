@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -52,7 +53,7 @@ const DEFAULT_TOAST_OPTIONS: ToasterProps['toastOptions'] = {
       [visibleToasts]="visibleToasts()"
       [closeButton]="closeButton()"
       [toastOptions]="resolvedToastOptions()"
-      [dir]="dir()"
+      [dir]="resolvedDir()"
     >
       <ng-icon loading-icon name="lucideLoader2" class="size-4 [&>svg]:animate-spin" />
       <ng-icon success-icon name="lucideCircleCheck" class="size-4" />
@@ -109,6 +110,14 @@ export class ZardSonnerComponent {
    * and would otherwise cover them regardless of `z-index`.
    */
   readonly topLayer = input(true, { transform: booleanAttribute });
+
+  private readonly directionality = inject(Directionality, { optional: true });
+
+  /** `auto` follows the CDK `Directionality` at the toaster's injection point (the `<html dir>` or a `Dir` subtree). */
+  protected readonly resolvedDir = computed<'ltr' | 'rtl' | 'auto'>(() => {
+    const dir = this.dir();
+    return dir === 'auto' ? (this.directionality?.valueSignal() ?? 'auto') : dir;
+  });
 
   protected readonly classes = computed(() => mergeClasses(sonnerVariants(), this.class()));
   protected readonly resolvedStyle = computed(() => ({ ...DEFAULT_STYLE, ...(this.style() ?? {}) }));

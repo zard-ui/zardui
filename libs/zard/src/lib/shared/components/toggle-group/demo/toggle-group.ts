@@ -2,6 +2,7 @@ import { TOGGLE_GROUP_DEMO_CUSTOM } from '@generated/components/toggle-group/dem
 import { TOGGLE_GROUP_DEMO_DISABLED } from '@generated/components/toggle-group/demo/disabled';
 import { TOGGLE_GROUP_DEMO_OUTLINE } from '@generated/components/toggle-group/demo/outline';
 import { TOGGLE_GROUP_DEMO_PREVIEW } from '@generated/components/toggle-group/demo/preview';
+import { TOGGLE_GROUP_DEMO_RTL } from '@generated/components/toggle-group/demo/rtl';
 import { TOGGLE_GROUP_DEMO_SIZE } from '@generated/components/toggle-group/demo/size';
 import { TOGGLE_GROUP_DEMO_SPACING } from '@generated/components/toggle-group/demo/spacing';
 import { TOGGLE_GROUP_DEMO_VERTICAL } from '@generated/components/toggle-group/demo/vertical';
@@ -15,6 +16,7 @@ import { ZardDemoToggleGroupVerticalComponent } from '@/shared/components/toggle
 import { ZardDemoToggleGroupDisabledComponent } from './disabled';
 import { ZardDemoToggleGroupOutlineComponent } from './outline';
 import { ZardDemoToggleGroupPreviewComponent } from './preview';
+import { ZardDemoToggleGroupRtlComponent } from './rtl';
 import { ZardDemoToggleGroupSizeComponent } from './size';
 import { ZardDemoToggleGroupSpacingComponent } from './spacing';
 import { TOGGLE_GROUP_API } from '../doc/api';
@@ -72,6 +74,13 @@ export const TOGGLE_GROUP = {
       description: 'A custom toggle group example.',
       component: ZardDemoToggleGroupCustomComponent,
       codeData: TOGGLE_GROUP_DEMO_CUSTOM,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoToggleGroupRtlComponent,
+      codeData: TOGGLE_GROUP_DEMO_RTL,
     },
   ],
 };

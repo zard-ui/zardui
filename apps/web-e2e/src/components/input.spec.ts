@@ -44,6 +44,25 @@ test.describe('Input component', () => {
     await expect(input).toBeDisabled();
   });
 
+  test('rtl example lays out the field right to left', async ({ page }) => {
+    const demo = demoPage.getDemoByName('rtl');
+    await demo.scrollIntoViewIfNeeded();
+    await expect(demo.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'rtl');
+
+    const input = demo.locator('input[z-input]');
+    await expect(input).toHaveCSS('direction', 'rtl');
+    await expect(input).toHaveCSS('text-align', 'start');
+    await input.fill('مرحبا');
+    await expect(input).toHaveValue('مرحبا');
+
+    // label and description hug the inline-start (right) edge of the field
+    const fieldBox = (await demo.locator('[z-field]').boundingBox())!;
+    const labelBox = (await demo.locator('[z-field-label]').boundingBox())!;
+    expect(labelBox.x + labelBox.width).toBeGreaterThan(fieldBox.x + fieldBox.width - 8);
+
+    await checkA11y(page, '#rtl', ['color-contrast']);
+  });
+
   test('passes accessibility checks', async ({ page }) => {
     // label: demo inputs use placeholder without associated <label>; button-name: icon-only buttons
     // color-contrast: Shiki syntax highlighting has insufficient contrast (4.3:1)

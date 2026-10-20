@@ -107,9 +107,9 @@ export class ZardPaginationButtonComponent {
       [zSize]="zSize()"
       [zDisabled]="zDisabled()"
     >
-      <span class="sr-only">To previous page</span>
+      <span class="sr-only">{{ label() }}</span>
       <ng-icon name="lucideChevronLeft" aria-hidden="true" class="rtl:rotate-180" />
-      <span class="hidden sm:block" aria-hidden="true">Previous</span>
+      <span class="hidden sm:block" aria-hidden="true">{{ zText() }}</span>
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -121,8 +121,11 @@ export class ZardPaginationPreviousComponent {
   readonly class = input<ClassValue>('');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zSize = input<PaginationNavSizeType>('default');
+  /** Visible label. Also the accessible name once it differs from the English default. */
+  readonly zText = input('Previous');
 
   protected readonly classes = computed(() => mergeClasses(paginationPreviousVariants(), this.class()));
+  protected readonly label = computed(() => (this.zText() === 'Previous' ? 'To previous page' : this.zText()));
 }
 
 @Component({
@@ -137,8 +140,8 @@ export class ZardPaginationPreviousComponent {
       [zDisabled]="zDisabled()"
       [zSize]="zSize()"
     >
-      <span class="sr-only">To next page</span>
-      <span class="hidden sm:block" aria-hidden="true">Next</span>
+      <span class="sr-only">{{ label() }}</span>
+      <span class="hidden sm:block" aria-hidden="true">{{ zText() }}</span>
       <ng-icon name="lucideChevronRight" aria-hidden="true" class="rtl:rotate-180" />
     </button>
   `,
@@ -151,8 +154,11 @@ export class ZardPaginationNextComponent {
   readonly class = input<ClassValue>('');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zSize = input<PaginationNavSizeType>('default');
+  /** Visible label. Also the accessible name once it differs from the English default. */
+  readonly zText = input('Next');
 
   protected readonly classes = computed(() => mergeClasses(paginationNextVariants(), this.class()));
+  protected readonly label = computed(() => (this.zText() === 'Next' ? 'To next page' : this.zText()));
 }
 
 @Component({
@@ -196,6 +202,7 @@ export class ZardPaginationEllipsisComponent {
             @let pagePrevious = Math.max(1, clampedIndex() - 1);
             <z-pagination-previous
               [zSize]="navSize()"
+              [zText]="zPreviousText()"
               [zDisabled]="zDisabled() || clampedIndex() === 1"
               (click)="goToPage(pagePrevious)"
             />
@@ -226,6 +233,7 @@ export class ZardPaginationEllipsisComponent {
             @let pageNext = Math.min(clampedIndex() + 1, zTotal());
             <z-pagination-next
               [zSize]="navSize()"
+              [zText]="zNextText()"
               [zDisabled]="zDisabled() || clampedIndex() === zTotal()"
               (click)="goToPage(pageNext)"
             />
@@ -248,7 +256,9 @@ export class ZardPaginationComponent {
   readonly zAriaLabel = input('Pagination');
   readonly zContent = input<TemplateRef<void> | undefined>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zNextText = input('Next');
   readonly zPageIndex = model<number>(1);
+  readonly zPreviousText = input('Previous');
   readonly zSimple = input(false, { transform: booleanAttribute });
   readonly zSize = input<PaginationItemSizeType>('icon');
   readonly zTotal = input<number>(1);

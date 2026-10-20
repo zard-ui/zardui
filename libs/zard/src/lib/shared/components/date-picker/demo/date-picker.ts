@@ -4,6 +4,7 @@ import { DATE_PICKER_DEMO_FORMATS } from '@generated/components/date-picker/demo
 import { DATE_PICKER_DEMO_INPUT } from '@generated/components/date-picker/demo/input';
 import { DATE_PICKER_DEMO_PREVIEW } from '@generated/components/date-picker/demo/preview';
 import { DATE_PICKER_DEMO_RANGE } from '@generated/components/date-picker/demo/range';
+import { DATE_PICKER_DEMO_RTL } from '@generated/components/date-picker/demo/rtl';
 import { DATE_PICKER_DEMO_SIZES } from '@generated/components/date-picker/demo/sizes';
 import { DATE_PICKER_DEMO_TIME_PICKER } from '@generated/components/date-picker/demo/time-picker';
 import { DATE_PICKER_CLI_ADD } from '@generated/installation/cli/add-date-picker';
@@ -16,6 +17,7 @@ import { ZardDemoDatePickerFormatsComponent } from './formats';
 import { ZardDemoDatePickerInputComponent } from './input';
 import { ZardDemoDatePickerPreviewComponent } from './preview';
 import { ZardDemoDatePickerRangeComponent } from './range';
+import { ZardDemoDatePickerRtlComponent } from './rtl';
 import { ZardDemoDatePickerSizesComponent } from './sizes';
 import { ZardDemoDatePickerTimePickerComponent } from './time-picker';
 import { DATE_PICKER_API } from '../doc/api';
@@ -80,6 +82,13 @@ export const DATE_PICKER = {
       description: '`zFormat` takes any Angular `DatePipe` pattern.',
       component: ZardDemoDatePickerFormatsComponent,
       codeData: DATE_PICKER_DEMO_FORMATS,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoDatePickerRtlComponent,
+      codeData: DATE_PICKER_DEMO_RTL,
     },
   ],
 };

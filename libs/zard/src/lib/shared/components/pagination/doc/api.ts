@@ -20,6 +20,20 @@ export const PAGINATION_API: ApiSection[] = [
         default: 'undefined',
       },
       { name: '[zDisabled]', description: 'Disables pagination interaction', type: 'boolean', default: 'false' },
+      {
+        name: '[zNextText]',
+        description:
+          'Visible label (and accessible name) of the built-in next button. Pass a translation for RTL languages.',
+        type: 'string',
+        default: "'Next'",
+      },
+      {
+        name: '[zPreviousText]',
+        description:
+          'Visible label (and accessible name) of the built-in previous button. Pass a translation for RTL languages.',
+        type: 'string',
+        default: "'Previous'",
+      },
       { name: '[zPageIndex]', description: 'Current page, two-way bindable', type: 'number', default: '1' },
       { name: '[(zPageIndex)]', description: 'Current page index', type: 'number', default: '1' },
       {
@@ -66,21 +80,33 @@ export const PAGINATION_API: ApiSection[] = [
   {
     selector: 'z-pagination-previous',
     description:
-      'Button to navigate to the previous page. Its "Previous" text and "To previous page" screen-reader label are fixed, not exposed as an input — for a translated or custom label, build the previous button yourself with a `[zContent]` template instead.',
+      'Button to navigate to the previous page. The chevron flips automatically in right-to-left layouts, so it always points outward. Use `[zText]` to translate the label.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       { name: '[zDisabled]', description: 'Whether the button is disabled', type: 'boolean', default: 'false' },
       { name: '[zSize]', description: 'Button size', type: "'default' | 'xs' | 'sm' | 'lg'", default: "'default'" },
+      {
+        name: '[zText]',
+        description: 'Visible label. Also the accessible name once it differs from the English default.',
+        type: 'string',
+        default: "'Previous'",
+      },
     ],
   },
   {
     selector: 'z-pagination-next',
     description:
-      'Button to navigate to the next page. Its "Next" text and "To next page" screen-reader label are fixed, not exposed as an input — for a translated or custom label, build the next button yourself with a `[zContent]` template instead.',
+      'Button to navigate to the next page. The chevron flips automatically in right-to-left layouts, so it always points outward. Use `[zText]` to translate the label.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       { name: '[zDisabled]', description: 'Whether the button is disabled', type: 'boolean', default: 'false' },
       { name: '[zSize]', description: 'Button size', type: "'default' | 'xs' | 'sm' | 'lg'", default: "'default'" },
+      {
+        name: '[zText]',
+        description: 'Visible label. Also the accessible name once it differs from the English default.',
+        type: 'string',
+        default: "'Next'",
+      },
     ],
   },
   {

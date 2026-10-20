@@ -4,7 +4,7 @@ export const DIALOG_API: ApiSection[] = [
   {
     selector: 'z-dialog',
     description:
-      'Root of a declarative dialog. Holds the open state and projects its content into the panel, which exposes `data-state` (`open` | `closed`) while the enter and leave transitions run.',
+      'Root of a declarative dialog. Holds the open state and projects its content into the panel, which exposes `data-state` (`open` | `closed`) while the enter and leave transitions run. The overlay takes the direction of where the dialog is declared: in RTL the close button moves to the left corner and the footer buttons mirror, while the panel stays centered.',
     props: [
       { name: '[zVisible]', description: 'Open state, two-way bound', type: 'boolean', default: 'false' },
       {

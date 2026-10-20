@@ -43,7 +43,8 @@ export const AVATAR_API: ApiSection[] = [
   },
   {
     selector: 'z-avatar-group',
-    description: 'A group container for displaying multiple avatars.',
+    description:
+      'A group container for displaying multiple avatars. The overlap stacks toward the inline end, so it mirrors in RTL.',
     props: [
       {
         name: '[zOrientation]',

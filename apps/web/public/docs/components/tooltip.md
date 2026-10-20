@@ -18,7 +18,13 @@ npx zard-cli@latest add tooltip
 ### Manual
 
 ```angular-ts
-import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
+import { Directionality, type Direction } from '@angular/cdk/bidi';
+import {
+  type FlexibleConnectedPositionStrategy,
+  Overlay,
+  OverlayPositionBuilder,
+  type OverlayRef,
+} from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -50,7 +56,11 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { filter, map, of, Subject, switchMap, tap, timer } from 'rxjs';
 
-import { TOOLTIP_POSITIONS_MAP } from '@/shared/components/tooltip/tooltip-positions';
+import {
+  getTooltipPosition,
+  resolveTooltipSide,
+  type ZardTooltipSide,
+} from '@/shared/components/tooltip/tooltip-positions';
 import {
   tooltipPositionVariants,
   tooltipVariants,
@@ -97,6 +107,8 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly renderer = inject(Renderer2);
+  // Optional: the direction of the trigger, which is where the overlay content takes its `dir` from.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   private ariaEffectRef?: ReturnType<typeof effect>;
   private componentRef?: ComponentRef<ZardTooltipComponent>;
@@ -104,9 +116,10 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private detachTimeoutId?: ReturnType<typeof setTimeout>;
   private listenersRefs: (() => void)[] = [];
   private overlayRef?: OverlayRef;
+  private positionStrategy?: FlexibleConnectedPositionStrategy;
 
   readonly zHideDelay = input(100, { transform: numberAttribute });
-  readonly zPosition = input<ZardTooltipPositionVariants>('top');
+  readonly zPosition = input<ZardTooltipSide>('top');
   readonly zPositionOffset = input(4);
   readonly zShowDelay = input(150, { transform: numberAttribute });
   readonly zTrigger = input<ZardTooltipTriggers>('hover');
@@ -127,17 +140,20 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      const position = TOOLTIP_POSITIONS_MAP[this.zPosition()];
-      const positionOffset = this.zPositionOffset();
-      if (this.zPosition() === 'top' || this.zPosition() === 'bottom') {
-        position.offsetY = this.zPosition() === 'top' ? -positionOffset : positionOffset;
-      } else {
-        position.offsetX = this.zPosition() === 'left' ? -positionOffset : positionOffset;
-      }
       const positionStrategy = this.overlayPositionBuilder
         .flexibleConnectedTo(this.elementRef)
-        .withPositions([position]);
-      this.overlayRef = this.overlay.create({ positionStrategy });
+        .withPositions([this.getPosition()]);
+      this.positionStrategy = positionStrategy;
+      this.overlayRef = this.overlay.create({ positionStrategy, direction: this.direction() });
+
+      // The direction changed (a `[dir]` switch): drop the tooltip, it reopens with the new direction.
+      this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+        this.overlayRef?.setDirection(this.direction());
+        this.positionStrategy?.withPositions([this.getPosition()]);
+        if (this.componentRef) {
+          this.delay(false, 0);
+        }
+      });
 
       runInInjectionContext(this.injector, () => {
         toObservable(this.zTrigger)
@@ -172,6 +188,14 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.delaySubject?.complete();
     this.cleanupTriggerEvents();
     this.overlayRef?.dispose();
+  }
+
+  private direction(): Direction {
+    return this.directionality?.value ?? 'ltr';
+  }
+
+  private getPosition() {
+    return getTooltipPosition(this.zPosition(), this.zPositionOffset(), this.direction() === 'rtl');
   }
 
   private initTriggers() {
@@ -271,7 +295,10 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
       this.componentRef = undefined;
     });
     this.componentRef?.instance.state.set('open');
-    this.componentRef?.instance.setProps(this.tooltipText(), this.zPosition());
+    this.componentRef?.instance.setProps(
+      this.tooltipText(),
+      resolveTooltipSide(this.zPosition(), this.direction() === 'rtl'),
+    );
     runInInjectionContext(this.injector, () => {
       this.ariaEffectRef = effect(() => {
         const tooltipId = this.componentRef?.instance.uniqueId()?.id();
@@ -363,7 +390,7 @@ export class ZardTooltipComponent {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const tooltipVariants = cva(
-  'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pr-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+  'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
 );
 export type ZardTooltipVariants = VariantProps<typeof tooltipVariants>;
 
@@ -390,6 +417,22 @@ export * from './tooltip.imports';
 
 ```angular-ts
 import type { ConnectedPosition } from '@angular/cdk/overlay';
+
+import type { ZardTooltipPositionVariants } from './tooltip.variants';
+
+/** Physical sides plus the logical ones, which follow the direction of the trigger. */
+export type ZardTooltipSide = ZardTooltipPositionVariants | 'inline-start' | 'inline-end';
+
+/** `inline-start` is the physical left in LTR and the physical right in RTL; physical sides pass through. */
+export function resolveTooltipSide(side: ZardTooltipSide, rtl: boolean): ZardTooltipPositionVariants {
+  if (side === 'inline-start') {
+    return rtl ? 'right' : 'left';
+  }
+  if (side === 'inline-end') {
+    return rtl ? 'left' : 'right';
+  }
+  return side;
+}
 
 export const TOOLTIP_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
   top: {
@@ -421,6 +464,43 @@ export const TOOLTIP_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
     offsetX: 4,
   },
 };
+
+/**
+ * Builds the connected position for a tooltip side without touching the shared map.
+ *
+ * `left` and `right` are physical sides. CDK resolves `start`/`end` through the overlay direction, so in RTL the
+ * physical left is `end`; the signed offset is physical, so it keeps pointing away from the trigger either way.
+ */
+export function getTooltipPosition(
+  requested: ZardTooltipSide | string,
+  offset: number,
+  rtl: boolean,
+): ConnectedPosition {
+  const side = resolveTooltipSide(requested as ZardTooltipSide, rtl);
+  const base = TOOLTIP_POSITIONS_MAP[side] ?? TOOLTIP_POSITIONS_MAP['top'];
+  const position: ConnectedPosition = { ...base };
+
+  switch (side) {
+    case 'top':
+      position.offsetY = -offset;
+      break;
+    case 'bottom':
+      position.offsetY = offset;
+      break;
+    case 'left':
+    case 'right': {
+      const onLeft = side === 'left';
+      // `start` is the physical left in LTR and the physical right in RTL.
+      const cdkStart = onLeft !== rtl;
+      position.originX = cdkStart ? 'start' : 'end';
+      position.overlayX = cdkStart ? 'end' : 'start';
+      position.offsetX = onLeft ? -offset : offset;
+      break;
+    }
+  }
+
+  return position;
+}
 ```
 
 ```angular-ts
@@ -587,6 +667,103 @@ export class ZardDemoTooltipOnShowHideComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import type { ZardTooltipSide } from '@/shared/components/tooltip/tooltip-positions';
+import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface TooltipRtlValues {
+  content: string;
+  'inline-start': string;
+  left: string;
+  top: string;
+  bottom: string;
+  right: string;
+  'inline-end': string;
+}
+
+const translations: ZardRtlTranslations<TooltipRtlValues> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      content: 'Add to library',
+      'inline-start': 'Inline Start',
+      left: 'Left',
+      top: 'Top',
+      bottom: 'Bottom',
+      right: 'Right',
+      'inline-end': 'Inline End',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      content: 'إضافة إلى المكتبة',
+      'inline-start': 'بداية السطر',
+      left: 'يسار',
+      top: 'أعلى',
+      bottom: 'أسفل',
+      right: 'يمين',
+      'inline-end': 'نهاية السطر',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      content: 'הוסף לספרייה',
+      'inline-start': 'תחילת השורה',
+      left: 'שמאל',
+      top: 'למעלה',
+      bottom: 'למטה',
+      right: 'ימין',
+      'inline-end': 'סוף השורה',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-tooltip-rtl',
+  imports: [ZardButtonComponent, ZardTooltipImports],
+  template: `
+    <div class="grid gap-4">
+      <div class="flex flex-wrap justify-center gap-2">
+        @for (side of physicalSides; track side) {
+          <button type="button" z-button zType="outline" [zTooltip]="i18n.t().content" [zPosition]="side">
+            {{ i18n.t()[side] }}
+          </button>
+        }
+      </div>
+      <div class="flex flex-wrap justify-center gap-2">
+        @for (side of logicalSides; track side) {
+          <button type="button" z-button zType="outline" [zTooltip]="i18n.t().content" [zPosition]="side">
+            {{ i18n.t()[side] }}
+          </button>
+        }
+      </div>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoTooltipRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly physicalSides: ZardTooltipSide[] = ['left', 'top', 'bottom', 'right'];
+  protected readonly logicalSides: ZardTooltipSide[] = ['inline-start', 'inline-end'];
+}
+```
+
 ## API Reference
 
 ### [zTooltip]
@@ -596,7 +773,7 @@ The directive that shows a tooltip popup when its host is hovered, focused, or c
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zTooltip]` | The tooltip content: a string, or a template for richer content such as a `z-kbd` | `string \| TemplateRef<void>` | `-` |
-| `[zPosition]` | Side of the trigger the tooltip opens on (shadcn calls this input `side`) | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` |
+| `[zPosition]` | Side of the trigger the tooltip opens on (shadcn calls this input `side`). `left` and `right` are physical sides; `inline-start` and `inline-end` follow the direction of the trigger, so they flip in RTL. | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'top'` |
 | `[zPositionOffset]` | Distance in pixels between the tooltip and the trigger | `number` | `4` |
 | `[zTrigger]` | How the tooltip is triggered | `'hover' \| 'click'` | `'hover'` |
 | `[zShowDelay]` | Delay in milliseconds before showing the tooltip | `number` | `150` |

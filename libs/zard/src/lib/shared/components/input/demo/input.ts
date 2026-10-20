@@ -12,6 +12,7 @@ import { INPUT_DEMO_INPUT_GROUP } from '@generated/components/input/demo/input-g
 import { INPUT_DEMO_INVALID } from '@generated/components/input/demo/invalid';
 import { INPUT_DEMO_PREVIEW } from '@generated/components/input/demo/preview';
 import { INPUT_DEMO_REQUIRED } from '@generated/components/input/demo/required';
+import { INPUT_DEMO_RTL } from '@generated/components/input/demo/rtl';
 import { INPUT_CLI_ADD } from '@generated/installation/cli/add-input';
 import { INPUT_MANUAL_CODE } from '@generated/installation/manual/input';
 import { INPUT_USAGE_CODE, INPUT_USAGE_IMPORT } from '@generated/usage/input';
@@ -30,6 +31,7 @@ import { ZardDemoInputInputGroupComponent } from './input-group';
 import { ZardDemoInputInvalidComponent } from './invalid';
 import { ZardDemoInputPreviewComponent } from './preview';
 import { ZardDemoInputRequiredComponent } from './required';
+import { ZardDemoInputRtlComponent } from './rtl';
 import { INPUT_API } from '../doc/api';
 
 export const INPUT = {
@@ -135,6 +137,13 @@ export const INPUT = {
         "A full reactive form built from `z-field-group` and `z-field`, with `z-select` for the country and a live validation message on the email field once it's touched and invalid.",
       component: ZardDemoInputFormComponent,
       codeData: INPUT_DEMO_FORM,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoInputRtlComponent,
+      codeData: INPUT_DEMO_RTL,
     },
   ],
 };

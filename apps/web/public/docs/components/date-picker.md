@@ -99,6 +99,7 @@ const RANGE_SEPARATOR = ' - ';
           [zMode]="zMode()"
           [zCaptionLayout]="zCaptionLayout()"
           [zNumberOfMonths]="zNumberOfMonths()"
+          [zLocale]="zLocale()"
           [zDisabledDates]="zDisabledDates()"
           [zShowOutsideDays]="zShowOutsideDays()"
           [value]="value()"
@@ -150,6 +151,11 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
+  /**
+   * BCP 47 locale for the calendar and the trigger label (for example `ar`, `he`, `fr-FR`).
+   * Falls back to the application locale.
+   */
+  readonly zLocale = input<string | undefined>(undefined);
   readonly zAlign = input<ZardPopoverAlign>('start');
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
@@ -225,7 +231,17 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
   }
 
   private formatDate(date: Date, format: string): string {
-    return this.datePipe.transform(date, format) ?? '';
+    const locale = this.zLocale();
+    if (!locale) {
+      return this.datePipe.transform(date, format) ?? '';
+    }
+
+    try {
+      return this.datePipe.transform(date, format, undefined, locale) ?? '';
+    } catch {
+      // Angular only formats locales whose data was registered with registerLocaleData; Intl covers the rest.
+      return new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(date);
+    }
   }
 
   writeValue(value: CalendarValue): void {
@@ -265,9 +281,9 @@ export const datePickerVariants = cva('flex w-[212px] flex-col');
 export const datePickerTriggerVariants = cva('w-full font-normal data-[empty=true]:text-muted-foreground', {
   variants: {
     zIcon: {
-      chevron: 'justify-between text-left',
-      calendar: 'justify-start text-left',
-      none: 'justify-start text-left',
+      chevron: 'justify-between text-start',
+      calendar: 'justify-start text-start',
+      none: 'justify-start text-start',
     },
   },
   defaultVariants: {
@@ -696,6 +712,66 @@ export class ZardDemoDatePickerFormatsComponent {
 }
 ```
 
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import type { CalendarValue } from '@/shared/components/calendar/calendar.types';
+import { ZardDatePickerComponent } from '@/shared/components/date-picker/date-picker.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ label: string; placeholder: string; locale: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      label: 'Date of birth',
+      placeholder: 'Pick a date',
+      locale: 'en',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      label: 'تاريخ الميلاد',
+      placeholder: 'اختر تاريخًا',
+      locale: 'ar',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      label: 'תאריך לידה',
+      placeholder: 'בחרו תאריך',
+      locale: 'he',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-date-picker-rtl',
+  imports: [ZardDatePickerComponent],
+  template: `
+    <div class="flex flex-col gap-2">
+      <span class="text-sm font-medium">{{ i18n.t().label }}</span>
+      <z-date-picker [zPlaceholder]="i18n.t().placeholder" [zLocale]="i18n.t().locale" [(value)]="selectedDate" />
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDatePickerRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+  protected readonly selectedDate = signal<CalendarValue>(null);
+}
+```
+
 ## API Reference
 
 ### z-date-picker
@@ -715,6 +791,7 @@ A button that opens a z-calendar inside a popover. Everything the calendar can d
 | `[zMode]` | Selection mode. `single` closes the popover on pick, `range` once both ends are set, `multiple` keeps it open | `'single' \| 'multiple' \| 'range'` | `'single'` |
 | `[zCaptionLayout]` | How the calendar renders its month/year caption | `'label' \| 'dropdown' \| 'dropdown-months' \| 'dropdown-years'` | `'label'` |
 | `[zNumberOfMonths]` | How many months the calendar renders side by side | `number` | `1` |
+| `[zLocale]` | BCP 47 locale (for example `ar`, `he`) for the calendar and the trigger label. Falls back to the application locale. Direction (RTL) comes from CDK `Directionality`: the popover and the calendar mirror automatically | `string` | `-` |
 | `[zDisabledDates]` | Individual days that cannot be selected, on top of the minDate/maxDate range | `Date[]` | `[]` |
 | `[zShowOutsideDays]` | Whether the days of the surrounding months are visible | `boolean` | `true` |
 | `[zAlign]` | Which edge of the popover lines up with the trigger | `'start' \| 'center' \| 'end'` | `'start'` |

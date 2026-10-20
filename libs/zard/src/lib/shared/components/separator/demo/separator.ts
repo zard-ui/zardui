@@ -1,6 +1,7 @@
 import { SEPARATOR_DEMO_LIST } from '@generated/components/separator/demo/list';
 import { SEPARATOR_DEMO_MENU } from '@generated/components/separator/demo/menu';
 import { SEPARATOR_DEMO_PREVIEW } from '@generated/components/separator/demo/preview';
+import { SEPARATOR_DEMO_RTL } from '@generated/components/separator/demo/rtl';
 import { SEPARATOR_DEMO_VERTICAL } from '@generated/components/separator/demo/vertical';
 import { SEPARATOR_CLI_ADD } from '@generated/installation/cli/add-separator';
 import { SEPARATOR_MANUAL_CODE } from '@generated/installation/manual/separator';
@@ -9,6 +10,7 @@ import { SEPARATOR_USAGE_CODE, SEPARATOR_USAGE_IMPORT } from '@generated/usage/s
 import { ZardDemoSeparatorListComponent } from './list';
 import { ZardDemoSeparatorMenuComponent } from './menu';
 import { ZardDemoSeparatorPreviewComponent } from './preview';
+import { ZardDemoSeparatorRtlComponent } from './rtl';
 import { ZardDemoSeparatorVerticalComponent } from './vertical';
 import { SEPARATOR_API } from '../doc/api';
 
@@ -48,6 +50,13 @@ export const SEPARATOR = {
         'Horizontal separators between list rows are meaningful dividers here too, not decoration, so `[zDecorative]="false"` exposes `role="separator"` to assistive tech.',
       component: ZardDemoSeparatorListComponent,
       codeData: SEPARATOR_DEMO_LIST,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoSeparatorRtlComponent,
+      codeData: SEPARATOR_DEMO_RTL,
     },
   ],
 };

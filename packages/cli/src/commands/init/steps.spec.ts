@@ -40,6 +40,7 @@ const answers: InitAnswers = {
   globalCss: 'projects/ui/src/styles.css',
   componentsAlias: '@/shared/components',
   utilsAlias: '@/shared/utils',
+  rtl: false,
 };
 
 /** Runs only the ng-package.json step and returns the resulting file. */

@@ -203,7 +203,7 @@ export class ZardTableFooterComponent {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const tableVariants = cva(
-  'w-full caption-bottom text-sm [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pr-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pr-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground',
+  'w-full caption-bottom text-sm [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pe-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pe-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground',
   {
     variants: {
       zType: {
@@ -243,7 +243,7 @@ export const tableRowVariants = cva(
 );
 
 export const tableHeadVariants = cva(
-  'h-10 px-2 text-start align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
+  'h-10 px-2 text-start align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},
@@ -251,7 +251,7 @@ export const tableHeadVariants = cva(
 );
 
 export const tableCellVariants = cva(
-  'p-2 align-middle has-[[role=checkbox]]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
+  'p-2 align-middle has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},
@@ -391,7 +391,7 @@ export interface Invoice {
               {{ invoice.method }}
             </td>
             <td z-table-cell>
-              <div class="text-right font-medium">{{ formatCurrency(invoice.amount) }}</div>
+              <div class="text-end font-medium">{{ formatCurrency(invoice.amount) }}</div>
             </td>
           </tr>
         } @empty {
@@ -403,7 +403,7 @@ export interface Invoice {
       <tfoot z-table-footer>
         <tr z-table-row>
           <td z-table-cell colspan="3">Total</td>
-          <td z-table-cell class="text-right">{{ formatCurrency(total()) }}</td>
+          <td z-table-cell class="text-end">{{ formatCurrency(total()) }}</td>
         </tr>
       </tfoot>
     </table>
@@ -476,7 +476,7 @@ interface Product {
         <tr z-table-row>
           <th z-table-head scope="col">Product</th>
           <th z-table-head scope="col">Price</th>
-          <th z-table-head scope="col" class="text-right">Actions</th>
+          <th z-table-head scope="col" class="text-end">Actions</th>
         </tr>
       </thead>
       <tbody z-table-body>
@@ -484,7 +484,7 @@ interface Product {
           <tr z-table-row>
             <td z-table-cell class="font-medium">{{ product.name }}</td>
             <td z-table-cell>{{ product.price }}</td>
-            <td z-table-cell class="text-right">
+            <td z-table-cell class="text-end">
               <button
                 z-button
                 z-dropdown
@@ -606,6 +606,101 @@ export class ZardDemoTableSimpleComponent {
       age: 32,
       address: 'Sidney No. 1 Lake Park',
     },
+  ];
+}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardTableImports } from '@/shared/components/table/table.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{
+  caption: string;
+  name: string;
+  status: string;
+  amount: string;
+  paid: string;
+  pending: string;
+}> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      caption: 'A list of recent invoices.',
+      name: 'Invoice',
+      status: 'Status',
+      amount: 'Amount',
+      paid: 'Paid',
+      pending: 'Pending',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      caption: 'قائمة بأحدث الفواتير.',
+      name: 'الفاتورة',
+      status: 'الحالة',
+      amount: 'المبلغ',
+      paid: 'مدفوعة',
+      pending: 'قيد الانتظار',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      caption: 'רשימת חשבוניות אחרונות.',
+      name: 'חשבונית',
+      status: 'סטטוס',
+      amount: 'סכום',
+      paid: 'שולם',
+      pending: 'ממתין',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-table-rtl',
+  imports: [ZardTableImports],
+  template: `
+    <table z-table>
+      <caption z-table-caption>{{ i18n.t().caption }}</caption>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head scope="col">{{ i18n.t().name }}</th>
+          <th z-table-head scope="col">{{ i18n.t().status }}</th>
+          <th z-table-head scope="col" class="text-end">{{ i18n.t().amount }}</th>
+        </tr>
+      </thead>
+      <tbody z-table-body>
+        @for (invoice of invoices; track invoice.id) {
+          <tr z-table-row>
+            <td z-table-cell class="font-medium">{{ invoice.id }}</td>
+            <td z-table-cell>{{ invoice.paid ? i18n.t().paid : i18n.t().pending }}</td>
+            <td z-table-cell class="text-end">{{ invoice.amount }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoTableRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly invoices = [
+    { id: 'INV001', paid: true, amount: '$250.00' },
+    { id: 'INV002', paid: false, amount: '$150.00' },
+    { id: 'INV003', paid: true, amount: '$350.00' },
   ];
 }
 ```

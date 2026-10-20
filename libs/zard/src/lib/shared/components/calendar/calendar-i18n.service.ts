@@ -1,10 +1,11 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 
 import {
   DEFAULT_CALENDAR_I18N,
   DEFAULT_CALENDAR_LABELS,
   type ZardCalendarI18n,
   type ZardCalendarLabels,
+  getPresetLocale,
   type ZardDayOfWeek,
   ZardI18nService,
 } from '@/shared/core/i18n';
@@ -24,9 +25,20 @@ export function capitalize(str: string, locale?: string): string {
 export class ZardCalendarI18nService {
   private readonly i18n = inject(ZardI18nService);
 
-  private readonly calendarData = this.i18n.getLocaleData<ZardCalendarI18n>('calendar', DEFAULT_CALENDAR_I18N);
+  private readonly globalCalendarData = this.i18n.getLocaleData<ZardCalendarI18n>('calendar', DEFAULT_CALENDAR_I18N);
 
-  readonly locale = this.i18n.locale;
+  /** Per-calendar locale (`zLocale`). When set it wins over the application-wide ZardI18nService locale. */
+  readonly localeOverride = signal<string | null>(null);
+
+  readonly locale = computed(() => this.localeOverride() || this.i18n.locale());
+
+  private readonly calendarData = computed<ZardCalendarI18n>(() => {
+    const override = this.localeOverride();
+    if (!override) {
+      return this.globalCalendarData();
+    }
+    return getPresetLocale(override)?.calendar ?? DEFAULT_CALENDAR_I18N;
+  });
 
   readonly weekStartsOn = computed<ZardDayOfWeek>(() => {
     const data = this.calendarData();

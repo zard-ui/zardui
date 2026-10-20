@@ -18,6 +18,7 @@ npx zard-cli@latest add popover
 ### Manual
 
 ```angular-ts
+import { Directionality, type Direction } from '@angular/cdk/bidi';
 import {
   type ConnectedPosition,
   type FlexibleConnectedPositionStrategy,
@@ -88,7 +89,6 @@ const FALLBACK_PLACEMENTS: Record<ZardPopoverPlacement, ZardPopoverPlacement[]> 
 };
 
 const ALIGN_TO_VERTICAL = { start: 'top', center: 'center', end: 'bottom' } as const;
-const ALIGN_TO_ORIGIN_X = { start: 'left', center: 'center', end: 'right' } as const;
 const ALIGN_TO_ORIGIN_Y = { start: 'top', center: 'center', end: 'bottom' } as const;
 
 function isVerticalPlacement(placement: ZardPopoverPlacement): boolean {
@@ -99,11 +99,19 @@ function isInlinePlacement(placement: ZardPopoverPlacement): boolean {
   return placement === 'inline-start' || placement === 'inline-end';
 }
 
+/** Whether the panel ends up on the physical left of the trigger (`left`/`right` are physical, `inline-*` use dir). */
+function isPhysicalLeft(placement: ZardPopoverPlacement, rtl: boolean): boolean {
+  if (placement === 'left') return true;
+  if (placement === 'right') return false;
+  return (placement === 'inline-start') !== rtl;
+}
+
 function buildPosition(
   placement: ZardPopoverPlacement,
   align: ZardPopoverAlign,
   sideOffset: number,
   alignOffset: number,
+  rtl: boolean,
 ): ConnectedPosition {
   if (isVerticalPlacement(placement)) {
     const isTop = placement === 'top';
@@ -112,34 +120,36 @@ function buildPosition(
       originY: isTop ? 'top' : 'bottom',
       overlayX: align,
       overlayY: isTop ? 'bottom' : 'top',
-      offsetX: alignOffset,
+      // `align` start/end are logical (CDK flips them in RTL); the offset is physical, so it is mirrored.
+      offsetX: rtl ? -alignOffset : alignOffset,
       offsetY: isTop ? -sideOffset : sideOffset,
     };
   }
 
-  const isStart = placement === 'left' || placement === 'inline-start';
+  const onLeft = isPhysicalLeft(placement, rtl);
+  // CDK `start`/`end` follow the overlay direction, so a physical side must be swapped in RTL.
+  const isStart = onLeft !== rtl;
   const verticalAlign = ALIGN_TO_VERTICAL[align];
   return {
     originX: isStart ? 'start' : 'end',
     originY: verticalAlign,
     overlayX: isStart ? 'end' : 'start',
     overlayY: verticalAlign,
-    offsetX: isStart ? -sideOffset : sideOffset,
+    offsetX: onLeft ? -sideOffset : sideOffset,
     offsetY: alignOffset,
   };
 }
 
-function transformOriginFor(side: ZardPopoverPlacement, align: ZardPopoverAlign): string {
+function transformOriginFor(side: ZardPopoverPlacement, align: ZardPopoverAlign, rtl: boolean): string {
+  // `align` is logical on the horizontal axis: start is the physical right in RTL.
+  const originX = align === 'center' ? 'center' : (align === 'start') !== rtl ? 'left' : 'right';
   switch (side) {
     case 'top':
-      return `${ALIGN_TO_ORIGIN_X[align]} bottom`;
+      return `${originX} bottom`;
     case 'bottom':
-      return `${ALIGN_TO_ORIGIN_X[align]} top`;
-    case 'left':
-    case 'inline-start':
-      return `right ${ALIGN_TO_ORIGIN_Y[align]}`;
+      return `${originX} top`;
     default:
-      return `left ${ALIGN_TO_ORIGIN_Y[align]}`;
+      return `${isPhysicalLeft(side, rtl) ? 'right' : 'left'} ${ALIGN_TO_ORIGIN_Y[align]}`;
   }
 }
 
@@ -162,6 +172,8 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly renderer = inject(Renderer2);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
+  // Optional: the direction of the trigger, which is where the overlay content takes its `dir` from.
+  private readonly directionality = inject(Directionality, { optional: true });
 
   private overlayRef?: OverlayRef;
   private positionStrategy?: FlexibleConnectedPositionStrategy;
@@ -199,6 +211,14 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
           this.hide();
         }
       });
+
+    // The direction changed while the panel is open (a `[dir]` switch): close it, it reopens with the new direction.
+    this.directionality?.change.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.overlayRef?.setDirection(this.direction());
+      if (this.isVisible()) {
+        this.hide();
+      }
+    });
 
     toObservable(this.zTrigger)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -241,6 +261,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
       this.cancelPendingDetach();
     }
 
+    this.overlayRef?.setDirection(this.direction());
     this.positionStrategy?.withPositions(this.getPositions());
 
     if (reopening) {
@@ -304,6 +325,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
+      direction: this.direction(),
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
@@ -364,6 +386,10 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.listeners = [];
   }
 
+  private direction(): Direction {
+    return this.directionality?.value ?? 'ltr';
+  }
+
   private getPositions(): ConnectedPosition[] {
     const placement = this.zPlacement();
     const align = this.zAlign();
@@ -371,7 +397,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     const alignOffset = this.zAlignOffset();
 
     return [placement, ...FALLBACK_PLACEMENTS[placement]].map(fallback =>
-      buildPosition(fallback, align, sideOffset, alignOffset),
+      buildPosition(fallback, align, sideOffset, alignOffset, this.direction() === 'rtl'),
     );
   }
 
@@ -418,7 +444,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.renderer.setStyle(
       content,
       '--transform-origin',
-      transformOriginFor(side, align),
+      transformOriginFor(side, align, this.direction() === 'rtl'),
       RendererStyleFlags2.DashCase,
     );
   }
@@ -432,10 +458,12 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     if (position.originY === 'bottom' && position.overlayY === 'top') {
       return 'bottom';
     }
-    if (position.originX === 'start' && position.overlayX === 'end') {
-      return inline ? 'inline-start' : 'left';
+    // CDK start/end follow the overlay direction; `left`/`right` are physical, so swap them in RTL.
+    const cdkStart = position.originX === 'start' && position.overlayX === 'end';
+    if (inline) {
+      return cdkStart ? 'inline-start' : 'inline-end';
     }
-    return inline ? 'inline-end' : 'right';
+    return cdkStart !== (this.direction() === 'rtl') ? 'left' : 'right';
   }
 
   private resolveAlign(position: ConnectedPosition, side: ZardPopoverPlacement): ZardPopoverAlign {
@@ -611,7 +639,7 @@ export class ZardPopoverComponent {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const popoverVariants = cva(
-  'z-50 flex w-72 origin-(--transform-origin) flex-col gap-2.5 rounded-lg bg-popover p-2.5 text-sm text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-hidden duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+  'z-50 flex w-72 origin-(--transform-origin) flex-col gap-2.5 rounded-lg bg-popover p-2.5 text-sm text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-hidden duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
 );
 
 export const popoverHeaderVariants = cva('flex flex-col gap-0.5 text-sm');
@@ -942,6 +970,116 @@ export class ZardDemoPopoverCloseOnActionComponent {
   saveChanges() {
     this.popoverDirective().hide();
   }
+}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import type { ZardPopoverPlacement } from '@/shared/components/popover/popover.component';
+import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface PopoverRtlValues {
+  title: string;
+  description: string;
+  'inline-start': string;
+  left: string;
+  top: string;
+  bottom: string;
+  right: string;
+  'inline-end': string;
+}
+
+const translations: ZardRtlTranslations<PopoverRtlValues> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      title: 'Dimensions',
+      description: 'Set the dimensions for the layer.',
+      'inline-start': 'Inline Start',
+      left: 'Left',
+      top: 'Top',
+      bottom: 'Bottom',
+      right: 'Right',
+      'inline-end': 'Inline End',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      title: 'الأبعاد',
+      description: 'تعيين الأبعاد للطبقة.',
+      'inline-start': 'بداية السطر',
+      left: 'يسار',
+      top: 'أعلى',
+      bottom: 'أسفل',
+      right: 'يمين',
+      'inline-end': 'نهاية السطر',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      title: 'מימדים',
+      description: 'הגדר את המימדים לשכבה.',
+      'inline-start': 'תחילת השורה',
+      left: 'שמאל',
+      top: 'למעלה',
+      bottom: 'למטה',
+      right: 'ימין',
+      'inline-end': 'סוף השורה',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-popover-rtl',
+  imports: [ZardButtonComponent, ...ZardPopoverImports],
+  template: `
+    <div class="grid gap-4">
+      <div class="flex flex-wrap justify-center gap-2">
+        @for (side of physicalSides; track side) {
+          <button type="button" z-button zPopover zType="outline" [zPlacement]="side" [zContent]="content">
+            {{ i18n.t()[side] }}
+          </button>
+        }
+      </div>
+      <div class="flex flex-wrap justify-center gap-2">
+        @for (side of logicalSides; track side) {
+          <button type="button" z-button zPopover zType="outline" [zPlacement]="side" [zContent]="content">
+            {{ i18n.t()[side] }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <ng-template #content>
+      <z-popover>
+        <div z-popover-header>
+          <h4 z-popover-title>{{ i18n.t().title }}</h4>
+          <p z-popover-description>{{ i18n.t().description }}</p>
+        </div>
+      </z-popover>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoPopoverRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+
+  protected readonly physicalSides: ZardPopoverPlacement[] = ['left', 'top', 'bottom', 'right'];
+  protected readonly logicalSides: ZardPopoverPlacement[] = ['inline-start', 'inline-end'];
 }
 ```
 

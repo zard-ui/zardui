@@ -3,6 +3,7 @@ import { COLLAPSIBLE_DEMO_CONTROLLED } from '@generated/components/collapsible/d
 import { COLLAPSIBLE_DEMO_DISABLED } from '@generated/components/collapsible/demo/disabled';
 import { COLLAPSIBLE_DEMO_FILE_TREE } from '@generated/components/collapsible/demo/file-tree';
 import { COLLAPSIBLE_DEMO_PREVIEW } from '@generated/components/collapsible/demo/preview';
+import { COLLAPSIBLE_DEMO_RTL } from '@generated/components/collapsible/demo/rtl';
 import { COLLAPSIBLE_DEMO_SETTINGS_PANEL } from '@generated/components/collapsible/demo/settings-panel';
 import { COLLAPSIBLE_CLI_ADD } from '@generated/installation/cli/add-collapsible';
 import { COLLAPSIBLE_MANUAL_CODE } from '@generated/installation/manual/collapsible';
@@ -13,6 +14,7 @@ import { ZardDemoCollapsibleControlledComponent } from './controlled';
 import { ZardDemoCollapsibleDisabledComponent } from './disabled';
 import { ZardDemoCollapsibleFileTreeComponent } from './file-tree';
 import { ZardDemoCollapsiblePreviewComponent } from './preview';
+import { ZardDemoCollapsibleRtlComponent } from './rtl';
 import { ZardDemoCollapsibleSettingsPanelComponent } from './settings-panel';
 import { COLLAPSIBLE_API } from '../doc/api';
 
@@ -71,6 +73,13 @@ export const COLLAPSIBLE = {
       component: ZardDemoCollapsibleDisabledComponent,
       column: true,
       codeData: COLLAPSIBLE_DEMO_DISABLED,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoCollapsibleRtlComponent,
+      codeData: COLLAPSIBLE_DEMO_RTL,
     },
   ],
 };

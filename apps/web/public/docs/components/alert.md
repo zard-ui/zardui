@@ -113,7 +113,7 @@ export class ZardAlertComponent {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const alertVariants = cva(
-  "group/alert relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-start text-sm has-data-[slot='alert-action']:pr-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4",
+  "group/alert relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-start text-sm has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       zType: {
@@ -130,7 +130,7 @@ export const alertVariants = cva(
 
 export const alertIconVariants = cva('shrink-0 self-start text-base!');
 
-export const alertActionVariants = cva('absolute top-2 right-2');
+export const alertActionVariants = cva('absolute top-2 end-2');
 
 export const alertTitleVariants = cva(
   "font-medium group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground",
@@ -294,6 +294,97 @@ import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
   viewProviders: [provideIcons({ lucideAlertTriangle })],
 })
 export class ZardDemoAlertCustomColorsComponent {}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { provideIcons } from '@ng-icons/core';
+import { lucideCircleCheck, lucideInfo } from '@ng-icons/lucide';
+
+import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+interface AlertRtlValues {
+  paymentTitle: string;
+  paymentDescription: string;
+  featureTitle: string;
+  featureDescription: string;
+  enable: string;
+}
+
+const translations: ZardRtlTranslations<AlertRtlValues> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      paymentTitle: 'Payment successful',
+      paymentDescription: 'Your payment of $29.99 has been processed. A receipt has been sent to your email address.',
+      featureTitle: 'New feature available',
+      featureDescription: "We've added dark mode support. You can enable it in your account settings.",
+      enable: 'Enable',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      paymentTitle: 'تم الدفع بنجاح',
+      paymentDescription: 'تمت معالجة دفعتك البالغة 29.99 دولارًا. تم إرسال إيصال إلى عنوان بريدك الإلكتروني.',
+      featureTitle: 'ميزة جديدة متاحة',
+      featureDescription: 'لقد أضفنا دعم الوضع الداكن. يمكنك تفعيله في إعدادات حسابك.',
+      enable: 'تفعيل',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      paymentTitle: 'התשלום בוצע בהצלחה',
+      paymentDescription: 'התשלום שלך בסך 29.99 דולר עובד. קבלה נשלחה לכתובת האימייל שלך.',
+      featureTitle: 'תכונה חדשה זמינה',
+      featureDescription: 'הוספנו תמיכה במצב כהה. אתה יכול להפעיל אותו בהגדרות החשבון שלך.',
+      enable: 'הפעל',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-alert-rtl',
+  imports: [ZardAlertComponent, ZardButtonComponent],
+  template: `
+    <ng-template #actionTpl>
+      <button type="button" z-button zSize="xs">{{ i18n.t().enable }}</button>
+    </ng-template>
+
+    <div class="grid w-full max-w-md items-start gap-4">
+      <z-alert
+        zIcon="lucideCircleCheck"
+        [zTitle]="i18n.t().paymentTitle"
+        [zDescription]="i18n.t().paymentDescription"
+      />
+
+      <z-alert
+        zIcon="lucideInfo"
+        [zTitle]="i18n.t().featureTitle"
+        [zDescription]="i18n.t().featureDescription"
+        [zAction]="actionTpl"
+      />
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCircleCheck, lucideInfo })],
+})
+export class ZardDemoAlertRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+}
 ```
 
 ## API Reference

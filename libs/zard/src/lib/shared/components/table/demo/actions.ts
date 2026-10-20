@@ -21,7 +21,7 @@ interface Product {
         <tr z-table-row>
           <th z-table-head scope="col">Product</th>
           <th z-table-head scope="col">Price</th>
-          <th z-table-head scope="col" class="text-right">Actions</th>
+          <th z-table-head scope="col" class="text-end">Actions</th>
         </tr>
       </thead>
       <tbody z-table-body>
@@ -29,7 +29,7 @@ interface Product {
           <tr z-table-row>
             <td z-table-cell class="font-medium">{{ product.name }}</td>
             <td z-table-cell>{{ product.price }}</td>
-            <td z-table-cell class="text-right">
+            <td z-table-cell class="text-end">
               <button
                 z-button
                 z-dropdown

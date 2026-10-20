@@ -100,6 +100,7 @@ const PROMPTS = {
   themeCss: 'Where should the theme tokens live?',
   components: 'Configure the import alias for components:',
   utils: 'Configure the import alias for utils:',
+  rtl: 'Does your app read right to left (Arabic, Hebrew…)?',
   done: 'zard/ui has been initialized successfully!',
 } as const;
 
@@ -182,6 +183,7 @@ describe('runInitWizard', () => {
       // The on-disk CSS check happens here, between one screen and the next.
       await run.reach([KEY.enter], PROMPTS.components);
       await run.reach([KEY.enter], PROMPTS.utils);
+      await run.reach([KEY.enter], PROMPTS.rtl);
       await run.reach([KEY.enter], PROMPTS.done);
       run.press([KEY.enter]);
 
@@ -213,6 +215,7 @@ describe('runInitWizard', () => {
       // The theme CSS does not exist yet: in a library init is what creates it.
       await run.reach([KEY.enter], PROMPTS.components);
       await run.reach([KEY.enter], PROMPTS.utils);
+      await run.reach([KEY.enter], PROMPTS.rtl);
       await run.reach([KEY.enter], PROMPTS.done);
       run.press([KEY.enter]);
 
@@ -245,6 +248,7 @@ describe('runInitWizard', () => {
 
       await run.reach([...'@app/components'], '@app/components');
       await run.reach([KEY.enter], PROMPTS.utils);
+      await run.reach([KEY.enter], PROMPTS.rtl);
       await run.reach([KEY.enter], PROMPTS.done);
       run.press([KEY.enter]);
 
@@ -270,6 +274,7 @@ describe('runInitWizard', () => {
       // `@/shared/components` minus its last 10 characters is `@/shared/`.
       await run.reach([...Array(10).fill(KEY.backspace), ...'ui'], '@/shared/ui');
       await run.reach([KEY.enter], PROMPTS.utils);
+      await run.reach([KEY.enter], PROMPTS.rtl);
       await run.reach([KEY.enter], PROMPTS.done);
       run.press([KEY.enter]);
 
@@ -287,10 +292,65 @@ describe('runInitWizard', () => {
       await run.reach([KEY.enter], PROMPTS.themeCss);
       await run.reach([KEY.enter], PROMPTS.components);
       await run.reach([KEY.enter], PROMPTS.utils);
+      await run.reach([KEY.enter], PROMPTS.rtl);
       await run.reach([KEY.enter], PROMPTS.done);
       run.press([KEY.enter]);
 
       expect((await run.config).projectType).toBe('nx-library');
+    } finally {
+      run.tty.restore();
+    }
+  });
+
+  /** The way to the RTL question for an Nx library: it needs no css on disk. */
+  async function toRtlQuestion(run: Run): Promise<void> {
+    await run.reach([KEY.enter], PROMPTS.theme);
+    await run.reach([KEY.enter], PROMPTS.themeCss);
+    await run.reach([KEY.enter], PROMPTS.components);
+    await run.reach([KEY.enter], PROMPTS.utils);
+    await run.reach([KEY.enter], PROMPTS.rtl);
+  }
+
+  it('should ask about RTL and open on No', async () => {
+    const run = await startWizard(await workspaceOnDisk(), { presetKind: 'nx-library' });
+
+    try {
+      await toRtlQuestion(run);
+      await run.reach([KEY.enter], PROMPTS.done);
+      run.press([KEY.enter]);
+
+      expect((await run.config).rtl).toBe(false);
+    } finally {
+      run.tty.restore();
+    }
+  });
+
+  it('should record rtl when the user answers yes', async () => {
+    const run = await startWizard(await workspaceOnDisk(), { presetKind: 'nx-library' });
+
+    try {
+      await toRtlQuestion(run);
+      await run.reach(['y'], PROMPTS.done);
+      run.press([KEY.enter]);
+
+      expect((await run.config).rtl).toBe(true);
+    } finally {
+      run.tty.restore();
+    }
+  });
+
+  it('should open the question on Yes when --rtl already answered it', async () => {
+    const run = await startWizard(await workspaceOnDisk(), {
+      presetKind: 'nx-library',
+      presetAnswers: { rtl: true },
+    });
+
+    try {
+      await toRtlQuestion(run);
+      await run.reach([KEY.enter], PROMPTS.done);
+      run.press([KEY.enter]);
+
+      expect((await run.config).rtl).toBe(true);
     } finally {
       run.tty.restore();
     }

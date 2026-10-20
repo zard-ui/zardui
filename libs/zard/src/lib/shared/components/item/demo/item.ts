@@ -6,6 +6,7 @@ import { ITEM_DEMO_ICON } from '@generated/components/item/demo/icon';
 import { ITEM_DEMO_IMAGE } from '@generated/components/item/demo/image';
 import { ITEM_DEMO_LINK } from '@generated/components/item/demo/link';
 import { ITEM_DEMO_PREVIEW } from '@generated/components/item/demo/preview';
+import { ITEM_DEMO_RTL } from '@generated/components/item/demo/rtl';
 import { ITEM_DEMO_SIZE } from '@generated/components/item/demo/size';
 import { ITEM_DEMO_VARIANT } from '@generated/components/item/demo/variant';
 import { ITEM_CLI_ADD } from '@generated/installation/cli/add-item';
@@ -20,6 +21,7 @@ import { ZardDemoItemIconComponent } from './icon';
 import { ZardDemoItemImageComponent } from './image';
 import { ZardDemoItemLinkComponent } from './link';
 import { ZardDemoItemPreviewComponent } from './preview';
+import { ZardDemoItemRtlComponent } from './rtl';
 import { ZardDemoItemSizeComponent } from './size';
 import { ZardDemoItemVariantComponent } from './variant';
 import { ITEM_API } from '../doc/api';
@@ -101,6 +103,13 @@ export const ITEM = {
         'Compose z-item at zSize="xs" (the compact scale) inside a real z-dropdown-menu-item to give each menu option its own media/content row.',
       component: ZardDemoItemDropdownComponent,
       codeData: ITEM_DEMO_DROPDOWN,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoItemRtlComponent,
+      codeData: ITEM_DEMO_RTL,
     },
   ],
 };
