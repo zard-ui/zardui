@@ -44,6 +44,10 @@ src/index.html
 </html>
 ```
 
+## Analog: set build.cssTarget
+
+Analog builds with Vite, which reuses build.target as the CSS target. The template sets es2020, so the logical properties the components use are lowered to left/right rules chosen by the lang attribute, not by dir. Set build.cssTarget to ["chrome111", "edge111", "firefox128", "safari16.4"] in vite.config.ts. zard-cli init and create do it for you.
+
 ## Or scope a subtree
 
 Mixed-direction page? Import the CDK Dir directive and put dir on any element. Components inside, and the overlays they open, take that direction instead of the document one.

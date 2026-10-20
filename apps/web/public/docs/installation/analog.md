@@ -58,7 +58,7 @@ npm install -D tailwindcss @tailwindcss/vite tailwindcss-animate
 
 ### Configure the Tailwind pipeline
 
-Analog builds with Vite, so Tailwind is a Vite plugin and a .postcssrc.json would never be read. Register it in vite.config.ts:
+Analog builds with Vite, so Tailwind is a Vite plugin and a .postcssrc.json would never be read. Register it in vite.config.ts, and set build.cssTarget: without it Vite lowers the logical CSS the components use to left/right rules chosen by the lang attribute, and right-to-left layouts break.
 
 ```bash
 vite.config.ts
@@ -70,6 +70,10 @@ import analog from '@analogjs/platform';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig(() => ({
+  build: {
+    target: ['es2020'],
+    cssTarget: ['chrome111', 'edge111', 'firefox128', 'safari16.4'],
+  },
   plugins: [
     analog(),
     tailwindcss(),

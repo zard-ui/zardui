@@ -1,11 +1,22 @@
 import { logger } from '@cli/utils/logger.js';
-import { arrayRange, lineEndingOf, withImport } from '@cli/utils/source-file.js';
+import { arrayRange, lineEndingOf, objectRange, withImport } from '@cli/utils/source-file.js';
 import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
 
 const TAILWIND_IMPORT = "import tailwindcss from '@tailwindcss/vite';";
 const TAILWIND_PLUGIN = 'tailwindcss()';
+
+/**
+ * Tailwind v4's browser baseline.
+ *
+ * It is what `build.cssTarget` has to be, so that Lightning CSS keeps the
+ * logical properties (`margin-inline-start`, `inset-inline-end`…) the components use
+ * instead of lowering them to `left`/`right` fallbacks.
+ */
+export const CSS_TARGET = ['chrome111', 'edge111', 'firefox128', 'safari16.4'];
+
+const CSS_TARGET_LITERAL = `[${CSS_TARGET.map(browser => `'${browser}'`).join(', ')}]`;
 
 /** The names Vite accepts, in the order it looks for them. */
 const CONFIG_FILES = ['vite.config.ts', 'vite.config.mts', 'vite.config.js', 'vite.config.mjs'];
@@ -47,6 +58,152 @@ export async function setupVitePlugin(cwd: string): Promise<void> {
   }
 
   await writeFile(configPath, withPlugin, 'utf8');
+}
+
+/**
+ * Sets `build.cssTarget` so logical CSS survives right-to-left layouts.
+ *
+ * Vite reuses `build.target` as the CSS target. The Analog template sets it to
+ * `es2020`, and Lightning CSS then lowers every logical property to a physical
+ * `left`/`right` pair chosen by `:lang(ar|he|…)` — not by `dir`. A page with
+ * `dir="rtl"` and `lang="en"` picks the LTR side everywhere: the dialog's close
+ * button, the sheet, the select, the carousel arrows. Applied whether or not the
+ * project uses RTL: the components use logical properties in LTR too.
+ */
+export async function setupCssTarget(cwd: string): Promise<void> {
+  const configPath = findViteConfig(cwd);
+
+  if (!configPath) {
+    logger.warn(`vite.config.ts not found; add cssTarget: ${CSS_TARGET_LITERAL} to "build" manually.`);
+    return;
+  }
+
+  const original = await readFile(configPath, 'utf8');
+  const updated = ensureCssTarget(original);
+
+  if (updated === null) {
+    logger.warn(
+      `Could not edit "build" in ${path.basename(configPath)}; add cssTarget: ${CSS_TARGET_LITERAL} to it manually, ` +
+        'or right-to-left layouts will lay out left to right.',
+    );
+    return;
+  }
+
+  if (updated !== original) await writeFile(configPath, updated, 'utf8');
+}
+
+/**
+ * Adds `cssTarget` to the config's `build` object.
+ *
+ * Returns the content untouched when there is a `cssTarget` already (never
+ * overwritten) or the `build.target` is modern enough, and null when the shape is
+ * not one that can be edited safely.
+ */
+export function ensureCssTarget(content: string): string | null {
+  if (/(^|[{,])\s*cssTarget\s*:/m.test(content)) return content;
+
+  const eol = lineEndingOf(content);
+  const build = objectRange(content, 'build');
+
+  if (!build) {
+    // A `build: someVariable` is a shape this does not understand; no `build` at
+    // all is the case where one can be created, in front of `plugins`.
+    if (/\bbuild\s*:/.test(content)) return null;
+
+    const plugins = /^([ \t]*)plugins\s*:/m.exec(content);
+    if (!plugins) return null;
+
+    const indent = plugins[1];
+    const block = `${indent}build: {${eol}${indent}  cssTarget: ${CSS_TARGET_LITERAL},${eol}${indent}},${eol}`;
+
+    return content.slice(0, plugins.index) + block + content.slice(plugins.index);
+  }
+
+  const multiline = build.body.includes('\n');
+  const target = targetValue(content, build.open, build.close);
+
+  if (target === null) return null;
+
+  if (target) {
+    if (isModernTarget(target.text)) return content;
+
+    const indent = lineIndentAt(content, target.start);
+
+    return (
+      content.slice(0, target.end) +
+      (multiline ? `,${eol}${indent}cssTarget: ${CSS_TARGET_LITERAL}` : `, cssTarget: ${CSS_TARGET_LITERAL}`) +
+      content.slice(target.end)
+    );
+  }
+
+  // No `target`: Vite's default (`modules`) is older than the baseline too.
+  if (!build.body.trim()) {
+    return content.slice(0, build.open) + `{ cssTarget: ${CSS_TARGET_LITERAL} }` + content.slice(build.close + 1);
+  }
+
+  if (!multiline) {
+    return content.slice(0, build.open + 1) + ` cssTarget: ${CSS_TARGET_LITERAL},` + content.slice(build.open + 1);
+  }
+
+  const indent = /\n([ \t]+)\S/.exec(build.body)?.[1] ?? '    ';
+
+  return (
+    content.slice(0, build.open + 1) +
+    `${eol}${indent}cssTarget: ${CSS_TARGET_LITERAL},` +
+    content.slice(build.open + 1)
+  );
+}
+
+interface TargetValue {
+  readonly text: string;
+  readonly start: number;
+  readonly end: number;
+}
+
+/**
+ * The `target` value inside the `build` object: undefined when there is none,
+ * null when it is not a literal (a variable, a call) and so cannot be judged.
+ */
+function targetValue(content: string, from: number, to: number): TargetValue | null | undefined {
+  const key = /\btarget\s*:\s*/.exec(content.slice(from, to));
+
+  if (!key) return undefined;
+
+  const start = from + key.index;
+  const valueStart = start + key[0].length;
+  const array = arrayRange(content, 'target', from);
+
+  if (array && array.open === valueStart) {
+    return { text: content.slice(array.open, array.close + 1), start, end: array.close + 1 };
+  }
+
+  const string = /^(['"`])[^'"`]*\1/.exec(content.slice(valueStart, to));
+
+  return string ? { text: string[0], start, end: valueStart + string[0].length } : null;
+}
+
+const MINIMUM: Record<string, number> = { chrome: 111, edge: 111, firefox: 128, safari: 16.4, ios: 16.4 };
+
+/** Whether every browser in the target is at or past Tailwind's baseline. */
+function isModernTarget(text: string): boolean {
+  const entries = [...text.matchAll(/['"`]([^'"`]+)['"`]/g)].map(match => match[1]);
+
+  return (
+    entries.length > 0 &&
+    entries.every(entry => {
+      if (entry === 'esnext') return true;
+
+      const parsed = /^([a-z]+)(\d+(?:\.\d+)?)$/.exec(entry);
+
+      return !!parsed && parsed[1] in MINIMUM && Number(parsed[2]) >= MINIMUM[parsed[1]];
+    })
+  );
+}
+
+function lineIndentAt(content: string, index: number): string {
+  const lineStart = content.lastIndexOf('\n', index - 1) + 1;
+
+  return /^[ \t]*/.exec(content.slice(lineStart, index))?.[0] ?? '';
 }
 
 /**

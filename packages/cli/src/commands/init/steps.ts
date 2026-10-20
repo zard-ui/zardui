@@ -12,7 +12,7 @@ import { setupRtlDirection } from '@cli/commands/init/rtl-setup.js';
 import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { updateAngularConfig } from '@cli/commands/init/update-angular-config.js';
-import { setupVitePlugin } from '@cli/commands/init/vite-setup.js';
+import { setupCssTarget, setupVitePlugin } from '@cli/commands/init/vite-setup.js';
 import { iconFamily } from '@cli/core/icons/index.js';
 import { resolveConfigPaths, type Config } from '@cli/utils/config.js';
 import { type ProjectInfo } from '@cli/utils/get-project-info.js';
@@ -157,8 +157,11 @@ function tailwindPipelineStep(
   if (bundlerFor(kind) === 'vite') {
     return {
       label: 'vite.config.ts',
-      note: 'Tailwind Vite plugin',
-      run: () => setupVitePlugin(cwd),
+      note: 'Tailwind Vite plugin, cssTarget (logical CSS for RTL)',
+      run: async () => {
+        await setupVitePlugin(cwd);
+        await setupCssTarget(cwd);
+      },
     };
   }
 

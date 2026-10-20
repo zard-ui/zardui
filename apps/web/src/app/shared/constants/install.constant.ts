@@ -308,7 +308,7 @@ export const installations: Installation[] = [
       {
         title: 'Configure the Tailwind pipeline',
         subtitle:
-          'Analog builds with Vite, so Tailwind is a Vite plugin and a .postcssrc.json would never be read. Register it in vite.config.ts:',
+          'Analog builds with Vite, so Tailwind is a Vite plugin and a .postcssrc.json would never be read. Register it in vite.config.ts, and set build.cssTarget: without it Vite lowers the logical CSS the components use to left/right rules chosen by the lang attribute, and right-to-left layouts break.',
         codeBlockData: SETUP_ANALOG_VITE,
       },
       tsconfigStep('tsconfig.json', SETUP_ANALOG_TSCONFIG),
