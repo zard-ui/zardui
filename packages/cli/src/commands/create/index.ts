@@ -2,6 +2,7 @@ import { runAdd } from '@cli/commands/add/index.js';
 import {
   assertHeadlessComplete,
   nameProblem,
+  nestingProblem,
   parseFlags,
   targetProblem,
   type CreateOptions,
@@ -46,6 +47,7 @@ export const create = new Command()
     `the package manager: ${PACKAGE_MANAGERS.join(', ')}. defaults to the one that ran the CLI, else npm.`,
   )
   .option('-c, --cwd <cwd>', 'the directory the project is created in. defaults to the current directory.')
+  .option('--allow-nested', 'create the project even when the directory is inside an existing Nx/Angular workspace.')
   .option('-y, --yes', 'skip confirmations and use the default design when no --preset is given.', false)
   .action((name: string | undefined, options: Omit<CreateOptions, 'name'>) => runCreate({ ...options, name }));
 
@@ -76,7 +78,7 @@ export async function runCreate(options: CreateOptions): Promise<void> {
 
   const plan = interactive ? await askForMissing(options, parsed) : planFromFlags(options, parsed);
 
-  await preflight(plan);
+  await preflight(plan, options.allowNested);
 
   const scaffolded = await runScaffold(plan);
 
@@ -147,9 +149,12 @@ async function askForMissing(options: CreateOptions, parsed: ParsedFlags): Promi
  * it is asked now. The design data and the icon catalog fall back to the copies bundled in the CLI,
  * so only the component index decides.
  */
-async function preflight(plan: Plan): Promise<void> {
+async function preflight(plan: Plan, allowNested?: boolean): Promise<void> {
   const nameError = nameProblem(plan.name) ?? targetProblem(plan.cwd, plan.name);
   if (nameError) throw new CliError(nameError, 'INVALID_NAME');
+
+  const nesting = nestingProblem(plan.cwd, allowNested);
+  if (nesting) throw new CliError(nesting, 'NESTED_WORKSPACE');
 
   const registry = getRegistryUrl();
   try {

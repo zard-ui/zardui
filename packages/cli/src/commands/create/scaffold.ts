@@ -28,6 +28,8 @@ export interface ScaffoldPlan {
   readonly packageManager: PackageManagerId;
 }
 
+const NX_TIMEOUT_VARIABLE = 'NX_PLUGIN_NO_TIMEOUTS';
+
 /**
  * Variables that switch Nx into its "AI agent mode": it maps presets onto remote templates (so
  * `--preset=apps` yields a different workspace) and prints JSON instead of progress. `create` runs the
@@ -41,11 +43,16 @@ const AGENT_MODE_VARIABLES = ['CLAUDECODE', 'CLAUDE_CODE', 'OPENCODE'];
  * `stdin: 'ignore'`, so a prompt reads EOF and aborts the run. `ng new` asks whether to enable shell
  * autocompletion (only when stdout is a TTY, with a global Angular CLI, `HOME` and `SHELL` set, and
  * never answered before) and, on a first run, whether to share analytics; `--interactive=false` covers
- * neither. They are defaults only: a value the user exported wins.
+ * neither. Nx's plugin-worker timeout is lifted for the same reason: a slow machine is not an error.
+ * They are defaults only: a value the user exported wins.
  */
 const GENERATOR_PROMPT_SWITCHES: Record<string, string> = {
   NG_FORCE_AUTOCOMPLETE: 'false',
   NG_CLI_ANALYTICS: 'false',
+  // Nx waits 30 s for each plugin worker to connect and gives up. On a loaded machine (a cold cache, an
+  // antivirus scan, several installs at once) that is not enough, and `create-nx-workspace` fails for
+  // reasons unrelated to the project. Waiting costs nothing when the worker connects at once.
+  [NX_TIMEOUT_VARIABLE]: 'true',
 };
 
 /** The environment the generators run in: the user's own, minus the agent-mode switches. */
@@ -105,13 +112,25 @@ export async function runScaffold(plan: ScaffoldPlan): Promise<string> {
       await discard(target);
       throw new CliError(
         `${item.label} failed (${printable(item)}): ${error instanceof Error ? error.message : String(error)}. ` +
-          'The incomplete directory was removed.',
+          'The incomplete directory was removed.' +
+          failureHint(plan.template.value),
         'SCAFFOLD_FAILED',
       );
     }
   }
 
   return target;
+}
+
+/** What is worth knowing when the generator of this template fails: the usual cause, and the way out. */
+export function failureHint(template: string): string {
+  if (template !== 'nx') return '';
+
+  return (
+    ' If the message mentions a plugin worker that was not connected to, the machine was too busy for Nx ' +
+    `(create already sets ${NX_TIMEOUT_VARIABLE}=true unless you set it yourself): close other heavy ` +
+    `processes and try again, or run with ${NX_TIMEOUT_VARIABLE}=true exported.`
+  );
 }
 
 /** Removes a directory this run created. Only ever called on `<cwd>/<name>`, which did not exist before. */

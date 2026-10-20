@@ -1,7 +1,7 @@
 const execaMock = jest.fn();
 jest.mock('execa', () => ({ execa: (...args: unknown[]) => execaMock(...args) }));
 
-import { generatorEnv, runScaffold } from '@cli/commands/create/scaffold.js';
+import { failureHint, generatorEnv, runScaffold } from '@cli/commands/create/scaffold.js';
 import { templateById } from '@cli/commands/create/templates.js';
 import { existsSync } from 'node:fs';
 import { mkdir, mkdtemp } from 'node:fs/promises';
@@ -18,6 +18,7 @@ describe('generatorEnv', () => {
       NX_DAEMON: 'false',
       NG_FORCE_AUTOCOMPLETE: 'false',
       NG_CLI_ANALYTICS: 'false',
+      NX_PLUGIN_NO_TIMEOUTS: 'true',
     });
   });
 
@@ -33,6 +34,23 @@ describe('generatorEnv', () => {
 
     expect(env['NG_FORCE_AUTOCOMPLETE']).toBe('true');
     expect(env['NG_CLI_ANALYTICS']).toBe('true');
+  });
+});
+
+describe('Nx plugin worker timeouts', () => {
+  it('lifts the 30 s limit unless the user chose a value', () => {
+    expect(generatorEnv({})['NX_PLUGIN_NO_TIMEOUTS']).toBe('true');
+    expect(generatorEnv({ NX_PLUGIN_NO_TIMEOUTS: 'false' })['NX_PLUGIN_NO_TIMEOUTS']).toBe('false');
+  });
+
+  it('names the likely cause and the variable when the Nx step fails', () => {
+    expect(failureHint('nx')).toContain('plugin worker');
+    expect(failureHint('nx')).toContain('NX_PLUGIN_NO_TIMEOUTS');
+  });
+
+  it('adds nothing for the other templates', () => {
+    expect(failureHint('angular')).toBe('');
+    expect(failureHint('analog')).toBe('');
   });
 });
 

@@ -52,7 +52,52 @@ function updatePaths(tsconfig: any, config: Config): any {
     [aliasPattern(config.aliases.components)]: [`${pathMappingBase(tsconfig, config)}/*`],
   };
 
+  raiseLib(tsconfig.compilerOptions);
+
   return tsconfig;
+}
+
+/** The oldest ECMAScript library the components compile against (`Array.prototype.at`). */
+const MINIMUM_ES_YEAR = 2022;
+
+/** `es2020` / `ES6` / `es2015` → the year; anything else (`dom`, `es2020.promise`, `esnext`) → undefined. */
+function esYear(entry: unknown): number | undefined {
+  const match = typeof entry === 'string' ? /^es(\d+)$/i.exec(entry.trim()) : null;
+  if (!match) return undefined;
+
+  const version = Number(match[1]);
+  return version >= 2015 ? version : version + 2009; // es6 is es2015
+}
+
+/**
+ * Makes sure `lib` reaches ES2022.
+ *
+ * `create-nx-workspace` writes `"lib": ["es2020", "dom"]` into tsconfig.base.json, and the components
+ * use ES2022 APIs (`Array.prototype.at`): the production build failed with TS2339. Only an explicit
+ * `lib` that stops below ES2022 is touched — without one, `target` decides, and `esnext` or a newer
+ * year already covers it. The old plain `esXXXX` entries are replaced by `es2022`; everything else
+ * (`dom`, `es2020.promise`…) stays where it was.
+ */
+function raiseLib(compilerOptions: any): void {
+  const lib = compilerOptions.lib;
+  if (!Array.isArray(lib)) return;
+
+  const covered = lib.some(
+    entry =>
+      (typeof entry === 'string' && entry.trim().toLowerCase() === 'esnext') || (esYear(entry) ?? 0) >= MINIMUM_ES_YEAR,
+  );
+  if (covered) return;
+
+  const index = lib.findIndex(entry => esYear(entry) !== undefined);
+  if (index === -1) {
+    lib.unshift(`es${MINIMUM_ES_YEAR}`);
+    return;
+  }
+
+  lib[index] = `es${MINIMUM_ES_YEAR}`;
+  for (let i = lib.length - 1; i > index; i--) {
+    if (esYear(lib[i]) !== undefined) lib.splice(i, 1);
+  }
 }
 
 /**

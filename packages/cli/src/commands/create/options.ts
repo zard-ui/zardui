@@ -27,6 +27,8 @@ export interface CreateOptions {
   pointer?: boolean;
   rtl?: boolean;
   yes?: boolean;
+  /** Create inside an existing Nx/Angular workspace anyway. */
+  allowNested?: boolean;
   cwd?: string;
   /** Never mount the wizard, even in a terminal. */
   headless?: boolean;
@@ -56,6 +58,36 @@ export function nameProblem(name: string): string | undefined {
 export function targetProblem(cwd: string, name: string): string | undefined {
   return existsSync(path.join(cwd, name))
     ? `"${name}" already exists in ${cwd}. Choose another name; create never writes into an existing directory.`
+    : undefined;
+}
+
+/**
+ * The closest directory at or above `cwd` that holds an `nx.json` or an `angular.json`, or
+ * `undefined` when `cwd` is not inside a workspace.
+ */
+export function enclosingWorkspace(cwd: string): string | undefined {
+  let dir = path.resolve(cwd);
+
+  for (;;) {
+    if (WORKSPACE_MARKERS.some(marker => existsSync(path.join(dir, marker)))) return dir;
+
+    const parent = path.dirname(dir);
+    if (parent === dir) return undefined;
+    dir = parent;
+  }
+}
+
+const WORKSPACE_MARKERS = ['nx.json', 'angular.json'];
+
+/** Why a project should not be created in `cwd` (it would be nested in a workspace), else `undefined`. */
+export function nestingProblem(cwd: string, allowNested?: boolean): string | undefined {
+  if (allowNested) return undefined;
+
+  const root = enclosingWorkspace(cwd);
+  return root
+    ? `${cwd} is inside the Nx/Angular workspace at ${root}. A project created here would be a second, nested ` +
+        'workspace. Add the app to the existing one with its own generator, choose a directory outside it with --cwd, ' +
+        'or pass --allow-nested if nesting is what you want. Nothing was created.'
     : undefined;
 }
 

@@ -1,12 +1,14 @@
 import {
   assertHeadlessComplete,
+  enclosingWorkspace,
+  nestingProblem,
   nameProblem,
   packageManagerFromEnvironment,
   parseFlags,
   targetProblem,
 } from '@cli/commands/create/options.js';
 import { CliError } from '@cli/utils/errors.js';
-import { mkdir, mkdtemp } from 'node:fs/promises';
+import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import * as path from 'node:path';
 
@@ -119,5 +121,37 @@ describe('assertHeadlessComplete', () => {
 
     expect(() => assertHeadlessComplete(base, parsed)).toThrow('--preset');
     expect(() => assertHeadlessComplete({ ...base, yes: true }, parsed)).not.toThrow();
+  });
+});
+
+describe('enclosing workspace', () => {
+  const workspace = async (marker: string): Promise<string> => {
+    const root = await mkdtemp(path.join(tmpdir(), 'zard-nested-'));
+    await writeFile(path.join(root, marker), '{}');
+    await mkdir(path.join(root, 'apps', 'web'), { recursive: true });
+    return root;
+  };
+
+  it.each(['nx.json', 'angular.json'])('finds the %s above the directory', async marker => {
+    const root = await workspace(marker);
+
+    expect(enclosingWorkspace(path.join(root, 'apps', 'web'))).toBe(root);
+    expect(enclosingWorkspace(root)).toBe(root);
+  });
+
+  it('finds nothing outside a workspace', async () => {
+    const dir = await mkdtemp(path.join(tmpdir(), 'zard-plain-'));
+
+    expect(enclosingWorkspace(dir)).toBeUndefined();
+    expect(nestingProblem(dir)).toBeUndefined();
+  });
+
+  it('refuses inside a workspace, naming its root, unless nesting is allowed', async () => {
+    const root = await workspace('nx.json');
+    const inside = path.join(root, 'apps');
+
+    expect(nestingProblem(inside)).toContain(root);
+    expect(nestingProblem(inside)).toContain('--allow-nested');
+    expect(nestingProblem(inside, true)).toBeUndefined();
   });
 });

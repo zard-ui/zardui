@@ -445,6 +445,39 @@ describe('updateTsConfig', () => {
   });
 
   // baseUrl virou erro no TypeScript 6 e some no 7.
+  // create-nx-workspace escreve lib es2020; os componentes usam Array.prototype.at (ES2022).
+  describe('lib', () => {
+    const libAfter = async (lib: string): Promise<string[] | undefined> => {
+      mockReadFile.mockResolvedValue(`{ "compilerOptions": { "lib": ${lib} } }`);
+      await updateTsConfig(CWD, makeConfig('src/app', { components: '@/shared/components' }));
+      return tsconfigOf().compilerOptions.lib;
+    };
+
+    it('should raise es2020 to es2022 and keep dom', async () => {
+      expect(await libAfter('["es2020", "dom"]')).toEqual(['es2022', 'dom']);
+    });
+
+    it('should replace every older plain es entry with one es2022', async () => {
+      expect(await libAfter('["ES2015", "dom", "es2019"]')).toEqual(['es2022', 'dom']);
+    });
+
+    it('should add es2022 when only sub-libraries or dom are listed', async () => {
+      expect(await libAfter('["dom", "es2020.promise"]')).toEqual(['es2022', 'dom', 'es2020.promise']);
+    });
+
+    it.each(['["es2022", "dom"]', '["es2023"]', '["esnext", "dom"]'])('should leave %s alone', async lib => {
+      expect(await libAfter(lib)).toEqual(JSON.parse(lib));
+    });
+
+    it('should not invent lib when the project has none', async () => {
+      mockReadFile.mockResolvedValue('{ "compilerOptions": { "target": "es2022" } }');
+
+      await updateTsConfig(CWD, makeConfig('src/app', { components: '@/shared/components' }));
+
+      expect(tsconfigOf().compilerOptions.lib).toBeUndefined();
+    });
+  });
+
   it('should never introduce baseUrl', async () => {
     mockReadFile.mockResolvedValue('{ "compilerOptions": {} }');
 

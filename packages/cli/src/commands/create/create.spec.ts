@@ -48,7 +48,7 @@ import { runScaffold } from '@cli/commands/create/scaffold.js';
 import { initWithPreset } from '@cli/commands/init/index.js';
 import { CliError } from '@cli/utils/errors.js';
 import { fetchJson } from '@cli/utils/http-client.js';
-import { mkdir, mkdtemp } from 'node:fs/promises';
+import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import * as path from 'node:path';
 
@@ -96,6 +96,19 @@ describe('runCreate', () => {
         runCreate({ cwd, name: 'app', template: 'angular', preset: 'b2D0wqNxT', yes: true }),
       ).rejects.toThrow('b2D0wqNxT');
       expect(calls).toEqual([]);
+    });
+
+    it('a directory inside an existing workspace, unless --allow-nested', async () => {
+      const root = await fresh();
+      await writeFile(path.join(root, 'nx.json'), '{}');
+      await mkdir(path.join(root, 'apps'));
+      const cwd = path.join(root, 'apps');
+
+      await expect(runCreate({ cwd, name: 'app', template: 'nx', preset: 'Z0', yes: true })).rejects.toThrow(root);
+      expect(calls).toEqual([]);
+
+      await runCreate({ cwd, name: 'app', template: 'nx', preset: 'Z0', yes: true, allowNested: true });
+      expect(runScaffold).toHaveBeenCalled();
     });
 
     it('a target directory that exists', async () => {
