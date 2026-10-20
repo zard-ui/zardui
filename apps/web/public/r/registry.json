@@ -902,7 +902,9 @@
         "symbols": [
           "lucidePipette"
         ],
-        "tokens": []
+        "tokens": [
+          "pipette"
+        ]
       },
       "files": [
         "color-picker.component.ts",

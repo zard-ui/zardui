@@ -79,8 +79,11 @@ type ZardColorChannel = 'area' | 'hue' | 'alpha';
 /** The EyeDropper API is Chromium-only and not in every TypeScript DOM lib yet. */
 type ZardEyeDropper = new () => { open(): Promise<{ sRGBHex: string }> };
 
-/** Shown in the panel while the value is empty, so the first drag starts from a visible color. */
-const DEFAULT_COLOR: ZardHsva = { h: 0, s: 0, v: 0, a: 1 };
+/**
+ * Shown in the panel while the value is empty: pure red (full saturation and brightness), so every first move
+ * picks a visible color. From black, a first hue drag would keep emitting `#000000`, which has no hue to show.
+ */
+const DEFAULT_COLOR: ZardHsva = { h: 0, s: 1, v: 1, a: 1 };
 
 const STEP = 1;
 const SHIFT_STEP = 10;
@@ -300,9 +303,9 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
       multi: true,
     },
   ],
-  viewProviders: [provideIcons({ lucidePipette })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucidePipette })],
   host: {
     'data-slot': 'color-picker',
     '[class]': 'classes()',
@@ -792,7 +795,7 @@ export const colorPickerFormatGroupVariants = cva('relative isolate flex rounded
 
 /** The pill behind the active tab. Tabs share the width equally, so it only needs a `translateX` per index. */
 export const colorPickerFormatIndicatorVariants = cva(
-  'absolute inset-y-0.5 start-0.5 -z-10 rounded-sm bg-background shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+  'absolute inset-y-0.5 inset-s-0.5 -z-10 rounded-sm bg-background shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
 );
 
 export const colorPickerFormatVariants = cva(
@@ -822,7 +825,7 @@ export const colorPickerTrackVariants = cva(
 
 /** Thumb shared by the area and both tracks; positioned inline through `left` / `top`. */
 export const colorPickerThumbVariants = cva(
-  `pointer-events-none absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_0_0_1px_rgb(0_0_0/0.3),0_1px_3px_rgb(0_0_0/0.3)] transition-[left,top,background-color,scale] ${glide} group-data-dragging/color-picker:transition-[scale] data-active:scale-125`,
+  `pointer-events-none absolute top-1/2 size-4 -translate-1/2 rounded-full border-2 border-white shadow-[0_0_0_1px_rgb(0_0_0/0.3),0_1px_3px_rgb(0_0_0/0.3)] transition-[left,top,background-color,scale] ${glide} group-data-dragging/color-picker:transition-[scale] data-active:scale-125`,
 );
 
 /** The color layer over a checkerboard (trigger swatch, presets), fading between colors. */

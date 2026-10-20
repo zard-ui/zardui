@@ -283,9 +283,9 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
       multi: true,
     },
   ],
-  viewProviders: [provideIcons({ lucidePipette })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucidePipette })],
   host: {
     'data-slot': 'color-picker',
     '[class]': 'classes()',

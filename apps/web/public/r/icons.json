@@ -280,6 +280,9 @@
     "pie-chart": {
       "lucide": "lucidePieChart"
     },
+    "pipette": {
+      "lucide": "lucidePipette"
+    },
     "plus": {
       "lucide": "lucidePlus"
     },
