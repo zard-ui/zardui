@@ -64,6 +64,24 @@ test.describe('Color Picker', () => {
     await expect(field).toHaveValue('#16a34a');
   });
 
+  test('keeps a value typed with Enter while another format tab shows it', async ({ page }) => {
+    const trigger = demos.firstDemoBox.locator('[data-slot="color-picker"] button').first();
+    await trigger.click();
+
+    await page
+      .locator('.cdk-overlay-container [data-slot="color-picker-format"]')
+      .getByRole('button', { name: 'HSL' })
+      .click();
+    const field = page.locator('.cdk-overlay-container input[aria-label="Color value"]');
+    await field.fill('#123456');
+    await field.press('Enter');
+    await expect(field).toHaveValue('hsl(210, 65%, 20%)');
+
+    // Chrome's `change` after Enter, and the blur, must not re-read the rounded HSL as a new color.
+    await page.locator('.cdk-overlay-container [data-slot="color-picker-hue"]').focus();
+    await expect(trigger).toHaveText('#123456');
+  });
+
   test('picks a preset and feeds the reactive form', async ({ page }) => {
     const form = demos.getDemoByName('form');
     await form.getByRole('button', { name: /Brand color/ }).click();

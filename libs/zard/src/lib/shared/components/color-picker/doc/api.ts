@@ -4,7 +4,7 @@ export const COLOR_PICKER_API: ApiSection[] = [
   {
     selector: 'z-color-picker',
     description:
-      'A swatch button that opens a panel in a popover: a saturation/brightness area, a hue slider, an optional alpha slider, a text field and optional presets. The value is a plain CSS color string in `zFormat`, and it works with `formControl` / `ngModel` through a ControlValueAccessor. Any hex, `rgb()`, `hsl()`, `oklch()` or named CSS color is accepted as input; an `oklch()` color outside sRGB is brought into gamut by lowering its chroma, as browsers do. A value written from outside is shown as is and only normalized to `zFormat` (and stripped of alpha without `zAlpha`) on the next pick. Where the browser supports the EyeDropper API (Chromium), the panel also offers a button to pick a color from the screen.',
+      'A swatch button that opens a panel in a popover: a saturation/brightness area, a hue slider, an optional alpha slider, a text field and optional presets. The value is a plain CSS color string in `zFormat`, and it works with `formControl` / `ngModel` through a ControlValueAccessor. Any hex, `rgb()`, `hsl()`, `oklch()` or named CSS color is accepted as input; an `oklch()` color outside sRGB is brought into gamut by lowering its chroma, as browsers do. A value written from outside is displayed in `zFormat`, but the value itself is only rewritten in `zFormat` (and stripped of alpha without `zAlpha`) when the user picks a color. Where the browser supports the EyeDropper API (Chromium), the panel also offers a button to pick a color from the screen.',
     props: [
       {
         name: '[class]',

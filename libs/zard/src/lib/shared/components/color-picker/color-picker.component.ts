@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
   afterNextRender,
+  afterRenderEffect,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
@@ -35,14 +36,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 import { noopFn } from '@/shared/utils/noop';
 import { clamp } from '@/shared/utils/number';
 
-import {
-  formatColor,
-  parseColor,
-  toCssColor,
-  type ZardColorFormat,
-  type ZardColorResolver,
-  type ZardHsva,
-} from './color-picker.utils';
+import { formatColor, parseColor, toCssColor, type ZardColorFormat, type ZardHsva } from './color-picker.utils';
 import {
   colorPickerAreaVariants,
   colorPickerFillVariants,
@@ -262,7 +256,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
                 [class]="presetClasses"
                 [attr.aria-label]="preset.value"
                 [attr.aria-pressed]="preset.hex === activeHex()"
-                (click)="commit(keepHue(preset.color, color()))"
+                (click)="commitParsed(preset.color)"
               >
                 <span [class]="fillClasses" [style.background-color]="preset.css"></span>
               </button>
@@ -323,60 +317,58 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
 
   /** The channel being dragged; drives `data-dragging` / `data-active`, which pause or adjust the transitions. */
   protected readonly dragging = signal<ZardColorChannel | null>(null);
-  /** Read once per drag: the track does not move while the pointer is captured. */
-  private dragRect: DOMRect | null = null;
+  /** The dragged element. Measured on every applied frame, since a scroll moves the popover under the pointer. */
+  private dragTarget: HTMLElement | null = null;
   private dragStartValue: string | null = null;
   private pendingPointer: { x: number; y: number } | null = null;
   private frame = 0;
-  private canvasContext: CanvasRenderingContext2D | null | undefined;
-
-  private readonly resolveColor: ZardColorResolver | undefined = this.isBrowser
-    ? value => this.resolveWithCanvas(value)
-    : undefined;
 
   protected readonly eyeDropper: ZardEyeDropper | undefined = this.isBrowser
     ? (this.document.defaultView as (Window & { EyeDropper?: ZardEyeDropper }) | null)?.EyeDropper
     : undefined;
 
-  protected readonly keepHue = keepHue;
-
-  private readonly parsedValue = computed(() => parseColor(this.value(), this.resolveColor));
-
   /**
    * The working color. HSV is kept here instead of re-parsed from `value`, otherwise the hue would
    * reset to red every time the color passes through gray or black, where hue is undefined.
    */
-  protected readonly color = linkedSignal<ZardHsva | null, ZardHsva>({
-    source: this.parsedValue,
-    computation: (parsed, previous) => {
-      if (!parsed) {
-        return previous?.value ?? DEFAULT_COLOR;
-      }
+  protected readonly color = linkedSignal<string | null, ZardHsva>({
+    source: this.value,
+    computation: (value, previous) => {
       // The value is just the working color written out (usually our own emit echoed back): keep the
-      // unrounded working color, so a drag is not snapped to 8-bit steps on every frame.
-      if (previous && untracked(() => this.format(previous.value) === this.value())) {
+      // unrounded working color, so a drag is not snapped to 8-bit steps, and skip parsing it on every frame.
+      if (value && previous && untracked(() => this.format(previous.value)) === value) {
         return previous.value;
       }
-      return keepHue(parsed, previous?.value);
+      const parsed = parseColor(value);
+      return parsed ? keepHue(parsed, previous?.value) : (previous?.value ?? DEFAULT_COLOR);
     },
   });
 
-  protected readonly isEmpty = computed(() => !this.parsedValue());
+  /** An echoed value is the working color formatted, so it is known valid without parsing it again. */
+  protected readonly isEmpty = computed(() => {
+    const value = this.value();
+    return !value || (this.format(this.color()) !== value && !parseColor(value));
+  });
 
   protected readonly presets = computed(() => {
     const alpha = this.zAlpha();
     return this.zPresets().flatMap(value => {
-      const parsed = parseColor(value, this.resolveColor);
+      const parsed = parseColor(value);
       if (!parsed) {
         return [];
       }
       const color = alpha ? parsed : { ...parsed, a: 1 };
-      return [{ value, color, css: toCssColor(color), hex: formatColor(color, 'hex', true) }];
+      return [{ value, color, css: toCssColor(color), hex: formatColor(color, 'hex', alpha) }];
     });
   });
 
-  /** Compared against each preset's hex, so the active swatch costs one format per change, not one per preset. */
-  protected readonly activeHex = computed(() => (this.isEmpty() ? null : formatColor(this.color(), 'hex', true)));
+  /**
+   * Compared against each preset's hex, so the active swatch costs one format per change, not one per preset.
+   * Alpha counts only with `zAlpha`, like in the presets, so an outside value's alpha does not hide the match.
+   */
+  protected readonly activeHex = computed(() =>
+    this.isEmpty() ? null : formatColor(this.color(), 'hex', this.zAlpha()),
+  );
 
   /** Format of the text field. Starts at `zFormat`; the toggle changes only what is shown, not what is emitted. */
   protected readonly displayFormat = linkedSignal(() => this.zFormat());
@@ -417,6 +409,16 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
 
   constructor() {
     inject(DestroyRef).onDestroy(() => this.cancelFrame());
+
+    // A control disabled while the panel is open (a form saving, say) closes it rather than leaving it half alive.
+    afterRenderEffect(() => {
+      if (this.disabled()) {
+        untracked(() => {
+          this.onPointerUp();
+          this.popoverDirective().hide();
+        });
+      }
+    });
   }
 
   /**
@@ -444,6 +446,14 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
     }
   }
 
+  /**
+   * Commits a color read from outside the drag (text field, preset, eyedropper). Such a gray carries no hue of
+   * its own, so the current one is kept. Drags call `commit` directly: they set the hue on purpose.
+   */
+  protected commitParsed(color: ZardHsva): void {
+    this.commit(keepHue(color, this.color()));
+  }
+
   protected percent(fraction: number): number {
     return Math.round(fraction * 100);
   }
@@ -457,7 +467,7 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
       const { sRGBHex } = await new this.eyeDropper().open();
       const parsed = parseColor(sRGBHex);
       if (parsed) {
-        this.commit(keepHue(parsed, this.color()));
+        this.commitParsed(parsed);
       }
     } catch {
       // Dismissed with Escape — nothing to apply.
@@ -473,7 +483,7 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
     element.focus();
     element.setPointerCapture?.(event.pointerId);
     this.dragging.set(channel);
-    this.dragRect = element.getBoundingClientRect();
+    this.dragTarget = element;
     this.dragStartValue = this.value();
     this.updateFromPointer(event.clientX, event.clientY);
   }
@@ -495,7 +505,7 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
 
     this.flushPointer();
     this.dragging.set(null);
-    this.dragRect = null;
+    this.dragTarget = null;
 
     const value = this.value();
     if (value !== null && value !== this.dragStartValue) {
@@ -504,6 +514,11 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   }
 
   protected onKeydown(event: KeyboardEvent, channel: ZardColorChannel): void {
+    // Alt/Ctrl/Cmd + arrow belong to the browser and the OS (history, word jumps), not to the slider.
+    if (this.disabled() || event.altKey || event.ctrlKey || event.metaKey) {
+      return;
+    }
+
     const next = this.colorForKey(event, channel);
     if (!next) {
       return;
@@ -515,10 +530,15 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
 
   protected onTextCommit(event: Event): void {
     const field = event.target as HTMLInputElement;
-    const parsed = parseColor(field.value, this.resolveColor);
+    // Already showing the current color: nothing was typed. This is also Chrome's `change` right after a
+    // handled Enter, which would otherwise re-read the rounded text (an HSL tab turning #123456 into #123354).
+    if (field.value === this.inputText()) {
+      return;
+    }
 
+    const parsed = parseColor(field.value);
     if (parsed) {
-      this.commit(keepHue(parsed, this.color()));
+      this.commitParsed(parsed);
     }
 
     // Normalizes valid input (`#FFF` → `#ffffff`) and reverts invalid input to the current color.
@@ -557,12 +577,12 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   }
 
   private updateFromPointer(clientX: number, clientY: number): void {
-    const rect = this.dragRect;
     const channel = this.dragging();
-    if (!rect || !channel) {
+    if (!this.dragTarget || !channel) {
       return;
     }
 
+    const rect = this.dragTarget.getBoundingClientRect();
     const x = rect.width ? clamp((clientX - rect.left) / rect.width, [0, 1]) : 0;
     const y = rect.height ? clamp((clientY - rect.top) / rect.height, [0, 1]) : 0;
     const color = this.color();
@@ -629,36 +649,6 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
       default:
         return null;
     }
-  }
-
-  /**
-   * Lets the browser parse what the utils don't (named colors such as `rebeccapurple`). The color is
-   * painted over two different backgrounds: if both reads agree, the browser accepted it.
-   */
-  private resolveWithCanvas(value: string): string | null {
-    if (!/^[a-z]+$/.test(value)) {
-      return null;
-    }
-
-    if (this.canvasContext === undefined) {
-      try {
-        this.canvasContext = this.document.createElement('canvas').getContext('2d');
-      } catch {
-        this.canvasContext = null;
-      }
-    }
-
-    const context = this.canvasContext;
-    if (!context) {
-      return null;
-    }
-
-    context.fillStyle = '#000';
-    context.fillStyle = value;
-    const first = String(context.fillStyle);
-    context.fillStyle = '#fff';
-    context.fillStyle = value;
-    return first === String(context.fillStyle) ? first : null;
   }
 
   writeValue(value: string | null): void {

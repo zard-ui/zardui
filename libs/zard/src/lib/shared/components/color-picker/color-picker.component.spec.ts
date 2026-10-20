@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, PLATFORM_ID, signal } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
@@ -158,6 +158,23 @@ describe('ZardColorPickerComponent', () => {
 
       expect(trigger().disabled).toBe(true);
     });
+
+    it('should close the panel and leave keys alone when disabled while open', async () => {
+      setInput('value', '#ff0000');
+      await open();
+      const hue = overlay('[data-slot="color-picker-hue"]') as HTMLElement;
+
+      setInput('disabled', true);
+      await fixture.whenStable();
+      // The panel closes after the render that disabled it; the trigger reflects that on the next one.
+      fixture.detectChanges();
+      expect(isOpen()).toBe(false);
+
+      const event = new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true });
+      hue.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(false);
+      expect(emitted).toEqual([]);
+    });
   });
 
   describe('keyboard', () => {
@@ -203,6 +220,21 @@ describe('ZardColorPickerComponent', () => {
       fixture.detectChanges();
       expect(area.getAttribute('aria-valuetext')).toBe('Saturation 100%, brightness 90%');
       expect(area.getAttribute('aria-roledescription')).toBe('2D slider');
+    });
+
+    it.each(['altKey', 'ctrlKey', 'metaKey'])('should leave %s shortcuts to the browser', modifier => {
+      const hue = overlay('[data-slot="color-picker-hue"]') as HTMLElement;
+      const event = new KeyboardEvent('keydown', {
+        key: 'ArrowLeft',
+        [modifier]: true,
+        bubbles: true,
+        cancelable: true,
+      });
+
+      hue.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(false);
+      expect(emitted).toEqual([]);
     });
 
     it('should commit every key press', () => {
@@ -279,6 +311,20 @@ describe('ZardColorPickerComponent', () => {
       expect(committed).toEqual([]);
     });
 
+    it('should measure the track again when the page scrolls mid-drag', () => {
+      const track = hue();
+      pointer(track, 'pointerdown', 0);
+
+      // The overlay follows the scroll, so the track now starts 120px further right.
+      jest
+        .spyOn(track, 'getBoundingClientRect')
+        .mockReturnValue({ left: 120, top: 0, width: 360, height: 12 } as DOMRect);
+      pointer(track, 'pointermove', 360);
+      pointer(track, 'pointerup', 360);
+
+      expect(component.value()).toBe('#0000ff');
+    });
+
     it('should mark the panel as dragging and the dragged thumb as active until release', () => {
       const track = hue();
       const panel = () => overlay('z-popover') as HTMLElement;
@@ -326,6 +372,21 @@ describe('ZardColorPickerComponent', () => {
       expect(component.value()).toBe('#ff0000');
       expect(field().value).toBe('#ff0000');
       expect(emitted).toEqual([]);
+    });
+
+    it('should commit once when Enter is followed by a change event', () => {
+      overlay('[data-slot="color-picker-format"] button:nth-of-type(3)')?.click();
+      fixture.detectChanges();
+
+      // Chrome fires `change` after a handled Enter, reading the rounded HSL the field now shows.
+      field().value = '#123456';
+      field().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      field().dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+
+      expect(field().value).toBe('hsl(210, 65%, 20%)');
+      expect(component.value()).toBe('#123456');
+      expect(emitted).toEqual(['#123456']);
     });
 
     it('should keep the hue when a gray is typed', () => {
@@ -469,6 +530,12 @@ describe('ZardColorPickerComponent', () => {
       expect(presets().map(button => button.getAttribute('aria-pressed'))).toEqual(['false', 'true']);
     });
 
+    it('should mark the matching preset when an outside value carries alpha that zAlpha drops', () => {
+      setInput('value', '#2563eb80');
+
+      expect(presets().map(button => button.getAttribute('aria-pressed'))).toEqual(['false', 'true']);
+    });
+
     it('should render duplicated presets', () => {
       const warn = jest.spyOn(console, 'warn').mockImplementation();
       const error = jest.spyOn(console, 'error').mockImplementation();
@@ -569,5 +636,22 @@ describe('ZardColorPickerComponent with forms', () => {
     fixture.detectChanges();
 
     expect(trigger().disabled).toBe(true);
+  });
+});
+
+describe('ZardColorPickerComponent on the server', () => {
+  it('should read named colors without a browser, so the server renders what the client hydrates', async () => {
+    await TestBed.configureTestingModule({
+      imports: [ZardColorPickerComponent],
+      providers: [...providers, { provide: PLATFORM_ID, useValue: 'server' }],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(ZardColorPickerComponent);
+    fixture.componentRef.setInput('value', 'rebeccapurple');
+    fixture.detectChanges();
+
+    const host = fixture.nativeElement as HTMLElement;
+    expect(host.hasAttribute('data-empty')).toBe(false);
+    expect(host.querySelector('button')?.getAttribute('aria-label')).toBe('Choose color, #663399');
   });
 });

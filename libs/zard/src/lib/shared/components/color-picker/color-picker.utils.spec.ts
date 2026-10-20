@@ -1,7 +1,6 @@
 import {
   formatColor,
   hsvaToRgba,
-  isSameColor,
   parseColor,
   rgbaToHsva,
   toCssColor,
@@ -85,19 +84,24 @@ describe('color-picker utils', () => {
       expect(parseColor(input)).toBeNull();
     });
 
-    it('falls back to the resolver for input it cannot parse', () => {
-      const resolve = jest.fn((value: string) => (value === 'rebeccapurple' ? '#663399' : null));
-
-      expect(parseColor('rebeccapurple')).toBeNull();
-      expect(formatColor(parseColor('rebeccapurple', resolve) as ZardHsva, 'hex')).toBe('#663399');
-      expect(parseColor('nope', resolve)).toBeNull();
-      expect(resolve).toHaveBeenCalledWith('nope');
+    // Without a browser to ask: the same answer on the server and in the client, so hydration matches.
+    it.each([
+      ['rebeccapurple', '#663399'],
+      ['RebeccaPurple', '#663399'],
+      ['red', '#ff0000'],
+      ['aliceblue', '#f0f8ff'],
+      ['yellowgreen', '#9acd32'],
+      ['grey', '#808080'],
+    ])('parses the named color %s', (input, expected) => {
+      expect(hex(input)).toBe(expected);
     });
 
-    it('does not call the resolver for input it already understands', () => {
-      const resolve = jest.fn(() => null);
-      parseColor('#fff', resolve);
-      expect(resolve).not.toHaveBeenCalled();
+    it('parses transparent as fully transparent black', () => {
+      expect(parseColor('transparent')).toEqual({ h: 0, s: 0, v: 0, a: 0 });
+    });
+
+    it.each(['currentcolor', 'inherit', 'reddish', 'constructor', 'toString'])('rejects the keyword %s', input => {
+      expect(parseColor(input)).toBeNull();
     });
   });
 
@@ -196,10 +200,5 @@ describe('color-picker utils', () => {
 
   it('toCssColor returns an rgba string', () => {
     expect(toCssColor(parseColor('#ff000080') as ZardHsva)).toBe('rgba(255, 0, 0, 0.502)');
-  });
-
-  it('isSameColor compares the rendered 8-bit color', () => {
-    expect(isSameColor(parseColor('#ff0000') as ZardHsva, parseColor('rgb(255, 0, 0)') as ZardHsva)).toBe(true);
-    expect(isSameColor(parseColor('#ff0000') as ZardHsva, parseColor('#fe0000') as ZardHsva)).toBe(false);
   });
 });
