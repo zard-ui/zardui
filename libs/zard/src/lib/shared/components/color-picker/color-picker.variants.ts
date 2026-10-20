@@ -54,11 +54,31 @@ export const colorPickerSwatchVariants = cva(
   },
 );
 
-export const colorPickerPanelVariants = cva('w-64 gap-3 p-3');
+/**
+ * Changes made from the keyboard, a preset or the text field glide; a drag must follow the pointer, so the
+ * panel carries `data-dragging` while one is in progress and the transitions below switch off.
+ */
+const glide = 'duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none';
+const glideUnlessDragging = `${glide} group-data-dragging/color-picker:transition-none`;
+
+/** Wide enough for the longest text value, `oklch(… / …)`, to show whole in the field. */
+export const colorPickerPanelVariants = cva('group/color-picker w-72 gap-3 p-3');
+
+/** Segmented control picking the format of the text field. */
+export const colorPickerFormatGroupVariants = cva('relative isolate flex rounded-md bg-muted p-0.5');
+
+/** The pill behind the active tab. Tabs share the width equally, so it only needs a `translateX` per index. */
+export const colorPickerFormatIndicatorVariants = cva(
+  'absolute inset-y-0.5 left-0.5 -z-10 rounded-sm bg-background shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+);
+
+export const colorPickerFormatVariants = cva(
+  'h-6 flex-1 rounded-sm font-mono text-[11px] font-medium text-muted-foreground outline-none transition-colors duration-200 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 aria-pressed:text-foreground',
+);
 
 /** The saturation (x) / brightness (y) area. Its hue background is set inline. */
 export const colorPickerAreaVariants = cva(
-  'relative h-36 w-full cursor-crosshair touch-none rounded-md outline-none select-none focus-visible:ring-3 focus-visible:ring-ring/50',
+  `relative h-36 w-full cursor-crosshair touch-none rounded-md bg-[linear-gradient(to_top,#000,transparent),linear-gradient(to_right,#fff,transparent)] outline-none select-none transition-[background-color] focus-visible:ring-3 focus-visible:ring-ring/50 ${glideUnlessDragging}`,
 );
 
 export const colorPickerTrackVariants = cva(
@@ -78,11 +98,16 @@ export const colorPickerTrackVariants = cva(
 
 /** Thumb shared by the area and both tracks; positioned inline through `left` / `top`. */
 export const colorPickerThumbVariants = cva(
-  'pointer-events-none absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_0_0_1px_rgb(0_0_0/0.3),0_1px_3px_rgb(0_0_0/0.3)]',
+  `pointer-events-none absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_0_0_1px_rgb(0_0_0/0.3),0_1px_3px_rgb(0_0_0/0.3)] transition-[left,top,background-color,scale] ${glide} group-data-dragging/color-picker:transition-[scale] data-active:scale-125`,
+);
+
+/** The color layer over a checkerboard (trigger swatch, presets), fading between colors. */
+export const colorPickerFillVariants = cva(
+  `absolute inset-0 transition-[background-color] ${glide} data-dragging:transition-none`,
 );
 
 export const colorPickerPresetVariants = cva(
-  `relative size-6 overflow-hidden rounded-md ring-1 ring-foreground/15 ring-inset outline-none ${checkerboard} transition-transform hover:scale-110 focus-visible:ring-3 focus-visible:ring-ring/50 aria-pressed:ring-2 aria-pressed:ring-ring`,
+  `relative size-6 overflow-hidden rounded-md ring-1 ring-foreground/15 ring-inset outline-none ${checkerboard} transition-[scale,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 focus-visible:ring-3 focus-visible:ring-ring/50 aria-pressed:ring-2 aria-pressed:ring-ring motion-reduce:transition-none`,
 );
 
 export type ZardColorPickerSizeVariants = Extract<ZardButtonSizeVariants, 'sm' | 'default' | 'lg'>;

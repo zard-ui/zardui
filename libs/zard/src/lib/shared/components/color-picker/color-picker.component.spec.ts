@@ -15,10 +15,17 @@ const overlay = (selector: string) => document.querySelector<HTMLElement>(`.cdk-
 const press = (element: HTMLElement, key: string, shiftKey = false) =>
   element.dispatchEvent(new KeyboardEvent('keydown', { key, shiftKey, bubbles: true }));
 
+/** jsdom has no PointerEvent; the handlers only read the fields a MouseEvent also has. */
+const pointer = (element: HTMLElement, type: string, clientX: number) =>
+  element.dispatchEvent(new MouseEvent(type, { clientX, clientY: 0, button: 0, bubbles: true }));
+
+type EyeDropperWindow = Window & { EyeDropper?: unknown };
+
 describe('ZardColorPickerComponent', () => {
   let component: ZardColorPickerComponent;
   let fixture: ComponentFixture<ZardColorPickerComponent>;
   let emitted: string[];
+  let committed: string[];
 
   const host = () => fixture.nativeElement as HTMLElement;
   const trigger = () => host().querySelector('button') as HTMLButtonElement;
@@ -36,14 +43,19 @@ describe('ZardColorPickerComponent', () => {
     await fixture.whenStable();
   };
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [ZardColorPickerComponent], providers }).compileComponents();
-
+  const create = () => {
     fixture = TestBed.createComponent(ZardColorPickerComponent);
     component = fixture.componentInstance;
     emitted = [];
+    committed = [];
     component.zColorChange.subscribe(value => emitted.push(value));
+    component.zColorCommit.subscribe(value => committed.push(value));
     fixture.detectChanges();
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({ imports: [ZardColorPickerComponent], providers }).compileComponents();
+    create();
   });
 
   afterEach(() => {
@@ -62,11 +74,18 @@ describe('ZardColorPickerComponent', () => {
       expect(trigger().getAttribute('aria-label')).toBe('Choose color, Pick a color');
     });
 
+    it('should show zPlaceholder while empty', () => {
+      setInput('zShowValue', true);
+      setInput('zPlaceholder', 'Escolha uma cor');
+
+      expect(trigger().textContent?.trim()).toBe('Escolha uma cor');
+    });
+
     it('should paint the swatch with the value', () => {
       setInput('value', '#ff0000');
 
       expect(host().hasAttribute('data-empty')).toBe(false);
-      expect(swatchFill()?.style.background).toBe('rgba(255, 0, 0, 1)');
+      expect(swatchFill()?.style.backgroundColor).toBe('rgba(255, 0, 0, 1)');
       expect(trigger().getAttribute('aria-label')).toBe('Choose color, #ff0000');
     });
 
@@ -177,6 +196,25 @@ describe('ZardColorPickerComponent', () => {
       expect(component.value()).toBe('#e61717');
     });
 
+    it('should move brightness by 10 with PageUp / PageDown', () => {
+      const area = overlay('[data-slot="color-picker-area"]') as HTMLElement;
+
+      press(area, 'PageDown');
+      fixture.detectChanges();
+      expect(area.getAttribute('aria-valuetext')).toBe('Saturation 100%, brightness 90%');
+      expect(area.getAttribute('aria-roledescription')).toBe('2D slider');
+    });
+
+    it('should commit every key press', () => {
+      const hue = overlay('[data-slot="color-picker-hue"]') as HTMLElement;
+
+      press(hue, 'ArrowRight');
+      press(hue, 'ArrowRight');
+
+      expect(committed).toEqual(emitted);
+      expect(committed.length).toBe(2);
+    });
+
     it('should keep the hue when the color passes through black', () => {
       const hue = overlay('[data-slot="color-picker-hue"]') as HTMLElement;
       const area = overlay('[data-slot="color-picker-area"]') as HTMLElement;
@@ -199,6 +237,65 @@ describe('ZardColorPickerComponent', () => {
       fixture.detectChanges();
 
       expect(component.value()).toBe('#ff0000e6');
+    });
+  });
+
+  describe('pointer', () => {
+    const hue = () => {
+      const element = overlay('[data-slot="color-picker-hue"]') as HTMLElement;
+      jest
+        .spyOn(element, 'getBoundingClientRect')
+        .mockReturnValue({ left: 0, top: 0, width: 360, height: 12 } as DOMRect);
+      return element;
+    };
+
+    beforeEach(async () => {
+      setInput('value', '#ff0000');
+      await open();
+    });
+
+    it('should coalesce moves into one update per frame and commit once on release', () => {
+      const track = hue();
+
+      pointer(track, 'pointerdown', 120);
+      pointer(track, 'pointermove', 180);
+      pointer(track, 'pointermove', 240);
+      expect(emitted).toEqual(['#00ff00']);
+      expect(committed).toEqual([]);
+
+      pointer(track, 'pointerup', 240);
+      expect(emitted).toEqual(['#00ff00', '#0000ff']);
+      expect(committed).toEqual(['#0000ff']);
+    });
+
+    it('should not commit a drag that ends where it started', () => {
+      const track = hue();
+
+      pointer(track, 'pointerdown', 120);
+      pointer(track, 'pointermove', 0);
+      pointer(track, 'pointerup', 0);
+
+      expect(component.value()).toBe('#ff0000');
+      expect(committed).toEqual([]);
+    });
+
+    it('should mark the panel as dragging and the dragged thumb as active until release', () => {
+      const track = hue();
+      const panel = () => overlay('z-popover') as HTMLElement;
+      const thumb = () => track.querySelector('span') as HTMLElement;
+      const areaThumb = () => overlay('[data-slot="color-picker-area"] span') as HTMLElement;
+
+      pointer(track, 'pointerdown', 120);
+      fixture.detectChanges();
+      expect(panel().hasAttribute('data-dragging')).toBe(true);
+      expect(swatchFill()?.hasAttribute('data-dragging')).toBe(true);
+      expect(thumb().hasAttribute('data-active')).toBe(true);
+      expect(areaThumb().hasAttribute('data-active')).toBe(false);
+
+      pointer(track, 'pointerup', 120);
+      fixture.detectChanges();
+      expect(panel().hasAttribute('data-dragging')).toBe(false);
+      expect(thumb().hasAttribute('data-active')).toBe(false);
     });
   });
 
@@ -230,6 +327,127 @@ describe('ZardColorPickerComponent', () => {
       expect(field().value).toBe('#ff0000');
       expect(emitted).toEqual([]);
     });
+
+    it('should keep the hue when a gray is typed', () => {
+      type('#00ff00');
+      type('#000');
+
+      expect(overlay('[data-slot="color-picker-hue"]')?.getAttribute('aria-valuenow')).toBe('120');
+    });
+
+    const tabs = () =>
+      Array.from(
+        document.querySelectorAll<HTMLButtonElement>('.cdk-overlay-container [data-slot="color-picker-format"] button'),
+      );
+    const pickTab = (label: string) => {
+      tabs()
+        .find(tab => tab.textContent?.trim() === label)
+        ?.click();
+      fixture.detectChanges();
+    };
+    const pressedTab = () =>
+      tabs()
+        .find(tab => tab.getAttribute('aria-pressed') === 'true')
+        ?.textContent?.trim();
+
+    it('should offer every format as a tab, starting at zFormat', () => {
+      expect(overlay('[data-slot="color-picker-format"]')?.getAttribute('role')).toBe('group');
+      expect(tabs().map(tab => tab.textContent?.trim())).toEqual(['HEX', 'RGB', 'HSL', 'OKLCH']);
+      expect(pressedTab()).toBe('HEX');
+    });
+
+    it('should slide the indicator under the active tab', () => {
+      const indicator = () => overlay('[data-slot="color-picker-format-indicator"]') as HTMLElement;
+      expect(indicator().style.transform).toBe('translateX(0%)');
+
+      pickTab('HSL');
+      expect(indicator().style.transform).toBe('translateX(200%)');
+
+      pickTab('OKLCH');
+      expect(indicator().style.transform).toBe('translateX(300%)');
+    });
+
+    it('should switch the text format without changing the value', () => {
+      pickTab('RGB');
+      expect(pressedTab()).toBe('RGB');
+      expect(field().value).toBe('rgb(255, 0, 0)');
+
+      pickTab('HSL');
+      expect(field().value).toBe('hsl(0, 100%, 50%)');
+      expect(emitted).toEqual([]);
+
+      type('hsl(120, 100%, 50%)');
+      expect(component.value()).toBe('#00ff00');
+      expect(field().value).toBe('hsl(120, 100%, 50%)');
+    });
+
+    it('should show OKLCH and keep it selected when clicked again', () => {
+      pickTab('OKLCH');
+      pickTab('OKLCH');
+      expect(pressedTab()).toBe('OKLCH');
+      expect(field().value).toBe('oklch(0.628 0.25768 29.23)');
+
+      pickTab('HEX');
+      expect(field().value).toBe('#ff0000');
+    });
+
+    it('should emit OKLCH with zFormat="oklch"', () => {
+      setInput('zFormat', 'oklch');
+      type('#0000ff');
+
+      expect(component.value()).toBe('oklch(0.452 0.31321 264.05)');
+      expect(field().value).toBe('oklch(0.452 0.31321 264.05)');
+    });
+
+    it('should hide the format toggle with zShowFormatToggle off', () => {
+      setInput('zShowFormatToggle', false);
+
+      expect(overlay('[data-slot="color-picker-format"]')).toBeNull();
+    });
+  });
+
+  describe('eyedropper', () => {
+    afterEach(() => {
+      delete (window as EyeDropperWindow).EyeDropper;
+    });
+
+    it('should not render without browser support', async () => {
+      await open();
+
+      expect(overlay('[data-slot="color-picker-eyedropper"]')).toBeNull();
+    });
+
+    it('should commit the color picked from the screen', async () => {
+      (window as EyeDropperWindow).EyeDropper = class {
+        open = () => Promise.resolve({ sRGBHex: '#123456' });
+      };
+      create();
+      await open();
+
+      overlay('[data-slot="color-picker-eyedropper"]')?.click();
+      await fixture.whenStable();
+
+      expect(component.value()).toBe('#123456');
+      expect(committed).toEqual(['#123456']);
+    });
+
+    it('should ignore a dismissed eyedropper', async () => {
+      (window as EyeDropperWindow).EyeDropper = class {
+        // A native async rejection, like the real API; zone.js would flag a patched `Promise.reject` as unhandled.
+        open = async () => {
+          throw new DOMException('Canceled', 'AbortError');
+        };
+      };
+      create();
+      setInput('value', '#ff0000');
+      await open();
+
+      overlay('[data-slot="color-picker-eyedropper"]')?.click();
+      await fixture.whenStable();
+
+      expect(component.value()).toBe('#ff0000');
+      expect(emitted).toEqual([]);
+    });
   });
 
   describe('presets', () => {
@@ -249,6 +467,17 @@ describe('ZardColorPickerComponent', () => {
     it('should render valid presets only and mark the active one', () => {
       expect(presets().map(button => button.getAttribute('aria-label'))).toEqual(['#0f172a', '#2563eb']);
       expect(presets().map(button => button.getAttribute('aria-pressed'))).toEqual(['false', 'true']);
+    });
+
+    it('should render duplicated presets', () => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation();
+      const error = jest.spyOn(console, 'error').mockImplementation();
+
+      setInput('zPresets', ['#2563eb', '#2563eb']);
+
+      expect(presets().length).toBe(2);
+      expect(warn).not.toHaveBeenCalled();
+      expect(error).not.toHaveBeenCalled();
     });
 
     it('should set the value on click and keep the panel open', () => {
@@ -314,6 +543,25 @@ describe('ZardColorPickerComponent with forms', () => {
     trigger().click();
     fixture.detectChanges();
     expect(control.touched).toBe(true);
+  });
+
+  it('should show a value written back after a different one', async () => {
+    trigger().click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    document
+      .querySelector<HTMLButtonElement>('.cdk-overlay-container [data-slot="color-picker-presets"] button')
+      ?.click();
+    fixture.detectChanges();
+
+    const { control } = fixture.componentInstance;
+    control.setValue('#00ff00');
+    fixture.detectChanges();
+    control.setValue('hsl(240, 100%, 50%)');
+    fixture.detectChanges();
+
+    expect(trigger().getAttribute('aria-label')).toBe('Choose color, hsl(240, 100%, 50%)');
   });
 
   it('should disable the trigger with the control', () => {

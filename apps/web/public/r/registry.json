@@ -899,7 +899,9 @@
       ],
       "icons": {
         "family": "lucide",
-        "symbols": [],
+        "symbols": [
+          "lucidePipette"
+        ],
         "tokens": []
       },
       "files": [

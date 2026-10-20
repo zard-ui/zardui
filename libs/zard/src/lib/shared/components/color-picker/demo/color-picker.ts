@@ -1,5 +1,6 @@
 import { COLOR_PICKER_DEMO_ALPHA } from '@generated/components/color-picker/demo/alpha';
 import { COLOR_PICKER_DEMO_BASIC } from '@generated/components/color-picker/demo/basic';
+import { COLOR_PICKER_DEMO_EVENTS } from '@generated/components/color-picker/demo/events';
 import { COLOR_PICKER_DEMO_FORM } from '@generated/components/color-picker/demo/form';
 import { COLOR_PICKER_DEMO_FORMATS } from '@generated/components/color-picker/demo/formats';
 import { COLOR_PICKER_DEMO_PRESETS } from '@generated/components/color-picker/demo/presets';
@@ -11,6 +12,7 @@ import { COLOR_PICKER_USAGE_IMPORT, COLOR_PICKER_USAGE_CODE } from '@generated/u
 
 import { ZardDemoColorPickerAlphaComponent } from './alpha';
 import { ZardDemoColorPickerBasicComponent } from './basic';
+import { ZardDemoColorPickerEventsComponent } from './events';
 import { ZardDemoColorPickerFormComponent } from './form';
 import { ZardDemoColorPickerFormatsComponent } from './formats';
 import { ZardDemoColorPickerPresetsComponent } from './presets';
@@ -57,6 +59,13 @@ export const COLOR_PICKER = {
       description: 'Pass `zPresets` to offer a palette under the panel. The matching swatch is marked as pressed.',
       component: ZardDemoColorPickerPresetsComponent,
       codeData: COLOR_PICKER_DEMO_PRESETS,
+    },
+    {
+      name: 'events',
+      description:
+        '`zColorChange` fires on every frame of a drag; `zColorCommit` only once the change settles, so it is the one to save from.',
+      component: ZardDemoColorPickerEventsComponent,
+      codeData: COLOR_PICKER_DEMO_EVENTS,
     },
     {
       name: 'form',

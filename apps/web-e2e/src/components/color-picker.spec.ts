@@ -13,7 +13,7 @@ test.describe('Color Picker', () => {
 
   test('hydrates every demo', async () => {
     await expect(demos.firstDemoBox.locator('[data-slot="color-picker"]')).toBeVisible();
-    for (const name of ['basic', 'formats', 'alpha', 'presets', 'form', 'sizes']) {
+    for (const name of ['basic', 'formats', 'alpha', 'presets', 'events', 'form', 'sizes']) {
       await expect(demos.getDemoByName(name).locator('[data-slot="color-picker"]').first()).toBeVisible();
     }
   });
@@ -78,9 +78,55 @@ test.describe('Color Picker', () => {
     await expect(form.getByRole('button', { name: /Logo color/ })).toBeDisabled();
   });
 
+  test('reads and writes OKLCH', async ({ page }) => {
+    const trigger = demos.getDemoByName('formats').getByRole('button', { name: /OKLCH/ });
+    await expect(trigger).toHaveText(/oklch\([\d.]+ [\d.]+ [\d.]+\)/);
+
+    await trigger.click();
+    const field = page.locator('.cdk-overlay-container input[aria-label="Color value"]');
+    await field.fill('#0000ff');
+    await field.press('Enter');
+    await expect(trigger).toHaveText('oklch(0.452 0.31321 264.05)');
+
+    // The longest value the field can hold must show whole, not scroll.
+    await field.fill('oklch(0.8664 0.29483 142.5 / 0.55)');
+    const overflows = await field.evaluate(input => input.scrollWidth > input.clientWidth);
+    expect(overflows).toBe(false);
+  });
+
+  test('commits a drag once on release and switches the text format', async ({ page }) => {
+    const demo = demos.getDemoByName('events');
+    const trigger = demo.locator('[data-slot="color-picker"] button').first();
+    await expect(trigger).toHaveText('No color yet');
+
+    await trigger.click();
+    const hue = page.locator('.cdk-overlay-container [data-slot="color-picker-hue"]');
+    const box = await hue.boundingBox();
+    if (!box) {
+      throw new Error('hue track has no bounding box');
+    }
+    await page.mouse.move(box.x + 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 3, box.y + box.height / 2, { steps: 10 });
+    await page.mouse.up();
+
+    const value = (await trigger.textContent())?.trim() ?? '';
+    await expect(demo).toContainText(`Live: ${value}`);
+    await expect(demo).toContainText(`Saved: ${value}`);
+
+    const rgbTab = page.locator('.cdk-overlay-container [data-slot="color-picker-format"]').getByRole('button', {
+      name: 'RGB',
+    });
+    const field = page.locator('.cdk-overlay-container input[aria-label="Color value"]');
+    await rgbTab.click();
+    await expect(rgbTab).toHaveAttribute('aria-pressed', 'true');
+    await expect(field).toHaveValue(/^rgb\(/);
+    await expect(trigger).toHaveText(value);
+  });
+
   test('has no accessibility violations', async ({ page }) => {
     await checkA11y(page, '#overview z-demo-color-picker-preview');
-    for (const name of ['basic', 'formats', 'alpha', 'presets', 'form', 'sizes']) {
+    for (const name of ['basic', 'formats', 'alpha', 'presets', 'events', 'form', 'sizes']) {
       await checkA11y(page, `#${name} z-demo-color-picker-${name}`);
     }
   });

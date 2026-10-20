@@ -1,36 +1,42 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
+  afterNextRender,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   DOCUMENT,
   type ElementRef,
   forwardRef,
   inject,
+  Injector,
   input,
   linkedSignal,
   model,
   output,
   PLATFORM_ID,
+  signal,
+  untracked,
   viewChild,
   ViewEncapsulation,
   type TemplateRef,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePipette } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardButtonComponent, type ZardButtonSizeVariants } from '@/shared/components/button';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/popover';
+import { ZardPopoverComponent, ZardPopoverDirective, type ZardPopoverAlign } from '@/shared/components/popover';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 import { noopFn } from '@/shared/utils/noop';
 import { clamp } from '@/shared/utils/number';
 
 import {
   formatColor,
-  isSameColor,
   parseColor,
   toCssColor,
   type ZardColorFormat,
@@ -39,6 +45,10 @@ import {
 } from './color-picker.utils';
 import {
   colorPickerAreaVariants,
+  colorPickerFillVariants,
+  colorPickerFormatGroupVariants,
+  colorPickerFormatIndicatorVariants,
+  colorPickerFormatVariants,
   colorPickerPanelVariants,
   colorPickerPresetVariants,
   colorPickerSwatchVariants,
@@ -51,11 +61,17 @@ import {
 
 type ZardColorChannel = 'area' | 'hue' | 'alpha';
 
+/** The EyeDropper API is Chromium-only and not in every TypeScript DOM lib yet. */
+type ZardEyeDropper = new () => { open(): Promise<{ sRGBHex: string }> };
+
 /** Shown in the panel while the value is empty, so the first drag starts from a visible color. */
 const DEFAULT_COLOR: ZardHsva = { h: 0, s: 0, v: 0, a: 1 };
 
 const STEP = 1;
 const SHIFT_STEP = 10;
+
+/** Order of the format tabs above the text field. */
+const FORMATS: ZardColorFormat[] = ['hex', 'rgb', 'hsl', 'oklch'];
 
 /** Swatch-only triggers are square, so they use the icon sizes of the button scale. */
 const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = {
@@ -64,9 +80,14 @@ const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = 
   lg: 'icon-lg',
 };
 
+/** Gray and black have no hue of their own, so the current one is kept instead of snapping back to red. */
+function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
+  return current && (color.s === 0 || color.v === 0) ? { ...color, h: current.h } : color;
+}
+
 @Component({
   selector: 'z-color-picker, [z-color-picker]',
-  imports: [ZardButtonComponent, ZardInputComponent, ZardPopoverComponent, ZardPopoverDirective],
+  imports: [ZardButtonComponent, ZardInputComponent, ZardPopoverComponent, ZardPopoverDirective, NgIcon],
   template: `
     <button
       z-button
@@ -82,12 +103,16 @@ const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = 
       #popoverDirective="zPopover"
       [zContent]="panelTemplate"
       zTrigger="click"
-      zAlign="start"
+      [zAlign]="zAlign()"
       (zVisibleChange)="onPopoverVisibilityChange($event)"
     >
       <span data-slot="color-picker-swatch" [class]="swatchClasses()">
         @if (!isEmpty()) {
-          <span class="absolute inset-0" [style.background]="swatchColor()"></span>
+          <span
+            [class]="fillClasses"
+            [style.background-color]="swatchColor()"
+            [attr.data-dragging]="dragging() ? '' : null"
+          ></span>
         }
       </span>
       @if (zShowValue()) {
@@ -98,19 +123,20 @@ const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = 
     </button>
 
     <ng-template #panelTemplate>
-      <z-popover aria-label="Choose color" [class]="panelClasses">
+      <z-popover aria-label="Choose color" [class]="panelClasses" [attr.data-dragging]="dragging() ? '' : null">
         <div
           #area
           data-slot="color-picker-area"
           role="slider"
           tabindex="0"
           aria-label="Saturation and brightness"
+          aria-roledescription="2D slider"
           aria-valuemin="0"
           aria-valuemax="100"
           [attr.aria-valuenow]="percent(color().s)"
           [attr.aria-valuetext]="'Saturation ' + percent(color().s) + '%, brightness ' + percent(color().v) + '%'"
           [class]="areaClasses"
-          [style.background]="areaBackground()"
+          [style.background-color]="hueColor()"
           (pointerdown)="onPointerDown($event, 'area')"
           (pointermove)="onPointerMove($event, 'area')"
           (pointerup)="onPointerUp()"
@@ -121,48 +147,99 @@ const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = 
             [class]="thumbClasses"
             [style.left.%]="color().s * 100"
             [style.top.%]="(1 - color().v) * 100"
-            [style.background]="opaqueColor()"
+            [style.background-color]="opaqueColor()"
+            [attr.data-active]="dragging() === 'area' ? '' : null"
           ></span>
         </div>
 
-        <div
-          data-slot="color-picker-hue"
-          role="slider"
-          tabindex="0"
-          aria-label="Hue"
-          aria-valuemin="0"
-          aria-valuemax="360"
-          [attr.aria-valuenow]="hue()"
-          [attr.aria-valuetext]="hue() + ' degrees'"
-          [class]="hueTrackClasses"
-          (pointerdown)="onPointerDown($event, 'hue')"
-          (pointermove)="onPointerMove($event, 'hue')"
-          (pointerup)="onPointerUp()"
-          (pointercancel)="onPointerUp()"
-          (keydown)="onKeydown($event, 'hue')"
-        >
-          <span [class]="thumbClasses" [style.left.%]="(color().h / 360) * 100" [style.background]="hueColor()"></span>
+        <div class="flex items-center gap-2">
+          <div class="flex min-w-0 flex-1 flex-col gap-3">
+            <div
+              data-slot="color-picker-hue"
+              role="slider"
+              tabindex="0"
+              aria-label="Hue"
+              aria-valuemin="0"
+              aria-valuemax="360"
+              [attr.aria-valuenow]="hue()"
+              [attr.aria-valuetext]="hue() + ' degrees'"
+              [class]="hueTrackClasses"
+              (pointerdown)="onPointerDown($event, 'hue')"
+              (pointermove)="onPointerMove($event, 'hue')"
+              (pointerup)="onPointerUp()"
+              (pointercancel)="onPointerUp()"
+              (keydown)="onKeydown($event, 'hue')"
+            >
+              <span
+                [class]="thumbClasses"
+                [style.left.%]="(color().h / 360) * 100"
+                [style.background-color]="hueColor()"
+                [attr.data-active]="dragging() === 'hue' ? '' : null"
+              ></span>
+            </div>
+
+            @if (zAlpha()) {
+              <div
+                data-slot="color-picker-alpha"
+                role="slider"
+                tabindex="0"
+                aria-label="Alpha"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [attr.aria-valuenow]="percent(color().a)"
+                [attr.aria-valuetext]="percent(color().a) + '%'"
+                [class]="alphaTrackClasses"
+                (pointerdown)="onPointerDown($event, 'alpha')"
+                (pointermove)="onPointerMove($event, 'alpha')"
+                (pointerup)="onPointerUp()"
+                (pointercancel)="onPointerUp()"
+                (keydown)="onKeydown($event, 'alpha')"
+              >
+                <span class="absolute inset-0 rounded-full" [style.background]="alphaBackground()"></span>
+                <span
+                  [class]="thumbClasses"
+                  [style.left.%]="color().a * 100"
+                  [style.background-color]="cssColor()"
+                  [attr.data-active]="dragging() === 'alpha' ? '' : null"
+                ></span>
+              </div>
+            }
+          </div>
+          @if (eyeDropper) {
+            <button
+              z-button
+              type="button"
+              zType="outline"
+              zSize="icon-sm"
+              data-slot="color-picker-eyedropper"
+              aria-label="Pick a color from the screen"
+              class="shrink-0"
+              (click)="pickFromScreen()"
+            >
+              <ng-icon name="lucidePipette" class="size-3.5!" />
+            </button>
+          }
         </div>
 
-        @if (zAlpha()) {
-          <div
-            data-slot="color-picker-alpha"
-            role="slider"
-            tabindex="0"
-            aria-label="Alpha"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            [attr.aria-valuenow]="percent(color().a)"
-            [attr.aria-valuetext]="percent(color().a) + '%'"
-            [class]="alphaTrackClasses"
-            (pointerdown)="onPointerDown($event, 'alpha')"
-            (pointermove)="onPointerMove($event, 'alpha')"
-            (pointerup)="onPointerUp()"
-            (pointercancel)="onPointerUp()"
-            (keydown)="onKeydown($event, 'alpha')"
-          >
-            <span class="absolute inset-0 rounded-full" [style.background]="alphaBackground()"></span>
-            <span [class]="thumbClasses" [style.left.%]="color().a * 100" [style.background]="cssColor()"></span>
+        @if (zShowFormatToggle()) {
+          <div role="group" aria-label="Color format" data-slot="color-picker-format" [class]="formatGroupClasses">
+            <span
+              aria-hidden="true"
+              data-slot="color-picker-format-indicator"
+              [class]="formatIndicatorClasses"
+              [style.width]="'calc((100% - 0.25rem) / ' + formats.length + ')'"
+              [style.transform]="'translateX(' + formatIndex() * 100 + '%)'"
+            ></span>
+            @for (format of formats; track format) {
+              <button
+                type="button"
+                [class]="formatClasses"
+                [attr.aria-pressed]="format === displayFormat()"
+                (click)="displayFormat.set(format)"
+              >
+                {{ format.toUpperCase() }}
+              </button>
+            }
           </div>
         }
 
@@ -171,7 +248,7 @@ const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = 
           aria-label="Color value"
           spellcheck="false"
           autocomplete="off"
-          class="h-7 font-mono text-xs"
+          class="h-7 px-2 font-mono text-[11px] md:text-[11px]"
           [value]="inputText()"
           (change)="onTextCommit($event)"
           (keydown.enter)="onTextCommit($event)"
@@ -179,15 +256,15 @@ const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = 
 
         @if (presets().length) {
           <div data-slot="color-picker-presets" class="flex flex-wrap gap-1.5">
-            @for (preset of presets(); track preset.value) {
+            @for (preset of presets(); track $index) {
               <button
                 type="button"
                 [class]="presetClasses"
                 [attr.aria-label]="preset.value"
-                [attr.aria-pressed]="isActivePreset(preset.color)"
-                (click)="commit(preset.color)"
+                [attr.aria-pressed]="preset.hex === activeHex()"
+                (click)="commit(keepHue(preset.color, color()))"
               >
-                <span class="absolute inset-0" [style.background]="presetColor(preset.color)"></span>
+                <span [class]="fillClasses" [style.background-color]="preset.css"></span>
               </button>
             }
           </div>
@@ -202,6 +279,7 @@ const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = 
       multi: true,
     },
   ],
+  viewProviders: [provideIcons({ lucidePipette })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -213,6 +291,7 @@ const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = 
 })
 export class ZardColorPickerComponent implements ControlValueAccessor {
   private readonly document = inject(DOCUMENT);
+  private readonly injector = inject(Injector);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly panelTemplate = viewChild.required<TemplateRef<unknown>>('panelTemplate');
@@ -228,67 +307,92 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   readonly zPresets = input<string[]>([]);
   readonly zSize = input<ZardColorPickerSizeVariants>('default');
   readonly zShowValue = input(false, { transform: booleanAttribute });
+  readonly zShowFormatToggle = input(true, { transform: booleanAttribute });
+  readonly zPlaceholder = input<string>('Pick a color');
+  readonly zAlign = input<ZardPopoverAlign>('start');
   readonly value = model<string | null>(null);
   readonly disabled = model<boolean>(false);
 
+  /** Every change, including each frame of a drag. */
   readonly zColorChange = output<string>();
+  /** Settled changes only: the end of a drag, a key press, a preset, the text field or the eyedropper. */
+  readonly zColorCommit = output<string>();
 
   private onChange: (value: string | null) => void = noopFn;
   private onTouched: () => void = noopFn;
 
-  /** The last string this component emitted, so echoing it back does not round the working color. */
-  private lastEmitted: string | null = null;
-  private activeChannel: ZardColorChannel | null = null;
+  /** The channel being dragged; drives `data-dragging` / `data-active`, which pause or adjust the transitions. */
+  protected readonly dragging = signal<ZardColorChannel | null>(null);
+  /** Read once per drag: the track does not move while the pointer is captured. */
+  private dragRect: DOMRect | null = null;
+  private dragStartValue: string | null = null;
+  private pendingPointer: { x: number; y: number } | null = null;
+  private frame = 0;
   private canvasContext: CanvasRenderingContext2D | null | undefined;
 
   private readonly resolveColor: ZardColorResolver | undefined = this.isBrowser
     ? value => this.resolveWithCanvas(value)
     : undefined;
 
+  protected readonly eyeDropper: ZardEyeDropper | undefined = this.isBrowser
+    ? (this.document.defaultView as (Window & { EyeDropper?: ZardEyeDropper }) | null)?.EyeDropper
+    : undefined;
+
+  protected readonly keepHue = keepHue;
+
+  private readonly parsedValue = computed(() => parseColor(this.value(), this.resolveColor));
+
   /**
    * The working color. HSV is kept here instead of re-parsed from `value`, otherwise the hue would
    * reset to red every time the color passes through gray or black, where hue is undefined.
    */
-  protected readonly color = linkedSignal<string | null, ZardHsva>({
-    source: this.value,
-    computation: (value, previous) => {
-      if (previous && value === this.lastEmitted) {
-        return previous.value;
-      }
-
-      const parsed = parseColor(value, this.resolveColor);
+  protected readonly color = linkedSignal<ZardHsva | null, ZardHsva>({
+    source: this.parsedValue,
+    computation: (parsed, previous) => {
       if (!parsed) {
         return previous?.value ?? DEFAULT_COLOR;
       }
-      if (previous && (parsed.s === 0 || parsed.v === 0)) {
-        return { ...parsed, h: previous.value.h };
+      // The value is just the working color written out (usually our own emit echoed back): keep the
+      // unrounded working color, so a drag is not snapped to 8-bit steps on every frame.
+      if (previous && untracked(() => this.format(previous.value) === this.value())) {
+        return previous.value;
       }
-      return parsed;
+      return keepHue(parsed, previous?.value);
     },
   });
 
-  protected readonly isEmpty = computed(() => !parseColor(this.value(), this.resolveColor));
+  protected readonly isEmpty = computed(() => !this.parsedValue());
 
-  protected readonly presets = computed(() =>
-    this.zPresets().flatMap(value => {
-      const color = parseColor(value, this.resolveColor);
-      return color ? [{ value, color }] : [];
-    }),
+  protected readonly presets = computed(() => {
+    const alpha = this.zAlpha();
+    return this.zPresets().flatMap(value => {
+      const parsed = parseColor(value, this.resolveColor);
+      if (!parsed) {
+        return [];
+      }
+      const color = alpha ? parsed : { ...parsed, a: 1 };
+      return [{ value, color, css: toCssColor(color), hex: formatColor(color, 'hex', true) }];
+    });
+  });
+
+  /** Compared against each preset's hex, so the active swatch costs one format per change, not one per preset. */
+  protected readonly activeHex = computed(() => (this.isEmpty() ? null : formatColor(this.color(), 'hex', true)));
+
+  /** Format of the text field. Starts at `zFormat`; the toggle changes only what is shown, not what is emitted. */
+  protected readonly displayFormat = linkedSignal(() => this.zFormat());
+  protected readonly formats = FORMATS;
+  protected readonly formatIndex = computed(() => FORMATS.indexOf(this.displayFormat()));
+
+  protected readonly displayText = computed(() => (this.isEmpty() ? this.zPlaceholder() : this.format(this.color())));
+  protected readonly inputText = computed(() =>
+    this.isEmpty() ? '' : formatColor(this.color(), this.displayFormat(), this.zAlpha()),
   );
-
-  protected readonly formatted = computed(() => formatColor(this.color(), this.zFormat(), this.zAlpha()));
-  protected readonly displayText = computed(() => (this.isEmpty() ? 'Pick a color' : this.formatted()));
-  protected readonly inputText = computed(() => (this.isEmpty() ? '' : this.formatted()));
 
   protected readonly hue = computed(() => Math.round(this.color().h));
   protected readonly cssColor = computed(() => toCssColor(this.color()));
   protected readonly opaqueColor = computed(() => toCssColor({ ...this.color(), a: 1 }));
   protected readonly hueColor = computed(() => `hsl(${this.color().h}, 100%, 50%)`);
   protected readonly swatchColor = computed(() => (this.zAlpha() ? this.cssColor() : this.opaqueColor()));
-  protected readonly areaBackground = computed(
-    () =>
-      `linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent), ${this.hueColor()}`,
-  );
 
   protected readonly alphaBackground = computed(() => `linear-gradient(to right, transparent, ${this.opaqueColor()})`);
 
@@ -306,9 +410,20 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   protected readonly alphaTrackClasses = colorPickerTrackVariants({ zChannel: 'alpha' });
   protected readonly thumbClasses = colorPickerThumbVariants();
   protected readonly presetClasses = colorPickerPresetVariants();
+  protected readonly formatGroupClasses = colorPickerFormatGroupVariants();
+  protected readonly formatClasses = colorPickerFormatVariants();
+  protected readonly formatIndicatorClasses = colorPickerFormatIndicatorVariants();
+  protected readonly fillClasses = colorPickerFillVariants();
 
-  /** Sets the working color and emits it in `zFormat`, once per distinct string. */
-  commit(color: ZardHsva): void {
+  constructor() {
+    inject(DestroyRef).onDestroy(() => this.cancelFrame());
+  }
+
+  /**
+   * Sets the working color and emits it in `zFormat`, once per distinct string. `final: false` is for the
+   * frames of a drag, which only emit `zColorCommit` once the pointer is released.
+   */
+  commit(color: ZardHsva, { final = true }: { final?: boolean } = {}): void {
     if (this.disabled()) {
       return;
     }
@@ -316,27 +431,37 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
     const next = this.zAlpha() ? color : { ...color, a: 1 };
     this.color.set(next);
 
-    const formatted = formatColor(next, this.zFormat(), this.zAlpha());
+    const formatted = this.format(next);
     if (formatted === this.value()) {
       return;
     }
 
-    this.lastEmitted = formatted;
     this.value.set(formatted);
     this.onChange(formatted);
     this.zColorChange.emit(formatted);
+    if (final) {
+      this.zColorCommit.emit(formatted);
+    }
   }
 
   protected percent(fraction: number): number {
     return Math.round(fraction * 100);
   }
 
-  protected presetColor(color: ZardHsva): string {
-    return toCssColor(this.zAlpha() ? color : { ...color, a: 1 });
-  }
+  protected async pickFromScreen(): Promise<void> {
+    if (!this.eyeDropper || this.disabled()) {
+      return;
+    }
 
-  protected isActivePreset(color: ZardHsva): boolean {
-    return !this.isEmpty() && isSameColor(this.zAlpha() ? color : { ...color, a: 1 }, this.color());
+    try {
+      const { sRGBHex } = await new this.eyeDropper().open();
+      const parsed = parseColor(sRGBHex);
+      if (parsed) {
+        this.commit(keepHue(parsed, this.color()));
+      }
+    } catch {
+      // Dismissed with Escape — nothing to apply.
+    }
   }
 
   protected onPointerDown(event: PointerEvent, channel: ZardColorChannel): void {
@@ -347,47 +472,45 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
     const element = event.currentTarget as HTMLElement;
     element.focus();
     element.setPointerCapture?.(event.pointerId);
-    this.activeChannel = channel;
-    this.updateFromPointer(event, channel);
+    this.dragging.set(channel);
+    this.dragRect = element.getBoundingClientRect();
+    this.dragStartValue = this.value();
+    this.updateFromPointer(event.clientX, event.clientY);
   }
 
+  /** Pointer events can fire far more often than the screen repaints, so moves are applied once per frame. */
   protected onPointerMove(event: PointerEvent, channel: ZardColorChannel): void {
-    if (this.activeChannel === channel) {
-      this.updateFromPointer(event, channel);
-    }
-  }
-
-  protected onPointerUp(): void {
-    this.activeChannel = null;
-  }
-
-  protected onKeydown(event: KeyboardEvent, channel: ZardColorChannel): void {
-    const step = event.shiftKey ? SHIFT_STEP : STEP;
-    const color = this.color();
-
-    if (channel === 'area') {
-      const delta = this.arrowDelta(event.key);
-      const s = event.key === 'Home' ? 0 : event.key === 'End' ? 100 : this.percent(color.s) + delta.x * step;
-      const v = this.percent(color.v) + delta.y * step;
-      if (!delta.x && !delta.y && event.key !== 'Home' && event.key !== 'End') {
-        return;
-      }
-      event.preventDefault();
-      this.commit({ ...color, s: clamp(s, [0, 100]) / 100, v: clamp(v, [0, 100]) / 100 });
+    if (this.dragging() !== channel) {
       return;
     }
 
-    const max = channel === 'hue' ? 360 : 100;
-    const current = channel === 'hue' ? Math.round(color.h) : this.percent(color.a);
-    const delta = this.arrowDelta(event.key);
-    const next = event.key === 'Home' ? 0 : event.key === 'End' ? max : current + (delta.x || delta.y) * step;
-    if (next === current && event.key !== 'Home' && event.key !== 'End') {
+    this.pendingPointer = { x: event.clientX, y: event.clientY };
+    this.frame ||= requestAnimationFrame(() => this.flushPointer());
+  }
+
+  protected onPointerUp(): void {
+    if (!this.dragging()) {
+      return;
+    }
+
+    this.flushPointer();
+    this.dragging.set(null);
+    this.dragRect = null;
+
+    const value = this.value();
+    if (value !== null && value !== this.dragStartValue) {
+      this.zColorCommit.emit(value);
+    }
+  }
+
+  protected onKeydown(event: KeyboardEvent, channel: ZardColorChannel): void {
+    const next = this.colorForKey(event, channel);
+    if (!next) {
       return;
     }
 
     event.preventDefault();
-    const value = clamp(next, [0, max]);
-    this.commit(channel === 'hue' ? { ...color, h: value } : { ...color, a: value / 100 });
+    this.commit(next);
   }
 
   protected onTextCommit(event: Event): void {
@@ -395,7 +518,7 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
     const parsed = parseColor(field.value, this.resolveColor);
 
     if (parsed) {
-      this.commit(parsed);
+      this.commit(keepHue(parsed, this.color()));
     }
 
     // Normalizes valid input (`#FFF` → `#ffffff`) and reverts invalid input to the current color.
@@ -404,47 +527,107 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
 
   protected onPopoverVisibilityChange(visible: boolean): void {
     if (!visible) {
-      this.activeChannel = null;
+      this.onPointerUp();
       this.onTouched();
       return;
     }
 
     // The panel is only created once the popover renders, hence the deferral.
-    setTimeout(() => this.area()?.nativeElement.focus());
+    afterNextRender(() => this.area()?.nativeElement.focus(), { injector: this.injector });
   }
 
-  private updateFromPointer(event: PointerEvent, channel: ZardColorChannel): void {
-    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-    const x = rect.width ? clamp((event.clientX - rect.left) / rect.width, [0, 1]) : 0;
-    const y = rect.height ? clamp((event.clientY - rect.top) / rect.height, [0, 1]) : 0;
+  private format(color: ZardHsva): string {
+    return formatColor(color, this.zFormat(), this.zAlpha());
+  }
+
+  private flushPointer(): void {
+    this.cancelFrame();
+    const pending = this.pendingPointer;
+    this.pendingPointer = null;
+    if (pending) {
+      this.updateFromPointer(pending.x, pending.y);
+    }
+  }
+
+  private cancelFrame(): void {
+    if (this.frame) {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+    }
+  }
+
+  private updateFromPointer(clientX: number, clientY: number): void {
+    const rect = this.dragRect;
+    const channel = this.dragging();
+    if (!rect || !channel) {
+      return;
+    }
+
+    const x = rect.width ? clamp((clientX - rect.left) / rect.width, [0, 1]) : 0;
+    const y = rect.height ? clamp((clientY - rect.top) / rect.height, [0, 1]) : 0;
     const color = this.color();
 
     switch (channel) {
       case 'area':
-        this.commit({ ...color, s: x, v: 1 - y });
+        this.commit({ ...color, s: x, v: 1 - y }, { final: false });
         break;
       case 'hue':
-        this.commit({ ...color, h: x * 360 });
+        this.commit({ ...color, h: x * 360 }, { final: false });
         break;
       case 'alpha':
-        this.commit({ ...color, a: x });
+        this.commit({ ...color, a: x }, { final: false });
         break;
     }
   }
 
-  /** Right/up increase, left/down decrease. In the area, x is saturation and y is brightness. */
-  private arrowDelta(key: string): { x: number; y: number } {
+  /** The color a key leads to, or `null` for keys the slider does not handle. */
+  private colorForKey(event: KeyboardEvent, channel: ZardColorChannel): ZardHsva | null {
+    const { key } = event;
+    const color = this.color();
+    const delta = this.keyDelta(key, event.shiftKey ? SHIFT_STEP : STEP);
+
+    if (channel === 'area') {
+      if (key === 'Home' || key === 'End') {
+        return { ...color, s: key === 'Home' ? 0 : 1 };
+      }
+      if (!delta) {
+        return null;
+      }
+      const s = clamp(this.percent(color.s) + delta.x, [0, 100]);
+      const v = clamp(this.percent(color.v) + delta.y, [0, 100]);
+      return { ...color, s: s / 100, v: v / 100 };
+    }
+
+    const max = channel === 'hue' ? 360 : 100;
+    const current = channel === 'hue' ? this.hue() : this.percent(color.a);
+    let next: number;
+    if (key === 'Home' || key === 'End') {
+      next = key === 'Home' ? 0 : max;
+    } else if (delta) {
+      next = clamp(current + (delta.x || delta.y), [0, max]);
+    } else {
+      return null;
+    }
+    return channel === 'hue' ? { ...color, h: next } : { ...color, a: next / 100 };
+  }
+
+  /** Right/up increase, left/down decrease; PageUp/PageDown move by the large step. In the area, y is brightness. */
+  private keyDelta(key: string, step: number): { x: number; y: number } | null {
     switch (key) {
       case 'ArrowRight':
-        return { x: 1, y: 0 };
+        return { x: step, y: 0 };
       case 'ArrowLeft':
-        return { x: -1, y: 0 };
+        return { x: -step, y: 0 };
       case 'ArrowUp':
-        return { x: 0, y: 1 };
+        return { x: 0, y: step };
       case 'ArrowDown':
-        return { x: 0, y: -1 };
+        return { x: 0, y: -step };
+      case 'PageUp':
+        return { x: 0, y: SHIFT_STEP };
+      case 'PageDown':
+        return { x: 0, y: -SHIFT_STEP };
       default:
-        return { x: 0, y: 0 };
+        return null;
     }
   }
 

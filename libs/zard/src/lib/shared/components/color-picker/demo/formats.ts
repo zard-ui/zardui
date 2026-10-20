@@ -23,6 +23,11 @@ import { ZardColorPickerComponent } from '../color-picker.component';
         <label z-field-label for="color-picker-format-hsl">HSL</label>
         <z-color-picker zId="color-picker-format-hsl" zFormat="hsl" zShowValue [(value)]="hsl" />
       </div>
+
+      <div z-field>
+        <label z-field-label for="color-picker-format-oklch">OKLCH</label>
+        <z-color-picker zId="color-picker-format-oklch" zFormat="oklch" zShowValue [(value)]="oklch" />
+      </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,4 +36,5 @@ export class ZardDemoColorPickerFormatsComponent {
   readonly hex = signal<string | null>('#7c3aed');
   readonly rgb = signal<string | null>('rgb(234, 88, 12)');
   readonly hsl = signal<string | null>('hsl(199, 89%, 48%)');
+  readonly oklch = signal<string | null>('oklch(0.723 0.219 149.579)');
 }
