@@ -20,7 +20,7 @@ import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/package-manager.js';
-import { getRegistryUrl } from '@cli/utils/registry.js';
+import { assertRegistryItems, fetchBlockFromRegistry, getRegistryUrl } from '@cli/utils/registry.js';
 import { loadStyleCatalog } from '@cli/utils/style-catalog.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
@@ -90,6 +90,7 @@ export async function runAdd(components: string[], options: AddOptions): Promise
         cwd,
         options,
       );
+      await assertInstallable(componentsToInstall);
       return {
         components: componentsToInstall,
         dependencies: pinAllForAngular(dependenciesToInstall, projectInfo.angularVersion),
@@ -147,6 +148,37 @@ export async function runAdd(components: string[], options: AddOptions): Promise
       process.exit(0);
     }
     throw error;
+  }
+}
+
+/**
+ * Every component fetched before the first dependency is installed or file written.
+ *
+ * The registry dropping mid-way used to leave some components in and the dependencies of the rest
+ * out; now it fails first, with nothing changed. A file that cannot be written afterwards (disk,
+ * permissions) is a local failure, which the installer rolls back per component.
+ */
+async function assertInstallable(components: readonly ComponentMeta[]): Promise<void> {
+  const outcome = 'Nothing was installed.';
+  const registry = getRegistryUrl();
+
+  await assertRegistryItems(
+    components.filter(component => !component.isBlock).map(component => component.name),
+    registry,
+    outcome,
+  );
+
+  for (const block of components.filter(component => component.isBlock)) {
+    try {
+      await fetchBlockFromRegistry(block.name, registry);
+    } catch (error) {
+      throw new CliError(
+        `Could not fetch block "${block.name}" from the zard/ui registry at ${registry}: ${
+          error instanceof Error ? error.message : String(error)
+        }. ${outcome} Check your connection and try again.`,
+        'REGISTRY_UNREACHABLE',
+      );
+    }
   }
 }
 

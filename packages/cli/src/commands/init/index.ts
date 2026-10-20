@@ -24,7 +24,7 @@ import { getProjectInfo, type ProjectInfo } from '@cli/utils/get-project-info.js
 import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager, suggestedRunner } from '@cli/utils/package-manager.js';
-import { getRegistryUrl } from '@cli/utils/registry.js';
+import { assertRegistryItems, assertRegistryReachable, getRegistryUrl } from '@cli/utils/registry.js';
 import { getAvailableThemes } from '@cli/utils/theme-selector.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
@@ -95,10 +95,19 @@ export async function runInit(options: InitOptions): Promise<void> {
   const isReInitializing = existsSync(path.resolve(cwd, 'components.json'));
   const packageManager = await detectPackageManager(cwd);
 
-  // Before any step: the catalog is what says which icon package to install,
-  // and it comes from the registry so it does not depend on the CLI version.
-  await loadIconCatalog(getRegistryUrl());
-  await loadDesignData(getRegistryUrl());
+  // Before any step — and before the wizard, which can take minutes to answer: the registry is the
+  // one thing the steps cannot do without (`core` and `utils` are their last), and finding it down
+  // after components.json, the dependencies, app.config and the stylesheet were rewritten leaves a
+  // project that no longer compiles. The icon catalog and the design data fall back to bundled copies.
+  const registry = getRegistryUrl();
+  const untouched = 'Nothing was changed in your project.';
+  await assertRegistryReachable(registry, untouched);
+  await assertRegistryItems(['core', 'utils'], registry, untouched);
+
+  // The catalog is what says which icon package to install, and it comes from the registry so it
+  // does not depend on the CLI version.
+  await loadIconCatalog(registry);
+  await loadDesignData(registry);
   if (preset) assertIconFamily(preset.design.iconLibrary);
 
   const buildSteps = (config: Config): InitStep[] =>

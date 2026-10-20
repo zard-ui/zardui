@@ -6,6 +6,8 @@ import { Config } from '@cli/utils/config.js';
 import { ConfigError } from '@cli/utils/errors.js';
 import { fetchJson } from '@cli/utils/http-client.js';
 import {
+  assertRegistryItems,
+  assertRegistryReachable,
   fetchComponent,
   fetchComponentFromRegistry,
   fetchRegistryIndex,
@@ -351,5 +353,48 @@ describe('relativizeImports', () => {
     const content = `import { Component } from '@angular/core';\nimport { x } from './x';`;
 
     expect(relativizeImports(content, path.join(lib, 'components', 'a', 'a.ts'), targets)).toBe(content);
+  });
+});
+
+describe('preflight', () => {
+  const registry = 'http://localhost:4223/r';
+  const item = { name: 'core', type: 'registry:component', files: [{ name: 'a.ts', content: '' }] };
+
+  beforeEach(() => {
+    mockFetchJson.mockReset();
+    invalidateRegistryCache();
+  });
+
+  it('names the registry and what was left alone when the index cannot be reached', async () => {
+    mockFetchJson.mockRejectedValue(new Error('fetch failed'));
+
+    await expect(assertRegistryReachable(registry, 'Nothing was changed.')).rejects.toThrow(
+      `Could not reach the zard/ui registry at ${registry}: fetch failed. Nothing was changed.`,
+    );
+  });
+
+  it('fails on the first item the registry cannot serve, naming it', async () => {
+    mockFetchJson.mockResolvedValueOnce(item).mockRejectedValueOnce(new Error('HTTP 404'));
+
+    await expect(assertRegistryItems(['core', 'utils'], registry, 'Nothing was installed.')).rejects.toThrow(
+      /Could not fetch "utils".*HTTP 404\. Nothing was installed\./,
+    );
+  });
+
+  it('refuses an item that comes back without files', async () => {
+    mockFetchJson.mockResolvedValue({ name: 'core', files: [] });
+
+    await expect(assertRegistryItems(['core'], registry, 'x')).rejects.toThrow(/no files/);
+  });
+
+  it('hands the prefetched item to the install once, without a second request', async () => {
+    mockFetchJson.mockResolvedValue(item);
+
+    await assertRegistryItems(['core'], registry, 'x');
+    expect(await fetchComponentFromRegistry('core', registry)).toBe(item);
+    expect(mockFetchJson).toHaveBeenCalledTimes(1);
+
+    await fetchComponentFromRegistry('core', registry);
+    expect(mockFetchJson).toHaveBeenCalledTimes(2);
   });
 });

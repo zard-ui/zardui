@@ -23,11 +23,10 @@ import { DEFAULT_PRESET_CODE } from '@cli/core/design/index.js';
 import { isInteractive, printReport, WizardCancelledError } from '@cli/ui/index.js';
 import { loadDesignData } from '@cli/utils/design-catalog.js';
 import { CliError } from '@cli/utils/errors.js';
-import { fetchJson } from '@cli/utils/http-client.js';
 import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger } from '@cli/utils/logger.js';
 import { suggestedRunner } from '@cli/utils/package-manager.js';
-import { getRegistryUrl } from '@cli/utils/registry.js';
+import { assertRegistryReachable, getRegistryUrl } from '@cli/utils/registry.js';
 import { Command } from 'commander';
 import * as path from 'node:path';
 
@@ -157,15 +156,7 @@ async function preflight(plan: Plan, allowNested?: boolean): Promise<void> {
   if (nesting) throw new CliError(nesting, 'NESTED_WORKSPACE');
 
   const registry = getRegistryUrl();
-  try {
-    await fetchJson(`${registry}/registry.json`, { retries: 1, timeout: 10_000 });
-  } catch (error) {
-    throw new CliError(
-      `Could not reach the zard/ui registry at ${registry}: ${error instanceof Error ? error.message : String(error)}. ` +
-        'Nothing was created. Check your connection and try again.',
-      'REGISTRY_UNREACHABLE',
-    );
-  }
+  await assertRegistryReachable(registry, 'Nothing was created.');
 
   await loadIconCatalog(registry);
   await loadDesignData(registry);

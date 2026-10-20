@@ -14,8 +14,18 @@ jest.mock('@cli/utils/package-manager.js', () => ({
   filterInstalledPackages: jest.fn(async (packages: string[]) => packages),
   installPackagesWithRetry: jest.fn(async () => undefined),
 }));
+// The registry answers for what init must reach (the index, `core`, `utils`); the catalogs fall back to
+// the copies bundled in the CLI, so they stay unreachable. `registryDown` takes the whole registry away.
+const mockRegistry = { down: false, missing: '' };
 jest.mock('@cli/utils/http-client.js', () => ({
-  fetchJson: jest.fn(async () => {
+  fetchJson: jest.fn(async (url: string) => {
+    if (
+      !mockRegistry.down &&
+      !url.endsWith(`/${mockRegistry.missing}.json`) &&
+      /\/(registry|core|utils)\.json$/.test(url)
+    ) {
+      return { files: [{ name: 'index.ts', content: '' }] };
+    }
     throw new Error('offline');
   }),
 }));
@@ -37,6 +47,8 @@ import { resetDesignData } from '@cli/utils/design-catalog.js';
 import { CliError } from '@cli/utils/errors.js';
 import { resetIconCatalog } from '@cli/utils/icon-catalog.js';
 import { installPackagesWithRetry } from '@cli/utils/package-manager.js';
+import { invalidateRegistryCache } from '@cli/utils/registry.js';
+import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, readdir, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import * as path from 'node:path';
@@ -76,7 +88,29 @@ async function angularApp(): Promise<string> {
   return cwd;
 }
 
+/** A hash of every path and byte under `dir`: equal before and after means nothing was touched. */
+async function treeHash(dir: string): Promise<string> {
+  const hash = createHash('sha256');
+
+  const walk = async (current: string): Promise<void> => {
+    for (const entry of (await readdir(current, { withFileTypes: true })).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    )) {
+      const full = path.join(current, entry.name);
+      hash.update(path.relative(dir, full));
+      if (entry.isDirectory()) await walk(full);
+      else hash.update(await readFile(full));
+    }
+  };
+
+  await walk(dir);
+  return hash.digest('hex');
+}
+
 beforeEach(() => {
+  mockRegistry.down = false;
+  mockRegistry.missing = '';
+  invalidateRegistryCache(); // items prefetched by one test must not feed the next
   resetIconCatalog();
   resetDesignData();
   (installPackagesWithRetry as jest.Mock).mockClear();
@@ -125,6 +159,31 @@ describe('initWithPreset', () => {
 
     expect((await readdir(cwd)).sort()).toEqual(before);
     expect(await readFile(path.join(cwd, 'src/styles.css'), 'utf8')).toBe('@import "tailwindcss";\n');
+    expect(installPackagesWithRetry).not.toHaveBeenCalled();
+  });
+
+  it('with the registry unreachable, leaves the project byte for byte untouched', async () => {
+    const cwd = await angularApp();
+    const before = await treeHash(cwd);
+    mockRegistry.down = true;
+
+    const attempt = initWithPreset({ cwd, type: 'angular', preset: 'Z6KtfCaQt' });
+
+    await expect(attempt).rejects.toThrow(CliError);
+    await expect(attempt).rejects.toThrow(/Could not reach the zard\/ui registry at .*Nothing was changed/);
+    expect(await treeHash(cwd)).toBe(before);
+    expect(installPackagesWithRetry).not.toHaveBeenCalled();
+  });
+
+  it('without --preset, a registry that cannot serve core and utils changes nothing either', async () => {
+    const cwd = await angularApp();
+    const before = await treeHash(cwd);
+    mockRegistry.missing = 'core'; // registry.json answers, core.json does not
+
+    const attempt = runInit({ cwd, yes: true, headless: true, type: 'angular' });
+
+    await expect(attempt).rejects.toThrow(/Could not fetch "core" from the zard\/ui registry/);
+    expect(await treeHash(cwd)).toBe(before);
     expect(installPackagesWithRetry).not.toHaveBeenCalled();
   });
 

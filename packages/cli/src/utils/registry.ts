@@ -2,7 +2,7 @@ import { DEFAULT_REGISTRY_URL as BUILD_REGISTRY_URL } from '@cli/config/registry
 import { isIconFamily, retargetIcons, SOURCE_ICON_FAMILY, type IconFamily } from '@cli/core/icons/index.js';
 import { resolveStyle, transformStyle, DEFAULT_STYLE } from '@cli/core/styles/index.js';
 import type { Config } from '@cli/utils/config.js';
-import { ConfigError } from '@cli/utils/errors.js';
+import { CliError, ConfigError } from '@cli/utils/errors.js';
 import { fetchJson } from '@cli/utils/http-client.js';
 import { iconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger } from '@cli/utils/logger.js';
@@ -132,6 +132,68 @@ export function validateRegistryUrl(url: string): void {
   }
 }
 
+/**
+ * Asks the registry for its index, and turns any failure into an error that names the URL.
+ *
+ * It is the check commands run before the first byte is written: the design data and the icon
+ * catalog fall back to copies bundled in the CLI, so the component index is what decides whether
+ * the run can finish. `outcome` says what the failure left behind ("Nothing was changed in your
+ * project.").
+ */
+export async function assertRegistryReachable(registry: string, outcome: string): Promise<void> {
+  try {
+    await fetchJson(`${registry}/registry.json`, { retries: 1, timeout: 10_000 });
+  } catch (error) {
+    throw new CliError(
+      `Could not reach the zard/ui registry at ${registry}: ${error instanceof Error ? error.message : String(error)}. ` +
+        `${outcome} Check your connection and try again.`,
+      'REGISTRY_UNREACHABLE',
+    );
+  }
+}
+
+/**
+ * Items fetched ahead of time by `assertRegistryItems`, waiting for the installer to ask for them.
+ *
+ * Each is handed over once: the preflight must not make the install fetch everything twice, and a
+ * stale copy must never outlive the run that asked for it.
+ */
+const prefetchedItems = new Map<string, RegistryItem>();
+
+/**
+ * Fetches the registry items a command will install, before it changes anything.
+ *
+ * `init` installs `core` and `utils` as its last step, and `add` fetches component by component
+ * after the dependencies are in; finding one unreachable there left a half-written project. The
+ * items are kept for the install, so the check costs no extra request.
+ */
+export async function assertRegistryItems(names: readonly string[], registry: string, outcome: string): Promise<void> {
+  const pending = names.filter(name => !prefetchedItems.has(`${registry}/${name}.json`));
+
+  for (let start = 0; start < pending.length; start += PREFETCH_CONCURRENCY) {
+    await Promise.all(
+      pending.slice(start, start + PREFETCH_CONCURRENCY).map(async name => {
+        try {
+          const item = await fetchJson<RegistryItem>(`${registry}/${name}.json`);
+          if (!Array.isArray(item.files) || item.files.length === 0) {
+            throw new Error('it has no files');
+          }
+          prefetchedItems.set(`${registry}/${name}.json`, item);
+        } catch (error) {
+          throw new CliError(
+            `Could not fetch "${name}" from the zard/ui registry at ${registry}: ${
+              error instanceof Error ? error.message : String(error)
+            }. ${outcome} Check your connection and try again.`,
+            'REGISTRY_UNREACHABLE',
+          );
+        }
+      }),
+    );
+  }
+}
+
+const PREFETCH_CONCURRENCY = 8;
+
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 /**
@@ -162,11 +224,19 @@ export async function fetchRegistryIndex(registryUrl?: string): Promise<Registry
 export function invalidateRegistryCache(): void {
   registryIndexCache.clear();
   blocksIndexCache.clear();
+  prefetchedItems.clear();
 }
 
 export async function fetchComponentFromRegistry(componentName: string, registryUrl?: string): Promise<RegistryItem> {
   const baseUrl = registryUrl || DEFAULT_REGISTRY_URL;
   const url = `${baseUrl}/${componentName}.json`;
+
+  const prefetched = prefetchedItems.get(url);
+  if (prefetched) {
+    prefetchedItems.delete(url);
+    return prefetched;
+  }
+
   return fetchJson<RegistryItem>(url);
 }
 
