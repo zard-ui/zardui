@@ -2198,10 +2198,6 @@
     @apply *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background;
   }
 
-  .cn-avatar-group-orientation-horizontal {
-    @apply rtl:space-x-reverse;
-  }
-
   .cn-avatar-group-count {
     @apply group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3;
   }

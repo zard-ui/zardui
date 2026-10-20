@@ -85,7 +85,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-count-size-default': 'size-9 text-xs',
     'cn-avatar-group-count-size-lg': 'size-10 text-sm',
     'cn-avatar-group-count-size-sm': 'size-6 text-xs',
-    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2 rtl:space-x-reverse',
+    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
       'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
@@ -776,7 +776,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-count-size-default': 'size-8 text-xs',
     'cn-avatar-group-count-size-lg': 'size-10 text-sm',
     'cn-avatar-group-count-size-sm': 'size-6 text-xs',
-    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2 rtl:space-x-reverse',
+    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
       'absolute inset-0 aspect-square size-full rounded-full object-cover opacity-0 transition-opacity duration-200',
@@ -1468,7 +1468,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-count-size-default': 'size-9 text-xs',
     'cn-avatar-group-count-size-lg': 'size-10 text-sm',
     'cn-avatar-group-count-size-sm': 'size-6 text-xs',
-    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2 rtl:space-x-reverse',
+    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
       'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
@@ -2157,7 +2157,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-count-size-default': 'size-8 text-xs',
     'cn-avatar-group-count-size-lg': 'size-10 text-xs',
     'cn-avatar-group-count-size-sm': 'size-6 text-xs',
-    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2 rtl:space-x-reverse',
+    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
       'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
@@ -2849,7 +2849,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-count-size-default': 'size-7 text-[0.625rem]',
     'cn-avatar-group-count-size-lg': 'size-8 text-xs/relaxed',
     'cn-avatar-group-count-size-sm': 'size-6 text-[0.625rem]',
-    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2 rtl:space-x-reverse',
+    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
       'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
@@ -3550,7 +3550,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-count-size-default': 'size-9 text-xs',
     'cn-avatar-group-count-size-lg': 'size-10 text-sm',
     'cn-avatar-group-count-size-sm': 'size-6 text-xs',
-    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2 rtl:space-x-reverse',
+    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
       'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
@@ -4239,7 +4239,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-count-size-default': 'size-10 text-xs',
     'cn-avatar-group-count-size-lg': 'size-10 text-xs',
     'cn-avatar-group-count-size-sm': 'size-6 text-xs',
-    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2 rtl:space-x-reverse',
+    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
       'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
@@ -4933,7 +4933,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-count-size-default': 'size-8 text-xs',
     'cn-avatar-group-count-size-lg': 'size-10 text-sm',
     'cn-avatar-group-count-size-sm': 'size-6 text-xs',
-    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2 rtl:space-x-reverse',
+    'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
       'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',

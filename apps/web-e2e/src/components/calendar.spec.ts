@@ -33,8 +33,10 @@ test.describe('Calendar component (RTL)', () => {
     await selected.focus();
     const before = await page.evaluate(() => document.activeElement?.textContent?.trim());
     await page.keyboard.press('ArrowLeft');
-    const after = await page.evaluate(() => document.activeElement?.textContent?.trim());
-    expect(Number(after)).toBe(Number(before) + 1);
+    // Focus moves after the grid re-renders, so poll instead of reading it right away.
+    await expect
+      .poll(async () => Number(await page.evaluate(() => document.activeElement?.textContent?.trim())))
+      .toBe(Number(before) + 1);
   });
 
   test('passes accessibility checks', async ({ page }) => {

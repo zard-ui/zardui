@@ -188,7 +188,7 @@ export const avatarBadgeVariants = mergeClasses(
 export const avatarGroupVariants = cva('flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background group/avatar-group', {
   variants: {
     zOrientation: {
-      horizontal: 'flex-row -space-x-2 rtl:space-x-reverse',
+      horizontal: 'flex-row -space-x-2',
       vertical: 'flex-col -space-y-2',
     },
   },

@@ -77,6 +77,11 @@ test.describe('Avatar RTL', () => {
     // The stack overlaps toward the inline end: the first avatar is the right-most one.
     expect(first!.x).toBeGreaterThan(second!.x);
     expect(second!.x + second!.width).toBeGreaterThan(first!.x);
+    // Tailwind v4 `space-x` already uses logical margins: every pair overlaps and the stack stays inside the group.
+    const third = await avatars.nth(2).boundingBox();
+    expect(third!.x + third!.width).toBeGreaterThan(second!.x);
+    const group = await preview.locator('z-avatar-group').first().boundingBox();
+    expect(first!.x + first!.width).toBeLessThanOrEqual(group!.x + group!.width + 1);
     const badged = preview.locator('z-avatar').nth(1);
     const badge = await badged.locator(':scope > div').boundingBox();
     const host = await badged.boundingBox();

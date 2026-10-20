@@ -366,7 +366,7 @@ import {
   ZardAttachmentActionComponent,
   ZardAttachmentTriggerDirective,
   ZardAttachmentGroupComponent,
-} from './attachment.component';
+} from '@/shared/components/attachment/attachment.component';
 
 export const ZardAttachmentImports = [
   ZardAttachmentComponent,
