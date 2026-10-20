@@ -1,6 +1,13 @@
 import { Directionality } from '@angular/cdk/bidi';
 import { type ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
-import { Component, type DebugElement, type TemplateRef, viewChild, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  type DebugElement,
+  ElementRef,
+  type TemplateRef,
+  viewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { type ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -722,4 +729,45 @@ describe('ZardPopoverDirective direction', () => {
     tick(ZARD_POPOVER_ANIMATION_DURATION);
     expect(queryPopover()).toBeNull();
   }));
+});
+
+@Component({
+  imports: [ZardPopoverDirective, ZardPopoverComponent],
+  template: `
+    <div #anchor id="anchor">Anchor</div>
+    <button type="button" zPopover [zContent]="popoverContent" [zOrigin]="anchorRef">Trigger</button>
+    <ng-template #popoverContent>
+      <z-popover><div id="test-content">Test content</div></z-popover>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.Eager,
+})
+class OriginTestComponent {
+  readonly anchor = viewChild.required<ElementRef<HTMLElement>>('anchor');
+  get anchorRef(): ElementRef<HTMLElement> {
+    return this.anchor();
+  }
+}
+
+describe('ZardPopoverDirective with zOrigin', () => {
+  let fixture: ComponentFixture<OriginTestComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [OverlayModule, OriginTestComponent],
+      providers: [{ provide: EVENT_MANAGER_PLUGINS, useClass: ZardEventManagerPlugin, multi: true }],
+    });
+    fixture = TestBed.createComponent(OriginTestComponent);
+    fixture.detectChanges();
+  });
+
+  it('opens from the trigger, not from the anchor', () => {
+    fixture.nativeElement.querySelector('#anchor').click();
+    fixture.detectChanges();
+    expect(queryContent()).toBeFalsy();
+
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+    expect(queryContent()).toBeTruthy();
+  });
 });

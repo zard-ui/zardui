@@ -364,7 +364,49 @@ test.describe('Create builder, first visit', () => {
 });
 
 test.describe('Create builder, phone', () => {
-  test.use({ viewport: { width: 390, height: 844 } });
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  const pickers = [
+    'Style',
+    'Base Color',
+    'Theme',
+    'Chart Color',
+    'Heading',
+    'Font',
+    'Icon Library',
+    'Radius',
+    'Menu',
+    'Menu Accent',
+  ];
+
+  test('a tap opens only that picker and an option can be chosen, in every picker', async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.addInitScript(() => localStorage.setItem('zard-create-welcome', 'true'));
+    await page.goto('/create');
+    await ready(page);
+
+    for (const label of pickers) {
+      await picker(page, label).locator('button[zpopover]').tap();
+      await expect(page.getByRole('menu')).toHaveCount(1);
+      const menu = page.getByRole('menu', { name: label });
+      await expect(menu).toBeVisible();
+
+      const next = menu.locator('[role="menuitemradio"][aria-checked="false"]:not(:disabled)').first();
+      const value = await next.getAttribute('data-value');
+      await next.tap();
+      await expect(page.getByRole('menu')).toHaveCount(0);
+      expect(value).toBeTruthy();
+    }
+  });
+
+  test('the footer buttons are 40px tall', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('zard-create-welcome', 'true'));
+    await page.goto('/create');
+    await ready(page);
+
+    const box = await page.getByTestId('copy-preset').boundingBox();
+    expect(box?.height).toBeCloseTo(40, 0);
+  });
 
   test('stacks the preview over a horizontal row of cards, with no Get Code and no overflow', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('zard-create-welcome', 'true'));

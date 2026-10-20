@@ -194,7 +194,7 @@ const COPIED_MS = 2000;
           type="button"
           z-button
           zType="outline"
-          class="hover:bg-muted! min-w-0 flex-1 bg-transparent! px-2! text-sm! md:flex-none"
+          class="hover:bg-muted! min-w-0 flex-1 bg-transparent! px-2! text-sm! max-md:h-10! md:flex-none"
           data-testid="copy-preset"
           [attr.title]="copyLabel()"
           (click)="copyPreset()"
@@ -205,7 +205,7 @@ const COPIED_MS = 2000;
           type="button"
           z-button
           zType="outline"
-          class="hover:bg-muted! max-w-20 min-w-0 flex-1 bg-transparent! px-2! text-sm! sm:max-w-none md:flex-none"
+          class="hover:bg-muted! max-w-20 min-w-0 flex-1 bg-transparent! px-2! text-sm! max-md:h-10! sm:max-w-none md:flex-none"
           (click)="state.openPresetOpen.set(true)"
         >
           <span class="truncate">{{ mobile() ? 'Open' : 'Open Preset' }}</span>
@@ -214,7 +214,7 @@ const COPIED_MS = 2000;
           type="button"
           z-button
           zType="outline"
-          class="hover:bg-muted! max-w-20 min-w-0 flex-1 bg-transparent! px-2! text-sm! sm:max-w-none md:flex-none"
+          class="hover:bg-muted! max-w-20 min-w-0 flex-1 bg-transparent! px-2! text-sm! max-md:h-10! sm:max-w-none md:flex-none"
           (click)="state.shuffle()"
         >
           <span class="truncate">Shuffle</span>
