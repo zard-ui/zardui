@@ -5,6 +5,7 @@ import { COLOR_PICKER_DEMO_FORM } from '@generated/components/color-picker/demo/
 import { COLOR_PICKER_DEMO_FORMATS } from '@generated/components/color-picker/demo/formats';
 import { COLOR_PICKER_DEMO_PRESETS } from '@generated/components/color-picker/demo/presets';
 import { COLOR_PICKER_DEMO_PREVIEW } from '@generated/components/color-picker/demo/preview';
+import { COLOR_PICKER_DEMO_RTL } from '@generated/components/color-picker/demo/rtl';
 import { COLOR_PICKER_DEMO_SIZES } from '@generated/components/color-picker/demo/sizes';
 import { COLOR_PICKER_CLI_ADD } from '@generated/installation/cli/add-color-picker';
 import { COLOR_PICKER_MANUAL_CODE } from '@generated/installation/manual/color-picker';
@@ -17,6 +18,7 @@ import { ZardDemoColorPickerFormComponent } from './form';
 import { ZardDemoColorPickerFormatsComponent } from './formats';
 import { ZardDemoColorPickerPresetsComponent } from './presets';
 import { ZardDemoColorPickerPreviewComponent } from './preview';
+import { ZardDemoColorPickerRtlComponent } from './rtl';
 import { ZardDemoColorPickerSizesComponent } from './sizes';
 import { COLOR_PICKER_API } from '../doc/api';
 
@@ -78,6 +80,13 @@ export const COLOR_PICKER = {
       description: '`zSize` follows the button scale, so the picker lines up with the inputs around it.',
       component: ZardDemoColorPickerSizesComponent,
       codeData: COLOR_PICKER_DEMO_SIZES,
+    },
+    {
+      name: 'rtl',
+      description: 'To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).',
+      type: 'rtl' as const,
+      component: ZardDemoColorPickerRtlComponent,
+      codeData: COLOR_PICKER_DEMO_RTL,
     },
   ],
 };

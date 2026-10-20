@@ -29,7 +29,7 @@ export const colorPickerVariants = cva('flex flex-col', {
 export const colorPickerTriggerVariants = cva('font-normal', {
   variants: {
     zShowValue: {
-      true: 'w-full justify-start text-left',
+      true: 'w-full justify-start text-start',
       false: '',
     },
   },
@@ -69,16 +69,16 @@ export const colorPickerFormatGroupVariants = cva('relative isolate flex rounded
 
 /** The pill behind the active tab. Tabs share the width equally, so it only needs a `translateX` per index. */
 export const colorPickerFormatIndicatorVariants = cva(
-  'absolute inset-y-0.5 left-0.5 -z-10 rounded-sm bg-background shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+  'absolute inset-y-0.5 start-0.5 -z-10 rounded-sm bg-background shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
 );
 
 export const colorPickerFormatVariants = cva(
   'h-6 flex-1 rounded-sm font-mono text-[11px] font-medium text-muted-foreground outline-none transition-colors duration-200 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 aria-pressed:text-foreground',
 );
 
-/** The saturation (x) / brightness (y) area. Its hue background is set inline. */
+/** The saturation (x) / brightness (y) area. Hue and gradients are set inline: x follows the reading direction. */
 export const colorPickerAreaVariants = cva(
-  `relative h-36 w-full cursor-crosshair touch-none rounded-md bg-[linear-gradient(to_top,#000,transparent),linear-gradient(to_right,#fff,transparent)] outline-none select-none transition-[background-color] focus-visible:ring-3 focus-visible:ring-ring/50 ${glideUnlessDragging}`,
+  `relative h-36 w-full cursor-crosshair touch-none rounded-md outline-none select-none transition-[background-color] focus-visible:ring-3 focus-visible:ring-ring/50 ${glideUnlessDragging}`,
 );
 
 export const colorPickerTrackVariants = cva(
@@ -86,7 +86,8 @@ export const colorPickerTrackVariants = cva(
   {
     variants: {
       zChannel: {
-        hue: 'bg-[linear-gradient(to_right,#f00_0%,#ff0_17%,#0f0_33%,#0ff_50%,#00f_67%,#f0f_83%,#f00_100%)]',
+        // The hue gradient is set inline, since its direction follows the reading direction.
+        hue: '',
         alpha: checkerboard,
       },
     },

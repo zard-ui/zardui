@@ -1,7 +1,14 @@
-import { expect, test } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 
 import { checkA11y } from '../utils/axe-helper';
 import { ComponentDemoPage } from '../utils/component-page';
+
+/** The panel opens with a zoom-in, and boxes measured during it are about 4% off: wait for it to settle. */
+const waitForPanel = async (page: Page) => {
+  const overlay = page.locator('.cdk-overlay-container');
+  await overlay.locator('[data-slot="color-picker-area"]').waitFor();
+  await overlay.evaluate(el => Promise.all(el.getAnimations({ subtree: true }).map(animation => animation.finished)));
+};
 
 test.describe('Color Picker', () => {
   let demos: ComponentDemoPage;
@@ -13,7 +20,7 @@ test.describe('Color Picker', () => {
 
   test('hydrates every demo', async () => {
     await expect(demos.firstDemoBox.locator('[data-slot="color-picker"]')).toBeVisible();
-    for (const name of ['basic', 'formats', 'alpha', 'presets', 'events', 'form', 'sizes']) {
+    for (const name of ['basic', 'formats', 'alpha', 'presets', 'events', 'form', 'sizes', 'rtl']) {
       await expect(demos.getDemoByName(name).locator('[data-slot="color-picker"]').first()).toBeVisible();
     }
   });
@@ -23,6 +30,7 @@ test.describe('Color Picker', () => {
     await expect(trigger).toHaveText('#2563eb');
 
     await trigger.click();
+    await waitForPanel(page);
     const area = page.locator('.cdk-overlay-container [data-slot="color-picker-area"]');
     await expect(area).toBeVisible();
     await expect(area).toBeFocused();
@@ -118,6 +126,7 @@ test.describe('Color Picker', () => {
     await expect(trigger).toHaveText('No color yet');
 
     await trigger.click();
+    await waitForPanel(page);
     const hue = page.locator('.cdk-overlay-container [data-slot="color-picker-hue"]');
     const box = await hue.boundingBox();
     if (!box) {
@@ -128,6 +137,8 @@ test.describe('Color Picker', () => {
     await page.mouse.move(box.x + box.width / 3, box.y + box.height / 2, { steps: 10 });
     await page.mouse.up();
 
+    // The trigger renders after the release is handled: wait for it instead of reading the stale placeholder.
+    await expect(trigger).not.toHaveText('No color yet');
     const value = (await trigger.textContent())?.trim() ?? '';
     await expect(demo).toContainText(`Live: ${value}`);
     await expect(demo).toContainText(`Saved: ${value}`);
@@ -144,8 +155,59 @@ test.describe('Color Picker', () => {
 
   test('has no accessibility violations', async ({ page }) => {
     await checkA11y(page, '#overview z-demo-color-picker-preview');
-    for (const name of ['basic', 'formats', 'alpha', 'presets', 'events', 'form', 'sizes']) {
+    for (const name of ['basic', 'formats', 'alpha', 'presets', 'events', 'form', 'sizes', 'rtl']) {
       await checkA11y(page, `#${name} z-demo-color-picker-${name}`);
     }
+  });
+});
+
+test.describe('Color Picker (RTL)', () => {
+  let rtl: ReturnType<ComponentDemoPage['getDemoByName']>;
+
+  test.beforeEach(async ({ page }) => {
+    const demos = new ComponentDemoPage(page, 'color-picker');
+    await demos.goto();
+    rtl = demos.getDemoByName('rtl');
+    await rtl.scrollIntoViewIfNeeded();
+    await expect(rtl.locator('[data-slot="preview"]')).toHaveAttribute('dir', 'rtl');
+    await rtl.locator('[data-slot="color-picker"] button').first().click();
+    await waitForPanel(page);
+  });
+
+  test('runs the hue with the reading direction: keys, thumb and drag', async ({ page }) => {
+    const hue = page.locator('.cdk-overlay-container [dir="rtl"] [data-slot="color-picker-hue"]');
+    await hue.focus();
+    const before = Number(await hue.getAttribute('aria-valuenow'));
+    await hue.press('ArrowLeft');
+    await expect(hue).toHaveAttribute('aria-valuenow', String(before + 1));
+    await hue.press('ArrowRight');
+    await expect(hue).toHaveAttribute('aria-valuenow', String(before));
+
+    // #2563eb has a hue of 221°, past the middle of the track, so in RTL its thumb sits left of the center.
+    const track = (await hue.boundingBox())!;
+    const thumb = (await hue.locator('span').boundingBox())!;
+    expect(thumb.x + thumb.width / 2).toBeLessThan(track.x + track.width / 2);
+
+    // Dragging to the left edge reaches the end of the hue range.
+    await page.mouse.move(thumb.x + thumb.width / 2, track.y + track.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(track.x + 2, track.y + track.height / 2, { steps: 5 });
+    await page.mouse.up();
+    await expect.poll(async () => Number(await hue.getAttribute('aria-valuenow'))).toBeGreaterThan(350);
+  });
+
+  test('lays the format tabs out from the right and slides the indicator with them', async ({ page }) => {
+    const tabs = page.locator('.cdk-overlay-container [data-slot="color-picker-format"]');
+    const indicator = tabs.locator('[data-slot="color-picker-format-indicator"]');
+    const hex = (await tabs.getByRole('button', { name: 'HEX' }).boundingBox())!;
+    const oklch = tabs.getByRole('button', { name: 'OKLCH' });
+    expect(hex.x).toBeGreaterThan((await oklch.boundingBox())!.x);
+    expect(Math.abs((await indicator.boundingBox())!.x - hex.x)).toBeLessThan(2);
+
+    await oklch.click();
+    await expect
+      .poll(async () => Math.abs((await indicator.boundingBox())!.x - (await oklch.boundingBox())!.x))
+      .toBeLessThan(2);
+    await expect(page.locator('.cdk-overlay-container input[aria-label="Color value"]')).toHaveValue(/^oklch\(/);
   });
 });

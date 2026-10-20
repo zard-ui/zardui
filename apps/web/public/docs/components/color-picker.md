@@ -18,6 +18,7 @@ npx zard-cli@latest add color-picker
 ### Manual
 
 ```angular-ts
+import { Directionality } from '@angular/cdk/bidi';
 import { isPlatformBrowser } from '@angular/common';
 import {
   afterNextRender,
@@ -88,6 +89,9 @@ const SHIFT_STEP = 10;
 const FORMATS: ZardColorFormat[] = ['hex', 'rgb', 'hsl', 'oklch'];
 
 /** Swatch-only triggers are square, so they use the icon sizes of the button scale. */
+/** The hue track's color stops; the direction is added per reading direction. */
+const HUE_STOPS = '#f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%';
+
 const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = {
   sm: 'icon-sm',
   default: 'icon',
@@ -130,7 +134,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
         }
       </span>
       @if (zShowValue()) {
-        <span class="data-[empty=true]:text-muted-foreground min-w-0 truncate" [attr.data-empty]="isEmpty()">
+        <span dir="auto" class="data-[empty=true]:text-muted-foreground min-w-0 truncate" [attr.data-empty]="isEmpty()">
           {{ displayText() }}
         </span>
       }
@@ -151,6 +155,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
           [attr.aria-valuetext]="'Saturation ' + percent(color().s) + '%, brightness ' + percent(color().v) + '%'"
           [class]="areaClasses"
           [style.background-color]="hueColor()"
+          [style.background-image]="areaImage()"
           (pointerdown)="onPointerDown($event, 'area')"
           (pointermove)="onPointerMove($event, 'area')"
           (pointerup)="onPointerUp()"
@@ -159,7 +164,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
         >
           <span
             [class]="thumbClasses"
-            [style.left.%]="color().s * 100"
+            [style.left.%]="inline(color().s) * 100"
             [style.top.%]="(1 - color().v) * 100"
             [style.background-color]="opaqueColor()"
             [attr.data-active]="dragging() === 'area' ? '' : null"
@@ -178,6 +183,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
               [attr.aria-valuenow]="hue()"
               [attr.aria-valuetext]="hue() + ' degrees'"
               [class]="hueTrackClasses"
+              [style.background-image]="hueImage()"
               (pointerdown)="onPointerDown($event, 'hue')"
               (pointermove)="onPointerMove($event, 'hue')"
               (pointerup)="onPointerUp()"
@@ -186,7 +192,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
             >
               <span
                 [class]="thumbClasses"
-                [style.left.%]="(color().h / 360) * 100"
+                [style.left.%]="inline(color().h / 360) * 100"
                 [style.background-color]="hueColor()"
                 [attr.data-active]="dragging() === 'hue' ? '' : null"
               ></span>
@@ -212,7 +218,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
                 <span class="absolute inset-0 rounded-full" [style.background]="alphaBackground()"></span>
                 <span
                   [class]="thumbClasses"
-                  [style.left.%]="color().a * 100"
+                  [style.left.%]="inline(color().a) * 100"
                   [style.background-color]="cssColor()"
                   [attr.data-active]="dragging() === 'alpha' ? '' : null"
                 ></span>
@@ -242,7 +248,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
               data-slot="color-picker-format-indicator"
               [class]="formatIndicatorClasses"
               [style.width]="'calc((100% - 0.25rem) / ' + formats.length + ')'"
-              [style.transform]="'translateX(' + formatIndex() * 100 + '%)'"
+              [style.transform]="'translateX(' + formatIndex() * (isRtl() ? -100 : 100) + '%)'"
             ></span>
             @for (format of formats; track format) {
               <button
@@ -260,6 +266,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
         <input
           z-input
           aria-label="Color value"
+          dir="ltr"
           spellcheck="false"
           autocomplete="off"
           class="h-7 px-2 font-mono text-[11px] md:text-[11px]"
@@ -307,6 +314,7 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   private readonly document = inject(DOCUMENT);
   private readonly injector = inject(Injector);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly directionality = inject(Directionality, { optional: true });
 
   readonly panelTemplate = viewChild.required<TemplateRef<unknown>>('panelTemplate');
   readonly popoverDirective = viewChild.required<ZardPopoverDirective>('popoverDirective');
@@ -406,7 +414,21 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   protected readonly hueColor = computed(() => `hsl(${this.color().h}, 100%, 50%)`);
   protected readonly swatchColor = computed(() => (this.zAlpha() ? this.cssColor() : this.opaqueColor()));
 
-  protected readonly alphaBackground = computed(() => `linear-gradient(to right, transparent, ${this.opaqueColor()})`);
+  /**
+   * The horizontal axis of the area and both tracks runs with the reading direction: in RTL, saturation, hue and
+   * alpha grow towards the left. Thumbs stay positioned by `left` (mirrored), so their centering is unchanged.
+   */
+  protected readonly isRtl = computed(() => (this.directionality?.valueSignal() ?? 'ltr') === 'rtl');
+  private readonly inlineEnd = computed(() => (this.isRtl() ? 'left' : 'right'));
+
+  protected readonly areaImage = computed(
+    () => `linear-gradient(to top, #000, transparent), linear-gradient(to ${this.inlineEnd()}, #fff, transparent)`,
+  );
+
+  protected readonly hueImage = computed(() => `linear-gradient(to ${this.inlineEnd()}, ${HUE_STOPS})`);
+  protected readonly alphaBackground = computed(
+    () => `linear-gradient(to ${this.inlineEnd()}, transparent, ${this.opaqueColor()})`,
+  );
 
   protected readonly classes = computed(() =>
     mergeClasses(colorPickerVariants({ zShowValue: this.zShowValue() }), this.class()),
@@ -472,6 +494,11 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
    */
   protected commitParsed(color: ZardHsva): void {
     this.commit(keepHue(color, this.color()));
+  }
+
+  /** A position along the inline axis (0 at the start, 1 at the end) as a fraction from the physical left. */
+  protected inline(fraction: number): number {
+    return this.isRtl() ? 1 - fraction : fraction;
   }
 
   protected percent(fraction: number): number {
@@ -603,7 +630,7 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
     }
 
     const rect = this.dragTarget.getBoundingClientRect();
-    const x = rect.width ? clamp((clientX - rect.left) / rect.width, [0, 1]) : 0;
+    const x = rect.width ? this.inline(clamp((clientX - rect.left) / rect.width, [0, 1])) : 0;
     const y = rect.height ? clamp((clientY - rect.top) / rect.height, [0, 1]) : 0;
     const color = this.color();
 
@@ -651,13 +678,17 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
     return channel === 'hue' ? { ...color, h: next } : { ...color, a: next / 100 };
   }
 
-  /** Right/up increase, left/down decrease; PageUp/PageDown move by the large step. In the area, y is brightness. */
+  /**
+   * Up increases and down decreases; left/right follow the reading direction (in RTL, left increases), like
+   * `z-slider`. PageUp/PageDown move by the large step. In the area, x is saturation and y is brightness.
+   */
   private keyDelta(key: string, step: number): { x: number; y: number } | null {
+    const towardsEnd = this.isRtl() ? -step : step;
     switch (key) {
       case 'ArrowRight':
-        return { x: step, y: 0 };
+        return { x: towardsEnd, y: 0 };
       case 'ArrowLeft':
-        return { x: -step, y: 0 };
+        return { x: -towardsEnd, y: 0 };
       case 'ArrowUp':
         return { x: 0, y: step };
       case 'ArrowDown':
@@ -721,7 +752,7 @@ export const colorPickerVariants = cva('flex flex-col', {
 export const colorPickerTriggerVariants = cva('font-normal', {
   variants: {
     zShowValue: {
-      true: 'w-full justify-start text-left',
+      true: 'w-full justify-start text-start',
       false: '',
     },
   },
@@ -761,16 +792,16 @@ export const colorPickerFormatGroupVariants = cva('relative isolate flex rounded
 
 /** The pill behind the active tab. Tabs share the width equally, so it only needs a `translateX` per index. */
 export const colorPickerFormatIndicatorVariants = cva(
-  'absolute inset-y-0.5 left-0.5 -z-10 rounded-sm bg-background shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+  'absolute inset-y-0.5 start-0.5 -z-10 rounded-sm bg-background shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
 );
 
 export const colorPickerFormatVariants = cva(
   'h-6 flex-1 rounded-sm font-mono text-[11px] font-medium text-muted-foreground outline-none transition-colors duration-200 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 aria-pressed:text-foreground',
 );
 
-/** The saturation (x) / brightness (y) area. Its hue background is set inline. */
+/** The saturation (x) / brightness (y) area. Hue and gradients are set inline: x follows the reading direction. */
 export const colorPickerAreaVariants = cva(
-  `relative h-36 w-full cursor-crosshair touch-none rounded-md bg-[linear-gradient(to_top,#000,transparent),linear-gradient(to_right,#fff,transparent)] outline-none select-none transition-[background-color] focus-visible:ring-3 focus-visible:ring-ring/50 ${glideUnlessDragging}`,
+  `relative h-36 w-full cursor-crosshair touch-none rounded-md outline-none select-none transition-[background-color] focus-visible:ring-3 focus-visible:ring-ring/50 ${glideUnlessDragging}`,
 );
 
 export const colorPickerTrackVariants = cva(
@@ -778,7 +809,8 @@ export const colorPickerTrackVariants = cva(
   {
     variants: {
       zChannel: {
-        hue: 'bg-[linear-gradient(to_right,#f00_0%,#ff0_17%,#0f0_33%,#0ff_50%,#00f_67%,#f0f_83%,#f00_100%)]',
+        // The hue gradient is set inline, since its direction follows the reading direction.
+        hue: '',
         alpha: checkerboard,
       },
     },
@@ -1464,6 +1496,63 @@ import { ZardColorPickerComponent } from '../color-picker.component';
 })
 export class ZardDemoColorPickerSizesComponent {
   readonly color = signal<string | null>('#db2777');
+}
+```
+
+### Rtl
+
+To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
+
+```angular-ts
+// You will notice this example is rendered inside a wrapper that sets the dir and data-lang attributes, and
+// reads its text from a translations helper. This is because this site is not RTL by default.
+// In your application you won't need either: set dir="rtl" on <html> (or use the CDK Dir directive on a subtree)
+// and write the text of your own language. See the RTL guide: https://zardui.com/docs/rtl
+
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardColorPickerComponent } from '@/shared/components/color-picker/color-picker.component';
+import { injectRtlTranslation, type ZardRtlTranslations } from '@/shared/demo-utils/rtl-translation';
+
+const translations: ZardRtlTranslations<{ label: string; placeholder: string }> = {
+  en: {
+    dir: 'ltr',
+    values: {
+      label: 'Brand color',
+      placeholder: 'Pick a color',
+    },
+  },
+  ar: {
+    dir: 'rtl',
+    values: {
+      label: 'لون العلامة التجارية',
+      placeholder: 'اختر لونًا',
+    },
+  },
+  he: {
+    dir: 'rtl',
+    values: {
+      label: 'צבע המותג',
+      placeholder: 'בחרו צבע',
+    },
+  },
+};
+
+@Component({
+  selector: 'z-demo-color-picker-rtl',
+  imports: [ZardColorPickerComponent],
+  template: `
+    <div class="flex flex-col gap-2">
+      <span class="text-sm font-medium">{{ i18n.t().label }}</span>
+      <z-color-picker zShowValue zAlpha [zPlaceholder]="i18n.t().placeholder" [zPresets]="presets" [(value)]="color" />
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoColorPickerRtlComponent {
+  protected readonly i18n = injectRtlTranslation(translations);
+  protected readonly presets = ['#dc2626', '#f59e0b', '#16a34a', '#2563eb', '#7c3aed'];
+  protected readonly color = signal<string | null>('#2563eb');
 }
 ```
 

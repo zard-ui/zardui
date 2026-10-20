@@ -1,7 +1,10 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { Component, PLATFORM_ID, signal } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+
+import { Subject } from 'rxjs';
 
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
@@ -131,6 +134,21 @@ describe('ZardColorPickerComponent', () => {
       expect(overlay('[data-slot="color-picker-hue"]')).not.toBeNull();
       expect(overlay('[data-slot="color-picker-alpha"]')).toBeNull();
       expect(overlay('[data-slot="color-picker-presets"]')).toBeNull();
+    });
+
+    it('should start an empty picker from pure red, so the first hue drag already picks a color', async () => {
+      await open();
+      const hue = overlay('[data-slot="color-picker-hue"]') as HTMLElement;
+      jest.spyOn(hue, 'getBoundingClientRect').mockReturnValue({ left: 0, top: 0, width: 360, height: 12 } as DOMRect);
+
+      expect(overlay('[data-slot="color-picker-area"]')?.getAttribute('aria-valuetext')).toBe(
+        'Saturation 100%, brightness 100%',
+      );
+
+      pointer(hue, 'pointerdown', 120);
+      pointer(hue, 'pointerup', 120);
+
+      expect(component.value()).toBe('#00ff00');
     });
 
     it('should show the alpha slider with zAlpha', async () => {
@@ -653,5 +671,101 @@ describe('ZardColorPickerComponent on the server', () => {
     const host = fixture.nativeElement as HTMLElement;
     expect(host.hasAttribute('data-empty')).toBe(false);
     expect(host.querySelector('button')?.getAttribute('aria-label')).toBe('Choose color, #663399');
+  });
+});
+
+describe('ZardColorPickerComponent in RTL', () => {
+  let fixture: ComponentFixture<ZardColorPickerComponent>;
+  let component: ZardColorPickerComponent;
+
+  const trigger = () => (fixture.nativeElement as HTMLElement).querySelector('button') as HTMLButtonElement;
+  const thumbOf = (slot: string) => overlay(`[data-slot="${slot}"] span:last-child`) as HTMLElement;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ZardColorPickerComponent],
+      providers: [
+        ...providers,
+        { provide: Directionality, useValue: { value: 'rtl', valueSignal: signal('rtl'), change: new Subject() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ZardColorPickerComponent);
+    component = fixture.componentInstance;
+    fixture.componentRef.setInput('value', '#ff0000');
+    fixture.componentRef.setInput('zAlpha', true);
+    fixture.detectChanges();
+
+    trigger().click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+  });
+
+  afterEach(() => {
+    document.querySelector('.cdk-overlay-container')?.replaceChildren();
+  });
+
+  it('should follow the reading direction with the arrow keys', () => {
+    const hue = overlay('[data-slot="color-picker-hue"]') as HTMLElement;
+    const area = overlay('[data-slot="color-picker-area"]') as HTMLElement;
+
+    press(hue, 'ArrowLeft', true);
+    fixture.detectChanges();
+    expect(hue.getAttribute('aria-valuenow')).toBe('10');
+
+    press(hue, 'ArrowRight');
+    fixture.detectChanges();
+    expect(hue.getAttribute('aria-valuenow')).toBe('9');
+
+    press(area, 'ArrowRight', true);
+    fixture.detectChanges();
+    expect(area.getAttribute('aria-valuetext')).toBe('Saturation 90%, brightness 100%');
+  });
+
+  it('should keep Home and End at the minimum and the maximum', () => {
+    const alpha = overlay('[data-slot="color-picker-alpha"]') as HTMLElement;
+
+    press(alpha, 'Home');
+    fixture.detectChanges();
+    expect(alpha.getAttribute('aria-valuenow')).toBe('0');
+  });
+
+  it('should read the pointer from the right edge of the track', () => {
+    const hue = overlay('[data-slot="color-picker-hue"]') as HTMLElement;
+    jest.spyOn(hue, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      right: 360,
+      top: 0,
+      width: 360,
+      height: 12,
+    } as DOMRect);
+
+    pointer(hue, 'pointerdown', 240);
+    pointer(hue, 'pointerup', 240);
+
+    expect(component.value()).toBe('#00ff00');
+  });
+
+  it('should mirror the thumbs and the gradients', () => {
+    fixture.componentRef.setInput('value', 'hsla(90, 100%, 50%, 0.25)');
+    fixture.detectChanges();
+
+    expect(thumbOf('color-picker-hue').style.left).toBe('75%');
+    expect(thumbOf('color-picker-alpha').style.left).toBe('75%');
+    expect(overlay('[data-slot="color-picker-area"] span')?.style.left).toBe('0%');
+    expect(overlay('[data-slot="color-picker-hue"]')?.style.backgroundImage).toContain('to left');
+    expect(overlay('[data-slot="color-picker-area"]')?.style.backgroundImage).toContain('to left');
+    expect(overlay('[data-slot="color-picker-alpha"] span')?.style.background).toContain('to left');
+  });
+
+  it('should slide the format indicator towards the left', () => {
+    overlay('[data-slot="color-picker-format"] button:nth-of-type(3)')?.click();
+    fixture.detectChanges();
+
+    expect(overlay('[data-slot="color-picker-format-indicator"]')?.style.transform).toBe('translateX(-200%)');
+  });
+
+  it('should keep color codes left-to-right inside the right-to-left layout', () => {
+    expect(overlay('input[aria-label="Color value"]')?.getAttribute('dir')).toBe('ltr');
   });
 });

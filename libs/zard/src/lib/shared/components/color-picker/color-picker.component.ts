@@ -1,3 +1,4 @@
+import { Directionality } from '@angular/cdk/bidi';
 import { isPlatformBrowser } from '@angular/common';
 import {
   afterNextRender,
@@ -58,8 +59,11 @@ type ZardColorChannel = 'area' | 'hue' | 'alpha';
 /** The EyeDropper API is Chromium-only and not in every TypeScript DOM lib yet. */
 type ZardEyeDropper = new () => { open(): Promise<{ sRGBHex: string }> };
 
-/** Shown in the panel while the value is empty, so the first drag starts from a visible color. */
-const DEFAULT_COLOR: ZardHsva = { h: 0, s: 0, v: 0, a: 1 };
+/**
+ * Shown in the panel while the value is empty: pure red (full saturation and brightness), so every first move
+ * picks a visible color. From black, a first hue drag would keep emitting `#000000`, which has no hue to show.
+ */
+const DEFAULT_COLOR: ZardHsva = { h: 0, s: 1, v: 1, a: 1 };
 
 const STEP = 1;
 const SHIFT_STEP = 10;
@@ -68,6 +72,9 @@ const SHIFT_STEP = 10;
 const FORMATS: ZardColorFormat[] = ['hex', 'rgb', 'hsl', 'oklch'];
 
 /** Swatch-only triggers are square, so they use the icon sizes of the button scale. */
+/** The hue track's color stops; the direction is added per reading direction. */
+const HUE_STOPS = '#f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%';
+
 const ICON_SIZES: Record<ZardColorPickerSizeVariants, ZardButtonSizeVariants> = {
   sm: 'icon-sm',
   default: 'icon',
@@ -110,7 +117,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
         }
       </span>
       @if (zShowValue()) {
-        <span class="data-[empty=true]:text-muted-foreground min-w-0 truncate" [attr.data-empty]="isEmpty()">
+        <span dir="auto" class="data-[empty=true]:text-muted-foreground min-w-0 truncate" [attr.data-empty]="isEmpty()">
           {{ displayText() }}
         </span>
       }
@@ -131,6 +138,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
           [attr.aria-valuetext]="'Saturation ' + percent(color().s) + '%, brightness ' + percent(color().v) + '%'"
           [class]="areaClasses"
           [style.background-color]="hueColor()"
+          [style.background-image]="areaImage()"
           (pointerdown)="onPointerDown($event, 'area')"
           (pointermove)="onPointerMove($event, 'area')"
           (pointerup)="onPointerUp()"
@@ -139,7 +147,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
         >
           <span
             [class]="thumbClasses"
-            [style.left.%]="color().s * 100"
+            [style.left.%]="inline(color().s) * 100"
             [style.top.%]="(1 - color().v) * 100"
             [style.background-color]="opaqueColor()"
             [attr.data-active]="dragging() === 'area' ? '' : null"
@@ -158,6 +166,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
               [attr.aria-valuenow]="hue()"
               [attr.aria-valuetext]="hue() + ' degrees'"
               [class]="hueTrackClasses"
+              [style.background-image]="hueImage()"
               (pointerdown)="onPointerDown($event, 'hue')"
               (pointermove)="onPointerMove($event, 'hue')"
               (pointerup)="onPointerUp()"
@@ -166,7 +175,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
             >
               <span
                 [class]="thumbClasses"
-                [style.left.%]="(color().h / 360) * 100"
+                [style.left.%]="inline(color().h / 360) * 100"
                 [style.background-color]="hueColor()"
                 [attr.data-active]="dragging() === 'hue' ? '' : null"
               ></span>
@@ -192,7 +201,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
                 <span class="absolute inset-0 rounded-full" [style.background]="alphaBackground()"></span>
                 <span
                   [class]="thumbClasses"
-                  [style.left.%]="color().a * 100"
+                  [style.left.%]="inline(color().a) * 100"
                   [style.background-color]="cssColor()"
                   [attr.data-active]="dragging() === 'alpha' ? '' : null"
                 ></span>
@@ -222,7 +231,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
               data-slot="color-picker-format-indicator"
               [class]="formatIndicatorClasses"
               [style.width]="'calc((100% - 0.25rem) / ' + formats.length + ')'"
-              [style.transform]="'translateX(' + formatIndex() * 100 + '%)'"
+              [style.transform]="'translateX(' + formatIndex() * (isRtl() ? -100 : 100) + '%)'"
             ></span>
             @for (format of formats; track format) {
               <button
@@ -240,6 +249,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
         <input
           z-input
           aria-label="Color value"
+          dir="ltr"
           spellcheck="false"
           autocomplete="off"
           class="h-7 px-2 font-mono text-[11px] md:text-[11px]"
@@ -287,6 +297,7 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   private readonly document = inject(DOCUMENT);
   private readonly injector = inject(Injector);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly directionality = inject(Directionality, { optional: true });
 
   readonly panelTemplate = viewChild.required<TemplateRef<unknown>>('panelTemplate');
   readonly popoverDirective = viewChild.required<ZardPopoverDirective>('popoverDirective');
@@ -386,7 +397,21 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
   protected readonly hueColor = computed(() => `hsl(${this.color().h}, 100%, 50%)`);
   protected readonly swatchColor = computed(() => (this.zAlpha() ? this.cssColor() : this.opaqueColor()));
 
-  protected readonly alphaBackground = computed(() => `linear-gradient(to right, transparent, ${this.opaqueColor()})`);
+  /**
+   * The horizontal axis of the area and both tracks runs with the reading direction: in RTL, saturation, hue and
+   * alpha grow towards the left. Thumbs stay positioned by `left` (mirrored), so their centering is unchanged.
+   */
+  protected readonly isRtl = computed(() => (this.directionality?.valueSignal() ?? 'ltr') === 'rtl');
+  private readonly inlineEnd = computed(() => (this.isRtl() ? 'left' : 'right'));
+
+  protected readonly areaImage = computed(
+    () => `linear-gradient(to top, #000, transparent), linear-gradient(to ${this.inlineEnd()}, #fff, transparent)`,
+  );
+
+  protected readonly hueImage = computed(() => `linear-gradient(to ${this.inlineEnd()}, ${HUE_STOPS})`);
+  protected readonly alphaBackground = computed(
+    () => `linear-gradient(to ${this.inlineEnd()}, transparent, ${this.opaqueColor()})`,
+  );
 
   protected readonly classes = computed(() =>
     mergeClasses(colorPickerVariants({ zShowValue: this.zShowValue() }), this.class()),
@@ -452,6 +477,11 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
    */
   protected commitParsed(color: ZardHsva): void {
     this.commit(keepHue(color, this.color()));
+  }
+
+  /** A position along the inline axis (0 at the start, 1 at the end) as a fraction from the physical left. */
+  protected inline(fraction: number): number {
+    return this.isRtl() ? 1 - fraction : fraction;
   }
 
   protected percent(fraction: number): number {
@@ -583,7 +613,7 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
     }
 
     const rect = this.dragTarget.getBoundingClientRect();
-    const x = rect.width ? clamp((clientX - rect.left) / rect.width, [0, 1]) : 0;
+    const x = rect.width ? this.inline(clamp((clientX - rect.left) / rect.width, [0, 1])) : 0;
     const y = rect.height ? clamp((clientY - rect.top) / rect.height, [0, 1]) : 0;
     const color = this.color();
 
@@ -631,13 +661,17 @@ export class ZardColorPickerComponent implements ControlValueAccessor {
     return channel === 'hue' ? { ...color, h: next } : { ...color, a: next / 100 };
   }
 
-  /** Right/up increase, left/down decrease; PageUp/PageDown move by the large step. In the area, y is brightness. */
+  /**
+   * Up increases and down decreases; left/right follow the reading direction (in RTL, left increases), like
+   * `z-slider`. PageUp/PageDown move by the large step. In the area, x is saturation and y is brightness.
+   */
   private keyDelta(key: string, step: number): { x: number; y: number } | null {
+    const towardsEnd = this.isRtl() ? -step : step;
     switch (key) {
       case 'ArrowRight':
-        return { x: step, y: 0 };
+        return { x: towardsEnd, y: 0 };
       case 'ArrowLeft':
-        return { x: -step, y: 0 };
+        return { x: -towardsEnd, y: 0 };
       case 'ArrowUp':
         return { x: 0, y: step };
       case 'ArrowDown':
