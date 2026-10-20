@@ -1514,6 +1514,7 @@ export const registry: ComponentRegistry[] = [
       'embla-carousel-angular',
       'embla-carousel-autoplay',
       'embla-carousel-class-names',
+      'embla-carousel-reactive-utils',
       'embla-carousel-wheel-gestures',
     ],
     registryDependencies: ['button'],

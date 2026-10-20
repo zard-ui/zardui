@@ -14,6 +14,8 @@
  *   closure pass — for the JSON already written to `apps/web/public/r`, every
  *                  relative and aliased import resolves to a file that ships,
  *                  either in the item itself or in one of its dependencies.
+ *   peer pass    — every peer dependency of a listed npm package is installed by
+ *                  the item (or by Angular), so Yarn Classic and legacy-peer-deps work.
  *
  * Run it with `npm run check:registry`. It is also the last step of
  * `npm run build:registry`, so a drifting registry fails the build.
@@ -455,11 +457,61 @@ function checkStylePass(): void {
   }
 }
 
+/**
+ * Peers an Angular project always has. Anything else a listed package asks
+ * for as a peer must be installed by the registry too.
+ */
+const PROVIDED_PEERS = (name: string) => name.startsWith('@angular/') || ['rxjs', 'zone.js', 'tslib'].includes(name);
+
+/**
+ * Every npm package a registry item lists must find its peer dependencies
+ * installed. npm >= 7 installs missing peers on its own, which is why this
+ * goes unnoticed there; Yarn Classic and `npm --legacy-peer-deps` do not, and
+ * the build (or, for lazy imports, the runtime) breaks. A peer is satisfied by
+ * the item's own `dependencies`, by those of the items it depends on, or by
+ * Angular itself.
+ */
+function checkPeerDependencies(): void {
+  const byName = new Map(registry.map(item => [item.name, item]));
+
+  const installedBy = (name: string, seen = new Set<string>()): Set<string> => {
+    const installed = new Set<string>();
+    if (seen.has(name)) return installed;
+    seen.add(name);
+    const item = byName.get(name);
+    for (const dependency of item?.dependencies ?? []) installed.add(dependency);
+    for (const other of item?.registryDependencies ?? []) {
+      for (const dependency of installedBy(other, seen)) installed.add(dependency);
+    }
+    return installed;
+  };
+
+  for (const item of registry) {
+    const installed = installedBy(item.name);
+
+    for (const dependency of item.dependencies ?? []) {
+      const manifestPath = path.resolve(__dirname, '../node_modules', dependency, 'package.json');
+      if (!fs.existsSync(manifestPath)) {
+        report(item.name, `cannot read the peer dependencies of "${dependency}": it is not installed in node_modules`);
+        continue;
+      }
+
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      for (const peer of Object.keys(manifest.peerDependencies ?? {})) {
+        if (manifest.peerDependenciesMeta?.[peer]?.optional) continue;
+        if (PROVIDED_PEERS(peer) || installed.has(peer)) continue;
+        report(item.name, `"${dependency}" has "${peer}" as a peer dependency, but the item does not install it`);
+      }
+    }
+  }
+}
+
 checkSourcePass();
 checkClosurePass();
 checkDesignPass();
 
 checkStylePass();
+checkPeerDependencies();
 
 if (problems.length > 0) {
   console.error(`\n✖ registry is not self-consistent — ${problems.length} problem(s):\n`);

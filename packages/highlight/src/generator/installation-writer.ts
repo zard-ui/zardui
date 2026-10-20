@@ -3,6 +3,7 @@ import path from 'path';
 
 import { writeIfChanged } from './file-utils';
 import { highlightCode } from './highlighter';
+import { registry } from '../../../cli/src/core/registry/registry-data';
 import { parseStyleSheet } from '../../../cli/src/core/styles/parse-style-sheet';
 import { transformStyle, type StyleCatalog } from '../../../cli/src/core/styles/transform-style';
 import type { CodeBlockData, CodeTabData, CodeTabItem } from '../types';
@@ -333,6 +334,13 @@ function analyzeComponentDependencies(componentDir: string, componentName: strin
     if (content.includes(check.pattern)) {
       deps.push({ name: check.name, type: check.type, npmPackage: check.npmPackage });
     }
+  }
+
+  // The registry is what `zard-cli add` installs, so the install guides list
+  // exactly that: packages only reachable through a peer dependency or a lazy
+  // import (embla-carousel-reactive-utils, the plugins) never show in the scan above.
+  for (const npmPackage of registry.find(item => item.name === componentName)?.dependencies ?? []) {
+    deps.push({ name: npmPackage, type: 'external', npmPackage });
   }
 
   return deps;

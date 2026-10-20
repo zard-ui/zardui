@@ -15,6 +15,7 @@
     "embla-carousel-angular": "^21.0.0 || ^22.0.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-class-names": "^8.6.0",
+    "embla-carousel-reactive-utils": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
     "@ng-icons/core": ">=33.1.0 <37.0.0",
     "@ng-icons/lucide": ">=33.1.0 <37.0.0",
