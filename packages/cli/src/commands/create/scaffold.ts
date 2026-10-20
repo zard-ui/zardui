@@ -36,12 +36,24 @@ export interface ScaffoldPlan {
  */
 const AGENT_MODE_VARIABLES = ['CLAUDECODE', 'CLAUDE_CODE', 'OPENCODE'];
 
+/**
+ * Switches that stop the generators from asking questions flags cannot answer. The generators run with
+ * `stdin: 'ignore'`, so a prompt reads EOF and aborts the run. `ng new` asks whether to enable shell
+ * autocompletion (only when stdout is a TTY, with a global Angular CLI, `HOME` and `SHELL` set, and
+ * never answered before) and, on a first run, whether to share analytics; `--interactive=false` covers
+ * neither. They are defaults only: a value the user exported wins.
+ */
+const GENERATOR_PROMPT_SWITCHES: Record<string, string> = {
+  NG_FORCE_AUTOCOMPLETE: 'false',
+  NG_CLI_ANALYTICS: 'false',
+};
+
 /** The environment the generators run in: the user's own, minus the agent-mode switches. */
 export function generatorEnv(source: NodeJS.ProcessEnv = process.env): NodeJS.ProcessEnv {
   const env = Object.fromEntries(Object.entries(source).filter(([key]) => !AGENT_MODE_VARIABLES.includes(key)));
   // No background daemon: it would outlive create, hold the new directory open (on Windows that blocks
   // removing it after a failure) and has nothing to cache for a workspace that is seconds old.
-  return { ...env, NX_DAEMON: 'false' };
+  return { ...GENERATOR_PROMPT_SWITCHES, ...env, NX_DAEMON: 'false' };
 }
 
 /** Fails now, naming the flag, when the chosen manager is not installed. */

@@ -12,7 +12,27 @@ describe('generatorEnv', () => {
   it('drops the switches that put Nx into agent mode and keeps everything else', () => {
     const env = generatorEnv({ PATH: '/bin', CLAUDECODE: '1', OPENCODE: '1', CLAUDE_CODE: '1', HOME: '/home/me' });
 
-    expect(env).toEqual({ PATH: '/bin', HOME: '/home/me', NX_DAEMON: 'false' });
+    expect(env).toEqual({
+      PATH: '/bin',
+      HOME: '/home/me',
+      NX_DAEMON: 'false',
+      NG_FORCE_AUTOCOMPLETE: 'false',
+      NG_CLI_ANALYTICS: 'false',
+    });
+  });
+
+  it('switches off the ng new prompts that flags cannot answer', () => {
+    const env = generatorEnv({ PATH: '/bin' });
+
+    expect(env['NG_FORCE_AUTOCOMPLETE']).toBe('false');
+    expect(env['NG_CLI_ANALYTICS']).toBe('false');
+  });
+
+  it('does not override a value the user set explicitly', () => {
+    const env = generatorEnv({ NG_FORCE_AUTOCOMPLETE: 'true', NG_CLI_ANALYTICS: 'true' });
+
+    expect(env['NG_FORCE_AUTOCOMPLETE']).toBe('true');
+    expect(env['NG_CLI_ANALYTICS']).toBe('true');
   });
 });
 
