@@ -73,6 +73,7 @@ describe('runCreate', () => {
       type: 'nx',
       rtl: true,
       pointer: true,
+      quiet: true,
     });
     expect(runAdd).toHaveBeenCalledWith(
       ['button'],

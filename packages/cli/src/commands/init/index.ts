@@ -68,6 +68,8 @@ export interface InitOptions {
   pointer?: boolean;
   /** Never mount the full-screen wizard, even in a terminal: the caller has every answer already. */
   headless?: boolean;
+  /** Skip the closing report: the caller (create) prints one summary for the whole run. */
+  quiet?: boolean;
 }
 
 /**
@@ -115,6 +117,7 @@ export async function runInit(options: InitOptions): Promise<void> {
       projectRoot,
       presets,
       preset,
+      quiet: options.quiet ?? false,
     });
     return;
   }
@@ -275,6 +278,8 @@ interface HeadlessOptions {
   packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun';
   isReInitializing: boolean;
   yes: boolean;
+  /** Do not print the closing report. */
+  quiet: boolean;
   /** O que `--type` pediu; sem ele, o workspace decide. */
   kind?: ProjectKind;
   /** What `--project` asked for; without it, the first compatible project. */
@@ -329,7 +334,7 @@ async function runHeadless(options: HeadlessOptions): Promise<void> {
     }
   }
 
-  reportSuccess(config, steps, []);
+  if (!options.quiet) reportSuccess(config, steps, []);
 }
 
 function reportSuccess(config: Config, steps: readonly InitStep[], logs: readonly LogRecord[]): void {

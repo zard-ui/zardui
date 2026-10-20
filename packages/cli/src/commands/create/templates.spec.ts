@@ -5,6 +5,7 @@ import {
   type ScaffoldCommand,
   scaffoldCommands,
   templateById,
+  pnpmBuildApprovalsYaml,
   withNpxRunner,
 } from '@cli/commands/create/templates.js';
 
@@ -62,6 +63,31 @@ describe('scaffoldCommands', () => {
       'create-analog@latest',
       'my-app',
     ]);
+  });
+});
+
+describe('Analog generator steps', () => {
+  it('captures create-analog and flags the install for pnpm build approvals', () => {
+    const [generator, install] = scaffoldCommands('analog', 'app', 'pnpm') as [ScaffoldCommand, ScaffoldCommand];
+
+    expect(generator.quiet).toBe(true);
+    expect(install.quiet).toBeUndefined();
+    expect(install.approveBuilds).toBe(true);
+    expect(install.args).toEqual(['install']);
+  });
+
+  it('leaves the other templates’ output visible', () => {
+    for (const template of ['angular', 'nx'] as const) {
+      expect(scaffoldCommands(template, 'app', 'npm').some(item => item.quiet || item.approveBuilds)).toBe(false);
+    }
+  });
+
+  it('approves the packages pnpm 11 and pnpm 10 each read', () => {
+    const yaml = pnpmBuildApprovalsYaml();
+
+    expect(yaml).toContain('allowBuilds:\n  "@parcel/watcher": true\n  "esbuild": true');
+    expect(yaml).toContain('onlyBuiltDependencies:\n  - "@parcel/watcher"\n  - "esbuild"');
+    expect(yaml.endsWith('\n')).toBe(true);
   });
 });
 

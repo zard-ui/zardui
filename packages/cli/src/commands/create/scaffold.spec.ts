@@ -4,7 +4,7 @@ jest.mock('execa', () => ({ execa: (...args: unknown[]) => execaMock(...args) })
 import { failureHint, generatorEnv, runScaffold } from '@cli/commands/create/scaffold.js';
 import { templateById } from '@cli/commands/create/templates.js';
 import { existsSync } from 'node:fs';
-import { mkdir, mkdtemp } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import * as path from 'node:path';
 
@@ -103,5 +103,85 @@ describe('runScaffold', () => {
     await runScaffold({ cwd, name: 'blog', template, packageManager: 'yarn' });
 
     expect(execaMock.mock.calls[1]?.[0]).toBe('npx');
+  });
+
+  it.each(['npm', 'yarn', 'bun'] as const)('writes no pnpm configuration for %s', async packageManager => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-scaffold-'));
+    execaMock.mockResolvedValue({ stdout: '10.0.0' });
+
+    await runScaffold({ cwd, name: 'blog', template, packageManager });
+
+    expect(existsSync(path.join(cwd, 'blog', 'pnpm-workspace.yaml'))).toBe(false);
+  });
+});
+
+describe('runScaffold with pnpm 11', () => {
+  const template = templateById('analog') as NonNullable<ReturnType<typeof templateById>>;
+
+  beforeEach(() => execaMock.mockReset());
+
+  it('approves the known build scripts in the project before the install, so strict-dep-builds passes', async () => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-scaffold-'));
+    const target = path.join(cwd, 'blog');
+    let atInstall = '';
+    execaMock.mockImplementation(async (command: string, args: string[]) => {
+      if (command === 'pnpm' && args[0] === 'install')
+        atInstall = await readFile(path.join(target, 'pnpm-workspace.yaml'), 'utf8');
+      // create-analog makes the directory.
+      if (command === 'pnpm' && args[0] === 'dlx') await mkdir(target);
+      return { stdout: '11.18.0' };
+    });
+
+    await runScaffold({ cwd, name: 'blog', template, packageManager: 'pnpm' });
+
+    for (const name of ['@parcel/watcher', 'esbuild', 'lmdb', 'msgpackr-extract']) {
+      expect(atInstall).toContain(`"${name}": true`);
+      expect(atInstall).toContain(`- "${name}"`);
+    }
+    const install = execaMock.mock.calls.find(([, args]) => args[0] === 'install');
+    expect(install?.[1]).toEqual(['install']);
+  });
+
+  it('keeps a pnpm-workspace.yaml the generator wrote', async () => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-scaffold-'));
+    const target = path.join(cwd, 'blog');
+    execaMock.mockImplementation(async (command: string, args: string[]) => {
+      if (command === 'pnpm' && args[0] === 'dlx') {
+        await mkdir(target);
+        await writeFile(path.join(target, 'pnpm-workspace.yaml'), 'packages: []\n');
+      }
+      return { stdout: '11.18.0' };
+    });
+
+    await runScaffold({ cwd, name: 'blog', template, packageManager: 'pnpm' });
+
+    expect(await readFile(path.join(target, 'pnpm-workspace.yaml'), 'utf8')).toBe('packages: []\n');
+  });
+});
+
+describe('runScaffold output', () => {
+  const analog = templateById('analog') as NonNullable<ReturnType<typeof templateById>>;
+  const angular = templateById('angular') as NonNullable<ReturnType<typeof templateById>>;
+
+  beforeEach(() => execaMock.mockReset());
+
+  it('captures the output of create-analog, which prints its own "Now run" block', async () => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-scaffold-'));
+    execaMock.mockResolvedValue({ stdout: 'Done. Now run: npm install' });
+
+    await runScaffold({ cwd, name: 'blog', template: analog, packageManager: 'npm' });
+
+    const [generator, install] = [execaMock.mock.calls[1]?.[2], execaMock.mock.calls[2]?.[2]];
+    expect(generator).toMatchObject({ stdout: 'pipe', stderr: 'pipe' });
+    expect(install).toMatchObject({ stdout: 'inherit', stderr: 'inherit' });
+  });
+
+  it('keeps showing the output of the other generators', async () => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-scaffold-'));
+    execaMock.mockResolvedValue({ stdout: '10.0.0' });
+
+    await runScaffold({ cwd, name: 'blog', template: angular, packageManager: 'npm' });
+
+    expect(execaMock.mock.calls[1]?.[2]).toMatchObject({ stdout: 'inherit', stderr: 'inherit' });
   });
 });

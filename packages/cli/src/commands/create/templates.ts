@@ -64,6 +64,41 @@ export interface ScaffoldCommand {
   readonly label: string;
   /** Runs inside the new project instead of next to it. */
   readonly inProject?: boolean;
+  /**
+   * Capture the process's output instead of showing it (it is logged with --debug). For generators that
+   * print their own "Now run: cd x / npm install" and git noise in the middle of create, which would
+   * contradict the steps create runs itself and the summary it prints at the end.
+   */
+  readonly quiet?: boolean;
+  /**
+   * pnpm 11 fails an install whose dependencies have build scripts nobody approved
+   * (ERR_PNPM_IGNORED_BUILDS). With pnpm, the known ones are approved in the project before this
+   * command runs (see `pnpmBuildApprovalsYaml`). Ignored for the other managers.
+   */
+  readonly approveBuilds?: boolean;
+}
+
+/**
+ * The dependencies of an Analog project that run a build script on install (native binaries and
+ * caches). pnpm 11 refuses to install them unless the project approves them, and a project that
+ * failed once keeps failing on every later `pnpm install` / `pnpm add`, so the approval is written
+ * into the project (`pnpm-workspace.yaml`) rather than passed to a single install.
+ */
+export const PNPM_BUILD_APPROVALS: readonly string[] = ['@parcel/watcher', 'esbuild', 'lmdb', 'msgpackr-extract'];
+
+/**
+ * `pnpm-workspace.yaml` approving `PNPM_BUILD_APPROVALS`: `allowBuilds` is what pnpm 11 reads,
+ * `onlyBuiltDependencies` what pnpm 10 reads (pnpm 11 accepts both).
+ */
+export function pnpmBuildApprovalsYaml(): string {
+  const names = PNPM_BUILD_APPROVALS.map(name => JSON.stringify(name));
+  return [
+    'allowBuilds:',
+    ...names.map(name => `  ${name}: true`),
+    'onlyBuiltDependencies:',
+    ...names.map(name => `  - ${name}`),
+    '',
+  ].join('\n');
 }
 
 /**
@@ -196,9 +231,16 @@ export function scaffoldCommands(
         {
           ...runner(packageManager, 'create-analog@latest', [name, '--template', 'latest', '--skipTailwind']),
           label: 'Creating the Analog app',
+          quiet: true,
         },
         // create-analog only writes files; the install is ours.
-        { command: packageManager, args: ['install'], label: 'Installing dependencies', inProject: true },
+        {
+          command: packageManager,
+          args: ['install'],
+          label: 'Installing dependencies',
+          inProject: true,
+          approveBuilds: true,
+        },
       ];
   }
 }

@@ -8,6 +8,7 @@
  */
 
 import {
+  pnpmBuildApprovalsYaml,
   printable,
   scaffoldCommands,
   withNpxRunner,
@@ -18,7 +19,8 @@ import {
 import { CliError } from '@cli/utils/errors.js';
 import { logger } from '@cli/utils/logger.js';
 import { existsSync } from 'node:fs';
-import { rm } from 'node:fs/promises';
+import { rm, writeFile } from 'node:fs/promises';
+import { EOL } from 'node:os';
 import * as path from 'node:path';
 
 export interface ScaffoldPlan {
@@ -100,14 +102,18 @@ export async function runScaffold(plan: ScaffoldPlan): Promise<string> {
     logger.debug(`$ ${printable(item)}  (in ${cwd})`);
 
     try {
-      await execa(item.command, [...item.args], {
+      if (item.approveBuilds && plan.packageManager === 'pnpm') await approvePnpmBuilds(target);
+
+      const output = item.quiet ? 'pipe' : 'inherit';
+      const result = await execa(item.command, [...item.args], {
         cwd,
         env: generatorEnv(),
         extendEnv: false,
         stdin: 'ignore',
-        stdout: 'inherit',
-        stderr: 'inherit',
+        stdout: output,
+        stderr: output,
       });
+      if (item.quiet) logger.debug([result?.stdout, result?.stderr].filter(Boolean).join(EOL));
     } catch (error) {
       await discard(target);
       throw new CliError(
@@ -120,6 +126,22 @@ export async function runScaffold(plan: ScaffoldPlan): Promise<string> {
   }
 
   return target;
+}
+
+/**
+ * Approves, in the new project, the dependencies whose build scripts pnpm 11 would otherwise refuse
+ * (ERR_PNPM_IGNORED_BUILDS, exit 1, which would make create remove the project). Written to
+ * `pnpm-workspace.yaml` so every later install of the project works too. A file the generator already
+ * wrote is the user's template, not ours to replace.
+ */
+async function approvePnpmBuilds(target: string): Promise<void> {
+  const file = path.join(target, 'pnpm-workspace.yaml');
+  if (existsSync(file)) {
+    logger.debug('pnpm-workspace.yaml already exists: leaving the build approvals as the generator wrote them.');
+    return;
+  }
+
+  await writeFile(file, pnpmBuildApprovalsYaml());
 }
 
 /** What is worth knowing when the generator of this template fails: the usual cause, and the way out. */

@@ -182,9 +182,11 @@ async function configure(plan: Plan, options: CreateOptions): Promise<void> {
     type: plan.template.kind,
     rtl: options.rtl,
     pointer: options.pointer,
+    // One summary for the whole run: create prints it, not each step.
+    quiet: true,
   });
 
-  await runAdd(['button'], { yes: true, overwrite: false, all: false, cwd: target, headless: true });
+  await runAdd(['button'], { yes: true, overwrite: false, all: false, cwd: target, headless: true, quiet: true });
 }
 
 function report(plan: Plan, options: CreateOptions): void {

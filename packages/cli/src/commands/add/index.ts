@@ -37,6 +37,8 @@ export interface AddOptions {
   indexHtml?: string;
   /** Never mount the full-screen wizard, even in a terminal: the caller has every answer already. */
   headless?: boolean;
+  /** Skip the closing report: the caller (create) prints one summary for the whole run. */
+  quiet?: boolean;
 }
 
 export const add = new Command()
@@ -222,7 +224,7 @@ async function runHeadless(preselected: string[], options: AddOptions, actions: 
     throw new CliError(`Failed to install: ${failed.join(', ')}`, 'INSTALL_FAILED');
   }
 
-  reportSuccess(installed, []);
+  if (!options.quiet) reportSuccess(installed, []);
 }
 
 function reportSuccess(installed: readonly string[], logs: readonly LogRecord[]): void {
