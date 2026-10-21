@@ -53,7 +53,7 @@ import type { CodeBlockData } from '@highlight/types';
           <a class="text-foreground underline underline-offset-4" routerLink="/create">create page</a>
           . The default is
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">nova</code>
-          .
+          , zard's own look (the one the library has always had), not a copy of shadcn's nova.
         </p>
         <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">css</code>

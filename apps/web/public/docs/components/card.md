@@ -216,7 +216,7 @@ export const cardActionVariants = cva('col-start-2 row-span-2 row-start-1 self-s
 
 export const cardContentVariants = cva('px-(--card-spacing)');
 
-export const cardFooterVariants = cva('flex items-center rounded-b-xl bg-muted/50 p-(--card-spacing)');
+export const cardFooterVariants = cva('flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing)');
 ```
 
 ```angular-ts

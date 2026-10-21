@@ -161,7 +161,7 @@
     "cn-card-action": "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
     "cn-card-content": "px-(--card-spacing)",
     "cn-card-description": "text-sm text-muted-foreground",
-    "cn-card-footer": "flex items-center rounded-b-xl bg-muted/50 p-(--card-spacing)",
+    "cn-card-footer": "flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing)",
     "cn-card-header": "grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [&.border-b]:pb-(--card-spacing)",
     "cn-card-title": "text-base/snug font-medium group-data-[size=sm]/card:text-sm",
     "cn-carousel": "overflow-hidden",

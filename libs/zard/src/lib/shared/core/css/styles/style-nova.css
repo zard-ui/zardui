@@ -644,7 +644,7 @@
 }
 
 .cn-card-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex items-center rounded-b-xl bg-muted/50 p-(--card-spacing);
+  @apply flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing);
 }
 
 /* MARK: carousel */

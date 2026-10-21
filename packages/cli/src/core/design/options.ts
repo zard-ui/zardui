@@ -20,7 +20,7 @@ export interface StyleOption {
 
 export const STYLES: readonly StyleOption[] = [
   { value: 'vega', label: 'Vega', description: 'Clean, neutral, and familiar' },
-  { value: 'nova', label: 'Nova', description: 'Reduced padding and margins' },
+  { value: 'nova', label: 'Nova', description: "Zard's own default look: compact padding and margins" },
   { value: 'maia', label: 'Maia', description: 'Rounded, with generous spacing.' },
   { value: 'lyra', label: 'Lyra', description: 'Boxy and sharp. For mono fonts.' },
   { value: 'mira', label: 'Mira', description: 'Made for compact interfaces.' },
