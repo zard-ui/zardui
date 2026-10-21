@@ -19,6 +19,12 @@ const RUNNERS: Record<PackageManager, string> = {
   bun: 'bunx zard-cli@latest',
 };
 
+/**
+ * The directory the new project goes in. The command carries one because `create` cannot ask for it without a
+ * terminal, and asking is the only thing that would make it stop; whoever pastes it can edit the word.
+ */
+export const DEFAULT_PROJECT_NAME = 'my-app';
+
 export function runnerFor(manager: PackageManager): string {
   return RUNNERS[manager];
 }
@@ -29,17 +35,30 @@ export interface NewProjectOptions {
   readonly template: CreateTemplate;
   readonly pointer: boolean;
   readonly rtl: boolean;
+  /** Defaults to {@link DEFAULT_PROJECT_NAME}. */
+  readonly name?: string;
 }
 
 /** `zard-cli create` — scaffolds a new project already configured with the preset. */
 export function newProjectCommand(options: NewProjectOptions): string {
-  const parts = [runnerFor(options.manager), 'create', '--preset', options.preset, '--template', options.template];
+  const parts = [
+    runnerFor(options.manager),
+    'create',
+    options.name ?? DEFAULT_PROJECT_NAME,
+    '--preset',
+    options.preset,
+    '--template',
+    options.template,
+  ];
   if (options.pointer) parts.push('--pointer');
   if (options.rtl) parts.push('--rtl');
   return parts.join(' ');
 }
 
-/** `init --preset` for the whole preset; `apply --preset … --only` for the theme or the fonts alone. */
+/**
+ * `init --preset … --yes` for the whole preset: init asks before it overwrites the global CSS, and `--yes` is what lets
+ * it run without a terminal. `apply --preset … --only` for the theme or the fonts alone (it never asks).
+ */
 export function existingProjectCommand(options: {
   readonly manager: PackageManager;
   readonly preset: string;
@@ -49,7 +68,7 @@ export function existingProjectCommand(options: {
 
   switch (options.scope) {
     case 'full':
-      return `${runner} init --preset ${options.preset}`;
+      return `${runner} init --preset ${options.preset} --yes`;
     case 'theme':
       return `${runner} apply --preset ${options.preset} --only theme`;
     case 'font':

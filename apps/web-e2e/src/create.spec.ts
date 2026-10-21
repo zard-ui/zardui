@@ -1,4 +1,8 @@
 import { test, expect, type Frame, type Page } from '@playwright/test';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 
 import { checkA11y } from './utils/axe-helper';
 
@@ -282,6 +286,39 @@ test.describe('Create builder', () => {
   });
 
   test.describe('Get Code', () => {
+    test('sits 64px from the top with pill tabs, separators and one scrolling command line', async ({ page }) => {
+      await page.getByRole('button', { name: 'Get Code' }).first().click();
+      const dialog = page.getByRole('dialog', { name: 'Get Code' });
+      await expect(dialog).toBeVisible();
+
+      // Polled: the panel scales in for a moment when it opens.
+      await expect.poll(async () => (await dialog.boundingBox())?.y).toBe(64);
+      await expect.poll(async () => (await dialog.boundingBox())?.width).toBe(448);
+
+      // Pill tabs in the header, not a title.
+      await expect(dialog.getByRole('tablist', { name: 'Project type' }).getByRole('tab')).toHaveText([
+        'New Project',
+        'Existing Project',
+        'Theme',
+      ]);
+      await expect(dialog.getByRole('tab', { name: 'New Project' })).toHaveAttribute('aria-selected', 'true');
+      expect(await dialog.locator('z-field-separator').count()).toBeGreaterThan(0);
+      await expect(dialog.locator('[data-template] svg')).toHaveCount(3);
+
+      // The command is one line that scrolls sideways; it never breaks in the middle of a word.
+      const code = dialog.getByTestId('command');
+      await dialog.getByRole('switch', { name: 'Use pointer on buttons' }).click();
+      await dialog.getByRole('switch', { name: 'Enable RTL support' }).click();
+      expect(await code.evaluate(element => getComputedStyle(element).whiteSpace)).toBe('nowrap');
+      expect(await code.evaluate(element => element.getBoundingClientRect().height)).toBeLessThan(30);
+
+      // The position does not jump from tab to tab.
+      for (const name of ['Existing Project', 'Theme', 'New Project']) {
+        await dialog.getByRole('tab', { name }).click();
+        await expect.poll(async () => (await dialog.boundingBox())?.y).toBe(64);
+      }
+    });
+
     test('prints the command for each template, switch and package manager, and remembers the manager', async ({
       page,
     }) => {
@@ -290,19 +327,25 @@ test.describe('Create builder', () => {
       const command = dialog.getByTestId('command').first();
       const preset = presetOf(page);
 
-      await expect(command).toHaveText(`npx zard-cli@latest create --preset ${preset} --template angular`);
+      // The name is part of the command, so it runs without a single question.
+      await expect(command).toHaveText(`npx zard-cli@latest create my-app --preset ${preset} --template angular`);
+
+      await dialog.locator('[data-template="analog"]').click();
+      await expect(command).toHaveText(`npx zard-cli@latest create my-app --preset ${preset} --template analog`);
 
       await dialog.locator('[data-template="nx"]').click();
       await dialog.getByRole('switch', { name: 'Use pointer on buttons' }).click();
       await dialog.getByRole('switch', { name: 'Enable RTL support' }).click();
-      await expect(command).toHaveText(`npx zard-cli@latest create --preset ${preset} --template nx --pointer --rtl`);
+      await expect(command).toHaveText(
+        `npx zard-cli@latest create my-app --preset ${preset} --template nx --pointer --rtl`,
+      );
 
       await dialog.locator('[data-manager="pnpm"]').first().click();
-      await expect(command).toContainText('pnpm dlx zard-cli@latest create');
+      await expect(command).toContainText('pnpm dlx zard-cli@latest create my-app');
       await dialog.locator('[data-manager="yarn"]').first().click();
-      await expect(command).toContainText('yarn dlx zard-cli@latest create');
+      await expect(command).toContainText('yarn dlx zard-cli@latest create my-app');
       await dialog.locator('[data-manager="bun"]').first().click();
-      await expect(command).toContainText('bunx zard-cli@latest create');
+      await expect(command).toContainText('bunx zard-cli@latest create my-app');
 
       await page.reload();
       await ready(page);
@@ -312,6 +355,61 @@ test.describe('Create builder', () => {
       );
     });
 
+    test('Copy Command and the icon button copy exactly the text shown', async ({ page, context }) => {
+      await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+      await page.getByRole('button', { name: 'Get Code' }).first().click();
+      const dialog = page.getByRole('dialog', { name: 'Get Code' });
+      const command = dialog.getByTestId('command').first();
+      await dialog.locator('[data-template="nx"]').click();
+      await dialog.getByRole('switch', { name: 'Enable RTL support' }).click();
+      await expect(command).toContainText('--template nx --rtl');
+      const shown = (await command.innerText()).trim();
+      expect(shown).toContain('create my-app --preset');
+
+      await dialog.getByRole('button', { name: 'Copy Command', exact: true }).click();
+      await expect(dialog.getByRole('button', { name: 'Copied' })).toBeVisible();
+      expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(shown);
+
+      await page.evaluate(() => navigator.clipboard.writeText(''));
+      await dialog.getByRole('button', { name: 'Copy command', exact: true }).click();
+      expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(shown);
+    });
+
+    test('the copied New Project command parses with no terminal and asks nothing', async ({ page }) => {
+      const cli = resolve(process.cwd(), 'packages/cli/dist/index.js');
+      test.skip(!existsSync(cli), 'build the CLI first: npm run build:cli');
+
+      await page.getByRole('button', { name: 'Get Code' }).first().click();
+      const dialog = page.getByRole('dialog', { name: 'Get Code' });
+      await dialog.locator('[data-template="angular"]').click();
+      await dialog.getByRole('switch', { name: 'Use pointer on buttons' }).click();
+      await dialog.getByRole('switch', { name: 'Enable RTL support' }).click();
+      await expect(dialog.getByTestId('command').first()).toContainText('--pointer --rtl');
+      const shown = (await dialog.getByTestId('command').first().innerText()).trim();
+      const args = shown.split(' ').slice(2); // drop `npx zard-cli@latest`
+
+      // Run the real CLI with stdin ignored (no TTY) in a directory where `my-app` already exists: the CLI validates
+      // the name, the preset, the template and the switches first, then refuses the taken name. A missing name would
+      // have said so ("Missing project name"); a question would have hung.
+      const cwd = mkdtempSync(join(tmpdir(), 'zard-e2e-'));
+      mkdirSync(join(cwd, 'my-app'));
+      try {
+        const result = spawnSync(process.execPath, [cli, ...args], {
+          cwd,
+          encoding: 'utf8',
+          stdio: ['ignore', 'pipe', 'pipe'],
+          timeout: 60_000,
+          env: { ...process.env, CI: 'true' },
+        });
+        const output = `${result.stdout}${result.stderr}`;
+        expect(output).toContain('"my-app" already exists');
+        expect(output).not.toContain('Missing project name');
+        expect(result.status).not.toBe(0);
+      } finally {
+        rmSync(cwd, { recursive: true, force: true });
+      }
+    });
+
     test('existing project: full preset, theme only, fonts only', async ({ page }) => {
       await page.getByRole('button', { name: 'Get Code' }).first().click();
       const dialog = page.getByRole('dialog', { name: 'Get Code' });
@@ -319,7 +417,7 @@ test.describe('Create builder', () => {
       const preset = presetOf(page);
       const command = dialog.locator('[data-tab="existing-project"] [data-testid="command"]');
 
-      await expect(command).toHaveText(`npx zard-cli@latest init --preset ${preset}`);
+      await expect(command).toHaveText(`npx zard-cli@latest init --preset ${preset} --yes`);
       await dialog.locator('[data-scope="theme"]').click();
       await expect(command).toHaveText(`npx zard-cli@latest apply --preset ${preset} --only theme`);
       await dialog.locator('[data-scope="font"]').click();
