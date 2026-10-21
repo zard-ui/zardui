@@ -94,7 +94,7 @@ describe('ZardBubbleComponent', () => {
     expect(content.length).toBe(1);
     expect(content[0].tagName).toBe('DIV');
     expect(content[0]).toHaveTextContent('Hey there!');
-    expect(content[0].className).toContain('rounded-3xl');
+    expect(content[0].className).toContain('rounded-[calc(var(--radius)*2.4)]');
   });
 
   it('does not add a surface when the content is projected', async () => {
