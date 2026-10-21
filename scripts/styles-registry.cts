@@ -217,3 +217,105 @@ export function checkPublishedItems(
 
   return problems;
 }
+
+/**
+ * The attribute names and `data-slot` values the component sources render.
+ *
+ * Read from the places Angular puts them: `[attr.data-x]` bindings, `'data-x':`
+ * host keys, static `data-x="…"` attributes in templates, and `data-slot` values.
+ * A class string such as `data-[state=open]:…` is a reader of an attribute, not a
+ * writer, so it does not count.
+ */
+function renderedAttributes(sources: Array<{ source: string }>): { attributes: Set<string>; slots: Set<string> } {
+  const attributes = new Set<string>();
+  const slots = new Set<string>();
+
+  for (const { source } of sources) {
+    for (const match of source.matchAll(/\[attr\.(data-[\w-]+)\]/g)) attributes.add(match[1]);
+    for (const match of source.matchAll(/['"](data-[\w-]+)['"]\s*:/g)) attributes.add(match[1]);
+    for (const match of source.matchAll(/(?<![\w:[.-])(data-[\w-]+)=["'{]/g)) attributes.add(match[1]);
+    // Attributes the component sets from code: renderer.setAttribute(el, 'data-open', '').
+    for (const match of source.matchAll(/setAttribute\([^,]+,\s*['"](data-[\w-]+)['"]/g)) attributes.add(match[1]);
+
+    // A slot can be a ternary (`parentGroup ? "a" : "b"`): every quoted word on a data-slot line counts.
+    for (const line of source.split('\n')) {
+      if (!line.includes('data-slot')) continue;
+      for (const match of line.matchAll(/['"]([a-z][\w-]*)['"]/g)) slots.add(match[1]);
+    }
+  }
+
+  return { attributes, slots };
+}
+
+/** The `data-*` / `cmdk-*` attributes (and `data-slot` values) one class token asks the DOM for. */
+function attributesRead(token: string): { attributes: string[]; slots: string[] } {
+  const attributes: string[] = [];
+  const slots: string[] = [];
+
+  // data-[name], data-[name=value], group-data-[name=value]/group, has-data-[name], **:data-[slot=x]
+  for (const match of token.matchAll(/data-\[([a-z][\w-]*)(?:=([^\]]*))?\]/g)) {
+    if (match[1] === 'slot' && match[2]) slots.push(match[2].replace(/["']/g, ''));
+    else attributes.push(`data-${match[1]}`);
+  }
+
+  // Tailwind's shorthand: data-active:, group-data-horizontal/tabs:, data-inset:
+  for (const match of token.matchAll(/(?:^|[^a-z])data-([a-z][a-z0-9-]*)(?=[:/])/g)) {
+    attributes.push(`data-${match[1]}`);
+  }
+
+  // Arbitrary selectors: [data-x], [[cmdk-group-heading]], [cmdk-item]
+  for (const match of token.matchAll(/\[\[?((?:data|cmdk)-[\w-]+)/g)) attributes.push(match[1]);
+
+  return { attributes, slots };
+}
+
+/**
+ * Slots the sheets address on purpose although no zard component renders them: the
+ * element is the consumer's (shadcn has a CheckboxGroup, zard has none), so the rule works
+ * the day someone sets the attribute on their own wrapper.
+ */
+const CONSUMER_SLOTS = new Set(['checkbox-group']);
+
+/**
+ * Selectors in the sheets that match nothing the components render.
+ *
+ * The sheets were derived from shadcn's, whose components render Base UI / Radix /
+ * cmdk / vaul attributes (`data-horizontal`, `[cmdk-group-heading]`, `data-size`…).
+ * Zard's own markup differs, and a rule written for an attribute that never exists
+ * is silent: nothing fails, the part just loses its look in that style. This is the
+ * check that makes the mismatch loud, one message per marker and attribute.
+ */
+export function checkStyleSelectors(sources: Array<{ source: string }>): string[] {
+  const problems: string[] = [];
+  const { attributes, slots } = renderedAttributes(sources);
+  const catalog = buildStyleCatalog(
+    Object.fromEntries(STYLE_IDS.map(id => [id, readSheet(id)])) as Record<StyleId, string>,
+  );
+  const seen = new Set<string>();
+
+  for (const id of STYLE_IDS) {
+    for (const [marker, classes] of Object.entries(catalog[id])) {
+      for (const token of classes.split(/\s+/).filter(Boolean)) {
+        const read = attributesRead(token);
+
+        for (const attribute of read.attributes) {
+          const key = `${id}|${marker}|${attribute}`;
+          if (attributes.has(attribute) || seen.has(key)) continue;
+          seen.add(key);
+          problems.push(`style-${id}.css: "${marker}" selects ${attribute}, which no component renders (${token})`);
+        }
+
+        for (const slot of read.slots) {
+          const key = `${id}|${marker}|slot=${slot}`;
+          if (slots.has(slot) || CONSUMER_SLOTS.has(slot) || seen.has(key)) continue;
+          seen.add(key);
+          problems.push(
+            `style-${id}.css: "${marker}" selects data-slot="${slot}", which no component renders (${token})`,
+          );
+        }
+      }
+    }
+  }
+
+  return problems;
+}

@@ -39,7 +39,7 @@ import {
 } from '../packages/cli/src/core/design/index';
 import { ICON_FAMILIES, ICON_MAP } from '../packages/cli/src/core/icons/index';
 import { registry } from '../packages/cli/src/core/registry/registry-data';
-import { checkPublishedItems, checkStyleSheets } from './styles-registry.cts';
+import { checkPublishedItems, checkStyleSelectors, checkStyleSheets } from './styles-registry.cts';
 
 const LIB_PATH = path.resolve(__dirname, '../libs/zard/src/lib/shared');
 const UTILITIES_CSS = path.join(LIB_PATH, 'core/css/utilities.css');
@@ -445,6 +445,7 @@ function checkStylePass(): void {
   }
 
   problems.push(...checkStyleSheets(sources));
+  problems.push(...checkStyleSelectors(sources));
 
   if (fs.existsSync(REGISTRY_OUTPUT)) {
     const published = fs
