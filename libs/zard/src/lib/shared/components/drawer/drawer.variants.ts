@@ -63,8 +63,8 @@ export const drawerFooterVariants = cva('cn-drawer-footer');
 
 /** Mask classes handed to the CDK overlay backdrop. */
 export const DRAWER_BACKDROP_CLASSES = [
-  'bg-black/30',
-  'supports-backdrop-filter:backdrop-blur-sm',
+  // The marker carries the mask (colour and blur) of the style; the CDK takes one class per entry.
+  ...'cn-drawer-overlay'.split(' ').filter(Boolean),
   'transition-opacity',
   'duration-450',
   'ease-[cubic-bezier(0.32,0.72,0,1)]',

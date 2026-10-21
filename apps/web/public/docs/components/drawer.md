@@ -415,7 +415,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
  * so the page stays visible around it. `m-2` is that inset — the enter/exit
  * transform in the component adds it back so the drawer still leaves the screen.
  */
-export const drawerVariants = cva('fixed z-50 m-2 flex min-h-0 flex-col rounded-3xl border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform dark:border-border group/drawer pointer-events-auto outline-none select-none', {
+export const drawerVariants = cva('fixed z-50 m-2 flex min-h-0 flex-col rounded-[calc(var(--radius)*2.4)] border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform dark:border-border group/drawer pointer-events-auto outline-none select-none', {
   variants: {
     zPlacement: {
       top: 'inset-x-0 top-0 origin-top',
@@ -473,8 +473,8 @@ export const drawerFooterVariants = cva('mt-auto flex shrink-0 flex-col gap-2 p-
 
 /** Mask classes handed to the CDK overlay backdrop. */
 export const DRAWER_BACKDROP_CLASSES = [
-  'bg-black/30',
-  'supports-backdrop-filter:backdrop-blur-sm',
+  // The marker carries the mask (colour and blur) of the style; the CDK takes one class per entry.
+  ...'bg-black/30 supports-backdrop-filter:backdrop-blur-sm'.split(' ').filter(Boolean),
   'transition-opacity',
   'duration-450',
   'ease-[cubic-bezier(0.32,0.72,0,1)]',

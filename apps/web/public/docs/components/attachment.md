@@ -309,7 +309,7 @@ export class ZardAttachmentGroupComponent {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const attachmentVariants = cva('relative isolate flex w-fit max-w-full min-w-0 shrink-0 snap-start items-center rounded-2xl border bg-card text-card-foreground transition-colors text-sm focus-within:ring-1 focus-within:ring-ring/30 has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/50 data-[state=idle]:border-dashed group/attachment', {
+export const attachmentVariants = cva('relative isolate flex w-fit max-w-full min-w-0 shrink-0 snap-start items-center rounded-[calc(var(--radius)*1.6)] border bg-card text-card-foreground transition-colors text-sm focus-within:ring-1 focus-within:ring-ring/30 has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/50 data-[state=idle]:border-dashed group/attachment', {
   variants: {
     zState: {
       idle: 'border-border border-dashed',

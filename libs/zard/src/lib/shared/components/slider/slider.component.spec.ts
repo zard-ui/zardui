@@ -77,6 +77,13 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
     expect(host.getAttribute('data-orientation')).toBe('horizontal');
   });
 
+  it('should expose the orientation on the thumb so a style can size it (luma)', () => {
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
+    expect(thumb.getAttribute('data-orientation')).toBe('horizontal');
+  });
+
   it('should apply aria attributes on thumb', () => {
     const thumb = fixture.debugElement
       .query(By.directive(ZardSliderThumbComponent))

@@ -156,7 +156,7 @@ export const bubbleVariants = cva('relative flex w-fit min-w-0 max-w-[80%] flex-
   },
 });
 
-export const bubbleContentVariants = cva('w-fit min-w-0 max-w-full overflow-hidden rounded-3xl border border-transparent px-3 py-2.5 text-sm/relaxed wrap-break-word group-data-[align=end]/bubble:self-end [button]:text-start [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-3 [button,a]:focus-visible:ring-ring/30');
+export const bubbleContentVariants = cva('w-fit min-w-0 max-w-full overflow-hidden rounded-[calc(var(--radius)*2.4)] border border-transparent px-3 py-2.5 text-sm/relaxed wrap-break-word group-data-[align=end]/bubble:self-end [button]:text-start [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-3 [button,a]:focus-visible:ring-ring/30');
 
 export const bubbleReactionsVariants = cva('absolute z-10 flex w-fit shrink-0 items-center justify-center gap-1 rounded-full bg-muted px-1.5 py-0.5 text-sm ring-3 ring-card has-[button]:p-0', {
   variants: {

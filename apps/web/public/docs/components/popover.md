@@ -196,8 +196,14 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   protected readonly isVisible = signal(false);
   protected readonly contentId = signal<string | null>(null);
 
+  /** The element the panel is positioned against: `zOrigin` when given, otherwise the trigger. */
   get nativeElement() {
-    return this.zOrigin()?.nativeElement ?? this.elementRef.nativeElement;
+    return this.zOrigin()?.nativeElement ?? this.triggerElement;
+  }
+
+  /** The element that owns the listeners, the ARIA state and the focus restore. Never replaced by `zOrigin`. */
+  private get triggerElement(): HTMLElement {
+    return this.elementRef.nativeElement;
   }
 
   constructor() {
@@ -302,7 +308,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.contentId.set(null);
 
     if (restoreFocus) {
-      this.nativeElement?.focus?.();
+      this.triggerElement?.focus?.();
     }
 
     this.scheduleDetach(content);
@@ -359,7 +365,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     ) {
       this.overlayRefSubscription = this.overlayRef
         .outsidePointerEvents()
-        .pipe(filter(event => !this.nativeElement.contains(event.target)))
+        .pipe(filter(event => !this.triggerElement.contains(event.target as Node)))
         .subscribe(() => this.hide());
     }
   }
@@ -371,11 +377,11 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     }
 
     if (trigger === 'click') {
-      this.listeners.push(this.renderer.listen(this.nativeElement, 'click.stop', () => this.toggle()));
+      this.listeners.push(this.renderer.listen(this.triggerElement, 'click.stop', () => this.toggle()));
     } else if (trigger === 'hover') {
-      this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseenter', () => this.show()));
+      this.listeners.push(this.renderer.listen(this.triggerElement, 'mouseenter', () => this.show()));
 
-      this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseleave', () => this.hide()));
+      this.listeners.push(this.renderer.listen(this.triggerElement, 'mouseleave', () => this.hide()));
     }
   }
 

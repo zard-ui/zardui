@@ -31,6 +31,7 @@ import {
 import type { ClassValue } from 'clsx';
 
 import { ZardAccordionItemComponent } from '@/shared/components/accordion/accordion-item.component';
+import { accordionVariants } from '@/shared/components/accordion/accordion.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -42,6 +43,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   encapsulation: ViewEncapsulation.None,
   host: {
     'data-slot': 'accordion',
+    '[class]': 'classes()',
   },
   exportAs: 'zAccordion',
 })
@@ -63,7 +65,7 @@ export class ZardAccordionComponent implements AfterContentInit {
     return defaultValue;
   });
 
-  protected readonly classes = computed(() => mergeClasses(this.class()));
+  protected readonly classes = computed(() => mergeClasses(accordionVariants(), this.class()));
 
   ngAfterContentInit(): void {
     for (const item of this.items()) {
@@ -111,6 +113,8 @@ export class ZardAccordionComponent implements AfterContentInit {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
+export const accordionVariants = cva('');
+
 export const accordionItemVariants = cva('border-b flex flex-1 flex-col last:border-b-0', {
   variants: {},
   defaultVariants: {},
@@ -136,6 +140,7 @@ export const accordionContentVariants = cva('grid text-sm transition-all', {
   },
 });
 
+export type ZardAccordionVariants = VariantProps<typeof accordionVariants>;
 export type ZardAccordionItemVariants = VariantProps<typeof accordionItemVariants>;
 export type ZardAccordionTriggerVariants = VariantProps<typeof accordionTriggerVariants>;
 export type ZardAccordionContentVariants = VariantProps<typeof accordionContentVariants>;

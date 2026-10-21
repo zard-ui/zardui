@@ -36,6 +36,10 @@
     @apply pt-0 pb-4;
   }
 
+  .cn-accordion {
+    @apply block overflow-hidden rounded-2xl border;
+  }
+
   /* MARK: alert */
 
   .cn-alert {
@@ -174,6 +178,10 @@
     @apply mb-2 inline-flex items-center justify-center bg-muted size-16 rounded-full;
   }
 
+  .cn-alert-dialog-overlay {
+    @apply bg-black/30;
+  }
+
   /* MARK: aspect-ratio */
 
   .cn-aspect-ratio {
@@ -277,7 +285,7 @@
   }
 
   .cn-avatar-size-default {
-    @apply size-9;
+    @apply size-8;
   }
 
   .cn-avatar-size-lg {
@@ -313,7 +321,7 @@
   }
 
   .cn-avatar-group-count-size-default {
-    @apply size-9 text-xs;
+    @apply size-8 text-xs;
   }
 
   .cn-avatar-group-count-size-lg {
@@ -932,6 +940,10 @@
     @apply min-w-16 flex-1 bg-transparent;
   }
 
+  .cn-combobox-trigger-icon {
+    @apply size-4!;
+  }
+
   /* MARK: command */
 
   .cn-command {
@@ -960,6 +972,18 @@
 
   .cn-command-shortcut {
     @apply ms-auto text-xs tracking-widest text-muted-foreground;
+  }
+
+  .cn-command-input-icon {
+    @apply size-4!;
+  }
+
+  .cn-command-input-wrapper {
+    @apply p-1 pb-0;
+  }
+
+  .cn-command-input-group {
+    @apply bg-input/50 border-input/30 h-9 shadow-none!;
   }
 
   /* MARK: dropdown */
@@ -1082,10 +1106,14 @@
     @apply absolute top-4 end-4 bg-secondary;
   }
 
+  .cn-dialog-overlay {
+    @apply bg-black/30;
+  }
+
   /* MARK: drawer */
 
   .cn-drawer {
-    @apply z-50 m-2 min-h-0 will-change-transform relative flex h-auto flex-col bg-transparent p-4 text-sm;
+    @apply fixed z-50 m-2 flex min-h-0 flex-col rounded-4xl border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform;
   }
 
   .cn-drawer-placement-top {
@@ -1144,6 +1172,10 @@
     @apply mt-auto flex shrink-0 flex-col gap-2 p-4;
   }
 
+  .cn-drawer-overlay {
+    @apply bg-black/30;
+  }
+
   /* MARK: empty */
 
   .cn-empty {
@@ -1171,7 +1203,11 @@
   }
 
   .cn-empty-actions {
-    @apply flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance;
+    @apply flex w-full max-w-sm min-w-0 items-center justify-center gap-4 text-sm text-balance;
+  }
+
+  .cn-empty-icon-glyph {
+    @apply size-5!;
   }
 
   /* MARK: field */
@@ -1209,7 +1245,7 @@
   }
 
   .cn-field-label {
-    @apply flex w-fit gap-2 text-sm/snug font-medium;
+    @apply flex w-fit gap-2 leading-snug;
   }
 
   .cn-field-title {
@@ -1482,6 +1518,10 @@
     @apply ms-auto text-xs tracking-widest text-muted-foreground;
   }
 
+  .cn-navigation-menu-indicator-arrow {
+    @apply rounded-tl-sm;
+  }
+
   /* MARK: pagination */
 
   .cn-pagination-content {
@@ -1522,6 +1562,14 @@
 
   .cn-radio-group-radio {
     @apply relative flex aspect-square size-4 shrink-0 rounded-full bg-input/90 border-transparent border;
+  }
+
+  .cn-radio-group-indicator {
+    @apply flex size-4 items-center justify-center;
+  }
+
+  .cn-radio-group-indicator-dot {
+    @apply bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full;
   }
 
   /* MARK: resizable */
@@ -1628,6 +1676,14 @@
     @apply end-2;
   }
 
+  .cn-select-trigger-icon {
+    @apply size-4!;
+  }
+
+  .cn-select-scroll-icon {
+    @apply size-4!;
+  }
+
   /* MARK: sheet */
 
   .cn-sheet {
@@ -1664,6 +1720,10 @@
 
   .cn-sheet-footer {
     @apply mt-auto flex flex-col gap-2 p-6;
+  }
+
+  .cn-sheet-overlay {
+    @apply bg-black/30;
   }
 
   /* MARK: skeleton */
@@ -1868,6 +1928,10 @@
     @apply text-sm;
   }
 
+  .cn-sidebar-menu-skeleton-icon {
+    @apply size-4;
+  }
+
   /* MARK: slider */
 
   .cn-slider {
@@ -1920,6 +1984,10 @@
 
   .cn-switch-thumb {
     @apply block transition-transform bg-background rounded-full shadow-sm ring-0;
+  }
+
+  .cn-switch-label {
+    @apply text-sm leading-none font-medium;
   }
 
   /* MARK: table */
@@ -1982,6 +2050,9 @@
     @apply relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all cursor-pointer gap-2 rounded-full border border-transparent! px-3 py-1 text-sm font-medium;
   }
 
+  .cn-tabs-panel {
+  }
+
   /* MARK: textarea */
 
   .cn-textarea {
@@ -2026,6 +2097,12 @@
 
   .cn-toggle-group-item {
     @apply shrink-0;
+  }
+
+  /* MARK: label */
+
+  .cn-label {
+    @apply gap-2 text-sm font-medium;
   }
 
 }
@@ -2136,6 +2213,10 @@
 
   .cn-alert-dialog-media {
     @apply sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-8;
+  }
+
+  .cn-alert-dialog-overlay {
+    @apply supports-backdrop-filter:backdrop-blur-sm;
   }
 
   /* MARK: attachment */
@@ -2598,10 +2679,14 @@
     @apply sm:flex-row sm:justify-end;
   }
 
+  .cn-dialog-overlay {
+    @apply supports-backdrop-filter:backdrop-blur-sm;
+  }
+
   /* MARK: drawer */
 
   .cn-drawer {
-    @apply before:bg-popover before:border-border before:absolute before:inset-2 before:-z-10 before:rounded-4xl before:border before:shadow-xl;
+    @apply dark:border-border;
   }
 
   .cn-drawer-placement-right {
@@ -2618,6 +2703,10 @@
 
   .cn-drawer-header {
     @apply group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start;
+  }
+
+  .cn-drawer-overlay {
+    @apply supports-backdrop-filter:backdrop-blur-sm;
   }
 
   /* MARK: empty */
@@ -2838,6 +2927,10 @@
     @apply after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary focus-visible:ring-ring/30 group-has-[:focus-visible]/field-label:border-transparent;
   }
 
+  .cn-radio-group-indicator-dot {
+    @apply dark:size-2.5;
+  }
+
   /* MARK: resizable */
 
   .cn-resizable {
@@ -2855,7 +2948,7 @@
   }
 
   .cn-select-trigger {
-    @apply data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 focus-visible:ring-ring/30;
+    @apply data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 focus-visible:ring-ring/30 data-[size=default]:h-9 data-[size=sm]:h-8;
   }
 
   .cn-select-content {
@@ -3043,7 +3136,7 @@
   /* MARK: switch */
 
   .cn-switch {
-    @apply after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 dark:data-[state=unchecked]:bg-input/80 disabled:cursor-not-allowed data-[state=checked]:bg-primary data-[state=unchecked]:bg-input/90 data-[state=checked]:border-primary data-[state=unchecked]:border-transparent focus-visible:ring-ring/30 focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:data-[state=unchecked]:border-transparent group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary data-[size=default]:h-5 data-[size=default]:w-11 data-[size=sm]:h-4 data-[size=sm]:w-7;
+    @apply after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed data-[state=checked]:bg-primary data-[state=unchecked]:bg-input/90 data-[state=checked]:border-primary data-[state=unchecked]:border-transparent focus-visible:ring-ring/30 focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:data-[state=unchecked]:border-transparent group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary data-[size=default]:h-5 data-[size=default]:w-11 data-[size=sm]:h-4 data-[size=sm]:w-7;
   }
 
   .cn-switch-thumb {
@@ -3102,6 +3195,10 @@
     @apply group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:outline-1 focus-visible:outline-ring [&_svg]:shrink-0 after:absolute after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[orientation=vertical]/tabs:px-3 group-data-[orientation=vertical]/tabs:py-1.5 group-data-[orientation=vertical]/tabs:rounded-2xl [&_svg:not([class*='size-'])]:size-4 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 text-foreground/60 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground after:opacity-0 group-data-[variant=line]/tabs-list:data-active:after:opacity-100;
   }
 
+  .cn-tabs-panel {
+    @apply focus-visible:ring-[3px] focus-visible:ring-ring/30;
+  }
+
   /* MARK: textarea */
 
   .cn-textarea {
@@ -3138,6 +3235,12 @@
 
   .cn-toggle-group-item {
     @apply group-data-[spacing=0]/toggle-group:rounded-none focus:z-10 focus-visible:z-10 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t data-[state=on]:bg-muted group-data-[spacing=0]/toggle-group:px-3 group-data-[spacing=0]/toggle-group:shadow-none group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-3xl group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-3xl group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-3xl group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-3xl group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-2.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-2.5;
+  }
+
+  /* MARK: sheet */
+
+  .cn-sheet-overlay {
+    @apply supports-backdrop-filter:backdrop-blur-sm;
   }
 
 }

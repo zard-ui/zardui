@@ -50,7 +50,8 @@ export const sheetVariants = cva('cn-sheet outline-none', {
 });
 
 /** Classes of the mask behind a sheet, shared by the declarative form and the service. */
-export const SHEET_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+// A marker, so the style decides how dark and how blurred the mask is. The CDK takes one class per entry.
+export const SHEET_BACKDROP_CLASSES = 'cn-sheet-overlay'.split(' ').filter(Boolean);
 
 export const sheetHeaderVariants = cva('cn-sheet-header');
 

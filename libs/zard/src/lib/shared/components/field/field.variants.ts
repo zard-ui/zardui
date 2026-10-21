@@ -21,7 +21,7 @@ export const fieldVariants = cva('cn-field group/field', {
 
 export const fieldContentVariants = cva('cn-field-content group/field-content');
 
-export const fieldLabelVariants = cva('cn-field-label group/field-label peer/field-label');
+export const fieldLabelVariants = cva('cn-label cn-field-label group/field-label peer/field-label');
 
 export const fieldTitleVariants = cva('cn-field-title');
 

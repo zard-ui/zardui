@@ -77,6 +77,7 @@ import {
   selectViewportVariants,
   type ZardSelectAlignVariants,
   type ZardSelectPositionVariants,
+  type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -105,6 +106,7 @@ let nextSelectId = 0;
       [attr.aria-label]="triggerAriaLabel()"
       [attr.aria-disabled]="disabledState()"
       [attr.data-placeholder]="!hasValue() ? '' : null"
+      [attr.data-size]="zSize()"
       (blur)="!isOpen() && isFocus.set(false)"
       (click)="toggle()"
       (focus)="onFocus()"
@@ -122,7 +124,7 @@ let nextSelectId = 0;
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
       </span>
-      <ng-icon name="lucideChevronDown" class="text-muted-foreground size-4!" />
+      <ng-icon name="lucideChevronDown" class="size-4! text-muted-foreground" />
     </button>
 
     <ng-template #dropdownTemplate>
@@ -236,6 +238,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   readonly zAlign = input<ZardSelectAlignVariants>('center');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zInvalid = input(false, { transform: booleanAttribute });
+  readonly zSize = input<ZardSelectSizeVariants>('default');
   readonly zLabel = input<string>('');
   readonly zMaxLabelCount = input(1, { transform: numberAttribute });
   readonly zMultiple = input(false, { transform: booleanAttribute });
@@ -1133,7 +1136,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const selectVariants = cva('relative inline-block w-full rounded-lg [&_button]:focus-visible:border [&_button]:focus-visible:border-ring [&_button]:focus-visible:ring-ring/50 [&_button]:focus-visible:ring-[3px] group');
 
 export const selectTriggerVariants = cva(
-  'flex h-8 px-3 py-2 w-full items-center justify-between gap-2 rounded-lg border border-input bg-transparent text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 outline-none disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'flex h-8 px-3 py-2 w-full items-center justify-between gap-2 rounded-lg border border-input bg-transparent text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 data-[size=sm]:h-7 outline-none disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {},
   },
@@ -1215,6 +1218,7 @@ export const selectItemIconVariants = cva('absolute flex size-3.5 items-center j
 export type ZardSelectPositionVariants = NonNullable<VariantProps<typeof selectContentVariants>['zPosition']>;
 export type ZardSelectItemModeVariants = NonNullable<VariantProps<typeof selectItemVariants>['zMode']>;
 export type ZardSelectAlignVariants = 'start' | 'center' | 'end';
+export type ZardSelectSizeVariants = 'default' | 'sm';
 ```
 
 ```angular-ts
@@ -1894,6 +1898,7 @@ A customizable select component that supports single and multiple value selectio
 | `[zMultiple]` | Turns the select into a multiselect; `zValue` becomes a `string[]` and each pick renders as a `z-badge` | `boolean` | `false` |
 | `[zPlaceholder]` | Placeholder text shown when nothing is selected | `string` | `'Select an option...'` |
 | `[zPosition]` | Overlay positioning mode: 'item-aligned' opens the listbox so the selected item sits over the trigger; 'popper' drops it from the trigger's edge instead | `'item-aligned' \| 'popper'` | `'item-aligned'` |
+| `[zSize]` | Trigger height; `sm` is the compact one (the style decides the exact height) | `'default' \| 'sm'` | `'default'` |
 | `[(zValue)]` | Selected value | `string \| string[]` | `'' \| []` |
 | `(zSelectionChange)` | Emitted when the selected value changes | `EventEmitter<string \| string[]>` | `-` |
 

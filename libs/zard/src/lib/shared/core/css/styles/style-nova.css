@@ -34,6 +34,9 @@
   @apply pt-0 pb-4;
 }
 
+.cn-accordion:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+}
+
 /* MARK: alert */
 
 .cn-alert:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -170,6 +173,10 @@
 
 .cn-alert-dialog-media:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply mb-2 inline-flex size-10 items-center justify-center rounded-md bg-muted;
+}
+
+.cn-alert-dialog-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply bg-black/10;
 }
 
 /* MARK: aspect-ratio */
@@ -934,6 +941,10 @@
   @apply min-w-16 flex-1 bg-transparent;
 }
 
+.cn-combobox-trigger-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-4;
+}
+
 /* MARK: command */
 
 .cn-command:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -962,6 +973,18 @@
 
 .cn-command-shortcut:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply ms-auto text-xs tracking-widest text-muted-foreground;
+}
+
+.cn-command-input-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-4!;
+}
+
+.cn-command-input-wrapper:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply p-1 pb-0;
+}
+
+.cn-command-input-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply border-input/30 shadow-none!;
 }
 
 /* MARK: dropdown */
@@ -1084,6 +1107,10 @@
   @apply absolute end-2 top-2;
 }
 
+.cn-dialog-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply bg-black/10;
+}
+
 /* MARK: drawer */
 
 .cn-drawer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1146,6 +1173,10 @@
   @apply mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0;
 }
 
+.cn-drawer-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply bg-black/30;
+}
+
 /* MARK: empty */
 
 .cn-empty:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1174,6 +1205,10 @@
 
 .cn-empty-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance;
+}
+
+.cn-empty-icon-glyph:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-4!;
 }
 
 /* MARK: field */
@@ -1480,6 +1515,10 @@
   @apply ms-auto text-xs tracking-widest text-muted-foreground;
 }
 
+.cn-navigation-menu-indicator-arrow:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply rounded-tl-sm;
+}
+
 /* MARK: pagination */
 
 .cn-pagination-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1520,6 +1559,14 @@
 
 .cn-radio-group-radio:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply relative flex aspect-square size-4 shrink-0 rounded-full border border-input;
+}
+
+.cn-radio-group-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply flex size-4 items-center justify-center;
+}
+
+.cn-radio-group-indicator-dot:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full;
 }
 
 /* MARK: resizable */
@@ -1626,6 +1673,14 @@
   @apply end-2;
 }
 
+.cn-select-trigger-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-4!;
+}
+
+.cn-select-scroll-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-4!;
+}
+
 /* MARK: sheet */
 
 .cn-sheet:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1662,6 +1717,10 @@
 
 .cn-sheet-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply mt-auto flex flex-col gap-2 p-4;
+}
+
+.cn-sheet-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply bg-black/10;
 }
 
 /* MARK: skeleton */
@@ -1866,6 +1925,10 @@
   @apply text-sm;
 }
 
+.cn-sidebar-menu-skeleton-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-4;
+}
+
 /* MARK: slider */
 
 .cn-slider:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1918,6 +1981,10 @@
 
 .cn-switch-thumb:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply bg-background block rounded-full ring-0 transition-transform;
+}
+
+.cn-switch-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-sm leading-none font-medium;
 }
 
 /* MARK: table */
@@ -1980,6 +2047,9 @@
   @apply relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all cursor-pointer;
 }
 
+.cn-tabs-panel:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+}
+
 /* MARK: textarea */
 
 .cn-textarea:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2024,6 +2094,11 @@
 
 .cn-toggle-group-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply shrink-0;
+}
+
+/* MARK: label */
+
+.cn-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
 }
 
 /* ---- PASS 2 — classes with a variant (they must outrank pass 1, as Tailwind sorts them) ---- */
@@ -2134,6 +2209,10 @@
 
 .cn-alert-dialog-media:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6;
+}
+
+.cn-alert-dialog-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply supports-backdrop-filter:backdrop-blur-xs;
 }
 
 /* MARK: attachment */
@@ -2570,6 +2649,10 @@
   @apply sm:flex-row sm:justify-end;
 }
 
+.cn-dialog-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply supports-backdrop-filter:backdrop-blur-xs;
+}
+
 /* MARK: drawer */
 
 .cn-drawer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2590,6 +2673,10 @@
 
 .cn-drawer-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start;
+}
+
+.cn-drawer-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply supports-backdrop-filter:backdrop-blur-sm;
 }
 
 /* MARK: empty */
@@ -2823,7 +2910,7 @@
 }
 
 .cn-select-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2;
+  @apply data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 data-[size=sm]:h-7;
 }
 
 .cn-select-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3062,6 +3149,10 @@
   @apply group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:opacity-50 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100;
 }
 
+.cn-tabs-panel:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply focus-visible:ring-primary/50 focus-visible:ring-2;
+}
+
 /* MARK: textarea */
 
 .cn-textarea:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3098,4 +3189,10 @@
 
 .cn-toggle-group-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t;
+}
+
+/* MARK: sheet */
+
+.cn-sheet-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply supports-backdrop-filter:backdrop-blur-xs;
 }

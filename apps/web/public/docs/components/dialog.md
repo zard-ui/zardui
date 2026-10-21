@@ -398,7 +398,8 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const dialogVariants = cva('fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 sm:max-w-sm outline-none');
 
 /** Classes of the mask behind a dialog, shared by the declarative form and the service. */
-export const DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+// A marker, so the style decides how dark and how blurred the mask is. The CDK takes one class per entry.
+export const DIALOG_BACKDROP_CLASSES = 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs'.split(' ').filter(Boolean);
 
 export const dialogHeaderVariants = cva('flex flex-col gap-2');
 

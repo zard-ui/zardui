@@ -43,7 +43,7 @@ import {
         </div>
       } @else if (icon) {
         <div data-slot="empty-media" data-variant="icon" [class]="iconClasses()" data-testid="icon">
-          <ng-icon [name]="icon" class="size-4!" />
+          <ng-icon [name]="icon" class="cn-empty-icon-glyph" />
         </div>
       }
 

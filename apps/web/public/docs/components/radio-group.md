@@ -177,6 +177,10 @@ export class ZardRadioGroupComponent implements ControlValueAccessor {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    class: 'peer',
+    'data-slot': 'radio-group-item',
+  },
   exportAs: 'zRadio',
 })
 export class ZardRadioComponent {

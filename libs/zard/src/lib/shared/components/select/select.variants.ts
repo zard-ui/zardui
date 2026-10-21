@@ -85,3 +85,4 @@ export const selectItemIconVariants = cva('cn-select-item-icon', {
 export type ZardSelectPositionVariants = NonNullable<VariantProps<typeof selectContentVariants>['zPosition']>;
 export type ZardSelectItemModeVariants = NonNullable<VariantProps<typeof selectItemVariants>['zMode']>;
 export type ZardSelectAlignVariants = 'start' | 'center' | 'end';
+export type ZardSelectSizeVariants = 'default' | 'sm';

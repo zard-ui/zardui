@@ -149,14 +149,18 @@ export class ZardRadioGroupComponent implements ControlValueAccessor {
       #z="zardId"
     >
       @if (checked()) {
-        <span data-slot="radio-group-indicator" class="flex size-4 items-center justify-center">
-          <span class="bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full"></span>
+        <span data-slot="radio-group-indicator" class="cn-radio-group-indicator">
+          <span class="cn-radio-group-indicator-dot"></span>
         </span>
       }
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    class: 'peer',
+    'data-slot': 'radio-group-item',
+  },
   exportAs: 'zRadio',
 })
 export class ZardRadioComponent {

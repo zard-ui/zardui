@@ -36,6 +36,9 @@
     @apply pt-0 pb-2.5;
   }
 
+  .cn-accordion {
+  }
+
   /* MARK: alert */
 
   .cn-alert {
@@ -172,6 +175,10 @@
 
   .cn-alert-dialog-media {
     @apply mb-2 inline-flex size-10 items-center justify-center bg-muted rounded-none;
+  }
+
+  .cn-alert-dialog-overlay {
+    @apply bg-black/10;
   }
 
   /* MARK: aspect-ratio */
@@ -615,7 +622,7 @@
   }
 
   .cn-card-title {
-    @apply text-base/snug font-medium;
+    @apply text-sm font-medium;
   }
 
   .cn-font-heading {
@@ -932,6 +939,10 @@
     @apply min-w-16 flex-1 bg-transparent;
   }
 
+  .cn-combobox-trigger-icon {
+    @apply size-4!;
+  }
+
   /* MARK: command */
 
   .cn-command {
@@ -960,6 +971,18 @@
 
   .cn-command-shortcut {
     @apply ms-auto text-xs tracking-widest text-muted-foreground;
+  }
+
+  .cn-command-input-icon {
+    @apply size-4!;
+  }
+
+  .cn-command-input-wrapper {
+    @apply border-b pb-0;
+  }
+
+  .cn-command-input-group {
+    @apply bg-input/30 border-input/30 h-8 border-none shadow-none!;
   }
 
   /* MARK: dropdown */
@@ -1082,10 +1105,14 @@
     @apply absolute end-2 top-2;
   }
 
+  .cn-dialog-overlay {
+    @apply bg-black/10;
+  }
+
   /* MARK: drawer */
 
   .cn-drawer {
-    @apply fixed z-50 m-2 min-h-0 will-change-transform bg-popover text-popover-foreground flex h-auto flex-col text-xs/relaxed;
+    @apply fixed z-50 min-h-0 will-change-transform bg-popover text-popover-foreground flex h-auto flex-col text-xs/relaxed;
   }
 
   .cn-drawer-placement-top {
@@ -1144,6 +1171,10 @@
     @apply mt-auto flex shrink-0 flex-col gap-2 p-4;
   }
 
+  .cn-drawer-overlay {
+    @apply bg-black/10;
+  }
+
   /* MARK: empty */
 
   .cn-empty {
@@ -1172,6 +1203,10 @@
 
   .cn-empty-actions {
     @apply flex w-full max-w-sm min-w-0 items-center justify-center gap-1.5 text-xs text-balance;
+  }
+
+  .cn-empty-icon-glyph {
+    @apply size-4!;
   }
 
   /* MARK: field */
@@ -1209,7 +1244,7 @@
   }
 
   .cn-field-label {
-    @apply flex w-fit gap-2 text-sm/snug font-medium;
+    @apply flex w-fit gap-2 leading-snug;
   }
 
   .cn-field-title {
@@ -1339,7 +1374,7 @@
   }
 
   .cn-item-title {
-    @apply line-clamp-1 flex w-fit items-center gap-2 text-sm/snug font-medium underline-offset-4;
+    @apply line-clamp-1 flex w-fit items-center gap-2 text-xs font-medium underline-offset-4;
   }
 
   .cn-item-description {
@@ -1482,6 +1517,10 @@
     @apply ms-auto text-xs tracking-widest text-muted-foreground;
   }
 
+  .cn-navigation-menu-indicator-arrow {
+    @apply rounded-none;
+  }
+
   /* MARK: pagination */
 
   .cn-pagination-content {
@@ -1522,6 +1561,14 @@
 
   .cn-radio-group-radio {
     @apply relative flex aspect-square size-4 shrink-0 rounded-full border border-input;
+  }
+
+  .cn-radio-group-indicator {
+    @apply flex size-4 items-center justify-center;
+  }
+
+  .cn-radio-group-indicator-dot {
+    @apply bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full;
   }
 
   /* MARK: resizable */
@@ -1628,6 +1675,14 @@
     @apply end-2;
   }
 
+  .cn-select-trigger-icon {
+    @apply size-4!;
+  }
+
+  .cn-select-scroll-icon {
+    @apply size-4!;
+  }
+
   /* MARK: sheet */
 
   .cn-sheet {
@@ -1664,6 +1719,10 @@
 
   .cn-sheet-footer {
     @apply mt-auto flex flex-col gap-2 p-4;
+  }
+
+  .cn-sheet-overlay {
+    @apply bg-black/10;
   }
 
   /* MARK: skeleton */
@@ -1868,6 +1927,10 @@
     @apply text-xs;
   }
 
+  .cn-sidebar-menu-skeleton-icon {
+    @apply size-4;
+  }
+
   /* MARK: slider */
 
   .cn-slider {
@@ -1920,6 +1983,10 @@
 
   .cn-switch-thumb {
     @apply block transition-transform bg-background rounded-full ring-0;
+  }
+
+  .cn-switch-label {
+    @apply text-xs leading-none;
   }
 
   /* MARK: table */
@@ -1982,6 +2049,9 @@
     @apply relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all cursor-pointer gap-1.5 rounded-none border border-transparent px-1.5 py-0.5 text-xs font-medium;
   }
 
+  .cn-tabs-panel {
+  }
+
   /* MARK: textarea */
 
   .cn-textarea {
@@ -2026,6 +2096,12 @@
 
   .cn-toggle-group-item {
     @apply shrink-0;
+  }
+
+  /* MARK: label */
+
+  .cn-label {
+    @apply gap-2 text-xs;
   }
 
 }
@@ -2136,6 +2212,10 @@
 
   .cn-alert-dialog-media {
     @apply sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6;
+  }
+
+  .cn-alert-dialog-overlay {
+    @apply supports-backdrop-filter:backdrop-blur-xs;
   }
 
   /* MARK: attachment */
@@ -2588,6 +2668,10 @@
     @apply sm:flex-row sm:justify-end;
   }
 
+  .cn-dialog-overlay {
+    @apply supports-backdrop-filter:backdrop-blur-xs;
+  }
+
   /* MARK: drawer */
 
   .cn-drawer-placement-right {
@@ -2604,6 +2688,10 @@
 
   .cn-drawer-header {
     @apply group-data-[axis=y]/drawer:text-center md:text-start md:gap-0.5;
+  }
+
+  .cn-drawer-overlay {
+    @apply supports-backdrop-filter:backdrop-blur-xs;
   }
 
   /* MARK: empty */
@@ -3084,6 +3172,10 @@
     @apply group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:outline-1 focus-visible:outline-ring [&_svg]:shrink-0 after:absolute after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[orientation=vertical]/tabs:py-[calc(--spacing(1.25))] [&_svg:not([class*='size-'])]:size-4 has-data-[icon=inline-end]:pe-1 has-data-[icon=inline-start]:ps-1 text-foreground/60 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground after:opacity-0 group-data-[variant=line]/tabs-list:data-active:after:opacity-100;
   }
 
+  .cn-tabs-panel {
+    @apply focus-visible:ring-1 focus-visible:ring-ring/50;
+  }
+
   /* MARK: textarea */
 
   .cn-textarea {
@@ -3120,6 +3212,12 @@
 
   .cn-toggle-group-item {
     @apply group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-none group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-none group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-none group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-none;
+  }
+
+  /* MARK: sheet */
+
+  .cn-sheet-overlay {
+    @apply supports-backdrop-filter:backdrop-blur-xs;
   }
 
 }

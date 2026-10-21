@@ -430,7 +430,8 @@ export const alertDialogVariants = cva('fixed top-1/2 left-1/2 z-50 grid w-full 
 });
 
 /** Classes of the mask behind an alert dialog, shared by the declarative form and the service. */
-export const ALERT_DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+// A marker, so the style decides how dark and how blurred the mask is. The CDK takes one class per entry.
+export const ALERT_DIALOG_BACKDROP_CLASSES = 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs'.split(' ').filter(Boolean);
 
 export const alertDialogHeaderVariants = cva('grid grid-rows-[auto_1fr] place-items-center gap-1.5 text-center has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] has-data-[slot=alert-dialog-media]:gap-x-4 sm:group-data-[size=default]/alert-dialog-content:place-items-start sm:group-data-[size=default]/alert-dialog-content:text-start sm:group-data-[size=default]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr]');
 

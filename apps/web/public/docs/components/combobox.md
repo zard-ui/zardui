@@ -1536,7 +1536,10 @@ export class ZardComboboxClearDirective {
             zVariant="ghost"
             [disabled]="disabled()"
           >
-            <ng-icon name="lucideChevronDown" class="text-muted-foreground pointer-events-none size-4" />
+            <ng-icon
+              name="lucideChevronDown"
+              class="size-4 text-muted-foreground pointer-events-none"
+            />
           </button>
         }
         @if (showClear()) {

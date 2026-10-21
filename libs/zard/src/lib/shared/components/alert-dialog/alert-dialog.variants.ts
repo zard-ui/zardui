@@ -13,7 +13,8 @@ export const alertDialogVariants = cva('cn-alert-dialog group/alert-dialog-conte
 });
 
 /** Classes of the mask behind an alert dialog, shared by the declarative form and the service. */
-export const ALERT_DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+// A marker, so the style decides how dark and how blurred the mask is. The CDK takes one class per entry.
+export const ALERT_DIALOG_BACKDROP_CLASSES = 'cn-alert-dialog-overlay'.split(' ').filter(Boolean);
 
 export const alertDialogHeaderVariants = cva('cn-alert-dialog-header');
 

@@ -459,7 +459,8 @@ export const sheetVariants = cva('fixed z-50 flex flex-col gap-4 bg-popover bg-c
 });
 
 /** Classes of the mask behind a sheet, shared by the declarative form and the service. */
-export const SHEET_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+// A marker, so the style decides how dark and how blurred the mask is. The CDK takes one class per entry.
+export const SHEET_BACKDROP_CLASSES = 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs'.split(' ').filter(Boolean);
 
 export const sheetHeaderVariants = cva('flex flex-col gap-0.5 p-4');
 

@@ -57,6 +57,7 @@ import {
   selectViewportVariants,
   type ZardSelectAlignVariants,
   type ZardSelectPositionVariants,
+  type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -85,6 +86,7 @@ let nextSelectId = 0;
       [attr.aria-label]="triggerAriaLabel()"
       [attr.aria-disabled]="disabledState()"
       [attr.data-placeholder]="!hasValue() ? '' : null"
+      [attr.data-size]="zSize()"
       (blur)="!isOpen() && isFocus.set(false)"
       (click)="toggle()"
       (focus)="onFocus()"
@@ -102,7 +104,7 @@ let nextSelectId = 0;
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
       </span>
-      <ng-icon name="lucideChevronDown" class="text-muted-foreground size-4!" />
+      <ng-icon name="lucideChevronDown" class="cn-select-trigger-icon text-muted-foreground" />
     </button>
 
     <ng-template #dropdownTemplate>
@@ -136,7 +138,7 @@ let nextSelectId = 0;
             (pointerup)="stopScrollOptions(-1)"
             (pointercancel)="stopScrollOptions(-1)"
           >
-            <ng-icon name="lucideChevronUp" class="size-4!" />
+            <ng-icon name="lucideChevronUp" class="cn-select-scroll-icon" />
           </div>
         }
 
@@ -163,7 +165,7 @@ let nextSelectId = 0;
             (pointerup)="stopScrollOptions(1)"
             (pointercancel)="stopScrollOptions(1)"
           >
-            <ng-icon name="lucideChevronDown" class="size-4!" />
+            <ng-icon name="lucideChevronDown" class="cn-select-scroll-icon" />
           </div>
         }
       </div>
@@ -216,6 +218,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   readonly zAlign = input<ZardSelectAlignVariants>('center');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zInvalid = input(false, { transform: booleanAttribute });
+  readonly zSize = input<ZardSelectSizeVariants>('default');
   readonly zLabel = input<string>('');
   readonly zMaxLabelCount = input(1, { transform: numberAttribute });
   readonly zMultiple = input(false, { transform: booleanAttribute });

@@ -22,7 +22,7 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
 @Component({
   selector: 'z-navigation-menu-indicator, [z-navigation-menu-indicator]',
   template: `
-    <div class="bg-border relative top-[60%] size-2 rotate-45 rounded-tl-sm shadow-md"></div>
+    <div class="cn-navigation-menu-indicator-arrow bg-border relative top-[60%] size-2 rotate-45 shadow-md"></div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

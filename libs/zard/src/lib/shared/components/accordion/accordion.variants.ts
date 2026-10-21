@@ -1,5 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
+export const accordionVariants = cva('cn-accordion');
+
 export const accordionItemVariants = cva('cn-accordion-item', {
   variants: {},
   defaultVariants: {},
@@ -25,6 +27,7 @@ export const accordionContentVariants = cva('cn-accordion-content', {
   },
 });
 
+export type ZardAccordionVariants = VariantProps<typeof accordionVariants>;
 export type ZardAccordionItemVariants = VariantProps<typeof accordionItemVariants>;
 export type ZardAccordionTriggerVariants = VariantProps<typeof accordionTriggerVariants>;
 export type ZardAccordionContentVariants = VariantProps<typeof accordionContentVariants>;

@@ -58,6 +58,12 @@ export const SELECT_API: ApiSection[] = [
         type: "'item-aligned' | 'popper'",
         default: "'item-aligned'",
       },
+      {
+        name: '[zSize]',
+        description: 'Trigger height; `sm` is the compact one (the style decides the exact height)',
+        type: "'default' | 'sm'",
+        default: "'default'",
+      },
       { name: '[(zValue)]', description: 'Selected value', type: 'string | string[]', default: "'' | []" },
       {
         name: '(zSelectionChange)',

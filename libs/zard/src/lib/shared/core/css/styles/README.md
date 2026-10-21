@@ -61,8 +61,31 @@ variable a preset's Heading font sets (`zard-cli init --preset`). A project with
    one wins by position, not by `twMerge`.
 4. `npm run build:registry` rebuilds the published tables and the CLI's bundled copy; `npm run check:registry` verifies them.
 
+## Things that trip a marker up
+
+- **Icons.** `<ng-icon>` sizes itself with an unlayered rule (`width: var(--ng-icon__size, 1em)`), so a style's
+  `[&_svg:not([class*='size-'])]:size-4` never reaches it and a plain `size-4` utility loses to it. An icon whose size a
+  style changes (select chevron, command search, empty-state glyph…) therefore carries its own marker
+  (`cn-select-trigger-icon`) that resolves to `size-4!` or `size-3.5!`. A literal `size-4!` in a template pins the icon
+  for every style, so use one only when no style varies it.
+- **Overlay masks.** The CDK takes the backdrop classes as an array, one class per entry, so a marker there is written
+  `'cn-dialog-overlay'.split(' ').filter(Boolean)`: the CLI resolves the literal, and the split turns the resolved classes
+  back into entries (`DIALOG_BACKDROP_CLASSES`, `ALERT_DIALOG_BACKDROP_CLASSES`, `SHEET_BACKDROP_CLASSES`,
+  `DRAWER_BACKDROP_CLASSES`).
+- **Attributes.** The sheets are written for the attributes the zard components render, not for shadcn's Base UI ones:
+  `data-size` on the select trigger (`zSize`), `data-orientation` for `data-vertical:` / `data-horizontal:` (the
+  `data-vertical` variant in `zard.css` reads `data-orientation`, on the slider thumb as everywhere else),
+  `data-slot="radio-group-item"` / `checkbox` / `switch` plus `peer` on the host for the `peer-data-[slot=…]` label rules.
+  `npm run check:registry` fails on a rule that reads an attribute nothing renders.
+- **`cn-label`.** The look of a form label (size, weight, case) lives in `cn-label`, which `z-field-label` carries next to
+  `cn-field-label` (layout, state, `leading-*`); nova leaves it empty, because nova's `cn-field-label` keeps the whole
+  label look. Keep a `leading-*` out of `cn-label`: the one in `cn-field-label` must win.
+- **Drawer.** `cn-drawer` is the panel itself (shadcn's `cn-drawer-popup`): in maia, mira, luma and rhea it is the inset
+  card (`m-2`, border, radius), in vega, lyra and sera it is flush with the edge and rounded only on the side that faces
+  the page (`cn-drawer-placement-*`).
+
 ## Known limits
 
-- Only class strings in `*.variants.ts` and the marked spots of a few component files are style-aware. Icon sizes written
-  as `class="size-4"` in a template are not.
+- Only class strings in `*.variants.ts` and the marked spots of a few component files are style-aware. An icon size or
+  radius written inline as `class="size-4"` in a template is not, unless it is a marker (see above).
 - Styles are not meant to nest. A `style-*` class inside another `style-*` class resolves to whichever sheet comes later.

@@ -465,7 +465,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   template: `
     <div data-slot="command-input-wrapper" class="p-1 pb-0">
       <z-input-group
-        class="border-input/30 has-[input:focus-visible]:border-input/30! shadow-none! has-[input:focus-visible]:ring-0!"
+        class="border-input/30 shadow-none! has-[input:focus-visible]:border-input/30! has-[input:focus-visible]:ring-0!"
       >
         <z-input-group-addon>
           <ng-icon name="lucideSearch" class="size-4! shrink-0 opacity-50" />

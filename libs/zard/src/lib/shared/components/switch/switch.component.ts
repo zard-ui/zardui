@@ -45,10 +45,7 @@ type OnChangeType = (value: boolean) => void;
         ></span>
       </button>
 
-      <label
-        class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        [for]="zId() || z.id()"
-      >
+      <label class="cn-switch-label peer-disabled:cursor-not-allowed peer-disabled:opacity-70" [for]="zId() || z.id()">
         <ng-content><span class="sr-only">toggle switch</span></ng-content>
       </label>
     </span>
@@ -63,6 +60,7 @@ type OnChangeType = (value: boolean) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    class: 'peer',
     'data-slot': 'switch',
   },
   exportAs: 'zSwitch',

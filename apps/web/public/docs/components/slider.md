@@ -156,6 +156,7 @@ export class ZardSliderRangeComponent {
     <span
       #thumb
       data-slot="slider-thumb"
+      [attr.data-orientation]="orientation()"
       [attr.role]="'slider'"
       [attr.aria-valuemin]="min()"
       [attr.aria-valuemax]="max()"
