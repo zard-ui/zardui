@@ -39,6 +39,7 @@ const NO_FOOTER_URL_PREFIXES = ['/create'];
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class]': 'rootClass()' },
 })
 export class AppComponent {
   private readonly destroyRef = inject(DestroyRef);
@@ -55,6 +56,11 @@ export class AppComponent {
 
   protected readonly hidesFooter = computed(() =>
     NO_FOOTER_URL_PREFIXES.some(prefix => this.currentUrl().split('?')[0] === prefix),
+  );
+
+  /** shadcn's create header is 56px below `lg`, 64px above: only the builder follows it, the docs keep 64px. */
+  protected readonly rootClass = computed(() =>
+    this.currentUrl().split('?')[0] === '/create' ? 'max-lg:[--header-height:--spacing(14)]' : '',
   );
 
   private resolveInitialUrl(): string {

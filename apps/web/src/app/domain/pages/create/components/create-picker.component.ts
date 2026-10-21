@@ -55,9 +55,14 @@ export type { PickerEvent, PickerOption, PickerSection } from '../lib/picker.typ
       (pointerdown)="viaPointer = true"
       (keydown)="onTriggerKeydown($event)"
     >
-      <span class="flex min-w-0 flex-col justify-start pr-7 text-left">
+      <span class="flex min-w-0 flex-col justify-start text-left max-md:pr-7">
         <span class="text-muted-foreground block text-xs leading-4">{{ label() }}</span>
-        <span class="text-foreground block truncate text-sm leading-5 font-medium">{{ display() }}</span>
+        <span
+          class="text-foreground block truncate text-sm leading-5 font-medium"
+          [class]="longValue() ? 'md:max-w-[80%]' : ''"
+        >
+          {{ display() }}
+        </span>
       </span>
       <span
         class="text-foreground pointer-events-none absolute top-1/2 right-4 flex size-4 -translate-y-1/2 items-center justify-center select-none md:right-2.5 [&>*]:shrink-0"
@@ -131,6 +136,8 @@ export class CreatePickerComponent {
   readonly display = input.required<string>();
   readonly sections = input.required<readonly PickerSection[]>();
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** A value that can run long (a font, a menu name): it stops short of the glyph and lock on a desktop. */
+  readonly longValue = input(false, { transform: booleanAttribute });
 
   /** On a phone the menu opens above the whole card, anchored to it, and closes on a pick. */
   readonly mobile = input(false, { transform: booleanAttribute });

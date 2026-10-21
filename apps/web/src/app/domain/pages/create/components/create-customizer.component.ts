@@ -47,15 +47,15 @@ const COPIED_MS = 2000;
   template: `
     <section
       #card
-      class="dark bg-card/90 text-foreground ring-foreground/10 isolate z-10 flex max-h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl ring-1 backdrop-blur-xl md:h-full"
+      class="dark bg-card/90 text-foreground ring-foreground/10 isolate z-10 flex max-h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl text-sm ring-1 backdrop-blur-xl md:h-full md:gap-3 md:pt-3"
       aria-label="Customize the design"
     >
-      <div class="hidden border-b p-2.5 md:block">
+      <div class="hidden border-b px-3 pb-3 md:block">
         <z-create-menu />
       </div>
 
       <div
-        class="flex min-h-0 flex-1 [scrollbar-width:none] flex-row gap-2.5 overflow-x-auto p-2.5 md:flex-col md:gap-3.25 md:overflow-x-hidden md:overflow-y-auto [&::-webkit-scrollbar]:hidden"
+        class="flex min-h-0 flex-1 [scrollbar-width:none] flex-row gap-2.5 overflow-x-auto p-2.5 md:flex-col md:gap-3.25 md:overflow-x-hidden md:overflow-y-auto md:px-3 md:py-px [&::-webkit-scrollbar]:hidden"
       >
         <z-create-picker
           label="Style"
@@ -69,7 +69,9 @@ const COPIED_MS = 2000;
         >
           <z-create-glyph slot="glyph" kind="style" [value]="design().style" />
         </z-create-picker>
-        <div class="bg-border -mx-2.5 hidden h-px shrink-0 md:block"></div>
+        <div class="relative -mx-4 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
+          <div class="bg-border absolute inset-x-0 top-1/2 h-px"></div>
+        </div>
 
         <z-create-picker
           label="Base Color"
@@ -109,10 +111,13 @@ const COPIED_MS = 2000;
         >
           <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().chartColor)" />
         </z-create-picker>
-        <div class="bg-border -mx-2.5 hidden h-px shrink-0 md:block"></div>
+        <div class="relative -mx-4 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
+          <div class="bg-border absolute inset-x-0 top-1/2 h-px"></div>
+        </div>
 
         <z-create-picker
           label="Heading"
+          longValue
           maxHeight="max-h-96"
           [display]="headingText()"
           [sections]="headingOptions()"
@@ -126,6 +131,7 @@ const COPIED_MS = 2000;
         </z-create-picker>
         <z-create-picker
           label="Font"
+          longValue
           maxHeight="max-h-96"
           [display]="fontText()"
           [sections]="fontOptions()"
@@ -137,7 +143,9 @@ const COPIED_MS = 2000;
         >
           <z-create-glyph slot="glyph" kind="aa" [value]="fontGlyph()" />
         </z-create-picker>
-        <div class="bg-border -mx-2.5 hidden h-px shrink-0 md:block"></div>
+        <div class="relative -mx-4 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
+          <div class="bg-border absolute inset-x-0 top-1/2 h-px"></div>
+        </div>
 
         <z-create-picker
           label="Icon Library"
@@ -164,10 +172,13 @@ const COPIED_MS = 2000;
         >
           <z-create-glyph slot="glyph" kind="radius" />
         </z-create-picker>
-        <div class="bg-border -mx-2.5 hidden h-px shrink-0 md:block"></div>
+        <div class="relative -mx-4 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
+          <div class="bg-border absolute inset-x-0 top-1/2 h-px"></div>
+        </div>
 
         <z-create-picker
           label="Menu"
+          longValue
           [display]="menuText()"
           [sections]="menuOptions()"
           [locked]="isLocked('menu')"
@@ -193,12 +204,14 @@ const COPIED_MS = 2000;
         </z-create-picker>
       </div>
 
-      <div class="flex min-w-0 gap-2 border-t p-2.5 md:flex-col [&>button]:min-w-0 md:[&>button]:w-full">
+      <div
+        class="bg-muted/50 flex min-w-0 gap-2 border-t p-2.5 md:flex-col md:p-3 [&>button]:min-w-0 md:[&>button]:w-full"
+      >
         <button
           type="button"
           z-button
           zType="outline"
-          class="hover:bg-muted! min-w-0 flex-1 bg-transparent! px-2! text-sm! max-md:h-10! md:flex-none"
+          class="hover:bg-muted! min-w-0 flex-1 rounded-lg bg-transparent! px-2! text-sm! max-md:h-10! md:flex-none"
           data-testid="copy-preset"
           [attr.title]="copyLabel()"
           (click)="copyPreset()"
@@ -209,7 +222,7 @@ const COPIED_MS = 2000;
           type="button"
           z-button
           zType="outline"
-          class="hover:bg-muted! max-w-20 min-w-0 flex-1 bg-transparent! px-2! text-sm! max-md:h-10! sm:max-w-none md:flex-none"
+          class="hover:bg-muted! max-w-20 min-w-0 flex-1 rounded-lg bg-transparent! px-2! text-sm! max-md:h-10! sm:max-w-none md:flex-none"
           (click)="state.openPresetOpen.set(true)"
         >
           <span class="truncate">{{ mobile() ? 'Open' : 'Open Preset' }}</span>
@@ -218,14 +231,16 @@ const COPIED_MS = 2000;
           type="button"
           z-button
           zType="outline"
-          class="hover:bg-muted! max-w-20 min-w-0 flex-1 bg-transparent! px-2! text-sm! max-md:h-10! sm:max-w-none md:flex-none"
+          class="hover:bg-muted! max-w-20 min-w-0 flex-1 rounded-lg bg-transparent! px-2! text-sm! max-md:h-10! sm:max-w-none md:flex-none"
           (click)="state.shuffle()"
         >
           <span class="truncate">Shuffle</span>
         </button>
       </div>
-      <div class="hidden p-2.5 pt-0 md:block">
-        <button type="button" z-button class="w-full" (click)="shell.openGetCode()">Get Code</button>
+      <div class="bg-muted/50 hidden border-t p-3 md:-mt-3 md:block">
+        <button type="button" z-button class="hover:bg-primary/80! w-full rounded-lg" (click)="shell.openGetCode()">
+          Get Code
+        </button>
       </div>
     </section>
   `,

@@ -29,7 +29,7 @@ interface MenuEntry {
   template: `
     <button
       type="button"
-      class="ring-foreground/10 hover:bg-muted aria-expanded:bg-muted focus-visible:ring-foreground/50 flex w-full items-center justify-between gap-2 rounded-lg px-1.75 py-2 text-left text-sm font-medium ring-1 select-none focus-visible:outline-none"
+      class="ring-foreground/10 hover:bg-muted aria-expanded:bg-muted focus-visible:ring-foreground/50 flex w-full items-center justify-between gap-2 rounded-lg px-1.75 py-2 text-left text-sm font-medium ring-1 select-none focus-visible:outline-none md:px-2.5"
       zPopover
       zAlign="start"
       zPlacement="right"
