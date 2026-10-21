@@ -107,6 +107,8 @@ export class Preview02LiveWaveformComponent {
   private audioContext: AudioContext | null = null;
   private stream: MediaStream | null = null;
   private micActive = false;
+  /** Off screen (a skipped canvas, a scrolled-away card) nothing is drawn and no frame is asked for. */
+  private visible = true;
 
   constructor() {
     effect(() => {
@@ -132,10 +134,18 @@ export class Preview02LiveWaveformComponent {
         this.needsRedraw = true;
       });
       resizeObserver.observe(container);
+      const visibility = new IntersectionObserver(entries => {
+        const visible = entries[entries.length - 1]?.isIntersecting ?? true;
+        if (visible !== this.visible) this.setVisible(visible);
+      });
+      visibility.observe(container);
       this.ready = true;
       this.sync(this.active(), this.processing(), this.mode());
       this.drawFrame = requestAnimationFrame(time => this.animate(time));
-      this.destroyRef.onDestroy(() => resizeObserver.disconnect());
+      this.destroyRef.onDestroy(() => {
+        resizeObserver.disconnect();
+        visibility.disconnect();
+      });
     });
 
     this.destroyRef.onDestroy(() => {
@@ -144,6 +154,16 @@ export class Preview02LiveWaveformComponent {
       if (this.drawFrame) cancelAnimationFrame(this.drawFrame);
       this.teardownMicrophone();
     });
+  }
+
+  /** Stops the loops when the waveform leaves the screen and restarts them, where they were, when it comes back. */
+  private setVisible(visible: boolean): void {
+    this.visible = visible;
+    if (!visible) return;
+
+    this.needsRedraw = true;
+    if (!this.drawFrame) this.drawFrame = requestAnimationFrame(time => this.animate(time));
+    this.sync(this.active(), this.processing(), this.mode());
   }
 
   protected toggleActive(): void {
@@ -228,7 +248,7 @@ export class Preview02LiveWaveformComponent {
         this.history = data;
       }
       this.needsRedraw = true;
-      this.processingFrame = requestAnimationFrame(animateProcessing);
+      this.processingFrame = this.visible ? requestAnimationFrame(animateProcessing) : null;
     };
     animateProcessing();
   }
@@ -297,6 +317,10 @@ export class Preview02LiveWaveformComponent {
   }
 
   private animate(currentTime: number): void {
+    if (!this.visible) {
+      this.drawFrame = 0;
+      return;
+    }
     this.drawFrame = requestAnimationFrame(time => this.animate(time));
     const canvas = this.canvasRef().nativeElement;
     const ctx = canvas.getContext('2d');

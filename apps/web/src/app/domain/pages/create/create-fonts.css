@@ -33,3 +33,8 @@
   src: url('@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FFFD;
 }
+
+/* The first design is not applied yet: showing the page now would show components with no style. */
+html[data-design-pending] main {
+  visibility: hidden;
+}

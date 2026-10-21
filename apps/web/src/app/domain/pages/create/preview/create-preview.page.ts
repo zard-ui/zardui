@@ -38,7 +38,7 @@ import {
   isCreateMessage,
   type FromPreviewMessage,
 } from '../lib/create.protocol';
-import { DesignApplier } from '../lib/design-applier';
+import { DESIGN_PENDING_ATTRIBUTE, DesignApplier, loadStyleSheet } from '../lib/design-applier';
 import { PreviewDesignContext } from '../lib/preview-design.context';
 
 /** What is on screen. It only changes once the next item's examples or block have loaded, so a switch never blanks. */
@@ -119,7 +119,8 @@ export class CreatePreviewPage {
     initialValue: 'preview-01',
   });
 
-  protected readonly idleCanvasClass = '[content-visibility:hidden]';
+  // Skipped rendering does not stop CSS animations (skeleton pulses, spinners): they are paused with it.
+  protected readonly idleCanvasClass = '[content-visibility:hidden] **:[animation-play-state:paused]!';
   protected readonly shown = signal<Shown | null>(null);
   protected readonly mounted = signal<ReadonlySet<Shown['kind']>>(new Set());
 
@@ -144,7 +145,17 @@ export class CreatePreviewPage {
     if (!this.isBrowser) return;
 
     this.document.documentElement.classList.add(PREVIEW_DOCUMENT_CLASS);
-    this.destroyRef.onDestroy(() => this.document.documentElement.classList.remove(PREVIEW_DOCUMENT_CLASS));
+    this.destroyRef.onDestroy(() => {
+      this.document.documentElement.classList.remove(PREVIEW_DOCUMENT_CLASS);
+      this.document.documentElement.removeAttribute(DESIGN_PENDING_ATTRIBUTE);
+    });
+
+    // The design the page opened with is in its address. Its style sheet starts downloading now, not after the first
+    // render, and the page stays hidden until the design is applied: components with no style are never shown.
+    const search = new URLSearchParams(this.document.defaultView?.location.search ?? '');
+    const initial = parseCreateParams({ keys: Array.from(search.keys()), get: name => search.get(name) });
+    this.document.documentElement.setAttribute(DESIGN_PENDING_ATTRIBUTE, '');
+    void loadStyleSheet(this.document, initial.design.style);
 
     afterNextRender(() => {
       const view = this.document.defaultView;
@@ -153,12 +164,8 @@ export class CreatePreviewPage {
       const applier = new DesignApplier(this.document);
       this.applier = applier;
 
-      const initial = parseCreateParams({
-        keys: Array.from(new URLSearchParams(view.location.search).keys()),
-        get: name => new URLSearchParams(view.location.search).get(name),
-      });
       this.context.design.set(initial.design);
-      applier.apply(initial.design, this.darkMode.themeMode() === 'dark');
+      void applier.apply(initial.design, this.darkMode.themeMode() === 'dark');
 
       const onMessage = (event: MessageEvent): void => {
         if (event.origin !== view.location.origin || event.source !== view.parent) return;
@@ -172,7 +179,7 @@ export class CreatePreviewPage {
           });
         } else if (event.data.type === 'design') {
           this.context.design.set(event.data.design);
-          applier.apply(event.data.design, event.data.dark);
+          void applier.apply(event.data.design, event.data.dark);
         }
       };
 

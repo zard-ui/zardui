@@ -1,0 +1,7 @@
+/*
+ * The lyra look, for the /create preview only: its own bundle (`create-style-lyra`, not injected), linked by
+ * `DesignApplier` inside the preview iframe the first time the design asks for it.
+ */
+@reference '../styles.css';
+
+@import '../../../../libs/zard/src/lib/shared/core/css/styles/style-lyra.css' layer(components);

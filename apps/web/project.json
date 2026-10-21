@@ -24,7 +24,13 @@
         ],
         "styles": [
           "apps/web/src/styles.css",
-          { "input": "apps/web/src/create-styles.css", "bundleName": "create-styles", "inject": false }
+          { "input": "apps/web/src/create-styles/vega.css", "bundleName": "create-style-vega", "inject": false },
+          { "input": "apps/web/src/create-styles/maia.css", "bundleName": "create-style-maia", "inject": false },
+          { "input": "apps/web/src/create-styles/lyra.css", "bundleName": "create-style-lyra", "inject": false },
+          { "input": "apps/web/src/create-styles/mira.css", "bundleName": "create-style-mira", "inject": false },
+          { "input": "apps/web/src/create-styles/luma.css", "bundleName": "create-style-luma", "inject": false },
+          { "input": "apps/web/src/create-styles/sera.css", "bundleName": "create-style-sera", "inject": false },
+          { "input": "apps/web/src/create-styles/rhea.css", "bundleName": "create-style-rhea", "inject": false }
         ],
         "stylePreprocessorOptions": {
           "includePaths": ["apps/web/src/css"]
