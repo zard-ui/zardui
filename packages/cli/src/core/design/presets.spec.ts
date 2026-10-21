@@ -132,6 +132,26 @@ describe('shuffleDesign', () => {
     }
   });
 
+  it('never changes a locked radius, even when a style would force it', () => {
+    const random = sequence(5);
+    const current = normalizeDesign({ style: 'nova', radius: 'large' });
+
+    for (let step = 0; step < 200; step++) {
+      const next = shuffleDesign(current, { radius: true }, random);
+      expect(next.radius).toBe('large');
+      expect(['lyra', 'sera']).not.toContain(next.style);
+    }
+  });
+
+  it('never changes a locked theme that is the base color itself', () => {
+    const random = sequence(11);
+    const current = normalizeDesign({ baseColor: 'zinc', theme: 'zinc' });
+
+    for (let step = 0; step < 200; step++) {
+      expect(shuffleDesign(current, { theme: true }, random).theme).toBe('zinc');
+    }
+  });
+
   it('returns the current design unchanged when every field is locked', () => {
     const current = SHUFFLE_PRESETS[0]!;
     const locks = Object.fromEntries(DESIGN_FIELDS.map(field => [field, true]));

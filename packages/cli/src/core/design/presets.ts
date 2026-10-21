@@ -379,7 +379,9 @@ export type DesignLocks = Partial<Record<DesignField, boolean>>;
  * A curated design other than the current one, with the locked fields held where they are.
  *
  * Locks are applied before comparing, so a candidate that only differs in locked fields counts as
- * the current design and is skipped. When nothing differs (everything locked), the current design is
+ * the current design and is skipped. A candidate whose style or base color would force a locked field
+ * to change (lyra squaring a locked radius) is excluded. When nothing differs (everything locked), the current
+ * design is
  * returned unchanged rather than looping.
  *
  * `random` returns a number in [0, 1); it is a parameter so tests (and the page's seeded undo) stay
@@ -392,11 +394,17 @@ export function shuffleDesign(
 ): DesignConfig {
   const currentCode = encodePreset(current);
 
+  const lockedFields = DESIGN_FIELDS.filter(field => locks[field]);
+
   const candidates = SHUFFLE_PRESETS.map(preset => {
     const held: Partial<DesignConfig> = {};
-    for (const field of DESIGN_FIELDS) if (locks[field]) (held as Record<string, unknown>)[field] = current[field];
+    for (const field of lockedFields) (held as Record<string, unknown>)[field] = current[field];
     return normalizeDesign({ ...preset, ...held });
-  }).filter(candidate => encodePreset(candidate) !== currentCode);
+  })
+    // A candidate whose style or base color would bend a locked field (lyra forcing the radius, a theme that only
+    // exists for another base color) is not a way to shuffle that field: it is dropped, not let through altered.
+    .filter(candidate => lockedFields.every(field => candidate[field] === current[field]))
+    .filter(candidate => encodePreset(candidate) !== currentCode);
 
   if (candidates.length === 0) return current;
 

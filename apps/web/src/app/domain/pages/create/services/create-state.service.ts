@@ -14,10 +14,12 @@ import {
   resetDesign,
   shuffleDesign,
 } from '@zard/design';
-import type { DesignConfig, DesignLocks, MenuAccentId } from '@zard/design';
+import type { DesignConfig, DesignLocks, MenuAccentId, RadiusId } from '@zard/design';
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
+import { loadBlockItems } from '../lib/create-items';
 import { parseCreateParams, serializeCreateParams } from '../lib/create-url';
+import { BLOCK_ITEM_PREFIX, DEFAULT_ITEM } from '../lib/create.protocol';
 import type { CreateAction } from '../lib/create.protocol';
 import { PresetHistory } from '../lib/preset-history';
 
@@ -78,18 +80,29 @@ export class CreateStateService {
   /** The newest design, ahead of the URL while a navigation is still in flight. */
   private latest: DesignConfig = this.design();
   private lastSolidAccent: MenuAccentId = 'subtle';
+  /** The radius the user picked, kept apart from the one a style forces (lyra and sera square it, rhea caps it). */
+  private chosenRadius: RadiusId = this.design().radius;
 
   constructor() {
     effect(() => {
       const { design, item, needsCanonicalization } = this.url();
       this.latest = design;
       if (this.design().menuAccent === 'bold') this.lastSolidAccent = 'bold';
+      if (!isRadiusForced(design)) this.chosenRadius = design.radius;
       this.history.observe(encodePreset(design));
       this.historyVersion.update(version => version + 1);
 
       // A hand-typed or stale URL is rewritten in place, so what is in the address bar is always the canonical form.
       if (needsCanonicalization && this.isBrowser) this.navigate(design, item, true);
+      else if (this.isBrowser && item.startsWith(BLOCK_ITEM_PREFIX)) void this.dropUnknownBlock(item);
     });
+  }
+
+  /** Blocks are a lazy list the URL parser cannot check: a block that does not exist falls back to the canvas. */
+  private async dropUnknownBlock(item: string): Promise<void> {
+    const blocks = await loadBlockItems();
+    if (this.item() === item && !blocks.some(block => block.id === item))
+      this.navigate(this.latest, DEFAULT_ITEM, true);
   }
 
   /** Closes every open picker and menu. */
@@ -227,11 +240,15 @@ export class CreateStateService {
     if (current.menuAppearance === 'solid') this.lastSolidAccent = current.menuAccent;
 
     const next: Partial<DesignConfig> = { ...partial };
+    // A style that forced the radius gave it back: restore what the user had picked, as shadcn does.
+    if (!partial.radius && partial.style && isRadiusForced(current)) next.radius = this.chosenRadius;
     if (partial.menuAppearance === 'solid' && current.menuAppearance === 'translucent' && !partial.menuAccent) {
       next.menuAccent = this.lastSolidAccent;
     }
 
-    return normalizeDesign({ ...current, ...next });
+    const result = normalizeDesign({ ...current, ...next });
+    if (partial.radius && !isRadiusForced(result)) this.chosenRadius = result.radius;
+    return result;
   }
 
   private navigate(design: DesignConfig, item: string, replaceUrl: boolean): void {
@@ -241,4 +258,12 @@ export class CreateStateService {
       replaceUrl,
     });
   }
+}
+
+/**
+ * Whether the style, rather than the user, decided the radius: lyra and sera square it, and rhea has no large (so
+ * `default` there may be a stand-in).
+ */
+function isRadiusForced(design: DesignConfig): boolean {
+  return design.style === 'lyra' || design.style === 'sera' || (design.style === 'rhea' && design.radius === 'default');
 }

@@ -100,6 +100,54 @@ describe('CreateStateService', () => {
       expect(service.design().menuAccent).toBe('bold');
     });
 
+    it('gives the chosen radius back when a style stops forcing it', () => {
+      const service = createService({ preset: code({ radius: 'large' }) });
+
+      for (const forcing of ['lyra', 'sera'] as const) {
+        service.commit({ style: forcing });
+        TestBed.tick();
+        expect(service.design().radius).toBe('none');
+
+        service.commit({ style: 'nova' });
+        TestBed.tick();
+        expect(service.design().radius).toBe('large');
+      }
+    });
+
+    it('restores the radius rhea capped, and takes a new pick over the memory', () => {
+      const service = createService({ preset: code({ radius: 'large' }) });
+
+      service.commit({ style: 'rhea' });
+      TestBed.tick();
+      expect(service.design().radius).toBe('default');
+
+      service.commit({ style: 'nova' });
+      TestBed.tick();
+      expect(service.design().radius).toBe('large');
+
+      service.commit({ style: 'lyra' });
+      TestBed.tick();
+      service.commit({ style: 'nova', radius: 'small' });
+      TestBed.tick();
+      service.commit({ style: 'sera' });
+      TestBed.tick();
+      service.commit({ style: 'maia' });
+      TestBed.tick();
+      expect(service.design().radius).toBe('small');
+    });
+
+    it('does not take the radius of a shuffled square style as the chosen one', () => {
+      const service = createService({ preset: code({ radius: 'large' }) });
+
+      service.commit({ style: 'sera', radius: 'none' });
+      TestBed.tick();
+      expect(service.design().radius).toBe('none');
+
+      service.commit({ style: 'nova' });
+      TestBed.tick();
+      expect(service.design().radius).toBe('large');
+    });
+
     it('opens a preset typed or pasted with its flag, and refuses a bad one', () => {
       const service = createService();
       const target = code({ style: 'sera', font: 'lora' });
@@ -167,6 +215,19 @@ describe('CreateStateService', () => {
         TestBed.tick();
         expect(service.design().font).toBe('lora');
         expect(service.design().iconLibrary).toBe('phosphor');
+      }
+    });
+
+    it('never changes a locked radius or a locked theme', () => {
+      const service = createService({ preset: code({ radius: 'large', baseColor: 'zinc', theme: 'zinc' }) });
+      service.toggleLock('radius');
+      service.toggleLock('theme');
+
+      for (let i = 0; i < 40; i++) {
+        service.shuffle();
+        TestBed.tick();
+        expect(service.design().radius).toBe('large');
+        expect(service.design().theme).toBe('zinc');
       }
     });
 

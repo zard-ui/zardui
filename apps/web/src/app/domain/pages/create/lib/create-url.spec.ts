@@ -69,6 +69,34 @@ describe('create URL contract', () => {
     expect(parseCreateParams(params({ preset: lyraCode, item: 'preview-02' })).item).toBe('preview-02');
   });
 
+  it('falls back to the default canvas for an unknown item and asks for canonicalization', () => {
+    for (const item of ['garbage', 'component:doesnotexist', 'block:']) {
+      const parsed = parseCreateParams(params({ preset: lyraCode, item }));
+
+      expect(parsed.item).toBe('preview-01');
+      expect(parsed.needsCanonicalization).toBe(true);
+    }
+  });
+
+  it('keeps a known component and a block item', () => {
+    expect(parseCreateParams(params({ preset: lyraCode, item: 'component:button' })).item).toBe('component:button');
+
+    const block = parseCreateParams(params({ preset: lyraCode, item: 'block:sidebar-07' }));
+    expect(block.item).toBe('block:sidebar-07');
+    expect(block.needsCanonicalization).toBe(false);
+  });
+
+  it('canonicalizes a repeated preset or item param', () => {
+    const repeated = (name: string): ParamsLike => ({
+      keys: ['preset', 'item'],
+      get: key => (key === 'preset' ? lyraCode : key === 'item' ? 'preview-02' : null),
+      getAll: key => (key === name ? ['a', 'b'] : key === 'preset' ? [lyraCode] : ['preview-02']),
+    });
+
+    expect(parseCreateParams(repeated('preset')).needsCanonicalization).toBe(true);
+    expect(parseCreateParams(repeated('item')).needsCanonicalization).toBe(true);
+  });
+
   it('writes the preset always and the item only when it is not the default canvas', () => {
     expect(serializeCreateParams(lyra, 'preview-01')).toEqual({ preset: lyraCode });
     expect(serializeCreateParams(lyra, 'component:button')).toEqual({ preset: lyraCode, item: 'component:button' });
