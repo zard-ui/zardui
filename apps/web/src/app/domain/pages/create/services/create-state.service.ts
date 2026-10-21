@@ -3,6 +3,8 @@ import { computed, effect, inject, Injectable, PLATFORM_ID, signal } from '@angu
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Subject } from 'rxjs';
+
 import {
   designConstraints,
   designsEqual,
@@ -65,6 +67,9 @@ export class CreateStateService {
   /** The one-time welcome; owned here so the page's shortcuts can see it. */
   readonly welcomeOpen = signal(false);
 
+  /** Emits when something outside the page's own document (the preview iframe) was clicked: pickers close on it. */
+  readonly popupsDismissed = new Subject<void>();
+
   private readonly history = new PresetHistory(this.preset());
   private readonly historyVersion = signal(0);
   readonly canUndo = computed(() => (this.historyVersion(), this.history.canUndo));
@@ -85,6 +90,11 @@ export class CreateStateService {
       // A hand-typed or stale URL is rewritten in place, so what is in the address bar is always the canonical form.
       if (needsCanonicalization && this.isBrowser) this.navigate(design, item, true);
     });
+  }
+
+  /** Closes every open picker and menu. */
+  dismissPopups(): void {
+    this.popupsDismissed.next();
   }
 
   // --- Committing --------------------------------------------------------------------------------

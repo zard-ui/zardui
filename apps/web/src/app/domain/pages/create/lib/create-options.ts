@@ -185,15 +185,13 @@ export function headingFamily(design: DesignConfig): string | null {
   return fontFamily(design.fontHeading === INHERIT_FONT ? design.font : design.fontHeading);
 }
 
-/** The color of a row's dot, taken from the dark tokens — the customizer is always dark. */
-export function colorDot(kind: 'base' | 'theme' | 'chart', id: string): string {
-  if (kind === 'chart') {
-    const tokens = isBaseColor(id) ? BASE_COLOR_TOKENS[id] : THEME_COLOR_TOKENS[id];
-    return tokens?.dark['chart-2'] ?? 'currentColor';
-  }
-
+/**
+ * The color of a row's dot, taken from the dark tokens — the customizer is always dark. A base color shows its
+ * `muted-foreground`, a theme color its `primary`; the chart row does the same with the color it holds.
+ */
+export function colorDot(id: string): string {
   if (isBaseColor(id)) return BASE_COLOR_TOKENS[id]?.dark['muted-foreground'] ?? 'currentColor';
-  return kind === 'theme' ? (THEME_COLOR_TOKENS[id]?.dark['primary'] ?? 'currentColor') : 'currentColor';
+  return THEME_COLOR_TOKENS[id]?.dark['primary'] ?? 'currentColor';
 }
 
 // --- Events -----------------------------------------------------------------------------------

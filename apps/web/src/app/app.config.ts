@@ -13,11 +13,13 @@ import { provideZard } from '@zard/core/provider/providezard';
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
 import { appRoutes } from './app.routes';
+import { provideEventReplayRelease } from './core/hydration/release-event-replay';
 import { GithubService } from './shared/services/github.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({}), withIncrementalHydration()),
+    provideEventReplayRelease(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       appRoutes,

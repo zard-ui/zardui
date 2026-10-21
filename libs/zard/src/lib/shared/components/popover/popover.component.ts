@@ -50,6 +50,8 @@ import {
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end';
 export type ZardPopoverAlign = 'start' | 'center' | 'end';
+/** What the trigger announces it opens; `dialog` unless the content is a menu. */
+export type ZardPopoverHasPopup = 'dialog' | 'menu' | 'listbox' | 'tree' | 'grid';
 
 /**
  * Kept in sync with the `duration-100` utility of `popoverVariants`. The exit animation runs for this long
@@ -137,7 +139,7 @@ function transformOriginFor(side: ZardPopoverPlacement, align: ZardPopoverAlign,
   selector: '[zPopover]',
   host: {
     'data-slot': 'popover-trigger',
-    '[attr.aria-haspopup]': '"dialog"',
+    '[attr.aria-haspopup]': 'zHasPopup()',
     '[attr.aria-expanded]': 'isVisible()',
     '[attr.aria-controls]': 'contentId()',
   },
@@ -169,6 +171,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   readonly zSideOffset = input(4, { transform: numberAttribute });
   readonly zAlignOffset = input(0, { transform: numberAttribute });
   readonly zOrigin = input<ElementRef>();
+  readonly zHasPopup = input<ZardPopoverHasPopup>('dialog');
   readonly zVisible = input<boolean>(false);
   readonly zOverlayClickable = input<boolean>(true);
   readonly zVisibleChange = output<boolean>();

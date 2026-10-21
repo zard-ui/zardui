@@ -96,7 +96,10 @@ export class CreatePage implements OnInit, OnDestroy {
     const answersReset = action === 'reset' && this.state.resetOpen();
     if (action === 'navigate') {
       event.preventDefault();
-      if (!others) this.state.run(action);
+      if (!others) {
+        this.state.dismissPopups();
+        this.state.run(action);
+      }
       return;
     }
     if ((others || this.state.navigateOpen()) && !answersReset) return;

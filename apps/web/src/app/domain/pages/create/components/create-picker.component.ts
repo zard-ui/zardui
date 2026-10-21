@@ -4,19 +4,23 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
   output,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucideLock, lucideLockOpen } from '@ng-icons/lucide';
 
 import { ZardPopoverImports } from '@zard/components/popover/popover.imports';
 
+import { MenuKeyboard } from '../lib/menu-keyboard';
 import type { PickerEvent, PickerOption, PickerSection } from '../lib/picker.types';
+import { CreateStateService } from '../services/create-state.service';
 
 export type { PickerEvent, PickerOption, PickerSection } from '../lib/picker.types';
 
@@ -38,7 +42,9 @@ export type { PickerEvent, PickerOption, PickerSection } from '../lib/picker.typ
       type="button"
       class="ring-foreground/10 hover:bg-muted aria-expanded:bg-muted focus-visible:ring-foreground/50 relative w-36 touch-manipulation rounded-xl p-3 text-left ring-1 select-none focus-visible:outline-none disabled:opacity-50 md:w-full md:rounded-lg md:px-2.5 md:py-2"
       zPopover
-      zAlign="start"
+      zHasPopup="menu"
+      [zAlign]="mobile() ? 'center' : 'start'"
+      [zAlignOffset]="mobile() ? 0 : 8"
       [zOrigin]="origin()"
       [zPlacement]="mobile() ? 'top' : 'right'"
       [zSideOffset]="mobile() ? 12 : 20"
@@ -46,6 +52,8 @@ export type { PickerEvent, PickerOption, PickerSection } from '../lib/picker.typ
       [zVisible]="open()"
       [disabled]="disabled()"
       (zVisibleChange)="onVisible($event)"
+      (pointerdown)="viaPointer = true"
+      (keydown)="onTriggerKeydown($event)"
     >
       <span class="flex min-w-0 flex-col justify-start pr-7 text-left">
         <span class="text-muted-foreground block text-xs leading-4">{{ label() }}</span>
@@ -75,10 +83,11 @@ export type { PickerEvent, PickerOption, PickerSection } from '../lib/picker.typ
 
     <ng-template #options>
       <z-popover
-        class="dark max-h-96 w-52 gap-0 overflow-y-auto rounded-xl border-0 bg-neutral-950/80 p-1.5 text-neutral-100 ring-1 ring-neutral-950/80 backdrop-blur-xl max-md:w-[calc(100vw-3rem)] dark:bg-neutral-800/90 dark:ring-neutral-700/50"
-        [attr.aria-label]="label()"
+        role="presentation"
+        class="dark w-52 gap-0 overflow-y-auto rounded-xl border-0 bg-neutral-950/80 p-1.5 text-neutral-100 shadow-none ring-1 ring-neutral-950/80 backdrop-blur-xl data-closed:hidden data-open:animate-none max-md:w-[calc(100vw-34px)] dark:bg-neutral-800/90 dark:ring-neutral-700/50"
+        [class]="maxHeight()"
       >
-        <div role="menu" [attr.aria-label]="label()" (keydown)="onKeydown($event)">
+        <div role="menu" tabindex="-1" class="outline-hidden" [attr.aria-label]="label()" (keydown)="onKeydown($event)">
           @for (section of sections(); track $index) {
             <div role="group" [attr.aria-label]="section.label ?? label()">
               @if (section.label) {
@@ -131,6 +140,12 @@ export class CreatePickerComponent {
     return this.mobile() && element ? new ElementRef(element) : undefined;
   });
 
+  /**
+   * The tallest the menu grows before it scrolls, as a Tailwind class. By default the room the window leaves, and
+   * 24rem on a phone, where the menu opens above the card.
+   */
+  readonly maxHeight = input('max-h-[calc(100svh-10px)] max-md:max-h-96');
+
   readonly lockable = input(true, { transform: booleanAttribute });
   readonly locked = input(false, { transform: booleanAttribute });
 
@@ -138,10 +153,35 @@ export class CreatePickerComponent {
   readonly lockToggled = output<void>();
 
   protected readonly open = signal(false);
+  /** Whether the menu was opened with a pointer: the pointer leaves the focus on the menu, the keyboard on an item. */
+  protected viaPointer = false;
+
+  private readonly keyboard = new MenuKeyboard(
+    () => this.document.activeElement,
+    () => this.open.set(false),
+  );
+
+  constructor() {
+    const destroyRef = inject(DestroyRef);
+    destroyRef.onDestroy(() => this.keyboard.dispose());
+    // A click inside the preview iframe never reaches this document, so the page announces it.
+    inject(CreateStateService)
+      .popupsDismissed.pipe(takeUntilDestroyed(destroyRef))
+      .subscribe(() => this.open.set(false));
+  }
 
   protected onVisible(open: boolean): void {
     this.open.set(open);
     if (open) this.focusOpenMenu();
+  }
+
+  protected onTriggerKeydown(event: KeyboardEvent): void {
+    this.viaPointer = false;
+    // Focus can still be on the trigger (the menu takes it a tick after opening): tabbing on must not leave it open.
+    if (event.key === 'Tab' && this.open()) this.open.set(false);
+    if (event.key !== 'ArrowDown' || this.open() || this.disabled()) return;
+    event.preventDefault();
+    this.open.set(true);
   }
 
   protected pick(section: string, option: PickerOption): void {
@@ -152,21 +192,23 @@ export class CreatePickerComponent {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    const step = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0;
-    if (step === 0) return;
-    event.preventDefault();
-
     const items = Array.from(
       (event.currentTarget as HTMLElement).querySelectorAll<HTMLElement>('[role="menuitemradio"]:not(:disabled)'),
     );
-    const current = items.indexOf(this.document.activeElement as HTMLElement);
-    items[(current + step + items.length) % items.length]?.focus();
+    this.keyboard.handle(event, items);
   }
 
   /** The CDK overlay mounts at the end of `body`, outside the tab order: move focus in so the menu is reachable. */
   private focusOpenMenu(): void {
     setTimeout(() => {
-      const menu = this.document.querySelector<HTMLElement>('.cdk-overlay-container [role="menu"]');
+      // The menu of the picker that just opened; one that is still closing may sit beside it for a moment.
+      const menus = Array.from(this.document.querySelectorAll<HTMLElement>('.cdk-overlay-container [role="menu"]'));
+      const menu = menus.find(candidate => candidate.getAttribute('aria-label') === this.label());
+      if (this.viaPointer) {
+        // Like Radix: a click focuses the menu itself, so no item shows as highlighted until the arrows move in.
+        menu?.focus();
+        return;
+      }
       const checked = menu?.querySelector<HTMLElement>('[aria-checked="true"]:not(:disabled)');
       // Start on the committed value, so the arrows move from where the user is.
       (checked ?? menu?.querySelector<HTMLElement>('[role="menuitemradio"]:not(:disabled)'))?.focus();

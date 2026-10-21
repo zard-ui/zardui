@@ -81,10 +81,11 @@ const COPIED_MS = 2000;
           (picked)="pick('baseColor', $event)"
           (lockToggled)="state.toggleLock('baseColor')"
         >
-          <z-create-glyph slot="glyph" kind="dot" [value]="dot('base', design().baseColor)" />
+          <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().baseColor)" />
         </z-create-picker>
         <z-create-picker
           label="Theme"
+          maxHeight="max-h-92"
           [display]="themeText()"
           [sections]="themeOptions()"
           [locked]="isLocked('theme')"
@@ -93,10 +94,11 @@ const COPIED_MS = 2000;
           (picked)="pick('theme', $event)"
           (lockToggled)="state.toggleLock('theme')"
         >
-          <z-create-glyph slot="glyph" kind="dot" [value]="dot('theme', design().theme)" />
+          <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().theme)" />
         </z-create-picker>
         <z-create-picker
           label="Chart Color"
+          maxHeight="max-h-92"
           [display]="chartText()"
           [sections]="chartOptions()"
           [locked]="isLocked('chartColor')"
@@ -105,12 +107,13 @@ const COPIED_MS = 2000;
           (picked)="pick('chartColor', $event)"
           (lockToggled)="state.toggleLock('chartColor')"
         >
-          <z-create-glyph slot="glyph" kind="dot" [value]="dot('chart', design().chartColor)" />
+          <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().chartColor)" />
         </z-create-picker>
         <div class="bg-border -mx-2.5 hidden h-px shrink-0 md:block"></div>
 
         <z-create-picker
           label="Heading"
+          maxHeight="max-h-96"
           [display]="headingText()"
           [sections]="headingOptions()"
           [locked]="isLocked('fontHeading')"
@@ -123,6 +126,7 @@ const COPIED_MS = 2000;
         </z-create-picker>
         <z-create-picker
           label="Font"
+          maxHeight="max-h-96"
           [display]="fontText()"
           [sections]="fontOptions()"
           [locked]="isLocked('font')"
@@ -265,8 +269,8 @@ export class CreateCustomizerComponent {
   protected readonly copyLabel = computed(() => (this.copied() ? 'Copied' : `--preset ${this.state.preset()}`));
   private copiedTimer: ReturnType<typeof setTimeout> | null = null;
 
-  protected dot(kind: 'base' | 'theme' | 'chart', id: string): string {
-    return colorDot(kind, id);
+  protected dot(id: string): string {
+    return colorDot(id);
   }
 
   protected isLocked(key: LockKey): boolean {

@@ -72,7 +72,7 @@ export type GlyphKind = 'style' | 'dot' | 'aa' | 'icons' | 'radius' | 'menu' | '
           stroke-width="2"
           stroke-linecap="round"
         >
-          <path d="M4 7h16M4 12h16M4 17h10" />
+          <path d="M4 8h16M4 16h16" />
         </svg>
       }
       @case ('accent') {

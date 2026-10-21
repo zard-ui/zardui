@@ -43,6 +43,12 @@ export const POPOVER_API: ApiSection[] = [
         default: '0',
       },
       { name: '[zOrigin]', description: 'Custom anchor element', type: 'ElementRef', default: '-' },
+      {
+        name: '[zHasPopup]',
+        description: "What the trigger announces through aria-haspopup. Use 'menu' when the content is a menu",
+        type: "'dialog' | 'menu' | 'listbox' | 'tree' | 'grid'",
+        default: "'dialog'",
+      },
       { name: '[zVisible]', description: 'Control visibility programmatically', type: 'boolean', default: 'false' },
       { name: '[zOverlayClickable]', description: 'Close on outside click', type: 'boolean', default: 'true' },
       {

@@ -46,12 +46,11 @@ test.describe('Command component', () => {
   test('passes accessibility checks in the RTL example', async ({ page }) => {
     const demo = await openRtlDemo();
     await expect(demo.locator('z-command')).toBeVisible();
-    // The listbox/combobox structure of the command is shared with every other demo (aria-required-attr on the root,
-    // a separator inside the listbox): it is not specific to the RTL example.
+    // The listbox structure of the command is shared with every other demo (a separator inside the listbox): it is
+    // not specific to the RTL example.
     await checkA11y(page, '[id="rtl"] [data-slot="preview"]', [
       'button-name',
       'color-contrast',
-      'aria-required-attr',
       'aria-required-children',
     ]);
   });

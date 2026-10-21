@@ -77,6 +77,7 @@ export interface ZardCommandConfig {
   host: {
     'data-slot': 'command',
     role: 'combobox',
+    'aria-controls': 'command-list',
     'aria-haspopup': 'listbox',
     '[attr.aria-expanded]': 'true',
     '(keydown.{arrowdown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',

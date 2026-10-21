@@ -73,8 +73,7 @@ describe('create options', () => {
 
   it('has a dot color for every base color and accent', () => {
     for (const id of ['neutral', 'taupe', 'amber', 'yellow']) {
-      expect(colorDot('theme', id)).not.toBe('currentColor');
-      expect(colorDot('chart', id)).not.toBe('currentColor');
+      expect(colorDot(id)).not.toBe('currentColor');
     }
   });
 });

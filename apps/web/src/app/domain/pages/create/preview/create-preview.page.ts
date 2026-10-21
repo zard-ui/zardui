@@ -185,11 +185,20 @@ export class CreatePreviewPage {
         view.parent.postMessage(message, view.location.origin);
       };
 
+      // A click in here never reaches the host page, so it is announced: an open picker closes on it.
+      const onPointerDown = (): void => {
+        if (view.parent === view) return;
+        const message: FromPreviewMessage = { channel: CREATE_CHANNEL, type: 'pointer' };
+        view.parent.postMessage(message, view.location.origin);
+      };
+
       view.addEventListener('message', onMessage);
       this.document.addEventListener('keydown', onKeydown);
+      this.document.addEventListener('pointerdown', onPointerDown, true);
       this.destroyRef.onDestroy(() => {
         view.removeEventListener('message', onMessage);
         this.document.removeEventListener('keydown', onKeydown);
+        this.document.removeEventListener('pointerdown', onPointerDown, true);
         applier.destroy();
       });
 

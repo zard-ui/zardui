@@ -1,11 +1,13 @@
 import { DOCUMENT } from '@angular/common';
-import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ZardPopoverImports } from '@zard/components/popover/popover.imports';
 
 import { CreateGlyphComponent } from './create-glyph.component';
 import { isApplePlatform } from '../lib/create-shortcuts';
 import type { CreateAction } from '../lib/create.protocol';
+import { MenuKeyboard } from '../lib/menu-keyboard';
 import { CreateStateService } from '../services/create-state.service';
 
 interface MenuEntry {
@@ -31,11 +33,13 @@ interface MenuEntry {
       zPopover
       zAlign="start"
       zPlacement="right"
-      [zAlignOffset]="-8"
+      zHasPopup="menu"
       [zSideOffset]="20"
       [zContent]="entries"
       [zVisible]="open()"
-      (zVisibleChange)="open.set($event)"
+      (zVisibleChange)="onVisible($event)"
+      (pointerdown)="viaPointer = true"
+      (keydown)="onTriggerKeydown($event)"
     >
       <span>Menu</span>
       <z-create-glyph kind="menu" />
@@ -43,10 +47,10 @@ interface MenuEntry {
 
     <ng-template #entries>
       <z-popover
-        class="dark w-52 gap-0 rounded-xl border-0 bg-neutral-950/80 p-1.5 text-neutral-100 ring-1 ring-neutral-950/80 backdrop-blur-xl dark:bg-neutral-800/90 dark:ring-neutral-700/50"
-        aria-label="Menu"
+        role="presentation"
+        class="dark w-52 gap-0 rounded-xl border-0 bg-neutral-950/80 p-1.5 text-neutral-100 shadow-none ring-1 ring-neutral-950/80 backdrop-blur-xl data-closed:hidden data-open:animate-none dark:bg-neutral-800/90 dark:ring-neutral-700/50"
       >
-        <div role="menu" aria-label="Menu" (keydown)="onKeydown($event)">
+        <div role="menu" tabindex="-1" class="outline-hidden" aria-label="Menu" (keydown)="onKeydown($event)">
           @for (group of groups(); track $index) {
             <div role="group">
               @for (entry of group; track entry.action) {
@@ -77,9 +81,21 @@ export class CreateMenuComponent {
   private readonly state = inject(CreateStateService);
 
   protected readonly open = signal(false);
+  /** Whether the menu was opened with a pointer: the pointer leaves the focus on the menu, the keyboard on an item. */
+  protected viaPointer = false;
   private readonly apple = signal(false);
 
+  private readonly keyboard = new MenuKeyboard(
+    () => this.document.activeElement,
+    () => this.open.set(false),
+  );
+
   constructor() {
+    const destroyRef = inject(DestroyRef);
+    destroyRef.onDestroy(() => this.keyboard.dispose());
+    // A click inside the preview iframe never reaches this document, so the page announces it.
+    this.state.popupsDismissed.pipe(takeUntilDestroyed(destroyRef)).subscribe(() => this.open.set(false));
+
     afterNextRender(() => {
       const nav = this.document.defaultView?.navigator;
       this.apple.set(isApplePlatform(nav?.platform || nav?.userAgent || ''));
@@ -112,14 +128,32 @@ export class CreateMenuComponent {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    const step = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0;
-    if (step === 0) return;
-    event.preventDefault();
-
     const items = Array.from(
       (event.currentTarget as HTMLElement).querySelectorAll<HTMLElement>('[role="menuitem"]:not(:disabled)'),
     );
-    const current = items.indexOf(this.document.activeElement as HTMLElement);
-    items[(current + step + items.length) % items.length]?.focus();
+    this.keyboard.handle(event, items);
+  }
+
+  protected onVisible(open: boolean): void {
+    this.open.set(open);
+    if (open) this.focusOpenMenu();
+  }
+
+  protected onTriggerKeydown(event: KeyboardEvent): void {
+    this.viaPointer = false;
+    // Focus can still be on the trigger (the menu takes it a tick after opening): tabbing on must not leave it open.
+    if (event.key === 'Tab' && this.open()) this.open.set(false);
+    if (event.key !== 'ArrowDown' || this.open()) return;
+    event.preventDefault();
+    this.open.set(true);
+  }
+
+  /** The CDK overlay mounts at the end of `body`, outside the tab order: move focus in so the menu is reachable. */
+  private focusOpenMenu(): void {
+    setTimeout(() => {
+      const menu = this.document.querySelector<HTMLElement>('.cdk-overlay-container [role="menu"][aria-label="Menu"]');
+      // A click focuses the menu itself (nothing highlighted); the keyboard lands on the first item.
+      (this.viaPointer ? menu : menu?.querySelector<HTMLElement>('[role="menuitem"]:not(:disabled)'))?.focus();
+    });
   }
 }

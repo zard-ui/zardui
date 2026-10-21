@@ -499,6 +499,122 @@ test.describe('Create builder', () => {
     });
   });
 
+  test.describe('picker popups', () => {
+    const focusedText = (page: Page): Promise<string> =>
+      page.evaluate(() => document.activeElement?.textContent?.trim() ?? '');
+
+    test('a click inside the preview closes an open popup', async ({ page }) => {
+      await open(page, 'Style');
+      await expect(page.getByRole('menu', { name: 'Style' })).toBeVisible();
+
+      await previewFrame(page)
+        .locator('body')
+        .click({ position: { x: 500, y: 450 } });
+
+      await expect(page.getByRole('menu', { name: 'Style' })).toHaveCount(0);
+      await expect(picker(page, 'Style').locator('button[zpopover]')).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    test('the Menu popup closes on a click inside the preview too', async ({ page }) => {
+      await page.getByRole('button', { name: 'Menu', exact: true }).click();
+      await expect(page.getByRole('menu', { name: 'Menu' })).toBeVisible();
+
+      await previewFrame(page)
+        .locator('body')
+        .click({ position: { x: 500, y: 450 } });
+
+      await expect(page.getByRole('menu', { name: 'Menu' })).toHaveCount(0);
+    });
+
+    test('opens 8px below the trigger, flat, announced as a menu, with nothing highlighted for a click', async ({
+      page,
+    }) => {
+      const trigger = picker(page, 'Style').locator('button[zpopover]');
+      await expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
+
+      const box = await trigger.boundingBox();
+      expect(box).not.toBeNull();
+      await open(page, 'Style');
+      const panel = page.locator('.cdk-overlay-container z-popover');
+      await expect(panel).toBeVisible();
+
+      const { top, shadow, animation } = await panel.evaluate(element => {
+        const style = getComputedStyle(element);
+        return { top: element.getBoundingClientRect().top, shadow: style.boxShadow, animation: style.animationName };
+      });
+      expect(Math.round(top - (box?.y ?? 0))).toBe(8);
+      // Only the ring: shadcn's popup casts no `shadow-md` (0 4px 6px -1px).
+      expect(shadow).not.toContain('6px -1px');
+      expect(animation).toBe('none');
+      // A click leaves the focus on the menu itself, so no option shows as highlighted.
+      await expect(page.getByRole('menu', { name: 'Style' })).toBeFocused();
+    });
+
+    test('the keyboard opens a popup on the checked option and moves with Home, End and type-ahead', async ({
+      page,
+    }) => {
+      const trigger = picker(page, 'Font').locator('button[zpopover]');
+      await trigger.focus();
+      await page.keyboard.press('ArrowDown');
+
+      const menu = page.getByRole('menu', { name: 'Font' });
+      await expect(menu).toBeVisible();
+      await expect(menu.locator('[aria-checked="true"]')).toBeFocused();
+
+      await page.keyboard.press('End');
+      const last = await focusedText(page);
+      await page.keyboard.press('Home');
+      const first = await focusedText(page);
+      expect(first).not.toBe(last);
+      expect(await menu.getByRole('menuitemradio').first().textContent()).toContain(first);
+
+      await page.keyboard.type('m');
+      expect((await focusedText(page)).toLowerCase().startsWith('m')).toBe(true);
+    });
+
+    test('Tab closes the popup and keeps the focus on its trigger', async ({ page }) => {
+      const trigger = picker(page, 'Style').locator('button[zpopover]');
+      await trigger.focus();
+      await page.keyboard.press('Enter');
+      await expect(page.getByRole('menu', { name: 'Style' }).locator('[aria-checked="true"]')).toBeFocused();
+
+      await page.keyboard.press('Tab');
+
+      await expect(page.getByRole('menu', { name: 'Style' })).toHaveCount(0);
+      await expect(trigger).toBeFocused();
+    });
+
+    test('R and D do not fire while a popup has focus', async ({ page }) => {
+      const before = presetOf(page);
+      const dark = await page.evaluate(() => document.documentElement.classList.contains('dark'));
+      const trigger = picker(page, 'Font').locator('button[zpopover]');
+      await trigger.focus();
+      await page.keyboard.press('Enter');
+      await expect(page.getByRole('menu', { name: 'Font' }).locator('[aria-checked="true"]')).toBeFocused();
+
+      await page.keyboard.press('r');
+      await page.keyboard.press('d');
+      await page.waitForTimeout(300);
+
+      expect(presetOf(page)).toBe(before);
+      expect(await page.evaluate(() => document.documentElement.classList.contains('dark'))).toBe(dark);
+    });
+
+    test('the Menu popup takes the keyboard too: focus lands on the first item and R does not shuffle', async ({
+      page,
+    }) => {
+      const before = presetOf(page);
+      const trigger = page.getByRole('button', { name: 'Menu', exact: true });
+      await trigger.focus();
+      await page.keyboard.press('Enter');
+
+      await expect(page.getByRole('menuitem', { name: /^Navigate/ })).toBeFocused();
+      await page.keyboard.press('r');
+      await page.waitForTimeout(300);
+      expect(presetOf(page)).toBe(before);
+    });
+  });
+
   test('has no accessibility violations in the customizer', async ({ page }) => {
     // `scrollable-region-focusable` is the horizontally scrolling row of cards on small screens.
     await checkA11y(page, 'z-create-customizer', ['scrollable-region-focusable']);

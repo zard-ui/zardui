@@ -39,8 +39,17 @@ export interface ActionMessage {
   readonly action: CreateAction;
 }
 
+/**
+ * Iframe → page: the pointer went down inside the iframe. The page cannot see that click (it never leaves the
+ * iframe's document), so this is what closes an open picker or menu.
+ */
+export interface PointerMessage {
+  readonly channel: typeof CREATE_CHANNEL;
+  readonly type: 'pointer';
+}
+
 export type ToPreviewMessage = DesignMessage | ItemMessage;
-export type FromPreviewMessage = ReadyMessage | ActionMessage;
+export type FromPreviewMessage = ReadyMessage | ActionMessage | PointerMessage;
 
 export function isCreateMessage(value: unknown): value is ToPreviewMessage | FromPreviewMessage {
   return (

@@ -44,7 +44,7 @@ const SWITCHER = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class:
-      'relative flex min-h-0 min-w-0 flex-1 flex-col justify-center overflow-hidden rounded-2xl ring ring-foreground/10 md:ring-muted',
+      'relative flex min-h-0 min-w-0 flex-1 flex-col justify-center overflow-hidden rounded-2xl ring ring-foreground/10 md:ring-muted md:dark:ring-foreground/10',
   },
   template: `
     <div class="relative z-0 mx-auto flex w-full flex-1 flex-col overflow-hidden">
@@ -59,14 +59,14 @@ const SWITCHER = [
 
     @if (isCanvas()) {
       <div
-        class="dark bg-card/90 absolute right-3 bottom-3 z-30 flex items-center gap-1 rounded-xl p-1 shadow-xl backdrop-blur-xl"
+        class="dark bg-card/90 absolute right-3 bottom-3 z-20 flex items-center gap-1 rounded-xl p-1 shadow-xl backdrop-blur-xl"
         role="group"
         aria-label="Canvas"
       >
         @for (entry of switcher; track entry.item) {
           <button
             type="button"
-            class="text-muted-foreground hover:text-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground h-7 min-w-8 cursor-pointer rounded-lg px-2.5 text-xs font-medium transition-colors"
+            class="text-muted-foreground hover:text-foreground h-7 min-w-8 cursor-pointer rounded-lg px-2.5 text-xs font-medium transition-colors hover:bg-neutral-700/50 data-[active=true]:bg-neutral-700 data-[active=true]:text-neutral-50"
             [attr.data-active]="state.item() === entry.item"
             [attr.aria-pressed]="state.item() === entry.item"
             (click)="state.setItem(entry.item)"
@@ -125,6 +125,8 @@ export class CreatePreviewComponent {
         this.sendItem();
       } else if (event.data.type === 'action') {
         this.state.run(event.data.action);
+      } else if (event.data.type === 'pointer') {
+        this.state.dismissPopups();
       }
     };
 

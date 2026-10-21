@@ -771,3 +771,33 @@ describe('ZardPopoverDirective with zOrigin', () => {
     expect(queryContent()).toBeTruthy();
   });
 });
+
+@Component({
+  imports: [ZardPopoverDirective, ZardPopoverComponent],
+  template: `
+    <button type="button" zPopover zHasPopup="menu" [zContent]="popoverContent">Trigger</button>
+    <ng-template #popoverContent>
+      <z-popover><div role="menu">Items</div></z-popover>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.Eager,
+})
+class MenuPopupTestComponent {}
+
+describe('ZardPopoverDirective with a menu', () => {
+  it('announces the kind of popup it opens through zHasPopup', () => {
+    TestBed.configureTestingModule({
+      imports: [OverlayModule, MenuPopupTestComponent],
+      providers: [{ provide: EVENT_MANAGER_PLUGINS, useClass: ZardEventManagerPlugin, multi: true }],
+    });
+    const fixture = TestBed.createComponent(MenuPopupTestComponent);
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector('button') as HTMLElement;
+    expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
+
+    trigger.click();
+    fixture.detectChanges();
+    expect(document.querySelector('[role="menu"]')).toBeTruthy();
+  });
+});

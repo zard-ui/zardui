@@ -37,4 +37,16 @@ describe('shortcutAction', () => {
     expect(shortcutAction(key('z', { metaKey: true, target: input }))).toBeNull();
     expect(shortcutAction(key('p', { metaKey: true, target: input }))).toBe('navigate');
   });
+
+  it('leaves an open menu alone: its letters are type-ahead, not shortcuts', () => {
+    const menu = document.createElement('div');
+    menu.setAttribute('role', 'menu');
+    const item = document.createElement('button');
+    menu.appendChild(item);
+
+    expect(shortcutAction(key('r', { target: item }))).toBeNull();
+    expect(shortcutAction(key('d', { target: menu }))).toBeNull();
+    expect(shortcutAction(key('z', { metaKey: true, target: item }))).toBeNull();
+    expect(shortcutAction(key('p', { metaKey: true, target: item }))).toBe('navigate');
+  });
 });

@@ -18,6 +18,13 @@ export function isEditableTarget(target: EventTarget | null | undefined): boolea
   return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || element.isContentEditable === true;
 }
 
+/** Inside an open menu the keyboard belongs to the menu: its own letters (type-ahead) must not trigger shortcuts. */
+export function isInsideMenu(target: EventTarget | null | undefined): boolean {
+  const element = target as HTMLElement | null | undefined;
+  if (!element || typeof element.closest !== 'function') return false;
+  return element.closest('[role="menu"]') !== null;
+}
+
 /**
  * The action a key press asks for, or `null`.
  *
@@ -27,7 +34,7 @@ export function isEditableTarget(target: EventTarget | null | undefined): boolea
 export function shortcutAction(event: KeyLike): CreateAction | null {
   const key = event.key.toLowerCase();
   const mod = event.metaKey || event.ctrlKey;
-  const editable = isEditableTarget(event.target);
+  const editable = isEditableTarget(event.target) || isInsideMenu(event.target);
 
   if (mod && !event.altKey) {
     if (key === 'p' || key === 'k') return 'navigate';
