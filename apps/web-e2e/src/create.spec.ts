@@ -227,7 +227,7 @@ test.describe('Create builder', () => {
     await expect(dialog.locator('z-command-option-group')).toHaveCount(0);
     const labels = await dialog.getByRole('option').allTextContents();
     expect(new Set(labels).size).toBe(labels.length);
-    expect((await dialog.boundingBox())?.width).toBeCloseTo(384, 0);
+    expect(await dialog.evaluate(el => (el as HTMLElement).offsetWidth)).toBe(384);
     expect(await dialog.evaluate(el => el.closest('.dark') !== null)).toBe(
       await page.evaluate(() => document.documentElement.classList.contains('dark')),
     );
