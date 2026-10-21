@@ -89,10 +89,17 @@ export class CreatePage implements OnInit, OnDestroy {
     const action = shortcutAction(event);
     if (!action) return;
 
-    // With a dialog open the keyboard belongs to it — except ⇧R, which answers an open "Reset?" question.
-    const dialogOpen = this.shell.getCodeOpen() || this.state.navigateOpen() || this.state.openPresetOpen();
+    // With a dialog open the keyboard belongs to it — except ⇧R, which answers an open "Reset?" question,
+    // and Ctrl+P while only Navigate is open. Ctrl+P never stacks Navigate over another dialog.
+    const others =
+      this.shell.getCodeOpen() || this.state.openPresetOpen() || this.state.resetOpen() || this.state.welcomeOpen();
     const answersReset = action === 'reset' && this.state.resetOpen();
-    if ((dialogOpen || this.state.resetOpen()) && !answersReset && action !== 'navigate') return;
+    if (action === 'navigate') {
+      event.preventDefault();
+      if (!others) this.state.run(action);
+      return;
+    }
+    if ((others || this.state.navigateOpen()) && !answersReset) return;
 
     event.preventDefault();
     this.state.run(action);

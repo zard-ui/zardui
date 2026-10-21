@@ -5,6 +5,7 @@ import {
   Component,
   computed,
   inject,
+  input,
   signal,
   viewChild,
   type AfterViewInit,
@@ -37,12 +38,8 @@ const WELCOME_KEY = 'zard-create-welcome';
         @if (cmd.isEmpty()) {
           <div class="py-6 text-center text-sm">No items found.</div>
         }
-        @for (group of groups(); track group.title) {
-          <z-command-option-group [zLabel]="group.title">
-            @for (item of group.items; track item.id) {
-              <z-command-option [zLabel]="item.label" [zValue]="item.id" />
-            }
-          </z-command-option-group>
+        @for (item of items(); track item.id) {
+          <z-command-option [zLabel]="item.label" [zValue]="item.id" />
         }
       </z-command-list>
     </z-command>
@@ -52,17 +49,11 @@ export class CreateNavigateContentComponent implements AfterViewInit {
   private readonly state = inject(CreateStateService);
   private readonly command = viewChild.required(ZardCommandComponent);
 
-  private readonly blocks = signal<readonly CreateItem[]>([]);
+  /** Already loaded by the owner: options that appear after the command exists race its filter (NG0950). */
+  readonly blocks = input.required<readonly CreateItem[]>();
 
-  protected readonly groups = computed(() => [
-    // shadcn/ui's order: the blocks (the overview first), then the components.
-    { title: 'Blocks', items: [PREVIEW_ITEM, ...this.blocks()] },
-    { title: 'Components', items: COMPONENT_LIST },
-  ]);
-
-  constructor() {
-    void loadBlockItems().then(items => this.blocks.set(items));
-  }
+  // A flat list, as on shadcn/ui: the overview first, then the blocks, then the components.
+  protected readonly items = computed(() => [PREVIEW_ITEM, ...this.blocks(), ...COMPONENT_LIST]);
 
   ngAfterViewInit(): void {
     setTimeout(() => this.command().focus(), 0);
@@ -90,7 +81,7 @@ export class CreateNavigateContentComponent implements AfterViewInit {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <z-dialog
-      class="dark gap-0 p-0 sm:max-w-lg"
+      class="gap-0 p-0 sm:max-w-sm"
       [zVisible]="state.navigateOpen()"
       [zClosable]="false"
       (zVisibleChange)="state.navigateOpen.set($event)"
@@ -99,8 +90,8 @@ export class CreateNavigateContentComponent implements AfterViewInit {
         <z-dialog-title>Navigate</z-dialog-title>
         <z-dialog-description>Preview a component or a block on its own.</z-dialog-description>
       </z-dialog-header>
-      @if (state.navigateOpen()) {
-        <z-create-navigate-content />
+      @if (state.navigateOpen() && blocks(); as loaded) {
+        <z-create-navigate-content [blocks]="loaded" />
       }
     </z-dialog>
 
@@ -112,7 +103,7 @@ export class CreateNavigateContentComponent implements AfterViewInit {
         </z-drawer-header>
         <form class="grid gap-4 px-4 pb-4" (ngSubmit)="openPreset()">
           <ng-container *ngTemplateOutlet="presetField" />
-          <button type="submit" z-button class="h-10" [disabled]="!valid()">Open</button>
+          <button type="submit" z-button class="h-10" [zDisabled]="!valid()">Open</button>
           <button type="button" z-button zType="outline" class="h-10" z-drawer-close>Cancel</button>
         </form>
       </z-drawer>
@@ -126,7 +117,7 @@ export class CreateNavigateContentComponent implements AfterViewInit {
           <ng-container *ngTemplateOutlet="presetField" />
           <z-dialog-footer>
             <button type="button" z-button zType="outline" z-dialog-close>Cancel</button>
-            <button type="submit" z-button [disabled]="!valid()">Open</button>
+            <button type="submit" z-button [zDisabled]="!valid()">Open</button>
           </z-dialog-footer>
         </form>
       </z-dialog>
@@ -137,6 +128,7 @@ export class CreateNavigateContentComponent implements AfterViewInit {
       <input
         z-input
         id="create-preset-code"
+        cdkFocusInitial
         name="preset"
         autocomplete="off"
         autocapitalize="none"
@@ -148,7 +140,7 @@ export class CreateNavigateContentComponent implements AfterViewInit {
       />
     </ng-template>
 
-    <z-alert-dialog [zVisible]="state.resetOpen()" (zVisibleChange)="state.resetOpen.set($event)" class="dark">
+    <z-alert-dialog [zVisible]="state.resetOpen()" (zVisibleChange)="state.resetOpen.set($event)" zSize="sm">
       <z-alert-dialog-header>
         <z-alert-dialog-title>Reset to defaults?</z-alert-dialog-title>
         <z-alert-dialog-description>
@@ -162,9 +154,9 @@ export class CreateNavigateContentComponent implements AfterViewInit {
     </z-alert-dialog>
 
     <z-dialog
-      class="dark max-w-92 gap-0 overflow-hidden p-0 sm:max-w-sm"
+      class="max-w-92 gap-0 overflow-hidden p-0 sm:max-w-sm"
       [zClosable]="false"
-      [zVisible]="welcome()"
+      [zVisible]="state.welcomeOpen()"
       (zVisibleChange)="onWelcome($event)"
     >
       <div class="flex aspect-2/1 w-full items-center justify-center bg-neutral-950 text-neutral-100">
@@ -180,9 +172,9 @@ export class CreateNavigateContentComponent implements AfterViewInit {
           Available for Angular, Nx and Analog.
         </z-dialog-description>
       </z-dialog-header>
-      <div class="p-4 pt-0">
+      <z-dialog-footer class="m-0 flex-col-reverse">
         <button type="button" z-button class="w-full" (click)="onWelcome(false)">Get Started</button>
-      </div>
+      </z-dialog-footer>
     </z-dialog>
   `,
 })
@@ -195,16 +187,22 @@ export class CreateDialogsComponent {
   protected readonly valid = computed(() => CreateStateService.canOpen(this.input()));
   protected readonly invalid = computed(() => this.input().trim() !== '' && !this.valid());
 
-  protected readonly welcome = signal(false);
+  /** The block items, loaded once the page is idle so Navigate opens with its whole list. */
+  protected readonly blocks = signal<readonly CreateItem[] | null>(null);
 
   constructor() {
     afterNextRender(() => {
       const storage = this.document.defaultView?.localStorage;
       try {
-        if (!storage?.getItem(WELCOME_KEY)) this.welcome.set(true);
+        if (!storage?.getItem(WELCOME_KEY)) this.state.welcomeOpen.set(true);
       } catch {
         // Storage can be blocked; the dialog then simply never shows.
       }
+
+      loadBlockItems().then(
+        items => this.blocks.set(items),
+        () => this.blocks.set([]),
+      );
     });
   }
 
@@ -226,7 +224,7 @@ export class CreateDialogsComponent {
 
   /** Remembers that the welcome was seen, however it was dismissed. */
   protected onWelcome(open: boolean): void {
-    this.welcome.set(open);
+    this.state.welcomeOpen.set(open);
     if (open) return;
 
     try {

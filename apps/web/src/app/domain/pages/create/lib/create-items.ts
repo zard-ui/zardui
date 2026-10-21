@@ -22,9 +22,12 @@ export const COMPONENT_LIST: readonly CreateItem[] = CREATE_EXAMPLES.map(example
 export async function loadBlockItems(): Promise<readonly CreateItem[]> {
   const { BLOCKS_REGISTRY } = await import('@doc/domain/config/blocks-registry');
 
-  return Object.values(BLOCKS_REGISTRY)
+  const items = Object.values(BLOCKS_REGISTRY)
     .flat()
     .map(block => ({ id: `${BLOCK_ITEM_PREFIX}${block.id}`, label: block.title, group: 'Blocks' as const }));
+
+  // The "featured" category repeats blocks of the other categories: each block is one item.
+  return [...new Map(items.map(item => [item.id, item])).values()];
 }
 
 export function itemLabel(id: string, blocks: readonly CreateItem[] = []): string {

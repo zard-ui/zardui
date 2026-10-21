@@ -218,6 +218,69 @@ test.describe('Create builder', () => {
     await expect(page.getByRole('option', { name: /Overview/ })).toHaveCount(0);
   });
 
+  test('Navigate lists each item once, flat, and follows the page theme', async ({ page }) => {
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('Control+p');
+
+    const dialog = page.getByRole('dialog', { name: 'Navigate' });
+    await expect(dialog.getByRole('option', { name: 'Sidebar 07', exact: true })).toHaveCount(1);
+    await expect(dialog.locator('z-command-option-group')).toHaveCount(0);
+    const labels = await dialog.getByRole('option').allTextContents();
+    expect(new Set(labels).size).toBe(labels.length);
+    expect((await dialog.boundingBox())?.width).toBeCloseTo(384, 0);
+    expect(await dialog.evaluate(el => el.closest('.dark') !== null)).toBe(
+      await page.evaluate(() => document.documentElement.classList.contains('dark')),
+    );
+  });
+
+  test('typing in Navigate right after it opens logs no error and Enter opens the item', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('console', message => message.type() === 'error' && errors.push(message.text()));
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('Control+p');
+    await page.keyboard.type('dropdown');
+    await page.keyboard.press('Enter');
+
+    await expect.poll(() => new URL(page.url()).searchParams.get('item')).toBe('component:dropdown-menu');
+    expect(errors.filter(text => text.includes('NG0950'))).toEqual([]);
+  });
+
+  test('Reset is a small dialog that follows the page theme', async ({ page }) => {
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('Shift+r');
+
+    const dialog = page.getByRole('alertdialog');
+    await expect(dialog).toBeVisible();
+    await expect.poll(async () => (await dialog.boundingBox())?.width).toBeCloseTo(320, 0);
+    expect(await dialog.evaluate(el => el.closest('.dark') !== null)).toBe(
+      await page.evaluate(() => document.documentElement.classList.contains('dark')),
+    );
+  });
+
+  test('Ctrl+P does not stack Navigate over another dialog', async ({ page }) => {
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('o');
+    await expect(page.getByRole('dialog', { name: 'Open Preset' })).toBeVisible();
+    await page.keyboard.press('Control+p');
+
+    await expect(page.getByRole('dialog', { name: 'Navigate' })).toHaveCount(0);
+  });
+
+  test('Open Preset focuses the field and enables Open only for a valid code', async ({ page }) => {
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('o');
+    const dialog = page.getByRole('dialog', { name: 'Open Preset' });
+    const field = dialog.getByRole('textbox');
+    const open = dialog.getByRole('button', { name: 'Open', exact: true });
+
+    await expect(field).toBeFocused();
+    await expect(open).toBeDisabled();
+    await field.fill('zzz');
+    await expect(open).toBeDisabled();
+    await field.fill('--preset Z0');
+    await expect(open).toBeEnabled();
+  });
+
   test('switching canvases swaps the content without reloading the iframe', async ({ page }) => {
     await previewFrame(page).evaluate(() => ((window as unknown as { __kept: boolean }).__kept = true));
     await page.getByRole('button', { name: '02', exact: true }).click();
@@ -458,6 +521,22 @@ test.describe('Create builder, first visit', () => {
     await page.reload();
     await ready(page);
     await expect(page.getByRole('button', { name: 'Get Started' })).toHaveCount(0);
+  });
+
+  test('the shortcuts do not fire behind the welcome dialog', async ({ page }) => {
+    await page.goto('/create');
+    await ready(page);
+    await expect(page.getByRole('button', { name: 'Get Started' })).toBeVisible();
+    const before = presetOf(page);
+    const dark = await page.evaluate(() => document.documentElement.classList.contains('dark'));
+
+    await page.keyboard.press('r');
+    await page.keyboard.press('d');
+    await page.keyboard.press('Control+p');
+
+    expect(presetOf(page)).toBe(before);
+    expect(await page.evaluate(() => document.documentElement.classList.contains('dark'))).toBe(dark);
+    await expect(page.getByRole('dialog', { name: 'Navigate' })).toHaveCount(0);
   });
 });
 

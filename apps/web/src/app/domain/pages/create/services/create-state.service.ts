@@ -62,6 +62,8 @@ export class CreateStateService {
   readonly navigateOpen = signal(false);
   readonly openPresetOpen = signal(false);
   readonly resetOpen = signal(false);
+  /** The one-time welcome; owned here so the page's shortcuts can see it. */
+  readonly welcomeOpen = signal(false);
 
   private readonly history = new PresetHistory(this.preset());
   private readonly historyVersion = signal(0);
