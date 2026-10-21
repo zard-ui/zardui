@@ -181,7 +181,7 @@
 /* MARK: attachment */
 
 .cn-attachment:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative isolate flex w-fit max-w-full min-w-0 shrink-0 snap-start items-center rounded-2xl border bg-card text-card-foreground transition-colors text-sm;
+  @apply relative isolate flex w-fit max-w-full min-w-0 shrink-0 snap-start items-center rounded-[calc(var(--radius)*1.6)] border bg-card text-card-foreground transition-colors text-sm;
 }
 
 .cn-attachment-state-idle:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -429,7 +429,7 @@
 }
 
 .cn-bubble-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply w-fit min-w-0 max-w-full overflow-hidden rounded-3xl border border-transparent px-3 py-2.5 text-sm/relaxed wrap-break-word;
+  @apply w-fit min-w-0 max-w-full overflow-hidden rounded-[calc(var(--radius)*2.4)] border border-transparent px-3 py-2.5 text-sm/relaxed wrap-break-word;
 }
 
 .cn-bubble-reactions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1087,7 +1087,7 @@
 /* MARK: drawer */
 
 .cn-drawer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply fixed z-50 m-2 flex min-h-0 flex-col rounded-3xl border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform;
+  @apply fixed z-50 m-2 flex min-h-0 flex-col rounded-[calc(var(--radius)*2.4)] border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform;
 }
 
 .cn-drawer-placement-top:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {

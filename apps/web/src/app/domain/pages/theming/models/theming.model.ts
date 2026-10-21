@@ -55,12 +55,12 @@ export interface RadiusStep {
   /** The `@theme inline` declaration that defines it. */
   formula: string;
   /**
-   * Pixels the formula adds to `--radius` — `-4` for `calc(var(--radius) - 4px)`.
+   * What the formula multiplies `--radius` by — `0.6` for `calc(var(--radius) * 0.6)`.
    *
-   * Stored as the offset rather than a resolved value so the preview can answer
+   * Stored as the multiplier rather than a resolved value so the preview can answer
    * for whichever `--radius` is selected, not only for the default.
    */
-  offset: number;
+  multiplier: number;
 }
 
 /** One entry of the troubleshooting list. */

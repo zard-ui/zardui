@@ -128,10 +128,13 @@ Expand
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -390,14 +393,17 @@ A self-contained scale for app shells.
 
 ## Radius & scale
 
-`--radius` is the single knob for corner rounding. The four utilities below are derived from it in `@theme inline` , so changing one value reshapes every component.
+`--radius` is the single knob for corner rounding. The utilities below are derived from it in `@theme inline` , so changing one value reshapes every component.
 
 `--radius` :
 
-- `rounded-sm`6px`--radius-sm: calc(var(--radius) - 4px)`
-- `rounded-md`8px`--radius-md: calc(var(--radius) - 2px)`
+- `rounded-sm`6px`--radius-sm: calc(var(--radius) * 0.6)`
+- `rounded-md`8px`--radius-md: calc(var(--radius) * 0.8)`
 - `rounded-lg`10px`--radius-lg: var(--radius)`
-- `rounded-xl`14px`--radius-xl: calc(var(--radius) + 4px)`
+- `rounded-xl`14px`--radius-xl: calc(var(--radius) * 1.4)`
+- `rounded-2xl`18px`--radius-2xl: calc(var(--radius) * 1.8)`
+- `rounded-3xl`22px`--radius-3xl: calc(var(--radius) * 2.2)`
+- `rounded-4xl`26px`--radius-4xl: calc(var(--radius) * 2.6)`
 
 ## Base colors
 

@@ -46,14 +46,14 @@ export class RadiusPreviewComponent {
   });
 
   /**
-   * The four steps resolved against the selected `--radius`.
+   * The steps resolved against the selected `--radius`.
    *
    * The values used to be frozen at the default, so picking another preset moved
    * the swatches while the numbers kept describing a radius nobody was looking at.
    * `max(0, …)` matches the browser: a negative border-radius clamps to zero.
    */
   readonly steps = computed(() =>
-    RADIUS_STEPS.map(step => ({ ...step, resolved: formatPx(Math.max(0, this.radiusPx() + step.offset)) })),
+    RADIUS_STEPS.map(step => ({ ...step, resolved: formatPx(Math.max(0, this.radiusPx() * step.multiplier)) })),
   );
 
   constructor() {

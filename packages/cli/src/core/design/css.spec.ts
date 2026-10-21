@@ -339,6 +339,24 @@ describe('renderStylesheet', () => {
     expect(css.split('{').length).toBe(css.split('}').length);
   });
 
+  it('derives the radius scale from --radius by multiplying, so radius 0 stays 0', () => {
+    const scale = css
+      .split('\n')
+      .filter(line => /^\s*--radius-(sm|md|lg|xl|2xl|3xl|4xl):/.test(line))
+      .map(line => line.trim());
+
+    expect(scale).toEqual([
+      '--radius-sm: calc(var(--radius) * 0.6);',
+      '--radius-md: calc(var(--radius) * 0.8);',
+      '--radius-lg: var(--radius);',
+      '--radius-xl: calc(var(--radius) * 1.4);',
+      '--radius-2xl: calc(var(--radius) * 1.8);',
+      '--radius-3xl: calc(var(--radius) * 2.2);',
+      '--radius-4xl: calc(var(--radius) * 2.6);',
+    ]);
+    expect(css).not.toMatch(/var\(--radius\) [-+] \d+px/);
+  });
+
   it('is golden for the default design', () => {
     const lines = renderStylesheet(DEFAULT_DESIGN, { corePath: '@/shared/core' }).split('\n');
 
