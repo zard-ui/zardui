@@ -2,41 +2,40 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import {
-  BLOCK_0,
-  BLOCK_1,
-  BLOCK_2,
+  TABS_0,
+  TABS_1,
+  TABS_2,
   TABS_3,
-  BLOCK_4,
-  BLOCK_5,
-  BLOCK_6,
-  BLOCK_7,
-  BLOCK_8,
-  BLOCK_9,
-  BLOCK_10,
-  BLOCK_11,
-  BLOCK_12,
-  BLOCK_13,
-  BLOCK_14,
-  BLOCK_15,
-  BLOCK_16,
-  BLOCK_17,
+  TABS_4,
+  TABS_5,
+  TABS_6,
+  TABS_7,
+  TABS_8,
+  TABS_9,
+  TABS_10,
+  TABS_11,
+  TABS_12,
+  TABS_13,
+  TABS_14,
+  TABS_15,
+  TABS_16,
+  TABS_17,
 } from '@generated/pages/cli/commands';
-import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
-import type { CodeBlockData, CodeTabData } from '@highlight/types';
+import type { CodeTabData } from '@highlight/types';
 
 @Component({
   selector: 'z-cli-commands-section',
-  imports: [CodeBlockComponent, CodeTabsComponent, RouterLink],
+  imports: [CodeTabsComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Commands</h2>
 
-    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">init</h3>
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight" id="command-init">init</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Initialize your project and install dependencies.
     </p>
-    <z-code-block [data]="initUsage" />
+    <z-code-tabs [data]="initUsage" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Options:</strong>
@@ -176,7 +175,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--yes</code>
       , because it overwrites your global CSS.
     </p>
-    <z-code-block [data]="initHeadless" />
+    <z-code-tabs [data]="initHeadless" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>With a preset:</strong>
@@ -193,7 +192,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--base-color</code>
       , since the preset already chooses it.
     </p>
-    <z-code-block [data]="initPreset" />
+    <z-code-tabs [data]="initPreset" />
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       A preset code starts with
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">Z</code>
@@ -206,11 +205,11 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       .
     </p>
 
-    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">add</h3>
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight" id="command-add">add</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Add components to your project, resolving their dependencies.
     </p>
-    <z-code-block [data]="addUsage" />
+    <z-code-tabs [data]="addUsage" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Options:</strong>
@@ -241,10 +240,10 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <z-code-tabs [data]="addExampleTabs" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">Several at once:</p>
-    <z-code-block [data]="addMultiple" />
+    <z-code-tabs [data]="addMultiple" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">Everything:</p>
-    <z-code-block [data]="addAll" />
+    <z-code-tabs [data]="addAll" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       With no arguments, a searchable list opens — pick with
@@ -255,7 +254,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--all</code>
       , since there is no list to pick from.
     </p>
-    <z-code-block [data]="addInteractive" />
+    <z-code-tabs [data]="addInteractive" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Dark mode:</strong>
@@ -269,7 +268,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--index-html</code>
       or that suggested path.
     </p>
-    <z-code-block [data]="addDarkMode" />
+    <z-code-tabs [data]="addDarkMode" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Blocks:</strong>
@@ -277,7 +276,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       component. It carries the components it uses, so running it on a project that has none of them still leaves you
       with a block that compiles.
     </p>
-    <z-code-block [data]="addBlock" />
+    <z-code-tabs [data]="addBlock" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Each block is written to a directory of its own, under the
@@ -290,16 +289,16 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--path</code>
       moves them elsewhere, still one directory per block, and the components they need follow along.
     </p>
-    <z-code-block [data]="addBlockPath" />
+    <z-code-tabs [data]="addBlockPath" />
 
-    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">create</h3>
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight" id="command-create">create</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Create a new project with the framework's own generator, already configured with a design preset. It is the
       one-command alternative to creating the project yourself and then running
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">init</code>
       .
     </p>
-    <z-code-block [data]="createUsage" />
+    <z-code-tabs [data]="createUsage" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Options:</strong>
@@ -384,13 +383,13 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">Custom…</code>
       prints the link to the create page so you can design one and paste its code.
     </p>
-    <z-code-block [data]="createInteractive" />
+    <z-code-tabs [data]="createInteractive" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Whatever you pass as a flag is not asked again, so a command copied from the create page runs without a single
       question:
     </p>
-    <z-code-block [data]="createFlags" />
+    <z-code-tabs [data]="createFlags" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Non-interactive use:</strong>
@@ -402,7 +401,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--yes</code>
       , which accepts the default design. Errors name the flag or the preset that is wrong.
     </p>
-    <z-code-block [data]="createHeadless" />
+    <z-code-tabs [data]="createHeadless" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Safe by design:</strong>
@@ -435,13 +434,13 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       …).
     </p>
 
-    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">apply</h3>
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight" id="command-apply">apply</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Apply a design preset to a project that is already initialized, without running init again. This is the command to
       use on an existing project: init rewrites your global CSS, apply replaces only the regions zard-cli manages. It
       never prompts and never rewrites a component.
     </p>
-    <z-code-block [data]="applyUsage" />
+    <z-code-tabs [data]="applyUsage" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Options:</strong>
@@ -465,6 +464,9 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-c, --cwd &lt;cwd&gt;</code>
       — Working directory, defaults to the current one
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-y, --yes</code>
+      — Accepted for scripts; apply never prompts
     </p>
 
     <ul class="text-muted-foreground mt-4 list-disc space-y-2 pl-6 text-base leading-relaxed">
@@ -505,7 +507,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--font-heading</code>
       </li>
     </ul>
-    <z-code-block [data]="applyExamples" />
+    <z-code-tabs [data]="applyExamples" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Everything outside the regions zard-cli manages survives byte for byte: your own rules and variables, including
@@ -530,7 +532,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       is refused.
     </p>
 
-    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Global options</h3>
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight" id="command-global-options">Global options</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-v, --version</code>
       — Print the version
@@ -540,26 +542,26 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ZARD_DEBUG</code>
       environment variable.
     </p>
-    <z-code-block [data]="globalOptions" />
+    <z-code-tabs [data]="globalOptions" />
   `,
 })
 export class CliCommandsSectionComponent {
-  readonly initUsage: CodeBlockData = BLOCK_0;
-  readonly initHeadless: CodeBlockData = BLOCK_1;
-  readonly addUsage: CodeBlockData = BLOCK_2;
+  readonly initUsage: CodeTabData = TABS_0;
+  readonly initHeadless: CodeTabData = TABS_1;
+  readonly addUsage: CodeTabData = TABS_2;
   readonly addExampleTabs: CodeTabData = TABS_3;
-  readonly addMultiple: CodeBlockData = BLOCK_4;
-  readonly addAll: CodeBlockData = BLOCK_5;
-  readonly addInteractive: CodeBlockData = BLOCK_6;
-  readonly addDarkMode: CodeBlockData = BLOCK_7;
-  readonly globalOptions: CodeBlockData = BLOCK_8;
-  readonly addBlock: CodeBlockData = BLOCK_9;
-  readonly addBlockPath: CodeBlockData = BLOCK_10;
-  readonly createUsage: CodeBlockData = BLOCK_11;
-  readonly createInteractive: CodeBlockData = BLOCK_12;
-  readonly createFlags: CodeBlockData = BLOCK_13;
-  readonly createHeadless: CodeBlockData = BLOCK_14;
-  readonly initPreset: CodeBlockData = BLOCK_15;
-  readonly applyUsage: CodeBlockData = BLOCK_16;
-  readonly applyExamples: CodeBlockData = BLOCK_17;
+  readonly addMultiple: CodeTabData = TABS_4;
+  readonly addAll: CodeTabData = TABS_5;
+  readonly addInteractive: CodeTabData = TABS_6;
+  readonly addDarkMode: CodeTabData = TABS_7;
+  readonly globalOptions: CodeTabData = TABS_8;
+  readonly addBlock: CodeTabData = TABS_9;
+  readonly addBlockPath: CodeTabData = TABS_10;
+  readonly createUsage: CodeTabData = TABS_11;
+  readonly createInteractive: CodeTabData = TABS_12;
+  readonly createFlags: CodeTabData = TABS_13;
+  readonly createHeadless: CodeTabData = TABS_14;
+  readonly initPreset: CodeTabData = TABS_15;
+  readonly applyUsage: CodeTabData = TABS_16;
+  readonly applyExamples: CodeTabData = TABS_17;
 }

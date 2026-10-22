@@ -854,7 +854,7 @@ The directive that opens rich content when its trigger is hovered or focused.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zContent]` | Required. Template rendered inside the hover card | `TemplateRef<void>` | `-` |
+| `[zHoverCard]` | Required. Template rendered inside the hover card, bound on the trigger: `[zHoverCard]="content"` | `TemplateRef<void>` | `-` |
 | `[zPlacement]` | Preferred position relative to the trigger. `left` and `right` are physical sides; `inline-start` and `inline-end` follow the direction of the trigger, so they flip in RTL. | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
 | `[zOpenDelay]` | Delay in milliseconds before opening | `number` | `700` |
 | `[zCloseDelay]` | Delay in milliseconds before closing | `number` | `300` |

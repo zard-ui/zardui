@@ -137,6 +137,7 @@ npx zard-cli apply --preset Z6F9MtstG --only font
 | `--only <parts>`  | all of it         | `theme` or `font` (`fonts` is accepted), comma-separated for both. |
 | `--pointer`       | keep what exists  | Add the pointer cursor rule. `--no-pointer` removes it.            |
 | `-c, --cwd <cwd>` | current directory | The working directory.                                             |
+| `-y, --yes`       | `false`           | Accepted for scripts; `apply` never prompts.                       |
 
 - `theme` rewrites the theme block in the stylesheet (rules of your own below it survive) and the base color and `menu*` keys of `components.json`.
 - `font` rewrites the font imports and `--font-sans` / `--font-heading`, and installs the font packages.
@@ -153,13 +154,14 @@ npx zard-cli add button card dialog
 npx zard-cli add
 ```
 
-| Flag                | Default                  | Purpose                                                                 |
-| ------------------- | ------------------------ | ----------------------------------------------------------------------- |
-| `-y, --yes`         | `false`                  | Skip the confirmation.                                                  |
-| `-o, --overwrite`   | `false`                  | Overwrite existing files.                                               |
-| `-c, --cwd <cwd>`   | current directory        | The working directory.                                                  |
-| `-a, --all`         | `false`                  | Add every available component.                                          |
-| `-p, --path <path>` | the configured directory | Write to a different directory. Must stay inside the working directory. |
+| Flag                  | Default                  | Purpose                                                                 |
+| --------------------- | ------------------------ | ----------------------------------------------------------------------- |
+| `-y, --yes`           | `false`                  | Skip the confirmation.                                                  |
+| `-o, --overwrite`     | `false`                  | Overwrite existing files.                                               |
+| `-c, --cwd <cwd>`     | current directory        | The working directory.                                                  |
+| `-a, --all`           | `false`                  | Add every available component.                                          |
+| `-p, --path <path>`   | the configured directory | Write to a different directory. Must stay inside the working directory. |
+| `--index-html <path>` | the suggested path       | The `index.html` that receives the dark-mode theme script.              |
 
 Positional arguments are component names — the same names the registry index publishes. With none, the wizard opens the list.
 

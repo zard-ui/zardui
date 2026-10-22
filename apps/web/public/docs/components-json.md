@@ -18,7 +18,7 @@ It is only required if you're using the CLI to add components to your project. I
 You can create a `components.json` file in your project by running the following command:
 
 ```
-npx zard-cli init
+npx zard-cli@latest init
 ```
 
 Starting from scratch? `npx zard-cli create my-app` scaffolds the project and writes this file for you, from a design preset.
@@ -41,17 +41,19 @@ The style of your design: the look a preset picks for spacing, radius, density a
 
 **Supported values:**`vega` , `nova` , `maia` , `lyra` , `mira` , `luma` , `sera` , `rhea` or the legacy `css` .
 
+components.json
+
 ```
 {
   "style": "nova"
 }
 ```
 
-The eight named styles are written by `zard-cli init --preset` , `zard-cli apply` and `zard-cli create` — pick one on the [create page](/create) . The default is `nova` , zard's own look (the one the library has always had), not a copy of shadcn's nova.
+The eight named styles are written by `zard-cli init --preset` , `zard-cli apply` and `zard-cli create` — pick one on the [create page](/create) . The default design uses `nova` , zard's own look (the one the library has always had), not a copy of shadcn's nova.
 
-`css` is what every project initialized before styles existed carries. It keeps working and is read as the current look, so nothing needs to change in an existing project.
+`css` is what every project initialized before styles existed carries, and what the CLI reads when the key is missing. It keeps working and is the same look as `nova` , so nothing needs to change in an existing project. A plain `zard-cli init` without a preset writes it; the others come from a preset.
 
-`zard-cli add` installs each component in this style: the CLI resolves the style markers in the sources at install time, so your files hold plain Tailwind classes and no runtime style switch. Changing `style` affects components added afterwards — re-add the others with `--overwrite` to restyle them.
+`zard-cli add` installs each component in this style: the CLI resolves the style markers in the sources at install time, so your files hold plain Tailwind classes and no runtime style switch. Changing the style affects components added afterwards — re-add the others with `--overwrite` to restyle them.
 
 ## Icons
 
@@ -183,6 +185,8 @@ This is used to generate the default color palette for your components. **Editin
 
 Currently supported base colors ( `mauve` , `olive` , `mist` and `taupe` come with presets):
 
+components.json
+
 ```
 {
   "tailwind": {
@@ -202,6 +206,20 @@ When using `@/` prefix in your aliases, the CLI resolves paths relative to this 
   "baseUrl": "src/app"
 }
 ```
+
+## Registry URL
+
+Optional. Points the CLI at a registry other than the official one ( `https://zardui.com/r` ), for teams that publish their own component set. The URL must use HTTPS, or be `localhost` during development. Every command that reads the registry — `add` , `apply` and `init` — uses it. Leave the key out to use the official registry.
+
+components.json
+
+```
+{
+  "registryUrl": "https://registry.acme.dev/r"
+}
+```
+
+To publish a registry of your own, see the [registry docs](/docs/registry) .
 
 ## Aliases
 
@@ -257,21 +275,39 @@ Import alias for your Angular services.
 }
 ```
 
+### aliases.blocks
+
+Where `zard-cli add <block>` writes a block. Each one gets a directory of its own here, since a block is several files that only make sense together.
+
+components.json
+
+```
+{
+  "aliases": {
+    "blocks": "@/shared/blocks"
+  }
+}
+```
+
 ## Current Zard/ui components.json
 
-Here's the current `components.json` structure that Zard/ui supports:
+Here's the current `components.json` structure that Zard/ui supports, as `zard-cli create` writes it for the default design. A project made with a plain `init` has `"style": "css"` and no `menu*` or `preset` keys:
 
 components.json
 
 ```
 {
   "$schema": "https://zardui.com/schema.json",
-  "style": "css",
+  "style": "nova",
   "icons": "lucide",
   "rtl": false,
   "projectType": "angular",
   "appConfigFile": "src/app/app.config.ts",
   "packageManager": "npm",
+  "menuColor": "default",
+  "menuAppearance": "solid",
+  "menuAccent": "subtle",
+  "preset": "Z0",
   "tailwind": {
     "css": "src/styles.css",
     "baseColor": "neutral"
@@ -281,7 +317,8 @@ components.json
     "components": "@/shared/components",
     "utils": "@/shared/utils",
     "core": "@/shared/core",
-    "services": "@/shared/services"
+    "services": "@/shared/services",
+    "blocks": "@/shared/blocks"
   }
 }
 ```

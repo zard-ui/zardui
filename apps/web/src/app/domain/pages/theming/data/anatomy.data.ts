@@ -46,6 +46,14 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
       'The 64 `data-*:` classes the library relies on silently compile to nothing — open/closed states, checked switches and selected menu items stop reacting. `animate-caret-blink` and `no-scrollbar` also disappear.',
   },
   {
+    id: 'font-imports',
+    snippet: "@import '@fontsource-variable/inter';",
+    title: 'Font packages',
+    reason:
+      'Loads the font files from the `@fontsource` package the design uses. CSS requires `@import` to sit with the other imports, so `zard-cli` keeps them in their own region at the top.',
+    breaksWhenMissing: 'The browser falls back to the system font, even though `--font-sans` names another one.',
+  },
+  {
     id: 'plugin-animate',
     snippet: '@plugin "tailwindcss-animate";',
     title: 'Enter/exit animations',
@@ -61,6 +69,15 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
       'Binds the `dark:` variant to a `.dark` ancestor instead of `prefers-color-scheme`. That is what lets `ZardDarkMode` flip the theme by toggling one class on `<html>`.',
     breaksWhenMissing:
       '`dark:` follows the OS setting only. The theme toggle stops working and the `.dark` block below never applies.',
+  },
+  {
+    id: 'markers',
+    snippet: '/* zard:theme:start — managed by zard-cli … */',
+    title: 'Managed regions',
+    reason:
+      'Comments that fence what `zard-cli` wrote (`zard:theme`, `zard:font-imports`, `zard:fonts`). `zard-cli apply` rewrites only what is between a pair of markers, so your own rules and overrides survive a new preset byte for byte.',
+    breaksWhenMissing:
+      'Nothing breaks in the browser. `apply` can no longer tell your CSS from the generated one, and replaces the theme as a whole instead.',
   },
   {
     id: 'root',
@@ -94,5 +111,13 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
       'Gives every element the themed border color and focus ring, and paints `body` with `bg-background text-foreground`.',
     breaksWhenMissing:
       'Borders fall back to `currentColor`, focus rings lose their theme color, and the page background stays white in dark mode.',
+  },
+  {
+    id: 'fonts',
+    snippet: "@theme inline { --font-sans: 'Inter Variable', sans-serif; … }",
+    title: 'Font variables',
+    reason:
+      'Maps the font family to `--font-sans` and `--font-heading`, which Tailwind turns into `font-sans` and `font-heading`. The heading font inherits the body font unless the design picks another.',
+    breaksWhenMissing: 'Text keeps the Tailwind default font stack, whatever package you imported.',
   },
 ];

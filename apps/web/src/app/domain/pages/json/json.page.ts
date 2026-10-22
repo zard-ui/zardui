@@ -12,6 +12,7 @@ import { JsonMenuSectionComponent } from './sections/menu-section.component';
 import { JsonPackageManagerSectionComponent } from './sections/package-manager-section.component';
 import { JsonPresetSectionComponent } from './sections/preset-section.component';
 import { JsonProjectTypeSectionComponent } from './sections/project-type-section.component';
+import { JsonRegistryUrlSectionComponent } from './sections/registry-url-section.component';
 import { JsonRtlSectionComponent } from './sections/rtl-section.component';
 import { JsonSchemaSectionComponent } from './sections/schema-section.component';
 import { JsonStyleSectionComponent } from './sections/style-section.component';
@@ -41,6 +42,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     JsonPackageManagerSectionComponent,
     JsonTailwindSectionComponent,
     JsonBaseUrlSectionComponent,
+    JsonRegistryUrlSectionComponent,
     JsonAliasesSectionComponent,
     JsonCurrentStructureSectionComponent,
   ],
@@ -72,6 +74,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
       <z-json-package-manager-section />
       <z-json-tailwind-section />
       <z-json-base-url-section />
+      <z-json-registry-url-section />
       <z-json-aliases-section />
       <z-json-current-structure-section />
     </z-content>
@@ -96,6 +99,7 @@ export class JsonPage implements OnInit {
       { id: 'package-manager', label: 'Package Manager', type: 'custom' },
       { id: 'tailwind', label: 'Tailwind', type: 'custom' },
       { id: 'base-url', label: 'Base URL', type: 'custom' },
+      { id: 'registry-url', label: 'Registry URL', type: 'custom' },
       { id: 'aliases', label: 'Aliases', type: 'custom' },
       { id: 'current-structure', label: 'Full Example', type: 'custom' },
     ],

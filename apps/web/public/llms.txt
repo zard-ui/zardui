@@ -9,6 +9,7 @@
 - [Components](https://zardui.com/docs/components): Browse all available components in the library.
 - [Blocks](https://zardui.com/blocks): Pre-built component compositions and templates.
 - [Colors](https://zardui.com/colors): Tailwind color palette reference in all formats.
+- [Create](https://zardui.com/create): Design a look (style, base color, theme, fonts, icons, radius, menu) with a live preview and get the preset code and the `zard-cli create` command that starts a project from it.
 - [Typeset](https://zardui.com/typeset): Build a typography preset for rendered markdown and take away the CSS.
 
 ## Get Started
@@ -21,7 +22,7 @@
 - [Pre-processors](https://zardui.com/docs/pre-processors): Understanding SCSS/Sass integration with Tailwind v4 - risks, limitations, and alternatives.
 - [Dark Mode](https://zardui.com/docs/dark-mode): Implementing dark mode in your Angular application.
 - [RTL](https://zardui.com/docs/rtl): Right-to-left support for Arabic, Hebrew and other RTL languages — direction, fonts, animations and migration.
-- [CLI](https://zardui.com/docs/cli): Command-line tool for installing and managing Zard UI components.
+- [CLI](https://zardui.com/docs/cli): Command-line tool to create projects from a design preset (`create`), set them up (`init`), add components (`add`) and restyle them (`apply`).
 - [Figma](https://zardui.com/docs/figma): Figma design resources and component library.
 - [Changelog](https://zardui.com/docs/changelog): Release notes, version history, and updates.
 - [About](https://zardui.com/docs/about): Credits, project information, and acknowledgments.
@@ -131,8 +132,14 @@
 ### Using CLI (Recommended)
 
 ```bash
-npx zard-cli init
-npx zard-cli add button
+npx zard-cli@latest create my-app --template angular
+```
+
+Or, in an existing project:
+
+```bash
+npx zard-cli@latest init
+npx zard-cli@latest add button
 ```
 
 ### Manual Installation

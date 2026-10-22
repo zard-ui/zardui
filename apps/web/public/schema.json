@@ -13,7 +13,7 @@
       "type": "string",
       "enum": ["css", "vega", "nova", "maia", "lyra", "mira", "luma", "sera", "rhea"],
       "default": "css",
-      "description": "The look the components are installed with. `css` is what projects initialized before styles existed carry and is read as the current look (nova); the eight names are written by `zard-cli init --preset` and `zard-cli apply`, which install the matching spacing, radius and typography."
+      "description": "The look the components are installed with. `css` is what projects initialized before styles existed carry and is read as the current look (nova); the eight names are written by `zard-cli create`, `zard-cli init --preset` and `zard-cli apply`, which install the matching spacing, radius and typography."
     },
     "icons": {
       "type": "string",
@@ -47,7 +47,7 @@
       "type": "string",
       "enum": ["default", "inverted"],
       "default": "default",
-      "description": "Whether menus, popovers and dropdowns take the inverted palette (dark in light mode, light in dark mode). Written by `zard-cli init --preset` and `zard-cli apply`."
+      "description": "Whether menus, popovers and dropdowns take the inverted palette (dark in light mode, light in dark mode). Written by `zard-cli create`, `zard-cli init --preset` and `zard-cli apply`."
     },
     "menuAppearance": {
       "type": "string",

@@ -25,6 +25,9 @@ import { SETUP_NX_LIBRARY_CREATE } from '@generated/documentation/setup/nx-libra
 import { SETUP_NX_LIBRARY_DEPENDENCIES } from '@generated/documentation/setup/nx-library/dependencies';
 import { SETUP_NX_LIBRARY_DEV_DEPENDENCIES } from '@generated/documentation/setup/nx-library/dev-dependencies';
 import { SETUP_NX_LIBRARY_TSCONFIG } from '@generated/documentation/setup/nx-library/tsconfig';
+import { SETUP_SHARED_CLI_CREATE_ANALOG } from '@generated/documentation/setup/shared/cli-create-analog';
+import { SETUP_SHARED_CLI_CREATE_ANGULAR } from '@generated/documentation/setup/shared/cli-create-angular';
+import { SETUP_SHARED_CLI_CREATE_NX } from '@generated/documentation/setup/shared/cli-create-nx';
 import { SETUP_SHARED_CLI_INIT } from '@generated/documentation/setup/shared/cli-init';
 import { SETUP_SHARED_CORE_CSS } from '@generated/documentation/setup/shared/core-css';
 import { SETUP_SHARED_CORE_DIRECTIVES } from '@generated/documentation/setup/shared/core-directives';
@@ -64,7 +67,7 @@ export interface Installation {
 
 const TAILWIND_NOTE = {
   text: 'Since Tailwind is the core of the project, we do not recommend using other pre-processors.',
-  href: '/docs/scss',
+  href: '/docs/pre-processors',
   external: false,
 };
 
@@ -144,9 +147,27 @@ const FINAL_STEP: Step = {
   subtitle: 'You can now start adding components to your project.',
 };
 
-/** The three steps of the guided path: create, run init, use. */
-function cliSteps(options: { create: CodeBlockData; createSubtitle: string; initSubtitle: string }): Step[] {
+/** The steps of the guided path: (applications) create it all, or create, run init, then use. */
+function cliSteps(options: {
+  create: CodeBlockData;
+  createSubtitle: string;
+  initSubtitle: string;
+  zardCreate?: CodeTabData;
+}): Step[] {
+  const zardCreate: Step[] = options.zardCreate
+    ? [
+        {
+          title: 'Create with zard/ui',
+          subtitle:
+            'The fastest path: one command scaffolds the project and configures it from a design preset, with a button already installed. If you use it, you are done: skip to the last step. To choose your own design, build it on the',
+          url: { text: 'create page.', href: '/create' },
+          codeTabData: options.zardCreate,
+        },
+      ]
+    : [];
+
   return [
+    ...zardCreate,
     {
       title: 'Create project',
       subtitle: options.createSubtitle,
@@ -202,8 +223,9 @@ export const installations: Installation[] = [
     cli: cliSteps({
       create: SETUP_ANGULAR_CREATE,
       createSubtitle:
-        'Start the cli and create an application that uses Tailwind as default styling. Or skip this step and the next in one command: npx zard-cli@latest create my-app --template angular scaffolds the app and configures it from a design preset.',
+        'Prefer to start from your own project? Start the cli and create an application that uses Tailwind as default styling.',
       initSubtitle: 'Prepare your entire project using the zard/ui cli. Pick "Angular" on the first question:',
+      zardCreate: SETUP_SHARED_CLI_CREATE_ANGULAR,
     }),
     manual: [
       {
@@ -238,10 +260,10 @@ export const installations: Installation[] = [
     description: 'Install and configure zard/ui for an application inside an Nx workspace.',
     cli: cliSteps({
       create: SETUP_NX_CREATE,
-      createSubtitle:
-        'Create an Nx workspace with an Angular application. Or skip this step and the next in one command: npx zard-cli@latest create my-app --template nx scaffolds the workspace and configures it from a design preset.',
+      createSubtitle: 'Prefer to start from your own workspace? Create an Nx workspace with an Angular application.',
       initSubtitle:
         'Run the cli at the workspace root. Pick "Nx" on the first question, then the app that receives the components:',
+      zardCreate: SETUP_SHARED_CLI_CREATE_NX,
     }),
     manual: [
       {
@@ -283,8 +305,9 @@ export const installations: Installation[] = [
     cli: cliSteps({
       create: SETUP_ANALOG_CREATE,
       createSubtitle:
-        'Create an Analog.js application. When asked to add Tailwind, answer No — the steps below configure it. Or skip this step and the next in one command: npx zard-cli@latest create my-app --template analog scaffolds the app and configures it from a design preset.',
+        'Prefer to start from your own project? Create an Analog.js application. When asked to add Tailwind, answer No — the steps below configure it.',
       initSubtitle: 'Prepare your entire project using the zard/ui cli. Pick "Analog.js" on the first question:',
+      zardCreate: SETUP_SHARED_CLI_CREATE_ANALOG,
     }),
     manual: [
       {

@@ -7,8 +7,9 @@ export const HOVER_CARD_API: ApiSection[] = [
     description: 'The directive that opens rich content when its trigger is hovered or focused.',
     props: [
       {
-        name: '[zContent]',
-        description: 'Required. Template rendered inside the hover card',
+        name: '[zHoverCard]',
+        description:
+          'Required. Template rendered inside the hover card, bound on the trigger: `[zHoverCard]="content"`',
         type: 'TemplateRef<void>',
         default: '-',
       },

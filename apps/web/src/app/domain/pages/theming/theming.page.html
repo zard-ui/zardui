@@ -59,10 +59,24 @@
       </h2>
       <p>
         This is the whole file, exactly as
-        <code>zard-cli init</code>
-        writes it for the Neutral base color. Paste it into
+        <code>zard-cli create</code>
+        (or
+        <code>zard-cli init --preset</code>
+        ) writes it for the default design: Neutral base color, Inter and the 0.625rem radius. Paste it into
         <code>src/styles.css</code>
         and every component is themed.
+      </p>
+      <p>
+        A plain
+        <code>zard-cli init</code>
+        writes the same tokens without the
+        <code>zard:*</code>
+        markers and the font regions, and its
+        <code>--chart-*</code>
+        tokens are the blue ramp of the base color instead of the grey one a preset writes. Both are valid; pick the
+        chart colors you want in the
+        <a class="underline underline-offset-4" routerLink="/create">create</a>
+        page.
       </p>
     </div>
 
@@ -71,7 +85,7 @@
     <div class="typeset typeset-docs text-muted-foreground">
       <h3 class="text-base font-semibold sm:text-lg">Line by line</h3>
       <p>
-        Nine parts, in the order they appear above. Each one earns its place — the last line of every entry says what
+        Twelve parts, in the order they appear above. Each one earns its place — the last line of every entry says what
         breaks without it.
       </p>
     </div>
@@ -167,7 +181,8 @@
         Base colors
       </h2>
       <p>
-        Five neutral scales ship with the CLI. They differ only in the hue mixed into the greys — pick one, then adjust
+        Nine neutral scales ship with the CLI: Neutral, Stone, Zinc, Gray, Slate, Mauve, Olive, Mist and Taupe. They
+        differ only in the hue mixed into the greys — pick one, then adjust
         <code>--primary</code>
         to taste.
       </p>

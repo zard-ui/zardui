@@ -199,8 +199,8 @@ Displays content within a desired ratio.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zRatio` | Desired ratio: 16 / 9 or '16 / 9'. Default 1 (square) | `number \| string` | `1` |
-| `class` | Additional CSS classes | `ClassValue` | `''` |
+| `[zRatio]` | Desired ratio: 16 / 9 or '16 / 9'. Default 1 (square) | `number \| string` | `1` |
+| `[class]` | Additional CSS classes | `ClassValue` | `''` |
 
 ---
 

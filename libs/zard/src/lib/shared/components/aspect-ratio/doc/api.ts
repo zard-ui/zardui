@@ -6,12 +6,12 @@ export const ASPECT_RATIO_API: ApiSection[] = [
     description: 'Displays content within a desired ratio.',
     props: [
       {
-        name: 'zRatio',
+        name: '[zRatio]',
         description: "Desired ratio: 16 / 9 or '16 / 9'. Default 1 (square)",
         type: 'number | string',
         default: '1',
       },
-      { name: 'class', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
     ],
   },
 ];

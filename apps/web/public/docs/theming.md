@@ -13,11 +13,13 @@ There are three ways to get a theme:
 
 - **Run the CLI.**`zard-cli init` writes the whole file and asks which base color you want — see [Installation](/docs/installation) .
 - **Copy the CSS.** The complete stylesheet is in How it works , explained line by line.
-- **Build your own.** [Create](/create) lets you pick colors, fonts and radius with a live preview and copies the finished CSS.
+- **Build your own.**[Create](/create) lets you pick colors, fonts and radius with a live preview and copies the finished CSS.
 
 ## How it works
 
-This is the whole file, exactly as `zard-cli init` writes it for the Neutral base color. Paste it into `src/styles.css` and every component is themed.
+This is the whole file, exactly as `zard-cli create` (or `zard-cli init --preset` ) writes it for the default design: Neutral base color, Inter and the 0.625rem radius. Paste it into `src/styles.css` and every component is themed.
+
+A plain `zard-cli init` writes the same tokens without the `zard:*` markers and the font regions, and its `--chart-*` tokens are the blue ramp of the base color instead of the grey one a preset writes. Both are valid; pick the chart colors you want in the [create](/create) page.
 
 ```bash
 src/styles.css
@@ -28,9 +30,14 @@ Expand
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
 @import './app/shared/core/css/zard';
+/* zard:font-imports:start */
+@import '@fontsource-variable/inter';
+/* zard:font-imports:end */
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
+
+/* zard:theme:start — managed by zard-cli, rules below this block are yours */
 
 :root {
   --radius: 0.625rem;
@@ -53,11 +60,11 @@ Expand
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -88,11 +95,11 @@ Expand
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -165,35 +172,32 @@ Expand
   }
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+/* zard:theme:end */
 
-::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 5px;
+/* zard:fonts:start */
+@theme inline {
+  --font-sans: 'Inter Variable', sans-serif;
+  --font-heading: var(--font-sans);
 }
-
-::-webkit-scrollbar-track {
-  border-radius: 5px;
-  background: var(--muted);
-}
+/* zard:fonts:end */
 ```
 
 ### Line by line
 
-Nine parts, in the order they appear above. Each one earns its place — the last line of every entry says what breaks without it.
+Twelve parts, in the order they appear above. Each one earns its place — the last line of every entry says what breaks without it.
 
 1. `@layer ng-icon, theme, base, components, utilities;`Cascade layer order Declaring the layers up front fixes their priority. `ng-icon` comes first, so it has the lowest weight — `@ng-icons/core` ships its rules inside `@layer ng-icon`.Without it Icon styles win over your utilities: `text-primary` on an `<ng-icon>` stops changing its color.
 2. `@import 'tailwindcss';`TailwindCSS itself Pulls in preflight, the default theme and the utility engine. Everything below extends it.Without it No utility class resolves at all.
 3. `@import './app/shared/core/css/zard';`ZardUI's core stylesheet Defines the `data-*` custom variants (`data-open`, `data-checked`, `data-selected`, `data-disabled`, `data-active`, `data-horizontal`, `data-vertical`) the accordion and caret keyframes, and `no-scrollbar`, which combobox and command rely on. `scroll-fade` and `shimmer` are not here — they ship in `utilities.css`, a separate registry item. The path follows the `core` alias in `components.json`.Without it The 64 `data-*:` classes the library relies on silently compile to nothing — open/closed states, checked switches and selected menu items stop reacting. `animate-caret-blink` and `no-scrollbar` also disappear.
-4. `@plugin "tailwindcss-animate";`Enter/exit animations Provides `animate-in`, `animate-out`, `fade-*`, `zoom-*` and `slide-in-from-*`.Without it Dialogs, sheets, popovers and dropdowns appear and vanish with no transition — over 50 classes across the library stop resolving.
-5. `@custom-variant dark (&:is(.dark *));`Class-based dark mode Binds the `dark:` variant to a `.dark` ancestor instead of `prefers-color-scheme`. That is what lets `ZardDarkMode` flip the theme by toggling one class on `<html>`.Without it`dark:` follows the OS setting only. The theme toggle stops working and the `.dark` block below never applies.
-6. `:root { --background: oklch(1 0 0); … }`Light values The raw color of every token, in OKLCH. Plain CSS variables — no Tailwind involved yet.Without it Every token resolves to nothing and components render unstyled.
-7. `.dark { --background: oklch(0.145 0 0); … }`Dark overrides Redefines the same variables under `.dark`. Only the values change — no component knows which mode is active.Without it Dark mode keeps the light palette.
-8. `@theme inline { --color-primary: var(--primary); … }`Tokens → Tailwind utilities Turns each token into a color utility: `--color-primary` is what makes `bg-primary` exist. `inline` is the important word — it makes Tailwind emit `var(--primary)` in the output instead of copying the value, so the `.dark` override still applies at runtime.Without it Without the block, `bg-primary` does not exist. Without `inline`, the light value gets baked into the CSS and dark mode has no effect.
-9. `@layer base { * { @apply border-border outline-ring/50; } … }`Global defaults Gives every element the themed border color and focus ring, and paints `body` with `bg-background text-foreground`.Without it Borders fall back to `currentColor`, focus rings lose their theme color, and the page background stays white in dark mode.
+4. `@import '@fontsource-variable/inter';`Font packages Loads the font files from the `@fontsource` package the design uses. CSS requires `@import` to sit with the other imports, so `zard-cli` keeps them in their own region at the top.Without it The browser falls back to the system font, even though `--font-sans` names another one.
+5. `@plugin "tailwindcss-animate";`Enter/exit animations Provides `animate-in`, `animate-out`, `fade-*`, `zoom-*` and `slide-in-from-*`.Without it Dialogs, sheets, popovers and dropdowns appear and vanish with no transition — over 50 classes across the library stop resolving.
+6. `@custom-variant dark (&:is(.dark *));`Class-based dark mode Binds the `dark:` variant to a `.dark` ancestor instead of `prefers-color-scheme`. That is what lets `ZardDarkMode` flip the theme by toggling one class on `<html>`.Without it`dark:` follows the OS setting only. The theme toggle stops working and the `.dark` block below never applies.
+7. `/* zard:theme:start — managed by zard-cli … */`Managed regions Comments that fence what `zard-cli` wrote (`zard:theme`, `zard:font-imports`, `zard:fonts`). `zard-cli apply` rewrites only what is between a pair of markers, so your own rules and overrides survive a new preset byte for byte.Without it Nothing breaks in the browser. `apply` can no longer tell your CSS from the generated one, and replaces the theme as a whole instead.
+8. `:root { --background: oklch(1 0 0); … }`Light values The raw color of every token, in OKLCH. Plain CSS variables — no Tailwind involved yet.Without it Every token resolves to nothing and components render unstyled.
+9. `.dark { --background: oklch(0.145 0 0); … }`Dark overrides Redefines the same variables under `.dark`. Only the values change — no component knows which mode is active.Without it Dark mode keeps the light palette.
+10. `@theme inline { --color-primary: var(--primary); … }`Tokens → Tailwind utilities Turns each token into a color utility: `--color-primary` is what makes `bg-primary` exist. `inline` is the important word — it makes Tailwind emit `var(--primary)` in the output instead of copying the value, so the `.dark` override still applies at runtime.Without it Without the block, `bg-primary` does not exist. Without `inline`, the light value gets baked into the CSS and dark mode has no effect.
+11. `@layer base { * { @apply border-border outline-ring/50; } … }`Global defaults Gives every element the themed border color and focus ring, and paints `body` with `bg-background text-foreground`.Without it Borders fall back to `currentColor`, focus rings lose their theme color, and the page background stays white in dark mode.
+12. `@theme inline { --font-sans: 'Inter Variable', sans-serif; … }`Font variables Maps the font family to `--font-sans` and `--font-heading`, which Tailwind turns into `font-sans` and `font-heading`. The heading font inherits the body font unless the design picks another.Without it Text keeps the Tailwind default font stack, whatever package you imported.
 
 Why OKLCH and not HSL or HEX?
 
@@ -330,7 +334,7 @@ Raw Tailwind colors work too, but you own every dark-mode variant by hand and lo
 
 ## Token reference
 
-All 32 tokens, with their Neutral values in both modes. The *Used by* column comes from a scan of the library source, so a token marked *not used yet* really is unused today.
+All 32 tokens, with their Neutral values in both modes. Expand *Used by* under a token to see which components read it. The list comes from a scan of the library source, so a token marked *not used yet* really is unused today.
 
 Showing 32 of 32 tokens · light values for Neutral
 
@@ -407,7 +411,7 @@ A self-contained scale for app shells.
 
 ## Base colors
 
-Five neutral scales ship with the CLI. They differ only in the hue mixed into the greys — pick one, then adjust `--primary` to taste.
+Nine neutral scales ship with the CLI: Neutral, Stone, Zinc, Gray, Slate, Mauve, Olive, Mist and Taupe. They differ only in the hue mixed into the greys — pick one, then adjust `--primary` to taste.
 
 Live preview
 
@@ -447,11 +451,11 @@ src/styles.css
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -482,11 +486,11 @@ src/styles.css
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);

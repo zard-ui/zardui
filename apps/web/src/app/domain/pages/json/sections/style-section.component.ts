@@ -51,14 +51,18 @@ import type { CodeBlockData } from '@highlight/types';
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli create</code>
           — pick one on the
           <a class="text-foreground underline underline-offset-4" routerLink="/create">create page</a>
-          . The default is
+          . The default design uses
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">nova</code>
           , zard's own look (the one the library has always had), not a copy of shadcn's nova.
         </p>
         <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">css</code>
-          is what every project initialized before styles existed carries. It keeps working and is read as the current
-          look, so nothing needs to change in an existing project.
+          is what every project initialized before styles existed carries, and what the CLI reads when the key is
+          missing. It keeps working and is the same look as
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">nova</code>
+          , so nothing needs to change in an existing project. A plain
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli init</code>
+          without a preset writes it; the others come from a preset.
         </p>
         <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli add</code>
