@@ -5,3 +5,6 @@
 @reference '../styles.css';
 
 @import '../../../../libs/zard/src/lib/shared/core/css/styles/style-rhea.css' layer(components);
+
+/* Again, after the look: menu.css and the sheet tie on specificity, so the translucent menu must come last (as in an installed project). */
+@import '../../../../libs/zard/src/lib/shared/core/css/styles/menu.css' layer(components);

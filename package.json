@@ -8,6 +8,7 @@
     "prepare": "husky",
     "build": "npm run generate:theme-tokens && npm run generate:highlight && npm run generate:md && npm run generate:llms && npm run build:registry && node apps/web/update-routes.mjs && npx nx run web:build --configuration=production && npm run generate:md:docs",
     "build:registry": "npx tsx scripts/build-registry.cts && npm run check:registry",
+    "check:create-parity": "npx tsx scripts/create-parity/run.mts",
     "check:registry": "npx tsx scripts/check-registry.cts",
     "check:api-docs": "npx tsx scripts/check-api-docs.cts",
     "check:scrollbar": "npx tsx scripts/check-scrollbar.cts",

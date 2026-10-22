@@ -2932,9 +2932,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group': 'flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
     'cn-avatar-group-count':
       'relative flex shrink-0 items-center justify-center bg-muted text-muted-foreground size-8 rounded-full text-xs/relaxed ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',
-    'cn-avatar-group-count-size-default': 'size-8 text-[0.625rem]',
+    'cn-avatar-group-count-size-default': 'size-8 text-[0.625rem]/relaxed',
     'cn-avatar-group-count-size-lg': 'size-10 text-xs/relaxed',
-    'cn-avatar-group-count-size-sm': 'size-6 text-[0.625rem]',
+    'cn-avatar-group-count-size-sm': 'size-6 text-[0.625rem]/relaxed',
     'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
@@ -2969,7 +2969,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       '[&_svg]:size-3.5 [&_ng-icon]:flex! [&_ng-icon]:items-center! [&_ng-icon]:size-3.5! [&>svg]:size-3.5',
     'cn-breadcrumb-size-lg': 'text-sm',
     'cn-breadcrumb-size-md': 'text-xs/relaxed',
-    'cn-breadcrumb-size-sm': 'text-[0.625rem]',
+    'cn-breadcrumb-size-sm': 'text-[0.625rem]/relaxed',
     'cn-bubble':
       'relative flex w-fit min-w-0 max-w-[80%] flex-col gap-1 data-[align=end]:self-end data-[variant=ghost]:max-w-full group-data-[align=end]/message:self-end',
     'cn-bubble-content':
@@ -3022,7 +3022,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-button-size-sm':
       "gap-1 h-6 px-2 text-xs/relaxed has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3",
     'cn-button-size-xs':
-      "gap-1 px-2 h-5 rounded-sm text-[0.625rem] has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-2.5",
+      "gap-1 px-2 h-5 rounded-sm text-[0.625rem]/relaxed has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-2.5",
     'cn-button-variant-default': 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
     'cn-button-variant-destructive':
       'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',

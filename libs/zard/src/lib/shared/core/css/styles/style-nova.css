@@ -1459,10 +1459,6 @@
   @apply relative;
 }
 
-.cn-navigation-menu-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all;
-}
-
 .cn-navigation-menu-trigger-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply relative top-px size-3 shrink-0 transition-transform duration-300;
 }
@@ -1493,6 +1489,10 @@
 
 .cn-navigation-menu-link-variant-destructive:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply text-destructive;
+}
+
+.cn-navigation-menu-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all;
 }
 
 .cn-navigation-menu-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2849,10 +2849,6 @@
 
 /* MARK: navigation-menu */
 
-.cn-navigation-menu-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:bg-muted/50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted;
-}
-
 .cn-navigation-menu-trigger-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply group-data-[state=open]/navigation-menu-trigger:rotate-180;
 }
@@ -2875,6 +2871,10 @@
 
 .cn-navigation-menu-link-variant-destructive:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply hover:bg-destructive/10 focus:bg-destructive/10 focus:text-destructive;
+}
+
+.cn-navigation-menu-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:bg-muted/50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted;
 }
 
 .cn-navigation-menu-submenu-arrow:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {

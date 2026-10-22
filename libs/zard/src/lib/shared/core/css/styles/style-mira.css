@@ -105,7 +105,7 @@
   }
 
   .cn-button-size-xs {
-    @apply gap-1 px-2 h-5 rounded-sm text-[0.625rem];
+    @apply gap-1 px-2 h-5 rounded-sm text-[0.625rem]/relaxed;
   }
 
   .cn-button-size-sm {
@@ -317,11 +317,11 @@
   }
 
   .cn-avatar-group-count-size-sm {
-    @apply size-6 text-[0.625rem];
+    @apply size-6 text-[0.625rem]/relaxed;
   }
 
   .cn-avatar-group-count-size-default {
-    @apply size-8 text-[0.625rem];
+    @apply size-8 text-[0.625rem]/relaxed;
   }
 
   .cn-avatar-group-count-size-lg {
@@ -361,7 +361,7 @@
   }
 
   .cn-breadcrumb-size-sm {
-    @apply text-[0.625rem];
+    @apply text-[0.625rem]/relaxed;
   }
 
   .cn-breadcrumb-size-md {
@@ -1462,10 +1462,6 @@
     @apply relative;
   }
 
-  .cn-navigation-menu-trigger {
-    @apply inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 font-medium transition-all text-xs/relaxed;
-  }
-
   .cn-navigation-menu-trigger-icon {
     @apply relative top-px size-3 shrink-0 transition-transform duration-300;
   }
@@ -1496,6 +1492,10 @@
 
   .cn-navigation-menu-link-variant-destructive {
     @apply text-destructive;
+  }
+
+  .cn-navigation-menu-trigger {
+    @apply inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 font-medium transition-all text-xs/relaxed;
   }
 
   .cn-navigation-menu-indicator {
@@ -2889,10 +2889,6 @@
 
   /* MARK: navigation-menu */
 
-  .cn-navigation-menu-trigger {
-    @apply hover:bg-muted focus:bg-muted focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50 focus-visible:ring-ring/30 focus-visible:ring-2;
-  }
-
   .cn-navigation-menu-trigger-icon {
     @apply group-data-[state=open]/navigation-menu-trigger:rotate-180;
   }
@@ -2915,6 +2911,10 @@
 
   .cn-navigation-menu-link-variant-destructive {
     @apply hover:bg-destructive/10 focus:bg-destructive/10 focus:text-destructive;
+  }
+
+  .cn-navigation-menu-trigger {
+    @apply hover:bg-muted focus:bg-muted focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50 focus-visible:ring-ring/30 focus-visible:ring-2;
   }
 
   .cn-navigation-menu-indicator {

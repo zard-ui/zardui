@@ -28,7 +28,7 @@ const ITEMS = [
         <z-card-title zTitle="5 days remaining in cycle" class="px-1 text-sm" />
       </z-card-header>
       <z-card-content>
-        <div z-item-group class="gap-0">
+        <div z-item-group class="gap-0 has-data-[size=xs]:gap-0">
           @for (item of items; track item.name) {
             <a
               z-item

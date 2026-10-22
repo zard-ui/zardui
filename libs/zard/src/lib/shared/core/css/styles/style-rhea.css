@@ -1462,10 +1462,6 @@
     @apply relative;
   }
 
-  .cn-navigation-menu-trigger {
-    @apply inline-flex h-9 w-max items-center justify-center gap-1 px-2.5 py-1.5 text-sm font-medium transition-all rounded-2xl;
-  }
-
   .cn-navigation-menu-trigger-icon {
     @apply relative top-px size-3 shrink-0 transition-transform duration-300;
   }
@@ -1496,6 +1492,10 @@
 
   .cn-navigation-menu-link-variant-destructive {
     @apply text-destructive;
+  }
+
+  .cn-navigation-menu-trigger {
+    @apply inline-flex h-9 w-max items-center justify-center gap-1 px-2.5 py-1.5 text-sm font-medium transition-all rounded-2xl;
   }
 
   .cn-navigation-menu-indicator {
@@ -2879,10 +2879,6 @@
 
   /* MARK: navigation-menu */
 
-  .cn-navigation-menu-trigger {
-    @apply hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50 focus-visible:ring-ring/30;
-  }
-
   .cn-navigation-menu-trigger-icon {
     @apply group-data-[state=open]/navigation-menu-trigger:rotate-180;
   }
@@ -2905,6 +2901,10 @@
 
   .cn-navigation-menu-link-variant-destructive {
     @apply hover:bg-destructive/10 focus:bg-destructive/10 focus:text-destructive;
+  }
+
+  .cn-navigation-menu-trigger {
+    @apply hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50 focus-visible:ring-ring/30;
   }
 
   .cn-navigation-menu-indicator {

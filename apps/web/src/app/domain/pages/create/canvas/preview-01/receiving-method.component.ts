@@ -38,7 +38,7 @@ import { ZardRadioGroupImports } from '@zard/components/radio-group';
               class="style-sera:grid-cols-1 grid grid-cols-1 items-start gap-3 md:grid-cols-2"
             >
               <label z-field-label for="p01-method-bank">
-                <z-field zOrientation="horizontal" class="pb-2.5">
+                <z-field zOrientation="horizontal" class="pb-2.5!">
                   <z-radio value="bank" zId="p01-method-bank" />
                   <z-field-content>
                     <div z-field-title>Bank Transfer</div>
@@ -47,7 +47,7 @@ import { ZardRadioGroupImports } from '@zard/components/radio-group';
                 </z-field>
               </label>
               <label z-field-label for="p01-method-paypal">
-                <z-field zOrientation="horizontal" class="pb-2.5">
+                <z-field zOrientation="horizontal" class="pb-2.5!">
                   <z-radio value="paypal" zId="p01-method-paypal" />
                   <z-field-content>
                     <div z-field-title>PayPal</div>

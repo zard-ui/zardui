@@ -27,7 +27,7 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
         <z-card-description [zDescription]="terms" />
       </z-card-header>
       <z-card-content class="flex flex-col gap-4">
-        <div z-item-group class="gap-0">
+        <div z-item-group class="gap-0 has-data-[size=xs]:gap-0">
           @for (feature of features; track feature) {
             <div z-item zSize="xs" class="px-0">
               <div z-item-media zVariant="icon" class="self-start">
