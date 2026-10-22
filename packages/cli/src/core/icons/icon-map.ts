@@ -13,9 +13,10 @@
  * — the file here is what holds when the registry does not answer, and the
  * floor the published table is generated from.
  *
- * The list covers every icon the components and demos use today. A new icon in
- * the code with no row here is an error: `icons.spec.ts` compares this table
- * against what `libs/zard` actually imports.
+ * The list covers every icon the components, demos, blocks and the /create canvas use
+ * today. A new icon in the code with no row here is an error: `icons.spec.ts` compares
+ * this table against what `libs/zard`, `libs/blocks` and the canvas actually use, and
+ * `npm run check:icons` fails the build for the same reason.
  *
  * The tokens come from the lucide name in kebab-case because that already is
  * the icon's semantic name (`lucideChevronDown` → `chevron-down`) — the key
@@ -28,6 +29,13 @@
  */
 
 export const ICON_MAP: Record<string, Record<string, string>> = {
+  activity: {
+    lucide: 'lucideActivity',
+    tabler: 'tablerActivity',
+    hugeicons: 'hugeAnalytics01',
+    phosphor: 'phosphorPulse',
+    remixicon: 'remixPulseLine',
+  },
   'alert-triangle': {
     lucide: 'lucideAlertTriangle',
     tabler: 'tablerAlertTriangle',
@@ -49,12 +57,33 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorArchive',
     remixicon: 'remixArchiveLine',
   },
+  'archive-x': {
+    lucide: 'lucideArchiveX',
+    tabler: 'tablerArchive',
+    hugeicons: 'hugeArchive',
+    phosphor: 'phosphorArchive',
+    remixicon: 'remixArchiveLine',
+  },
+  'arrow-down': {
+    lucide: 'lucideArrowDown',
+    tabler: 'tablerArrowDown',
+    hugeicons: 'hugeArrowDown01',
+    phosphor: 'phosphorArrowDown',
+    remixicon: 'remixArrowDownLine',
+  },
   'arrow-left': {
     lucide: 'lucideArrowLeft',
     tabler: 'tablerArrowLeft',
     hugeicons: 'hugeArrowLeft01',
     phosphor: 'phosphorArrowLeft',
     remixicon: 'remixArrowLeftLine',
+  },
+  'arrow-left-right': {
+    lucide: 'lucideArrowLeftRight',
+    tabler: 'tablerArrowsLeftRight',
+    hugeicons: 'hugeArrowLeftRight',
+    phosphor: 'phosphorArrowsLeftRight',
+    remixicon: 'remixArrowLeftRightLine',
   },
   'arrow-right': {
     lucide: 'lucideArrowRight',
@@ -84,6 +113,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorWaveform',
     remixicon: 'remixVoiceprintLine',
   },
+  'audio-waveform': {
+    lucide: 'lucideAudioWaveform',
+    tabler: 'tablerWaveSine',
+    hugeicons: 'hugeVoice',
+    phosphor: 'phosphorWaveform',
+    remixicon: 'remixSoundModuleLine',
+  },
   'badge-check': {
     lucide: 'lucideBadgeCheck',
     tabler: 'tablerRosetteDiscountCheck',
@@ -97,6 +133,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeNotification01',
     phosphor: 'phosphorBell',
     remixicon: 'remixNotificationLine',
+  },
+  blocks: {
+    lucide: 'lucideBlocks',
+    tabler: 'tablerBlocks',
+    hugeicons: 'hugeLayoutGrid',
+    phosphor: 'phosphorSquaresFour',
+    remixicon: 'remixAppsLine',
   },
   bluetooth: {
     lucide: 'lucideBluetooth',
@@ -168,6 +211,48 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorCalendarPlus',
     remixicon: 'remixCalendarEventLine',
   },
+  camera: {
+    lucide: 'lucideCamera',
+    tabler: 'tablerCamera',
+    hugeicons: 'hugeCamera01',
+    phosphor: 'phosphorCamera',
+    remixicon: 'remixCameraLine',
+  },
+  captions: {
+    lucide: 'lucideCaptions',
+    tabler: 'tablerSubtitles',
+    hugeicons: 'hugeClosedCaption',
+    phosphor: 'phosphorSubtitles',
+    remixicon: 'remixClosedCaptioningLine',
+  },
+  car: {
+    lucide: 'lucideCar',
+    tabler: 'tablerCar',
+    hugeicons: 'hugeCar01',
+    phosphor: 'phosphorCar',
+    remixicon: 'remixCarLine',
+  },
+  'chart-bar': {
+    lucide: 'lucideChartBar',
+    tabler: 'tablerChartBar',
+    hugeicons: 'hugeChartBarLine',
+    phosphor: 'phosphorChartBar',
+    remixicon: 'remixBarChartLine',
+  },
+  'chart-line': {
+    lucide: 'lucideChartLine',
+    tabler: 'tablerChartLine',
+    hugeicons: 'hugeChartLineData01',
+    phosphor: 'phosphorChartLine',
+    remixicon: 'remixLineChartLine',
+  },
+  'chart-pie': {
+    lucide: 'lucideChartPie',
+    tabler: 'tablerChartPie',
+    hugeicons: 'hugePieChart',
+    phosphor: 'phosphorChartPie',
+    remixicon: 'remixPieChartLine',
+  },
   check: {
     lucide: 'lucideCheck',
     tabler: 'tablerCheck',
@@ -231,6 +316,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorWarningCircle',
     remixicon: 'remixErrorWarningLine',
   },
+  'circle-arrow-left': {
+    lucide: 'lucideCircleArrowLeft',
+    tabler: 'tablerCircleArrowLeft',
+    hugeicons: 'hugeCircleArrowLeft01',
+    phosphor: 'phosphorArrowCircleLeft',
+    remixicon: 'remixArrowLeftCircleLine',
+  },
   'circle-check': {
     lucide: 'lucideCircleCheck',
     tabler: 'tablerCircleCheck',
@@ -244,6 +336,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeCircle',
     phosphor: 'phosphorCircleDashed',
     remixicon: 'remixCircleLine',
+  },
+  'circle-dot': {
+    lucide: 'lucideCircleDot',
+    tabler: 'tablerCircleDot',
+    hugeicons: 'hugeFocusPoint',
+    phosphor: 'phosphorRadioButton',
+    remixicon: 'remixRadioButtonLine',
   },
   'circle-fading-arrow-up': {
     lucide: 'lucideCircleFadingArrowUp',
@@ -266,12 +365,33 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorQuestion',
     remixicon: 'remixQuestionLine',
   },
+  'circle-plus': {
+    lucide: 'lucideCirclePlus',
+    tabler: 'tablerCirclePlus',
+    hugeicons: 'hugePlusSignCircle',
+    phosphor: 'phosphorPlusCircle',
+    remixicon: 'remixAddCircleLine',
+  },
   'circle-small': {
     lucide: 'lucideCircleSmall',
     tabler: 'tablerPoint',
     hugeicons: 'hugeCircle',
     phosphor: 'phosphorDot',
     remixicon: 'remixCircleLine',
+  },
+  'circle-user': {
+    lucide: 'lucideCircleUser',
+    tabler: 'tablerUserCircle',
+    hugeicons: 'hugeUserCircle',
+    phosphor: 'phosphorUserCircle',
+    remixicon: 'remixAccountCircleLine',
+  },
+  'clipboard-list': {
+    lucide: 'lucideClipboardList',
+    tabler: 'tablerClipboardList',
+    hugeicons: 'hugeCheckList',
+    phosphor: 'phosphorClipboardText',
+    remixicon: 'remixClipboardLine',
   },
   'clipboard-paste': {
     lucide: 'lucideClipboardPaste',
@@ -301,12 +421,47 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorCloud',
     remixicon: 'remixCloudLine',
   },
+  'cloud-upload': {
+    lucide: 'lucideCloudUpload',
+    tabler: 'tablerCloudUpload',
+    hugeicons: 'hugeCloudUpload',
+    phosphor: 'phosphorCloudArrowUp',
+    remixicon: 'remixUploadCloud2Line',
+  },
   code: {
     lucide: 'lucideCode',
     tabler: 'tablerCode',
     hugeicons: 'hugeSourceCode',
     phosphor: 'phosphorCode',
     remixicon: 'remixCodeLine',
+  },
+  coffee: {
+    lucide: 'lucideCoffee',
+    tabler: 'tablerCoffee',
+    hugeicons: 'hugeCoffee01',
+    phosphor: 'phosphorCoffee',
+    remixicon: 'remixCupLine',
+  },
+  'columns-3': {
+    lucide: 'lucideColumns3',
+    tabler: 'tablerColumns3',
+    hugeicons: 'hugeLayout3Column',
+    phosphor: 'phosphorColumns',
+    remixicon: 'remixLayoutColumnLine',
+  },
+  command: {
+    lucide: 'lucideCommand',
+    tabler: 'tablerCommand',
+    hugeicons: 'hugeCommand',
+    phosphor: 'phosphorCommand',
+    remixicon: 'remixCommandLine',
+  },
+  container: {
+    lucide: 'lucideContainer',
+    tabler: 'tablerContainer',
+    hugeicons: 'hugeContainerTruck',
+    phosphor: 'phosphorShippingContainer',
+    remixicon: 'remixBox3Line',
   },
   copy: {
     lucide: 'lucideCopy',
@@ -322,12 +477,33 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorArrowBendDownLeft',
     remixicon: 'remixCornerDownLeftLine',
   },
+  'corner-up-left': {
+    lucide: 'lucideCornerUpLeft',
+    tabler: 'tablerCornerUpLeft',
+    hugeicons: 'hugeArrowUpLeft01',
+    phosphor: 'phosphorArrowBendUpLeft',
+    remixicon: 'remixCornerUpLeftLine',
+  },
+  'corner-up-right': {
+    lucide: 'lucideCornerUpRight',
+    tabler: 'tablerCornerUpRight',
+    hugeicons: 'hugeArrowUpRight01',
+    phosphor: 'phosphorArrowBendUpRight',
+    remixicon: 'remixCornerUpRightLine',
+  },
   'credit-card': {
     lucide: 'lucideCreditCard',
     tabler: 'tablerCreditCard',
     hugeicons: 'hugeCreditCard',
     phosphor: 'phosphorCreditCard',
     remixicon: 'remixBankCardLine',
+  },
+  database: {
+    lucide: 'lucideDatabase',
+    tabler: 'tablerDatabase',
+    hugeicons: 'hugeDatabase',
+    phosphor: 'phosphorDatabase',
+    remixicon: 'remixDatabase2Line',
   },
   dot: {
     lucide: 'lucideDot',
@@ -350,6 +526,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorDotsThree',
     remixicon: 'remixMoreLine',
   },
+  'ellipsis-vertical': {
+    lucide: 'lucideEllipsisVertical',
+    tabler: 'tablerDotsVertical',
+    hugeicons: 'hugeMoreVertical',
+    phosphor: 'phosphorDotsThreeVertical',
+    remixicon: 'remixMore2Line',
+  },
   'external-link': {
     lucide: 'lucideExternalLink',
     tabler: 'tablerExternalLink',
@@ -371,6 +554,20 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorFile',
     remixicon: 'remixFileLine',
   },
+  'file-archive': {
+    lucide: 'lucideFileArchive',
+    tabler: 'tablerFileZip',
+    hugeicons: 'hugeFileZip',
+    phosphor: 'phosphorFileArchive',
+    remixicon: 'remixFileZipLine',
+  },
+  'file-chart-column-increasing': {
+    lucide: 'lucideFileChartColumnIncreasing',
+    tabler: 'tablerFileAnalytics',
+    hugeicons: 'hugeChartHistogram',
+    phosphor: 'phosphorChartBar',
+    remixicon: 'remixFileChartLine',
+  },
   'file-code': {
     lucide: 'lucideFileCode',
     tabler: 'tablerFileCode',
@@ -385,12 +582,40 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorFileCode',
     remixicon: 'remixFileCodeLine',
   },
+  'file-search': {
+    lucide: 'lucideFileSearch',
+    tabler: 'tablerFileSearch',
+    hugeicons: 'hugeFileSearch',
+    phosphor: 'phosphorFileMagnifyingGlass',
+    remixicon: 'remixFileSearchLine',
+  },
   'file-text': {
     lucide: 'lucideFileText',
     tabler: 'tablerFileText',
     hugeicons: 'hugeFile02',
     phosphor: 'phosphorFileText',
     remixicon: 'remixFileTextLine',
+  },
+  'file-warning': {
+    lucide: 'lucideFileWarning',
+    tabler: 'tablerFileAlert',
+    hugeicons: 'hugeFileBlock',
+    phosphor: 'phosphorFileX',
+    remixicon: 'remixFileWarningLine',
+  },
+  'flip-horizontal': {
+    lucide: 'lucideFlipHorizontal',
+    tabler: 'tablerFlipHorizontal',
+    hugeicons: 'hugeFlipHorizontal',
+    phosphor: 'phosphorFlipHorizontal',
+    remixicon: 'remixFlipHorizontalLine',
+  },
+  'flip-vertical': {
+    lucide: 'lucideFlipVertical',
+    tabler: 'tablerFlipVertical',
+    hugeicons: 'hugeFlipVertical',
+    phosphor: 'phosphorFlipVertical',
+    remixicon: 'remixFlipVerticalLine',
   },
   folder: {
     lucide: 'lucideFolder',
@@ -426,13 +651,25 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorShareFat',
     remixicon: 'remixShareForwardLine',
   },
-  frame: { lucide: 'lucideFrame', tabler: 'tablerFrame', phosphor: 'phosphorFrameCorners', remixicon: 'remixCropLine' },
+  frame: {
+    lucide: 'lucideFrame',
+    tabler: 'tablerFrame',
+    phosphor: 'phosphorFrameCorners',
+    remixicon: 'remixCropLine',
+  },
   'gallery-vertical-end': {
     lucide: 'lucideGalleryVerticalEnd',
     tabler: 'tablerCarouselVertical',
     hugeicons: 'hugeCarouselVertical',
     phosphor: 'phosphorRows',
     remixicon: 'remixGalleryView2',
+  },
+  gauge: {
+    lucide: 'lucideGauge',
+    tabler: 'tablerGauge',
+    hugeicons: 'hugeDashboardSpeed01',
+    phosphor: 'phosphorGauge',
+    remixicon: 'remixDashboard3Line',
   },
   'git-branch': {
     lucide: 'lucideGitBranch',
@@ -447,6 +684,20 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeGlobe',
     phosphor: 'phosphorGlobe',
     remixicon: 'remixGlobeLine',
+  },
+  'grip-vertical': {
+    lucide: 'lucideGripVertical',
+    tabler: 'tablerGripVertical',
+    hugeicons: 'hugeDragDropVertical',
+    phosphor: 'phosphorDotsSixVertical',
+    remixicon: 'remixDraggable',
+  },
+  heart: {
+    lucide: 'lucideHeart',
+    tabler: 'tablerHeart',
+    hugeicons: 'hugeFavourite',
+    phosphor: 'phosphorHeart',
+    remixicon: 'remixHeartLine',
   },
   house: {
     lucide: 'lucideHouse',
@@ -490,12 +741,33 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorKeyboard',
     remixicon: 'remixKeyboardLine',
   },
+  layout: {
+    lucide: 'lucideLayout',
+    tabler: 'tablerLayout',
+    hugeicons: 'hugeLayout01',
+    phosphor: 'phosphorLayout',
+    remixicon: 'remixLayoutLine',
+  },
+  'layout-dashboard': {
+    lucide: 'lucideLayoutDashboard',
+    tabler: 'tablerLayoutDashboard',
+    hugeicons: 'hugeDashboardSquare01',
+    phosphor: 'phosphorSquaresFour',
+    remixicon: 'remixDashboardLine',
+  },
   'layout-grid': {
     lucide: 'lucideLayoutGrid',
     tabler: 'tablerLayoutGrid',
     hugeicons: 'hugeLayoutGrid',
     phosphor: 'phosphorSquaresFour',
     remixicon: 'remixLayoutGridLine',
+  },
+  'life-buoy': {
+    lucide: 'lucideLifeBuoy',
+    tabler: 'tablerLifebuoy',
+    hugeicons: 'hugeCustomerSupport',
+    phosphor: 'phosphorLifebuoy',
+    remixicon: 'remixLifebuoyLine',
   },
   lightbulb: {
     lucide: 'lucideLightbulb',
@@ -510,6 +782,20 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeBulb',
     phosphor: 'phosphorLightbulbFilament',
     remixicon: 'remixLightbulbLine',
+  },
+  'line-chart': {
+    lucide: 'lucideLineChart',
+    tabler: 'tablerChartLine',
+    hugeicons: 'hugeChartLineData01',
+    phosphor: 'phosphorChartLine',
+    remixicon: 'remixLineChartLine',
+  },
+  link: {
+    lucide: 'lucideLink',
+    tabler: 'tablerLink',
+    hugeicons: 'hugeLink01',
+    phosphor: 'phosphorLink',
+    remixicon: 'remixLink',
   },
   list: {
     lucide: 'lucideList',
@@ -532,6 +818,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorFunnelSimple',
     remixicon: 'remixFilter2Line',
   },
+  'list-todo': {
+    lucide: 'lucideListTodo',
+    tabler: 'tablerListCheck',
+    hugeicons: 'hugeCheckList',
+    phosphor: 'phosphorListChecks',
+    remixicon: 'remixTodoLine',
+  },
   loader: {
     lucide: 'lucideLoader',
     tabler: 'tablerLoader',
@@ -552,6 +845,20 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeLoading03',
     phosphor: 'phosphorCircleNotch',
     remixicon: 'remixLoader4Line',
+  },
+  lock: {
+    lucide: 'lucideLock',
+    tabler: 'tablerLock',
+    hugeicons: 'hugeLockPassword',
+    phosphor: 'phosphorLock',
+    remixicon: 'remixLockLine',
+  },
+  'lock-keyhole': {
+    lucide: 'lucideLockKeyhole',
+    tabler: 'tablerLock',
+    hugeicons: 'hugeLockKey',
+    phosphor: 'phosphorLockKey',
+    remixicon: 'remixLockPasswordLine',
   },
   'log-out': {
     lucide: 'lucideLogOut',
@@ -588,12 +895,40 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorArrowsOut',
     remixicon: 'remixFullscreenLine',
   },
+  menu: {
+    lucide: 'lucideMenu',
+    tabler: 'tablerMenu2',
+    hugeicons: 'hugeMenu01',
+    phosphor: 'phosphorList',
+    remixicon: 'remixMenuLine',
+  },
+  'message-circle': {
+    lucide: 'lucideMessageCircle',
+    tabler: 'tablerMessageCircle',
+    hugeicons: 'hugeMessage01',
+    phosphor: 'phosphorChatCircle',
+    remixicon: 'remixMessageLine',
+  },
+  'message-circle-question': {
+    lucide: 'lucideMessageCircleQuestion',
+    tabler: 'tablerMessageCircleQuestion',
+    hugeicons: 'hugeMessageQuestion',
+    phosphor: 'phosphorChatCircleDots',
+    remixicon: 'remixQuestionAnswerLine',
+  },
   'message-square': {
     lucide: 'lucideMessageSquare',
     tabler: 'tablerMessage',
     hugeicons: 'hugeMessage01',
     phosphor: 'phosphorChatText',
     remixicon: 'remixMessageLine',
+  },
+  mic: {
+    lucide: 'lucideMic',
+    tabler: 'tablerMicrophone',
+    hugeicons: 'hugeMic01',
+    phosphor: 'phosphorMicrophone',
+    remixicon: 'remixMicLine',
   },
   minimize: {
     lucide: 'lucideMinimize',
@@ -630,6 +965,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorWarningOctagon',
     remixicon: 'remixCloseCircleLine',
   },
+  paintbrush: {
+    lucide: 'lucidePaintbrush',
+    tabler: 'tablerBrush',
+    hugeicons: 'hugePaintBrush01',
+    phosphor: 'phosphorPaintBrush',
+    remixicon: 'remixPaintBrushLine',
+  },
   'panel-left': {
     lucide: 'lucidePanelLeft',
     tabler: 'tablerLayoutSidebar',
@@ -658,6 +1000,20 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorPlus',
     remixicon: 'remixAddLine',
   },
+  presentation: {
+    lucide: 'lucidePresentation',
+    tabler: 'tablerPresentation',
+    hugeicons: 'hugePresentation01',
+    phosphor: 'phosphorPresentation',
+    remixicon: 'remixPresentationLine',
+  },
+  radio: {
+    lucide: 'lucideRadio',
+    tabler: 'tablerRadio',
+    hugeicons: 'hugeRadio01',
+    phosphor: 'phosphorRadio',
+    remixicon: 'remixRadioLine',
+  },
   'refresh-ccw': {
     lucide: 'lucideRefreshCcw',
     tabler: 'tablerRefresh',
@@ -671,6 +1027,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeReload',
     phosphor: 'phosphorArrowsClockwise',
     remixicon: 'remixRestartLine',
+  },
+  repeat: {
+    lucide: 'lucideRepeat',
+    tabler: 'tablerRepeat',
+    hugeicons: 'hugeRepeat',
+    phosphor: 'phosphorRepeat',
+    remixicon: 'remixRepeatLine',
   },
   'rotate-ccw': {
     lucide: 'lucideRotateCcw',
@@ -707,6 +1070,20 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorMagnifyingGlass',
     remixicon: 'remixSearchLine',
   },
+  send: {
+    lucide: 'lucideSend',
+    tabler: 'tablerSend',
+    hugeicons: 'hugeSent',
+    phosphor: 'phosphorPaperPlaneRight',
+    remixicon: 'remixSendPlaneLine',
+  },
+  server: {
+    lucide: 'lucideServer',
+    tabler: 'tablerServer',
+    hugeicons: 'hugeCloudServer',
+    phosphor: 'phosphorHardDrives',
+    remixicon: 'remixServerLine',
+  },
   settings: {
     lucide: 'lucideSettings',
     tabler: 'tablerSettings',
@@ -728,11 +1105,39 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorShareNetwork',
     remixicon: 'remixShareLine',
   },
+  'share-2': {
+    lucide: 'lucideShare2',
+    tabler: 'tablerShare2',
+    hugeicons: 'hugeShare01',
+    phosphor: 'phosphorShareNetwork',
+    remixicon: 'remixShare2Line',
+  },
+  shield: {
+    lucide: 'lucideShield',
+    tabler: 'tablerShield',
+    hugeicons: 'hugeSecurity',
+    phosphor: 'phosphorShield',
+    remixicon: 'remixShieldLine',
+  },
   'shield-alert': {
     lucide: 'lucideShieldAlert',
     tabler: 'tablerShieldExclamation',
     phosphor: 'phosphorShieldWarning',
     remixicon: 'remixShieldLine',
+  },
+  'shopping-bag': {
+    lucide: 'lucideShoppingBag',
+    tabler: 'tablerShoppingBag',
+    hugeicons: 'hugeShoppingBag01',
+    phosphor: 'phosphorShoppingBag',
+    remixicon: 'remixShoppingBagLine',
+  },
+  'shopping-cart': {
+    lucide: 'lucideShoppingCart',
+    tabler: 'tablerShoppingCart',
+    hugeicons: 'hugeShoppingCart01',
+    phosphor: 'phosphorShoppingCart',
+    remixicon: 'remixShoppingCartLine',
   },
   smartphone: {
     lucide: 'lucideSmartphone',
@@ -769,12 +1174,26 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorStar',
     remixicon: 'remixStarLine',
   },
+  'star-off': {
+    lucide: 'lucideStarOff',
+    tabler: 'tablerStarOff',
+    hugeicons: 'hugeStarOff',
+    phosphor: 'phosphorStar',
+    remixicon: 'remixStarOffLine',
+  },
   sun: {
     lucide: 'lucideSun',
     tabler: 'tablerSun',
     hugeicons: 'hugeSun01',
     phosphor: 'phosphorSun',
     remixicon: 'remixSunLine',
+  },
+  table: {
+    lucide: 'lucideTable',
+    tabler: 'tablerTable',
+    hugeicons: 'hugeLayoutTable01',
+    phosphor: 'phosphorTable',
+    remixicon: 'remixTableLine',
   },
   tag: {
     lucide: 'lucideTag',
@@ -783,12 +1202,26 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorTag',
     remixicon: 'remixPriceTag3Line',
   },
+  target: {
+    lucide: 'lucideTarget',
+    tabler: 'tablerTarget',
+    hugeicons: 'hugeTarget01',
+    phosphor: 'phosphorTarget',
+    remixicon: 'remixFocus3Line',
+  },
   terminal: {
     lucide: 'lucideTerminal',
     tabler: 'tablerTerminal',
     hugeicons: 'hugeCommandLine',
     phosphor: 'phosphorTerminal',
     remixicon: 'remixTerminalBoxLine',
+  },
+  thermometer: {
+    lucide: 'lucideThermometer',
+    tabler: 'tablerThermometer',
+    hugeicons: 'hugeThermometer',
+    phosphor: 'phosphorThermometer',
+    remixicon: 'remixThermometerLine',
   },
   'thumbs-down': {
     lucide: 'lucideThumbsDown',
@@ -804,6 +1237,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorThumbsUp',
     remixicon: 'remixThumbUpLine',
   },
+  timer: {
+    lucide: 'lucideTimer',
+    tabler: 'tablerStopwatch',
+    hugeicons: 'hugeTimer01',
+    phosphor: 'phosphorTimer',
+    remixicon: 'remixTimerLine',
+  },
   trash: {
     lucide: 'lucideTrash',
     tabler: 'tablerTrash',
@@ -817,6 +1257,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeDelete01',
     phosphor: 'phosphorTrashSimple',
     remixicon: 'remixDeleteBin6Line',
+  },
+  'trending-down': {
+    lucide: 'lucideTrendingDown',
+    tabler: 'tablerTrendingDown',
+    hugeicons: 'hugeChartDecrease',
+    phosphor: 'phosphorTrendDown',
+    remixicon: 'remixArrowRightDownLine',
   },
   'trending-up': {
     lucide: 'lucideTrendingUp',
@@ -832,6 +1279,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorWarning',
     remixicon: 'remixAlertLine',
   },
+  tv: {
+    lucide: 'lucideTv',
+    tabler: 'tablerDeviceTv',
+    hugeicons: 'hugeTv01',
+    phosphor: 'phosphorTelevision',
+    remixicon: 'remixTvLine',
+  },
   underline: {
     lucide: 'lucideUnderline',
     tabler: 'tablerUnderline',
@@ -846,12 +1300,40 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorUser',
     remixicon: 'remixUserLine',
   },
+  'user-circle': {
+    lucide: 'lucideUserCircle',
+    tabler: 'tablerUserCircle',
+    hugeicons: 'hugeUserCircle',
+    phosphor: 'phosphorUserCircle',
+    remixicon: 'remixAccountCircleLine',
+  },
   'user-round-x': {
     lucide: 'lucideUserRoundX',
     tabler: 'tablerUserX',
     hugeicons: 'hugeUserRemove01',
     phosphor: 'phosphorUserMinus',
     remixicon: 'remixUserForbidLine',
+  },
+  users: {
+    lucide: 'lucideUsers',
+    tabler: 'tablerUsers',
+    hugeicons: 'hugeUserGroup',
+    phosphor: 'phosphorUsers',
+    remixicon: 'remixGroupLine',
+  },
+  video: {
+    lucide: 'lucideVideo',
+    tabler: 'tablerVideo',
+    hugeicons: 'hugeVideo01',
+    phosphor: 'phosphorVideoCamera',
+    remixicon: 'remixVideoLine',
+  },
+  'volume-2': {
+    lucide: 'lucideVolume2',
+    tabler: 'tablerVolume2',
+    hugeicons: 'hugeVolumeHigh',
+    phosphor: 'phosphorSpeakerHigh',
+    remixicon: 'remixVolumeUpLine',
   },
   'volume-off': {
     lucide: 'lucideVolumeOff',
@@ -880,6 +1362,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorX',
     remixicon: 'remixCloseLine',
   },
+  zap: {
+    lucide: 'lucideZap',
+    tabler: 'tablerBolt',
+    hugeicons: 'hugeZap',
+    phosphor: 'phosphorLightning',
+    remixicon: 'remixFlashlightLine',
+  },
   'zoom-in': {
     lucide: 'lucideZoomIn',
     tabler: 'tablerZoomIn',
@@ -894,4 +1383,19 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorMagnifyingGlassMinus',
     remixicon: 'remixZoomOutLine',
   },
+};
+
+/**
+ * Tokens a family has no equivalent for, by family — the documented gaps in an otherwise complete table.
+ *
+ * An item that uses one of these keeps the lucide icon in that family (`add` warns about it and the
+ * summary says so). `families.spec.ts` pins this list to the table, and `npm run check:registry` lets a
+ * used icon go without a row only if it is listed here, so a new gap has to be declared, not discovered.
+ */
+export const KNOWN_ICON_GAPS: Record<string, string[]> = {
+  lucide: [],
+  tabler: [],
+  hugeicons: ['footprints', 'frame', 'shield-alert', 'waves'],
+  phosphor: [],
+  remixicon: [],
 };

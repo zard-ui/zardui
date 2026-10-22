@@ -18,56 +18,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const { ICON_MAP } = await import(pathToFileURL(join(root, 'packages/cli/src/core/icons/icon-map.ts')).href);
 const { ICON_FAMILIES } = await import(pathToFileURL(join(root, 'packages/cli/src/core/icons/families.ts')).href);
 
-/**
- * Icons the canvas cards draw that the CLI table has no row for (no component of the library uses them). They only
- * exist for the preview, so they live here and not in the CLI's map.
- */
-const row = (lucide, tabler, hugeicons, phosphor, remixicon) => ({ lucide, tabler, hugeicons, phosphor, remixicon });
-const EXTRA = {
-  activity: row('lucideActivity', 'tablerActivity', 'hugeAnalytics01', 'phosphorPulse', 'remixPulseLine'),
-  'arrow-left-right': row(
-    'lucideArrowLeftRight',
-    'tablerArrowsLeftRight',
-    'hugeArrowLeftRight',
-    'phosphorArrowsLeftRight',
-    'remixArrowLeftRightLine',
-  ),
-  'chart-column': row(
-    'lucideChartColumn',
-    'tablerChartBar',
-    'hugeChartColumn',
-    'phosphorChartBar',
-    'remixBarChartLine',
-  ),
-  'chart-no-axes-column': row(
-    'lucideChartNoAxesColumn',
-    'tablerChartBar',
-    'hugeChartColumn',
-    'phosphorChartBar',
-    'remixBarChartLine',
-  ),
-  'chart-pie': row('lucideChartPie', 'tablerChartPie', 'hugePieChart', 'phosphorChartPie', 'remixPieChartLine'),
-  landmark: row('lucideLandmark', 'tablerBuildingBank', 'hugeBank', 'phosphorBank', 'remixBankLine'),
-  lock: row('lucideLock', 'tablerLock', 'hugeLockPassword', 'phosphorLock', 'remixLockLine'),
-  'message-circle': row(
-    'lucideMessageCircle',
-    'tablerMessageCircle',
-    'hugeMessage01',
-    'phosphorChatCircle',
-    'remixMessageLine',
-  ),
-  'message-circle-dashed': row(
-    'lucideMessageCircleDashed',
-    'tablerMessageCircle',
-    'hugeMessage01',
-    'phosphorChatCircle',
-    'remixMessageLine',
-  ),
-  palette: row('lucidePalette', 'tablerPalette', 'hugePaintBoard', 'phosphorPalette', 'remixPaletteLine'),
-  shield: row('lucideShield', 'tablerShield', 'hugeSecurity', 'phosphorShield', 'remixShieldLine'),
-  target: row('lucideTarget', 'tablerTarget', 'hugeTarget01', 'phosphorTarget', 'remixFocus3Line'),
-};
-const TABLE = { ...EXTRA, ...ICON_MAP };
+const TABLE = ICON_MAP;
 
 const outDir = join(root, 'apps/web/src/app/domain/pages/create/data/icons');
 mkdirSync(outDir, { recursive: true });

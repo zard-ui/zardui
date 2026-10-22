@@ -8,7 +8,8 @@
  * release and no hunting for `lucide` through the code.
  *
  *   `extractIcons`    reads which icons a source uses (the registry publishes this)
- *   `retargetIcons`   rewrites a source from one family to another (install uses it)
+ *   `retargetIcons`   rewrites a source from one family to another
+ *   `retargetFiles`   the same, decided over all the files of one item (install uses it)
  *   `iconPackagesFor` says which packages the project needs (init uses it)
  */
 
@@ -30,7 +31,7 @@ export {
   type IconFamily,
   type IconFamilyInfo,
 } from './families.js';
-export { ICON_MAP } from './icon-map.js';
+export { ICON_MAP, KNOWN_ICON_GAPS } from './icon-map.js';
 
 /** An icon by what it means: `check`, `chevron-down`. */
 export type IconToken = string;
@@ -277,6 +278,75 @@ export function retargetIcons(
   };
 }
 
+export interface RetargetFile {
+  readonly name: string;
+  readonly content: string;
+}
+
+export interface RetargetedFile extends RetargetFile {
+  /** Symbols of this file the target family does not declare — left untouched. */
+  readonly missing: string[];
+}
+
+/**
+ * Every symbol a file mentions, by import or by name.
+ *
+ * `extractIcons` stops at imports, which is right for what a component *provides*. What a block
+ * *draws* is wider: a `.html` template refers to the icon by name (`name="lucideCheck"`), and a data
+ * file holds the names as strings (`icon: 'lucideBot'`) without importing anything. Both are the same
+ * word as the import, so they have to follow it — a name left behind renders nothing in the new family.
+ */
+function mentionedIcons(source: string, from: IconFamily, catalog: IconCatalog): string[] {
+  const origin = iconFamily(from, catalog);
+  const found = new Set(extractIcons(source, from, catalog));
+
+  if (origin?.prefix) {
+    const named = new RegExp(`\\b${escapeRegExp(origin.prefix)}[A-Z0-9][A-Za-z0-9]*\\b`, 'g');
+    for (const match of source.matchAll(named)) found.add(match[0]);
+  }
+
+  return [...found].sort();
+}
+
+/**
+ * Rewrites the files of one installable item from one icon family to another, as a set.
+ *
+ * `retargetIcons` decides file by file, from each file's own imports. A block is several files that
+ * share icons — the component imports and provides them, its template and its data refer to them
+ * by name — so the decision is made once over all the files and applied to each. A symbol without an
+ * equivalent in the target keeps its source name in every file and is reported against the files that
+ * mention it.
+ */
+export function retargetFiles(
+  files: readonly RetargetFile[],
+  from: IconFamily,
+  to: IconFamily,
+  catalog: IconCatalog = LOCAL_ICON_CATALOG,
+): RetargetedFile[] {
+  const origin = iconFamily(from, catalog);
+  const target = iconFamily(to, catalog);
+
+  if (from === to || !origin || !target) return files.map(file => ({ ...file, missing: [] }));
+
+  const mentions = files.map(file => mentionedIcons(file.content, from, catalog));
+  const replacements = new Map<string, string>();
+  const unmapped = new Set<string>();
+
+  for (const symbol of new Set(mentions.flat())) {
+    const token = tokenFor(symbol, from, catalog);
+    const replacement = token !== undefined ? symbolFor(token, to, catalog) : undefined;
+
+    if (replacement === undefined) unmapped.add(symbol);
+    else replacements.set(symbol, replacement);
+  }
+
+  return files.map((file, index) => ({
+    name: file.name,
+    content: rewriteIcons(file.content, importSpecifier(origin), importSpecifier(target), replacements, unmapped),
+    missing: (mentions[index] ?? []).filter(symbol => unmapped.has(symbol)),
+  }));
+}
+
 /**
  * The mechanical half of the swap, separated from whatever decides what to swap.
  *
@@ -306,7 +376,47 @@ export function rewriteIcons(
         )
       : swapImports(source, fromPackage, toPackage, keep);
 
-  return swapped.replace(pattern, symbol => replacements.get(symbol) ?? symbol);
+  return dropRepeatedIcons(swapped.replace(pattern, symbol => replacements.get(symbol) ?? symbol));
+}
+
+/**
+ * Two lucide icons can share one symbol in a smaller family (`trash` and `trash-2` are both
+ * `tablerTrash`). After the swap that leaves the same name twice in an import and in
+ * `provideIcons({ … })` — a compile error — so the repeats are dropped and the first stays.
+ */
+function dropRepeatedIcons(source: string): string {
+  const dedupe = (list: string): string => {
+    const pieces = list.split(',');
+    const seen = new Set<string>();
+    const kept: string[] = [];
+    let tail = '';
+
+    pieces.forEach((piece, index) => {
+      const key = piece.trim();
+
+      if (key && seen.has(key)) {
+        // The last piece is whatever follows the final comma: blank in `{ a, b, }`, an entry in `{ a, b }`.
+        // Dropping the entry also drops the comma before it, and its trailing space stays.
+        if (index === pieces.length - 1) tail = /\s*$/.exec(piece)?.[0] ?? '';
+        return;
+      }
+
+      if (key) seen.add(key);
+      kept.push(piece);
+    });
+
+    return kept.join(',') + tail;
+  };
+
+  return source
+    .replace(
+      /(import\s*(?:type\s+)?\{)([^}]*)(\}\s*from\s*['"]@ng-icons\/[^'"]+['"])/g,
+      (_match, open: string, names: string, close: string) => `${open}${dedupe(names)}${close}`,
+    )
+    .replace(
+      /(provideIcons\(\s*\{)([^{}]*)(\}\s*\))/g,
+      (_match, open: string, entries: string, close: string) => `${open}${dedupe(entries)}${close}`,
+    );
 }
 
 /**

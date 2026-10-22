@@ -1,5 +1,5 @@
 import { DEFAULT_REGISTRY_URL as BUILD_REGISTRY_URL } from '@cli/config/registry-config.js';
-import { isIconFamily, retargetIcons, SOURCE_ICON_FAMILY, type IconFamily } from '@cli/core/icons/index.js';
+import { isIconFamily, retargetFiles, SOURCE_ICON_FAMILY, type IconFamily } from '@cli/core/icons/index.js';
 import { resolveStyle, transformStyle, DEFAULT_STYLE } from '@cli/core/styles/index.js';
 import type { Config } from '@cli/utils/config.js';
 import { CliError, ConfigError } from '@cli/utils/errors.js';
@@ -433,6 +433,25 @@ export function styledContent(
   return transformStyle(file.styled, config.style, styleCatalog(), config);
 }
 
+/** An icon the chosen family has no equivalent for, in a file that was installed anyway. */
+export interface IconGap {
+  readonly component: string;
+  readonly file: string;
+  readonly symbols: string[];
+}
+
+const iconGaps: IconGap[] = [];
+
+/**
+ * The icons left in their source family since the last call, then forgets them.
+ *
+ * `fetchComponent` warns as it goes, but a warning scrolls past between the spinners; the command reads
+ * this once at the end so the summary can say "installed, with icons to swap" instead of plain success.
+ */
+export function takeIconGaps(): IconGap[] {
+  return iconGaps.splice(0, iconGaps.length);
+}
+
 export async function fetchComponent(
   componentName: string,
   config: Config,
@@ -448,33 +467,32 @@ export async function fetchComponent(
   }
 
   const sourceFamily = sourceFamilyOf(item);
-  const missing = new Set<string>();
 
-  const transformedFiles = item.files.map(file => {
-    const retargeted = retargetIcons(
-      transformContent(styledContent(file, config), config, { ...options, fileName: file.name }),
-      sourceFamily,
-      config.icons,
-      iconCatalog(),
-    );
-    for (const symbol of retargeted.missing) missing.add(symbol);
-
-    return { name: file.name, content: retargeted.content };
-  });
+  // The icons are decided over the whole item, not file by file: a template (.html) and a data file
+  // name the icons their component imports, and have no import of their own to follow.
+  const styled = item.files.map(file => ({
+    name: file.name,
+    content: transformContent(styledContent(file, config), config, { ...options, fileName: file.name }),
+  }));
+  const transformedFiles = retargetFiles(styled, sourceFamily, config.icons, iconCatalog());
 
   // An icon with no equivalent in the chosen family keeps its source symbol,
   // imported from the package it came from — which `add` installs alongside, so
   // the component compiles. Failing the whole install over that would be worse:
   // the rest of the component is correct and swapping the icon is one line.
-  if (missing.size > 0) {
+  const gaps = transformedFiles.filter(file => file.missing.length > 0);
+
+  if (gaps.length > 0) {
+    const detail = gaps.map(file => `${file.name}: ${[...file.missing].sort().join(', ')}`).join('; ');
     logger.warn(
-      `"${componentName}" uses icons that ${config.icons} does not provide: ${[...missing].sort().join(', ')}. ` +
-        `They keep their ${sourceFamily} import, which still works — swap them by hand if you want them in the new set.`,
+      `"${componentName}" uses icons that ${config.icons} does not provide (${detail}). ` +
+        `They keep their ${sourceFamily} name and import, which still works — swap them by hand if you want them in the new set.`,
     );
+    for (const file of gaps) iconGaps.push({ component: componentName, file: file.name, symbols: [...file.missing] });
   }
 
   return {
     ...item,
-    files: transformedFiles,
+    files: transformedFiles.map(({ name, content }) => ({ name, content })),
   };
 }

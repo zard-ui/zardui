@@ -11,7 +11,7 @@ import { type LogRecord } from './log-sink.js';
 import { flushRecords, writeLine } from './output.js';
 import { style } from './style.js';
 
-export type ReportStatus = 'success' | 'cancelled' | 'error';
+export type ReportStatus = 'success' | 'warning' | 'cancelled' | 'error';
 
 export interface ReportCommand {
   readonly command: string;
@@ -35,6 +35,7 @@ export interface Report {
 
 const HEADLINE: Record<ReportStatus, (text: string) => string> = {
   success: text => `${style.success('✔')} ${style.bold(text)}`,
+  warning: text => `${style.warning('⚠')} ${style.bold(text)}`,
   cancelled: text => `${style.warning('■')} ${style.bold(text)}`,
   error: text => `${style.danger('✖')} ${style.bold(text)}`,
 };

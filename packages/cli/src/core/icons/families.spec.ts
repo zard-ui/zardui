@@ -11,10 +11,12 @@ import * as path from 'node:path';
 import {
   ICON_FAMILIES,
   ICON_MAP,
+  KNOWN_ICON_GAPS,
   extractIcons,
   iconPackagesFor,
   importSpecifier,
   missingTokensFor,
+  retargetFiles,
   retargetIcons,
   symbolFor,
   tokenFor,
@@ -40,15 +42,6 @@ function exportsOf(family: string): Set<string> | null {
     [...readFileSync(file, 'utf8').matchAll(/declare const ([A-Za-z0-9_]+)/g)].map(match => match[1] ?? ''),
   );
 }
-
-/** Tokens a family has no equivalent for — reported by `retargetIcons`, never invented. */
-const KNOWN_GAPS: Record<string, string[]> = {
-  lucide: [],
-  tabler: [],
-  hugeicons: ['footprints', 'frame', 'shield-alert', 'waves'],
-  phosphor: [],
-  remixicon: [],
-};
 
 describe('the declared families', () => {
   it('declares the five families the design system offers', () => {
@@ -89,7 +82,7 @@ describe.each(Object.keys(DECLARATIONS))('the %s column', family => {
   });
 
   it('has an equivalent for every token except the documented gaps', () => {
-    expect(missingTokensFor(family).sort()).toEqual(KNOWN_GAPS[family]);
+    expect(missingTokensFor(family).sort()).toEqual(KNOWN_ICON_GAPS[family]);
   });
 });
 
@@ -153,5 +146,163 @@ describe('retargeting to the new families', () => {
         `import type { hugeTick02 } from "@ng-icons/huge-icons";\nimport type { lucideWaves } from "@ng-icons/lucide";`,
       );
     });
+  });
+});
+
+/**
+ * A block is several files: the component imports and provides its icons, but the template (.html) and
+ * the data (strings in another .ts) only name them. Deciding per file left those names in lucide, and
+ * the `<ng-icon>` rendered nothing — sidebar-07 in HugeIcons logged 19 "No icon named …" warnings.
+ */
+describe('retargetFiles', () => {
+  const COMPONENT = [
+    `import { NgIcon, provideIcons } from '@ng-icons/core';`,
+    `import { lucideBot, lucideChevronRight } from '@ng-icons/lucide';`,
+    `@Component({ templateUrl: './nav.component.html', viewProviders: [provideIcons({ lucideBot, lucideChevronRight })] })`,
+  ].join('\n');
+  const TEMPLATE = `<ng-icon name="lucideChevronRight" /><ng-icon [name]="item.icon" /><ng-icon name='lucideBot' />`;
+  const DATA = `export const NAV = [{ title: 'Playground', icon: 'lucideBot' }, { title: 'Docs', icon: "lucideChevronRight" }];`;
+
+  const files = [
+    { name: 'nav.component.ts', content: COMPONENT },
+    { name: 'nav.component.html', content: TEMPLATE },
+    { name: 'nav.data.ts', content: DATA },
+  ];
+
+  it.each([
+    ['tabler', 'tablerRobot', 'tablerChevronRight'],
+    ['hugeicons', 'hugeBot', 'hugeArrowRight01'],
+    ['phosphor', 'phosphorRobot', 'phosphorCaretRight'],
+    ['remixicon', 'remixRobot2Line', 'remixArrowRightSLine'],
+  ])('follows the icons of the component into the template and the data for %s', (family, bot, chevron) => {
+    const [component, template, data] = retargetFiles(files, 'lucide', family);
+
+    expect(template?.content).toBe(
+      `<ng-icon name="${chevron}" /><ng-icon [name]="item.icon" /><ng-icon name='${bot}' />`,
+    );
+    expect(data?.content).toBe(
+      `export const NAV = [{ title: 'Playground', icon: '${bot}' }, { title: 'Docs', icon: "${chevron}" }];`,
+    );
+    expect(component?.content).toContain(`provideIcons({ ${bot}, ${chevron} })`);
+    expect(component?.content).not.toContain('lucide');
+    for (const file of [component, template, data]) expect(file?.missing).toEqual([]);
+  });
+
+  it('retargets a name that appears only in a template or in data, without any import', () => {
+    const [template, data] = retargetFiles(
+      [
+        { name: 'a.html', content: `<ng-icon name="lucideCheck" />` },
+        { name: 'a.data.ts', content: `export const ICON = 'lucideCheck';` },
+      ],
+      'lucide',
+      'tabler',
+    );
+
+    expect(template?.content).toBe(`<ng-icon name="tablerCheck" />`);
+    expect(data?.content).toBe(`export const ICON = 'tablerCheck';`);
+  });
+
+  it('does not touch words that only start like an icon prefix of another package', () => {
+    const [file] = retargetFiles(
+      [{ name: 'a.ts', content: `import { LucideAngularModule } from 'lucide-angular'; const lucide = 1;` }],
+      'lucide',
+      'tabler',
+    );
+
+    expect(file?.content).toContain('LucideAngularModule');
+    expect(file?.content).toContain('const lucide = 1');
+    expect(file?.missing).toEqual([]);
+  });
+
+  describe('an icon the family does not have', () => {
+    const gapFiles = [
+      {
+        name: 'team.component.ts',
+        content: `import { lucideCheck, lucideWaves } from '@ng-icons/lucide';\nprovideIcons({ lucideCheck, lucideWaves });`,
+      },
+      { name: 'team.component.html', content: `<ng-icon name="lucideCheck" /><ng-icon name="lucideWaves" />` },
+      { name: 'team.data.ts', content: `export const T = [{ logo: 'lucideWaves' }];` },
+    ];
+
+    it('keeps its name in every file, so import, provider, template and data stay consistent', () => {
+      const [component, template, data] = retargetFiles(gapFiles, 'lucide', 'hugeicons');
+
+      expect(component?.content).toBe(
+        `import { hugeTick02 } from '@ng-icons/huge-icons';\nimport { lucideWaves } from '@ng-icons/lucide';\nprovideIcons({ hugeTick02, lucideWaves });`,
+      );
+      expect(template?.content).toBe(`<ng-icon name="hugeTick02" /><ng-icon name="lucideWaves" />`);
+      expect(data?.content).toBe(`export const T = [{ logo: 'lucideWaves' }];`);
+    });
+
+    it('reports the gap against each file that mentions it', () => {
+      const result = retargetFiles(gapFiles, 'lucide', 'hugeicons');
+
+      expect(result.map(file => [file.name, file.missing])).toEqual([
+        ['team.component.ts', ['lucideWaves']],
+        ['team.component.html', ['lucideWaves']],
+        ['team.data.ts', ['lucideWaves']],
+      ]);
+    });
+
+    it('reports a lucide-looking name that no family knows instead of silently leaving it', () => {
+      const [file] = retargetFiles(
+        [{ name: 'x.html', content: `<ng-icon name="lucideNotAnIcon" />` }],
+        'lucide',
+        'tabler',
+      );
+
+      expect(file?.missing).toEqual(['lucideNotAnIcon']);
+      expect(file?.content).toBe(`<ng-icon name="lucideNotAnIcon" />`);
+    });
+  });
+
+  it('returns the files untouched when the family does not change', () => {
+    expect(retargetFiles(files, 'lucide', 'lucide')).toEqual(files.map(file => ({ ...file, missing: [] })));
+  });
+});
+
+/**
+ * `trash` and `trash-2` are different lucide icons that Tabler draws with one: after the swap the
+ * import and `provideIcons` would name `tablerTrash` twice, which does not compile (sidebar-10).
+ */
+describe('two icons that collapse into one in the target family', () => {
+  const SOURCE = [
+    `import { lucideTrash, lucideTrash2, lucideX } from '@ng-icons/lucide';`,
+    `import {`,
+    `  lucideTrash,`,
+    `  lucideTrash2,`,
+    `} from '@ng-icons/lucide';`,
+    `viewProviders: [provideIcons({ lucideTrash, lucideTrash2, lucideX })],`,
+    `viewProviders: [provideIcons({`,
+    `  lucideTrash,`,
+    `  lucideTrash2,`,
+    `})],`,
+  ].join('\n');
+
+  it('names the shared symbol once in the import and in provideIcons', () => {
+    expect(symbolFor('trash', 'tabler')).toBe(symbolFor('trash-2', 'tabler'));
+
+    const { content, missing } = retargetIcons(SOURCE, 'lucide', 'tabler');
+
+    expect(missing).toEqual([]);
+    expect(content).toContain(`import { tablerTrash, tablerX } from '@ng-icons/tabler-icons';`);
+    expect(content).toContain(`provideIcons({ tablerTrash, tablerX })`);
+    expect(content.match(/tablerTrash/g)).toHaveLength(4);
+    expect(content).toContain(`import {\n  tablerTrash,\n} from '@ng-icons/tabler-icons';`);
+    expect(content).toContain(`provideIcons({\n  tablerTrash,\n})`);
+  });
+
+  it('does the same across the files of a block', () => {
+    const [component, template] = retargetFiles(
+      [
+        { name: 'a.ts', content: `import { lucideTrash, lucideTrash2 } from '@ng-icons/lucide';` },
+        { name: 'a.html', content: `<ng-icon name="lucideTrash" /><ng-icon name="lucideTrash2" />` },
+      ],
+      'lucide',
+      'tabler',
+    );
+
+    expect(component?.content).toBe(`import { tablerTrash } from '@ng-icons/tabler-icons';`);
+    expect(template?.content).toBe(`<ng-icon name="tablerTrash" /><ng-icon name="tablerTrash" />`);
   });
 });

@@ -16,6 +16,9 @@
  *                  either in the item itself or in one of its dependencies.
  *   peer pass    — every peer dependency of a listed npm package is installed by
  *                  the item (or by Angular), so Yarn Classic and legacy-peer-deps work.
+ *   icon pass    — every lucide icon a component, block or /create canvas uses has a
+ *                  row in the icon map for every family (or a declared gap), so a
+ *                  preset with another icon library never meets a name it cannot draw.
  *
  * Run it with `npm run check:registry`. It is also the last step of
  * `npm run build:registry`, so a drifting registry fails the build.
@@ -37,7 +40,7 @@ import {
   encodePreset,
   resolveTokens,
 } from '../packages/cli/src/core/design/index';
-import { ICON_FAMILIES, ICON_MAP } from '../packages/cli/src/core/icons/index';
+import { ICON_FAMILIES, ICON_MAP, KNOWN_ICON_GAPS } from '../packages/cli/src/core/icons/index';
 import { registry } from '../packages/cli/src/core/registry/registry-data';
 import { checkPublishedItems, checkStyleSelectors, checkStyleSheets } from './styles-registry.cts';
 
@@ -507,12 +510,80 @@ function checkPeerDependencies(): void {
   }
 }
 
+/**
+ * Where icons are drawn: the library (components and demos), the blocks and the /create canvas. A
+ * lucide name in any of them is something `add` or the preview will have to translate.
+ */
+const ICON_SURFACES = [
+  LIB_PATH,
+  path.resolve(__dirname, '../libs/blocks/src'),
+  path.resolve(__dirname, '../apps/web/src/app/domain/pages/create/canvas'),
+  path.resolve(__dirname, '../apps/web/src/app/domain/pages/create/examples'),
+];
+
+function sourcesUnder(dir: string): string[] {
+  return fs.readdirSync(dir).flatMap(entry => {
+    const absolute = path.join(dir, entry);
+    if (fs.statSync(absolute).isDirectory()) return sourcesUnder(absolute);
+    return absolute.endsWith('.ts') || absolute.endsWith('.html') ? [absolute] : [];
+  });
+}
+
+/**
+ * `lucideCheck` in a template or in a data file draws nothing in another family unless the icon map
+ * knows it, and `retargetFiles` can only rewrite what the map names. So the map has to cover every icon
+ * the code uses, in every family — the only exceptions are the gaps declared in `KNOWN_ICON_GAPS`, which
+ * `add` reports. Only names that are real exports of `@ng-icons/lucide` count, so an unrelated
+ * identifier that starts with "lucide" is not an icon.
+ */
+function checkIconCoverage(): void {
+  const declarations = path.resolve(__dirname, '../node_modules/@ng-icons/lucide/types/ng-icons-lucide.d.ts');
+  if (!fs.existsSync(declarations)) {
+    report('icons', 'cannot check icon coverage: @ng-icons/lucide is not installed in node_modules');
+    return;
+  }
+
+  const exported = new Set(
+    [...fs.readFileSync(declarations, 'utf8').matchAll(/declare const ([A-Za-z0-9_]+)/g)].map(match => match[1]),
+  );
+  const tokenBySymbol = new Map(Object.entries(ICON_MAP).map(([token, row]) => [row['lucide'], token]));
+  const usedIn = new Map<string, string>();
+
+  for (const surface of ICON_SURFACES) {
+    if (!fs.existsSync(surface)) continue;
+    for (const file of sourcesUnder(surface)) {
+      for (const match of fs.readFileSync(file, 'utf8').matchAll(/\blucide[A-Z0-9][A-Za-z0-9]*\b/g)) {
+        if (exported.has(match[0]) && !usedIn.has(match[0])) usedIn.set(match[0], path.relative(process.cwd(), file));
+      }
+    }
+  }
+
+  for (const [symbol, file] of [...usedIn].sort()) {
+    const token = tokenBySymbol.get(symbol);
+
+    if (token === undefined) {
+      report('icons', `${symbol} (used in ${file}) has no row in icon-map.ts`);
+      continue;
+    }
+
+    for (const family of Object.keys(ICON_FAMILIES)) {
+      if (ICON_MAP[token]?.[family] === undefined && !KNOWN_ICON_GAPS[family]?.includes(token)) {
+        report(
+          'icons',
+          `${symbol} (used in ${file}) has no ${family} equivalent in icon-map.ts and is not a declared gap`,
+        );
+      }
+    }
+  }
+}
+
 checkSourcePass();
 checkClosurePass();
 checkDesignPass();
 
 checkStylePass();
 checkPeerDependencies();
+checkIconCoverage();
 
 if (problems.length > 0) {
   console.error(`\n✖ registry is not self-consistent — ${problems.length} problem(s):\n`);

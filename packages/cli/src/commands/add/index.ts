@@ -12,6 +12,7 @@ import { runAddWizard } from '@cli/commands/add/wizard.js';
 import { syncLibraryPeerDependencies } from '@cli/commands/init/library-peers.js';
 import { indexHtmlFor } from '@cli/commands/init/project-kind.js';
 import { injectThemeScript } from '@cli/commands/init/theme-loader.js';
+import { SOURCE_ICON_FAMILY } from '@cli/core/icons/index.js';
 import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
 import { pinAllForAngular } from '@cli/utils/angular-compat.js';
 import { getConfig, resolveConfigPaths, type Config } from '@cli/utils/config.js';
@@ -20,7 +21,7 @@ import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/package-manager.js';
-import { assertRegistryItems, fetchBlockFromRegistry, getRegistryUrl } from '@cli/utils/registry.js';
+import { assertRegistryItems, fetchBlockFromRegistry, getRegistryUrl, takeIconGaps } from '@cli/utils/registry.js';
 import { loadStyleCatalog } from '@cli/utils/style-catalog.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
@@ -260,17 +261,33 @@ async function runHeadless(preselected: string[], options: AddOptions, actions: 
 }
 
 function reportSuccess(installed: readonly string[], logs: readonly LogRecord[]): void {
+  const gaps = takeIconGaps();
+
   if (!installed.length) {
     printReport({ status: 'success', headline: 'All components are already installed.', logs });
     return;
   }
 
-  printReport({
-    status: 'success',
-    headline: `Installed ${installed.length} component${installed.length > 1 ? 's' : ''}.`,
-    items: [...installed],
-    logs,
-  });
+  const headline = `Installed ${installed.length} component${installed.length > 1 ? 's' : ''}.`;
+
+  // Icons the chosen family has no equivalent for were installed in their source family: the code
+  // works, but the result is not what the preset asked for, so it is not reported as plain success.
+  if (gaps.length > 0) {
+    printReport({
+      status: 'warning',
+      headline: `${headline} Some icons stayed in ${SOURCE_ICON_FAMILY}.`,
+      items: [...installed],
+      notes: [
+        `${gaps.length === 1 ? 'This file uses' : 'These files use'} icons with no equivalent in the icon library of this project:`,
+        ...gaps.map(gap => `${gap.component} / ${gap.file}: ${gap.symbols.join(', ')}`),
+        'They keep working through @ng-icons/lucide; swap them by hand if you want them in your icon library.',
+      ],
+      logs,
+    });
+    return;
+  }
+
+  printReport({ status: 'success', headline, items: [...installed], logs });
 }
 
 function validateWorkingDirectory(cwd: string): void {
