@@ -2952,7 +2952,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 export class ZardDemoSidebarRailComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

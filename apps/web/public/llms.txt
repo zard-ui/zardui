@@ -8,7 +8,6 @@
 - [Documentation](https://zardui.com/docs): Complete documentation for Zard UI components and guides.
 - [Components](https://zardui.com/docs/components): Browse all available components in the library.
 - [Blocks](https://zardui.com/blocks): Pre-built component compositions and templates.
-- [Colors](https://zardui.com/colors): Tailwind color palette reference in all formats.
 - [Create](https://zardui.com/create): Design a look (style, base color, theme, fonts, icons, radius, menu) with a live preview and get the preset code and the `zard-cli create` command that starts a project from it.
 - [Typeset](https://zardui.com/typeset): Build a typography preset for rendered markdown and take away the CSS.
 

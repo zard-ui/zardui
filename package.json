@@ -15,6 +15,7 @@
     "check:install-docs": "npx tsx scripts/check-install-docs.cts",
     "check:skills": "npx tsx scripts/check-skills.cts",
     "check:docs-md": "node scripts/check-docs-markdown.mjs",
+    "check:links": "node scripts/check-links.mjs",
     "build:cli": "npx nx run cli:build",
     "build:mcp": "npx nx run mcp:build",
     "dev:mcp": "npx nx run mcp:build:dev",

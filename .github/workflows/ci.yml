@@ -84,6 +84,9 @@ jobs:
       # every section and code block of the rendered pages.
       - name: Check docs Markdown matches the pages
         run: npm run check:docs-md
+      # Unknown paths fall back to the home page (no 404), so a broken link never shows up on its own.
+      - name: Check internal links and anchors
+        run: npm run check:links
 
   test:
     runs-on: ubuntu-latest

@@ -478,7 +478,7 @@ Display errors next to the field with z-field-error. For styling and accessibili
 
 Every zard/ui form control implements a value accessor, so name + [(ngModel)] binds to all of them the same way.
 
-### input
+### Input
 
 For text inputs, add the validation attributes and expose the control with `#ctrl="ngModel"`.
 
@@ -573,7 +573,7 @@ export class ZardFormsTemplateInputComponent {
 }
 ```
 
-### textarea
+### Textarea
 
 Textareas work exactly like inputs. Add `z-field-description` for the helper copy below the control.
 
@@ -664,7 +664,7 @@ export class ZardFormsTemplateTextareaComponent {
 }
 ```
 
-### select
+### Select
 
 `z-select` is a value accessor too, so `required` and `[(ngModel)]` behave exactly as on a native control. "Auto" is listed but rejected on submit — a value rule with no attribute equivalent, so it lives in the component.
 
@@ -775,7 +775,7 @@ export class ZardFormsTemplateSelectComponent {
 }
 ```
 
-### checkbox
+### Checkbox
 
 A checkbox group is one boolean per option in the model. The 'pick at least one' rule has no attribute equivalent, so it lives in the component. The first group is a single control kept checked and locked with the `disabled` attribute.
 
@@ -908,7 +908,7 @@ export class ZardFormsTemplateCheckboxComponent {
 }
 ```
 
-### radio group
+### Radio Group
 
 Bind `[(ngModel)]` to `z-radio-group` — the individual `z-radio` items only carry their value.
 
@@ -998,7 +998,7 @@ export class ZardFormsTemplateRadioComponent {
 }
 ```
 
-### switch
+### Switch
 
 Switches bind to a boolean. Watch out: `required` only rejects `null` and `undefined`, never `false`, and there is no `requiredTrue` attribute — so the "must be enabled" rule lives in the component.
 
@@ -1088,7 +1088,7 @@ export class ZardFormsTemplateSwitchComponent {
 }
 ```
 
-### complex forms
+### Complex Forms
 
 Everything above, composed into one form with fieldsets, separators and the count and value rules handled in the component, since attributes cannot express them.
 

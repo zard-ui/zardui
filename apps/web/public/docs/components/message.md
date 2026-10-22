@@ -723,7 +723,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
 export class ZardDemoMessageShorthandComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

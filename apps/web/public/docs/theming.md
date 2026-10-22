@@ -600,7 +600,7 @@ The raw tokens hold plain CSS colors, so RGB, HSL and HEX all work. Keep the `@t
 }
 ```
 
-Need the values? The [colors page](/colors) lists the full Tailwind palette in OKLCH, HEX, RGB and HSL.
+Need the values? The [Tailwind colors reference](https://tailwindcss.com/docs/colors) lists the full palette in OKLCH, HEX, RGB and HSL.
 
 ## Troubleshooting
 

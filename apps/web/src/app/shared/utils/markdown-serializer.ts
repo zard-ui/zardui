@@ -3,6 +3,8 @@ import type { CodeBlockData } from '@highlight/types';
 import type { ApiSection } from '@doc/domain/components/api-reference/api-reference.types';
 import type { ComponentData, CodeSnippet, ExampleData } from '@doc/shared/constants/components.constant';
 
+import { exampleTitle } from './example-title';
+
 const BASE_URL = 'https://zardui.com';
 
 /** `date-picker` -> `Date Picker` */
@@ -60,7 +62,7 @@ function serializeExamples(examples: ExampleData[] | undefined): string {
 
   return examples
     .map(example => {
-      const parts: string[] = [`### ${titleCase(example.name)}`];
+      const parts: string[] = [`### ${exampleTitle(example.name)}`];
       if (example.description) parts.push(example.description);
 
       const before = snippet(example.codeBefore);

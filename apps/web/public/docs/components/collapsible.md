@@ -573,7 +573,7 @@ import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsi
 export class ZardDemoCollapsibleDisabledComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

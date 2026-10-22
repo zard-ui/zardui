@@ -498,7 +498,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 export class ZardDemoAccordionCardComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

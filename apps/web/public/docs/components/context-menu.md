@@ -929,7 +929,7 @@ import { ZardContextMenuImports } from '@/shared/components/context-menu/context
 export class ZardDemoContextMenuDisabledComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

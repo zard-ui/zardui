@@ -2172,7 +2172,7 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu';
 export class ZardDemoNavigationMenuNoViewportComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

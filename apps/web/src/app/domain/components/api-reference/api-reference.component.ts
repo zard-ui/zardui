@@ -13,7 +13,7 @@ import type { ApiSection } from './api-reference.types';
           <span class="component-selector">{{ section.selector }}</span>
           <span class="component-badge component-badge--component">Component</span>
         </p>
-        <p class="text-muted-foreground text-sm leading-7">
+        <p class="text-muted-foreground text-sm leading-7 [overflow-wrap:anywhere]">
           {{ section.description }}
         </p>
 

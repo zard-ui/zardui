@@ -511,7 +511,7 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 export class ZardDemoTabsIconsComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

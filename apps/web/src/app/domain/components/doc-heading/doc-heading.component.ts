@@ -7,6 +7,8 @@ import { AiAssistComponent } from '../ai-assist/ai-assist.component';
   selector: 'z-doc-heading',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ScrollSpyItemDirective, AiAssistComponent],
+  // The pages also pass `id` as a plain attribute; the id lives on the inner header, once.
+  host: { '[attr.id]': 'null' },
   template: `
     <header class="flex flex-col gap-2" [scrollSpyItem]="id() || 'overview'" [id]="id() || 'overview'">
       <div class="flex flex-col gap-2">

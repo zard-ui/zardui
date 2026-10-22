@@ -12,7 +12,7 @@ import { lucideInfo } from '@ng-icons/lucide';
 import { AnchorDirective } from '@doc/domain/directives/anchor.directive';
 import { ProseDirective } from '@doc/domain/directives/prose.directive';
 import type { CodeSnippet, ExampleType } from '@doc/shared/constants/components.constant';
-import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
+import { ExampleTitlePipe } from '@doc/shared/pipes/example-title.pipe';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardPopoverImports } from '@zard/components/popover/popover.imports';
@@ -29,7 +29,7 @@ import {
   selector: 'z-code-box',
   imports: [
     NgComponentOutlet,
-    HyphenToSpacePipe,
+    ExampleTitlePipe,
     CodeBlockComponent,
     CopyButtonComponent,
     ProseDirective,

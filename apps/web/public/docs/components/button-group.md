@@ -865,7 +865,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 export class ZardDemoButtonGroupTextComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

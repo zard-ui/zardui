@@ -486,7 +486,7 @@ Display errors next to the field with z-field-error. For styling and accessibili
 
 Every zard/ui form control implements a value accessor, so [formField] binds to all of them the same way.
 
-### input
+### Input
 
 For text inputs, bind `[formField]` to the field and mirror its invalid state with `aria-invalid`.
 
@@ -578,7 +578,7 @@ export class ZardFormsSignalInputComponent {
 }
 ```
 
-### textarea
+### Textarea
 
 Textareas work exactly like inputs. Add `z-field-description` for the helper copy below the control.
 
@@ -664,7 +664,7 @@ export class ZardFormsSignalTextareaComponent {
 }
 ```
 
-### select
+### Select
 
 `z-select` is a value accessor too. Use `zOrientation="responsive"` with `z-field-content` to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a `validate()` rule — a value rule, not a presence one.
 
@@ -772,7 +772,7 @@ export class ZardFormsSignalSelectComponent {
 }
 ```
 
-### checkbox
+### Checkbox
 
 A checkbox group edits an array field. Bind each box to `value().includes(id)` and update the field on change. The first group is a single boolean field turned read-only with `disabled()` in the schema. Remember `data-slot="checkbox-group"` on the `z-field-group` for the tighter spacing.
 
@@ -901,7 +901,7 @@ export class ZardFormsSignalCheckboxComponent {
 }
 ```
 
-### radio group
+### Radio Group
 
 Bind `[formField]` to `z-radio-group` — the individual `z-radio` items only carry their value.
 
@@ -995,7 +995,7 @@ export class ZardFormsSignalRadioComponent {
 }
 ```
 
-### switch
+### Switch
 
 Switches bind to a boolean field. Use a horizontal field with `z-field-content` so the label and description sit next to the control.
 
@@ -1080,7 +1080,7 @@ export class ZardFormsSignalSwitchComponent {
 }
 ```
 
-### complex forms
+### Complex Forms
 
 Everything above, composed into one form with fieldsets, separators, a `validate()` rule that rejects unknown plan values and length rules on the add-ons array.
 

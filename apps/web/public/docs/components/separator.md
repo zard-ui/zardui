@@ -220,7 +220,7 @@ import { ZardSeparatorComponent } from '../separator.component';
 export class ZardDemoSeparatorListComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

@@ -346,7 +346,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
 export class ZardDemoSpinnerEmptyComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

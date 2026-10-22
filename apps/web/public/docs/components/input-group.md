@@ -877,7 +877,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 export class ZardDemoInputGroupCustomInputComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

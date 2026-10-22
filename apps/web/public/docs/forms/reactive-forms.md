@@ -515,7 +515,7 @@ Display errors next to the field with z-field-error. For styling and accessibili
 
 Every zard/ui form control implements a value accessor, so formControlName binds to all of them the same way.
 
-### input
+### Input
 
 For text inputs, bind `formControlName` and mirror the control's invalid state with `aria-invalid`.
 
@@ -613,7 +613,7 @@ export class ZardFormsReactiveInputComponent {
 }
 ```
 
-### textarea
+### Textarea
 
 Textareas work exactly like inputs. Add `z-field-description` for the helper copy below the control.
 
@@ -701,7 +701,7 @@ export class ZardFormsReactiveTextareaComponent {
 }
 ```
 
-### select
+### Select
 
 `z-select` is a value accessor too. Use `zOrientation="responsive"` with `z-field-content` to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a custom validator — a value rule, not a presence one.
 
@@ -815,7 +815,7 @@ export class ZardFormsReactiveSelectComponent {
 }
 ```
 
-### checkbox
+### Checkbox
 
 A checkbox group maps cleanly to a `FormArray` of booleans: one control per option, plus a group-level validator for the 'pick at least one' rule. The first group holds a single disabled control that ships checked — `getRawValue()` is what reads it back. Remember `data-slot="checkbox-group"` on the `z-field-group`.
 
@@ -946,7 +946,7 @@ export class ZardFormsReactiveCheckboxComponent {
 }
 ```
 
-### radio group
+### Radio Group
 
 Bind `formControlName` to `z-radio-group` — the individual `z-radio` items only carry their value.
 
@@ -1035,7 +1035,7 @@ export class ZardFormsReactiveRadioComponent {
 }
 ```
 
-### switch
+### Switch
 
 Switches bind to a boolean control. `Validators.requiredTrue` is the rule for "must be enabled".
 
@@ -1111,7 +1111,7 @@ export class ZardFormsReactiveSwitchComponent {
 }
 ```
 
-### complex forms
+### Complex Forms
 
 Everything above, composed into one form with fieldsets, separators, a validator that rejects unknown plan values and count rules on the add-ons array.
 

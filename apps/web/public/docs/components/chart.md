@@ -3605,7 +3605,7 @@ export class ZardDemoChartRadialSimpleComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl). The category axis keeps its left-to-right order in RTL; the legend, tooltip text and surrounding layout mirror.
 

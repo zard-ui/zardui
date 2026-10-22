@@ -898,7 +898,7 @@ import { ZardResizableImports } from '@/shared/components/resizable/resizable.im
 export class ZardDemoResizableHandleComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

@@ -786,7 +786,7 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
 export class ZardDemoBreadcrumbLinkComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

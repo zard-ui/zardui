@@ -327,7 +327,7 @@ import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
 export class ZardDemoAlertCustomColorsComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

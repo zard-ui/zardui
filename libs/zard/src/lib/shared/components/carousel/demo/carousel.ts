@@ -73,7 +73,7 @@ export const CAROUSEL = {
       codeAfter: { codeData: CAROUSEL_SNIPPET_ORIENTATION },
     },
     {
-      name: 'api',
+      name: 'events',
       description:
         'Listen for `(zInited)` to capture the Embla Carousel instance and `(zSelected)` to react to slide changes, reading `selectedScrollSnap()` and `scrollSnapList().length` off it.',
       component: ZardDemoCarouselApiComponent,

@@ -752,7 +752,7 @@ export class ZardDemoCarouselOrientationComponent {
 </z-carousel>
 ```
 
-### Api
+### Events
 
 Listen for `(zInited)` to capture the Embla Carousel instance and `(zSelected)` to react to slide changes, reading `selectedScrollSnap()` and `scrollSnapList().length` off it.
 
@@ -866,7 +866,7 @@ export class ZardDemoCarouselPluginsComponent implements OnInit {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 
