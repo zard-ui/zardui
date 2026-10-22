@@ -410,12 +410,20 @@ function replaceRegion(css: string, start: string, end: string, replacement: str
 }
 
 function removeRange(css: string, from: number, to: number): string {
-  // Take the line break after the rule with it, and one blank line before, so repeated edits do not
-  // pile up empty lines.
-  let end = to;
-  while (css[end] === '\r' || css[end] === '\n') end++;
-  return css.slice(0, from) + css.slice(end);
+  // Take the blank space before the rule with it, never the space after: what follows a removed rule
+  // may be the user's own text, and it keeps its line breaks. Repeated edits do not pile up blank
+  // lines either, since each removal leaves the gap it found.
+  let start = from;
+  while (start > 0 && /\s/.test(css[start - 1]!)) start--;
+  return css.slice(0, start) + css.slice(to);
 }
+
+/**
+ * The tokens an `init` of CLI <= 1.1.0 always wrote into `:root` and `.dark`. A rule that defines
+ * all of them is the generated theme; a rule that redefines a few (`--background: hotpink`) is the
+ * user's own override and is none of the CLI's business.
+ */
+const LEGACY_TOKEN_SET = ['--background', '--foreground', '--primary', '--secondary', '--border', '--ring'];
 
 /**
  * The rules a stylesheet written before the markers existed uses for the theme: `:root` and `.dark`
@@ -427,11 +435,26 @@ function isLegacyThemeRule(css: string, span: Span): boolean {
   if (!span.block) return false;
   const body = css.slice(span.start, span.end);
 
-  if (span.head === ':root' || span.head === '.dark') return body.includes('--background');
+  if (span.head === ':root' || span.head === '.dark') return LEGACY_TOKEN_SET.every(token => body.includes(token));
   if (span.head === '@theme inline') return body.includes('--color-background');
   if (span.head === '@layer base') return body.includes('border-border') && body.includes('bg-background');
 
   return false;
+}
+
+/**
+ * The generated theme of an unmarked stylesheet: the first rule of each kind that looks like one.
+ * Later rules with the same selector are the user's — they come after the theme and override it, and
+ * they must stay exactly where they are.
+ */
+function legacyThemeRules(css: string): Span[] {
+  const seen = new Set<string>();
+
+  return topLevelRules(css).filter(span => {
+    if (!isLegacyThemeRule(css, span) || seen.has(span.head)) return false;
+    seen.add(span.head);
+    return true;
+  });
 }
 
 /**
@@ -441,7 +464,7 @@ function isLegacyThemeRule(css: string, span: Span): boolean {
 export function applyThemeBlock(css: string, block: string): string {
   if (hasRegion(css, THEME_START, THEME_END)) return replaceRegion(css, THEME_START, THEME_END, block);
 
-  const legacy = topLevelRules(css).filter(span => isLegacyThemeRule(css, span));
+  const legacy = legacyThemeRules(css);
   if (legacy.length > 0) {
     const first = legacy[0]!;
     let result = css;

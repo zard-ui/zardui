@@ -480,7 +480,7 @@ test.describe('Create builder', () => {
       const preset = presetOf(page);
       const command = dialog.locator('[data-tab="existing-project"] [data-testid="command"]');
 
-      await expect(command).toHaveText(`npx zard-cli@latest init --preset ${preset} --yes`);
+      await expect(command).toHaveText(`npx zard-cli@latest apply --preset ${preset}`);
       await dialog.locator('[data-scope="theme"]').click();
       await expect(command).toHaveText(`npx zard-cli@latest apply --preset ${preset} --only theme`);
       await dialog.locator('[data-scope="font"]').click();

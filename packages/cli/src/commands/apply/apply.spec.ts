@@ -13,6 +13,7 @@ jest.mock('@cli/utils/logger.js', () => ({
 jest.mock('@cli/utils/package-manager.js', () => ({
   filterInstalledPackages: jest.fn(async (packages: string[]) => packages),
   installPackagesWithRetry: jest.fn(async () => undefined),
+  suggestedRunner: jest.fn(() => 'npx'),
 }));
 // No network: the registry never answers, so the bundled catalogs apply.
 jest.mock('@cli/utils/http-client.js', () => ({
@@ -92,6 +93,20 @@ async function project(options: { crlf?: boolean; legacy?: boolean } = {}): Prom
   return cwd;
 }
 
+/** Marks components as installed: a folder each, as `add` leaves them. */
+async function installFake(cwd: string, ...names: string[]): Promise<void> {
+  for (const name of names) {
+    await mkdir(path.join(cwd, 'src/app/shared/components', name), { recursive: true });
+    await writeFile(path.join(cwd, 'src/app/shared/components', name, 'index.ts'), '', 'utf8');
+  }
+}
+
+/** A package.json that declares these dependencies. */
+async function declare(cwd: string, names: string[]): Promise<void> {
+  const dependencies = Object.fromEntries(names.map(name => [name, '^1.0.0']));
+  await writeFile(path.join(cwd, 'package.json'), JSON.stringify({ dependencies }), 'utf8');
+}
+
 const read = (cwd: string, file: string): Promise<string> => readFile(path.join(cwd, file), 'utf8');
 const json = async (cwd: string): Promise<Record<string, any>> => JSON.parse(await read(cwd, 'components.json'));
 
@@ -161,19 +176,34 @@ describe('apply --only theme', () => {
     expect(await read(cwd, 'src/styles.css')).not.toContain('jetbrains');
   });
 
-  it('records the base color and menu look, and not style, icons or preset', async () => {
+  it('records the base color and menu accent, and not style, icons, menu look or preset', async () => {
+    const cwd = await project();
+    const before = await json(cwd);
+
+    await runApply({ cwd, preset: PRESET_B, only: 'theme' });
+
+    const after = await json(cwd);
+    expect(after).toMatchObject({
+      style: 'nova',
+      icons: 'lucide',
+      preset: 'Z0',
+      menuAccent: 'subtle',
+      tailwind: { baseColor: 'mauve' },
+    });
+    // The menu look is baked into components, so a stylesheet-only apply must not claim it.
+    expect(after['menuColor']).toBe(before['menuColor']);
+    expect(after['menuAppearance']).toBe(before['menuAppearance']);
+  });
+
+  it('says why the menu look did not change when the preset has another one', async () => {
     const cwd = await project();
 
     await runApply({ cwd, preset: PRESET_B, only: 'theme' });
 
-    expect(await json(cwd)).toMatchObject({
-      style: 'nova',
-      icons: 'lucide',
-      preset: 'Z0',
-      menuColor: 'inverted',
-      menuAppearance: 'translucent',
-      tailwind: { baseColor: 'mauve' },
-    });
+    const report = JSON.stringify((printReport as jest.Mock).mock.calls[0]);
+    expect(report).toContain('menu look');
+    expect(report).toContain('full preset');
+    expect(report).not.toContain('--overwrite');
   });
 
   it('keeps the pointer rule the file already has, unless told otherwise', async () => {
@@ -278,12 +308,55 @@ describe('apply (the whole preset)', () => {
     });
   });
 
-  it('tells the user how to bring the components along', async () => {
+  it('writes the menu look together with the components it describes', async () => {
     const cwd = await project();
+
+    await runApply({ cwd, preset: PRESET_B });
+
+    expect(await json(cwd)).toMatchObject({ menuColor: 'inverted', menuAppearance: 'translucent' });
+  });
+
+  it('lists the installed components in the exact command that brings them along', async () => {
+    const cwd = await project();
+    await installFake(cwd, 'button', 'dialog');
 
     await runApply({ cwd, preset: PRESET_C });
 
-    expect(JSON.stringify((printReport as jest.Mock).mock.calls[0])).toContain('--overwrite');
+    const { commands } = (printReport as jest.Mock).mock.calls[0][0];
+    expect(commands[0].command).toBe('npx zard-cli add button dialog --overwrite');
+  });
+
+  it('does not ask for a re-add when nothing that components carry changed', async () => {
+    const cwd = await project();
+    await installFake(cwd, 'button');
+
+    await runApply({ cwd, preset: 'Z0' });
+
+    expect(JSON.stringify((printReport as jest.Mock).mock.calls[0])).not.toContain('--overwrite');
+  });
+
+  it('names the packages of the previous fonts and icons the preset no longer uses', async () => {
+    const cwd = await project();
+    await declare(cwd, ['@fontsource-variable/inter', '@ng-icons/lucide', '@ng-icons/core']);
+
+    await runApply({ cwd, preset: PRESET_C });
+
+    const { commands } = (printReport as jest.Mock).mock.calls[0][0];
+    // Inter is still the body font of preset C; lucide is not the icon family anymore.
+    expect(commands.map((entry: { command: string }) => entry.command)).toEqual(['npm uninstall @ng-icons/lucide']);
+  });
+
+  it('names the previous font of --only font as well, and nothing about icons', async () => {
+    const cwd = await project();
+    await runApply({ cwd, preset: PRESET_C, only: 'font' });
+    await declare(cwd, ['@fontsource-variable/playfair-display', '@fontsource-variable/inter', '@ng-icons/lucide']);
+
+    await runApply({ cwd, preset: 'Z0', only: 'font' });
+
+    const { commands } = (printReport as jest.Mock).mock.calls.at(-1)![0];
+    expect(commands.map((entry: { command: string }) => entry.command)).toEqual([
+      'npm uninstall @fontsource-variable/playfair-display',
+    ]);
   });
 
   it('upgrades a stylesheet written by an init that had no preset, keeping the user rules', async () => {
@@ -299,6 +372,29 @@ describe('apply (the whole preset)', () => {
     expect(css).toContain(':root {\n  --brand: hotpink;\n}');
   });
 
+  it('keeps the token overrides a user put below a theme with no markers', async () => {
+    const cwd = await project({ legacy: true });
+    const file = path.join(cwd, 'src/styles.css');
+    const overrides = `
+/* brand */
+:root {
+  --background: hotpink;
+  --brand: red;
+}
+
+.dark {
+  --background: purple;
+}
+`;
+    await writeFile(file, (await read(cwd, 'src/styles.css')) + overrides, 'utf8');
+
+    await runApply({ cwd, preset: PRESET_B });
+
+    const css = await read(cwd, 'src/styles.css');
+    expect(css.endsWith(overrides)).toBe(true);
+    expect(css).toContain(THEME_START);
+  });
+
   it('keeps a CRLF file CRLF, so the diff shows only what changed', async () => {
     const cwd = await project({ crlf: true });
 
@@ -307,6 +403,31 @@ describe('apply (the whole preset)', () => {
     const css = await read(cwd, 'src/styles.css');
     expect(css).toContain('\r\n');
     expect(css.replace(/\r\n/g, '')).not.toContain('\n');
+  });
+});
+
+describe('flags that cannot work together', () => {
+  it.each([
+    ['--pointer', true],
+    ['--no-pointer', false],
+  ])('rejects %s with --only font, which does not write the theme', async (flag, pointer) => {
+    const cwd = await project();
+    const css = await read(cwd, 'src/styles.css');
+
+    await expect(runApply({ cwd, preset: PRESET_B, only: 'font', pointer })).rejects.toThrow(
+      new RegExp(`${flag}.*--only font`),
+    );
+
+    expect(await read(cwd, 'src/styles.css')).toBe(css);
+    expect(installPackagesWithRetry).not.toHaveBeenCalled();
+  });
+
+  it('accepts --pointer when the theme is among the parts', async () => {
+    const cwd = await project();
+
+    await runApply({ cwd, preset: PRESET_B, only: 'theme,font', pointer: true });
+
+    expect(await read(cwd, 'src/styles.css')).toContain('cursor: pointer');
   });
 });
 

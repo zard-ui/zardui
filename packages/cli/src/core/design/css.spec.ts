@@ -415,6 +415,29 @@ describe('applyThemeBlock', () => {
     expect(updated).toContain("@import 'tailwindcss';");
   });
 
+  it('keeps user overrides of theme tokens that sit below an unmarked theme', () => {
+    const overrides =
+      '\n/* brand override */\n:root {\n  --background: hotpink;\n  --brand: red;\n}\n\n.dark {\n  --background: purple;\n}\n';
+    const legacy = neutral('@/shared/core').trim() + overrides;
+
+    const updated = applyThemeBlock(legacy, renderThemeBlock(B));
+
+    // everything the user wrote after the old theme is still there, byte for byte, after the new block
+    expect(updated.endsWith(`${THEME_END}${overrides}`)).toBe(true);
+    // and the old generated theme is gone: only the new :root/.dark carry the full token set
+    expect(updated.match(/--secondary-foreground:/g)).toHaveLength(2);
+  });
+
+  it('keeps a complete :root that is not the first one of the file', () => {
+    const complete =
+      ':root {\n  --background: a;\n  --foreground: b;\n  --primary: c;\n  --secondary: d;\n  --border: e;\n  --ring: f;\n}\n';
+    const legacy = neutral('@/shared/core').trim() + '\n' + complete;
+
+    const updated = applyThemeBlock(legacy, renderThemeBlock(B));
+
+    expect(updated.endsWith(`${THEME_END}\n${complete}`)).toBe(true);
+  });
+
   it('inserts the block after the Tailwind setup when the file has no theme', () => {
     const file = `@import 'tailwindcss';\n@plugin "tailwindcss-animate";\n\n@custom-variant dark (&:is(.dark *));\n\n.mine { color: red; }\n`;
 

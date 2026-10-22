@@ -56,8 +56,9 @@ export function newProjectCommand(options: NewProjectOptions): string {
 }
 
 /**
- * `init --preset … --yes` for the whole preset: init asks before it overwrites the global CSS, and `--yes` is what lets
- * it run without a terminal. `apply --preset … --only` for the theme or the fonts alone (it never asks).
+ * `apply --preset …` for an existing project, whole or in parts (`--only`). Not `init`: init rewrites the global CSS,
+ * while apply replaces only the regions zard-cli manages and keeps every rule of the user's own. The project must
+ * already be initialized (`zard-cli init`), which apply says when it is not. Apply never prompts.
  */
 export function existingProjectCommand(options: {
   readonly manager: PackageManager;
@@ -68,7 +69,7 @@ export function existingProjectCommand(options: {
 
   switch (options.scope) {
     case 'full':
-      return `${runner} init --preset ${options.preset} --yes`;
+      return `${runner} apply --preset ${options.preset}`;
     case 'theme':
       return `${runner} apply --preset ${options.preset} --only theme`;
     case 'font':

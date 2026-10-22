@@ -38,11 +38,15 @@ const TABS: readonly { value: GetCodeTab; label: string }[] = [
 ];
 
 const SCOPES: readonly { value: ApplyScope; label: string; description: string }[] = [
-  { value: 'full', label: 'Full preset', description: 'Everything from the preset: style, theme, fonts and icons.' },
+  {
+    value: 'full',
+    label: 'Full preset',
+    description: 'Everything from the preset: style, theme, fonts and icons. Your own CSS is kept.',
+  },
   {
     value: 'theme',
     label: 'Theme only',
-    description: 'Theme tokens only: colors, radius and menu. Components stay as they are.',
+    description: 'Theme tokens only: colors, radius and menu accent. Components stay as they are.',
   },
   {
     value: 'font',
@@ -165,7 +169,10 @@ const SCOPES: readonly { value: ApplyScope; label: string; description: string }
               <div z-field-group class="px-6 py-4">
                 <fieldset z-field-set class="gap-3">
                   <legend z-field-legend zVariant="label">Apply Preset</legend>
-                  <p z-field-description>Pick which parts of the preset to apply.</p>
+                  <p z-field-description>
+                    Pick which parts of the preset to apply. For a project that already uses zard-cli (run init first if
+                    not).
+                  </p>
                   <div class="grid gap-2" role="radiogroup" aria-label="Apply">
                     @for (item of scopes; track item.value) {
                       <button

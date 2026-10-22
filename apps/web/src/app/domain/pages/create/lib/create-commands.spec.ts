@@ -21,9 +21,9 @@ describe('create commands', () => {
     );
   });
 
-  it('prints init for the full preset and apply --only for its parts', () => {
+  it('prints apply for the whole preset, never init, and apply --only for its parts', () => {
     expect(existingProjectCommand({ manager: 'npm', preset: 'Z3k', scope: 'full' })).toBe(
-      'npx zard-cli@latest init --preset Z3k --yes',
+      'npx zard-cli@latest apply --preset Z3k',
     );
     expect(existingProjectCommand({ manager: 'pnpm', preset: 'Z3k', scope: 'theme' })).toBe(
       'pnpm dlx zard-cli@latest apply --preset Z3k --only theme',

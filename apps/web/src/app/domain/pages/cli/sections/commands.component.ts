@@ -437,8 +437,9 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">apply</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Apply a design preset to a project that is already initialized, without running init again. It never prompts and
-      never touches components.
+      Apply a design preset to a project that is already initialized, without running init again. This is the command to
+      use on an existing project: init rewrites your global CSS, apply replaces only the regions zard-cli manages. It
+      never prompts and never rewrites a component.
     </p>
     <z-code-block [data]="applyUsage" />
 
@@ -488,9 +489,13 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       </li>
       <li>
         <strong>theme</strong>
-        — the base color, theme and chart colors, radius, menu look and base layer in your stylesheet, and the matching
-        keys in
+        — the base color, theme and chart colors, radius, bold or subtle menu accent and base layer in your stylesheet,
+        and the matching keys in
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
+        . The menu color and appearance (inverted, translucent) are written into the components when they are added, so
+        they belong to the full preset and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--only theme</code>
+        leaves them alone
       </li>
       <li>
         <strong>font</strong>
@@ -503,11 +508,26 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <z-code-block [data]="applyExamples" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Rules of your own below the theme block in the stylesheet survive, and so do the aliases and every other key of
+      Everything outside the regions zard-cli manages survives byte for byte: your own rules and variables, including
+      your overrides of theme tokens such as
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--background</code>
+      , plus the aliases and every other key of
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
-      . Components already in your project keep their current style and icons; add them again with
-      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--overwrite</code>
-      to follow the preset.
+      . A stylesheet written by an older zard-cli, with no markers, has only its generated theme replaced.
+    </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Components already in your project keep their current style, icons and menu look. When the preset changes any of
+      those, a full apply prints the exact
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">add … --overwrite</code>
+      command for the components and blocks you have installed (it replaces their files, so commit your own edits
+      first), and the font and icon packages of the previous design that nothing uses anymore, with the command to
+      remove them.
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--pointer</code>
+      and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-pointer</code>
+      belong to the theme, so combining them with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--only font</code>
+      is refused.
     </p>
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Global options</h3>
