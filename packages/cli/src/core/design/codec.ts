@@ -232,7 +232,10 @@ export function decodePreset(code: string): DesignConfig {
     throw new PresetError(
       'newer',
       input,
-      `The preset "${input}" has more options than this zard-cli knows. Update with \`npm i -g zard-cli@latest\`.`,
+      // The format has one version character and it is ours; a code with too many digits is either
+      // made up or from a newer layout, and nothing in it says which. Say both, update only as a maybe.
+      `"${input}" is not a valid preset code. If it was made by a newer zard-cli, update with ` +
+        '`npm i -g zard-cli@latest` and try again.',
     );
   }
 
@@ -246,8 +249,8 @@ export function decodePreset(code: string): DesignConfig {
       throw new PresetError(
         'newer',
         input,
-        `The preset "${input}" uses an option (${field.key} #${index}) this zard-cli does not know. ` +
-          'Update with `npm i -g zard-cli@latest`.',
+        `"${input}" is not a valid preset code: ${field.key} #${index} is not an option this zard-cli knows. ` +
+          'If it was made by a newer zard-cli, update with `npm i -g zard-cli@latest` and try again.',
       );
     }
 

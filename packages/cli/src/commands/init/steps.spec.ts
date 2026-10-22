@@ -111,6 +111,30 @@ describe('ng-package.json step', () => {
   });
 });
 
+describe('ng-package.json step outcome', () => {
+  it('reports itself as skipped, not done, when the library is not publishable', async () => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-ng-package-'));
+    await mkdir(path.join(cwd, 'projects', 'ui'), { recursive: true });
+
+    const config = buildConfig(answers, 'npm');
+    const step = buildInitSteps(cwd, config, projectInfo, false).find(item => item.label === 'ng-package.json');
+
+    await expect(step?.run()).resolves.toMatchObject({ skipped: expect.stringContaining('ng-package.json not found') });
+  });
+
+  it('returns nothing when it did its work', async () => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-ng-package-'));
+    const libraryRoot = path.join(cwd, 'projects', 'ui');
+    await mkdir(libraryRoot, { recursive: true });
+    await writeFile(path.join(libraryRoot, 'ng-package.json'), '{}');
+
+    const config = buildConfig(answers, 'npm');
+    const step = buildInitSteps(cwd, config, projectInfo, false).find(item => item.label === 'ng-package.json');
+
+    await expect(step?.run()).resolves.toBeUndefined();
+  });
+});
+
 describe('library package.json exports', () => {
   /** Runs the ng-package.json step on a library whose package.json declares `exports`. */
   async function runWithExports(exports: unknown): Promise<unknown> {

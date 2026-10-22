@@ -17,7 +17,6 @@ import { iconFamily } from '@cli/core/icons/index.js';
 import { resolveConfigPaths, type Config } from '@cli/utils/config.js';
 import { type ProjectInfo } from '@cli/utils/get-project-info.js';
 import { iconCatalog } from '@cli/utils/icon-catalog.js';
-import { logger } from '@cli/utils/logger.js';
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
@@ -31,8 +30,11 @@ import * as path from 'node:path';
 export interface InitStep {
   readonly label: string;
   readonly note: string;
-  run(): Promise<void>;
+  /** Resolves with `{ skipped }` when there was nothing to do and the step did not run: it is not a ✔. */
+  run(): Promise<StepOutcome>;
 }
+
+export type StepOutcome = void | { readonly skipped: string };
 
 export interface InitStepOptions {
   /** Add the cursor-pointer rule for buttons to the theme (`--pointer`). Only meaningful with a preset. */
@@ -195,7 +197,7 @@ function tailwindPipelineStep(
  * end up importing `<lib>/src/styles.css` — a `src/` that is a detail of the
  * library's repository, not something whoever installs it should know.
  */
-async function registerStylesAsset(cwd: string, config: Config): Promise<void> {
+async function registerStylesAsset(cwd: string, config: Config): Promise<StepOutcome> {
   const libraryRoot = path.resolve(cwd, projectRootOf(config.baseUrl));
   const ngPackagePath = path.join(libraryRoot, 'ng-package.json');
 
@@ -203,8 +205,7 @@ async function registerStylesAsset(cwd: string, config: Config): Promise<void> {
     // An Nx library only gets an ng-package.json when it is publishable; in the
     // others there is no package to assemble and the CSS is consumed straight
     // from the source.
-    logger.warn(`ng-package.json not found in ${path.relative(cwd, libraryRoot)}; skipping the theme asset.`);
-    return;
+    return { skipped: `ng-package.json not found in ${path.relative(cwd, libraryRoot)}: no theme asset to register` };
   }
 
   const relative = path.relative(libraryRoot, path.resolve(cwd, config.tailwind.css)).split(path.sep).join('/');

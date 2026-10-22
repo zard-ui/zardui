@@ -155,7 +155,7 @@ export async function runCreateWizard(options: CreateWizardOptions): Promise<Cre
             }
           } else {
             try {
-              state.preset = resolvePreset(value);
+              state.preset = resolvePreset(value, 'pasted');
               finish();
             } catch (error) {
               state.error = error instanceof CliError ? error.message : String(error);

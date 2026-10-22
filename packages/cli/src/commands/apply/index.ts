@@ -14,6 +14,7 @@ import { assertIconFamily, iconCatalog, loadIconCatalog } from '@cli/utils/icon-
 import { logger, spinner } from '@cli/utils/logger.js';
 import { filterInstalledPackages, installPackagesWithRetry, suggestedRunner } from '@cli/utils/package-manager.js';
 import { getRegistryUrl } from '@cli/utils/registry.js';
+import { assertWorkingDirectory } from '@cli/utils/working-directory.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
@@ -85,7 +86,7 @@ export async function runApply(options: ApplyOptions): Promise<void> {
   }
 
   const cwd = path.resolve(options.cwd ?? process.cwd());
-  if (!existsSync(cwd)) throw new CliError(`The path ${cwd} does not exist. Please try again.`, 'INVALID_CWD');
+  assertWorkingDirectory(cwd);
 
   const config = await getConfig(cwd);
   if (!config) {

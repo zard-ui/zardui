@@ -23,6 +23,7 @@ import { logger, spinner } from '@cli/utils/logger.js';
 import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/package-manager.js';
 import { assertRegistryItems, fetchBlockFromRegistry, getRegistryUrl, takeIconGaps } from '@cli/utils/registry.js';
 import { loadStyleCatalog } from '@cli/utils/style-catalog.js';
+import { assertWorkingDirectory } from '@cli/utils/working-directory.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
@@ -146,7 +147,7 @@ export async function runAdd(components: string[], options: AddOptions): Promise
   } catch (error) {
     if (error instanceof WizardCancelledError) {
       printReport({ status: 'cancelled', headline: error.message, notes: ['No files were written.'] });
-      process.exit(0);
+      return;
     }
     throw error;
   }
@@ -291,9 +292,7 @@ function reportSuccess(installed: readonly string[], logs: readonly LogRecord[])
 }
 
 function validateWorkingDirectory(cwd: string): void {
-  if (!existsSync(cwd)) {
-    throw new CliError(`The path ${cwd} does not exist. Please try again.`, 'INVALID_CWD');
-  }
+  assertWorkingDirectory(cwd);
 }
 
 async function loadConfiguration(cwd: string): Promise<Config> {

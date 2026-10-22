@@ -286,6 +286,8 @@ export interface InitWizardOptions {
 export interface InitWizardResult {
   readonly config: Config;
   readonly logs: readonly LogRecord[];
+  /** Steps that had nothing to do, by label, with the reason. */
+  readonly skipped: ReadonlyMap<string, string>;
 }
 
 export async function runInitWizard(options: InitWizardOptions): Promise<InitWizardResult> {
@@ -316,6 +318,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
   };
 
   let config: Config | null = null;
+  const skipped = new Map<string, string>();
 
   const currentStep = (): Step => state.steps[state.stepIndex] as Step;
 
@@ -358,7 +361,8 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
       for (const step of steps) {
         state.taskStartedAt = Date.now();
         try {
-          await step.run();
+          const outcome = await step.run();
+          if (outcome && 'skipped' in outcome) skipped.set(step.label, outcome.skipped);
         } catch (error) {
           state.phase = 'failed';
           state.failure = `${step.label}: ${error instanceof Error ? error.message : String(error)}`;
@@ -638,7 +642,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     onKey,
   });
 
-  return { config: result.value, logs: result.logs };
+  return { config: result.value, logs: result.logs, skipped };
 }
 
 function displayValue(step: Step, state: State): string {

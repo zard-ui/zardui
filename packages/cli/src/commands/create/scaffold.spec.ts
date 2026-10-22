@@ -3,7 +3,8 @@ jest.mock('execa', () => ({ execa: (...args: unknown[]) => execaMock(...args) })
 
 import { failureHint, generatorEnv, runScaffold } from '@cli/commands/create/scaffold.js';
 import { templateById } from '@cli/commands/create/templates.js';
-import { existsSync } from 'node:fs';
+import { InterruptedError, setInterruptExit } from '@cli/utils/interrupt.js';
+import { existsSync, mkdirSync } from 'node:fs';
 import { mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import * as path from 'node:path';
@@ -183,5 +184,87 @@ describe('runScaffold output', () => {
     await runScaffold({ cwd, name: 'blog', template: angular, packageManager: 'npm' });
 
     expect(execaMock.mock.calls[1]?.[2]).toMatchObject({ stdout: 'inherit', stderr: 'inherit' });
+  });
+});
+
+describe('runScaffold interrupted', () => {
+  const template = templateById('analog') as NonNullable<ReturnType<typeof templateById>>;
+  let restore: () => void;
+  const exits: number[] = [];
+
+  beforeEach(() => {
+    execaMock.mockReset();
+    exits.length = 0;
+    restore = setInterruptExit(code => void exits.push(code));
+  });
+  afterEach(() => restore());
+
+  /** A generator that has written the project and then hangs until it is killed, like an install. */
+  function hangingGenerator(target: string): void {
+    execaMock.mockResolvedValueOnce({ stdout: '10.0.0' }).mockImplementationOnce(() => {
+      let fail: (error: Error) => void = () => undefined;
+      const child = new Promise((_, reject) => {
+        fail = reject;
+      }) as Promise<unknown> & { kill: jest.Mock };
+      child.kill = jest.fn(() => fail(Object.assign(new Error('terminated'), { signal: 'SIGTERM' })));
+      mkdirSync(target);
+      return child;
+    });
+  }
+
+  it('stops the generator and removes the directory it created, then reports the interruption', async () => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-scaffold-'));
+    const target = path.join(cwd, 'blog');
+    hangingGenerator(target);
+
+    const run = runScaffold({ cwd, name: 'blog', template, packageManager: 'npm' });
+    const outcome = expect(run).rejects.toBeInstanceOf(InterruptedError);
+    await new Promise(resolve => setTimeout(resolve, 50));
+    expect(existsSync(target)).toBe(true);
+
+    process.emit('SIGINT');
+    await outcome;
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    expect(existsSync(target)).toBe(false);
+    expect(exits).toEqual([130]);
+  });
+
+  it('treats a generator that dies of Ctrl+C as an interruption, not as a failed generator', async () => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-scaffold-'));
+    const target = path.join(cwd, 'blog');
+    execaMock.mockResolvedValueOnce({ stdout: '10.0.0' }).mockImplementationOnce(async () => {
+      await mkdir(target);
+      throw Object.assign(new Error('Command failed'), { exitCode: 3221225786 });
+    });
+
+    await expect(runScaffold({ cwd, name: 'blog', template, packageManager: 'npm' })).rejects.toMatchObject({
+      code: 'INTERRUPTED',
+    });
+    expect(existsSync(target)).toBe(false);
+  });
+
+  it('never touches a directory that was already there', async () => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-scaffold-'));
+    const target = path.join(cwd, 'blog');
+    await mkdir(target);
+    await writeFile(path.join(target, 'mine.txt'), 'keep');
+    execaMock.mockResolvedValueOnce({ stdout: '10.0.0' });
+
+    await expect(runScaffold({ cwd, name: 'blog', template, packageManager: 'npm' })).rejects.toMatchObject({
+      code: 'INVALID_NAME',
+    });
+    expect(await readFile(path.join(target, 'mine.txt'), 'utf8')).toBe('keep');
+    expect(execaMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('stops listening for signals once the run is over', async () => {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-scaffold-'));
+    const before = process.listenerCount('SIGINT');
+    execaMock.mockResolvedValue({ stdout: '10.0.0' });
+
+    await runScaffold({ cwd, name: 'blog', template, packageManager: 'npm' });
+
+    expect(process.listenerCount('SIGINT')).toBe(before);
   });
 });

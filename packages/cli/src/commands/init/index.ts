@@ -22,10 +22,12 @@ import { loadDesignData } from '@cli/utils/design-catalog.js';
 import { CliError } from '@cli/utils/errors.js';
 import { getProjectInfo, type ProjectInfo } from '@cli/utils/get-project-info.js';
 import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
+import { isInterrupting, throwIfInterrupted } from '@cli/utils/interrupt.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager, suggestedRunner } from '@cli/utils/package-manager.js';
 import { assertRegistryItems, assertRegistryReachable, getRegistryUrl } from '@cli/utils/registry.js';
 import { getAvailableThemes } from '@cli/utils/theme-selector.js';
+import { assertWorkingDirectory } from '@cli/utils/working-directory.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
@@ -132,7 +134,7 @@ export async function runInit(options: InitOptions): Promise<void> {
   }
 
   try {
-    const { config, logs } = await runInitWizard({
+    const { config, logs, skipped } = await runInitWizard({
       cwd,
       projectInfo,
       packageManager,
@@ -145,7 +147,7 @@ export async function runInit(options: InitOptions): Promise<void> {
       preset,
     });
 
-    reportSuccess(config, buildSteps(config), logs);
+    reportSuccess(config, buildSteps(config), logs, skipped);
   } catch (error) {
     if (error instanceof WizardCancelledError) {
       printReport({
@@ -153,7 +155,8 @@ export async function runInit(options: InitOptions): Promise<void> {
         headline: error.message,
         notes: ['Nothing was changed in your project.'],
       });
-      process.exit(0);
+      // Cancelling is not an error: exit code 0, reached by returning, not by `process.exit`.
+      return;
     }
     throw error;
   }
@@ -200,9 +203,7 @@ function logHeadlessReason(): void {
 }
 
 function validateWorkingDirectory(cwd: string): void {
-  if (!existsSync(cwd)) {
-    throw new CliError(`The path ${cwd} does not exist. Please try again.`, 'INVALID_CWD');
-  }
+  assertWorkingDirectory(cwd);
 }
 
 function validateAngularProject(projectInfo: ProjectInfo): void {
@@ -332,25 +333,43 @@ async function runHeadless(options: HeadlessOptions): Promise<void> {
 
   logger.info(options.isReInitializing ? 'Re-initializing zard/ui...' : 'Initializing zard/ui...');
 
+  const skipped = new Map<string, string>();
+
   for (const step of steps) {
+    throwIfInterrupted();
     const stepSpinner = spinner(`${step.label} — ${step.note}`).start();
     try {
-      await step.run();
-      stepSpinner.succeed(step.label);
+      const outcome = await step.run();
+      if (outcome && 'skipped' in outcome) {
+        skipped.set(step.label, outcome.skipped);
+        stepSpinner.skip(`${step.label} — skipped: ${outcome.skipped}`);
+      } else {
+        stepSpinner.succeed(step.label);
+      }
     } catch (error) {
-      stepSpinner.fail(`${step.label}: ${error instanceof Error ? error.message : String(error)}`);
+      // An interrupted step "failed" because it was killed: the interruption says so once, not this line.
+      if (isInterrupting()) stepSpinner.stop();
+      else stepSpinner.fail(`${step.label}: ${error instanceof Error ? error.message : String(error)}`);
       throw error;
     }
   }
 
-  if (!options.quiet) reportSuccess(config, steps, []);
+  if (!options.quiet) reportSuccess(config, steps, [], skipped);
 }
 
-function reportSuccess(config: Config, steps: readonly InitStep[], logs: readonly LogRecord[]): void {
+function reportSuccess(
+  config: Config,
+  steps: readonly InitStep[],
+  logs: readonly LogRecord[],
+  skipped: ReadonlyMap<string, string> = new Map(),
+): void {
   printReport({
     status: 'success',
     headline: 'zard/ui has been initialized successfully!',
-    items: steps.map(step => `${step.label} — ${step.note}`),
+    items: steps.filter(step => !skipped.has(step.label)).map(step => `${step.label} — ${step.note}`),
+    skipped: steps
+      .filter(step => skipped.has(step.label))
+      .map(step => `${step.label} — skipped: ${skipped.get(step.label)}`),
     notes: nextStepsFor(config),
     commands: [{ command: `${suggestedRunner(config.packageManager)} zard-cli add`, argument: '[component]' }],
     logs,

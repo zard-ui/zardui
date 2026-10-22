@@ -83,6 +83,13 @@ describe('resolvePreset', () => {
     if (code) expect(attempt).toThrow(code);
   });
 
+  it.each(['zzz', '', 'Z!'])('does not name a flag for %j typed into a prompt', code => {
+    const attempt = (): AppliedPreset => resolvePreset(code, 'pasted');
+
+    expect(attempt).toThrow(CliError);
+    expect(attempt).not.toThrow(/--preset/);
+  });
+
   it('carries the INVALID_PRESET code, which the CLI reports', () => {
     try {
       resolvePreset('b2D0wqNxT');

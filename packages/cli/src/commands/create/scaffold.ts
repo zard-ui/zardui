@@ -17,6 +17,14 @@ import {
   type TemplateOption,
 } from '@cli/commands/create/templates.js';
 import { CliError } from '@cli/utils/errors.js';
+import {
+  InterruptedError,
+  interruptedSoon,
+  onInterrupt,
+  terminate,
+  track,
+  type Running,
+} from '@cli/utils/interrupt.js';
 import { logger } from '@cli/utils/logger.js';
 import { existsSync } from 'node:fs';
 import { rm, writeFile } from 'node:fs/promises';
@@ -80,14 +88,34 @@ async function assertPackageManagerAvailable(packageManager: PackageManagerId): 
   }
 }
 
+/** Exit statuses that mean "killed by Ctrl+C" rather than "failed": 130 (POSIX) and STATUS_CONTROL_C_EXIT. */
+function wasInterrupted(error: unknown): boolean {
+  const { exitCode, signal } = (error ?? {}) as { exitCode?: number; signal?: string };
+  return signal === 'SIGINT' || signal === 'SIGTERM' || exitCode === 130 || exitCode === 3221225786;
+}
+
 /**
  * Creates the project in `<cwd>/<name>` and returns its path.
  *
+ * The directory belongs to this run from the moment it is checked to be absent until the generators
+ * finish: a failure or an interruption (Ctrl+C, the terminal closing) stops the generator and removes
+ * it. A directory that was already there is never touched.
+ *
  * @throws CliError `SCAFFOLD_FAILED` after removing whatever the generator wrote.
+ * @throws InterruptedError after the same removal, when the run was interrupted.
  */
 export async function runScaffold(plan: ScaffoldPlan): Promise<string> {
   const target = path.join(plan.cwd, plan.name);
   const version = await assertPackageManagerAvailable(plan.packageManager);
+
+  // The preflight checked this too; the generator is minutes long, and the check is the only thing
+  // standing between "ours to remove" and "somebody else's".
+  if (existsSync(target)) {
+    throw new CliError(
+      `"${plan.name}" already exists in ${plan.cwd}. Choose another name; create never writes into an existing directory.`,
+      'INVALID_NAME',
+    );
+  }
 
   let commands: ScaffoldCommand[] = scaffoldCommands(plan.template.value, plan.name, plan.packageManager);
   // Yarn Classic has no `dlx`; npx runs the generator and yarn still installs.
@@ -95,34 +123,85 @@ export async function runScaffold(plan: ScaffoldPlan): Promise<string> {
 
   const { execa } = await import('execa');
 
-  for (const item of commands) {
-    // The install of a generator that only writes files runs inside the project.
-    const cwd = item.inProject ? target : plan.cwd;
-    logger.info(`${item.label}...`);
-    logger.debug(`$ ${printable(item)}  (in ${cwd})`);
+  let running: Running | undefined;
+  let interrupted = false;
+  let discarded: Promise<boolean> | undefined;
 
-    try {
-      if (item.approveBuilds && plan.packageManager === 'pnpm') await approvePnpmBuilds(target);
+  // Once per run, however many paths ask: the signal handler and the failing generator both do.
+  const abandon = (): Promise<boolean> => {
+    discarded ??= (async () => {
+      if (running) terminate(running);
+      await running?.then(undefined, () => undefined);
+      return discard(target);
+    })();
+    return discarded;
+  };
 
-      const output = item.quiet ? 'pipe' : 'inherit';
-      const result = await execa(item.command, [...item.args], {
-        cwd,
-        env: generatorEnv(),
-        extendEnv: false,
-        stdin: 'ignore',
-        stdout: output,
-        stderr: output,
-      });
-      if (item.quiet) logger.debug([result?.stdout, result?.stderr].filter(Boolean).join(EOL));
-    } catch (error) {
-      await discard(target);
-      throw new CliError(
-        `${item.label} failed (${printable(item)}): ${error instanceof Error ? error.message : String(error)}. ` +
-          'The incomplete directory was removed.' +
-          failureHint(plan.template.value),
-        'SCAFFOLD_FAILED',
+  let interruptedError: Promise<InterruptedError> | undefined;
+  const interruption = (): Promise<InterruptedError> => {
+    interruptedError ??= (async () => {
+      const removed = await abandon();
+      return new InterruptedError(
+        removed
+          ? `Interrupted. The incomplete directory ${target} was removed.`
+          : `Interrupted. ${target} could not be removed completely: delete it before running create again.`,
       );
+    })();
+    return interruptedError;
+  };
+
+  const stopListening = onInterrupt(async () => {
+    interrupted = true;
+    (await interruption()).announce();
+  });
+
+  try {
+    for (const item of commands) {
+      if (interrupted) throw await interruption();
+
+      // The install of a generator that only writes files runs inside the project.
+      const cwd = item.inProject ? target : plan.cwd;
+      logger.info(`${item.label}...`);
+      logger.debug(`$ ${printable(item)}  (in ${cwd})`);
+
+      try {
+        if (item.approveBuilds && plan.packageManager === 'pnpm') await approvePnpmBuilds(target);
+
+        const output = item.quiet ? 'pipe' : 'inherit';
+        const child = track(
+          execa(item.command, [...item.args], {
+            cwd,
+            env: generatorEnv(),
+            extendEnv: false,
+            stdin: 'ignore',
+            stdout: output,
+            stderr: output,
+          }),
+        );
+        running = child;
+        const result = await child;
+        running = undefined;
+        if (item.quiet) logger.debug([result?.stdout, result?.stderr].filter(Boolean).join(EOL));
+      } catch (error) {
+        // Ctrl+C reaches the generator too, and it can report its death before our own handler runs.
+        if (interrupted || wasInterrupted(error) || (await interruptedSoon())) {
+          interrupted = true;
+          throw await interruption();
+        }
+
+        const removed = await abandon();
+        throw new CliError(
+          `${item.label} failed (${printable(item)}): ${error instanceof Error ? error.message : String(error)}. ` +
+            (removed
+              ? 'The incomplete directory was removed.'
+              : `${target} could not be removed completely: delete it before running create again.`) +
+            failureHint(plan.template.value),
+          'SCAFFOLD_FAILED',
+        );
+      }
     }
+  } finally {
+    stopListening();
   }
 
   return target;
@@ -155,13 +234,18 @@ export function failureHint(template: string): string {
   );
 }
 
-/** Removes a directory this run created. Only ever called on `<cwd>/<name>`, which did not exist before. */
-async function discard(target: string): Promise<void> {
-  if (!existsSync(target)) return;
+/**
+ * Removes a directory this run created. Only ever called on `<cwd>/<name>`, which did not exist before.
+ * Returns whether it is gone; a failure is reported, never swallowed.
+ */
+async function discard(target: string): Promise<boolean> {
+  if (!existsSync(target)) return true;
 
   try {
-    await rm(target, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+    await rm(target, { recursive: true, force: true, maxRetries: 10, retryDelay: 300 });
+    return !existsSync(target);
   } catch (error) {
     logger.warn(`Could not remove ${target}: ${error instanceof Error ? error.message : String(error)}`);
+    return false;
   }
 }

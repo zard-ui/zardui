@@ -97,6 +97,41 @@ describe('packageManagerFromEnvironment', () => {
   });
 });
 
+describe('parseFlags --cwd', () => {
+  const full = { template: 'angular', name: 'app', preset: 'Z0' };
+
+  it('names the path in one line when the directory does not exist', () => {
+    const cwd = path.join(tmpdir(), 'zard-no-such-dir', 'deeper');
+    let message = '';
+    try {
+      parseFlags({ ...full, cwd });
+    } catch (error) {
+      message = (error as Error).message;
+    }
+
+    expect(message).toContain(cwd);
+    expect(message).toContain('--cwd');
+    expect(message).not.toContain('\n');
+  });
+
+  it('resolves a relative --cwd before checking it', () => {
+    expect(codeOf(() => parseFlags({ ...full, cwd: './zard/does/not/exist' }))).toBe('INVALID_CWD');
+  });
+
+  it('refuses a file', async () => {
+    const dir = await mkdtemp(path.join(tmpdir(), 'zard-create-'));
+    const file = path.join(dir, 'a-file.txt');
+    await writeFile(file, 'x');
+
+    expect(codeOf(() => parseFlags({ ...full, cwd: file }))).toBe('INVALID_CWD');
+  });
+
+  it('accepts an existing directory', async () => {
+    const dir = await mkdtemp(path.join(tmpdir(), 'zard-create-'));
+    expect(parseFlags({ ...full, cwd: dir }).cwd).toBe(path.resolve(dir));
+  });
+});
+
 describe('assertHeadlessComplete', () => {
   const full = { template: 'angular', name: 'app', preset: 'Z0' };
 

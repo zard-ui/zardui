@@ -1,6 +1,7 @@
 import { detect } from '@antfu/ni';
 import { isCapturing } from '@cli/ui/log-sink.js';
 import { getConfig } from '@cli/utils/config.js';
+import { interruptedSoon, throwIfInterrupted, track } from '@cli/utils/interrupt.js';
 import { logger } from '@cli/utils/logger.js';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
@@ -119,6 +120,7 @@ export async function installPackages(
   isDev = false,
   legacyPeerDeps = false,
 ): Promise<void> {
+  throwIfInterrupted();
   const { execa } = await import('execa');
   const installCmd = await getInstallCommand(packageManager, isDev);
 
@@ -142,12 +144,14 @@ export async function installPackages(
       // stdin ignored, not piped: an open input pipe never sees EOF and the
       // package manager waits on it forever. Closing stdin also guarantees it
       // never opens a prompt, which would be invisible behind the full screen.
-      const result = await execa(packageManager, args, {
-        cwd,
-        stdin: 'ignore',
-        stdout: 'pipe',
-        stderr: 'pipe',
-      });
+      const result = await track(
+        execa(packageManager, args, {
+          cwd,
+          stdin: 'ignore',
+          stdout: 'pipe',
+          stderr: 'pipe',
+        }),
+      );
       logger.debug(`${command}\n${result.stdout}`);
     } catch (error) {
       // Without this the failure reaches the user as one generic line: the
@@ -163,7 +167,7 @@ export async function installPackages(
   // nothing to ask; inheriting a stdin that never closes (a pipe, CI, a
   // background job) leaves the manager waiting for an EOF that never comes —
   // output stays live because stdout and stderr are still inherited.
-  await execa(packageManager, args, { cwd, stdin: 'ignore', stdout: 'inherit', stderr: 'inherit' });
+  await track(execa(packageManager, args, { cwd, stdin: 'ignore', stdout: 'inherit', stderr: 'inherit' }));
 }
 
 function outputOf(error: unknown): string {
@@ -203,6 +207,8 @@ export async function installPackagesWithRetry(
     await installPackages(packages, cwd, packageManager, isDev);
   } catch (error) {
     if (!canRelaxPeers(packageManager)) throw error;
+    // A killed install is not a peer-resolution failure: do not start another one.
+    if (await interruptedSoon()) throw error;
 
     logger.warn('Installation failed, retrying with relaxed peer dependency resolution...');
     await installPackages(packages, cwd, packageManager, isDev, true);

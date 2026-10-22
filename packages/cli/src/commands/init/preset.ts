@@ -17,15 +17,20 @@ import { CliError } from '@cli/utils/errors.js';
  * `--preset` as the user typed it — `Z3k`, `--preset Z3k`, a whole pasted command — resolved to the
  * design and its canonical code.
  *
+ * `source` says where it came from, only to word the error: `--preset` for a flag, the bare reason for
+ * a code typed into a prompt.
+ *
  * @throws CliError `INVALID_PRESET`, with the offending input in the message.
  */
-export function resolvePreset(input: string): AppliedPreset {
+export function resolvePreset(input: string, source: 'flag' | 'pasted' = 'flag'): AppliedPreset {
   try {
     const design = decodePreset(extractPresetCode(input));
     return { design, code: encodePreset(design) };
   } catch (error) {
     if (error instanceof PresetError) {
-      throw new CliError(`Invalid --preset: ${error.message}`, 'INVALID_PRESET');
+      // A code pasted into a prompt was never a flag: naming `--preset` there points at something
+      // the user did not type.
+      throw new CliError(source === 'flag' ? `Invalid --preset: ${error.message}` : error.message, 'INVALID_PRESET');
     }
     throw error;
   }

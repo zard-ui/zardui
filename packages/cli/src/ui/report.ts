@@ -25,6 +25,8 @@ export interface Report {
   readonly headline: string;
   /** What was actually done. */
   readonly items?: readonly string[];
+  /** What was left undone on purpose, and why — not a failure, but not a ✔ either. */
+  readonly skipped?: readonly string[];
   /** Supporting text, shown in a secondary tone. */
   readonly notes?: readonly string[];
   /** Suggested next steps. */
@@ -52,6 +54,11 @@ export function printReport(report: Report): void {
   if (report.items?.length) {
     writeLine();
     for (const item of report.items) writeLine(`  ${style.success('✔')} ${item}`);
+  }
+
+  if (report.skipped?.length) {
+    if (!report.items?.length) writeLine();
+    for (const item of report.skipped) writeLine(`  ${style.warning('–')} ${item}`);
   }
 
   if (report.notes?.length) {

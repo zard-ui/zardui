@@ -3,6 +3,7 @@ import * as path from 'path';
 
 import { iconPackagesFor, symbolFor } from '../../core/icons/index.js';
 import { Config } from '../../utils/config.js';
+import { CliError } from '../../utils/errors.js';
 import { iconCatalog } from '../../utils/icon-catalog.js';
 import { logger } from '../../utils/logger.js';
 import {
@@ -170,8 +171,7 @@ export async function resolveDependencies(
   }
 
   if (!componentMetas.length) {
-    logger.error('Selected components not found in registry.');
-    process.exit(1);
+    throw new CliError('Selected components not found in registry.', 'COMPONENT_NOT_FOUND');
   }
 
   const dependenciesToInstall = new Set<string>();

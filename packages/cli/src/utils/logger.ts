@@ -63,6 +63,8 @@ export interface Spinner {
   stop(): Spinner;
   succeed(text?: string): Spinner;
   fail(text?: string): Spinner;
+  /** Ends the task as skipped: neither done nor failed. */
+  skip(text?: string): Spinner;
 }
 
 const FRAMES = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
@@ -124,6 +126,9 @@ export function spinner(text: string): Spinner {
     },
     fail(message?: string) {
       return finish('error', message);
+    },
+    skip(message?: string) {
+      return finish('warn', message);
     },
   };
 

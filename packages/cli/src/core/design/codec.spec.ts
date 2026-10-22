@@ -243,6 +243,19 @@ describe('malformed and foreign codes', () => {
     expect(reasonOf('Zzzzzzzzzz')).toBe('newer');
   });
 
+  it('does not claim a code with too many digits is from a newer CLI: it may be made up', () => {
+    let message = '';
+    try {
+      decodePreset('Zzzzzzzzzz');
+    } catch (error) {
+      message = (error as Error).message;
+    }
+
+    expect(message).toContain('is not a valid preset code');
+    expect(message).toContain('If it was made by a newer zard-cli');
+    expect(message).not.toContain('has more options');
+  });
+
   it('refuses an index past the end of a table, as one from a newer CLI', () => {
     // style index 31: five bits all set, the rest zero
     expect(reasonOf('ZV')).toBe('newer'); // V = 31

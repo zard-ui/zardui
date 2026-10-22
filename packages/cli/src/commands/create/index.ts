@@ -24,6 +24,7 @@ import { isInteractive, printReport, WizardCancelledError } from '@cli/ui/index.
 import { loadDesignData } from '@cli/utils/design-catalog.js';
 import { CliError } from '@cli/utils/errors.js';
 import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
+import { InterruptedError, interruptedSoon, onInterrupt, throwIfInterrupted } from '@cli/utils/interrupt.js';
 import { logger } from '@cli/utils/logger.js';
 import { suggestedRunner } from '@cli/utils/package-manager.js';
 import { assertRegistryReachable, getRegistryUrl } from '@cli/utils/registry.js';
@@ -76,22 +77,33 @@ export async function runCreate(options: CreateOptions): Promise<void> {
   }
 
   const plan = interactive ? await askForMissing(options, parsed) : planFromFlags(options, parsed);
+  // The wizard was cancelled: it said so, nothing was created, and the exit code is 0.
+  if (!plan) return;
 
   await preflight(plan, options.allowNested);
 
   const scaffolded = await runScaffold(plan);
 
+  // The project exists and is installed; only the zard/ui part can still fail or be interrupted. Say how
+  // to resume instead of deleting work that took minutes to produce.
+  const resume = (): string =>
+    `The ${plan.template.label} project was created in ${scaffolded}, but configuring it did not finish. ` +
+    `Resume with: cd ${plan.name} && npx zard-cli init --preset ${plan.preset.code} --type ${plan.template.kind} --yes`;
+
+  const interruption = new InterruptedError(`Interrupted. ${resume()}`);
+  const stopListening = onInterrupt(() => interruption.announce());
+
   try {
     await configure(plan, options);
+    if (await interruptedSoon(0)) throw interruption;
   } catch (error) {
-    // The project exists and is installed; only the zard/ui part failed. Say how to resume instead of
-    // deleting work that took minutes to produce.
+    if (await interruptedSoon()) throw interruption;
+
     logger.break();
-    logger.warn(
-      `The ${plan.template.label} project was created in ${scaffolded}, but configuring it failed. ` +
-        `Resume with: cd ${plan.name} && npx zard-cli init --preset ${plan.preset.code} --type ${plan.template.kind} --yes`,
-    );
+    logger.warn(resume());
     throw error;
+  } finally {
+    stopListening();
   }
 
   report(plan, options);
@@ -109,7 +121,7 @@ function planFromFlags(options: CreateOptions, parsed: ParsedFlags): Plan {
 }
 
 /** Interactive: ask only what the flags left open, and never guess the template. */
-async function askForMissing(options: CreateOptions, parsed: ParsedFlags): Promise<Plan> {
+async function askForMissing(options: CreateOptions, parsed: ParsedFlags): Promise<Plan | undefined> {
   // `--yes` accepts the default design; it never picks the template or the name.
   const preset = parsed.preset ?? (options.yes ? resolvePreset(DEFAULT_PRESET_CODE) : undefined);
 
@@ -134,7 +146,7 @@ async function askForMissing(options: CreateOptions, parsed: ParsedFlags): Promi
   } catch (error) {
     if (error instanceof WizardCancelledError) {
       printReport({ status: 'cancelled', headline: error.message, notes: ['Nothing was created.'] });
-      process.exit(0);
+      return undefined;
     }
     throw error;
   }
@@ -177,6 +189,7 @@ async function configure(plan: Plan, options: CreateOptions): Promise<void> {
     quiet: true,
   });
 
+  throwIfInterrupted();
   await runAdd(['button'], { yes: true, overwrite: false, all: false, cwd: target, headless: true, quiet: true });
 }
 

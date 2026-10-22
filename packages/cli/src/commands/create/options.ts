@@ -15,6 +15,7 @@ import {
 import { type AppliedPreset } from '@cli/commands/init/config-prompter.js';
 import { resolvePreset } from '@cli/commands/init/preset.js';
 import { CliError } from '@cli/utils/errors.js';
+import { workingDirectoryProblem } from '@cli/utils/working-directory.js';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
 
@@ -142,6 +143,9 @@ export function parseFlags(options: CreateOptions): ParsedFlags {
   const packageManager = resolvePackageManager(options.packageManager) ?? packageManagerFromEnvironment();
   const preset = options.preset !== undefined ? resolvePreset(options.preset) : undefined;
   const cwd = path.resolve(options.cwd ?? process.cwd());
+
+  const cwdError = workingDirectoryProblem(cwd);
+  if (cwdError) throw new CliError(`--cwd ${cwd} ${cwdError}. Pass an existing directory.`, 'INVALID_CWD');
 
   if (options.name !== undefined) {
     const problem = nameProblem(options.name) ?? targetProblem(cwd, options.name);

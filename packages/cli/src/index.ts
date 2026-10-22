@@ -5,6 +5,7 @@ import { init } from '@cli/commands/init/index.js';
 import { APP_VERSION } from '@cli/constants/app.constants.js';
 import { style } from '@cli/ui/style.js';
 import { CliError } from '@cli/utils/errors.js';
+import { INTERRUPTED_EXIT_CODE, InterruptedError, onInterrupt } from '@cli/utils/interrupt.js';
 import { enableDebug, isDebugEnabled, logger } from '@cli/utils/logger.js';
 import { Command } from 'commander';
 
@@ -19,6 +20,10 @@ function checkDeprecatedPackageName(): void {
 
 async function main() {
   checkDeprecatedPackageName();
+
+  // Every command: Ctrl+C (or a closing terminal) stops the processes the CLI started and leaves with 130.
+  // Commands that own something to undo (create) add their own cleanup on top.
+  onInterrupt(() => undefined);
 
   const program = new Command()
     .name('zard-cli')
@@ -41,6 +46,13 @@ async function main() {
 }
 
 main().catch(error => {
+  if (error instanceof InterruptedError) {
+    // The interrupted run already undid its work; this only says so and sets the code.
+    error.announce();
+    process.exitCode = INTERRUPTED_EXIT_CODE;
+    return;
+  }
+
   if (error instanceof CliError) {
     logger.error(error.message);
     if (isDebugEnabled()) {
@@ -53,5 +65,10 @@ main().catch(error => {
       console.error(error);
     }
   }
-  process.exit(1);
+  // Not `process.exit`: leaving while stdin or the network still have handles closing aborts Node on
+  // Windows (`Assertion failed: !(handle->flags & UV_HANDLE_CLOSING)`, exit 127). Setting the code and
+  // letting the loop drain exits with it. The timer is the way out for a handle that never closes; it is
+  // unref'd, so it does not keep a process that is already finished alive.
+  process.exitCode = 1;
+  setTimeout(() => process.exit(1), 2000).unref();
 });
