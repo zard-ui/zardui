@@ -21,7 +21,8 @@ test.describe('Bubble RTL', () => {
     // zAlign="end" is the left edge in RTL, zAlign="start" the right edge.
     expect(end!.x + end!.width / 2).toBeLessThan(start!.x + start!.width / 2);
     const reactions = preview.locator('z-bubble-reactions').first();
-    await expect(reactions).toHaveClass(/start-3/);
+    // zAlign="start" anchors the reactions to the inline start edge (right in RTL).
+    await expect(reactions).toHaveCSS('right', '12px');
 
     await checkA11y(page, '#rtl z-demo-bubble-rtl', ['color-contrast', 'button-name']);
   });

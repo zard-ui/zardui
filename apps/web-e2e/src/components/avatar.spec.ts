@@ -24,7 +24,7 @@ test.describe('Avatar component', () => {
     const validAvatar = demoPage.firstDemoBox.locator('z-avatar').first();
     const image = validAvatar.locator('img');
 
-    await expect(image).toHaveClass(/opacity-100/);
+    await expect(image).toHaveCSS('opacity', '1');
     await expect(image).toHaveJSProperty('complete', true);
   });
 
@@ -41,8 +41,8 @@ test.describe('Avatar component', () => {
     // (absolutely positioned) so neither one can be squeezed by the other while loading.
     const validAvatar = demoPage.firstDemoBox.locator('z-avatar').first();
 
-    await expect(validAvatar.locator('span')).toHaveClass(/absolute/);
-    await expect(validAvatar.locator('img')).toHaveClass(/absolute/);
+    await expect(validAvatar.locator('span')).toHaveCSS('position', 'absolute');
+    await expect(validAvatar.locator('img')).toHaveCSS('position', 'absolute');
   });
 
   test('avatar box does not resize once the image has loaded', async () => {
