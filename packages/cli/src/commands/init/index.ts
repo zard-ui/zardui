@@ -147,7 +147,7 @@ export async function runInit(options: InitOptions): Promise<void> {
       preset,
     });
 
-    reportSuccess(config, buildSteps(config), logs, skipped);
+    reportSuccess(cwd, config, buildSteps(config), logs, skipped);
   } catch (error) {
     if (error instanceof WizardCancelledError) {
       printReport({
@@ -354,10 +354,11 @@ async function runHeadless(options: HeadlessOptions): Promise<void> {
     }
   }
 
-  if (!options.quiet) reportSuccess(config, steps, [], skipped);
+  if (!options.quiet) reportSuccess(options.cwd, config, steps, [], skipped);
 }
 
 function reportSuccess(
+  cwd: string,
   config: Config,
   steps: readonly InitStep[],
   logs: readonly LogRecord[],
@@ -371,7 +372,7 @@ function reportSuccess(
       .filter(step => skipped.has(step.label))
       .map(step => `${step.label} — skipped: ${skipped.get(step.label)}`),
     notes: nextStepsFor(config),
-    commands: [{ command: `${suggestedRunner(config.packageManager)} zard-cli add`, argument: '[component]' }],
+    commands: [{ command: `${suggestedRunner(config.packageManager, cwd)} zard-cli add`, argument: '[component]' }],
     logs,
   });
 }

@@ -19,7 +19,7 @@ pnpm dlx zard-cli add button
 ```
 
 ```bash tab="yarn" copyButton
-yarn zard-cli add button
+npx zard-cli add button
 ```
 
 ```bash tab="bun" copyButton

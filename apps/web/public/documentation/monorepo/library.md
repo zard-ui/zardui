@@ -7,7 +7,7 @@ pnpm dlx zard-cli@latest init --type nx-library --project ui
 ```
 
 ```bash tab="yarn" copyButton
-yarn zard-cli@latest init --type nx-library --project ui
+npx zard-cli@latest init --type nx-library --project ui
 ```
 
 ```bash tab="bun" copyButton

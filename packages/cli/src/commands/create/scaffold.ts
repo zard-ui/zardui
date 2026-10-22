@@ -26,6 +26,7 @@ import {
   type Running,
 } from '@cli/utils/interrupt.js';
 import { logger } from '@cli/utils/logger.js';
+import { isYarnClassic } from '@cli/utils/yarn.js';
 import { existsSync } from 'node:fs';
 import { rm, writeFile } from 'node:fs/promises';
 import { EOL } from 'node:os';
@@ -119,7 +120,7 @@ export async function runScaffold(plan: ScaffoldPlan): Promise<string> {
 
   let commands: ScaffoldCommand[] = scaffoldCommands(plan.template.value, plan.name, plan.packageManager);
   // Yarn Classic has no `dlx`; npx runs the generator and yarn still installs.
-  if (plan.packageManager === 'yarn' && Number.parseInt(version, 10) < 2) commands = withNpxRunner(commands);
+  if (plan.packageManager === 'yarn' && isYarnClassic(version)) commands = withNpxRunner(commands);
 
   const { execa } = await import('execa');
 

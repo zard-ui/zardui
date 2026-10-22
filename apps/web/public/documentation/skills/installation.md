@@ -7,7 +7,7 @@ pnpm dlx skills add https://github.com/zard-ui/zardui --skill zard
 ```
 
 ```bash tab="yarn" copyButton
-yarn dlx skills add https://github.com/zard-ui/zardui --skill zard
+npx skills add https://github.com/zard-ui/zardui --skill zard
 ```
 
 ```bash tab="bun" copyButton
@@ -25,7 +25,7 @@ pnpm dlx skills add https://github.com/zard-ui/zardui --skill zard-migration
 ```
 
 ```bash tab="yarn" copyButton
-yarn dlx skills add https://github.com/zard-ui/zardui --skill zard-migration
+npx skills add https://github.com/zard-ui/zardui --skill zard-migration
 ```
 
 ```bash tab="bun" copyButton

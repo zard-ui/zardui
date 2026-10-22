@@ -7,7 +7,7 @@ pnpm dlx zard-cli@latest init
 ```
 
 ```bash tab="yarn" copyButton
-yarn zard-cli@latest init
+npx zard-cli@latest init
 ```
 
 ```bash tab="bun" copyButton

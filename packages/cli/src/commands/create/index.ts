@@ -214,7 +214,10 @@ function report(plan: Plan, options: CreateOptions): void {
     commands: [
       { command: `cd ${plan.name}` },
       { command: run },
-      { command: `${suggestedRunner(plan.packageManager)} zard-cli add`, argument: '[component]' },
+      {
+        command: `${suggestedRunner(plan.packageManager, path.join(plan.cwd, plan.name))} zard-cli add`,
+        argument: '[component]',
+      },
     ],
   });
 }

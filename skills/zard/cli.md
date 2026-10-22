@@ -7,7 +7,7 @@ The package is `zard-cli`. Run it with the project's own runner:
 ```bash
 npx zard-cli <command>
 pnpm dlx zard-cli <command>
-yarn zard-cli <command>
+npx zard-cli <command>   # yarn too: `yarn dlx` does not exist in Yarn 1
 bunx zard-cli <command>
 ```
 

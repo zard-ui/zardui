@@ -11,11 +11,17 @@ export type CreateTemplate = (typeof TEMPLATES)[number]['value'];
 
 export type ApplyScope = 'full' | 'theme' | 'font';
 
-/** How each package manager runs a package without installing it. These strings are what the CLI docs print too. */
+/**
+ * How each package manager runs a package without installing it. These strings are what the CLI docs print too.
+ *
+ * Yarn runs `npx`: `yarn dlx` exists only from Yarn 2, and Yarn Classic (1.x) answers `Command "dlx" not found`,
+ * while `npx` works under both. shadcn's yarn tab does the same. Since `npx` tells `create` the manager is npm,
+ * the new-project command names yarn with `--package-manager`.
+ */
 const RUNNERS: Record<PackageManager, string> = {
   npm: 'npx zard-cli@latest',
   pnpm: 'pnpm dlx zard-cli@latest',
-  yarn: 'yarn dlx zard-cli@latest',
+  yarn: 'npx zard-cli@latest',
   bun: 'bunx zard-cli@latest',
 };
 
@@ -50,6 +56,7 @@ export function newProjectCommand(options: NewProjectOptions): string {
     '--template',
     options.template,
   ];
+  if (options.manager === 'yarn') parts.push('--package-manager', 'yarn');
   if (options.pointer) parts.push('--pointer');
   if (options.rtl) parts.push('--rtl');
   return parts.join(' ');

@@ -3,6 +3,7 @@ import { isCapturing } from '@cli/ui/log-sink.js';
 import { getConfig } from '@cli/utils/config.js';
 import { interruptedSoon, throwIfInterrupted, track } from '@cli/utils/interrupt.js';
 import { logger } from '@cli/utils/logger.js';
+import { probeYarnMajor, yarnMajorOf } from '@cli/utils/yarn.js';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import * as path from 'node:path';
@@ -54,6 +55,14 @@ const RUNNER: Record<PackageManager, string> = {
 };
 
 /**
+ * `yarn dlx` only exists from Yarn 2. Yarn Classic — still what a plain `yarn` is for many people — answers
+ * `Command "dlx" not found`, so anything that is not known to be Berry gets `npx`, which both can run.
+ */
+function yarnRunner(major: number | null): string {
+  return major !== null && major >= 2 ? RUNNER.yarn : RUNNER.npm;
+}
+
+/**
  * How to suggest running the CLI again.
  *
  * A different question: not which manager the project installs dependencies
@@ -61,16 +70,20 @@ const RUNNER: Record<PackageManager, string> = {
  * in a bun project does not expect to finish reading `bunx` — and the `npx`
  * they already used works. Only when that cannot be known does the project's
  * manager answer.
+ *
+ * Yarn is the exception that needs its version: the user agent of a `yarn`
+ * invocation carries it (`yarn/1.22.19`); for a project that merely uses yarn,
+ * the version is asked of yarn inside `cwd`.
  */
-export function suggestedRunner(packageManager: PackageManager): string {
+export function suggestedRunner(packageManager: PackageManager, cwd: string = process.cwd()): string {
   const userAgent = process.env.npm_config_user_agent || '';
 
   if (userAgent.startsWith('bun')) return RUNNER.bun;
   if (userAgent.startsWith('pnpm')) return RUNNER.pnpm;
-  if (userAgent.startsWith('yarn')) return RUNNER.yarn;
+  if (userAgent.startsWith('yarn')) return yarnRunner(yarnMajorOf(userAgent.split(' ')[0]));
   if (userAgent.startsWith('npm')) return RUNNER.npm;
 
-  return RUNNER[packageManager];
+  return packageManager === 'yarn' ? yarnRunner(probeYarnMajor(cwd)) : RUNNER[packageManager];
 }
 
 /** The package.json `packageManager` field — the Corepack standard, an explicit declaration. */

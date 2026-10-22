@@ -184,7 +184,7 @@ async function findLeftovers(input: LeftoverInput): Promise<{ notes: string[]; c
   const { cwd, config, design, parts, isFull, before } = input;
   const notes: string[] = [];
   const commands: ReportCommand[] = [];
-  const runner = suggestedRunner(config.packageManager);
+  const runner = suggestedRunner(config.packageManager, cwd);
 
   // Only a full preset writes the look of the components; a part never does.
   if (!isFull && parts.includes('theme')) {

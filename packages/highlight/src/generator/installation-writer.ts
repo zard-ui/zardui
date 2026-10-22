@@ -97,7 +97,7 @@ async function generateCliFiles(componentName: string, deps: ComponentDependency
   const addTabs = await buildPackageManagerTabs([
     { manager: 'npm', command: `npx zard-cli@latest add ${componentName}` },
     { manager: 'pnpm', command: `pnpm dlx zard-cli@latest add ${componentName}` },
-    { manager: 'yarn', command: `yarn dlx zard-cli@latest add ${componentName}` },
+    { manager: 'yarn', command: `npx zard-cli@latest add ${componentName}` },
     { manager: 'bun', command: `bunx zard-cli@latest add ${componentName}` },
   ]);
 

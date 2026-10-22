@@ -6,7 +6,7 @@ describe('create commands', () => {
   it.each([
     ['npm', 'npx zard-cli@latest create my-app --preset Z3k --template angular'],
     ['pnpm', 'pnpm dlx zard-cli@latest create my-app --preset Z3k --template angular'],
-    ['yarn', 'yarn dlx zard-cli@latest create my-app --preset Z3k --template angular'],
+    ['yarn', 'npx zard-cli@latest create my-app --preset Z3k --template angular --package-manager yarn'],
     ['bun', 'bunx zard-cli@latest create my-app --preset Z3k --template angular'],
   ] as const)('prints the new-project command for %s', (manager, command) => {
     expect(newProjectCommand({ ...base, manager })).toBe(command);
@@ -18,6 +18,16 @@ describe('create commands', () => {
     );
     expect(newProjectCommand({ ...base, manager: 'npm', template: 'analog', rtl: true })).toBe(
       'npx zard-cli@latest create my-app --preset Z3k --template analog --rtl',
+    );
+  });
+
+  it('never prints yarn dlx, which Yarn Classic does not have', () => {
+    for (const manager of PACKAGE_MANAGERS) {
+      expect(newProjectCommand({ ...base, manager })).not.toContain('yarn dlx');
+      expect(existingProjectCommand({ manager, preset: 'Z3k', scope: 'full' })).not.toContain('yarn dlx');
+    }
+    expect(existingProjectCommand({ manager: 'yarn', preset: 'Z3k', scope: 'full' })).toBe(
+      'npx zard-cli@latest apply --preset Z3k',
     );
   });
 

@@ -9,7 +9,7 @@ allowed-tools: Bash(npx zard-cli *), Bash(pnpm dlx zard-cli *), Bash(bunx --bun 
 
 An Angular component library. Components are installed as source code into the user's project by the CLI — there is no runtime package to import from, and no component to `npm install`.
 
-> **IMPORTANT:** Run every CLI command with the project's own package runner: `npx zard-cli`, `pnpm dlx zard-cli`, `yarn zard-cli`, or `bunx zard-cli` — pick the one matching `packageManager` in `components.json`. The examples below use `npx zard-cli`; substitute the right runner.
+> **IMPORTANT:** Run every CLI command with the project's own package runner: `npx zard-cli`, `pnpm dlx zard-cli`, or `bunx zard-cli` (yarn uses `npx zard-cli` too: `yarn dlx` does not exist in Yarn 1) — pick the one matching `packageManager` in `components.json`. The examples below use `npx zard-cli`; substitute the right runner.
 
 ## Current Project Context
 

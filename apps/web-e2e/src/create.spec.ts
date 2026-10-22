@@ -406,7 +406,8 @@ test.describe('Create builder', () => {
       await dialog.locator('[data-manager="pnpm"]').first().click();
       await expect(command).toContainText('pnpm dlx zard-cli@latest create my-app');
       await dialog.locator('[data-manager="yarn"]').first().click();
-      await expect(command).toContainText('yarn dlx zard-cli@latest create my-app');
+      await expect(command).toContainText('npx zard-cli@latest create my-app');
+      await expect(command).toContainText('--package-manager yarn');
       await dialog.locator('[data-manager="bun"]').first().click();
       await expect(command).toContainText('bunx zard-cli@latest create my-app');
 

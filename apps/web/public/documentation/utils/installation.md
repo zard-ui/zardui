@@ -13,7 +13,7 @@ pnpm dlx zard-cli add utilities
 ```
 
 ```bash tab="yarn" copyButton
-yarn dlx zard-cli add utilities
+npx zard-cli add utilities
 ```
 
 ```bash tab="bun" copyButton
