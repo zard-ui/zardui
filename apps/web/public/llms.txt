@@ -46,6 +46,7 @@
 - [Button Group](https://zardui.com/docs/components/button-group): Groups buttons together.
 - [Calendar](https://zardui.com/docs/components/calendar): A calendar component that allows users to select a date or a range of dates.
 - [Checkbox](https://zardui.com/docs/components/checkbox): A control that allows the user to toggle between checked and not checked.
+- [Color Picker](https://zardui.com/docs/components/color-picker): A swatch button that opens a panel to pick a color, with optional alpha and presets.
 - [Combobox](https://zardui.com/docs/components/combobox): Autocomplete input and command palette with a list of suggestions.
 - [Date Picker](https://zardui.com/docs/components/date-picker): A button that opens a calendar in a popover to pick one date, several dates, or a date range.
 - [Field](https://zardui.com/docs/components/field): Composable building blocks for accessible form layouts with labels, descriptions and errors.

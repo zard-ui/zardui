@@ -173,6 +173,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/collapsible/demo/collapsible').then(m => m.COLLAPSIBLE),
   },
   {
+    componentName: 'color-picker',
+    description: 'A swatch button that opens a panel to pick a color, with optional alpha and presets.',
+    category: 'Form & Input',
+    loadData: () => import('@zard/components/color-picker/demo/color-picker').then(m => m.COLOR_PICKER),
+  },
+  {
     componentName: 'combobox',
     description: 'Autocomplete input and command palette with a list of suggestions.',
     category: 'Form & Input',
