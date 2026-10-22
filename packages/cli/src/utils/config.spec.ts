@@ -145,6 +145,54 @@ describe('getConfig', () => {
     it('should reject a menu setting that does not exist', async () => {
       await expect(load({ menuAccent: 'loud' })).rejects.toThrow(ConfigError);
     });
+
+    describe('values from a newer CLI', () => {
+      it('should name the field and the value, and suggest updating, for an unknown style', async () => {
+        const error = await load({ style: 'brutalist' }).catch(e => e);
+
+        expect(error).toBeInstanceOf(ConfigError);
+        expect(error.message).toContain('"style" is "brutalist"');
+        expect(error.message).toContain('nova');
+        expect(error.message).toContain('npx zard-cli@latest');
+      });
+
+      it.each([
+        ['menuColor', 'neon'],
+        ['menuAppearance', 'frosted'],
+        ['menuAccent', 'loud'],
+        ['projectType', 'astro'],
+      ])('should name %s and suggest updating for the unknown value "%s"', async (field, value) => {
+        const error = await load({ [field]: value }).catch(e => e);
+
+        expect(error.message).toContain(`"${field}" is "${value}"`);
+        expect(error.message).toContain('npx zard-cli@latest');
+      });
+
+      it('should not suggest updating for a value that cannot be a newer id', async () => {
+        const error = await load({ style: 'Not An Id!' }).catch(e => e);
+
+        expect(error.message).toContain('"style" is "Not An Id!"');
+        expect(error.message).not.toContain('zard-cli@latest');
+      });
+
+      it('should not suggest updating for a wrong type, and still name the field', async () => {
+        const error = await load({ rtl: 'yes' }).catch(e => e);
+
+        expect(error.message).toContain('"rtl"');
+        expect(error.message).not.toContain('zard-cli@latest');
+      });
+
+      it('should name every offending field', async () => {
+        const error = await load({ style: 'brutalist', menuAccent: 'loud' }).catch(e => e);
+
+        expect(error.message).toContain('"style"');
+        expect(error.message).toContain('"menuAccent"');
+      });
+
+      it('should ignore fields it does not know instead of failing', async () => {
+        expect((await load({ style: 'nova', futureThing: { a: 1 } }))!.style).toBe('nova');
+      });
+    });
   });
 
   it('should re-throw ConfigError from validateRegistryUrl', async () => {

@@ -1,3 +1,4 @@
+import { CONFIG_STYLES, MENU_ACCENT_IDS, MENU_APPEARANCE_IDS, MENU_COLOR_IDS } from '@cli/core/design/options.js';
 import { DEFAULT_CONFIG } from '@cli/utils/config.js';
 import { existsSync, readFileSync } from 'node:fs';
 import * as path from 'node:path';
@@ -47,5 +48,18 @@ describe('the published components.json schema', () => {
     expect(Object.keys(schema.properties['aliases']?.properties ?? {}).sort()).toEqual(
       Object.keys(DEFAULT_CONFIG.aliases).sort(),
     );
+  });
+
+  // `style` stays an enum in the schema (as shadcn's does): the schema is served live from zardui.com,
+  // so it always lists what the latest CLI writes, and an editor flags a typo. The price is that the
+  // list must move with the CLI, which this keeps honest. See task #84.
+  (available ? it : it.skip)('lists exactly the closed values the CLI accepts', () => {
+    const schema = JSON.parse(readFileSync(SCHEMA, 'utf8')) as { properties: Record<string, { enum?: string[] }> };
+    const enumOf = (field: string) => [...(schema.properties[field]?.enum ?? [])].sort();
+
+    expect(enumOf('style')).toEqual([...CONFIG_STYLES].sort());
+    expect(enumOf('menuColor')).toEqual([...MENU_COLOR_IDS].sort());
+    expect(enumOf('menuAppearance')).toEqual([...MENU_APPEARANCE_IDS].sort());
+    expect(enumOf('menuAccent')).toEqual([...MENU_ACCENT_IDS].sort());
   });
 });

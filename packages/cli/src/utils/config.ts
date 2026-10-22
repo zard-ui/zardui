@@ -1,3 +1,4 @@
+import { APP_VERSION } from '@cli/constants/app.constants.js';
 import { CONFIG_STYLES, MENU_ACCENT_IDS, MENU_APPEARANCE_IDS, MENU_COLOR_IDS } from '@cli/core/design/options.js';
 import { SOURCE_ICON_FAMILY } from '@cli/core/icons/index.js';
 import { ConfigError } from '@cli/utils/errors.js';
@@ -109,7 +110,9 @@ export async function getConfig(cwd: string): Promise<Config | null> {
 
   try {
     const configJson = await readJson(configPath);
-    const config = configSchema.parse(configJson);
+    const parsed = configSchema.safeParse(configJson);
+    if (!parsed.success) throw new ConfigError(describeConfigIssues(parsed.error, configJson));
+    const config = parsed.data;
 
     if (config.registryUrl) {
       const { validateRegistryUrl } = await import('@cli/utils/registry.js');
@@ -121,6 +124,51 @@ export async function getConfig(cwd: string): Promise<Config | null> {
     if (error instanceof ConfigError) throw error;
     throw new ConfigError('Invalid configuration file: components.json');
   }
+}
+
+/** What a value from a newer CLI looks like: a short lowercase identifier (`brutalist`, `high-contrast`). */
+const LOOKS_LIKE_AN_ID = /^[a-z][a-z0-9-]{0,31}$/;
+
+const UPDATE_HINT = 'update with `npx zard-cli@latest` (or `npm i -g zard-cli@latest`).';
+
+/**
+ * Turns the zod issues of a components.json into a message that names the field.
+ *
+ * "Invalid configuration file: components.json" was all a value this CLI does not
+ * know produced. When the field is a closed list (style, menu settings, project
+ * type, package manager) and the value is shaped like an id, the likeliest cause
+ * is a file written by a newer zard-cli, so the message says that and how to
+ * update. Anything else (wrong type, garbage) is reported as a plain invalid
+ * value, without the update advice: telling someone to update for a typo would
+ * be a lie.
+ *
+ * This only helps for values a newer CLI introduces AFTER this one: published
+ * versions that predate it keep their own message and cannot be patched.
+ */
+export function describeConfigIssues(error: z.ZodError, input: unknown): string {
+  const lines = error.issues.map(issue => {
+    const field = issue.path.length ? issue.path.join('.') : 'components.json';
+
+    if (issue.code === 'invalid_value') {
+      const options = issue.values.map(v => `"${String(v)}"`).join(', ');
+      const value = valueAt(input, issue.path);
+      const shown = typeof value === 'string' ? `"${value}"` : JSON.stringify(value);
+      const newer = typeof value === 'string' && LOOKS_LIKE_AN_ID.test(value);
+
+      return (
+        `  - "${field}" is ${shown}, which zard-cli ${APP_VERSION} does not support (supported: ${options}).` +
+        (newer ? ` If components.json was written by a newer zard-cli, ${UPDATE_HINT}` : '')
+      );
+    }
+
+    return `  - "${field}": ${issue.message}`;
+  });
+
+  return ['Invalid configuration file: components.json', ...lines].join('\n');
+}
+
+function valueAt(input: unknown, path: PropertyKey[]): unknown {
+  return path.reduce<any>((node, key) => node?.[key], input);
 }
 
 /**
