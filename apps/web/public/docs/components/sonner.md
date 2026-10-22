@@ -17,6 +17,14 @@ npx zard-cli@latest add sonner
 
 ### Manual
 
+**Install dependencies**
+
+```bash
+npm install ngx-sonner
+```
+
+**Add sonner.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import {
@@ -229,17 +237,23 @@ export class ZardSonnerComponent {
 }
 ```
 
+**Add sonner.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
 export const sonnerVariants = cva('toaster group');
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './sonner.component';
 export * from './sonner.service';
 export * from './sonner.variants';
 ```
+
+**Add sonner.service.ts**
 
 ```angular-ts
 import { Injectable, type Type } from '@angular/core';
@@ -349,6 +363,37 @@ import { ZardSonnerComponent } from '@/shared/components/sonner/sonner.component
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
+
+@Component({
+  selector: 'z-demo-sonner-preview',
+  imports: [ZardButtonComponent],
+  template: `
+    <button type="button" z-button zType="outline" (click)="show()">Show Toast</button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSonnerPreviewComponent {
+  private readonly sonner = inject(ZardSonnerService);
+
+  show() {
+    this.sonner.show('Event has been created', {
+      description: 'Sunday, December 03, 2023 at 9:00 AM',
+      action: {
+        label: 'Undo',
+        onClick: () => console.log('Undo'),
+      },
+    });
+  }
+}
+```
 
 ### Types
 

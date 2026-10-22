@@ -13,9 +13,7 @@ Install and configure zard/ui inside a library of an Nx workspace.
 
 Inside an existing Nx workspace, generate the library that will hold the components. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/pre-processors)
 
-```bash
-Terminal
-```
+**Terminal**
 
 ```
 npx nx g @nx/angular:library --name=ui --directory=libs/ui
@@ -39,9 +37,7 @@ You can now start adding components to your project. [Open the components page a
 
 Inside an existing Nx workspace, generate the library that will hold the components.
 
-```bash
-Terminal
-```
+**Terminal**
 
 ```
 npx nx g @nx/angular:library --name=ui --directory=libs/ui
@@ -67,9 +63,7 @@ npm install -D tailwindcss tailwindcss-animate
 
 Add these lines inside compilerOptions on your tsconfig.base.json. Do not add baseUrl, it is an error from TypeScript 6 on.
 
-```bash
-tsconfig.base.json
-```
+**tsconfig.base.json**
 
 ```
 {
@@ -85,10 +79,7 @@ tsconfig.base.json
 
 Create libs/ui/src/lib/shared/core/directives/ with:
 
-```bash
-string-template-outlet.directive.ts
-Expand
-```
+**string-template-outlet.directive.ts**
 
 ```
 import {
@@ -248,12 +239,9 @@ export class ZardStringTemplateOutletDirective<T = unknown> implements OnDestroy
 }
 ```
 
-```bash
-id.directive.ts
-Expand
-```
+**id.directive.ts**
 
-```
+````
 import { computed, Directive, inject, Injectable, input } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
@@ -297,16 +285,13 @@ export class ZardIdDirective {
   /** `<prefix>-<n>`, with `n` fixed for the life of the directive. */
   readonly id = computed(() => `${this.zardId()}-${this.sequence}`);
 }
-```
+````
 
 ### Add the overlay stack
 
 Create libs/ui/src/lib/shared/core/overlay/ with:
 
-```bash
-overlay-ref.ts
-Expand
-```
+**overlay-ref.ts**
 
 ```
 import type { OverlayRef } from '@angular/cdk/overlay';
@@ -544,10 +529,7 @@ export abstract class ZardOverlayRefBase<T = unknown, R = unknown> {
 }
 ```
 
-```bash
-overlay-stack.ts
-Expand
-```
+**overlay-stack.ts**
 
 ```
 /**
@@ -594,10 +576,7 @@ export function openOverlayCount(): number {
 
 Create libs/ui/src/lib/shared/core/i18n/ with:
 
-```bash
-i18n.constants.ts
-Expand
-```
+**i18n.constants.ts**
 
 ```
 import type { ZardCalendarI18n, ZardCalendarLabels, ZardI18nInterface } from './i18n.types';
@@ -631,10 +610,7 @@ export const DEFAULT_ZARD_I18N: ZardI18nInterface = {
 };
 ```
 
-```bash
-i18n.provider.ts
-Expand
-```
+**i18n.provider.ts**
 
 ```
 import { makeEnvironmentProviders } from '@angular/core';
@@ -655,10 +631,7 @@ export function provideZardI18n(locale: ZardI18nInterface | string = DEFAULT_LOC
 }
 ```
 
-```bash
-i18n.service.ts
-Expand
-```
+**i18n.service.ts**
 
 ```
 import { computed, inject, Injectable, LOCALE_ID, signal } from '@angular/core';
@@ -746,10 +719,7 @@ export class ZardI18nService {
 }
 ```
 
-```bash
-i18n.tokens.ts
-Expand
-```
+**i18n.tokens.ts**
 
 ```
 import { InjectionToken } from '@angular/core';
@@ -760,10 +730,7 @@ export const ZARD_LOCALE = new InjectionToken<string>('ZARD_LOCALE');
 export const ZARD_I18N = new InjectionToken<ZardI18nInterface>('ZARD_I18N');
 ```
 
-```bash
-i18n.types.ts
-Expand
-```
+**i18n.types.ts**
 
 ```
 export interface ZardCalendarLabels {
@@ -797,10 +764,7 @@ export interface ZardI18nInterface {
 }
 ```
 
-```bash
-index.ts
-Expand
-```
+**index.ts**
 
 ```
 export * from './i18n.types';
@@ -822,10 +786,7 @@ export * from './locales/pt-pt';
 
 Create libs/ui/src/lib/shared/core/i18n/locales/ with:
 
-```bash
-de-de.ts
-Expand
-```
+**de-de.ts**
 
 ```
 import type { ZardI18nInterface } from '../i18n.types';
@@ -853,10 +814,7 @@ export const de_DE: ZardI18nInterface = {
 };
 ```
 
-```bash
-en-us.ts
-Expand
-```
+**en-us.ts**
 
 ```
 import { DEFAULT_CALENDAR_I18N } from '../i18n.constants';
@@ -868,10 +826,7 @@ export const en_US: ZardI18nInterface = {
 };
 ```
 
-```bash
-es-es.ts
-Expand
-```
+**es-es.ts**
 
 ```
 import type { ZardI18nInterface } from '../i18n.types';
@@ -899,10 +854,7 @@ export const es_ES: ZardI18nInterface = {
 };
 ```
 
-```bash
-fr-fr.ts
-Expand
-```
+**fr-fr.ts**
 
 ```
 import type { ZardI18nInterface } from '../i18n.types';
@@ -930,10 +882,7 @@ export const fr_FR: ZardI18nInterface = {
 };
 ```
 
-```bash
-it-it.ts
-Expand
-```
+**it-it.ts**
 
 ```
 import type { ZardI18nInterface } from '../i18n.types';
@@ -961,10 +910,7 @@ export const it_IT: ZardI18nInterface = {
 };
 ```
 
-```bash
-pt-br.ts
-Expand
-```
+**pt-br.ts**
 
 ```
 import type { ZardI18nInterface } from '../i18n.types';
@@ -992,10 +938,7 @@ export const pt_BR: ZardI18nInterface = {
 };
 ```
 
-```bash
-pt-pt.ts
-Expand
-```
+**pt-pt.ts**
 
 ```
 import type { ZardI18nInterface } from '../i18n.types';
@@ -1023,10 +966,7 @@ export const pt_PT: ZardI18nInterface = {
 };
 ```
 
-```bash
-registry.ts
-Expand
-```
+**registry.ts**
 
 ```
 import type { ZardI18nInterface } from '../i18n.types';
@@ -1070,10 +1010,7 @@ export function getPresetLocale(locale: string): ZardI18nInterface | undefined {
 
 Create libs/ui/src/lib/shared/core/provider/event-manager-plugins/ with:
 
-```bash
-zard-debounce-event-manager-plugin.ts
-Expand
-```
+**zard-debounce-event-manager-plugin.ts**
 
 ```
 import type { ListenerOptions } from '@angular/core';
@@ -1111,10 +1048,7 @@ export class ZardDebounceEventManagerPlugin extends EventManagerPlugin {
 }
 ```
 
-```bash
-zard-event-manager-plugin.ts
-Expand
-```
+**zard-event-manager-plugin.ts**
 
 ```
 import type { ListenerOptions } from '@angular/core';
@@ -1229,10 +1163,7 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
 
 Create libs/ui/src/lib/shared/core/provider/ with:
 
-```bash
-providezard.ts
-Expand
-```
+**providezard.ts**
 
 ```
 import { makeEnvironmentProviders, type EnvironmentProviders } from '@angular/core';
@@ -1263,10 +1194,7 @@ export function provideZard(): EnvironmentProviders {
 
 Create libs/ui/src/lib/shared/core/css/ with:
 
-```bash
-zard.css
-Expand
-```
+**zard.css**
 
 ```
 /*
@@ -1421,9 +1349,7 @@ Expand
 
 Create libs/ui/src/lib/shared/core/index.ts with:
 
-```bash
-index.ts
-```
+**index.ts**
 
 ```
 export * from './directives/string-template-outlet.directive';
@@ -1439,9 +1365,7 @@ export * from './provider/event-manager-plugins/zard-event-manager-plugin';
 
 Create a utils folder at libs/ui/src/lib/shared/utils with:
 
-```bash
-index.ts
-```
+**index.ts**
 
 ```
 export * from './merge-classes';
@@ -1449,9 +1373,7 @@ export * from './noop';
 export * from './number';
 ```
 
-```bash
-merge-classes.ts
-```
+**merge-classes.ts**
 
 ```
 import { type ClassValue, clsx } from 'clsx';
@@ -1465,18 +1387,14 @@ export function mergeClasses(...inputs: ClassValue[]): string {
 }
 ```
 
-```bash
-noop.ts
-```
+**noop.ts**
 
 ```
 /** Does nothing. Used as the initial value of a ControlValueAccessor callback. */
 export const noopFn = (): void => void 0;
 ```
 
-```bash
-number.ts
-```
+**number.ts**
 
 ```
 function clamp(value: number, [min, max]: [number, number]): number {
@@ -1498,10 +1416,7 @@ export { clamp, roundToStep, convertValueToPercentage };
 
 Add the following to libs/ui/src/styles.css. You can learn more about using CSS variables for theming in the [theming section.](/docs/theming)
 
-```bash
-styles.css
-Expand
-```
+**styles.css**
 
 ```
 @layer ng-icon, theme, base, components, utilities;
@@ -1649,9 +1564,7 @@ Expand
 
 Create a components.json file in the root of your workspace.
 
-```bash
-components.json
-```
+**components.json**
 
 ```
 {
@@ -1684,9 +1597,7 @@ You can now start adding components to your project.
 
 The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts and imports the theme from the library styles.css.
 
-```bash
-.postcssrc.json
-```
+**.postcssrc.json**
 
 ```
 {

@@ -13,14 +13,6 @@ In this guide we will build forms with Signal Forms, the signal-based forms API 
 
 We are going to build the following form. It has a text input and a textarea. On submit we validate the form data and display any errors.
 
-Bug Title
-
-Description
-
-0/100 characters
-
-Include steps to reproduce, expected behavior, and what actually happened.
-
 ```
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { form, FormField, maxLength, minLength, required, submit } from '@angular/forms/signals';
@@ -177,7 +169,7 @@ Here is a single field: the field tree provides the state, the directive binds t
 
 Start from the shape of your data. The second argument of `form()` is a schema function: it receives a path object mirroring the model and binds rules to it.
 
-bug-report-form.ts
+**bug-report-form.ts**
 
 ```
 import { Component, signal } from '@angular/core';
@@ -205,7 +197,7 @@ export class BugReportForm {
 
 Import `FormField` so the template can bind controls, and use `submit()` to run your action only when the form is valid.
 
-bug-report-form.ts
+**bug-report-form.ts**
 
 ```
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
@@ -251,7 +243,7 @@ Compose the markup with the field components. The full source of the demo above 
 
 The action passed to `submit()` can return validation errors, and each one lands on the field it names — the server has the same reach over the error UI as a client-side validator, with no state of your own to keep.
 
-signup-form.ts
+**signup-form.ts**
 
 ```
 protected async onSubmit(event: Event): Promise<void> {
@@ -283,7 +275,7 @@ That's it. You now have a fully accessible form with client-side validation. Whe
 
 Validators are functions you call inside the schema against a path. Each accepts a `message` used as the human-readable error.
 
-account-form.ts
+**account-form.ts**
 
 ```
 import { email, form, max, maxLength, min, minLength, pattern, required } from '@angular/forms/signals';
@@ -310,7 +302,7 @@ protected readonly accountForm = form(this.model, schemaPath => {
 
 Use `validate()` for a single field and `validateTree()` when a rule spans several fields.
 
-signup-form.ts
+**signup-form.ts**
 
 ```
 import { form, validate, validateTree } from '@angular/forms/signals';
@@ -340,7 +332,7 @@ protected readonly signupForm = form(this.model, schemaPath => {
 
 `validateAsync()` wires a resource into the field. While the request is in flight the field is `pending()` — neither valid nor invalid — so use it to disable the submit button without showing a false error.
 
-signup-form.ts
+**signup-form.ts**
 
 ```
 import { httpResource } from '@angular/common/http';
@@ -369,7 +361,7 @@ When the resource is a plain HTTP call, `validateHttp()` is the same thing with 
 
 If the rules already live in a Zod, Valibot or ArkType schema, there is no need to restate them. `validateStandardSchema()` accepts any [Standard Schema](https://github.com/standard-schema/standard-schema) validator and routes each issue to the field it belongs to.
 
-signup-form.ts
+**signup-form.ts**
 
 ```
 import { form, validateStandardSchema } from '@angular/forms/signals';
@@ -401,7 +393,7 @@ The schema holds more than validators: it is also where a field decides whether 
 
 `disabled()` , `readonly()` and `hidden()` take a reactive function and live in the schema next to the validators. All three stop the field from contributing to the validity of its parent, so a rule attached to a hidden field does not block the submit while the field is out of the way.
 
-checkout-form.ts
+**checkout-form.ts**
 
 ```
 import { disabled, form, hidden, readonly, required } from '@angular/forms/signals';
@@ -428,7 +420,7 @@ A hidden field still exists in the model — guard it with `@if (!field().hidden
 
 `schema()` packages the rules of one shape under a name. `apply()` binds it to a path and `applyWhen()` does it conditionally — the same composition `applyEach()` gives you for array items.
 
-checkout-form.ts
+**checkout-form.ts**
 
 ```
 import { apply, applyWhen, form, minLength, required, schema } from '@angular/forms/signals';
@@ -496,17 +488,7 @@ Every zard/ui form control implements a value accessor, so [formField] binds to 
 
 ### input
 
-For text inputs, bind
-
-[formField]
-
-to the field and mirror its invalid state with
-
-aria-invalid
-
-Username
-
-This is your public display name. Must be between 3 and 10 characters. Must only contain letters, numbers, and underscores.
+For text inputs, bind `[formField]` to the field and mirror its invalid state with `aria-invalid`.
 
 ```
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
@@ -598,15 +580,7 @@ export class ZardFormsSignalInputComponent {
 
 ### textarea
 
-Textareas work exactly like inputs. Add
-
-z-field-description
-
-for the helper copy below the control.
-
-More about you
-
-Tell us more about yourself. This will be used to help us personalize your experience.
+Textareas work exactly like inputs. Add `z-field-description` for the helper copy below the control.
 
 ```
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
@@ -692,25 +666,7 @@ export class ZardFormsSignalTextareaComponent {
 
 ### select
 
-z-select
-
-is a value accessor too. Use
-
-zOrientation="responsive"
-
-with
-
-z-field-content
-
-to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a
-
-validate()
-
-rule — a value rule, not a presence one.
-
-Spoken Language
-
-For best results, select the language you speak.
+`z-select` is a value accessor too. Use `zOrientation="responsive"` with `z-field-content` to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a `validate()` rule — a value rule, not a presence one.
 
 ```
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
@@ -818,37 +774,7 @@ export class ZardFormsSignalSelectComponent {
 
 ### checkbox
 
-A checkbox group edits an array field. Bind each box to
-
-value().includes(id)
-
-and update the field on change. The first group is a single boolean field turned read-only with
-
-disabled()
-
-in the schema. Remember
-
-data-slot="checkbox-group"
-
-on the
-
-z-field-group
-
-for the tighter spacing.
-
-Responses
-
-Get notified for requests that take time, like research or image generation.
-
-Push notifications
-
-Tasks
-
-Get notified when tasks you've created have updates.
-
-Push notifications
-
-Email notifications
+A checkbox group edits an array field. Bind each box to `value().includes(id)` and update the field on change. The first group is a single boolean field turned read-only with `disabled()` in the schema. Remember `data-slot="checkbox-group"` on the `z-field-group` for the tighter spacing.
 
 ```
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
@@ -977,29 +903,7 @@ export class ZardFormsSignalCheckboxComponent {
 
 ### radio group
 
-Bind
-
-[formField]
-
-to
-
-z-radio-group
-
-— the individual
-
-z-radio
-
-items only carry their value.
-
-Plan
-
-You can upgrade or downgrade your plan at any time.
-
-Starter (100K tokens/month)For everyday use with basic features.
-
-Pro (1M tokens/month)For advanced AI usage with more features.
-
-Enterprise (Unlimited tokens)For large teams and heavy usage.
+Bind `[formField]` to `z-radio-group` — the individual `z-radio` items only carry their value.
 
 ```
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
@@ -1093,15 +997,7 @@ export class ZardFormsSignalRadioComponent {
 
 ### switch
 
-Switches bind to a boolean field. Use a horizontal field with
-
-z-field-content
-
-so the label and description sit next to the control.
-
-Multi-factor authentication
-
-Enable multi-factor authentication to secure your account.
+Switches bind to a boolean field. Use a horizontal field with `z-field-content` so the label and description sit next to the control.
 
 ```
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
@@ -1186,43 +1082,7 @@ export class ZardFormsSignalSwitchComponent {
 
 ### complex forms
 
-Everything above, composed into one form with fieldsets, separators, a
-
-validate()
-
-rule that rejects unknown plan values and length rules on the add-ons array.
-
-Subscription Plan
-
-Choose your subscription plan.
-
-Basic For individuals and small teams
-
-Pro For businesses with higher demands
-
-Billing Period
-
-Choose how often you want to be billed.
-
-Add-ons
-
-Select additional features you'd like to include.
-
-Analytics
-
-Advanced analytics and reporting
-
-Backup
-
-Automated daily backups
-
-Priority Support
-
-24/7 premium customer support
-
-Email Notifications
-
-Receive email updates about your subscription
+Everything above, composed into one form with fieldsets, separators, a `validate()` rule that rejects unknown plan values and length rules on the add-ons array.
 
 ```
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
@@ -1459,10 +1319,6 @@ protected onClearErrors(): void {
 
 Array fields need no special API: the array lives in your model, and applyEach binds the same rules to every item.
 
-Email Addresses
-
-Add up to 5 email addresses where we can contact you.
-
 ```
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { applyEach, email, form, FormField, maxLength, minLength, required, submit } from '@angular/forms/signals';
@@ -1620,7 +1476,7 @@ export class ZardFormsSignalArrayComponent {
 
 ### Validating every item with applyEach
 
-contact-form.ts
+**contact-form.ts**
 
 ```
 import { applyEach, email, form, maxLength, minLength, required } from '@angular/forms/signals';

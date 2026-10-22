@@ -17,6 +17,8 @@ npx zard-cli@latest add pagination
 
 ### Manual
 
+**Add pagination.component.ts**
+
 ```angular-ts
 import { NgTemplateOutlet } from '@angular/common';
 import {
@@ -317,6 +319,8 @@ export class ZardPaginationComponent {
 }
 ```
 
+**Add pagination.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
@@ -331,11 +335,15 @@ export const paginationEllipsisVariants = cva('flex size-8 items-center justify-
 export const paginationVariants = cva('mx-auto flex w-full justify-center');
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './pagination.component';
 export * from './pagination.imports';
 export * from './pagination.variants';
 ```
+
+**Add pagination.imports.ts**
 
 ```angular-ts
 import {
@@ -370,6 +378,70 @@ import { ZardPaginationImports } from '@/shared/components/pagination/pagination
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardPaginationImports } from '../pagination.imports';
+
+@Component({
+  selector: 'z-demo-pagination-preview',
+  imports: [ZardPaginationImports],
+  template: `
+    <z-pagination [zTotal]="totalPages" [(zPageIndex)]="currentPage" [zContent]="content" />
+
+    <ng-template #content>
+      <ul z-pagination-content>
+        <li z-pagination-item>
+          <z-pagination-previous (click)="goToPrevious()" [zDisabled]="currentPage() === 1" />
+        </li>
+
+        @for (page of pages(); track page) {
+          <li z-pagination-item>
+            <button type="button" z-pagination-button [zActive]="page === currentPage()" (click)="goToPage(page)">
+              <span class="sr-only">To page</span>
+              {{ page }}
+            </button>
+          </li>
+        }
+
+        <li z-pagination-item>
+          <z-pagination-ellipsis />
+        </li>
+
+        <li z-pagination-item>
+          <z-pagination-next (click)="goToNext()" [zDisabled]="currentPage() === totalPages" />
+        </li>
+      </ul>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoPaginationPreviewComponent {
+  readonly totalPages = 3;
+  readonly currentPage = signal(2);
+
+  readonly pages = signal<number[]>(Array.from({ length: this.totalPages }, (_, i) => i + 1));
+
+  goToPage(page: number) {
+    this.currentPage.set(page);
+  }
+
+  goToPrevious() {
+    if (this.currentPage() > 1) {
+      this.currentPage.update(p => p - 1);
+    }
+  }
+
+  goToNext() {
+    if (this.currentPage() < this.totalPages) {
+      this.currentPage.update(p => p + 1);
+    }
+  }
+}
+```
 
 ### Simple
 

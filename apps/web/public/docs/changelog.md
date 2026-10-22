@@ -17,7 +17,7 @@ We made every component read right to left, so Arabic, Hebrew and Persian apps g
 
 `zard-cli create` scaffolds an Angular, Nx or Analog.js application and configures it from a design preset, with a button already installed. Run it with no arguments to answer the questions, or paste the command the create page gives you.
 
-npx zard-cli@latest create my-app --template angular
+`npx zard-cli@latest create my-app --template angular`
 
 #### Design your look on the create page
 
@@ -27,7 +27,7 @@ Pick one of eight styles, a base color out of nine (Mauve, Olive, Mist and Taupe
 
 `zard-cli apply --preset` swaps the theme, fonts and icons of a project that is already initialized. It only rewrites the regions the CLI manages, so your own CSS survives, and it prints the commands to re-add the components you want to follow the new look.
 
-npx zard-cli@latest apply --preset <code>
+`npx zard-cli@latest apply --preset <code>`
 
 ### Right to left
 
@@ -240,7 +240,7 @@ Four new components this month — Field, Item, Textarea, and Sonner — and a r
 
 The `toast` component has been replaced by `sonner`. Swap `z-toast` / `z-toaster` for `z-sonner`, import `ZardSonnerService` instead of the toast service, and reinstall under the new name. The old component no longer ships.
 
-npx zard-cli@latest add sonner
+`npx zard-cli@latest add sonner`
 
 #### Demos and docs live with the components
 
@@ -557,7 +557,7 @@ The input directive now reads and writes real numbers for `type="number"` and `t
 
 `zMaskClosable` now defaults to `false` on Alert Dialog. A confirmation is meant to be answered, not dismissed by a stray click. If you relied on the old behaviour, opt back in explicitly.
 
-zMaskClosable: true
+`zMaskClosable: true`
 
 ## April 2026
 
@@ -573,7 +573,7 @@ A thin month — two releases, no new components. One quietly narrows the Avatar
 - `ZardImageVariants` → `ZardAvatarShapeVariants`
 - `ZardAvatarGroupVariants` → `ZardAvatarGroupOrientationVariants`
 
-<z-avatar zSize="sm" />
+`<z-avatar zSize="sm" />`
 
 #### Select follows dynamic option lists
 
@@ -597,7 +597,7 @@ Icons are now provided at component level using `provideIcons()` in `viewProvide
 
 The `lucide-angular` dependency has been replaced by `@ng-icons/core` and `@ng-icons/lucide`. The CLI `init` command now installs these automatically.
 
-npm install @ng-icons/core @ng-icons/lucide
+`npm install @ng-icons/core @ng-icons/lucide`
 
 ## February 2026
 
@@ -609,7 +609,7 @@ The busiest month of the year outside August — 77 commits, most of them releas
 
 The package moves from `@ngzard/ui` to `zard-cli`, and the binary from `ngzard` to `zard-cli`. The old package now prints a deprecation warning instead of doing anything. `components.json` and components you already installed are unaffected.
 
-npx zard-cli@latest init
+`npx zard-cli@latest init`
 
 #### Tree component
 
@@ -619,7 +619,7 @@ A new `z-tree` shipped this month — expand/collapse, single and checkbox selec
 
 `z-switch` is now a component driven by `[(zChecked)]` and `zDisabled` instead of an attribute directive. The `(checkChange)` output and the bare `[z-switch]` selector are gone. Migrate `(checkChange)` to `(zCheckedChange)` or `[(zChecked)]`, `<button z-switch>` to `<z-switch>`, and a bare `disabled` attribute to `[zDisabled]`.
 
-<z-switch [(zChecked)]="enabled" [zDisabled]="locked">Label</z-switch>
+`<z-switch [(zChecked)]="enabled" [zDisabled]="locked">Label</z-switch>`
 
 #### Button matches the latest shadcn/ui
 
@@ -629,7 +629,7 @@ New `zSize` values (`xs`, `icon`, `icon-xs`, `icon-sm`, `icon-lg`), every existi
 
 `ZardDarkMode` no longer touches `matchMedia` in its constructor, so it no longer throws on the server and no longer flashes the wrong theme on first paint. It initialises after first render and keeps tracking OS changes while in `system` mode.
 
-npx zard-cli@latest add dark-mode
+`npx zard-cli@latest add dark-mode`
 
 #### CLI add is monorepo- and Angular-aware
 
@@ -645,19 +645,19 @@ A quiet month by commit count but not by API surface: Angular 21 becomes the flo
 
 Peer dependencies move to `^21.0.0` for `@angular/core`, `common`, `forms`, `router`, `platform-browser`, and `cdk` (previously pinned to 20.3.14), with `embla-carousel-angular` on `^21` and `tailwind-merge` on `^3.4`. Apps still on Angular 20 need to update before installing new components.
 
-ng update @angular/core@21 @angular/cli@21 @angular/cdk@21
+`ng update @angular/core@21 @angular/cli@21 @angular/cdk@21`
 
 #### SSR-stable ids with ZardIdDirective
 
 Alert Dialog, Card, Checkbox, Input Group, Radio, Switch, Tooltip, and Menu now generate their ids through the public `ZardIdDirective` instead of `crypto.randomUUID()`, so the id is deterministic and the server and browser render the same markup — no more hydration mismatch. `generateId` from `@/shared/utils/merge-classes` is gone; use `ZardIdDirective` from `@/shared/core` instead.
 
-<label zardId="email" #e="zardId" [for]="e.id()">Email</label>
+`<label zardId="email" #e="zardId" [for]="e.id()">Email</label>`
 
 #### ZardTooltipModule replaced by ZardTooltipImports
 
 The tooltip module is gone. Import `ZardTooltipImports` (or the standalone directive/component directly) instead.
 
-imports: [ZardTooltipImports]
+`imports: [ZardTooltipImports]`
 
 #### Input directive is a ControlValueAccessor
 
@@ -667,13 +667,13 @@ The `input[z-input]` and `textarea[z-input]` directives now register `NG_VALUE_A
 
 The `disabled` input is renamed to `zDisabled`, `setDisabledState` is implemented so reactive forms can disable a checkbox directly, and `checked` is now a signal. The outer `<span>` wrapper is gone — the host itself carries the layout and `aria-disabled`.
 
-<span z-checkbox [zDisabled]="true">Disabled</span>
+`<span z-checkbox [zDisabled]="true">Disabled</span>`
 
 #### Avatar and Empty render images with NgOptimizedImage
 
 Avatar gains a `zPriority` input and accepts a `SafeUrl` for `zSrc`; the image fills its container and lazy-loads unless marked priority. Empty renders its `zImage` at 64×64 by default. Both reject `data:`/`blob:` URLs in dev mode.
 
-<z-avatar zSrc="/me.png" zPriority />
+`<z-avatar zSrc="/me.png" zPriority />`
 
 #### Variant helper types renamed
 
@@ -694,7 +694,7 @@ Major infrastructure improvements this month! We focused on developer experience
 
 New provider function for streamlined app configuration. Add event manager plugins and other Zard utilities with a single function call in your app.config.ts.
 
-provideZard()
+`provideZard()`
 
 #### Private Registry System
 
@@ -704,7 +704,7 @@ The CLI now uses our own private registry instead of fetching from GitHub. This 
 
 Adding dark-mode support to your project is now as simple as running a single CLI command. It automatically configures everything you need.
 
-npx zard-cli@latest add dark-mode
+`npx zard-cli@latest add dark-mode`
 
 ## November 2025
 

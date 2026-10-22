@@ -17,6 +17,8 @@ npx zard-cli@latest add tooltip
 
 ### Manual
 
+**Add tooltip.ts**
+
 ```angular-ts
 import { Directionality, type Direction } from '@angular/cdk/bidi';
 import {
@@ -380,6 +382,8 @@ export class ZardTooltipComponent {
 }
 ```
 
+**Add tooltip.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -400,12 +404,16 @@ export const tooltipPositionVariants = cva('absolute', {
 export type ZardTooltipPositionVariants = NonNullable<VariantProps<typeof tooltipPositionVariants>['position']>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './tooltip';
 export * from './tooltip.variants';
 export * from './tooltip-positions';
 export * from './tooltip.imports';
 ```
+
+**Add tooltip-positions.ts**
 
 ```angular-ts
 import type { ConnectedPosition } from '@angular/cdk/overlay';
@@ -495,6 +503,8 @@ export function getTooltipPosition(
 }
 ```
 
+**Add tooltip.imports.ts**
+
 ```angular-ts
 import { OverlayModule } from '@angular/cdk/overlay';
 
@@ -514,6 +524,25 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
+
+@Component({
+  selector: 'z-demo-tooltip-preview',
+  imports: [ZardButtonComponent, ZardTooltipImports],
+  template: `
+    <button type="button" z-button zType="outline" zTooltip="Tooltip content">Hover</button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoTooltipPreviewComponent {}
+```
 
 ### Side
 

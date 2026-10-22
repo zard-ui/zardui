@@ -17,6 +17,8 @@ npx zard-cli@latest add resizable
 
 ### Manual
 
+**Add resizable.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { isPlatformBrowser } from '@angular/common';
@@ -343,6 +345,8 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 }
 ```
 
+**Add resizable.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -391,6 +395,8 @@ export const resizableHandleIndicatorVariants = cva('z-10 flex h-6 w-1 shrink-0 
 export type ZardResizableLayoutVariants = NonNullable<VariantProps<typeof resizableVariants>['zLayout']>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './resizable.component';
 export * from './resizable-panel.component';
@@ -398,6 +404,8 @@ export * from './resizable-handle.component';
 export * from './resizable.imports';
 export * from './resizable.variants';
 ```
+
+**Add resizable-handle.component.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -696,6 +704,8 @@ export class ZardResizableHandleComponent {
 }
 ```
 
+**Add resizable-panel.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -751,6 +761,8 @@ export class ZardResizablePanelComponent {
 }
 ```
 
+**Add resizable.imports.ts**
+
 ```angular-ts
 import { ZardResizableHandleComponent } from '@/shared/components/resizable/resizable-handle.component';
 import { ZardResizablePanelComponent } from '@/shared/components/resizable/resizable-panel.component';
@@ -778,6 +790,47 @@ import { ZardResizableImports } from '@/shared/components/resizable/resizable.im
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+
+import { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';
+
+@Component({
+  selector: 'z-demo-resizable-preview',
+  imports: [...ZardResizableImports],
+  template: `
+    <z-resizable class="h-60 w-80 rounded-lg border sm:w-96">
+      <z-resizable-panel>
+        <div class="flex h-full items-center justify-center p-6">
+          <span class="font-semibold">One</span>
+        </div>
+      </z-resizable-panel>
+      <z-resizable-handle zWithHandle />
+      <z-resizable-panel>
+        <z-resizable zLayout="vertical">
+          <z-resizable-panel zDefaultSize="25">
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Two</span>
+            </div>
+          </z-resizable-panel>
+          <z-resizable-handle zWithHandle />
+          <z-resizable-panel zDefaultSize="75">
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Three</span>
+            </div>
+          </z-resizable-panel>
+        </z-resizable>
+      </z-resizable-panel>
+    </z-resizable>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+})
+export class ZardDemoResizablePreviewComponent {}
+```
 
 ### Vertical
 

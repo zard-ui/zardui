@@ -17,6 +17,8 @@ npx zard-cli@latest add combobox
 
 ### Manual
 
+**Add combobox.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -645,6 +647,8 @@ export class ZardComboboxValueComponent {
 }
 ```
 
+**Add combobox.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -734,6 +738,8 @@ export type ZardComboboxTriggerStandaloneVariants = NonNullable<
   VariantProps<typeof comboboxTriggerVariants>['zStandalone']
 >;
 ```
+
+**Add combobox-chips.component.ts**
 
 ```angular-ts
 import {
@@ -926,6 +932,8 @@ export class ZardComboboxChipsComponent {
   }
 }
 ```
+
+**Add combobox-content.component.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -1292,6 +1300,8 @@ function nullableNumberAttribute(value: number | string | null | undefined): num
 }
 ```
 
+**Add combobox-group.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -1360,6 +1370,8 @@ export class ZardComboboxGroupComponent {
   protected readonly classes = computed(() => mergeClasses(comboboxGroupVariants(), this.class()));
 }
 ```
+
+**Add combobox-input.component.ts**
 
 ```angular-ts
 import {
@@ -1656,6 +1668,8 @@ export class ZardComboboxInputComponent {
 }
 ```
 
+**Add combobox-item.component.ts**
+
 ```angular-ts
 import {
   afterNextRender,
@@ -1778,6 +1792,8 @@ export class ZardComboboxItemComponent implements ZardComboboxItemRef {
 }
 ```
 
+**Add combobox.imports.ts**
+
 ```angular-ts
 export {
   ZardComboboxChipComponent,
@@ -1840,6 +1856,8 @@ export const ZardComboboxImports = [
   ZardComboboxChipsInputComponent,
 ] as const;
 ```
+
+**Add combobox.types.ts**
 
 ```angular-ts
 import type { Signal } from '@angular/core';
@@ -1931,6 +1949,8 @@ export abstract class ZardComboboxRoot {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './combobox-chips.component';
 export * from './combobox-content.component';
@@ -1966,6 +1986,48 @@ import { ZardComboboxImports } from '@/shared/components/combobox/combobox.impor
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
+
+import { ZardComboboxImports } from '../combobox.imports';
+import type { ZardComboboxOption } from '../combobox.types';
+
+@Component({
+  selector: 'z-demo-combobox-preview',
+  imports: [ZardComboboxImports],
+  template: `
+    <z-combobox [(zValue)]="value">
+      <z-combobox-input placeholder="Select a framework" />
+
+      <z-combobox-content>
+        <z-combobox-empty>No items found.</z-combobox-empty>
+
+        <z-combobox-list>
+          @for (framework of frameworks; track framework.value) {
+            <z-combobox-item [zValue]="framework.value">{{ framework.label }}</z-combobox-item>
+          }
+        </z-combobox-list>
+      </z-combobox-content>
+    </z-combobox>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoComboboxPreviewComponent {
+  readonly value = signal<string | string[] | null>(null);
+
+  frameworks: ZardComboboxOption[] = [
+    { value: 'angular', label: 'Angular' },
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue.js' },
+    { value: 'svelte', label: 'Svelte' },
+    { value: 'ember', label: 'Ember.js' },
+    { value: 'nextjs', label: 'Next.js' },
+  ];
+}
+```
 
 ### Multiple
 

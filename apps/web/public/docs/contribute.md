@@ -43,7 +43,7 @@ Work on zard-cli or the zard-mcp server under packages/, both published from thi
 
 Five steps from a fresh clone to an open pull request. Each one links to the page that covers it in depth.
 
-Quick start
+**Quick start**
 
 ```
 # 1. Fork zardui/zardui on GitHub, then clone your fork

@@ -17,6 +17,8 @@ npx zard-cli@latest add select
 
 ### Manual
 
+**Add select.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import {
@@ -1130,6 +1132,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
 }
 ```
 
+**Add select.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -1221,6 +1225,8 @@ export type ZardSelectAlignVariants = 'start' | 'center' | 'end';
 export type ZardSelectSizeVariants = 'default' | 'sm';
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './select.component';
 export * from './select-group.component';
@@ -1228,6 +1234,8 @@ export * from './select-item.component';
 export * from './select.imports';
 export * from './select.variants';
 ```
+
+**Add select-group.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -1294,6 +1302,8 @@ export class ZardSelectSeparatorComponent {
   protected readonly classes = computed(() => mergeClasses(selectSeparatorVariants(), this.class()));
 }
 ```
+
+**Add select-item.component.ts**
 
 ```angular-ts
 import {
@@ -1414,6 +1424,8 @@ export class ZardSelectItemComponent {
 }
 ```
 
+**Add select.imports.ts**
+
 ```angular-ts
 import {
   ZardSelectGroupComponent,
@@ -1464,6 +1476,33 @@ z-select
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardSelectImports } from '@/shared/components/select/select.imports';
+
+@Component({
+  selector: 'z-demo-select-preview',
+  imports: [ZardSelectImports],
+  template: `
+    <z-select class="w-full min-w-48" zPlaceholder="Select a fruit" [(zValue)]="selectedFruit">
+      <z-select-label>Fruits</z-select-label>
+      <z-select-item zValue="apple">Apple</z-select-item>
+      <z-select-item zValue="banana">Banana</z-select-item>
+      <z-select-item zValue="blueberry">Blueberry</z-select-item>
+      <z-select-item zValue="grapes">Grapes</z-select-item>
+      <z-select-item zValue="pineapple">Pineapple</z-select-item>
+    </z-select>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSelectPreviewComponent {
+  readonly selectedFruit = signal('');
+}
+```
 
 ### Align Item With Trigger
 

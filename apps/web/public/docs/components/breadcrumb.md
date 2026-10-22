@@ -17,6 +17,8 @@ npx zard-cli@latest add breadcrumb
 
 ### Manual
 
+**Add breadcrumb.component.ts**
+
 ```angular-ts
 import { LocationStrategy } from '@angular/common';
 import {
@@ -448,6 +450,8 @@ export class ZardBreadcrumbComponent {
 }
 ```
 
+**Add breadcrumb.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -513,6 +517,8 @@ export type ZardBreadcrumbEllipsisColorVariants = NonNullable<
 >;
 ```
 
+**Add breadcrumb.imports.ts**
+
 ```angular-ts
 import {
   ZardBreadcrumbComponent,
@@ -532,6 +538,8 @@ export const ZardBreadcrumbImports = [
   ZardBreadcrumbEllipsisComponent,
 ] as const;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './breadcrumb.component';
@@ -560,6 +568,37 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
+
+@Component({
+  selector: 'z-demo-breadcrumb-preview',
+  imports: [ZardBreadcrumbImports],
+  template: `
+    <z-breadcrumb>
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link [routerLink]="['/']">Home</a>
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <z-breadcrumb-ellipsis />
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link [routerLink]="['/docs/components']">Components</a>
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <span z-breadcrumb-page>Breadcrumb</span>
+      </z-breadcrumb-item>
+    </z-breadcrumb>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoBreadcrumbPreviewComponent {}
+```
 
 ### Basic
 

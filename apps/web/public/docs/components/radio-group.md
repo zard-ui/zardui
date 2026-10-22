@@ -17,6 +17,8 @@ npx zard-cli@latest add radio-group
 
 ### Manual
 
+**Add radio-group.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import {
@@ -211,6 +213,8 @@ export class ZardRadioComponent {
 }
 ```
 
+**Add radio-group.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
@@ -221,11 +225,15 @@ export const radioVariants = cva(
 );
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './radio-group.component';
 export * from './radio-group.imports';
 export * from './radio-group.variants';
 ```
+
+**Add radio-group.imports.ts**
 
 ```angular-ts
 export { ZardRadioComponent, ZardRadioGroupComponent } from './radio-group.component';
@@ -249,6 +257,40 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
+
+@Component({
+  selector: 'z-demo-radio-group-preview',
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
+  template: `
+    <z-radio-group [(value)]="selected" class="w-fit">
+      <div class="flex items-center gap-3">
+        <z-radio zId="r1" value="default" />
+        <label z-field-label for="r1">Default</label>
+      </div>
+      <div class="flex items-center gap-3">
+        <z-radio zId="r2" value="comfortable" />
+        <label z-field-label for="r2">Comfortable</label>
+      </div>
+      <div class="flex items-center gap-3">
+        <z-radio zId="r3" value="compact" />
+        <label z-field-label for="r3">Compact</label>
+      </div>
+    </z-radio-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoRadioGroupPreviewComponent {
+  selected: unknown = 'comfortable';
+}
+```
 
 ### Description
 

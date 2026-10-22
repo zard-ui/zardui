@@ -17,6 +17,8 @@ npx zard-cli@latest add progress
 
 ### Manual
 
+**Add progress.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -71,11 +73,15 @@ export class ZardProgressComponent {
 }
 ```
 
+**Add progress.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
 export const progressVariants = cva('bg-muted relative flex h-1 w-full items-center overflow-x-hidden rounded-full');
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './progress.component';
@@ -93,6 +99,32 @@ import { ZardProgressComponent } from '@/shared/components/progress/progress.com
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { afterNextRender, ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardProgressComponent } from '@/shared/components/progress/progress.component';
+
+@Component({
+  selector: 'z-demo-progress-preview',
+  imports: [ZardProgressComponent],
+  template: `
+    <z-progress class="w-60" [value]="value()" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoProgressPreviewComponent {
+  protected readonly value = signal(13);
+
+  constructor() {
+    afterNextRender(() => {
+      setTimeout(() => this.value.set(66), 500);
+    });
+  }
+}
+```
 
 ### With Label And Value
 

@@ -17,6 +17,8 @@ npx zard-cli@latest add hover-card
 
 ### Manual
 
+**Add hover-card.component.ts**
+
 ```angular-ts
 import { Directionality, type Direction } from '@angular/cdk/bidi';
 import {
@@ -525,6 +527,8 @@ export class ZardHoverCardComponent {
 }
 ```
 
+**Add hover-card.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -534,6 +538,8 @@ export const hoverCardVariants = cva('z-50 w-64 rounded-md border bg-popover p-4
 /** Variant properties accepted by the hover card style generator. */
 export type ZardHoverCardVariants = VariantProps<typeof hoverCardVariants>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './hover-card.component';
@@ -567,6 +573,36 @@ trigger[zHoverCard]
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.component';
+
+/** Demonstrates the default hover card behavior and content composition. */
+@Component({
+  selector: 'z-demo-hover-card-preview',
+  imports: [ZardButtonComponent, ZardHoverCardComponent, ZardHoverCardDirective],
+  template: `
+    <button type="button" z-button zType="link" [zHoverCard]="content">Hover Here</button>
+
+    <ng-template #content>
+      <z-hover-card>
+        <div class="space-y-1">
+          <h4 class="text-sm font-semibold">Next.js</h4>
+          <p class="text-sm">The React Framework - created and maintained by @vercel.</p>
+          <div class="text-muted-foreground text-xs">Released December 2021</div>
+        </div>
+      </z-hover-card>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoHoverCardPreviewComponent {}
+```
 
 ### Sides
 

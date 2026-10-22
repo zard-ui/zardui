@@ -23,6 +23,14 @@ npx zard-cli@latest add chart
 
 ### Manual
 
+**Install dependencies**
+
+```bash
+npm install ngx-echarts echarts
+```
+
+**Add chart.component.ts**
+
 ```angular-ts
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -507,6 +515,8 @@ export class ZardChartComponent implements ZardChartHost {
 }
 ```
 
+**Add chart.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -561,6 +571,8 @@ export const chartLegendItemVariants = cva('flex cursor-pointer items-center gap
 
 export const chartLegendSwatchVariants = cva('size-2 shrink-0 rounded-[2px]');
 ```
+
+**Add chart-arc-label.util.ts**
 
 ```angular-ts
 /**
@@ -666,6 +678,8 @@ export function resolveRadius(value: string | number | undefined, base: number, 
   return fallback;
 }
 ```
+
+**Add chart-colors.util.ts**
 
 ```angular-ts
 import type { ZardChartChromeColors, ZardChartConfig } from './chart.types';
@@ -904,6 +918,8 @@ export function resolveChartChrome(host: HTMLElement | null | undefined): ZardCh
 }
 ```
 
+**Add chart-context.ts**
+
 ```angular-ts
 import { InjectionToken, type Signal } from '@angular/core';
 
@@ -926,6 +942,8 @@ export interface ZardChartHost {
 export const ZARD_CHART = new InjectionToken<ZardChartHost>('ZARD_CHART');
 ```
 
+**Add chart-echarts.provider.ts**
+
 ```angular-ts
 import { provideEchartsCore } from 'ngx-echarts';
 
@@ -939,6 +957,8 @@ import { provideEchartsCore } from 'ngx-echarts';
 export const provideZardCharts = () =>
   provideEchartsCore({ echarts: () => import('./chart-echarts.registry').then(module => module.zardEcharts) });
 ```
+
+**Add chart-echarts.registry.ts**
 
 ```angular-ts
 import { BarChart, GaugeChart, LineChart, PieChart, RadarChart } from 'echarts/charts';
@@ -1005,6 +1025,8 @@ echarts.use([
 /** The registered ECharts core. Also what `z-chart` renders with on the server. */
 export const zardEcharts = echarts;
 ```
+
+**Add chart-legend.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -1077,6 +1099,8 @@ export class ZardChartLegendComponent {
   }
 }
 ```
+
+**Add chart-option.builder.ts**
 
 ```angular-ts
 import type { EChartsOption } from 'echarts';
@@ -1973,6 +1997,8 @@ export function buildChartOption(ctx: ZardChartBuildContext): EChartsOption {
 }
 ```
 
+**Add chart-ssr.util.ts**
+
 ```angular-ts
 import type { EChartsOption } from 'echarts';
 
@@ -2034,6 +2060,8 @@ export function renderChartToSvg(
 }
 ```
 
+**Add chart-tooltip.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -2083,6 +2111,8 @@ export class ZardChartTooltipComponent {
   readonly zDefaultIndex = input<number | undefined>(undefined, { transform: numberAttribute });
 }
 ```
+
+**Add chart-tooltip.formatter.ts**
 
 ```angular-ts
 import { mergeClasses } from '@/shared/utils/merge-classes';
@@ -2322,6 +2352,8 @@ export function buildTooltipHtml(
 }
 ```
 
+**Add chart.imports.ts**
+
 ```angular-ts
 import { ZardChartLegendComponent } from '@/shared/components/chart/chart-legend.component';
 import { ZardChartTooltipComponent } from '@/shared/components/chart/chart-tooltip.component';
@@ -2329,6 +2361,8 @@ import { ZardChartComponent } from '@/shared/components/chart/chart.component';
 
 export const ZardChartImports = [ZardChartComponent, ZardChartTooltipComponent, ZardChartLegendComponent] as const;
 ```
+
+**Add chart.types.ts**
 
 ```angular-ts
 import type { EChartsOption } from 'echarts';
@@ -2415,6 +2449,8 @@ export interface ZardChartLegendEntry {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './chart.component';
 export * from './chart-legend.component';
@@ -2467,6 +2503,63 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardChartImports } from '@/shared/components/chart/chart.imports';
+import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
+
+@Component({
+  selector: 'z-demo-chart-preview',
+  imports: [ZardCardImports, ZardChartImports],
+  template: `
+    <z-card class="w-full">
+      <z-card-header>
+        <z-card-title zTitle="Bar Chart" />
+        <z-card-description zDescription="Showing total visitors for the last 6 months" />
+      </z-card-header>
+      <z-card-content>
+        <z-chart
+          zType="bar"
+          [zConfig]="chartConfig"
+          [zData]="chartData"
+          [zSeries]="series"
+          zXAxisKey="month"
+          [zXAxisFormatter]="shortMonth"
+          class="w-full"
+        >
+          <z-chart-tooltip zIndicator="dashed" />
+          <z-chart-legend />
+        </z-chart>
+      </z-card-content>
+    </z-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoChartPreviewComponent {
+  protected readonly chartConfig: ZardChartConfig = {
+    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
+    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
+  };
+
+  protected readonly chartData = [
+    { month: 'January', desktop: 186, mobile: 80 },
+    { month: 'February', desktop: 305, mobile: 200 },
+    { month: 'March', desktop: 237, mobile: 120 },
+    { month: 'April', desktop: 73, mobile: 190 },
+    { month: 'May', desktop: 209, mobile: 130 },
+    { month: 'June', desktop: 214, mobile: 140 },
+  ];
+
+  protected readonly series = ['desktop', 'mobile'];
+
+  protected readonly shortMonth = (value: string) => value.slice(0, 3);
+}
+```
 
 ### Chart Config
 

@@ -17,6 +17,8 @@ npx zard-cli@latest add kbd
 
 ### Manual
 
+**Add kbd.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -42,6 +44,8 @@ export class ZardKbdComponent {
 }
 ```
 
+**Add kbd.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
@@ -50,12 +54,16 @@ export const kbdVariants = cva("inline-flex h-5 w-fit min-w-5 items-center justi
 export const kbdGroupVariants = cva('inline-flex items-center gap-1');
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './kbd-group.component';
 export * from './kbd.component';
 export * from './kbd.imports';
 export * from './kbd.variants';
 ```
+
+**Add kbd-group.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -86,6 +94,8 @@ export class ZardKbdGroupComponent {
 }
 ```
 
+**Add kbd.imports.ts**
+
 ```angular-ts
 /*
  * The alias, not a relative path: the Angular compiler re-emits these imports from
@@ -110,6 +120,37 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardKbdGroupComponent } from '@/shared/components/kbd/kbd-group.component';
+import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
+
+@Component({
+  selector: 'z-demo-kbd-preview',
+  imports: [ZardKbdComponent, ZardKbdGroupComponent],
+  template: `
+    <div class="flex flex-col items-center justify-center gap-4">
+      <z-kbd-group>
+        <z-kbd>⌘</z-kbd>
+        <z-kbd>⇧</z-kbd>
+        <z-kbd>⌥</z-kbd>
+        <z-kbd>⌃</z-kbd>
+      </z-kbd-group>
+      <z-kbd-group>
+        <z-kbd>Ctrl</z-kbd>
+        <span>+</span>
+        <z-kbd>B</z-kbd>
+      </z-kbd-group>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoKbdPreviewComponent {}
+```
 
 ### Group
 

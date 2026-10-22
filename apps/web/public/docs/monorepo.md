@@ -31,7 +31,7 @@ npx zard-cli@latest init --type nx --project web
 
 Every path in the report is relative to the workspace root, and each one belongs to the app that was chosen — except the aliases, which are shared by construction.
 
-Terminal
+**Terminal**
 
 ```
 ✔  Writing configuration…
@@ -49,7 +49,7 @@ Terminal
 
 The mapping points at the app's source root, so the components installed there are reachable from anywhere in the workspace under the prefix you configured. The prefix comes from the alias you chose — pick `@app/components` and the key is `@app/*` , not a fixed `@/*` .
 
-tsconfig.base.json
+**tsconfig.base.json**
 
 ```
 {
@@ -65,7 +65,7 @@ tsconfig.base.json
 
 Written next to the app's `project.json` , never at the workspace root. Running `init` again rewrites it on purpose: it is the way to fix a file left over from an earlier setup.
 
-apps/web/.postcssrc.json
+**apps/web/.postcssrc.json**
 
 ```
 {
@@ -85,7 +85,7 @@ npx zard-cli@latest init --type nx-library --project ui
 
 The configuration says as much: `appConfigFile` is empty, and `baseUrl` points at `src/lib` — the convention of both `ng generate library` and `nx g @nx/angular:library` , where `src/` holds the public entry point and everything it exports lives one level down.
 
-components.json
+**components.json**
 
 ```
 {
@@ -114,7 +114,7 @@ components.json
 
 The theme tokens are still written, but into the library instead of an app — and a loose `.css` file is not reachable from the entry point, so ng-packagr would leave it out of the package. Declaring it as an asset is what puts it in the published output, at the root of the package rather than under a `src/` that only means something inside the library's own repository.
 
-libs/ui/ng-package.json
+**libs/ui/ng-package.json**
 
 ```
 {
@@ -134,14 +134,14 @@ Two things belong to the application, and the library cannot do either on its be
 
 One step is the library's, and it is easy to miss: `provideZard()` is installed with `core` inside the library, and `init` does not touch the public entry point. Re-export it from `src/index.ts` , or the import below has nothing to resolve to.
 
-libs/ui/src/index.ts
+**libs/ui/src/index.ts**
 
 ```
 export * from './lib/shared/core';
 export * from './lib/shared/components/button';
 ```
 
-apps/web/src/app/app.config.ts
+**apps/web/src/app/app.config.ts**
 
 ```
 import { ApplicationConfig } from '@angular/core';
@@ -155,7 +155,7 @@ export const appConfig: ApplicationConfig = {
 
 The stylesheet import resolves to the asset published at the package root. Tailwind is the application's to configure too: the library has no build of its own to run it in.
 
-apps/web/src/styles.css
+**apps/web/src/styles.css**
 
 ```
 @import '@acme/ui/styles.css';
@@ -165,7 +165,7 @@ apps/web/src/styles.css
 
 Once the type is answered, only the projects that match it are offered: applications for `nx` , libraries for `nx-library` . Offering the others would mean offering a target the following steps do not know how to configure.
 
-Terminal
+**Terminal**
 
 ```
    ✔  project type  …  Nx
@@ -185,7 +185,7 @@ With a single compatible project there is nothing to choose, so the question is 
 
 `--type` and `--project` are the two wizard questions given in advance. A name that is not a project of that type is refused with the list of the ones that are, rather than falling back to something you did not ask for.
 
-Terminal
+**Terminal**
 
 ```
 # Both answers up front — required in CI, where nobody can be asked.

@@ -17,6 +17,8 @@ npx zard-cli@latest add slider
 
 ### Manual
 
+**Add slider.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import {
@@ -521,6 +523,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 }
 ```
 
+**Add slider.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
@@ -545,11 +549,15 @@ export const sliderOrientationVariants = cva('absolute', {
 });
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './slider.component';
 export * from './slider.imports';
 export * from './slider.variants';
 ```
+
+**Add slider.imports.ts**
 
 ```angular-ts
 /*
@@ -584,6 +592,26 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardSliderComponent } from '../slider.component';
+
+@Component({
+  selector: 'z-demo-slider-preview',
+  imports: [ZardSliderComponent],
+  template: `
+    <div class="flex min-h-50 w-full items-center p-10">
+      <z-slider class="mx-auto w-full max-w-xs" [zDefault]="[75]" />
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSliderPreviewComponent {}
+```
 
 ### Range
 

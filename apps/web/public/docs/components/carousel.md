@@ -23,6 +23,14 @@ npx zard-cli@latest add carousel
 
 ### Manual
 
+**Install dependencies**
+
+```bash
+npm install embla-carousel-angular embla-carousel embla-carousel-autoplay embla-carousel-class-names embla-carousel-reactive-utils embla-carousel-wheel-gestures
+```
+
+**Add carousel.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import {
@@ -243,6 +251,8 @@ export class ZardCarouselComponent {
 }
 ```
 
+**Add carousel.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -315,6 +325,8 @@ export type ZardCarouselOrientationVariants = NonNullable<VariantProps<typeof ca
 export type ZardCarouselControlsVariants = NonNullable<VariantProps<typeof carouselVariants>['zControls']>;
 ```
 
+**Add carousel-content.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, inject, input } from '@angular/core';
 
@@ -347,6 +359,8 @@ export class ZardCarouselContentComponent {
   );
 }
 ```
+
+**Add carousel-item.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, inject, input } from '@angular/core';
@@ -382,6 +396,8 @@ export class ZardCarouselItemComponent {
   );
 }
 ```
+
+**Add carousel-plugins.service.ts**
 
 ```angular-ts
 import { Injectable } from '@angular/core';
@@ -487,6 +503,8 @@ export class ZardCarouselPluginsService {
 }
 ```
 
+**Add carousel.imports.ts**
+
 ```angular-ts
 import { ZardCarouselContentComponent } from '@/shared/components/carousel/carousel-content.component';
 import { ZardCarouselItemComponent } from '@/shared/components/carousel/carousel-item.component';
@@ -498,6 +516,8 @@ export const ZardCarouselImports = [
   ZardCarouselItemComponent,
 ] as const;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './carousel.component';
@@ -525,6 +545,43 @@ import { ZardCarouselImports } from '@/shared/components/carousel/carousel.impor
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
+
+@Component({
+  selector: 'z-demo-carousel-preview',
+  imports: [ZardCarouselImports, ZardCardImports],
+  template: `
+    <div class="w-full max-w-48 sm:max-w-xs">
+      <z-carousel>
+        <z-carousel-content>
+          @for (slide of slides; track slide) {
+            <z-carousel-item>
+              <div class="p-1">
+                <z-card>
+                  <z-card-content class="flex aspect-square items-center justify-center p-6">
+                    <span class="text-4xl font-semibold">{{ slide }}</span>
+                  </z-card-content>
+                </z-card>
+              </div>
+            </z-carousel-item>
+          }
+        </z-carousel-content>
+      </z-carousel>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCarouselPreviewComponent {
+  protected slides = ['1', '2', '3', '4', '5'];
+}
+```
 
 ### Sizes
 

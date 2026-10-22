@@ -114,9 +114,19 @@ function serializeInstallation(data: ComponentData): string {
     parts.push('### CLI', fence(cli.code, cli.language));
   }
 
-  const manual = (data.installData?.manualCode ?? []).map(codeBlock).filter(Boolean);
+  // Mirrors the Manual tab: dependencies first, then one labelled block per file, so a
+  // reader (or an AI assistant) knows which file each block belongs to.
+  const manual: string[] = [];
+  const deps = data.installData?.manualDeps?.tabs?.[0];
+  if (deps?.code) {
+    manual.push('**Install dependencies**', fence(deps.code, deps.language));
+  }
+  for (const block of data.installData?.manualCode ?? []) {
+    const rendered = codeBlock(block);
+    if (rendered) manual.push(block.title ? `**Add ${block.title}**` : '', rendered);
+  }
   if (manual.length) {
-    parts.push('### Manual', ...manual);
+    parts.push('### Manual', ...manual.filter(Boolean));
   }
 
   const register = codeBlock(data.installData?.register);
@@ -151,7 +161,7 @@ export function serializeComponentToMarkdown(data: ComponentData): string {
     section('Installation', serializeInstallation(data)),
     section('Usage', serializeUsage(data)),
     section('Composition', codeBlock(data.composition)),
-    section('Examples', serializeExamples(data.examples)),
+    section('Examples', serializeExamples(data.preview ? [data.preview, ...data.examples] : data.examples)),
     section('API Reference', serializeApi(data.api)),
     `---\n\n[Open in browser](${BASE_URL}/docs/components/${data.componentName})`,
   ];

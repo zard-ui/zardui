@@ -17,6 +17,8 @@ npx zard-cli@latest add toggle
 
 ### Manual
 
+**Add toggle.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -133,6 +135,8 @@ export class ZardToggleComponent implements ControlValueAccessor {
 }
 ```
 
+**Add toggle.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -160,6 +164,8 @@ export type ZardToggleTypeVariants = NonNullable<VariantProps<typeof toggleVaria
 export type ZardToggleSizeVariants = NonNullable<VariantProps<typeof toggleVariants>['zSize']>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './toggle.component';
 export * from './toggle.variants';
@@ -176,6 +182,31 @@ import { ZardToggleComponent } from '@/shared/components/toggle/toggle.component
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBookmark } from '@ng-icons/lucide';
+
+import { ZardToggleComponent } from '../toggle.component';
+
+@Component({
+  selector: 'z-demo-toggle-preview',
+  imports: [ZardToggleComponent, NgIcon],
+  template: `
+    <z-toggle zAriaLabel="Toggle bookmark" zSize="sm" zType="outline">
+      <ng-icon name="lucideBookmark" class="group-data-[state=on]/toggle:[&_path]:fill-foreground" />
+      Bookmark
+    </z-toggle>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideBookmark })],
+})
+export class ZardDemoTogglePreviewComponent {}
+```
 
 ### Outline
 

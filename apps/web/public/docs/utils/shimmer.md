@@ -11,15 +11,15 @@ A spinner tells you the app is busy. A shimmering line tells you *this text* is 
 
 ## Installation
 
-The utility ships in utilities.css, its own registry item — separate from core, so nothing pulls it in until you ask for it.
+The utility ships in utilities.css, its own registry item — separate from core. You add it yourself, or it comes along with a component that uses it.
 
 ```
 npx zard-cli add utilities
 ```
 
-`tailwind.css` imports it on its first line, so the classes are available as soon as that stylesheet is imported after Tailwind.
+The CLI writes `utilities.css` next to your global stylesheet and adds its `@import` after the ones already there. If you install by hand, copy the file there and add the same line yourself.
 
-src/styles.css
+**src/styles.css**
 
 ```
 @import 'tailwindcss';
@@ -34,8 +34,6 @@ One class, on the element that holds the text.
 ```
 <p class="shimmer text-muted-foreground">Generating response...</p>
 ```
-
-Generating response...
 
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -57,7 +55,7 @@ The element gets a `linear-gradient` background clipped to its glyphs — `backg
 
 Dark mode brightens the highlight through a `@variant dark` override, rather than dimming it the way a fixed colour would.
 
-css/utilities.css
+**css/utilities.css**
 
 ```
 @utility shimmer {
@@ -91,10 +89,6 @@ shimmer-color-* takes a theme colour or an arbitrary one, and accepts the slash-
 <p class="shimmer shimmer-color-blue-500/60">The same colour, dimmed to 60%</p>
 ```
 
-shimmer-color-blue-500/60 — an arbitrary colour, dimmed
-
-shimmer-color-primary — a theme token from @theme inline
-
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -125,12 +119,6 @@ export class ZardUtilsShimmerColorComponent {}
 <p class="shimmer shimmer-duration-4000">Four seconds per sweep</p>
 ```
 
-shimmer-duration-1000 — one second
-
-default — two seconds
-
-shimmer-duration-4000 — four seconds
-
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -159,10 +147,6 @@ Spread is how wide the band is; angle is how far it tilts off vertical.
 <p class="shimmer shimmer-angle-45">A steeper tilt</p>
 ```
 
-shimmer-spread-24 — a wider band
-
-shimmer-angle-45 — a steeper tilt
-
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -189,8 +173,6 @@ export class ZardUtilsShimmerSpreadAngleComponent {}
 <p class="shimmer shimmer-reverse">Sweeping the other way</p>
 ```
 
-Response generated.
-
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -216,12 +198,6 @@ export class ZardUtilsShimmerOnceComponent {}
 The effect is text-only. Applying it to a container clips *that container's* background to its text, and everything inside it looks broken — put the class on the element that holds the words, never on the row that wraps them.
 
 Next to a badge or a spinner is where it earns its place: the chrome says something is running, the shimmer says which line is still being written.
-
-Run 41
-
-Indexing 1,204 files...
-
-Building the dependency graph...
 
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';

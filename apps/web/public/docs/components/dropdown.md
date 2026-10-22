@@ -17,6 +17,8 @@ npx zard-cli@latest add dropdown
 
 ### Manual
 
+**Add dropdown.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
@@ -365,6 +367,8 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 }
 ```
 
+**Add dropdown.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -424,6 +428,8 @@ export const dropdownLabelVariants = cva('relative flex items-center px-2 py-1.5
 export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>;
 export type ZardDropdownItemTypeVariants = NonNullable<ZardDropdownItemVariants['variant']>;
 ```
+
+**Add dropdown-item.component.ts**
 
 ```angular-ts
 import {
@@ -507,6 +513,8 @@ export class ZardDropdownMenuItemComponent {
 }
 ```
 
+**Add dropdown-menu-content.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -571,6 +579,8 @@ export class ZardDropdownMenuContentComponent {
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
 }
 ```
+
+**Add dropdown-positions.ts**
 
 ```angular-ts
 import type { ConnectedPosition } from '@angular/cdk/overlay';
@@ -662,6 +672,8 @@ export function buildDropdownPositions(
   ];
 }
 ```
+
+**Add dropdown-primitives.component.ts**
 
 ```angular-ts
 import {
@@ -926,6 +938,8 @@ export class ZardDropdownMenuRadioItemComponent {
   }
 }
 ```
+
+**Add dropdown-submenu.component.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -1335,6 +1349,8 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 }
 ```
 
+**Add dropdown-trigger.directive.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -1458,6 +1474,8 @@ export class ZardDropdownDirective implements OnInit {
 }
 ```
 
+**Add dropdown.imports.ts**
+
 ```angular-ts
 import { ZardDropdownMenuItemComponent } from '@/shared/components/dropdown/dropdown-item.component';
 import { ZardDropdownMenuContentComponent } from '@/shared/components/dropdown/dropdown-menu-content.component';
@@ -1493,6 +1511,8 @@ export const ZardDropdownImports = [
   ZardDropdownDirective,
 ] as const;
 ```
+
+**Add dropdown.service.ts**
 
 ```angular-ts
 import { Directionality, type Direction } from '@angular/cdk/bidi';
@@ -1917,6 +1937,8 @@ export class ZardDropdownService {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './dropdown.component';
 export * from './dropdown-item.component';
@@ -1930,6 +1952,8 @@ export * from './dropdown.imports';
 export * from './dropdown.variants';
 export * from './menu-keyboard';
 ```
+
+**Add menu-keyboard.ts**
 
 ```angular-ts
 /**
@@ -2028,6 +2052,64 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
+
+@Component({
+  selector: 'z-demo-dropdown-preview',
+  imports: [ZardDropdownImports, ZardButtonComponent],
+  template: `
+    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
+
+    <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-56">
+      <z-dropdown-menu-label>My Account</z-dropdown-menu-label>
+      <z-dropdown-menu-item (click)="log('Profile')">
+        Profile
+        <z-dropdown-menu-shortcut>⇧⌘P</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Billing')">
+        Billing
+        <z-dropdown-menu-shortcut>⌘B</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Settings')">
+        Settings
+        <z-dropdown-menu-shortcut>⌘S</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Keyboard shortcuts')">
+        Keyboard shortcuts
+        <z-dropdown-menu-shortcut>⌘K</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-separator />
+      <z-dropdown-menu-item (click)="log('Team')">Team</z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('New Team')">
+        New Team
+        <z-dropdown-menu-shortcut>⌘+T</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-separator />
+      <z-dropdown-menu-item (click)="log('GitHub')">GitHub</z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Support')">Support</z-dropdown-menu-item>
+      <z-dropdown-menu-item [disabled]="true">API</z-dropdown-menu-item>
+      <z-dropdown-menu-separator />
+      <z-dropdown-menu-item (click)="log('Log out')">
+        Log out
+        <z-dropdown-menu-shortcut>⇧⌘Q</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+    </z-dropdown-menu-content>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDropdownPreviewComponent {
+  log(item: string) {
+    console.log(`${item} clicked`);
+  }
+}
+```
 
 ### Basic
 

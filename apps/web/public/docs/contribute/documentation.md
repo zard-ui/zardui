@@ -45,7 +45,7 @@ A fence in `apps/web/public/documentation/` opens with its language followed by 
 
 Exports are numbered by order of appearance — `BLOCK_0` , `TABS_0` , `BLOCK_1` — so inserting a fence in the middle of a file renumbers everything after it. Import with an alias to keep the page readable, and rerun the generator after every edit.
 
-apps/web/src/app/domain/pages/dark-mode/dark-mode.page.ts
+**apps/web/src/app/domain/pages/dark-mode/dark-mode.page.ts**
 
 ```
 import { BLOCK_0 as HEADER_BLOCK_0, BLOCK_1 as HEADER_BLOCK_1 } from '@generated/pages/dark-mode/header-usage';
@@ -61,7 +61,7 @@ export class DarkModePage {
 }
 ```
 
-Rendering the generated blocks
+**Rendering the generated blocks**
 
 ```
 <z-code-tabs [data]="serviceInstallationTabs" />
@@ -83,7 +83,7 @@ Documentation pages are assembled from a small set of components. Reuse them ins
 | `z-code-tabs` | A tabbed group from CodeTabData. |
 | `z-api-reference` | The API table rendered from an ApiSection[]. |
 
-Skeleton of a documentation page
+**Skeleton of a documentation page**
 
 ```
 @Component({
@@ -110,7 +110,7 @@ export class ContributeFaqPage implements OnInit {
 }
 ```
 
-Skeleton of the matching template
+**Skeleton of the matching template**
 
 ```
 <z-content
@@ -139,7 +139,7 @@ npm run generate:md:docs
 
 Reads the prerendered HTML of every static page and converts the `z-content` subtree to Markdown under `apps/web/public/docs/` . Runs after the build, because it needs the rendered output.
 
-The documentation pipeline
+**The documentation pipeline**
 
 ```
 # Markdown sources -> apps/web/src/generated/**

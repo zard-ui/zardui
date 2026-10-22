@@ -17,6 +17,8 @@ npx zard-cli@latest add switch
 
 ### Manual
 
+**Add switch.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -129,6 +131,8 @@ export class ZardSwitchComponent implements ControlValueAccessor {
 }
 ```
 
+**Add switch.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -147,6 +151,8 @@ export const switchVariants = cva('relative inline-flex shrink-0 cursor-pointer 
 export type ZardSwitchSizeVariants = NonNullable<VariantProps<typeof switchVariants>['zSize']>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './switch.component';
 export * from './switch.variants';
@@ -163,6 +169,24 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
+
+@Component({
+  selector: 'z-demo-switch-preview',
+  imports: [ZardSwitchComponent],
+  template: `
+    <z-switch zId="airplane-mode">Airplane Mode</z-switch>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSwitchPreviewComponent {}
+```
 
 ### Description
 

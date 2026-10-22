@@ -13,7 +13,7 @@ Most surprises in this repository come from the same place: a committed file tha
 
 **My commit was rejected.** commitlint prints the exact rule that failed. The most common cause is a missing emoji, followed by a subject shorter than ten characters. Fix the message and amend — never reach for `--no-verify` , because the CI runs commitlint again on every commit in the pull request.
 
-Fix a rejected commit
+**Fix a rejected commit**
 
 ```
 # Rewrite the message of the last commit — never use --no-verify
@@ -40,7 +40,7 @@ The Usage section of my component is missing
 
 Add an entry for the component in packages/highlight/src/generator/usage-data.ts — usage-writer only emits files for the keys listed there.
 
-Code blocks are empty or stale
+**Code blocks are empty or stale**
 
 ```
 npm run generate:highlight
@@ -61,7 +61,7 @@ The page has no .md and the Copy Page button does nothing
 
 apps/web/public/docs/**.md is written after the build by generate:md:docs. Run npm run build, then commit the new file. An empty output means the page structure strayed from z-content.
 
-A new route is missing from the prerender list
+**A new route is missing from the prerender list**
 
 ```
 node apps/web/update-routes.mjs
@@ -90,7 +90,7 @@ Do I need to touch the E2E specs?
 
 Only when you change a component behaviour or its first demo — that demo is the fixture every spec targets. Pure documentation changes do not need E2E updates.
 
-Reset a confusing build
+**Reset a confusing build**
 
 ```
 npx nx reset

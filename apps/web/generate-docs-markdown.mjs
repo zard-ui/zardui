@@ -7,16 +7,27 @@
  * in Angular templates. So this reads the prerendered HTML (post-build) and
  * converts the page content to Markdown. Runs AFTER `nx build`.
  *
- *   node apps/web/generate-docs-markdown.mjs
+ *   node apps/web/generate-docs-markdown.mjs [--volatile]
+ *
+ * Pages in VOLATILE carry data fetched from GitHub while prerendering (sponsors,
+ * contributors), so a build with no network or a rate-limited token renders them degraded.
+ * The committed `.md` of those pages is only rewritten with `--volatile`.
+ *
+ * `apps/web/check-docs-markdown.mjs` reuses `convertPage`/`collectDocPaths` to verify the
+ * committed files against the prerendered pages.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { Window } from 'happy-dom';
 
 const domParser = new new Window().DOMParser();
 
-const BROWSER_DOCS = 'dist/apps/web/browser/docs';
-const PUBLIC_DOCS = 'apps/web/public/docs';
+export const BROWSER_DOCS = 'dist/apps/web/browser/docs';
+export const PUBLIC_DOCS = 'apps/web/public/docs';
+
+/** Pages whose content tracks the GitHub API and not the branch. */
+export const VOLATILE = new Set(['about', 'changelog']);
 
 // Chrome / non-content elements to drop before converting.
 // `Z-AVATAR` renders an initials fallback (`<span>HE</span>`) next to the image while it
@@ -39,7 +50,9 @@ const INLINE = new Set(['A', 'STRONG', 'B', 'EM', 'I', 'CODE', 'SPAN', 'SMALL', 
  * inactive CLI/Manual tab (duplicate steps) and screen-reader-only figcaptions
  * (duplicate code filenames) both carry it, so skipping it dedupes both.
  */
-function skipEl(el) {
+export function skipEl(el) {
+  // `data-slot="preview"` is a live demo rendered next to its code: UI chrome, not documentation.
+  if (el.getAttribute('data-slot') === 'preview') return true;
   return SKIP.has(el.tagName) || (el.getAttribute('class') || '').split(/\s+/).includes('sr-only');
 }
 
@@ -89,6 +102,22 @@ function tabContainer(el) {
     .filter(b => b.label);
   if (buttons.length < 2) return null;
 
+  // Tabs that name their panel (`aria-controls`), or hide the inactive one without `sr-only`
+  // (dark mode: `invisible h-0`): match by id, then by position.
+  const controlled = [...nav.querySelectorAll('button')]
+    .filter(b => b.textContent.trim())
+    .map(b => ({
+      label: b.textContent.replace(/\s+/g, ' ').trim(),
+      section: sections.find(section => section.id && section.id === b.getAttribute('aria-controls')),
+    }));
+  if (controlled.length === buttons.length && controlled.every(entry => entry.section)) return controlled;
+  if (
+    sections.length === buttons.length &&
+    !sections.some(s => (s.getAttribute('class') || '').split(/\s+/).includes('sr-only'))
+  ) {
+    return buttons.map((b, i) => ({ label: b.label, section: sections[i] }));
+  }
+
   const isSrOnly = section => (section.getAttribute('class') || '').split(/\s+/).includes('sr-only');
   const activeLabel = (buttons.find(b => b.active) || buttons[0]).label;
   const activeSection = sections.find(section => !isSrOnly(section));
@@ -99,6 +128,58 @@ function tabContainer(el) {
   return buttons
     .map(b => ({ label: b.label, section: b.label === activeLabel ? activeSection : inactiveSections[inactive++] }))
     .filter(entry => entry.section);
+}
+
+/** Custom elements that wrap one or more `<pre>` blocks (single block, tabs, expandable). */
+const CODE_CONTAINERS = new Set(['Z-CODE-BLOCK', 'Z-CODE-DISPLAY', 'Z-CODE-TABS', 'Z-EXPANDABLE-CODE']);
+/** Tab labels of a code-tabs switcher that only vary the package manager (same command, four spellings). */
+export const PACKAGE_MANAGERS = new Set(['npm', 'pnpm', 'yarn', 'bun']);
+
+function fence(code) {
+  const text = code.replace(/\n+$/, '');
+  if (!text.trim()) return '';
+  // A fence longer than any backtick run inside the code, so embedded fences cannot close it.
+  const longest = Math.max(2, ...[...text.matchAll(/`+/g)].map(m => m[0].length));
+  const ticks = '`'.repeat(longest + 1);
+  return `${ticks}\n${text}\n${ticks}`;
+}
+
+/**
+ * Converts a code element (`z-code-block`, `z-code-display`, `z-code-tabs`,
+ * `z-expandable-code`) to Markdown blocks, labelling every block with its file
+ * name (the header title) or its tab name, so the reader knows which file a block
+ * belongs to. Package-manager tabs (npm/pnpm/yarn/bun) keep only the first variant.
+ */
+function codeMarkdown(el, out) {
+  const pres = [...el.querySelectorAll('pre')];
+  if (!pres.length) return;
+
+  const tabs = [...el.querySelectorAll('[role="tab"]')].map(t => t.textContent.replace(/\s+/g, ' ').trim());
+  const panels = [...el.querySelectorAll('[role="tabpanel"]')];
+  if (tabs.length >= 2 && panels.length === tabs.length) {
+    const onlyPackageManagers = tabs.every(label => PACKAGE_MANAGERS.has(label.toLowerCase()));
+    const count = onlyPackageManagers ? 1 : tabs.length;
+    for (let i = 0; i < count; i++) {
+      const pre = panels[i].querySelector('pre');
+      const block = pre ? fence(pre.textContent) : '';
+      if (!block) continue;
+      if (!onlyPackageManagers) out.push(`**${tabs[i]}**`);
+      out.push(block);
+    }
+    return;
+  }
+
+  // File name: the first text in the header that is outside the code and the controls.
+  const title = [...el.querySelectorAll('span')]
+    .filter(span => !span.closest('pre, button, z-copy-button'))
+    .map(span => span.textContent.replace(/\s+/g, ' ').trim())
+    .find(Boolean);
+  for (const pre of pres) {
+    const block = fence(pre.textContent);
+    if (!block) continue;
+    if (title && pres.length === 1) out.push(`**${title}**`);
+    out.push(block);
+  }
 }
 
 /** Convert an HTML <table> (e.g. a component's API reference) to a Markdown table. */
@@ -123,48 +204,139 @@ function convertTable(table) {
   ].join('\n');
 }
 
+const BLOCKISH = new Set([
+  'DIV',
+  'P',
+  'SECTION',
+  'ARTICLE',
+  'LI',
+  'DL',
+  'DD',
+  'UL',
+  'OL',
+  'H1',
+  'H2',
+  'H3',
+  'H4',
+  'H5',
+  'H6',
+]);
+
 function inlineText(node) {
   let out = '';
+  // True right after an element, until a text node (which carries its own whitespace) follows.
+  let afterElement = false;
   for (const child of node.childNodes) {
     if (child.nodeType === 3) {
       out += child.textContent.replace(/\s+/g, ' ');
+      afterElement = false;
     } else if (child.nodeType === 1) {
       const tag = child.tagName;
       if (skipEl(child)) continue;
       const inner = inlineText(child);
       if (!inner.trim() && tag !== 'BR') continue;
+      let piece;
       if (tag === 'A') {
         const href = child.getAttribute('href') || '';
-        out += href && !href.startsWith('#') ? `[${inner.trim()}](${href})` : inner;
+        piece = href && !href.startsWith('#') ? `[${inner.trim()}](${href})` : inner;
       } else if (tag === 'STRONG' || tag === 'B') {
-        out += `**${inner.trim()}**`;
+        piece = `**${inner.trim()}**`;
       } else if (tag === 'EM' || tag === 'I') {
-        out += `*${inner.trim()}*`;
+        piece = `*${inner.trim()}*`;
       } else if (tag === 'CODE') {
-        out += `\`${inner.trim()}\``;
+        piece = `\`${inner.trim()}\``;
       } else if (tag === 'BR') {
-        out += '\n';
+        piece = '\n';
+      } else if (tag === 'DT') {
+        piece = ` **${inner.trim()}** `;
+      } else if (BLOCKISH.has(tag)) {
+        // Blocks nested in a list item or table cell: keep them apart, inline.
+        piece = ` ${inner.trim()} `;
       } else {
-        // Insert a space at element boundaries that would otherwise merge two words
-        // (e.g. adjacent card title/description spans → "DiscordJoin", "customizationsKeep").
-        const needsSpace = /\w$/.test(out) && /^\w/.test(inner);
-        out += (needsSpace ? ' ' : '') + inner;
+        piece = inner;
       }
+      // Two elements with no text between them (`<strong>Run the CLI.</strong><code>x</code>`,
+      // adjacent card title/description spans, a row of `<code>` chips) would be glued
+      // together. Separate chips with a comma, everything else with a space.
+      if (afterElement && tag !== 'BR' && !/\s$/.test(out) && !/^\s/.test(piece)) {
+        if (tag === 'CODE' && out.endsWith('`')) out += ', ';
+        else if (/[\w`*\])]$/.test(out) && /^[\w`*[]/.test(piece)) out += ' ';
+      }
+      // A label span glued to the end of a sentence ("…color.<span>Without it</span>").
+      else if ((tag === 'SPAN' || tag === 'SMALL') && /[.!?:;,]$/.test(out) && /^[\w`*[]/.test(piece)) out += ' ';
+      out += piece;
+      afterElement = tag !== 'BR';
     }
   }
-  return out;
+  return out.replace(/ {2,}/g, ' ');
+}
+
+/** Elements that start a new block: an inline wrapper containing one is walked as a container. */
+const BLOCK_SELECTOR =
+  'p,pre,ul,ol,dl,table,h1,h2,h3,h4,h5,h6,div,section,article,blockquote,hr,z-code-block,z-code-tabs,z-code-display';
+
+function isInlineFlow(el) {
+  if (!INLINE.has(el.tagName) || el.querySelector(BLOCK_SELECTOR)) return false;
+  // A link on its own is a block-level card/CTA (a list entry); inside a sentence it is inline.
+  if (el.tagName === 'A') {
+    const neighbour = n => n && n.nodeType === 3 && n.textContent.trim();
+    return Boolean(neighbour(el.previousSibling) || neighbour(el.nextSibling));
+  }
+  return true;
+}
+
+/**
+ * Whether an inline element continues the current paragraph. Sibling `<span>`s with no
+ * running text around them (card title + description, a row of goals) are separate
+ * lines, not one sentence.
+ */
+function joinsRun(el, run) {
+  if (!['SPAN', 'SMALL', 'LABEL'].includes(el.tagName)) return true;
+  if (run.some(n => (n.nodeType === 3 ? n.textContent.trim() : !['SPAN', 'SMALL', 'LABEL'].includes(n.tagName))))
+    return true;
+  let next = el.nextSibling;
+  while (next && next.nodeType === 3 && !next.textContent.trim()) next = next.nextSibling;
+  if (!next) return false;
+  return next.nodeType === 3 || !['SPAN', 'SMALL', 'LABEL'].includes(next.tagName);
+}
+
+/** A link styled as a button is an action, not a list entry. */
+function isButtonLink(el) {
+  return el.tagName === 'A' && el.getAttribute('data-slot') === 'button';
 }
 
 function blockMarkdown(node, out) {
+  // Text and inline elements that sit directly in a container (`<dd>text <code>x</code> more</dd>`)
+  // are one paragraph: collect the run and flush it as a single block.
+  let run = [];
+  const flush = () => {
+    if (!run.length) return;
+    const holder = { childNodes: run };
+    const text = inlineText(holder).replace(/\s+/g, ' ').trim();
+    run = [];
+    if (text) out.push(text);
+  };
+
   for (const child of node.childNodes) {
     if (child.nodeType === 3) {
-      const text = child.textContent.replace(/\s+/g, ' ').trim();
-      if (text) out.push(text);
+      run.push(child);
       continue;
     }
     if (child.nodeType !== 1) continue;
-    const tag = child.tagName;
     if (skipEl(child)) continue;
+    if (isInlineFlow(child) && !isButtonLink(child) && joinsRun(child, run)) {
+      run.push(child);
+      continue;
+    }
+    flush();
+    blockChild(child, out);
+  }
+  flush();
+}
+
+function blockChild(child, out) {
+  {
+    const tag = child.tagName;
 
     if (/^H[1-6]$/.test(tag)) {
       const text = inlineText(child).trim();
@@ -173,8 +345,8 @@ function blockMarkdown(node, out) {
       const text = inlineText(child).trim();
       if (text) out.push(text);
     } else if (tag === 'PRE') {
-      const code = child.textContent.replace(/\n+$/, '');
-      if (code.trim()) out.push('```\n' + code + '\n```');
+      const block = fence(child.textContent);
+      if (block) out.push(block);
     } else if (tag === 'UL' || tag === 'OL') {
       const items = [];
       let i = 1;
@@ -199,15 +371,18 @@ function blockMarkdown(node, out) {
             .join('\n'),
         );
       }
-    } else if (
-      /bg-code|code-tabs-wrapper/.test(child.getAttribute('class') || '') &&
-      child.querySelectorAll('pre').length >= 2
-    ) {
-      // Code-tabs (npm/pnpm/yarn/bun) — two implementations (`bg-code` on doc pages,
-      // `code-tabs-wrapper` on install steps). Keep only the first variant, not all four.
-      const code = child.querySelector('pre').textContent.replace(/\n+$/, '');
-      if (code.trim()) out.push('```\n' + code + '\n```');
-    } else if ((child.getAttribute('class') || '').includes('bg-code') && !child.querySelector('pre')) {
+    } else if (CODE_CONTAINERS.has(tag)) {
+      codeMarkdown(child, out);
+    } else if (tag === 'DL') {
+      // Definition list (e.g. troubleshooting): the term as a bold line, then its definition.
+      for (const part of child.querySelectorAll('dt, dd')) {
+        const text = inlineText(part).replace(/\s+/g, ' ').trim();
+        if (text) out.push(part.tagName === 'DT' ? `**${text}**` : text);
+      }
+    } else if (/bg-code|code-tabs-wrapper/.test(child.getAttribute('class') || '') && child.querySelector('pre')) {
+      // Bare code UI without a custom-element wrapper: same handling.
+      codeMarkdown(child, out);
+    } else if ((child.getAttribute('class') || '').includes('bg-code')) {
       // Terminal-style code UI (styled div, not a <pre>) — render as fenced code.
       const code = terminalCode(child);
       if (code) out.push(code);
@@ -222,7 +397,13 @@ function blockMarkdown(node, out) {
       const isButton = child.getAttribute('data-slot') === 'button';
       if (text) {
         if (!href || href.startsWith('#')) out.push(text);
-        else out.push(isButton ? `[${text}](${href})` : `- [${text}](${href})`);
+        else if (isButton) {
+          // Consecutive action links ("Add to Cursor", "Add to VS Code") share one line.
+          const link = `[${text}](${href})`;
+          if (out.buttonRun === out.length - 1 && out.length) out[out.length - 1] += ` · ${link}`;
+          else out.push(link);
+          out.buttonRun = out.length - 1;
+        } else out.push(`- [${text}](${href})`);
       }
     } else if (INLINE.has(tag)) {
       const text = inlineText(child).trim();
@@ -257,7 +438,7 @@ function tidy(markdown) {
   );
 }
 
-function convertPage(html, slug) {
+export function convertPage(html, slug) {
   const document = domParser.parseFromString(html, 'text/html');
   const content = document.querySelector('z-content');
   if (!content) return null;
@@ -299,7 +480,7 @@ function convertPage(html, slug) {
  * component pages (`components/<name>`) are skipped — they get a richer `.md`
  * from generate-markdown.mts.
  */
-function collectDocPaths(dir, base = '') {
+export function collectDocPaths(dir, base = '') {
   const paths = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
@@ -312,7 +493,7 @@ function collectDocPaths(dir, base = '') {
   return paths;
 }
 
-function generate() {
+function generate({ volatile = false } = {}) {
   if (!existsSync(BROWSER_DOCS)) {
     console.error(`❌ ${BROWSER_DOCS} not found — run the build first.`);
     process.exit(1);
@@ -320,6 +501,7 @@ function generate() {
 
   let count = 0;
   const skipped = [];
+  const kept = [];
 
   for (const relPath of collectDocPaths(BROWSER_DOCS)) {
     const html = readFileSync(join(BROWSER_DOCS, relPath, 'index.html'), 'utf-8');
@@ -329,7 +511,15 @@ function generate() {
       continue;
     }
     // Committed source (served in dev + next build) and the current build output.
-    for (const file of [join(PUBLIC_DOCS, `${relPath}.md`), join(BROWSER_DOCS, `${relPath}.md`)]) {
+    const files = [join(PUBLIC_DOCS, `${relPath}.md`), join(BROWSER_DOCS, `${relPath}.md`)];
+    if (VOLATILE.has(relPath) && !volatile && existsSync(files[0])) {
+      // Keep the committed file; the build output serves it as is.
+      mkdirSync(dirname(files[1]), { recursive: true });
+      writeFileSync(files[1], readFileSync(files[0], 'utf-8'), 'utf-8');
+      kept.push(relPath);
+      continue;
+    }
+    for (const file of files) {
       mkdirSync(dirname(file), { recursive: true });
       writeFileSync(file, markdown, 'utf-8');
     }
@@ -371,7 +561,12 @@ function generate() {
   console.log(`✅ Wrote ${count} documentation markdown files to ${PUBLIC_DOCS}`);
   if (recovered.length)
     console.log(`↳ Recovered ${recovered.length} component stub(s) from HTML: ${recovered.join(', ')}`);
+  if (kept.length)
+    console.log(`↳ Kept the committed file of volatile page(s) (use --volatile to rewrite): ${kept.join(', ')}`);
   if (skipped.length) console.warn(`⚠️  Skipped (no content extracted): ${skipped.join(', ')}`);
 }
 
-generate();
+// Run only when invoked directly, not when imported by the check script.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  generate({ volatile: process.argv.includes('--volatile') });
+}

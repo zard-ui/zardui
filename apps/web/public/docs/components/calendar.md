@@ -17,6 +17,8 @@ npx zard-cli@latest add calendar
 
 ### Manual
 
+**Add calendar.component.ts**
+
 ```angular-ts
 import {
   afterNextRender,
@@ -517,6 +519,8 @@ export class ZardCalendarComponent implements ControlValueAccessor {
 }
 ```
 
+**Add calendar.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -691,6 +695,8 @@ export const calendarDayButtonVariants = cva('relative isolate z-10 flex aspect-
 
 export type ZardCalendarCaptionLabelVariants = NonNullable<VariantProps<typeof calendarCaptionLabelVariants>['layout']>;
 ```
+
+**Add calendar-grid.component.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -1066,6 +1072,8 @@ export class ZardCalendarGridComponent {
 }
 ```
 
+**Add calendar-i18n.service.ts**
+
 ```angular-ts
 import { computed, inject, Injectable, signal } from '@angular/core';
 
@@ -1156,6 +1164,8 @@ export class ZardCalendarI18nService {
   }
 }
 ```
+
+**Add calendar-navigation.component.ts**
 
 ```angular-ts
 import {
@@ -1419,6 +1429,8 @@ export class ZardCalendarNavigationComponent {
 }
 ```
 
+**Add calendar.imports.ts**
+
 ```angular-ts
 /*
  * The alias, not a relative path: the Angular compiler re-emits these imports from
@@ -1436,6 +1448,8 @@ export const ZardCalendarImports = [
   ZardCalendarNavigationComponent,
 ] as const;
 ```
+
+**Add calendar.types.ts**
 
 ```angular-ts
 import type { ZardDayOfWeek } from '@/shared/core/i18n';
@@ -1484,6 +1498,8 @@ export interface CalendarDayConfig {
   weekStartsOn?: ZardDayOfWeek;
 }
 ```
+
+**Add calendar.utils.ts**
 
 ```angular-ts
 import { DEFAULT_CALENDAR_LABELS, DEFAULT_LOCALE, type ZardCalendarLabels } from '@/shared/core/i18n';
@@ -1776,6 +1792,8 @@ export function toValidDate(value: unknown): Date | null {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './calendar-grid.component';
 export * from './calendar-i18n.service';
@@ -1798,6 +1816,26 @@ import { ZardCalendarComponent } from '@/shared/components/calendar/calendar.com
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardCalendarComponent } from '../calendar.component';
+
+@Component({
+  selector: 'z-demo-calendar-preview',
+  imports: [ZardCalendarComponent],
+  template: `
+    <z-calendar zMode="single" zCaptionLayout="dropdown" class="rounded-lg border" [(value)]="selectedDate" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCalendarPreviewComponent {
+  readonly selectedDate = signal<Date | null>(new Date());
+}
+```
 
 ### Basic
 

@@ -17,6 +17,8 @@ npx zard-cli@latest add alert
 
 ### Manual
 
+**Add alert.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
@@ -109,6 +111,8 @@ export class ZardAlertComponent {
 }
 ```
 
+**Add alert.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -145,6 +149,8 @@ export const alertDescriptionVariants = cva('text-sm text-balance md:text-pretty
 export type ZardAlertTypeVariants = NonNullable<VariantProps<typeof alertVariants>['zType']>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './alert.component';
 export * from './alert.variants';
@@ -161,6 +167,40 @@ import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { provideIcons } from '@ng-icons/core';
+import { lucideCircleCheck } from '@ng-icons/lucide';
+
+import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
+
+@Component({
+  selector: 'z-demo-alert-preview',
+  imports: [ZardAlertComponent],
+  template: `
+    <div class="grid w-full max-w-md items-start gap-4">
+      <z-alert
+        zIcon="lucideCircleCheck"
+        zTitle="Success! Your changes have been saved"
+        zDescription="This is an alert with icon, title and description."
+      />
+
+      <z-alert
+        zType="destructive"
+        zTitle="Unable to process your payment"
+        zDescription="Please verify your billing information and try again."
+      />
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCircleCheck })],
+})
+export class ZardDemoAlertPreviewComponent {}
+```
 
 ### Basic
 

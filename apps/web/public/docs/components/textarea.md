@@ -17,6 +17,8 @@ npx zard-cli@latest add textarea
 
 ### Manual
 
+**Add textarea.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -118,6 +120,8 @@ export class ZardTextareaComponent implements ControlValueAccessor {
 }
 ```
 
+**Add textarea.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
@@ -125,6 +129,8 @@ export const textareaVariants = cva('flex field-sizing-content min-h-16 w-full r
 
 export const inputGroupTextAreaVariants = cva('flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0 dark:bg-transparent dark:disabled:bg-transparent');
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './textarea.component';
@@ -142,6 +148,24 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
+
+@Component({
+  selector: 'z-demo-textarea-preview',
+  imports: [ZardTextareaComponent],
+  template: `
+    <textarea z-textarea id="textarea-preview" placeholder="Type your message here." class="w-72"></textarea>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoTextareaPreviewComponent {}
+```
 
 ### Field
 

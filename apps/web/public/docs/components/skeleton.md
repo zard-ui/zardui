@@ -17,6 +17,8 @@ npx zard-cli@latest add skeleton
 
 ### Manual
 
+**Add skeleton.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -47,12 +49,16 @@ export class ZardSkeletonComponent {
 }
 ```
 
+**Add skeleton.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const skeletonVariants = cva('bg-muted animate-pulse rounded-md');
 export type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './skeleton.component';
@@ -70,6 +76,30 @@ import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.com
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';
+
+@Component({
+  selector: 'z-demo-skeleton-preview',
+  imports: [ZardSkeletonComponent],
+  template: `
+    <div class="flex items-center space-x-4">
+      <z-skeleton class="size-12 rounded-full" />
+      <div class="space-y-2">
+        <z-skeleton class="h-4 w-[250px]" />
+        <z-skeleton class="h-4 w-[200px]" />
+      </div>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSkeletonPreviewComponent {}
+```
 
 ### Avatar
 

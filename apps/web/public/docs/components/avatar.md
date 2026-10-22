@@ -17,6 +17,8 @@ npx zard-cli@latest add avatar
 
 ### Manual
 
+**Add avatar.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -145,6 +147,8 @@ export class ZardAvatarComponent {
 }
 ```
 
+**Add avatar.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -218,6 +222,8 @@ export type ZardAvatarSizeVariants = NonNullable<VariantProps<typeof avatarVaria
 export type ZardAvatarGroupOrientationVariants = NonNullable<VariantProps<typeof avatarGroupVariants>['zOrientation']>;
 ```
 
+**Add avatar-group-count.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -257,6 +263,8 @@ export class ZardAvatarGroupCountComponent {
 }
 ```
 
+**Add avatar-group.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -288,6 +296,8 @@ export class ZardAvatarGroupComponent {
 }
 ```
 
+**Add avatar.imports.ts**
+
 ```angular-ts
 /*
  * The alias, not a relative path: the Angular compiler re-emits these imports from
@@ -305,6 +315,8 @@ export const ZardAvatarImports = [
   ZardAvatarGroupCountComponent,
 ] as const;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './avatar-group-count.component';
@@ -325,6 +337,41 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardAvatarGroupCountComponent } from '@/shared/components/avatar/avatar-group-count.component';
+import { ZardAvatarGroupComponent } from '@/shared/components/avatar/avatar-group.component';
+import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
+
+@Component({
+  selector: 'z-demo-avatar-preview',
+  imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardAvatarGroupCountComponent],
+  template: `
+    <div class="flex flex-row flex-wrap items-center gap-6 md:gap-12">
+      <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Rick Sanchez" zFallback="RS" class="grayscale" />
+      <z-avatar
+        zSrc="https://github.com/Luizgomess.png"
+        zAlt="@Luizgomess"
+        zFallback="LG"
+        [zShowBadge]="true"
+        zBadgeClass="bg-green-600 dark:bg-green-800"
+      />
+      <z-avatar-group class="grayscale">
+        <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Rick Sanchez" zFallback="RS" />
+        <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
+        <z-avatar zSrc="https://github.com/ribeiromatheuss.png" zAlt="@ribeiromatheuss" zFallback="MR" />
+        <z-avatar-group-count [zCount]="3" />
+      </z-avatar-group>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoAvatarPreviewComponent {}
+```
 
 ### Basic
 

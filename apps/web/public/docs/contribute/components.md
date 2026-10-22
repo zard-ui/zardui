@@ -13,7 +13,7 @@ A component lives entirely inside `libs/zard/src/lib/shared/components/<name>` .
 
 Always start here. The generator creates seven files and updates four existing ones, so nothing is forgotten.
 
-Scaffold a component
+**Scaffold a component**
 
 ```
 npm run generate:component
@@ -52,7 +52,7 @@ The demo registry imports from `@generated/…` , and those files only exist onc
 
 The component file declares its inputs as signals and computes the final class list once. Styling never lives in the template.
 
-libs/zard/src/lib/shared/components/button/button.component.ts
+**libs/zard/src/lib/shared/components/button/button.component.ts**
 
 ```
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation, booleanAttribute } from '@angular/core';
@@ -92,7 +92,7 @@ export class ZardButtonComponent {
 
 The `.variants.ts` file is the single source of truth for both the classes and the types. Deriving the types from the CVA definition means a new variant key cannot be forgotten in the component signature.
 
-libs/zard/src/lib/shared/components/button/button.variants.ts
+**libs/zard/src/lib/shared/components/button/button.variants.ts**
 
 ```
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -163,7 +163,7 @@ The `demo/` folder holds one standalone component per example, plus a registry n
 
 Each example pairs its component with a `codeData` import, which is the highlighted source of that very file. Add an optional `preview` entry to control the hero demo at the top of the page; without it the first example is used.
 
-demo/<component>.ts — the demo registry
+**demo/<component>.ts — the demo registry**
 
 ```
 import { BADGE_DEMO_DEFAULT } from '@generated/components/badge/demo/default';
@@ -198,7 +198,7 @@ export const BADGE = {
 
 The API reference is TypeScript, not Markdown. Export an `ApiSection[]` from `doc/api.ts` and the `z-api-reference` component renders the table. One section per public selector.
 
-doc/api.ts — the API reference
+**doc/api.ts — the API reference**
 
 ```
 import type { ApiSection } from '@doc/domain/components/api-reference/api-reference.types';
@@ -225,7 +225,7 @@ export const BUTTON_API: ApiSection[] = [
 
 The "Usage" section of a component page comes from `packages/highlight/src/generator/usage-data.ts` , a hand-maintained record keyed by component name. The generator seeds an entry for you; replace it with the smallest snippet that shows the component doing something useful.
 
-packages/highlight/src/generator/usage-data.ts
+**packages/highlight/src/generator/usage-data.ts**
 
 ```
 export const USAGE_DATA: Record<string, RawUsageData> = {
@@ -248,7 +248,7 @@ Walk through this before opening the pull request.
 - •npm run build succeeds — that is the job the CI runs.
 - •The E2E spec was updated if the component or its first demo changed.
 
-Regenerate and verify
+**Regenerate and verify**
 
 ```
 npm run generate:highlight

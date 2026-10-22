@@ -39,9 +39,9 @@ The `$schema` property provides JSON schema validation for your `components.json
 
 The style of your design: the look a preset picks for spacing, radius, density and typography.
 
-**Supported values:**`vega` , `nova` , `maia` , `lyra` , `mira` , `luma` , `sera` , `rhea` or the legacy `css` .
+**Supported values:** `vega` , `nova` , `maia` , `lyra` , `mira` , `luma` , `sera` , `rhea` or the legacy `css` .
 
-components.json
+**components.json**
 
 ```
 {
@@ -59,9 +59,9 @@ The eight named styles are written by `zard-cli init --preset` , `zard-cli apply
 
 The `icons` property names the icon set the components are written against. Every component draws through `ng-icons` , which stays the dependency either way — this picks which of its packages comes along ( `@ng-icons/lucide` ) and which names the components import.
 
-**Supported values:**`lucide` , `tabler` , `hugeicons` , `phosphor` or `remixicon`
+**Supported values:** `lucide` , `tabler` , `hugeicons` , `phosphor` or `remixicon`
 
-components.json
+**components.json**
 
 ```
 {
@@ -79,7 +79,7 @@ A `components.json` written before this property existed is read as `lucide` .
 
 The `rtl` property declares that the project reads right to left. It defaults to `false` .
 
-components.json
+**components.json**
 
 ```
 {
@@ -93,7 +93,7 @@ The components are direction-agnostic, so the files the CLI installs are identic
 
 Three properties describe how menus, popovers and dropdowns look. They are written by `zard-cli init --preset` , `apply` and `create` , and absent from a project without a preset, which then has the defaults.
 
-components.json
+**components.json**
 
 ```
 {
@@ -111,7 +111,7 @@ components.json
 
 The `preset` property holds the preset code the project was last fully configured from — the short `Z…` code built on the [create page](/create) .
 
-components.json
+**components.json**
 
 ```
 {
@@ -125,9 +125,9 @@ It is informational: it records the design and nothing reads it to decide what t
 
 The `projectType` property records the kind of project you chose when running init. The CLI uses it to know where the components live and how the build is wired: which file holds the TypeScript paths, whether Tailwind goes through PostCSS or a Vite plugin, and whether there is an application to register providers in.
 
-**Supported values:**`angular` , `angular-library` , `nx` , `nx-library` or `analog`
+**Supported values:** `angular` , `angular-library` , `nx` , `nx-library` or `analog`
 
-components.json
+**components.json**
 
 ```
 {
@@ -151,9 +151,9 @@ The `appConfigFile` property specifies the path to your Angular application's co
 
 The package manager to use for installing dependencies. This configuration helps the CLI use the correct package runner commands for your project.
 
-**Supported values:**`npm` , `pnpm` , `yarn` , or `bun`
+**Supported values:** `npm` , `pnpm` , `yarn` , or `bun`
 
-components.json
+**components.json**
 
 ```
 {
@@ -185,7 +185,7 @@ This is used to generate the default color palette for your components. **Editin
 
 Currently supported base colors ( `mauve` , `olive` , `mist` and `taupe` come with presets):
 
-components.json
+**components.json**
 
 ```
 {
@@ -211,7 +211,7 @@ When using `@/` prefix in your aliases, the CLI resolves paths relative to this 
 
 Optional. Points the CLI at a registry other than the official one ( `https://zardui.com/r` ), for teams that publish their own component set. The URL must use HTTPS, or be `localhost` during development. Every command that reads the registry — `add` , `apply` and `init` — uses it. Leave the key out to use the official registry.
 
-components.json
+**components.json**
 
 ```
 {
@@ -279,7 +279,7 @@ Import alias for your Angular services.
 
 Where `zard-cli add <block>` writes a block. Each one gets a directory of its own here, since a block is several files that only make sense together.
 
-components.json
+**components.json**
 
 ```
 {
@@ -293,7 +293,7 @@ components.json
 
 Here's the current `components.json` structure that Zard/ui supports, as `zard-cli create` writes it for the default design. A project made with a plain `init` has `"style": "css"` and no `menu*` or `preset` keys:
 
-components.json
+**components.json**
 
 ```
 {

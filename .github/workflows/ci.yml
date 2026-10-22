@@ -68,17 +68,22 @@ jobs:
       # and committed. A build that changes them means the branch is shipping
       # artifacts that no longer match its own source.
       #
-      # `about.md` and `changelog.md` are deliberately not checked: they are converted
-      # from pages that fetch sponsors, contributors and releases from GitHub while
-      # prerendering, so their content tracks the API and not the branch.
+      # `about.md` and `changelog.md` are deliberately excluded: they are converted from
+      # pages that fetch sponsors, contributors and releases from GitHub while prerendering,
+      # so their content tracks the API and not the branch. The generator never rewrites them
+      # without `--volatile`, and `check:docs-md` below still compares their sections and code.
       - name: Check generated artifacts are committed
         run: |
-          GENERATED="apps/web/public/r apps/web/public/docs/components apps/web/public/llms.txt apps/web/public/schema.json apps/web/prerender-routes.txt"
+          GENERATED="apps/web/public/r apps/web/public/docs :(exclude)apps/web/public/docs/about.md :(exclude)apps/web/public/docs/changelog.md apps/web/public/llms.txt apps/web/public/schema.json apps/web/prerender-routes.txt"
           if ! git diff --quiet -- $GENERATED; then
             echo "::error::Generated artifacts are out of date. Run 'npm run build' and commit the result."
             git --no-pager diff --stat -- $GENERATED
             exit 1
           fi
+      # The committed docs Markdown (served to AI assistants by the MCP server) must keep
+      # every section and code block of the rendered pages.
+      - name: Check docs Markdown matches the pages
+        run: npm run check:docs-md
 
   test:
     runs-on: ubuntu-latest

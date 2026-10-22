@@ -17,6 +17,8 @@ npx zard-cli@latest add sheet
 
 ### Manual
 
+**Add sheet.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
@@ -406,6 +408,8 @@ export class ZardSheetCloseDirective {
 }
 ```
 
+**Add sheet.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -473,6 +477,8 @@ export const sheetFooterVariants = cva('mt-auto flex flex-col gap-2 p-4');
 export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export { type OnClickCallback as SheetOnClickCallback } from './sheet-container.component';
 export { ZardSheetContainerComponent, ZardSheetOptions } from './sheet-container.component';
@@ -484,6 +490,8 @@ export * from './sheet.imports';
 export * from './sheet.service';
 export * from './sheet.variants';
 ```
+
+**Add sheet-container.component.ts**
 
 ```angular-ts
 import {
@@ -719,6 +727,8 @@ export class ZardSheetContainerComponent<T, U> extends BasePortalOutlet implemen
 }
 ```
 
+**Add sheet-host.ts**
+
 ```angular-ts
 import type { WritableSignal } from '@angular/core';
 
@@ -741,6 +751,8 @@ export abstract class ZardSheetHost {
   abstract requestClose(): void;
 }
 ```
+
+**Add sheet-panel.component.ts**
 
 ```angular-ts
 import { FocusTrapFactory } from '@angular/cdk/a11y';
@@ -907,6 +919,8 @@ export class ZardSheetPanelComponent {
 }
 ```
 
+**Add sheet-ref.ts**
+
 ```angular-ts
 import type { OverlayRef } from '@angular/cdk/overlay';
 
@@ -950,6 +964,8 @@ export class ZardSheetRef<T = unknown, R = unknown, U = unknown> extends ZardOve
 }
 ```
 
+**Add sheet.imports.ts**
+
 ```angular-ts
 import {
   ZardSheetCloseDirective,
@@ -970,6 +986,8 @@ export const ZardSheetImports = [
   ZardSheetCloseDirective,
 ] as const;
 ```
+
+**Add sheet.service.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -1166,6 +1184,111 @@ z-sheet
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardInputComponent } from '@/shared/components/input';
+import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
+import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+/** Content the service renders inside the sheet. */
+@Component({
+  selector: 'z-demo-sheet-preview-form',
+  imports: [ReactiveFormsModule, ZardInputComponent],
+  template: `
+    <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
+      <div class="grid gap-3">
+        <label for="sheet-service-name" class="text-sm leading-none font-medium select-none">Name</label>
+        <input z-input id="sheet-service-name" formControlName="name" />
+      </div>
+      <div class="grid gap-3">
+        <label for="sheet-service-username" class="text-sm leading-none font-medium select-none">Username</label>
+        <input z-input id="sheet-service-username" formControlName="username" />
+      </div>
+    </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  exportAs: 'zardDemoSheetPreviewForm',
+})
+export class ZardDemoSheetPreviewFormComponent {
+  readonly form = new FormGroup({
+    name: new FormControl('Pedro Duarte'),
+    username: new FormControl('@peduarte'),
+  });
+}
+
+@Component({
+  selector: 'z-demo-sheet-preview',
+  imports: [ZardButtonComponent, ZardInputComponent, ZardSheetImports, ZardTabsImports, ReactiveFormsModule],
+  template: `
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Open</button>
+
+        <z-sheet [(zVisible)]="visible">
+          <z-sheet-header>
+            <z-sheet-title>Edit profile</z-sheet-title>
+            <z-sheet-description>Make changes to your profile here. Click save when you're done.</z-sheet-description>
+          </z-sheet-header>
+          <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
+            <div class="grid gap-3">
+              <label for="sheet-name" class="text-sm leading-none font-medium select-none">Name</label>
+              <input z-input id="sheet-name" formControlName="name" />
+            </div>
+            <div class="grid gap-3">
+              <label for="sheet-username" class="text-sm leading-none font-medium select-none">Username</label>
+              <input z-input id="sheet-username" formControlName="username" />
+            </div>
+          </form>
+          <z-sheet-footer>
+            <button type="button" z-button (click)="save()">Save changes</button>
+            <button type="button" z-button zType="outline" z-sheet-close>Close</button>
+          </z-sheet-footer>
+        </z-sheet>
+      </z-tab>
+
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="openSheet()">Open</button>
+      </z-tab>
+    </z-tab-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSheetPreviewComponent {
+  private readonly sheetService = inject(ZardSheetService);
+
+  readonly visible = signal(false);
+
+  readonly form = new FormGroup({
+    name: new FormControl('Pedro Duarte'),
+    username: new FormControl('@peduarte'),
+  });
+
+  save() {
+    console.log('Form submitted:', this.form.value);
+    this.visible.set(false);
+  }
+
+  openSheet() {
+    this.sheetService.create({
+      zTitle: 'Edit profile',
+      zDescription: `Make changes to your profile here. Click save when you're done.`,
+      zContent: ZardDemoSheetPreviewFormComponent,
+      zOkText: 'Save changes',
+      zCancelText: 'Close',
+      zOnOk: instance => {
+        console.log('Form submitted:', instance.form.value);
+      },
+    });
+  }
+}
+```
 
 ### Side
 

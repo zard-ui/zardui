@@ -17,6 +17,8 @@ npx zard-cli@latest add command
 
 ### Manual
 
+**Add command.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -357,6 +359,8 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
 }
 ```
 
+**Add command.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -391,6 +395,8 @@ export const commandShortcutVariants = cva('ms-auto text-xs tracking-widest text
 
 export type ZardCommandItemVariants = NonNullable<VariantProps<typeof commandItemVariants>['variant']>;
 ```
+
+**Add command-divider.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -437,6 +443,8 @@ export class ZardCommandDividerComponent {
   });
 }
 ```
+
+**Add command-input.component.ts**
 
 ```angular-ts
 import {
@@ -571,6 +579,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
 }
 ```
 
+**Add command-list.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -596,6 +606,8 @@ export class ZardCommandListComponent {
   protected readonly classes = computed(() => mergeClasses(commandListVariants(), this.class()));
 }
 ```
+
+**Add command-option-group.component.ts**
 
 ```angular-ts
 import {
@@ -679,6 +691,8 @@ export class ZardCommandOptionGroupComponent implements ZardCommandOptionGroup {
   }
 }
 ```
+
+**Add command-option.component.ts**
 
 ```angular-ts
 import {
@@ -834,6 +848,8 @@ export class ZardCommandOptionComponent {
 }
 ```
 
+**Add command.imports.ts**
+
 ```angular-ts
 import { ZardCommandDividerComponent } from '@/shared/components/command/command-divider.component';
 import { ZardCommandInputComponent } from '@/shared/components/command/command-input.component';
@@ -851,6 +867,8 @@ export const ZardCommandImports = [
   ZardCommandDividerComponent,
 ] as const;
 ```
+
+**Add command.tokens.ts**
 
 ```angular-ts
 import type { Signal, WritableSignal } from '@angular/core';
@@ -890,6 +908,8 @@ export abstract class ZardCommand {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './command.component';
 export * from './command-input.component';
@@ -923,6 +943,65 @@ import { ZardCommandImports } from '@/shared/components/command/command.imports'
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { provideIcons } from '@ng-icons/core';
+import {
+  lucideCalculator,
+  lucideCalendar,
+  lucideCreditCard,
+  lucideSettings,
+  lucideSmile,
+  lucideUser,
+} from '@ng-icons/lucide';
+
+import { ZardCommandImports } from '@/shared/components/command/command.imports';
+
+@Component({
+  selector: 'z-demo-command-preview',
+  imports: [ZardCommandImports],
+  template: `
+    <z-command class="min-w-sm" #cmd="zCommand">
+      <z-command-input placeholder="Type a command or search..." />
+      <z-command-list>
+        @if (cmd.isEmpty()) {
+          <div class="py-6 text-center text-sm">No results found.</div>
+        }
+
+        <z-command-option-group zLabel="Suggestions">
+          <z-command-option zLabel="Calendar" zValue="calendar" zIcon="lucideCalendar" />
+          <z-command-option zLabel="Search Emoji" zValue="emoji" zIcon="lucideSmile" />
+          <z-command-option zLabel="Calculator" zValue="calculator" zIcon="lucideCalculator" [zDisabled]="true" />
+        </z-command-option-group>
+
+        <z-command-divider />
+
+        <z-command-option-group zLabel="Settings">
+          <z-command-option zLabel="Profile" zValue="profile" zIcon="lucideUser" zShortcut="⌘P" />
+          <z-command-option zLabel="Billing" zValue="billing" zIcon="lucideCreditCard" zShortcut="⌘B" />
+          <z-command-option zLabel="Settings" zValue="settings" zIcon="lucideSettings" zShortcut="⌘S" />
+        </z-command-option-group>
+      </z-command-list>
+    </z-command>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideCalendar,
+      lucideSmile,
+      lucideCalculator,
+      lucideUser,
+      lucideCreditCard,
+      lucideSettings,
+    }),
+  ],
+})
+export class ZardDemoCommandPreviewComponent {}
+```
 
 ### Basic
 

@@ -187,31 +187,31 @@ RTL documentation and demos
 - RTL example on every component page, in English, Arabic and Hebrew
 - RTL guide at /docs/rtl
 
-Planned
+Completed
 
-### zard-cli create - Project-level Theming
+### zard-cli create - Project builder
 
-0%
+100%
 
-A large, CLI-driven customization update that replaces the /themes web customizer: theme, tokens, radius, fonts, typeset, and block presets generated for the project without leaving the terminal. It has not shipped yet.
+zard-cli create scaffolds a new Angular, Nx or Analog project already configured with a preset, and /create is the visual builder that produces it: pick a style, colors, fonts, icons, radius and menu, preview them live, and leave with one command. init --preset and apply cover existing projects.
 
 #### Goals
 
-Project-aware theme generation
+Preset codes that describe a whole design
 
-Token, radius, and font presets
+A live /create builder with the Get Code command
 
-Typeset and block presets
+Scaffold new projects from the CLI
 
-Supersede the /themes web customizer
+Apply a preset, its theme or its fonts to existing projects
 
-#### Deliverables (0/5)
+#### Deliverables (5/5)
 
-- Interactive theme customization in zard-cli create
-- Token, radius, and font presets
-- Typeset and block-level presets
-- Project-level overrides saved to components.json
-- /themes web customizer retired in favor of the CLI flow
+- zard-cli create for Angular, Nx and Analog
+- Preset codes: styles, colors, fonts, icon libraries, radius and menu
+- init --preset and apply --only theme|font for existing projects
+- /create builder with live preview, shuffle, undo and shareable URLs
+- /themes retired: /create is the one theme builder
 
 Planned
 
@@ -260,7 +260,7 @@ Changelog discipline
 
 ### Help Shape What's Next
 
-Join our community and help build zard-cli create and the AI SDK.
+Join our community and help build the AI SDK.
 
 - [Contribute on GitHub](https://github.com/zard-ui/zardui)
 - [Share Feedback](https://github.com/zard-ui/zardui/discussions)

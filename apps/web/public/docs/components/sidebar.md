@@ -23,6 +23,8 @@ npx zard-cli@latest add sidebar
 
 ### Manual
 
+**Add sidebar.component.ts**
+
 ```angular-ts
 import { A11yModule } from '@angular/cdk/a11y';
 import { NgTemplateOutlet } from '@angular/common';
@@ -325,6 +327,8 @@ export class ZardSidebarInsetComponent {
 }
 ```
 
+**Add sidebar.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -494,6 +498,8 @@ export type ZardSidebarMenuSubButtonSizeVariants = NonNullable<
 >;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from '@/shared/components/sidebar/sidebar.component';
 export * from '@/shared/components/sidebar/sidebar-primitives.component';
@@ -503,6 +509,8 @@ export * from '@/shared/components/sidebar/sidebar.service';
 export * from '@/shared/components/sidebar/sidebar.variants';
 export * from '@/shared/components/sidebar/sidebar.imports';
 ```
+
+**Add sidebar-menu.component.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -869,6 +877,8 @@ export class ZardSidebarMenuSubButtonComponent {
 }
 ```
 
+**Add sidebar-primitives.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, Directive, input, ViewEncapsulation } from '@angular/core';
 
@@ -985,7 +995,7 @@ export class ZardSidebarSeparatorComponent {
   host: {
     'data-slot': 'sidebar-input',
     'data-sidebar': 'input',
-    class: 'h-8 w-full bg-background! shadow-none dark:bg-input/30!',
+    class: 'h-8! w-full bg-background! shadow-none dark:bg-input/30!',
   },
   exportAs: 'zSidebarInput',
 })
@@ -1073,6 +1083,8 @@ export class ZardSidebarGroupContentComponent {
 }
 ```
 
+**Add sidebar.constants.ts**
+
 ```angular-ts
 export const ZARD_SIDEBAR_COOKIE_NAME = 'sidebar_state';
 export const ZARD_SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -1082,6 +1094,8 @@ export const ZARD_SIDEBAR_WIDTH_ICON = '3rem';
 export const ZARD_SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 export const ZARD_SIDEBAR_MOBILE_BREAKPOINT = '(max-width: 767.98px)';
 ```
+
+**Add sidebar.imports.ts**
 
 ```angular-ts
 import {
@@ -1140,6 +1154,8 @@ export const ZardSidebarImports = [
   ZardSidebarMenuSubButtonComponent,
 ] as const;
 ```
+
+**Add sidebar.service.ts**
 
 ```angular-ts
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -1317,6 +1333,223 @@ z-sidebar-provider
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideCalendar,
+  lucideChevronDown,
+  lucideChevronsUpDown,
+  lucideGalleryVerticalEnd,
+  lucideHouse,
+  lucideInbox,
+  lucideLogOut,
+  lucideSearch,
+  lucideSettings,
+  lucideUser,
+} from '@ng-icons/lucide';
+
+import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
+import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
+import { ZardSeparatorComponent } from '@/shared/components/separator/separator.component';
+import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports';
+import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';
+
+interface NavItem {
+  readonly title: string;
+  readonly icon: string;
+}
+
+@Component({
+  selector: 'z-demo-sidebar-preview',
+  imports: [
+    ZardSidebarImports,
+    ZardDropdownImports,
+    ZardBreadcrumbImports,
+    ZardSeparatorComponent,
+    ZardSkeletonComponent,
+    ZardAvatarComponent,
+    NgIcon,
+  ],
+  template: `
+    <!--
+      In a real app the provider is the page shell and needs no extra classes. Here transform-gpu
+      turns it into the containing block for the sidebar's fixed panel, so the demo stays inside the
+      documentation page instead of covering the viewport.
+    -->
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-128 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
+      <z-sidebar zCollapsible="icon" class="h-full">
+        <div z-sidebar-header>
+          <ul z-sidebar-menu>
+            <li z-sidebar-menu-item>
+              <button z-sidebar-menu-button zSize="lg" z-dropdown [zDropdownMenu]="workspaces">
+                <div
+                  class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
+                >
+                  <ng-icon name="lucideGalleryVerticalEnd" class="size-4" />
+                </div>
+
+                <div class="grid flex-1 text-left text-sm/tight">
+                  <span class="truncate font-medium">{{ workspace() }}</span>
+                  <span class="text-muted-foreground truncate text-xs">Enterprise</span>
+                </div>
+
+                <ng-icon name="lucideChevronDown" class="ml-auto" />
+              </button>
+
+              <z-dropdown-menu-content
+                #workspaces="zDropdownMenuContent"
+                class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                zAlign="start"
+              >
+                @for (name of workspaceNames; track name) {
+                  <z-dropdown-menu-item (click)="workspace.set(name)">{{ name }}</z-dropdown-menu-item>
+                }
+              </z-dropdown-menu-content>
+            </li>
+          </ul>
+        </div>
+
+        <z-sidebar-content>
+          <div z-sidebar-group>
+            <div z-sidebar-group-label>Platform</div>
+
+            <div z-sidebar-group-content>
+              <ul z-sidebar-menu>
+                @for (item of navItems; track item.title) {
+                  <li z-sidebar-menu-item>
+                    <button
+                      z-sidebar-menu-button
+                      [zActive]="item.title === active()"
+                      [zTooltip]="item.title"
+                      (click)="active.set(item.title)"
+                    >
+                      <ng-icon [name]="item.icon" />
+                      <span>{{ item.title }}</span>
+                    </button>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </z-sidebar-content>
+
+        <div z-sidebar-footer>
+          <ul z-sidebar-menu>
+            <li z-sidebar-menu-item>
+              <button z-sidebar-menu-button zSize="lg" z-dropdown [zDropdownMenu]="account">
+                <z-avatar
+                  class="size-8 rounded-lg"
+                  zSrc="https://github.com/zard-ui.png"
+                  zAlt="zard ui"
+                  zFallback="ZU"
+                />
+
+                <div class="grid flex-1 text-left text-sm/tight">
+                  <span class="truncate font-medium">zard ui</span>
+                  <span class="text-muted-foreground truncate text-xs">m&#64;example.com</span>
+                </div>
+
+                <ng-icon name="lucideChevronsUpDown" class="ml-auto" />
+              </button>
+
+              <z-dropdown-menu-content
+                #account="zDropdownMenuContent"
+                class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                zSide="right"
+                zAlign="end"
+              >
+                <z-dropdown-menu-item>
+                  <ng-icon name="lucideUser" />
+                  Profile
+                </z-dropdown-menu-item>
+                <z-dropdown-menu-item>
+                  <ng-icon name="lucideSettings" />
+                  Settings
+                </z-dropdown-menu-item>
+                <z-dropdown-menu-separator />
+                <z-dropdown-menu-item>
+                  <ng-icon name="lucideLogOut" />
+                  Log out
+                </z-dropdown-menu-item>
+              </z-dropdown-menu-content>
+            </li>
+          </ul>
+        </div>
+
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
+      </z-sidebar>
+
+      <main z-sidebar-inset class="overflow-auto">
+        <header class="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4">
+          <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
+
+          <z-separator
+            zOrientation="vertical"
+            class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+          />
+
+          <z-breadcrumb zLabel="Breadcrumb">
+            <z-breadcrumb-item>
+              <span z-breadcrumb-page class="text-muted-foreground">Platform</span>
+            </z-breadcrumb-item>
+            <z-breadcrumb-item>
+              <span z-breadcrumb-page>{{ active() }}</span>
+            </z-breadcrumb-item>
+          </z-breadcrumb>
+        </header>
+
+        <div class="flex flex-1 flex-col gap-4 p-4">
+          <div class="grid auto-rows-min grid-cols-2 gap-4">
+            @for (tile of tiles; track tile) {
+              <z-skeleton class="bg-muted/50 aspect-video rounded-xl" />
+            }
+          </div>
+
+          <z-skeleton class="bg-muted/50 min-h-64 flex-1 rounded-xl" />
+        </div>
+      </main>
+    </z-sidebar-provider>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideCalendar,
+      lucideChevronDown,
+      lucideChevronsUpDown,
+      lucideGalleryVerticalEnd,
+      lucideHouse,
+      lucideInbox,
+      lucideLogOut,
+      lucideSearch,
+      lucideSettings,
+      lucideUser,
+    }),
+  ],
+})
+export class ZardDemoSidebarPreviewComponent {
+  readonly workspaceNames = ['Acme Inc', 'Acme Corp.', 'Evil Corp.'] as const;
+  readonly workspace = signal<string>(this.workspaceNames[0]);
+  readonly active = signal('Home');
+  readonly tiles = [1, 2];
+
+  readonly navItems: readonly NavItem[] = [
+    { title: 'Home', icon: 'lucideHouse' },
+    { title: 'Inbox', icon: 'lucideInbox' },
+    { title: 'Calendar', icon: 'lucideCalendar' },
+    { title: 'Search', icon: 'lucideSearch' },
+    { title: 'Settings', icon: 'lucideSettings' },
+  ];
+}
+```
 
 ### Structure
 

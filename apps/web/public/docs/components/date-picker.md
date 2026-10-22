@@ -17,6 +17,8 @@ npx zard-cli@latest add date-picker
 
 ### Manual
 
+**Add date-picker.component.ts**
+
 ```angular-ts
 import { DatePipe } from '@angular/common';
 import {
@@ -262,6 +264,8 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
 }
 ```
 
+**Add date-picker.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -297,6 +301,8 @@ export type ZardDatePickerIconVariants = NonNullable<VariantProps<typeof datePic
 export type ZardDatePickerSizeVariants = Extract<ZardButtonSizeVariants, 'xs' | 'sm' | 'default' | 'lg'>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './date-picker.component';
 export * from './date-picker.variants';
@@ -313,6 +319,28 @@ import { ZardDatePickerComponent } from '@/shared/components/date-picker/date-pi
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import type { CalendarValue } from '@/shared/components/calendar/calendar.types';
+
+import { ZardDatePickerComponent } from '../date-picker.component';
+
+@Component({
+  selector: 'z-demo-date-picker-preview',
+  imports: [ZardDatePickerComponent],
+  template: `
+    <z-date-picker class="mx-auto" [(value)]="selectedDate" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDatePickerPreviewComponent {
+  readonly selectedDate = signal<CalendarValue>(null);
+}
+```
 
 ### Basic
 

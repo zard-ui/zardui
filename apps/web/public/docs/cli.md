@@ -21,7 +21,7 @@ npx zard-cli@latest init
 
 The first question is what kind of project you are setting up. Everything after it follows from that answer — which files get configured, and where the components will live.
 
-Terminal
+**Terminal**
 
 ```
 ◇ zard/ui · initialize
@@ -40,7 +40,7 @@ Terminal
 
 Answered questions stay on screen as a transcript, and the paths suggested from there on come from the project you picked:
 
-Terminal
+**Terminal**
 
 ```
    ✔  project type  …  Nx
@@ -57,7 +57,7 @@ Text fields are fully editable: arrows and `Home` / `End` move the caret, `Delet
 
 Once everything is answered, the steps run with live progress. Steps that take a while — installing dependencies, usually — show how long they have been running, so a spinner is never mistaken for a stuck process.
 
-Terminal
+**Terminal**
 
 ```
 ✔  Writing configuration…
@@ -95,7 +95,7 @@ npx zard-cli add button card dialog
 
 Import the components in your standalone components and start using them in your templates.
 
-src/app/app.ts
+**src/app/app.ts**
 
 ```
 import { Component } from '@angular/core';
@@ -181,7 +181,7 @@ Outside a TTY — CI, pipes — there is nobody to answer the questions, so `--y
 npx zard-cli@latest init --yes --type nx --project web
 ```
 
-**With a preset:**`--preset` configures a project that already exists with a whole design in one go — the style, base color, theme and chart colors, fonts, icon library, radius and menu look. Any of the five project types accepts it, libraries included. It writes the same `components.json` and theme tokens as a plain init, plus the font packages with their imports, the icon library's `ng-icons` package and the `preset` key. It cannot be combined with `--base-color` , since the preset already chooses it.
+**With a preset:** `--preset` configures a project that already exists with a whole design in one go — the style, base color, theme and chart colors, fonts, icon library, radius and menu look. Any of the five project types accepts it, libraries included. It writes the same `components.json` and theme tokens as a plain init, plus the font packages with their imports, the icon library's `ng-icons` package and the `preset` key. It cannot be combined with `--base-color` , since the preset already chooses it.
 
 ```
 npx zard-cli@latest init --preset Z6F9MtstG --pointer
@@ -295,7 +295,7 @@ npx zard-cli@latest create my-app --template angular --yes
 
 **Safe by design:** every flag, the preset, the project name and the registry are checked before anything is written. A name that already exists in the target directory is refused — `create` never writes into an existing directory — and an unreachable registry stops it before the scaffold starts, so a failure leaves no half-created project. If configuring fails after the scaffold, the project is kept and the message tells you how to resume with `init --preset` .
 
-**Right to left:**`--rtl` sets `dir="rtl"` on `<html>` and nothing else. `lang` stays `"en"` , because direction does not say which language the content is in — set it yourself to the right one ( `ar` , `he` , `fa` …).
+**Right to left:** `--rtl` sets `dir="rtl"` on `<html>` and nothing else. `lang` stays `"en"` , because direction does not say which language the content is in — set it yourself to the right one ( `ar` , `he` , `fa` …).
 
 ### apply
 
@@ -342,7 +342,7 @@ npx zard-cli@latest init --debug
 
 The CLI stores configuration in `components.json` in your project root. This file is created automatically when you run `npx zard-cli init` , and the [components.json page](/docs/components-json) documents every field.
 
-components.json
+**components.json**
 
 ```
 {
@@ -376,7 +376,7 @@ components.json
 
 The CLI maps the import alias for you, in whichever tsconfig your project type actually extends — `tsconfig.base.json` on Nx, `tsconfig.json` elsewhere:
 
-tsconfig.json
+**tsconfig.json**
 
 ```
 {
@@ -392,7 +392,7 @@ No `baseUrl` is written: the option became an error in TypeScript 6, and since 4
 
 This is what lets you import components and utilities through clean paths:
 
-example.component.ts
+**example.component.ts**
 
 ```
 import { ZardButtonComponent } from '@/shared/components/button';
@@ -403,7 +403,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 An optional `registryUrl` points the CLI at a registry other than the official one — for teams publishing their own component set.
 
-components.json
+**components.json**
 
 ```
 {
@@ -421,11 +421,11 @@ The ZardUI team is actively working on an intelligent update system that will au
 
 ### Planned Features
 
-- 🔄Smart detection of component changes Automatically identify which components have updates available
-- 🛡️Preservation of user customizations Keep your custom modifications safe during updates
-- 📊Conflict resolution with clear options Visual diff and merge tools to handle conflicts intelligently
-- 🎯Selective component updates Choose which components to update and which to skip
-- 📝Detailed changelog for each update See exactly what changed in each component version
+- 🔄 Smart detection of component changes Automatically identify which components have updates available
+- 🛡️ Preservation of user customizations Keep your custom modifications safe during updates
+- 📊 Conflict resolution with clear options Visual diff and merge tools to handle conflicts intelligently
+- 🎯 Selective component updates Choose which components to update and which to skip
+- 📝 Detailed changelog for each update See exactly what changed in each component version
 
 ### What to Expect
 

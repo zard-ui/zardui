@@ -17,6 +17,8 @@ npx zard-cli@latest add alert-dialog
 
 ### Manual
 
+**Add alert-dialog.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
@@ -414,6 +416,8 @@ export class ZardAlertDialogCloseDirective {
 }
 ```
 
+**Add alert-dialog.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -446,6 +450,8 @@ export const alertDialogMediaVariants = cva("mb-2 inline-flex size-10 items-cent
 export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 export type ZardAlertDialogSizeVariants = NonNullable<VariantProps<typeof alertDialogVariants>['zSize']>;
 ```
+
+**Add alert-dialog-container.component.ts**
 
 ```angular-ts
 import { NgTemplateOutlet } from '@angular/common';
@@ -629,6 +635,8 @@ export class ZardAlertDialogContainerComponent<T> implements ZardAlertDialogHost
 }
 ```
 
+**Add alert-dialog-host.ts**
+
 ```angular-ts
 import type { WritableSignal } from '@angular/core';
 
@@ -651,6 +659,8 @@ export abstract class ZardAlertDialogHost {
   abstract requestClose(): void;
 }
 ```
+
+**Add alert-dialog-panel.component.ts**
 
 ```angular-ts
 import { FocusTrapFactory } from '@angular/cdk/a11y';
@@ -758,6 +768,8 @@ export class ZardAlertDialogPanelComponent {
 }
 ```
 
+**Add alert-dialog-ref.ts**
+
 ```angular-ts
 import type { OverlayRef } from '@angular/cdk/overlay';
 
@@ -809,6 +821,8 @@ export class ZardAlertDialogRef<T = unknown> extends ZardOverlayRefBase<T, void>
 }
 ```
 
+**Add alert-dialog.imports.ts**
+
 ```angular-ts
 import {
   ZardAlertDialogCloseDirective,
@@ -831,6 +845,8 @@ export const ZardAlertDialogImports = [
   ZardAlertDialogCloseDirective,
 ] as const;
 ```
+
+**Add alert-dialog.service.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -965,6 +981,8 @@ export class ZardAlertDialogService {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export { type OnClickCallback as AlertDialogOnClickCallback } from './alert-dialog-container.component';
 export { ZardAlertDialogContainerComponent, ZardAlertDialogOptions } from './alert-dialog-container.component';
@@ -1013,6 +1031,63 @@ z-alert-dialog
 ```
 
 ## Examples
+
+### Preview
+
+A basic alert dialog with a title, description, and cancel and continue buttons.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+
+import { ZardAlertDialogImports } from '@/shared/components/alert-dialog/alert-dialog.imports';
+import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+@Component({
+  selector: 'z-demo-alert-dialog-preview',
+  imports: [ZardAlertDialogImports, ZardButtonComponent, ZardTabsImports],
+  template: `
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Show Dialog</button>
+
+        <z-alert-dialog [(zVisible)]="visible">
+          <z-alert-dialog-header>
+            <z-alert-dialog-title>Are you absolutely sure?</z-alert-dialog-title>
+            <z-alert-dialog-description>
+              This action cannot be undone. This will permanently delete your account from our servers.
+            </z-alert-dialog-description>
+          </z-alert-dialog-header>
+          <z-alert-dialog-footer>
+            <button type="button" z-button zType="outline" z-alert-dialog-close>Cancel</button>
+            <button type="button" z-button (click)="visible.set(false)">Continue</button>
+          </z-alert-dialog-footer>
+        </z-alert-dialog>
+      </z-tab>
+
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="open()">Show Dialog</button>
+      </z-tab>
+    </z-tab-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoAlertDialogPreviewComponent {
+  private readonly alertDialogService = inject(ZardAlertDialogService);
+
+  readonly visible = signal(false);
+
+  open() {
+    this.alertDialogService.create({
+      zTitle: 'Are you absolutely sure?',
+      zDescription: 'This action cannot be undone. This will permanently delete your account from our servers.',
+      zOkText: 'Continue',
+      zCancelText: 'Cancel',
+    });
+  }
+}
+```
 
 ### Basic
 

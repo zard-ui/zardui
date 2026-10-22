@@ -57,6 +57,35 @@ describe('serializeComponentToMarkdown', () => {
     expect(md).toContain('### Manual\n\n```angular-ts\nexport class Foo {}\n```');
   });
 
+  it('labels each manual block with its file name and lists the dependencies first', () => {
+    const md = serializeComponentToMarkdown({
+      ...DATA,
+      installData: {
+        manualDeps: {
+          tabs: [{ label: 'npm', html: '<pre>npm</pre>', code: 'npm install foo', language: 'bash' }],
+        },
+        manualCode: [
+          { ...codeBlock('export class Foo {}', 'angular-ts'), title: 'foo.component.ts' },
+          { ...codeBlock('export const fooVariants = {};', 'angular-ts'), title: 'foo.variants.ts' },
+        ],
+      },
+    });
+
+    expect(md).toContain('### Manual\n\n**Install dependencies**\n\n```bash\nnpm install foo\n```');
+    expect(md).toContain('**Add foo.component.ts**\n\n```angular-ts\nexport class Foo {}\n```');
+    expect(md).toContain('**Add foo.variants.ts**\n\n```angular-ts\nexport const fooVariants = {};\n```');
+  });
+
+  it('lists the preview demo shown at the top of the page first among the examples', () => {
+    const md = serializeComponentToMarkdown({
+      ...DATA,
+      preview: { name: 'preview', codeData: codeBlock('<z-date-picker />', 'angular-html') },
+    });
+
+    expect(md.indexOf('### Preview')).toBeGreaterThan(-1);
+    expect(md.indexOf('### Preview')).toBeLessThan(md.indexOf('### With Range'));
+  });
+
   it('renders usage, examples and an API table', () => {
     const md = serializeComponentToMarkdown(DATA);
 

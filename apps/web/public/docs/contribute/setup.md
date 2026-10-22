@@ -13,7 +13,7 @@ Zard UI is a single Nx workspace. One `npm install` at the root installs everyth
 
 The `engines` field in `package.json` requires Node 20.19.0 or newer. The CI runs Node 24, so anything in between works.
 
-Check your toolchain
+**Check your toolchain**
 
 ```
 node --version   # must be >= 20.19.0
@@ -25,7 +25,7 @@ git --version
 
 Contributions come from forks. Fork `zard-ui/zardui` on GitHub, then clone your copy and install the dependencies with npm — the repository ships a `package-lock.json` , so npm is the supported package manager.
 
-Fork, clone and install
+**Fork, clone and install**
 
 ```
 git clone https://github.com/<your-username>/zardui.git
@@ -37,7 +37,7 @@ npm install
 
 `npm start` runs `scripts/dev.mjs` , which does three things: it pre-builds every highlighted code block, then runs two processes side by side — the highlight generator in watch mode and `nx run web:serve --configuration=local` .
 
-Start the docs site
+**Start the docs site**
 
 ```
 npm start
@@ -45,7 +45,7 @@ npm start
 
 The site listens on `http://localhost:4222` . To change the port, copy `.env.example` to `.env` — the start script loads it automatically.
 
-.env
+**.env**
 
 ```
 PORT=4222
@@ -105,7 +105,7 @@ Every command below is defined in the root `package.json` .
 
 The four failures newcomers hit most often, and the command that fixes each.
 
-Troubleshooting
+**Troubleshooting**
 
 ```
 # Port already taken — pick another one

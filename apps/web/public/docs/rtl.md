@@ -9,12 +9,6 @@ Right-to-left support for ZardUI components.
 
 ZardUI components have first-class support for right-to-left (RTL) layouts. Text alignment, positioning and directional styles adapt for languages like Arabic, Hebrew and Persian, and so do the overlays they open.
 
-مرحبا بعودتك
-
-يتبع النص والمسافات والأيقونات اتجاه القراءة.
-
-غيّر اللغة من الأعلى لترى البطاقة تنعكس دون أي شيفرة إضافية.
-
 Pick a language in the preview above: the card is the same component in every language, only the text and the direction change. Every component page also has an `RTL` example you can switch the same way.
 
 ## Get started
@@ -25,9 +19,7 @@ RTL is a matter of setting the direction of the document, or of the part of the 
 
 Add dir="rtl" and the language of your content to the html tag. Update lang="ar" to your target language. Every component and every overlay it opens reads the direction from there.
 
-```bash
-src/index.html
-```
+**src/index.html**
 
 ```
 <!doctype html>
@@ -52,9 +44,7 @@ Analog builds with Vite, which reuses build.target as the CSS target. The templa
 
 Mixed-direction page? Import the CDK Dir directive and put dir on any element. Components inside, and the overlays they open, take that direction instead of the document one.
 
-```bash
-src/app/arabic-section.component.ts
-```
+**src/app/arabic-section.component.ts**
 
 ```
 import { Dir } from '@angular/cdk/bidi';
@@ -83,9 +73,7 @@ export class ArabicSectionComponent {}
 
 zard-cli init asks whether your app reads right to left, and --rtl / --no-rtl answer the question up front. Nothing is inferred from your project: the answer is yours.
 
-```bash
-Terminal
-```
+**Terminal**
 
 ```
 # The project reads right to left
@@ -99,9 +87,7 @@ npx zard-cli@latest init --no-rtl
 
 With RTL on, init writes "rtl": true to components.json and sets dir="rtl" on the html tag of your index.html. The component files you install are identical either way.
 
-```bash
-components.json
-```
+**components.json**
 
 ```
 {
@@ -121,13 +107,13 @@ The components are direction-agnostic: the files you install are the same in LTR
 
 Component styles use TailwindCSS logical utilities instead of physical ones: `ms-*` / `me-*` , `ps-*` / `pe-*` , `start-*` / `end-*` , `text-start` , `border-s` and `rounded-s` . Utilities that have no logical form get an `rtl:` pair, and icons that point along the reading direction use `rtl:rotate-180` . Use the same classes in your own markup.
 
-Physical (does not mirror)
+**Physical (does not mirror)**
 
 ```
 <div class="ml-4 pr-2 text-left border-l rounded-l-md left-0"></div>
 ```
 
-Logical (works in both directions)
+**Logical (works in both directions)**
 
 ```
 <div class="ms-4 pe-2 text-start border-s rounded-s-md start-0"></div>
@@ -137,7 +123,7 @@ Logical (works in both directions)
 
 Whatever CSS cannot express is decided in code: arrow keys that move inline, slider and carousel math, positions computed in JavaScript. Those components inject `Directionality` and read its `value` , or its `valueSignal()` inside computed values so they follow a direction switch.
 
-src/app/my-overlay.directive.ts
+**src/app/my-overlay.directive.ts**
 
 ```
 import { Directionality } from '@angular/cdk/bidi';
@@ -178,9 +164,7 @@ npm install @fontsource-variable/noto-sans-arabic
 
 Import the font in your global stylesheet and point the Tailwind font token at it.
 
-```bash
-src/styles.css
-```
+**src/styles.css**
 
 ```
 @import 'tailwindcss';
@@ -195,13 +179,13 @@ src/styles.css
 
 Enter and exit animations of overlays slide away from their trigger, so the physical slide classes were replaced by logical ones, for example `slide-in-from-right` became `slide-in-from-end` . Where the animation utilities have no logical form, an `rtl:` pair covers the other direction. Because the overlay carries the direction of its trigger, you do not need to set `dir` on the panel yourself.
 
-Physical
+**Physical**
 
 ```
 <div class="data-[side=right]:slide-in-from-left-2"></div>
 ```
 
-Logical
+**Logical**
 
 ```
 <div class="data-[side=inline-end]:slide-in-from-start-2"></div>
@@ -223,17 +207,13 @@ npx zard-cli@latest add dropdown-menu popover --overwrite
 
 Sidebar, calendar and pagination also carry behavior or labels you may have customized. Re-add them, then check their RTL examples: the sidebar docks to the inline-start edge, the calendar mirrors its week and navigation, and pagination takes translated labels.
 
-```bash
-Translated labels
-```
+**Translated labels**
 
 ```
 <z-pagination [zTotal]="10" [(zPageIndex)]="page" zPreviousText="السابق" zNextText="التالي" />
 ```
 
-```bash
-Composable parts
-```
+**Composable parts**
 
 ```
 <z-pagination-previous zText="السابق" />

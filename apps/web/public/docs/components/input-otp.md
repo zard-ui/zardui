@@ -17,6 +17,8 @@ npx zard-cli@latest add input-otp
 
 ### Manual
 
+**Add input-otp.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import {
@@ -540,6 +542,8 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 }
 ```
 
+**Add input-otp.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -580,6 +584,8 @@ export type ZardInputOtpGroupVariants = VariantProps<typeof inputOtpGroupVariant
 export type ZardInputOtpSeparatorVariants = VariantProps<typeof inputOtpSeparatorVariants>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './input-otp.component';
 export * from './input-otp-signal.component';
@@ -591,6 +597,8 @@ export * from './input-otp.tokens';
 export * from './input-otp.variants';
 export { REGEXP_ONLY_CHARS, REGEXP_ONLY_DIGITS, REGEXP_ONLY_DIGITS_AND_CHARS } from './input-otp.utils';
 ```
+
+**Add input-otp-group.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -622,6 +630,8 @@ export class ZardInputOtpGroupComponent {
   readonly classes = computed(() => mergeClasses(inputOtpGroupVariants(), this.class()));
 }
 ```
+
+**Add input-otp-separator.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -669,6 +679,8 @@ export class ZardInputOtpSeparatorComponent {
   );
 }
 ```
+
+**Add input-otp-signal.component.ts**
 
 ```angular-ts
 import {
@@ -746,6 +758,8 @@ export class ZardInputOtpSignalComponent extends ZardInputOtpComponent implement
   }
 }
 ```
+
+**Add input-otp-slot.component.ts**
 
 ```angular-ts
 import {
@@ -908,6 +922,8 @@ export class ZardInputOtpSlotComponent {
 }
 ```
 
+**Add input-otp.imports.ts**
+
 ```angular-ts
 import { ZardInputOtpGroupComponent } from '@/shared/components/input-otp/input-otp-group.component';
 import { ZardInputOtpSeparatorComponent } from '@/shared/components/input-otp/input-otp-separator.component';
@@ -924,6 +940,8 @@ export const ZardInputOtpImports = [
 ] as const;
 ```
 
+**Add input-otp.tokens.ts**
+
 ```angular-ts
 import { InjectionToken, type Signal } from '@angular/core';
 
@@ -935,6 +953,8 @@ export interface ZardInputOtpSlotApi {
 
 export const ZARD_INPUT_OTP_SLOT = new InjectionToken<ZardInputOtpSlotApi>('ZardInputOtpSlot');
 ```
+
+**Add input-otp.utils.ts**
 
 ```angular-ts
 /** Ready-made `zPattern` values, mirroring the ones shipped by the `input-otp` library. */
@@ -974,6 +994,36 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
+
+@Component({
+  selector: 'z-demo-input-otp-preview',
+  imports: [ZardInputOtpImports, FormsModule],
+  template: `
+    <z-input-otp [zMaxLength]="6" [(ngModel)]="value">
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="0" />
+        <z-input-otp-slot [zIndex]="1" />
+        <z-input-otp-slot [zIndex]="2" />
+        <z-input-otp-slot [zIndex]="3" />
+        <z-input-otp-slot [zIndex]="4" />
+        <z-input-otp-slot [zIndex]="5" />
+      </z-input-otp-group>
+    </z-input-otp>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoInputOtpPreviewComponent {
+  value = '123456';
+}
+```
 
 ### Pattern
 

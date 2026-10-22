@@ -13,14 +13,6 @@ In this guide we will build forms with Reactive Forms — the explicit, strongly
 
 We are going to build the following form. It has a text input and a textarea. On submit we validate the form data and display any errors.
 
-Bug Title
-
-Description
-
-0/100 characters
-
-Include steps to reproduce, expected behavior, and what actually happened.
-
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -190,7 +182,7 @@ Here is a single field: the control provides the state, formControlName binds it
 
 Describe the shape of the form with controls and attach the validators each one needs.
 
-bug-report-form.ts
+**bug-report-form.ts**
 
 ```
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -213,7 +205,7 @@ protected readonly bugForm = new FormGroup({
 
 `FormBuilder` is the same model with less ceremony: an array is read as `[initialValue, validators]` . Both styles produce identical, equally typed controls — pick one and stay with it.
 
-bug-report-form.ts
+**bug-report-form.ts**
 
 ```
 import { inject } from '@angular/core';
@@ -233,7 +225,7 @@ protected readonly bugForm = this.fb.nonNullable.group({
 
 Import `ReactiveFormsModule` and handle the submit. Angular does not mark controls as touched on submit, so call `markAllAsTouched()` yourself to reveal the errors of fields the user never focused.
 
-bug-report-form.ts
+**bug-report-form.ts**
 
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -296,7 +288,7 @@ That's it. You now have a fully accessible form with client-side validation. Rea
 
 `Validators` covers the common rules. Pass one, or an array, to the control options.
 
-account-form.ts
+**account-form.ts**
 
 ```
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -321,7 +313,7 @@ protected readonly accountForm = new FormGroup({
 
 A validator is a function from a control to an error map, or to `null` when the value is valid. Attach cross-field rules to the group that owns both controls — not to the individual controls.
 
-signup-form.ts
+**signup-form.ts**
 
 ```
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
@@ -353,7 +345,7 @@ protected readonly signupForm = new FormGroup(
 
 An async validator returns a `Promise` or an `Observable` of the same error map, and goes in `asyncValidators` . Angular only runs them once every synchronous validator passes, and while the request is in flight the control reports `status === 'PENDING'` — neither valid nor invalid, which is what a submit button should wait on.
 
-signup-form.ts
+**signup-form.ts**
 
 ```
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
@@ -525,17 +517,7 @@ Every zard/ui form control implements a value accessor, so formControlName binds
 
 ### input
 
-For text inputs, bind
-
-formControlName
-
-and mirror the control's invalid state with
-
-aria-invalid
-
-Username
-
-This is your public display name. Must be between 3 and 10 characters. Must only contain letters, numbers, and underscores.
+For text inputs, bind `formControlName` and mirror the control's invalid state with `aria-invalid`.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -633,15 +615,7 @@ export class ZardFormsReactiveInputComponent {
 
 ### textarea
 
-Textareas work exactly like inputs. Add
-
-z-field-description
-
-for the helper copy below the control.
-
-More about you
-
-Tell us more about yourself. This will be used to help us personalize your experience.
+Textareas work exactly like inputs. Add `z-field-description` for the helper copy below the control.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -729,21 +703,7 @@ export class ZardFormsReactiveTextareaComponent {
 
 ### select
 
-z-select
-
-is a value accessor too. Use
-
-zOrientation="responsive"
-
-with
-
-z-field-content
-
-to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a custom validator — a value rule, not a presence one.
-
-Spoken Language
-
-For best results, select the language you speak.
+`z-select` is a value accessor too. Use `zOrientation="responsive"` with `z-field-content` to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a custom validator — a value rule, not a presence one.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -857,35 +817,7 @@ export class ZardFormsReactiveSelectComponent {
 
 ### checkbox
 
-A checkbox group maps cleanly to a
-
-FormArray
-
-of booleans: one control per option, plus a group-level validator for the 'pick at least one' rule. The first group holds a single disabled control that ships checked —
-
-getRawValue()
-
-is what reads it back. Remember
-
-data-slot="checkbox-group"
-
-on the
-
-z-field-group
-
-Responses
-
-Get notified for requests that take time, like research or image generation.
-
-Push notifications
-
-Tasks
-
-Get notified when tasks you've created have updates.
-
-Push notifications
-
-Email notifications
+A checkbox group maps cleanly to a `FormArray` of booleans: one control per option, plus a group-level validator for the 'pick at least one' rule. The first group holds a single disabled control that ships checked — `getRawValue()` is what reads it back. Remember `data-slot="checkbox-group"` on the `z-field-group`.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -1016,29 +948,7 @@ export class ZardFormsReactiveCheckboxComponent {
 
 ### radio group
 
-Bind
-
-formControlName
-
-to
-
-z-radio-group
-
-— the individual
-
-z-radio
-
-items only carry their value.
-
-Plan
-
-You can upgrade or downgrade your plan at any time.
-
-Starter (100K tokens/month)For everyday use with basic features.
-
-Pro (1M tokens/month)For advanced AI usage with more features.
-
-Enterprise (Unlimited tokens)For large teams and heavy usage.
+Bind `formControlName` to `z-radio-group` — the individual `z-radio` items only carry their value.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -1127,15 +1037,7 @@ export class ZardFormsReactiveRadioComponent {
 
 ### switch
 
-Switches bind to a boolean control.
-
-Validators.requiredTrue
-
-is the rule for "must be enabled".
-
-Multi-factor authentication
-
-Enable multi-factor authentication to secure your account.
+Switches bind to a boolean control. `Validators.requiredTrue` is the rule for "must be enabled".
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -1212,38 +1114,6 @@ export class ZardFormsReactiveSwitchComponent {
 ### complex forms
 
 Everything above, composed into one form with fieldsets, separators, a validator that rejects unknown plan values and count rules on the add-ons array.
-
-Subscription Plan
-
-Choose your subscription plan.
-
-Basic For individuals and small teams
-
-Pro For businesses with higher demands
-
-Billing Period
-
-Choose how often you want to be billed.
-
-Add-ons
-
-Select additional features you'd like to include.
-
-Analytics
-
-Advanced analytics and reporting
-
-Backup
-
-Automated daily backups
-
-Priority Support
-
-24/7 premium customer support
-
-Email Notifications
-
-Receive email updates about your subscription
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -1492,10 +1362,6 @@ protected onResetToDefaults(): void {
 
 FormArray manages a list of controls you can grow and shrink at runtime — one group per row keeps each item independently validated.
 
-Email Addresses
-
-Add up to 5 email addresses where we can contact you.
-
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -1672,7 +1538,7 @@ export class ZardFormsReactiveArrayComponent {
 
 ### Setting up the FormArray
 
-contact-form.ts
+**contact-form.ts**
 
 ```
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';

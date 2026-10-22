@@ -17,6 +17,8 @@ npx zard-cli@latest add badge
 
 ### Manual
 
+**Add badge.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -49,6 +51,8 @@ export class ZardBadgeComponent {
 }
 ```
 
+**Add badge.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -71,6 +75,8 @@ export const badgeVariants = cva('inline-flex w-fit shrink-0 items-center justif
 export type ZardBadgeTypeVariants = NonNullable<VariantProps<typeof badgeVariants>['zType']>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './badge.component';
 export * from './badge.variants';
@@ -87,6 +93,29 @@ import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardBadgeComponent } from '../badge.component';
+
+@Component({
+  selector: 'z-demo-badge-preview',
+  imports: [ZardBadgeComponent],
+  template: `
+    <div class="flex w-full flex-wrap items-center gap-2">
+      <z-badge>Badge</z-badge>
+      <z-badge zType="secondary">Secondary</z-badge>
+      <z-badge zType="destructive">Destructive</z-badge>
+      <z-badge zType="outline">Outline</z-badge>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoBadgePreviewComponent {}
+```
 
 ### Variants
 

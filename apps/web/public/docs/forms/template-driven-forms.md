@@ -13,14 +13,6 @@ In this guide we will build forms with Template-driven Forms — the simplest of
 
 We are going to build the following form. It has a text input and a textarea. On submit we validate the form data and display any errors.
 
-Bug Title
-
-Description
-
-0/100 characters
-
-Include steps to reproduce, expected behavior, and what actually happened.
-
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -207,7 +199,7 @@ Here is a single field: ngModel creates the control, the template reference expo
 
 The shape of the form is the shape of the object you bind to it.
 
-bug-report-form.ts
+**bug-report-form.ts**
 
 ```
 // There is no schema object here: the shape of the form is the shape of the
@@ -224,7 +216,7 @@ protected model: BugReport = { title: '', description: '' };
 
 Import `FormsModule` and take the `NgForm` from the template on submit.
 
-bug-report-form.ts
+**bug-report-form.ts**
 
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -324,7 +316,7 @@ Angular maps the standard HTML validation attributes onto its own validators. Cu
 
 The attributes cannot express everything — a minimum number of selected options, a value the control offers but the form must reject, or a rule that spans two fields. The quick way out is a getter next to the model, checked on submit alongside `form.invalid` . It costs nothing, but the rule stays invisible to the form: the control never turns invalid on its own.
 
-subscription-form.ts
+**subscription-form.ts**
 
 ```
 // Template-driven forms have no declarative place for count, value or
@@ -350,7 +342,7 @@ protected onSubmit(form: NgForm): void {
 
 A getter checked on submit is fine for one form. When the rule travels, wrap it in a directive that registers itself in `NG_VALIDATORS` : it becomes an attribute like `required` , and the error lands on the control itself, so `form.invalid` finally accounts for it.
 
-forbidden-names.directive.ts
+**forbidden-names.directive.ts**
 
 ```
 @Directive({
@@ -390,7 +382,7 @@ The `registerOnValidatorChange` wiring is what makes a validator with inputs rev
 
 Same idea against `NG_ASYNC_VALIDATORS` , returning a `Promise` or an `Observable` . Pair it with `[ngModelOptions]="{ updateOn: 'blur' }"` so you are not firing a request per keystroke.
 
-username-available.directive.ts
+**username-available.directive.ts**
 
 ```
 @Directive({
@@ -488,13 +480,7 @@ Every zard/ui form control implements a value accessor, so name + [(ngModel)] bi
 
 ### input
 
-For text inputs, add the validation attributes and expose the control with
-
-#ctrl="ngModel"
-
-Username
-
-This is your public display name. Must be between 3 and 10 characters. Must only contain letters, numbers, and underscores.
+For text inputs, add the validation attributes and expose the control with `#ctrl="ngModel"`.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -589,15 +575,7 @@ export class ZardFormsTemplateInputComponent {
 
 ### textarea
 
-Textareas work exactly like inputs. Add
-
-z-field-description
-
-for the helper copy below the control.
-
-More about you
-
-Tell us more about yourself. This will be used to help us personalize your experience.
+Textareas work exactly like inputs. Add `z-field-description` for the helper copy below the control.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -688,21 +666,7 @@ export class ZardFormsTemplateTextareaComponent {
 
 ### select
 
-z-select
-
-is a value accessor too, so
-
-required
-
-and
-
-[(ngModel)]
-
-behave exactly as on a native control. "Auto" is listed but rejected on submit — a value rule with no attribute equivalent, so it lives in the component.
-
-Spoken Language
-
-For best results, select the language you speak.
+`z-select` is a value accessor too, so `required` and `[(ngModel)]` behave exactly as on a native control. "Auto" is listed but rejected on submit — a value rule with no attribute equivalent, so it lives in the component.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -813,25 +777,7 @@ export class ZardFormsTemplateSelectComponent {
 
 ### checkbox
 
-A checkbox group is one boolean per option in the model. The 'pick at least one' rule has no attribute equivalent, so it lives in the component. The first group is a single control kept checked and locked with the
-
-disabled
-
-attribute.
-
-Responses
-
-Get notified for requests that take time, like research or image generation.
-
-Push notifications
-
-Tasks
-
-Get notified when tasks you've created have updates.
-
-Push notifications
-
-Email notifications
+A checkbox group is one boolean per option in the model. The 'pick at least one' rule has no attribute equivalent, so it lives in the component. The first group is a single control kept checked and locked with the `disabled` attribute.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -964,29 +910,7 @@ export class ZardFormsTemplateCheckboxComponent {
 
 ### radio group
 
-Bind
-
-[(ngModel)]
-
-to
-
-z-radio-group
-
-— the individual
-
-z-radio
-
-items only carry their value.
-
-Plan
-
-You can upgrade or downgrade your plan at any time.
-
-Starter (100K tokens/month)For everyday use with basic features.
-
-Pro (1M tokens/month)For advanced AI usage with more features.
-
-Enterprise (Unlimited tokens)For large teams and heavy usage.
+Bind `[(ngModel)]` to `z-radio-group` — the individual `z-radio` items only carry their value.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -1076,31 +1000,7 @@ export class ZardFormsTemplateRadioComponent {
 
 ### switch
 
-Switches bind to a boolean. Watch out:
-
-required
-
-only rejects
-
-null
-
-and
-
-undefined
-
-, never
-
-false
-
-, and there is no
-
-requiredTrue
-
-attribute — so the "must be enabled" rule lives in the component.
-
-Multi-factor authentication
-
-Enable multi-factor authentication to secure your account.
+Switches bind to a boolean. Watch out: `required` only rejects `null` and `undefined`, never `false`, and there is no `requiredTrue` attribute — so the "must be enabled" rule lives in the component.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -1191,38 +1091,6 @@ export class ZardFormsTemplateSwitchComponent {
 ### complex forms
 
 Everything above, composed into one form with fieldsets, separators and the count and value rules handled in the component, since attributes cannot express them.
-
-Subscription Plan
-
-Choose your subscription plan.
-
-Basic For individuals and small teams
-
-Pro For businesses with higher demands
-
-Billing Period
-
-Choose how often you want to be billed.
-
-Add-ons
-
-Select additional features you'd like to include.
-
-Analytics
-
-Advanced analytics and reporting
-
-Backup
-
-Automated daily backups
-
-Priority Support
-
-24/7 premium customer support
-
-Email Notifications
-
-Receive email updates about your subscription
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -1468,10 +1336,6 @@ protected onReset(form: NgForm): void {
 ## Array Fields
 
 There is no FormArray here: loop over a plain array and give every row a unique control name.
-
-Email Addresses
-
-Add up to 5 email addresses where we can contact you.
 
 ```
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';

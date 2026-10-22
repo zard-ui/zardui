@@ -17,6 +17,8 @@ npx zard-cli@latest add accordion
 
 ### Manual
 
+**Add accordion.component.ts**
+
 ```angular-ts
 import {
   type AfterContentInit,
@@ -110,6 +112,8 @@ export class ZardAccordionComponent implements AfterContentInit {
 }
 ```
 
+**Add accordion.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -145,6 +149,8 @@ export type ZardAccordionItemVariants = VariantProps<typeof accordionItemVariant
 export type ZardAccordionTriggerVariants = VariantProps<typeof accordionTriggerVariants>;
 export type ZardAccordionContentVariants = VariantProps<typeof accordionContentVariants>;
 ```
+
+**Add accordion-item.component.ts**
 
 ```angular-ts
 import {
@@ -242,12 +248,16 @@ export class ZardAccordionItemComponent {
 }
 ```
 
+**Add accordion.imports.ts**
+
 ```angular-ts
 import { ZardAccordionItemComponent } from '@/shared/components/accordion/accordion-item.component';
 import { ZardAccordionComponent } from '@/shared/components/accordion/accordion.component';
 
 export const ZardAccordionImports = [ZardAccordionComponent, ZardAccordionItemComponent] as const;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './accordion.component';
@@ -271,6 +281,37 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardAccordionImports } from '@/shared/components/accordion/accordion.imports';
+
+@Component({
+  selector: 'z-demo-accordion-preview',
+  imports: [ZardAccordionImports],
+  template: `
+    <div z-accordion zDefaultValue="shipping" zType="single" class="max-w-sm">
+      <z-accordion-item zValue="shipping" zTitle="What are your shipping options?">
+        We offer standard (5-7 days), express (2-3 days), and overnight shipping. Free shipping on international orders.
+      </z-accordion-item>
+
+      <z-accordion-item zValue="returns" zTitle="What is your return policy?">
+        Returns accepted within 30 days. Items must be unused and in original packaging. Refunds processed within 5-7
+        business days.
+      </z-accordion-item>
+
+      <z-accordion-item zValue="support" zTitle="How can I contact customer support?">
+        Reach us via email, live chat, or phone. We respond within 24 hours during business days.
+      </z-accordion-item>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoAccordionPreviewComponent {}
+```
 
 ### Basic
 
