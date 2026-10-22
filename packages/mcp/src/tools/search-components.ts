@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { docsService, type CatalogEntry } from '../services/docs.service.js';
 import { registryService } from '../services/registry.service.js';
-import { ALIASES } from '../utils/aliases.js';
+import { ALIASES, guideTargetsFor } from '../utils/aliases.js';
 import { distance, suggest } from '../utils/fuzzy.js';
 import { errorMessage, fail, json } from '../utils/result.js';
 
@@ -50,7 +50,21 @@ export function registerSearchComponents(server: McpServer): void {
     },
     async ({ query, limit }) => {
       try {
-        const [items, catalog] = await Promise.all([registryService.getItems(), docsService.getCatalog()]);
+        const [items, catalog, guideEntries] = await Promise.all([
+          registryService.getItems(),
+          docsService.getCatalog(),
+          docsService.getGuides(),
+        ]);
+        // "create project" or "apply a preset" are CLI commands, not components:
+        // they live in a guide. Only guides the site publishes are offered.
+        const guides = guideTargetsFor(query)
+          .filter(target => guideEntries.has(target.topic))
+          .map(({ topic, section }) => ({
+            topic,
+            ...(section && { section }),
+            title: guideEntries.get(topic)?.title,
+            read: { tool: 'get-docs', topic, ...(section && { section }) },
+          }));
         const matches = items
           .map(item => ({
             item,
@@ -66,6 +80,15 @@ export function registerSearchComponents(server: McpServer): void {
             registryDependencies: item.registryDependencies ?? [],
           }));
 
+        if (matches.length === 0 && guides.length > 0) {
+          return json({
+            query,
+            total: 0,
+            matches: [],
+            guides,
+            hint: 'No component matched, but the guides below cover this. Read them with get-docs.',
+          });
+        }
         if (matches.length === 0) {
           const guesses = suggest(
             query,
@@ -80,7 +103,7 @@ export function registerSearchComponents(server: McpServer): void {
               : 'Nothing matched. Use list-components to see the whole catalog.',
           });
         }
-        return json({ query, total: matches.length, matches });
+        return json({ query, ...(guides.length > 0 && { guides }), total: matches.length, matches });
       } catch (error) {
         return fail(`Could not reach the Zard UI registry: ${errorMessage(error)}`);
       }

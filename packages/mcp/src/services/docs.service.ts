@@ -126,22 +126,49 @@ function isMarkdown(response: Response, body: string): boolean {
   return !/^\s*<(!doctype|html)/i.test(body);
 }
 
+/** The headings of a markdown document, outside code fences (a shell comment is not a heading). */
+function headingsWithLines(lines: string[]): { index: number; level: number; text: string }[] {
+  let inFence = false;
+  const headings: { index: number; level: number; text: string }[] = [];
+  lines.forEach((line, index) => {
+    if (line.trimStart().startsWith('```')) inFence = !inFence;
+    const match = inFence ? null : /^(#{1,6}) (.*)$/.exec(line);
+    if (match) headings.push({ index, level: match[1].length, text: match[2].trim() });
+  });
+  return headings;
+}
+
 /**
- * Cuts a level-two section out of the markdown, with its subsections.
+ * Cuts a section out of the markdown, with its subsections.
  *
- * Runs to the next `## ` or to the end. It exists so that asking for examples
- * returns examples, rather than the whole document.
+ * Looks for a level-two heading first, then a level-three one (`### create`
+ * under `## Commands`). Runs to the next heading of the same or a higher level
+ * or to the end. It exists so that asking for examples returns examples,
+ * rather than the whole document.
  */
 export function sectionOf(markdown: string, heading: string): string | null {
   const lines = markdown.split('\n');
-  const start = lines.findIndex(line => line.trim().toLowerCase() === `## ${heading.toLowerCase()}`);
+  const wanted = heading.trim().toLowerCase();
+  const headings = headingsWithLines(lines);
 
-  if (start === -1) return null;
+  for (const level of [2, 3]) {
+    const start = headings.find(item => item.level === level && item.text.toLowerCase() === wanted);
+    if (!start) continue;
 
-  const rest = lines.slice(start + 1);
-  const end = rest.findIndex(line => line.startsWith('## '));
+    const next = headings.find(item => item.index > start.index && item.level <= level);
+    return lines
+      .slice(start.index, next?.index ?? lines.length)
+      .join('\n')
+      .trim();
+  }
+  return null;
+}
 
-  return [lines[start], ...(end === -1 ? rest : rest.slice(0, end))].join('\n').trim();
+/** The level-two and level-three headings of a markdown document, outside code fences. */
+export function headingsOf(markdown: string): string[] {
+  return headingsWithLines(markdown.split('\n'))
+    .filter(item => item.level === 2 || item.level === 3)
+    .map(item => item.text);
 }
 
 export interface CatalogEntry {
