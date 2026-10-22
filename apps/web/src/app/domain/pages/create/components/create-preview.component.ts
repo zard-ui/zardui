@@ -95,10 +95,12 @@ export class CreatePreviewComponent {
 
   /**
    * The iframe's address, read once: a new `src` is a reload, so neither the design nor the item is tracked. Later
-   * changes reach the iframe as messages.
+   * changes reach the iframe as messages. Not rendered on the server: hydration replaces the server's iframe, so the
+   * preview would load twice.
    */
   protected readonly src = computed<SafeResourceUrl | null>(() =>
     untracked(() => {
+      if (!this.isBrowser) return null;
       const item = this.state.item();
       const query = new URLSearchParams(serializeCreateParams(this.state.design(), item));
       query.delete('item');
