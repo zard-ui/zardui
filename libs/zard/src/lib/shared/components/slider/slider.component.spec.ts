@@ -648,3 +648,132 @@ describe('ZardSliderComponent (RTL)', () => {
     expect(ariaNow()).toBe(30);
   });
 });
+
+describe('ZardSliderComponent (custom zMin/zMax)', () => {
+  let fixture: ComponentFixture<TestHostComponent>;
+  let component: TestHostComponent;
+
+  const setup = (min: number, max: number, value: number[], step = 1) => {
+    component.min = min;
+    component.max = max;
+    component.step = step;
+    component.value = value;
+    fixture.detectChanges();
+  };
+
+  const thumbHost = () =>
+    fixture.debugElement.query(By.directive(ZardSliderThumbComponent)).nativeElement as HTMLElement;
+  const thumb = () => thumbHost().querySelector('span') as HTMLElement;
+  const ariaNow = () => Number(thumb().getAttribute('aria-valuenow'));
+  const range = () => fixture.nativeElement.querySelector('[data-slot="slider-range"]') as HTMLElement;
+  const mockTrackRect = () => {
+    const track = fixture.nativeElement.querySelector('[data-slot="slider-track"]') as HTMLElement;
+    track.getBoundingClientRect = () =>
+      ({ left: 0, right: 200, width: 200, top: 0, bottom: 4, height: 4, x: 0, y: 0 }) as DOMRect;
+    return track;
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestHostComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestHostComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('positions the thumb relative to a zMax below 100', () => {
+    setup(0, 50, [25]);
+
+    expect(ariaNow()).toBe(25);
+    expect(thumbHost().style.left).toBe('calc(50% + 0px)');
+    expect(range().style.right).toBe('50%');
+  });
+
+  it('accepts and positions values above 100', () => {
+    setup(0, 1000, [750], 10);
+
+    expect(thumb().getAttribute('aria-valuemax')).toBe('1000');
+    expect(ariaNow()).toBe(750);
+    expect(thumbHost().style.left).toBe('calc(75% + 0px)');
+  });
+
+  it('supports a negative zMin', () => {
+    setup(-10, 10, [0]);
+
+    expect(ariaNow()).toBe(0);
+    expect(thumbHost().style.left).toBe('calc(50% + 0px)');
+
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(-10);
+    expect(thumbHost().style.left).toBe('calc(0% + 0px)');
+  });
+
+  it('moves to zMin with Home and to zMax with End', () => {
+    setup(0, 1000, [500], 10);
+
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(1000);
+    expect(thumbHost().style.left).toBe('calc(100% + 0px)');
+
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(0);
+  });
+
+  it('maps a track click onto the [zMin, zMax] range', () => {
+    setup(0, 50, [10]);
+    const track = mockTrackRect();
+
+    track.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: 100 }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(25);
+
+    track.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: 200 }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(50);
+  });
+
+  it('maps a track click onto a negative range', () => {
+    setup(-10, 10, [0]);
+    const track = mockTrackRect();
+
+    track.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: 50 }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(-5);
+  });
+
+  it('clamps values written through the form API to [zMin, zMax]', () => {
+    setup(-10, 10, [0]);
+    const slider = fixture.debugElement.query(By.directive(ZardSliderComponent))
+      .componentInstance as ZardSliderComponent;
+
+    slider.writeValue(50);
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(10);
+
+    slider.writeValue(-50);
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(-10);
+  });
+
+  it('keeps the fractional 0-1 scale working', () => {
+    setup(0, 1, [0.5], 0.1);
+
+    expect(thumbHost().style.left).toBe('calc(50% + 0px)');
+
+    const track = mockTrackRect();
+    track.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: 160 }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBeCloseTo(0.8);
+  });
+});
