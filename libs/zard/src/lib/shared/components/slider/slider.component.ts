@@ -434,7 +434,11 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 
   private updateThumbFromPercentage(percentage: number, thumbIndex: number): void {
     const [min, max] = this.getMinMax();
-    let value = clamp(roundToStep(this.percentageToValue(percentage), min, this.zStep()), [min, max]);
+    const rawValue = this.percentageToValue(percentage);
+    const steppedValue = clamp(roundToStep(rawValue, min, this.zStep()), [min, max]);
+    // when (zMax - zMin) is not a multiple of zStep the last step falls short of zMax,
+    // so snap to zMax if it is closer, keeping the endpoint reachable like the End key
+    let value = Math.abs(max - rawValue) < Math.abs(steppedValue - rawValue) ? max : steppedValue;
 
     const currentValues = [...this.values()];
 

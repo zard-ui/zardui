@@ -743,6 +743,23 @@ describe('ZardSliderComponent (custom zMin/zMax)', () => {
     expect(ariaNow()).toBe(50);
   });
 
+  it('keeps zMax reachable by pointer when the range is not a multiple of zStep', () => {
+    setup(0, 1000, [0], 300);
+    const track = mockTrackRect();
+
+    track.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: 200 }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(1000);
+
+    track.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: 184 }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(900);
+
+    track.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: 196 }));
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(1000);
+  });
+
   it('maps a track click onto a negative range', () => {
     setup(-10, 10, [0]);
     const track = mockTrackRect();
