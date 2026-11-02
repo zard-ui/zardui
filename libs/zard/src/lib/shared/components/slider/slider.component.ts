@@ -351,12 +351,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       return;
     }
 
-    const [min, max] = this.getMinMax();
-    const step = this.zStep();
-
-    const values = Array.isArray(value)
-      ? value.map(v => roundToStep(clamp(v, [min, max]), min, step))
-      : [roundToStep(clamp(value, [min, max]), min, step)];
+    const values = Array.isArray(value) ? value.map(v => this.snapToStep(v)) : [this.snapToStep(value)];
 
     if (values.toString() === this.lastEmittedValue().toString()) {
       return;
@@ -433,12 +428,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   }
 
   private updateThumbFromPercentage(percentage: number, thumbIndex: number): void {
-    const [min, max] = this.getMinMax();
-    const rawValue = this.percentageToValue(percentage);
-    const steppedValue = clamp(roundToStep(rawValue, min, this.zStep()), [min, max]);
-    // when (zMax - zMin) is not a multiple of zStep the last step falls short of zMax,
-    // so snap to zMax if it is closer, keeping the endpoint reachable like the End key
-    let value = Math.abs(max - rawValue) < Math.abs(steppedValue - rawValue) ? max : steppedValue;
+    let value = this.snapToStep(this.percentageToValue(percentage));
 
     const currentValues = [...this.values()];
 
@@ -477,7 +467,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 
   private setInitialValue(): void {
     const [min, max] = this.getMinMax();
-    const step = this.zStep();
 
     const rawValues = this.zValue();
     const defaults = this.zDefault();
@@ -489,12 +478,21 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       const def = clamp(defaults[i] ?? min, [min, max]);
       const raw = rawValues[i];
       const value = raw !== undefined && raw >= min && raw <= max ? raw : def;
-      values.push(roundToStep(value, min, step));
+      values.push(this.snapToStep(value));
     }
 
     this.lastEmittedValue.set(values);
     this.values.set(values);
     this.thumbOffset.set(0);
+  }
+
+  private snapToStep(value: number): number {
+    const [min, max] = this.getMinMax();
+    const bounded = clamp(value, [min, max]);
+    const stepped = clamp(roundToStep(bounded, min, this.zStep()), [min, max]);
+    // when (zMax - zMin) is not a multiple of zStep the last step falls short of zMax,
+    // so snap to zMax if it is closer, keeping the endpoint reachable like the End key
+    return Math.abs(max - bounded) < Math.abs(stepped - bounded) ? max : stepped;
   }
 
   private percentageToValue(percentage: number): number {

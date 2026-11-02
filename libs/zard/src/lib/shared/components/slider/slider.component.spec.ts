@@ -783,6 +783,34 @@ describe('ZardSliderComponent (custom zMin/zMax)', () => {
     expect(ariaNow()).toBe(-10);
   });
 
+  it('keeps zMax reachable through the form API when the range is not a multiple of zStep', () => {
+    setup(0, 1000, [0], 300);
+    const slider = fixture.debugElement.query(By.directive(ZardSliderComponent))
+      .componentInstance as ZardSliderComponent;
+
+    slider.writeValue(1000);
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(1000);
+
+    slider.writeValue(850);
+    fixture.detectChanges();
+    expect(ariaNow()).toBe(900);
+  });
+
+  it('keeps an initial zValue of zMax when the range is not a multiple of zStep', () => {
+    setup(0, 1000, [1000], 300);
+
+    expect(ariaNow()).toBe(1000);
+    expect(thumbHost().style.left).toBe('calc(100% + 0px)');
+  });
+
+  it('keeps a zDefault of zMax when the range is not a multiple of zStep', () => {
+    component.default = [1000];
+    setup(0, 1000, [], 300);
+
+    expect(ariaNow()).toBe(1000);
+  });
+
   it('keeps the fractional 0-1 scale working', () => {
     setup(0, 1, [0.5], 0.1);
 
