@@ -3,6 +3,11 @@ export interface RawUsageData {
   templateCode: string;
   /** Language of `templateCode`; defaults to `angular-html`. Use `angular-ts` for service-driven components. */
   templateLanguage?: 'angular-html' | 'angular-ts';
+  description?: string;
+  additionalCodeBlocks?: Array<{
+    code: string;
+    language: 'angular-html' | 'angular-ts';
+  }>;
 }
 
 export const USAGE_DATA: Record<string, RawUsageData> = {
@@ -482,5 +487,100 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     </button>
   </z-attachment-actions>
 </z-attachment>`,
+  },
+  questionnaire: {
+    importCode: `import { ZardQuestionnaireImports } from '@/shared/components/questionnaire/questionnaire.imports';
+import type {
+  ZardQuestionnaireAnswers,
+  ZardQuestionnaireChoice,
+  ZardQuestionnaireItem,
+} from '@/shared/components/questionnaire/questionnaire.types';`,
+    templateCode: `interface QuestionnaireUsageItem extends ZardQuestionnaireItem {
+  prompt: string;
+  description: string;
+  choices: readonly (ZardQuestionnaireChoice & { description?: string })[];
+  input?: { label: string; placeholder: string };
+}
+
+readonly items: readonly QuestionnaireUsageItem[] = [
+  {
+    name: 'direction',
+    required: true,
+    prompt: 'What should we prototype next?',
+    description: 'Choose a direction or write your own.',
+    choices: [
+      {
+        value: 'delegation',
+        label: 'Delegation',
+        description: 'Show how work moves to a specialist.',
+      },
+      {
+        value: 'questions',
+        label: 'Question prompts',
+        description: 'Show choices while the interface waits.',
+      },
+      { value: 'both', label: 'Both together' },
+    ],
+    input: { label: 'Another answer', placeholder: 'Type another answer…' },
+  },
+  {
+    name: 'detail',
+    required: false,
+    prompt: 'How much detail should it include?',
+    description: 'Skip this if you are not sure yet.',
+    choices: [
+      { value: 'focused', label: 'Focused' },
+      { value: 'complete', label: 'Complete flow' },
+    ],
+  },
+];`,
+    templateLanguage: 'angular-ts',
+    description:
+      'Define the collection once: pass it to z-questionnaire for progress, actions, and shortcuts, then project it into the parts.',
+    additionalCodeBlocks: [
+      {
+        language: 'angular-html',
+        code: `<z-questionnaire [zItems]="items" (zSubmit)="handleSubmit($event)">
+  <z-questionnaire-progress />
+
+  @for (question of items; track question.name) {
+    <z-questionnaire-item [zName]="question.name" [zRequired]="question.required">
+      <z-questionnaire-title>{{ question.prompt }}</z-questionnaire-title>
+      <z-questionnaire-description>{{ question.description }}</z-questionnaire-description>
+      <z-questionnaire-choices>
+        @for (choice of question.choices; track choice.value) {
+          <z-questionnaire-choice [zValue]="choice.value">
+            <span class="font-medium">{{ choice.label }}</span>
+            @if (choice.description; as description) {
+              <span data-slot="questionnaire-choice-description" class="text-muted-foreground">
+                {{ description }}
+              </span>
+            }
+          </z-questionnaire-choice>
+        }
+
+        @if (question.input; as input) {
+          <z-questionnaire-input [aria-label]="input.label" [placeholder]="input.placeholder" />
+        }
+      </z-questionnaire-choices>
+      <z-questionnaire-error />
+    </z-questionnaire-item>
+  }
+
+  <z-questionnaire-actions>
+    <button type="button" z-questionnaire-previous>Previous</button>
+    <button type="button" z-questionnaire-skip>Skip</button>
+    <button type="button" z-questionnaire-next>Next</button>
+    <button type="submit" z-questionnaire-submit>Submit</button>
+  </z-questionnaire-actions>
+</z-questionnaire>`,
+      },
+      {
+        language: 'angular-ts',
+        code: `handleSubmit(answers: ZardQuestionnaireAnswers): void {
+  // answers['direction'], answers['detail'], and answers from multiple-choice items.
+}`,
+      },
+    ],
   },
 };

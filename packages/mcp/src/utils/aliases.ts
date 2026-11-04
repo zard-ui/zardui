@@ -39,6 +39,7 @@ export const ALIASES: Record<string, string[]> = {
   chart: ['graph', 'plot', 'visualization'],
   progress: ['progress bar', 'meter'],
   field: ['form', 'label', 'validation'],
+  typeset: ['typography', 'prose', 'rich text', 'markdown styles'],
 };
 
 /**

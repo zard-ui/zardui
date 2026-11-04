@@ -7,7 +7,9 @@ import type { CodeBlockData, CodeTabData, CodeTabItem } from '../types';
 
 const COMPONENTS_PATH = path.resolve('libs/zard/src/lib/shared/components');
 const OUTPUT_PATH = path.resolve('apps/web/src/generated/installation');
-const SKIPPED_DIRS = ['styles', 'core', 'components.ts'];
+// `toast` is the components-list face of `sonner`: it has no files of its own to install, so its installation
+// steps are Sonner's, reused in its demo registration.
+const SKIPPED_DIRS = ['styles', 'core', 'components.ts', 'toast'];
 
 const BASIC_DEPENDENCIES = [
   '@angular/cdk',
