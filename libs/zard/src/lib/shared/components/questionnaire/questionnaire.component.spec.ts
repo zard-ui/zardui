@@ -381,6 +381,58 @@ class QuestionnaireReactiveFormsHostComponent {
   );
 }
 
+@Component({
+  imports: [...ZardQuestionnaireImports],
+  template: `
+    <z-questionnaire [zItems]="items" [(zActive)]="active" zShortcuts="letters" (zSubmit)="submitted = $event">
+      <z-questionnaire-progress />
+      <z-questionnaire-item zName="required-item" zRequired>
+        <z-questionnaire-choice zValue="one">One</z-questionnaire-choice>
+      </z-questionnaire-item>
+      <z-questionnaire-item zName="off-item" zDisabled>
+        <z-questionnaire-choice zValue="off">Off</z-questionnaire-choice>
+      </z-questionnaire-item>
+      <z-questionnaire-item zName="tags" zMultiple>
+        <z-questionnaire-choice zValue="x">X</z-questionnaire-choice>
+        <z-questionnaire-choice zValue="y">Y</z-questionnaire-choice>
+      </z-questionnaire-item>
+      <z-questionnaire-item zName="relaxed" [zRequired]="false">
+        <z-questionnaire-choice zValue="r">R</z-questionnaire-choice>
+      </z-questionnaire-item>
+      <button type="button" z-questionnaire-next>Next</button>
+      <button type="button" z-questionnaire-skip>Skip</button>
+      <button type="submit" z-questionnaire-submit>Submit</button>
+    </z-questionnaire>
+  `,
+  changeDetection: ChangeDetectionStrategy.Eager,
+})
+class QuestionnaireItemPrecedenceHostComponent {
+  items: ZardQuestionnaireItem[] = [];
+  active: string | undefined;
+  submitted: ZardQuestionnaireAnswers | undefined;
+}
+
+@Component({
+  imports: [...ZardQuestionnaireImports],
+  template: `
+    <input data-testid="outside-input" />
+    <z-questionnaire data-testid="q1" zShortcuts="letters">
+      <z-questionnaire-item zName="one">
+        <z-questionnaire-choice zValue="a">A</z-questionnaire-choice>
+        <z-questionnaire-choice zValue="b">B</z-questionnaire-choice>
+      </z-questionnaire-item>
+    </z-questionnaire>
+    <z-questionnaire data-testid="q2" zShortcuts="letters">
+      <z-questionnaire-item zName="two">
+        <z-questionnaire-choice zValue="a">A</z-questionnaire-choice>
+        <z-questionnaire-choice zValue="b">B</z-questionnaire-choice>
+      </z-questionnaire-item>
+    </z-questionnaire>
+  `,
+  changeDetection: ChangeDetectionStrategy.Eager,
+})
+class TwoQuestionnairesHostComponent {}
+
 async function createBehaviorFixture(
   items: ZardQuestionnaireItem[],
   active?: string,
@@ -1441,5 +1493,155 @@ describe('ZardQuestionnaireComponent', () => {
     expect(classListFor('questionnaire-error')).not.toContain('mt-2');
     expect(classListFor('questionnaire-actions')).toContain('gap-4');
     expect(classListFor('questionnaire-actions')).not.toContain('gap-2');
+  });
+});
+
+describe('ZardQuestionnaireComponent item settings', () => {
+  afterEach(() => TestBed.resetTestingModule());
+
+  async function createPrecedenceFixture(items: ZardQuestionnaireItem[] = []) {
+    await TestBed.configureTestingModule({ imports: [QuestionnaireItemPrecedenceHostComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(QuestionnaireItemPrecedenceHostComponent);
+    fixture.componentInstance.items = items;
+    fixture.detectChanges();
+    return fixture;
+  }
+
+  function answer(fixture: ComponentFixture<QuestionnaireItemPrecedenceHostComponent>, value: string): void {
+    (fixture.nativeElement.querySelector(`input[value="${value}"]`) as HTMLInputElement).click();
+    fixture.detectChanges();
+  }
+
+  it('should read required from the item itself when zItems does not list it', async () => {
+    const fixture = await createPrecedenceFixture();
+
+    clickAction(fixture, ZardQuestionnaireNextDirective);
+
+    expect(fixture.componentInstance.active).toBe('required-item');
+    expect(getAction(fixture, ZardQuestionnaireSkipDirective).hidden).toBe(true);
+  });
+
+  it('should skip an item that is disabled on the item but enabled in zItems', async () => {
+    const fixture = await createPrecedenceFixture([
+      { name: 'required-item' },
+      { name: 'off-item', disabled: false },
+      { name: 'tags' },
+      { name: 'relaxed' },
+    ]);
+    answer(fixture, 'one');
+
+    clickAction(fixture, ZardQuestionnaireNextDirective);
+
+    expect(fixture.componentInstance.active).toBe('tags');
+    expect(fixture.nativeElement.querySelector('z-questionnaire-progress').textContent).toContain('2');
+  });
+
+  it('should render checkboxes and submit an array for an item that is multiple only on the item', async () => {
+    const fixture = await createPrecedenceFixture([{ name: 'tags' }]);
+    answer(fixture, 'one');
+    clickAction(fixture, ZardQuestionnaireNextDirective);
+
+    const inputs = fixture.nativeElement.querySelectorAll('input[name="tags"]') as NodeListOf<HTMLInputElement>;
+    expect(Array.from(inputs, input => input.type)).toEqual(['checkbox', 'checkbox']);
+
+    answer(fixture, 'x');
+    answer(fixture, 'y');
+    clickAction(fixture, ZardQuestionnaireNextDirective);
+    answer(fixture, 'r');
+    (fixture.nativeElement.querySelector('form') as HTMLFormElement).dispatchEvent(
+      new Event('submit', { cancelable: true }),
+    );
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.submitted).toEqual({ 'required-item': 'one', tags: ['x', 'y'], relaxed: 'r' });
+  });
+
+  it('should let the item win over zItems and use zItems only where the item sets nothing', async () => {
+    const fixture = await createPrecedenceFixture([
+      { name: 'tags', required: true },
+      { name: 'relaxed', required: true },
+    ]);
+    answer(fixture, 'one');
+    clickAction(fixture, ZardQuestionnaireNextDirective);
+
+    // `tags` sets nothing on the item, so zItems makes it required.
+    expect(fixture.componentInstance.active).toBe('tags');
+    expect(getAction(fixture, ZardQuestionnaireSkipDirective).hidden).toBe(true);
+
+    // `relaxed` sets zRequired to false, which wins over the required entry in zItems.
+    answer(fixture, 'x');
+    clickAction(fixture, ZardQuestionnaireNextDirective);
+    expect(fixture.componentInstance.active).toBe('relaxed');
+    expect(getAction(fixture, ZardQuestionnaireSkipDirective).hidden).toBe(false);
+  });
+});
+
+describe('ZardQuestionnaireComponent shortcut scope and stability', () => {
+  afterEach(() => TestBed.resetTestingModule());
+
+  async function createTwoQuestionnaires() {
+    await TestBed.configureTestingModule({ imports: [TwoQuestionnairesHostComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(TwoQuestionnairesHostComponent);
+    fixture.detectChanges();
+    const q1 = fixture.nativeElement.querySelector('[data-testid="q1"]') as HTMLElement;
+    const q2 = fixture.nativeElement.querySelector('[data-testid="q2"]') as HTMLElement;
+    const checked = (root: HTMLElement) =>
+      Array.from(root.querySelectorAll<HTMLInputElement>('input:checked'), input => input.value);
+    return { fixture, q1, q2, checked };
+  }
+
+  it('should act in the focused questionnaire only', async () => {
+    const { q1, q2, checked } = await createTwoQuestionnaires();
+
+    q2.querySelector('input')?.dispatchEvent(new KeyboardEvent('keydown', { key: 'b', bubbles: true }));
+
+    expect(checked(q1)).toEqual([]);
+    expect(checked(q2)).toEqual(['b']);
+  });
+
+  it('should send body shortcuts to the questionnaire interacted with last, and to none before that', async () => {
+    const { q1, q2, checked } = await createTwoQuestionnaires();
+
+    document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+    expect(checked(q1)).toEqual([]);
+    expect(checked(q2)).toEqual([]);
+
+    q2.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+
+    expect(checked(q1)).toEqual([]);
+    expect(checked(q2)).toEqual(['a']);
+  });
+
+  it('should not act on shortcuts typed in an input outside the questionnaire', async () => {
+    const { fixture, q2, checked } = await createTwoQuestionnaires();
+    q2.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+
+    (fixture.nativeElement.querySelector('[data-testid="outside-input"]') as HTMLElement).dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'a', bubbles: true }),
+    );
+
+    expect(checked(q2)).toEqual([]);
+  });
+
+  it('should keep badges, aria-keyshortcuts and key handling in sync when a sibling choice becomes disabled', async () => {
+    const fixture = await createBehaviorFixture([{ name: 'first', required: true }]);
+    const badges = () =>
+      Array.from(
+        fixture.nativeElement.querySelectorAll('[data-slot="questionnaire-choice-shortcut"]'),
+        (badge: Element) => badge.textContent?.trim(),
+      );
+    expect(badges()).toEqual(['A', 'B']);
+
+    fixture.componentInstance.firstChoiceDisabled = true;
+    fixture.detectChanges();
+
+    expect(badges()).toEqual(['A']);
+    expect(getChoiceInput(fixture, 'first', 'a').getAttribute('aria-keyshortcuts')).toBeNull();
+    expect(getChoiceInput(fixture, 'first', 'b').getAttribute('aria-keyshortcuts')).toBe('a');
+
+    dispatchShortcut(fixture, 'a');
+
+    expect(getChoiceInput(fixture, 'first', 'b').checked).toBe(true);
   });
 });

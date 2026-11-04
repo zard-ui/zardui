@@ -3,8 +3,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  forwardRef,
   inject,
   input,
+  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 
@@ -13,7 +16,7 @@ import type { ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardQuestionnaireItemComponent } from './questionnaire-item.component';
-import { ZardQuestionnaireComponent } from './questionnaire.component';
+import { ZARD_QUESTIONNAIRE_CHOICE, type ZardQuestionnaireChoiceRef } from './questionnaire.tokens';
 import {
   questionnaireChoiceControlVariants,
   questionnaireChoiceLabelVariants,
@@ -27,26 +30,27 @@ import {
     <label class="contents">
       <input
         data-slot="questionnaire-choice-control"
-        [type]="item.zMultiple() ? 'checkbox' : 'radio'"
+        [type]="item.multiple() ? 'checkbox' : 'radio'"
         [name]="item.zName()"
         [value]="zValue()"
         [attr.checked]="checked() ? '' : null"
         [disabled]="disabledState()"
-        [attr.aria-keyshortcuts]="questionnaire.shortcutFor(input, item.zName())"
+        [attr.aria-keyshortcuts]="shortcut()"
         [attr.aria-describedby]="item.ariaDescribedBy()"
         [class]="controlClasses"
-        #input
+        #control
       />
       <span data-slot="questionnaire-choice-label" [class]="labelClasses">
         <ng-content />
       </span>
-      @if (questionnaire.shortcutFor(input, item.zName()); as shortcut) {
+      @if (shortcut(); as label) {
         <span data-slot="questionnaire-choice-shortcut" aria-hidden="true" [class]="shortcutClasses">
-          {{ shortcut.toUpperCase() }}
+          {{ label.toUpperCase() }}
         </span>
       }
     </label>
   `,
+  providers: [{ provide: ZARD_QUESTIONNAIRE_CHOICE, useExisting: forwardRef(() => ZardQuestionnaireChoiceComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -57,18 +61,23 @@ import {
   },
   exportAs: 'zQuestionnaireChoice',
 })
-export class ZardQuestionnaireChoiceComponent {
+export class ZardQuestionnaireChoiceComponent implements ZardQuestionnaireChoiceRef {
   readonly item = inject(ZardQuestionnaireItemComponent);
-  protected readonly questionnaire = inject(ZardQuestionnaireComponent);
+  private readonly control = viewChild.required<ElementRef<HTMLInputElement>>('control');
 
   readonly zValue = input.required<string>();
   readonly checked = input(false, { transform: booleanAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
-  protected readonly disabledState = computed(() => this.zDisabled() || this.item.isDisabled());
+  readonly disabledState = computed(() => this.zDisabled() || this.item.isDisabled());
+  protected readonly shortcut = computed(() => this.item.shortcutFor(this));
   protected readonly classes = computed(() => mergeClasses(questionnaireChoiceVariants(), this.class()));
   protected readonly controlClasses = questionnaireChoiceControlVariants();
   protected readonly labelClasses = questionnaireChoiceLabelVariants();
   protected readonly shortcutClasses = questionnaireChoiceShortcutVariants();
+
+  select(): void {
+    this.control().nativeElement.click();
+  }
 }

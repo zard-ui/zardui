@@ -57,7 +57,8 @@ export const QUESTIONNAIRE_API: ApiSection[] = [
     props: [
       {
         name: '[zItems]',
-        description: 'Item definitions that control order, name, required, multiple, and disabled state',
+        description:
+          'Optional item settings by name (required, multiple, disabled). They apply only where the matching z-questionnaire-item does not set the same input; the projected items define the order. Without projected items, this list defines the flow',
         type: 'readonly ZardQuestionnaireItem[]',
         default: '[]',
       },
@@ -69,7 +70,8 @@ export const QUESTIONNAIRE_API: ApiSection[] = [
       },
       {
         name: 'zShortcuts',
-        description: 'Assigns answer shortcuts in item order',
+        description:
+          'Assigns answer shortcuts to the enabled choices of the active item. Only the focused questionnaire reacts; with nothing focused, the last one interacted with does',
         type: "'none' | 'letters' | 'numbers'",
         default: "'none'",
       },
@@ -99,19 +101,22 @@ export const QUESTIONNAIRE_API: ApiSection[] = [
       },
       {
         name: 'zRequired',
-        description: 'Requires an answer before navigation or submission can continue',
+        description:
+          'Requires an answer before navigation or submission can continue. Wins over the item in [zItems]; when unset, [zItems] decides',
         type: 'boolean',
         default: 'false',
       },
       {
         name: 'zMultiple',
-        description: 'Allows multiple fixed answers and submits a string array',
+        description:
+          'Allows multiple fixed answers and submits a string array. Wins over the item in [zItems]; when unset, [zItems] decides',
         type: 'boolean',
         default: 'false',
       },
       {
         name: 'zDisabled',
-        description: 'Disables the item and excludes it from progress, navigation, validation, and submission',
+        description:
+          'Disables the item and excludes it from progress, navigation, validation, and submission. Wins over the item in [zItems]; when unset, [zItems] decides',
         type: 'boolean',
         default: 'false',
       },

@@ -3,6 +3,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  contentChildren,
+  DestroyRef,
   effect,
   ElementRef,
   forwardRef,
@@ -22,12 +24,16 @@ import type { ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 import { noopFn } from '@/shared/utils/noop';
 
+import { ZARD_QUESTIONNAIRE_ITEM, type ZardQuestionnaireItemRef } from './questionnaire.tokens';
 import type {
   ZardQuestionnaireAnswers,
   ZardQuestionnaireItem,
   ZardQuestionnaireShortcutMode,
 } from './questionnaire.types';
 import { questionnaireVariants } from './questionnaire.variants';
+
+// The questionnaire the user last focused or clicked in. Keyboard shortcuts fired with nothing focused go to it.
+let lastInteracted: HTMLElement | null = null;
 
 @Component({
   selector: 'z-questionnaire',
@@ -58,12 +64,18 @@ import { questionnaireVariants } from './questionnaire.variants';
     '[attr.data-shortcuts]': 'zShortcuts() === "none" ? null : zShortcuts()',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '(document:keydown)': 'handleShortcut($event)',
+    '(focusin)': 'markInteracted()',
+    '(pointerdown)': 'markInteracted()',
   },
   exportAs: 'zQuestionnaire',
 })
 export class ZardQuestionnaireComponent implements ControlValueAccessor {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly injector = inject(Injector);
+  private readonly itemRefs = contentChildren<ZardQuestionnaireItemRef>(ZARD_QUESTIONNAIRE_ITEM, {
+    descendants: true,
+  });
+
   private readonly form = viewChild<ElementRef<HTMLFormElement>>('form');
   private readonly invalidItems = signal<ReadonlySet<string>>(new Set());
   private readonly skippedItems = signal<ReadonlySet<string>>(new Set());
@@ -79,7 +91,15 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
   readonly zSubmit = output<ZardQuestionnaireAnswers>();
   readonly disabled = signal(false);
 
-  readonly enabledItems = computed(() => this.zItems().filter(item => !item.disabled));
+  // The projected items in DOM order, with their effective settings (the item's own inputs win over `zItems`).
+  // Without any projected item (native controls only), or while one is still unbound, `zItems` defines the flow.
+  readonly items = computed(() => {
+    const settings = this.itemRefs().map(ref => ref.settings());
+    const bound = settings.filter((item): item is ZardQuestionnaireItem => item !== null);
+    return bound.length === 0 || bound.length < settings.length ? this.zItems() : bound;
+  });
+
+  readonly enabledItems = computed(() => this.items().filter(item => !item.disabled));
   readonly activeIndex = computed(() => {
     const index = this.enabledItems().findIndex(item => item.name === this.zActive());
     return index >= 0 ? index : 0;
@@ -99,6 +119,12 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
   protected readonly classes = computed(() => mergeClasses(questionnaireVariants(), this.class()));
 
   constructor() {
+    inject(DestroyRef).onDestroy(() => {
+      if (lastInteracted === this.elementRef.nativeElement) {
+        lastInteracted = null;
+      }
+    });
+
     effect(() => {
       const enabledItems = this.enabledItems();
       const active = this.zActive();
@@ -166,29 +192,6 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
 
   isInvalid(name: string): boolean {
     return this.invalidItems().has(name);
-  }
-
-  shortcutFor(control: HTMLInputElement, itemName: string): string | null {
-    const mode = this.zShortcuts();
-    if (mode === 'none' || itemName !== this.zActive() || control.disabled) {
-      return null;
-    }
-
-    const item = control.closest<HTMLElement>('[data-slot="questionnaire-item"]');
-    const choices = Array.from(
-      item?.querySelectorAll<HTMLInputElement>('[data-slot="questionnaire-choice"] input:not(:disabled)') ?? [],
-    );
-    const index = choices.indexOf(control);
-
-    if (index < 0) {
-      return null;
-    }
-
-    if (mode === 'letters') {
-      return index < 26 ? String.fromCharCode(97 + index) : null;
-    }
-
-    return index < 9 ? String(index + 1) : null;
   }
 
   handleAnswerChange(event: Event): void {
@@ -280,8 +283,10 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
       return;
     }
 
+    // Only one questionnaire reacts: the one holding focus, or, with nothing focused (the event targets
+    // the body), the one the user interacted with last. Never while typing, wherever the caret is.
     const { target } = event;
-    if (!(target instanceof Node) || !this.elementRef.nativeElement.contains(target)) {
+    if (!(target instanceof Node)) {
       return;
     }
 
@@ -293,23 +298,29 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
       return;
     }
 
+    const hasFocus = this.elementRef.nativeElement.contains(target);
+    const nothingFocused = target === document.body || target === document.documentElement;
+    if (!hasFocus && !(nothingFocused && lastInteracted === this.elementRef.nativeElement)) {
+      return;
+    }
+
     const shortcutIndex = this.shortcutIndex(event.key);
     if (shortcutIndex < 0) {
       return;
     }
 
-    const activeItem = this.elementRef.nativeElement.querySelector<HTMLElement>(
-      '[data-slot="questionnaire-item"]:not([hidden])',
-    );
-    const choices = activeItem?.querySelectorAll<HTMLInputElement>(
-      '[data-slot="questionnaire-choice"] input:not(:disabled)',
-    );
-    const choice = choices?.item(shortcutIndex);
+    const activeName = this.enabledItems()[this.activeIndex()]?.name;
+    const activeRef = this.itemRefs().find(ref => ref.settings()?.name === activeName);
+    const choice = activeRef?.choiceAt(shortcutIndex);
 
     if (choice) {
       event.preventDefault();
-      choice.click();
+      choice.select();
     }
+  }
+
+  protected markInteracted(): void {
+    lastInteracted = this.elementRef.nativeElement;
   }
 
   private validateItem(item: ZardQuestionnaireItem): boolean {
@@ -377,7 +388,7 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
   }
 
   private applyAnswers(form: HTMLFormElement, answers: ZardQuestionnaireAnswers): void {
-    for (const item of this.zItems()) {
+    for (const item of this.items()) {
       const answer = answers[item.name];
       const values = answer === undefined ? [] : Array.isArray(answer) ? answer : [answer];
       const namedControl = form.elements.namedItem(item.name);

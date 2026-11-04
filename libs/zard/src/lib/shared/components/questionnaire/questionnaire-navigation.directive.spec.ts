@@ -3,6 +3,7 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import {
+  ZardQuestionnaireNavigationButton,
   ZardQuestionnaireNextDirective,
   ZardQuestionnairePreviousDirective,
   ZardQuestionnaireSkipDirective,
@@ -243,5 +244,21 @@ describe('questionnaire navigation directives', () => {
       expect(button.hidden).toBe(false);
       expect(button.getAttribute('aria-disabled')).toBe('true');
     });
+  });
+
+  it('shares one base class across the four navigation buttons', async () => {
+    const fixture = TestBed.createComponent(NavigationDirectiveHostComponent);
+    fixture.detectChanges();
+
+    for (const directive of [
+      ZardQuestionnairePreviousDirective,
+      ZardQuestionnaireSkipDirective,
+      ZardQuestionnaireNextDirective,
+      ZardQuestionnaireSubmitDirective,
+    ]) {
+      expect(fixture.debugElement.query(By.directive(directive)).injector.get(directive)).toBeInstanceOf(
+        ZardQuestionnaireNavigationButton,
+      );
+    }
   });
 });

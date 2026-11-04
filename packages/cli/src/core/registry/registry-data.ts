@@ -1659,6 +1659,7 @@ export const registry: ComponentRegistry[] = [
       { name: 'questionnaire-navigation.directive.ts', content: '' },
       { name: 'questionnaire-input.component.ts', content: '' },
       { name: 'questionnaire.types.ts', content: '' },
+      { name: 'questionnaire.tokens.ts', content: '' },
       { name: 'questionnaire.imports.ts', content: '' },
       { name: 'index.ts', content: '' },
     ],
