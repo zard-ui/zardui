@@ -135,6 +135,8 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Toggle', path: '/docs/components/toggle', available: true },
     { name: 'Toggle Group', path: '/docs/components/toggle-group', available: true },
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
+    // As in shadcn/ui, Typography is the components-list entry for Typeset and opens its docs.
+    { name: 'Typography', path: '/docs/typeset', available: true },
     { name: 'Navigation Menu', path: '/docs/components/navigation-menu', available: true },
     { name: 'Resizable', path: '/docs/components/resizable', available: true },
     { name: 'Sheet', path: '/docs/components/sheet', available: true },
