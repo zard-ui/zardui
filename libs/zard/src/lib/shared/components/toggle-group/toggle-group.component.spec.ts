@@ -354,6 +354,30 @@ describe('ZardToggleGroupComponent', () => {
     expect(buttons[2].getAttribute('aria-pressed')).toBe('true');
   });
 
+  it('should fall back to zDefaultValue when zValue is cleared after writeValue', () => {
+    fixture.componentRef.setInput('zItems', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'single');
+    fixture.componentRef.setInput('zDefaultValue', 'bold');
+    fixture.componentRef.setInput('zValue', 'italic');
+    fixture.detectChanges();
+
+    component.writeValue('underline');
+    fixture.detectChanges();
+
+    fixture.componentRef.setInput('zValue', undefined);
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button');
+    expect(buttons[0].getAttribute('aria-pressed')).toBe('true');
+    expect(buttons[1].getAttribute('aria-pressed')).toBe('false');
+    expect(buttons[2].getAttribute('aria-pressed')).toBe('false');
+
+    jest.spyOn(component.valueChange, 'emit');
+    buttons[0].click();
+
+    expect(component.valueChange.emit).toHaveBeenCalledWith('');
+  });
+
   it('should toggle from the value set by writeValue when zValue does not change', () => {
     fixture.componentRef.setInput('zItems', mockToggleItems);
     fixture.componentRef.setInput('zMode', 'multiple');
