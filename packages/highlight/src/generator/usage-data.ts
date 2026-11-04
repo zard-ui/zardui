@@ -193,6 +193,14 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';`,
     templateCode: `<textarea z-textarea rows="6" placeholder="Type your message"></textarea>`,
   },
+  'native-select': {
+    importCode: `import { ZardNativeSelectDirective } from '@/shared/components/native-select/native-select.directive';`,
+    templateCode: `<select z-native-select>
+  <option value="todo">Todo</option>
+  <option value="in-progress">In progress</option>
+  <option value="done">Done</option>
+</select>`,
+  },
   'input-group': {
     importCode: `import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';`,
     templateCode: `<z-input-group>

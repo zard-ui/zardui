@@ -461,6 +461,20 @@
       ]
     },
     {
+      "name": "native-select",
+      "type": "registry:component",
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "native-select.directive.ts",
+        "native-select.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "textarea",
       "type": "registry:component",
       "registryDependencies": [
