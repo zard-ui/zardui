@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "items": [
     {
       "name": "core",
@@ -1195,6 +1195,43 @@
         "attachment.component.ts",
         "attachment.variants.ts",
         "attachment.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "questionnaire",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideCheck",
+          "lucideLoaderCircle"
+        ],
+        "tokens": [
+          "check",
+          "loader-circle"
+        ]
+      },
+      "files": [
+        "questionnaire.component.ts",
+        "questionnaire.variants.ts",
+        "questionnaire-progress.component.ts",
+        "questionnaire-item.component.ts",
+        "questionnaire-choice.component.ts",
+        "questionnaire-choice-description.component.ts",
+        "questionnaire-choices.component.ts",
+        "questionnaire-title.component.ts",
+        "questionnaire-description.component.ts",
+        "questionnaire-actions.component.ts",
+        "questionnaire-error.component.ts",
+        "questionnaire-navigation.directive.ts",
+        "questionnaire-input.component.ts",
+        "questionnaire.types.ts",
+        "questionnaire.tokens.ts",
+        "questionnaire.imports.ts",
         "index.ts"
       ]
     }

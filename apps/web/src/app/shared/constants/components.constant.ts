@@ -20,6 +20,7 @@ export interface AboutData {
 export interface ComponentData {
   componentName: string;
   description: string;
+  accessibility?: string[];
   about?: AboutData;
   preview?: ExampleData;
   examples: ExampleData[];
@@ -425,5 +426,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Composable file and image attachment',
     category: 'Display & Media',
     loadData: () => import('@zard/components/attachment/demo/attachment').then(m => m.ATTACHMENT),
+  },
+  {
+    componentName: 'questionnaire',
+    description: 'A multi-step questionnaire with single-choice, multiple-choice, freeform, and skippable questions.',
+    category: 'Form & Input',
+    loadData: () => import('@zard/components/questionnaire/demo/questionnaire').then(m => m.QUESTIONNAIRE),
   },
 ];

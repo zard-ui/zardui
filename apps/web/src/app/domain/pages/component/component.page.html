@@ -160,6 +160,14 @@
           <div class="overflow-hidden rounded-lg">
             <z-code-block [data]="data.usage.codeBlock" [embedded]="true" />
           </div>
+          @if (data.usage.description; as description) {
+            <p class="text-muted-foreground leading-relaxed">{{ description }}</p>
+          }
+          @for (codeBlock of data.usage.additionalBlocks ?? []; track $index) {
+            <div class="overflow-hidden rounded-lg">
+              <z-code-block [data]="codeBlock" [embedded]="true" />
+            </div>
+          }
         </section>
       }
 
@@ -201,6 +209,15 @@
           }
         </section>
       </div>
+
+      @if (data.accessibility; as accessibility) {
+        <section class="flex flex-col gap-3" scrollSpyItem="accessibility" id="accessibility">
+          <h2 class="font-heading scroll-m-28 text-xl font-medium tracking-tight">Accessibility</h2>
+          @for (paragraph of accessibility; track $index) {
+            <p class="text-muted-foreground leading-relaxed" [innerHTML]="inlineText(paragraph)"></p>
+          }
+        </section>
+      }
 
       <footer scrollSpyItem="api" id="api">
         @if (data.api) {
