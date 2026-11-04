@@ -267,10 +267,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   });
 
   protected readonly percentages = computed(() => {
-    if (this.zMax() > 1) {
-      return this.values();
-    }
-    const [min, max] = [this.zMin(), this.zMax()];
+    const [min, max] = this.getMinMax();
     return this.values().map(v => convertValueToPercentage(v, min, max));
   });
 
@@ -306,13 +303,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
         if (isTrack) {
           const coord = this.zOrientation() === 'vertical' ? event.clientY : event.clientX;
           const clickPercentage = this.calculatePercentage(coord);
-          let clickValue: number;
-          if (this.zMax() <= 1) {
-            const [userMin, userMax] = [this.zMin(), this.zMax()];
-            clickValue = userMin + (userMax - userMin) * clickPercentage;
-          } else {
-            clickValue = clamp(clickPercentage * 100, this.getMinMax());
-          }
+          const clickValue = this.percentageToValue(clickPercentage);
 
           const currentValues = this.values();
           const closestIndex = currentValues.reduce(
@@ -360,12 +351,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       return;
     }
 
-    const [min, max] = this.getMinMax();
-    const step = this.zStep();
-
-    const values = Array.isArray(value)
-      ? value.map(v => roundToStep(clamp(v, [min, max]), min, step))
-      : [roundToStep(clamp(value, [min, max]), min, step)];
+    const values = Array.isArray(value) ? value.map(v => this.snapToStep(v)) : [this.snapToStep(value)];
 
     if (values.toString() === this.lastEmittedValue().toString()) {
       return;
@@ -442,16 +428,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   }
 
   private updateThumbFromPercentage(percentage: number, thumbIndex: number): void {
-    const [min, max] = this.getMinMax();
-    let value: number;
-
-    if (this.zMax() <= 1) {
-      const [userMin, userMax] = [this.zMin(), this.zMax()];
-      value = roundToStep(userMin + (userMax - userMin) * clamp(percentage, [0, 1]), userMin, this.zStep());
-      value = clamp(value, [min, max]);
-    } else {
-      value = roundToStep(clamp(percentage * 100, [min, max]), min, this.zStep());
-    }
+    let value = this.snapToStep(this.percentageToValue(percentage));
 
     const currentValues = [...this.values()];
 
@@ -490,7 +467,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 
   private setInitialValue(): void {
     const [min, max] = this.getMinMax();
-    const step = this.zStep();
 
     const rawValues = this.zValue();
     const defaults = this.zDefault();
@@ -502,7 +478,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       const def = clamp(defaults[i] ?? min, [min, max]);
       const raw = rawValues[i];
       const value = raw !== undefined && raw >= min && raw <= max ? raw : def;
-      values.push(roundToStep(value, min, step));
+      values.push(this.snapToStep(value));
     }
 
     this.lastEmittedValue.set(values);
@@ -510,7 +486,21 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
     this.thumbOffset.set(0);
   }
 
+  private snapToStep(value: number): number {
+    const [min, max] = this.getMinMax();
+    const bounded = clamp(value, [min, max]);
+    const stepped = clamp(roundToStep(bounded, min, this.zStep()), [min, max]);
+    // when (zMax - zMin) is not a multiple of zStep the last step falls short of zMax,
+    // so snap to zMax if it is closer, keeping the endpoint reachable like the End key
+    return Math.abs(max - bounded) < Math.abs(stepped - bounded) ? max : stepped;
+  }
+
+  private percentageToValue(percentage: number): number {
+    const [min, max] = this.getMinMax();
+    return min + (max - min) * clamp(percentage, [0, 1]);
+  }
+
   private getMinMax(): [number, number] {
-    return [Math.max(this.zMin(), 0), Math.min(this.zMax(), 100)];
+    return [this.zMin(), this.zMax()];
   }
 }
