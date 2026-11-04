@@ -160,6 +160,9 @@ for (const component of fs.readdirSync(COMPONENTS).sort()) {
   const dir = path.join(COMPONENTS, component);
   const apiPath = path.join(dir, 'doc', 'api.ts');
 
+  // A docs-only page (e.g. Toast, which points to Sonner) ships demos but no component, so no API table.
+  if (sourceFiles(dir).length === 0) continue;
+
   if (!fs.existsSync(apiPath)) {
     report(component, 'has no doc/api.ts');
     continue;

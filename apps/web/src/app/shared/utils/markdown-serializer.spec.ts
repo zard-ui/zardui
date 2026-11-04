@@ -79,6 +79,18 @@ describe('serializeComponentToMarkdown', () => {
     expect(md).toContain("| `zRange` | Enables range \\| selection | `'a' \\| 'b'` | `false` |");
   });
 
+  it('reduces a deprecated page to the notice that points at its replacement', () => {
+    const md = serializeComponentToMarkdown({ ...DATA, deprecatedFor: 'sonner' });
+
+    expect(md).toContain(
+      `${DATA.description}\n\nThe date-picker component has been deprecated. ` +
+        'Use the [sonner](https://zardui.com/docs/components/sonner) component instead.',
+    );
+    expect(md).not.toContain('## Installation');
+    expect(md).not.toContain('## Examples');
+    expect(serializeComponentToMarkdown(DATA)).not.toContain('has been deprecated');
+  });
+
   it('renders accessibility guidance as its own section', () => {
     const md = serializeComponentToMarkdown(DATA);
 

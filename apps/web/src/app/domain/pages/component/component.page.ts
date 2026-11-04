@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
@@ -36,6 +36,7 @@ const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar'];
     StepsComponent,
     ZardCodeBoxComponent,
     HyphenToSpacePipe,
+    RouterLink,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -147,23 +148,27 @@ export class ComponentPage implements OnInit {
       type: 'custom' as const,
     }));
 
-    this.navigationConfig = {
-      items: [
-        { id: 'overview', label: 'Overview', type: 'core' },
-        ...(component.about ? [{ id: 'about', label: 'About', type: 'core' as const }] : []),
-        { id: 'installation', label: 'Installation', type: 'core' },
-        { id: 'usage', label: 'Usage', type: 'core' },
-        ...(component.composition ? [{ id: 'composition', label: 'Composition', type: 'core' as const }] : []),
-        {
-          id: 'examples',
-          label: 'Examples',
-          type: 'core',
-          children: exampleNavigationItems,
-        },
-        ...(component.accessibility ? [{ id: 'accessibility', label: 'Accessibility', type: 'core' as const }] : []),
-        { id: 'api', label: 'API', type: 'core' },
-      ],
-    };
+    this.navigationConfig = component.deprecatedFor
+      ? { items: [] }
+      : {
+          items: [
+            { id: 'overview', label: 'Overview', type: 'core' },
+            ...(component.about ? [{ id: 'about', label: 'About', type: 'core' as const }] : []),
+            { id: 'installation', label: 'Installation', type: 'core' },
+            { id: 'usage', label: 'Usage', type: 'core' },
+            ...(component.composition ? [{ id: 'composition', label: 'Composition', type: 'core' as const }] : []),
+            {
+              id: 'examples',
+              label: 'Examples',
+              type: 'core',
+              children: exampleNavigationItems,
+            },
+            ...(component.accessibility
+              ? [{ id: 'accessibility', label: 'Accessibility', type: 'core' as const }]
+              : []),
+            { id: 'api', label: 'API', type: 'core' },
+          ],
+        };
 
     this.installGuide.set(installGuide);
     this.componentData.set(component);
