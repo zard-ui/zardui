@@ -42,6 +42,7 @@ const optionalBooleanAttribute = (value: unknown): boolean | undefined =>
       <ng-content />
     </fieldset>
   `,
+  providers: [{ provide: ZARD_QUESTIONNAIRE_ITEM, useExisting: forwardRef(() => ZardQuestionnaireItemComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -52,7 +53,6 @@ const optionalBooleanAttribute = (value: unknown): boolean | undefined =>
     '[attr.data-disabled]': 'isDisabled() ? "" : null',
     '[hidden]': '!isActive()',
   },
-  providers: [{ provide: ZARD_QUESTIONNAIRE_ITEM, useExisting: forwardRef(() => ZardQuestionnaireItemComponent) }],
   hostDirectives: [ZardIdDirective],
   exportAs: 'zQuestionnaireItem',
 })

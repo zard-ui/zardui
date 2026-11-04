@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
+  type ElementRef,
   forwardRef,
   inject,
   input,
@@ -31,6 +31,7 @@ import {
 
 @Component({
   selector: 'z-questionnaire-choice',
+  imports: [NgIcon],
   template: `
     <label class="contents">
       <input
@@ -61,11 +62,10 @@ import {
       }
     </label>
   `,
-  imports: [NgIcon],
-  viewProviders: [provideIcons({ lucideCheck })],
   providers: [{ provide: ZARD_QUESTIONNAIRE_CHOICE, useExisting: forwardRef(() => ZardQuestionnaireChoiceComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideCheck })],
   host: {
     'data-slot': 'questionnaire-choice',
     '[attr.data-disabled]': 'disabledState() ? "" : null',
