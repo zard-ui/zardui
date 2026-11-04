@@ -36,6 +36,7 @@ export * from './lib/shared/components/navigation-menu';
 export * from './lib/shared/components/pagination';
 export * from './lib/shared/components/popover';
 export * from './lib/shared/components/progress';
+export * from './lib/shared/components/questionnaire';
 export * from './lib/shared/components/radio-group';
 export * from './lib/shared/components/resizable';
 export * from './lib/shared/components/select';

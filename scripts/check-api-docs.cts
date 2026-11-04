@@ -43,6 +43,12 @@ const UNDOCUMENTED_BY_DESIGN = new Set([
   'z-dropdown-menu-checkbox-item.zVariant',
   'z-dropdown-menu-radio-item.variant',
   'z-dropdown-menu-radio-item.zVariant',
+  // These members are documented under their public Angular aliases.
+  'button[z-questionnaire-previous].zDisabled',
+  'button[z-questionnaire-skip].zDisabled',
+  'button[z-questionnaire-next].zDisabled',
+  'button[z-questionnaire-submit].zDisabled',
+  'z-questionnaire-input.ariaLabel',
 ]);
 
 interface Declared {

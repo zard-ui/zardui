@@ -13,6 +13,8 @@ export interface CodeBlockData {
 export interface ComponentUsageData {
   importBlock: CodeBlockData;
   codeBlock: CodeBlockData;
+  description?: string;
+  additionalBlocks?: CodeBlockData[];
 }
 
 export interface CodeTabData {

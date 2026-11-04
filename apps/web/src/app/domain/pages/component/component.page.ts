@@ -41,6 +41,19 @@ const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar'];
 })
 export class ComponentPage implements OnInit {
   protected readonly fillsContainer = (componentName: string) => FULL_WIDTH_PREVIEWS.includes(componentName);
+  protected readonly inlineText = (text: string): string =>
+    text
+      .split(/(`[^`]+`)/g)
+      .map(segment => {
+        const isCode = segment.startsWith('`') && segment.endsWith('`');
+        const content = isCode ? segment.slice(1, -1) : segment;
+        const escapedContent = content.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+
+        return isCode
+          ? `<code class="bg-muted rounded px-1.5 py-0.5 font-mono text-sm">${escapedContent}</code>`
+          : escapedContent;
+      })
+      .join('');
 
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
@@ -147,6 +160,7 @@ export class ComponentPage implements OnInit {
           type: 'core',
           children: exampleNavigationItems,
         },
+        ...(component.accessibility ? [{ id: 'accessibility', label: 'Accessibility', type: 'core' as const }] : []),
         { id: 'api', label: 'API', type: 'core' },
       ],
     };

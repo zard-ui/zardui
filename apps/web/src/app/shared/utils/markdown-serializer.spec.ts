@@ -11,6 +11,7 @@ function codeBlock(code: string, language: string): CodeBlockData {
 const DATA: ComponentData = {
   componentName: 'date-picker',
   description: 'A date picker component with range and presets.',
+  accessibility: ['Use native controls.', 'Give every input an accessible name.'],
   installData: {
     cliAdd: {
       tabs: [
@@ -22,7 +23,9 @@ const DATA: ComponentData = {
   },
   usage: {
     importBlock: codeBlock("import { ZardDatePicker } from '@zard';", 'angular-ts'),
-    codeBlock: codeBlock('<z-date-picker />', 'angular-html'),
+    codeBlock: codeBlock('const value = signal(new Date());', 'angular-ts'),
+    description: 'Bind the value to the date picker.',
+    additionalBlocks: [codeBlock('<z-date-picker [(zValue)]="value" />', 'angular-html')],
   },
   examples: [
     {
@@ -62,6 +65,11 @@ describe('serializeComponentToMarkdown', () => {
 
     expect(md).toContain('## Usage');
     expect(md).toContain("```angular-ts\nimport { ZardDatePicker } from '@zard';\n```");
+    expect(md).toContain('```angular-ts\nconst value = signal(new Date());\n```');
+    expect(md).toContain('Bind the value to the date picker.');
+    expect(md).toContain('```angular-html\n<z-date-picker [(zValue)]="value" />\n```');
+    expect(md.indexOf('const value')).toBeLessThan(md.indexOf('Bind the value'));
+    expect(md.indexOf('Bind the value')).toBeLessThan(md.indexOf('<z-date-picker'));
     expect(md).toContain('## Examples');
     expect(md).toContain('### With Range');
     expect(md).toContain('Use the `zRange` prop to select a range.');
@@ -71,11 +79,20 @@ describe('serializeComponentToMarkdown', () => {
     expect(md).toContain("| `zRange` | Enables range \\| selection | `'a' \\| 'b'` | `false` |");
   });
 
+  it('renders accessibility guidance as its own section', () => {
+    const md = serializeComponentToMarkdown(DATA);
+
+    expect(md).toContain('## Accessibility\n\nUse native controls.\n\nGive every input an accessible name.');
+    expect(md.indexOf('## Accessibility')).toBeGreaterThan(md.indexOf('## Examples'));
+    expect(md.indexOf('## Accessibility')).toBeLessThan(md.indexOf('## API Reference'));
+  });
+
   it('omits sections that have no data', () => {
     const md = serializeComponentToMarkdown({ componentName: 'empty', description: 'Nothing here.', examples: [] });
 
     expect(md).not.toContain('## Installation');
     expect(md).not.toContain('## Usage');
+    expect(md).not.toContain('## Accessibility');
     expect(md).not.toContain('## Examples');
     expect(md).not.toContain('## API Reference');
   });
