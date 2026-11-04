@@ -11,6 +11,8 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
@@ -19,6 +21,9 @@ import { ZardQuestionnaireItemComponent } from './questionnaire-item.component';
 import { ZARD_QUESTIONNAIRE_CHOICE, type ZardQuestionnaireChoiceRef } from './questionnaire.tokens';
 import {
   questionnaireChoiceControlVariants,
+  questionnaireChoiceIndicatorCheckVariants,
+  questionnaireChoiceIndicatorDotVariants,
+  questionnaireChoiceIndicatorVariants,
   questionnaireChoiceLabelVariants,
   questionnaireChoiceShortcutVariants,
   questionnaireChoiceVariants,
@@ -40,6 +45,12 @@ import {
         [class]="controlClasses"
         #control
       />
+      <span aria-hidden="true" data-slot="questionnaire-choice-indicator" [class]="indicatorClasses">
+        <span data-slot="questionnaire-choice-indicator-dot" [class]="indicatorDotClasses"></span>
+        <span data-slot="questionnaire-choice-indicator-check" [class]="indicatorCheckClasses">
+          <ng-icon name="lucideCheck" class="size-full" />
+        </span>
+      </span>
       <span data-slot="questionnaire-choice-label" [class]="labelClasses">
         <ng-content />
       </span>
@@ -50,6 +61,8 @@ import {
       }
     </label>
   `,
+  imports: [NgIcon],
+  viewProviders: [provideIcons({ lucideCheck })],
   providers: [{ provide: ZARD_QUESTIONNAIRE_CHOICE, useExisting: forwardRef(() => ZardQuestionnaireChoiceComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -74,6 +87,9 @@ export class ZardQuestionnaireChoiceComponent implements ZardQuestionnaireChoice
   protected readonly shortcut = computed(() => this.item.shortcutFor(this));
   protected readonly classes = computed(() => mergeClasses(questionnaireChoiceVariants(), this.class()));
   protected readonly controlClasses = questionnaireChoiceControlVariants();
+  protected readonly indicatorClasses = questionnaireChoiceIndicatorVariants();
+  protected readonly indicatorDotClasses = questionnaireChoiceIndicatorDotVariants();
+  protected readonly indicatorCheckClasses = questionnaireChoiceIndicatorCheckVariants();
   protected readonly labelClasses = questionnaireChoiceLabelVariants();
   protected readonly shortcutClasses = questionnaireChoiceShortcutVariants();
 

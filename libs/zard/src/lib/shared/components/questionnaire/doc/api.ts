@@ -170,6 +170,11 @@ export const QUESTIONNAIRE_API: ApiSection[] = [
     ],
   },
   {
+    selector: 'z-questionnaire-choice-description',
+    description: 'Secondary text under a choice label, rendered in muted color.',
+    props: [CLASS_PROP],
+  },
+  {
     selector: 'z-questionnaire-input',
     description: 'Freeform answer for the active item.',
     props: [

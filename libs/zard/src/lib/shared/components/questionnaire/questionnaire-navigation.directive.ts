@@ -43,7 +43,7 @@ const NAVIGATION_BUTTON_TEMPLATE = `
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
     '[hidden]': '!available()',
-    '[disabled]': 'disabledState()',
+    '[attr.disabled]': 'disabledState() ? "" : null',
     '[attr.aria-disabled]': 'disabledState() ? "true" : null',
     '[attr.aria-busy]': 'zLoading() ? "true" : null',
     '(click)': 'handleClick()',

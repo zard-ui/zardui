@@ -17,6 +17,7 @@ import {
   ZardQuestionnaireInputComponent,
   ZardQuestionnaireItemComponent,
   ZardQuestionnaireChoiceComponent,
+  ZardQuestionnaireChoiceDescriptionComponent,
   ZardQuestionnaireNextDirective,
   ZardQuestionnairePreviousDirective,
   ZardQuestionnaireProgressComponent,
@@ -327,6 +328,7 @@ class QuestionnaireExternalValidationHostComponent {
     ZardQuestionnaireItemComponent,
     ZardQuestionnaireProgressComponent,
     ZardQuestionnaireTitleComponent,
+    ZardQuestionnaireChoiceDescriptionComponent,
   ],
   template: `
     <z-questionnaire class="max-w-xl" [zItems]="items">
@@ -335,7 +337,10 @@ class QuestionnaireExternalValidationHostComponent {
         <z-questionnaire-title class="text-lg">Question title</z-questionnaire-title>
         <z-questionnaire-description class="text-base">Question description</z-questionnaire-description>
         <z-questionnaire-choices class="gap-3">
-          <z-questionnaire-choice class="rounded-md" zValue="answer">Answer</z-questionnaire-choice>
+          <z-questionnaire-choice class="rounded-md" zValue="answer">
+            Answer
+            <z-questionnaire-choice-description class="text-foreground">Answer hint</z-questionnaire-choice-description>
+          </z-questionnaire-choice>
           <z-questionnaire-input class="h-10" placeholder="Other answer" />
         </z-questionnaire-choices>
         <z-questionnaire-error class="mt-4">Choose an answer.</z-questionnaire-error>
@@ -1416,6 +1421,9 @@ describe('ZardQuestionnaireComponent', () => {
     const choiceControl = fixture.nativeElement.querySelector(
       '[data-slot="questionnaire-choice-control"]',
     ) as HTMLInputElement;
+    const choiceIndicator = fixture.nativeElement.querySelector(
+      '[data-slot="questionnaire-choice-indicator"]',
+    ) as HTMLElement;
     const choiceLabel = fixture.nativeElement.querySelector('[data-slot="questionnaire-choice-label"]') as HTMLElement;
     const choiceShortcut = fixture.nativeElement.querySelector(
       '[data-slot="questionnaire-choice-shortcut"]',
@@ -1445,13 +1453,15 @@ describe('ZardQuestionnaireComponent', () => {
     expect(choices.classList).toContain('gap-2');
     expect(choice.classList).toContain('border-input');
     expect(choice.classList).toContain('rounded-lg');
-    expect(choice.classList).toContain('items-center');
-    expect(choice.classList).not.toContain('items-start');
+    expect(choice.classList).toContain('items-start');
+    expect(choice.classList).not.toContain('items-center');
     expect(choice.getAttribute('data-disabled')).toBe('');
-    expect(choiceControl.classList).toContain('shrink-0');
-    expect([...choiceControl.classList].some(className => className.startsWith('translate-y-'))).toBe(false);
+    expect(choiceControl.classList).toContain('absolute');
+    expect(choiceControl.classList).toContain('opacity-0');
+    expect(choiceIndicator.classList).toContain('shrink-0');
+    expect(choiceIndicator.getAttribute('aria-hidden')).toBe('true');
     expect(choiceLabel.classList).toContain('flex-1');
-    expect([...choiceShortcut.classList].some(className => className.startsWith('translate-y-'))).toBe(false);
+    expect(choiceShortcut.classList).toContain('size-5');
     expect(inputWrapper.classList).toContain('relative');
     expect(inputWrapper.classList).toContain('block');
     expect(input.classList).toContain('border-input');
@@ -1487,6 +1497,8 @@ describe('ZardQuestionnaireComponent', () => {
     expect(classListFor('questionnaire-choices')).not.toContain('gap-2');
     expect(classListFor('questionnaire-choice')).toContain('rounded-md');
     expect(classListFor('questionnaire-choice')).not.toContain('rounded-lg');
+    expect(classListFor('questionnaire-choice-description')).toContain('text-foreground');
+    expect(classListFor('questionnaire-choice-description')).not.toContain('text-muted-foreground');
     expect(classListFor('questionnaire-input')).toContain('h-10');
     expect(classListFor('questionnaire-input')).not.toContain('h-8');
     expect(classListFor('questionnaire-error')).toContain('mt-4');

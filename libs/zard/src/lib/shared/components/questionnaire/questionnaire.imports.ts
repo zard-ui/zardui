@@ -1,4 +1,5 @@
 import { ZardQuestionnaireActionsComponent } from './questionnaire-actions.component';
+import { ZardQuestionnaireChoiceDescriptionComponent } from './questionnaire-choice-description.component';
 import { ZardQuestionnaireChoiceComponent } from './questionnaire-choice.component';
 import { ZardQuestionnaireChoicesComponent } from './questionnaire-choices.component';
 import { ZardQuestionnaireDescriptionComponent } from './questionnaire-description.component';
@@ -18,6 +19,7 @@ import { ZardQuestionnaireComponent } from './questionnaire.component';
 export const ZardQuestionnaireImports = [
   ZardQuestionnaireComponent,
   ZardQuestionnaireChoiceComponent,
+  ZardQuestionnaireChoiceDescriptionComponent,
   ZardQuestionnaireChoicesComponent,
   ZardQuestionnaireItemComponent,
   ZardQuestionnaireProgressComponent,
@@ -35,6 +37,7 @@ export const ZardQuestionnaireImports = [
 export {
   ZardQuestionnaireComponent,
   ZardQuestionnaireChoiceComponent,
+  ZardQuestionnaireChoiceDescriptionComponent,
   ZardQuestionnaireChoicesComponent,
   ZardQuestionnaireItemComponent,
   ZardQuestionnaireProgressComponent,

@@ -36,22 +36,22 @@ const TIMING_LABELS: Record<string, string> = {
         <z-questionnaire-description>Choose a direction or describe another task.</z-questionnaire-description>
         <z-questionnaire-choices>
           <z-questionnaire-choice zValue="tool-calls">
-            <span>Tool call timeline</span>
-            <span data-slot="questionnaire-choice-description" class="text-muted-foreground">
+            <span class="font-medium">Tool call timeline</span>
+            <z-questionnaire-choice-description>
               Show what the agent ran and what came back.
-            </span>
+            </z-questionnaire-choice-description>
           </z-questionnaire-choice>
           <z-questionnaire-choice zValue="approvals">
-            <span>Approval checkpoints</span>
-            <span data-slot="questionnaire-choice-description" class="text-muted-foreground">
+            <span class="font-medium">Approval checkpoints</span>
+            <z-questionnaire-choice-description>
               Ask before sensitive or destructive actions.
-            </span>
+            </z-questionnaire-choice-description>
           </z-questionnaire-choice>
           <z-questionnaire-choice zValue="handoffs">
-            <span>Sub-agent handoffs</span>
-            <span data-slot="questionnaire-choice-description" class="text-muted-foreground">
+            <span class="font-medium">Sub-agent handoffs</span>
+            <z-questionnaire-choice-description>
               Make delegated work and results easier to follow.
-            </span>
+            </z-questionnaire-choice-description>
           </z-questionnaire-choice>
           <z-questionnaire-input placeholder="Describe another feature..." aria-label="Describe another feature" />
         </z-questionnaire-choices>

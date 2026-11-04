@@ -1651,6 +1651,7 @@ export const registry: ComponentRegistry[] = [
       { name: 'questionnaire-progress.component.ts', content: '' },
       { name: 'questionnaire-item.component.ts', content: '' },
       { name: 'questionnaire-choice.component.ts', content: '' },
+      { name: 'questionnaire-choice-description.component.ts', content: '' },
       { name: 'questionnaire-choices.component.ts', content: '' },
       { name: 'questionnaire-title.component.ts', content: '' },
       { name: 'questionnaire-description.component.ts', content: '' },
