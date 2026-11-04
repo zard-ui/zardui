@@ -93,6 +93,7 @@
 - [Skeleton](https://zardui.com/docs/components/skeleton): Use to show a placeholder while content is loading.
 - [Sonner](https://zardui.com/docs/components/sonner): An opinionated toast component for Angular.
 - [Spinner](https://zardui.com/docs/components/spinner): Displays a loading spinner.
+- [Toast](https://zardui.com/docs/components/toast): A succinct message that is displayed temporarily.
 
 ### Display & Media
 

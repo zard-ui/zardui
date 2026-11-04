@@ -26,8 +26,17 @@ export interface ComponentData {
   installData?: ComponentInstallData;
   usage?: ComponentUsageData;
   composition?: CodeBlockData;
+  /** A notice about the page itself, such as a deprecation. Shown by the page's preview and in its markdown. */
+  notice?: string;
+  /** Related pages shown under the description (guide, builder…). Internal links start with `/`. */
+  links?: PageLink[];
   fullWidth?: boolean;
   api?: ApiSection[];
+}
+
+export interface PageLink {
+  label: string;
+  href: string;
 }
 
 /** A standalone code block with an optional heading/description, shown around (or instead of) a demo. */
@@ -377,6 +386,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Displays a multi-line text input field.',
     category: 'Form & Input',
     loadData: () => import('@zard/components/textarea/demo/textarea').then(m => m.TEXTAREA),
+  },
+  {
+    componentName: 'toast',
+    description: 'A succinct message that is displayed temporarily.',
+    category: 'Feedback & Status',
+    loadData: () => import('@zard/components/toast/demo/toast').then(m => m.TOAST),
   },
   {
     componentName: 'toggle',

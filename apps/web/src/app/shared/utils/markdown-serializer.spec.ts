@@ -71,6 +71,26 @@ describe('serializeComponentToMarkdown', () => {
     expect(md).toContain("| `zRange` | Enables range \\| selection | `'a' \\| 'b'` | `false` |");
   });
 
+  it('lists related pages with absolute URLs for internal links', () => {
+    const md = serializeComponentToMarkdown({
+      ...DATA,
+      links: [
+        { label: 'Typeset guide', href: '/docs/typeset' },
+        { label: 'Elsewhere', href: 'https://example.com/a' },
+      ],
+    });
+
+    expect(md).toContain('- [Typeset guide](https://zardui.com/docs/typeset)\n- [Elsewhere](https://example.com/a)');
+    expect(serializeComponentToMarkdown(DATA)).not.toContain('Typeset guide');
+  });
+
+  it('quotes the notice of a page right under its description', () => {
+    const md = serializeComponentToMarkdown({ ...DATA, notice: 'Use the sonner component instead.' });
+
+    expect(md).toContain(`${DATA.description}\n\n> Use the sonner component instead.`);
+    expect(serializeComponentToMarkdown(DATA)).not.toContain('> ');
+  });
+
   it('omits sections that have no data', () => {
     const md = serializeComponentToMarkdown({ componentName: 'empty', description: 'Nothing here.', examples: [] });
 

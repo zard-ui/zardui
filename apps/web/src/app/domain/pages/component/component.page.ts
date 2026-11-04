@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
@@ -36,6 +36,7 @@ const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar'];
     StepsComponent,
     ZardCodeBoxComponent,
     HyphenToSpacePipe,
+    RouterLink,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

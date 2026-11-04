@@ -147,6 +147,8 @@ export function serializeComponentToMarkdown(data: ComponentData): string {
   const blocks: string[] = [
     frontmatter(title, data.description),
     `# ${title}\n\n${data.description}`,
+    data.notice ? `> ${data.notice}` : '',
+    serializeLinks(data),
     data.about?.description ? section('About', serializeAbout(data)) : '',
     section('Installation', serializeInstallation(data)),
     section('Usage', serializeUsage(data)),
@@ -157,6 +159,13 @@ export function serializeComponentToMarkdown(data: ComponentData): string {
   ];
 
   return `${blocks.filter(Boolean).join('\n\n')}\n`;
+}
+
+function serializeLinks(data: ComponentData): string {
+  if (!data.links?.length) return '';
+  return data.links
+    .map(link => `- [${link.label}](${link.href.startsWith('/') ? BASE_URL + link.href : link.href})`)
+    .join('\n');
 }
 
 function serializeAbout(data: ComponentData): string {

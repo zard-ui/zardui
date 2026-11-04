@@ -74,6 +74,7 @@
 /docs/components/tabs
 /docs/components/textarea
 /docs/components/sonner
+/docs/components/toast
 /docs/components/toggle
 /docs/components/toggle-group
 /docs/components/tooltip
