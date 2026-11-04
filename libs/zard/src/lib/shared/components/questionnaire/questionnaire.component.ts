@@ -67,7 +67,8 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
   private readonly form = viewChild<ElementRef<HTMLFormElement>>('form');
   private readonly invalidItems = signal<ReadonlySet<string>>(new Set());
   private readonly skippedItems = signal<ReadonlySet<string>>(new Set());
-  private readonly writtenAnswers = signal<ZardQuestionnaireAnswers | null>(null);
+  // Every writeValue call must re-sync the DOM, even when the same answers object is written again.
+  private readonly writtenAnswers = signal<ZardQuestionnaireAnswers | null>(null, { equal: () => false });
   private onChangeFn: (answers: ZardQuestionnaireAnswers) => void = noopFn;
   private onTouchedFn: () => void = noopFn;
 
@@ -222,7 +223,9 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
       return;
     }
 
-    const invalidItems = this.enabledItems().filter(item => !this.isItemValid(item));
+    const form = this.form()?.nativeElement;
+    const formData = form ? new FormData(form) : undefined;
+    const invalidItems = this.enabledItems().filter(item => !this.isItemValid(item, formData));
     this.invalidItems.set(new Set(invalidItems.map(item => item.name)));
 
     if (invalidItems.length > 0) {
@@ -260,7 +263,16 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
   }
 
   writeValue(answers: ZardQuestionnaireAnswers | null | undefined): void {
-    this.writtenAnswers.set(answers ?? {});
+    const writtenAnswers = answers ?? {};
+    // An item that receives an answer from the model is no longer skipped or invalid.
+    for (const [name, answer] of Object.entries(writtenAnswers)) {
+      const values = Array.isArray(answer) ? answer : [answer];
+      if (values.some(value => String(value).trim().length > 0)) {
+        this.updateSet(this.skippedItems, name, false);
+        this.updateSet(this.invalidItems, name, false);
+      }
+    }
+    this.writtenAnswers.set(writtenAnswers);
   }
 
   protected handleShortcut(event: KeyboardEvent): void {
@@ -278,10 +290,6 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
       (target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, select') ||
         target.isContentEditable);
     if (isTypingTarget) {
-      return;
-    }
-
-    if (target instanceof HTMLElement && (target.matches('input, textarea, select') || target.isContentEditable)) {
       return;
     }
 
@@ -310,13 +318,14 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
     return valid;
   }
 
-  private isItemValid(item: ZardQuestionnaireItem): boolean {
-    return this.hasAnswer(item.name) || (!item.required && this.skippedItems().has(item.name));
+  private isItemValid(item: ZardQuestionnaireItem, formData?: FormData): boolean {
+    return this.hasAnswer(item.name, formData) || (!item.required && this.skippedItems().has(item.name));
   }
 
-  private hasAnswer(name: string): boolean {
+  private hasAnswer(name: string, formData?: FormData): boolean {
     const form = this.form()?.nativeElement;
-    return Boolean(form && new FormData(form).getAll(name).some(value => String(value).trim().length > 0));
+    const data = formData ?? (form ? new FormData(form) : undefined);
+    return Boolean(data?.getAll(name).some(value => String(value).trim().length > 0));
   }
 
   private collectAnswers(

@@ -16,7 +16,7 @@ import { questionnaireProgressVariants } from './questionnaire.variants';
   encapsulation: ViewEncapsulation.None,
   host: {
     role: 'progressbar',
-    'aria-valuemin': '1',
+    '[attr.aria-valuemin]': 'total() === 0 ? 0 : 1',
     '[attr.aria-valuemax]': 'total()',
     '[attr.aria-valuenow]': 'current()',
     '[attr.aria-valuetext]': '"Question " + current() + " of " + total()',

@@ -1,4 +1,12 @@
-import { booleanAttribute, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideLoaderCircle } from '@ng-icons/lucide';
@@ -32,6 +40,7 @@ const NAVIGATION_BUTTON_TEMPLATE = `
   selector: 'button[z-questionnaire-previous]',
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
@@ -57,6 +66,10 @@ export class ZardQuestionnairePreviousDirective extends ZardButtonComponent {
   override readonly zShape = input<ZardButtonShapeVariants>('default');
   override readonly zLoading = input(false, { transform: booleanAttribute });
   override readonly class = input<ClassValue>('');
+  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
+  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
+  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
+  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
   readonly disabledState = computed(
     () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canMoveBack(),
   );
@@ -86,6 +99,7 @@ export class ZardQuestionnairePreviousDirective extends ZardButtonComponent {
   selector: 'button[z-questionnaire-skip]',
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
@@ -111,6 +125,10 @@ export class ZardQuestionnaireSkipDirective extends ZardButtonComponent {
   override readonly zShape = input<ZardButtonShapeVariants>('default');
   override readonly zLoading = input(false, { transform: booleanAttribute });
   override readonly class = input<ClassValue>('');
+  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
+  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
+  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
+  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
   readonly disabledState = computed(
     () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canSkip(),
   );
@@ -140,6 +158,7 @@ export class ZardQuestionnaireSkipDirective extends ZardButtonComponent {
   selector: 'button[z-questionnaire-next]',
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
@@ -165,6 +184,10 @@ export class ZardQuestionnaireNextDirective extends ZardButtonComponent {
   override readonly zShape = input<ZardButtonShapeVariants>('default');
   override readonly zLoading = input(false, { transform: booleanAttribute });
   override readonly class = input<ClassValue>('');
+  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
+  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
+  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
+  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
   readonly disabledState = computed(
     () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canMoveNext(),
   );
@@ -194,6 +217,7 @@ export class ZardQuestionnaireNextDirective extends ZardButtonComponent {
   selector: 'button[z-questionnaire-submit]',
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
@@ -218,6 +242,10 @@ export class ZardQuestionnaireSubmitDirective extends ZardButtonComponent {
   override readonly zShape = input<ZardButtonShapeVariants>('default');
   override readonly zLoading = input(false, { transform: booleanAttribute });
   override readonly class = input<ClassValue>('');
+  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
+  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
+  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
+  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
   readonly disabledState = computed(
     () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canSubmit(),
   );

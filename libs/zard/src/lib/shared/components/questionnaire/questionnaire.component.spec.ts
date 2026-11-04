@@ -855,6 +855,17 @@ describe('ZardQuestionnaireComponent', () => {
     expect(fixture.componentInstance.active).toBe('first');
   });
 
+  it('should select an answer with a shortcut while a choice has focus', async () => {
+    const fixture = await createBehaviorFixture([{ name: 'first', required: true }]);
+    const firstChoice = getChoiceInput(fixture, 'first', 'a');
+
+    firstChoice.focus();
+    firstChoice.dispatchEvent(new KeyboardEvent('keydown', { key: 'b', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(getChoiceInput(fixture, 'first', 'b').checked).toBe(true);
+  });
+
   it('should ignore shortcuts with modifier keys', async () => {
     const fixture = await createBehaviorFixture([{ name: 'first', required: true }]);
 
@@ -1164,6 +1175,31 @@ describe('ZardQuestionnaireComponent', () => {
       ),
     ).toBe(true);
     expect(getAction(fixture, ZardQuestionnaireNextDirective).disabled).toBe(true);
+    expect(fixture.nativeElement.querySelector('z-questionnaire-item:not([hidden])')).not.toBeNull();
+  });
+
+  it('should re-apply answers when the same value object is written again', async () => {
+    await TestBed.configureTestingModule({ imports: [QuestionnaireReactiveFormsHostComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(QuestionnaireReactiveFormsHostComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const saved = { choice: 'beta' };
+    const beta = fixture.nativeElement.querySelector('input[value="beta"]') as HTMLInputElement;
+    const alpha = fixture.nativeElement.querySelector('input[value="alpha"]') as HTMLInputElement;
+    fixture.componentInstance.answers.setValue(saved);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(beta.checked).toBe(true);
+
+    alpha.click();
+    fixture.detectChanges();
+    expect(alpha.checked).toBe(true);
+
+    fixture.componentInstance.answers.setValue(saved);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(beta.checked).toBe(true);
   });
 
   it('should resume from native controls initialized with saved answers', async () => {

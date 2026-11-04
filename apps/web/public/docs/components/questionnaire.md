@@ -87,7 +87,8 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
   private readonly form = viewChild<ElementRef<HTMLFormElement>>('form');
   private readonly invalidItems = signal<ReadonlySet<string>>(new Set());
   private readonly skippedItems = signal<ReadonlySet<string>>(new Set());
-  private readonly writtenAnswers = signal<ZardQuestionnaireAnswers | null>(null);
+  // Every writeValue call must re-sync the DOM, even when the same answers object is written again.
+  private readonly writtenAnswers = signal<ZardQuestionnaireAnswers | null>(null, { equal: () => false });
   private onChangeFn: (answers: ZardQuestionnaireAnswers) => void = noopFn;
   private onTouchedFn: () => void = noopFn;
 
@@ -174,6 +175,7 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
 
     this.updateSet(this.skippedItems, activeItem.name, true);
     this.updateSet(this.invalidItems, activeItem.name, false);
+    this.onChangeFn(this.collectAnswers());
 
     if (this.canMoveNext()) {
       const nextItem = this.enabledItems()[this.activeIndex() + 1];
@@ -241,7 +243,9 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
       return;
     }
 
-    const invalidItems = this.enabledItems().filter(item => !this.isItemValid(item));
+    const form = this.form()?.nativeElement;
+    const formData = form ? new FormData(form) : undefined;
+    const invalidItems = this.enabledItems().filter(item => !this.isItemValid(item, formData));
     this.invalidItems.set(new Set(invalidItems.map(item => item.name)));
 
     if (invalidItems.length > 0) {
@@ -279,7 +283,16 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
   }
 
   writeValue(answers: ZardQuestionnaireAnswers | null | undefined): void {
-    this.writtenAnswers.set(answers ?? {});
+    const writtenAnswers = answers ?? {};
+    // An item that receives an answer from the model is no longer skipped or invalid.
+    for (const [name, answer] of Object.entries(writtenAnswers)) {
+      const values = Array.isArray(answer) ? answer : [answer];
+      if (values.some(value => String(value).trim().length > 0)) {
+        this.updateSet(this.skippedItems, name, false);
+        this.updateSet(this.invalidItems, name, false);
+      }
+    }
+    this.writtenAnswers.set(writtenAnswers);
   }
 
   protected handleShortcut(event: KeyboardEvent): void {
@@ -297,10 +310,6 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
       (target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, select') ||
         target.isContentEditable);
     if (isTypingTarget) {
-      return;
-    }
-
-    if (target instanceof HTMLElement && (target.matches('input, textarea, select') || target.isContentEditable)) {
       return;
     }
 
@@ -329,13 +338,14 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
     return valid;
   }
 
-  private isItemValid(item: ZardQuestionnaireItem): boolean {
-    return this.hasAnswer(item.name) || (!item.required && this.skippedItems().has(item.name));
+  private isItemValid(item: ZardQuestionnaireItem, formData?: FormData): boolean {
+    return this.hasAnswer(item.name, formData) || (!item.required && this.skippedItems().has(item.name));
   }
 
-  private hasAnswer(name: string): boolean {
+  private hasAnswer(name: string, formData?: FormData): boolean {
     const form = this.form()?.nativeElement;
-    return Boolean(form && new FormData(form).getAll(name).some(value => String(value).trim().length > 0));
+    const data = formData ?? (form ? new FormData(form) : undefined);
+    return Boolean(data?.getAll(name).some(value => String(value).trim().length > 0));
   }
 
   private collectAnswers(
@@ -874,7 +884,9 @@ export class ZardQuestionnaireItemComponent {
   readonly descriptionId = computed(() => `${this.uniqueId.id()}-description`);
   readonly errorId = computed(() => `${this.uniqueId.id()}-error`);
   readonly isDisabled = computed(() => this.zDisabled() || this.questionnaire.disabled());
-  readonly isActive = computed(() => this.questionnaire.zActive() === this.zName() && !this.isDisabled());
+  // A disabled questionnaire keeps its active item visible (as a disabled fieldset); only an item that is
+  // itself disabled leaves the flow.
+  readonly isActive = computed(() => this.questionnaire.zActive() === this.zName() && !this.zDisabled());
   readonly isInvalid = computed(() => this.zInvalid() || this.questionnaire.isInvalid(this.zName()));
   readonly ariaDescribedBy = computed(() => {
     const ids: string[] = [];
@@ -892,7 +904,15 @@ export class ZardQuestionnaireItemComponent {
 ```
 
 ```angular-ts
-import { booleanAttribute, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideLoaderCircle } from '@ng-icons/lucide';
@@ -926,6 +946,7 @@ const NAVIGATION_BUTTON_TEMPLATE = `
   selector: 'button[z-questionnaire-previous]',
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
@@ -951,6 +972,10 @@ export class ZardQuestionnairePreviousDirective extends ZardButtonComponent {
   override readonly zShape = input<ZardButtonShapeVariants>('default');
   override readonly zLoading = input(false, { transform: booleanAttribute });
   override readonly class = input<ClassValue>('');
+  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
+  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
+  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
+  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
   readonly disabledState = computed(
     () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canMoveBack(),
   );
@@ -980,6 +1005,7 @@ export class ZardQuestionnairePreviousDirective extends ZardButtonComponent {
   selector: 'button[z-questionnaire-skip]',
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
@@ -1005,6 +1031,10 @@ export class ZardQuestionnaireSkipDirective extends ZardButtonComponent {
   override readonly zShape = input<ZardButtonShapeVariants>('default');
   override readonly zLoading = input(false, { transform: booleanAttribute });
   override readonly class = input<ClassValue>('');
+  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
+  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
+  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
+  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
   readonly disabledState = computed(
     () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canSkip(),
   );
@@ -1034,6 +1064,7 @@ export class ZardQuestionnaireSkipDirective extends ZardButtonComponent {
   selector: 'button[z-questionnaire-next]',
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
@@ -1059,6 +1090,10 @@ export class ZardQuestionnaireNextDirective extends ZardButtonComponent {
   override readonly zShape = input<ZardButtonShapeVariants>('default');
   override readonly zLoading = input(false, { transform: booleanAttribute });
   override readonly class = input<ClassValue>('');
+  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
+  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
+  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
+  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
   readonly disabledState = computed(
     () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canMoveNext(),
   );
@@ -1088,6 +1123,7 @@ export class ZardQuestionnaireNextDirective extends ZardButtonComponent {
   selector: 'button[z-questionnaire-submit]',
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
@@ -1112,6 +1148,10 @@ export class ZardQuestionnaireSubmitDirective extends ZardButtonComponent {
   override readonly zShape = input<ZardButtonShapeVariants>('default');
   override readonly zLoading = input(false, { transform: booleanAttribute });
   override readonly class = input<ClassValue>('');
+  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
+  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
+  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
+  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
   readonly disabledState = computed(
     () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canSubmit(),
   );
@@ -1151,7 +1191,7 @@ import { questionnaireProgressVariants } from './questionnaire.variants';
   encapsulation: ViewEncapsulation.None,
   host: {
     role: 'progressbar',
-    'aria-valuemin': '1',
+    '[attr.aria-valuemin]': 'total() === 0 ? 0 : 1',
     '[attr.aria-valuemax]': 'total()',
     '[attr.aria-valuenow]': 'current()',
     '[attr.aria-valuetext]': '"Question " + current() + " of " + total()',

@@ -59,7 +59,9 @@ export class ZardQuestionnaireItemComponent {
   readonly descriptionId = computed(() => `${this.uniqueId.id()}-description`);
   readonly errorId = computed(() => `${this.uniqueId.id()}-error`);
   readonly isDisabled = computed(() => this.zDisabled() || this.questionnaire.disabled());
-  readonly isActive = computed(() => this.questionnaire.zActive() === this.zName() && !this.isDisabled());
+  // A disabled questionnaire keeps its active item visible (as a disabled fieldset); only an item that is
+  // itself disabled leaves the flow.
+  readonly isActive = computed(() => this.questionnaire.zActive() === this.zName() && !this.zDisabled());
   readonly isInvalid = computed(() => this.zInvalid() || this.questionnaire.isInvalid(this.zName()));
   readonly ariaDescribedBy = computed(() => {
     const ids: string[] = [];
