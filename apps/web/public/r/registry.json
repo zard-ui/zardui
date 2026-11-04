@@ -1207,9 +1207,11 @@
       "icons": {
         "family": "lucide",
         "symbols": [
+          "lucideCheck",
           "lucideLoaderCircle"
         ],
         "tokens": [
+          "check",
           "loader-circle"
         ]
       },
@@ -1219,6 +1221,7 @@
         "questionnaire-progress.component.ts",
         "questionnaire-item.component.ts",
         "questionnaire-choice.component.ts",
+        "questionnaire-choice-description.component.ts",
         "questionnaire-choices.component.ts",
         "questionnaire-title.component.ts",
         "questionnaire-description.component.ts",
@@ -1227,6 +1230,7 @@
         "questionnaire-navigation.directive.ts",
         "questionnaire-input.component.ts",
         "questionnaire.types.ts",
+        "questionnaire.tokens.ts",
         "questionnaire.imports.ts",
         "index.ts"
       ]

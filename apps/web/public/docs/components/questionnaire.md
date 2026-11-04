@@ -23,6 +23,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  contentChildren,
+  DestroyRef,
   effect,
   ElementRef,
   forwardRef,
@@ -42,12 +44,16 @@ import type { ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 import { noopFn } from '@/shared/utils/noop';
 
+import { ZARD_QUESTIONNAIRE_ITEM, type ZardQuestionnaireItemRef } from './questionnaire.tokens';
 import type {
   ZardQuestionnaireAnswers,
   ZardQuestionnaireItem,
   ZardQuestionnaireShortcutMode,
 } from './questionnaire.types';
 import { questionnaireVariants } from './questionnaire.variants';
+
+// The questionnaire the user last focused or clicked in. Keyboard shortcuts fired with nothing focused go to it.
+let lastInteracted: HTMLElement | null = null;
 
 @Component({
   selector: 'z-questionnaire',
@@ -78,12 +84,18 @@ import { questionnaireVariants } from './questionnaire.variants';
     '[attr.data-shortcuts]': 'zShortcuts() === "none" ? null : zShortcuts()',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '(document:keydown)': 'handleShortcut($event)',
+    '(focusin)': 'markInteracted()',
+    '(pointerdown)': 'markInteracted()',
   },
   exportAs: 'zQuestionnaire',
 })
 export class ZardQuestionnaireComponent implements ControlValueAccessor {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly injector = inject(Injector);
+  private readonly itemRefs = contentChildren<ZardQuestionnaireItemRef>(ZARD_QUESTIONNAIRE_ITEM, {
+    descendants: true,
+  });
+
   private readonly form = viewChild<ElementRef<HTMLFormElement>>('form');
   private readonly invalidItems = signal<ReadonlySet<string>>(new Set());
   private readonly skippedItems = signal<ReadonlySet<string>>(new Set());
@@ -99,7 +111,15 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
   readonly zSubmit = output<ZardQuestionnaireAnswers>();
   readonly disabled = signal(false);
 
-  readonly enabledItems = computed(() => this.zItems().filter(item => !item.disabled));
+  // The projected items in DOM order, with their effective settings (the item's own inputs win over `zItems`).
+  // Without any projected item (native controls only), or while one is still unbound, `zItems` defines the flow.
+  readonly items = computed(() => {
+    const settings = this.itemRefs().map(ref => ref.settings());
+    const bound = settings.filter((item): item is ZardQuestionnaireItem => item !== null);
+    return bound.length === 0 || bound.length < settings.length ? this.zItems() : bound;
+  });
+
+  readonly enabledItems = computed(() => this.items().filter(item => !item.disabled));
   readonly activeIndex = computed(() => {
     const index = this.enabledItems().findIndex(item => item.name === this.zActive());
     return index >= 0 ? index : 0;
@@ -119,6 +139,12 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
   protected readonly classes = computed(() => mergeClasses(questionnaireVariants(), this.class()));
 
   constructor() {
+    inject(DestroyRef).onDestroy(() => {
+      if (lastInteracted === this.elementRef.nativeElement) {
+        lastInteracted = null;
+      }
+    });
+
     effect(() => {
       const enabledItems = this.enabledItems();
       const active = this.zActive();
@@ -186,29 +212,6 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
 
   isInvalid(name: string): boolean {
     return this.invalidItems().has(name);
-  }
-
-  shortcutFor(control: HTMLInputElement, itemName: string): string | null {
-    const mode = this.zShortcuts();
-    if (mode === 'none' || itemName !== this.zActive() || control.disabled) {
-      return null;
-    }
-
-    const item = control.closest<HTMLElement>('[data-slot="questionnaire-item"]');
-    const choices = Array.from(
-      item?.querySelectorAll<HTMLInputElement>('[data-slot="questionnaire-choice"] input:not(:disabled)') ?? [],
-    );
-    const index = choices.indexOf(control);
-
-    if (index < 0) {
-      return null;
-    }
-
-    if (mode === 'letters') {
-      return index < 26 ? String.fromCharCode(97 + index) : null;
-    }
-
-    return index < 9 ? String(index + 1) : null;
   }
 
   handleAnswerChange(event: Event): void {
@@ -300,8 +303,10 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
       return;
     }
 
+    // Only one questionnaire reacts: the one holding focus, or, with nothing focused (the event targets
+    // the body), the one the user interacted with last. Never while typing, wherever the caret is.
     const { target } = event;
-    if (!(target instanceof Node) || !this.elementRef.nativeElement.contains(target)) {
+    if (!(target instanceof Node)) {
       return;
     }
 
@@ -313,23 +318,29 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
       return;
     }
 
+    const hasFocus = this.elementRef.nativeElement.contains(target);
+    const nothingFocused = target === document.body || target === document.documentElement;
+    if (!hasFocus && !(nothingFocused && lastInteracted === this.elementRef.nativeElement)) {
+      return;
+    }
+
     const shortcutIndex = this.shortcutIndex(event.key);
     if (shortcutIndex < 0) {
       return;
     }
 
-    const activeItem = this.elementRef.nativeElement.querySelector<HTMLElement>(
-      '[data-slot="questionnaire-item"]:not([hidden])',
-    );
-    const choices = activeItem?.querySelectorAll<HTMLInputElement>(
-      '[data-slot="questionnaire-choice"] input:not(:disabled)',
-    );
-    const choice = choices?.item(shortcutIndex);
+    const activeName = this.enabledItems()[this.activeIndex()]?.name;
+    const activeRef = this.itemRefs().find(ref => ref.settings()?.name === activeName);
+    const choice = activeRef?.choiceAt(shortcutIndex);
 
     if (choice) {
       event.preventDefault();
-      choice.click();
+      choice.select();
     }
+  }
+
+  protected markInteracted(): void {
+    lastInteracted = this.elementRef.nativeElement;
   }
 
   private validateItem(item: ZardQuestionnaireItem): boolean {
@@ -397,7 +408,7 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
   }
 
   private applyAnswers(form: HTMLFormElement, answers: ZardQuestionnaireAnswers): void {
-    for (const item of this.zItems()) {
+    for (const item of this.items()) {
       const answer = answers[item.name];
       const values = answer === undefined ? [] : Array.isArray(answer) ? answer : [answer];
       const namedControl = form.elements.namedItem(item.name);
@@ -476,7 +487,7 @@ export const questionnaireProgressVariants = cva(
 );
 
 export const questionnaireTitleVariants = cva(
-  'text-base/snug font-medium text-pretty [&:not(:has(~[data-slot=questionnaire-description]))]:mb-4',
+  'text-base/snug font-medium text-pretty [&:has(~[data-slot=questionnaire-description])]:-mb-4',
 );
 
 export const questionnaireDescriptionVariants = cva('text-sm text-pretty text-muted-foreground');
@@ -488,10 +499,22 @@ export const questionnaireItemVariants = cva(
 export const questionnaireChoicesVariants = cva('group/questionnaire-choices grid min-w-0 gap-2');
 
 export const questionnaireChoiceVariants = cva(
-  'group/questionnaire-choice relative flex min-h-11 cursor-pointer items-center gap-2.5 rounded-lg border border-input bg-transparent px-3 py-2.5 text-start text-sm transition-colors outline-none select-none hover:bg-muted/50 has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50 data-invalid:border-destructive dark:bg-input/20 has-[input:checked]:border-primary/40 has-[input:checked]:bg-muted dark:has-[input:checked]:bg-muted data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
+  'group/questionnaire-choice relative flex min-h-11 cursor-pointer items-start gap-2.5 rounded-lg border border-input bg-transparent px-3 py-2.5 text-start text-sm transition-colors outline-none select-none hover:bg-muted/50 has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50 data-invalid:border-destructive dark:bg-input/20 has-[input:checked]:border-primary/40 has-[input:checked]:bg-muted dark:has-[input:checked]:bg-muted data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
 );
 
-export const questionnaireChoiceControlVariants = cva('shrink-0');
+export const questionnaireChoiceControlVariants = cva('absolute inset-0 z-10 size-full cursor-pointer opacity-0');
+
+export const questionnaireChoiceIndicatorVariants = cva(
+  'pointer-events-none relative flex size-4 shrink-0 translate-y-[calc(var(--spacing)*0.45)] items-center justify-center rounded-[4px] border border-input group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 group-has-[input[type=radio]]/questionnaire-choice:rounded-full group-has-[input:checked]/questionnaire-choice:border-primary group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground dark:bg-input/30 dark:group-has-[input:checked]/questionnaire-choice:bg-primary',
+);
+
+export const questionnaireChoiceIndicatorDotVariants = cva(
+  'hidden size-2 rounded-full bg-primary-foreground group-has-[input[type=radio]:checked]/questionnaire-choice:block',
+);
+
+export const questionnaireChoiceIndicatorCheckVariants = cva(
+  'hidden size-3.5 group-has-[input[type=checkbox]:checked]/questionnaire-choice:block',
+);
 
 export const questionnaireInputVariants = cva(
   'h-8 min-h-11 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 sm:min-h-0 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground',
@@ -499,8 +522,10 @@ export const questionnaireInputVariants = cva(
 
 export const questionnaireChoiceLabelVariants = cva('flex min-w-0 flex-1 flex-col gap-0.5 leading-snug');
 
+export const questionnaireChoiceDescriptionVariants = cva('block text-muted-foreground');
+
 export const questionnaireChoiceShortcutVariants = cva(
-  'pointer-events-none ms-auto inline-flex size-5 shrink-0 items-center justify-center rounded-md border border-input bg-background font-mono text-[0.625rem] leading-none font-medium text-muted-foreground',
+  'pointer-events-none ms-auto inline-flex size-5 shrink-0 translate-y-[calc(var(--spacing)*0.45)] items-center justify-center rounded-md border border-input bg-background font-mono text-[0.625rem] leading-none font-medium text-muted-foreground group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
 );
 
 export const questionnaireInputWrapperVariants = cva('group/questionnaire-input relative block w-full min-w-0');
@@ -562,24 +587,60 @@ export class ZardQuestionnaireActionsComponent {
 ```
 
 ```angular-ts
-import {
-  booleanAttribute,
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  input,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+import { questionnaireChoiceDescriptionVariants } from './questionnaire.variants';
+
+@Component({
+  selector: 'z-questionnaire-choice-description',
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'questionnaire-choice-description',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zQuestionnaireChoiceDescription',
+})
+export class ZardQuestionnaireChoiceDescriptionComponent {
+  readonly class = input<ClassValue>('');
+  protected readonly classes = computed(() => mergeClasses(questionnaireChoiceDescriptionVariants(), this.class()));
+}
+```
+
+```angular-ts
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  forwardRef,
+  inject,
+  input,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck } from '@ng-icons/lucide';
+import type { ClassValue } from 'clsx';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import { ZardQuestionnaireItemComponent } from './questionnaire-item.component';
-import { ZardQuestionnaireComponent } from './questionnaire.component';
+import { ZARD_QUESTIONNAIRE_CHOICE, type ZardQuestionnaireChoiceRef } from './questionnaire.tokens';
 import {
   questionnaireChoiceControlVariants,
+  questionnaireChoiceIndicatorCheckVariants,
+  questionnaireChoiceIndicatorDotVariants,
+  questionnaireChoiceIndicatorVariants,
   questionnaireChoiceLabelVariants,
   questionnaireChoiceShortcutVariants,
   questionnaireChoiceVariants,
@@ -591,26 +652,35 @@ import {
     <label class="contents">
       <input
         data-slot="questionnaire-choice-control"
-        [type]="item.zMultiple() ? 'checkbox' : 'radio'"
+        [type]="item.multiple() ? 'checkbox' : 'radio'"
         [name]="item.zName()"
         [value]="zValue()"
         [attr.checked]="checked() ? '' : null"
         [disabled]="disabledState()"
-        [attr.aria-keyshortcuts]="questionnaire.shortcutFor(input, item.zName())"
+        [attr.aria-keyshortcuts]="shortcut()"
         [attr.aria-describedby]="item.ariaDescribedBy()"
         [class]="controlClasses"
-        #input
+        #control
       />
+      <span aria-hidden="true" data-slot="questionnaire-choice-indicator" [class]="indicatorClasses">
+        <span data-slot="questionnaire-choice-indicator-dot" [class]="indicatorDotClasses"></span>
+        <span data-slot="questionnaire-choice-indicator-check" [class]="indicatorCheckClasses">
+          <ng-icon name="lucideCheck" class="size-full" />
+        </span>
+      </span>
       <span data-slot="questionnaire-choice-label" [class]="labelClasses">
         <ng-content />
       </span>
-      @if (questionnaire.shortcutFor(input, item.zName()); as shortcut) {
+      @if (shortcut(); as label) {
         <span data-slot="questionnaire-choice-shortcut" aria-hidden="true" [class]="shortcutClasses">
-          {{ shortcut.toUpperCase() }}
+          {{ label.toUpperCase() }}
         </span>
       }
     </label>
   `,
+  imports: [NgIcon],
+  viewProviders: [provideIcons({ lucideCheck })],
+  providers: [{ provide: ZARD_QUESTIONNAIRE_CHOICE, useExisting: forwardRef(() => ZardQuestionnaireChoiceComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -621,20 +691,28 @@ import {
   },
   exportAs: 'zQuestionnaireChoice',
 })
-export class ZardQuestionnaireChoiceComponent {
+export class ZardQuestionnaireChoiceComponent implements ZardQuestionnaireChoiceRef {
   readonly item = inject(ZardQuestionnaireItemComponent);
-  protected readonly questionnaire = inject(ZardQuestionnaireComponent);
+  private readonly control = viewChild.required<ElementRef<HTMLInputElement>>('control');
 
   readonly zValue = input.required<string>();
   readonly checked = input(false, { transform: booleanAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
-  protected readonly disabledState = computed(() => this.zDisabled() || this.item.isDisabled());
+  readonly disabledState = computed(() => this.zDisabled() || this.item.isDisabled());
+  protected readonly shortcut = computed(() => this.item.shortcutFor(this));
   protected readonly classes = computed(() => mergeClasses(questionnaireChoiceVariants(), this.class()));
   protected readonly controlClasses = questionnaireChoiceControlVariants();
+  protected readonly indicatorClasses = questionnaireChoiceIndicatorVariants();
+  protected readonly indicatorDotClasses = questionnaireChoiceIndicatorDotVariants();
+  protected readonly indicatorCheckClasses = questionnaireChoiceIndicatorCheckVariants();
   protected readonly labelClasses = questionnaireChoiceLabelVariants();
   protected readonly shortcutClasses = questionnaireChoiceShortcutVariants();
+
+  select(): void {
+    this.control().nativeElement.click();
+  }
 }
 ```
 
@@ -828,6 +906,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  contentChildren,
+  forwardRef,
   inject,
   input,
   signal,
@@ -840,7 +920,17 @@ import { ZardIdDirective } from '@/shared/core/directives/id.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardQuestionnaireComponent } from './questionnaire.component';
+import {
+  ZARD_QUESTIONNAIRE_CHOICE,
+  ZARD_QUESTIONNAIRE_ITEM,
+  type ZardQuestionnaireChoiceRef,
+  type ZardQuestionnaireItemRef,
+} from './questionnaire.tokens';
+import type { ZardQuestionnaireItem } from './questionnaire.types';
 import { questionnaireItemVariants } from './questionnaire.variants';
+
+const optionalBooleanAttribute = (value: unknown): boolean | undefined =>
+  value === undefined || value === null ? undefined : booleanAttribute(value);
 
 @Component({
   selector: 'z-questionnaire-item',
@@ -865,17 +955,19 @@ import { questionnaireItemVariants } from './questionnaire.variants';
     '[attr.data-disabled]': 'isDisabled() ? "" : null',
     '[hidden]': '!isActive()',
   },
+  providers: [{ provide: ZARD_QUESTIONNAIRE_ITEM, useExisting: forwardRef(() => ZardQuestionnaireItemComponent) }],
   hostDirectives: [ZardIdDirective],
   exportAs: 'zQuestionnaireItem',
 })
-export class ZardQuestionnaireItemComponent {
+export class ZardQuestionnaireItemComponent implements ZardQuestionnaireItemRef {
   private readonly questionnaire = inject(ZardQuestionnaireComponent);
   private readonly uniqueId = inject(ZardIdDirective);
 
   readonly zName = input.required<string>();
-  readonly zRequired = input(false, { transform: booleanAttribute });
-  readonly zMultiple = input(false, { transform: booleanAttribute });
-  readonly zDisabled = input(false, { transform: booleanAttribute });
+  // `undefined` means "not set": the matching `[zItems]` entry decides, then the default (false).
+  readonly zRequired = input<boolean | undefined, unknown>(undefined, { transform: optionalBooleanAttribute });
+  readonly zMultiple = input<boolean | undefined, unknown>(undefined, { transform: optionalBooleanAttribute });
+  readonly zDisabled = input<boolean | undefined, unknown>(undefined, { transform: optionalBooleanAttribute });
   readonly zInvalid = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
@@ -883,10 +975,45 @@ export class ZardQuestionnaireItemComponent {
   readonly errorPresent = signal(false);
   readonly descriptionId = computed(() => `${this.uniqueId.id()}-description`);
   readonly errorId = computed(() => `${this.uniqueId.id()}-error`);
-  readonly isDisabled = computed(() => this.zDisabled() || this.questionnaire.disabled());
+  private readonly choices = contentChildren<ZardQuestionnaireChoiceRef>(ZARD_QUESTIONNAIRE_CHOICE, {
+    descendants: true,
+  });
+
+  // View effects of the root can run before the item's own inputs are bound; the item is skipped until then.
+  private readonly name = computed(() => {
+    try {
+      return this.zName();
+    } catch {
+      return undefined;
+    }
+  });
+
+  private readonly definition = computed(() => this.questionnaire.zItems().find(item => item.name === this.name()));
+
+  readonly settings = computed<ZardQuestionnaireItem | null>(() => {
+    const name = this.name();
+    if (name === undefined) {
+      return null;
+    }
+
+    const definition = this.definition();
+    return {
+      name,
+      required: this.zRequired() ?? definition?.required ?? false,
+      multiple: this.zMultiple() ?? definition?.multiple ?? false,
+      disabled: this.zDisabled() ?? definition?.disabled ?? false,
+    };
+  });
+
+  readonly required = computed(() => this.settings()?.required === true);
+  readonly multiple = computed(() => this.settings()?.multiple === true);
+  readonly disabled = computed(() => this.settings()?.disabled === true);
+  // Enabled choices in DOM order; the shortcut badges, aria-keyshortcuts and key handling all index into this.
+  private readonly enabledChoices = computed(() => this.choices().filter(choice => !choice.disabledState()));
+  readonly isDisabled = computed(() => this.disabled() || this.questionnaire.disabled());
   // A disabled questionnaire keeps its active item visible (as a disabled fieldset); only an item that is
   // itself disabled leaves the flow.
-  readonly isActive = computed(() => this.questionnaire.zActive() === this.zName() && !this.zDisabled());
+  readonly isActive = computed(() => this.questionnaire.zActive() === this.zName() && !this.disabled());
   readonly isInvalid = computed(() => this.zInvalid() || this.questionnaire.isInvalid(this.zName()));
   readonly ariaDescribedBy = computed(() => {
     const ids: string[] = [];
@@ -898,6 +1025,27 @@ export class ZardQuestionnaireItemComponent {
     }
     return ids.length > 0 ? ids.join(' ') : null;
   });
+
+  /** The shortcut label of a choice, or null when shortcuts are off or this item is not the active one. */
+  readonly shortcutFor = (choice: ZardQuestionnaireChoiceRef): string | null => {
+    const mode = this.questionnaire.zShortcuts();
+    if (mode === 'none' || !this.isActive()) {
+      return null;
+    }
+
+    const index = this.enabledChoices().indexOf(choice);
+    if (index < 0) {
+      return null;
+    }
+    if (mode === 'letters') {
+      return index < 26 ? String.fromCharCode(97 + index) : null;
+    }
+    return index < 9 ? String(index + 1) : null;
+  };
+
+  choiceAt(index: number): ZardQuestionnaireChoiceRef | undefined {
+    return this.enabledChoices()[index];
+  }
 
   protected readonly classes = computed(() => mergeClasses(questionnaireItemVariants(), this.class()));
 }
@@ -911,20 +1059,15 @@ import {
   computed,
   inject,
   input,
+  type Signal,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideLoaderCircle } from '@ng-icons/lucide';
-import type { ClassValue } from 'clsx';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import {
-  buttonVariants,
-  type ZardButtonShapeVariants,
-  type ZardButtonSizeVariants,
-  type ZardButtonTypeVariants,
-} from '@/shared/components/button/button.variants';
+import { buttonVariants, type ZardButtonTypeVariants } from '@/shared/components/button/button.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardQuestionnaireComponent } from './questionnaire.component';
@@ -942,42 +1085,39 @@ const NAVIGATION_BUTTON_TEMPLATE = `
   <ng-content />
 `;
 
+/**
+ * Shared behavior of the four navigation buttons: the questionnaire decides when the action is available,
+ * the button only adds its own disabled and loading state on top.
+ */
 @Component({
-  selector: 'button[z-questionnaire-previous]',
   imports: [NgIcon],
   template: NAVIGATION_BUTTON_TEMPLATE,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
-    type: 'button',
-    'data-slot': 'questionnaire-previous',
-    '[hidden]': '!questionnaire.canMoveBack()',
-    '[disabled]': 'disabledState()',
+    '[hidden]': '!available()',
+    '[attr.disabled]': 'disabledState() ? "" : null',
     '[attr.aria-disabled]': 'disabledState() ? "true" : null',
     '[attr.aria-busy]': 'zLoading() ? "true" : null',
-    '[attr.data-size]': 'zSize()',
-    '[attr.data-variant]': 'zType()',
-    '[class]': 'classes()',
-    '(click)': 'moveBack()',
+    '(click)': 'handleClick()',
   },
-  exportAs: 'zQuestionnairePrevious',
 })
-export class ZardQuestionnairePreviousDirective extends ZardButtonComponent {
+export abstract class ZardQuestionnaireNavigationButton extends ZardButtonComponent {
   protected readonly questionnaire = inject(ZardQuestionnaireComponent);
 
   override readonly zDisabled = input(false, { alias: 'disabled', transform: booleanAttribute });
-  override readonly zType = input<ZardButtonTypeVariants>('outline');
-  override readonly zSize = input<ZardButtonSizeVariants>('default');
-  override readonly zShape = input<ZardButtonShapeVariants>('default');
-  override readonly zLoading = input(false, { transform: booleanAttribute });
-  override readonly class = input<ClassValue>('');
   // These are always native buttons that own their disabled state. Turning this off keeps the inherited
   // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
-  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
+  // overwrite the `[disabled]` binding above when `disabled` toggles while the action is still unavailable.
   protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
+
+  /** Whether the questionnaire currently offers this action. */
+  protected abstract readonly available: Signal<boolean>;
+  protected abstract readonly slotVariants: () => string;
+
   readonly disabledState = computed(
-    () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canMoveBack(),
+    () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.available(),
   );
 
   protected override readonly classes = computed(() =>
@@ -989,15 +1129,41 @@ export class ZardQuestionnairePreviousDirective extends ZardButtonComponent {
         zLoading: this.zLoading(),
         zDisabled: this.disabledState(),
       }),
-      questionnairePreviousVariants(),
+      this.slotVariants(),
       this.class(),
     ),
   );
 
-  protected moveBack(): void {
+  /** The questionnaire call this button triggers; the submit button leaves it to the native form submit. */
+  protected abstract act(): void;
+
+  protected handleClick(): void {
     if (!this.disabledState()) {
-      this.questionnaire.previous();
+      this.act();
     }
+  }
+}
+
+@Component({
+  selector: 'button[z-questionnaire-previous]',
+  imports: [NgIcon],
+  template: NAVIGATION_BUTTON_TEMPLATE,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideLoaderCircle })],
+  host: {
+    type: 'button',
+    'data-slot': 'questionnaire-previous',
+  },
+  exportAs: 'zQuestionnairePrevious',
+})
+export class ZardQuestionnairePreviousDirective extends ZardQuestionnaireNavigationButton {
+  override readonly zType = input<ZardButtonTypeVariants>('outline');
+  protected readonly available = this.questionnaire.canMoveBack;
+  protected readonly slotVariants = questionnairePreviousVariants;
+
+  protected act(): void {
+    this.questionnaire.previous();
   }
 }
 
@@ -1011,52 +1177,16 @@ export class ZardQuestionnairePreviousDirective extends ZardButtonComponent {
   host: {
     type: 'button',
     'data-slot': 'questionnaire-skip',
-    '[hidden]': '!questionnaire.canSkip()',
-    '[disabled]': 'disabledState()',
-    '[attr.aria-disabled]': 'disabledState() ? "true" : null',
-    '[attr.aria-busy]': 'zLoading() ? "true" : null',
-    '[attr.data-size]': 'zSize()',
-    '[attr.data-variant]': 'zType()',
-    '[class]': 'classes()',
-    '(click)': 'skip()',
   },
   exportAs: 'zQuestionnaireSkip',
 })
-export class ZardQuestionnaireSkipDirective extends ZardButtonComponent {
-  protected readonly questionnaire = inject(ZardQuestionnaireComponent);
-
-  override readonly zDisabled = input(false, { alias: 'disabled', transform: booleanAttribute });
+export class ZardQuestionnaireSkipDirective extends ZardQuestionnaireNavigationButton {
   override readonly zType = input<ZardButtonTypeVariants>('outline');
-  override readonly zSize = input<ZardButtonSizeVariants>('default');
-  override readonly zShape = input<ZardButtonShapeVariants>('default');
-  override readonly zLoading = input(false, { transform: booleanAttribute });
-  override readonly class = input<ClassValue>('');
-  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
-  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
-  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
-  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
-  readonly disabledState = computed(
-    () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canSkip(),
-  );
+  protected readonly available = this.questionnaire.canSkip;
+  protected readonly slotVariants = questionnaireSkipVariants;
 
-  protected override readonly classes = computed(() =>
-    mergeClasses(
-      buttonVariants({
-        zType: this.zType(),
-        zSize: this.zSize(),
-        zShape: this.zShape(),
-        zLoading: this.zLoading(),
-        zDisabled: this.disabledState(),
-      }),
-      questionnaireSkipVariants(),
-      this.class(),
-    ),
-  );
-
-  protected skip(): void {
-    if (!this.disabledState()) {
-      this.questionnaire.skip();
-    }
+  protected act(): void {
+    this.questionnaire.skip();
   }
 }
 
@@ -1070,52 +1200,15 @@ export class ZardQuestionnaireSkipDirective extends ZardButtonComponent {
   host: {
     type: 'button',
     'data-slot': 'questionnaire-next',
-    '[hidden]': '!questionnaire.canMoveNext()',
-    '[disabled]': 'disabledState()',
-    '[attr.aria-disabled]': 'disabledState() ? "true" : null',
-    '[attr.aria-busy]': 'zLoading() ? "true" : null',
-    '[attr.data-size]': 'zSize()',
-    '[attr.data-variant]': 'zType()',
-    '[class]': 'classes()',
-    '(click)': 'moveNext()',
   },
   exportAs: 'zQuestionnaireNext',
 })
-export class ZardQuestionnaireNextDirective extends ZardButtonComponent {
-  protected readonly questionnaire = inject(ZardQuestionnaireComponent);
+export class ZardQuestionnaireNextDirective extends ZardQuestionnaireNavigationButton {
+  protected readonly available = this.questionnaire.canMoveNext;
+  protected readonly slotVariants = questionnaireNextVariants;
 
-  override readonly zDisabled = input(false, { alias: 'disabled', transform: booleanAttribute });
-  override readonly zType = input<ZardButtonTypeVariants>('default');
-  override readonly zSize = input<ZardButtonSizeVariants>('default');
-  override readonly zShape = input<ZardButtonShapeVariants>('default');
-  override readonly zLoading = input(false, { transform: booleanAttribute });
-  override readonly class = input<ClassValue>('');
-  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
-  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
-  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
-  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
-  readonly disabledState = computed(
-    () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canMoveNext(),
-  );
-
-  protected override readonly classes = computed(() =>
-    mergeClasses(
-      buttonVariants({
-        zType: this.zType(),
-        zSize: this.zSize(),
-        zShape: this.zShape(),
-        zLoading: this.zLoading(),
-        zDisabled: this.disabledState(),
-      }),
-      questionnaireNextVariants(),
-      this.class(),
-    ),
-  );
-
-  protected moveNext(): void {
-    if (!this.disabledState()) {
-      this.questionnaire.next();
-    }
+  protected act(): void {
+    this.questionnaire.next();
   }
 }
 
@@ -1129,46 +1222,16 @@ export class ZardQuestionnaireNextDirective extends ZardButtonComponent {
   host: {
     type: 'submit',
     'data-slot': 'questionnaire-submit',
-    '[hidden]': '!questionnaire.canSubmit()',
-    '[disabled]': 'disabledState()',
-    '[attr.aria-disabled]': 'disabledState() ? "true" : null',
-    '[attr.aria-busy]': 'zLoading() ? "true" : null',
-    '[attr.data-size]': 'zSize()',
-    '[attr.data-variant]': 'zType()',
-    '[class]': 'classes()',
   },
   exportAs: 'zQuestionnaireSubmit',
 })
-export class ZardQuestionnaireSubmitDirective extends ZardButtonComponent {
-  protected readonly questionnaire = inject(ZardQuestionnaireComponent);
+export class ZardQuestionnaireSubmitDirective extends ZardQuestionnaireNavigationButton {
+  protected readonly available = this.questionnaire.canSubmit;
+  protected readonly slotVariants = questionnaireSubmitVariants;
 
-  override readonly zDisabled = input(false, { alias: 'disabled', transform: booleanAttribute });
-  override readonly zType = input<ZardButtonTypeVariants>('default');
-  override readonly zSize = input<ZardButtonSizeVariants>('default');
-  override readonly zShape = input<ZardButtonShapeVariants>('default');
-  override readonly zLoading = input(false, { transform: booleanAttribute });
-  override readonly class = input<ClassValue>('');
-  // These are always native buttons that own their disabled state. Turning this off keeps the inherited
-  // ZardButtonComponent host bindings (attr.disabled, aria-disabled, role, tabindex) inert, so they cannot
-  // overwrite the `[disabled]` binding below when `disabled` toggles while the action is still unavailable.
-  protected override readonly isNotInsideOfButtonOrLink = computed(() => false);
-  readonly disabledState = computed(
-    () => this.zDisabled() || this.zLoading() || this.questionnaire.disabled() || !this.questionnaire.canSubmit(),
-  );
-
-  protected override readonly classes = computed(() =>
-    mergeClasses(
-      buttonVariants({
-        zType: this.zType(),
-        zSize: this.zSize(),
-        zShape: this.zShape(),
-        zLoading: this.zLoading(),
-        zDisabled: this.disabledState(),
-      }),
-      questionnaireSubmitVariants(),
-      this.class(),
-    ),
-  );
+  protected act(): void {
+    // The native submit event on the form does the work.
+  }
 }
 ```
 
@@ -1246,6 +1309,7 @@ export class ZardQuestionnaireTitleComponent {
 
 ```angular-ts
 import { ZardQuestionnaireActionsComponent } from './questionnaire-actions.component';
+import { ZardQuestionnaireChoiceDescriptionComponent } from './questionnaire-choice-description.component';
 import { ZardQuestionnaireChoiceComponent } from './questionnaire-choice.component';
 import { ZardQuestionnaireChoicesComponent } from './questionnaire-choices.component';
 import { ZardQuestionnaireDescriptionComponent } from './questionnaire-description.component';
@@ -1265,6 +1329,7 @@ import { ZardQuestionnaireComponent } from './questionnaire.component';
 export const ZardQuestionnaireImports = [
   ZardQuestionnaireComponent,
   ZardQuestionnaireChoiceComponent,
+  ZardQuestionnaireChoiceDescriptionComponent,
   ZardQuestionnaireChoicesComponent,
   ZardQuestionnaireItemComponent,
   ZardQuestionnaireProgressComponent,
@@ -1282,6 +1347,7 @@ export const ZardQuestionnaireImports = [
 export {
   ZardQuestionnaireComponent,
   ZardQuestionnaireChoiceComponent,
+  ZardQuestionnaireChoiceDescriptionComponent,
   ZardQuestionnaireChoicesComponent,
   ZardQuestionnaireItemComponent,
   ZardQuestionnaireProgressComponent,
@@ -1295,6 +1361,28 @@ export {
   ZardQuestionnaireNextDirective,
   ZardQuestionnaireSubmitDirective,
 };
+```
+
+```angular-ts
+import { InjectionToken, type Signal } from '@angular/core';
+
+import type { ZardQuestionnaireItem } from './questionnaire.types';
+
+/** What the questionnaire needs from a projected item; the token keeps item and root free of an import cycle. */
+export interface ZardQuestionnaireItemRef {
+  /** The effective settings (the item's own inputs win over `[zItems]`); null until its name is bound. */
+  readonly settings: Signal<ZardQuestionnaireItem | null>;
+  /** The enabled choice that the shortcut at `index` selects, if any. */
+  choiceAt(index: number): ZardQuestionnaireChoiceRef | undefined;
+}
+
+export interface ZardQuestionnaireChoiceRef {
+  readonly disabledState: Signal<boolean>;
+  select(): void;
+}
+
+export const ZARD_QUESTIONNAIRE_ITEM = new InjectionToken<ZardQuestionnaireItemRef>('ZARD_QUESTIONNAIRE_ITEM');
+export const ZARD_QUESTIONNAIRE_CHOICE = new InjectionToken<ZardQuestionnaireChoiceRef>('ZARD_QUESTIONNAIRE_CHOICE');
 ```
 
 ```angular-ts
@@ -2689,9 +2777,9 @@ A multi-step questionnaire with single-choice, multiple-choice, freeform, and sk
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zItems]` | Item definitions that control order, name, required, multiple, and disabled state | `readonly ZardQuestionnaireItem[]` | `[]` |
+| `[zItems]` | Optional item settings by name (required, multiple, disabled). They apply only where the matching z-questionnaire-item does not set the same input; the projected items define the order. Without projected items, this list defines the flow | `readonly ZardQuestionnaireItem[]` | `[]` |
 | `zActive` | Active item name; supports two-way binding with [(zActive)] | `string \| undefined` | `undefined` |
-| `zShortcuts` | Assigns answer shortcuts in item order | `'none' \| 'letters' \| 'numbers'` | `'none'` |
+| `zShortcuts` | Assigns answer shortcuts to the enabled choices of the active item. Only the focused questionnaire reacts; with nothing focused, the last one interacted with does | `'none' \| 'letters' \| 'numbers'` | `'none'` |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
 | `(zSubmit)` | Emits the answers once every enabled item validates | `EventEmitter<Record<string, string \| string[]>>` | `-` |
 
@@ -2710,9 +2798,9 @@ One questionnaire step rendered as a fieldset.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `zName` | Unique item name used for navigation and the submitted answer key | `string` | `required` |
-| `zRequired` | Requires an answer before navigation or submission can continue | `boolean` | `false` |
-| `zMultiple` | Allows multiple fixed answers and submits a string array | `boolean` | `false` |
-| `zDisabled` | Disables the item and excludes it from progress, navigation, validation, and submission | `boolean` | `false` |
+| `zRequired` | Requires an answer before navigation or submission can continue. Wins over the item in [zItems]; when unset, [zItems] decides | `boolean` | `false` |
+| `zMultiple` | Allows multiple fixed answers and submits a string array. Wins over the item in [zItems]; when unset, [zItems] decides | `boolean` | `false` |
+| `zDisabled` | Disables the item and excludes it from progress, navigation, validation, and submission. Wins over the item in [zItems]; when unset, [zItems] decides | `boolean` | `false` |
 | `zInvalid` | Marks the item invalid from consumer-owned validation | `boolean` | `false` |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
 
@@ -2749,6 +2837,14 @@ One fixed answer rendered as a label with a native radio or checkbox and an opti
 | `zValue` | Value submitted when the choice is selected | `string` | `required` |
 | `checked` | Initial checked state, including the state restored by a native form reset | `boolean` | `false` |
 | `zDisabled` | Disables this choice | `boolean` | `false` |
+| `class` | Custom CSS classes | `ClassValue` | `''` |
+
+### z-questionnaire-choice-description
+
+Secondary text under a choice label, rendered in muted color.
+
+| Prop | Description | Type | Default |
+| --- | --- | --- | --- |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-questionnaire-input
