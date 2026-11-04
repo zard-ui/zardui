@@ -58,6 +58,7 @@ Here you can find all the components available in the library. We are working on
 - [Table](/docs/components/table)
 - [Tabs](/docs/components/tabs)
 - [Textarea](/docs/components/textarea)
+- [Toast](/docs/components/toast)
 - [Toggle](/docs/components/toggle)
 - [Toggle Group](/docs/components/toggle-group)
 - [Tooltip](/docs/components/tooltip)
