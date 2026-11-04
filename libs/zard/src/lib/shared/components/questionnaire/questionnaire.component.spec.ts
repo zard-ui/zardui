@@ -1657,3 +1657,32 @@ describe('ZardQuestionnaireComponent shortcut scope and stability', () => {
     expect(getChoiceInput(fixture, 'first', 'b').checked).toBe(true);
   });
 });
+
+@Component({
+  imports: [ZardQuestionnaireComponent, ZardQuestionnaireItemComponent, ZardQuestionnaireProgressComponent],
+  template: `
+    <z-questionnaire [zItems]="items">
+      <z-questionnaire-progress data-testid="default-progress" />
+      <z-questionnaire-progress data-testid="named-progress" aria-label="Onboarding progress" />
+      <z-questionnaire-item zName="first">First</z-questionnaire-item>
+    </z-questionnaire>
+  `,
+  changeDetection: ChangeDetectionStrategy.Eager,
+})
+class QuestionnaireProgressNameHostComponent {
+  readonly items: ZardQuestionnaireItem[] = [{ name: 'first' }];
+}
+
+describe('ZardQuestionnaireProgressComponent accessible name', () => {
+  it('should name the progressbar by default and keep a consumer aria-label', async () => {
+    await TestBed.configureTestingModule({ imports: [QuestionnaireProgressNameHostComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(QuestionnaireProgressNameHostComponent);
+    fixture.detectChanges();
+
+    const progress = (testId: string): HTMLElement =>
+      fixture.nativeElement.querySelector(`[data-testid="${testId}"]`) as HTMLElement;
+
+    expect(progress('default-progress').getAttribute('aria-label')).toBe('Questionnaire progress');
+    expect(progress('named-progress').getAttribute('aria-label')).toBe('Onboarding progress');
+  });
+});
