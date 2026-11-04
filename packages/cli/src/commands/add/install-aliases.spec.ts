@@ -10,6 +10,13 @@ describe('resolveInstallAliases', () => {
     });
   });
 
+  it('should install typeset when asked for typography', () => {
+    expect(resolveInstallAliases(['typography'], new Set([...REGISTRY, 'typeset']))).toEqual({
+      names: ['typeset'],
+      replaced: [['typography', 'typeset']],
+    });
+  });
+
   it('should leave real registry names and unknown names alone', () => {
     expect(resolveInstallAliases(['button', 'nope'], REGISTRY)).toEqual({ names: ['button', 'nope'], replaced: [] });
   });

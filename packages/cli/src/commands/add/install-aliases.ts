@@ -12,6 +12,11 @@ export const INSTALL_ALIASES: Readonly<Record<string, string>> = {
    * deprecated it in favour of Sonner, so `add toast` installs `sonner`.
    */
   toast: 'sonner',
+  /**
+   * Typography is the components-list entry for Typeset, as in shadcn/ui: it opens
+   * the Typeset docs, so `add typography` installs the `typeset` stylesheet.
+   */
+  typography: 'typeset',
 };
 
 export interface ResolvedAliases {

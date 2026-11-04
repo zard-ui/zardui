@@ -78,6 +78,7 @@
 /docs/components/toggle
 /docs/components/toggle-group
 /docs/components/tooltip
+/docs/typeset
 /docs/components/navigation-menu
 /docs/components/resizable
 /docs/components/sheet
