@@ -144,28 +144,27 @@ function section(heading: string, body: string): string {
 export function serializeComponentToMarkdown(data: ComponentData): string {
   const title = titleCase(data.componentName);
 
+  const browserLink = `---\n\n[Open in browser](${BASE_URL}/docs/components/${data.componentName})`;
+
+  if (data.deprecatedFor) {
+    const replacement = `[${data.deprecatedFor}](${BASE_URL}/docs/components/${data.deprecatedFor})`;
+    const notice = `The ${data.componentName} component has been deprecated. Use the ${replacement} component instead.`;
+    return `${[frontmatter(title, data.description), `# ${title}\n\n${data.description}`, notice, browserLink].join('\n\n')}\n`;
+  }
+
   const blocks: string[] = [
     frontmatter(title, data.description),
     `# ${title}\n\n${data.description}`,
-    data.notice ? `> ${data.notice}` : '',
-    serializeLinks(data),
     data.about?.description ? section('About', serializeAbout(data)) : '',
     section('Installation', serializeInstallation(data)),
     section('Usage', serializeUsage(data)),
     section('Composition', codeBlock(data.composition)),
     section('Examples', serializeExamples(data.examples)),
     section('API Reference', serializeApi(data.api)),
-    `---\n\n[Open in browser](${BASE_URL}/docs/components/${data.componentName})`,
+    browserLink,
   ];
 
   return `${blocks.filter(Boolean).join('\n\n')}\n`;
-}
-
-function serializeLinks(data: ComponentData): string {
-  if (!data.links?.length) return '';
-  return data.links
-    .map(link => `- [${link.label}](${link.href.startsWith('/') ? BASE_URL + link.href : link.href})`)
-    .join('\n');
 }
 
 function serializeAbout(data: ComponentData): string {

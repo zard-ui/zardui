@@ -71,24 +71,16 @@ describe('serializeComponentToMarkdown', () => {
     expect(md).toContain("| `zRange` | Enables range \\| selection | `'a' \\| 'b'` | `false` |");
   });
 
-  it('lists related pages with absolute URLs for internal links', () => {
-    const md = serializeComponentToMarkdown({
-      ...DATA,
-      links: [
-        { label: 'Typeset guide', href: '/docs/typeset' },
-        { label: 'Elsewhere', href: 'https://example.com/a' },
-      ],
-    });
+  it('reduces a deprecated page to the notice that points at its replacement', () => {
+    const md = serializeComponentToMarkdown({ ...DATA, deprecatedFor: 'sonner' });
 
-    expect(md).toContain('- [Typeset guide](https://zardui.com/docs/typeset)\n- [Elsewhere](https://example.com/a)');
-    expect(serializeComponentToMarkdown(DATA)).not.toContain('Typeset guide');
-  });
-
-  it('quotes the notice of a page right under its description', () => {
-    const md = serializeComponentToMarkdown({ ...DATA, notice: 'Use the sonner component instead.' });
-
-    expect(md).toContain(`${DATA.description}\n\n> Use the sonner component instead.`);
-    expect(serializeComponentToMarkdown(DATA)).not.toContain('> ');
+    expect(md).toContain(
+      `${DATA.description}\n\nThe date-picker component has been deprecated. ` +
+        'Use the [sonner](https://zardui.com/docs/components/sonner) component instead.',
+    );
+    expect(md).not.toContain('## Installation');
+    expect(md).not.toContain('## Examples');
+    expect(serializeComponentToMarkdown(DATA)).not.toContain('has been deprecated');
   });
 
   it('omits sections that have no data', () => {

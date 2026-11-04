@@ -11,27 +11,25 @@ test.describe('Toast', () => {
     await demoPage.goto();
   });
 
-  test('renders the page with the deprecation notice', async () => {
-    await expect(demoPage.page.getByRole('heading', { level: 1, name: 'Toast' })).toBeVisible();
+  test('only says the component is deprecated', async ({ page }) => {
+    await expect(page.getByRole('heading', { level: 1, name: 'Toast' })).toBeVisible();
+    await expect(page.locator('[data-slot="deprecation-notice"]')).toHaveText(
+      'The toast component has been deprecated. Use the sonner component instead.',
+    );
 
-    const notice = demoPage.firstDemoBox.locator('z-alert');
-    await expect(notice).toBeVisible();
-    await expect(notice).toContainText('The toast component has been deprecated.');
-    await expect(notice).toContainText('Use the sonner component instead.');
-    await expect(demoPage.installationSection).toBeVisible();
+    for (const id of ['installation', 'usage', 'examples', 'api']) {
+      await expect(page.locator(`#${id}`)).toHaveCount(0);
+    }
+    await expect(page.locator('z-code-box')).toHaveCount(0);
   });
 
-  test('links to the Sonner page from the notice and from the related pages', async ({ page }) => {
-    const related = demoPage.overviewSection.getByRole('navigation', { name: 'Related pages' });
-    await expect(related.getByRole('link', { name: 'Sonner' })).toHaveAttribute('href', '/docs/components/sonner');
+  test('links to the Sonner page', async ({ page }) => {
+    const link = page.locator('[data-slot="deprecation-notice"]').getByRole('link', { name: 'sonner' });
+    await expect(link).toHaveAttribute('href', '/docs/components/sonner');
 
-    await demoPage.firstDemoBox.locator('z-alert').getByRole('link', { name: 'sonner' }).click();
+    await link.click();
     await expect(page).toHaveURL(/\/docs\/components\/sonner$/);
     await expect(page.getByRole('heading', { level: 1, name: 'Sonner' })).toBeVisible();
-  });
-
-  test('installs sonner', async () => {
-    await expect(demoPage.installationSection.locator('#cli-panel')).toContainText('zard-cli@latest add sonner');
   });
 
   test('is listed in the components sidebar and the components list', async ({ page }) => {
@@ -41,20 +39,12 @@ test.describe('Toast', () => {
     await expect(page.locator('z-content').getByRole('link', { name: 'Toast', exact: true })).toBeVisible();
   });
 
-  test('its demo opens a toast', async ({ page }) => {
-    const trigger = demoPage.getDemoByName('show').locator('button[z-button]');
-    await trigger.click();
-
-    await expect(page.locator('[data-sonner-toast]').first()).toBeVisible({ timeout: 5000 });
-  });
-
   for (const dark of [false, true]) {
     test(`has no accessibility violations, dark=${dark}`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light' });
       await page.evaluate(isDark => document.documentElement.classList.toggle('dark', isDark), dark);
 
-      await checkA11y(page, '[data-slot="preview"]');
-      await checkA11y(page, '#overview, #examples', ['color-contrast']);
+      await checkA11y(page, '#overview');
     });
   }
 });

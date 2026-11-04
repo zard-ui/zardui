@@ -135,22 +135,24 @@ export class ComponentPage implements OnInit {
       type: 'custom' as const,
     }));
 
-    this.navigationConfig = {
-      items: [
-        { id: 'overview', label: 'Overview', type: 'core' },
-        ...(component.about ? [{ id: 'about', label: 'About', type: 'core' as const }] : []),
-        { id: 'installation', label: 'Installation', type: 'core' },
-        { id: 'usage', label: 'Usage', type: 'core' },
-        ...(component.composition ? [{ id: 'composition', label: 'Composition', type: 'core' as const }] : []),
-        {
-          id: 'examples',
-          label: 'Examples',
-          type: 'core',
-          children: exampleNavigationItems,
-        },
-        { id: 'api', label: 'API', type: 'core' },
-      ],
-    };
+    this.navigationConfig = component.deprecatedFor
+      ? { items: [] }
+      : {
+          items: [
+            { id: 'overview', label: 'Overview', type: 'core' },
+            ...(component.about ? [{ id: 'about', label: 'About', type: 'core' as const }] : []),
+            { id: 'installation', label: 'Installation', type: 'core' },
+            { id: 'usage', label: 'Usage', type: 'core' },
+            ...(component.composition ? [{ id: 'composition', label: 'Composition', type: 'core' as const }] : []),
+            {
+              id: 'examples',
+              label: 'Examples',
+              type: 'core',
+              children: exampleNavigationItems,
+            },
+            { id: 'api', label: 'API', type: 'core' },
+          ],
+        };
 
     this.installGuide.set(installGuide);
     this.componentData.set(component);

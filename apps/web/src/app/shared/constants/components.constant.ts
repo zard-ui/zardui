@@ -26,17 +26,13 @@ export interface ComponentData {
   installData?: ComponentInstallData;
   usage?: ComponentUsageData;
   composition?: CodeBlockData;
-  /** A notice about the page itself, such as a deprecation. Shown by the page's preview and in its markdown. */
-  notice?: string;
-  /** Related pages shown under the description (guide, builder…). Internal links start with `/`. */
-  links?: PageLink[];
+  /**
+   * Name of the component that replaces this one. The page then only says the component is deprecated and links
+   * to the replacement — no preview, installation, examples or API (e.g. Toast → Sonner, as in shadcn/ui).
+   */
+  deprecatedFor?: string;
   fullWidth?: boolean;
   api?: ApiSection[];
-}
-
-export interface PageLink {
-  label: string;
-  href: string;
 }
 
 /** A standalone code block with an optional heading/description, shown around (or instead of) a demo. */
