@@ -313,6 +313,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/resizable/demo/resizable').then(m => m.RESIZABLE),
   },
   {
+    componentName: 'native-select',
+    description: 'A styled native HTML select element with consistent design system integration.',
+    category: 'Form & Input',
+    loadData: () => import('@zard/components/native-select/demo/native-select').then(m => m.NATIVE_SELECT),
+  },
+  {
     componentName: 'select',
     description: 'Displays a list of options for the user to pick from — triggered by a button.',
     category: 'Form & Input',

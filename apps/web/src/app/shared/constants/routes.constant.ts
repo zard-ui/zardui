@@ -153,6 +153,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Context Menu', path: '/docs/components/context-menu', available: true },
     { name: 'Message', path: '/docs/components/message', available: true },
     { name: 'Marker', path: '/docs/components/marker', available: true },
+    { name: 'Native Select', path: '/docs/components/native-select', available: true },
     { name: 'Aspect Ratio', path: '/docs/components/aspect-ratio', available: true },
     { name: 'Attachment', path: '/docs/components/attachment', available: true },
     { name: 'Questionnaire', path: '/docs/components/questionnaire', available: true },

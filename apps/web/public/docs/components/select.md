@@ -1914,7 +1914,7 @@ export class ZardDemoSelectRtlComponent {
 
 ### z-select
 
-A customizable select component that supports single and multiple value selection.
+A customizable select component that supports single and multiple value selection. Need the native OS picker, built-in keyboard and form behavior, or zero overlay? Use `select[z-native-select]` (Native Select) instead.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

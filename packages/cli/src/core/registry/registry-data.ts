@@ -675,6 +675,23 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'native-select',
+    files: [
+      {
+        name: 'native-select.directive.ts',
+        content: '',
+      },
+      {
+        name: 'native-select.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'textarea',
     registryDependencies: ['input-group'],
     files: [

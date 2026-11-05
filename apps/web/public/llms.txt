@@ -52,6 +52,7 @@
 - [Input](https://zardui.com/docs/components/input): Displays a form input field or a component that looks like an input field.
 - [Input Group](https://zardui.com/docs/components/input-group): Groups input elements together with addons.
 - [Input OTP](https://zardui.com/docs/components/input-otp): Accessible one-time password component with copy-paste functionality.
+- [Native Select](https://zardui.com/docs/components/native-select): A styled native HTML select element with consistent design system integration.
 - [Questionnaire](https://zardui.com/docs/components/questionnaire): A multi-step questionnaire with single-choice, multiple-choice, freeform, and skippable questions.
 - [Radio Group](https://zardui.com/docs/components/radio-group): A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked at a time.
 - [Select](https://zardui.com/docs/components/select): Displays a list of options for the user to pick from — triggered by a button.
