@@ -146,6 +146,18 @@ describe('ZardCalendarNavigationComponent', () => {
     expect(screen.getByRole('button', { name: /next month/i })).toBeDisabled();
   });
 
+  it('keeps the previous arrow enabled when minDate falls on the last day of the previous month', async () => {
+    await renderNavigation({ currentMonth: '1', minDate: new Date(2024, 0, 31, 14, 30) });
+
+    expect(screen.getByRole('button', { name: /previous month/i })).toBeEnabled();
+  });
+
+  it('disables the previous arrow when minDate is inside the current month', async () => {
+    await renderNavigation({ currentMonth: '1', minDate: new Date(2024, 1, 1, 14, 30) });
+
+    expect(screen.getByRole('button', { name: /previous month/i })).toBeDisabled();
+  });
+
   it('replaces a hidden arrow with a spacer so the caption stays centered', async () => {
     const { container } = await renderNavigation({ zShowPreviousButton: false });
 

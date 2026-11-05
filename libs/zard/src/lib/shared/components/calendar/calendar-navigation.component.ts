@@ -219,9 +219,9 @@ export class ZardCalendarNavigationComponent {
 
     const currentMonth = Number.parseInt(this.currentMonth());
     const currentYear = Number.parseInt(this.currentYear());
-    const lastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0);
+    const firstDayOfCurrentMonth = new Date(currentYear, currentMonth, 1);
 
-    return lastDayOfPreviousMonth.getTime() < minDate.getTime();
+    return minDate.getTime() >= firstDayOfCurrentMonth.getTime();
   });
 
   protected readonly isNextDisabled = computed(() => {

@@ -52,7 +52,8 @@ export function isSameDay(date1: Date, date2: Date): boolean {
 
 /**
  * Checks if a date is disabled based on min/max constraints and on the
- * individually disabled days
+ * individually disabled days. The bounds are compared by day, so a minDate
+ * with a time of day (e.g. `new Date()`) still leaves that day selectable.
  */
 export function isDateDisabled(
   date: Date,
@@ -60,11 +61,16 @@ export function isDateDisabled(
   maxDate: Date | null,
   disabledDates?: Date[],
 ): boolean {
-  if ((minDate && date < minDate) || (maxDate && date > maxDate)) {
+  const day = startOfDay(date);
+  if ((minDate && day < startOfDay(minDate)) || (maxDate && day > startOfDay(maxDate))) {
     return true;
   }
 
   return !!disabledDates?.some(disabledDate => isSameDay(date, disabledDate));
+}
+
+function startOfDay(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 /**

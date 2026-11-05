@@ -45,6 +45,35 @@ describe('Calendar Utilities', () => {
     });
   });
 
+  describe('generateCalendarDays with minDate and maxDate', () => {
+    const baseConfig: CalendarDayConfig = {
+      year: 2024,
+      month: 9,
+      mode: 'single',
+      selectedDates: [],
+      minDate: null,
+      maxDate: null,
+      disabled: false,
+    };
+
+    const findDay = (days: CalendarDay[], date: number) =>
+      days.find(day => day.isCurrentMonth && day.date.getDate() === date);
+
+    it('keeps the minDate day enabled when minDate carries a time of day', () => {
+      const days = generateCalendarDays({ ...baseConfig, minDate: new Date(2024, 9, 15, 14, 30) });
+
+      expect(findDay(days, 14)?.isDisabled).toBe(true);
+      expect(findDay(days, 15)?.isDisabled).toBe(false);
+    });
+
+    it('keeps the maxDate day enabled when maxDate carries a time of day', () => {
+      const days = generateCalendarDays({ ...baseConfig, maxDate: new Date(2024, 9, 15, 14, 30) });
+
+      expect(findDay(days, 15)?.isDisabled).toBe(false);
+      expect(findDay(days, 16)?.isDisabled).toBe(true);
+    });
+  });
+
   describe('getDayAriaLabel with localization and custom labels', () => {
     const mockDay: CalendarDay = {
       date: new Date(2024, 7, 15),
