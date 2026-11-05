@@ -70,7 +70,9 @@ export function isDateDisabled(
 }
 
 function startOfDay(date: Date): Date {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const day = new Date(date);
+  day.setHours(0, 0, 0, 0);
+  return day;
 }
 
 /**

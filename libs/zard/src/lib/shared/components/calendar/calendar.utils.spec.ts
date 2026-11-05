@@ -1,5 +1,5 @@
 import type { CalendarDay, CalendarDayConfig } from './calendar.types';
-import { generateCalendarDays, getDayAriaLabel } from './calendar.utils';
+import { generateCalendarDays, getDayAriaLabel, isDateDisabled } from './calendar.utils';
 
 describe('Calendar Utilities', () => {
   describe('generateCalendarDays with weekStartsOn', () => {
@@ -71,6 +71,15 @@ describe('Calendar Utilities', () => {
 
       expect(findDay(days, 15)?.isDisabled).toBe(false);
       expect(findDay(days, 16)?.isDisabled).toBe(true);
+    });
+
+    it('compares bounds by day for years below 100', () => {
+      const maxDate = new Date(2024, 0, 1);
+      maxDate.setFullYear(99);
+      const candidate = new Date(2024, 0, 1);
+      candidate.setFullYear(1900);
+
+      expect(isDateDisabled(candidate, null, maxDate)).toBe(true);
     });
   });
 
