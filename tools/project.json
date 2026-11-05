@@ -2,5 +2,14 @@
   "name": "@zardui/generators",
   "root": "tools",
   "sourceRoot": "tools",
-  "projectType": "library"
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "tools/jest.config.ts"
+      }
+    }
+  }
 }

@@ -296,6 +296,108 @@ describe('ZardToggleGroupComponent', () => {
     expect(component.valueChange.emit).toHaveBeenCalledWith('');
   });
 
+  it('should follow zValue changes after an item was clicked in single mode', () => {
+    fixture.componentRef.setInput('zItems', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'single');
+    fixture.componentRef.setInput('zValue', 'bold');
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button');
+    buttons[1].click();
+    fixture.detectChanges();
+
+    expect(buttons[1].getAttribute('aria-pressed')).toBe('true');
+
+    fixture.componentRef.setInput('zValue', 'underline');
+    fixture.detectChanges();
+
+    expect(buttons[0].getAttribute('aria-pressed')).toBe('false');
+    expect(buttons[1].getAttribute('aria-pressed')).toBe('false');
+    expect(buttons[2].getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('should follow zValue changes after an item was clicked in multiple mode', () => {
+    fixture.componentRef.setInput('zItems', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'multiple');
+    fixture.componentRef.setInput('zValue', ['bold']);
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button');
+    buttons[1].click();
+    fixture.detectChanges();
+
+    fixture.componentRef.setInput('zValue', []);
+    fixture.detectChanges();
+
+    jest.spyOn(component.valueChange, 'emit');
+    buttons[2].click();
+
+    expect(component.valueChange.emit).toHaveBeenCalledWith(['underline']);
+  });
+
+  it('should follow zValue changes after writeValue', () => {
+    fixture.componentRef.setInput('zItems', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'single');
+    fixture.componentRef.setInput('zValue', 'bold');
+    fixture.detectChanges();
+
+    component.writeValue('italic');
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button');
+    expect(buttons[1].getAttribute('aria-pressed')).toBe('true');
+
+    fixture.componentRef.setInput('zValue', 'underline');
+    fixture.detectChanges();
+
+    expect(buttons[1].getAttribute('aria-pressed')).toBe('false');
+    expect(buttons[2].getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('should fall back to zDefaultValue when zValue is cleared after writeValue', () => {
+    fixture.componentRef.setInput('zItems', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'single');
+    fixture.componentRef.setInput('zDefaultValue', 'bold');
+    fixture.componentRef.setInput('zValue', 'italic');
+    fixture.detectChanges();
+
+    component.writeValue('underline');
+    fixture.detectChanges();
+
+    fixture.componentRef.setInput('zValue', undefined);
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button');
+    expect(buttons[0].getAttribute('aria-pressed')).toBe('true');
+    expect(buttons[1].getAttribute('aria-pressed')).toBe('false');
+    expect(buttons[2].getAttribute('aria-pressed')).toBe('false');
+
+    jest.spyOn(component.valueChange, 'emit');
+    buttons[0].click();
+
+    expect(component.valueChange.emit).toHaveBeenCalledWith('');
+  });
+
+  it('should toggle from the value set by writeValue when zValue does not change', () => {
+    fixture.componentRef.setInput('zItems', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'multiple');
+    fixture.componentRef.setInput('zValue', []);
+    fixture.detectChanges();
+
+    component.writeValue(['bold']);
+    fixture.detectChanges();
+
+    jest.spyOn(component.valueChange, 'emit');
+
+    const buttons = fixture.nativeElement.querySelectorAll('button');
+    buttons[1].click();
+    fixture.detectChanges();
+    buttons[0].click();
+
+    expect(component.valueChange.emit).toHaveBeenNthCalledWith(1, ['bold', 'italic']);
+    expect(component.valueChange.emit).toHaveBeenNthCalledWith(2, ['italic']);
+  });
+
   it('should toggle off in multiple mode when clicking an active item', () => {
     fixture.componentRef.setInput('zItems', mockToggleItems);
     fixture.componentRef.setInput('zMode', 'multiple');

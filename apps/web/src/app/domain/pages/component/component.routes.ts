@@ -11,6 +11,11 @@ export const COMPONENTS_ROUTES: Routes = [
     redirectTo: 'sidebar',
   },
   {
+    path: 'typography',
+    pathMatch: 'full',
+    redirectTo: '/docs/typeset',
+  },
+  {
     path: ':componentName',
     loadComponent: () => import('./component.page').then(m => m.ComponentPage),
   },

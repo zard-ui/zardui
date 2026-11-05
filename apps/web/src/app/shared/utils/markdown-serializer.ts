@@ -128,7 +128,14 @@ function serializeInstallation(data: ComponentData): string {
 }
 
 function serializeUsage(data: ComponentData): string {
-  return [codeBlock(data.usage?.importBlock), codeBlock(data.usage?.codeBlock)].filter(Boolean).join('\n\n');
+  return [
+    codeBlock(data.usage?.importBlock),
+    codeBlock(data.usage?.codeBlock),
+    data.usage?.description,
+    ...(data.usage?.additionalBlocks ?? []).map(codeBlock),
+  ]
+    .filter(Boolean)
+    .join('\n\n');
 }
 
 /** Wraps a heading + body only when the body is non-empty, so we never emit empty sections. */
@@ -144,6 +151,14 @@ function section(heading: string, body: string): string {
 export function serializeComponentToMarkdown(data: ComponentData): string {
   const title = titleCase(data.componentName);
 
+  const browserLink = `---\n\n[Open in browser](${BASE_URL}/docs/components/${data.componentName})`;
+
+  if (data.deprecatedFor) {
+    const replacement = `[${data.deprecatedFor}](${BASE_URL}/docs/components/${data.deprecatedFor})`;
+    const notice = `The ${data.componentName} component has been deprecated. Use the ${replacement} component instead.`;
+    return `${[frontmatter(title, data.description), `# ${title}\n\n${data.description}`, notice, browserLink].join('\n\n')}\n`;
+  }
+
   const blocks: string[] = [
     frontmatter(title, data.description),
     `# ${title}\n\n${data.description}`,
@@ -152,8 +167,9 @@ export function serializeComponentToMarkdown(data: ComponentData): string {
     section('Usage', serializeUsage(data)),
     section('Composition', codeBlock(data.composition)),
     section('Examples', serializeExamples(data.examples)),
+    section('Accessibility', data.accessibility?.join('\n\n') ?? ''),
     section('API Reference', serializeApi(data.api)),
-    `---\n\n[Open in browser](${BASE_URL}/docs/components/${data.componentName})`,
+    browserLink,
   ];
 
   return `${blocks.filter(Boolean).join('\n\n')}\n`;
