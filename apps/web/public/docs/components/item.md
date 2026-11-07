@@ -953,46 +953,46 @@ export class ZardDemoItemRtlComponent {
 
 ### z-item
 
-Container for an entry composed of media, content, and actions.
+An entry made of media, content and actions.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zVariant]` | Visual style of the item. | `default \| outline \| muted` | `default` |
-| `[zSize]` | Padding and density. | `default \| sm \| xs` | `default` |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[zVariant]` | Visual variant | `default \| outline \| muted` | `default` |
+| `[zSize]` | Padding and density | `default \| sm \| xs` | `default` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-item-group
 
-Wrapper around multiple items with consistent spacing.
+Groups items with consistent spacing.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-item-separator
 
-Horizontal separator rendered between items in a group.
+Separator between items in a group.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-item-media
 
-Slot for an icon, image, or custom media at the leading edge of the item.
+Leading icon, image or media.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zVariant]` | Media presentation. | `default \| icon \| image` | `default` |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[zVariant]` | Media presentation | `default \| icon \| image` | `default` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-item-content
 
-Main text/content area; usually wraps title and description.
+Main content; wraps title and description.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-item-title
 
@@ -1000,7 +1000,7 @@ Primary heading for the item.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-item-description
 
@@ -1008,7 +1008,7 @@ Supporting copy below the title.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-item-actions
 
@@ -1016,23 +1016,23 @@ Container for trailing buttons or controls.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-item-header
 
-Optional header row rendered at the top of the item.
+Header row at the top of the item.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-item-footer
 
-Optional footer row rendered at the bottom of the item.
+Footer row at the bottom of the item.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ---
 

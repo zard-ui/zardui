@@ -922,59 +922,59 @@ export class ZardDemoAttachmentRtlComponent {
 
 ### z-attachment
 
-File or image container. Consumer projection owns labels, URLs, progress and transport.
+File or image container; you project labels, links and progress.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zState]` | Upload state | `idle \| uploading \| processing \| error \| done` | `done` |
 | `[zSize]` | Density | `default \| sm \| xs` | `default` |
 | `[zOrientation]` | Layout | `horizontal \| vertical` | `horizontal` |
-| `[class]` | Override or extend default classes. | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-attachment-media
 
-Projected icon or image. Give images meaningful alt text.
+Icon or image; give images alt text.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zVariant]` | Media presentation | `icon \| image` | `icon` |
-| `[class]` | Override or extend default classes. | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-attachment-content
 
-Projected text container.
+Text container.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-attachment-title
 
-Title; shimmers only while the nearest attachment is busy.
+Title; shimmers while the attachment is busy.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-attachment-description
 
-Projected progress or error description; use an aria-live region when appropriate.
+Progress or error text.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-attachment-actions
 
-Independent controls above the full-card trigger.
+Controls layered above the card trigger.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### button[z-attachment-action]
 
-Also a[z-attachment-action]. Native actions inherit the complete z-button API and loading observer lifecycle. Native href, target and download remain consumer attributes.
+Action button with the full `z-button` API.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -984,26 +984,26 @@ Also a[z-attachment-action]. Native actions inherit the complete z-button API an
 | `[zLoading]` | Loading indicator | `boolean` | `false` |
 | `[zDisabled]` | Disabled state | `boolean` | `false` |
 | `[disabled]` | Native disabled state | `boolean` | `false` |
-| `[type]` | Native button type (ignored on anchors) | `button \| submit \| reset` | `button` |
-| `[tabindex]` | Consumer tab order; disabled links use -1 | `string \| number \| null` | `null` |
-| `[class]` | Override or extend default classes. | `ClassValue` | `''` |
+| `[type]` | Native button type; ignored on anchors | `button \| submit \| reset` | `button` |
+| `[tabindex]` | Tab order; disabled links use -1 | `string \| number \| null` | `null` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### button[z-attachment-trigger]
 
-Also a[z-attachment-trigger]. Project a named native overlay button or link alongside actions, never around them.
+Full-card button or link; place it beside actions, not around them.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[type]` | Native button type (ignored on anchors) | `button \| submit \| reset` | `button` |
-| `[class]` | Override or extend default classes. | `ClassValue` | `''` |
+| `[type]` | Native button type; ignored on anchors | `button \| submit \| reset` | `button` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-attachment-group
 
-Horizontal snapping group. Provide aria-label or aria-labelledby. Host arrow keys scroll one current viewport; descendant controls keep their keys. ArrowLeft and ArrowRight scroll toward the visual left and right in both directions, and the group starts at the right edge in RTL.
+Horizontal snapping group; give it an `aria-label`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

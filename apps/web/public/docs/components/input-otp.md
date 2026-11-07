@@ -1416,44 +1416,44 @@ export class ZardDemoInputOtpRtlComponent {
 
 ### z-input-otp
 
-In RTL (CDK `Directionality`) the slots run right to left: typing advances focus to the left, ArrowLeft moves to the next slot and ArrowRight to the previous one, and the group rounds and borders its inline-start/end slots.
+One-time code input; slots and arrow keys follow the text direction.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zMaxLength]` | Maximum number of characters. Falls back to the projected slot count, or 6 when there are none | `number` | `undefined` |
-| `[zPattern]` | Per-character regex pattern used to validate typed and pasted input. Ready-made patterns — REGEXP_ONLY_DIGITS, REGEXP_ONLY_CHARS, REGEXP_ONLY_DIGITS_AND_CHARS — are exported from `input-otp.utils`, mirroring the `input-otp` library's constants of the same name | `string` | `'[0-9]'` |
+| `[zMaxLength]` | Max characters; falls back to the slot count, or 6 | `number` | `undefined` |
+| `[zPattern]` | Per-character regex; presets in `input-otp.utils` | `string` | `'[0-9]'` |
 | `[zReadonly]` | Makes every slot readonly | `boolean` | `false` |
-| `[zIntegerOnly]` | Sets inputmode to numeric and restricts keyboard input to digits | `boolean` | `true` |
-| `[zInvalid]` | Marks every slot as invalid; cascades to projected slots | `boolean` | `false` |
-| `[zSize]` | Size variant; cascades to projected slots and separators | `'sm' \| 'default' \| 'lg'` | `'default'` |
-| `(zValueChange)` | Emitted whenever the value changes | `EventEmitter<string>` | `-` |
+| `[zIntegerOnly]` | Numeric keyboard, digits only | `boolean` | `true` |
+| `[zInvalid]` | Marks every slot as invalid | `boolean` | `false` |
+| `[zSize]` | Size of the slots and separators | `'sm' \| 'default' \| 'lg'` | `'default'` |
+| `(zValueChange)` | Emitted when the value changes | `EventEmitter<string>` | `-` |
 | `(zComplete)` | Emitted when every slot is filled | `EventEmitter<string>` | `-` |
 
 ### z-input-otp-signal
 
-Drop-in alternative to z-input-otp that implements the signal forms FormValueControl<string> contract. Use it when binding through [formField] from '@angular/forms/signals'. Inherits every input and output from z-input-otp.
+`z-input-otp` for signal forms (`[formField]`).
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[value]` | Current value | `string` | `''` |
-| `[(value)]` | Current value; two-way bound by [formField] | `string` | `''` |
-| `[disabled]` | Disabled state; mirrors the field's disabled state | `boolean` | `false` |
-| `[(disabled)]` | Disabled state; two-way bound by [formField] | `boolean` | `false` |
+| `[(value)]` | Current value | `string` | `''` |
+| `[disabled]` | Disabled state | `boolean` | `false` |
+| `[(disabled)]` | Disabled state | `boolean` | `false` |
 
 ### z-input-otp-slot
 
-Individual character slot. Displays the character, the active state, and the blinking fake caret while focused.
+A single character slot.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zIndex]` | Zero-based position of the slot | `number` | `required` |
-| `[zInvalid]` | Marks this slot as invalid; also inherited from the parent z-input-otp | `boolean` | `false` |
+| `[zIndex]` | Zero-based slot position | `number` | `required` |
+| `[zInvalid]` | Marks this slot as invalid | `boolean` | `false` |
 
 ### z-input-otp-group
 
-Groups slots together so they render as a single connected block.
+Joins slots into one connected block.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -1461,7 +1461,7 @@ Groups slots together so they render as a single connected block.
 
 ### z-input-otp-separator
 
-Visual separator rendered between slot groups. Marked aria-hidden.
+Separator between slot groups.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

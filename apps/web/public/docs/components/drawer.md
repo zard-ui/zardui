@@ -2604,100 +2604,100 @@ export class ZardDemoDrawerRtlComponent {
 
 ### z-drawer
 
-Root of a declarative drawer. Holds the open state and hosts the projected content. The panel exposes `data-placement`, `data-axis`, `data-state`, `data-swiping`, `data-snap-points`, `data-expanded` and `data-nested-open` (present while a drawer stacked on top of this one is open). Two CSS variables tune the panel: `--z-drawer-inset` (gap kept between the panel and the viewport edge, default `0.5rem`) and `--z-drawer-bleed` (fills that gap while the panel is dragged past its edge — set it for an edge-to-edge look). A drawer with `zSnapPoints` also publishes `--z-drawer-visible-size`, the pixels of the panel currently on screen, so content can size itself against whatever is reachable at the active snap point.
+Declarative drawer root, tunable via `--z-drawer-inset` and `--z-drawer-bleed`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zVisible]` | Open state, two-way bound | `boolean` | `false` |
-| `[zPlacement]` | Edge of the screen the drawer slides from. Also sets the swipe axis: top/bottom drag vertically, left/right drag horizontally. Both stay physical in RTL | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
-| `[zSnapPoints]` | Sizes the drawer rests at. 0–1 is a fraction of the viewport, above that pixels, strings keep their CSS unit | `(number \| string)[]` | `-` |
-| `[zSnapPoint]` | Active snap point, two-way bound through [(zSnapPoint)]. Defaults to the first one | `number \| string` | `-` |
-| `[zDismissible]` | Whether swiping, the mask and Escape can close the drawer | `boolean` | `true` |
-| `[zHandle]` | Renders the swipe handle | `boolean` | `false` |
-| `[zModal]` | Renders the mask and blocks the page behind. Set false for a non-modal drawer | `boolean` | `true` |
-| `[class]` | Custom CSS classes applied to the panel | `ClassValue` | `-` |
-| `(zAfterOpen)` | Emitted once the drawer is attached | `EventEmitter<void>` | `-` |
-| `(zAfterClose)` | Emitted once the exit animation has finished | `EventEmitter<void>` | `-` |
+| `[zVisible]` | Two-way bindable open state | `boolean` | `false` |
+| `[zPlacement]` | Edge it slides from; also sets the swipe axis | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
+| `[zSnapPoints]` | Rest sizes: 0–1 viewport fraction, else px or CSS | `(number \| string)[]` | `-` |
+| `[zSnapPoint]` | Two-way bindable active snap point | `number \| string` | `-` |
+| `[zDismissible]` | Swipe, mask and Escape can close it | `boolean` | `true` |
+| `[zHandle]` | Shows the swipe handle | `boolean` | `false` |
+| `[zModal]` | Shows the mask and blocks the page | `boolean` | `true` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
+| `(zAfterOpen)` | Emits once the drawer is attached | `EventEmitter<void>` | `-` |
+| `(zAfterClose)` | Emits after the exit animation | `EventEmitter<void>` | `-` |
 
 ### z-drawer-header
 
-Layout slot for the top of a drawer, next to `z-drawer-title` and `z-drawer-description`.
+Top slot for the title and description.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-drawer-footer
 
-Layout slot for the bottom of a drawer, typically the action buttons.
+Bottom slot, usually for actions.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-drawer-title
 
-Accessible name of the drawer. Wired to `aria-labelledby` automatically.
+Drawer title, wired to `aria-labelledby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zTitle]` | Title text or template, when not projecting content | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[zTitle]` | Title text or template | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-drawer-description
 
-Supporting text. Wired to `aria-describedby` automatically.
+Supporting text, wired to `aria-describedby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zDescription]` | Description text or template, when not projecting content | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[zDescription]` | Description text or template | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### [z-drawer-close]
 
-Closes the drawer it is projected into. Works for declarative and service-opened drawers alike.
+Closes the enclosing drawer.
 
 ### ZardDrawerOptions
 
-Configuration accepted by `ZardDrawerService.create()`.
+Options for `ZardDrawerService.create()`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zTitle]` | Drawer title text or template | `string \| TemplateRef<void>` | `-` |
-| `[zDescription]` | Drawer description text or template | `string \| TemplateRef<void>` | `-` |
-| `[zContent]` | Custom content component, template, or HTML | `string \| TemplateRef<T> \| Type<T>` | `-` |
-| `[zPlacement]` | Edge of the screen the drawer slides from | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
-| `[zSnapPoints]` | Sizes the drawer rests at | `(number \| string)[]` | `-` |
-| `[zSnapPoint]` | Snap point the drawer opens at | `number \| string` | `-` |
-| `[zDismissible]` | Whether swiping, the mask and Escape can close the drawer | `boolean` | `true` |
-| `[zHandle]` | Renders the swipe handle | `boolean` | `false` |
-| `[zMask]` | Renders the backdrop and blocks the page behind. Set false for a non-modal drawer | `boolean` | `true` |
-| `[zMaskClosable]` | Whether clicking outside closes the drawer. Also requires zDismissible | `boolean` | `true` |
-| `[zClosable]` | Whether to show the close button | `boolean` | `true` |
+| `[zTitle]` | Title text or template | `string \| TemplateRef<void>` | `-` |
+| `[zDescription]` | Description text or template | `string \| TemplateRef<void>` | `-` |
+| `[zContent]` | Content component, template or HTML | `string \| TemplateRef<T> \| Type<T>` | `-` |
+| `[zPlacement]` | Edge it slides from | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` |
+| `[zSnapPoints]` | Rest sizes | `(number \| string)[]` | `-` |
+| `[zSnapPoint]` | Initial snap point | `number \| string` | `-` |
+| `[zDismissible]` | Swipe, mask and Escape can close it | `boolean` | `true` |
+| `[zHandle]` | Shows the swipe handle | `boolean` | `false` |
+| `[zMask]` | Shows the backdrop and blocks the page | `boolean` | `true` |
+| `[zMaskClosable]` | Outside click closes it. Requires `zDismissible` | `boolean` | `true` |
+| `[zClosable]` | Shows the close button | `boolean` | `true` |
 | `[zDuration]` | Exit animation duration in ms | `number` | `450` |
-| `[zOkText]` | OK button text, null to hide button | `string \| null` | `'OK'` |
-| `[zCancelText]` | Cancel button text, null to hide button | `string \| null` | `'Cancel'` |
-| `[zOkIcon]` | OK button icon — registered icon name or inline SVG string | `string` | `-` |
-| `[zCancelIcon]` | Cancel button icon — registered icon name or inline SVG string | `string` | `-` |
-| `[zOkDestructive]` | Whether OK button should have destructive styling | `boolean` | `false` |
-| `[zOkDisabled]` | Whether OK button should be disabled | `boolean` | `false` |
-| `[zHideFooter]` | Whether to hide the footer with action buttons | `boolean` | `false` |
-| `[zCustomClasses]` | Additional CSS classes to apply | `ClassValue` | `-` |
-| `[zOnOk]` | OK button click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `[zOnCancel]` | Cancel button click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `[zData]` | Data to pass to custom content components | `object` | `-` |
-| `[zViewContainerRef]` | View container for rendering custom content | `ViewContainerRef` | `-` |
+| `[zOkText]` | OK button text, `null` hides it | `string \| null` | `'OK'` |
+| `[zCancelText]` | Cancel button text, `null` hides it | `string \| null` | `'Cancel'` |
+| `[zOkIcon]` | OK button icon name or SVG | `string` | `-` |
+| `[zCancelIcon]` | Cancel button icon name or SVG | `string` | `-` |
+| `[zOkDestructive]` | Destructive OK button | `boolean` | `false` |
+| `[zOkDisabled]` | Disables the OK button | `boolean` | `false` |
+| `[zHideFooter]` | Hides the action footer | `boolean` | `false` |
+| `[zCustomClasses]` | Custom CSS classes | `ClassValue` | `-` |
+| `[zOnOk]` | OK click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zOnCancel]` | Cancel click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zData]` | Data for the content component | `object` | `-` |
+| `[zViewContainerRef]` | View container for the content | `ViewContainerRef` | `-` |
 
 ### ZardDrawerRef
 
-Reference returned by `ZardDrawerService.create()`, used to observe and close the drawer.
+Handle returned by `ZardDrawerService.create()`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[close]` | Closes the drawer, optionally with a result | `(result?: R) => void` | `-` |
-| `[isClosing]` | Signal that turns true once the drawer starts closing | `Signal<boolean>` | `false` |
-| `[result]` | Signal holding the result passed to close() | `Signal<R \| undefined>` | `undefined` |
-| `[componentInstance]` | Signal with the instance of the component rendered as content | `Signal<T \| null>` | `null` |
+| `[close]` | Closes the drawer with an optional result | `(result?: R) => void` | `-` |
+| `[isClosing]` | True once closing starts | `Signal<boolean>` | `false` |
+| `[result]` | Result passed to `close()` | `Signal<R \| undefined>` | `undefined` |
+| `[componentInstance]` | Rendered content component instance | `Signal<T \| null>` | `null` |
 
 ---
 

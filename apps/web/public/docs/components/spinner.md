@@ -377,13 +377,13 @@ export class ZardDemoSpinnerRtlComponent {
 
 ### z-spinner
 
-A simple loading indicator built on the Lucide loader-circle icon.
+Loading indicator.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zAriaLabel]` | Text announced by screen readers | `string` | `'Loading'` |
-| `[class]` | Override or extend the default classes (size, color, animation duration). | `ClassValue` | `size-4 animate-spin` |
-| `[zIcon]` | Custom icon template. Receives the merged classes via `$implicit` so the icon stays in sync with the spinner sizing/animation. | `TemplateRef<{ $implicit: string }>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `size-4 animate-spin` |
+| `[zIcon]` | Custom icon template; receives the classes as `$implicit` | `TemplateRef<{ $implicit: string }>` | `-` |
 
 ---
 

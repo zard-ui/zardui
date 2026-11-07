@@ -1033,125 +1033,125 @@ export class ZardDemoContextMenuRtlComponent {
 
 ### z-context-menu
 
-Trigger directive. Opens the linked menu at the pointer, replacing the browser menu.
+Trigger directive that opens the menu at the pointer.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zContextMenuTriggerFor]` | Menu content opened at the pointer, exported as `zDropdownMenuContent`. | `ZardDropdownMenuContentComponent \| TemplateRef<void>` | `-` |
-| `[zDisabled]` | Disables the trigger and restores the native browser menu. | `boolean` | `false` |
-| `(zVisibleChange)` | Emits when the menu opens or closes. | `EventEmitter<boolean>` | `-` |
+| `[zContextMenuTriggerFor]` | Menu content (`#ref="zDropdownMenuContent"`) | `ZardDropdownMenuContentComponent \| TemplateRef<void>` | `-` |
+| `[zDisabled]` | Disables it and restores the native menu | `boolean` | `false` |
+| `(zVisibleChange)` | Emits when the menu opens or closes | `EventEmitter<boolean>` | `-` |
 
 ### ZardContextMenuService
 
-Opens a menu at a pointer event or a coordinate, for one shared menu serving many rows. Injected with `inject(ZardContextMenuService)`.
+Opens one shared menu at a pointer event or coordinate.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `create()` | Opens `menu` at the event or coordinate. Options take a `focusOrigin` and a `viewContainerRef`. | `(origin: MouseEvent \| { x: number; y: number }, menu: ZardDropdownMenuContentComponent \| TemplateRef<void>, options?: ZardContextMenuOptions) => void` | `-` |
-| `close()` | Closes the open context menu. | `() => void` | `-` |
-| `isOpen` | Whether a menu is currently on screen. | `Signal<boolean>` | `false` |
+| `create()` | Opens `menu` at the event or coordinate | `(origin: MouseEvent \| { x: number; y: number }, menu: ZardDropdownMenuContentComponent \| TemplateRef<void>, options?: ZardContextMenuOptions) => void` | `-` |
+| `close()` | Closes the open menu | `() => void` | `-` |
+| `isOpen` | A menu is on screen | `Signal<boolean>` | `false` |
 
 ### z-dropdown-menu-content
 
-The menu surface. Every item primitive below is declared inside it. Placement is automatic — the menu opens at the pointer and flips to whichever quadrant keeps it on screen. The `zSide`/`zAlign`/`zSideOffset` inputs this component also has are for `z-dropdown`; a context menu has no anchor element to be a side or an alignment of, so they have no effect here.
+Menu surface; placement is automatic, so `zSide`/`zAlign` have no effect.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-item
 
-Clickable menu row that closes the menu after selection.
+Clickable row that closes the menu on select.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zType]` | Visual type of the item. | `'default' \| 'destructive'` | `'default'` |
-| `[zInset]` | Adds left padding for alignment. | `boolean` | `false` |
-| `[zDisabled]` | Disables the item. | `boolean` | `false` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zType]` | Visual style | `'default' \| 'destructive'` | `'default'` |
+| `[zInset]` | Adds start padding for alignment | `boolean` | `false` |
+| `[zDisabled]` | Disables the item | `boolean` | `false` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-sub-trigger
 
-Menu row that opens a nested menu to its side, on hover, click or `ArrowRight`.
+Row that opens a nested menu.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zSubMenu]` | Submenu content, exported as `zDropdownMenuSubContent`. | `ZardDropdownMenuSubContentComponent \| TemplateRef<unknown>` | `-` |
-| `[zInset]` | Adds left padding for alignment. | `boolean` | `false` |
-| `[zDisabled]` | Disables the sub-trigger. | `boolean` | `false` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zSubMenu]` | Submenu content (`#ref="zDropdownMenuSubContent"`) | `ZardDropdownMenuSubContentComponent \| TemplateRef<unknown>` | `-` |
+| `[zInset]` | Adds start padding for alignment | `boolean` | `false` |
+| `[zDisabled]` | Disables the sub-trigger | `boolean` | `false` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-sub-content
 
-Surface of a submenu. Declared next to its sub-trigger and referenced by it. It has no `side`/`align` inputs — the submenu always opens beside its trigger and flips to the opposite side when the preferred one runs out of room, the same automatic behaviour a native OS submenu has.
+Submenu surface; opens beside its trigger and flips when needed.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-checkbox-item
 
-Menu row with a checked state and `menuitemcheckbox` semantics.
+Row with a checked state.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[(zChecked)]` | Checked state for the item. | `boolean` | `false` |
-| `[zDisabled]` | Disables the item. | `boolean` | `false` |
-| `[zType]` | Visual type of the item. | `'default' \| 'destructive'` | `'default'` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[(zChecked)]` | Checked state | `boolean` | `false` |
+| `[zDisabled]` | Disables the item | `boolean` | `false` |
+| `[zType]` | Visual style | `'default' \| 'destructive'` | `'default'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-radio-group
 
-Radio group wrapper for menu radio items.
+Wrapper for radio items.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[(zValue)]` | Selected radio item value. | `string \| undefined` | `undefined` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[(zValue)]` | Selected value | `string \| undefined` | `undefined` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-radio-item
 
-Menu row with `menuitemradio` semantics.
+Row with radio semantics.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zValue]` | Value represented by this radio item. | `string` | `-` |
-| `[zDisabled]` | Disables the item. | `boolean` | `false` |
-| `[zType]` | Visual type of the item. | `'default' \| 'destructive'` | `'default'` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zValue]` | Item value | `string` | `-` |
+| `[zDisabled]` | Disables the item | `boolean` | `false` |
+| `[zType]` | Visual style | `'default' \| 'destructive'` | `'default'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-group
 
-Groups related rows under a shared label.
+Groups related rows.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-label
 
-Label naming a group of rows.
+Group label.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[inset]` | Adds left padding for alignment. | `boolean` | `false` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[inset]` | Adds start padding for alignment | `boolean` | `false` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-separator
 
-Divider between menu sections.
+Divider between sections.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-dropdown-menu-shortcut
 
-Right-aligned keyboard hint inside a menu row.
+Keyboard hint inside a row.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

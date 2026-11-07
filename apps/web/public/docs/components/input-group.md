@@ -970,38 +970,38 @@ export class ZardDemoInputGroupRtlComponent {
 
 ### z-input-group
 
-Container that groups an input or textarea with addons (text, icons, buttons).
+Groups an input or textarea with addons.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-input-group-addon
 
-A slot inside the group for prefix/suffix content. Clicking it focuses the inner input.
+Prefix or suffix slot; clicking it focuses the input.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zAlign]` | Addon alignment | `'inline-start' \| 'inline-end' \| 'block-start' \| 'block-end'` | `'inline-start'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zAlign]` | Addon position | `'inline-start' \| 'inline-end' \| 'block-start' \| 'block-end'` | `'inline-start'` |
 
 ### button[z-input-group-button]
 
-Compact button styled to fit inside a `z-input-group-addon`, with its own narrowed size and variant scale.
+Compact button sized to fit inside an addon.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zVariant]` | Visual variant of the button. | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'ghost'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zVariant]` | Visual variant | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'ghost'` |
 | `[zSize]` | Button size | `'xs' \| 'sm' \| 'icon-xs' \| 'icon-sm'` | `'xs'` |
 
 ### z-input-group-text
 
-Inline text label inside an addon (e.g. currency symbol, unit suffix).
+Inline text inside an addon, e.g. a currency symbol.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

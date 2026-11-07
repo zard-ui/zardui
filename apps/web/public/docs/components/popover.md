@@ -1087,52 +1087,52 @@ export class ZardDemoPopoverRtlComponent {
 
 ### [zPopover]
 
-The directive that creates a popover when applied to a trigger element.
+Directive that opens a popover from its host element.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zTrigger]` | How the popover is triggered | `'click' \| 'hover' \| null` | `'click'` |
-| `[zContent]` | Required. Template to display in the popover | `TemplateRef<unknown>` | `-` |
-| `[zPlacement]` | Side of the trigger the popover opens on. `inline-start` and `inline-end` follow the text direction | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
-| `[zAlign]` | Alignment of the popover along the side of the trigger | `'start' \| 'center' \| 'end'` | `'center'` |
-| `[zSideOffset]` | Distance in pixels between the popover and the trigger | `number` | `4` |
-| `[zAlignOffset]` | Offset in pixels along the alignment axis | `number` | `0` |
+| `[zTrigger]` | How the popover opens | `'click' \| 'hover' \| null` | `'click'` |
+| `[zContent]` | Popover template (required) | `TemplateRef<unknown>` | `-` |
+| `[zPlacement]` | Side of the trigger; `inline-*` follows text direction | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
+| `[zAlign]` | Alignment along the trigger side | `'start' \| 'center' \| 'end'` | `'center'` |
+| `[zSideOffset]` | Distance from the trigger in px | `number` | `4` |
+| `[zAlignOffset]` | Offset along the alignment axis in px | `number` | `0` |
 | `[zOrigin]` | Custom anchor element | `ElementRef` | `-` |
-| `[zVisible]` | Control visibility programmatically | `boolean` | `false` |
-| `[zOverlayClickable]` | Close on outside click | `boolean` | `true` |
-| `(zVisibleChange)` | Emits when visibility changes. Fires immediately, before the exit animation ends | `EventEmitter<boolean>` | `-` |
+| `[zVisible]` | Controls visibility programmatically | `boolean` | `false` |
+| `[zOverlayClickable]` | Closes on outside click | `boolean` | `true` |
+| `(zVisibleChange)` | Emitted when visibility changes, before the exit animation | `EventEmitter<boolean>` | `-` |
 
 ### z-popover
 
-The popover content. Exposes `data-side`, `data-align` and `data-open`/`data-closed` while it is mounted.
+The popover content.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-popover-header
 
-Groups the title and the description at the top of the popover.
+Groups the title and description.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-popover-title
 
-The popover title. Wired to the content through `aria-labelledby`.
+Popover title, wired via `aria-labelledby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-popover-description
 
-The popover description. Wired to the content through `aria-describedby`.
+Popover description, wired via `aria-describedby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

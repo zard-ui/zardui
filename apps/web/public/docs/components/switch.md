@@ -461,17 +461,17 @@ export class ZardDemoSwitchRtlComponent {
 
 ### z-switch
 
-A control that toggles between checked and unchecked, built on a native button with role="switch".
+Toggles between checked and unchecked.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zChecked]` | Checked state, two-way bindable | `boolean` | `false` |
-| `[(zChecked)]` | Checked state (two-way binding) | `boolean` | `false` |
-| `[zId]` | Id applied to the underlying button | `string` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zChecked]` | Checked state | `boolean` | `false` |
+| `[(zChecked)]` | Checked state | `boolean` | `false` |
+| `[zId]` | Id of the inner button | `string` | `-` |
 | `[zSize]` | Switch size | `'default' \| 'sm'` | `'default'` |
 | `[zDisabled]` | Disables the switch | `boolean` | `false` |
-| `[zInvalid]` | Invalid state (sets aria-invalid) | `boolean` | `false` |
+| `[zInvalid]` | Sets `aria-invalid` | `boolean` | `false` |
 
 ---
 

@@ -792,31 +792,31 @@ export class ZardDemoBubbleRtlComponent {
 
 ### z-bubble
 
-The root bubble wrapper. Content projected straight into it gets the bubble surface, so a plain turn needs no sub-component.
+Bubble root; projected content gets the bubble surface.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zVariant]` | The bubble visual treatment. | `default \| secondary \| muted \| tinted \| outline \| ghost \| destructive` | `default` |
-| `[zAlign]` | The inline alignment of the bubble. | `start \| end` | `start` |
-| `[class]` | Additional classes to apply to the root element. | `ClassValue` | `-` |
+| `[zVariant]` | Visual variant | `default \| secondary \| muted \| tinted \| outline \| ghost \| destructive` | `default` |
+| `[zAlign]` | Inline alignment | `start \| end` | `start` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-bubble-content
 
-The bubble content wrapper. Project it to style the surface, or use it as an attribute on a button or anchor to render the content as an interactive element.
+Bubble surface; also works as an attribute on a button or link.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional classes to apply to the content element. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-bubble-reactions
 
-Displays overlapped reactions for a bubble.
+Overlapping reactions on a bubble.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zSide]` | The side of the bubble to anchor the reactions. | `top \| bottom` | `bottom` |
-| `[zAlign]` | The inline alignment of the reactions. | `start \| end` | `end` |
-| `[class]` | Additional classes to apply to the reaction row. | `ClassValue` | `-` |
+| `[zSide]` | Bubble edge the reactions anchor to | `top \| bottom` | `bottom` |
+| `[zAlign]` | Inline alignment | `start \| end` | `end` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-bubble-group
 
@@ -824,7 +824,7 @@ Groups consecutive bubbles from the same sender.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional classes to apply to the group root. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ---
 

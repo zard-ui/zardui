@@ -1447,99 +1447,99 @@ export class ZardDemoSheetRtlComponent {
 
 ### z-sheet
 
-Root of a declarative sheet. Holds the open state and projects its content into the panel, which exposes `data-side` and `data-state` (`open` | `closed`) while the enter and leave transitions run.
+Declarative sheet root that holds the open state.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zVisible]` | Open state, two-way bound | `boolean` | `false` |
-| `[zSide]` | Edge of the screen the sheet slides from. Physical in RTL too: pick `left` to open from the inline-start edge of a right-to-left page | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
-| `[zSize]` | Preset width (left/right) or height (top/bottom). Ignored once `zWidth` or `zHeight` is set | `'default' \| 'sm' \| 'lg'` | `'default'` |
-| `[zWidth]` | Explicit width, for left/right sheets | `string` | `-` |
-| `[zHeight]` | Explicit height, for top/bottom sheets | `string` | `-` |
-| `[zClosable]` | Renders the close (X) button in the top-right corner | `boolean` | `true` |
-| `[zMaskClosable]` | Whether clicking outside the sheet (on the mask) closes it | `boolean` | `true` |
-| `[zDuration]` | How long the enter and leave transitions run, in ms | `number` | `200` |
-| `[class]` | Custom CSS classes applied to the panel | `ClassValue` | `-` |
-| `(zAfterOpen)` | Emitted once the sheet is attached | `EventEmitter<void>` | `-` |
-| `(zAfterClose)` | Emitted once the exit transition has finished | `EventEmitter<void>` | `-` |
+| `[zVisible]` | Two-way bindable open state | `boolean` | `false` |
+| `[zSide]` | Edge it slides from, physical in RTL too | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
+| `[zSize]` | Preset size. Ignored when `zWidth` or `zHeight` is set | `'default' \| 'sm' \| 'lg'` | `'default'` |
+| `[zWidth]` | Width for left/right sheets | `string` | `-` |
+| `[zHeight]` | Height for top/bottom sheets | `string` | `-` |
+| `[zClosable]` | Shows the close (X) button | `boolean` | `true` |
+| `[zMaskClosable]` | Clicking the mask closes it | `boolean` | `true` |
+| `[zDuration]` | Transition duration in ms | `number` | `200` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
+| `(zAfterOpen)` | Emits once the sheet is attached | `EventEmitter<void>` | `-` |
+| `(zAfterClose)` | Emits after the exit transition | `EventEmitter<void>` | `-` |
 
 ### z-sheet-header
 
-Layout slot for the top of a sheet, next to `z-sheet-title` and `z-sheet-description`.
+Top slot for the title and description.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-sheet-footer
 
-Layout slot for the bottom of a sheet, typically the action buttons.
+Bottom slot, usually for actions.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-sheet-title
 
-Accessible name of the sheet. Wired to `aria-labelledby` automatically.
+Sheet title, wired to `aria-labelledby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zTitle]` | Title text or template, when not projecting content | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[zTitle]` | Title text or template | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-sheet-description
 
-Supporting text. Wired to `aria-describedby` automatically.
+Supporting text, wired to `aria-describedby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zDescription]` | Description text or template, when not projecting content | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[zDescription]` | Description text or template | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### [z-sheet-close]
 
-Closes the sheet it is projected into. Works for declarative and service-opened sheets alike.
+Closes the enclosing sheet.
 
 ### ZardSheetOptions
 
-Configuration accepted by `ZardSheetService.create()`.
+Options for `ZardSheetService.create()`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zCancelIcon]` | Cancel button icon — registered icon name or inline SVG string | `string` | `-` |
-| `[zCancelText]` | Cancel button text, null to hide the button | `string \| null` | `'Cancel'` |
-| `[zClosable]` | Whether the close (X) button in the header is shown. Escape and clicking outside the mask still dismiss the sheet unless `zMaskClosable` is also set to false | `boolean` | `true` |
-| `[zContent]` | Custom content component, template, or HTML | `string \| TemplateRef<T> \| Type<T>` | `-` |
-| `[zCustomClasses]` | Additional CSS classes to apply | `ClassValue` | `-` |
-| `[zData]` | Data to pass to custom content components | `object` | `-` |
-| `[zDescription]` | Sheet description/body text | `string` | `-` |
+| `[zCancelIcon]` | Cancel button icon name or SVG | `string` | `-` |
+| `[zCancelText]` | Cancel button text, `null` hides it | `string \| null` | `'Cancel'` |
+| `[zClosable]` | Shows the close (X) button | `boolean` | `true` |
+| `[zContent]` | Content component, template or HTML | `string \| TemplateRef<T> \| Type<T>` | `-` |
+| `[zCustomClasses]` | Custom CSS classes | `ClassValue` | `-` |
+| `[zData]` | Data for the content component | `object` | `-` |
+| `[zDescription]` | Description text | `string` | `-` |
 | `[zDuration]` | Exit animation duration in ms | `number` | `200` |
-| `[zHeight]` | Custom height (e.g., '80vh', '500px') | `string` | `-` |
-| `[zHideFooter]` | Whether to hide the footer with action buttons | `boolean` | `false` |
-| `[zMaskClosable]` | Whether clicking outside the sheet (on the mask) closes it | `boolean` | `true` |
-| `[zOkDestructive]` | Whether the OK button should have destructive styling | `boolean` | `false` |
-| `[zOkDisabled]` | Whether the OK button should be disabled | `boolean` | `false` |
-| `[zOkIcon]` | OK button icon — registered icon name or inline SVG string | `string` | `-` |
-| `[zOkText]` | OK button text, null to hide the button | `string \| null` | `'OK'` |
-| `[zOnCancel]` | Cancel button click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `[zOnOk]` | OK button click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `[zSide]` | Edge of the screen where the sheet appears | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
-| `[zSize]` | Preset size for the sheet, relative to its side. Ignored in favor of a custom size when `zWidth` or `zHeight` is set | `'default' \| 'sm' \| 'lg'` | `'default'` |
-| `[zTitle]` | Sheet title text or template | `string \| TemplateRef<void>` | `-` |
-| `[zViewContainerRef]` | View container for rendering custom content | `ViewContainerRef` | `-` |
-| `[zWidth]` | Custom width (e.g., '400px', '50%') | `string` | `-` |
+| `[zHeight]` | Custom height | `string` | `-` |
+| `[zHideFooter]` | Hides the action footer | `boolean` | `false` |
+| `[zMaskClosable]` | Clicking the mask closes it | `boolean` | `true` |
+| `[zOkDestructive]` | Destructive OK button | `boolean` | `false` |
+| `[zOkDisabled]` | Disables the OK button | `boolean` | `false` |
+| `[zOkIcon]` | OK button icon name or SVG | `string` | `-` |
+| `[zOkText]` | OK button text, `null` hides it | `string \| null` | `'OK'` |
+| `[zOnCancel]` | Cancel click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zOnOk]` | OK click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zSide]` | Edge it slides from | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` |
+| `[zSize]` | Preset size. Ignored when `zWidth` or `zHeight` is set | `'default' \| 'sm' \| 'lg'` | `'default'` |
+| `[zTitle]` | Title text or template | `string \| TemplateRef<void>` | `-` |
+| `[zViewContainerRef]` | View container for the content | `ViewContainerRef` | `-` |
+| `[zWidth]` | Custom width | `string` | `-` |
 
 ### ZardSheetRef
 
-Reference returned by `ZardSheetService.create()`, used to observe and close the sheet.
+Handle returned by `ZardSheetService.create()`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[close]` | Closes the sheet, optionally with a result | `(result?: R) => void` | `-` |
-| `[isClosing]` | Signal that turns true once the sheet starts closing | `Signal<boolean>` | `false` |
-| `[result]` | Signal holding the result passed to close() | `Signal<R \| undefined>` | `undefined` |
-| `[componentInstance]` | Signal with the instance of the component rendered as content | `Signal<T \| null>` | `null` |
+| `[close]` | Closes the sheet with an optional result | `(result?: R) => void` | `-` |
+| `[isClosing]` | True once closing starts | `Signal<boolean>` | `false` |
+| `[result]` | Result passed to `close()` | `Signal<R \| undefined>` | `undefined` |
+| `[componentInstance]` | Rendered content component instance | `Signal<T \| null>` | `null` |
 
 ---
 

@@ -3,37 +3,26 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const TABS_API: ApiSection[] = [
   {
     selector: 'z-tab-group',
-    description:
-      'A set of layered sections of content — known as tab panels — displayed one at a time. Arrow keys, Home and End move between enabled tabs; in right-to-left layouts the horizontal arrows follow the visual order (ArrowRight moves to the previous tab).',
+    description: 'Layered panels shown one at a time.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
-      {
-        name: '[zVariant]',
-        description: 'Visual variant of the tab navigation',
-        type: "'default' | 'line'",
-        default: "'default'",
-      },
+      { name: '[zVariant]', description: 'Visual variant', type: "'default' | 'line'", default: "'default'" },
       {
         name: '[zOrientation]',
-        description: 'Layout direction of the tab group',
+        description: 'Layout direction',
         type: "'horizontal' | 'vertical'",
         default: "'horizontal'",
       },
-      {
-        name: '[zDisabled]',
-        description: 'Whether the entire tab group is disabled',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: '[zDisabled]', description: 'Disables the whole group', type: 'boolean', default: 'false' },
       {
         name: '(zTabChange)',
-        description: 'Emits when a new tab is selected',
+        description: 'Emitted when a tab is selected',
         type: 'EventEmitter<{ index: number; label: string; tab: ZardTabComponent }>',
         default: '-',
       },
       {
         name: '(zDeselect)',
-        description: 'Emits when the current tab is deselected',
+        description: 'Emitted when the current tab is deselected',
         type: 'EventEmitter<{ index: number; label: string; tab: ZardTabComponent }>',
         default: '-',
       },
@@ -41,21 +30,11 @@ export const TABS_API: ApiSection[] = [
   },
   {
     selector: 'z-tab',
-    description: 'An individual tab. Label is shown in the navigation; projected content becomes the tab panel.',
+    description: 'A tab; its projected content is the panel.',
     props: [
-      { name: '[label]', description: 'Label displayed in the tab button', type: 'string', default: '-' },
-      {
-        name: '[zIcon]',
-        description: 'Optional ng-icons name shown before the label',
-        type: 'string',
-        default: '-',
-      },
-      {
-        name: '[zDisabled]',
-        description: 'Whether this individual tab is disabled',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: '[label]', description: 'Tab label', type: 'string', default: '-' },
+      { name: '[zIcon]', description: 'Icon before the label', type: 'string', default: '-' },
+      { name: '[zDisabled]', description: 'Disables this tab', type: 'boolean', default: 'false' },
     ],
   },
 ];

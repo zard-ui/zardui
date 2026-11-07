@@ -488,15 +488,15 @@ export class ZardDemoEmptyRtlComponent {
 
 ### z-empty
 
-Displays a placeholder when no data is available, commonly used in tables, lists, or search results.
+Placeholder for when there is no data.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zIcon]` | Icon name rendered in the media slot as the `icon` variant (`data-variant="icon"`). Ignored when `zImage` is set. | `ZardIcon` | `-` |
-| `[zImage]` | Image URL or custom template (e.g. a `z-avatar`/`z-avatar-group`) rendered in the media slot as the `default` variant (`data-variant="default"`). Takes priority over `zIcon`. | `string \| TemplateRef<void>` | `-` |
-| `[zDescription]` | Description text or custom template | `string \| TemplateRef<void>` | `-` |
-| `[zTitle]` | Title text or custom template | `string \| TemplateRef<void>` | `-` |
-| `[zActions]` | Array of action templates | `TemplateRef<void>[]` | `[]` |
+| `[zIcon]` | Icon in the media slot; ignored when `zImage` is set | `ZardIcon` | `-` |
+| `[zImage]` | Image URL or template; overrides `zIcon` | `string \| TemplateRef<void>` | `-` |
+| `[zDescription]` | Description text or template | `string \| TemplateRef<void>` | `-` |
+| `[zTitle]` | Title text or template | `string \| TemplateRef<void>` | `-` |
+| `[zActions]` | Action templates | `TemplateRef<void>[]` | `[]` |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---

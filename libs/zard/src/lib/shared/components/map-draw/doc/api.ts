@@ -7,58 +7,41 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const MAP_DRAW_API: ApiSection[] = [
   {
     selector: 'ng-map-draw',
-    description:
-      'Draws, selects and edits points, lines and polygons on the map, built on terra-draw. Install it with `zard-cli add map-draw`; the core map never loads terra-draw. Enter finishes a shape, Escape cancels it and Delete removes the selected feature.',
+    description: 'Draws, selects and edits points, lines and polygons; install it with `zard-cli add map-draw`.',
     props: [
       {
         name: '[modes]',
-        description: 'The shapes the user can draw',
+        description: 'Shapes the user can draw',
         type: "readonly ('point' | 'line' | 'polygon')[]",
         default: "['point', 'line', 'polygon']",
       },
       {
         name: '[(mode)]',
-        description: 'The active tool: a shape, `select` to pick and edit features, or `static` to only display them',
+        description: 'Active tool; `static` only displays features',
         type: "'point' | 'line' | 'polygon' | 'select' | 'static'",
         default: "'static'",
       },
       {
         name: '[(features)]',
-        description:
-          'The drawn features as a GeoJSON FeatureCollection. It is the source of truth: it updates when a draw, edit or delete completes, and assigning a new collection replaces what is shown',
+        description: 'Drawn features; the source of truth',
         type: 'MapDrawFeatureCollection',
         default: 'empty collection',
       },
       {
         name: '[editable]',
-        description: 'Enables the `select` mode: select, drag, reshape and delete features',
+        description: 'Enables `select` mode for editing features',
         type: 'boolean',
         default: 'false',
       },
-      {
-        name: '[color]',
-        description: 'Accent color of the drawn shapes as `#rrggbb`. A theme-aware blue by default',
-        type: 'DrawHexColor',
-        default: '-',
-      },
+      { name: '[color]', description: 'Accent color as `#rrggbb`', type: 'DrawHexColor', default: '-' },
     ],
     outputs: [
-      { name: '(drawEnd)', description: 'Emits when a new shape is completed', type: 'MapDrawEvent', default: '-' },
-      {
-        name: '(featureEdit)',
-        description: 'Emits when an existing feature is moved, reshaped or otherwise edited',
-        type: 'MapDrawEvent',
-        default: '-',
-      },
-      {
-        name: '(featureSelect)',
-        description: 'Emits the feature selected in `select` mode',
-        type: 'MapDrawFeature',
-        default: '-',
-      },
+      { name: '(drawEnd)', description: 'Emits when a shape is completed', type: 'MapDrawEvent', default: '-' },
+      { name: '(featureEdit)', description: 'Emits when a feature is edited', type: 'MapDrawEvent', default: '-' },
+      { name: '(featureSelect)', description: 'Emits the selected feature', type: 'MapDrawFeature', default: '-' },
       {
         name: '(featureDeselect)',
-        description: 'Emits the id of the feature that was deselected',
+        description: 'Emits the deselected feature id',
         type: 'string | number',
         default: '-',
       },

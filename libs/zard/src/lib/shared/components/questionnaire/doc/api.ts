@@ -9,7 +9,7 @@ const CLASS_PROP = {
 
 const DISABLED_PROP = {
   name: 'disabled',
-  description: 'Disables the button in addition to its questionnaire-controlled disabled state',
+  description: 'Disables the button',
   type: 'boolean',
   default: 'false',
 };
@@ -44,7 +44,7 @@ const SHAPE_PROP = {
 
 const LOADING_PROP = {
   name: 'zLoading',
-  description: 'Shows the loading state and disables the button',
+  description: 'Loading state; also disables the button',
   type: 'boolean',
   default: 'false',
 };
@@ -52,33 +52,30 @@ const LOADING_PROP = {
 export const QUESTIONNAIRE_API: ApiSection[] = [
   {
     selector: 'z-questionnaire',
-    description:
-      'A multi-step questionnaire with single-choice, multiple-choice, freeform, and skippable questions. Implements ControlValueAccessor for Reactive Forms.',
+    description: 'Multi-step questionnaire that works with Reactive Forms.',
     props: [
       {
         name: '[zItems]',
-        description:
-          'Optional item settings by name (required, multiple, disabled). They apply only where the matching z-questionnaire-item does not set the same input; the projected items define the order. Without projected items, this list defines the flow',
+        description: 'Item settings by name; projected item inputs win',
         type: 'readonly ZardQuestionnaireItem[]',
         default: '[]',
       },
       {
         name: 'zActive',
-        description: 'Active item name; supports two-way binding with [(zActive)]',
+        description: 'Two-way bindable active item name',
         type: 'string | undefined',
         default: 'undefined',
       },
       {
         name: 'zShortcuts',
-        description:
-          'Assigns answer shortcuts to the enabled choices of the active item. Only the focused questionnaire reacts; with nothing focused, the last one interacted with does',
+        description: 'Keyboard shortcuts for the active choices',
         type: "'none' | 'letters' | 'numbers'",
         default: "'none'",
       },
       CLASS_PROP,
       {
         name: '(zSubmit)',
-        description: 'Emits the answers once every enabled item validates',
+        description: 'Emits the answers once all items validate',
         type: 'EventEmitter<Record<string, string | string[]>>',
         default: '-',
       },
@@ -86,92 +83,59 @@ export const QUESTIONNAIRE_API: ApiSection[] = [
   },
   {
     selector: 'z-questionnaire-progress',
-    description: 'Displays the current question and total as text and an accessible progress bar.',
+    description: 'Current step as text and a progress bar.',
     props: [CLASS_PROP],
   },
   {
     selector: 'z-questionnaire-item',
-    description: 'One questionnaire step rendered as a fieldset.',
+    description: 'One step, rendered as a fieldset.',
     props: [
-      {
-        name: 'zName',
-        description: 'Unique item name used for navigation and the submitted answer key',
-        type: 'string',
-        default: 'required',
-      },
-      {
-        name: 'zRequired',
-        description:
-          'Requires an answer before navigation or submission can continue. Wins over the item in [zItems]; when unset, [zItems] decides',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: 'zName', description: 'Unique name and answer key', type: 'string', default: 'required' },
+      { name: 'zRequired', description: 'Requires an answer. Overrides `zItems`', type: 'boolean', default: 'false' },
       {
         name: 'zMultiple',
-        description:
-          'Allows multiple fixed answers and submits a string array. Wins over the item in [zItems]; when unset, [zItems] decides',
+        description: 'Allows multiple answers. Overrides `zItems`',
         type: 'boolean',
         default: 'false',
       },
       {
         name: 'zDisabled',
-        description:
-          'Disables the item and excludes it from progress, navigation, validation, and submission. Wins over the item in [zItems]; when unset, [zItems] decides',
+        description: 'Disables and skips the item. Overrides `zItems`',
         type: 'boolean',
         default: 'false',
       },
-      {
-        name: 'zInvalid',
-        description: 'Marks the item invalid from consumer-owned validation',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: 'zInvalid', description: 'Marks the item invalid', type: 'boolean', default: 'false' },
       CLASS_PROP,
     ],
   },
   {
     selector: 'z-questionnaire-title',
-    description: 'Item prompt rendered as the fieldset legend.',
+    description: 'Item prompt, rendered as the legend.',
     props: [CLASS_PROP],
   },
   {
     selector: 'z-questionnaire-description',
-    description: 'Supporting text automatically wired to the item fieldset and built-in answer controls.',
+    description: 'Supporting text wired to the item controls.',
     props: [CLASS_PROP],
   },
   {
     selector: 'z-questionnaire-choices',
-    description: 'Layout container for fixed choices and the freeform input.',
+    description: 'Container for choices and the freeform input.',
     props: [CLASS_PROP],
   },
   {
     selector: 'z-questionnaire-choice',
-    description: 'One fixed answer rendered as a label with a native radio or checkbox and an optional shortcut.',
+    description: 'One fixed answer with a native radio or checkbox.',
     props: [
-      {
-        name: 'zValue',
-        description: 'Value submitted when the choice is selected',
-        type: 'string',
-        default: 'required',
-      },
-      {
-        name: 'checked',
-        description: 'Initial checked state, including the state restored by a native form reset',
-        type: 'boolean',
-        default: 'false',
-      },
-      {
-        name: 'zDisabled',
-        description: 'Disables this choice',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: 'zValue', description: 'Submitted value', type: 'string', default: 'required' },
+      { name: 'checked', description: 'Initial checked state', type: 'boolean', default: 'false' },
+      { name: 'zDisabled', description: 'Disables this choice', type: 'boolean', default: 'false' },
       CLASS_PROP,
     ],
   },
   {
     selector: 'z-questionnaire-choice-description',
-    description: 'Secondary text under a choice label, rendered in muted color.',
+    description: 'Muted text under a choice label.',
     props: [CLASS_PROP],
   },
   {
@@ -179,20 +143,10 @@ export const QUESTIONNAIRE_API: ApiSection[] = [
     description: 'Freeform answer for the active item.',
     props: [
       { name: 'type', description: 'Native input type', type: 'string', default: "'text'" },
-      {
-        name: 'value',
-        description: 'Initial value, including the value restored by a native form reset',
-        type: 'string',
-        default: "''",
-      },
+      { name: 'value', description: 'Initial value', type: 'string', default: "''" },
       { name: 'placeholder', description: 'Placeholder text', type: 'string', default: "''" },
-      {
-        name: 'aria-label',
-        description: 'Accessible label for the freeform input',
-        type: 'string | null',
-        default: 'null',
-      },
-      { name: 'zDisabled', description: 'Disables the freeform input', type: 'boolean', default: 'false' },
+      { name: 'aria-label', description: 'Accessible label', type: 'string | null', default: 'null' },
+      { name: 'zDisabled', description: 'Disables the input', type: 'boolean', default: 'false' },
       CLASS_PROP,
     ],
   },
@@ -203,27 +157,27 @@ export const QUESTIONNAIRE_API: ApiSection[] = [
   },
   {
     selector: 'z-questionnaire-actions',
-    description: 'Layout row for questionnaire navigation buttons.',
+    description: 'Row for the navigation buttons.',
     props: [CLASS_PROP],
   },
   {
     selector: 'button[z-questionnaire-previous]',
-    description: 'Moves to the previous item and hides itself when no previous item is available.',
+    description: 'Goes back; hidden when there is no previous item.',
     props: [DISABLED_PROP, OUTLINE_TYPE_PROP, SIZE_PROP, SHAPE_PROP, LOADING_PROP, CLASS_PROP],
   },
   {
     selector: 'button[z-questionnaire-skip]',
-    description: 'Skips the active optional item and hides itself when the item cannot be skipped.',
+    description: 'Skips an optional item; hidden otherwise.',
     props: [DISABLED_PROP, OUTLINE_TYPE_PROP, SIZE_PROP, SHAPE_PROP, LOADING_PROP, CLASS_PROP],
   },
   {
     selector: 'button[z-questionnaire-next]',
-    description: 'Validates the active item, moves forward, and hides itself on the final item.',
+    description: 'Validates and moves forward; hidden on the last item.',
     props: [DISABLED_PROP, DEFAULT_TYPE_PROP, SIZE_PROP, SHAPE_PROP, LOADING_PROP, CLASS_PROP],
   },
   {
     selector: 'button[z-questionnaire-submit]',
-    description: 'Submits the questionnaire and hides itself until the final item is active.',
+    description: 'Submits; shown only on the last item.',
     props: [DISABLED_PROP, DEFAULT_TYPE_PROP, SIZE_PROP, SHAPE_PROP, LOADING_PROP, CLASS_PROP],
   },
 ];
