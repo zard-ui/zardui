@@ -250,24 +250,34 @@
           <h2 class="font-heading mt-10 scroll-m-28 text-xl font-medium tracking-tight lg:mt-12">
             {{ section.title }}
           </h2>
+          @if (section.callout; as callout) {
+            <z-alert
+              zType="destructive"
+              zRole="status"
+              data-slot="section-callout"
+              [zTitle]="callout.title"
+              [zDescription]="calloutText"
+            />
+            <ng-template #calloutText><span [prose]="callout.description"></span></ng-template>
+          }
           @if (section.description) {
             <div class="leading-relaxed text-pretty" [prose]="section.description"></div>
           }
           @if (section.table; as table) {
             <div class="overflow-x-auto rounded-lg border">
-              <table class="w-full text-left text-sm">
-                <thead class="bg-muted/50 text-muted-foreground text-xs">
-                  <tr>
+              <table z-table [class]="tableClass">
+                <thead z-table-header>
+                  <tr z-table-row>
                     @for (column of table.columns; track column) {
-                      <th scope="col" class="px-4 py-2.5 font-medium whitespace-nowrap">{{ column }}</th>
+                      <th z-table-head scope="col" class="whitespace-nowrap">{{ column }}</th>
                     }
                   </tr>
                 </thead>
-                <tbody class="[&>tr:not(:last-child)]:border-b">
+                <tbody z-table-body>
                   @for (row of table.rows; track $index) {
-                    <tr>
+                    <tr z-table-row>
                       @for (cell of row; track $index; let first = $first) {
-                        <td class="px-4 py-3 align-top" [class.font-medium]="first" [class.whitespace-nowrap]="first">
+                        <td z-table-cell [class.font-medium]="first" [class.whitespace-nowrap]="first">
                           @if (isLink(cell)) {
                             <a
                               [href]="cell.href"
@@ -316,7 +326,7 @@
         <section class="flex flex-col gap-3" scrollSpyItem="accessibility" id="accessibility">
           <h2 class="font-heading scroll-m-28 text-xl font-medium tracking-tight">Accessibility</h2>
           @for (paragraph of accessibility; track $index) {
-            <p class="text-muted-foreground leading-relaxed" [innerHTML]="inlineText(paragraph)"></p>
+            <p class="text-muted-foreground api-inline leading-relaxed" [innerHTML]="inlineText(paragraph)"></p>
           }
         </section>
       }

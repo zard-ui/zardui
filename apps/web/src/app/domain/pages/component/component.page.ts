@@ -15,11 +15,16 @@ import { ProseDirective } from '@doc/domain/directives/prose.directive';
 import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
 import { ComponentData, COMPONENTS_REGISTRY, type SectionTableLink } from '@doc/shared/constants/components.constant';
+import { DOCS_TABLE_CLASS } from '@doc/shared/constants/docs-table.constant';
 import { Step } from '@doc/shared/constants/install.constant';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 import { DynamicInstallationService } from '@doc/shared/services/dynamic-installation.service';
 import { SeoService } from '@doc/shared/services/seo.service';
+import { inlineCode } from '@doc/shared/utils/inline-code';
 import { ZardCodeBoxComponent } from '@doc/widget/components/zard-code-box/zard-code-box.component';
+
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
+import { ZardTableImports } from '@zard/components/table/table.imports';
 
 /** Components whose demos are only readable at the full width of the preview. */
 const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar', 'map'];
@@ -41,6 +46,8 @@ const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar', 'map'];
     HyphenToSpacePipe,
     NgComponentOutlet,
     RouterLink,
+    ZardAlertComponent,
+    ZardTableImports,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -48,19 +55,8 @@ export class ComponentPage implements OnInit {
   protected readonly fillsContainer = (componentName: string) => FULL_WIDTH_PREVIEWS.includes(componentName);
   protected readonly isLink = (cell: string | SectionTableLink): cell is SectionTableLink => typeof cell !== 'string';
 
-  protected readonly inlineText = (text: string): string =>
-    text
-      .split(/(`[^`]+`)/g)
-      .map(segment => {
-        const isCode = segment.startsWith('`') && segment.endsWith('`');
-        const content = isCode ? segment.slice(1, -1) : segment;
-        const escapedContent = content.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-
-        return isCode
-          ? `<code class="bg-muted rounded px-1.5 py-0.5 font-mono text-sm">${escapedContent}</code>`
-          : escapedContent;
-      })
-      .join('');
+  protected readonly inlineText = inlineCode;
+  protected readonly tableClass = DOCS_TABLE_CLASS;
 
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);

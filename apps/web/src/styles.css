@@ -404,6 +404,25 @@ code [data-highlighted-chars] {
   box-shadow: none !important;
 }
 
+/* Inline code inside API reference descriptions (rendered from backticks by `inlineCode`). */
+.api-inline code {
+  @apply bg-muted text-foreground rounded px-1 py-0.5 font-mono text-[0.85em];
+}
+
+/* Docs reference tables: roomier cells and no row hover on top of z-table (unlayered, so it wins). */
+.docs-table :is(th, td) {
+  padding-inline: 1rem;
+}
+
+.docs-table td {
+  padding-block: 0.75rem;
+  vertical-align: top;
+}
+
+.docs-table tr:hover {
+  background: none;
+}
+
 .component-selector {
   @apply bg-muted text-foreground inline-flex items-center rounded-md px-2 py-1 text-sm font-medium;
 }

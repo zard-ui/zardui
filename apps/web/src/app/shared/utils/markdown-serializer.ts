@@ -201,6 +201,7 @@ function serializeAbout(data: ComponentData): string {
 /** A titled extra block: its prose, its table, then its examples one level below the heading. */
 function serializeSection(extra: ComponentSection): string {
   const parts: string[] = [];
+  if (extra.callout) parts.push(`> **${extra.callout.title}.** ${extra.callout.description}`);
   if (extra.description) parts.push(extra.description);
 
   if (extra.table) {

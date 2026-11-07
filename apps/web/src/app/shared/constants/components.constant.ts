@@ -37,6 +37,8 @@ export interface ComponentSection {
   id: string;
   title: string;
   description?: string;
+  /** A highlighted warning shown above the description, for what readers must not miss. */
+  callout?: { title: string; description: string };
   table?: SectionTable;
   examples?: ExampleData[];
 }
