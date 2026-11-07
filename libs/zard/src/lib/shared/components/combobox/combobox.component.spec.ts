@@ -639,6 +639,17 @@ describe('ZardComboboxComponent', () => {
         expect(host.value()).toBeNull();
       }));
 
+      it('adds new items while one is highlighted', () => {
+        pressKey(fixture, 'ArrowDown');
+
+        host.options = [...host.options, { value: 'elderberry', label: 'Elderberry' }, { value: 'fig', label: 'Fig' }];
+
+        expect(() => fixture.detectChanges()).not.toThrow();
+        expect(itemElements()).toHaveLength(6);
+        expect(itemElements()[5]).toHaveTextContent('Fig');
+        expect(itemElements()[0]).toHaveAttribute('data-highlighted');
+      });
+
       it('closes the popup on Tab', fakeAsync(() => {
         pressKey(fixture, 'Tab');
         flush();
