@@ -15,6 +15,7 @@ export * from './lib/shared/components/carousel';
 export * from './lib/shared/components/chart';
 export * from './lib/shared/components/checkbox';
 export * from './lib/shared/components/collapsible';
+export * from './lib/shared/components/color-picker';
 export * from './lib/shared/components/combobox';
 export * from './lib/shared/components/command';
 export * from './lib/shared/components/context-menu';

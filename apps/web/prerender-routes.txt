@@ -53,6 +53,7 @@
 /docs/components/carousel
 /docs/components/chart
 /docs/components/checkbox
+/docs/components/color-picker
 /docs/components/combobox
 /docs/components/command
 /docs/components/date-picker
