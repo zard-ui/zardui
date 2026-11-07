@@ -560,29 +560,29 @@ export class ZardDemoMarkerRtlComponent {
 
 ### z-marker
 
-Root of an inline conversation marker. Content projected without a `z-marker-content` child gets the content surface for free, so `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>` is a complete row. Use the attribute selector on an `a` or `button` to make the whole marker interactive, and set `role="status"` for streaming or in-progress markers.
+Root of an inline conversation marker; bare projected content gets the content surface.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zVariant]` | Layout of the marker: inline row, bordered row, or a centered label with divider lines on each side. | `default \| border \| separator` | `default` |
-| `[zIcon]` | Icon rendered in the decorative icon slot. A string is the `@ng-icons` name to render — register it with `provideIcons` — and a template is rendered as is. Ignored when a `z-marker-icon` is projected. | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[zVariant]` | Layout of the marker | `default \| border \| separator` | `default` |
+| `[zIcon]` | `@ng-icons` name or template. Ignored with `z-marker-icon` | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-marker-icon
 
-Decorative icon slot, hidden from assistive tech with `aria-hidden`. Project it when the icon is a component such as `z-spinner`; otherwise `zIcon` on the root is enough.
+Decorative icon slot, for component icons such as `z-spinner`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-marker-content
 
-Text content of the marker. Optional — the root wraps bare projected content in this surface. Project it to add classes such as `shimmer`, an animated streaming-text effect that is disabled automatically when the user prefers reduced motion.
+Optional text surface; project it to add classes such as `shimmer`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Override or extend default classes. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ---
 

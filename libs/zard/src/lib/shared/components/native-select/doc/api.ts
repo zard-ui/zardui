@@ -3,16 +3,15 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const NATIVE_SELECT_API: ApiSection[] = [
   {
     selector: 'select[z-native-select]',
-    description:
-      'A directive that styles a native `<select>` element. It adds no `ControlValueAccessor` and no wrapper, so `formControl`, `formControlName`, `ngModel` and every native attribute (`disabled`, `required`, `multiple`, `name`, `aria-invalid`, ...) keep working as-is. Options and groups are plain `<option>` and `<optgroup>` elements. Use Native Select for the native OS picker, built-in keyboard and form support, and zero overlay; use Select for custom styling, animations, rich items or complex interactions.',
+    description: 'Styles a native `<select>`; forms and native attributes work as usual.',
     props: [
       {
         name: '[zSize]',
-        description: 'Size variant. `default` lines up with the height of `z-input` and `z-select`',
+        description: 'Size; `default` matches `z-input`',
         type: "'sm' | 'default' | 'lg'",
         default: "'default'",
       },
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
     ],
   },
 ];

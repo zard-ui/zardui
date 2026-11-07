@@ -1914,32 +1914,32 @@ export class ZardDemoSelectRtlComponent {
 
 ### z-select
 
-A customizable select component that supports single and multiple value selection. Need the native OS picker, built-in keyboard and form behavior, or zero overlay? Use `select[z-native-select]` (Native Select) instead.
+Custom select with single or multiple selection.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zValue]` | Selected value(s), two-way bindable — a plain `string`, or `string[]` when `zMultiple` is set | `string \| string[]` | `''` |
+| `[zValue]` | Selected value; `string[]` with `zMultiple` | `string \| string[]` | `''` |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zAlign]` | Overlay alignment relative to the trigger | `'start' \| 'center' \| 'end'` | `'center'` |
+| `[zAlign]` | Overlay alignment to the trigger | `'start' \| 'center' \| 'end'` | `'center'` |
 | `[zDisabled]` | Disables the select | `boolean` | `false` |
-| `[zInvalid]` | Applies invalid ARIA state and destructive styling | `boolean` | `false` |
-| `[zLabel]` | Optional manual override for the displayed label | `string` | `''` |
-| `[zMaxLabelCount]` | In multiselect mode, how many selected labels render as badges before collapsing the rest into a "N more items selected" badge | `number` | `1` |
-| `[zMultiple]` | Turns the select into a multiselect; `zValue` becomes a `string[]` and each pick renders as a `z-badge` | `boolean` | `false` |
-| `[zPlaceholder]` | Placeholder text shown when nothing is selected | `string` | `'Select an option...'` |
-| `[zPosition]` | Overlay positioning mode: 'item-aligned' opens the listbox so the selected item sits over the trigger; 'popper' drops it from the trigger's edge instead | `'item-aligned' \| 'popper'` | `'item-aligned'` |
+| `[zInvalid]` | Invalid state and styling | `boolean` | `false` |
+| `[zLabel]` | Overrides the displayed label | `string` | `''` |
+| `[zMaxLabelCount]` | Badges shown before collapsing into "N more" | `number` | `1` |
+| `[zMultiple]` | Enables multiple selection | `boolean` | `false` |
+| `[zPlaceholder]` | Shown when nothing is selected | `string` | `'Select an option...'` |
+| `[zPosition]` | Over the trigger, or dropped from its edge | `'item-aligned' \| 'popper'` | `'item-aligned'` |
 | `[(zValue)]` | Selected value | `string \| string[]` | `'' \| []` |
 | `(zSelectionChange)` | Emitted when the selected value changes | `EventEmitter<string \| string[]>` | `-` |
 
 ### z-select-item
 
-Represents an individual item inside a z-select component.
+An option of the select.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zValue]` | The value associated with this item (required) | `string` | `-` |
-| `[zDisabled]` | Disables selection for this item | `boolean` | `false` |
+| `[zValue]` | Item value (required) | `string` | `-` |
+| `[zDisabled]` | Disables this item | `boolean` | `false` |
 
 ### z-select-group
 
@@ -1951,7 +1951,7 @@ Groups related select items.
 
 ### z-select-label
 
-Displays a non-selectable label inside a select group.
+Non-selectable group label.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -1959,7 +1959,7 @@ Displays a non-selectable label inside a select group.
 
 ### z-select-separator
 
-Displays a separator between select groups.
+Separator between groups.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

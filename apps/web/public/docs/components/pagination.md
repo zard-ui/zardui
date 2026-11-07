@@ -664,25 +664,25 @@ export class ZardDemoPaginationRtlComponent {
 
 ### z-pagination
 
-Renders as a `role="group"` element (not a `<nav>` landmark) with an `[zAriaLabel]`-driven accessible name. Given `[zTotal]` and `[(zPageIndex)]`, it renders and manages the full previous/numbers/next navigation itself and calls `goToPage()` internally on click; pass `[zContent]` to replace that markup with your own composition (e.g. to wire real `routerLink`/`href` page links), in which case `[zTotal]`/`[zPageIndex]`/`[zSimple]`/`[zSize]`/`[zDisabled]` are ignored by the root and it is up to the projected content to use them.
+Full pagination from `[zTotal]` and `[(zPageIndex)]`, or custom markup via `[zContent]`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `[zAriaLabel]` | Accessible name for the pagination element, rendered as its aria-label. | `string` | `'Pagination'` |
-| `[zContent]` | Custom pagination structure, replacing the built-in previous/numbers/next markup. | `TemplateRef<void> \| undefined` | `undefined` |
+| `[zAriaLabel]` | Accessible name | `string` | `'Pagination'` |
+| `[zContent]` | Custom markup; the root then ignores its other inputs | `TemplateRef<void> \| undefined` | `undefined` |
 | `[zDisabled]` | Disables pagination interaction | `boolean` | `false` |
-| `[zNextText]` | Visible label (and accessible name) of the built-in next button. Pass a translation for RTL languages. | `string` | `'Next'` |
-| `[zPreviousText]` | Visible label (and accessible name) of the built-in previous button. Pass a translation for RTL languages. | `string` | `'Previous'` |
-| `[zPageIndex]` | Current page, two-way bindable | `number` | `1` |
+| `[zNextText]` | Label of the next button | `string` | `'Next'` |
+| `[zPreviousText]` | Label of the previous button | `string` | `'Previous'` |
+| `[zPageIndex]` | Current page | `number` | `1` |
 | `[(zPageIndex)]` | Current page index | `number` | `1` |
-| `[zSimple]` | A simple pagination with only page numbers. | `boolean` | `false` |
-| `[zSize]` | Size of the numbered page buttons. | `'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'icon'` |
+| `[zSimple]` | Shows only page numbers | `boolean` | `false` |
+| `[zSize]` | Size of the page buttons | `'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'icon'` |
 | `[zTotal]` | Total number of pages | `number` | `1` |
 
 ### ul[z-pagination-content]
 
-Container (unordered list) for pagination content (buttons and ellipsis).
+List that holds the pagination items.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -690,44 +690,44 @@ Container (unordered list) for pagination content (buttons and ellipsis).
 
 ### li[z-pagination-item]
 
-Wraps a pagination button or ellipsis as li element of container.
+List item wrapping a button or ellipsis.
 
 ### button[z-pagination-button]
 
-A single page button, styled via an internal z-button. Also usable as `a[z-pagination-button]` — render it on an anchor and stack Angular's `RouterLink` (this directive does not reimplement router inputs of its own) to make page links drive real navigation, as the `routing` example does.
+A page button; also works as `a[z-pagination-button]` with `routerLink`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `[zActive]` | Whether the button is currently active | `boolean` | `false` |
-| `[zDisabled]` | Whether the button is disabled | `boolean` | `false` |
+| `[zActive]` | Marks the current page | `boolean` | `false` |
+| `[zDisabled]` | Disables the button | `boolean` | `false` |
 | `[zSize]` | Button size | `'default' \| 'xs' \| 'sm' \| 'lg' \| 'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'icon'` |
 
 ### z-pagination-previous
 
-Button to navigate to the previous page. The chevron flips automatically in right-to-left layouts, so it always points outward. Use `[zText]` to translate the label.
+Previous-page button; the chevron flips in RTL.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `[zDisabled]` | Whether the button is disabled | `boolean` | `false` |
+| `[zDisabled]` | Disables the button | `boolean` | `false` |
 | `[zSize]` | Button size | `'default' \| 'xs' \| 'sm' \| 'lg'` | `'default'` |
-| `[zText]` | Visible label. Also the accessible name once it differs from the English default. | `string` | `'Previous'` |
+| `[zText]` | Visible label | `string` | `'Previous'` |
 
 ### z-pagination-next
 
-Button to navigate to the next page. The chevron flips automatically in right-to-left layouts, so it always points outward. Use `[zText]` to translate the label.
+Next-page button; the chevron flips in RTL.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `[zDisabled]` | Whether the button is disabled | `boolean` | `false` |
+| `[zDisabled]` | Disables the button | `boolean` | `false` |
 | `[zSize]` | Button size | `'default' \| 'xs' \| 'sm' \| 'lg'` | `'default'` |
-| `[zText]` | Visible label. Also the accessible name once it differs from the English default. | `string` | `'Next'` |
+| `[zText]` | Visible label | `string` | `'Next'` |
 
 ### z-pagination-ellipsis
 
-Visual ellipsis ("...") for omitted pages.
+Ellipsis for omitted pages.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

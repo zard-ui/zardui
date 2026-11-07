@@ -617,22 +617,22 @@ export class ZardDemoCardRtlComponent {
 
 ### z-card, [z-card]
 
-A structured container for displaying content with optional header and footer sections.
+Container with optional header and footer.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zSize]` | Size variant of the card. `sm` sets `--card-spacing` to `--spacing(3)` and shrinks the title | `'default' \| 'sm'` | `'default'` |
-| `[--card-spacing]` | CSS variable behind every gap and padding of the card and its sections, e.g. `class="[--card-spacing:--spacing(6)]"` | `length` | `--spacing(4)` |
+| `[zSize]` | Card size; `sm` tightens spacing | `'default' \| 'sm'` | `'default'` |
+| `[--card-spacing]` | CSS variable for all card gaps and padding | `length` | `--spacing(4)` |
 
 ### z-card-header, [z-card-header]
 
-Container for card title, description, and optional action.
+Holds the title, description and action.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zHeaderBorder]` | Adds a bottom border to the header | `boolean` | `false` |
+| `[zHeaderBorder]` | Adds a bottom border | `boolean` | `false` |
 
 ### z-card-title, [z-card-title]
 
@@ -641,7 +641,7 @@ Card title text or template.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zTitle]` | Title content — string or template reference | `string \| TemplateRef<void> \| undefined` | `-` |
+| `[zTitle]` | Title content | `string \| TemplateRef<void> \| undefined` | `-` |
 
 ### z-card-description, [z-card-description]
 
@@ -650,11 +650,11 @@ Card description text or template.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zDescription]` | Description content — string or template reference | `string \| TemplateRef<void> \| undefined` | `-` |
+| `[zDescription]` | Description content | `string \| TemplateRef<void> \| undefined` | `-` |
 
 ### z-card-action, [z-card-action]
 
-Action button displayed in the card header.
+Action in the card header.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -675,7 +675,7 @@ Footer section of the card.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zFooterBorder]` | Adds a top border to the footer | `boolean` | `false` |
+| `[zFooterBorder]` | Adds a top border | `boolean` | `false` |
 
 ---
 

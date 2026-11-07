@@ -866,57 +866,57 @@ export class ZardDemoBreadcrumbRtlComponent {
 
 ### z-breadcrumb
 
-Displays the path to the current resource using a hierarchy of links. Renders a labelled `<nav>` wrapping an ordered list; separators render automatically unless explicit separators are projected. The default chevron separator flips in right-to-left layouts; a custom separator is rendered as given.
+Navigation trail with automatic separators.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zLabel]` | Accessible label for the breadcrumb navigation | `string` | `'breadcrumb'` |
-| `[zSize]` | Breadcrumb text size | `'sm' \| 'md' \| 'lg'` | `'md'` |
-| `[zAlign]` | Horizontal alignment of the item list | `'start' \| 'center' \| 'end'` | `'start'` |
-| `[zWrap]` | Whether the item list wraps onto multiple lines | `'wrap' \| 'nowrap'` | `'wrap'` |
-| `[zSeparator]` | Custom separator content rendered between auto-generated separators | `string \| TemplateRef<void>` | `''` |
+| `[zLabel]` | Accessible label for the nav | `string` | `'breadcrumb'` |
+| `[zSize]` | Text size | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `[zAlign]` | Horizontal alignment | `'start' \| 'center' \| 'end'` | `'start'` |
+| `[zWrap]` | Line wrapping | `'wrap' \| 'nowrap'` | `'wrap'` |
+| `[zSeparator]` | Custom content for automatic separators | `string \| TemplateRef<void>` | `''` |
 
 ### z-breadcrumb-item, [z-breadcrumb-item]
 
-An individual breadcrumb item, rendered with `role="listitem"`. When no `z-breadcrumb-link`, `z-breadcrumb-page`, or `z-breadcrumb-ellipsis` is projected, it renders a generated link for every item except the last and a page for the last one; the router-compatible inputs below configure that generated link.
+Trail item; without projected content it generates a link or page.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[routerLink]` | Router-compatible command array, string, or UrlTree for the generated link | `string \| any[] \| UrlTree` | `[]` |
-| `[queryParams]` | Query params merged into the generated URL when routerLink is set | `Params` | `-` |
-| `[fragment]` | URL fragment appended to the generated URL when routerLink is set | `string` | `-` |
-| `[queryParamsHandling]` | How the current query params are merged with queryParams | `'merge' \| 'preserve' \| ''` | `-` |
-| `[state]` | Navigation state passed to the Router when routerLink is set | `unknown` | `-` |
-| `[info]` | Arbitrary navigation info passed to the Router when routerLink is set | `unknown` | `-` |
-| `[relativeTo]` | Route the routerLink commands are resolved against; defaults to the current activated route | `ActivatedRoute` | `-` |
-| `[preserveFragment]` | Keeps the current URL fragment when navigating via routerLink | `boolean` | `false` |
-| `[skipLocationChange]` | Navigates via routerLink without pushing a new browser history entry | `boolean` | `false` |
-| `[replaceUrl]` | Replaces the current browser history entry instead of pushing a new one | `boolean` | `false` |
+| `[routerLink]` | Target of the generated link | `string \| any[] \| UrlTree` | `[]` |
+| `[queryParams]` | Query params for the generated URL | `Params` | `-` |
+| `[fragment]` | URL fragment for the generated URL | `string` | `-` |
+| `[queryParamsHandling]` | How current query params are kept | `'merge' \| 'preserve' \| ''` | `-` |
+| `[state]` | Navigation state for the Router | `unknown` | `-` |
+| `[info]` | Navigation info for the Router | `unknown` | `-` |
+| `[relativeTo]` | Route the commands resolve against | `ActivatedRoute` | `-` |
+| `[preserveFragment]` | Keeps the current URL fragment | `boolean` | `false` |
+| `[skipLocationChange]` | Navigates without a new history entry | `boolean` | `false` |
+| `[replaceUrl]` | Replaces the current history entry | `boolean` | `false` |
 
 ### z-breadcrumb-link, [z-breadcrumb-link]
 
-A clickable breadcrumb link. Apply the attribute to a native `<a>` or `<button>` to reuse its interactive semantics. Set routerLink to navigate through the Angular Router (href is generated and kept in sync), or set href directly for a plain link.
+Clickable link; use on a native `<a>` or `<button>`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[routerLink]` | Router-compatible command array, string, or UrlTree; navigates via the Router and computes href | `string \| any[] \| UrlTree` | `-` |
-| `[queryParams]` | Query params merged into the generated URL when routerLink is set | `Params` | `-` |
-| `[fragment]` | URL fragment appended to the generated URL when routerLink is set | `string` | `-` |
-| `[queryParamsHandling]` | How the current query params are merged with queryParams | `'merge' \| 'preserve' \| ''` | `-` |
-| `[state]` | Navigation state passed to the Router when routerLink is set | `unknown` | `-` |
-| `[info]` | Arbitrary navigation info passed to the Router when routerLink is set | `unknown` | `-` |
-| `[relativeTo]` | Route the routerLink commands are resolved against; defaults to the current activated route | `ActivatedRoute` | `-` |
-| `[preserveFragment]` | Keeps the current URL fragment when navigating via routerLink | `boolean` | `false` |
-| `[skipLocationChange]` | Navigates via routerLink without pushing a new browser history entry | `boolean` | `false` |
-| `[replaceUrl]` | Replaces the current browser history entry instead of pushing a new one | `boolean` | `false` |
-| `[href]` | Plain link URL, used when routerLink is not set | `string` | `-` |
+| `[routerLink]` | Router target; also computes `href` | `string \| any[] \| UrlTree` | `-` |
+| `[queryParams]` | Query params for the generated URL | `Params` | `-` |
+| `[fragment]` | URL fragment for the generated URL | `string` | `-` |
+| `[queryParamsHandling]` | How current query params are kept | `'merge' \| 'preserve' \| ''` | `-` |
+| `[state]` | Navigation state for the Router | `unknown` | `-` |
+| `[info]` | Navigation info for the Router | `unknown` | `-` |
+| `[relativeTo]` | Route the commands resolve against | `ActivatedRoute` | `-` |
+| `[preserveFragment]` | Keeps the current URL fragment | `boolean` | `false` |
+| `[skipLocationChange]` | Navigates without a new history entry | `boolean` | `false` |
+| `[replaceUrl]` | Replaces the current history entry | `boolean` | `false` |
+| `[href]` | Plain URL when `routerLink` is unset | `string` | `-` |
 
 ### z-breadcrumb-page, [z-breadcrumb-page]
 
-The current page in the breadcrumb trail. Renders non-clickable content with `aria-current="page"`.
+Current page, marked with `aria-current="page"`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -924,7 +924,7 @@ The current page in the breadcrumb trail. Renders non-clickable content with `ar
 
 ### z-breadcrumb-separator, [z-breadcrumb-separator]
 
-A decorative separator between breadcrumb items (`aria-hidden`, `role="presentation"`). Project it manually — e.g. on an `<li>` — to override the default chevron and suppress the automatic separators; project custom content inside it to change the glyph.
+Decorative separator; projecting one disables the automatic ones.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -932,13 +932,13 @@ A decorative separator between breadcrumb items (`aria-hidden`, `role="presentat
 
 ### z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]
 
-A control that stands in for one or more collapsed items in a long breadcrumb trail.
+Stands in for collapsed items.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zColor]` | Icon color | `'muted' \| 'strong'` | `'muted'` |
-| `[zLabel]` | Screen-reader label for the collapsed items | `string` | `'More breadcrumbs'` |
+| `[zLabel]` | Screen-reader label | `string` | `'More breadcrumbs'` |
 
 ---
 

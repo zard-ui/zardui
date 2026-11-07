@@ -709,17 +709,17 @@ export class ZardDemoTableRtlComponent {
 
 ### table[z-table]
 
-The table root. Apply the `z-table` attribute to a native `<table>` — it styles nested cells and rows through descendant selectors, and picks up the full set of per-slot styles once you also apply the matching attribute to each native tag: `z-table-header`, `z-table-body`, `z-table-row`, `z-table-head`, `z-table-cell`, `z-table-caption`, `z-table-footer`.
+Table root on a native `<table>`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zType]` | Visual style of the table | `'default' \| 'striped' \| 'bordered'` | `'default'` |
-| `[zSize]` | Row and cell padding density | `'default' \| 'compact' \| 'comfortable'` | `'default'` |
+| `[zType]` | Visual style | `'default' \| 'striped' \| 'bordered'` | `'default'` |
+| `[zSize]` | Cell padding density | `'default' \| 'compact' \| 'comfortable'` | `'default'` |
 
 ### thead[z-table-header]
 
-The table header section. Apply the attribute to a native `<thead>`.
+Table header section.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -727,7 +727,7 @@ The table header section. Apply the attribute to a native `<thead>`.
 
 ### tbody[z-table-body]
 
-The table body section. Apply the attribute to a native `<tbody>`; its last row renders without a bottom border.
+Table body section.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -735,7 +735,7 @@ The table body section. Apply the attribute to a native `<tbody>`; its last row 
 
 ### tr[z-table-row]
 
-A table row. Apply the attribute to a native `<tr>`; it highlights on hover and when `[data-state="selected"]` is set on the element.
+Table row; highlights on hover and with `data-state="selected"`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -743,7 +743,7 @@ A table row. Apply the attribute to a native `<tr>`; it highlights on hover and 
 
 ### th[z-table-head]
 
-A header cell. Apply the attribute to a native `<th>`; set `scope="col"` (or `"row"`) on the element yourself so the table stays accessible.
+Header cell; set `scope` yourself.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -751,7 +751,7 @@ A header cell. Apply the attribute to a native `<th>`; set `scope="col"` (or `"r
 
 ### td[z-table-cell]
 
-A data cell. Apply the attribute to a native `<td>`.
+Data cell.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -759,7 +759,7 @@ A data cell. Apply the attribute to a native `<td>`.
 
 ### caption[z-table-caption]
 
-The table caption, giving the table an accessible name for screen readers. Apply the attribute to a native `<caption>`.
+Table caption, its accessible name.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -767,7 +767,7 @@ The table caption, giving the table an accessible name for screen readers. Apply
 
 ### tfoot[z-table-footer]
 
-The table footer section, typically a totals row. Apply the attribute to a native `<tfoot>`.
+Table footer section.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

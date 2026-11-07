@@ -40,6 +40,16 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'maps',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./domain/pages/maps/maps.routes').then(m => m.MAPS_ROUTES),
+      },
+    ],
+  },
+  {
     path: 'docs',
     component: DocumentationLayout,
     children: [

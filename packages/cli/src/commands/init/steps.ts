@@ -11,7 +11,7 @@ import { setupRtlDirection } from '@cli/commands/init/rtl-setup.js';
 import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { updateAngularConfig } from '@cli/commands/init/update-angular-config.js';
-import { setupVitePlugin } from '@cli/commands/init/vite-setup.js';
+import { setupVitePlugin, setupViteTsconfigPaths } from '@cli/commands/init/vite-setup.js';
 import { iconFamily } from '@cli/core/icons/index.js';
 import { resolveConfigPaths, type Config } from '@cli/utils/config.js';
 import { type ProjectInfo } from '@cli/utils/get-project-info.js';
@@ -98,18 +98,25 @@ export function buildInitSteps(
     });
   }
 
-  steps.push(
-    {
-      label: tsconfigFile,
-      note: 'import path aliases',
-      run: () => updateTsConfig(cwd, config, tsconfigFile),
-    },
-    {
-      label: 'core & utils',
-      note: 'shared helpers used by every component',
-      run: () => installCoreDependencies(cwd, config),
-    },
-  );
+  steps.push({
+    label: tsconfigFile,
+    note: 'import path aliases',
+    run: () => updateTsConfig(cwd, config, tsconfigFile),
+  });
+
+  if (!isLibrary && bundlerFor(kind) === 'vite') {
+    steps.push({
+      label: 'vite.config.ts',
+      note: 'resolve the import aliases',
+      run: () => setupViteTsconfigPaths(cwd),
+    });
+  }
+
+  steps.push({
+    label: 'core & utils',
+    note: 'shared helpers used by every component',
+    run: () => installCoreDependencies(cwd, config),
+  });
 
   return steps;
 }

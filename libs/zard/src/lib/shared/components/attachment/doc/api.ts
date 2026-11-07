@@ -3,7 +3,7 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const ATTACHMENT_API: ApiSection[] = [
   {
     selector: 'z-attachment',
-    description: 'File or image container. Consumer projection owns labels, URLs, progress and transport.',
+    description: 'File or image container; you project labels, links and progress.',
     props: [
       {
         name: '[zState]',
@@ -13,41 +13,40 @@ export const ATTACHMENT_API: ApiSection[] = [
       },
       { name: '[zSize]', description: 'Density', type: 'default | sm | xs', default: 'default' },
       { name: '[zOrientation]', description: 'Layout', type: 'horizontal | vertical', default: 'horizontal' },
-      { name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
     ],
   },
   {
     selector: 'z-attachment-media',
-    description: 'Projected icon or image. Give images meaningful alt text.',
+    description: 'Icon or image; give images alt text.',
     props: [
       { name: '[zVariant]', description: 'Media presentation', type: 'icon | image', default: 'icon' },
-      { name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
     ],
   },
   {
     selector: 'z-attachment-content',
-    description: 'Projected text container.',
-    props: [{ name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" }],
+    description: 'Text container.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-attachment-title',
-    description: 'Title; shimmers only while the nearest attachment is busy.',
-    props: [{ name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" }],
+    description: 'Title; shimmers while the attachment is busy.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-attachment-description',
-    description: 'Projected progress or error description; use an aria-live region when appropriate.',
-    props: [{ name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" }],
+    description: 'Progress or error text.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-attachment-actions',
-    description: 'Independent controls above the full-card trigger.',
-    props: [{ name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" }],
+    description: 'Controls layered above the card trigger.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'button[z-attachment-action]',
-    description:
-      'Also a[z-attachment-action]. Native actions inherit the complete z-button API and loading observer lifecycle. Native href, target and download remain consumer attributes.',
+    description: 'Action button with the full `z-button` API.',
     props: [
       {
         name: '[zType]',
@@ -67,37 +66,35 @@ export const ATTACHMENT_API: ApiSection[] = [
       { name: '[disabled]', description: 'Native disabled state', type: 'boolean', default: 'false' },
       {
         name: '[type]',
-        description: 'Native button type (ignored on anchors)',
+        description: 'Native button type; ignored on anchors',
         type: 'button | submit | reset',
         default: 'button',
       },
       {
         name: '[tabindex]',
-        description: 'Consumer tab order; disabled links use -1',
+        description: 'Tab order; disabled links use -1',
         type: 'string | number | null',
         default: 'null',
       },
-      { name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
     ],
   },
   {
     selector: 'button[z-attachment-trigger]',
-    description:
-      'Also a[z-attachment-trigger]. Project a named native overlay button or link alongside actions, never around them.',
+    description: 'Full-card button or link; place it beside actions, not around them.',
     props: [
       {
         name: '[type]',
-        description: 'Native button type (ignored on anchors)',
+        description: 'Native button type; ignored on anchors',
         type: 'button | submit | reset',
         default: 'button',
       },
-      { name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
     ],
   },
   {
     selector: 'z-attachment-group',
-    description:
-      'Horizontal snapping group. Provide aria-label or aria-labelledby. Host arrow keys scroll one current viewport; descendant controls keep their keys. ArrowLeft and ArrowRight scroll toward the visual left and right in both directions, and the group starts at the right edge in RTL.',
-    props: [{ name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: "''" }],
+    description: 'Horizontal snapping group; give it an `aria-label`.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

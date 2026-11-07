@@ -99,6 +99,19 @@ describe('serializeComponentToMarkdown', () => {
     expect(md.indexOf('## Accessibility')).toBeLessThan(md.indexOf('## API Reference'));
   });
 
+  it('puts a section callout first, as a quote', () => {
+    const md = serializeComponentToMarkdown({
+      componentName: 'thing',
+      description: 'A thing.',
+      examples: [],
+      sections: [
+        { id: 'notes', title: 'Notes', callout: { title: 'Heads up', description: 'Read me.' }, description: 'Body.' },
+      ],
+    });
+
+    expect(md).toContain(['## Notes', '> **Heads up.** Read me.', 'Body.'].join('\n\n'));
+  });
+
   it('omits sections that have no data', () => {
     const md = serializeComponentToMarkdown({ componentName: 'empty', description: 'Nothing here.', examples: [] });
 

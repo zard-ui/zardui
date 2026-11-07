@@ -327,15 +327,15 @@ Displays a keyboard key.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-kbd-group
 
-Groups z-kbd components together.
+Groups `z-kbd` keys.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

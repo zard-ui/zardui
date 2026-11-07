@@ -11,7 +11,7 @@ export const BADGE_API: ApiSection[] = [
         type: "'default' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'link'",
         default: "'default'",
       },
-      { name: '[class]', description: 'Additional CSS classes', type: 'string', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
     ],
   },
 ];

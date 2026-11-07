@@ -276,13 +276,13 @@ export class ZardDemoSeparatorRtlComponent {
 
 ### z-separator
 
-Visually or semantically separates content with a horizontal or vertical line.
+A horizontal or vertical dividing line.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zOrientation]` | The orientation of the separator. | `"horizontal" \| "vertical"` | `horizontal` |
-| `[zDecorative]` | When true, indicates that the separator is purely decorative and removes it from the accessibility tree. | `boolean` | `true` |
-| `[class]` | Override or extend the default classes (margin, color, etc). | `ClassValue` | `-` |
+| `[zOrientation]` | Line direction | `"horizontal" \| "vertical"` | `horizontal` |
+| `[zDecorative]` | Hides it from assistive tech | `boolean` | `true` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ---
 

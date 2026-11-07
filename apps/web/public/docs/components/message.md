@@ -757,26 +757,26 @@ export class ZardDemoMessageRtlComponent {
 
 ### z-message
 
-The message row wrapper. It owns the avatar, alignment, header and footer around the message surface.
+Message row with avatar, header and footer.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zAlign]` | The alignment of the message in the conversation. | `start \| end` | `start` |
-| `[zSrc]` | Avatar image of the sender. Renders the avatar slot for you; a projected z-message-avatar wins over it. | `string \| SafeUrl` | `-` |
-| `[zAlt]` | Alternative text of the shorthand avatar image. | `string` | `-` |
-| `[zFallback]` | Initials shown while the shorthand avatar has no image, or instead of one. | `string` | `-` |
-| `[zHeader]` | Content above the turn, such as a sender name. Only applies to the shorthand. | `string \| TemplateRef<void>` | `-` |
-| `[zFooter]` | Content below the turn, such as a delivery status. Only applies to the shorthand. | `string \| TemplateRef<void>` | `-` |
-| `[zVariant]` | Variant of the bubble the shorthand renders. Ignored once the content is projected. | `default \| secondary \| muted \| tinted \| outline \| ghost \| destructive` | `default` |
-| `[class]` | Additional classes to apply to the row. | `ClassValue` | `-` |
+| `[zAlign]` | Side of the conversation | `start \| end` | `start` |
+| `[zSrc]` | Sender avatar image; a projected avatar overrides it | `string \| SafeUrl` | `-` |
+| `[zAlt]` | Avatar alt text | `string` | `-` |
+| `[zFallback]` | Avatar initials when there is no image | `string` | `-` |
+| `[zHeader]` | Content above the message, e.g. sender name | `string \| TemplateRef<void>` | `-` |
+| `[zFooter]` | Content below the message, e.g. delivery status | `string \| TemplateRef<void>` | `-` |
+| `[zVariant]` | Bubble variant; ignored when content is projected | `default \| secondary \| muted \| tinted \| outline \| ghost \| destructive` | `default` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-message-avatar
 
-The avatar slot, aligned to the bottom of the message. When the message has a z-message-footer, the avatar shifts up to stay aligned with the message surface instead of the footer.
+Avatar slot, aligned to the bottom of the message surface.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional classes to apply to the avatar slot. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-message-content
 
@@ -784,25 +784,25 @@ Wraps the header, message surface and footer.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional classes to apply to the content slot. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-message-header
 
-Displays content above the message, such as a sender name. Stays aligned to the start regardless of zAlign.
+Content above the message, always start-aligned.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zHeader]` | Header content, as an alternative to projecting it. | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Additional classes to apply to the header. | `ClassValue` | `-` |
+| `[zHeader]` | Header content, instead of projecting it | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-message-footer
 
-Displays content below the message, such as status or actions. Aligns to the message side.
+Content below the message, aligned to its side.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zFooter]` | Footer content, as an alternative to projecting it. | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Additional classes to apply to the footer. | `ClassValue` | `-` |
+| `[zFooter]` | Footer content, instead of projecting it | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-message-group
 
@@ -810,7 +810,7 @@ Groups consecutive messages from the same sender.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional classes to apply to the group root. | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ---
 

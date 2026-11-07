@@ -394,8 +394,8 @@ A two-state button that can be either on or off.
 | `[zSize]` | Toggle size | `'sm' \| 'default' \| 'lg'` | `'default'` |
 | `[zType]` | Visual style | `'default' \| 'outline'` | `'default'` |
 | `[(zValue)]` | Toggle value | `boolean` | `false` |
-| `[zDisabled]` | Disables the toggle (also integrates with Angular Forms) | `boolean` | `false` |
-| `[zAriaLabel]` | Accessible label for screen readers (required) | `string (required)` | `-` |
+| `[zDisabled]` | Disables the toggle | `boolean` | `false` |
+| `[zAriaLabel]` | Accessible label | `string (required)` | `-` |
 | `(zToggleClick)` | Emitted when the toggle is clicked | `void` | `-` |
 | `(zToggleHover)` | Emitted when the toggle is hovered | `void` | `-` |
 | `(zToggleChange)` | Emitted when the toggle value changes | `boolean` | `-` |

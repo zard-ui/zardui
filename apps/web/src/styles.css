@@ -3,6 +3,9 @@
 @import '../../../libs/zard/src/lib/shared/core/css/zard.css';
 @import '../../../libs/zard/src/lib/shared/core/css/utilities.css';
 @import '../../../libs/zard/src/lib/shared/core/css/typeset.css';
+/* maplibre-gl.css (about 90 kB) is not imported here: it is copied to the output as an asset and linked by the map
+   routes only, so no other page pays for it. See apps/web/src/app/shared/utils/maplibre-styles.ts. */
+@import '../../../libs/zard/src/lib/shared/components/map/map.css';
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource-variable/geist';
 @import '@fontsource-variable/noto-sans-arabic';
@@ -399,6 +402,25 @@ code span {
 code [data-highlighted-chars] {
   background-color: transparent !important;
   box-shadow: none !important;
+}
+
+/* Inline code inside API reference descriptions (rendered from backticks by `inlineCode`). */
+.api-inline code {
+  @apply bg-muted text-foreground rounded px-1 py-0.5 font-mono text-[0.85em];
+}
+
+/* Docs reference tables: roomier cells and no row hover on top of z-table (unlayered, so it wins). */
+.docs-table :is(th, td) {
+  padding-inline: 1rem;
+}
+
+.docs-table td {
+  padding-block: 0.75rem;
+  vertical-align: top;
+}
+
+.docs-table tr:hover {
+  background: none;
 }
 
 .component-selector {

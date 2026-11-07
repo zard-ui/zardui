@@ -679,13 +679,13 @@ export class ZardDemoInputRtlComponent {
 
 ### input[z-input]
 
-A directive that styles a native `<input>` element. All native HTML input attributes (`type`, `placeholder`, `disabled`, `required`, `readonly`, `aria-invalid`, etc.) keep working as-is.
+Styles a native `<input>`; native attributes work as usual.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[value]` | Input value, two-way bindable | `string \| number \| null` | `null` |
-| `[(value)]` | Input value (two-way binding) | `string \| number \| null` | `null` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[value]` | Input value | `string \| number \| null` | `null` |
+| `[(value)]` | Input value | `string \| number \| null` | `null` |
 
 ---
 

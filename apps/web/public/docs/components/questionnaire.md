@@ -2774,19 +2774,19 @@ Always give `z-questionnaire-input` an accessible name with `aria-label` or by w
 
 ### z-questionnaire
 
-A multi-step questionnaire with single-choice, multiple-choice, freeform, and skippable questions. Implements ControlValueAccessor for Reactive Forms.
+Multi-step questionnaire that works with Reactive Forms.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zItems]` | Optional item settings by name (required, multiple, disabled). They apply only where the matching z-questionnaire-item does not set the same input; the projected items define the order. Without projected items, this list defines the flow | `readonly ZardQuestionnaireItem[]` | `[]` |
-| `zActive` | Active item name; supports two-way binding with [(zActive)] | `string \| undefined` | `undefined` |
-| `zShortcuts` | Assigns answer shortcuts to the enabled choices of the active item. Only the focused questionnaire reacts; with nothing focused, the last one interacted with does | `'none' \| 'letters' \| 'numbers'` | `'none'` |
+| `[zItems]` | Item settings by name; projected item inputs win | `readonly ZardQuestionnaireItem[]` | `[]` |
+| `zActive` | Two-way bindable active item name | `string \| undefined` | `undefined` |
+| `zShortcuts` | Keyboard shortcuts for the active choices | `'none' \| 'letters' \| 'numbers'` | `'none'` |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
-| `(zSubmit)` | Emits the answers once every enabled item validates | `EventEmitter<Record<string, string \| string[]>>` | `-` |
+| `(zSubmit)` | Emits the answers once all items validate | `EventEmitter<Record<string, string \| string[]>>` | `-` |
 
 ### z-questionnaire-progress
 
-Displays the current question and total as text and an accessible progress bar.
+Current step as text and a progress bar.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2794,20 +2794,20 @@ Displays the current question and total as text and an accessible progress bar.
 
 ### z-questionnaire-item
 
-One questionnaire step rendered as a fieldset.
+One step, rendered as a fieldset.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zName` | Unique item name used for navigation and the submitted answer key | `string` | `required` |
-| `zRequired` | Requires an answer before navigation or submission can continue. Wins over the item in [zItems]; when unset, [zItems] decides | `boolean` | `false` |
-| `zMultiple` | Allows multiple fixed answers and submits a string array. Wins over the item in [zItems]; when unset, [zItems] decides | `boolean` | `false` |
-| `zDisabled` | Disables the item and excludes it from progress, navigation, validation, and submission. Wins over the item in [zItems]; when unset, [zItems] decides | `boolean` | `false` |
-| `zInvalid` | Marks the item invalid from consumer-owned validation | `boolean` | `false` |
+| `zName` | Unique name and answer key | `string` | `required` |
+| `zRequired` | Requires an answer. Overrides `zItems` | `boolean` | `false` |
+| `zMultiple` | Allows multiple answers. Overrides `zItems` | `boolean` | `false` |
+| `zDisabled` | Disables and skips the item. Overrides `zItems` | `boolean` | `false` |
+| `zInvalid` | Marks the item invalid | `boolean` | `false` |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-questionnaire-title
 
-Item prompt rendered as the fieldset legend.
+Item prompt, rendered as the legend.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2815,7 +2815,7 @@ Item prompt rendered as the fieldset legend.
 
 ### z-questionnaire-description
 
-Supporting text automatically wired to the item fieldset and built-in answer controls.
+Supporting text wired to the item controls.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2823,7 +2823,7 @@ Supporting text automatically wired to the item fieldset and built-in answer con
 
 ### z-questionnaire-choices
 
-Layout container for fixed choices and the freeform input.
+Container for choices and the freeform input.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2831,18 +2831,18 @@ Layout container for fixed choices and the freeform input.
 
 ### z-questionnaire-choice
 
-One fixed answer rendered as a label with a native radio or checkbox and an optional shortcut.
+One fixed answer with a native radio or checkbox.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zValue` | Value submitted when the choice is selected | `string` | `required` |
-| `checked` | Initial checked state, including the state restored by a native form reset | `boolean` | `false` |
+| `zValue` | Submitted value | `string` | `required` |
+| `checked` | Initial checked state | `boolean` | `false` |
 | `zDisabled` | Disables this choice | `boolean` | `false` |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-questionnaire-choice-description
 
-Secondary text under a choice label, rendered in muted color.
+Muted text under a choice label.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2855,10 +2855,10 @@ Freeform answer for the active item.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `type` | Native input type | `string` | `'text'` |
-| `value` | Initial value, including the value restored by a native form reset | `string` | `''` |
+| `value` | Initial value | `string` | `''` |
 | `placeholder` | Placeholder text | `string` | `''` |
-| `aria-label` | Accessible label for the freeform input | `string \| null` | `null` |
-| `zDisabled` | Disables the freeform input | `boolean` | `false` |
+| `aria-label` | Accessible label | `string \| null` | `null` |
+| `zDisabled` | Disables the input | `boolean` | `false` |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-questionnaire-error
@@ -2871,7 +2871,7 @@ Validation message for the item.
 
 ### z-questionnaire-actions
 
-Layout row for questionnaire navigation buttons.
+Row for the navigation buttons.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2879,54 +2879,54 @@ Layout row for questionnaire navigation buttons.
 
 ### button[z-questionnaire-previous]
 
-Moves to the previous item and hides itself when no previous item is available.
+Goes back; hidden when there is no previous item.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `disabled` | Disables the button in addition to its questionnaire-controlled disabled state | `boolean` | `false` |
+| `disabled` | Disables the button | `boolean` | `false` |
 | `zType` | Button visual style | `ZardButtonTypeVariants` | `'outline'` |
 | `zSize` | Button size | `ZardButtonSizeVariants` | `'default'` |
 | `zShape` | Button shape | `ZardButtonShapeVariants` | `'default'` |
-| `zLoading` | Shows the loading state and disables the button | `boolean` | `false` |
+| `zLoading` | Loading state; also disables the button | `boolean` | `false` |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
 
 ### button[z-questionnaire-skip]
 
-Skips the active optional item and hides itself when the item cannot be skipped.
+Skips an optional item; hidden otherwise.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `disabled` | Disables the button in addition to its questionnaire-controlled disabled state | `boolean` | `false` |
+| `disabled` | Disables the button | `boolean` | `false` |
 | `zType` | Button visual style | `ZardButtonTypeVariants` | `'outline'` |
 | `zSize` | Button size | `ZardButtonSizeVariants` | `'default'` |
 | `zShape` | Button shape | `ZardButtonShapeVariants` | `'default'` |
-| `zLoading` | Shows the loading state and disables the button | `boolean` | `false` |
+| `zLoading` | Loading state; also disables the button | `boolean` | `false` |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
 
 ### button[z-questionnaire-next]
 
-Validates the active item, moves forward, and hides itself on the final item.
+Validates and moves forward; hidden on the last item.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `disabled` | Disables the button in addition to its questionnaire-controlled disabled state | `boolean` | `false` |
+| `disabled` | Disables the button | `boolean` | `false` |
 | `zType` | Button visual style | `ZardButtonTypeVariants` | `'default'` |
 | `zSize` | Button size | `ZardButtonSizeVariants` | `'default'` |
 | `zShape` | Button shape | `ZardButtonShapeVariants` | `'default'` |
-| `zLoading` | Shows the loading state and disables the button | `boolean` | `false` |
+| `zLoading` | Loading state; also disables the button | `boolean` | `false` |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
 
 ### button[z-questionnaire-submit]
 
-Submits the questionnaire and hides itself until the final item is active.
+Submits; shown only on the last item.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `disabled` | Disables the button in addition to its questionnaire-controlled disabled state | `boolean` | `false` |
+| `disabled` | Disables the button | `boolean` | `false` |
 | `zType` | Button visual style | `ZardButtonTypeVariants` | `'default'` |
 | `zSize` | Button size | `ZardButtonSizeVariants` | `'default'` |
 | `zShape` | Button shape | `ZardButtonShapeVariants` | `'default'` |
-| `zLoading` | Shows the loading state and disables the button | `boolean` | `false` |
+| `zLoading` | Loading state; also disables the button | `boolean` | `false` |
 | `class` | Custom CSS classes | `ClassValue` | `''` |
 
 ---

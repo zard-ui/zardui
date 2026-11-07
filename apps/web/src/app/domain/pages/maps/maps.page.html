@@ -1,0 +1,33 @@
+<section class="container flex flex-col items-center gap-2 py-8 text-center md:py-16 lg:py-20 xl:gap-4">
+  <h1
+    class="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter"
+  >
+    Beautiful Maps for the Web
+  </h1>
+  <p class="text-foreground max-w-3xl text-base text-balance sm:text-lg">
+    Ready-made map blocks built with MapLibre GL and ng-mapcn. Copy and paste into your apps. Works with all Angular
+    Ecosystem. Open Source. Free forever.
+  </p>
+  <section class="flex w-full items-center justify-center gap-2 pt-2 **:data-[slot=button]:shadow-none">
+    <a z-button href="/maps#maps" class="h-[35px] rounded-[26px] px-3">Browse Maps</a>
+    <a z-button zType="ghost" routerLink="/docs/components/map" class="h-9 rounded-[26px] px-3">Map docs</a>
+  </section>
+</section>
+
+<!-- The tabs, like the charts page, with the map style picker at the right end of the row (under them, at the start, on a phone). -->
+<div class="relative" data-slot="maps-toolbar">
+  <z-category-tabs [tabs]="categoryTabs" />
+
+  <div
+    class="container mt-6 flex justify-start md:pointer-events-none md:absolute md:inset-x-0 md:top-1/2 md:mt-0 md:-translate-y-1/2 md:justify-end"
+  >
+    <!-- The shipped picker: it drives every map on this page, and the choice follows you to the docs. -->
+    <z-map-style-select class="md:pointer-events-auto" [zAlign]="isMobile() ? 'start' : 'end'" />
+  </div>
+</div>
+
+<section id="maps" class="container flex min-h-svh flex-col gap-10 pt-8 pb-24">
+  @for (block of blocks(); track block.id) {
+    <z-map-block [block]="block" />
+  }
+</section>

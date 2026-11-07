@@ -398,8 +398,8 @@ Displays a callout for user attention.
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zAction]` | Alert action | `TemplateRef<void>` | `-` |
 | `[zDescription]` | Alert description | `string \| TemplateRef<void>` | `-` |
-| `[zIcon]` | Alert icon (an ng-icons name or a TemplateRef). When unset, defaults to 'lucideCircleAlert' for the 'destructive' zType; otherwise no icon renders. | `TemplateRef<void> \| string` | `-` |
-| `[zRole]` | Overrides the ARIA role. Defaults to 'status' when [zAction] is set, otherwise 'alert'. | `'alert' \| 'status'` | `-` |
+| `[zIcon]` | Icon name or template; destructive alerts get one by default | `TemplateRef<void> \| string` | `-` |
+| `[zRole]` | ARIA role; `status` with `zAction`, else `alert` | `'alert' \| 'status'` | `-` |
 | `[zTitle]` | Alert title | `string \| TemplateRef<void>` | `-` |
 | `[zType]` | Alert variant | `'default' \| 'destructive'` | `'default'` |
 
