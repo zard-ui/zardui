@@ -1,7 +1,7 @@
 import { NgComponentOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
@@ -40,12 +40,27 @@ const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar', 'map'];
     ZardCodeBoxComponent,
     HyphenToSpacePipe,
     NgComponentOutlet,
+    RouterLink,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComponentPage implements OnInit {
   protected readonly fillsContainer = (componentName: string) => FULL_WIDTH_PREVIEWS.includes(componentName);
   protected readonly isLink = (cell: string | SectionTableLink): cell is SectionTableLink => typeof cell !== 'string';
+
+  protected readonly inlineText = (text: string): string =>
+    text
+      .split(/(`[^`]+`)/g)
+      .map(segment => {
+        const isCode = segment.startsWith('`') && segment.endsWith('`');
+        const content = isCode ? segment.slice(1, -1) : segment;
+        const escapedContent = content.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+
+        return isCode
+          ? `<code class="bg-muted rounded px-1.5 py-0.5 font-mono text-sm">${escapedContent}</code>`
+          : escapedContent;
+      })
+      .join('');
 
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
@@ -141,32 +156,37 @@ export class ComponentPage implements OnInit {
       type: 'custom' as const,
     }));
 
-    this.navigationConfig = {
-      items: [
-        { id: 'overview', label: 'Overview', type: 'core' },
-        ...(component.about ? [{ id: 'about', label: 'About', type: 'core' as const }] : []),
-        { id: 'installation', label: 'Installation', type: 'core' },
-        { id: 'usage', label: 'Usage', type: 'core' },
-        ...(component.composition ? [{ id: 'composition', label: 'Composition', type: 'core' as const }] : []),
-        {
-          id: 'examples',
-          label: 'Examples',
-          type: 'core',
-          children: exampleNavigationItems,
-        },
-        ...(component.sections ?? []).map(section => ({
-          id: section.id,
-          label: section.title,
-          type: 'core' as const,
-          children: (section.examples ?? []).map(example => ({
-            id: example.name,
-            label: example.name,
-            type: 'custom' as const,
-          })),
-        })),
-        { id: 'api', label: 'API', type: 'core' },
-      ],
-    };
+    this.navigationConfig = component.deprecatedFor
+      ? { items: [] }
+      : {
+          items: [
+            { id: 'overview', label: 'Overview', type: 'core' },
+            ...(component.about ? [{ id: 'about', label: 'About', type: 'core' as const }] : []),
+            { id: 'installation', label: 'Installation', type: 'core' },
+            { id: 'usage', label: 'Usage', type: 'core' },
+            ...(component.composition ? [{ id: 'composition', label: 'Composition', type: 'core' as const }] : []),
+            {
+              id: 'examples',
+              label: 'Examples',
+              type: 'core',
+              children: exampleNavigationItems,
+            },
+            ...(component.sections ?? []).map(section => ({
+              id: section.id,
+              label: section.title,
+              type: 'core' as const,
+              children: (section.examples ?? []).map(example => ({
+                id: example.name,
+                label: example.name,
+                type: 'custom' as const,
+              })),
+            })),
+            ...(component.accessibility
+              ? [{ id: 'accessibility', label: 'Accessibility', type: 'core' as const }]
+              : []),
+            { id: 'api', label: 'API', type: 'core' },
+          ],
+        };
 
     this.installGuide.set(installGuide);
     this.componentData.set(component);

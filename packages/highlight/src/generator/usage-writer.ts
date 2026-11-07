@@ -16,6 +16,16 @@ export async function generateUsageFiles(): Promise<number> {
     const templateLanguage = rawData.templateLanguage ?? 'angular-html';
     const importHtml = await highlightCode(rawData.importCode, 'angular-ts');
     const templateHtml = await highlightCode(rawData.templateCode, templateLanguage);
+    const additionalBlocks = await Promise.all(
+      (rawData.additionalCodeBlocks ?? []).map(async block => ({
+        html: await highlightCode(block.code, block.language),
+        code: block.code,
+        language: block.language,
+        showLineNumbers: true,
+        copyButton: true,
+        expandable: false,
+      })),
+    );
 
     const importBlock: CodeBlockData = {
       html: importHtml,
@@ -41,7 +51,15 @@ export async function generateUsageFiles(): Promise<number> {
 export const ${constPrefix}_USAGE_IMPORT: CodeBlockData = ${JSON.stringify(importBlock, null, 2)};
 
 export const ${constPrefix}_USAGE_CODE: CodeBlockData = ${JSON.stringify(codeBlock, null, 2)};
-`;
+${
+  rawData.description || additionalBlocks.length
+    ? `
+export const ${constPrefix}_USAGE_DESCRIPTION = ${JSON.stringify(rawData.description ?? '')};
+
+export const ${constPrefix}_USAGE_ADDITIONAL: CodeBlockData[] = ${JSON.stringify(additionalBlocks, null, 2)};
+`
+    : ''
+}`;
     if (writeIfChanged(path.join(OUTPUT_PATH, `${componentName}.ts`), content)) count++;
   }
 

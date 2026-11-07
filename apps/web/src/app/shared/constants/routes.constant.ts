@@ -132,9 +132,12 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Tabs', path: '/docs/components/tabs', available: true },
     { name: 'Textarea', path: '/docs/components/textarea', available: true },
     { name: 'Sonner', path: '/docs/components/sonner', available: true },
+    { name: 'Toast', path: '/docs/components/toast', available: true },
     { name: 'Toggle', path: '/docs/components/toggle', available: true },
     { name: 'Toggle Group', path: '/docs/components/toggle-group', available: true },
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
+    // As in shadcn/ui, Typography is the components-list entry for Typeset and opens its docs.
+    { name: 'Typography', path: '/docs/typeset', available: true },
     { name: 'Navigation Menu', path: '/docs/components/navigation-menu', available: true },
     { name: 'Resizable', path: '/docs/components/resizable', available: true },
     { name: 'Sheet', path: '/docs/components/sheet', available: true },
@@ -154,8 +157,10 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Map Draw', path: '/docs/components/map-draw', available: true },
     { name: 'Map Style Select', path: '/docs/components/map-style-select', available: true },
     { name: 'Marker', path: '/docs/components/marker', available: true },
+    { name: 'Native Select', path: '/docs/components/native-select', available: true },
     { name: 'Aspect Ratio', path: '/docs/components/aspect-ratio', available: true },
     { name: 'Attachment', path: '/docs/components/attachment', available: true },
+    { name: 'Questionnaire', path: '/docs/components/questionnaire', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 

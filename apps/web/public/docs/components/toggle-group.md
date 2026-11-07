@@ -28,7 +28,6 @@ import {
   input,
   linkedSignal,
   output,
-  signal,
   type TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
@@ -132,7 +131,11 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
   readonly valueChange = output<string | string[]>();
 
   protected readonly disabledState = linkedSignal(() => this.zDisabled());
-  private readonly internalValue = signal<string | string[] | undefined>(undefined);
+  // Reset whenever zValue changes, so a new controlled value wins over earlier clicks or writeValue calls
+  private readonly internalValue = linkedSignal<string | string[] | undefined, string | string[] | undefined>({
+    source: this.zValue,
+    computation: () => undefined,
+  });
 
   protected readonly classes = computed(() => mergeClasses(toggleGroupVariants(), this.class()));
 

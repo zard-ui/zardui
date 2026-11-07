@@ -3,7 +3,8 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const SELECT_API: ApiSection[] = [
   {
     selector: 'z-select',
-    description: 'A customizable select component that supports single and multiple value selection.',
+    description:
+      'A customizable select component that supports single and multiple value selection. Need the native OS picker, built-in keyboard and form behavior, or zero overlay? Use `select[z-native-select]` (Native Select) instead.',
     props: [
       {
         name: '[zValue]',

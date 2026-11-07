@@ -11,6 +11,11 @@ export const COMPONENTS_ROUTES: Routes = [
     redirectTo: 'sidebar',
   },
   {
+    path: 'typography',
+    pathMatch: 'full',
+    redirectTo: '/docs/typeset',
+  },
+  {
     // The map pages have a lazy boundary of their own: ng-mapcn is not tree-shakeable, so everything that touches it
     // (the providers and the demos the page loads) stays out of the chunk the other components share.
     path: 'map',

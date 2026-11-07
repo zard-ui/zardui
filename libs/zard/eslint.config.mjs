@@ -38,6 +38,7 @@ export default [
       '@nx/dependency-checks': [
         'error',
         {
+          ignoredDependencies: ['zod'],
           ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs}'],
           // Type-only imports from 'geojson' (map demos); the map registry item installs it as a devDependency.
           ignoredDependencies: ['@types/geojson'],

@@ -41,6 +41,7 @@ export const ALIASES: Record<string, string[]> = {
   field: ['form', 'label', 'validation'],
   map: ['maps', 'geo', 'location', 'maplibre', 'markers', 'heatmap'],
   'map-draw': ['draw polygon', 'drawing', 'draw on map'],
+  typeset: ['typography', 'prose', 'rich text', 'markdown styles'],
 };
 
 /**

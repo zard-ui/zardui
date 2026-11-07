@@ -701,6 +701,23 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'native-select',
+    files: [
+      {
+        name: 'native-select.directive.ts',
+        content: '',
+      },
+      {
+        name: 'native-select.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'textarea',
     registryDependencies: ['input-group'],
     files: [
@@ -1739,6 +1756,29 @@ export const registry: ComponentRegistry[] = [
       { name: 'attachment.component.ts', content: '' },
       { name: 'attachment.variants.ts', content: '' },
       { name: 'attachment.imports.ts', content: '' },
+      { name: 'index.ts', content: '' },
+    ],
+  },
+  {
+    name: 'questionnaire',
+    registryDependencies: ['button'],
+    files: [
+      { name: 'questionnaire.component.ts', content: '' },
+      { name: 'questionnaire.variants.ts', content: '' },
+      { name: 'questionnaire-progress.component.ts', content: '' },
+      { name: 'questionnaire-item.component.ts', content: '' },
+      { name: 'questionnaire-choice.component.ts', content: '' },
+      { name: 'questionnaire-choice-description.component.ts', content: '' },
+      { name: 'questionnaire-choices.component.ts', content: '' },
+      { name: 'questionnaire-title.component.ts', content: '' },
+      { name: 'questionnaire-description.component.ts', content: '' },
+      { name: 'questionnaire-actions.component.ts', content: '' },
+      { name: 'questionnaire-error.component.ts', content: '' },
+      { name: 'questionnaire-navigation.directive.ts', content: '' },
+      { name: 'questionnaire-input.component.ts', content: '' },
+      { name: 'questionnaire.types.ts', content: '' },
+      { name: 'questionnaire.tokens.ts', content: '' },
+      { name: 'questionnaire.imports.ts', content: '' },
       { name: 'index.ts', content: '' },
     ],
   },

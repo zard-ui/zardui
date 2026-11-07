@@ -1,0 +1,28 @@
+{
+  "$schema": "https://zardui.com/schema/registry-item.json",
+  "name": "native-select",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "native-select.directive.ts",
+      "content": "import { computed, Directive, input } from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\nimport { nativeSelectVariants, type ZardNativeSelectSizeVariants } from './native-select.variants';\n\n@Directive({\n  selector: 'select[z-native-select]',\n  host: {\n    'data-slot': 'native-select',\n    '[attr.data-size]': 'zSize()',\n    '[class]': 'classes()',\n  },\n  exportAs: 'zNativeSelect',\n})\nexport class ZardNativeSelectDirective {\n  readonly zSize = input<ZardNativeSelectSizeVariants>('default');\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() =>\n    mergeClasses(nativeSelectVariants({ zSize: this.zSize() }), this.class()),\n  );\n}\n"
+    },
+    {
+      "name": "native-select.variants.ts",
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\n// Lucide `chevron-down`, inlined as a background image so the real <select> needs no wrapper or sibling element.\n// The stroke matches `--muted-foreground` in light (#737373) and dark (#a1a1a1) themes.\nconst CHEVRON_LIGHT =\n  'bg-[url(data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23737373%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27m6%209%206%206%206-6%27%2F%3E%3C%2Fsvg%3E)]';\nconst CHEVRON_DARK =\n  'dark:bg-[url(data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23a1a1a1%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27m6%209%206%206%206-6%27%2F%3E%3C%2Fsvg%3E)]';\n\nexport const nativeSelectVariants = cva(\n  mergeClasses(\n    'h-8 w-full min-w-0 appearance-none rounded-lg border border-input bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors outline-none select-none selection:bg-primary selection:text-primary-foreground',\n    'bg-no-repeat bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center]',\n    CHEVRON_LIGHT,\n    CHEVRON_DARK,\n    'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',\n    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',\n    'aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20',\n    'dark:bg-input/30 dark:scheme-dark dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',\n    '[&[multiple]]:h-auto [&[multiple]]:bg-none dark:[&[multiple]]:bg-none',\n    '[&_option]:bg-[Canvas] [&_option]:text-[CanvasText] [&_optgroup]:bg-[Canvas] [&_optgroup]:text-[CanvasText]',\n  ),\n  {\n    variants: {\n      zSize: {\n        sm: 'h-7 rounded-[min(var(--radius-md),10px)] py-0.5',\n        default: '',\n        lg: 'h-10 ps-3 pe-9 text-base md:text-sm',\n      },\n    },\n    defaultVariants: { zSize: 'default' },\n  },\n);\n\ntype Variants = VariantProps<typeof nativeSelectVariants>;\nexport type ZardNativeSelectSizeVariants = NonNullable<Variants['zSize']>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './native-select.directive';\nexport * from './native-select.variants';\n"
+    }
+  ],
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
+    }
+  }
+}

@@ -44,12 +44,18 @@ export interface ComponentSection {
 export interface ComponentData {
   componentName: string;
   description: string;
+  accessibility?: string[];
   about?: AboutData;
   preview?: ExampleData;
   examples: ExampleData[];
   installData?: ComponentInstallData;
   usage?: ComponentUsageData;
   composition?: CodeBlockData;
+  /**
+   * Name of the component that replaces this one. The page then only says the component is deprecated and links
+   * to the replacement — no preview, installation, examples or API (e.g. Toast → Sonner, as in shadcn/ui).
+   */
+  deprecatedFor?: string;
   fullWidth?: boolean;
   api?: ApiSection[];
   /** Extra blocks after the examples, such as the "Map styles" section of the map. */
@@ -362,6 +368,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/resizable/demo/resizable').then(m => m.RESIZABLE),
   },
   {
+    componentName: 'native-select',
+    description: 'A styled native HTML select element with consistent design system integration.',
+    category: 'Form & Input',
+    loadData: () => import('@zard/components/native-select/demo/native-select').then(m => m.NATIVE_SELECT),
+  },
+  {
     componentName: 'select',
     description: 'Displays a list of options for the user to pick from — triggered by a button.',
     category: 'Form & Input',
@@ -434,6 +446,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/textarea/demo/textarea').then(m => m.TEXTAREA),
   },
   {
+    componentName: 'toast',
+    description: 'A succinct message that is displayed temporarily.',
+    category: 'Feedback & Status',
+    loadData: () => import('@zard/components/toast/demo/toast').then(m => m.TOAST),
+  },
+  {
     componentName: 'toggle',
     description: 'A two-state button that can be either on or off.',
     category: 'Misc',
@@ -469,5 +487,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Composable file and image attachment',
     category: 'Display & Media',
     loadData: () => import('@zard/components/attachment/demo/attachment').then(m => m.ATTACHMENT),
+  },
+  {
+    componentName: 'questionnaire',
+    description: 'A multi-step questionnaire with single-choice, multiple-choice, freeform, and skippable questions.',
+    category: 'Form & Input',
+    loadData: () => import('@zard/components/questionnaire/demo/questionnaire').then(m => m.QUESTIONNAIRE),
   },
 ];

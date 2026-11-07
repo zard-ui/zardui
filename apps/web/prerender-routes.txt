@@ -75,9 +75,11 @@
 /docs/components/tabs
 /docs/components/textarea
 /docs/components/sonner
+/docs/components/toast
 /docs/components/toggle
 /docs/components/toggle-group
 /docs/components/tooltip
+/docs/typeset
 /docs/components/navigation-menu
 /docs/components/resizable
 /docs/components/sheet
@@ -97,8 +99,10 @@
 /docs/components/map-draw
 /docs/components/map-style-select
 /docs/components/marker
+/docs/components/native-select
 /docs/components/aspect-ratio
 /docs/components/attachment
+/docs/components/questionnaire
 /docs/contribute
 /docs/contribute/setup
 /docs/contribute/architecture
