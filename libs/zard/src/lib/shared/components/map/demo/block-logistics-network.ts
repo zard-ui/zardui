@@ -72,7 +72,7 @@ const LANES: Lane[] = [
   template: `
     <div class="bg-background @container relative size-full overflow-hidden">
       <ng-map [center]="[20, 30]" [zoom]="compact ? 0.2 : 1.4" [options]="mapOptions">
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map-controls />
         <!-- The width of an arc follows its volume: a paint expression reads the datum with ["get", "volume"]. -->
         <ng-map-arc
           [data]="lanes()"

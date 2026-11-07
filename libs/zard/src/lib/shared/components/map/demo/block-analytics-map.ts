@@ -11,7 +11,7 @@ import { ZardMapImports } from '@/shared/components/map/map.imports';
 
 /*
  * Layout after the analytics block of ng-mapcn (MIT): a world map, stats floating over it and breakdown cards under it.
- * The countries are drawn from GeoJSON on a blank basemap, so the block reads the same in every map style.
+ * The map follows the basemap picked for the page.
  */
 
 interface Visitor {
@@ -107,10 +107,6 @@ const CARDS: { title: string; rows: BreakdownRow[] }[] = [
 
 const BREAKDOWNS = CARDS.map(card => ({ ...card, max: Math.max(...card.rows.map(row => row.value)) }));
 
-/** Natural Earth countries (public domain). Swap in your own GeoJSON to change the regions. */
-const COUNTRIES =
-  'https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@v5.1.2/geojson/ne_110m_admin_0_countries.geojson';
-
 @Component({
   selector: 'z-demo-map-block-analytics-map',
   imports: [DecimalPipe, NgIcon, ZardCardComponent, ZardChartComponent, ZardMapImports],
@@ -118,9 +114,8 @@ const COUNTRIES =
     <div class="bg-background @container flex size-full flex-col">
       <!-- The map fills this area edge to edge; the stats float over it. -->
       <div class="relative h-104 shrink-0 @3xl:h-152">
-        <ng-map [blank]="true" [center]="[-2, 16]" [zoom]="compact ? 0.3 : 1.4" [options]="mapOptions">
-          <ng-map-geojson [data]="countries" [linePaint]="false" />
-          <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map [center]="[-2, 16]" [zoom]="compact ? 0.3 : 1.4" [options]="mapOptions">
+          <ng-map-controls />
           @for (visitor of visitors; track visitor.city) {
             <ng-map-marker [longitude]="visitor.lng" [latitude]="visitor.lat">
               <ng-marker-content>
@@ -237,7 +232,6 @@ const COUNTRIES =
 export class ZardDemoMapBlockAnalyticsMapComponent {
   /** A phone shows the whole world small; a wide frame zooms in. */
   protected readonly compact = !globalThis.matchMedia?.('(min-width: 816px)').matches;
-  protected readonly countries = COUNTRIES;
   protected readonly visitors = VISITORS;
   protected readonly breakdowns = BREAKDOWNS;
   protected readonly usersPerDay = USERS_PER_DAY;

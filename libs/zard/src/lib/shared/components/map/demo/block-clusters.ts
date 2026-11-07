@@ -73,7 +73,7 @@ function createCustomers(): FeatureCollection<Point, Customer> {
         [options]="{ scrollZoom: false, dragRotate: false }"
         (mapReady)="map = $event"
       >
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map-controls />
         <!-- MapLibre paints with colors, not CSS variables: these are the blues of --chart-1 to --chart-5. -->
         <ng-map-cluster-layer
           [data]="customers"

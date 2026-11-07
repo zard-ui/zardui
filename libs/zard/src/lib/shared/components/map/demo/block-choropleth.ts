@@ -69,13 +69,8 @@ const EMPTY: FeatureCollection<Geometry, Country> = { type: 'FeatureCollection',
   imports: [ZardMapImports, ZardCardImports, ZardToggleGroupComponent],
   template: `
     <div class="bg-background relative size-full overflow-hidden">
-      <ng-map
-        [blank]="true"
-        [center]="[12, 28]"
-        [zoom]="compact ? 0.3 : 1.35"
-        [options]="{ scrollZoom: false, dragRotate: false }"
-      >
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+      <ng-map [center]="[12, 28]" [zoom]="compact ? 0.3 : 1.35" [options]="{ scrollZoom: false, dragRotate: false }">
+        <ng-map-controls />
         <ng-map-geojson
           [data]="data()"
           promoteId="ADM0_A3"
@@ -168,7 +163,7 @@ export class ZardDemoMapBlockChoroplethComponent {
     const [first, ...rest] = steps;
     const expression = ['step', ['get', property], first[1], ...rest.flat()] as ExpressionSpecification;
 
-    return { 'fill-color': expression, 'fill-opacity': 0.85 };
+    return { 'fill-color': expression, 'fill-opacity': 0.75 };
   });
 
   protected readonly top = computed(() => {

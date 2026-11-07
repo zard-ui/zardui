@@ -16,7 +16,7 @@ import { ZardMapImports } from '@/shared/components/map/map.imports';
 
 /*
  * After the uptime monitor of ng-mapcn (MIT): a status-page style map of edge locations, with the list of locations
- * floating over it. The countries are drawn from GeoJSON on a blank basemap, so the status colors stand out.
+ * floating over it. The map follows the basemap picked for the page.
  */
 
 type Status = 'up' | 'degraded' | 'down';
@@ -103,24 +103,13 @@ const PROBES: Probe[] = [
   { id: 'syd', city: 'Sydney', region: 'Oceania', lng: 151.21, lat: -33.87, latency: 96, uptime: 99.9, status: 'up' },
 ];
 
-/** Natural Earth countries (public domain). Swap in your own GeoJSON to change the regions. */
-const COUNTRIES =
-  'https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@v5.1.2/geojson/ne_110m_admin_0_countries.geojson';
-
 @Component({
   selector: 'z-demo-map-block-uptime-monitor',
   imports: [ZardMapImports, ZardBadgeComponent, ZardCardComponent],
   template: `
     <div class="bg-background @container relative size-full overflow-hidden">
-      <ng-map
-        [blank]="true"
-        [center]="[10, 22]"
-        [zoom]="compact ? 0.1 : 1.5"
-        [options]="mapOptions"
-        (mapReady)="map = $event"
-      >
-        <ng-map-geojson [data]="countries" [linePaint]="false" />
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+      <ng-map [center]="[10, 22]" [zoom]="compact ? 0.1 : 1.5" [options]="mapOptions" (mapReady)="map = $event">
+        <ng-map-controls />
         @for (probe of probes(); track probe.id) {
           <ng-map-marker [longitude]="probe.lng" [latitude]="probe.lat" [ariaLabel]="probe.city + ': ' + label(probe)">
             <ng-marker-content>
@@ -214,7 +203,6 @@ export class ZardDemoMapBlockUptimeMonitorComponent {
     : { bottom: 252, top: 16, left: 16, right: 16 };
 
   protected map: MapLibreMap | null = null;
-  protected readonly countries = COUNTRIES;
   protected readonly styles = STATUS_STYLES;
   protected readonly probes = signal<Probe[]>(PROBES);
 

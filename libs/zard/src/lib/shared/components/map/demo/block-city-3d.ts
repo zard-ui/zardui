@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, effect, signal } from '@angular/core';
 
+import type { Map as MapLibreMap } from 'maplibre-gl';
 import type { MapViewport } from 'ng-mapcn';
 
 import { ZardCardComponent } from '@/shared/components/card/card.component';
-import { ZARD_MAP_DEFAULT_STYLES } from '@/shared/components/map/map-styles';
 import { ZardMapImports } from '@/shared/components/map/map.imports';
 import { ZardSliderComponent } from '@/shared/components/slider/slider.component';
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
@@ -20,20 +20,27 @@ const CITIES: Record<City, MapViewport> = {
   frankfurt: { center: [8.6724, 50.1127], zoom: 15.5, bearing: -35, pitch: 62 },
 };
 
+/** OpenMapTiles basemaps name their vector source differently from Carto. */
+const OPENMAPTILES_SOURCES = ['openmaptiles', 'maptiler_planet'];
+
 @Component({
   selector: 'z-demo-map-block-city-3d',
   imports: [ZardMapImports, ZardCardComponent, ZardSliderComponent, ZardSwitchComponent, ZardToggleGroupComponent],
   template: `
     <div class="bg-background relative size-full overflow-hidden">
-      <!-- The extrusions read Carto's building layer: pin Carto so a global preset does not take it away. -->
       <ng-map
-        [styles]="carto"
         [viewport]="viewport()"
         [options]="{ scrollZoom: false }"
         (viewportChange)="viewport.set($event)"
+        (mapReady)="watchBuildings($event)"
       >
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" [showCompass]="true" />
-        <ng-map-fill-extrusion [color]="color" [opacity]="0.9" />
+        <ng-map-controls [showCompass]="true" />
+        <ng-map-fill-extrusion
+          [source]="buildings()"
+          [sourceLayer]="buildings() ? 'building' : undefined"
+          [color]="color"
+          [opacity]="0.9"
+        />
       </ng-map>
 
       <z-card
@@ -91,7 +98,8 @@ export class ZardDemoMapBlockCity3dComponent {
   /** The sliders run from 0 to 100, so the tilt and the heading are mapped onto them. */
   protected readonly MAX_PITCH = 75;
 
-  protected readonly carto = ZARD_MAP_DEFAULT_STYLES;
+  /** The buildings' source when the basemap is OpenMapTiles; Carto is detected on its own. */
+  protected readonly buildings = signal<string | undefined>(undefined);
   protected readonly viewport = signal<MapViewport>(CITIES['new-york']);
   protected readonly city = signal<City>('new-york');
   protected readonly rotating = signal(false);
@@ -109,7 +117,7 @@ export class ZardDemoMapBlockCity3dComponent {
   protected readonly color = [
     'interpolate',
     ['linear'],
-    ['coalesce', ['get', 'render_height'], 0],
+    ['coalesce', ['get', 'render_height'], ['get', 'height'], 0],
     0,
     '#bedbff',
     60,
@@ -129,6 +137,12 @@ export class ZardDemoMapBlockCity3dComponent {
       const timer = setInterval(() => this.patch({ bearing: this.viewport().bearing + 0.5 }), 50);
       onCleanup(() => clearInterval(timer));
     });
+  }
+
+  protected watchBuildings(map: MapLibreMap): void {
+    const sync = () => this.buildings.set(OPENMAPTILES_SOURCES.find(id => map.getSource(id)));
+    sync();
+    map.on('styledata', sync);
   }
 
   protected patch(change: Partial<MapViewport>): void {

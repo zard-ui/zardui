@@ -34,6 +34,8 @@ export interface ZardMapPreset {
   readonly variants: { readonly light: string; readonly dark: string };
   /** What the basemap looks like in light and dark, in one line. */
   readonly description: string;
+  /** Set when the style only fits one theme. The picker marks it "Light only" or "Dark only". */
+  readonly theme?: 'light' | 'dark';
   /** Needs an API key from the provider. The key is never part of the catalogue: it comes from config or the picker. */
   readonly requiresKey: boolean;
   /** Not for production traffic: the provider's usage policy forbids it. */
@@ -198,6 +200,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'carto',
     variants: { light: 'Voyager', dark: 'Dark Matter' },
     description: 'Warm, colorful street map in light mode, Dark Matter in dark mode.',
+    theme: 'light',
     requiresKey: false,
     devOnly: false,
     attribution: CARTO_ATTRIBUTION,
@@ -227,6 +230,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'openfreemap',
     variants: { light: 'Liberty', dark: 'Dark' },
     description: 'Detailed, softly colored street map. Dark mode uses the OpenFreeMap dark style.',
+    theme: 'light',
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
@@ -256,6 +260,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'openfreemap',
     variants: { light: 'Bright', dark: 'Dark' },
     description: 'Saturated, high-contrast street map. Dark mode uses the OpenFreeMap dark style.',
+    theme: 'light',
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
@@ -285,6 +290,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'openfreemap',
     variants: { light: 'Positron', dark: 'Dark' },
     description: 'Minimal light basemap for data on top. Dark mode uses the OpenFreeMap dark style.',
+    theme: 'light',
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
@@ -314,6 +320,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'openfreemap',
     variants: { light: 'Dark', dark: 'Dark' },
     description: 'Always dark, in light mode too.',
+    theme: 'dark',
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
@@ -343,6 +350,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'openfreemap',
     variants: { light: 'Fiord', dark: 'Fiord' },
     description: 'Muted blue-gray basemap, the same in both themes.',
+    theme: 'dark',
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
@@ -372,6 +380,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'osm',
     variants: { light: 'Standard', dark: 'Standard, dimmed' },
     description: 'The classic OpenStreetMap raster tiles. Dimmed in dark mode. Development only.',
+    theme: 'light',
     requiresKey: false,
     devOnly: true,
     attribution: OSM_ATTRIBUTION,
@@ -546,6 +555,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'stadia',
     variants: { light: 'Outdoors', dark: 'Outdoors' },
     description: 'Hiking and cycling map with terrain, the same in both themes.',
+    theme: 'light',
     requiresKey: true,
     devOnly: false,
     attribution: STADIA_ATTRIBUTION,
@@ -575,6 +585,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'stadia',
     variants: { light: 'OSM Bright', dark: 'OSM Bright' },
     description: 'Familiar OpenStreetMap colors on vector tiles, the same in both themes.',
+    theme: 'light',
     requiresKey: true,
     devOnly: false,
     attribution: STADIA_ATTRIBUTION,

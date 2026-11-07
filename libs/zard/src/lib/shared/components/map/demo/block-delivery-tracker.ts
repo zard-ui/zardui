@@ -50,7 +50,7 @@ const TRIP_MS = 45_000;
   template: `
     <div class="bg-background @container relative size-full overflow-hidden">
       <ng-map [center]="[-122.4185, 37.7965]" [zoom]="13.2" [fitBounds]="fit" [options]="{ scrollZoom: false }">
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map-controls />
         <ng-map-route [coordinates]="route" [width]="5" [opacity]="0.35" [progress]="progress()" [interactive]="false">
           <ng-route-progress color="#155dfc" />
           <ng-route-marker at="start">

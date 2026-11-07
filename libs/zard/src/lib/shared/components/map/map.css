@@ -1,15 +1,6 @@
 /*
- * Global styles for the map. Load it together with `maplibre-gl/dist/maplibre-gl.css`:
- *
- *   @import 'maplibre-gl/dist/maplibre-gl.css';
- *   @import './map.css';
- *
- * Both imports stay unlayered. MapLibre's own sheet then wins over Tailwind's preflight (which would
- * otherwise reset its buttons and images), and the `.ng-*` rules below live in `@layer components`, so a
- * Tailwind utility on a popup or a marker label still overrides them.
- *
- * ng-mapcn renders its popups, tooltips and labels as plain DOM inside MapLibre, outside Angular's
- * component styles. This file styles them with the zard tokens so they look like a `z-popover`.
+ * Global map styles: import after `maplibre-gl/dist/maplibre-gl.css`, both unlayered, so MapLibre wins over
+ * Tailwind's preflight. Styles ng-mapcn's popups, tooltips and labels with the zard tokens.
  */
 
 /* MapLibre's popup chrome is neutralised: the card below is the only visible surface. */

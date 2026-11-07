@@ -48,7 +48,7 @@ import { ZardDemoMapStylePickerComponent } from '@/shared/components/map/demo/st
 import { ZardDemoMapThreeDComponent } from '@/shared/components/map/demo/three-d';
 import { ZardDemoMapTileSourcesComponent } from '@/shared/components/map/demo/tile-sources';
 import { ZardDemoMapViewportComponent } from '@/shared/components/map/demo/viewport';
-import { ZARD_MAP_PRESETS, ZARD_MAP_PROVIDERS } from '@/shared/components/map/map-styles';
+import { ZARD_MAP_PRESETS, ZARD_MAP_PROVIDERS, type ZardMapPreset } from '@/shared/components/map/map-styles';
 import { ZardMapStyleSelectComponent } from '@/shared/components/map-style-select/map-style-select.component';
 
 import { MAP_API } from '../doc/api';
@@ -57,6 +57,28 @@ import { MAP_API } from '../doc/api';
 const LIVE = { lazyRender: true, requiresWebgl2: true, compact: true, previewHeight: '30rem' } as const;
 
 const providerOf = (id: string) => ZARD_MAP_PROVIDERS.find(provider => provider.id === id);
+
+/** The light / dark column of the presets table, saying which presets only fit one theme. */
+function themeColumn(preset: ZardMapPreset): string {
+  const { light, dark } = preset.variants;
+  if (!preset.theme) {
+    return `${light} / ${dark}`;
+  }
+  const own = preset.theme === 'light' ? light : dark;
+  const other = preset.theme === 'light' ? dark : light;
+  return light === dark ? `${own} (${preset.theme} only)` : `${own} (${preset.theme} only, ${other} otherwise)`;
+}
+
+const presetNames = (theme: 'light' | 'dark') =>
+  ZARD_MAP_PRESETS.filter(preset => preset.theme === theme)
+    .map(preset => `**${providerOf(preset.provider)?.label ?? preset.provider} ${preset.label}**`)
+    .join(', ');
+
+/** The warning about single-theme presets, shared by the map and the map-style-select pages. */
+export const MAP_THEME_CALLOUT = {
+  title: 'Not every style works in dark mode',
+  description: `${presetNames('light')} are drawn for light mode only: in dark mode they stay light or fall back to a shared dark style, so they all look alike. ${presetNames('dark')} are dark only. The picker marks them \`Light only\` and \`Dark only\`. If your app has a dark mode, pick a preset with its own dark variant.`,
+};
 
 export const MAP = {
   api: MAP_API,
@@ -199,7 +221,7 @@ export const MAP = {
     {
       name: '3d',
       description:
-        'Tilt the map (hold right-click and drag, or Ctrl and drag) to see `ng-map-fill-extrusion` lift the buildings and `ng-map-terrain` raise the relief. Extrusions read the Carto `building` layer, so this map pins Carto with `[styles]`.',
+        'Tilt the map (hold right-click and drag, or Ctrl and drag) to see `ng-map-fill-extrusion` lift the buildings and `ng-map-terrain` raise the relief. Extrusions follow the picked basemap; a raster one (OSM) has no buildings.',
       component: ZardDemoMapThreeDComponent,
       codeData: MAP_DEMO_THREE_D,
       ...LIVE,
@@ -231,7 +253,7 @@ export const MAP = {
     {
       name: 'lazy-loading',
       description:
-        'MapLibre is heavy and ng-mapcn is not tree-shakeable, so keep it out of the initial bundle: render maps from a lazy route, or inside `@defer`. For the same reason, register `provideZardMap()` on that lazy route and not in `app.config.ts`.',
+        'MapLibre is heavy and ng-mapcn is not tree-shakeable, so keep it out of the initial bundle: render maps from a lazy route, or inside `@defer`. For the same reason, import `provideZardMap()` only from a routes file loaded with `loadChildren`: importing it in `app.routes.ts` or `app.config.ts` puts MapLibre in the initial bundle.',
       codeData: MAP_SNIPPET_LAZY_LOADING,
     },
     {
@@ -245,12 +267,12 @@ export const MAP = {
     {
       id: 'map-styles',
       title: 'Map styles',
+      callout: MAP_THEME_CALLOUT,
       description: [
-        'Every map without a `[styles]` input follows one app-wide basemap, and it changes live: pick another preset and every map on the page swaps, with no reload and no remount. The precedence is `[styles]`, then `[blank]`, then the app-wide basemap, then Carto.',
-        '- **Presets** pair a light and a dark style, so the preset and the dark mode compose.',
-        '- **`z-map-style-select`** is the shipped picker (`npx zard-cli add map-style-select`) and **`ZardMapStyleService`** is the state behind it.',
-        '- **Key-based presets** never ship a key. Give it to `provideZardMap({ keys })`, or the picker asks for it inline and keeps it in this browser.',
-        'The picker at the top of this page drives every map on it, and your choice carries over to the `/maps` gallery.',
+        'Maps without `[styles]` share one app-wide basemap that switches live. Precedence: `[styles]`, `[blank]`, the app-wide basemap, then Carto.',
+        '- **Presets** pair a light and a dark style, except the single-theme ones above.',
+        '- **`z-map-style-select`** is the picker; **`ZardMapStyleService`** holds its state.',
+        '- **Key-based presets** take their key from `provideZardMap({ keys })` or the picker.',
       ].join('\n'),
       table: {
         columns: ['Preset', 'Provider', 'Key', 'Light / dark', 'Attribution', 'Usage'],
@@ -260,7 +282,7 @@ export const MAP = {
             `\`${preset.id}\``,
             provider ? { text: provider.label, href: provider.url } : preset.provider,
             preset.requiresKey ? 'Required' : 'None',
-            `${preset.variants.light} / ${preset.variants.dark}`,
+            themeColumn(preset),
             preset.attribution,
             preset.devOnly ? 'Development only' : (provider?.limits ?? ''),
           ];
@@ -269,8 +291,7 @@ export const MAP = {
       examples: [
         {
           name: 'style-picker',
-          description:
-            'Drop `z-map-style-select` anywhere: over a corner of a map, in a toolbar or in your app header. Pick a key-based preset such as MapTiler and it asks for the key inline; nothing changes, and no request goes out, until you give one.',
+          description: 'Place `z-map-style-select` anywhere. Key-based presets ask for their key inline.',
           component: ZardDemoMapStylePickerComponent,
           codeData: MAP_DEMO_STYLE_PICKER,
           codeBefore: { title: 'Register', codeData: MAP_SNIPPET_STYLE_CONFIG },
@@ -283,8 +304,7 @@ export const MAP = {
         },
         {
           name: 'style-override',
-          description:
-            'A map with its own `[styles]` ignores the picker. Change the preset and only the left map moves.',
+          description: 'A map with its own `[styles]` ignores the picker.',
           component: ZardDemoMapStyleOverrideComponent,
           codeData: MAP_DEMO_STYLE_OVERRIDE,
           lazyRender: true,
@@ -294,8 +314,7 @@ export const MAP = {
         },
         {
           name: 'style-blank',
-          description:
-            '`[blank]` swaps the basemap for an empty, transparent style. Whatever sits behind the map shows through, and the layers you add are the whole map.',
+          description: '`[blank]` replaces the basemap with an empty, transparent style.',
           component: ZardDemoMapStyleBlankComponent,
           codeData: MAP_DEMO_STYLE_BLANK,
           lazyRender: true,

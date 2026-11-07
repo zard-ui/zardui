@@ -10,8 +10,8 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
 import { ZardMapImports } from '@/shared/components/map/map.imports';
 
 /*
- * After the analytics card of ng-mapcn (MIT): a headline metric floating over a world map. The countries are drawn
- * from GeoJSON on a blank basemap, and the bubbles use the chart tokens, so the block follows the theme.
+ * After the analytics card of ng-mapcn (MIT): a headline metric floating over a world map. The map follows the basemap
+ * picked for the page, and the bubbles use the chart tokens, so the block follows the theme.
  */
 
 interface Visitor {
@@ -48,23 +48,17 @@ const WEEK = [
   { day: 'Sun', visitors: 78 },
 ];
 
-/** Natural Earth countries (public domain). Swap in your own GeoJSON to change the regions. */
-const COUNTRIES =
-  'https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@v5.1.2/geojson/ne_110m_admin_0_countries.geojson';
-
 @Component({
   selector: 'z-demo-map-block-analytics-card',
   imports: [NgIcon, ZardBadgeComponent, ZardCardComponent, ZardChartComponent, ZardMapImports],
   template: `
     <div class="bg-background relative size-full overflow-hidden">
       <ng-map
-        [blank]="true"
         [center]="[10, 24]"
         [zoom]="compact ? 0.3 : 1.5"
         [options]="mapOptions"
         class="[&_.maplibregl-canvas]:cursor-default! [&_.maplibregl-canvas-container]:cursor-default!"
       >
-        <ng-map-geojson [data]="countries" [linePaint]="false" />
         @for (visitor of visitors; track visitor.city) {
           <ng-map-marker [longitude]="visitor.lng" [latitude]="visitor.lat">
             <ng-marker-content>
@@ -114,7 +108,6 @@ const COUNTRIES =
 export class ZardDemoMapBlockAnalyticsCardComponent {
   /** A phone shows the whole world small; a wide frame zooms in. */
   protected readonly compact = !globalThis.matchMedia?.('(min-width: 816px)').matches;
-  protected readonly countries = COUNTRIES;
   protected readonly visitors = VISITORS;
   protected readonly week = WEEK;
 

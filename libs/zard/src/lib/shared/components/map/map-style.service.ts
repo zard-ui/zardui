@@ -37,12 +37,8 @@ export const ZARD_MAP_STYLE_CONFIG = new InjectionToken<ZardMapStyleConfig>('ZAR
 const DEFAULT_STORAGE_KEY = 'zard-map-style';
 
 /**
- * The active basemap of every map on the page.
- *
- * It lives in the root injector on purpose: the lazy routes that render maps register their own
- * `provideZardMap()`, and they all share this one state, so a choice made on one page is the one the next page opens
- * with. `styles` is the signal `provideZardMap()` hands to ng-mapcn: setting a preset swaps the basemap of every
- * `<ng-map>` without a `[styles]` of its own, live, with no reload and no remount.
+ * The active basemap of every map, shared from the root injector by all the routes that register `provideZardMap()`.
+ * Selecting a preset swaps, live, every `<ng-map>` without a `[styles]` of its own.
  */
 @Injectable({ providedIn: 'root' })
 export class ZardMapStyleService {

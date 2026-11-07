@@ -78,6 +78,20 @@ describe('ZardMapStyleSelectComponent', () => {
     expect(option('maptiler-streets').textContent).toContain('Vector · API key');
   });
 
+  it('marks the presets that only fit one theme', () => {
+    const { open, option } = setup();
+    open();
+
+    expect(option('stadia-outdoors').textContent).toContain('Light only');
+    expect(option('stadia-osm-bright').textContent).toContain('Light only');
+    expect(option('openfreemap-dark').textContent).toContain('Dark only');
+    expect(option('openfreemap-fiord').textContent).toContain('Dark only');
+    expect(option('carto-voyager').textContent).toContain('Light only');
+    expect(option('openfreemap-liberty').textContent).toContain('Light only');
+    expect(option('carto-positron').textContent).not.toMatch(/(Light|Dark) only/);
+    expect(option('maptiler-streets').textContent).not.toMatch(/(Light|Dark) only/);
+  });
+
   it('paints a mini-map swatch per preset with its own palette', () => {
     const { open, option } = setup();
     open();

@@ -1179,7 +1179,7 @@
       "name": "map",
       "type": "registry:component",
       "dependencies": [
-        "ng-mapcn@22.0.0-beta.7",
+        "ng-mapcn@22.0.0-beta.9",
         "maplibre-gl@^6.11.2"
       ],
       "devDependencies": [

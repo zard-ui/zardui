@@ -4,6 +4,7 @@ import { MAP_STYLE_SELECT_CLI_ADD } from '@generated/installation/cli/add-map-st
 import { MAP_STYLE_SELECT_MANUAL_CODE } from '@generated/installation/manual/map-style-select';
 import { MAP_STYLE_SELECT_USAGE_CODE, MAP_STYLE_SELECT_USAGE_IMPORT } from '@generated/usage/map-style-select';
 
+import { MAP_THEME_CALLOUT } from '@/shared/components/map/demo/map';
 import { ZardDemoMapStyleOverrideComponent } from '@/shared/components/map/demo/style-override';
 import { ZardDemoMapStylePickerComponent } from '@/shared/components/map/demo/style-picker';
 
@@ -32,6 +33,15 @@ export const MAP_STYLE_SELECT = {
     compact: true,
     previewHeight: '30rem',
   },
+  sections: [
+    {
+      id: 'light-and-dark',
+      title: 'Light and dark',
+      callout: MAP_THEME_CALLOUT,
+      description:
+        'Presets pair a light and a dark style and follow the `dark` class on `<html>`. See the presets table in [Map styles](/docs/components/map#map-styles).',
+    },
+  ],
   examples: [
     {
       name: 'style-override',

@@ -28,28 +28,31 @@ block is exported as `MAP_SNIPPET_<ID>` via the snippet generator.
 @import './app/shared/components/map/map.css';
 ```
 
-```angular-ts id="lazy-route" title="app.routes.ts" copyButton
+```angular-ts id="lazy-route" title="map.routes.ts" copyButton
 import { Routes } from '@angular/router';
 
 import { provideZardMap } from '@/shared/components/map/map.provider';
 
-export const routes: Routes = [
+// ng-mapcn is not tree-shakeable: wherever provideZardMap is imported from, all of MapLibre (about 1 MB) comes along.
+// Import it from a routes file of its own, loaded lazily, never from app.routes.ts or app.config.ts. In app.routes.ts:
+//   { path: 'map', loadChildren: () => import('./map.routes').then(m => m.MAP_ROUTES) }
+export const MAP_ROUTES: Routes = [
   {
-    path: 'map',
-    // ng-mapcn is not tree-shakeable: it pulls in all of MapLibre (about 1 MB). Register it on the lazy route that
-    // renders the maps, not in app.config.ts, and the other routes keep their bundle.
+    path: '',
     loadComponent: () => import('./map.page').then(m => m.MapPage),
     providers: [provideZardMap()],
   },
 ];
 ```
 
-```angular-ts id="style-config" title="app.routes.ts" copyButton
+```angular-ts id="style-config" title="map.routes.ts" copyButton
 import { provideZardMap } from '@/shared/components/map/map.provider';
 
-export const routes: Routes = [
+// A routes file of its own, loaded from app.routes.ts with loadChildren, keeps MapLibre out of the initial bundle:
+//   { path: 'map', loadChildren: () => import('./map.routes').then(m => m.MAP_ROUTES) }
+export const MAP_ROUTES: Routes = [
   {
-    path: 'map',
+    path: '',
     loadComponent: () => import('./map.page').then(m => m.MapPage),
     providers: [
       provideZardMap({

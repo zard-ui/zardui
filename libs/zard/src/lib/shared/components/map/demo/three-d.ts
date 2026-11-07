@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import type { Map as MapLibreMap } from 'maplibre-gl';
 
-import { ZARD_MAP_DEFAULT_STYLES } from '@/shared/components/map/map-styles';
 import { ZardMapImports } from '@/shared/components/map/map.imports';
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
 import {
@@ -16,6 +15,9 @@ const CAMERAS: Record<Place, { center: [number, number]; zoom: number; pitch: nu
   manhattan: { center: [-74.0134, 40.7061], zoom: 15.6, pitch: 62, bearing: -20 },
   matterhorn: { center: [7.6586, 45.9763], zoom: 11.6, pitch: 72, bearing: 25 },
 };
+
+/** OpenMapTiles basemaps name their vector source differently from Carto. */
+const OPENMAPTILES_SOURCES = ['openmaptiles', 'maptiler_planet'];
 
 @Component({
   selector: 'z-demo-map-three-d',
@@ -35,18 +37,15 @@ const CAMERAS: Record<Place, { center: [number, number]; zoom: number; pitch: nu
       </div>
 
       <div class="h-[420px] w-full overflow-hidden rounded-xl border">
-        <!-- Extrusions read the "building" layer of the Carto basemap, so this map pins Carto instead of following
-             the app-wide basemap. -->
         <ng-map
-          [styles]="carto"
           [center]="camera.center"
           [zoom]="camera.zoom"
           [options]="{ pitch: camera.pitch, bearing: camera.bearing }"
-          (mapReady)="map = $event"
+          (mapReady)="onMapReady($event)"
         >
           <ng-map-controls [showCompass]="true" />
           <!-- Buildings appear from zoom 14, with the heights the basemap carries. -->
-          <ng-map-fill-extrusion />
+          <ng-map-fill-extrusion [source]="buildings()" [sourceLayer]="buildings() ? 'building' : undefined" />
           @if (terrain()) {
             <!-- Elevation from public Terrarium tiles, plus a hillshade so the relief reads. -->
             <ng-map-terrain [exaggeration]="1.5" [hillshade]="true" />
@@ -58,7 +57,8 @@ const CAMERAS: Record<Place, { center: [number, number]; zoom: number; pitch: nu
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoMapThreeDComponent {
-  protected readonly carto = ZARD_MAP_DEFAULT_STYLES;
+  /** The buildings' source when the basemap is OpenMapTiles; Carto is detected on its own. */
+  protected readonly buildings = signal<string | undefined>(undefined);
   protected readonly camera = CAMERAS.manhattan;
   protected map: MapLibreMap | null = null;
 
@@ -69,6 +69,13 @@ export class ZardDemoMapThreeDComponent {
     { value: 'manhattan', label: 'Manhattan (buildings)' },
     { value: 'matterhorn', label: 'Matterhorn (terrain)' },
   ];
+
+  protected onMapReady(map: MapLibreMap): void {
+    this.map = map;
+    const sync = () => this.buildings.set(OPENMAPTILES_SOURCES.find(id => map.getSource(id)));
+    sync();
+    map.on('styledata', sync);
+  }
 
   protected onPlaceChange(value: string | string[]): void {
     if (typeof value !== 'string' || !value) {

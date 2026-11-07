@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, viewChild } from '@angular/core';
 
 import type { MapDrawFeature, MapDrawFeatureCollection, MapDrawMode } from 'ng-mapcn/draw';
 
@@ -19,6 +19,10 @@ function distance([lng1, lat1]: number[], [lng2, lat2]: number[]): number {
     Math.sin(toRad(lat2 - lat1) / 2) ** 2 +
     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(toRad(lng2 - lng1) / 2) ** 2;
   return 2 * EARTH_RADIUS_M * Math.asin(Math.sqrt(a));
+}
+
+function formatArea(km2: number): string {
+  return km2 < 0.01 ? `${Math.round(km2 * 1e6).toLocaleString('en-US')} m²` : `${km2.toFixed(2)} km²`;
 }
 
 /** Area of a polygon ring on the sphere, in square meters. */
@@ -46,7 +50,7 @@ function measure(feature: MapDrawFeature): string {
     }
     case 'Polygon': {
       const km2 = ringArea(geometry.coordinates[0]) / 1e6;
-      return km2 < 1 ? `${(km2 * 1e6).toFixed(0)} m²` : `${km2.toFixed(2)} km²`;
+      return formatArea(km2);
     }
   }
 }
@@ -107,8 +111,11 @@ function measure(feature: MapDrawFeature): string {
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block w-full' },
 })
 export class ZardDemoMapDrawComponent {
+  private readonly toolbar = viewChild.required(ZardToggleGroupComponent);
+
   protected readonly mode = signal<MapDrawMode>('polygon');
   protected readonly features = signal<MapDrawFeatureCollection>({ type: 'FeatureCollection', features: [] });
 
@@ -128,9 +135,12 @@ export class ZardDemoMapDrawComponent {
     { value: 'polygon', label: 'Polygon' },
   ];
 
+  /** Re-clicking the active tool unpresses it while it keeps drawing, so press it back. */
   protected onModeChange(value: string | string[]): void {
     if (typeof value === 'string' && value) {
       this.mode.set(value as MapDrawMode);
+    } else {
+      this.toolbar().writeValue(this.mode());
     }
   }
 

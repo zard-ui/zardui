@@ -63,7 +63,7 @@ const FLIGHTS: Flight[] = AIRPORTS.flatMap(from =>
   template: `
     <div class="bg-background @container relative size-full overflow-hidden">
       <ng-map [center]="[15, 22]" [zoom]="compact ? 0.2 : 1.2" [options]="{ scrollZoom: false }">
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map-controls />
         <ng-map-arc
           [data]="routes()"
           [curvature]="0.25"

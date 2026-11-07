@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, viewChild } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCopy, lucideTrash2 } from '@ng-icons/lucide';
@@ -22,6 +22,10 @@ function distance([lng1, lat1]: number[], [lng2, lat2]: number[]): number {
     Math.sin(toRad(lat2 - lat1) / 2) ** 2 +
     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(toRad(lng2 - lng1) / 2) ** 2;
   return 2 * EARTH_RADIUS_M * Math.asin(Math.sqrt(a));
+}
+
+function formatArea(km2: number): string {
+  return km2 < 0.01 ? `${Math.round(km2 * 1e6).toLocaleString('en-US')} m²` : `${km2.toFixed(2)} km²`;
 }
 
 /** Area of a polygon ring on the sphere, in square meters. */
@@ -49,7 +53,7 @@ function describe(feature: MapDrawFeature): { kind: string; value: string } {
     }
     case 'Polygon': {
       const km2 = ringArea(geometry.coordinates[0]) / 1e6;
-      return { kind: 'Polygon', value: km2 < 1 ? `${(km2 * 1e6).toFixed(0)} m²` : `${km2.toFixed(2)} km²` };
+      return { kind: 'Polygon', value: formatArea(km2) };
     }
   }
 }
@@ -109,7 +113,7 @@ const SAMPLE: MapDrawFeatureCollection = {
   template: `
     <div class="bg-background @container relative size-full overflow-hidden">
       <ng-map [center]="[-73.97, 40.775]" [zoom]="12.4" [options]="mapOptions">
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map-controls />
         <ng-map-draw [(mode)]="mode" [(features)]="features" [modes]="['point', 'line', 'polygon']" [editable]="true" />
       </ng-map>
 
@@ -176,6 +180,8 @@ const SAMPLE: MapDrawFeatureCollection = {
   host: { class: 'block size-full' },
 })
 export class ZardDemoMapBlockDrawComponent {
+  private readonly toolbar = viewChild.required(ZardToggleGroupComponent);
+
   /** The camera is padded by the card over the map, so the sample shapes sit in what is left of the frame. */
   protected readonly mapOptions = {
     scrollZoom: false,
@@ -203,9 +209,12 @@ export class ZardDemoMapBlockDrawComponent {
     { value: 'polygon', label: 'Polygon' },
   ];
 
+  /** Re-clicking the active tool unpresses it while it keeps drawing, so press it back. */
   protected onModeChange(value: string | string[]): void {
     if (typeof value === 'string' && value) {
       this.mode.set(value as MapDrawMode);
+    } else {
+      this.toolbar().writeValue(this.mode());
     }
   }
 

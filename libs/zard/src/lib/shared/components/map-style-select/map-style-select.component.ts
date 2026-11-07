@@ -120,6 +120,11 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
                     @if (preset.id === defaultPresetId) {
                       <z-badge zType="secondary" class="px-1.5 py-0 text-[10px]">Default</z-badge>
                     }
+                    @if (preset.theme; as theme) {
+                      <z-badge zType="outline" class="px-1.5 py-0 text-[10px] font-normal">
+                        {{ theme === 'light' ? 'Light only' : 'Dark only' }}
+                      </z-badge>
+                    }
                   </span>
                   <span class="text-muted-foreground text-xs">{{ detail(preset) }}</span>
                 </span>

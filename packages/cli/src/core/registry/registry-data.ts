@@ -1660,7 +1660,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'map',
-    dependencies: ['ng-mapcn@22.0.0-beta.7', 'maplibre-gl@^6.11.2'],
+    dependencies: ['ng-mapcn@22.0.0-beta.9', 'maplibre-gl@^6.11.2'],
     devDependencies: ['@types/geojson'],
     minAngularMajor: 22,
     // MapLibre 6 loads its worker from the site root, and its stylesheet has to come before map.css.

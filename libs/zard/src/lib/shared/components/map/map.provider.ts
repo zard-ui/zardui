@@ -19,19 +19,11 @@ export interface ZardMapConfig extends ZardMapStyleConfig {
 }
 
 /**
- * Registers the map defaults. Returns plain providers, so it fits a route's `providers`, a component's `providers` or
- * `app.config.ts`.
+ * Registers the map defaults, driven by `ZardMapStyleService` so `<z-map-style-select>` changes every map live.
  *
- * Register it where the maps live, in the `providers` of the lazy route (or component) that renders them. ng-mapcn is
- * not tree-shakeable: importing it from `app.config.ts` puts the engine and MapLibre (about 1 MB) in the initial
- * bundle of every route. Without overrides it is optional, since ng-mapcn's own defaults are the same Carto pair.
- *
- * The basemap is driven by `ZardMapStyleService`, so `<z-map-style-select>` (or `service.select(id)`) changes every
- * map live. `style` picks the preset to start with, `keys` gives the key-based presets their API keys and `persist`
- * remembers the choice in the browser.
- *
- * The theme is not configured here: `<ng-map>` follows the `dark` class on `<html>`, which `ZardDarkMode`
- * toggles, so the basemap and the chrome switch together.
+ * ng-mapcn is not tree-shakeable: import this from a routes file loaded with `loadChildren` (or from the map's own
+ * component), never from `app.config.ts` or an eager `app.routes.ts`, or MapLibre (about 1 MB) lands in the initial
+ * bundle. The theme follows the `dark` class on `<html>`.
  */
 export function provideZardMap(config: ZardMapConfig = {}): Provider[] {
   const { styles, labels, ...styleConfig } = config;

@@ -102,7 +102,7 @@ const HOME: [number, number] = [13.405, 52.52];
   template: `
     <div class="bg-background @container relative size-full overflow-hidden">
       <ng-map [center]="home" [zoom]="11.8" [options]="mapOptions" (mapReady)="map = $event">
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map-controls />
         @for (store of results(); track store.id) {
           <ng-map-marker
             [longitude]="store.lng"

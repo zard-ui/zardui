@@ -47,7 +47,7 @@ const PEAKS: Record<
         [options]="{ pitch: start.pitch, bearing: start.bearing, maxPitch: 80, scrollZoom: false }"
         (mapReady)="map = $event"
       >
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" [showCompass]="true" />
+        <ng-map-controls [showCompass]="true" />
         <!-- Elevation comes from public Terrarium tiles. Apply it with one element, relief included. -->
         <ng-map-terrain [exaggeration]="exaggeration()" [hillshade]="hillshade()" />
       </ng-map>

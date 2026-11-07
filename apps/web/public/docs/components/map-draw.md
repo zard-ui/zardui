@@ -58,22 +58,22 @@ import { ZardMapDrawImports } from '@/shared/components/map-draw/map-draw.import
 
 ### ng-map-draw
 
-Draws, selects and edits points, lines and polygons on the map, built on terra-draw. Install it with `zard-cli add map-draw`; the core map never loads terra-draw. Enter finishes a shape, Escape cancels it and Delete removes the selected feature.
+Draws, selects and edits points, lines and polygons; install it with `zard-cli add map-draw`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[modes]` | The shapes the user can draw | `readonly ('point' \| 'line' \| 'polygon')[]` | `['point', 'line', 'polygon']` |
-| `[(mode)]` | The active tool: a shape, `select` to pick and edit features, or `static` to only display them | `'point' \| 'line' \| 'polygon' \| 'select' \| 'static'` | `'static'` |
-| `[(features)]` | The drawn features as a GeoJSON FeatureCollection. It is the source of truth: it updates when a draw, edit or delete completes, and assigning a new collection replaces what is shown | `MapDrawFeatureCollection` | `empty collection` |
-| `[editable]` | Enables the `select` mode: select, drag, reshape and delete features | `boolean` | `false` |
-| `[color]` | Accent color of the drawn shapes as `#rrggbb`. A theme-aware blue by default | `DrawHexColor` | `-` |
+| `[modes]` | Shapes the user can draw | `readonly ('point' \| 'line' \| 'polygon')[]` | `['point', 'line', 'polygon']` |
+| `[(mode)]` | Active tool; `static` only displays features | `'point' \| 'line' \| 'polygon' \| 'select' \| 'static'` | `'static'` |
+| `[(features)]` | Drawn features; the source of truth | `MapDrawFeatureCollection` | `empty collection` |
+| `[editable]` | Enables `select` mode for editing features | `boolean` | `false` |
+| `[color]` | Accent color as `#rrggbb` | `DrawHexColor` | `-` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
-| `(drawEnd)` | Emits when a new shape is completed | `MapDrawEvent` | `-` |
-| `(featureEdit)` | Emits when an existing feature is moved, reshaped or otherwise edited | `MapDrawEvent` | `-` |
-| `(featureSelect)` | Emits the feature selected in `select` mode | `MapDrawFeature` | `-` |
-| `(featureDeselect)` | Emits the id of the feature that was deselected | `string \| number` | `-` |
+| `(drawEnd)` | Emits when a shape is completed | `MapDrawEvent` | `-` |
+| `(featureEdit)` | Emits when a feature is edited | `MapDrawEvent` | `-` |
+| `(featureSelect)` | Emits the selected feature | `MapDrawFeature` | `-` |
+| `(featureDeselect)` | Emits the deselected feature id | `string \| number` | `-` |
 
 ---
 

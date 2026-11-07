@@ -140,6 +140,11 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
                     @if (preset.id === defaultPresetId) {
                       <z-badge zType="secondary" class="px-1.5 py-0 text-[10px]">Default</z-badge>
                     }
+                    @if (preset.theme; as theme) {
+                      <z-badge zType="outline" class="px-1.5 py-0 text-[10px] font-normal">
+                        {{ theme === 'light' ? 'Light only' : 'Dark only' }}
+                      </z-badge>
+                    }
                   </span>
                   <span class="text-muted-foreground text-xs">{{ detail(preset) }}</span>
                 </span>
@@ -447,18 +452,24 @@ export class ZardDemoMapStyleOverrideComponent {
 }
 ```
 
+## Light and dark
+
+> **Not every style works in dark mode.** **Carto Voyager**, **OpenFreeMap Liberty**, **OpenFreeMap Bright**, **OpenFreeMap Positron**, **OpenStreetMap Standard**, **Stadia Maps Outdoors**, **Stadia Maps OSM Bright** are drawn for light mode only: in dark mode they stay light or fall back to a shared dark style, so they all look alike. **OpenFreeMap Dark**, **OpenFreeMap Fiord** are dark only. The picker marks them `Light only` and `Dark only`. If your app has a dark mode, pick a preset with its own dark variant.
+
+Presets pair a light and a dark style and follow the `dark` class on `<html>`. See the presets table in [Map styles](/docs/components/map#map-styles).
+
 ## API Reference
 
 ### z-map-style-select
 
-Picks the basemap of every map on the page, live. A button shows the style in use with a mini-map swatch and opens a popover that lists the presets of `ZardMapStyleService` by provider, each with a swatch of its own. A key-based preset asks for its API key inline, under the list. It has an effect wherever `provideZardMap()` is registered, and a map with its own `[styles]` ignores it.
+Picks the basemap of every map on the page; maps with their own `[styles]` ignore it.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zAriaLabel]` | Accessible name of the picker, also its caption and the title of the popover | `string` | `'Map style'` |
-| `[zAlign]` | Which edge of the button the popover lines up with | `'start' \| 'center' \| 'end'` | `'end'` |
-| `(zStyleChange)` | Emits the preset in use after a pick, and for a key-based preset after its key was accepted | `ZardMapPreset` | `-` |
+| `[zAriaLabel]` | Accessible name, caption and popover title | `string` | `'Map style'` |
+| `[zAlign]` | Button edge the popover aligns to | `'start' \| 'center' \| 'end'` | `'end'` |
+| `(zStyleChange)` | Emits the picked preset once applied | `ZardMapPreset` | `-` |
 
 ---
 

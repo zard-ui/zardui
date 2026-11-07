@@ -28,7 +28,7 @@ const EMPTY: FeatureCollection<Point, Quake> = { type: 'FeatureCollection', feat
   template: `
     <div class="bg-background @container relative size-full overflow-hidden">
       <ng-map [center]="[150, 10]" [zoom]="compact ? 0.6 : 1.8" [options]="mapOptions">
-        <ng-map-controls class="[&_.ng-controls]:bottom-2!" />
+        <ng-map-controls />
         <ng-map-heatmap
           [data]="visible()"
           weightProperty="mag"

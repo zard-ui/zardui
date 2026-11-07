@@ -77,12 +77,8 @@ export const ZARD_MAP_STYLE_CONFIG = new InjectionToken<ZardMapStyleConfig>('ZAR
 const DEFAULT_STORAGE_KEY = 'zard-map-style';
 
 /**
- * The active basemap of every map on the page.
- *
- * It lives in the root injector on purpose: the lazy routes that render maps register their own
- * `provideZardMap()`, and they all share this one state, so a choice made on one page is the one the next page opens
- * with. `styles` is the signal `provideZardMap()` hands to ng-mapcn: setting a preset swaps the basemap of every
- * `<ng-map>` without a `[styles]` of its own, live, with no reload and no remount.
+ * The active basemap of every map, shared from the root injector by all the routes that register `provideZardMap()`.
+ * Selecting a preset swaps, live, every `<ng-map>` without a `[styles]` of its own.
  */
 @Injectable({ providedIn: 'root' })
 export class ZardMapStyleService {
@@ -313,6 +309,8 @@ export interface ZardMapPreset {
   readonly variants: { readonly light: string; readonly dark: string };
   /** What the basemap looks like in light and dark, in one line. */
   readonly description: string;
+  /** Set when the style only fits one theme. The picker marks it "Light only" or "Dark only". */
+  readonly theme?: 'light' | 'dark';
   /** Needs an API key from the provider. The key is never part of the catalogue: it comes from config or the picker. */
   readonly requiresKey: boolean;
   /** Not for production traffic: the provider's usage policy forbids it. */
@@ -477,6 +475,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'carto',
     variants: { light: 'Voyager', dark: 'Dark Matter' },
     description: 'Warm, colorful street map in light mode, Dark Matter in dark mode.',
+    theme: 'light',
     requiresKey: false,
     devOnly: false,
     attribution: CARTO_ATTRIBUTION,
@@ -506,6 +505,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'openfreemap',
     variants: { light: 'Liberty', dark: 'Dark' },
     description: 'Detailed, softly colored street map. Dark mode uses the OpenFreeMap dark style.',
+    theme: 'light',
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
@@ -535,6 +535,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'openfreemap',
     variants: { light: 'Bright', dark: 'Dark' },
     description: 'Saturated, high-contrast street map. Dark mode uses the OpenFreeMap dark style.',
+    theme: 'light',
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
@@ -564,6 +565,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'openfreemap',
     variants: { light: 'Positron', dark: 'Dark' },
     description: 'Minimal light basemap for data on top. Dark mode uses the OpenFreeMap dark style.',
+    theme: 'light',
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
@@ -593,6 +595,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'openfreemap',
     variants: { light: 'Dark', dark: 'Dark' },
     description: 'Always dark, in light mode too.',
+    theme: 'dark',
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
@@ -622,6 +625,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'openfreemap',
     variants: { light: 'Fiord', dark: 'Fiord' },
     description: 'Muted blue-gray basemap, the same in both themes.',
+    theme: 'dark',
     requiresKey: false,
     devOnly: false,
     attribution: OPENFREEMAP_ATTRIBUTION,
@@ -651,6 +655,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'osm',
     variants: { light: 'Standard', dark: 'Standard, dimmed' },
     description: 'The classic OpenStreetMap raster tiles. Dimmed in dark mode. Development only.',
+    theme: 'light',
     requiresKey: false,
     devOnly: true,
     attribution: OSM_ATTRIBUTION,
@@ -825,6 +830,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'stadia',
     variants: { light: 'Outdoors', dark: 'Outdoors' },
     description: 'Hiking and cycling map with terrain, the same in both themes.',
+    theme: 'light',
     requiresKey: true,
     devOnly: false,
     attribution: STADIA_ATTRIBUTION,
@@ -854,6 +860,7 @@ export const ZARD_MAP_PRESETS: readonly ZardMapPreset[] = [
     provider: 'stadia',
     variants: { light: 'OSM Bright', dark: 'OSM Bright' },
     description: 'Familiar OpenStreetMap colors on vector tiles, the same in both themes.',
+    theme: 'light',
     requiresKey: true,
     devOnly: false,
     attribution: STADIA_ATTRIBUTION,
@@ -895,17 +902,8 @@ export function findZardMapPreset(
 
 ```css
 /*
- * Global styles for the map. Load it together with `maplibre-gl/dist/maplibre-gl.css`:
- *
- *   @import 'maplibre-gl/dist/maplibre-gl.css';
- *   @import './map.css';
- *
- * Both imports stay unlayered. MapLibre's own sheet then wins over Tailwind's preflight (which would
- * otherwise reset its buttons and images), and the `.ng-*` rules below live in `@layer components`, so a
- * Tailwind utility on a popup or a marker label still overrides them.
- *
- * ng-mapcn renders its popups, tooltips and labels as plain DOM inside MapLibre, outside Angular's
- * component styles. This file styles them with the zard tokens so they look like a `z-popover`.
+ * Global map styles: import after `maplibre-gl/dist/maplibre-gl.css`, both unlayered, so MapLibre wins over
+ * Tailwind's preflight. Styles ng-mapcn's popups, tooltips and labels with the zard tokens.
  */
 
 /* MapLibre's popup chrome is neutralised: the card below is the only visible surface. */
@@ -1195,19 +1193,11 @@ export interface ZardMapConfig extends ZardMapStyleConfig {
 }
 
 /**
- * Registers the map defaults. Returns plain providers, so it fits a route's `providers`, a component's `providers` or
- * `app.config.ts`.
+ * Registers the map defaults, driven by `ZardMapStyleService` so `<z-map-style-select>` changes every map live.
  *
- * Register it where the maps live, in the `providers` of the lazy route (or component) that renders them. ng-mapcn is
- * not tree-shakeable: importing it from `app.config.ts` puts the engine and MapLibre (about 1 MB) in the initial
- * bundle of every route. Without overrides it is optional, since ng-mapcn's own defaults are the same Carto pair.
- *
- * The basemap is driven by `ZardMapStyleService`, so `<z-map-style-select>` (or `service.select(id)`) changes every
- * map live. `style` picks the preset to start with, `keys` gives the key-based presets their API keys and `persist`
- * remembers the choice in the browser.
- *
- * The theme is not configured here: `<ng-map>` follows the `dark` class on `<html>`, which `ZardDarkMode`
- * toggles, so the basemap and the chrome switch together.
+ * ng-mapcn is not tree-shakeable: import this from a routes file loaded with `loadChildren` (or from the map's own
+ * component), never from `app.config.ts` or an eager `app.routes.ts`, or MapLibre (about 1 MB) lands in the initial
+ * bundle. The theme follows the `dark` class on `<html>`.
  */
 export function provideZardMap(config: ZardMapConfig = {}): Provider[] {
   const { styles, labels, ...styleConfig } = config;
@@ -2106,14 +2096,13 @@ export class ZardDemoMapTileSourcesComponent {
 
 ### 3d
 
-Tilt the map (hold right-click and drag, or Ctrl and drag) to see `ng-map-fill-extrusion` lift the buildings and `ng-map-terrain` raise the relief. Extrusions read the Carto `building` layer, so this map pins Carto with `[styles]`.
+Tilt the map (hold right-click and drag, or Ctrl and drag) to see `ng-map-fill-extrusion` lift the buildings and `ng-map-terrain` raise the relief. Extrusions follow the picked basemap; a raster one (OSM) has no buildings.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import type { Map as MapLibreMap } from 'maplibre-gl';
 
-import { ZARD_MAP_DEFAULT_STYLES } from '@/shared/components/map/map-styles';
 import { ZardMapImports } from '@/shared/components/map/map.imports';
 import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
 import {
@@ -2127,6 +2116,9 @@ const CAMERAS: Record<Place, { center: [number, number]; zoom: number; pitch: nu
   manhattan: { center: [-74.0134, 40.7061], zoom: 15.6, pitch: 62, bearing: -20 },
   matterhorn: { center: [7.6586, 45.9763], zoom: 11.6, pitch: 72, bearing: 25 },
 };
+
+/** OpenMapTiles basemaps name their vector source differently from Carto. */
+const OPENMAPTILES_SOURCES = ['openmaptiles', 'maptiler_planet'];
 
 @Component({
   selector: 'z-demo-map-three-d',
@@ -2146,18 +2138,15 @@ const CAMERAS: Record<Place, { center: [number, number]; zoom: number; pitch: nu
       </div>
 
       <div class="h-[420px] w-full overflow-hidden rounded-xl border">
-        <!-- Extrusions read the "building" layer of the Carto basemap, so this map pins Carto instead of following
-             the app-wide basemap. -->
         <ng-map
-          [styles]="carto"
           [center]="camera.center"
           [zoom]="camera.zoom"
           [options]="{ pitch: camera.pitch, bearing: camera.bearing }"
-          (mapReady)="map = $event"
+          (mapReady)="onMapReady($event)"
         >
           <ng-map-controls [showCompass]="true" />
           <!-- Buildings appear from zoom 14, with the heights the basemap carries. -->
-          <ng-map-fill-extrusion />
+          <ng-map-fill-extrusion [source]="buildings()" [sourceLayer]="buildings() ? 'building' : undefined" />
           @if (terrain()) {
             <!-- Elevation from public Terrarium tiles, plus a hillshade so the relief reads. -->
             <ng-map-terrain [exaggeration]="1.5" [hillshade]="true" />
@@ -2169,7 +2158,8 @@ const CAMERAS: Record<Place, { center: [number, number]; zoom: number; pitch: nu
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoMapThreeDComponent {
-  protected readonly carto = ZARD_MAP_DEFAULT_STYLES;
+  /** The buildings' source when the basemap is OpenMapTiles; Carto is detected on its own. */
+  protected readonly buildings = signal<string | undefined>(undefined);
   protected readonly camera = CAMERAS.manhattan;
   protected map: MapLibreMap | null = null;
 
@@ -2180,6 +2170,13 @@ export class ZardDemoMapThreeDComponent {
     { value: 'manhattan', label: 'Manhattan (buildings)' },
     { value: 'matterhorn', label: 'Matterhorn (terrain)' },
   ];
+
+  protected onMapReady(map: MapLibreMap): void {
+    this.map = map;
+    const sync = () => this.buildings.set(OPENMAPTILES_SOURCES.find(id => map.getSource(id)));
+    sync();
+    map.on('styledata', sync);
+  }
 
   protected onPlaceChange(value: string | string[]): void {
     if (typeof value !== 'string' || !value) {
@@ -2348,7 +2345,7 @@ export class ZardDemoMapViewportComponent {
 `ng-map-draw` draws, selects and edits points, lines and polygons. It comes from the optional `map-draw` item (`npx zard-cli add map-draw`), which adds `terra-draw`; the core map never loads it. Pick a tool, click the map, and double-click or press Enter to finish.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, viewChild } from '@angular/core';
 
 import type { MapDrawFeature, MapDrawFeatureCollection, MapDrawMode } from 'ng-mapcn/draw';
 
@@ -2369,6 +2366,10 @@ function distance([lng1, lat1]: number[], [lng2, lat2]: number[]): number {
     Math.sin(toRad(lat2 - lat1) / 2) ** 2 +
     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(toRad(lng2 - lng1) / 2) ** 2;
   return 2 * EARTH_RADIUS_M * Math.asin(Math.sqrt(a));
+}
+
+function formatArea(km2: number): string {
+  return km2 < 0.01 ? `${Math.round(km2 * 1e6).toLocaleString('en-US')} m²` : `${km2.toFixed(2)} km²`;
 }
 
 /** Area of a polygon ring on the sphere, in square meters. */
@@ -2396,7 +2397,7 @@ function measure(feature: MapDrawFeature): string {
     }
     case 'Polygon': {
       const km2 = ringArea(geometry.coordinates[0]) / 1e6;
-      return km2 < 1 ? `${(km2 * 1e6).toFixed(0)} m²` : `${km2.toFixed(2)} km²`;
+      return formatArea(km2);
     }
   }
 }
@@ -2457,8 +2458,11 @@ function measure(feature: MapDrawFeature): string {
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block w-full' },
 })
 export class ZardDemoMapDrawComponent {
+  private readonly toolbar = viewChild.required(ZardToggleGroupComponent);
+
   protected readonly mode = signal<MapDrawMode>('polygon');
   protected readonly features = signal<MapDrawFeatureCollection>({ type: 'FeatureCollection', features: [] });
 
@@ -2478,9 +2482,12 @@ export class ZardDemoMapDrawComponent {
     { value: 'polygon', label: 'Polygon' },
   ];
 
+  /** Re-clicking the active tool unpresses it while it keeps drawing, so press it back. */
   protected onModeChange(value: string | string[]): void {
     if (typeof value === 'string' && value) {
       this.mode.set(value as MapDrawMode);
+    } else {
+      this.toolbar().writeValue(this.mode());
     }
   }
 
@@ -2492,7 +2499,7 @@ export class ZardDemoMapDrawComponent {
 
 ### Lazy Loading
 
-MapLibre is heavy and ng-mapcn is not tree-shakeable, so keep it out of the initial bundle: render maps from a lazy route, or inside `@defer`. For the same reason, register `provideZardMap()` on that lazy route and not in `app.config.ts`.
+MapLibre is heavy and ng-mapcn is not tree-shakeable, so keep it out of the initial bundle: render maps from a lazy route, or inside `@defer`. For the same reason, import `provideZardMap()` only from a routes file loaded with `loadChildren`: importing it in `app.routes.ts` or `app.config.ts` puts MapLibre in the initial bundle.
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -2556,42 +2563,45 @@ export class MapPage {
 
 ## Map styles
 
-Every map without a `[styles]` input follows one app-wide basemap, and it changes live: pick another preset and every map on the page swaps, with no reload and no remount. The precedence is `[styles]`, then `[blank]`, then the app-wide basemap, then Carto.
-- **Presets** pair a light and a dark style, so the preset and the dark mode compose.
-- **`z-map-style-select`** is the shipped picker (`npx zard-cli add map-style-select`) and **`ZardMapStyleService`** is the state behind it.
-- **Key-based presets** never ship a key. Give it to `provideZardMap({ keys })`, or the picker asks for it inline and keeps it in this browser.
-The picker at the top of this page drives every map on it, and your choice carries over to the `/maps` gallery.
+> **Not every style works in dark mode.** **Carto Voyager**, **OpenFreeMap Liberty**, **OpenFreeMap Bright**, **OpenFreeMap Positron**, **OpenStreetMap Standard**, **Stadia Maps Outdoors**, **Stadia Maps OSM Bright** are drawn for light mode only: in dark mode they stay light or fall back to a shared dark style, so they all look alike. **OpenFreeMap Dark**, **OpenFreeMap Fiord** are dark only. The picker marks them `Light only` and `Dark only`. If your app has a dark mode, pick a preset with its own dark variant.
+
+Maps without `[styles]` share one app-wide basemap that switches live. Precedence: `[styles]`, `[blank]`, the app-wide basemap, then Carto.
+- **Presets** pair a light and a dark style, except the single-theme ones above.
+- **`z-map-style-select`** is the picker; **`ZardMapStyleService`** holds its state.
+- **Key-based presets** take their key from `provideZardMap({ keys })` or the picker.
 
 | Preset | Provider | Key | Light / dark | Attribution | Usage |
 | --- | --- | --- | --- | --- | --- |
 | `carto-positron` | [Carto](https://carto.com/basemaps) | None | Positron / Dark Matter | © OpenStreetMap contributors © CARTO | Free for non-commercial and low-traffic use. Commercial products need a Carto plan. |
-| `carto-voyager` | [Carto](https://carto.com/basemaps) | None | Voyager / Dark Matter | © OpenStreetMap contributors © CARTO | Free for non-commercial and low-traffic use. Commercial products need a Carto plan. |
-| `openfreemap-liberty` | [OpenFreeMap](https://openfreemap.org) | None | Liberty / Dark | © OpenFreeMap © OpenMapTiles Data from OpenStreetMap | Free with no registration and no hard limit. Donations keep it running. |
-| `openfreemap-bright` | [OpenFreeMap](https://openfreemap.org) | None | Bright / Dark | © OpenFreeMap © OpenMapTiles Data from OpenStreetMap | Free with no registration and no hard limit. Donations keep it running. |
-| `openfreemap-positron` | [OpenFreeMap](https://openfreemap.org) | None | Positron / Dark | © OpenFreeMap © OpenMapTiles Data from OpenStreetMap | Free with no registration and no hard limit. Donations keep it running. |
-| `openfreemap-dark` | [OpenFreeMap](https://openfreemap.org) | None | Dark / Dark | © OpenFreeMap © OpenMapTiles Data from OpenStreetMap | Free with no registration and no hard limit. Donations keep it running. |
-| `openfreemap-fiord` | [OpenFreeMap](https://openfreemap.org) | None | Fiord / Fiord | © OpenFreeMap © OpenMapTiles Data from OpenStreetMap | Free with no registration and no hard limit. Donations keep it running. |
-| `osm-raster` | [OpenStreetMap](https://operations.osmfoundation.org/policies/tiles/) | None | Standard / Standard, dimmed | © OpenStreetMap contributors | Development only |
+| `carto-voyager` | [Carto](https://carto.com/basemaps) | None | Voyager (light only, Dark Matter otherwise) | © OpenStreetMap contributors © CARTO | Free for non-commercial and low-traffic use. Commercial products need a Carto plan. |
+| `openfreemap-liberty` | [OpenFreeMap](https://openfreemap.org) | None | Liberty (light only, Dark otherwise) | © OpenFreeMap © OpenMapTiles Data from OpenStreetMap | Free with no registration and no hard limit. Donations keep it running. |
+| `openfreemap-bright` | [OpenFreeMap](https://openfreemap.org) | None | Bright (light only, Dark otherwise) | © OpenFreeMap © OpenMapTiles Data from OpenStreetMap | Free with no registration and no hard limit. Donations keep it running. |
+| `openfreemap-positron` | [OpenFreeMap](https://openfreemap.org) | None | Positron (light only, Dark otherwise) | © OpenFreeMap © OpenMapTiles Data from OpenStreetMap | Free with no registration and no hard limit. Donations keep it running. |
+| `openfreemap-dark` | [OpenFreeMap](https://openfreemap.org) | None | Dark (dark only) | © OpenFreeMap © OpenMapTiles Data from OpenStreetMap | Free with no registration and no hard limit. Donations keep it running. |
+| `openfreemap-fiord` | [OpenFreeMap](https://openfreemap.org) | None | Fiord (dark only) | © OpenFreeMap © OpenMapTiles Data from OpenStreetMap | Free with no registration and no hard limit. Donations keep it running. |
+| `osm-raster` | [OpenStreetMap](https://operations.osmfoundation.org/policies/tiles/) | None | Standard (light only, Standard, dimmed otherwise) | © OpenStreetMap contributors | Development only |
 | `maptiler-streets` | [MapTiler](https://www.maptiler.com/cloud/) | Required | Streets / Streets Dark | © MapTiler © OpenStreetMap contributors | Free plan for non-commercial use with a monthly request quota. Restrict the key to your domain. |
 | `maptiler-dataviz` | [MapTiler](https://www.maptiler.com/cloud/) | Required | Dataviz / Dataviz Dark | © MapTiler © OpenStreetMap contributors | Free plan for non-commercial use with a monthly request quota. Restrict the key to your domain. |
 | `maptiler-satellite` | [MapTiler](https://www.maptiler.com/cloud/) | Required | Hybrid / Hybrid | © MapTiler © OpenStreetMap contributors | Free plan for non-commercial use with a monthly request quota. Restrict the key to your domain. |
 | `maptiler-outdoor` | [MapTiler](https://www.maptiler.com/cloud/) | Required | Outdoor / Outdoor Dark | © MapTiler © OpenStreetMap contributors | Free plan for non-commercial use with a monthly request quota. Restrict the key to your domain. |
 | `stadia-alidade-smooth` | [Stadia Maps](https://stadiamaps.com) | Required | Alidade Smooth / Alidade Smooth Dark | © Stadia Maps © OpenMapTiles © OpenStreetMap contributors | Works without a key on localhost. Production domains need a (free) account and a key. |
-| `stadia-outdoors` | [Stadia Maps](https://stadiamaps.com) | Required | Outdoors / Outdoors | © Stadia Maps © OpenMapTiles © OpenStreetMap contributors | Works without a key on localhost. Production domains need a (free) account and a key. |
-| `stadia-osm-bright` | [Stadia Maps](https://stadiamaps.com) | Required | OSM Bright / OSM Bright | © Stadia Maps © OpenMapTiles © OpenStreetMap contributors | Works without a key on localhost. Production domains need a (free) account and a key. |
+| `stadia-outdoors` | [Stadia Maps](https://stadiamaps.com) | Required | Outdoors (light only) | © Stadia Maps © OpenMapTiles © OpenStreetMap contributors | Works without a key on localhost. Production domains need a (free) account and a key. |
+| `stadia-osm-bright` | [Stadia Maps](https://stadiamaps.com) | Required | OSM Bright (light only) | © Stadia Maps © OpenMapTiles © OpenStreetMap contributors | Works without a key on localhost. Production domains need a (free) account and a key. |
 
 ### Style Picker
 
-Drop `z-map-style-select` anywhere: over a corner of a map, in a toolbar or in your app header. Pick a key-based preset such as MapTiler and it asks for the key inline; nothing changes, and no request goes out, until you give one.
+Place `z-map-style-select` anywhere. Key-based presets ask for their key inline.
 
 **Register**
 
 ```angular-ts
 import { provideZardMap } from '@/shared/components/map/map.provider';
 
-export const routes: Routes = [
+// A routes file of its own, loaded from app.routes.ts with loadChildren, keeps MapLibre out of the initial bundle:
+//   { path: 'map', loadChildren: () => import('./map.routes').then(m => m.MAP_ROUTES) }
+export const MAP_ROUTES: Routes = [
   {
-    path: 'map',
+    path: '',
     loadComponent: () => import('./map.page').then(m => m.MapPage),
     providers: [
       provideZardMap({
@@ -2660,7 +2670,7 @@ export class BasemapToggle {
 
 ### Style Override
 
-A map with its own `[styles]` ignores the picker. Change the preset and only the left map moves.
+A map with its own `[styles]` ignores the picker.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -2705,7 +2715,7 @@ export class ZardDemoMapStyleOverrideComponent {
 
 ### Style Blank
 
-`[blank]` swaps the basemap for an empty, transparent style. Whatever sits behind the map shows through, and the layers you add are the whole map.
+`[blank]` replaces the basemap with an empty, transparent style.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -2764,83 +2774,83 @@ export class ZardDemoMapStyleBlankComponent {
 
 ### ng-map
 
-The map host. It fills its parent, so give the parent an explicit height. The map follows the `dark` class on `<html>`, which `ZardDarkMode` toggles, and swaps its basemap live. Every other `ng-*` element goes inside it.
+The map host. It fills its parent, so give the parent an explicit height.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[center]` | Initial center as [longitude, latitude] | `[number, number]` | `[0, 0]` |
+| `[center]` | Initial [longitude, latitude] | `[number, number]` | `[0, 0]` |
 | `[zoom]` | Initial zoom level | `number` | `2` |
-| `[viewport]` | Controlled camera: center, zoom, bearing and pitch. Pair it with `(viewportChange)` | `Partial<MapViewport>` | `-` |
-| `[styles]` | Basemap for this map, one style per theme (a style URL or a style JSON). Wins over the app-wide basemap | `MapStylesConfig` | `app-wide basemap` |
-| `[blank]` | Tile-less style with a transparent background, for dataviz. Ignored when `[styles]` is set | `boolean` | `false` |
-| `[theme]` | Leave it on `auto`: the map follows the `dark` class on `<html>` | `'light' \| 'dark' \| 'auto'` | `'auto'` |
-| `[projection]` | MapLibre projection, for example `{ type: "globe" }` | `ProjectionSpecification` | `-` |
-| `[fitBounds]` | Fits the camera to `bounds`, or to the data of the children (markers, GeoJSON, routes, arcs, clusters, heatmaps) once loaded | `MapFitBoundsOptions` | `-` |
-| `[loading]` | Shows the loader on top of the map | `boolean` | `false` |
-| `[labels]` | Label overrides for this map, merged over `provideZardMap({ labels })` and the English defaults | `Partial<MapLabels>` | `-` |
-| `[options]` | Raw MapLibre `MapOptions` (pitch, bearing, minZoom, maxBounds, ...) spread into the constructor | `Omit<MapOptions, "container" \| "style">` | `-` |
+| `[viewport]` | Controlled camera; pair with `(viewportChange)` | `Partial<MapViewport>` | `-` |
+| `[styles]` | Light and dark basemap for this map only | `MapStylesConfig` | `app-wide basemap` |
+| `[blank]` | Transparent, tile-less style. Ignored with `[styles]` | `boolean` | `false` |
+| `[theme]` | Leave on `auto` to follow the `dark` class | `'light' \| 'dark' \| 'auto'` | `'auto'` |
+| `[projection]` | MapLibre projection, e.g. `{ type: "globe" }` | `ProjectionSpecification` | `-` |
+| `[fitBounds]` | Fits the camera to `bounds` or the children data | `MapFitBoundsOptions` | `-` |
+| `[loading]` | Shows the loader over the map | `boolean` | `false` |
+| `[labels]` | Label overrides for this map | `Partial<MapLabels>` | `-` |
+| `[options]` | Raw MapLibre `MapOptions` | `Omit<MapOptions, "container" \| "style">` | `-` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
-| `(mapReady)` | Emits the MapLibre map once it has loaded | `Map` | `-` |
-| `(viewportChange)` | Emits on every camera frame while the map moves | `MapViewport` | `-` |
+| `(mapReady)` | Emits the loaded MapLibre map | `Map` | `-` |
+| `(viewportChange)` | Emits on every camera frame | `MapViewport` | `-` |
 | `(mapClick)` | Emits when the map is clicked | `MapMouseEvent` | `-` |
-| `(mapError)` | Emits when MapLibre reports an error: no WebGL2, a failed style or tile request, a rejected layer | `Error` | `-` |
+| `(mapError)` | Emits on a MapLibre error (WebGL2, style, tile, layer) | `Error` | `-` |
 
 ### ng-map-controls
 
-Zoom, compass, locate and fullscreen buttons, styled with the zard tokens.
+Zoom, compass, locate and fullscreen buttons.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[position]` | Corner of the map | `'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'` | `'bottom-right'` |
-| `[showZoom]` | Shows the zoom in and out buttons | `boolean` | `true` |
-| `[showCompass]` | Shows the compass: click to reset north and pitch | `boolean` | `false` |
-| `[showLocate]` | Shows the locate button (browser geolocation) | `boolean` | `false` |
+| `[showZoom]` | Shows the zoom buttons | `boolean` | `true` |
+| `[showCompass]` | Shows the compass (resets north and pitch) | `boolean` | `false` |
+| `[showLocate]` | Shows the geolocation button | `boolean` | `false` |
 | `[showFullscreen]` | Shows the fullscreen button | `boolean` | `false` |
-| `[labels]` | Label overrides for the tooltips of the buttons, merged over `provideZardMap({ labels })` and the English defaults | `Partial<MapLabels>` | `-` |
-| `[className]` | Extra space-separated classes for the controls element. The built-in classes are kept | `string` | `-` |
+| `[labels]` | Label overrides for the button tooltips | `Partial<MapLabels>` | `-` |
+| `[className]` | Extra classes for the controls | `string` | `-` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
-| `(locateChange)` | Emits after a successful geolocation. Treat the coordinates as personal data | `{ longitude: number; latitude: number }` | `-` |
-| `(locateError)` | Emits when geolocation fails (permission denied, timeout) or the browser has none | `Error \| GeolocationPositionError` | `-` |
+| `(locateChange)` | Emits the located coordinates | `{ longitude: number; latitude: number }` | `-` |
+| `(locateError)` | Emits when geolocation fails or is unavailable | `Error \| GeolocationPositionError` | `-` |
 
 ### ng-map-marker
 
-A marker with optional `ng-marker-content`, `ng-marker-label`, `ng-marker-popup` and `ng-marker-tooltip` children. Keyboard: Enter and Space click it, and the arrow keys drag a draggable one.
+A marker with optional content, label, popup and tooltip children.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[longitude]` | Longitude | `number` | `-` |
 | `[latitude]` | Latitude | `number` | `-` |
 | `[draggable]` | Lets the user drag the marker | `boolean` | `false` |
-| `[offset]` | Pixel offset of the marker from its position | `PointLike` | `-` |
+| `[offset]` | Pixel offset from the position | `PointLike` | `-` |
 | `[rotation]` | Rotation in degrees | `number` | `0` |
-| `[anchor]` | Which part of the marker sits on the position. Applied at creation only | `PositionAnchor` | `'center'` |
+| `[anchor]` | Part of the marker on the position (creation only) | `PositionAnchor` | `'center'` |
 | `[rotationAlignment]` | What the rotation is relative to | `Alignment` | `'auto'` |
 | `[pitchAlignment]` | What the pitch is relative to | `Alignment` | `'auto'` |
-| `[ariaLabel]` | Accessible name of the marker. An interactive marker without text falls back to the `marker` label | `string` | `-` |
-| `[labels]` | Label overrides for the marker, merged over `provideZardMap({ labels })` and the English defaults | `Partial<MapLabels>` | `-` |
-| `[keyboardStep]` | Pixels an arrow key drags a focused draggable marker | `number` | `10` |
-| `[keyboardStepLarge]` | The same with Shift held | `number` | `50` |
+| `[ariaLabel]` | Accessible name of the marker | `string` | `-` |
+| `[labels]` | Label overrides for the marker | `Partial<MapLabels>` | `-` |
+| `[keyboardStep]` | Pixels moved per arrow key when dragging | `number` | `10` |
+| `[keyboardStepLarge]` | Pixels moved with Shift held | `number` | `50` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
-| `(markerClick)` | Emits on click, and on Enter or Space when focused | `MouseEvent` | `-` |
-| `(markerMouseEnter)` | Emits when the pointer enters the marker | `MouseEvent` | `-` |
-| `(markerMouseLeave)` | Emits when the pointer leaves the marker | `MouseEvent` | `-` |
+| `(markerClick)` | Emits on click, Enter or Space | `MouseEvent` | `-` |
+| `(markerMouseEnter)` | Emits when the pointer enters | `MouseEvent` | `-` |
+| `(markerMouseLeave)` | Emits when the pointer leaves | `MouseEvent` | `-` |
 | `(dragStart)` | Emits when a drag starts | `{ lng: number; lat: number }` | `-` |
-| `(drag)` | Emits on every frame of a drag | `{ lng: number; lat: number }` | `-` |
+| `(drag)` | Emits on every drag frame | `{ lng: number; lat: number }` | `-` |
 | `(dragEnd)` | Emits the new position after a drag | `{ lng: number; lat: number }` | `-` |
 
 ### ng-marker-content
 
-Custom HTML for the marker. Empty, it renders the default dot, so always include it for a plain marker.
+Custom marker HTML; leave it empty for the default dot.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[className]` | Extra space-separated classes for the marker content. The built-in classes are kept | `string` | `-` |
+| `[className]` | Extra classes for the marker content | `string` | `-` |
 
 ### ng-marker-label
 
@@ -2852,82 +2862,82 @@ A text label above or below the marker.
 
 ### ng-marker-popup
 
-A popup that opens when the marker is clicked. Styled as a zard popover.
+A popup that opens when the marker is clicked.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[closeButton]` | Shows a close button | `boolean` | `false` |
 | `[offset]` | Pixel offset from the marker | `Offset` | `-` |
-| `[anchor]` | Side of the marker the popup anchors to. Applied at creation only | `PositionAnchor` | `auto` |
+| `[anchor]` | Side the popup anchors to (creation only) | `PositionAnchor` | `auto` |
 | `[maxWidth]` | CSS max-width of the popup | `string` | `'none'` |
-| `[closeOnClick]` | Closes the popup when the map is clicked. Applied at creation only | `boolean` | `false` |
-| `[labels]` | Label overrides for the close button, merged over `provideZardMap({ labels })` and the English defaults | `Partial<MapLabels>` | `-` |
-| `[className]` | Extra space-separated classes for the popup card. The built-in classes are kept | `string` | `-` |
+| `[closeOnClick]` | Closes on map click (creation only) | `boolean` | `false` |
+| `[labels]` | Label overrides for the close button | `Partial<MapLabels>` | `-` |
+| `[className]` | Extra classes for the popup card | `string` | `-` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
-| `(popupClose)` | Emits whenever the popup closes | `void` | `-` |
+| `(popupClose)` | Emits when the popup closes | `void` | `-` |
 
 ### ng-marker-tooltip
 
-A tooltip that shows while the marker is hovered or focused.
+A tooltip shown while the marker is hovered or focused.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[offset]` | Pixel offset from the marker | `Offset` | `16` |
-| `[anchor]` | Side of the marker the tooltip anchors to. Applied at creation only | `PositionAnchor` | `auto` |
-| `[className]` | Extra space-separated classes for the tooltip pill. The built-in classes are kept | `string` | `-` |
+| `[anchor]` | Side the tooltip anchors to (creation only) | `PositionAnchor` | `auto` |
+| `[className]` | Extra classes for the tooltip pill | `string` | `-` |
 
 ### ng-map-popup
 
-A standalone popup at a longitude and latitude, with no marker.
+A standalone popup at a coordinate, with no marker.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[longitude]` | Longitude | `number` | `-` |
 | `[latitude]` | Latitude | `number` | `-` |
-| `[(open)]` | Whether the popup is shown. Closing it from the map updates the binding | `boolean` | `true` |
+| `[(open)]` | Whether the popup is shown | `boolean` | `true` |
 | `[closeButton]` | Shows a close button | `boolean` | `false` |
 | `[offset]` | Pixel offset from the position | `Offset` | `16` |
 | `[maxWidth]` | CSS max-width of the popup | `string` | `'none'` |
-| `[closeOnClick]` | Closes the popup when the map is clicked. Applied at creation only | `boolean` | `true` |
-| `[labels]` | Label overrides for the close button, merged over `provideZardMap({ labels })` and the English defaults | `Partial<MapLabels>` | `-` |
-| `[className]` | Extra space-separated classes for the popup card. The built-in classes are kept | `string` | `-` |
+| `[closeOnClick]` | Closes on map click (creation only) | `boolean` | `true` |
+| `[labels]` | Label overrides for the close button | `Partial<MapLabels>` | `-` |
+| `[className]` | Extra classes for the popup card | `string` | `-` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
-| `(popupClose)` | Emits whenever the popup closes | `void` | `-` |
+| `(popupClose)` | Emits when the popup closes | `void` | `-` |
 
 ### ng-map-route
 
-A line through a list of coordinates. Add `ng-route-progress` for a covered part and `ng-route-marker` for markers along it.
+A line through a list of coordinates.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[coordinates]` | The path as [longitude, latitude] pairs | `[number, number][]` | `-` |
-| `[id]` | Identifier prefix of the source and layer. Generated when omitted. Changing it recreates them | `string` | `auto` |
+| `[coordinates]` | Path as [longitude, latitude] pairs | `[number, number][]` | `-` |
+| `[id]` | Id prefix of the source and layer. Changing it recreates them | `string` | `auto` |
 | `[color]` | Line color | `string` | `'#4285F4'` |
 | `[width]` | Line width in pixels | `number` | `3` |
 | `[opacity]` | Line opacity | `number` | `0.8` |
 | `[dashArray]` | Dash pattern as [dash, gap] | `[number, number]` | `-` |
-| `[interactive]` | Whether the route responds to mouse events | `boolean` | `true` |
-| `[progress]` | Covered fraction of the route, from 0 to 1, drawn by `ng-route-progress` | `number` | `-` |
-| `[active]` | Highlights the route: the `active*` inputs override the base paint | `boolean` | `false` |
+| `[interactive]` | Responds to mouse events | `boolean` | `true` |
+| `[progress]` | Covered fraction (0–1), drawn by `ng-route-progress` | `number` | `-` |
+| `[active]` | Applies the `active*` paint | `boolean` | `false` |
 | `[activeColor]` | Color while `active` | `string` | `-` |
 | `[activeWidth]` | Width while `active` | `number` | `-` |
 | `[activeOpacity]` | Opacity while `active` | `number` | `-` |
 | `[activeDashArray]` | Dash pattern while `active` | `[number, number]` | `-` |
-| `[beforeId]` | Id of an existing layer to insert the route and its progress line before, for z-order control. Applied at creation only | `string` | `-` |
+| `[beforeId]` | Layer id to insert the route before (creation only) | `string` | `-` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
 | `(routeClick)` | Emits when the route is clicked | `MapMouseEvent` | `-` |
-| `(routeMouseEnter)` | Emits when the pointer enters the route | `MapMouseEvent` | `-` |
-| `(routeMouseLeave)` | Emits when the pointer leaves the route | `MapMouseEvent` | `-` |
+| `(routeMouseEnter)` | Emits when the pointer enters | `MapMouseEvent` | `-` |
+| `(routeMouseLeave)` | Emits when the pointer leaves | `MapMouseEvent` | `-` |
 
 ### ng-route-progress
 
-The covered part of the parent `ng-map-route`, drawn up to its `[progress]`.
+The covered part of the parent route, up to its `[progress]`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -2938,73 +2948,73 @@ The covered part of the parent `ng-map-route`, drawn up to its `[progress]`.
 
 ### ng-route-marker
 
-A marker placed along the parent `ng-map-route`. Project an `ng-marker-content` into it.
+A marker placed along the parent `ng-map-route`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[at]` | Where it sits: the start, the end, the current progress, or a fraction from 0 to 1 | `'start' \| 'end' \| 'progress' \| number` | `'start'` |
+| `[at]` | Position along the route; a number is a fraction | `'start' \| 'end' \| 'progress' \| number` | `'start'` |
 
 ### ng-map-arc
 
-Curved arcs between origin and destination points, such as flight paths. An invisible wide layer under the line keeps hover and click comfortable. Arcs that cross the antimeridian take the short way.
+Curved arcs between origin and destination points, such as flight paths.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[data]` | The arcs. Extra keys travel with the datum: they come back in the events and in paint expressions | `MapArcDatum[]` | `-` |
-| `[id]` | Identifier prefix of the source and layers. Generated when omitted. Changing it recreates them | `string` | `auto` |
-| `[curvature]` | Bend of the arc relative to its length. 0 is a straight line | `number` | `0.2` |
-| `[samples]` | Segments used to approximate each arc | `number` | `64` |
-| `[paint]` | Paint of the line. Datum keys are readable with ["get", key] | `MapLibre paint properties` | `-` |
-| `[layout]` | Layout of the line | `MapLibre line layout` | `-` |
-| `[hoverPaint]` | Paint applied to the hovered arc | `MapLibre paint properties` | `-` |
-| `[interactive]` | Whether arcs respond to mouse events | `boolean` | `true` |
-| `[beforeId]` | Id of an existing layer to insert the arc layers before, for z-order control. Applied at creation only | `string` | `-` |
+| `[data]` | The arcs; extra keys reach events and paint | `MapArcDatum[]` | `-` |
+| `[id]` | Id prefix of the source and layers. Changing it recreates them | `string` | `auto` |
+| `[curvature]` | Bend relative to length; 0 is straight | `number` | `0.2` |
+| `[samples]` | Segments per arc | `number` | `64` |
+| `[paint]` | Line paint; read datum keys with ["get", key] | `MapLibre paint properties` | `-` |
+| `[layout]` | Line layout | `MapLibre line layout` | `-` |
+| `[hoverPaint]` | Paint of the hovered arc | `MapLibre paint properties` | `-` |
+| `[interactive]` | Responds to mouse events | `boolean` | `true` |
+| `[beforeId]` | Layer id to insert the arc layers before (creation only) | `string` | `-` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
 | `(arcClick)` | Emits the clicked arc | `MapArcEvent` | `-` |
-| `(arcHover)` | Emits the hovered arc, or null when the pointer leaves | `MapArcEvent \| null` | `-` |
+| `(arcHover)` | Emits the hovered arc, or null on leave | `MapArcEvent \| null` | `-` |
 
 ### ng-map-geojson
 
-Renders GeoJSON as fill and outline layers. With `[blank]` on the map it makes a choropleth. Declarative hover needs `promoteId` and `fillHoverPaint`.
+Renders GeoJSON as fill and outline layers.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[data]` | A FeatureCollection, Feature or Geometry, or a URL to fetch it from | `MapGeoJSONData \| string` | `-` |
-| `[id]` | Identifier prefix of the source and layers. Generated when omitted. Changing it recreates them | `string` | `auto` |
-| `[promoteId]` | Feature property to promote to the feature id. Required for hover feature-state | `string` | `-` |
-| `[fillPaint]` | Paint of the fill layer, merged onto theme defaults. `false` omits the layer | `MapLibre paint properties` | `-` |
-| `[linePaint]` | Paint of the outline layer, merged onto a hairline. `false` omits the layer | `MapLibre paint properties` | `-` |
-| `[fillHoverPaint]` | Paint applied to the hovered feature. Requires `promoteId` | `MapLibre paint properties` | `-` |
-| `[interactive]` | Whether features respond to mouse events | `boolean` | `false` |
-| `[beforeId]` | Id of an existing layer to insert the layers before, for z-order control. Applied at creation only | `string` | `-` |
+| `[data]` | GeoJSON object, or a URL to fetch | `MapGeoJSONData \| string` | `-` |
+| `[id]` | Id prefix of the source and layers. Changing it recreates them | `string` | `auto` |
+| `[promoteId]` | Property used as feature id. Required for hover | `string` | `-` |
+| `[fillPaint]` | Fill paint; `false` omits the layer | `MapLibre paint properties` | `-` |
+| `[linePaint]` | Outline paint; `false` omits the layer | `MapLibre paint properties` | `-` |
+| `[fillHoverPaint]` | Paint of the hovered feature. Requires `promoteId` | `MapLibre paint properties` | `-` |
+| `[interactive]` | Responds to mouse events | `boolean` | `false` |
+| `[beforeId]` | Layer id to insert the layers before (creation only) | `string` | `-` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
 | `(featureClick)` | Emits the clicked feature | `MapGeoJSONEvent` | `-` |
-| `(featureHover)` | Emits the hovered feature, or null when the pointer leaves | `MapGeoJSONEvent \| null` | `-` |
+| `(featureHover)` | Emits the hovered feature, or null on leave | `MapGeoJSONEvent \| null` | `-` |
 
 ### ng-map-cluster-layer
 
-Clustered points with count labels and threshold-based colors and sizes. A click on a cluster zooms into it.
+Clustered points with count labels and threshold-based colors and sizes.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[data]` | A FeatureCollection of points, or a URL to fetch it from | `FeatureCollection<Point> \| string` | `-` |
-| `[id]` | Identifier prefix of the source and layers. Generated when omitted. Changing it recreates them | `string` | `auto` |
-| `[clusterMaxZoom]` | Highest zoom level that still clusters | `number` | `14` |
-| `[clusterRadius]` | Radius of a cluster in pixels | `number` | `50` |
-| `[clusterColors]` | Colors of the small, medium and large clusters | `[string, string, string]` | `['#22c55e', '#eab308', '#ef4444']` |
-| `[clusterThresholds]` | Point counts where the medium and large steps start | `[number, number]` | `[100, 750]` |
-| `[pointColor]` | Color of a single, unclustered point | `string` | `'#3b82f6'` |
-| `[zoomOnClusterClick]` | Zooms into a cluster when it is clicked | `boolean` | `true` |
-| `[beforeId]` | Id of an existing layer to insert the cluster layers before, for z-order control. Applied at creation only | `string` | `-` |
+| `[data]` | Points, or a URL to fetch | `FeatureCollection<Point> \| string` | `-` |
+| `[id]` | Id prefix of the source and layers. Changing it recreates them | `string` | `auto` |
+| `[clusterMaxZoom]` | Highest zoom that still clusters | `number` | `14` |
+| `[clusterRadius]` | Cluster radius in pixels | `number` | `50` |
+| `[clusterColors]` | Small, medium and large cluster colors | `[string, string, string]` | `['#22c55e', '#eab308', '#ef4444']` |
+| `[clusterThresholds]` | Counts where medium and large start | `[number, number]` | `[100, 750]` |
+| `[pointColor]` | Color of an unclustered point | `string` | `'#3b82f6'` |
+| `[zoomOnClusterClick]` | Zooms into a clicked cluster | `boolean` | `true` |
+| `[beforeId]` | Layer id to insert the cluster layers before (creation only) | `string` | `-` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
-| `(pointClick)` | Emits a clicked single point | `ClusterPointClickEvent` | `-` |
-| `(clusterClick)` | Emits a clicked cluster | `ClusterClickEvent` | `-` |
+| `(pointClick)` | Emits the clicked point | `ClusterPointClickEvent` | `-` |
+| `(clusterClick)` | Emits the clicked cluster | `ClusterClickEvent` | `-` |
 
 ### ng-map-heatmap
 
@@ -3012,168 +3022,168 @@ A point-density heatmap with a theme-aware gradient.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[data]` | A FeatureCollection of points, or a URL to fetch it from | `FeatureCollection<Point> \| string` | `-` |
-| `[id]` | Identifier prefix of the source and layer. Generated when omitted. Changing it recreates them | `string` | `auto` |
-| `[weightProperty]` | Feature property used as the weight of a point | `string` | `-` |
-| `[weightRange]` | [min, max] of the weight property, mapped to a weight from 0 to 1 | `[number, number]` | `[0, 1]` |
-| `[radius]` | Influence radius of a point in pixels, or an expression | `number \| Expression` | `30` |
-| `[intensity]` | Global intensity multiplier, or an expression | `number \| Expression` | `1` |
-| `[opacity]` | Layer opacity, or an expression | `number \| Expression` | `1` |
-| `[gradient]` | Color ramp over the density. A theme-aware default when omitted | `HeatmapGradient` | `-` |
-| `[minZoom]` | Lowest zoom the heatmap is drawn at | `number` | `0` |
-| `[maxZoom]` | Zoom from which the heatmap is no longer drawn | `number` | `24` |
-| `[paint]` | Heatmap paint properties merged last, over everything above | `MapLibre paint properties` | `-` |
-| `[beforeId]` | Id of an existing layer to insert the layer before, for z-order control. Applied at creation only | `string` | `-` |
+| `[data]` | Points, or a URL to fetch | `FeatureCollection<Point> \| string` | `-` |
+| `[id]` | Id prefix of the source and layer. Changing it recreates them | `string` | `auto` |
+| `[weightProperty]` | Property used as point weight | `string` | `-` |
+| `[weightRange]` | Weight [min, max], mapped to 0–1 | `[number, number]` | `[0, 1]` |
+| `[radius]` | Point radius in pixels | `number \| Expression` | `30` |
+| `[intensity]` | Global intensity multiplier | `number \| Expression` | `1` |
+| `[opacity]` | Layer opacity | `number \| Expression` | `1` |
+| `[gradient]` | Color ramp over the density | `HeatmapGradient` | `-` |
+| `[minZoom]` | Lowest visible zoom | `number` | `0` |
+| `[maxZoom]` | Zoom from which it is hidden | `number` | `24` |
+| `[paint]` | Heatmap paint, merged last | `MapLibre paint properties` | `-` |
+| `[beforeId]` | Layer id to insert the layer before (creation only) | `string` | `-` |
 
 ### ng-map-raster-source
 
-A raster tile source (XYZ, TMS or WMS) plus the layer that draws it.
+A raster tile source (XYZ, TMS or WMS) and its layer.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[id]` | Identifier prefix of the source and layer. Generated when omitted. Changing it recreates them | `string` | `auto` |
-| `[tiles]` | Tile URL templates, such as https://example.com/{z}/{x}/{y}.png | `string[]` | `-` |
-| `[url]` | URL of a TileJSON document, instead of `tiles` | `string` | `-` |
-| `[tileSize]` | Tile size in pixels. Applied at creation | `number` | `256` |
-| `[minzoom]` | Lowest zoom of the tiles. Applied at creation | `number` | `0` |
-| `[maxzoom]` | Highest zoom of the tiles. Applied at creation | `number` | `22` |
-| `[attribution]` | Shown in the attribution control. Applied at creation | `string` | `-` |
-| `[bounds]` | [west, south, east, north] limit of the tiles. Applied at creation | `[number, number, number, number]` | `-` |
-| `[scheme]` | Tile scheme. Applied at creation | `'xyz' \| 'tms'` | `'xyz'` |
-| `[opacity]` | Layer opacity, or an expression | `number \| Expression` | `1` |
-| `[visible]` | Whether the layer is drawn. The source stays loaded when hidden | `boolean` | `true` |
-| `[paint]` | Raster paint properties merged last, such as `raster-saturation` | `MapLibre paint properties` | `-` |
-| `[beforeId]` | Id of an existing layer to insert the layer before, for z-order control. Applied at creation only | `string` | `-` |
+| `[id]` | Id prefix of the source and layer. Changing it recreates them | `string` | `auto` |
+| `[tiles]` | Tile URL templates | `string[]` | `-` |
+| `[url]` | TileJSON URL, instead of `tiles` | `string` | `-` |
+| `[tileSize]` | Tile size in pixels (creation only) | `number` | `256` |
+| `[minzoom]` | Lowest tile zoom (creation only) | `number` | `0` |
+| `[maxzoom]` | Highest tile zoom (creation only) | `number` | `22` |
+| `[attribution]` | Attribution text (creation only) | `string` | `-` |
+| `[bounds]` | Tile bounds [west, south, east, north] (creation only) | `[number, number, number, number]` | `-` |
+| `[scheme]` | Tile scheme (creation only) | `'xyz' \| 'tms'` | `'xyz'` |
+| `[opacity]` | Layer opacity | `number \| Expression` | `1` |
+| `[visible]` | Shows the layer; the source stays loaded | `boolean` | `true` |
+| `[paint]` | Raster paint, merged last | `MapLibre paint properties` | `-` |
+| `[beforeId]` | Layer id to insert the layer before (creation only) | `string` | `-` |
 
 ### ng-map-vector-source
 
-A vector tile source (MVT, TileJSON or `pmtiles://`). It only adds the source: draw it with a layer component such as `ng-map-fill-extrusion`, which waits for it.
+A vector tile source (MVT, TileJSON or `pmtiles://`), drawn by a layer component.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[id]` | Identifier prefix of the source. Generated when omitted. Changing it recreates them | `string` | `auto` |
-| `[tiles]` | Tile URL templates, such as https://example.com/{z}/{x}/{y}.mvt | `string[]` | `-` |
-| `[url]` | URL of a TileJSON document, or `pmtiles://<archive url>`. Takes precedence over `tiles` | `string` | `-` |
-| `[minzoom]` | Lowest zoom of the tiles. Applied at creation | `number` | `0` |
-| `[maxzoom]` | Highest zoom of the tiles. Applied at creation | `number` | `22` |
-| `[attribution]` | Shown in the attribution control. Applied at creation | `string` | `-` |
-| `[bounds]` | [west, south, east, north] limit of the tiles. Applied at creation | `[number, number, number, number]` | `-` |
-| `[scheme]` | Tile scheme. Applied at creation | `'xyz' \| 'tms'` | `'xyz'` |
-| `[promoteId]` | Feature property used as the feature id, which enables feature-state | `PromoteIdSpecification` | `-` |
+| `[id]` | Id prefix of the source. Changing it recreates them | `string` | `auto` |
+| `[tiles]` | Tile URL templates | `string[]` | `-` |
+| `[url]` | TileJSON or `pmtiles://` URL. Overrides `tiles` | `string` | `-` |
+| `[minzoom]` | Lowest tile zoom (creation only) | `number` | `0` |
+| `[maxzoom]` | Highest tile zoom (creation only) | `number` | `22` |
+| `[attribution]` | Attribution text (creation only) | `string` | `-` |
+| `[bounds]` | Tile bounds [west, south, east, north] (creation only) | `[number, number, number, number]` | `-` |
+| `[scheme]` | Tile scheme (creation only) | `'xyz' \| 'tms'` | `'xyz'` |
+| `[promoteId]` | Property used as feature id, for feature-state | `PromoteIdSpecification` | `-` |
 
 ### ng-map-image-overlay
 
-An image pinned to four corner coordinates, such as a scanned map or a radar frame.
+An image pinned to four corner coordinates.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[id]` | Identifier prefix of the source and layer. Generated when omitted. Changing it recreates them | `string` | `auto` |
+| `[id]` | Id prefix of the source and layer. Changing it recreates them | `string` | `auto` |
 | `[url]` | Image URL | `string` | `-` |
-| `[coordinates]` | The four [longitude, latitude] corners, clockwise from the top left | `ImageOverlayCoordinates` | `-` |
-| `[opacity]` | Layer opacity, or an expression | `number \| Expression` | `1` |
-| `[visible]` | Whether the layer is drawn | `boolean` | `true` |
-| `[paint]` | Raster paint properties merged last | `MapLibre paint properties` | `-` |
-| `[beforeId]` | Id of an existing layer to insert the layer before, for z-order control. Applied at creation only | `string` | `-` |
+| `[coordinates]` | Four corners, clockwise from top left | `ImageOverlayCoordinates` | `-` |
+| `[opacity]` | Layer opacity | `number \| Expression` | `1` |
+| `[visible]` | Shows the layer | `boolean` | `true` |
+| `[paint]` | Raster paint, merged last | `MapLibre paint properties` | `-` |
+| `[beforeId]` | Layer id to insert the layer before (creation only) | `string` | `-` |
 
 ### ng-map-fill-extrusion
 
-A 3D extrusion of polygons, such as buildings. It defaults to the `building` layer of the Carto basemaps, so pin Carto with `[styles]` on that map. Tilt the map to see it.
+3D extruded polygons, such as buildings; tilt the map to see them.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[id]` | Identifier prefix of the layer. Generated when omitted. Changing it recreates them | `string` | `auto` |
-| `[source]` | Id of the source to extrude: a basemap source or a source component | `string` | `'carto'` |
+| `[id]` | Id prefix of the layer. Changing it recreates them | `string` | `auto` |
+| `[source]` | Id of the source to extrude | `string` | `'carto'` |
 | `[sourceLayer]` | Layer of a vector source | `string` | `'building' for carto` |
-| `[heightProperty]` | Feature property with the height in meters | `string` | `'render_height'` |
-| `[baseProperty]` | Feature property with the base height in meters | `string` | `'render_min_height'` |
-| `[color]` | Fill color, or an expression. A theme-aware gray by default | `string \| Expression` | `-` |
-| `[opacity]` | Layer opacity, from 0 to 1 | `number` | `0.8` |
-| `[minZoom]` | Lowest zoom the extrusion is drawn at | `number` | `14` |
-| `[maxZoom]` | Zoom from which the extrusion is no longer drawn | `number` | `24` |
-| `[filter]` | MapLibre filter. Skips `hide_3d` buildings by default; `null` for none | `FilterSpecification \| null` | `-` |
-| `[paint]` | Fill-extrusion paint properties merged last | `MapLibre paint properties` | `-` |
-| `[beforeId]` | Id of an existing layer to insert the layer before, for z-order control. Applied at creation only | `string` | `-` |
+| `[heightProperty]` | Property with the height in meters | `string` | `'render_height'` |
+| `[baseProperty]` | Property with the base height in meters | `string` | `'render_min_height'` |
+| `[color]` | Fill color | `string \| Expression` | `-` |
+| `[opacity]` | Layer opacity | `number` | `0.8` |
+| `[minZoom]` | Lowest visible zoom | `number` | `14` |
+| `[maxZoom]` | Zoom from which it is hidden | `number` | `24` |
+| `[filter]` | MapLibre filter; `null` for none | `FilterSpecification \| null` | `-` |
+| `[paint]` | Fill-extrusion paint, merged last | `MapLibre paint properties` | `-` |
+| `[beforeId]` | Layer id to insert the layer before (creation only) | `string` | `-` |
 
 ### ng-map-terrain
 
-3D terrain from a `raster-dem` source, with an optional hillshade. Public Terrarium tiles by default. Only one terrain per map.
+3D terrain from a `raster-dem` source, with an optional hillshade. One per map.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[id]` | Identifier prefix of the sources and layers. Generated when omitted. Changing it recreates them | `string` | `auto` |
-| `[tiles]` | Elevation tile URL templates. Public Terrarium tiles by default | `string[]` | `-` |
+| `[id]` | Id prefix of the sources and layers. Changing it recreates them | `string` | `auto` |
+| `[tiles]` | Elevation tile URL templates | `string[]` | `-` |
 | `[url]` | TileJSON URL, instead of `tiles` | `string` | `-` |
-| `[encoding]` | Encoding of the elevation tiles | `'terrarium' \| 'mapbox'` | `'terrarium'` |
+| `[encoding]` | Elevation tile encoding | `'terrarium' \| 'mapbox'` | `'terrarium'` |
 | `[tileSize]` | Tile size in pixels | `number` | `256` |
-| `[minzoom]` | Lowest zoom of the elevation tiles | `number` | `0` |
-| `[maxzoom]` | Highest zoom of the elevation tiles | `number` | `15` |
-| `[attribution]` | Shown in the attribution control | `string` | `-` |
-| `[exaggeration]` | How tall the terrain looks. 1 is true scale | `number` | `1` |
-| `[hillshade]` | Draws a hillshade layer over the terrain | `boolean` | `false` |
-| `[hillshadeExaggeration]` | Hillshade intensity, from 0 to 1 | `number` | `0.5` |
-| `[hillshadeShadowColor]` | Color of the shaded slopes | `string` | `-` |
-| `[hillshadeHighlightColor]` | Color of the lit slopes | `string` | `-` |
+| `[minzoom]` | Lowest elevation tile zoom | `number` | `0` |
+| `[maxzoom]` | Highest elevation tile zoom | `number` | `15` |
+| `[attribution]` | Attribution text | `string` | `-` |
+| `[exaggeration]` | Vertical scale; 1 is true scale | `number` | `1` |
+| `[hillshade]` | Draws a hillshade layer | `boolean` | `false` |
+| `[hillshadeExaggeration]` | Hillshade intensity (0–1) | `number` | `0.5` |
+| `[hillshadeShadowColor]` | Color of shaded slopes | `string` | `-` |
+| `[hillshadeHighlightColor]` | Color of lit slopes | `string` | `-` |
 | `[hillshadeAccentColor]` | Accent color of steep slopes | `string` | `-` |
-| `[hillshadePaint]` | Hillshade paint properties merged last | `MapLibre paint properties` | `-` |
-| `[beforeId]` | Id of an existing layer to insert the hillshade layer before, for z-order control. Applied at creation only | `string` | `-` |
+| `[hillshadePaint]` | Hillshade paint, merged last | `MapLibre paint properties` | `-` |
+| `[beforeId]` | Layer id to insert the hillshade layer before (creation only) | `string` | `-` |
 
 ### provideZardMap(config?)
 
-Registers the map defaults. Put it in the `providers` of the lazy route that renders the maps, not in `app.config.ts`: ng-mapcn is not tree-shakeable and would join the initial bundle of every route.
+Registers the map defaults; provide it on the lazy map route, not in `app.config.ts`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `style` | Id of the preset every map starts with. A stored choice wins when `persist` is on | `string` | `'carto-positron'` |
-| `keys` | API keys of the key-based providers, such as `{ maptiler: "..." }`. Never hard-code them | `Partial<Record<'maptiler' \| 'stadia', string>>` | `{}` |
-| `persist` | Remembers the picked preset (and the keys typed into the picker) in `localStorage`, browser only. A string picks the storage key | `boolean \| string` | `false` |
-| `presets` | The catalogue the picker lists. Add your own presets to `ZARD_MAP_PRESETS` | `readonly ZardMapPreset[]` | `ZARD_MAP_PRESETS` |
-| `styles` | A fixed basemap per theme, or a signal of one. When set, the service and the picker no longer drive the maps | `MapStylesConfig \| Signal<MapStylesConfig \| undefined> \| (() => Signal<MapStylesConfig \| undefined>)` | `-` |
-| `labels` | Translations for the control tooltips, the loader and the popup close button | `Partial<MapLabels> \| Signal<Partial<MapLabels> \| undefined> \| (() => Signal<Partial<MapLabels> \| undefined>)` | `English` |
+| `style` | Id of the starting preset | `string` | `'carto-positron'` |
+| `keys` | API keys of key-based providers | `Partial<Record<'maptiler' \| 'stadia', string>>` | `{}` |
+| `persist` | Saves the pick in `localStorage`; a string sets the key | `boolean \| string` | `false` |
+| `presets` | Presets the picker lists | `readonly ZardMapPreset[]` | `ZARD_MAP_PRESETS` |
+| `styles` | Fixed basemap per theme. Overrides the service and picker | `MapStylesConfig \| Signal<MapStylesConfig \| undefined> \| (() => Signal<MapStylesConfig \| undefined>)` | `-` |
+| `labels` | Translations for tooltips, loader and close button | `Partial<MapLabels> \| Signal<Partial<MapLabels> \| undefined> \| (() => Signal<Partial<MapLabels> \| undefined>)` | `English` |
 
 ### ZardMapStyleService
 
-Holds the basemap preset of every map. A root service, so a choice made on one page is the one the next page opens with. Inject it to switch the basemap from your own UI.
+Root service holding the basemap preset of every map.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `select(id, key?)` | Switches every map to a preset, live. Returns "selected", "unknown-preset" or "needs-key" | `ZardMapSelectResult` | `-` |
-| `setKey(provider, key)` | Stores the API key of a provider. An empty key forgets it | `void` | `-` |
-| `reset()` | Back to the default preset | `void` | `-` |
+| `select(id, key?)` | Switches every map to a preset | `ZardMapSelectResult` | `-` |
+| `setKey(provider, key)` | Stores a provider API key; empty forgets it | `void` | `-` |
+| `reset()` | Restores the default preset | `void` | `-` |
 | `presetId` | Id of the preset in use | `Signal<string>` | `'carto-positron'` |
-| `preset` | The preset in use. A key-based preset without a key falls back to the default | `Signal<ZardMapPreset>` | `-` |
-| `presets` | Every preset the picker lists | `Signal<readonly ZardMapPreset[]>` | `ZARD_MAP_PRESETS` |
-| `styles` | The light and dark styles of the preset in use: what `provideZardMap()` hands to ng-mapcn | `Signal<ZardMapStyles>` | `-` |
-| `keys` | The API keys the service knows, by provider | `Signal<ZardMapKeys>` | `{}` |
+| `preset` | Preset in use | `Signal<ZardMapPreset>` | `-` |
+| `presets` | Presets the picker lists | `Signal<readonly ZardMapPreset[]>` | `ZARD_MAP_PRESETS` |
+| `styles` | Light and dark styles of the preset in use | `Signal<ZardMapStyles>` | `-` |
+| `keys` | Known API keys, by provider | `Signal<ZardMapKeys>` | `{}` |
 
 ### z-map-style-select
 
-Picks the basemap of every map on the page, live. A button shows the style in use with a mini-map swatch and opens a popover that lists the presets of `ZardMapStyleService` by provider, each with a swatch of its own. A key-based preset asks for its API key inline, under the list. It has an effect wherever `provideZardMap()` is registered, and a map with its own `[styles]` ignores it.
+Picks the basemap of every map on the page; maps with their own `[styles]` ignore it.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zAriaLabel]` | Accessible name of the picker, also its caption and the title of the popover | `string` | `'Map style'` |
-| `[zAlign]` | Which edge of the button the popover lines up with | `'start' \| 'center' \| 'end'` | `'end'` |
-| `(zStyleChange)` | Emits the preset in use after a pick, and for a key-based preset after its key was accepted | `ZardMapPreset` | `-` |
+| `[zAriaLabel]` | Accessible name, caption and popover title | `string` | `'Map style'` |
+| `[zAlign]` | Button edge the popover aligns to | `'start' \| 'center' \| 'end'` | `'end'` |
+| `(zStyleChange)` | Emits the picked preset once applied | `ZardMapPreset` | `-` |
 
 ### ng-map-draw
 
-Draws, selects and edits points, lines and polygons on the map, built on terra-draw. Install it with `zard-cli add map-draw`; the core map never loads terra-draw. Enter finishes a shape, Escape cancels it and Delete removes the selected feature.
+Draws, selects and edits points, lines and polygons; install it with `zard-cli add map-draw`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[modes]` | The shapes the user can draw | `readonly ('point' \| 'line' \| 'polygon')[]` | `['point', 'line', 'polygon']` |
-| `[(mode)]` | The active tool: a shape, `select` to pick and edit features, or `static` to only display them | `'point' \| 'line' \| 'polygon' \| 'select' \| 'static'` | `'static'` |
-| `[(features)]` | The drawn features as a GeoJSON FeatureCollection. It is the source of truth: it updates when a draw, edit or delete completes, and assigning a new collection replaces what is shown | `MapDrawFeatureCollection` | `empty collection` |
-| `[editable]` | Enables the `select` mode: select, drag, reshape and delete features | `boolean` | `false` |
-| `[color]` | Accent color of the drawn shapes as `#rrggbb`. A theme-aware blue by default | `DrawHexColor` | `-` |
+| `[modes]` | Shapes the user can draw | `readonly ('point' \| 'line' \| 'polygon')[]` | `['point', 'line', 'polygon']` |
+| `[(mode)]` | Active tool; `static` only displays features | `'point' \| 'line' \| 'polygon' \| 'select' \| 'static'` | `'static'` |
+| `[(features)]` | Drawn features; the source of truth | `MapDrawFeatureCollection` | `empty collection` |
+| `[editable]` | Enables `select` mode for editing features | `boolean` | `false` |
+| `[color]` | Accent color as `#rrggbb` | `DrawHexColor` | `-` |
 
 | Output | Description | Type | Default |
 | --- | --- | --- | --- |
-| `(drawEnd)` | Emits when a new shape is completed | `MapDrawEvent` | `-` |
-| `(featureEdit)` | Emits when an existing feature is moved, reshaped or otherwise edited | `MapDrawEvent` | `-` |
-| `(featureSelect)` | Emits the feature selected in `select` mode | `MapDrawFeature` | `-` |
-| `(featureDeselect)` | Emits the id of the feature that was deselected | `string \| number` | `-` |
+| `(drawEnd)` | Emits when a shape is completed | `MapDrawEvent` | `-` |
+| `(featureEdit)` | Emits when a feature is edited | `MapDrawEvent` | `-` |
+| `(featureSelect)` | Emits the selected feature | `MapDrawFeature` | `-` |
+| `(featureDeselect)` | Emits the deselected feature id | `string \| number` | `-` |
 
 ---
 
