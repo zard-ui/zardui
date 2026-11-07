@@ -41,17 +41,8 @@ export async function routeMapTiles(page: Page): Promise<MapRequests> {
 
   // Playwright runs the most recently registered route first, so the catch-all goes first and the specific ones win.
   // Any other tile, sprite, glyph or TileJSON request: an empty, successful answer.
-  const tileHosts = new RegExp(
-    [
-      'basemaps.cartocdn.com',
-      'tiles.openfreemap.org',
-      'server.arcgisonline.com',
-      'tile.opentopomap.org',
-      'elevation-tiles-prod',
-    ]
-      .map(host => host.replaceAll('.', '\\.'))
-      .join('|'),
-  );
+  const tileHosts =
+    /basemaps\.cartocdn\.com|tiles?\.open(?:freemap|topomap)\.org|server\.arcgisonline\.com|elevation-tiles-prod/;
   await page.route(tileHosts, route => {
     if (route.request().url().endsWith('.json') && !/style\.json|\/styles\//.test(route.request().url())) {
       return route.fulfill({ headers: CORS, json: { tiles: [], vector_layers: [] } });
