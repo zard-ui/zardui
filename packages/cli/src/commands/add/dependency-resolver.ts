@@ -114,11 +114,8 @@ export interface BuildRequirement {
 }
 
 /**
- * The `build` requirements of the items the user asked for and of everything they pull in.
- *
- * Unlike the install list this includes items that were already on disk: the wiring is idempotent and cheap, and
- * a project where the stylesheet or the build assets were lost (or never reached, because an earlier run stopped)
- * is repaired by running `add` again instead of by `--overwrite`.
+ * The `build` requirements of the requested items and their dependencies, including those already on disk, so
+ * running `add` again repairs a lost setup.
  */
 export async function collectBuildRequirements(
   names: readonly string[],
@@ -327,13 +324,7 @@ async function resolveRegistryDependencies(
   }
 }
 
-/**
- * Stops before anything is written when an item cannot compile on the project's Angular.
- *
- * `ng-mapcn` ships one line per Angular major, and the lines are not the same API: the files of the `map` item
- * import names that only exist from the 22 line on, so on Angular 21 the install "worked" and the build failed
- * with a dozen missing exports in code the user never wrote.
- */
+/** Stops before anything is written when an item cannot compile on the project's Angular (`minAngularMajor`). */
 export function assertAngularSupported(components: readonly ComponentMeta[], angularVersion: string | null): void {
   const major = angularMajorOf(angularVersion);
   if (major === null) return;

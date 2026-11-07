@@ -10,14 +10,8 @@ import {
 } from '@angular/core';
 
 /**
- * Tells a template when its host is on (or near) the screen: `visible` turns on as the host gets close to the
- * viewport and off again once it is far away, and `reservedHeight` keeps the host's height while the content is
- * gone, so scrolling never jumps.
- *
- * It exists for content that holds a scarce resource, such as the WebGL context of a map: a page with dozens of maps
- * would otherwise run out of contexts. With `lazyRenderKeep` it only ever turns on. Not enabled, or without an
- * IntersectionObserver, it is always visible. On the server a lazy host starts hidden, so the markup the server sent is
- * the placeholder.
+ * Renders content only while its host is near the viewport, keeping the host's height meanwhile, so a page with many
+ * maps does not run out of WebGL contexts. Always visible when disabled or without IntersectionObserver.
  */
 @Directive({
   selector: '[lazyRender]',
@@ -30,11 +24,7 @@ export class LazyRenderDirective {
   readonly lazyRender = input(true, { transform: booleanAttribute });
   /** How early the content appears, and how long it stays, as an IntersectionObserver root margin. */
   readonly lazyRenderMargin = input('500px 0px');
-  /**
-   * Keep the content once it has appeared, and never take it away again. The host is then a latch: it holds the
-   * content until it is destroyed itself. The scarce resource is still held, so use it only where the host's
-   * lifetime is bounded, such as a page that is left as a whole.
-   */
+  /** Keep the content once it has appeared. */
   readonly lazyRenderKeep = input(false, { transform: booleanAttribute });
 
   private readonly shown = signal(false);

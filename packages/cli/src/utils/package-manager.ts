@@ -199,9 +199,7 @@ export async function installPackagesWithRetry(
 ): Promise<void> {
   if (packages.length === 0) return;
 
-  // `name@1.2.3` asks for that release and nothing else, but the managers save it as `^1.2.3` unless told
-  // otherwise — which lets a pre-1.0 package drift on the next install. The flag is per command, not per
-  // package, so the exact ones go in a batch of their own.
+  // Exact specs are saved as `^x` unless the per-command exact flag is set, so they go in a batch of their own.
   const exact = packages.filter(isExactSpec);
   const ranged = packages.filter(spec => !isExactSpec(spec));
 
@@ -300,11 +298,8 @@ export interface OutdatedInstall {
 }
 
 /**
- * The packages whose installed release has an older major than the one asked for.
- *
- * The package manager can "succeed" and still leave the old one: a peer conflict relaxed by the retry, or a
- * lockfile that wins. For most packages that is a warning in the build; for the ones an item cannot work without
- * (MapLibre 5 where ng-mapcn 22 needs 6) it is a blank screen, so the caller stops with a message instead.
+ * The packages whose installed release has an older major than the one asked for: the install can "succeed" and
+ * still leave the old one (a relaxed peer conflict, a lockfile), which breaks items such as the map at runtime.
  */
 export async function findOutdatedInstalls(specs: readonly string[], cwd: string): Promise<OutdatedInstall[]> {
   const outdated: OutdatedInstall[] = [];

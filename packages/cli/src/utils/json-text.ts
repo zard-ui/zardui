@@ -1,9 +1,6 @@
 /**
- * Surgical edits to a JSON file that may carry comments.
- *
- * `angular.json` and `project.json` are read by people and live in version control. Parsing and re-serializing
- * them rewrites every inline array and every comment, and the diff of a one-line change becomes the whole file.
- * These helpers find the value by its key path in the text and splice only what is new.
+ * Surgical edits to a JSON file that may carry comments (`angular.json`, `project.json`): the value is found by its
+ * key path in the text and only what is new is spliced in, so the rest of the file and its diff stay untouched.
  */
 
 export interface ValueRange {

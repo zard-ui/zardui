@@ -12,19 +12,9 @@ import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
 
 /**
- * Wires into the project whatever an installed item declares in its `build` field.
- *
- * Some items cannot work from their source files and npm packages alone: the map needs its CSS loaded globally,
- * in a given order, and two worker files served from the site root. Nothing here knows about any particular item —
- * the registry says what is needed, and this module knows, per project type, where it goes:
- *
- *   angular / nx      the global stylesheet, and the `assets` of the build target (angular.json / project.json)
- *   analog            the global stylesheet, and the files copied into Vite's public directory
- *   *-library         nothing is edited — a library has no global CSS and no build of its own — and the steps for
- *                     the consuming application are printed
- *
- * Every step is idempotent, and when a file cannot be edited safely it is left alone and the exact snippet to
- * paste is printed.
+ * Wires into the project what an installed item declares in its `build` field (global styles, served assets):
+ * the build target's `assets` in Angular / Nx, Vite's public directory in Analog, printed steps for a library.
+ * Idempotent; a file that cannot be edited safely is left alone and the snippet to paste is printed.
  */
 
 export interface BuildItem {
@@ -150,12 +140,8 @@ function resolveInput(workspaceRoot: string, input: string): string | null {
 }
 
 /**
- * The assets that exist in what is installed.
- *
- * A requirement can belong to one release of a package and not another: MapLibre 5 builds its worker inline and
- * ships no `maplibre-gl-worker.mjs`, so a project on the Angular 21 line has nothing to copy. Registering a glob
- * that matches nothing is harmless but misleading, so it is dropped — only when the package is there to look at;
- * when it is not (a failed install, a layout this cannot see), the asset is kept and the build decides.
+ * Drops the assets the installed package does not ship (MapLibre 5 has no worker file). When the package cannot be
+ * found, the asset is kept and the build decides.
  */
 function availableAssets(assets: readonly Asset[], workspaceRoot: string): Asset[] {
   return assets.filter(asset => {
@@ -168,10 +154,6 @@ function availableAssets(assets: readonly Asset[], workspaceRoot: string): Asset
     return present;
   });
 }
-
-// ---------------------------------------------------------------------------------------------------------------
-// Angular CLI and Nx: the assets of the build target
-// ---------------------------------------------------------------------------------------------------------------
 
 interface BuildTargetFile {
   /** Path relative to the workspace root, for messages. */
@@ -276,15 +258,7 @@ function printAssetsSnippet(reason: string, assets: readonly Asset[], file: stri
   );
 }
 
-// ---------------------------------------------------------------------------------------------------------------
-// Analog / Vite: files in the public directory
-// ---------------------------------------------------------------------------------------------------------------
-
-/**
- * Analog has no `assets` option: Vite serves the contents of its public directory at the root, in development and
- * in the build, and nothing else. So the files are copied there. The copy is refreshed on every run — a newer
- * MapLibre ships a newer worker, and `add <item> --overwrite` is how a project picks it up.
- */
+/** Analog has no `assets` option, so the files are copied into Vite's public directory, refreshed on every run. */
 async function copyAssetsToPublicDir(assets: readonly Asset[], context: BuildSetupContext): Promise<void> {
   const projectDir = path.resolve(context.cwd, projectRootOf(context.baseUrl));
   const publicDir = await vitePublicDir(projectDir);
@@ -352,10 +326,6 @@ async function vitePublicDir(projectDir: string): Promise<string | null> {
   return path.join(projectDir, 'public');
 }
 
-// ---------------------------------------------------------------------------------------------------------------
-// Libraries: next steps for the consuming application
-// ---------------------------------------------------------------------------------------------------------------
-
 function printLibrarySteps(
   names: string,
   styles: readonly string[],
@@ -369,8 +339,6 @@ function printLibrarySteps(
 
   if (styles.length) {
     const imports = printedStyles.map(style => {
-      // A file of the item is printed relative to the workspace; the app's stylesheet sits somewhere else, so the
-      // path to write there is that one rewritten relative to it.
       const target = path.isAbsolute(style)
         ? `<path from the app's stylesheet to>/${path.relative(context.workspaceRoot, style).split(path.sep).join('/')}`
         : style;

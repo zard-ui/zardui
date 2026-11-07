@@ -25,16 +25,10 @@ export interface MapBlock {
   /** One line about the block: the description of its code sheet. */
   description: string;
   category: MapCategory;
-  /**
-   * The block component. It is loaded only when the block comes on screen: every block imports ng-mapcn, and the
-   * draw block brings terra-draw too, so none of it may reach the chunk of the gallery page itself.
-   */
+  /** The block component, loaded only when the block comes on screen so ng-mapcn stays out of the page chunk. */
   load: () => Promise<Type<unknown>>;
   codeData: CodeBlockData;
-  /**
-   * The height of the preview frame, as Tailwind classes. It is fixed, and the same one holds the place before the
-   * block is there, so nothing moves while the map loads.
-   */
+  /** The fixed height of the preview frame, as Tailwind classes. */
   frameClass: string;
 }
 

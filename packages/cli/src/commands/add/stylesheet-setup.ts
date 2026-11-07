@@ -101,11 +101,7 @@ async function importIntoGlobalCss(tailwindCssPath: string, fileName: string, la
   logger.info(`${label} imported in your global stylesheet.`);
 }
 
-/**
- * Where a stylesheet sits, as an `@import` target relative to the global CSS.
- *
- * Always POSIX and always starting with `./` or `../`: a bare `components/map/map.css` would be read as a package.
- */
+/** A stylesheet as a POSIX `@import` target relative to the global CSS, always starting with `./` or `../`. */
 export function relativeImportTarget(globalCssPath: string, stylesheetPath: string): string {
   const relative = path.relative(path.dirname(globalCssPath), stylesheetPath).split(path.sep).join('/');
 
@@ -115,14 +111,8 @@ export function relativeImportTarget(globalCssPath: string, stylesheetPath: stri
 export type StyleImportResult = 'added' | 'present' | 'manual';
 
 /**
- * Imports several stylesheets into the global CSS, in the order given.
- *
- * The order is part of the contract: MapLibre's own sheet has to come before the one that styles over it. A target
- * the file already imports stays where it is; a missing one goes just before the next target that is already there
- * (so the order holds), or after the last `@import` when none follows. A second call changes nothing.
- *
- * When the file cannot be edited safely — missing, or with no `@import` to anchor to — nothing is written and the
- * exact lines to paste are logged.
+ * Imports several stylesheets into the global CSS, keeping the given order. Idempotent; when the file cannot be
+ * edited safely (missing, or with no `@import` to anchor to) the lines to paste are logged instead.
  */
 export async function importStylesIntoGlobalCss(
   globalCssPath: string,
