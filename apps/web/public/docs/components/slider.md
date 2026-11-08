@@ -794,19 +794,19 @@ export class ZardDemoSliderRtlComponent {
 
 ### z-slider
 
-A flexible and accessible component that allows users to select a numeric value from within a configurable range using pointer or keyboard interaction. The value is always an array of numbers, one entry per thumb: a single-element array renders one thumb, two elements render a range (see the `range` example), and three or more render that many independent thumbs (see the `multiple-thumbs` example) — values must be provided in ascending order. Implements Angular’s `ControlValueAccessor`, so `formControlName` and `[(ngModel)]` also work. In RTL (CDK `Directionality`) the range fills from the right, ArrowRight decreases and ArrowLeft increases the value, and dragging follows the pointer.
+Picks values in a range; one ascending array entry per thumb.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `[zMin]` | Minimum selectable value | `number` | `0` |
-| `[zMax]` | Maximum selectable value. When zMax <= 1, values are automatically normalized to a 0-100% visual scale | `number` | `100` |
-| `[zDefault]` | Uncontrolled initial value, read once. One number per thumb, ascending: [value] for a single thumb, [lower, upper] for a range, or more entries for additional thumbs. Ignored once [zValue] is bound | `number[]` | `[0]` |
-| `[zValue]` | Controlled value — pair with (zSlideIndexChange) to own the value from the parent. Same shape as [zDefault]: one number per thumb, ascending | `number[]` | `[]` |
-| `[zStep]` | Step increment for the value | `number` | `1` |
+| `[zMin]` | Minimum value | `number` | `0` |
+| `[zMax]` | Maximum value | `number` | `100` |
+| `[zDefault]` | Uncontrolled initial value; ignored when `zValue` is bound | `number[]` | `[0]` |
+| `[zValue]` | Controlled value, one number per thumb | `number[]` | `[]` |
+| `[zStep]` | Step increment | `number` | `1` |
 | `[zDisabled]` | Disables slider interaction | `boolean` | `false` |
 | `[zOrientation]` | Slider orientation | `horizontal \| vertical` | `'horizontal'` |
-| `(zSlideIndexChange)` | Emitted when a thumb value changes. Always emits the full array of current values | `EventEmitter<number[]>` | `-` |
+| `(zSlideIndexChange)` | Emitted with all values when a thumb moves | `EventEmitter<number[]>` | `-` |
 
 ---
 

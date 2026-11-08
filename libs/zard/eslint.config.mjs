@@ -38,7 +38,8 @@ export default [
       '@nx/dependency-checks': [
         'error',
         {
-          ignoredDependencies: ['zod'],
+          // `@types/geojson`: type-only imports in the map demos; the map item installs it as a devDependency.
+          ignoredDependencies: ['zod', '@types/geojson'],
           ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs}'],
         },
       ],

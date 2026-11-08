@@ -768,22 +768,22 @@ export class ZardDemoTooltipRtlComponent {
 
 ### [zTooltip]
 
-The directive that shows a tooltip popup when its host is hovered, focused, or clicked.
+Directive that shows a tooltip on hover, focus or click.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zTooltip]` | The tooltip content: a string, or a template for richer content such as a `z-kbd` | `string \| TemplateRef<void>` | `-` |
-| `[zPosition]` | Side of the trigger the tooltip opens on (shadcn calls this input `side`). `left` and `right` are physical sides; `inline-start` and `inline-end` follow the direction of the trigger, so they flip in RTL. | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'top'` |
-| `[zPositionOffset]` | Distance in pixels between the tooltip and the trigger | `number` | `4` |
-| `[zTrigger]` | How the tooltip is triggered | `'hover' \| 'click'` | `'hover'` |
-| `[zShowDelay]` | Delay in milliseconds before showing the tooltip | `number` | `150` |
-| `[zHideDelay]` | Delay in milliseconds before hiding the tooltip | `number` | `100` |
-| `(zShow)` | Emits when the tooltip is shown | `EventEmitter<void>` | `-` |
-| `(zHide)` | Emits when the tooltip is hidden | `EventEmitter<void>` | `-` |
+| `[zTooltip]` | Tooltip text or template | `string \| TemplateRef<void>` | `-` |
+| `[zPosition]` | Side of the trigger; `inline-*` flips in RTL | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'top'` |
+| `[zPositionOffset]` | Distance from the trigger in px | `number` | `4` |
+| `[zTrigger]` | How the tooltip opens | `'hover' \| 'click'` | `'hover'` |
+| `[zShowDelay]` | Show delay in ms | `number` | `150` |
+| `[zHideDelay]` | Hide delay in ms | `number` | `100` |
+| `(zShow)` | Emitted when the tooltip shows | `EventEmitter<void>` | `-` |
+| `(zHide)` | Emitted when the tooltip hides | `EventEmitter<void>` | `-` |
 
 ### z-tooltip
 
-The tooltip content. Mounted automatically by `[zTooltip]` — never placed directly in a template. Exposes `role="tooltip"`, `data-side` and `data-state` while mounted.
+Tooltip content, mounted by `[zTooltip]`; not used directly.
 
 ---
 

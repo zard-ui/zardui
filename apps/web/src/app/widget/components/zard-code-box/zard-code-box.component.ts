@@ -1,7 +1,16 @@
 import { Dir } from '@angular/cdk/bidi';
 import { ComponentType } from '@angular/cdk/overlay';
 import { NgComponentOutlet } from '@angular/common';
-import { Component, computed, inject, input, signal, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CopyButtonComponent } from '@highlight/components/copy-button/copy-button.component';
@@ -9,10 +18,13 @@ import type { CodeBlockData } from '@highlight/types';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInfo } from '@ng-icons/lucide';
 
+import { MapStateComponent } from '@doc/domain/components/map-state/map-state.component';
 import { AnchorDirective } from '@doc/domain/directives/anchor.directive';
+import { LazyRenderDirective } from '@doc/domain/directives/lazy-render.directive';
 import { ProseDirective } from '@doc/domain/directives/prose.directive';
 import type { CodeSnippet, ExampleType } from '@doc/shared/constants/components.constant';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
+import { supportsWebGL2 } from '@doc/shared/utils/webgl';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardPopoverImports } from '@zard/components/popover/popover.imports';
@@ -34,6 +46,8 @@ import {
     CopyButtonComponent,
     ProseDirective,
     AnchorDirective,
+    LazyRenderDirective,
+    MapStateComponent,
     Dir,
     NgIcon,
     ZardButtonComponent,
@@ -67,11 +81,23 @@ export class ZardCodeBoxComponent {
   readonly codeHeight = input<string>();
   /** Optional CSS min-height (e.g. '32rem') overriding the default preview (component) area height. */
   readonly previewHeight = input<string>();
+  /**
+   * Mounts the demo only while it is near the screen, and unmounts it when it is far.
+   * For demos that hold a WebGL context.
+   */
+  readonly lazyRender = input(false, { transform: booleanAttribute });
+  /** Shows a message instead of the demo when the browser has no WebGL2. */
+  readonly requiresWebgl2 = input(false, { transform: booleanAttribute });
+  /** Less padding around the demo, for demos that are a frame of their own (a map, a full-width card). */
+  readonly compact = input(false, { transform: booleanAttribute });
 
   /** `'rtl'` renders the example in the RTL preview; anything else is a plain example, forced to `dir="ltr"`. */
   readonly type = input<ExampleType>();
 
   readonly codeCollapsed = signal(true);
+
+  /** Probed on first use, in the browser only: a probe creates a WebGL context. */
+  protected readonly unsupported = (): boolean => this.requiresWebgl2() && !supportsWebGL2();
 
   protected readonly rtlLanguages = ZARD_RTL_LANGUAGES;
   protected readonly rtlNotes = RTL_AI_NOTES;
@@ -103,7 +129,9 @@ export class ZardCodeBoxComponent {
   });
 
   readonly previewClasses = computed(() => {
-    const base = 'preview relative flex min-h-72 w-full justify-center p-6 md:p-10';
+    const base = this.compact()
+      ? 'preview relative flex min-h-72 w-full justify-center p-3 md:p-4'
+      : 'preview relative flex min-h-72 w-full justify-center p-6 md:p-10';
     return this.fillContainer() ? `${base} [&>*]:size-full` : base;
   });
 }

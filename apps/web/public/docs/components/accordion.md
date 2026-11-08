@@ -540,25 +540,25 @@ export class ZardDemoAccordionRtlComponent {
 
 ### z-accordion
 
-A component that displays a list of collapsible content sections.
+A list of collapsible sections.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `[zType]` | Single or multiple items can be opened | `'single' \| 'multiple'` | `'single'` |
-| `[zCollapsible]` | Whether accordion items can be collapsed | `boolean` | `true` |
-| `[zDefaultValue]` | Item value(s) of the accordion's item(s) to be opened by default | `string \| string[]` | `''` |
+| `[zType]` | How many items can be open | `'single' \| 'multiple'` | `'single'` |
+| `[zCollapsible]` | Allows closing the last open item | `boolean` | `true` |
+| `[zDefaultValue]` | Items open by default | `string \| string[]` | `''` |
 
 ### z-accordion-item
 
-Represents a single section in the accordion.
+A single accordion section.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `[zTitle]` | The title for item header | `string` | `''` |
-| `[zValue]` | Unique value of the accordion item | `string` | `''` |
-| `[zDisabled]` | Accordion disabled state | `boolean` | `false` |
+| `[zTitle]` | Item title | `string` | `''` |
+| `[zValue]` | Unique item value | `string` | `''` |
+| `[zDisabled]` | Disables the item | `boolean` | `false` |
 
 ---
 

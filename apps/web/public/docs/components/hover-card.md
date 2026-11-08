@@ -860,24 +860,24 @@ export class ZardDemoHoverCardRtlComponent {
 
 ### [zHoverCard]
 
-The directive that opens rich content when its trigger is hovered or focused.
+Directive that opens rich content on hover or focus.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zContent]` | Required. Template rendered inside the hover card | `TemplateRef<void>` | `-` |
-| `[zPlacement]` | Preferred position relative to the trigger. `left` and `right` are physical sides; `inline-start` and `inline-end` follow the direction of the trigger, so they flip in RTL. | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
-| `[zOpenDelay]` | Delay in milliseconds before opening | `number` | `700` |
-| `[zCloseDelay]` | Delay in milliseconds before closing | `number` | `300` |
+| `[zContent]` | Hover card template (required) | `TemplateRef<void>` | `-` |
+| `[zPlacement]` | Side of the trigger; `inline-*` flips in RTL | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
+| `[zOpenDelay]` | Open delay in ms | `number` | `700` |
+| `[zCloseDelay]` | Close delay in ms | `number` | `300` |
 | `[zVisible]` | Controls visibility programmatically | `boolean` | `false` |
-| `(zVisibleChange)` | Emits when visibility changes | `EventEmitter<boolean>` | `-` |
+| `(zVisibleChange)` | Emitted when visibility changes | `EventEmitter<boolean>` | `-` |
 
 ### z-hover-card
 
-The wrapper component that styles hover card content. Exposes `data-state` and `data-side` while mounted, driving the open and directional animations.
+The hover card content.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

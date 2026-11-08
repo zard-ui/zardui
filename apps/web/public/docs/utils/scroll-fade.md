@@ -11,13 +11,13 @@ A scroll container that overflows tells you nothing about where you are in it. `
 
 ## Installation
 
-The utility ships in utilities.css, its own registry item — separate from core, so nothing pulls it in until you ask for it.
+The utility ships in utilities.css, its own registry item — separate from core. You add it yourself, or it comes along with a component that uses it.
 
 ```
 npx zard-cli add utilities
 ```
 
-`tailwind.css` imports it on its first line, so the classes are available as soon as that stylesheet is imported after Tailwind.
+The CLI writes `utilities.css` next to your global stylesheet and adds its `@import` after the ones already there. If you install by hand, copy the file there and add the same line yourself.
 
 src/styles.css
 
@@ -651,32 +651,32 @@ css/utilities.css
 
 ## Class reference
 
-| Class | Description |
-| --- | --- |
-| `scroll-fade` | Fades both vertical edges, tracking vertical scroll. |
-| `scroll-fade-y` | Identical to scroll-fade; the explicit axis form. |
-| `scroll-fade-x` | Fades both inline edges, tracking horizontal scroll. Mirrors under RTL. |
-| `scroll-fade-t` | Top edge only. |
-| `scroll-fade-b` | Bottom edge only. |
-| `scroll-fade-l` | Left edge only (physical — does not mirror). |
-| `scroll-fade-r` | Right edge only (physical — does not mirror). |
-| `scroll-fade-s` | Inline start edge — left in LTR, right in RTL. |
-| `scroll-fade-e` | Inline end edge — right in LTR, left in RTL. |
-| `scroll-fade-<number>` | Fade depth from the spacing scale (scroll-fade-4 is 1rem). |
-| `scroll-fade-[<value>]` | Arbitrary fade depth: any length or percentage. |
-| `scroll-fade-t-<number>` | Top-edge depth only. Also accepts an arbitrary value. |
-| `scroll-fade-b-<number>` | Bottom-edge depth only. Also accepts an arbitrary value. |
-| `scroll-fade-s-<number>` | Inline-start depth only. Also accepts an arbitrary value. |
-| `scroll-fade-e-<number>` | Inline-end depth only. Also accepts an arbitrary value. |
-| `scroll-fade-none` | Disables the mask. Useful with variants, e.g. md:scroll-fade-none. |
+| Class |
+| --- |
+| `scroll-fade`Fades the top and bottom edges |
+| `scroll-fade-y`Same as `scroll-fade` |
+| `scroll-fade-x`Fades the inline edges; mirrors under RTL |
+| `scroll-fade-t`Top edge only |
+| `scroll-fade-b`Bottom edge only |
+| `scroll-fade-l`Left edge only; does not mirror |
+| `scroll-fade-r`Right edge only; does not mirror |
+| `scroll-fade-s`Inline start edge only |
+| `scroll-fade-e`Inline end edge only |
+| `scroll-fade-<number>`Fade depth from the spacing scale |
+| `scroll-fade-[<value>]`Arbitrary fade depth |
+| `scroll-fade-t-<number>`Top edge depth |
+| `scroll-fade-b-<number>`Bottom edge depth |
+| `scroll-fade-s-<number>`Inline start depth |
+| `scroll-fade-e-<number>`Inline end depth |
+| `scroll-fade-none`Disables the mask |
 
 ### Custom properties
 
-| Property | Description | Default |
-| --- | --- | --- |
-| `--scroll-fade-size` | Fade depth for every edge — 12% of the container, capped at ten spacing units (40px by default). | `min(12%, calc(var(--spacing) * 10))` |
-| `--scroll-fade-t-size` | Top-edge depth. | `--scroll-fade-size` |
-| `--scroll-fade-b-size` | Bottom-edge depth. | `--scroll-fade-size` |
-| `--scroll-fade-s-size` | Inline-start depth. | `--scroll-fade-size` |
-| `--scroll-fade-e-size` | Inline-end depth. | `--scroll-fade-size` |
-| `--scroll-fade-reveal` | How far you scroll before an edge is fully faded — 24 spacing units (96px by default). | `calc(var(--spacing) * 24)` |
+| Property | Default |
+| --- | --- |
+| `--scroll-fade-size`Fade depth of every edge | `min(12%, calc(var(--spacing) * 10))` |
+| `--scroll-fade-t-size`Top edge depth | `--scroll-fade-size` |
+| `--scroll-fade-b-size`Bottom edge depth | `--scroll-fade-size` |
+| `--scroll-fade-s-size`Inline start depth | `--scroll-fade-size` |
+| `--scroll-fade-e-size`Inline end depth | `--scroll-fade-size` |
+| `--scroll-fade-reveal`Scroll distance to a full fade | `calc(var(--spacing) * 24)` |

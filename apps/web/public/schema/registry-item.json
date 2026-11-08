@@ -24,6 +24,11 @@
       "items": { "type": "string" },
       "description": "Other items of this registry that must be installed alongside."
     },
+    "build": { "$ref": "#/definitions/build" },
+    "minAngularMajor": {
+      "type": "integer",
+      "description": "The lowest Angular major the item's source compiles on. `zard-cli add` stops with a message on an older project instead of installing files that do not build."
+    },
     "icons": { "$ref": "#/definitions/icons" },
     "files": {
       "type": "array",
@@ -41,6 +46,57 @@
   },
   "additionalProperties": false,
   "definitions": {
+    "build": {
+      "type": "object",
+      "description": "What the item needs from the project's build, beyond npm packages and its own files. `zard-cli add` applies it: it wires the global stylesheet and the build assets of the project, and prints the snippet to paste where it cannot edit the file.",
+      "properties": {
+        "styles": {
+          "type": "array",
+          "description": "Imports the global stylesheet needs, in this order and unlayered.",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": ["import"],
+                "properties": {
+                  "import": {
+                    "type": "string",
+                    "description": "A specifier resolved from node_modules, e.g. maplibre-gl/dist/maplibre-gl.css."
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": ["file"],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "One of the item's own files, imported by its path relative to the stylesheet."
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "assets": {
+          "type": "array",
+          "description": "Static files the build copies to the output root, in the shape of an Angular build assets entry.",
+          "items": {
+            "type": "object",
+            "required": ["glob", "input", "output"],
+            "properties": {
+              "glob": { "type": "string" },
+              "input": { "type": "string", "description": "Relative to the workspace root." },
+              "output": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "icons": {
       "type": "object",
       "required": ["family", "symbols", "tokens", "demos"],

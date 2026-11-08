@@ -3,37 +3,27 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const ACCORDION_API: ApiSection[] = [
   {
     selector: 'z-accordion',
-    description: 'A component that displays a list of collapsible content sections.',
+    description: 'A list of collapsible sections.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       {
         name: '[zType]',
-        description: 'Single or multiple items can be opened',
+        description: 'How many items can be open',
         type: "'single' | 'multiple'",
         default: "'single'",
       },
-      {
-        name: '[zCollapsible]',
-        description: 'Whether accordion items can be collapsed',
-        type: 'boolean',
-        default: 'true',
-      },
-      {
-        name: '[zDefaultValue]',
-        description: "Item value(s) of the accordion's item(s) to be opened by default",
-        type: 'string | string[]',
-        default: "''",
-      },
+      { name: '[zCollapsible]', description: 'Allows closing the last open item', type: 'boolean', default: 'true' },
+      { name: '[zDefaultValue]', description: 'Items open by default', type: 'string | string[]', default: "''" },
     ],
   },
   {
     selector: 'z-accordion-item',
-    description: 'Represents a single section in the accordion.',
+    description: 'A single accordion section.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
-      { name: '[zTitle]', description: 'The title for item header', type: 'string', default: "''" },
-      { name: '[zValue]', description: 'Unique value of the accordion item', type: 'string', default: "''" },
-      { name: '[zDisabled]', description: 'Accordion disabled state', type: 'boolean', default: 'false' },
+      { name: '[zTitle]', description: 'Item title', type: 'string', default: "''" },
+      { name: '[zValue]', description: 'Unique item value', type: 'string', default: "''" },
+      { name: '[zDisabled]', description: 'Disables the item', type: 'boolean', default: 'false' },
     ],
   },
 ];

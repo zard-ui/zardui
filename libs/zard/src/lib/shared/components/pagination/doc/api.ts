@@ -3,48 +3,25 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const PAGINATION_API: ApiSection[] = [
   {
     selector: 'z-pagination',
-    description:
-      'Renders as a `role="group"` element (not a `<nav>` landmark) with an `[zAriaLabel]`-driven accessible name. Given `[zTotal]` and `[(zPageIndex)]`, it renders and manages the full previous/numbers/next navigation itself and calls `goToPage()` internally on click; pass `[zContent]` to replace that markup with your own composition (e.g. to wire real `routerLink`/`href` page links), in which case `[zTotal]`/`[zPageIndex]`/`[zSimple]`/`[zSize]`/`[zDisabled]` are ignored by the root and it is up to the projected content to use them.',
+    description: 'Full pagination from `[zTotal]` and `[(zPageIndex)]`, or custom markup via `[zContent]`.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
-      {
-        name: '[zAriaLabel]',
-        description: 'Accessible name for the pagination element, rendered as its aria-label.',
-        type: 'string',
-        default: "'Pagination'",
-      },
+      { name: '[zAriaLabel]', description: 'Accessible name', type: 'string', default: "'Pagination'" },
       {
         name: '[zContent]',
-        description: 'Custom pagination structure, replacing the built-in previous/numbers/next markup.',
+        description: 'Custom markup; the root then ignores its other inputs',
         type: 'TemplateRef<void> | undefined',
         default: 'undefined',
       },
       { name: '[zDisabled]', description: 'Disables pagination interaction', type: 'boolean', default: 'false' },
-      {
-        name: '[zNextText]',
-        description:
-          'Visible label (and accessible name) of the built-in next button. Pass a translation for RTL languages.',
-        type: 'string',
-        default: "'Next'",
-      },
-      {
-        name: '[zPreviousText]',
-        description:
-          'Visible label (and accessible name) of the built-in previous button. Pass a translation for RTL languages.',
-        type: 'string',
-        default: "'Previous'",
-      },
-      { name: '[zPageIndex]', description: 'Current page, two-way bindable', type: 'number', default: '1' },
+      { name: '[zNextText]', description: 'Label of the next button', type: 'string', default: "'Next'" },
+      { name: '[zPreviousText]', description: 'Label of the previous button', type: 'string', default: "'Previous'" },
+      { name: '[zPageIndex]', description: 'Current page', type: 'number', default: '1' },
       { name: '[(zPageIndex)]', description: 'Current page index', type: 'number', default: '1' },
-      {
-        name: '[zSimple]',
-        description: 'A simple pagination with only page numbers.',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: '[zSimple]', description: 'Shows only page numbers', type: 'boolean', default: 'false' },
       {
         name: '[zSize]',
-        description: 'Size of the numbered page buttons.',
+        description: 'Size of the page buttons',
         type: "'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'",
         default: "'icon'",
       },
@@ -53,22 +30,21 @@ export const PAGINATION_API: ApiSection[] = [
   },
   {
     selector: 'ul[z-pagination-content]',
-    description: 'Container (unordered list) for pagination content (buttons and ellipsis).',
+    description: 'List that holds the pagination items.',
     props: [{ name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" }],
   },
   {
     selector: 'li[z-pagination-item]',
-    description: 'Wraps a pagination button or ellipsis as li element of container.',
+    description: 'List item wrapping a button or ellipsis.',
     props: [],
   },
   {
     selector: 'button[z-pagination-button]',
-    description:
-      "A single page button, styled via an internal z-button. Also usable as `a[z-pagination-button]` — render it on an anchor and stack Angular's `RouterLink` (this directive does not reimplement router inputs of its own) to make page links drive real navigation, as the `routing` example does.",
+    description: 'A page button; also works as `a[z-pagination-button]` with `routerLink`.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
-      { name: '[zActive]', description: 'Whether the button is currently active', type: 'boolean', default: 'false' },
-      { name: '[zDisabled]', description: 'Whether the button is disabled', type: 'boolean', default: 'false' },
+      { name: '[zActive]', description: 'Marks the current page', type: 'boolean', default: 'false' },
+      { name: '[zDisabled]', description: 'Disables the button', type: 'boolean', default: 'false' },
       {
         name: '[zSize]',
         description: 'Button size',
@@ -79,39 +55,27 @@ export const PAGINATION_API: ApiSection[] = [
   },
   {
     selector: 'z-pagination-previous',
-    description:
-      'Button to navigate to the previous page. The chevron flips automatically in right-to-left layouts, so it always points outward. Use `[zText]` to translate the label.',
+    description: 'Previous-page button; the chevron flips in RTL.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
-      { name: '[zDisabled]', description: 'Whether the button is disabled', type: 'boolean', default: 'false' },
+      { name: '[zDisabled]', description: 'Disables the button', type: 'boolean', default: 'false' },
       { name: '[zSize]', description: 'Button size', type: "'default' | 'xs' | 'sm' | 'lg'", default: "'default'" },
-      {
-        name: '[zText]',
-        description: 'Visible label. Also the accessible name once it differs from the English default.',
-        type: 'string',
-        default: "'Previous'",
-      },
+      { name: '[zText]', description: 'Visible label', type: 'string', default: "'Previous'" },
     ],
   },
   {
     selector: 'z-pagination-next',
-    description:
-      'Button to navigate to the next page. The chevron flips automatically in right-to-left layouts, so it always points outward. Use `[zText]` to translate the label.',
+    description: 'Next-page button; the chevron flips in RTL.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
-      { name: '[zDisabled]', description: 'Whether the button is disabled', type: 'boolean', default: 'false' },
+      { name: '[zDisabled]', description: 'Disables the button', type: 'boolean', default: 'false' },
       { name: '[zSize]', description: 'Button size', type: "'default' | 'xs' | 'sm' | 'lg'", default: "'default'" },
-      {
-        name: '[zText]',
-        description: 'Visible label. Also the accessible name once it differs from the English default.',
-        type: 'string',
-        default: "'Next'",
-      },
+      { name: '[zText]', description: 'Visible label', type: 'string', default: "'Next'" },
     ],
   },
   {
     selector: 'z-pagination-ellipsis',
-    description: 'Visual ellipsis ("...") for omitted pages.',
+    description: 'Ellipsis for omitted pages.',
     props: [{ name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" }],
   },
 ];

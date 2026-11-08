@@ -3,160 +3,90 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const CALENDAR_API: ApiSection[] = [
   {
     selector: 'z-calendar',
-    description:
-      'A calendar component that allows users to select a date or a range of dates, with full keyboard navigation support. Every measurement derives from the --cell-size and --cell-radius CSS variables listed at the end of the table, so overriding them through the class input rescales the whole calendar.',
+    description: 'Date or range picker grid, sized by `--cell-size` and `--cell-radius`.',
     props: [
       {
         name: '[class]',
-        description:
-          'Additional CSS classes. Also where a border is opted into (`rounded-lg border`) and where the CSS variables below are overridden',
+        description: 'Custom CSS classes; also overrides the CSS variables',
         type: 'ClassValue',
         default: "''",
       },
-      {
-        name: '[zMode]',
-        description: 'Selection mode of the calendar',
-        type: "'single' | 'multiple' | 'range'",
-        default: "'single'",
-      },
-      {
-        name: '[value]',
-        description: 'Currently selected date(s) - type depends on mode',
-        type: 'CalendarValue',
-        default: 'null',
-      },
-      {
-        name: '[minDate]',
-        description: 'Minimum selectable date. Also used to expand the year picker range',
-        type: 'Date | null',
-        default: 'null',
-      },
-      {
-        name: '[maxDate]',
-        description: 'Maximum selectable date. Also used to expand the year picker range',
-        type: 'Date | null',
-        default: 'null',
-      },
-      { name: '[disabled]', description: 'Whether the calendar is disabled', type: 'boolean', default: 'false' },
+      { name: '[zMode]', description: 'Selection mode', type: "'single' | 'multiple' | 'range'", default: "'single'" },
+      { name: '[value]', description: 'Selected date(s), shaped by `zMode`', type: 'CalendarValue', default: 'null' },
+      { name: '[minDate]', description: 'Earliest selectable date', type: 'Date | null', default: 'null' },
+      { name: '[maxDate]', description: 'Latest selectable date', type: 'Date | null', default: 'null' },
+      { name: '[disabled]', description: 'Disables the calendar', type: 'boolean', default: 'false' },
       {
         name: '[zCaptionLayout]',
-        description:
-          'How the month/year caption is rendered: a plain label, two dropdowns, or a dropdown for only the month or only the year. The dropdowns are native `<select>` elements laid invisible over the label, so the browser owns the popup',
+        description: 'Month/year caption as label or native dropdowns',
         type: "'label' | 'dropdown' | 'dropdown-months' | 'dropdown-years'",
         default: "'label'",
       },
       {
         name: '[zButtonVariant]',
-        description: 'Button variant used by the previous/next month arrows',
+        description: 'Variant of the navigation arrows',
         type: 'ZardButtonTypeVariants',
         default: "'ghost'",
       },
-      {
-        name: '[zShowOutsideDays]',
-        description:
-          'Whether the days of the surrounding months are visible. When false they are hidden but keep their grid cell, so the layout never shifts',
-        type: 'boolean',
-        default: 'true',
-      },
+      { name: '[zShowOutsideDays]', description: 'Shows days of adjacent months', type: 'boolean', default: 'true' },
       {
         name: '[zDisabledDates]',
-        description:
-          'Individual days that cannot be selected, on top of the minDate/maxDate range. Each day still keeps its grid cell and is marked with `data-disabled="true"`',
+        description: 'Individual days that cannot be selected',
         type: 'Date[]',
         default: '[]',
       },
-      {
-        name: '[zNumberOfMonths]',
-        description:
-          'How many months are rendered side by side. They stack vertically below the `md` breakpoint, and only the first and the last month carry the navigation arrows',
-        type: 'number',
-        default: '1',
-      },
-      {
-        name: '[zLocale]',
-        description:
-          'BCP 47 locale (for example `ar`, `he`, `fr-FR`) used for month names, weekday names and ARIA labels of this calendar only. Falls back to the application locale of `ZardI18nService`. The grid follows the reading direction: in RTL the weeks run right to left, the navigation chevrons flip and ArrowLeft moves to the next day (direction comes from CDK `Directionality`, i.e. `<html dir="rtl">` or the `Dir` directive)',
-        type: 'string',
-        default: '-',
-      },
+      { name: '[zNumberOfMonths]', description: 'Months shown side by side', type: 'number', default: '1' },
+      { name: '[zLocale]', description: 'BCP 47 locale for this calendar only', type: 'string', default: '-' },
       {
         name: '[zDayTemplate]',
-        description:
-          'Template rendered inside every day button instead of the plain day number. The `CalendarDay` is the implicit context (`let-day`), so the template can read `date`, `isCurrentMonth`, `isSelected` and the range flags. A second `<span>` inside the button is styled as a small caption',
+        description: 'Custom day content (`let-day`)',
         type: 'TemplateRef<CalendarDayTemplateContext> | null',
         default: 'null',
       },
       {
         name: '(dateChange)',
-        description: 'Emitted when date selection changes',
+        description: 'Emits when the selection changes',
         type: 'EventEmitter<Date | Date[]>',
         default: '-',
       },
       {
         name: 'resetNavigation()',
-        description:
-          'Public method that moves the visible month back to the selected value and clears the roving focus',
+        description: 'Returns the view to the selected value',
         type: '() => void',
         default: '-',
       },
-      {
-        name: '[--cell-size]',
-        description: 'CSS variable: width and height of a day cell, e.g. `class="[--cell-size:--spacing(12)]"`',
-        type: 'length',
-        default: '--spacing(7)',
-      },
-      {
-        name: '[--cell-radius]',
-        description: 'CSS variable: corner radius of a day cell, e.g. `class="[--cell-radius:var(--radius-lg)]"`',
-        type: 'length',
-        default: 'var(--radius-md)',
-      },
+      { name: '[--cell-size]', description: 'Day cell width and height', type: 'length', default: '--spacing(7)' },
+      { name: '[--cell-radius]', description: 'Day cell corner radius', type: 'length', default: 'var(--radius-md)' },
     ],
   },
   {
     selector: 'ZardCalendarI18nService',
-    description:
-      'Injectable service that provides localized month names, weekday names, and week-start configuration. Driven by ZardI18nService or provideZardI18n().',
+    description: 'Localized month and weekday names, driven by `ZardI18nService`.',
     props: [
-      {
-        name: 'locale',
-        description: 'Signal emitting the current BCP-47 locale tag, e.g. "en-US", "fr-FR"',
-        type: 'Signal<string>',
-        default: "'en-US'",
-      },
+      { name: 'locale', description: 'Current BCP 47 locale', type: 'Signal<string>', default: "'en-US'" },
       {
         name: 'weekStartsOn',
-        description: 'Signal emitting the starting day of the week (0 for Sunday, 1 for Monday, etc.)',
+        description: 'First day of the week (0 = Sunday)',
         type: 'Signal<ZardDayOfWeek>',
         default: '0',
       },
-      {
-        name: 'shortMonths',
-        description: 'Signal emitting the 12 localized short month names for the current locale',
-        type: 'Signal<string[]>',
-        default: '',
-      },
-      {
-        name: 'longMonths',
-        description: 'Signal emitting the 12 localized full month names for the current locale',
-        type: 'Signal<string[]>',
-        default: '',
-      },
+      { name: 'shortMonths', description: 'Short month names', type: 'Signal<string[]>', default: '' },
+      { name: 'longMonths', description: 'Full month names', type: 'Signal<string[]>', default: '' },
       {
         name: 'weekdays',
-        description: 'Signal emitting the 7 localized weekday names matching weekStartsOn',
+        description: 'Weekday names ordered by `weekStartsOn`',
         type: 'Signal<string[]>',
         default: '',
       },
       {
         name: 'getMonthNames(format?, locale?)',
-        description: 'Returns formatted month names for a given locale',
+        description: 'Month names for a locale',
         type: "(format?: 'short' | 'long', locale?: string) => string[]",
         default: '',
       },
       {
         name: 'getWeekdayNames(format?, weekStartsOn?, locale?)',
-        description: 'Returns formatted weekday names for a given locale and starting day',
+        description: 'Weekday names for a locale and start day',
         type: "(format?: 'short' | 'narrow' | 'long', weekStartsOn?: ZardDayOfWeek, locale?: string) => string[]",
         default: '',
       },

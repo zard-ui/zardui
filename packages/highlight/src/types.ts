@@ -8,6 +8,8 @@ export interface CodeBlockData {
   expandable: boolean;
   expandableTitle?: string;
   highlightLines?: number[];
+  /** When the block is a manual-install step, the heading it gets instead of "Add <title>". */
+  step?: { title: string; subtitle?: string };
 }
 
 export interface ComponentUsageData {

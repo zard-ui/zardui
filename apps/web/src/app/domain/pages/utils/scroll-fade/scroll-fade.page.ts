@@ -29,55 +29,35 @@ import { ZardUtilsScrollFadeRevealComponent } from '../demos/scroll-fade/reveal'
 import { ZardUtilsScrollFadeSizeComponent } from '../demos/scroll-fade/size';
 
 const CLASS_ROWS: UtilsClassRow[] = [
-  { name: 'scroll-fade', description: 'Fades both vertical edges, tracking vertical scroll.' },
-  { name: 'scroll-fade-y', description: 'Identical to scroll-fade; the explicit axis form.' },
-  { name: 'scroll-fade-x', description: 'Fades both inline edges, tracking horizontal scroll. Mirrors under RTL.' },
-  { name: 'scroll-fade-t', description: 'Top edge only.' },
-  { name: 'scroll-fade-b', description: 'Bottom edge only.' },
-  { name: 'scroll-fade-l', description: 'Left edge only (physical — does not mirror).' },
-  { name: 'scroll-fade-r', description: 'Right edge only (physical — does not mirror).' },
-  { name: 'scroll-fade-s', description: 'Inline start edge — left in LTR, right in RTL.' },
-  { name: 'scroll-fade-e', description: 'Inline end edge — right in LTR, left in RTL.' },
-  { name: 'scroll-fade-<number>', description: 'Fade depth from the spacing scale (scroll-fade-4 is 1rem).' },
-  { name: 'scroll-fade-[<value>]', description: 'Arbitrary fade depth: any length or percentage.' },
-  { name: 'scroll-fade-t-<number>', description: 'Top-edge depth only. Also accepts an arbitrary value.' },
-  { name: 'scroll-fade-b-<number>', description: 'Bottom-edge depth only. Also accepts an arbitrary value.' },
-  { name: 'scroll-fade-s-<number>', description: 'Inline-start depth only. Also accepts an arbitrary value.' },
-  { name: 'scroll-fade-e-<number>', description: 'Inline-end depth only. Also accepts an arbitrary value.' },
-  { name: 'scroll-fade-none', description: 'Disables the mask. Useful with variants, e.g. md:scroll-fade-none.' },
+  { name: 'scroll-fade', description: 'Fades the top and bottom edges' },
+  { name: 'scroll-fade-y', description: 'Same as `scroll-fade`' },
+  { name: 'scroll-fade-x', description: 'Fades the inline edges; mirrors under RTL' },
+  { name: 'scroll-fade-t', description: 'Top edge only' },
+  { name: 'scroll-fade-b', description: 'Bottom edge only' },
+  { name: 'scroll-fade-l', description: 'Left edge only; does not mirror' },
+  { name: 'scroll-fade-r', description: 'Right edge only; does not mirror' },
+  { name: 'scroll-fade-s', description: 'Inline start edge only' },
+  { name: 'scroll-fade-e', description: 'Inline end edge only' },
+  { name: 'scroll-fade-<number>', description: 'Fade depth from the spacing scale' },
+  { name: 'scroll-fade-[<value>]', description: 'Arbitrary fade depth' },
+  { name: 'scroll-fade-t-<number>', description: 'Top edge depth' },
+  { name: 'scroll-fade-b-<number>', description: 'Bottom edge depth' },
+  { name: 'scroll-fade-s-<number>', description: 'Inline start depth' },
+  { name: 'scroll-fade-e-<number>', description: 'Inline end depth' },
+  { name: 'scroll-fade-none', description: 'Disables the mask' },
 ];
 
 const PROPERTY_ROWS: UtilsClassRow[] = [
   {
     name: '--scroll-fade-size',
-    description: 'Fade depth for every edge — 12% of the container, capped at ten spacing units (40px by default).',
+    description: 'Fade depth of every edge',
     default: 'min(12%, calc(var(--spacing) * 10))',
   },
-  {
-    name: '--scroll-fade-t-size',
-    description: 'Top-edge depth.',
-    default: '--scroll-fade-size',
-  },
-  {
-    name: '--scroll-fade-b-size',
-    description: 'Bottom-edge depth.',
-    default: '--scroll-fade-size',
-  },
-  {
-    name: '--scroll-fade-s-size',
-    description: 'Inline-start depth.',
-    default: '--scroll-fade-size',
-  },
-  {
-    name: '--scroll-fade-e-size',
-    description: 'Inline-end depth.',
-    default: '--scroll-fade-size',
-  },
-  {
-    name: '--scroll-fade-reveal',
-    description: 'How far you scroll before an edge is fully faded — 24 spacing units (96px by default).',
-    default: 'calc(var(--spacing) * 24)',
-  },
+  { name: '--scroll-fade-t-size', description: 'Top edge depth', default: '--scroll-fade-size' },
+  { name: '--scroll-fade-b-size', description: 'Bottom edge depth', default: '--scroll-fade-size' },
+  { name: '--scroll-fade-s-size', description: 'Inline start depth', default: '--scroll-fade-size' },
+  { name: '--scroll-fade-e-size', description: 'Inline end depth', default: '--scroll-fade-size' },
+  { name: '--scroll-fade-reveal', description: 'Scroll distance to a full fade', default: 'calc(var(--spacing) * 24)' },
 ];
 
 @Component({

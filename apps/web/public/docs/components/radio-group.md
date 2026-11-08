@@ -600,26 +600,26 @@ export class ZardDemoRadioGroupRtlComponent {
 
 ### z-radio-group
 
-Wrapper that groups radio items and manages the selected value. Arrow keys move the selection; ArrowLeft/ArrowRight follow the reading direction, so they swap in RTL.
+Groups radio items and holds the selected value.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[value]` | Selected value, two-way bindable | `unknown` | `null` |
-| `[(value)]` | Selected value (two-way binding) | `unknown` | `null` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zDisabled]` | Disables every item in the group | `boolean` | `false` |
-| `[name]` | Optional name for native form submission | `string` | `''` |
+| `[value]` | Item value | `unknown` | `null` |
+| `[(value)]` | Selected value | `unknown` | `null` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zDisabled]` | Disables every item | `boolean` | `false` |
+| `[name]` | Name for native form submission | `string` | `''` |
 
 ### z-radio
 
-Individual radio button. Must be a descendant of z-radio-group.
+A radio button inside `z-radio-group`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[value]` | Item value, compared against the group value | `unknown` | `null` |
 | `[zDisabled]` | Disables this item only | `boolean` | `false` |
-| `[zInvalid]` | Invalid state (sets aria-invalid) | `boolean` | `false` |
+| `[zInvalid]` | Sets `aria-invalid` | `boolean` | `false` |
 | `[zId]` | Item id | `string` | `-` |
 
 ---

@@ -4,42 +4,21 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const HOVER_CARD_API: ApiSection[] = [
   {
     selector: '[zHoverCard]',
-    description: 'The directive that opens rich content when its trigger is hovered or focused.',
+    description: 'Directive that opens rich content on hover or focus.',
     props: [
-      {
-        name: '[zContent]',
-        description: 'Required. Template rendered inside the hover card',
-        type: 'TemplateRef<void>',
-        default: '-',
-      },
+      { name: '[zContent]', description: 'Hover card template (required)', type: 'TemplateRef<void>', default: '-' },
       {
         name: '[zPlacement]',
-        description:
-          'Preferred position relative to the trigger. `left` and `right` are physical sides; `inline-start` and `inline-end` follow the direction of the trigger, so they flip in RTL.',
+        description: 'Side of the trigger; `inline-*` flips in RTL',
         type: "'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end'",
         default: "'bottom'",
       },
-      {
-        name: '[zOpenDelay]',
-        description: 'Delay in milliseconds before opening',
-        type: 'number',
-        default: '700',
-      },
-      {
-        name: '[zCloseDelay]',
-        description: 'Delay in milliseconds before closing',
-        type: 'number',
-        default: '300',
-      },
-      {
-        name: '[zVisible]',
-        description: 'Controls visibility programmatically',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: '[zOpenDelay]', description: 'Open delay in ms', type: 'number', default: '700' },
+      { name: '[zCloseDelay]', description: 'Close delay in ms', type: 'number', default: '300' },
+      { name: '[zVisible]', description: 'Controls visibility programmatically', type: 'boolean', default: 'false' },
       {
         name: '(zVisibleChange)',
-        description: 'Emits when visibility changes',
+        description: 'Emitted when visibility changes',
         type: 'EventEmitter<boolean>',
         default: '-',
       },
@@ -47,8 +26,7 @@ export const HOVER_CARD_API: ApiSection[] = [
   },
   {
     selector: 'z-hover-card',
-    description:
-      'The wrapper component that styles hover card content. Exposes `data-state` and `data-side` while mounted, driving the open and directional animations.',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    description: 'The hover card content.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

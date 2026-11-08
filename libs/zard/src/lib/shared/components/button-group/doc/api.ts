@@ -3,12 +3,12 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const BUTTON_GROUP_API: ApiSection[] = [
   {
     selector: 'z-button-group',
-    description: 'A container that groups related buttons together with consistent styling.',
+    description: 'Groups related buttons.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zOrientation]',
-        description: 'Orientation of the button group',
+        description: 'Layout direction',
         type: "'horizontal' | 'vertical'",
         default: "'horizontal'",
       },
@@ -16,13 +16,12 @@ export const BUTTON_GROUP_API: ApiSection[] = [
   },
   {
     selector: 'z-button-group-separator',
-    description:
-      'Visually divides buttons within a group. Buttons with `zType="outline"` do not need a separator since they have a border.',
+    description: 'Divides buttons in a group; not needed for outline buttons.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zOrientation]',
-        description: "Override for the separator orientation, by default it uses the parent's orientation",
+        description: 'Overrides the group orientation',
         type: "'horizontal' | 'vertical'",
         default: 'null',
       },
@@ -30,8 +29,7 @@ export const BUTTON_GROUP_API: ApiSection[] = [
   },
   {
     selector: '[z-button-group-text]',
-    description:
-      'Applies styles to text elements so that they conform with the rest of the group, for example a label.',
+    description: 'Styles text, such as a label, to fit the group.',
     props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

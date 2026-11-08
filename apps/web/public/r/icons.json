@@ -130,6 +130,9 @@
     "code": {
       "lucide": "lucideCode"
     },
+    "coffee": {
+      "lucide": "lucideCoffee"
+    },
     "copy": {
       "lucide": "lucideCopy"
     },
@@ -211,6 +214,9 @@
     "keyboard": {
       "lucide": "lucideKeyboard"
     },
+    "landmark": {
+      "lucide": "lucideLandmark"
+    },
     "layout-grid": {
       "lucide": "lucideLayoutGrid"
     },
@@ -250,6 +256,9 @@
     "map": {
       "lucide": "lucideMap"
     },
+    "map-pin": {
+      "lucide": "lucideMapPin"
+    },
     "maximize": {
       "lucide": "lucideMaximize"
     },
@@ -271,14 +280,26 @@
     "octagon-x": {
       "lucide": "lucideOctagonX"
     },
+    "package": {
+      "lucide": "lucidePackage"
+    },
     "panel-left": {
       "lucide": "lucidePanelLeft"
+    },
+    "pause": {
+      "lucide": "lucidePause"
     },
     "pencil": {
       "lucide": "lucidePencil"
     },
+    "phone": {
+      "lucide": "lucidePhone"
+    },
     "pie-chart": {
       "lucide": "lucidePieChart"
+    },
+    "play": {
+      "lucide": "lucidePlay"
     },
     "plus": {
       "lucide": "lucidePlus"
@@ -357,6 +378,9 @@
     },
     "triangle-alert": {
       "lucide": "lucideTriangleAlert"
+    },
+    "truck": {
+      "lucide": "lucideTruck"
     },
     "underline": {
       "lucide": "lucideUnderline"

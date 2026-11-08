@@ -3,19 +3,18 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const CARD_API: ApiSection[] = [
   {
     selector: 'z-card, [z-card]',
-    description: 'A structured container for displaying content with optional header and footer sections.',
+    description: 'Container with optional header and footer.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zSize]',
-        description: 'Size variant of the card. `sm` sets `--card-spacing` to `--spacing(3)` and shrinks the title',
+        description: 'Card size; `sm` tightens spacing',
         type: "'default' | 'sm'",
         default: "'default'",
       },
       {
         name: '[--card-spacing]',
-        description:
-          'CSS variable behind every gap and padding of the card and its sections, e.g. `class="[--card-spacing:--spacing(6)]"`',
+        description: 'CSS variable for all card gaps and padding',
         type: 'length',
         default: '--spacing(4)',
       },
@@ -23,15 +22,10 @@ export const CARD_API: ApiSection[] = [
   },
   {
     selector: 'z-card-header, [z-card-header]',
-    description: 'Container for card title, description, and optional action.',
+    description: 'Holds the title, description and action.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
-      {
-        name: '[zHeaderBorder]',
-        description: 'Adds a bottom border to the header',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: '[zHeaderBorder]', description: 'Adds a bottom border', type: 'boolean', default: 'false' },
     ],
   },
   {
@@ -39,12 +33,7 @@ export const CARD_API: ApiSection[] = [
     description: 'Card title text or template.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
-      {
-        name: '[zTitle]',
-        description: 'Title content — string or template reference',
-        type: 'string | TemplateRef<void> | undefined',
-        default: '-',
-      },
+      { name: '[zTitle]', description: 'Title content', type: 'string | TemplateRef<void> | undefined', default: '-' },
     ],
   },
   {
@@ -54,7 +43,7 @@ export const CARD_API: ApiSection[] = [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zDescription]',
-        description: 'Description content — string or template reference',
+        description: 'Description content',
         type: 'string | TemplateRef<void> | undefined',
         default: '-',
       },
@@ -62,7 +51,7 @@ export const CARD_API: ApiSection[] = [
   },
   {
     selector: 'z-card-action, [z-card-action]',
-    description: 'Action button displayed in the card header.',
+    description: 'Action in the card header.',
     props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
@@ -75,12 +64,7 @@ export const CARD_API: ApiSection[] = [
     description: 'Footer section of the card.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
-      {
-        name: '[zFooterBorder]',
-        description: 'Adds a top border to the footer',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: '[zFooterBorder]', description: 'Adds a top border', type: 'boolean', default: 'false' },
     ],
   },
 ];

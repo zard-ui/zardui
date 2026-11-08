@@ -776,29 +776,29 @@ export class ZardDemoDatePickerRtlComponent {
 
 ### z-date-picker
 
-A button that opens a z-calendar inside a popover. Everything the calendar can do — single, multiple and range selection, month/year dropdowns, several months side by side — is forwarded through the inputs below. The width lives on the host, so `class="w-44"` (or dropping it inside a `<div z-field>`) resizes the trigger.
+A button that opens a `z-calendar` in a popover.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes on the host. Also where the trigger width is overridden | `ClassValue` | `''` |
-| `[zId]` | Applied to the trigger button, so a `<label for="…">` points at something focusable | `string` | `''` |
-| `[zType]` | Button variant used by the trigger | `ZardButtonTypeVariants` | `'outline'` |
-| `[zSize]` | Trigger height, following the button scale | `'xs' \| 'sm' \| 'default' \| 'lg'` | `'default'` |
-| `[zIcon]` | Trigger icon: a trailing chevron, a leading calendar, or none. `chevron` justifies the label to the start and pushes the icon to the end | `'chevron' \| 'calendar' \| 'none'` | `'chevron'` |
-| `[value]` | Selected date(s) — a Date in single mode, a Date[] in range and multiple modes | `CalendarValue` | `null` |
-| `[zPlaceholder]` | Trigger label shown while nothing is selected | `string` | `'Pick a date'` |
-| `[zFormat]` | Angular DatePipe pattern used to render the selected date(s), e.g. 'MMM dd, y' | `string` | `'MMMM d, yyyy'` |
-| `[zMode]` | Selection mode. `single` closes the popover on pick, `range` once both ends are set, `multiple` keeps it open | `'single' \| 'multiple' \| 'range'` | `'single'` |
-| `[zCaptionLayout]` | How the calendar renders its month/year caption | `'label' \| 'dropdown' \| 'dropdown-months' \| 'dropdown-years'` | `'label'` |
-| `[zNumberOfMonths]` | How many months the calendar renders side by side | `number` | `1` |
-| `[zLocale]` | BCP 47 locale (for example `ar`, `he`) for the calendar and the trigger label. Falls back to the application locale. Direction (RTL) comes from CDK `Directionality`: the popover and the calendar mirror automatically | `string` | `-` |
-| `[zDisabledDates]` | Individual days that cannot be selected, on top of the minDate/maxDate range | `Date[]` | `[]` |
-| `[zShowOutsideDays]` | Whether the days of the surrounding months are visible | `boolean` | `true` |
-| `[zAlign]` | Which edge of the popover lines up with the trigger | `'start' \| 'center' \| 'end'` | `'start'` |
-| `[minDate]` | Minimum selectable date. Also used to expand the year dropdown range | `Date \| null` | `null` |
-| `[maxDate]` | Maximum selectable date. Also used to expand the year dropdown range | `Date \| null` | `null` |
-| `[disabled]` | Whether the date picker is disabled | `boolean` | `false` |
-| `(dateChange)` | Emitted whenever the selection changes, including when a range is cleared | `EventEmitter<CalendarValue>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zId]` | Id of the trigger button, for `<label for>` | `string` | `''` |
+| `[zType]` | Trigger button variant | `ZardButtonTypeVariants` | `'outline'` |
+| `[zSize]` | Trigger height | `'xs' \| 'sm' \| 'default' \| 'lg'` | `'default'` |
+| `[zIcon]` | Trigger icon | `'chevron' \| 'calendar' \| 'none'` | `'chevron'` |
+| `[value]` | Selected date, or dates in range and multiple modes | `CalendarValue` | `null` |
+| `[zPlaceholder]` | Trigger label when nothing is selected | `string` | `'Pick a date'` |
+| `[zFormat]` | `DatePipe` format of the label | `string` | `'MMMM d, yyyy'` |
+| `[zMode]` | Selection mode | `'single' \| 'multiple' \| 'range'` | `'single'` |
+| `[zCaptionLayout]` | Calendar month/year caption style | `'label' \| 'dropdown' \| 'dropdown-months' \| 'dropdown-years'` | `'label'` |
+| `[zNumberOfMonths]` | Months shown side by side | `number` | `1` |
+| `[zLocale]` | BCP 47 locale; falls back to the app locale | `string` | `-` |
+| `[zDisabledDates]` | Days that cannot be selected | `Date[]` | `[]` |
+| `[zShowOutsideDays]` | Shows days of adjacent months | `boolean` | `true` |
+| `[zAlign]` | Popover alignment to the trigger | `'start' \| 'center' \| 'end'` | `'start'` |
+| `[minDate]` | Minimum selectable date | `Date \| null` | `null` |
+| `[maxDate]` | Maximum selectable date | `Date \| null` | `null` |
+| `[disabled]` | Disables the date picker | `boolean` | `false` |
+| `(dateChange)` | Emitted when the selection changes or is cleared | `EventEmitter<CalendarValue>` | `-` |
 
 ---
 

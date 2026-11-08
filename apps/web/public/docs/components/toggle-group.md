@@ -717,22 +717,22 @@ export class ZardDemoToggleGroupRtlComponent {
 
 ### z-toggle-group
 
-A set of two-state buttons that can be pressed or released, with multiple selections supported.
+A set of toggle buttons with single or multiple selection.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zDefaultValue]` | Uncontrolled initial value — a string when zMode is 'single', a string[] when 'multiple' | `string \| string[]` | `-` |
-| `[zDisabled]` | Whether the entire group is disabled | `boolean` | `false` |
-| `[zItemClass]` | Additional CSS classes for group item | `ClassValue` | `''` |
-| `[zItems]` | Array of toggle items to display | `ZardToggleGroupItem[]` | `[]` |
-| `[zMode]` | Selection mode: 'single' binds a string value and allows one pressed item at a time; 'multiple' binds a string[] value and allows any number pressed | `'single' \| 'multiple'` | `'multiple'` |
-| `[zOrientation]` | Layout direction of the toggle group | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| `[zSize]` | Size variant of the toggle group | `'sm' \| 'default' \| 'lg'` | `'default'` |
-| `[zSpacing]` | Gap between items in spacing units. `0` joins them into a single bar | `number` | `2` |
-| `[zType]` | Visual style variant | `'default' \| 'outline'` | `'default'` |
-| `[zValue]` | Controlled value of the toggle group — a string when zMode is 'single', a string[] when 'multiple' | `string \| string[] \| undefined` | `-` |
-| `(valueChange)` | Emitted when toggle state changes, returns the updated value in the shape matching zMode | `EventEmitter<string \| string[]>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zDefaultValue]` | Uncontrolled initial value, shaped by `zMode` | `string \| string[]` | `-` |
+| `[zDisabled]` | Disables the whole group | `boolean` | `false` |
+| `[zItemClass]` | CSS classes for each item | `ClassValue` | `''` |
+| `[zItems]` | Toggle items to render | `ZardToggleGroupItem[]` | `[]` |
+| `[zMode]` | One pressed item (string) or many (string[]) | `'single' \| 'multiple'` | `'multiple'` |
+| `[zOrientation]` | Layout direction | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `[zSize]` | Item size | `'sm' \| 'default' \| 'lg'` | `'default'` |
+| `[zSpacing]` | Gap between items; `0` joins them | `number` | `2` |
+| `[zType]` | Visual variant | `'default' \| 'outline'` | `'default'` |
+| `[zValue]` | Controlled value, shaped by `zMode` | `string \| string[] \| undefined` | `-` |
+| `(valueChange)` | Emitted with the new value | `EventEmitter<string \| string[]>` | `-` |
 
 ---
 

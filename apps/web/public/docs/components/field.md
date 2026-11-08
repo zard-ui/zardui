@@ -1021,16 +1021,16 @@ export class ZardDemoFieldRtlComponent {
 
 ### z-field
 
-A field container that wraps a label, control and optional description / error, exposed as `role="group"`. Set the `data-invalid` attribute (e.g. `[attr.data-invalid]="control.invalid && control.touched"`) to switch the whole field into its destructive styling; pair it with `aria-invalid` on the control itself.
+Wraps a label, control and help text; set `data-invalid` for errors.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zOrientation]` | Layout direction of the field: vertical stacks, horizontal aligns label and control in a row, responsive stacks until the parent `z-field-group` container query crosses its `@md` breakpoint. | `'vertical' \| 'horizontal' \| 'responsive'` | `'vertical'` |
+| `[zOrientation]` | Layout; `responsive` follows the `z-field-group` container | `'vertical' \| 'horizontal' \| 'responsive'` | `'vertical'` |
 
 ### z-field-set
 
-A semantic <fieldset> wrapper that vertically stacks fields with consistent spacing.
+A `<fieldset>` that stacks fields.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -1038,16 +1038,16 @@ A semantic <fieldset> wrapper that vertically stacks fields with consistent spac
 
 ### z-field-legend
 
-Legend element for a field-set. Use the label variant when grouping inline controls.
+Legend of a field set.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zVariant]` | Visual size of the legend | `'legend' \| 'label'` | `'legend'` |
+| `[zVariant]` | Legend size | `'legend' \| 'label'` | `'legend'` |
 
 ### z-field-group
 
-Group of fields with consistent vertical spacing. Acts as a container query parent for responsive fields.
+Stacks fields; container query parent for responsive fields.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -1055,7 +1055,7 @@ Group of fields with consistent vertical spacing. Acts as a container query pare
 
 ### z-field-content
 
-Wrapper for the textual portion of a field (title + description) when used in horizontal layouts.
+Wraps the title and description in horizontal layouts.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -1063,16 +1063,16 @@ Wrapper for the textual portion of a field (title + description) when used in ho
 
 ### z-field-label
 
-Label for a form control. Use on <label> for proper semantics, or as <z-field-label>.
+Label for a control; prefer it on a `<label>`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[for]` | Associates the label with a form control by referencing the control's id. | `string` |  |
+| `[for]` | Id of the labelled control | `string` |  |
 
 ### z-field-title
 
-Non-interactive title for a field (e.g. when wrapping a checkbox/radio along with description).
+Non-interactive field title.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -1080,7 +1080,7 @@ Non-interactive title for a field (e.g. when wrapping a checkbox/radio along wit
 
 ### z-field-description
 
-Helper text rendered below or beside a field control.
+Helper text for a control.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
@@ -1088,21 +1088,21 @@ Helper text rendered below or beside a field control.
 
 ### z-field-separator
 
-Horizontal separator with optional centered content.
+Separator with optional centered content.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zContent]` | Optional text or template displayed above the separator line | `string \| TemplateRef<void>` | `''` |
+| `[zContent]` | Text or template on the line | `string \| TemplateRef<void>` | `''` |
 
 ### z-field-error
 
-Renders validation messages for a field, exposed as `role="alert"`. Pass the errors to show through `[zErrors]` — e.g. from a reactive form control's `errors` — or project static content when there is nothing to compute.
+Validation messages from `[zErrors]` or projected content.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zErrors]` | Array of error objects with an optional `message` string. A single entry renders inline, multiple render as a bulleted list, and duplicate messages are removed. Falls back to projected content when the array is empty. | `ReadonlyArray<{ message?: string } \| undefined>` | `[]` |
+| `[zErrors]` | Errors to show; duplicates are removed | `ReadonlyArray<{ message?: string } \| undefined>` | `[]` |
 
 ---
 
