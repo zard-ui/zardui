@@ -416,14 +416,14 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       case 'ArrowRight': {
         // horizontal keys follow the reading direction: in RTL the value grows towards the left
         const towardsEnd = (key === 'ArrowRight') !== this.isRtl();
-        newValue = towardsEnd ? Math.min(currentValue + this.zStep(), max) : Math.max(currentValue - this.zStep(), min);
+        newValue = this.snapToStep(towardsEnd ? currentValue + this.zStep() : currentValue - this.zStep());
         break;
       }
       case 'ArrowDown':
-        newValue = Math.max(currentValue - this.zStep(), min);
+        newValue = this.snapToStep(currentValue - this.zStep());
         break;
       case 'ArrowUp':
-        newValue = Math.min(currentValue + this.zStep(), max);
+        newValue = this.snapToStep(currentValue + this.zStep());
         break;
       default:
         return;

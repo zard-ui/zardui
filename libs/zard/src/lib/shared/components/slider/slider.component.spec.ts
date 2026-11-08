@@ -821,4 +821,26 @@ describe('ZardSliderComponent (custom zMin/zMax)', () => {
     fixture.detectChanges();
     expect(ariaNow()).toBeCloseTo(0.8);
   });
+
+  it('keeps keyboard steps at the precision of a decimal zStep', () => {
+    setup(0, 1, [0.2], 0.1);
+
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+    fixture.detectChanges();
+    expect(thumb().getAttribute('aria-valuenow')).toBe('0.3');
+
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+    thumbHost().dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+    fixture.detectChanges();
+    expect(thumb().getAttribute('aria-valuenow')).toBe('0.1');
+  });
+
+  it('keeps pointer values at the precision of a decimal zStep', () => {
+    setup(0, 1, [0], 0.1);
+    const track = mockTrackRect();
+
+    track.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, clientX: 140 }));
+    fixture.detectChanges();
+    expect(thumb().getAttribute('aria-valuenow')).toBe('0.7');
+  });
 });
