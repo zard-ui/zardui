@@ -1709,6 +1709,7 @@ import {
   ElementRef,
   inject,
   input,
+  type OnInit,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
@@ -1761,7 +1762,7 @@ let nextComboboxItemId = 0;
   },
   exportAs: 'zComboboxItem',
 })
-export class ZardComboboxItemComponent implements ZardComboboxItemRef {
+export class ZardComboboxItemComponent implements ZardComboboxItemRef, OnInit {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly root = inject(ZardComboboxRoot);
 
@@ -1788,7 +1789,6 @@ export class ZardComboboxItemComponent implements ZardComboboxItemRef {
   protected readonly indicatorClasses = computed(() => mergeClasses(comboboxItemIndicatorVariants()));
 
   constructor() {
-    this.root.registerItem(this);
     inject(DestroyRef).onDestroy(() => this.root.unregisterItem(this));
 
     afterNextRender(() => {
@@ -1797,6 +1797,11 @@ export class ZardComboboxItemComponent implements ZardComboboxItemRef {
         this.projectedLabel.set(text);
       }
     });
+  }
+
+  ngOnInit(): void {
+    // Registered here, not in the constructor: the root reads `zValue` (required) of every registered item.
+    this.root.registerItem(this);
   }
 
   protected onClick(): void {
