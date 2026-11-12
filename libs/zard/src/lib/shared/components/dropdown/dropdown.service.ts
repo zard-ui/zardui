@@ -22,7 +22,14 @@ import {
   type ZardDropdownSide,
 } from '@/shared/components/dropdown/dropdown-positions';
 
-import { findMenuItemByChar, getMenuItems, highlightMenuItem, isTypeaheadKey, nextMenuIndex } from './menu-keyboard';
+import {
+  bindMenuPointer,
+  findMenuItemByChar,
+  getMenuItems,
+  highlightMenuItem,
+  isTypeaheadKey,
+  nextMenuIndex,
+} from './menu-keyboard';
 
 /** A viewport coordinate a menu can be anchored to, instead of an element. */
 export interface ZardMenuOrigin {
@@ -394,6 +401,17 @@ export class ZardDropdownService {
       this.renderer.listen(dropdownElement, 'contextmenu', (event: MouseEvent) => {
         event.preventDefault();
         dropdownElement.focus();
+      }),
+    );
+
+    // The highlight follows the pointer and goes away with it; the keyboard continues from there.
+    this.unlisten.push(
+      bindMenuPointer(dropdownElement, index => {
+        if (index === -1) {
+          this.focusedIndex.set(-1);
+        } else {
+          this.focusItemAtIndex(this.getDropdownItems(), index);
+        }
       }),
     );
 

@@ -102,6 +102,27 @@ test.describe('Menubar component', () => {
       await expect(triggers().first()).toHaveAttribute('aria-expanded', 'false');
     });
 
+    test('moves the highlight with the pointer and clears it once the pointer leaves', async ({ page }) => {
+      await openWithClick(triggers().first());
+      const subTrigger = menu().locator('[data-slot="dropdown-menu-sub-trigger"]');
+      const firstRow = menu().locator('[role="menuitem"]').first();
+
+      await subTrigger.hover();
+      await expect(subMenu()).toBeVisible();
+      await expect(subTrigger).toBeFocused();
+
+      // Back to another row: the sub-trigger must not stay lit next to it.
+      await firstRow.hover();
+      await expect(firstRow).toBeFocused();
+      await expect(subMenu()).toHaveCount(0);
+
+      // Off the menu entirely: no row keeps the highlight, the menu surface holds the focus.
+      await page.mouse.move(1, 1);
+      await expect(firstRow).not.toBeFocused();
+      await expect(subTrigger).not.toBeFocused();
+      expect(await page.evaluate(() => document.activeElement?.getAttribute('role'))).toBe('menu');
+    });
+
     test('closes after a row is selected and hands the focus back to its trigger', async () => {
       const trigger = triggers().first();
       await openWithClick(trigger);
