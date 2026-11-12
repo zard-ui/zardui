@@ -23,12 +23,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   effect,
+  ElementRef,
   inject,
   input,
+  PLATFORM_ID,
   signal,
+  untracked,
   ViewEncapsulation,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronRight } from '@ng-icons/lucide';
@@ -227,24 +232,76 @@ export class ZardTraceCollapsibleContentComponent {
   readonly zKeepMounted = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
-  /** Flips to `true` once a close transition has ended; opening flips it back. */
+  /** Flips to `true` once the collapse has finished; opening flips it back. */
   private readonly settledClosed = signal(!this.collapsible.open());
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private settleTimer: ReturnType<typeof setTimeout> | undefined;
 
   protected readonly mounted = computed(() => this.zKeepMounted() || this.collapsible.open() || !this.settledClosed());
   protected readonly innerClasses = computed(() => mergeClasses(traceCollapsibleContentVariants(), this.class()));
 
   constructor() {
+    inject(DestroyRef).onDestroy(() => this.clearSettleTimer());
+
     effect(() => {
       if (this.collapsible.open()) {
+        this.clearSettleTimer();
         this.settledClosed.set(false);
+      } else if (!untracked(this.settledClosed)) {
+        this.scheduleSettle();
       }
     });
   }
 
   protected onTransitionEnd(event: TransitionEvent): void {
-    if (event.target === event.currentTarget && event.propertyName !== 'visibility' && !this.collapsible.open()) {
+    if (event.target === event.currentTarget && event.propertyName !== 'visibility') {
+      this.settle();
+    }
+  }
+
+  /**
+   * `transitionend` is the fast path, but it never fires when the collapse does not animate (a `transition: none`
+   * override, or a browser that does not interpolate `grid-template-rows`). So the same close also arms a timer sized
+   * from the panel's computed transition, which is 0 (settle now) when there is none.
+   */
+  private scheduleSettle(): void {
+    this.clearSettleTimer();
+    const panel = this.isBrowser ? this.host.nativeElement.querySelector('[data-slot="collapsible-content"]') : null;
+    const duration = panel ? this.transitionTime(getComputedStyle(panel)) : 0;
+
+    if (duration <= 0) {
+      this.settle();
+      return;
+    }
+    this.settleTimer = setTimeout(() => this.settle(), duration + 50);
+  }
+
+  private settle(): void {
+    if (!this.collapsible.open()) {
+      this.clearSettleTimer();
       this.settledClosed.set(true);
     }
+  }
+
+  private clearSettleTimer(): void {
+    clearTimeout(this.settleTimer);
+    this.settleTimer = undefined;
+  }
+
+  /** Longest `delay + duration` among the element's transitions, in ms. */
+  private transitionTime(style: CSSStyleDeclaration): number {
+    const toMs = (list: string): number[] =>
+      list
+        .split(',')
+        .map(value => value.trim())
+        .filter(Boolean)
+        .map(value => (value.endsWith('ms') ? parseFloat(value) : parseFloat(value) * 1000) || 0);
+    const durations = toMs(style.transitionDuration);
+    const delays = toMs(style.transitionDelay);
+
+    return Math.max(0, ...durations.map((duration, index) => duration + (delays[index % (delays.length || 1)] ?? 0)));
   }
 }
 ```
@@ -364,7 +421,12 @@ export const ZardTraceImports = [
 ## Usage
 
 ```angular-ts
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTerminal } from '@ng-icons/lucide';
+
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
+
+// Add NgIcon to the component imports and provideIcons({ lucideTerminal }) to its viewProviders.
 ```
 
 ```angular-html
@@ -1108,6 +1170,9 @@ An expandable row, built on `z-collapsible`.
 | --- | --- | --- | --- |
 | `[zOpen]` | Open state; supports `[(zOpen)]` | `boolean` | `false` |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
+
+| Output | Description | Type | Default |
+| --- | --- | --- | --- |
 | `(zOpenChange)` | Emitted with the new open state | `EventEmitter<boolean>` | `-` |
 
 ### z-trace-collapsible-trigger, [z-trace-collapsible-trigger]

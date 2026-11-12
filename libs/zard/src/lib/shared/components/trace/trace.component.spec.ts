@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
 import { ZardTraceImports } from './trace.imports';
@@ -379,6 +379,20 @@ describe('ZardTrace', () => {
   });
 
   describe('zKeepMounted', () => {
+    const realGetComputedStyle = window.getComputedStyle.bind(window);
+
+    /** happy-dom resolves no transition styles, so the collapse panel is given one explicitly. */
+    const mockTransition = (duration: string, delay = '0s'): void => {
+      jest.spyOn(window, 'getComputedStyle').mockImplementation(element => {
+        const style = realGetComputedStyle(element);
+        return element.getAttribute('data-slot') === 'collapsible-content'
+          ? ({ transitionDuration: duration, transitionDelay: delay } as CSSStyleDeclaration)
+          : style;
+      });
+    };
+
+    afterEach(() => jest.restoreAllMocks());
+
     const closeTransition = (): void => {
       const panel = document.querySelector('[data-slot="collapsible-content"]');
       const event = new Event('transitionend');
@@ -402,6 +416,7 @@ describe('ZardTrace', () => {
     });
 
     it('removes the content only after the close transition ends', async () => {
+      mockTransition('10s');
       const user = userEvent.setup();
       const { fixture } = await render(TestTraceCollapsibleHost);
       await user.click(screen.getByRole('button'));
@@ -416,12 +431,48 @@ describe('ZardTrace', () => {
     });
 
     it('ignores a transition that ends while the row is open', async () => {
+      mockTransition('10s');
       const user = userEvent.setup();
       const { fixture } = await render(TestTraceCollapsibleHost);
       await user.click(screen.getByRole('button'));
 
       closeTransition();
       fixture.detectChanges();
+      expect(screen.getByTestId('detail')).toBeInTheDocument();
+    });
+
+    it('removes the content on a timer when no transition ever ends', async () => {
+      mockTransition('20ms', '10ms');
+      const user = userEvent.setup();
+      await render(TestTraceCollapsibleHost);
+      await user.click(screen.getByRole('button'));
+      await user.click(screen.getByRole('button'));
+      expect(screen.getByTestId('detail')).toBeInTheDocument();
+
+      await waitFor(() => expect(screen.queryByTestId('detail')).not.toBeInTheDocument());
+    });
+
+    it('removes the content right away when the collapse does not animate', async () => {
+      mockTransition('0s');
+      const user = userEvent.setup();
+      await render(TestTraceCollapsibleHost);
+      await user.click(screen.getByRole('button'));
+      await user.click(screen.getByRole('button'));
+
+      expect(screen.queryByTestId('detail')).not.toBeInTheDocument();
+    });
+
+    it('keeps the content when the row reopens before the collapse settles', async () => {
+      mockTransition('20ms');
+      const user = userEvent.setup();
+      await render(TestTraceCollapsibleHost);
+      const trigger = screen.getByRole('button');
+      await user.click(trigger);
+      await user.click(trigger);
+      await user.click(trigger);
+
+      await new Promise(resolve => setTimeout(resolve, 150));
+      expect(trigger).toHaveAttribute('aria-expanded', 'true');
       expect(screen.getByTestId('detail')).toBeInTheDocument();
     });
 

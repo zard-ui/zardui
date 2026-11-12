@@ -130,8 +130,9 @@ test.describe('Trace component', () => {
   });
 
   test('every example passes accessibility checks', async ({ page }) => {
-    // color-contrast: the `pending` row is deliberately dimmed (`opacity-60`) to read as "not started yet", which
-    // takes it below 4.5:1 by design; its title still says what it is, so the state is not conveyed by colour alone.
-    await checkA11y(page, '#examples', ['color-contrast']);
+    // The `pending` rows are left out of the scan: they are deliberately dimmed (`opacity-60`) to read as "not started
+    // yet", which takes them below 4.5:1 by design, and their title still says what they are. Every other row in every
+    // example keeps the full rule set, including color-contrast.
+    await checkA11y(page, '#examples', [], ['z-trace-line[data-status="pending"]']);
   });
 });

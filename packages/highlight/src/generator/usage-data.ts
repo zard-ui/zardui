@@ -494,7 +494,12 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>`,
   },
   trace: {
-    importCode: `import { ZardTraceImports } from '@/shared/components/trace/trace.imports';`,
+    importCode: `import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTerminal } from '@ng-icons/lucide';
+
+import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
+
+// Add NgIcon to the component imports and provideIcons({ lucideTerminal }) to its viewProviders.`,
     templateCode: `<z-trace>
   <z-trace-line>
     <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>

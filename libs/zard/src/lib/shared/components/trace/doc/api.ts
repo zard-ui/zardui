@@ -41,6 +41,8 @@ export const TRACE_API: ApiSection[] = [
     props: [
       { name: '[zOpen]', description: 'Open state; supports `[(zOpen)]`', type: 'boolean', default: 'false' },
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
+    ],
+    outputs: [
       {
         name: '(zOpenChange)',
         description: 'Emitted with the new open state',
