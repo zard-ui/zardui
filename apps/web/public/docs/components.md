@@ -23,6 +23,7 @@ Here you can find all the components available in the library. We are working on
 - [Carousel](/docs/components/carousel)
 - [Chart](/docs/components/chart)
 - [Checkbox](/docs/components/checkbox)
+- [Code Block](/docs/components/code-block)
 - [Collapsible](/docs/components/collapsible)
 - [Combobox](/docs/components/combobox)
 - [Command](/docs/components/command)

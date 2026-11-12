@@ -495,6 +495,39 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'code-block',
+    // Shiki is only reached through the dynamic imports of `code-block.highlight.ts`, so it is not bundled unless
+    // `highlightCode()` is called, but the file type-checks against it.
+    dependencies: ['shiki@^4.1.0'],
+    registryDependencies: ['button', 'utilities'],
+    files: [
+      {
+        name: 'code-block.component.ts',
+        content: '',
+      },
+      {
+        name: 'code-block.variants.ts',
+        content: '',
+      },
+      {
+        name: 'code-block.imports.ts',
+        content: '',
+      },
+      {
+        name: 'code-block.highlight.ts',
+        content: '',
+      },
+      {
+        name: 'code-block.types.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'collapsible',
     files: [
       {

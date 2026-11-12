@@ -387,6 +387,18 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';`,
     templateCode: `<button z-button zType="outline" zTooltip="Add to library">Hover</button>`,
   },
+  'code-block': {
+    importCode: `import { ZardCodeBlockImports } from '@/shared/components/code-block/code-block.imports';`,
+    templateCode: `<z-code-block>
+  <z-code-block-header>
+    <z-code-block-title>install.sh</z-code-block-title>
+    <z-code-block-actions>
+      <z-code-block-copy-button [zValue]="command" />
+    </z-code-block-actions>
+  </z-code-block-header>
+  <z-code-block-content>{{ command }}</z-code-block-content>
+</z-code-block>`,
+  },
   collapsible: {
     importCode: `import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsible.imports';`,
     templateCode: `<z-collapsible>

@@ -106,6 +106,7 @@
 - [Card](https://zardui.com/docs/components/card): Displays a card with header, content, and footer.
 - [Carousel](https://zardui.com/docs/components/carousel): A carousel with motion and swipe built using Embla.
 - [Chart](https://zardui.com/docs/components/chart): Beautiful charts built with Apache ECharts. Copy and paste into your apps.
+- [Code Block](https://zardui.com/docs/components/code-block): Displays code, terminal output and diffs with an optional header, line numbers and a copy button.
 - [Map](https://zardui.com/docs/components/map): Beautiful maps built on MapLibre GL, themed with zard. Copy and paste into your apps.
 - [Map Draw](https://zardui.com/docs/components/map-draw): Draw, select and edit points, lines and polygons on a map. An optional addition to the map.
 - [Marker](https://zardui.com/docs/components/marker): Displays an inline status, system note, bordered row, or labeled separator in a conversation.
