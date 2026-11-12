@@ -333,6 +333,13 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/message/demo/message').then(m => m.MESSAGE),
   },
   {
+    componentName: 'trace',
+    description:
+      'Displays the steps an agent takes as a list of lines: tool calls, reasoning, sources and file changes.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/trace/demo/trace').then(m => m.TRACE),
+  },
+  {
     componentName: 'navigation-menu',
     description: 'A collection of links for navigating websites.',
     category: 'Layout & Navigation',

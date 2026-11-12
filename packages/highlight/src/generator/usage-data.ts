@@ -493,6 +493,16 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';`,
     templateCode: `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>`,
   },
+  trace: {
+    importCode: `import { ZardTraceImports } from '@/shared/components/trace/trace.imports';`,
+    templateCode: `<z-trace>
+  <z-trace-line>
+    <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+    <z-trace-title>Ran pnpm install</z-trace-title>
+    <z-trace-description>12s</z-trace-description>
+  </z-trace-line>
+</z-trace>`,
+  },
   'aspect-ratio': {
     importCode: `import { ZardAspectRatioComponent } from '@/shared/components/aspect-ratio/aspect-ratio.component';`,
     templateCode: `<z-aspect-ratio [zRatio]="16 / 9"></z-aspect-ratio>`,

@@ -1782,4 +1782,14 @@ export const registry: ComponentRegistry[] = [
       { name: 'index.ts', content: '' },
     ],
   },
+  {
+    name: 'trace',
+    registryDependencies: ['collapsible', 'utilities'],
+    files: [
+      { name: 'trace.component.ts', content: '' },
+      { name: 'trace.variants.ts', content: '' },
+      { name: 'trace.imports.ts', content: '' },
+      { name: 'index.ts', content: '' },
+    ],
+  },
 ];

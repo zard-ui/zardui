@@ -111,6 +111,7 @@
 - [Marker](https://zardui.com/docs/components/marker): Displays an inline status, system note, bordered row, or labeled separator in a conversation.
 - [Message](https://zardui.com/docs/components/message): Displays a message in a conversation, with optional avatar, header, footer, and alignment.
 - [Table](https://zardui.com/docs/components/table): A responsive table component.
+- [Trace](https://zardui.com/docs/components/trace): Displays the steps an agent takes as a list of lines: tool calls, reasoning, sources and file changes.
 
 ### Misc
 
