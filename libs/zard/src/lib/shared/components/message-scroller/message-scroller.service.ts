@@ -89,7 +89,7 @@ export class ZardMessageScrollerService {
   private defaultDone = false;
   /** The reader is at the live edge and has not scrolled away since. Follow-output and anchoring depend on it. */
   private atLiveEdge = false;
-  /** A touch is in progress: do not scroll under the reader's finger. */
+  /** A touch or a scrollbar drag is in progress: do not scroll under the reader's hand. */
   private touching = false;
   private programmatic: { target: number } | null = null;
   private settleTimer: ReturnType<typeof setTimeout> | null = null;
@@ -185,6 +185,9 @@ export class ZardMessageScrollerService {
       this.listen(viewport, 'touchstart', this.onTouchStart);
       this.listen(viewport, 'touchend', this.onTouchEnd);
       this.listen(viewport, 'touchcancel', this.onTouchEnd);
+      this.listen(viewport, 'pointerdown', this.onPointerDown as EventListener);
+      this.listen(document, 'pointerup', this.onTouchEnd);
+      this.listen(document, 'pointercancel', this.onTouchEnd);
 
       if (typeof ResizeObserver !== 'undefined') {
         const resizeObserver = new ResizeObserver(() => this.reconcile());
@@ -279,6 +282,13 @@ export class ZardMessageScrollerService {
   private readonly onTouchStart = () => {
     this.touching = true;
     this.cancelProgrammatic();
+  };
+
+  /** A press on the viewport itself is a press on its scrollbar (rows are children): the reader is dragging it. */
+  private readonly onPointerDown = (event: PointerEvent) => {
+    if (event.target === this.els?.viewport) {
+      this.onTouchStart();
+    }
   };
 
   private readonly onTouchEnd = () => {
@@ -599,12 +609,17 @@ export class ZardMessageScrollerService {
     const wasProgrammatic = !!this.programmatic;
     this.programmatic = null;
     this.autoscrollingState.set(false);
-    if (this.els && wasProgrammatic) {
-      this.updateState();
-      // The content may have grown while a smooth scroll was in flight.
-      if (this.shouldFollow() && !this.isAtEnd()) {
-        this.scrollTo(this.maxScrollTop(), 'auto', true);
-      }
+    if (!this.els) {
+      return;
+    }
+    // A jump that lands on the bottom leaves the reader at the live edge, wherever it started from.
+    if (this.defaultDone && this.isAtEnd()) {
+      this.atLiveEdge = true;
+    }
+    this.updateState();
+    // The content may have grown while a smooth scroll was in flight.
+    if (wasProgrammatic && this.shouldFollow() && !this.isAtEnd()) {
+      this.scrollTo(this.maxScrollTop(), 'auto', true);
     }
   }
 
@@ -668,7 +683,7 @@ export class ZardMessageScrollerService {
     );
   }
 
-  private listen(target: HTMLElement, type: string, listener: EventListener): void {
+  private listen(target: HTMLElement | Document, type: string, listener: EventListener): void {
     target.addEventListener(type, listener, { passive: true });
     this.cleanups.push(() => target.removeEventListener(type, listener));
   }

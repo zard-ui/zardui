@@ -25,7 +25,7 @@ interface Turn {
         </z-message-scroller-item>
       }
 
-      <button z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
+      <button type="button" z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
     </z-message-scroller>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -522,6 +522,36 @@ describe('ZardMessageScrollerComponent', () => {
       expect(viewport.scrollTop).toBe(ROW);
     });
 
+    it('is released by a scrollbar drag, even while a follow scroll is in flight', async () => {
+      const { viewport, update, userScroll } = await setup(host => host.autoScroll.set(true));
+      update(items => [...items, ...rows(13, 14)]); // a follow scroll is now in flight
+      viewport.dispatchEvent(new Event('pointerdown')); // the press lands on the viewport: its scrollbar
+      await userScroll(100);
+      update(items => [...items, ...rows(15, 16)]);
+      expect(viewport.scrollTop).toBe(100);
+
+      viewport.dispatchEvent(new Event('pointerup'));
+      document.dispatchEvent(new Event('pointerup'));
+      update(items => [...items, ...rows(17, 18)]);
+      expect(viewport.scrollTop).toBe(100);
+    });
+
+    it('ignores presses on the rows, which are not scrollbar drags', async () => {
+      const { viewport, update, el } = await setup(host => host.autoScroll.set(true));
+      const row = el.querySelector('[data-slot="message-scroller-item"]') as HTMLElement;
+      row.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+      update(items => [...items, ...rows(13, 14)]);
+      expect(viewport.scrollTop).toBe(max(14));
+    });
+
+    it('resumes following when a jump to a message lands on the bottom', async () => {
+      const { viewport, update, service } = await setup(host => host.autoScroll.set(true));
+      service.scrollToMessage('m12', { align: 'end' });
+      expect(viewport.scrollTop).toBe(max(12));
+      update(items => [...items, ...rows(13, 14)]);
+      expect(viewport.scrollTop).toBe(max(14));
+    });
+
     it('is resumed by scrollToEnd', async () => {
       const { viewport, update, service, userScroll } = await setup(host => host.autoScroll.set(true));
       await userScroll(100);

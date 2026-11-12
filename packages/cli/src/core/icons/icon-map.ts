@@ -25,6 +25,7 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
   'alert-triangle': { lucide: 'lucideAlertTriangle' },
   'app-window': { lucide: 'lucideAppWindow' },
   archive: { lucide: 'lucideArchive' },
+  'arrow-down': { lucide: 'lucideArrowDown' },
   'arrow-left': { lucide: 'lucideArrowLeft' },
   'arrow-right': { lucide: 'lucideArrowRight' },
   'arrow-up': { lucide: 'lucideArrowUp' },

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, viewChild } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardMessageImports } from '@/shared/components/message/message.imports';
@@ -28,7 +28,7 @@ import { ZardMessageScrollerService } from '@/shared/components/message-scroller
           </z-message-scroller-item>
         }
 
-        <button z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
+        <button type="button" z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
       </z-message-scroller>
 
       <p class="text-muted-foreground text-xs" data-testid="visible-ids">Visible: {{ visible() }}</p>
@@ -44,9 +44,7 @@ export class ZardDemoMessageScrollerJumpToMessageComponent {
   protected readonly ids = Array.from({ length: 40 }, (_, i) => i + 1);
   protected readonly targets = [3, 20, 38];
 
-  protected visible(): string {
-    return this.scroller().visibleMessageIds().join(', ') || '-';
-  }
+  protected readonly visible = computed(() => this.scroller().visibleMessageIds().join(', ') || '-');
 
   protected jump(id: number): void {
     this.scroller().scrollToMessage(`m${id}`, { align: 'center', behavior: 'smooth' });

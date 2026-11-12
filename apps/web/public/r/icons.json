@@ -19,6 +19,9 @@
     "archive": {
       "lucide": "lucideArchive"
     },
+    "arrow-down": {
+      "lucide": "lucideArrowDown"
+    },
     "arrow-left": {
       "lucide": "lucideArrowLeft"
     },

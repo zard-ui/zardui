@@ -1356,7 +1356,9 @@
         "symbols": [
           "lucideArrowDown"
         ],
-        "tokens": []
+        "tokens": [
+          "arrow-down"
+        ]
       },
       "files": [
         "message-scroller.component.ts",

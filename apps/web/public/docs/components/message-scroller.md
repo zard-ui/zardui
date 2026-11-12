@@ -413,7 +413,7 @@ export class ZardMessageScrollerService {
   private defaultDone = false;
   /** The reader is at the live edge and has not scrolled away since. Follow-output and anchoring depend on it. */
   private atLiveEdge = false;
-  /** A touch is in progress: do not scroll under the reader's finger. */
+  /** A touch or a scrollbar drag is in progress: do not scroll under the reader's hand. */
   private touching = false;
   private programmatic: { target: number } | null = null;
   private settleTimer: ReturnType<typeof setTimeout> | null = null;
@@ -509,6 +509,9 @@ export class ZardMessageScrollerService {
       this.listen(viewport, 'touchstart', this.onTouchStart);
       this.listen(viewport, 'touchend', this.onTouchEnd);
       this.listen(viewport, 'touchcancel', this.onTouchEnd);
+      this.listen(viewport, 'pointerdown', this.onPointerDown as EventListener);
+      this.listen(document, 'pointerup', this.onTouchEnd);
+      this.listen(document, 'pointercancel', this.onTouchEnd);
 
       if (typeof ResizeObserver !== 'undefined') {
         const resizeObserver = new ResizeObserver(() => this.reconcile());
@@ -603,6 +606,13 @@ export class ZardMessageScrollerService {
   private readonly onTouchStart = () => {
     this.touching = true;
     this.cancelProgrammatic();
+  };
+
+  /** A press on the viewport itself is a press on its scrollbar (rows are children): the reader is dragging it. */
+  private readonly onPointerDown = (event: PointerEvent) => {
+    if (event.target === this.els?.viewport) {
+      this.onTouchStart();
+    }
   };
 
   private readonly onTouchEnd = () => {
@@ -923,12 +933,17 @@ export class ZardMessageScrollerService {
     const wasProgrammatic = !!this.programmatic;
     this.programmatic = null;
     this.autoscrollingState.set(false);
-    if (this.els && wasProgrammatic) {
-      this.updateState();
-      // The content may have grown while a smooth scroll was in flight.
-      if (this.shouldFollow() && !this.isAtEnd()) {
-        this.scrollTo(this.maxScrollTop(), 'auto', true);
-      }
+    if (!this.els) {
+      return;
+    }
+    // A jump that lands on the bottom leaves the reader at the live edge, wherever it started from.
+    if (this.defaultDone && this.isAtEnd()) {
+      this.atLiveEdge = true;
+    }
+    this.updateState();
+    // The content may have grown while a smooth scroll was in flight.
+    if (wasProgrammatic && this.shouldFollow() && !this.isAtEnd()) {
+      this.scrollTo(this.maxScrollTop(), 'auto', true);
     }
   }
 
@@ -992,7 +1007,7 @@ export class ZardMessageScrollerService {
     );
   }
 
-  private listen(target: HTMLElement, type: string, listener: EventListener): void {
+  private listen(target: HTMLElement | Document, type: string, listener: EventListener): void {
     target.addEventListener(type, listener, { passive: true });
     this.cleanups.push(() => target.removeEventListener(type, listener));
   }
@@ -1009,7 +1024,7 @@ import { ZardMessageScrollerImports } from '@/shared/components/message-scroller
 <z-message-scroller zAutoScroll class="h-96 rounded-lg border">
   @for (message of messages(); track message.id) {
     <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
-      <z-message [zAlign]="message.role === 'user' ? 'end' : 'start'">{{ message.text }}</z-message>
+      <p class="w-fit rounded-lg bg-muted px-3 py-2 text-sm">{{ message.text }}</p>
     </z-message-scroller-item>
   }
 
@@ -1056,7 +1071,7 @@ const REPLY =
           </z-message-scroller-item>
         }
 
-        <button z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
+        <button type="button" z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
       </z-message-scroller>
 
       <button z-button zType="outline" type="button" [disabled]="streaming()" (click)="send()">
@@ -1211,7 +1226,7 @@ interface Turn {
         </z-message-scroller-item>
       }
 
-      <button z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
+      <button type="button" z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
     </z-message-scroller>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -1256,7 +1271,7 @@ export class ZardDemoMessageScrollerLastAnchorComponent {
 Controls outside the transcript, such as search results or an outline, drive it through `ZardMessageScrollerService`. Read it from the scroller with `viewChild(ZardMessageScrollerComponent, { read: ZardMessageScrollerService })`, then call `scrollToMessage`. `visibleMessageIds` and `currentAnchorId` are signals.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, viewChild } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardMessageImports } from '@/shared/components/message/message.imports';
@@ -1286,7 +1301,7 @@ import { ZardMessageScrollerService } from '@/shared/components/message-scroller
           </z-message-scroller-item>
         }
 
-        <button z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
+        <button type="button" z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
       </z-message-scroller>
 
       <p class="text-muted-foreground text-xs" data-testid="visible-ids">Visible: {{ visible() }}</p>
@@ -1302,71 +1317,10 @@ export class ZardDemoMessageScrollerJumpToMessageComponent {
   protected readonly ids = Array.from({ length: 40 }, (_, i) => i + 1);
   protected readonly targets = [3, 20, 38];
 
-  protected visible(): string {
-    return this.scroller().visibleMessageIds().join(', ') || '-';
-  }
+  protected readonly visible = computed(() => this.scroller().visibleMessageIds().join(', ') || '-');
 
   protected jump(id: number): void {
     this.scroller().scrollToMessage(`m${id}`, { align: 'center', behavior: 'smooth' });
-  }
-}
-```
-
-### Virtualization
-
-Virtualization is a recipe, not an input. `z-message-scroller` renders real rows, which is what anchoring, prepend preservation and jump-to-message measure, and it stays fast well into the thousands of rows. When a transcript needs more, put the rows in a `cdk-virtual-scroll-viewport` with a fixed `itemSize` and let it own the scrolling, `scrollToIndex` standing in for `scrollToMessage`. You trade the scroller live-edge and anchoring behavior for it, so reach for it only when you have measured the need.
-
-```angular-ts
-import { ScrollingModule, type CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { afterNextRender, ChangeDetectionStrategy, Component, viewChild } from '@angular/core';
-
-import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardMessageImports } from '@/shared/components/message/message.imports';
-
-const TOTAL = 5000;
-
-@Component({
-  selector: 'z-demo-message-scroller-virtualization',
-  imports: [ScrollingModule, ZardButtonComponent, ...ZardMessageImports],
-  template: `
-    <div class="flex w-full max-w-md flex-col gap-3">
-      <cdk-virtual-scroll-viewport
-        #viewport
-        itemSize="56"
-        role="region"
-        aria-label="Messages"
-        class="h-96 rounded-lg border"
-      >
-        <div *cdkVirtualFor="let id of ids" class="flex h-14 items-center px-4" [attr.data-message-id]="'m' + id">
-          <z-message
-            class="w-full"
-            [zAlign]="id % 2 === 0 ? 'end' : 'start'"
-            [zVariant]="id % 2 === 0 ? 'default' : 'muted'"
-          >
-            Message {{ id }} of {{ total }}
-          </z-message>
-        </div>
-      </cdk-virtual-scroll-viewport>
-
-      <button z-button zType="outline" type="button" (click)="scrollToLatest()">Jump to latest</button>
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'contents' },
-})
-export class ZardDemoMessageScrollerVirtualizationComponent {
-  private readonly viewport = viewChild.required<CdkVirtualScrollViewport>('viewport');
-
-  protected readonly total = TOTAL;
-  protected readonly ids = Array.from({ length: TOTAL }, (_, i) => i + 1);
-
-  constructor() {
-    // Wait a frame: the viewport measures itself once the rows are rendered.
-    afterNextRender(() => requestAnimationFrame(() => this.scrollToLatest()));
-  }
-
-  protected scrollToLatest(): void {
-    this.viewport().scrollToIndex(TOTAL - 1);
   }
 }
 ```
@@ -1462,7 +1416,7 @@ const translations: ZardRtlTranslations<Strings> = {
         </z-message-scroller-item>
       }
 
-      <button z-message-scroller-button zDirection="end" [attr.aria-label]="i18n.t().jump"></button>
+      <button type="button" z-message-scroller-button zDirection="end" [attr.aria-label]="i18n.t().jump"></button>
     </z-message-scroller>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -1515,7 +1469,7 @@ Scroll state and commands of one scroller. Provided by `z-message-scroller`: inj
 | --- | --- | --- | --- |
 | `scrollToEnd(options?)` | Scroll to the latest message and resume following. Returns `false` when it cannot be applied | `(options?: ZardScrollOptions) => boolean` | `-` |
 | `scrollToStart(options?)` | Scroll to the top. Returns `false` when it cannot be applied | `(options?: ZardScrollOptions) => boolean` | `-` |
-| `scrollToMessage(messageId, options?)` | Scroll to a mounted message id and release the live edge. Returns `false` when the id is not mounted | `(messageId: string, options?: ZardScrollOptions) => boolean` | `-` |
+| `scrollToMessage(messageId, options?)` | Scroll to a mounted message id and release the live edge, unless it lands on the bottom. Returns `false` when the id is not mounted | `(messageId: string, options?: ZardScrollOptions) => boolean` | `-` |
 | `scrollable` | Which edges can still be scrolled toward. `end` stays `false` while following the live edge | `Signal<{ start: boolean; end: boolean }>` | `-` |
 | `visibleMessageIds` | Ids of the rows intersecting the viewport, in document order | `Signal<string[]>` | `-` |
 | `currentAnchorId` | The anchored turn at or above the reading line | `Signal<string \| null>` | `-` |

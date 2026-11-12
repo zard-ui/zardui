@@ -94,7 +94,7 @@ export const MESSAGE_SCROLLER_API: ApiSection[] = [
       {
         name: 'scrollToMessage(messageId, options?)',
         description:
-          'Scroll to a mounted message id and release the live edge. Returns `false` when the id is not mounted',
+          'Scroll to a mounted message id and release the live edge, unless it lands on the bottom. Returns `false` when the id is not mounted',
         type: '(messageId: string, options?: ZardScrollOptions) => boolean',
         default: '-',
       },

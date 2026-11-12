@@ -4,7 +4,6 @@ import { MESSAGE_SCROLLER_DEMO_LOAD_EARLIER } from '@generated/components/messag
 import { MESSAGE_SCROLLER_DEMO_PREVIEW } from '@generated/components/message-scroller/demo/preview';
 import { MESSAGE_SCROLLER_DEMO_RTL } from '@generated/components/message-scroller/demo/rtl';
 import { MESSAGE_SCROLLER_DEMO_STREAMING } from '@generated/components/message-scroller/demo/streaming';
-import { MESSAGE_SCROLLER_DEMO_VIRTUALIZATION } from '@generated/components/message-scroller/demo/virtualization';
 import { MESSAGE_SCROLLER_CLI_ADD } from '@generated/installation/cli/add-message-scroller';
 import { MESSAGE_SCROLLER_MANUAL_CODE } from '@generated/installation/manual/message-scroller';
 import { MESSAGE_SCROLLER_USAGE_CODE, MESSAGE_SCROLLER_USAGE_IMPORT } from '@generated/usage/message-scroller';
@@ -15,7 +14,6 @@ import { ZardDemoMessageScrollerLoadEarlierComponent } from './load-earlier';
 import { ZardDemoMessageScrollerPreviewComponent } from './preview';
 import { ZardDemoMessageScrollerRtlComponent } from './rtl';
 import { ZardDemoMessageScrollerStreamingComponent } from './streaming';
-import { ZardDemoMessageScrollerVirtualizationComponent } from './virtualization';
 import { MESSAGE_SCROLLER_API } from '../doc/api';
 
 export const MESSAGE_SCROLLER = {
@@ -62,13 +60,6 @@ export const MESSAGE_SCROLLER = {
         'Controls outside the transcript, such as search results or an outline, drive it through `ZardMessageScrollerService`. Read it from the scroller with `viewChild(ZardMessageScrollerComponent, { read: ZardMessageScrollerService })`, then call `scrollToMessage`. `visibleMessageIds` and `currentAnchorId` are signals.',
       component: ZardDemoMessageScrollerJumpToMessageComponent,
       codeData: MESSAGE_SCROLLER_DEMO_JUMP_TO_MESSAGE,
-    },
-    {
-      name: 'virtualization',
-      description:
-        'Virtualization is a recipe, not an input. `z-message-scroller` renders real rows, which is what anchoring, prepend preservation and jump-to-message measure, and it stays fast well into the thousands of rows. When a transcript needs more, put the rows in a `cdk-virtual-scroll-viewport` with a fixed `itemSize` and let it own the scrolling, `scrollToIndex` standing in for `scrollToMessage`. You trade the scroller live-edge and anchoring behavior for it, so reach for it only when you have measured the need.',
-      component: ZardDemoMessageScrollerVirtualizationComponent,
-      codeData: MESSAGE_SCROLLER_DEMO_VIRTUALIZATION,
     },
     {
       name: 'rtl',

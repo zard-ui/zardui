@@ -68,7 +68,7 @@ test.describe('Message Scroller component', () => {
       await demo.scrollIntoViewIfNeeded();
 
       const lastAnchor = demo.locator('z-message-scroller-item[data-scroll-anchor="true"]').last();
-      await expect.poll(() => offsetInViewport(viewport, lastAnchor)).toBeLessThanOrEqual(2);
+      await expect.poll(async () => Math.abs(await offsetInViewport(viewport, lastAnchor))).toBeLessThanOrEqual(2);
       // the reply is longer than the viewport, so it opened at the anchor, not at the bottom
       expect(await distanceToEnd(viewport)).toBeGreaterThan(8);
     });
@@ -122,8 +122,10 @@ test.describe('Message Scroller component', () => {
       await wheelUp(page, viewport);
 
       await scroller.locator('[z-message-scroller-button]').click();
-      // no animation: the end is reached on the next frame instead of over hundreds of milliseconds
-      await page.waitForTimeout(60);
+      // no animation: the end is reached within two frames instead of over hundreds of milliseconds
+      await page.evaluate(
+        () => new Promise<void>(done => requestAnimationFrame(() => requestAnimationFrame(() => done()))),
+      );
       expect(await distanceToEnd(viewport)).toBeLessThanOrEqual(8);
     });
   });
@@ -157,8 +159,19 @@ test.describe('Message Scroller component', () => {
 
       await send.click();
       await expect(demo.locator('z-message-scroller-item')).toHaveCount(4);
+      const beforeWheel = await scrollTopOf(viewport);
       await wheelUp(page, viewport, 200);
-      const released = await scrollTopOf(viewport);
+      // the wheel does not wait for the scroll it causes: let it land, and settle, before recording the position
+      await expect.poll(() => scrollTopOf(viewport)).toBeLessThan(beforeWheel);
+      let released = await scrollTopOf(viewport);
+      await expect
+        .poll(async () => {
+          const current = await scrollTopOf(viewport);
+          const settled = current === released;
+          released = current;
+          return settled;
+        })
+        .toBe(true);
 
       await expect(send).toBeEnabled({ timeout: 20_000 });
       expect(await scrollTopOf(viewport)).toBe(released);

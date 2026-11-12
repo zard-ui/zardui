@@ -470,12 +470,40 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-message-scroller zAutoScroll class="h-96 rounded-lg border">
   @for (message of messages(); track message.id) {
     <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
-      <z-message [zAlign]="message.role === 'user' ? 'end' : 'start'">{{ message.text }}</z-message>
+      <p class="w-fit rounded-lg bg-muted px-3 py-2 text-sm">{{ message.text }}</p>
     </z-message-scroller-item>
   }
 
   <button z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
 </z-message-scroller>`,
+    description:
+      'Virtualization is a recipe, not an input. z-message-scroller renders real rows, which is what anchoring, prepend preservation and jump-to-message measure, and it stays fast well into the thousands of rows. When a transcript needs more, put the rows in a cdk-virtual-scroll-viewport with a fixed itemSize and let it own the scrolling, with scrollToIndex standing in for scrollToMessage. You give up the live-edge and anchoring behavior, so reach for it only once you have measured the need.',
+    additionalCodeBlocks: [
+      {
+        language: 'angular-ts',
+        code: `import { ScrollingModule, type CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { afterNextRender, Component, viewChild } from '@angular/core';
+
+@Component({
+  selector: 'app-virtual-transcript',
+  imports: [ScrollingModule],
+  template: \`
+    <cdk-virtual-scroll-viewport #viewport itemSize="56" role="region" aria-label="Messages" class="h-96 rounded-lg border">
+      <div *cdkVirtualFor="let message of messages" class="flex h-14 items-center px-4">{{ message.text }}</div>
+    </cdk-virtual-scroll-viewport>
+  \`,
+})
+export class VirtualTranscript {
+  private readonly viewport = viewChild.required<CdkVirtualScrollViewport>('viewport');
+  protected readonly messages = Array.from({ length: 5000 }, (_, i) => ({ id: i, text: \`Message \${i + 1}\` }));
+
+  constructor() {
+    // Open at the latest message once the viewport has measured itself.
+    afterNextRender(() => requestAnimationFrame(() => this.viewport().scrollToIndex(this.messages.length - 1)));
+  }
+}`,
+      },
+    ],
   },
   map: {
     importCode: `import { ZardMapImports } from '@/shared/components/map/map.imports';`,

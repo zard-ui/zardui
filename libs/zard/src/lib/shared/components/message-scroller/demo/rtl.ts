@@ -79,7 +79,7 @@ const translations: ZardRtlTranslations<Strings> = {
         </z-message-scroller-item>
       }
 
-      <button z-message-scroller-button zDirection="end" [attr.aria-label]="i18n.t().jump"></button>
+      <button type="button" z-message-scroller-button zDirection="end" [attr.aria-label]="i18n.t().jump"></button>
     </z-message-scroller>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
