@@ -30,10 +30,26 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardDropdownService } from './dropdown.service';
 import { dropdownSubContentVariants, dropdownSubTriggerVariants } from './dropdown.variants';
-import { findMenuItemByChar, getMenuItems, highlightMenuItem, isTypeaheadKey, nextMenuIndex } from './menu-keyboard';
+import {
+  bindMenuPointer,
+  findMenuItemByChar,
+  getMenuItems,
+  highlightMenuItem,
+  isTypeaheadKey,
+  nextMenuIndex,
+} from './menu-keyboard';
 
 /** How long the pointer may sit between the trigger and the popup before the submenu closes. */
 const CLOSE_DELAY = 120;
+
+/** `:hover` is not supported by every DOM implementation (test environments); treat it as not hovered there. */
+function isHovered(element: HTMLElement): boolean {
+  try {
+    return element.matches(':hover');
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Holds the rows of one submenu. Like `z-dropdown-menu-content` it renders nothing where it is
@@ -120,6 +136,8 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   private closeTimeout?: ReturnType<typeof setTimeout>;
   private readonly cleanups: Array<() => void> = [];
   private focusedIndex = -1;
+  /** The parent menu this submenu was opened from: another one taking its place closes it too. */
+  private openedIn = 0;
 
   readonly zSubMenu = input.required<ZardDropdownMenuSubContentComponent | TemplateRef<unknown>>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
@@ -140,7 +158,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
      * being left behind on screen.
      */
     effect(() => {
-      if (this.dropdownService.isOpen() || !this.isOpen()) {
+      const parentIsOpen = this.dropdownService.isOpen();
+      const generation = this.dropdownService.generation();
+      if (!this.isOpen() || (parentIsOpen && generation === this.openedIn)) {
         return;
       }
 
@@ -184,6 +204,7 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 
     this.overlayRef.attach(new TemplatePortal(template, viewContainerRef));
     this.isOpen.set(true);
+    this.openedIn = this.dropdownService.generation();
     this.focusedIndex = -1;
     this.attachOverlayListeners();
 
@@ -203,8 +224,13 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
     this.isOpen.set(false);
     this.focusedIndex = -1;
 
+    const trigger = this.elementRef.nativeElement;
     if (returnFocus) {
-      this.elementRef.nativeElement.focus();
+      trigger.focus();
+    } else if (trigger.ownerDocument.activeElement === trigger && !isHovered(trigger)) {
+      // Closed because the pointer left for somewhere else: the row it left must not stay lit.
+      delete trigger.dataset['highlighted'];
+      trigger.closest<HTMLElement>('[role="menu"]')?.focus({ preventScroll: true });
     }
   }
 
@@ -322,10 +348,20 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
     pane.addEventListener('mouseleave', onLeave);
     pane.addEventListener('keydown', onKeydown);
 
+    const surface = pane.querySelector<HTMLElement>('[role="menu"]') ?? pane;
+    const unbindPointer = bindMenuPointer(surface, index => {
+      if (index === -1) {
+        this.focusedIndex = -1;
+      } else {
+        this.focusItem(index);
+      }
+    });
+
     this.cleanups.push(
       () => pane.removeEventListener('mouseenter', onEnter),
       () => pane.removeEventListener('mouseleave', onLeave),
       () => pane.removeEventListener('keydown', onKeydown),
+      unbindPointer,
     );
   }
 

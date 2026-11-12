@@ -369,12 +369,12 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const dropdownContentVariants = cva([
-  'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground',
-  'shadow-md outline-none animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+  'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground',
+  'shadow-md ring-1 ring-foreground/10 outline-none animate-in duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
 ]);
 
 export const dropdownItemVariants = cva(
-  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'relative flex cursor-default select-none items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -383,7 +383,7 @@ export const dropdownItemVariants = cva(
           'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
       },
       inset: {
-        true: 'ps-8',
+        true: 'ps-7',
         false: '',
       },
     },
@@ -395,16 +395,16 @@ export const dropdownItemVariants = cva(
 );
 
 export const dropdownSubContentVariants = cva([
-  'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground',
-  'shadow-lg outline-none animate-in fade-in-0 zoom-in-95',
+  'z-50 min-w-24 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground',
+  'shadow-lg ring-1 ring-foreground/10 outline-none animate-in duration-100 fade-in-0 zoom-in-95',
 ]);
 
 export const dropdownSubTriggerVariants = cva(
-  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'relative flex cursor-default select-none items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       inset: {
-        true: 'ps-8',
+        true: 'ps-7',
         false: '',
       },
     },
@@ -415,11 +415,11 @@ export const dropdownSubTriggerVariants = cva(
 );
 
 export const dropdownLabelVariants = cva(
-  'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
+  'relative flex items-center px-1.5 py-1 text-xs font-medium text-muted-foreground',
   {
     variants: {
       inset: {
-        true: 'ps-8',
+        true: 'ps-7',
         false: '',
       },
     },
@@ -625,15 +625,23 @@ function toConnectedPosition(
   align: ZardDropdownAlign,
   offset: number,
   rtl: boolean,
+  alignOffset: number,
 ): ConnectedPosition {
   if (isVertical(side)) {
-    return {
+    // `offsetX` is physical, while `align` follows the direction: the shift is mirrored in RTL and,
+    // like Radix's `alignOffset`, measured from the aligned edge, so it flips for `end`.
+    const logicalShift = align === 'end' ? -alignOffset : alignOffset;
+    const position: ConnectedPosition = {
       originX: align,
       originY: side === 'bottom' ? 'bottom' : 'top',
       overlayX: align,
       overlayY: side === 'bottom' ? 'top' : 'bottom',
       offsetY: side === 'bottom' ? offset : -offset,
     };
+    if (alignOffset !== 0) {
+      position.offsetX = rtl ? -logicalShift : logicalShift;
+    }
+    return position;
   }
 
   const verticalAlign = { start: 'top', center: 'center', end: 'bottom' } as const;
@@ -647,6 +655,7 @@ function toConnectedPosition(
     overlayX: cdkStart ? 'end' : 'start',
     overlayY: verticalAlign[align],
     offsetX: onLeft ? -offset : offset,
+    ...(alignOffset !== 0 ? { offsetY: align === 'end' ? -alignOffset : alignOffset } : {}),
   };
 }
 
@@ -659,14 +668,17 @@ export function buildDropdownPositions(
   align: ZardDropdownAlign,
   offset: number,
   rtl = false,
+  alignOffset = 0,
 ): ConnectedPosition[] {
   const fallbackAligns: ZardDropdownAlign[] = (['start', 'center', 'end'] as const).filter(value => value !== align);
 
   return [
-    toConnectedPosition(side, align, offset, rtl),
-    toConnectedPosition(OPPOSITE_SIDE[side], align, offset, rtl),
-    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(side, fallbackAlign, offset, rtl)),
-    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(OPPOSITE_SIDE[side], fallbackAlign, offset, rtl)),
+    toConnectedPosition(side, align, offset, rtl, alignOffset),
+    toConnectedPosition(OPPOSITE_SIDE[side], align, offset, rtl, alignOffset),
+    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(side, fallbackAlign, offset, rtl, alignOffset)),
+    ...fallbackAligns.map(fallbackAlign =>
+      toConnectedPosition(OPPOSITE_SIDE[side], fallbackAlign, offset, rtl, alignOffset),
+    ),
   ];
 }
 ```
@@ -793,7 +805,7 @@ export class ZardDropdownMenuShortcutComponent {
 @Component({
   selector: 'z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item]',
   template: `
-    <span class="pointer-events-none absolute start-2 flex size-3.5 items-center justify-center">
+    <span class="pointer-events-none absolute start-1.5 flex size-4 items-center justify-center">
       @if (zChecked()) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="size-4">
           <path d="M20 6 9 17l-5-5" />
@@ -880,7 +892,7 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
 @Component({
   selector: 'z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
   template: `
-    <span class="pointer-events-none absolute start-2 flex size-3.5 items-center justify-center">
+    <span class="pointer-events-none absolute start-1.5 flex size-4 items-center justify-center">
       @if (isChecked()) {
         <span class="size-2 rounded-full bg-current"></span>
       }
@@ -970,10 +982,26 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardDropdownService } from './dropdown.service';
 import { dropdownSubContentVariants, dropdownSubTriggerVariants } from './dropdown.variants';
-import { findMenuItemByChar, getMenuItems, highlightMenuItem, isTypeaheadKey, nextMenuIndex } from './menu-keyboard';
+import {
+  bindMenuPointer,
+  findMenuItemByChar,
+  getMenuItems,
+  highlightMenuItem,
+  isTypeaheadKey,
+  nextMenuIndex,
+} from './menu-keyboard';
 
 /** How long the pointer may sit between the trigger and the popup before the submenu closes. */
 const CLOSE_DELAY = 120;
+
+/** `:hover` is not supported by every DOM implementation (test environments); treat it as not hovered there. */
+function isHovered(element: HTMLElement): boolean {
+  try {
+    return element.matches(':hover');
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Holds the rows of one submenu. Like `z-dropdown-menu-content` it renders nothing where it is
@@ -1060,6 +1088,8 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   private closeTimeout?: ReturnType<typeof setTimeout>;
   private readonly cleanups: Array<() => void> = [];
   private focusedIndex = -1;
+  /** The parent menu this submenu was opened from: another one taking its place closes it too. */
+  private openedIn = 0;
 
   readonly zSubMenu = input.required<ZardDropdownMenuSubContentComponent | TemplateRef<unknown>>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
@@ -1080,7 +1110,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
      * being left behind on screen.
      */
     effect(() => {
-      if (this.dropdownService.isOpen() || !this.isOpen()) {
+      const parentIsOpen = this.dropdownService.isOpen();
+      const generation = this.dropdownService.generation();
+      if (!this.isOpen() || (parentIsOpen && generation === this.openedIn)) {
         return;
       }
 
@@ -1124,6 +1156,7 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 
     this.overlayRef.attach(new TemplatePortal(template, viewContainerRef));
     this.isOpen.set(true);
+    this.openedIn = this.dropdownService.generation();
     this.focusedIndex = -1;
     this.attachOverlayListeners();
 
@@ -1143,8 +1176,13 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
     this.isOpen.set(false);
     this.focusedIndex = -1;
 
+    const trigger = this.elementRef.nativeElement;
     if (returnFocus) {
-      this.elementRef.nativeElement.focus();
+      trigger.focus();
+    } else if (trigger.ownerDocument.activeElement === trigger && !isHovered(trigger)) {
+      // Closed because the pointer left for somewhere else: the row it left must not stay lit.
+      delete trigger.dataset['highlighted'];
+      trigger.closest<HTMLElement>('[role="menu"]')?.focus({ preventScroll: true });
     }
   }
 
@@ -1262,10 +1300,20 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
     pane.addEventListener('mouseleave', onLeave);
     pane.addEventListener('keydown', onKeydown);
 
+    const surface = pane.querySelector<HTMLElement>('[role="menu"]') ?? pane;
+    const unbindPointer = bindMenuPointer(surface, index => {
+      if (index === -1) {
+        this.focusedIndex = -1;
+      } else {
+        this.focusItem(index);
+      }
+    });
+
     this.cleanups.push(
       () => pane.removeEventListener('mouseenter', onEnter),
       () => pane.removeEventListener('mouseleave', onLeave),
       () => pane.removeEventListener('keydown', onKeydown),
+      unbindPointer,
     );
   }
 
@@ -1529,7 +1577,14 @@ import {
   type ZardDropdownSide,
 } from '@/shared/components/dropdown/dropdown-positions';
 
-import { findMenuItemByChar, getMenuItems, highlightMenuItem, isTypeaheadKey, nextMenuIndex } from './menu-keyboard';
+import {
+  bindMenuPointer,
+  findMenuItemByChar,
+  getMenuItems,
+  highlightMenuItem,
+  isTypeaheadKey,
+  nextMenuIndex,
+} from './menu-keyboard';
 
 /** A viewport coordinate a menu can be anchored to, instead of an element. */
 export interface ZardMenuOrigin {
@@ -1542,6 +1597,17 @@ export interface ZardDropdownPlacement {
   side?: ZardDropdownSide;
   align?: ZardDropdownAlign;
   sideOffset?: number;
+  /** Shift along the aligned edge, in pixels — Radix's `alignOffset`. Follows the direction of the trigger. */
+  alignOffset?: number;
+}
+
+/** What a caller may ask for when it opens a menu from an element. */
+export interface ZardDropdownOpenOptions {
+  /**
+   * Row that takes the focus as soon as the menu is on screen — what a keyboard opening needs.
+   * Without it the menu surface itself is focused, which is what a pointer opening wants.
+   */
+  initialFocus?: 'first' | 'last';
 }
 
 @Injectable({
@@ -1557,7 +1623,7 @@ export class ZardDropdownService {
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
-  private triggerElement?: ElementRef;
+  private readonly triggerRef = signal<ElementRef | undefined>(undefined);
   /**
    * The element whose own clicks must not close the menu. It is the trigger for a dropdown — the
    * click that toggles it would otherwise register as an outside click and close it right back —
@@ -1576,8 +1642,16 @@ export class ZardDropdownService {
   private keydownSubscription?: Subscription;
   private directionSubscription?: Subscription;
   private unlisten: Array<() => void> = [];
+  /** The deferred keyboard setup of the menu being opened; a menu replaced before it fires must not run it. */
+  private focusTimer?: ReturnType<typeof setTimeout>;
 
   readonly isOpen = signal(false);
+  private readonly openings = signal(0);
+  /**
+   * Counts the menus opened so far. Switching straight from one menu to another never lets `isOpen`
+   * rest on `false`, so this is how what hangs off the old menu — an open submenu — learns it is gone.
+   */
+  readonly generation = this.openings.asReadonly();
 
   constructor() {
     this.renderer = this.rendererFactory.createRenderer(null, null);
@@ -1588,31 +1662,34 @@ export class ZardDropdownService {
     template: TemplateRef<unknown>,
     viewContainerRef: ViewContainerRef,
     placement?: ZardDropdownPlacement,
+    options?: ZardDropdownOpenOptions,
   ) {
     if (this.isOpen()) {
       this.close();
     } else {
-      this.open(triggerElement, template, viewContainerRef, placement);
+      this.open(triggerElement, template, viewContainerRef, placement, options);
     }
   }
 
-  private open(
+  /** Opens the menu below `triggerElement`, closing whichever one was open — what a menubar switch needs. */
+  open(
     triggerElement: ElementRef,
     template: TemplateRef<unknown>,
     viewContainerRef: ViewContainerRef,
     placement?: ZardDropdownPlacement,
+    options?: ZardDropdownOpenOptions,
   ) {
     if (this.isOpen()) {
       this.close();
     }
 
-    this.triggerElement = triggerElement;
+    this.triggerRef.set(triggerElement);
     this.outsideClickExempt = triggerElement;
     this.skipFirstAuxClick = false;
     const directionality = this.directionalityOf(viewContainerRef);
     this.createOverlay(triggerElement, placement, directionality?.value ?? 'ltr');
     this.watchDirection(directionality);
-    this.attach(template, viewContainerRef);
+    this.attach(template, viewContainerRef, options?.initialFocus);
   }
 
   /**
@@ -1630,7 +1707,7 @@ export class ZardDropdownService {
       this.close();
     }
 
-    this.triggerElement = focusOrigin;
+    this.triggerRef.set(focusOrigin);
     this.outsideClickExempt = undefined;
     this.skipFirstAuxClick = true;
     const directionality = this.directionalityOf(viewContainerRef);
@@ -1650,7 +1727,11 @@ export class ZardDropdownService {
     this.directionSubscription = directionality?.change.subscribe(() => this.close());
   }
 
-  private attach(template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
+  private attach(
+    template: TemplateRef<unknown>,
+    viewContainerRef: ViewContainerRef,
+    initialFocus?: ZardDropdownOpenOptions['initialFocus'],
+  ) {
     if (!this.overlayRef) {
       return;
     }
@@ -1659,8 +1740,12 @@ export class ZardDropdownService {
     this.overlayRef.attach(this.portal);
 
     // Setup keyboard navigation
-    setTimeout(() => {
+    clearTimeout(this.focusTimer);
+    this.focusTimer = setTimeout(() => {
       this.setupKeyboardNavigation();
+      if (initialFocus) {
+        this.focusEdgeItem(initialFocus);
+      }
     }, 0);
 
     /**
@@ -1686,6 +1771,7 @@ export class ZardDropdownService {
       .subscribe(() => {
         this.close();
       });
+    this.openings.update(count => count + 1);
     this.isOpen.set(true);
   }
 
@@ -1699,10 +1785,17 @@ export class ZardDropdownService {
   }
 
   getTriggerElement(): ElementRef | undefined {
-    return this.triggerElement;
+    return this.triggerRef();
+  }
+
+  /** Moves the focus to the first or last row of the open menu. */
+  focusEdgeItem(position: 'first' | 'last') {
+    const items = this.getDropdownItems();
+    this.focusItemAtIndex(items, position === 'first' ? 0 : items.length - 1);
   }
 
   close() {
+    clearTimeout(this.focusTimer);
     if (this.overlayRef?.hasAttached()) {
       this.overlayRef.detach();
     }
@@ -1711,12 +1804,12 @@ export class ZardDropdownService {
     this.unlisten = [];
     this.destroyOverlay();
     this.isOpen.set(false);
-    this.triggerElement = undefined;
+    this.triggerRef.set(undefined);
     this.outsideClickExempt = undefined;
   }
 
   closeAndReturnTrigger(): ElementRef | undefined {
-    const trigger = this.triggerElement;
+    const trigger = this.triggerRef();
     this.close();
     return trigger;
   }
@@ -1743,6 +1836,7 @@ export class ZardDropdownService {
           placement?.align ?? 'start',
           placement?.sideOffset ?? 4,
           direction === 'rtl',
+          placement?.alignOffset ?? 0,
         ),
       )
       .withPush(false);
@@ -1862,6 +1956,17 @@ export class ZardDropdownService {
       this.renderer.listen(dropdownElement, 'contextmenu', (event: MouseEvent) => {
         event.preventDefault();
         dropdownElement.focus();
+      }),
+    );
+
+    // The highlight follows the pointer and goes away with it; the keyboard continues from there.
+    this.unlisten.push(
+      bindMenuPointer(dropdownElement, index => {
+        if (index === -1) {
+          this.focusedIndex.set(-1);
+        } else {
+          this.focusItemAtIndex(this.getDropdownItems(), index);
+        }
       }),
     );
 
@@ -2018,6 +2123,55 @@ export function findMenuItemByChar(items: HTMLElement[], char: string, from: num
 /** True for a key that should drive typeahead rather than an action. */
 export function isTypeaheadKey(event: KeyboardEvent): boolean {
   return event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey;
+}
+
+/**
+ * The pointer half of the roving focus, the way Radix menus do it: the row under the pointer takes
+ * the focus, so the pointer and the keyboard share a single highlight, and leaving a row hands the
+ * focus back to the menu surface, so no row stays lit once the pointer has gone. A sub-trigger whose
+ * submenu is open keeps it — the pointer is on its way into that submenu.
+ *
+ * `onHighlight` receives the row's index among `getMenuItems(surface)`, or `-1` when the pointer
+ * left, so the caller keeps its own focused index in step with what is on screen.
+ */
+export function bindMenuPointer(surface: HTMLElement, onHighlight: (index: number) => void): () => void {
+  const rowOf = (target: EventTarget | null): HTMLElement | null => {
+    const row = target instanceof Element ? target.closest<HTMLElement>(ZARD_MENU_ITEM_SELECTOR) : null;
+    return row && surface.contains(row) ? row : null;
+  };
+
+  const onPointerMove = (event: PointerEvent) => {
+    const row = rowOf(event.target);
+    if (!row || row.dataset['disabled'] !== undefined || row.ownerDocument.activeElement === row) {
+      return;
+    }
+
+    const index = getMenuItems(surface).indexOf(row);
+    if (index !== -1) {
+      onHighlight(index);
+    }
+  };
+
+  const onPointerOut = (event: PointerEvent) => {
+    const row = rowOf(event.target);
+    if (!row || row.contains(event.relatedTarget as Node | null) || row.getAttribute('aria-expanded') === 'true') {
+      return;
+    }
+
+    delete row.dataset['highlighted'];
+    if (row.ownerDocument.activeElement === row) {
+      surface.focus({ preventScroll: true });
+    }
+    onHighlight(-1);
+  };
+
+  surface.addEventListener('pointermove', onPointerMove);
+  surface.addEventListener('pointerout', onPointerOut);
+
+  return () => {
+    surface.removeEventListener('pointermove', onPointerMove);
+    surface.removeEventListener('pointerout', onPointerOut);
+  };
 }
 ```
 
