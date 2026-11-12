@@ -108,7 +108,7 @@ const translations: ZardRtlTranslations<MenubarRtlValues> = {
   selector: 'z-demo-menubar-rtl',
   imports: [ZardMenubarImports],
   template: `
-    <z-menubar>
+    <z-menubar class="w-72">
       <button type="button" z-menubar-trigger [zMenubarMenu]="fileMenu">{{ i18n.t().file }}</button>
       <button type="button" z-menubar-trigger [zMenubarMenu]="editMenu">{{ i18n.t().edit }}</button>
       <button type="button" z-menubar-trigger [zMenubarMenu]="viewMenu">{{ i18n.t().view }}</button>

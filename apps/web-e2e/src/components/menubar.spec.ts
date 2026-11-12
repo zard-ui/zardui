@@ -273,20 +273,18 @@ test.describe('Menubar component', () => {
     });
 
     test('toggles checkbox items and picks radio items', async ({ page }) => {
-      const demo = await example('checkbox-radio');
-      const [viewTrigger, profilesTrigger] = await demo.locator('[z-menubar-trigger]').all();
+      // The fixture's View menu holds the checkbox items and its Profiles menu the radio group.
+      const viewTrigger = triggers().nth(2);
+      const profilesTrigger = triggers().nth(3);
 
-      await expect(async () => {
-        await viewTrigger.click();
-        await expect(viewTrigger).toHaveAttribute('aria-expanded', 'true', { timeout: 1000 });
-      }).toPass({ timeout: 10_000 });
-      const checkbox = menu().getByRole('menuitemcheckbox').nth(1);
+      await openWithClick(viewTrigger);
+      const checkbox = menu().getByRole('menuitemcheckbox').first();
       await expect(checkbox).toHaveAttribute('aria-checked', 'false');
       await checkbox.click();
       await expect(menu()).toHaveCount(0);
 
       await viewTrigger.click();
-      await expect(menu().getByRole('menuitemcheckbox').nth(1)).toHaveAttribute('aria-checked', 'true');
+      await expect(menu().getByRole('menuitemcheckbox').first()).toHaveAttribute('aria-checked', 'true');
 
       // Hover moves to the next menu while one is open.
       await profilesTrigger.hover();
@@ -297,27 +295,6 @@ test.describe('Menubar component', () => {
       await profilesTrigger.click();
       await expect(menu().getByRole('menuitemradio').first()).toHaveAttribute('aria-checked', 'true');
       await page.keyboard.press('Escape');
-    });
-
-    test('skips a disabled trigger with the arrow keys and ignores its hover', async ({ page }) => {
-      const demo = await example('disabled');
-      const all = demo.locator('[z-menubar-trigger]');
-      const disabled = all.nth(1);
-
-      await expect(disabled).toHaveAttribute('aria-disabled', 'true');
-      await expect(disabled).toHaveAttribute('data-disabled');
-
-      await all.first().focus();
-      await page.keyboard.press('ArrowRight');
-      await expect(all.last()).toBeFocused();
-
-      await expect(async () => {
-        await all.first().click();
-        await expect(all.first()).toHaveAttribute('aria-expanded', 'true', { timeout: 1000 });
-      }).toPass({ timeout: 10_000 });
-      await disabled.hover({ force: true });
-      await expect(all.first()).toHaveAttribute('aria-expanded', 'true');
-      await expect(disabled).toHaveAttribute('aria-expanded', 'false');
     });
 
     test('reverses the arrow keys in RTL', async ({ page }) => {

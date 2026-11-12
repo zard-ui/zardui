@@ -1,18 +1,16 @@
-import { MENUBAR_DEMO_APP_BAR } from '@generated/components/menubar/demo/app-bar';
-import { MENUBAR_DEMO_CHECKBOX_RADIO } from '@generated/components/menubar/demo/checkbox-radio';
-import { MENUBAR_DEMO_DISABLED } from '@generated/components/menubar/demo/disabled';
+import { MENUBAR_DEMO_CHECKBOX } from '@generated/components/menubar/demo/checkbox';
+import { MENUBAR_DEMO_ICONS } from '@generated/components/menubar/demo/icons';
 import { MENUBAR_DEMO_PREVIEW } from '@generated/components/menubar/demo/preview';
+import { MENUBAR_DEMO_RADIO } from '@generated/components/menubar/demo/radio';
 import { MENUBAR_DEMO_RTL } from '@generated/components/menubar/demo/rtl';
-import { MENUBAR_DEMO_SHORTCUTS } from '@generated/components/menubar/demo/shortcuts';
 import { MENUBAR_DEMO_SUBMENU } from '@generated/components/menubar/demo/submenu';
 import { MENUBAR_CLI_ADD } from '@generated/installation/cli/add-menubar';
 import { MENUBAR_MANUAL_CODE } from '@generated/installation/manual/menubar';
 import { MENUBAR_USAGE_CODE, MENUBAR_USAGE_IMPORT } from '@generated/usage/menubar';
 
-import { ZardDemoMenubarAppBarComponent } from '@/shared/components/menubar/demo/app-bar';
-import { ZardDemoMenubarCheckboxRadioComponent } from '@/shared/components/menubar/demo/checkbox-radio';
-import { ZardDemoMenubarDisabledComponent } from '@/shared/components/menubar/demo/disabled';
-import { ZardDemoMenubarShortcutsComponent } from '@/shared/components/menubar/demo/shortcuts';
+import { ZardDemoMenubarCheckboxComponent } from '@/shared/components/menubar/demo/checkbox';
+import { ZardDemoMenubarIconsComponent } from '@/shared/components/menubar/demo/icons';
+import { ZardDemoMenubarRadioComponent } from '@/shared/components/menubar/demo/radio';
 import { ZardDemoMenubarSubmenuComponent } from '@/shared/components/menubar/demo/submenu';
 
 import { ZardDemoMenubarPreviewComponent } from './preview';
@@ -36,17 +34,16 @@ export const MENUBAR = {
   },
   examples: [
     {
-      name: 'shortcuts',
-      description: 'Add `z-dropdown-menu-shortcut` to show keyboard hints.',
-      component: ZardDemoMenubarShortcutsComponent,
-      codeData: MENUBAR_DEMO_SHORTCUTS,
+      name: 'checkbox',
+      description: 'Use `z-dropdown-menu-checkbox-item` for toggleable options.',
+      component: ZardDemoMenubarCheckboxComponent,
+      codeData: MENUBAR_DEMO_CHECKBOX,
     },
     {
-      name: 'checkbox-radio',
-      description:
-        'Use `z-dropdown-menu-checkbox-item` for toggles and `z-dropdown-menu-radio-group` for exclusive choices.',
-      component: ZardDemoMenubarCheckboxRadioComponent,
-      codeData: MENUBAR_DEMO_CHECKBOX_RADIO,
+      name: 'radio',
+      description: 'Use `z-dropdown-menu-radio-group` with `z-dropdown-menu-radio-item` for exclusive choices.',
+      component: ZardDemoMenubarRadioComponent,
+      codeData: MENUBAR_DEMO_RADIO,
     },
     {
       name: 'submenu',
@@ -55,17 +52,10 @@ export const MENUBAR = {
       codeData: MENUBAR_DEMO_SUBMENU,
     },
     {
-      name: 'disabled',
-      description: 'A trigger with `zDisabled` stays in the bar but is skipped by the arrow keys and the hover switch.',
-      component: ZardDemoMenubarDisabledComponent,
-      codeData: MENUBAR_DEMO_DISABLED,
-    },
-    {
-      name: 'app-bar',
-      description:
-        'Every piece together: shortcuts, submenus, checkbox items and a radio group in a full application bar.',
-      component: ZardDemoMenubarAppBarComponent,
-      codeData: MENUBAR_DEMO_APP_BAR,
+      name: 'icons',
+      description: 'Place an icon before the label of an item; `zType="destructive"` marks a dangerous action.',
+      component: ZardDemoMenubarIconsComponent,
+      codeData: MENUBAR_DEMO_ICONS,
     },
     {
       name: 'rtl',

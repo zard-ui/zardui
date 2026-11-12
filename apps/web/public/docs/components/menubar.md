@@ -225,10 +225,10 @@ export class ZardMenubarComponent {
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
-export const menubarVariants = cva('flex h-9 items-center gap-1 rounded-md border bg-background p-1 shadow-xs');
+export const menubarVariants = cva('flex h-8 items-center gap-0.5 rounded-lg border p-0.75');
 
 export const menubarTriggerVariants = cva(
-  'flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50',
+  'flex items-center rounded-sm px-1.5 py-0.5 text-sm font-medium outline-hidden select-none hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50',
 );
 ```
 
@@ -530,72 +530,9 @@ import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports'
 
 ## Examples
 
-### Shortcuts
+### Checkbox
 
-Add `z-dropdown-menu-shortcut` to show keyboard hints.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports';
-
-@Component({
-  selector: 'z-demo-menubar-shortcuts',
-  imports: [ZardMenubarImports],
-  template: `
-    <z-menubar>
-      <button type="button" z-menubar-trigger [zMenubarMenu]="fileMenu">File</button>
-      <button type="button" z-menubar-trigger [zMenubarMenu]="editMenu">Edit</button>
-    </z-menubar>
-
-    <z-dropdown-menu-content #fileMenu="zDropdownMenuContent" class="w-56">
-      <z-dropdown-menu-item>
-        New Tab
-        <z-dropdown-menu-shortcut>⌘T</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-item>
-        New Window
-        <z-dropdown-menu-shortcut>⌘N</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-item>
-        Print...
-        <z-dropdown-menu-shortcut>⌘P</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-    </z-dropdown-menu-content>
-
-    <z-dropdown-menu-content #editMenu="zDropdownMenuContent" class="w-56">
-      <z-dropdown-menu-item>
-        Undo
-        <z-dropdown-menu-shortcut>⌘Z</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-item>
-        Redo
-        <z-dropdown-menu-shortcut>⇧⌘Z</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-item>
-        Cut
-        <z-dropdown-menu-shortcut>⌘X</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-item>
-        Copy
-        <z-dropdown-menu-shortcut>⌘C</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-item>
-        Paste
-        <z-dropdown-menu-shortcut>⌘V</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-    </z-dropdown-menu-content>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoMenubarShortcutsComponent {}
-```
-
-### Checkbox Radio
-
-Use `z-dropdown-menu-checkbox-item` for toggles and `z-dropdown-menu-radio-group` for exclusive choices.
+Use `z-dropdown-menu-checkbox-item` for toggleable options.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
@@ -603,12 +540,12 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports';
 
 @Component({
-  selector: 'z-demo-menubar-checkbox-radio',
+  selector: 'z-demo-menubar-checkbox',
   imports: [ZardMenubarImports],
   template: `
-    <z-menubar>
+    <z-menubar class="w-72">
       <button type="button" z-menubar-trigger [zMenubarMenu]="viewMenu">View</button>
-      <button type="button" z-menubar-trigger [zMenubarMenu]="profilesMenu">Profiles</button>
+      <button type="button" z-menubar-trigger [zMenubarMenu]="formatMenu">Format</button>
     </z-menubar>
 
     <z-dropdown-menu-content #viewMenu="zDropdownMenuContent" class="w-64">
@@ -616,23 +553,76 @@ import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports'
         Always Show Bookmarks Bar
       </z-dropdown-menu-checkbox-item>
       <z-dropdown-menu-checkbox-item [(zChecked)]="showFullUrls">Always Show Full URLs</z-dropdown-menu-checkbox-item>
+      <z-dropdown-menu-separator />
+      <z-dropdown-menu-item zInset>
+        Reload
+        <z-dropdown-menu-shortcut>⌘R</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-item zInset zDisabled>
+        Force Reload
+        <z-dropdown-menu-shortcut>⇧⌘R</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
     </z-dropdown-menu-content>
 
-    <z-dropdown-menu-content #profilesMenu="zDropdownMenuContent" class="w-44">
-      <z-dropdown-menu-label>Profiles</z-dropdown-menu-label>
-      <z-dropdown-menu-radio-group [(zValue)]="profile">
+    <z-dropdown-menu-content #formatMenu="zDropdownMenuContent">
+      <z-dropdown-menu-checkbox-item [(zChecked)]="strikethrough">Strikethrough</z-dropdown-menu-checkbox-item>
+      <z-dropdown-menu-checkbox-item [(zChecked)]="code">Code</z-dropdown-menu-checkbox-item>
+      <z-dropdown-menu-checkbox-item [(zChecked)]="superscript">Superscript</z-dropdown-menu-checkbox-item>
+    </z-dropdown-menu-content>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoMenubarCheckboxComponent {
+  protected readonly showBookmarks = signal(false);
+  protected readonly showFullUrls = signal(true);
+  protected readonly strikethrough = signal(true);
+  protected readonly code = signal(false);
+  protected readonly superscript = signal(false);
+}
+```
+
+### Radio
+
+Use `z-dropdown-menu-radio-group` with `z-dropdown-menu-radio-item` for exclusive choices.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports';
+
+@Component({
+  selector: 'z-demo-menubar-radio',
+  imports: [ZardMenubarImports],
+  template: `
+    <z-menubar class="w-72">
+      <button type="button" z-menubar-trigger [zMenubarMenu]="profilesMenu">Profiles</button>
+      <button type="button" z-menubar-trigger [zMenubarMenu]="themeMenu">Theme</button>
+    </z-menubar>
+
+    <z-dropdown-menu-content #profilesMenu="zDropdownMenuContent">
+      <z-dropdown-menu-radio-group [(zValue)]="user">
         <z-dropdown-menu-radio-item zValue="andy">Andy</z-dropdown-menu-radio-item>
         <z-dropdown-menu-radio-item zValue="benoit">Benoit</z-dropdown-menu-radio-item>
         <z-dropdown-menu-radio-item zValue="luis">Luis</z-dropdown-menu-radio-item>
+      </z-dropdown-menu-radio-group>
+      <z-dropdown-menu-separator />
+      <z-dropdown-menu-item zInset>Edit...</z-dropdown-menu-item>
+      <z-dropdown-menu-item zInset>Add Profile...</z-dropdown-menu-item>
+    </z-dropdown-menu-content>
+
+    <z-dropdown-menu-content #themeMenu="zDropdownMenuContent">
+      <z-dropdown-menu-radio-group [(zValue)]="theme">
+        <z-dropdown-menu-radio-item zValue="light">Light</z-dropdown-menu-radio-item>
+        <z-dropdown-menu-radio-item zValue="dark">Dark</z-dropdown-menu-radio-item>
+        <z-dropdown-menu-radio-item zValue="system">System</z-dropdown-menu-radio-item>
       </z-dropdown-menu-radio-group>
     </z-dropdown-menu-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoMenubarCheckboxRadioComponent {
-  protected readonly showBookmarks = signal(true);
-  protected readonly showFullUrls = signal(false);
-  protected readonly profile = signal('benoit');
+export class ZardDemoMenubarRadioComponent {
+  protected readonly user = signal('benoit');
+  protected readonly theme = signal('system');
 }
 ```
 
@@ -649,33 +639,37 @@ import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports'
   selector: 'z-demo-menubar-submenu',
   imports: [ZardMenubarImports],
   template: `
-    <z-menubar>
+    <z-menubar class="w-72">
       <button type="button" z-menubar-trigger [zMenubarMenu]="fileMenu">File</button>
       <button type="button" z-menubar-trigger [zMenubarMenu]="editMenu">Edit</button>
     </z-menubar>
 
-    <z-dropdown-menu-content #fileMenu="zDropdownMenuContent" class="w-56">
-      <z-dropdown-menu-item>New Tab</z-dropdown-menu-item>
-      <z-dropdown-menu-item>New Window</z-dropdown-menu-item>
-      <z-dropdown-menu-separator />
+    <z-dropdown-menu-content #fileMenu="zDropdownMenuContent">
       <z-dropdown-menu-sub-trigger [zSubMenu]="shareMenu">Share</z-dropdown-menu-sub-trigger>
-      <z-dropdown-menu-sub-content #shareMenu="zDropdownMenuSubContent" class="w-44">
+      <z-dropdown-menu-sub-content #shareMenu="zDropdownMenuSubContent">
         <z-dropdown-menu-item>Email link</z-dropdown-menu-item>
         <z-dropdown-menu-item>Messages</z-dropdown-menu-item>
         <z-dropdown-menu-item>Notes</z-dropdown-menu-item>
       </z-dropdown-menu-sub-content>
       <z-dropdown-menu-separator />
-      <z-dropdown-menu-item>Print...</z-dropdown-menu-item>
+      <z-dropdown-menu-item>
+        Print...
+        <z-dropdown-menu-shortcut>⌘P</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
     </z-dropdown-menu-content>
 
-    <z-dropdown-menu-content #editMenu="zDropdownMenuContent" class="w-56">
-      <z-dropdown-menu-item>Undo</z-dropdown-menu-item>
-      <z-dropdown-menu-item>Redo</z-dropdown-menu-item>
+    <z-dropdown-menu-content #editMenu="zDropdownMenuContent">
+      <z-dropdown-menu-item>
+        Undo
+        <z-dropdown-menu-shortcut>⌘Z</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-item>
+        Redo
+        <z-dropdown-menu-shortcut>⇧⌘Z</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
       <z-dropdown-menu-separator />
       <z-dropdown-menu-sub-trigger [zSubMenu]="findMenu">Find</z-dropdown-menu-sub-trigger>
-      <z-dropdown-menu-sub-content #findMenu="zDropdownMenuSubContent" class="w-48">
-        <z-dropdown-menu-item>Search the web</z-dropdown-menu-item>
-        <z-dropdown-menu-separator />
+      <z-dropdown-menu-sub-content #findMenu="zDropdownMenuSubContent">
         <z-dropdown-menu-item>Find...</z-dropdown-menu-item>
         <z-dropdown-menu-item>Find Next</z-dropdown-menu-item>
         <z-dropdown-menu-item>Find Previous</z-dropdown-menu-item>
@@ -691,153 +685,67 @@ import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports'
 export class ZardDemoMenubarSubmenuComponent {}
 ```
 
-### Disabled
+### Icons
 
-A trigger with `zDisabled` stays in the bar but is skipped by the arrow keys and the hover switch.
+Place an icon before the label of an item; `zType="destructive"` marks a dangerous action.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports';
-
-@Component({
-  selector: 'z-demo-menubar-disabled',
-  imports: [ZardMenubarImports],
-  template: `
-    <z-menubar>
-      <button type="button" z-menubar-trigger [zMenubarMenu]="fileMenu">File</button>
-      <button type="button" z-menubar-trigger zDisabled [zMenubarMenu]="editMenu">Edit</button>
-      <button type="button" z-menubar-trigger [zMenubarMenu]="viewMenu">View</button>
-    </z-menubar>
-
-    <z-dropdown-menu-content #fileMenu="zDropdownMenuContent" class="w-44">
-      <z-dropdown-menu-item>New Tab</z-dropdown-menu-item>
-      <z-dropdown-menu-item zDisabled>New Incognito Window</z-dropdown-menu-item>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-item>Print...</z-dropdown-menu-item>
-    </z-dropdown-menu-content>
-
-    <z-dropdown-menu-content #editMenu="zDropdownMenuContent" class="w-44">
-      <z-dropdown-menu-item>Undo</z-dropdown-menu-item>
-    </z-dropdown-menu-content>
-
-    <z-dropdown-menu-content #viewMenu="zDropdownMenuContent" class="w-44">
-      <z-dropdown-menu-item>Reload</z-dropdown-menu-item>
-      <z-dropdown-menu-item>Toggle Fullscreen</z-dropdown-menu-item>
-    </z-dropdown-menu-content>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ZardDemoMenubarDisabledComponent {}
-```
-
-### App Bar
-
-Every piece together: shortcuts, submenus, checkbox items and a radio group in a full application bar.
-
-```angular-ts
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCircleHelp, lucideFile, lucideFolder, lucideSave, lucideSettings, lucideTrash } from '@ng-icons/lucide';
 
 import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports';
 
 @Component({
-  selector: 'z-demo-menubar-app-bar',
-  imports: [ZardMenubarImports],
+  selector: 'z-demo-menubar-icons',
+  imports: [ZardMenubarImports, NgIcon],
   template: `
-    <z-menubar>
+    <z-menubar class="w-72">
       <button type="button" z-menubar-trigger [zMenubarMenu]="fileMenu">File</button>
-      <button type="button" z-menubar-trigger [zMenubarMenu]="editMenu">Edit</button>
-      <button type="button" z-menubar-trigger [zMenubarMenu]="viewMenu">View</button>
-      <button type="button" z-menubar-trigger [zMenubarMenu]="profilesMenu">Profiles</button>
+      <button type="button" z-menubar-trigger [zMenubarMenu]="moreMenu">More</button>
     </z-menubar>
 
-    <z-dropdown-menu-content #fileMenu="zDropdownMenuContent" class="w-56">
+    <z-dropdown-menu-content #fileMenu="zDropdownMenuContent">
       <z-dropdown-menu-item>
-        New Tab
-        <z-dropdown-menu-shortcut>⌘T</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-item>
-        New Window
+        <ng-icon name="lucideFile" />
+        New File
         <z-dropdown-menu-shortcut>⌘N</z-dropdown-menu-shortcut>
       </z-dropdown-menu-item>
-      <z-dropdown-menu-item zDisabled>New Incognito Window</z-dropdown-menu-item>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-sub-trigger [zSubMenu]="shareMenu">Share</z-dropdown-menu-sub-trigger>
-      <z-dropdown-menu-sub-content #shareMenu="zDropdownMenuSubContent" class="w-44">
-        <z-dropdown-menu-item>Email link</z-dropdown-menu-item>
-        <z-dropdown-menu-item>Messages</z-dropdown-menu-item>
-        <z-dropdown-menu-item>Notes</z-dropdown-menu-item>
-      </z-dropdown-menu-sub-content>
+      <z-dropdown-menu-item>
+        <ng-icon name="lucideFolder" />
+        Open Folder
+      </z-dropdown-menu-item>
       <z-dropdown-menu-separator />
       <z-dropdown-menu-item>
-        Print...
-        <z-dropdown-menu-shortcut>⌘P</z-dropdown-menu-shortcut>
+        <ng-icon name="lucideSave" />
+        Save
+        <z-dropdown-menu-shortcut>⌘S</z-dropdown-menu-shortcut>
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
 
-    <z-dropdown-menu-content #editMenu="zDropdownMenuContent" class="w-56">
-      <z-dropdown-menu-item>
-        Undo
-        <z-dropdown-menu-shortcut>⌘Z</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-item>
-        Redo
-        <z-dropdown-menu-shortcut>⇧⌘Z</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-sub-trigger [zSubMenu]="findMenu">Find</z-dropdown-menu-sub-trigger>
-      <z-dropdown-menu-sub-content #findMenu="zDropdownMenuSubContent" class="w-48">
-        <z-dropdown-menu-item>Search the web</z-dropdown-menu-item>
+    <z-dropdown-menu-content #moreMenu="zDropdownMenuContent">
+      <z-dropdown-menu-group>
+        <z-dropdown-menu-item>
+          <ng-icon name="lucideSettings" />
+          Settings
+        </z-dropdown-menu-item>
+        <z-dropdown-menu-item>
+          <ng-icon name="lucideCircleHelp" />
+          Help
+        </z-dropdown-menu-item>
         <z-dropdown-menu-separator />
-        <z-dropdown-menu-item>Find...</z-dropdown-menu-item>
-        <z-dropdown-menu-item>Find Next</z-dropdown-menu-item>
-        <z-dropdown-menu-item>Find Previous</z-dropdown-menu-item>
-      </z-dropdown-menu-sub-content>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-item>Cut</z-dropdown-menu-item>
-      <z-dropdown-menu-item>Copy</z-dropdown-menu-item>
-      <z-dropdown-menu-item>Paste</z-dropdown-menu-item>
-    </z-dropdown-menu-content>
-
-    <z-dropdown-menu-content #viewMenu="zDropdownMenuContent" class="w-64">
-      <z-dropdown-menu-checkbox-item [(zChecked)]="showBookmarks">
-        Always Show Bookmarks Bar
-      </z-dropdown-menu-checkbox-item>
-      <z-dropdown-menu-checkbox-item [(zChecked)]="showFullUrls">Always Show Full URLs</z-dropdown-menu-checkbox-item>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-item zInset>
-        Reload
-        <z-dropdown-menu-shortcut>⌘R</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-item zInset zDisabled>
-        Force Reload
-        <z-dropdown-menu-shortcut>⇧⌘R</z-dropdown-menu-shortcut>
-      </z-dropdown-menu-item>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-item zInset>Toggle Fullscreen</z-dropdown-menu-item>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-item zInset>Hide Sidebar</z-dropdown-menu-item>
-    </z-dropdown-menu-content>
-
-    <z-dropdown-menu-content #profilesMenu="zDropdownMenuContent" class="w-48">
-      <z-dropdown-menu-radio-group [(zValue)]="profile">
-        <z-dropdown-menu-radio-item zValue="andy">Andy</z-dropdown-menu-radio-item>
-        <z-dropdown-menu-radio-item zValue="benoit">Benoit</z-dropdown-menu-radio-item>
-        <z-dropdown-menu-radio-item zValue="luis">Luis</z-dropdown-menu-radio-item>
-      </z-dropdown-menu-radio-group>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-item zInset>Edit...</z-dropdown-menu-item>
-      <z-dropdown-menu-separator />
-      <z-dropdown-menu-item zInset>Add Profile...</z-dropdown-menu-item>
+        <z-dropdown-menu-item zType="destructive">
+          <ng-icon name="lucideTrash" />
+          Delete
+        </z-dropdown-menu-item>
+      </z-dropdown-menu-group>
     </z-dropdown-menu-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideFile, lucideFolder, lucideSave, lucideSettings, lucideCircleHelp, lucideTrash })],
 })
-export class ZardDemoMenubarAppBarComponent {
-  protected readonly showBookmarks = signal(true);
-  protected readonly showFullUrls = signal(false);
-  protected readonly profile = signal('benoit');
-}
+export class ZardDemoMenubarIconsComponent {}
 ```
 
 ### Rtl
@@ -960,7 +868,7 @@ const translations: ZardRtlTranslations<MenubarRtlValues> = {
   selector: 'z-demo-menubar-rtl',
   imports: [ZardMenubarImports],
   template: `
-    <z-menubar>
+    <z-menubar class="w-72">
       <button type="button" z-menubar-trigger [zMenubarMenu]="fileMenu">{{ i18n.t().file }}</button>
       <button type="button" z-menubar-trigger [zMenubarMenu]="editMenu">{{ i18n.t().edit }}</button>
       <button type="button" z-menubar-trigger [zMenubarMenu]="viewMenu">{{ i18n.t().view }}</button>

@@ -143,25 +143,16 @@ describe('ZardMenubarComponent', () => {
     });
 
     it('has the shadcn bar surface', () => {
-      expect(byId('bar')).toHaveClass(
-        'flex',
-        'h-9',
-        'items-center',
-        'gap-1',
-        'rounded-md',
-        'border',
-        'bg-background',
-        'p-1',
-        'shadow-xs',
-      );
+      expect(byId('bar')).toHaveClass('flex', 'h-8', 'items-center', 'gap-0.5', 'rounded-lg', 'border', 'p-0.75');
+      expect(byId('bar')).not.toHaveClass('shadow-xs', 'bg-background');
     });
 
     it('merges the custom class last', () => {
-      host.barClass.set('h-12 bg-muted');
+      host.barClass.set('h-12 rounded-md');
       fixture.detectChanges();
 
-      expect(byId('bar')).toHaveClass('h-12', 'bg-muted');
-      expect(byId('bar')).not.toHaveClass('h-9', 'bg-background');
+      expect(byId('bar')).toHaveClass('h-12', 'rounded-md');
+      expect(byId('bar')).not.toHaveClass('h-8', 'rounded-lg');
     });
   });
 
@@ -178,8 +169,8 @@ describe('ZardMenubarComponent', () => {
     });
 
     it('has the shadcn trigger styling including the open state', () => {
-      expect(byId('file')).toHaveClass('rounded-sm', 'px-2', 'py-1', 'text-sm', 'font-medium');
-      expect(byId('file').className).toContain('data-[state=open]:bg-accent');
+      expect(byId('file')).toHaveClass('rounded-sm', 'px-1.5', 'py-0.5', 'text-sm', 'font-medium');
+      expect(byId('file')).toHaveClass('hover:bg-muted', 'focus-visible:bg-muted', 'aria-expanded:bg-muted');
     });
 
     it('reflects the open menu in aria-expanded and data-state', async () => {
@@ -202,7 +193,7 @@ describe('ZardMenubarComponent', () => {
     });
 
     it('merges the custom class of the trigger after the variants', () => {
-      expect(byId('profiles')).toHaveClass('text-primary', 'rounded-sm', 'px-2');
+      expect(byId('profiles')).toHaveClass('text-primary', 'rounded-sm', 'px-1.5');
     });
   });
 
