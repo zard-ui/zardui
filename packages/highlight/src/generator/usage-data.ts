@@ -465,6 +465,18 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   How can I help you today?
 </z-message>`,
   },
+  'message-scroller': {
+    importCode: `import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';`,
+    templateCode: `<z-message-scroller zAutoScroll class="h-96 rounded-lg border">
+  @for (message of messages(); track message.id) {
+    <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
+      <z-message [zAlign]="message.role === 'user' ? 'end' : 'start'">{{ message.text }}</z-message>
+    </z-message-scroller-item>
+  }
+
+  <button z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
+</z-message-scroller>`,
+  },
   map: {
     importCode: `import { ZardMapImports } from '@/shared/components/map/map.imports';`,
     templateCode: `<div class="h-96 overflow-hidden rounded-xl border">

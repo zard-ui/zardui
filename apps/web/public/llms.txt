@@ -110,6 +110,7 @@
 - [Map Draw](https://zardui.com/docs/components/map-draw): Draw, select and edit points, lines and polygons on a map. An optional addition to the map.
 - [Marker](https://zardui.com/docs/components/marker): Displays an inline status, system note, bordered row, or labeled separator in a conversation.
 - [Message](https://zardui.com/docs/components/message): Displays a message in a conversation, with optional avatar, header, footer, and alignment.
+- [Message Scroller](https://zardui.com/docs/components/message-scroller): A chat scroll container that opens at the right place, follows a streaming answer, keeps your place as history loads, and jumps to any message.
 - [Table](https://zardui.com/docs/components/table): A responsive table component.
 
 ### Misc

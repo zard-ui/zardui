@@ -1343,6 +1343,28 @@
         "questionnaire.imports.ts",
         "index.ts"
       ]
+    },
+    {
+      "name": "message-scroller",
+      "type": "registry:component",
+      "registryDependencies": [
+        "button",
+        "utilities"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideArrowDown"
+        ],
+        "tokens": []
+      },
+      "files": [
+        "message-scroller.component.ts",
+        "message-scroller.service.ts",
+        "message-scroller.variants.ts",
+        "message-scroller.imports.ts",
+        "index.ts"
+      ]
     }
   ]
 }

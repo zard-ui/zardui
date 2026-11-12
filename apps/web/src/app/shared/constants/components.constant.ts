@@ -333,6 +333,13 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/message/demo/message').then(m => m.MESSAGE),
   },
   {
+    componentName: 'message-scroller',
+    description:
+      'A chat scroll container that opens at the right place, follows a streaming answer, keeps your place as history loads, and jumps to any message.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/message-scroller/demo/message-scroller').then(m => m.MESSAGE_SCROLLER),
+  },
+  {
     componentName: 'navigation-menu',
     description: 'A collection of links for navigating websites.',
     category: 'Layout & Navigation',

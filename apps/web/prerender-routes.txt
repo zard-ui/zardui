@@ -95,6 +95,7 @@
 /docs/components/hover-card
 /docs/components/context-menu
 /docs/components/message
+/docs/components/message-scroller
 /docs/components/map
 /docs/components/map-draw
 /docs/components/map-style-select
