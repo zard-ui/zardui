@@ -94,6 +94,7 @@
 /docs/components/bubble
 /docs/components/hover-card
 /docs/components/context-menu
+/docs/components/menubar
 /docs/components/message
 /docs/components/map
 /docs/components/map-draw

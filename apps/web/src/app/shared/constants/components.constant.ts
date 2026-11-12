@@ -333,6 +333,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/message/demo/message').then(m => m.MESSAGE),
   },
   {
+    componentName: 'menubar',
+    description: 'A visually persistent bar of command menus, as found in desktop applications.',
+    category: 'Layout & Navigation',
+    loadData: () => import('@zard/components/menubar/demo/menubar').then(m => m.MENUBAR),
+  },
+  {
     componentName: 'trace',
     description:
       'Displays the steps an agent takes as a list of lines: tool calls, reasoning, sources and file changes.',

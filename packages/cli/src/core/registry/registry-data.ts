@@ -630,6 +630,32 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'menubar',
+    registryDependencies: ['dropdown'],
+    files: [
+      {
+        name: 'menubar.component.ts',
+        content: '',
+      },
+      {
+        name: 'menubar-trigger.directive.ts',
+        content: '',
+      },
+      {
+        name: 'menubar.variants.ts',
+        content: '',
+      },
+      {
+        name: 'menubar.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'dropdown',
     files: [
       {
