@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowUpRight, lucideBookOpen, lucideGlobe } from '@ng-icons/lucide';
+import { lucideArrowUpRight, lucideGlobe } from '@ng-icons/lucide';
 
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
@@ -9,18 +9,18 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
   selector: 'z-demo-trace-sources',
   imports: [NgIcon, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
-      <z-trace-collapsible>
+    <div class="w-full max-w-sm">
+      <z-trace-collapsible zOpen>
         <z-trace-collapsible-trigger>
           <z-trace-line>
-            <z-trace-icon><ng-icon name="lucideBookOpen" /></z-trace-icon>
-            <z-trace-title>Used 3 sources</z-trace-title>
+            <z-trace-icon><ng-icon name="lucideGlobe" /></z-trace-icon>
+            <z-trace-title>Used {{ sources.length }} sources</z-trace-title>
           </z-trace-line>
         </z-trace-collapsible-trigger>
         <z-trace-collapsible-content>
           <z-trace>
-            @for (source of sources; track source.url) {
-              <a [href]="source.url" target="_blank" rel="noreferrer">
+            @for (source of sources; track source.href) {
+              <a [href]="source.href" target="_blank" rel="noreferrer">
                 <z-trace-line>
                   <z-trace-icon><ng-icon name="lucideGlobe" /></z-trace-icon>
                   <z-trace-title>
@@ -34,15 +34,16 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
           </z-trace>
         </z-trace-collapsible-content>
       </z-trace-collapsible>
-    </z-trace>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideArrowUpRight, lucideBookOpen, lucideGlobe })],
+  viewProviders: [provideIcons({ lucideArrowUpRight, lucideGlobe })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceSourcesComponent {
   protected readonly sources = [
-    { title: 'Install Astro', url: 'https://docs.astro.build/en/install-and-setup/' },
-    { title: 'Project structure', url: 'https://docs.astro.build/en/basics/project-structure/' },
-    { title: 'Deploy your site', url: 'https://docs.astro.build/en/guides/deploy/' },
+    { title: 'Install Astro | docs.astro.build', href: 'https://docs.astro.build/en/install-and-setup/' },
+    { title: 'create-astro | npmjs.com', href: 'https://www.npmjs.com/package/create-astro' },
+    { title: 'Settings: minimumReleaseAge | pnpm.io', href: 'https://pnpm.io/settings#minimumreleaseage' },
   ];
 }

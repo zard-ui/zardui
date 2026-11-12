@@ -3,6 +3,25 @@ import { test, expect } from '@playwright/test';
 import { checkA11y } from '../utils/axe-helper';
 import { ComponentDemoPage } from '../utils/component-page';
 
+/** Every example is its own section on the page, keyed by the example name. */
+const EXAMPLE_SECTIONS = [
+  'line',
+  'status',
+  'description',
+  'collapsible',
+  'open',
+  'link',
+  'dialog',
+  'sheet',
+  'group',
+  'sources',
+  'chain-of-thought',
+  'commit',
+  'whole-turn',
+  'reasoning',
+  'tool',
+];
+
 test.describe('Trace component', () => {
   let demoPage: ComponentDemoPage;
 
@@ -12,7 +31,8 @@ test.describe('Trace component', () => {
   });
 
   test('renders lines that are plain text, not tab stops', async () => {
-    const trace = demoPage.firstDemoBox.locator('z-trace').first();
+    const trace = demoPage.getDemoByName('line').locator('z-trace').first();
+    await trace.scrollIntoViewIfNeeded();
     await expect(trace).toBeVisible();
 
     const line = trace.locator('> z-trace-line').first();
@@ -23,7 +43,8 @@ test.describe('Trace component', () => {
   });
 
   test('the collapsible trigger is a single button that toggles the detail', async ({ page }) => {
-    const row = demoPage.firstDemoBox.locator('z-trace-collapsible').first();
+    const row = demoPage.getDemoByName('collapsible').locator('z-trace-collapsible').first();
+    await row.scrollIntoViewIfNeeded();
     const trigger = row.getByRole('button');
     const panel = row.locator('[data-slot="collapsible-content"]');
 
@@ -66,7 +87,7 @@ test.describe('Trace component', () => {
   test('a link wraps the line without nesting interactive elements', async () => {
     const demo = demoPage.getDemoByName('link');
     await demo.scrollIntoViewIfNeeded();
-    const link = demo.locator('z-trace').getByRole('link');
+    const link = demo.locator('z-trace').getByRole('link', { name: /opens in a new tab/ });
 
     await expect(link).toHaveAttribute('target', '_blank');
     await expect(link).toHaveAccessibleName(/opens in a new tab/);
@@ -88,24 +109,50 @@ test.describe('Trace component', () => {
   test('a sheet opens from a file row in the commit example', async ({ page }) => {
     const demo = demoPage.getDemoByName('commit');
     await demo.scrollIntoViewIfNeeded();
-    const file = demo.getByRole('button', { name: /edited index\.ts/i });
+    const file = demo.getByRole('button', { name: /edited app\/login\/page\.tsx/i });
 
     await file.click();
     await expect(page.getByRole('dialog')).toBeVisible();
-    await expect(page.getByRole('dialog')).toContainText('src/index.ts');
+    await expect(page.getByRole('dialog')).toContainText('app/login/page.tsx');
     await page.keyboard.press('Escape');
     await expect(page.getByRole('dialog')).toBeHidden();
   });
 
-  test('sources expand into a nested list of links', async () => {
+  test('sources start open as a nested list of links and collapse', async () => {
     const demo = demoPage.getDemoByName('sources');
     await demo.scrollIntoViewIfNeeded();
-    const trace = demo.locator('z-trace').first();
-    const trigger = trace.getByRole('button').first();
+    const row = demo.locator('z-trace-collapsible').first();
+    const trigger = row.getByRole('button').first();
 
-    await expect(trace.getByRole('link')).toHaveCount(0);
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(row.locator('z-trace').getByRole('link')).toHaveCount(3);
     await trigger.click();
-    await expect(trace.getByRole('link')).toHaveCount(3);
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(row.locator('z-trace').getByRole('link')).toHaveCount(0);
+  });
+
+  test('the preview replays the turn step by step', async () => {
+    const preview = demoPage.firstDemoBox;
+    await preview.getByRole('button', { name: 'Replay' }).click();
+
+    await expect(preview.getByRole('button', { name: 'Replay' })).toBeHidden();
+    await expect(preview.locator('z-trace-line[data-status="running"]').first()).toBeVisible();
+    await expect(preview.getByRole('button', { name: 'Replay' })).toBeVisible({ timeout: 15_000 });
+    await expect(preview.locator('z-trace-line[data-status="error"] z-trace-title')).toContainText(/failed to run/i);
+  });
+
+  test('the reasoning row follows the stream until the reader toggles it', async () => {
+    const demo = demoPage.getDemoByName('reasoning');
+    await demo.scrollIntoViewIfNeeded();
+    await demo.getByRole('button', { name: 'Send message' }).click();
+
+    const trigger = demo.locator('z-trace-collapsible-trigger button');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(demo.getByRole('button', { name: 'Reset' })).toBeVisible({ timeout: 15_000 });
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+    await demo.getByRole('button', { name: 'Reset' }).click();
+    await expect(demo.locator('z-trace')).toHaveCount(0);
   });
 
   test('RTL example renders inside an RTL preview and mirrors the chevron', async () => {
@@ -133,6 +180,9 @@ test.describe('Trace component', () => {
     // The `pending` rows are left out of the scan: they are deliberately dimmed (`opacity-60`) to read as "not started
     // yet", which takes them below 4.5:1 by design, and their title still says what they are. Every other row in every
     // example keeps the full rule set, including color-contrast.
-    await checkA11y(page, '#examples', [], ['z-trace-line[data-status="pending"]']);
+    for (const id of EXAMPLE_SECTIONS) {
+      // Only the live demo: the code blocks around it are the site's syntax theme, not the component.
+      await checkA11y(page, `[id="${id}"] [data-slot="preview"]`, [], ['z-trace-line[data-status="pending"]']);
+    }
   });
 });

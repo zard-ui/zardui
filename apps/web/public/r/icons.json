@@ -97,6 +97,9 @@
     "chevrons-up-down": {
       "lucide": "lucideChevronsUpDown"
     },
+    "circle": {
+      "lucide": "lucideCircle"
+    },
     "circle-alert": {
       "lucide": "lucideCircleAlert"
     },
@@ -169,9 +172,6 @@
     "file-code-2": {
       "lucide": "lucideFileCode2"
     },
-    "file-minus": {
-      "lucide": "lucideFileMinus"
-    },
     "file-pen": {
       "lucide": "lucideFilePen"
     },
@@ -189,6 +189,9 @@
     },
     "folder-plus": {
       "lucide": "lucideFolderPlus"
+    },
+    "folder-search": {
+      "lucide": "lucideFolderSearch"
     },
     "footprints": {
       "lucide": "lucideFootprints"

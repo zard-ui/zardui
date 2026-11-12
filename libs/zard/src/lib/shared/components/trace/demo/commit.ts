@@ -1,46 +1,43 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  lucideChevronRight,
-  lucideFileMinus,
-  lucideFilePen,
-  lucideFilePlus,
-  lucideGitCommitHorizontal,
-} from '@ng-icons/lucide';
+import { lucideChevronRight, lucideFilePen, lucideFilePlus, lucideGitCommitHorizontal } from '@ng-icons/lucide';
 
 import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
 interface ChangedFile {
   readonly path: string;
-  readonly title: string;
-  readonly icon: string;
-  readonly stats: string;
+  readonly added: boolean;
+  readonly additions: number;
+  readonly deletions: number;
   readonly diff: string;
 }
+
+type DiffKind = 'hunk' | 'added' | 'removed' | 'context';
 
 @Component({
   selector: 'z-demo-trace-commit',
   imports: [NgIcon, ...ZardSheetImports, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <z-trace class="max-w-sm">
       <z-trace-collapsible zOpen>
         <z-trace-collapsible-trigger>
           <z-trace-line>
             <z-trace-icon><ng-icon name="lucideGitCommitHorizontal" /></z-trace-icon>
-            <z-trace-title>Committed 3 files</z-trace-title>
-            <z-trace-description>+31 -9</z-trace-description>
+            <z-trace-title>Committed a1b2c3: Fix the login redirect</z-trace-title>
           </z-trace-line>
         </z-trace-collapsible-trigger>
-        <z-trace-collapsible-content zKeepMounted>
+        <z-trace-collapsible-content>
           <z-trace>
             @for (file of files; track file.path) {
-              <button type="button" (click)="select(file)">
+              <button type="button" (click)="show(file)">
                 <z-trace-line>
-                  <z-trace-icon><ng-icon [name]="file.icon" /></z-trace-icon>
-                  <z-trace-title>{{ file.title }}</z-trace-title>
-                  <z-trace-description>{{ file.stats }}</z-trace-description>
+                  <z-trace-icon><ng-icon [name]="file.added ? 'lucideFilePlus' : 'lucideFilePen'" /></z-trace-icon>
+                  <z-trace-title>{{ file.added ? 'Added' : 'Edited' }} {{ file.path }}</z-trace-title>
+                  <z-trace-description class="font-mono">
+                    +{{ file.additions }} −{{ file.deletions }}
+                  </z-trace-description>
                   <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
                 </z-trace-line>
               </button>
@@ -50,49 +47,79 @@ interface ChangedFile {
       </z-trace-collapsible>
     </z-trace>
 
-    <z-sheet [zVisible]="sheetOpen()" (zVisibleChange)="sheetOpen.set($event)">
+    <z-sheet [(zVisible)]="open">
       <z-sheet-header>
-        <z-sheet-title>{{ selected().path }}</z-sheet-title>
-        <z-sheet-description>{{ selected().stats }}</z-sheet-description>
+        <z-sheet-title class="font-mono">{{ selected().path }}</z-sheet-title>
+        <z-sheet-description>
+          {{ selected().additions }} additions, {{ selected().deletions }} deletions
+        </z-sheet-description>
       </z-sheet-header>
-      <pre class="bg-muted mx-4 rounded-lg p-3 font-mono text-xs whitespace-pre-wrap">{{ selected().diff }}</pre>
+      <pre
+        class="bg-muted/50 mx-6 mb-6 overflow-auto rounded-lg border py-3 font-mono text-xs leading-relaxed"
+      ><code>@for (line of lines(); track $index) {<span class="block px-3" [class]="lineClass[line.kind]">{{ line.text }}</span>}</code></pre>
     </z-sheet>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [
-    provideIcons({ lucideChevronRight, lucideFileMinus, lucideFilePen, lucideFilePlus, lucideGitCommitHorizontal }),
-  ],
+  viewProviders: [provideIcons({ lucideChevronRight, lucideFilePen, lucideFilePlus, lucideGitCommitHorizontal })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceCommitComponent {
   protected readonly files: readonly ChangedFile[] = [
     {
-      path: 'src/trace.component.ts',
-      title: 'Added trace.component.ts',
-      icon: 'lucideFilePlus',
-      stats: '+24',
-      diff: `+ @Component({ selector: 'z-trace, [z-trace]' })\n+ export class ZardTraceComponent {}`,
+      path: 'app/login/page.tsx',
+      added: false,
+      additions: 2,
+      deletions: 2,
+      diff: `@@ -14,7 +14,7 @@ export default async function LoginPage({
+   searchParams,
+ }) {
+   const { next } = await searchParams
+-  const redirectTo =
+-    next && next.startsWith("/") ? next : "/"
++  const redirectTo = safeRedirect(next)
++
+   return <LoginForm redirectTo={redirectTo} />
+ }`,
     },
     {
-      path: 'src/index.ts',
-      title: 'Edited index.ts',
-      icon: 'lucideFilePen',
-      stats: '+7 -1',
-      diff: `- export * from './marker';\n+ export * from './marker';\n+ export * from './trace';`,
-    },
-    {
-      path: 'src/legacy-steps.ts',
-      title: 'Deleted legacy-steps.ts',
-      icon: 'lucideFileMinus',
-      stats: '-8',
-      diff: `- export const legacySteps = [];`,
+      path: 'lib/auth/redirect.ts',
+      added: true,
+      additions: 7,
+      deletions: 0,
+      diff: `@@ -0,0 +1,7 @@
++export function safeRedirect(next: string | undefined) {
++  if (!next || !next.startsWith("/") || next.startsWith("//")) {
++    return "/"
++  }
++
++  return next
++}`,
     },
   ];
 
-  protected readonly sheetOpen = signal(false);
+  protected readonly open = signal(false);
   protected readonly selected = signal<ChangedFile>(this.files[0]);
 
-  protected select(file: ChangedFile): void {
+  protected readonly lineClass: Record<DiffKind, string> = {
+    hunk: 'text-muted-foreground',
+    added: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+    removed: 'bg-red-500/10 text-red-700 dark:text-red-400',
+    context: 'text-foreground',
+  };
+
+  /** One entry per diff line, without the leading `+`, `-` or space. */
+  protected readonly lines = computed(() =>
+    this.selected()
+      .diff.split('\n')
+      .map(line => {
+        if (line.startsWith('@@')) return { kind: 'hunk' as DiffKind, text: line };
+        const kind: DiffKind = line.startsWith('+') ? 'added' : line.startsWith('-') ? 'removed' : 'context';
+        return { kind, text: line.slice(1) || ' ' };
+      }),
+  );
+
+  protected show(file: ChangedFile): void {
     this.selected.set(file);
-    this.sheetOpen.set(true);
+    this.open.set(true);
   }
 }

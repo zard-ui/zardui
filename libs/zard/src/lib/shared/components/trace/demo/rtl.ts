@@ -57,7 +57,7 @@ const translations: ZardRtlTranslations<{
   selector: 'z-demo-trace-rtl',
   imports: [NgIcon, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <z-trace class="max-w-sm">
       <z-trace-line>
         <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
         <z-trace-title>{{ i18n.t().searched }}</z-trace-title>
@@ -93,6 +93,7 @@ const translations: ZardRtlTranslations<{
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideArrowUpRight, lucideSearch, lucideTerminal })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceRtlComponent {
   protected readonly i18n = injectRtlTranslation(translations);

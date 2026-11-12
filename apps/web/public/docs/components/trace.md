@@ -1,11 +1,17 @@
 ---
 title: Trace
-description: Displays the steps an agent takes as a list of lines: tool calls, reasoning, sources and file changes.
+description: The building block for reasoning, tool calls, sources and more.
 ---
 
 # Trace
 
-Displays the steps an agent takes as a list of lines: tool calls, reasoning, sources and file changes.
+The building block for reasoning, tool calls, sources and more.
+
+`z-trace` is a list of lines. Each line has an icon, a title, and an optional description and status. A line can expand to show more detail, link to a page, or open a dialog or sheet.
+
+Every line has the same shape, so reasoning, tool calls, sources and plans built from `z-trace` look and behave the same.
+
+Use `z-trace` for the steps an agent takes, like calling a tool, running a subagent or editing a file. Use [Message](/docs/components/message) for its reply, and [Marker](/docs/components/marker) for notes and dividers between turns.
 
 ## Installation
 
@@ -420,36 +426,83 @@ export const ZardTraceImports = [
 
 ## Usage
 
+Use a `z-trace-line` for a single step:
+
 ```angular-ts
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTerminal } from '@ng-icons/lucide';
+import { lucideSearch, lucideTerminal } from '@ng-icons/lucide';
 
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
-// Add NgIcon to the component imports and provideIcons({ lucideTerminal }) to its viewProviders.
+// Add NgIcon to the component imports and provideIcons({ lucideSearch, lucideTerminal }) to its viewProviders.
 ```
 
 ```angular-html
 <z-trace>
   <z-trace-line>
-    <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
-    <z-trace-title>Ran pnpm install</z-trace-title>
-    <z-trace-description>12s</z-trace-description>
+    <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
+    <z-trace-title>Searched for minimumReleaseAge</z-trace-title>
   </z-trace-line>
 </z-trace>
 ```
 
-## Examples
+Wrap the line in a `z-trace-collapsible` to show more detail when it expands:
 
-### Line
+```angular-html
+<z-trace>
+  <z-trace-collapsible>
+    <z-trace-collapsible-trigger>
+      <z-trace-line>
+        <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+        <z-trace-title>Ran node --version</z-trace-title>
+      </z-trace-line>
+    </z-trace-collapsible-trigger>
+    <z-trace-collapsible-content>v24.18.0</z-trace-collapsible-content>
+  </z-trace-collapsible>
+</z-trace>
+```
 
-Plain text rows: an icon and a one-line title. A `z-trace-line` is a span-like box, so on its own it is read as text and is not a tab stop.
+## Composition
+
+```text
+z-trace
+└── z-trace-line
+    ├── z-trace-icon
+    ├── z-trace-title
+    ├── z-trace-description
+    └── z-trace-icon
+```
+
+Wrap the line in a `z-trace-collapsible` to show more detail when it expands:
+
+```text
+z-trace
+└── z-trace-collapsible
+    ├── z-trace-collapsible-trigger
+    │   └── z-trace-line
+    └── z-trace-collapsible-content
+```
+
+`z-trace-line` is always the line. To make a line do something, wrap it in that thing’s trigger.
+
+## Features
+
+- One row for reasoning, tool calls, sources, plans and tasks
+- Rows that expand, link out, or open a dialog, sheet, drawer or popover
+- `running`, `error` and `pending` states, with a shimmer while running
+- Nested rows, so a summary expands into steps and a step into its output
+- Keyboard and screen reader support from the trigger that wraps each row
+- Customizable styling through the `class` input on every part
+
+## Trace Line
+
+Use a `z-trace-line` on its own for a step with no detail to show. It reads as plain text.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideFilePen, lucideSearch, lucideTerminal } from '@ng-icons/lucide';
+import { lucideGitBranch } from '@ng-icons/lucide';
 
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
@@ -457,36 +510,29 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
   selector: 'z-demo-trace-line',
   imports: [NgIcon, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <z-trace class="max-w-sm">
       <z-trace-line>
-        <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
-        <z-trace-title>Searched for minimumReleaseAge</z-trace-title>
-      </z-trace-line>
-      <z-trace-line>
-        <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
-        <z-trace-title>Ran pnpm install</z-trace-title>
-      </z-trace-line>
-      <z-trace-line>
-        <z-trace-icon><ng-icon name="lucideFilePen" /></z-trace-icon>
-        <z-trace-title>Edited trace.component.ts</z-trace-title>
+        <z-trace-icon><ng-icon name="lucideGitBranch" /></z-trace-icon>
+        <z-trace-title>Created branch fix/frozen-lockfile</z-trace-title>
       </z-trace-line>
     </z-trace>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideFilePen, lucideSearch, lucideTerminal })],
+  viewProviders: [provideIcons({ lucideGitBranch })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceLineComponent {}
 ```
 
-### Status
+## Status
 
-Set `zStatus` to `running`, `error` or `pending` when a step is in progress, failed or not started. Completed work has no status. Say the state in the title as well ("Running", "Failed to run"), because the color and the shimmer are not read out.
+Set `zStatus` on `z-trace-line` when a step is running, has failed or hasn’t started yet.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideTerminal } from '@ng-icons/lucide';
+import { lucideCircle, lucideCircleAlert, lucideCircleCheck, lucideLoaderCircle } from '@ng-icons/lucide';
 
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
@@ -494,34 +540,42 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
   selector: 'z-demo-trace-status',
   imports: [NgIcon, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <z-trace class="max-w-sm">
       <z-trace-line>
-        <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+        <z-trace-icon><ng-icon name="lucideCircleCheck" /></z-trace-icon>
         <z-trace-title>Ran pnpm install</z-trace-title>
       </z-trace-line>
       <z-trace-line zStatus="error">
-        <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+        <z-trace-icon><ng-icon name="lucideCircleAlert" /></z-trace-icon>
         <z-trace-title>Failed to run pnpm lint</z-trace-title>
       </z-trace-line>
       <z-trace-line zStatus="running">
-        <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+        <z-trace-icon><ng-icon name="lucideLoaderCircle" class="animate-spin" /></z-trace-icon>
         <z-trace-title>Running pnpm build</z-trace-title>
       </z-trace-line>
       <z-trace-line zStatus="pending">
-        <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+        <z-trace-icon><ng-icon name="lucideCircle" /></z-trace-icon>
         <z-trace-title>Run pnpm test</z-trace-title>
       </z-trace-line>
     </z-trace>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideTerminal })],
+  viewProviders: [provideIcons({ lucideCircle, lucideCircleAlert, lucideCircleCheck, lucideLoaderCircle })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceStatusComponent {}
 ```
 
-### Description
+| Status | Use for |
+| --- | --- |
+| none | Work that is done: "Ran pnpm install". |
+| `error` | Work that failed. Say so in the title: "Failed to run pnpm lint". |
+| `running` | Work in progress. Write the title in the present tense: "Running pnpm build". |
+| `pending` | Work that has not started, such as a plan step: "Run pnpm test". |
 
-Put secondary text such as a duration, a count or diff stats in `z-trace-description`, after the title. It does not truncate.
+## Description
+
+Put secondary text such as a diff stat, a duration or a count in a `z-trace-description` after the `z-trace-title`. It does not truncate.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -535,36 +589,37 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
   selector: 'z-demo-trace-description',
   imports: [NgIcon, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <z-trace class="max-w-sm">
+      <z-trace-line>
+        <z-trace-icon><ng-icon name="lucideFilePen" /></z-trace-icon>
+        <z-trace-title>Edited components/settings/notification-preferences-form.tsx</z-trace-title>
+        <z-trace-description class="font-mono">+48 −12</z-trace-description>
+      </z-trace-line>
       <z-trace-line>
         <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
-        <z-trace-title>Ran pnpm install</z-trace-title>
-        <z-trace-description>12s</z-trace-description>
+        <z-trace-title>Ran pnpm test</z-trace-title>
+        <z-trace-description>14s</z-trace-description>
       </z-trace-line>
       <z-trace-line>
         <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
-        <z-trace-title>Searched the codebase</z-trace-title>
-        <z-trace-description>3 results</z-trace-description>
-      </z-trace-line>
-      <z-trace-line>
-        <z-trace-icon><ng-icon name="lucideFilePen" /></z-trace-icon>
-        <z-trace-title>Edited trace.component.ts</z-trace-title>
-        <z-trace-description>+24 -6</z-trace-description>
+        <z-trace-title>Searched for useChat</z-trace-title>
+        <z-trace-description>8 results</z-trace-description>
       </z-trace-line>
     </z-trace>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideFilePen, lucideSearch, lucideTerminal })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceDescriptionComponent {}
 ```
 
-### Collapsible
+## Collapsible
 
-Wrap the line in `z-trace-collapsible-trigger` to expand it into `z-trace-collapsible-content`. Bind `[(zOpen)]` to control a row, and set `zKeepMounted` to keep the detail in the DOM while it is closed.
+Wrap the line in a `z-trace-collapsible` to show more detail when it expands. Put the `z-trace-line` inside `z-trace-collapsible-trigger` and the detail in `z-trace-collapsible-content`.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideTerminal } from '@ng-icons/lucide';
@@ -575,7 +630,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
   selector: 'z-demo-trace-collapsible',
   imports: [NgIcon, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <div class="w-full max-w-sm">
       <z-trace-collapsible>
         <z-trace-collapsible-trigger>
           <z-trace-line>
@@ -583,44 +638,110 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
             <z-trace-title>Ran node --version</z-trace-title>
           </z-trace-line>
         </z-trace-collapsible-trigger>
-        <z-trace-collapsible-content>v24.18.0</z-trace-collapsible-content>
+        <z-trace-collapsible-content>
+          <pre
+            class="bg-muted/50 text-foreground max-h-64 overflow-auto rounded-lg border px-3 py-2.5 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+            >{{ output }}</pre>
+        </z-trace-collapsible-content>
+      </z-trace-collapsible>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideTerminal })],
+  host: { class: 'contents' },
+})
+export class ZardDemoTraceCollapsibleComponent {
+  protected readonly output = '$ node --version\nv24.18.0';
+}
+```
+
+## Open State
+
+Rows start closed. Set `zOpen` on `z-trace-collapsible` to start open, or bind `[(zOpen)]` to control a row.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTerminal } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
+
+@Component({
+  selector: 'z-demo-trace-open',
+  imports: [NgIcon, ZardButtonComponent, ...ZardTraceImports],
+  template: `
+    <div class="flex w-full max-w-sm flex-col items-start gap-4">
+      <z-trace-collapsible zOpen>
+        <z-trace-collapsible-trigger>
+          <z-trace-line>
+            <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+            <z-trace-title>Ran node --version</z-trace-title>
+          </z-trace-line>
+        </z-trace-collapsible-trigger>
+        <z-trace-collapsible-content>
+          <pre
+            class="bg-muted/50 text-foreground max-h-64 overflow-auto rounded-lg border px-3 py-2.5 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+            >{{ nodeOutput }}</pre>
+        </z-trace-collapsible-content>
       </z-trace-collapsible>
 
       <z-trace-collapsible [(zOpen)]="open">
         <z-trace-collapsible-trigger>
           <z-trace-line>
             <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
-            <z-trace-title>Ran pnpm install</z-trace-title>
-            <z-trace-description>12s</z-trace-description>
+            <z-trace-title>Ran pnpm --version</z-trace-title>
           </z-trace-line>
         </z-trace-collapsible-trigger>
-        <z-trace-collapsible-content zKeepMounted>
-          <pre class="bg-muted text-foreground rounded-lg p-3 font-mono text-xs whitespace-pre-wrap">{{ output }}</pre>
+        <z-trace-collapsible-content>
+          <pre
+            class="bg-muted/50 text-foreground max-h-64 overflow-auto rounded-lg border px-3 py-2.5 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+            >{{ pnpmOutput }}</pre>
         </z-trace-collapsible-content>
       </z-trace-collapsible>
-    </z-trace>
+
+      <button type="button" z-button zType="outline" zSize="sm" (click)="open.set(!open())">
+        {{ open() ? 'Hide' : 'Show' }} the pnpm output
+      </button>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideTerminal })],
+  host: { class: 'contents' },
 })
-export class ZardDemoTraceCollapsibleComponent {
-  protected readonly open = signal(true);
-
-  protected readonly output = `Packages: +142
-Progress: resolved 142, reused 142, downloaded 0
-Done in 11.8s`;
+export class ZardDemoTraceOpenComponent {
+  protected readonly open = signal(false);
+  protected readonly nodeOutput = '$ node --version\nv24.18.0';
+  protected readonly pnpmOutput = '$ pnpm --version\n10.33.4';
 }
 ```
 
-### Link
+To open a row while it streams and let the reader’s click win, keep the reader’s choice in a signal that starts `undefined` and bind `open() ?? running()`.
 
-Wrap the line in an anchor. For a new tab, add an arrow-up-right icon and an `sr-only` "(opens in a new tab)" to the title.
+```angular-ts
+// Undefined until the reader toggles the row, so it follows `running` until then.
+protected readonly open = signal<boolean | undefined>(undefined);
+```
+
+```angular-html
+<z-trace-collapsible [zOpen]="open() ?? running()" (zOpenChange)="open.set($event)">
+  <z-trace-collapsible-trigger>
+    <z-trace-line [zStatus]="running() ? 'running' : undefined">…</z-trace-line>
+  </z-trace-collapsible-trigger>
+  <z-trace-collapsible-content>{{ text() }}</z-trace-collapsible-content>
+</z-trace-collapsible>
+```
+
+## Link
+
+Wrap the `z-trace-line` in an anchor. For a new tab, use an arrow-up-right icon and an `sr-only` "(opens in a new tab)".
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowUpRight, lucideBookOpen } from '@ng-icons/lucide';
+import { lucideArrowUpRight, lucideChevronRight, lucideFileText, lucideGlobe } from '@ng-icons/lucide';
 
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
@@ -628,12 +749,19 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
   selector: 'z-demo-trace-link',
   imports: [NgIcon, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
-      <a href="https://docs.astro.build" target="_blank" rel="noreferrer">
+    <z-trace class="max-w-sm">
+      <a href="#link">
         <z-trace-line>
-          <z-trace-icon><ng-icon name="lucideBookOpen" /></z-trace-icon>
+          <z-trace-icon><ng-icon name="lucideFileText" /></z-trace-icon>
+          <z-trace-title>Read apps/v4/lib/docs.ts</z-trace-title>
+          <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
+        </z-trace-line>
+      </a>
+      <a href="https://docs.astro.build/en/install-and-setup/" target="_blank" rel="noreferrer">
+        <z-trace-line>
+          <z-trace-icon><ng-icon name="lucideGlobe" /></z-trace-icon>
           <z-trace-title>
-            Read the Astro docs
+            Install Astro | docs.astro.build
             <span class="sr-only">(opens in a new tab)</span>
           </z-trace-title>
           <z-trace-icon><ng-icon name="lucideArrowUpRight" /></z-trace-icon>
@@ -642,20 +770,33 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
     </z-trace>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideArrowUpRight, lucideBookOpen })],
+  viewProviders: [provideIcons({ lucideArrowUpRight, lucideChevronRight, lucideFileText, lucideGlobe })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceLinkComponent {}
 ```
 
-### Dialog
+```angular-html
+<a href="https://docs.astro.build" target="_blank" rel="noreferrer">
+  <z-trace-line>
+    <z-trace-title>
+      Install Astro
+      <span class="sr-only">(opens in a new tab)</span>
+    </z-trace-title>
+    <z-trace-icon><ng-icon name="lucideArrowUpRight" /></z-trace-icon>
+  </z-trace-line>
+</a>
+```
 
-Wrap the line in the button that opens the dialog. The dialog owns its open state, Escape and focus return.
+## Dialog
+
+Wrap the `z-trace-line` in the button that opens the dialog. The dialog owns its open state, Escape and focus return.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronRight, lucideGlobe } from '@ng-icons/lucide';
+import { lucideArrowUpRight, lucideChevronRight, lucideGlobe } from '@ng-icons/lucide';
 
 import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
@@ -664,7 +805,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
   selector: 'z-demo-trace-dialog',
   imports: [NgIcon, ...ZardDialogImports, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <z-trace class="max-w-sm">
       <button type="button" (click)="open.set(true)">
         <z-trace-line>
           <z-trace-icon><ng-icon name="lucideGlobe" /></z-trace-icon>
@@ -677,32 +818,59 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
     <z-dialog [(zVisible)]="open">
       <z-dialog-header>
         <z-dialog-title>Searched the web for cache keys</z-dialog-title>
-        <z-dialog-description>The agent ran one query and read the top three results.</z-dialog-description>
+        <z-dialog-description>Three results were used in the response.</z-dialog-description>
       </z-dialog-header>
-      <ul class="list-disc ps-5 text-sm">
-        <li>Cache keys in a monorepo build</li>
-        <li>Content-addressed cache invalidation</li>
-        <li>Hashing lockfiles for CI caches</li>
-      </ul>
+      <z-trace>
+        @for (result of results; track result.url) {
+          <a [href]="result.url" target="_blank" rel="noreferrer">
+            <z-trace-line>
+              <z-trace-icon><ng-icon name="lucideGlobe" /></z-trace-icon>
+              <z-trace-title>
+                {{ result.title }}
+                <span class="sr-only">(opens in a new tab)</span>
+              </z-trace-title>
+              <z-trace-icon><ng-icon name="lucideArrowUpRight" /></z-trace-icon>
+            </z-trace-line>
+          </a>
+        }
+      </z-trace>
     </z-dialog>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideChevronRight, lucideGlobe })],
+  viewProviders: [provideIcons({ lucideArrowUpRight, lucideChevronRight, lucideGlobe })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceDialogComponent {
   protected readonly open = signal(false);
+
+  protected readonly results = [
+    { title: 'Caching build outputs', url: 'https://nextjs.org/docs/app/guides/caching' },
+    { title: 'Image optimization reference', url: 'https://nextjs.org/docs/app/api-reference/components/image' },
+    { title: 'Deploy hooks and cache keys', url: 'https://vercel.com/docs/deploy-hooks' },
+  ];
 }
 ```
 
-### Sheet
+```angular-html
+<button type="button" (click)="open.set(true)">
+  <z-trace-line>
+    <z-trace-title>Searched the web for cache keys</z-trace-title>
+    <z-trace-icon><ng-icon name="lucideChevronRight" /></z-trace-icon>
+  </z-trace-line>
+</button>
 
-The same shape as the dialog: a button around the line opens a sheet. Drawer and popover triggers work the same way.
+<z-dialog [(zVisible)]="open">…</z-dialog>
+```
+
+## Sheet
+
+The same shape as the dialog. Drawer and Popover work the same way.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronRight, lucideFilePen } from '@ng-icons/lucide';
+import { lucideChevronRight, lucideFolderSearch } from '@ng-icons/lucide';
 
 import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
@@ -711,12 +879,11 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
   selector: 'z-demo-trace-sheet',
   imports: [NgIcon, ...ZardSheetImports, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <z-trace class="max-w-sm">
       <button type="button" (click)="open.set(true)">
         <z-trace-line>
-          <z-trace-icon><ng-icon name="lucideFilePen" /></z-trace-icon>
-          <z-trace-title>Edited trace.component.ts</z-trace-title>
-          <z-trace-description>+24 -6</z-trace-description>
+          <z-trace-icon><ng-icon name="lucideFolderSearch" /></z-trace-icon>
+          <z-trace-title>Explored {{ files.length }} files</z-trace-title>
           <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
         </z-trace-line>
       </button>
@@ -724,33 +891,41 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
     <z-sheet [(zVisible)]="open">
       <z-sheet-header>
-        <z-sheet-title>trace.component.ts</z-sheet-title>
-        <z-sheet-description>24 additions and 6 deletions.</z-sheet-description>
+        <z-sheet-title>Explored {{ files.length }} files</z-sheet-title>
+        <z-sheet-description>Files read while preparing the response.</z-sheet-description>
       </z-sheet-header>
-      <pre class="bg-muted mx-4 rounded-lg p-3 font-mono text-xs whitespace-pre-wrap">{{ diff }}</pre>
+      <ul class="flex flex-col gap-2 px-6 font-mono text-xs">
+        @for (file of files; track file) {
+          <li>{{ file }}</li>
+        }
+      </ul>
     </z-sheet>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideChevronRight, lucideFilePen })],
+  viewProviders: [provideIcons({ lucideChevronRight, lucideFolderSearch })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceSheetComponent {
   protected readonly open = signal(false);
 
-  protected readonly diff = `- readonly zOpen = input(false);
-+ readonly zOpen = model(false);
-+ readonly zKeepMounted = input(false, { transform: booleanAttribute });`;
+  protected readonly files = [
+    'apps/v4/lib/docs.ts',
+    'apps/v4/lib/components.ts',
+    'apps/v4/next.config.mjs',
+    'apps/v4/package.json',
+  ];
 }
 ```
 
-### Group
+## Group
 
-Put rows that sit next to each other in a `z-trace`. It also styles any trigger or link that directly wraps a `z-trace-line`.
+Put rows that sit next to each other in a `z-trace`. It also styles any trigger or link that wraps a `z-trace-line`.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowUpRight, lucideFilePen, lucideSearch, lucideTerminal } from '@ng-icons/lucide';
+import { lucideFileText, lucideSearch, lucideTerminal } from '@ng-icons/lucide';
 
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
@@ -758,48 +933,29 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
   selector: 'z-demo-trace-group',
   imports: [NgIcon, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <z-trace class="max-w-sm">
       <z-trace-line>
         <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
         <z-trace-title>Searched for minimumReleaseAge</z-trace-title>
       </z-trace-line>
-
-      <a href="https://pnpm.io/settings" target="_blank" rel="noreferrer">
-        <z-trace-line>
-          <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
-          <z-trace-title>
-            Read the pnpm settings
-            <span class="sr-only">(opens in a new tab)</span>
-          </z-trace-title>
-          <z-trace-icon><ng-icon name="lucideArrowUpRight" /></z-trace-icon>
-        </z-trace-line>
-      </a>
-
-      <z-trace-collapsible>
-        <z-trace-collapsible-trigger>
-          <z-trace-line>
-            <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
-            <z-trace-title>Ran pnpm install</z-trace-title>
-            <z-trace-description>12s</z-trace-description>
-          </z-trace-line>
-        </z-trace-collapsible-trigger>
-        <z-trace-collapsible-content>Lockfile is up to date, resolution step is skipped.</z-trace-collapsible-content>
-      </z-trace-collapsible>
-
       <z-trace-line>
-        <z-trace-icon><ng-icon name="lucideFilePen" /></z-trace-icon>
-        <z-trace-title>Edited pnpm-workspace.yaml</z-trace-title>
-        <z-trace-description>+1 -0</z-trace-description>
+        <z-trace-icon><ng-icon name="lucideFileText" /></z-trace-icon>
+        <z-trace-title>Read pnpm-workspace.yaml</z-trace-title>
+      </z-trace-line>
+      <z-trace-line>
+        <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+        <z-trace-title>Ran pnpm install</z-trace-title>
       </z-trace-line>
     </z-trace>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideArrowUpRight, lucideFilePen, lucideSearch, lucideTerminal })],
+  viewProviders: [provideIcons({ lucideFileText, lucideSearch, lucideTerminal })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceGroupComponent {}
 ```
 
-### Sources
+## Sources
 
 A collapsible row whose detail is a `z-trace` of link rows.
 
@@ -807,7 +963,7 @@ A collapsible row whose detail is a `z-trace` of link rows.
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowUpRight, lucideBookOpen, lucideGlobe } from '@ng-icons/lucide';
+import { lucideArrowUpRight, lucideGlobe } from '@ng-icons/lucide';
 
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
@@ -815,18 +971,18 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
   selector: 'z-demo-trace-sources',
   imports: [NgIcon, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
-      <z-trace-collapsible>
+    <div class="w-full max-w-sm">
+      <z-trace-collapsible zOpen>
         <z-trace-collapsible-trigger>
           <z-trace-line>
-            <z-trace-icon><ng-icon name="lucideBookOpen" /></z-trace-icon>
-            <z-trace-title>Used 3 sources</z-trace-title>
+            <z-trace-icon><ng-icon name="lucideGlobe" /></z-trace-icon>
+            <z-trace-title>Used {{ sources.length }} sources</z-trace-title>
           </z-trace-line>
         </z-trace-collapsible-trigger>
         <z-trace-collapsible-content>
           <z-trace>
-            @for (source of sources; track source.url) {
-              <a [href]="source.url" target="_blank" rel="noreferrer">
+            @for (source of sources; track source.href) {
+              <a [href]="source.href" target="_blank" rel="noreferrer">
                 <z-trace-line>
                   <z-trace-icon><ng-icon name="lucideGlobe" /></z-trace-icon>
                   <z-trace-title>
@@ -840,117 +996,139 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
           </z-trace>
         </z-trace-collapsible-content>
       </z-trace-collapsible>
-    </z-trace>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideArrowUpRight, lucideBookOpen, lucideGlobe })],
+  viewProviders: [provideIcons({ lucideArrowUpRight, lucideGlobe })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceSourcesComponent {
   protected readonly sources = [
-    { title: 'Install Astro', url: 'https://docs.astro.build/en/install-and-setup/' },
-    { title: 'Project structure', url: 'https://docs.astro.build/en/basics/project-structure/' },
-    { title: 'Deploy your site', url: 'https://docs.astro.build/en/guides/deploy/' },
+    { title: 'Install Astro | docs.astro.build', href: 'https://docs.astro.build/en/install-and-setup/' },
+    { title: 'create-astro | npmjs.com', href: 'https://www.npmjs.com/package/create-astro' },
+    { title: 'Settings: minimumReleaseAge | pnpm.io', href: 'https://pnpm.io/settings#minimumreleaseage' },
   ];
 }
 ```
 
-### Chain Of Thought
+## Chain of Thought
 
-A collapsible row with step rows inside. Set the parent status and title from its children.
+A chain of thought is a collapsible row with step rows inside. Set the parent’s status and title from its children.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideBrain, lucideCheck, lucideCircleDashed, lucideSearch } from '@ng-icons/lucide';
+import { lucideChevronRight, lucideFileText, lucideSearch } from '@ng-icons/lucide';
 
+import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
 @Component({
   selector: 'z-demo-trace-chain-of-thought',
-  imports: [NgIcon, ...ZardTraceImports],
+  imports: [NgIcon, ZardBadgeComponent, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <div class="w-full max-w-sm">
       <z-trace-collapsible zOpen>
         <z-trace-collapsible-trigger>
           <z-trace-line zStatus="running">
-            <z-trace-icon><ng-icon name="lucideBrain" /></z-trace-icon>
-            <z-trace-title>Thinking through the migration</z-trace-title>
+            <z-trace-title>Looking into the slow deploy</z-trace-title>
           </z-trace-line>
         </z-trace-collapsible-trigger>
         <z-trace-collapsible-content zKeepMounted>
-          <z-trace class="gap-1.5">
-            <z-trace-line>
-              <z-trace-icon><ng-icon name="lucideCheck" /></z-trace-icon>
-              <z-trace-title>Read the current config</z-trace-title>
-            </z-trace-line>
-            <z-trace-line>
-              <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
-              <z-trace-title>Compared it with the migration guide</z-trace-title>
-            </z-trace-line>
-            <z-trace-line zStatus="pending">
-              <z-trace-icon><ng-icon name="lucideCircleDashed" /></z-trace-icon>
-              <z-trace-title>Write the new config</z-trace-title>
-            </z-trace-line>
+          <z-trace>
+            <z-trace-collapsible>
+              <z-trace-collapsible-trigger>
+                <z-trace-line>
+                  <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
+                  <z-trace-title>Searched for the checkout build log</z-trace-title>
+                </z-trace-line>
+              </z-trace-collapsible-trigger>
+              <z-trace-collapsible-content class="flex flex-wrap gap-1.5">
+                <z-badge zType="secondary">vercel.com</z-badge>
+                <z-badge zType="secondary">github.com</z-badge>
+              </z-trace-collapsible-content>
+            </z-trace-collapsible>
+
+            <a href="#chain-of-thought">
+              <z-trace-line>
+                <z-trace-icon><ng-icon name="lucideFileText" /></z-trace-icon>
+                <z-trace-title>Read the last twelve deploys</z-trace-title>
+                <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
+              </z-trace-line>
+            </a>
+
+            <z-trace-collapsible>
+              <z-trace-collapsible-trigger>
+                <z-trace-line zStatus="running">
+                  <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
+                  <z-trace-title>Searching for the cache key</z-trace-title>
+                </z-trace-line>
+              </z-trace-collapsible-trigger>
+              <z-trace-collapsible-content>
+                <pre
+                  class="bg-muted/50 text-foreground max-h-64 overflow-auto rounded-lg border px-3 py-2.5 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+                >
+cache key image optimization</pre>
+              </z-trace-collapsible-content>
+            </z-trace-collapsible>
           </z-trace>
         </z-trace-collapsible-content>
       </z-trace-collapsible>
-    </z-trace>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideBrain, lucideCheck, lucideCircleDashed, lucideSearch })],
+  viewProviders: [provideIcons({ lucideChevronRight, lucideFileText, lucideSearch })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceChainOfThoughtComponent {}
 ```
 
-### Commit
+## Commit
 
-A collapsible row with a line per changed file. Say what changed in the title and put the line counts in the description; each file opens its diff in a sheet.
+A commit is a collapsible row with a line for each changed file. Say what changed in the title, Added, Edited or Deleted, and put the line counts in the description. Each file opens its diff in a [Sheet](/docs/components/trace#sheet).
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  lucideChevronRight,
-  lucideFileMinus,
-  lucideFilePen,
-  lucideFilePlus,
-  lucideGitCommitHorizontal,
-} from '@ng-icons/lucide';
+import { lucideChevronRight, lucideFilePen, lucideFilePlus, lucideGitCommitHorizontal } from '@ng-icons/lucide';
 
 import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
 import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
 interface ChangedFile {
   readonly path: string;
-  readonly title: string;
-  readonly icon: string;
-  readonly stats: string;
+  readonly added: boolean;
+  readonly additions: number;
+  readonly deletions: number;
   readonly diff: string;
 }
+
+type DiffKind = 'hunk' | 'added' | 'removed' | 'context';
 
 @Component({
   selector: 'z-demo-trace-commit',
   imports: [NgIcon, ...ZardSheetImports, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <z-trace class="max-w-sm">
       <z-trace-collapsible zOpen>
         <z-trace-collapsible-trigger>
           <z-trace-line>
             <z-trace-icon><ng-icon name="lucideGitCommitHorizontal" /></z-trace-icon>
-            <z-trace-title>Committed 3 files</z-trace-title>
-            <z-trace-description>+31 -9</z-trace-description>
+            <z-trace-title>Committed a1b2c3: Fix the login redirect</z-trace-title>
           </z-trace-line>
         </z-trace-collapsible-trigger>
-        <z-trace-collapsible-content zKeepMounted>
+        <z-trace-collapsible-content>
           <z-trace>
             @for (file of files; track file.path) {
-              <button type="button" (click)="select(file)">
+              <button type="button" (click)="show(file)">
                 <z-trace-line>
-                  <z-trace-icon><ng-icon [name]="file.icon" /></z-trace-icon>
-                  <z-trace-title>{{ file.title }}</z-trace-title>
-                  <z-trace-description>{{ file.stats }}</z-trace-description>
+                  <z-trace-icon><ng-icon [name]="file.added ? 'lucideFilePlus' : 'lucideFilePen'" /></z-trace-icon>
+                  <z-trace-title>{{ file.added ? 'Added' : 'Edited' }} {{ file.path }}</z-trace-title>
+                  <z-trace-description class="font-mono">
+                    +{{ file.additions }} −{{ file.deletions }}
+                  </z-trace-description>
                   <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
                 </z-trace-line>
               </button>
@@ -960,55 +1138,478 @@ interface ChangedFile {
       </z-trace-collapsible>
     </z-trace>
 
-    <z-sheet [zVisible]="sheetOpen()" (zVisibleChange)="sheetOpen.set($event)">
+    <z-sheet [(zVisible)]="open">
       <z-sheet-header>
-        <z-sheet-title>{{ selected().path }}</z-sheet-title>
-        <z-sheet-description>{{ selected().stats }}</z-sheet-description>
+        <z-sheet-title class="font-mono">{{ selected().path }}</z-sheet-title>
+        <z-sheet-description>
+          {{ selected().additions }} additions, {{ selected().deletions }} deletions
+        </z-sheet-description>
       </z-sheet-header>
-      <pre class="bg-muted mx-4 rounded-lg p-3 font-mono text-xs whitespace-pre-wrap">{{ selected().diff }}</pre>
+      <pre
+        class="bg-muted/50 mx-6 mb-6 overflow-auto rounded-lg border py-3 font-mono text-xs leading-relaxed"
+      ><code>@for (line of lines(); track $index) {<span class="block px-3" [class]="lineClass[line.kind]">{{ line.text }}</span>}</code></pre>
     </z-sheet>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [
-    provideIcons({ lucideChevronRight, lucideFileMinus, lucideFilePen, lucideFilePlus, lucideGitCommitHorizontal }),
-  ],
+  viewProviders: [provideIcons({ lucideChevronRight, lucideFilePen, lucideFilePlus, lucideGitCommitHorizontal })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceCommitComponent {
   protected readonly files: readonly ChangedFile[] = [
     {
-      path: 'src/trace.component.ts',
-      title: 'Added trace.component.ts',
-      icon: 'lucideFilePlus',
-      stats: '+24',
-      diff: `+ @Component({ selector: 'z-trace, [z-trace]' })\n+ export class ZardTraceComponent {}`,
+      path: 'app/login/page.tsx',
+      added: false,
+      additions: 2,
+      deletions: 2,
+      diff: `@@ -14,7 +14,7 @@ export default async function LoginPage({
+   searchParams,
+ }) {
+   const { next } = await searchParams
+-  const redirectTo =
+-    next && next.startsWith("/") ? next : "/"
++  const redirectTo = safeRedirect(next)
++
+   return <LoginForm redirectTo={redirectTo} />
+ }`,
     },
     {
-      path: 'src/index.ts',
-      title: 'Edited index.ts',
-      icon: 'lucideFilePen',
-      stats: '+7 -1',
-      diff: `- export * from './marker';\n+ export * from './marker';\n+ export * from './trace';`,
-    },
-    {
-      path: 'src/legacy-steps.ts',
-      title: 'Deleted legacy-steps.ts',
-      icon: 'lucideFileMinus',
-      stats: '-8',
-      diff: `- export const legacySteps = [];`,
+      path: 'lib/auth/redirect.ts',
+      added: true,
+      additions: 7,
+      deletions: 0,
+      diff: `@@ -0,0 +1,7 @@
++export function safeRedirect(next: string | undefined) {
++  if (!next || !next.startsWith("/") || next.startsWith("//")) {
++    return "/"
++  }
++
++  return next
++}`,
     },
   ];
 
-  protected readonly sheetOpen = signal(false);
+  protected readonly open = signal(false);
   protected readonly selected = signal<ChangedFile>(this.files[0]);
 
-  protected select(file: ChangedFile): void {
+  protected readonly lineClass: Record<DiffKind, string> = {
+    hunk: 'text-muted-foreground',
+    added: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+    removed: 'bg-red-500/10 text-red-700 dark:text-red-400',
+    context: 'text-foreground',
+  };
+
+  /** One entry per diff line, without the leading `+`, `-` or space. */
+  protected readonly lines = computed(() =>
+    this.selected()
+      .diff.split('\n')
+      .map(line => {
+        if (line.startsWith('@@')) return { kind: 'hunk' as DiffKind, text: line };
+        const kind: DiffKind = line.startsWith('+') ? 'added' : line.startsWith('-') ? 'removed' : 'context';
+        return { kind, text: line.slice(1) || ' ' };
+      }),
+  );
+
+  protected show(file: ChangedFile): void {
     this.selected.set(file);
-    this.sheetOpen.set(true);
+    this.open.set(true);
   }
 }
 ```
 
-### Rtl
+## Whole Turn
+
+Three levels: the turn, a summary, and the rows. Text between steps sits between two `z-trace` lists.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBrain, lucideChevronRight, lucideFileText, lucideTerminal } from '@ng-icons/lucide';
+
+import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
+
+@Component({
+  selector: 'z-demo-trace-whole-turn',
+  imports: [NgIcon, ...ZardTraceImports],
+  template: `
+    <div class="w-full max-w-sm">
+      <z-trace-collapsible zOpen>
+        <z-trace-collapsible-trigger>
+          <z-trace-line zStatus="error">
+            <z-trace-title>Worked for 2m 4s, 1 command failed</z-trace-title>
+          </z-trace-line>
+        </z-trace-collapsible-trigger>
+        <z-trace-collapsible-content zKeepMounted class="flex flex-col gap-2">
+          <z-trace>
+            <z-trace-collapsible>
+              <z-trace-collapsible-trigger>
+                <z-trace-line>
+                  <z-trace-icon><ng-icon name="lucideBrain" /></z-trace-icon>
+                  <z-trace-title>Thought</z-trace-title>
+                  <z-trace-description>12s</z-trace-description>
+                </z-trace-line>
+              </z-trace-collapsible-trigger>
+              <z-trace-collapsible-content class="whitespace-pre-wrap">
+                I should check which package managers are installed before I scaffold anything.
+              </z-trace-collapsible-content>
+            </z-trace-collapsible>
+
+            <z-trace-collapsible zOpen>
+              <z-trace-collapsible-trigger>
+                <z-trace-line zStatus="error">
+                  <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+                  <z-trace-title>Ran 2 commands, 1 failed</z-trace-title>
+                </z-trace-line>
+              </z-trace-collapsible-trigger>
+              <z-trace-collapsible-content zKeepMounted>
+                <z-trace>
+                  <z-trace-line>
+                    <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+                    <z-trace-title>Ran node --version</z-trace-title>
+                  </z-trace-line>
+                  <z-trace-collapsible>
+                    <z-trace-collapsible-trigger>
+                      <z-trace-line zStatus="error">
+                        <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+                        <z-trace-title>Failed to run pnpm --version</z-trace-title>
+                      </z-trace-line>
+                    </z-trace-collapsible-trigger>
+                    <z-trace-collapsible-content>
+                      <pre
+                        class="border-destructive/30 bg-destructive/5 text-destructive max-h-64 overflow-auto rounded-lg border px-3 py-2.5 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+                        >{{ error }}</pre>
+                    </z-trace-collapsible-content>
+                  </z-trace-collapsible>
+                </z-trace>
+              </z-trace-collapsible-content>
+            </z-trace-collapsible>
+          </z-trace>
+
+          <p class="text-foreground">Node is installed and pnpm is not. Reading the docs config.</p>
+
+          <z-trace>
+            <a href="#whole-turn">
+              <z-trace-line>
+                <z-trace-icon><ng-icon name="lucideFileText" /></z-trace-icon>
+                <z-trace-title>Read apps/v4/lib/docs.ts</z-trace-title>
+                <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
+              </z-trace-line>
+            </a>
+          </z-trace>
+        </z-trace-collapsible-content>
+      </z-trace-collapsible>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideBrain, lucideChevronRight, lucideFileText, lucideTerminal })],
+  host: { class: 'contents' },
+})
+export class ZardDemoTraceWholeTurnComponent {
+  protected readonly error = 'command not found: pnpm';
+}
+```
+
+## Reasoning
+
+Render the reasoning of a streamed reply. The row is a `z-trace-line` until the first text arrives. See [Open State](/docs/components/trace#open).
+
+```angular-ts
+import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBrain } from '@ng-icons/lucide';
+
+import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardMessageImports } from '@/shared/components/message/message.imports';
+import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
+
+const QUESTION = 'Why is the checkout deploy so slow?';
+const REASONING =
+  'The build log shows install and compile finish in under a minute. Image optimization takes almost four, and it reruns on every deploy because the cache key includes the commit hash.';
+const ANSWER =
+  'Image optimization is the bottleneck. Key its cache on the lockfile and the image directory instead of the commit hash.';
+
+@Component({
+  selector: 'z-demo-trace-reasoning',
+  imports: [
+    NgIcon,
+    NgTemplateOutlet,
+    ZardButtonComponent,
+    ...ZardBubbleImports,
+    ...ZardMessageImports,
+    ...ZardTraceImports,
+  ],
+  template: `
+    <div class="flex min-h-72 w-full max-w-sm flex-col gap-4 py-6 text-sm">
+      @if (sent()) {
+        <z-message zAlign="end">
+          <z-message-content>
+            <z-bubble zAlign="end" zVariant="muted">
+              <z-bubble-content>{{ question }}</z-bubble-content>
+            </z-bubble>
+          </z-message-content>
+        </z-message>
+      }
+
+      @if (thinking() || reasoning()) {
+        <z-message>
+          <z-message-content class="gap-4">
+            <z-trace>
+              <ng-template #line>
+                <z-trace-line [zStatus]="thinking() ? 'running' : undefined">
+                  <z-trace-icon><ng-icon name="lucideBrain" /></z-trace-icon>
+                  <z-trace-title>{{ thinking() ? 'Thinking' : 'Thought' }}</z-trace-title>
+                </z-trace-line>
+              </ng-template>
+
+              <!-- A plain line until the first text arrives, then a row that follows the stream until it is toggled. -->
+              @if (reasoning()) {
+                <z-trace-collapsible [zOpen]="open() ?? thinking()" (zOpenChange)="open.set($event)">
+                  <z-trace-collapsible-trigger>
+                    <ng-container *ngTemplateOutlet="line" />
+                  </z-trace-collapsible-trigger>
+                  <z-trace-collapsible-content class="whitespace-pre-wrap">
+                    {{ reasoning() }}
+                  </z-trace-collapsible-content>
+                </z-trace-collapsible>
+              } @else {
+                <ng-container *ngTemplateOutlet="line" />
+              }
+            </z-trace>
+
+            @if (answer()) {
+              <p>{{ answer() }}</p>
+            }
+          </z-message-content>
+        </z-message>
+      }
+
+      @if (!busy()) {
+        <button type="button" z-button zType="outline" zSize="sm" class="mt-auto self-start" (click)="next()">
+          {{ sent() ? 'Reset' : 'Send message' }}
+        </button>
+      }
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideBrain })],
+  host: { class: 'contents' },
+})
+export class ZardDemoTraceReasoningComponent {
+  protected readonly question = QUESTION;
+
+  protected readonly sent = signal(false);
+  protected readonly thinking = signal(false);
+  protected readonly reasoning = signal('');
+  protected readonly open = signal<boolean | undefined>(undefined);
+  protected readonly answer = signal('');
+  protected readonly busy = signal(false);
+
+  /** Bumped on every run and on destroy, so a stale run stops at its next step. */
+  private run = 0;
+
+  constructor() {
+    inject(DestroyRef).onDestroy(() => this.run++);
+  }
+
+  protected next(): void {
+    if (this.sent()) {
+      this.reset();
+    } else {
+      void this.send();
+    }
+  }
+
+  private reset(): void {
+    this.run++;
+    this.sent.set(false);
+    this.thinking.set(false);
+    this.reasoning.set('');
+    this.open.set(undefined);
+    this.answer.set('');
+  }
+
+  private async send(): Promise<void> {
+    const run = ++this.run;
+    this.sent.set(true);
+    this.busy.set(true);
+    this.thinking.set(true);
+
+    if (!(await this.wait(400, run))) return;
+    if (!(await this.stream(REASONING, text => this.reasoning.set(text), 60, run))) return;
+    this.thinking.set(false);
+
+    if (!(await this.wait(400, run))) return;
+    if (!(await this.stream(ANSWER, text => this.answer.set(text), 20, run))) return;
+    this.busy.set(false);
+  }
+
+  /** Reveals `text` a word at a time, like a streamed response. Resolves `false` if the run was replaced. */
+  private async stream(text: string, set: (value: string) => void, delay: number, run: number): Promise<boolean> {
+    let shown = '';
+    for (const word of text.split(/(?<= )/)) {
+      if (!(await this.wait(delay, run))) return false;
+      shown += word;
+      set(shown);
+    }
+    return true;
+  }
+
+  private wait(ms: number, run: number): Promise<boolean> {
+    return new Promise(resolve => setTimeout(() => resolve(run === this.run), ms));
+  }
+}
+```
+
+## Tool
+
+Render the tool calls of a streamed reply: a running line while the call runs, then a row that expands into its output.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTerminal } from '@ng-icons/lucide';
+
+import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardMessageImports } from '@/shared/components/message/message.imports';
+import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
+
+interface ToolCall {
+  readonly command: string;
+  readonly state: 'running' | 'done' | 'error';
+  readonly output: string;
+}
+
+const QUESTION = 'Which package managers are installed?';
+const COMMANDS = [
+  { command: 'node --version', output: 'v24.18.0', failed: false },
+  { command: 'npm --version', output: '11.6.2', failed: false },
+  { command: 'pnpm --version', output: 'command not found: pnpm', failed: true },
+];
+const ANSWER = 'Node 24 and npm 11 are installed. pnpm is not.';
+
+@Component({
+  selector: 'z-demo-trace-tool',
+  imports: [NgIcon, ZardButtonComponent, ...ZardBubbleImports, ...ZardMessageImports, ...ZardTraceImports],
+  template: `
+    <div class="flex min-h-72 w-full max-w-sm flex-col gap-4 py-6 text-sm">
+      @if (sent()) {
+        <z-message zAlign="end">
+          <z-message-content>
+            <z-bubble zAlign="end" zVariant="muted">
+              <z-bubble-content>{{ question }}</z-bubble-content>
+            </z-bubble>
+          </z-message-content>
+        </z-message>
+      }
+
+      @if (tools().length) {
+        <z-message>
+          <z-message-content class="gap-4">
+            <z-trace>
+              @for (tool of tools(); track tool.command) {
+                @if (tool.state === 'running') {
+                  <z-trace-line zStatus="running">
+                    <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+                    <z-trace-title>Running {{ tool.command }}</z-trace-title>
+                  </z-trace-line>
+                } @else {
+                  <z-trace-collapsible>
+                    <z-trace-collapsible-trigger>
+                      <z-trace-line [zStatus]="tool.state === 'error' ? 'error' : undefined">
+                        <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+                        <z-trace-title>
+                          {{ tool.state === 'error' ? 'Failed to run' : 'Ran' }} {{ tool.command }}
+                        </z-trace-title>
+                      </z-trace-line>
+                    </z-trace-collapsible-trigger>
+                    <z-trace-collapsible-content>
+                      <pre
+                        class="bg-muted/50 text-foreground max-h-64 overflow-auto rounded-lg border px-3 py-2.5 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+                        >{{ tool.output }}</pre>
+                    </z-trace-collapsible-content>
+                  </z-trace-collapsible>
+                }
+              }
+            </z-trace>
+
+            @if (answer()) {
+              <p>{{ answer() }}</p>
+            }
+          </z-message-content>
+        </z-message>
+      }
+
+      @if (!busy()) {
+        <button type="button" z-button zType="outline" zSize="sm" class="mt-auto self-start" (click)="next()">
+          {{ sent() ? 'Reset' : 'Send message' }}
+        </button>
+      }
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideTerminal })],
+  host: { class: 'contents' },
+})
+export class ZardDemoTraceToolComponent {
+  protected readonly question = QUESTION;
+
+  protected readonly sent = signal(false);
+  protected readonly tools = signal<ToolCall[]>([]);
+  protected readonly answer = signal('');
+  protected readonly busy = signal(false);
+
+  /** Bumped on every run and on destroy, so a stale run stops at its next step. */
+  private run = 0;
+
+  constructor() {
+    inject(DestroyRef).onDestroy(() => this.run++);
+  }
+
+  protected next(): void {
+    if (this.sent()) {
+      this.run++;
+      this.sent.set(false);
+      this.tools.set([]);
+      this.answer.set('');
+    } else {
+      void this.send();
+    }
+  }
+
+  private async send(): Promise<void> {
+    const run = ++this.run;
+    this.sent.set(true);
+    this.busy.set(true);
+
+    for (const { failed, ...tool } of COMMANDS) {
+      this.tools.update(tools => [...tools, { ...tool, state: 'running' }]);
+      if (!(await this.wait(900, run))) return;
+      this.tools.update(tools =>
+        tools.map(item => (item.command === tool.command ? { ...item, state: failed ? 'error' : 'done' } : item)),
+      );
+    }
+
+    let shown = '';
+    for (const word of ANSWER.split(/(?<= )/)) {
+      if (!(await this.wait(20, run))) return;
+      shown += word;
+      this.answer.set(shown);
+    }
+    this.busy.set(false);
+  }
+
+  private wait(ms: number, run: number): Promise<boolean> {
+    return new Promise(resolve => setTimeout(() => resolve(run === this.run), ms));
+  }
+}
+```
+
+## RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 
@@ -1077,7 +1678,7 @@ const translations: ZardRtlTranslations<{
   selector: 'z-demo-trace-rtl',
   imports: [NgIcon, ...ZardTraceImports],
   template: `
-    <z-trace class="w-full max-w-sm">
+    <z-trace class="max-w-sm">
       <z-trace-line>
         <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
         <z-trace-title>{{ i18n.t().searched }}</z-trace-title>
@@ -1113,11 +1714,24 @@ const translations: ZardRtlTranslations<{
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideArrowUpRight, lucideSearch, lucideTerminal })],
+  host: { class: 'contents' },
 })
 export class ZardDemoTraceRtlComponent {
   protected readonly i18n = injectRtlTranslation(translations);
 }
 ```
+
+## Accessibility
+
+`z-trace` adds no roles of its own. Each line gets its semantics from the element that wraps it.
+
+- A `z-trace-line` on its own is a span-like box. It is read as text and is not a tab stop.
+- Wrap it in a `z-trace-collapsible-trigger` and it becomes a button with `aria-expanded`. Wrap it in a link, or in the trigger for a dialog or sheet, and it takes the keyboard and focus behavior of that element.
+- `z-trace-icon` is hidden from assistive tech, so `z-trace-title` is the accessible name. Write it as a sentence that says what happened, like "Edited trace.component.ts", not just "trace.component.ts".
+- When a link opens a new tab, add "(opens in a new tab)" to the title with `sr-only`.
+- Status is shown with color and motion, so put it in the title too. Write "Running pnpm build" while it runs and "Failed to run pnpm build" when it errors.
+- The shimmer on a running title stops when the reader prefers reduced motion. The title still says what is happening.
+- `z-trace-collapsible-content` mutes its text. If you put a block with a muted background inside it, give the block `text-foreground` so it keeps its contrast.
 
 ## API Reference
 
