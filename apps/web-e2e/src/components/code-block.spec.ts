@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from '@playwright/test';
 
 import { checkA11y } from '../utils/axe-helper';
@@ -214,20 +215,36 @@ test.describe('Code Block component', () => {
     await expect(demo.locator('z-code-block-content')).toHaveCSS('direction', 'ltr');
     await expect(demo.locator('z-code-block-header')).toHaveCSS('direction', 'rtl');
 
-    await checkA11y(page, '#rtl', ['color-contrast']);
+    await checkA11y(page, '#rtl');
   });
 
-  test('every example passes accessibility checks', async ({ page }) => {
-    // color-contrast: the terminal example prints the ANSI palette of the Shiki github themes (green, red), which is
-    // below 4.5:1 on white; the words PASS and FAIL carry the meaning too, so color is not the only cue
-    await expect(page.locator('[id="terminal"] span[style*="--shiki-light"]').first()).toBeAttached({
+  test('every example but the Shiki ones passes accessibility checks, contrast included', async ({ page }) => {
+    await expect(page.locator('[id="highlighting"] span[style*="--shiki-light"]').first()).toBeAttached({
       timeout: 15_000,
     });
-    await checkA11y(page, '#examples', ['color-contrast']);
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .include('#examples')
+      .exclude('#highlighting')
+      .exclude('#terminal')
+      .analyze();
+
+    expect(results.violations.map(violation => `${violation.id} (${violation.nodes.length})`)).toEqual([]);
+  });
+
+  test('the Shiki examples pass accessibility checks but contrast', async ({ page }) => {
+    // color-contrast: both examples print the palette of the Shiki github themes as is (a few syntax tokens and the
+    // ANSI green / red are below 4.5:1 on white, the same palette as the docs site's own viewer); the words PASS and
+    // FAIL carry the meaning in the terminal, so color is not the only cue
+    for (const id of ['highlighting', 'terminal']) {
+      await expect(page.locator(`[id="${id}"] span[style*="--shiki-light"]`).first()).toBeAttached({
+        timeout: 15_000,
+      });
+      await checkA11y(page, `#${id}`, ['color-contrast']);
+    }
   });
 
   test('passes accessibility checks', async ({ page }) => {
-    // color-contrast: the muted syntax and gutter colors in the demos come from the theme tokens of the docs preview
-    await checkA11y(page, '#overview', ['color-contrast']);
+    await checkA11y(page, '#overview');
   });
 });

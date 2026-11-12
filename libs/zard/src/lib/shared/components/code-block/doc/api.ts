@@ -39,7 +39,7 @@ export const CODE_BLOCK_API: ApiSection[] = [
     props: [CLASS_PROP],
   },
   {
-    selector: 'z-code-block-copy-button, [z-code-block-copy-button]',
+    selector: 'z-code-block-copy-button',
     description:
       'Ghost icon button that copies its value to the clipboard and announces "Copied" in a polite live region.',
     props: [
@@ -85,7 +85,7 @@ export const CODE_BLOCK_API: ApiSection[] = [
       },
       {
         name: '[zTokens]',
-        description: 'One line returned by `highlightCode()`; replaces the projected text',
+        description: 'One line returned by `highlightCode()`; the projected text is hidden while it is set',
         type: 'ZardCodeBlockLineTokens',
         default: '-',
       },

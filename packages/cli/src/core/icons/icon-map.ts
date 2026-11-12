@@ -152,6 +152,7 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
   'volume-off': { lucide: 'lucideVolumeOff' },
   wallet: { lucide: 'lucideWallet' },
   waves: { lucide: 'lucideWaves' },
+  'wrap-text': { lucide: 'lucideWrapText' },
   x: { lucide: 'lucideX' },
   'zoom-in': { lucide: 'lucideZoomIn' },
   'zoom-out': { lucide: 'lucideZoomOut' },

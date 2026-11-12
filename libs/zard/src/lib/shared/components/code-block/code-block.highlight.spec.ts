@@ -112,11 +112,33 @@ describe('highlightCode', () => {
       expect(mockLoadLanguage).not.toHaveBeenCalled();
     });
 
+    it.each(['__proto__', 'constructor', 'toString', 'hasOwnProperty'])(
+      'treats the inherited property "%s" as an unknown language',
+      async name => {
+        mockLoadLanguage.mockClear();
+
+        await expect(highlightCode('a', name)).resolves.toEqual([[{ content: 'a' }]]);
+        expect(mockLoadLanguage).not.toHaveBeenCalled();
+      },
+    );
+
     it('lets the promise reject when a grammar cannot be loaded, and retries the next time', async () => {
       mockLoadLanguage.mockRejectedValueOnce(new Error('chunk failed'));
 
       await expect(highlightCode('SELECT 1', 'sql')).rejects.toThrow('chunk failed');
       await expect(highlightCode('SELECT 1', 'sql')).resolves.toHaveLength(1);
+    });
+  });
+
+  it('does not cache a failed highlighter, so the next call tries again', async () => {
+    mockCreateHighlighterCore.mockRejectedValueOnce(new Error('theme failed'));
+
+    // a fresh copy of the module, whose highlighter has not been created yet
+    await jest.isolateModulesAsync(async () => {
+      const fresh = await import('./code-block.highlight');
+
+      await expect(fresh.highlightCode('a', 'css')).rejects.toThrow('theme failed');
+      await expect(fresh.highlightCode('a', 'css')).resolves.toHaveLength(1);
     });
   });
 

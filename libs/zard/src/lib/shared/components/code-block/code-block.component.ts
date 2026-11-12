@@ -133,7 +133,7 @@ export class ZardCodeBlockActionsComponent {
 }
 
 @Component({
-  selector: 'z-code-block-copy-button, [z-code-block-copy-button]',
+  selector: 'z-code-block-copy-button',
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <button
@@ -155,8 +155,8 @@ export class ZardCodeBlockActionsComponent {
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCheck, lucideCopy })],
   host: {
-    class: 'contents',
     'data-slot': 'code-block-copy',
+    '[class]': 'classes()',
   },
   exportAs: 'zCodeBlockCopyButton',
 })
@@ -167,6 +167,9 @@ export class ZardCodeBlockCopyButtonComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly copied = signal(false);
+
+  // The host only wraps the button and the live region, so it adds no box of its own.
+  protected readonly classes = computed(() => mergeClasses('contents'));
 
   private resetTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -200,7 +203,7 @@ export class ZardCodeBlockCopyButtonComponent {
   selector: 'z-code-block-line, [z-code-block-line]',
   template: `
     <span data-slot="code-block-line-content" class="min-w-0">
-      <span data-slot="code-block-line-source" class="contents"><ng-content /></span>
+      <span data-slot="code-block-line-source" [class]="zTokens() ? 'hidden' : 'contents'"><ng-content /></span>
       @for (token of zTokens(); track $index) {
         <span [class]="tokenClasses" [style]="token.style">{{ token.content }}</span>
       }

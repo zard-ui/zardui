@@ -153,7 +153,7 @@ export class ZardCodeBlockActionsComponent {
 }
 
 @Component({
-  selector: 'z-code-block-copy-button, [z-code-block-copy-button]',
+  selector: 'z-code-block-copy-button',
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <button
@@ -175,8 +175,8 @@ export class ZardCodeBlockActionsComponent {
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCheck, lucideCopy })],
   host: {
-    class: 'contents',
     'data-slot': 'code-block-copy',
+    '[class]': 'classes()',
   },
   exportAs: 'zCodeBlockCopyButton',
 })
@@ -187,6 +187,9 @@ export class ZardCodeBlockCopyButtonComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly copied = signal(false);
+
+  // The host only wraps the button and the live region, so it adds no box of its own.
+  protected readonly classes = computed(() => mergeClasses('contents'));
 
   private resetTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -220,7 +223,7 @@ export class ZardCodeBlockCopyButtonComponent {
   selector: 'z-code-block-line, [z-code-block-line]',
   template: `
     <span data-slot="code-block-line-content" class="min-w-0">
-      <span data-slot="code-block-line-source" class="contents"><ng-content /></span>
+      <span data-slot="code-block-line-source" [class]="zTokens() ? 'hidden' : 'contents'"><ng-content /></span>
       @for (token of zTokens(); track $index) {
         <span [class]="tokenClasses" [style]="token.style">{{ token.content }}</span>
       }
@@ -549,14 +552,19 @@ let highlighter: Promise<HighlighterCore> | undefined;
 const loadingLanguages = new Map<string, Promise<void>>();
 
 function getHighlighter(): Promise<HighlighterCore> {
-  highlighter ??= Promise.all([import('shiki/core'), import('shiki/engine/javascript')]).then(
-    ([{ createHighlighterCore }, { createJavaScriptRegexEngine }]) =>
+  highlighter ??= Promise.all([import('shiki/core'), import('shiki/engine/javascript')])
+    .then(([{ createHighlighterCore }, { createJavaScriptRegexEngine }]) =>
       createHighlighterCore({
         themes: [import('shiki/themes/github-light.mjs'), import('shiki/themes/github-dark.mjs')],
         langs: [],
         engine: createJavaScriptRegexEngine({ forgiving: true }),
       }),
-  );
+    )
+    .catch((error: unknown) => {
+      // A failed load is not cached: the next call tries again.
+      highlighter = undefined;
+      throw error;
+    });
 
   return highlighter;
 }
@@ -568,11 +576,12 @@ function resolveLanguage(language: string): keyof typeof LANGUAGES | 'ansi' | nu
     return name;
   }
 
-  if (name in LANGUAGES) {
+  // Own keys only: `__proto__` or `constructor` are not languages.
+  if (Object.hasOwn(LANGUAGES, name)) {
     return name as keyof typeof LANGUAGES;
   }
 
-  return ALIASES[name] ?? null;
+  return Object.hasOwn(ALIASES, name) ? ALIASES[name] : null;
 }
 
 async function loadLanguage(shiki: HighlighterCore, language: keyof typeof LANGUAGES): Promise<void> {
@@ -1029,7 +1038,7 @@ export class ZardDemoCodeBlockShowMoreComponent {
 
   protected readonly code = `@Component({
   selector: 'app-chat',
-  imports: [ZardButtonComponent, ZardInputDirective],
+  imports: [FormsModule, ZardButtonComponent, ZardInputDirective],
   template: \`
     @for (message of messages(); track message.id) {
       <p>{{ message.text }}</p>
@@ -1098,7 +1107,12 @@ export class ZardDemoCodeBlockHighlightingComponent {
 
   // Plain lines are shown until the highlighted ones arrive.
   protected lines() {
-    return this.highlighted.value() ?? CODE.split('\n').map(line => (line ? [{ content: line }] : []));
+    // Reading `value()` of a failed resource throws, so check it first.
+    if (this.highlighted.hasValue()) {
+      return this.highlighted.value();
+    }
+
+    return CODE.split('\n').map(line => (line ? [{ content: line }] : []));
   }
 }
 ```
@@ -1156,7 +1170,12 @@ export class ZardDemoCodeBlockTerminalComponent {
 
   // Without the highlighter the escape codes are removed, so the output stays readable.
   protected lines() {
-    return this.highlighted.value() ?? PLAIN_OUTPUT.split('\n').map(line => (line ? [{ content: line }] : []));
+    // Reading `value()` of a failed resource throws, so check it first.
+    if (this.highlighted.hasValue()) {
+      return this.highlighted.value();
+    }
+
+    return PLAIN_OUTPUT.split('\n').map(line => (line ? [{ content: line }] : []));
   }
 }
 ```
@@ -1293,7 +1312,7 @@ Holds buttons at the end of the header. As a direct child of `z-code-block` it f
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
-### z-code-block-copy-button, [z-code-block-copy-button]
+### z-code-block-copy-button
 
 Ghost icon button that copies its value to the clipboard and announces "Copied" in a polite live region.
 
@@ -1320,7 +1339,7 @@ One line of code.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zType]` | State of the line; `added` and `removed` also draw a `+` or `−` marker | `'default' \| 'added' \| 'removed' \| 'highlighted'` | `'default'` |
-| `[zTokens]` | One line returned by `highlightCode()`; replaces the projected text | `ZardCodeBlockLineTokens` | `-` |
+| `[zTokens]` | One line returned by `highlightCode()`; the projected text is hidden while it is set | `ZardCodeBlockLineTokens` | `-` |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-code-block-footer, [z-code-block-footer]

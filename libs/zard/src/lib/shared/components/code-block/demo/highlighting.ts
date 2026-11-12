@@ -41,6 +41,11 @@ export class ZardDemoCodeBlockHighlightingComponent {
 
   // Plain lines are shown until the highlighted ones arrive.
   protected lines() {
-    return this.highlighted.value() ?? CODE.split('\n').map(line => (line ? [{ content: line }] : []));
+    // Reading `value()` of a failed resource throws, so check it first.
+    if (this.highlighted.hasValue()) {
+      return this.highlighted.value();
+    }
+
+    return CODE.split('\n').map(line => (line ? [{ content: line }] : []));
   }
 }

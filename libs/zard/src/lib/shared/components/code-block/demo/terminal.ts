@@ -46,6 +46,11 @@ export class ZardDemoCodeBlockTerminalComponent {
 
   // Without the highlighter the escape codes are removed, so the output stays readable.
   protected lines() {
-    return this.highlighted.value() ?? PLAIN_OUTPUT.split('\n').map(line => (line ? [{ content: line }] : []));
+    // Reading `value()` of a failed resource throws, so check it first.
+    if (this.highlighted.hasValue()) {
+      return this.highlighted.value();
+    }
+
+    return PLAIN_OUTPUT.split('\n').map(line => (line ? [{ content: line }] : []));
   }
 }

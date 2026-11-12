@@ -39,7 +39,7 @@ export class ZardDemoCodeBlockShowMoreComponent {
 
   protected readonly code = `@Component({
   selector: 'app-chat',
-  imports: [ZardButtonComponent, ZardInputDirective],
+  imports: [FormsModule, ZardButtonComponent, ZardInputDirective],
   template: \`
     @for (message of messages(); track message.id) {
       <p>{{ message.text }}</p>

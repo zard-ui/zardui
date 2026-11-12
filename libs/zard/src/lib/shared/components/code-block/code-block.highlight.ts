@@ -51,14 +51,19 @@ let highlighter: Promise<HighlighterCore> | undefined;
 const loadingLanguages = new Map<string, Promise<void>>();
 
 function getHighlighter(): Promise<HighlighterCore> {
-  highlighter ??= Promise.all([import('shiki/core'), import('shiki/engine/javascript')]).then(
-    ([{ createHighlighterCore }, { createJavaScriptRegexEngine }]) =>
+  highlighter ??= Promise.all([import('shiki/core'), import('shiki/engine/javascript')])
+    .then(([{ createHighlighterCore }, { createJavaScriptRegexEngine }]) =>
       createHighlighterCore({
         themes: [import('shiki/themes/github-light.mjs'), import('shiki/themes/github-dark.mjs')],
         langs: [],
         engine: createJavaScriptRegexEngine({ forgiving: true }),
       }),
-  );
+    )
+    .catch((error: unknown) => {
+      // A failed load is not cached: the next call tries again.
+      highlighter = undefined;
+      throw error;
+    });
 
   return highlighter;
 }
@@ -70,11 +75,12 @@ function resolveLanguage(language: string): keyof typeof LANGUAGES | 'ansi' | nu
     return name;
   }
 
-  if (name in LANGUAGES) {
+  // Own keys only: `__proto__` or `constructor` are not languages.
+  if (Object.hasOwn(LANGUAGES, name)) {
     return name as keyof typeof LANGUAGES;
   }
 
-  return ALIASES[name] ?? null;
+  return Object.hasOwn(ALIASES, name) ? ALIASES[name] : null;
 }
 
 async function loadLanguage(shiki: HighlighterCore, language: keyof typeof LANGUAGES): Promise<void> {

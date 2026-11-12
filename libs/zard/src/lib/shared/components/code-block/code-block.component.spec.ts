@@ -403,6 +403,15 @@ describe('ZardCodeBlock', () => {
         expect(container.querySelector('z-code-block-line')?.textContent).toBe('<img src=x onerror=alert(1)>');
       });
 
+      it('hides the projected text while tokens are set, so the line is not rendered twice', async () => {
+        const { container } = await render(
+          `<z-code-block><z-code-block-content><z-code-block-line [zTokens]="tokens">fallback</z-code-block-line></z-code-block-content></z-code-block>`,
+          { imports: [...ZardCodeBlockImports], componentProperties: { tokens } },
+        );
+
+        expect(container.querySelector('[data-slot="code-block-line-source"]')).toHaveClass('hidden');
+      });
+
       it('keeps a line with no tokens as a blank line', async () => {
         const { container } = await render(
           `<z-code-block><z-code-block-content><z-code-block-line [zTokens]="[]" /></z-code-block-content></z-code-block>`,
