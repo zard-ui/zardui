@@ -417,6 +417,25 @@
       ]
     },
     {
+      "name": "menubar",
+      "type": "registry:component",
+      "registryDependencies": [
+        "dropdown"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "menubar.component.ts",
+        "menubar-trigger.directive.ts",
+        "menubar.variants.ts",
+        "menubar.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "dropdown",
       "type": "registry:component",
       "icons": {

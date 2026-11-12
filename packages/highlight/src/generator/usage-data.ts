@@ -459,6 +459,28 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   <z-dropdown-menu-item zType="destructive">Delete</z-dropdown-menu-item>
 </z-dropdown-menu-content>`,
   },
+  menubar: {
+    importCode: `import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports';`,
+    templateCode: `<z-menubar>
+  <button z-menubar-trigger [zMenubarMenu]="fileMenu">File</button>
+  <button z-menubar-trigger [zMenubarMenu]="editMenu">Edit</button>
+</z-menubar>
+
+<z-dropdown-menu-content #fileMenu="zDropdownMenuContent" class="w-56">
+  <z-dropdown-menu-item>
+    New Tab
+    <z-dropdown-menu-shortcut>⌘T</z-dropdown-menu-shortcut>
+  </z-dropdown-menu-item>
+  <z-dropdown-menu-item>New Window</z-dropdown-menu-item>
+  <z-dropdown-menu-separator />
+  <z-dropdown-menu-item>Print...</z-dropdown-menu-item>
+</z-dropdown-menu-content>
+
+<z-dropdown-menu-content #editMenu="zDropdownMenuContent" class="w-56">
+  <z-dropdown-menu-item>Undo</z-dropdown-menu-item>
+  <z-dropdown-menu-item>Redo</z-dropdown-menu-item>
+</z-dropdown-menu-content>`,
+  },
   message: {
     importCode: `import { ZardMessageImports } from '@/shared/components/message/message.imports';`,
     templateCode: `<z-message zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zVariant="muted">

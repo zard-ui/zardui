@@ -333,6 +333,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/message/demo/message').then(m => m.MESSAGE),
   },
   {
+    componentName: 'menubar',
+    description: 'A visually persistent bar of command menus, as found in desktop applications.',
+    category: 'Layout & Navigation',
+    loadData: () => import('@zard/components/menubar/demo/menubar').then(m => m.MENUBAR),
+  },
+  {
     componentName: 'navigation-menu',
     description: 'A collection of links for navigating websites.',
     category: 'Layout & Navigation',

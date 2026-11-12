@@ -120,6 +120,8 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   private closeTimeout?: ReturnType<typeof setTimeout>;
   private readonly cleanups: Array<() => void> = [];
   private focusedIndex = -1;
+  /** The parent menu this submenu was opened from: another one taking its place closes it too. */
+  private openedIn = 0;
 
   readonly zSubMenu = input.required<ZardDropdownMenuSubContentComponent | TemplateRef<unknown>>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
@@ -140,7 +142,9 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
      * being left behind on screen.
      */
     effect(() => {
-      if (this.dropdownService.isOpen() || !this.isOpen()) {
+      const parentIsOpen = this.dropdownService.isOpen();
+      const generation = this.dropdownService.generation();
+      if (!this.isOpen() || (parentIsOpen && generation === this.openedIn)) {
         return;
       }
 
@@ -184,6 +188,7 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
 
     this.overlayRef.attach(new TemplatePortal(template, viewContainerRef));
     this.isOpen.set(true);
+    this.openedIn = this.dropdownService.generation();
     this.focusedIndex = -1;
     this.attachOverlayListeners();
 
