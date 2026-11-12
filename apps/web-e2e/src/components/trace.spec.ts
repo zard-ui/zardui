@@ -180,9 +180,8 @@ test.describe('Trace component', () => {
     // The `pending` rows are left out of the scan: they are deliberately dimmed (`opacity-60`) to read as "not started
     // yet", which takes them below 4.5:1 by design, and their title still says what they are. Every other row in every
     // example keeps the full rule set, including color-contrast.
-    for (const id of EXAMPLE_SECTIONS) {
-      // Only the live demo: the code blocks around it are the site's syntax theme, not the component.
-      await checkA11y(page, `[id="${id}"] [data-slot="preview"]`, [], ['z-trace-line[data-status="pending"]']);
-    }
+    // Only the live demos: the code blocks around them are the site's syntax theme, not the component.
+    const previews = EXAMPLE_SECTIONS.map(id => `[id="${id}"] [data-slot="preview"]`).join(', ');
+    await checkA11y(page, previews, [], ['z-trace-line[data-status="pending"]']);
   });
 });
