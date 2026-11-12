@@ -743,7 +743,9 @@ import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports'
     </z-dropdown-menu-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideFile, lucideFolder, lucideSave, lucideSettings, lucideCircleHelp, lucideTrash })],
+  viewProviders: [
+    provideIcons({ lucideFile, lucideFolder, lucideSave, lucideSettings, lucideCircleHelp, lucideTrash }),
+  ],
 })
 export class ZardDemoMenubarIconsComponent {}
 ```
