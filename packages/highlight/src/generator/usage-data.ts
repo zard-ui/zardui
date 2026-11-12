@@ -462,8 +462,8 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   menubar: {
     importCode: `import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports';`,
     templateCode: `<z-menubar>
-  <button z-menubar-trigger [zMenubarMenu]="fileMenu">File</button>
-  <button z-menubar-trigger [zMenubarMenu]="editMenu">Edit</button>
+  <button type="button" z-menubar-trigger [zMenubarMenu]="fileMenu">File</button>
+  <button type="button" z-menubar-trigger [zMenubarMenu]="editMenu">Edit</button>
 </z-menubar>
 
 <z-dropdown-menu-content #fileMenu="zDropdownMenuContent" class="w-56">

@@ -1,11 +1,11 @@
 import { Directionality } from '@angular/cdk/bidi';
-import { DOCUMENT } from '@angular/common';
 import {
   afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
   DestroyRef,
+  DOCUMENT,
   ElementRef,
   inject,
   input,
@@ -169,6 +169,13 @@ export class ZardMenubarComponent {
       return;
     }
 
+    // Only keys pressed inside the open menu (or a submenu of it) belong to the bar: a focused control
+    // elsewhere — an input in a dialog — must neither close it on Tab nor have its arrows switch it.
+    const menu = target.closest(MENU_SELECTOR);
+    if (!menu) {
+      return;
+    }
+
     if (event.key === 'Tab') {
       // Leaves the bar: the focus goes back to the trigger first so the browser moves on from there.
       this.dropdownService.close();
@@ -177,11 +184,6 @@ export class ZardMenubarComponent {
     }
 
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
-      return;
-    }
-
-    const menu = target.closest(MENU_SELECTOR);
-    if (!menu) {
       return;
     }
 

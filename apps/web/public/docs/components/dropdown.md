@@ -1604,6 +1604,8 @@ export class ZardDropdownService {
   private keydownSubscription?: Subscription;
   private directionSubscription?: Subscription;
   private unlisten: Array<() => void> = [];
+  /** The deferred keyboard setup of the menu being opened; a menu replaced before it fires must not run it. */
+  private focusTimer?: ReturnType<typeof setTimeout>;
 
   readonly isOpen = signal(false);
   private readonly openings = signal(0);
@@ -1700,7 +1702,8 @@ export class ZardDropdownService {
     this.overlayRef.attach(this.portal);
 
     // Setup keyboard navigation
-    setTimeout(() => {
+    clearTimeout(this.focusTimer);
+    this.focusTimer = setTimeout(() => {
       this.setupKeyboardNavigation();
       if (initialFocus) {
         this.focusEdgeItem(initialFocus);
@@ -1754,6 +1757,7 @@ export class ZardDropdownService {
   }
 
   close() {
+    clearTimeout(this.focusTimer);
     if (this.overlayRef?.hasAttached()) {
       this.overlayRef.detach();
     }

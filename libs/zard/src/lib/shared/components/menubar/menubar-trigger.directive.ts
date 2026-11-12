@@ -85,11 +85,15 @@ export class ZardMenubarTriggerDirective implements ZardMenubarItem, OnDestroy {
   constructor() {
     this.menubar.register(this);
 
-    // The service is the source of truth for what is open; `zVisible` mirrors it...
+    // The service is the source of truth for what is open; `zVisible` mirrors it. Only a change of the
+    // service state is written back, so a `zVisible` bound to `true` from the start is not overwritten
+    // by the initial "closed" before the effect below gets to open the menu...
+    let reportedOpen = false;
     effect(() => {
       const open = this.isOpen();
       untracked(() => {
-        if (this.zVisible() !== open) {
+        if (open !== reportedOpen) {
+          reportedOpen = open;
           this.zVisible.set(open);
         }
       });

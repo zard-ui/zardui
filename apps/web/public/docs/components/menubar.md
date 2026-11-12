@@ -19,13 +19,13 @@ npx zard-cli@latest add menubar
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
-import { DOCUMENT } from '@angular/common';
 import {
   afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
   DestroyRef,
+  DOCUMENT,
   ElementRef,
   inject,
   input,
@@ -189,6 +189,13 @@ export class ZardMenubarComponent {
       return;
     }
 
+    // Only keys pressed inside the open menu (or a submenu of it) belong to the bar: a focused control
+    // elsewhere — an input in a dialog — must neither close it on Tab nor have its arrows switch it.
+    const menu = target.closest(MENU_SELECTOR);
+    if (!menu) {
+      return;
+    }
+
     if (event.key === 'Tab') {
       // Leaves the bar: the focus goes back to the trigger first so the browser moves on from there.
       this.dropdownService.close();
@@ -197,11 +204,6 @@ export class ZardMenubarComponent {
     }
 
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
-      return;
-    }
-
-    const menu = target.closest(MENU_SELECTOR);
-    if (!menu) {
       return;
     }
 
@@ -325,11 +327,15 @@ export class ZardMenubarTriggerDirective implements ZardMenubarItem, OnDestroy {
   constructor() {
     this.menubar.register(this);
 
-    // The service is the source of truth for what is open; `zVisible` mirrors it...
+    // The service is the source of truth for what is open; `zVisible` mirrors it. Only a change of the
+    // service state is written back, so a `zVisible` bound to `true` from the start is not overwritten
+    // by the initial "closed" before the effect below gets to open the menu...
+    let reportedOpen = false;
     effect(() => {
       const open = this.isOpen();
       untracked(() => {
-        if (this.zVisible() !== open) {
+        if (open !== reportedOpen) {
+          reportedOpen = open;
           this.zVisible.set(open);
         }
       });
@@ -502,8 +508,8 @@ import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports'
 
 ```angular-html
 <z-menubar>
-  <button z-menubar-trigger [zMenubarMenu]="fileMenu">File</button>
-  <button z-menubar-trigger [zMenubarMenu]="editMenu">Edit</button>
+  <button type="button" z-menubar-trigger [zMenubarMenu]="fileMenu">File</button>
+  <button type="button" z-menubar-trigger [zMenubarMenu]="editMenu">Edit</button>
 </z-menubar>
 
 <z-dropdown-menu-content #fileMenu="zDropdownMenuContent" class="w-56">

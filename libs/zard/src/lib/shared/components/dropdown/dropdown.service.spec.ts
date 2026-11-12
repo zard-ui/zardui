@@ -249,6 +249,24 @@ describe('ZardDropdownService', () => {
       menu.remove();
     });
 
+    it('does not let the deferred focus of a replaced menu reach the next one', async () => {
+      const focusEdge = jest.spyOn(service, 'focusEdgeItem');
+
+      service.open(first, templateRef, viewContainerRef, undefined, { initialFocus: 'last' });
+      service.open(second, templateRef, viewContainerRef);
+      await new Promise(resolve => setTimeout(resolve, 20));
+
+      expect(focusEdge).not.toHaveBeenCalled();
+    });
+
+    it('cancels the deferred keyboard setup when the menu closes first', async () => {
+      service.open(first, templateRef, viewContainerRef);
+      service.close();
+      await new Promise(resolve => setTimeout(resolve, 20));
+
+      expect(mockRenderer.listen).not.toHaveBeenCalled();
+    });
+
     it('hands the alignment offset to the positions', () => {
       service.open(first, templateRef, viewContainerRef, { sideOffset: 8, alignOffset: -4 });
 

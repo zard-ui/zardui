@@ -32,6 +32,7 @@ import { ZardMenubarImports } from './menubar.imports';
     </z-menubar>
 
     <button type="button" data-testid="after">After</button>
+    <input data-testid="outside-input" aria-label="Outside" />
 
     <z-dropdown-menu-content #fileMenu="zDropdownMenuContent" class="w-56">
       <z-dropdown-menu-item data-testid="new-tab" (click)="selected.set('new-tab')">
@@ -77,6 +78,24 @@ class TestHostComponent {
   bookmarks = false;
   profile = 'andy';
   readonly file = viewChild.required(ZardMenubarTriggerDirective);
+}
+
+@Component({
+  imports: [ZardMenubarImports],
+  template: `
+    <z-menubar>
+      <button type="button" z-menubar-trigger data-testid="first-trigger" [zMenubarMenu]="menu" [(zVisible)]="visible">
+        File
+      </button>
+    </z-menubar>
+    <z-dropdown-menu-content #menu="zDropdownMenuContent">
+      <z-dropdown-menu-item>New Tab</z-dropdown-menu-item>
+    </z-dropdown-menu-content>
+  `,
+  changeDetection: ChangeDetectionStrategy.Eager,
+})
+class InitiallyOpenHostComponent {
+  readonly visible = signal(true);
 }
 
 describe('ZardMenubarComponent', () => {
@@ -514,6 +533,19 @@ describe('ZardMenubarComponent', () => {
       expect(byId('after')).toHaveFocus();
     });
 
+    it('leaves the keys of an unrelated focused control alone while a menu is open', async () => {
+      const input = byId('outside-input');
+      input.focus();
+
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }));
+      await flush();
+
+      expect(openMenus()).toHaveLength(1);
+      expect(byId('file')).toHaveAttribute('aria-expanded', 'true');
+      expect(input).toHaveFocus();
+    });
+
     it('closes on Shift+Tab and moves before the bar', async () => {
       await user.tab({ shift: true });
       await flush();
@@ -658,6 +690,27 @@ describe('ZardMenubarComponent', () => {
       await flush();
 
       expect(openMenus()).toHaveLength(0);
+    });
+  });
+
+  describe('zVisible bound to true from the start', () => {
+    it('opens the menu instead of being reset to false', async () => {
+      await TestBed.configureTestingModule({
+        imports: [InitiallyOpenHostComponent],
+        providers: [{ provide: EVENT_MANAGER_PLUGINS, useClass: ZardEventManagerPlugin, multi: true }],
+      }).compileComponents();
+      const open = TestBed.createComponent(InitiallyOpenHostComponent);
+      open.detectChanges();
+      await open.whenStable();
+      await new Promise(resolve => setTimeout(resolve, 5));
+      open.detectChanges();
+
+      expect(open.componentInstance.visible()).toBe(true);
+      expect(document.querySelectorAll('[data-slot="dropdown-menu-content"]')).toHaveLength(1);
+      expect(document.querySelector('[data-testid="first-trigger"]')).toHaveAttribute('aria-expanded', 'true');
+
+      TestBed.inject(ZardDropdownService).close();
+      open.destroy();
     });
   });
 
