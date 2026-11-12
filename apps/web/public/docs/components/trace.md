@@ -18,6 +18,7 @@ npx zard-cli@latest add trace
 ### Manual
 
 ```angular-ts
+import { isPlatformBrowser } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -33,7 +34,6 @@ import {
   untracked,
   ViewEncapsulation,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronRight } from '@ng-icons/lucide';
