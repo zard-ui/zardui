@@ -1219,7 +1219,7 @@ const SCRIPT: ChatMessage[] = [
                   <z-demo-chat-row [zMessage]="message" />
                 </z-message-scroller-item>
               }
-              <button type="button" z-message-scroller-button></button>
+              <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
             </z-message-scroller>
           }
         </z-card-content>
@@ -1407,7 +1407,7 @@ const ROCKY_MESSAGE: GroupChatItem = {
                   </z-message-scroller-item>
                 }
               }
-              <button type="button" z-message-scroller-button></button>
+              <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
             </z-message-scroller>
           }
         </z-card-content>
@@ -1548,7 +1548,7 @@ const DEFAULT_PEEK = 64;
                   <z-demo-chat-row [zMessage]="message" />
                 </z-message-scroller-item>
               }
-              <button type="button" z-message-scroller-button></button>
+              <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
             </z-message-scroller>
           }
         </z-card-content>
@@ -1700,7 +1700,7 @@ import { injectScriptedChat, messageAnimationClass, ZardDemoChatRowComponent } f
                   <z-demo-chat-row [zMessage]="message" />
                 </z-message-scroller-item>
               }
-              <button type="button" z-message-scroller-button></button>
+              <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
             </z-message-scroller>
           }
         </z-card-content>
@@ -1809,7 +1809,7 @@ const MESSAGES: ChatMessage[] = [
                   <z-demo-chat-row [zMessage]="message" />
                 </z-message-scroller-item>
               }
-              <button type="button" z-message-scroller-button></button>
+              <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
             </z-message-scroller>
           }
         </z-card-content>
@@ -1960,7 +1960,7 @@ const INITIAL_VISIBLE_COUNT = 5;
                   <z-marker-content>End of Conversation</z-marker-content>
                 </z-marker>
               </z-message-scroller-item>
-              <button type="button" z-message-scroller-button></button>
+              <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
             </z-message-scroller>
           }
         </z-card-content>
@@ -2117,7 +2117,7 @@ const SCRIPT: ChatScriptStep[] = [
                   <z-demo-chat-row [zMessage]="message" />
                 </z-message-scroller-item>
               }
-              <button type="button" z-message-scroller-button></button>
+              <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
             </z-message-scroller>
           }
         </z-card-content>
@@ -2237,7 +2237,7 @@ const MESSAGES = scriptMessages([
                 <z-demo-chat-row [zMessage]="message" />
               </z-message-scroller-item>
             }
-            <button type="button" z-message-scroller-button></button>
+            <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
           </z-message-scroller>
         </z-card-content>
       </z-card>
@@ -2340,7 +2340,7 @@ const MESSAGES = scriptMessages([
                   <z-demo-chat-row [zMessage]="message" />
                 </z-message-scroller-item>
               }
-              <button type="button" z-message-scroller-button></button>
+              <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
             </z-message-scroller>
           </z-card-content>
         </z-card>
@@ -2449,7 +2449,7 @@ const MESSAGES: ChatMessage[] = Array.from({ length: 12 }, (_, index) => ({
                 <z-demo-chat-row [zMessage]="message" />
               </z-message-scroller-item>
             }
-            <button type="button" z-message-scroller-button></button>
+            <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
           </z-message-scroller>
         </z-card-content>
         <z-card-footer class="text-muted-foreground justify-center border-t text-center text-sm">
