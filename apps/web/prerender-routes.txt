@@ -88,6 +88,7 @@
 /docs/components/dropdown
 /docs/components/popover
 /docs/components/kbd
+/docs/components/code-block
 /docs/components/collapsible
 /docs/components/sidebar
 /docs/components/drawer

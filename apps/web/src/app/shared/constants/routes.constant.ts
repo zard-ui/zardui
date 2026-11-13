@@ -146,6 +146,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Dropdown', path: '/docs/components/dropdown', available: true },
     { name: 'Popover', path: '/docs/components/popover', available: true },
     { name: 'Kbd', path: '/docs/components/kbd', available: true },
+    { name: 'Code Block', path: '/docs/components/code-block', available: true },
     { name: 'Collapsible', path: '/docs/components/collapsible', available: true },
     { name: 'Sidebar', path: '/docs/components/sidebar', available: true },
     { name: 'Drawer', path: '/docs/components/drawer', available: true },

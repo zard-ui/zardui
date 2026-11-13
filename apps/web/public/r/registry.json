@@ -328,6 +328,36 @@
       ]
     },
     {
+      "name": "code-block",
+      "type": "registry:component",
+      "dependencies": [
+        "shiki@^4.1.0"
+      ],
+      "registryDependencies": [
+        "button",
+        "utilities"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideCheck",
+          "lucideCopy"
+        ],
+        "tokens": [
+          "check",
+          "copy"
+        ]
+      },
+      "files": [
+        "code-block.component.ts",
+        "code-block.variants.ts",
+        "code-block.imports.ts",
+        "code-block.highlight.ts",
+        "code-block.types.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "collapsible",
       "type": "registry:component",
       "icons": {
