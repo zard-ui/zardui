@@ -487,6 +487,32 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   How can I help you today?
 </z-message>`,
   },
+  'message-scroller': {
+    importCode: `import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
+import { ZardMessageImports } from '@/shared/components/message/message.imports';
+import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';`,
+    templateCode: `<z-message-scroller>
+  @for (message of messages(); track message.id) {
+    <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
+      <z-message [zAlign]="message.role === 'user' ? 'end' : 'start'">
+        <z-message-content>
+          <z-bubble><z-bubble-content>{{ message.text }}</z-bubble-content></z-bubble>
+        </z-message-content>
+      </z-message>
+    </z-message-scroller-item>
+  }
+  <button type="button" z-message-scroller-button></button>
+</z-message-scroller>`,
+    description: '`z-message-scroller` fills its parent, so place it inside a height-constrained container.',
+    additionalCodeBlocks: [
+      {
+        language: 'angular-html',
+        code: `<div class="flex h-screen flex-col">
+  <z-message-scroller class="flex-1"><!-- transcript --></z-message-scroller>
+</div>`,
+      },
+    ],
+  },
   map: {
     importCode: `import { ZardMapImports } from '@/shared/components/map/map.imports';`,
     templateCode: `<div class="h-96 overflow-hidden rounded-xl border">

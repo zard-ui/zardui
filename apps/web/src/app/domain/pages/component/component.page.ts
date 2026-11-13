@@ -9,7 +9,7 @@ import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.com
 import { AiAssistComponent } from '@doc/domain/components/ai-assist/ai-assist.component';
 import { ApiReferenceComponent } from '@doc/domain/components/api-reference/api-reference.component';
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
-import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { NavigationConfig, type NavigationItem } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { StepsComponent } from '@doc/domain/components/steps/steps.component';
 import { ProseDirective } from '@doc/domain/directives/prose.directive';
 import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
@@ -162,15 +162,26 @@ export class ComponentPage implements OnInit {
     const introSections = sections.filter(section => section.position === 'intro');
     const outroSections = sections.filter(section => section.position !== 'intro');
     // A section with a single example reads as that example, so it lists no children.
-    const sectionNavigationItem = ({ id, title, examples = [] }: ComponentSection) => ({
+    const sectionNavigationItem = ({ id, title, examples = [] }: ComponentSection): NavigationItem => ({
       id,
       label: title,
-      type: 'core' as const,
+      type: 'core',
       children:
         examples.length > 1
           ? examples.map(example => ({ id: example.name, label: example.name, type: 'custom' as const }))
           : undefined,
     });
+    // A `level: 3` section is listed under the section above it, like an h3 under its h2.
+    const sectionNavigationItems = (list: ComponentSection[]) =>
+      list.reduce<NavigationItem[]>((items, section) => {
+        const parent = items[items.length - 1];
+        if (section.level === 3 && parent) {
+          parent.children = [...(parent.children ?? []), { ...sectionNavigationItem(section), type: 'custom' }];
+        } else {
+          items.push(sectionNavigationItem(section));
+        }
+        return items;
+      }, []);
 
     this.navigationConfig = component.deprecatedFor
       ? { items: [] }
@@ -178,7 +189,7 @@ export class ComponentPage implements OnInit {
           items: [
             { id: 'overview', label: 'Overview', type: 'core' },
             ...(component.about ? [{ id: 'about', label: 'About', type: 'core' as const }] : []),
-            ...introSections.map(sectionNavigationItem),
+            ...sectionNavigationItems(introSections),
             { id: 'installation', label: 'Installation', type: 'core' },
             { id: 'usage', label: 'Usage', type: 'core' },
             ...(component.composition ? [{ id: 'composition', label: 'Composition', type: 'core' as const }] : []),
@@ -186,7 +197,7 @@ export class ComponentPage implements OnInit {
             ...(component.examples.length
               ? [{ id: 'examples', label: 'Examples', type: 'core' as const, children: exampleNavigationItems }]
               : []),
-            ...outroSections.map(sectionNavigationItem),
+            ...sectionNavigationItems(outroSections),
             ...(component.accessibility
               ? [{ id: 'accessibility', label: 'Accessibility', type: 'core' as const }]
               : []),

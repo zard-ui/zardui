@@ -172,14 +172,14 @@ export function serializeComponentToMarkdown(data: ComponentData): string {
     frontmatter(title, data.description),
     `# ${title}\n\n${data.description}`,
     ...(data.intro ?? []),
-    ...sections.filter(extra => extra.position === 'intro').map(extra => section(extra.title, serializeSection(extra))),
+    ...sections.filter(extra => extra.position === 'intro').map(serializeTitledSection),
     data.about?.description ? section('About', serializeAbout(data)) : '',
     section('Installation', serializeInstallation(data)),
     section('Usage', serializeUsage(data)),
     section('Composition', serializeComposition(data)),
     section('Features', (data.features ?? []).map(feature => `- ${feature}`).join('\n')),
     section('Examples', serializeExamples(data.examples)),
-    ...sections.filter(extra => extra.position !== 'intro').map(extra => section(extra.title, serializeSection(extra))),
+    ...sections.filter(extra => extra.position !== 'intro').map(serializeTitledSection),
     section('Accessibility', data.accessibility?.join('\n\n') ?? ''),
     section('API Reference', serializeApi(data.api)),
     browserLink,
@@ -212,6 +212,12 @@ function serializeAbout(data: ComponentData): string {
   }
   if (about.note) parts.push(about.note);
   return parts.join('\n\n');
+}
+
+/** A section under its heading: `##`, or `###` for a `level: 3` part of the section above it. */
+function serializeTitledSection(extra: ComponentSection): string {
+  const body = serializeSection(extra);
+  return extra.level === 3 ? `### ${extra.title}\n\n${body}` : section(extra.title, body);
 }
 
 /** A titled extra block: its prose, its table, then its examples one level below the heading. */

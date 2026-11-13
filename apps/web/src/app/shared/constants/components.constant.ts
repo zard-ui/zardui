@@ -43,6 +43,8 @@ export interface ComponentSection {
   id: string;
   title: string;
   position?: 'intro';
+  /** `3` renders an h3 listed under the section above it in the page navigation, like the parts of "Core Concepts". */
+  level?: 2 | 3;
   description?: string;
   /** A highlighted warning shown above the description, for what readers must not miss. */
   callout?: { title: string; description: string };
@@ -363,6 +365,13 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'The building block for reasoning, tool calls, sources and more.',
     category: 'Display & Media',
     loadData: () => import('@zard/components/trace/demo/trace').then(m => m.TRACE),
+  },
+  {
+    componentName: 'message-scroller',
+    description:
+      'A chat scroll container that opens at the right place, follows a streaming answer, keeps your place as history loads, and jumps to any message.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/message-scroller/demo/message-scroller').then(m => m.MESSAGE_SCROLLER),
   },
   {
     componentName: 'navigation-menu',

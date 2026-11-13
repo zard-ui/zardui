@@ -35,6 +35,7 @@ export * from './lib/shared/components/map';
 export * from './lib/shared/components/map-style-select';
 export * from './lib/shared/components/menubar';
 export * from './lib/shared/components/message';
+export * from './lib/shared/components/message-scroller';
 export * from './lib/shared/components/native-select';
 export * from './lib/shared/components/navigation-menu';
 export * from './lib/shared/components/pagination';

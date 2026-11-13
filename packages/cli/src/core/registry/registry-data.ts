@@ -1818,4 +1818,15 @@ export const registry: ComponentRegistry[] = [
       { name: 'index.ts', content: '' },
     ],
   },
+  {
+    name: 'message-scroller',
+    registryDependencies: ['button', 'utilities'],
+    files: [
+      { name: 'message-scroller.component.ts', content: '' },
+      { name: 'message-scroller.service.ts', content: '' },
+      { name: 'message-scroller.variants.ts', content: '' },
+      { name: 'message-scroller.imports.ts', content: '' },
+      { name: 'index.ts', content: '' },
+    ],
+  },
 ];

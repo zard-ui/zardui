@@ -45,6 +45,7 @@ Here you can find all the components available in the library. We are working on
 - [Marker](/docs/components/marker)
 - [Menubar](/docs/components/menubar)
 - [Message](/docs/components/message)
+- [Message Scroller](/docs/components/message-scroller)
 - [Native Select](/docs/components/native-select)
 - [Navigation Menu](/docs/components/navigation-menu)
 - [Pagination](/docs/components/pagination)

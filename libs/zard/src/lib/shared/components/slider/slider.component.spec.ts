@@ -844,3 +844,25 @@ describe('ZardSliderComponent (custom zMin/zMax)', () => {
     expect(thumb().getAttribute('aria-valuenow')).toBe('0.7');
   });
 });
+
+@Component({
+  selector: 'test-slider-labelled-host',
+  imports: [ZardSliderComponent],
+  template: `
+    <z-slider aria-label="Volume" [zDefault]="[30]" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+class LabelledSliderHostComponent {}
+
+describe('ZardSliderComponent accessible name', () => {
+  it('names the thumb with the aria-label of the slider and keeps it off the role-less host', async () => {
+    await TestBed.configureTestingModule({ imports: [LabelledSliderHostComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(LabelledSliderHostComponent);
+    fixture.detectChanges();
+
+    const thumb = fixture.nativeElement.querySelector('[role="slider"]') as HTMLElement;
+    expect(thumb.getAttribute('aria-label')).toBe('Volume');
+    expect(fixture.nativeElement.querySelector('z-slider').hasAttribute('aria-label')).toBe(false);
+  });
+});

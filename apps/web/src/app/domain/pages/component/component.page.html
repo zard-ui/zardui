@@ -311,9 +311,13 @@
 
     <ng-template #sectionBlock let-section let-componentName="componentName">
       <section class="flex flex-col gap-4" [scrollSpyItem]="section.id" [attr.id]="section.id">
-        <h2 class="font-heading mt-10 scroll-m-28 text-xl font-medium tracking-tight lg:mt-12">
-          {{ section.title }}
-        </h2>
+        @if (section.level === 3) {
+          <h3 class="font-heading mt-6 scroll-m-28 text-lg font-medium tracking-tight">{{ section.title }}</h3>
+        } @else {
+          <h2 class="font-heading mt-10 scroll-m-28 text-xl font-medium tracking-tight lg:mt-12">
+            {{ section.title }}
+          </h2>
+        }
         @if (section.callout; as callout) {
           <z-alert
             zType="destructive"
