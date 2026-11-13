@@ -152,6 +152,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Bubble', path: '/docs/components/bubble', available: true },
     { name: 'Hover Card', path: '/docs/components/hover-card', available: true },
     { name: 'Context Menu', path: '/docs/components/context-menu', available: true },
+    { name: 'Menubar', path: '/docs/components/menubar', available: true },
     { name: 'Message', path: '/docs/components/message', available: true },
     { name: 'Message Scroller', path: '/docs/components/message-scroller', available: true },
     { name: 'Map', path: '/docs/components/map', available: true },
@@ -162,6 +163,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Aspect Ratio', path: '/docs/components/aspect-ratio', available: true },
     { name: 'Attachment', path: '/docs/components/attachment', available: true },
     { name: 'Questionnaire', path: '/docs/components/questionnaire', available: true },
+    { name: 'Trace', path: '/docs/components/trace', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 

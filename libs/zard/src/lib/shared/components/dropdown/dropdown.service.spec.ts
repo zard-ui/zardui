@@ -173,6 +173,108 @@ describe('ZardDropdownService', () => {
     });
   });
 
+  describe('open', () => {
+    let first: ElementRef;
+    let second: ElementRef;
+    let templateRef: TemplateRef<unknown>;
+    let viewContainerRef: ViewContainerRef;
+
+    beforeEach(() => {
+      first = new ElementRef(document.createElement('button'));
+      second = new ElementRef(document.createElement('button'));
+      templateRef = { elementRef: new ElementRef(document.createElement('div')) } as TemplateRef<unknown>;
+      viewContainerRef = {
+        createEmbeddedView: jest.fn(),
+        clear: jest.fn(),
+        element: new ElementRef(document.createElement('div')),
+        injector: TestBed.inject(Injector),
+      } as unknown as ViewContainerRef;
+    });
+
+    it('opens the menu below the trigger it was given', () => {
+      service.open(first, templateRef, viewContainerRef);
+
+      expect(service.isOpen()).toBe(true);
+      expect(service.getTriggerElement()).toBe(first);
+    });
+
+    it('switches to another trigger instead of closing when a menu is already open', () => {
+      service.open(first, templateRef, viewContainerRef);
+      service.open(second, templateRef, viewContainerRef);
+
+      expect(service.isOpen()).toBe(true);
+      expect(service.getTriggerElement()).toBe(second);
+      expect(mockOverlayRef.dispose).toHaveBeenCalledTimes(1);
+    });
+
+    it('counts every opening, including a switch that never rests on closed', () => {
+      const start = service.generation();
+
+      service.open(first, templateRef, viewContainerRef);
+      service.open(second, templateRef, viewContainerRef);
+
+      expect(service.generation()).toBe(start + 2);
+    });
+
+    it('forgets the trigger once closed', () => {
+      service.open(first, templateRef, viewContainerRef);
+      service.close();
+
+      expect(service.getTriggerElement()).toBeUndefined();
+    });
+
+    it('focuses the requested edge row once the menu is up', async () => {
+      const menu = document.createElement('div');
+      menu.setAttribute('role', 'menu');
+      const rows = [0, 1, 2].map(() => {
+        const row = document.createElement('div');
+        row.setAttribute('z-dropdown-menu-item', '');
+        row.tabIndex = -1;
+        menu.appendChild(row);
+        return row;
+      });
+      document.body.appendChild(menu);
+      mockOverlayRef.overlayElement.appendChild(menu);
+
+      service.open(first, templateRef, viewContainerRef, undefined, { initialFocus: 'last' });
+      await new Promise(resolve => setTimeout(resolve, 20));
+
+      expect(rows[2]).toHaveAttribute('data-highlighted');
+      expect(rows[0]).not.toHaveAttribute('data-highlighted');
+
+      service.focusEdgeItem('first');
+
+      expect(rows[0]).toHaveAttribute('data-highlighted');
+      expect(rows[2]).not.toHaveAttribute('data-highlighted');
+      menu.remove();
+    });
+
+    it('does not let the deferred focus of a replaced menu reach the next one', async () => {
+      const focusEdge = jest.spyOn(service, 'focusEdgeItem');
+
+      service.open(first, templateRef, viewContainerRef, undefined, { initialFocus: 'last' });
+      service.open(second, templateRef, viewContainerRef);
+      await new Promise(resolve => setTimeout(resolve, 20));
+
+      expect(focusEdge).not.toHaveBeenCalled();
+    });
+
+    it('cancels the deferred keyboard setup when the menu closes first', async () => {
+      service.open(first, templateRef, viewContainerRef);
+      service.close();
+      await new Promise(resolve => setTimeout(resolve, 20));
+
+      expect(mockRenderer.listen).not.toHaveBeenCalled();
+    });
+
+    it('hands the alignment offset to the positions', () => {
+      service.open(first, templateRef, viewContainerRef, { sideOffset: 8, alignOffset: -4 });
+
+      const withPositions = mockOverlayPositionBuilder.flexibleConnectedTo.mock.results[0].value.withPositions;
+      expect(withPositions.mock.calls[0][0][0]).toMatchObject({ offsetY: 8, offsetX: -4 });
+    });
+  });
+
   describe('close', () => {
     let triggerElement: ElementRef;
     let templateRef: TemplateRef<unknown>;

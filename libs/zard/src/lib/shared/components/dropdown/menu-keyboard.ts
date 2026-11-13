@@ -75,3 +75,52 @@ export function findMenuItemByChar(items: HTMLElement[], char: string, from: num
 export function isTypeaheadKey(event: KeyboardEvent): boolean {
   return event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey;
 }
+
+/**
+ * The pointer half of the roving focus, the way Radix menus do it: the row under the pointer takes
+ * the focus, so the pointer and the keyboard share a single highlight, and leaving a row hands the
+ * focus back to the menu surface, so no row stays lit once the pointer has gone. A sub-trigger whose
+ * submenu is open keeps it — the pointer is on its way into that submenu.
+ *
+ * `onHighlight` receives the row's index among `getMenuItems(surface)`, or `-1` when the pointer
+ * left, so the caller keeps its own focused index in step with what is on screen.
+ */
+export function bindMenuPointer(surface: HTMLElement, onHighlight: (index: number) => void): () => void {
+  const rowOf = (target: EventTarget | null): HTMLElement | null => {
+    const row = target instanceof Element ? target.closest<HTMLElement>(ZARD_MENU_ITEM_SELECTOR) : null;
+    return row && surface.contains(row) ? row : null;
+  };
+
+  const onPointerMove = (event: PointerEvent) => {
+    const row = rowOf(event.target);
+    if (!row || row.dataset['disabled'] !== undefined || row.ownerDocument.activeElement === row) {
+      return;
+    }
+
+    const index = getMenuItems(surface).indexOf(row);
+    if (index !== -1) {
+      onHighlight(index);
+    }
+  };
+
+  const onPointerOut = (event: PointerEvent) => {
+    const row = rowOf(event.target);
+    if (!row || row.contains(event.relatedTarget as Node | null) || row.getAttribute('aria-expanded') === 'true') {
+      return;
+    }
+
+    delete row.dataset['highlighted'];
+    if (row.ownerDocument.activeElement === row) {
+      surface.focus({ preventScroll: true });
+    }
+    onHighlight(-1);
+  };
+
+  surface.addEventListener('pointermove', onPointerMove);
+  surface.addEventListener('pointerout', onPointerOut);
+
+  return () => {
+    surface.removeEventListener('pointermove', onPointerMove);
+    surface.removeEventListener('pointerout', onPointerOut);
+  };
+}

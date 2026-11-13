@@ -630,6 +630,32 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'menubar',
+    registryDependencies: ['dropdown'],
+    files: [
+      {
+        name: 'menubar.component.ts',
+        content: '',
+      },
+      {
+        name: 'menubar-trigger.directive.ts',
+        content: '',
+      },
+      {
+        name: 'menubar.variants.ts',
+        content: '',
+      },
+      {
+        name: 'menubar.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'dropdown',
     files: [
       {
@@ -1779,6 +1805,16 @@ export const registry: ComponentRegistry[] = [
       { name: 'questionnaire.types.ts', content: '' },
       { name: 'questionnaire.tokens.ts', content: '' },
       { name: 'questionnaire.imports.ts', content: '' },
+      { name: 'index.ts', content: '' },
+    ],
+  },
+  {
+    name: 'trace',
+    registryDependencies: ['collapsible', 'utilities'],
+    files: [
+      { name: 'trace.component.ts', content: '' },
+      { name: 'trace.variants.ts', content: '' },
+      { name: 'trace.imports.ts', content: '' },
       { name: 'index.ts', content: '' },
     ],
   },

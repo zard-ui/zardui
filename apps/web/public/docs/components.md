@@ -43,6 +43,7 @@ Here you can find all the components available in the library. We are working on
 - [Map Draw](/docs/components/map-draw)
 - [Map Style Select](/docs/components/map-style-select)
 - [Marker](/docs/components/marker)
+- [Menubar](/docs/components/menubar)
 - [Message](/docs/components/message)
 - [Message Scroller](/docs/components/message-scroller)
 - [Native Select](/docs/components/native-select)
@@ -69,4 +70,5 @@ Here you can find all the components available in the library. We are working on
 - [Toggle](/docs/components/toggle)
 - [Toggle Group](/docs/components/toggle-group)
 - [Tooltip](/docs/components/tooltip)
+- [Trace](/docs/components/trace)
 - [Typography](/docs/typeset)
