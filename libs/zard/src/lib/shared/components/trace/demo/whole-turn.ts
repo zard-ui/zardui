@@ -62,13 +62,13 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
             </z-trace-collapsible>
           </z-trace>
 
-          <p class="text-foreground">Node is installed and pnpm is not. Reading the docs config.</p>
+          <p class="text-foreground">Node is installed and pnpm is not. Reading the workspace config.</p>
 
           <z-trace>
             <a href="#whole-turn">
               <z-trace-line>
                 <z-trace-icon><ng-icon name="lucideFileText" /></z-trace-icon>
-                <z-trace-title>Read apps/v4/lib/docs.ts</z-trace-title>
+                <z-trace-title>Read angular.json</z-trace-title>
                 <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
               </z-trace-line>
             </a>

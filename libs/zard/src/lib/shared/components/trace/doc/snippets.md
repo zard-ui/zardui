@@ -35,10 +35,10 @@ protected readonly open = signal<boolean | undefined>(undefined);
 ```
 
 ```angular-html id="link" copyButton
-<a href="https://docs.astro.build" target="_blank" rel="noreferrer">
+<a href="https://angular.dev/installation" target="_blank" rel="noreferrer">
   <z-trace-line>
     <z-trace-title>
-      Install Astro
+      Install Angular
       <span class="sr-only">(opens in a new tab)</span>
     </z-trace-title>
     <z-trace-icon><ng-icon name="lucideArrowUpRight" /></z-trace-icon>
@@ -49,7 +49,7 @@ protected readonly open = signal<boolean | undefined>(undefined);
 ```angular-html id="dialog" copyButton
 <button type="button" (click)="open.set(true)">
   <z-trace-line>
-    <z-trace-title>Searched the web for cache keys</z-trace-title>
+    <z-trace-title>Searched the web for build cache settings</z-trace-title>
     <z-trace-icon><ng-icon name="lucideChevronRight" /></z-trace-icon>
   </z-trace-line>
 </button>

@@ -39,10 +39,5 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 export class ZardDemoTraceSheetComponent {
   protected readonly open = signal(false);
 
-  protected readonly files = [
-    'apps/v4/lib/docs.ts',
-    'apps/v4/lib/components.ts',
-    'apps/v4/next.config.mjs',
-    'apps/v4/package.json',
-  ];
+  protected readonly files = ['src/app/app.config.ts', 'src/app/app.routes.ts', 'angular.json', 'package.json'];
 }

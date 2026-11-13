@@ -592,7 +592,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
     <z-trace class="max-w-sm">
       <z-trace-line>
         <z-trace-icon><ng-icon name="lucideFilePen" /></z-trace-icon>
-        <z-trace-title>Edited components/settings/notification-preferences-form.tsx</z-trace-title>
+        <z-trace-title>Edited src/app/settings/notification-preferences.component.ts</z-trace-title>
         <z-trace-description class="font-mono">+48 −12</z-trace-description>
       </z-trace-line>
       <z-trace-line>
@@ -602,7 +602,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
       </z-trace-line>
       <z-trace-line>
         <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
-        <z-trace-title>Searched for useChat</z-trace-title>
+        <z-trace-title>Searched for provideHttpClient</z-trace-title>
         <z-trace-description>8 results</z-trace-description>
       </z-trace-line>
     </z-trace>
@@ -753,15 +753,15 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
       <a href="#link">
         <z-trace-line>
           <z-trace-icon><ng-icon name="lucideFileText" /></z-trace-icon>
-          <z-trace-title>Read apps/v4/lib/docs.ts</z-trace-title>
+          <z-trace-title>Read src/app/app.config.ts</z-trace-title>
           <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
         </z-trace-line>
       </a>
-      <a href="https://docs.astro.build/en/install-and-setup/" target="_blank" rel="noreferrer">
+      <a href="https://angular.dev/installation" target="_blank" rel="noreferrer">
         <z-trace-line>
           <z-trace-icon><ng-icon name="lucideGlobe" /></z-trace-icon>
           <z-trace-title>
-            Install Astro | docs.astro.build
+            Installation | angular.dev
             <span class="sr-only">(opens in a new tab)</span>
           </z-trace-title>
           <z-trace-icon><ng-icon name="lucideArrowUpRight" /></z-trace-icon>
@@ -777,10 +777,10 @@ export class ZardDemoTraceLinkComponent {}
 ```
 
 ```angular-html
-<a href="https://docs.astro.build" target="_blank" rel="noreferrer">
+<a href="https://angular.dev/installation" target="_blank" rel="noreferrer">
   <z-trace-line>
     <z-trace-title>
-      Install Astro
+      Install Angular
       <span class="sr-only">(opens in a new tab)</span>
     </z-trace-title>
     <z-trace-icon><ng-icon name="lucideArrowUpRight" /></z-trace-icon>
@@ -809,7 +809,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
       <button type="button" (click)="open.set(true)">
         <z-trace-line>
           <z-trace-icon><ng-icon name="lucideGlobe" /></z-trace-icon>
-          <z-trace-title>Searched the web for cache keys</z-trace-title>
+          <z-trace-title>Searched the web for build cache settings</z-trace-title>
           <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
         </z-trace-line>
       </button>
@@ -817,7 +817,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
     <z-dialog [(zVisible)]="open">
       <z-dialog-header>
-        <z-dialog-title>Searched the web for cache keys</z-dialog-title>
+        <z-dialog-title>Searched the web for build cache settings</z-dialog-title>
         <z-dialog-description>Three results were used in the response.</z-dialog-description>
       </z-dialog-header>
       <z-trace>
@@ -844,9 +844,9 @@ export class ZardDemoTraceDialogComponent {
   protected readonly open = signal(false);
 
   protected readonly results = [
-    { title: 'Caching build outputs', url: 'https://nextjs.org/docs/app/guides/caching' },
-    { title: 'Image optimization reference', url: 'https://nextjs.org/docs/app/api-reference/components/image' },
-    { title: 'Deploy hooks and cache keys', url: 'https://vercel.com/docs/deploy-hooks' },
+    { title: 'Build cache | angular.dev', url: 'https://angular.dev/cli/cache' },
+    { title: 'Image optimization | angular.dev', url: 'https://angular.dev/guide/image-optimization' },
+    { title: 'Building Angular apps | angular.dev', url: 'https://angular.dev/tools/cli/build' },
   ];
 }
 ```
@@ -854,7 +854,7 @@ export class ZardDemoTraceDialogComponent {
 ```angular-html
 <button type="button" (click)="open.set(true)">
   <z-trace-line>
-    <z-trace-title>Searched the web for cache keys</z-trace-title>
+    <z-trace-title>Searched the web for build cache settings</z-trace-title>
     <z-trace-icon><ng-icon name="lucideChevronRight" /></z-trace-icon>
   </z-trace-line>
 </button>
@@ -908,12 +908,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 export class ZardDemoTraceSheetComponent {
   protected readonly open = signal(false);
 
-  protected readonly files = [
-    'apps/v4/lib/docs.ts',
-    'apps/v4/lib/components.ts',
-    'apps/v4/next.config.mjs',
-    'apps/v4/package.json',
-  ];
+  protected readonly files = ['src/app/app.config.ts', 'src/app/app.routes.ts', 'angular.json', 'package.json'];
 }
 ```
 
@@ -1004,8 +999,8 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 })
 export class ZardDemoTraceSourcesComponent {
   protected readonly sources = [
-    { title: 'Install Astro | docs.astro.build', href: 'https://docs.astro.build/en/install-and-setup/' },
-    { title: 'create-astro | npmjs.com', href: 'https://www.npmjs.com/package/create-astro' },
+    { title: 'Installation | angular.dev', href: 'https://angular.dev/installation' },
+    { title: '@angular/cli | npmjs.com', href: 'https://www.npmjs.com/package/@angular/cli' },
     { title: 'Settings: minimumReleaseAge | pnpm.io', href: 'https://pnpm.io/settings#minimumreleaseage' },
   ];
 }
@@ -1045,7 +1040,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
                 </z-trace-line>
               </z-trace-collapsible-trigger>
               <z-trace-collapsible-content class="flex flex-wrap gap-1.5">
-                <z-badge zType="secondary">vercel.com</z-badge>
+                <z-badge zType="secondary">angular.dev</z-badge>
                 <z-badge zType="secondary">github.com</z-badge>
               </z-trace-collapsible-content>
             </z-trace-collapsible>
@@ -1138,7 +1133,7 @@ type DiffKind = 'hunk' | 'added' | 'removed' | 'context';
       </z-trace-collapsible>
     </z-trace>
 
-    <z-sheet [(zVisible)]="open">
+    <z-sheet [(zVisible)]="open" zSize="lg">
       <z-sheet-header>
         <z-sheet-title class="font-mono">{{ selected().path }}</z-sheet-title>
         <z-sheet-description>
@@ -1146,8 +1141,8 @@ type DiffKind = 'hunk' | 'added' | 'removed' | 'context';
         </z-sheet-description>
       </z-sheet-header>
       <pre
-        class="bg-muted/50 mx-6 mb-6 overflow-auto rounded-lg border py-3 font-mono text-xs leading-relaxed"
-      ><code>@for (line of lines(); track $index) {<span class="block px-3" [class]="lineClass[line.kind]">{{ line.text }}</span>}</code></pre>
+        class="bg-muted/50 mx-6 mb-6 rounded-lg border py-3 font-mono text-xs leading-relaxed"
+      ><code>@for (line of lines(); track $index) {<span class="block px-3 wrap-break-word whitespace-pre-wrap" [class]="lineClass[line.kind]">{{ line.text }}</span>}</code></pre>
     </z-sheet>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -1157,33 +1152,33 @@ type DiffKind = 'hunk' | 'added' | 'removed' | 'context';
 export class ZardDemoTraceCommitComponent {
   protected readonly files: readonly ChangedFile[] = [
     {
-      path: 'app/login/page.tsx',
+      path: 'src/app/login/login.component.ts',
       added: false,
       additions: 2,
       deletions: 2,
-      diff: `@@ -14,7 +14,7 @@ export default async function LoginPage({
-   searchParams,
- }) {
-   const { next } = await searchParams
--  const redirectTo =
--    next && next.startsWith("/") ? next : "/"
-+  const redirectTo = safeRedirect(next)
-+
-   return <LoginForm redirectTo={redirectTo} />
- }`,
+      diff: `@@ -18,7 +18,7 @@ export class LoginComponent {
+   private readonly route = inject(ActivatedRoute);
+   private readonly router = inject(Router);
+ 
+-  private readonly redirectTo =
+-    this.route.snapshot.queryParamMap.get('next') ?? '/';
++  private readonly redirectTo = safeRedirect(
++    this.route.snapshot.queryParamMap.get('next'));
+ 
+   protected onSignedIn(): void {`,
     },
     {
-      path: 'lib/auth/redirect.ts',
+      path: 'src/app/auth/safe-redirect.ts',
       added: true,
       additions: 7,
       deletions: 0,
       diff: `@@ -0,0 +1,7 @@
-+export function safeRedirect(next: string | undefined) {
-+  if (!next || !next.startsWith("/") || next.startsWith("//")) {
-+    return "/"
++export function safeRedirect(next: string | null): string {
++  if (!next || !next.startsWith('/') || next.startsWith('//')) {
++    return '/';
 +  }
 +
-+  return next
++  return next;
 +}`,
     },
   ];
@@ -1285,13 +1280,13 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
             </z-trace-collapsible>
           </z-trace>
 
-          <p class="text-foreground">Node is installed and pnpm is not. Reading the docs config.</p>
+          <p class="text-foreground">Node is installed and pnpm is not. Reading the workspace config.</p>
 
           <z-trace>
             <a href="#whole-turn">
               <z-trace-line>
                 <z-trace-icon><ng-icon name="lucideFileText" /></z-trace-icon>
-                <z-trace-title>Read apps/v4/lib/docs.ts</z-trace-title>
+                <z-trace-title>Read angular.json</z-trace-title>
                 <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
               </z-trace-line>
             </a>

@@ -27,7 +27,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
                 </z-trace-line>
               </z-trace-collapsible-trigger>
               <z-trace-collapsible-content class="flex flex-wrap gap-1.5">
-                <z-badge zType="secondary">vercel.com</z-badge>
+                <z-badge zType="secondary">angular.dev</z-badge>
                 <z-badge zType="secondary">github.com</z-badge>
               </z-trace-collapsible-content>
             </z-trace-collapsible>

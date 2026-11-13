@@ -113,7 +113,7 @@ class TestTraceNestedHost {
       <a href="#docs" data-testid="link">
         <z-trace-line>
           <z-trace-title>
-            Install Astro
+            Install Angular
             <span class="sr-only">(opens in a new tab)</span>
           </z-trace-title>
           <z-trace-icon><svg></svg></z-trace-icon>
@@ -236,7 +236,7 @@ describe('ZardTrace', () => {
     it('names a link by its title, including the sr-only hint', async () => {
       await render(TestTraceWrappedHost);
 
-      expect(screen.getByRole('link', { name: 'Install Astro (opens in a new tab)' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Install Angular (opens in a new tab)' })).toBeInTheDocument();
     });
 
     it('does not nest interactive elements when wrapped in a link or button', async () => {

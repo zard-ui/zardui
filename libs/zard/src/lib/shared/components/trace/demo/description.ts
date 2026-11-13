@@ -12,7 +12,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
     <z-trace class="max-w-sm">
       <z-trace-line>
         <z-trace-icon><ng-icon name="lucideFilePen" /></z-trace-icon>
-        <z-trace-title>Edited components/settings/notification-preferences-form.tsx</z-trace-title>
+        <z-trace-title>Edited src/app/settings/notification-preferences.component.ts</z-trace-title>
         <z-trace-description class="font-mono">+48 −12</z-trace-description>
       </z-trace-line>
       <z-trace-line>
@@ -22,7 +22,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
       </z-trace-line>
       <z-trace-line>
         <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
-        <z-trace-title>Searched for useChat</z-trace-title>
+        <z-trace-title>Searched for provideHttpClient</z-trace-title>
         <z-trace-description>8 results</z-trace-description>
       </z-trace-line>
     </z-trace>

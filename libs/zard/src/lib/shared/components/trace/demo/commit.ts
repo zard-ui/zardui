@@ -47,7 +47,7 @@ type DiffKind = 'hunk' | 'added' | 'removed' | 'context';
       </z-trace-collapsible>
     </z-trace>
 
-    <z-sheet [(zVisible)]="open">
+    <z-sheet [(zVisible)]="open" zSize="lg">
       <z-sheet-header>
         <z-sheet-title class="font-mono">{{ selected().path }}</z-sheet-title>
         <z-sheet-description>
@@ -55,8 +55,8 @@ type DiffKind = 'hunk' | 'added' | 'removed' | 'context';
         </z-sheet-description>
       </z-sheet-header>
       <pre
-        class="bg-muted/50 mx-6 mb-6 overflow-auto rounded-lg border py-3 font-mono text-xs leading-relaxed"
-      ><code>@for (line of lines(); track $index) {<span class="block px-3" [class]="lineClass[line.kind]">{{ line.text }}</span>}</code></pre>
+        class="bg-muted/50 mx-6 mb-6 rounded-lg border py-3 font-mono text-xs leading-relaxed"
+      ><code>@for (line of lines(); track $index) {<span class="block px-3 wrap-break-word whitespace-pre-wrap" [class]="lineClass[line.kind]">{{ line.text }}</span>}</code></pre>
     </z-sheet>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,33 +66,33 @@ type DiffKind = 'hunk' | 'added' | 'removed' | 'context';
 export class ZardDemoTraceCommitComponent {
   protected readonly files: readonly ChangedFile[] = [
     {
-      path: 'app/login/page.tsx',
+      path: 'src/app/login/login.component.ts',
       added: false,
       additions: 2,
       deletions: 2,
-      diff: `@@ -14,7 +14,7 @@ export default async function LoginPage({
-   searchParams,
- }) {
-   const { next } = await searchParams
--  const redirectTo =
--    next && next.startsWith("/") ? next : "/"
-+  const redirectTo = safeRedirect(next)
-+
-   return <LoginForm redirectTo={redirectTo} />
- }`,
+      diff: `@@ -18,7 +18,7 @@ export class LoginComponent {
+   private readonly route = inject(ActivatedRoute);
+   private readonly router = inject(Router);
+ 
+-  private readonly redirectTo =
+-    this.route.snapshot.queryParamMap.get('next') ?? '/';
++  private readonly redirectTo = safeRedirect(
++    this.route.snapshot.queryParamMap.get('next'));
+ 
+   protected onSignedIn(): void {`,
     },
     {
-      path: 'lib/auth/redirect.ts',
+      path: 'src/app/auth/safe-redirect.ts',
       added: true,
       additions: 7,
       deletions: 0,
       diff: `@@ -0,0 +1,7 @@
-+export function safeRedirect(next: string | undefined) {
-+  if (!next || !next.startsWith("/") || next.startsWith("//")) {
-+    return "/"
++export function safeRedirect(next: string | null): string {
++  if (!next || !next.startsWith('/') || next.startsWith('//')) {
++    return '/';
 +  }
 +
-+  return next
++  return next;
 +}`,
     },
   ];

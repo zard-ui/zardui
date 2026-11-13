@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Locator } from '@playwright/test';
 
 import { checkA11y } from '../utils/axe-helper';
 import { ComponentDemoPage } from '../utils/component-page';
@@ -21,6 +21,17 @@ const EXAMPLE_SECTIONS = [
   'reasoning',
   'tool',
 ];
+
+/**
+ * Clicks a button that starts a streamed run and waits until the run hides it. A click that lands before the page
+ * has hydrated does nothing, so it retries until one takes.
+ */
+async function startRun(button: Locator): Promise<void> {
+  await expect(async () => {
+    await button.click();
+    await expect(button).toBeHidden({ timeout: 1_000 });
+  }).toPass({ timeout: 15_000 });
+}
 
 test.describe('Trace component', () => {
   let demoPage: ComponentDemoPage;
@@ -109,11 +120,11 @@ test.describe('Trace component', () => {
   test('a sheet opens from a file row in the commit example', async ({ page }) => {
     const demo = demoPage.getDemoByName('commit');
     await demo.scrollIntoViewIfNeeded();
-    const file = demo.getByRole('button', { name: /edited app\/login\/page\.tsx/i });
+    const file = demo.getByRole('button', { name: /edited src\/app\/login\/login\.component\.ts/i });
 
     await file.click();
     await expect(page.getByRole('dialog')).toBeVisible();
-    await expect(page.getByRole('dialog')).toContainText('app/login/page.tsx');
+    await expect(page.getByRole('dialog')).toContainText('src/app/login/login.component.ts');
     await page.keyboard.press('Escape');
     await expect(page.getByRole('dialog')).toBeHidden();
   });
@@ -133,9 +144,9 @@ test.describe('Trace component', () => {
 
   test('the preview replays the turn step by step', async () => {
     const preview = demoPage.firstDemoBox;
-    await preview.getByRole('button', { name: 'Replay' }).click();
+    const replay = preview.getByRole('button', { name: 'Replay' });
+    await startRun(replay);
 
-    await expect(preview.getByRole('button', { name: 'Replay' })).toBeHidden();
     await expect(preview.locator('z-trace-line[data-status="running"]').first()).toBeVisible();
     await expect(preview.getByRole('button', { name: 'Replay' })).toBeVisible({ timeout: 15_000 });
     await expect(preview.locator('z-trace-line[data-status="error"] z-trace-title')).toContainText(/failed to run/i);
@@ -144,7 +155,7 @@ test.describe('Trace component', () => {
   test('the reasoning row follows the stream until the reader toggles it', async () => {
     const demo = demoPage.getDemoByName('reasoning');
     await demo.scrollIntoViewIfNeeded();
-    await demo.getByRole('button', { name: 'Send message' }).click();
+    await startRun(demo.getByRole('button', { name: 'Send message' }));
 
     const trigger = demo.locator('z-trace-collapsible-trigger button');
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');

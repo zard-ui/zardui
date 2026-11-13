@@ -42,8 +42,8 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 })
 export class ZardDemoTraceSourcesComponent {
   protected readonly sources = [
-    { title: 'Install Astro | docs.astro.build', href: 'https://docs.astro.build/en/install-and-setup/' },
-    { title: 'create-astro | npmjs.com', href: 'https://www.npmjs.com/package/create-astro' },
+    { title: 'Installation | angular.dev', href: 'https://angular.dev/installation' },
+    { title: '@angular/cli | npmjs.com', href: 'https://www.npmjs.com/package/@angular/cli' },
     { title: 'Settings: minimumReleaseAge | pnpm.io', href: 'https://pnpm.io/settings#minimumreleaseage' },
   ];
 }

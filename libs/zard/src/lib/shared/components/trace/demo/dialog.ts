@@ -14,7 +14,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
       <button type="button" (click)="open.set(true)">
         <z-trace-line>
           <z-trace-icon><ng-icon name="lucideGlobe" /></z-trace-icon>
-          <z-trace-title>Searched the web for cache keys</z-trace-title>
+          <z-trace-title>Searched the web for build cache settings</z-trace-title>
           <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
         </z-trace-line>
       </button>
@@ -22,7 +22,7 @@ import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
 
     <z-dialog [(zVisible)]="open">
       <z-dialog-header>
-        <z-dialog-title>Searched the web for cache keys</z-dialog-title>
+        <z-dialog-title>Searched the web for build cache settings</z-dialog-title>
         <z-dialog-description>Three results were used in the response.</z-dialog-description>
       </z-dialog-header>
       <z-trace>
@@ -49,8 +49,8 @@ export class ZardDemoTraceDialogComponent {
   protected readonly open = signal(false);
 
   protected readonly results = [
-    { title: 'Caching build outputs', url: 'https://nextjs.org/docs/app/guides/caching' },
-    { title: 'Image optimization reference', url: 'https://nextjs.org/docs/app/api-reference/components/image' },
-    { title: 'Deploy hooks and cache keys', url: 'https://vercel.com/docs/deploy-hooks' },
+    { title: 'Build cache | angular.dev', url: 'https://angular.dev/cli/cache' },
+    { title: 'Image optimization | angular.dev', url: 'https://angular.dev/guide/image-optimization' },
+    { title: 'Building Angular apps | angular.dev', url: 'https://angular.dev/tools/cli/build' },
   ];
 }
