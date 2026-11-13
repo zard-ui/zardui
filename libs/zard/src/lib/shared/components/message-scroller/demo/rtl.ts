@@ -70,10 +70,10 @@ const translations: ZardRtlTranslations<Strings> = {
   selector: 'z-demo-message-scroller-rtl',
   imports: [...ZardMessageImports, ...ZardMessageScrollerImports],
   template: `
-    <z-message-scroller class="h-80 w-full max-w-md rounded-lg border">
+    <z-message-scroller class="h-80 w-full max-w-sm rounded-xl border" zContentClass="p-4">
       @for (text of i18n.t().messages; track $index) {
         <z-message-scroller-item [zMessageId]="'m' + $index">
-          <z-message [zAlign]="$index % 2 === 0 ? 'end' : 'start'" [zVariant]="$index % 2 === 0 ? 'default' : 'muted'">
+          <z-message [zAlign]="$index % 2 === 0 ? 'end' : 'start'" [zVariant]="$index % 2 === 0 ? 'muted' : 'ghost'">
             {{ text }}
           </z-message>
         </z-message-scroller-item>

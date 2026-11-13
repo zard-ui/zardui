@@ -1,11 +1,46 @@
 ---
 title: Message Scroller
-description: A chat scroll container that opens at the right place, follows a streaming answer, keeps your place as history loads, and jumps to any message.
+description: A chat scroll container that anchors turns, opens saved transcripts, follows streamed responses, loads history without jumping, and jumps to any message.
 ---
 
 # Message Scroller
 
-A chat scroll container that opens at the right place, follows a streaming answer, keeps your place as history loads, and jumps to any message.
+A chat scroll container that anchors turns, opens saved transcripts, follows streamed responses, loads history without jumping, and jumps to any message.
+
+## What Makes a Great Streaming Chat Experience
+
+Building a chat interface used to be simple. You create an inverted list with an input. Type a message, it appends at the bottom. When a reply comes in, the list grows and scrolls. Done.
+
+Streaming breaks that model. Messages arrive in chunks while you may still be reading, scrolling, or looking somewhere else entirely.
+
+Now the challenge is preserving the reader’s place while the conversation keeps changing. Get that wrong and the experience feels jumpy: people are pulled to the bottom, lose context, and have to find their way back.
+
+In practice, this comes down to scroll: when to follow, when to hold, and when to let the reader decide. A great streaming chat should:
+1. **Move only when the reader asked to move.** If someone is reading, don’t pull them somewhere else. Auto-scroll should never be the default.
+2. **Follow only while they’re following.** If they’re at the live edge, keep the stream in view. If they scroll away, leave them there.
+3. **Every interaction is a signal.** Scrolling is not the only one. Selecting text, using the keyboard, opening a link, or searching should all stop the interface from moving.
+4. **Start a new turn near the top of the viewport.** This gives the new turn somewhere it can be read from the beginning.
+5. **Then stream in the answer.** The answer should grow into the screen, not immediately push everything away.
+6. **Keep part of the previous conversation in context.** The prompt and reply should stay visually connected, and enough of the previous turn should remain visible so the reader knows where they are.
+7. **Let new content arrive offscreen.** The conversation can keep streaming without changing what the reader is looking at.
+8. **Show what’s happening out of view.** Make it clear when a response is still streaming or when new messages have arrived.
+9. **Make it easy to return to the latest reply.** A “Jump to latest” action should bring the reader back and resume following.
+10. **Let people jump anywhere in the conversation.** Long threads need message links, search, unread markers, and direct navigation.
+11. **Reopen where the reader left off.** A saved conversation should open at the last meaningful turn. Often this is the last user message. Not the absolute bottom.
+12. **Keep the reader’s place when layout changes.** Images load. Markdown expands. Code blocks render. Older messages appear above. None of that should make the reader lose their place.
+13. **Handle interruptions without stealing position.** Stopping, retrying, regenerating, branching, or errors should not unexpectedly move the conversation.
+14. **Stay responsive in long threads.** Streaming text, markdown, code, images, and long history should still feel responsive.
+15. **Be accessible without the noise.** Keep the transcript navigable, preserve keyboard focus, and announce important events at a comfortable pace.
+
+**Never move the reader against their intent.**
+
+## Message Scroller
+
+`z-message-scroller` is a chat transcript scroller built for these behaviors. It owns the scroll state and the transcript-row behavior: opening position, streamed output, new-turn anchoring, prepended history, visibility, and scroll controls.
+
+It is scoped to the scroll viewport. It does not own messages, AI state, transport, persistence, branching, or model state. Your product code stays focused on composing messages, markers, tools, attachments, and prompt inputs.
+
+It gives you the scroll behavior that chat needs, without taking over the rest of the chat UI. And it stays fast, even in long conversations with rich markdown.
 
 ## Installation
 
@@ -79,6 +114,7 @@ import {
         data-slot="message-scroller-content"
         role="log"
         aria-relevant="additions"
+        [attr.aria-busy]="zBusy() || null"
         [class]="contentClasses()"
       >
         <ng-content />
@@ -110,6 +146,12 @@ export class ZardMessageScrollerComponent {
   readonly zEdgeThreshold = input(8, { transform: numberAttribute });
   /** Margin applied to the aligned edge when scrolling to a message. */
   readonly zScrollMargin = input(0, { transform: numberAttribute });
+  /** How much of the previous row, in px, stays visible above a newly anchored turn. */
+  readonly zPreviousItemPeek = input(64, { transform: numberAttribute });
+  /** Sets `aria-busy` on the transcript while a turn streams, so announcements wait for the finished row. */
+  readonly zBusy = input(false, { transform: booleanAttribute });
+  /** Classes for the transcript content (the `role="log"` element), such as its padding or gap. */
+  readonly zContentClass = input<ClassValue>('');
   readonly class = input<ClassValue>('');
 
   /** The state and commands of this scroller: the instance `inject(ZardMessageScrollerService)` returns inside it. */
@@ -128,11 +170,14 @@ export class ZardMessageScrollerComponent {
     preserveScrollOnPrepend: this.zPreserveScrollOnPrepend(),
     edgeThreshold: this.zEdgeThreshold(),
     scrollMargin: this.zScrollMargin(),
+    previousItemPeek: this.zPreviousItemPeek(),
   }));
 
   protected readonly classes = computed(() => mergeClasses(messageScrollerVariants(), this.class()));
   protected readonly viewportClasses = computed(() => messageScrollerViewportVariants());
-  protected readonly contentClasses = computed(() => messageScrollerContentVariants());
+  protected readonly contentClasses = computed(() =>
+    mergeClasses(messageScrollerContentVariants(), this.zContentClass()),
+  );
 
   /** `start`, `end`, `start end`, or absent when the transcript fits. */
   protected readonly scrollableAttr = computed(() => {
@@ -265,7 +310,7 @@ export const messageScrollerViewportVariants = cva(
   ),
 );
 
-export const messageScrollerContentVariants = cva('flex h-max min-h-full flex-col gap-6 p-4');
+export const messageScrollerContentVariants = cva('flex h-max min-h-full flex-col gap-6');
 
 export const messageScrollerItemVariants = cva('min-w-0 shrink-0');
 
@@ -352,6 +397,7 @@ export interface ZardMessageScrollerConfig {
   preserveScrollOnPrepend: boolean;
   edgeThreshold: number;
   scrollMargin: number;
+  previousItemPeek: number;
 }
 
 /** The elements the scroller component hands to the engine. */
@@ -362,8 +408,6 @@ export interface ZardMessageScrollerElements {
 }
 
 const ITEM_SLOT = 'message-scroller-item';
-/** How much of the previous row stays visible above a freshly anchored turn. */
-const PREVIOUS_ITEM_PEEK = 64;
 /** A programmatic scroll counts as finished this long after the last scroll event. */
 const SETTLE_MS = 120;
 const REVEAL_KEYS = new Set(['ArrowUp', 'PageUp', 'Home']);
@@ -735,7 +779,7 @@ export class ZardMessageScrollerService {
 
   private anchorTop(anchor: HTMLElement): number {
     const hasPrevious = this.items.indexOf(anchor) > 0;
-    return this.contentY(anchor) - (hasPrevious ? PREVIOUS_ITEM_PEEK : 0) - this.cfg().scrollMargin;
+    return this.contentY(anchor) - (hasPrevious ? this.cfg().previousItemPeek : 0) - this.cfg().scrollMargin;
   }
 
   /**
@@ -1017,315 +1061,1467 @@ export class ZardMessageScrollerService {
 ## Usage
 
 ```angular-ts
+import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
+import { ZardMessageImports } from '@/shared/components/message/message.imports';
 import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
 ```
 
 ```angular-html
-<z-message-scroller zAutoScroll class="h-96 rounded-lg border">
+<z-message-scroller>
   @for (message of messages(); track message.id) {
     <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
-      <p class="w-fit rounded-lg bg-muted px-3 py-2 text-sm">{{ message.text }}</p>
+      <z-message [zAlign]="message.role === 'user' ? 'end' : 'start'">
+        <z-message-content>
+          <z-bubble><z-bubble-content>{{ message.text }}</z-bubble-content></z-bubble>
+        </z-message-content>
+      </z-message>
     </z-message-scroller-item>
   }
-
-  <button z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
+  <button type="button" z-message-scroller-button></button>
 </z-message-scroller>
 ```
 
-## Examples
+`z-message-scroller` fills its parent, so place it inside a height-constrained container.
 
-### Streaming
+```angular-html
+<div class="flex h-screen flex-col">
+  <z-message-scroller class="flex-1"><!-- transcript --></z-message-scroller>
+</div>
+```
 
-Set `zAutoScroll` to follow a streaming answer while the reader is at the live edge. Scroll up and it lets go; `[z-message-scroller-button]` appears, and clicking it scrolls back and resumes following. Mark the reader's own messages with `zAnchor` so each new turn settles near the top and the answer streams in below it.
+## Composition
+
+```angular-html
+<z-message-scroller>
+  <z-message-scroller-item>
+    <!-- a message, marker, or row -->
+  </z-message-scroller-item>
+  <z-message-scroller-item />
+  <z-message-scroller-item />
+  <button type="button" z-message-scroller-button></button>
+</z-message-scroller>
+```
+
+- **`z-message-scroller`** — the frame, the scrollable viewport and the transcript in one. It owns the scroll state and the behavior inputs for opening position, auto-scroll, anchoring and the previous-turn peek. The viewport is a labelled, focusable region; the transcript is a `role="log"` live region.
+- **`z-message-scroller-item`** — the transcript row boundary. Wrap every row so the scroller can measure, anchor, preserve position, track visibility, and jump to it. A row can be a message, marker, typing indicator, separator, join/leave event, or "load earlier" row.
+- **`[z-message-scroller-button]`** — the scroll control. Scrolls to the start or end of the transcript and is inert until there is content in its direction.
+- **`ZardMessageScrollerService`** — the commands and signals of one scroller (`scrollToMessage`, `scrollToEnd`, `scrollable`, `currentAnchorId`...), for controls outside the transcript.
+
+### Anchoring Turns
+
+A turn is the part of the conversation that starts a new exchange. In a simple AI chat, that is usually the user’s message and the assistant reply that follows.
+
+An anchor is the row the viewport should treat as the start of that turn. Mark that row with `zAnchor`. When a new anchor is appended, the viewport moves it near the top and keeps a peek of the previous item above it, so the new turn does not feel detached from its context.
+
+Scroll anchors are not tied to message role. You can turn any row into an anchor: a user message, a system marker, a handoff event, or anything else that starts a meaningful turn. `z-message-scroller` only needs to know which row should anchor the viewport.
+
+In the following example, the user’s message is anchored. When you send a new message, the viewport anchors it near the top and appends the assistant reply below it. Toggle the anchor to the assistant’s message to see the difference.
+
+```angular-html
+<!-- This tells the scroller to anchor the user's message for the next turn. -->
+<z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'" />
+```
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp, lucideMessageCircleDashed, lucideRotateCw } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardMessageImports } from '@/shared/components/message/message.imports';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardEmptyComponent } from '@/shared/components/empty/empty.component';
 import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
+import {
+  ZardToggleGroupComponent,
+  type ZardToggleGroupItem,
+} from '@/shared/components/toggle-group/toggle-group.component';
+import {
+  type ChatMessage,
+  type ChatRole,
+  messageAnimationClass,
+  ZardDemoChatRowComponent,
+} from '@/shared/demo-utils/scripted-chat';
 
-interface Turn {
-  id: string;
-  role: 'user' | 'assistant';
-  text: string;
-}
-
-const REPLY =
-  'Streaming works best when the scroller only follows you while you are at the live edge. Scroll up while this answer is arriving and it stops; the jump button appears, and one click brings you back and resumes following. Nothing moves unless you asked it to.';
+const SCRIPT: ChatMessage[] = [
+  {
+    id: 'anchor-1-user',
+    role: 'user',
+    text: 'Can you show me how anchoring behaves when a new prompt starts the turn?',
+  },
+  {
+    id: 'anchor-1-assistant',
+    role: 'assistant',
+    text: 'Append the user prompt first, then append the assistant response. With User selected, the prompt settles near the top and the assistant response fills in below it.',
+  },
+  { id: 'anchor-2-user', role: 'user', text: 'What changes when assistant messages are the anchor?' },
+  {
+    id: 'anchor-2-assistant',
+    role: 'assistant',
+    text: 'Now each assistant response is the row `z-message-scroller` keeps in view. This is useful when the reply is the moment you want readers to land on after each turn.',
+  },
+  { id: 'anchor-3-user', role: 'user', text: 'Can I switch roles and keep adding turns?' },
+  {
+    id: 'anchor-3-assistant',
+    role: 'assistant',
+    text: 'Yes. The next appended message with the selected role becomes the anchor, so you can compare user and assistant anchoring without resetting the demo.',
+  },
+];
 
 @Component({
-  selector: 'z-demo-message-scroller-streaming',
-  imports: [ZardButtonComponent, ...ZardMessageImports, ...ZardMessageScrollerImports],
+  selector: 'z-demo-message-scroller-anchoring',
+  imports: [
+    NgIcon,
+    ZardButtonComponent,
+    ZardDemoChatRowComponent,
+    ZardEmptyComponent,
+    ZardToggleGroupComponent,
+    ...ZardCardImports,
+    ...ZardMessageScrollerImports,
+  ],
   template: `
-    <div class="flex w-full max-w-md flex-col gap-3">
-      <z-message-scroller zAutoScroll class="h-96 rounded-lg border">
-        @for (turn of turns(); track turn.id) {
-          <z-message-scroller-item [zMessageId]="turn.id" [zAnchor]="turn.role === 'user'">
-            <z-message
-              [zAlign]="turn.role === 'user' ? 'end' : 'start'"
-              [zVariant]="turn.role === 'user' ? 'default' : 'muted'"
+    <div class="relative flex w-full flex-col gap-4">
+      <z-card class="mx-auto h-140 w-full max-w-sm gap-0">
+        <z-card-header class="border-b">
+          <z-card-title zTitle="Anchoring Turns" />
+          <z-card-description zDescription="Choose which role settles near the top edge." />
+          <z-card-action>
+            <button
+              type="button"
+              z-button
+              zType="outline"
+              zSize="icon"
+              aria-label="Reset anchored turns"
+              [disabled]="messages().length === 0"
+              (click)="reset()"
             >
-              {{ turn.text || '…' }}
-            </z-message>
-          </z-message-scroller-item>
-        }
+              <ng-icon name="lucideRotateCw" />
+            </button>
+          </z-card-action>
+        </z-card-header>
 
-        <button type="button" z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
-      </z-message-scroller>
+        <z-card-content class="min-h-0 flex-1 overflow-hidden p-0">
+          @if (messages().length === 0) {
+            <z-empty
+              class="h-full"
+              zIcon="lucideMessageCircleDashed"
+              zTitle="No anchored messages yet"
+              zDescription="Send the first message to see the selected role anchor."
+            />
+          } @else {
+            <z-message-scroller zContentClass="p-(--card-spacing)">
+              @for (message of messages(); track message.id) {
+                <z-message-scroller-item
+                  [zMessageId]="message.id"
+                  [zAnchor]="message.role === anchorRole()"
+                  [class]="message.role === 'user' ? entrance : ''"
+                >
+                  <z-demo-chat-row [zMessage]="message" />
+                </z-message-scroller-item>
+              }
+              <button type="button" z-message-scroller-button></button>
+            </z-message-scroller>
+          }
+        </z-card-content>
 
-      <button z-button zType="outline" type="button" [disabled]="streaming()" (click)="send()">
-        {{ streaming() ? 'Streaming…' : 'Send a message' }}
-      </button>
+        <z-card-footer>
+          <z-toggle-group
+            zMode="single"
+            zType="outline"
+            aria-label="Select scroll anchor role"
+            [zItems]="roles"
+            [zValue]="anchorRole()"
+            (valueChange)="selectRole($event)"
+          />
+          <button type="button" z-button zSize="icon" class="ms-auto" [disabled]="!nextMessage()" (click)="send()">
+            <ng-icon name="lucideArrowUp" />
+            <span class="sr-only">Send Message</span>
+          </button>
+        </z-card-footer>
+      </z-card>
+      <p class="text-muted-foreground mx-auto max-w-xs px-0.5 text-center text-xs">
+        Toggle the anchor role, then send messages to compare where turns settle.
+      </p>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideArrowUp, lucideMessageCircleDashed, lucideRotateCw })],
   host: { class: 'contents' },
 })
-export class ZardDemoMessageScrollerStreamingComponent {
-  private timer: ReturnType<typeof setInterval> | undefined;
-  private count = 1;
+export class ZardDemoMessageScrollerAnchoringComponent {
+  protected readonly roles: ZardToggleGroupItem[] = [
+    { value: 'user', label: 'User', ariaLabel: 'Anchor user messages' },
+    { value: 'assistant', label: 'Assistant', ariaLabel: 'Anchor assistant messages' },
+  ];
 
-  protected readonly streaming = signal(false);
-  protected readonly turns = signal<Turn[]>([
-    { id: 'u0', role: 'user', text: 'How should a chat scroll while an answer streams in?' },
-    { id: 'a0', role: 'assistant', text: 'It should follow the answer only while you are reading the latest line.' },
-  ]);
-
-  constructor() {
-    inject(DestroyRef).onDestroy(() => clearInterval(this.timer));
-  }
+  protected readonly entrance = messageAnimationClass('slide-up');
+  protected readonly anchorRole = signal<ChatRole>('user');
+  protected readonly messages = signal<ChatMessage[]>([]);
+  protected readonly nextMessage = computed(() => SCRIPT[this.messages().length]);
 
   protected send(): void {
-    const n = this.count++;
-    const assistantId = `a${n}`;
-    this.turns.update(turns => [
-      ...turns,
-      { id: `u${n}`, role: 'user', text: 'Tell me more about following the live edge.' },
-      { id: assistantId, role: 'assistant', text: '' },
-    ]);
-    this.streaming.set(true);
+    const next = this.nextMessage();
+    if (next) {
+      this.messages.update(messages => [...messages, next]);
+    }
+  }
 
-    // Stands in for a model streaming tokens.
-    const words = REPLY.split(' ');
-    let sent = 0;
-    this.timer = setInterval(() => {
-      sent++;
-      const text = words.slice(0, sent).join(' ');
-      this.turns.update(turns => turns.map(turn => (turn.id === assistantId ? { ...turn, text } : turn)));
-      if (sent >= words.length) {
-        clearInterval(this.timer);
-        this.streaming.set(false);
-      }
-    }, 70);
+  protected selectRole(value: string | string[]): void {
+    const role = Array.isArray(value) ? value[0] : value;
+    if (role === 'user' || role === 'assistant') {
+      this.anchorRole.set(role);
+      this.reset();
+    }
+  }
+
+  protected reset(): void {
+    this.messages.set([]);
   }
 }
 ```
 
-### Load Earlier
+### Group Chat
 
-Prepending older rows does not move what the reader is looking at. `zPreserveScrollOnPrepend` is on by default; the "load earlier" row is just another `z-message-scroller-item`.
+In a group chat, the turn boundary is more specific than “the user message”. It is often the message that asks the model to respond, or a marker like “Marcus joined the chat”. Typing indicators and history controls usually should not anchor.
+
+Because anchoring is role-independent, you can anchor a marker just as easily as a message.
+
+```angular-html
+<z-message-scroller-item zMessageId="marcus-joined" zAnchor>
+  <z-marker zVariant="separator">
+    <z-marker-content>Marcus joined the chat</z-marker-content>
+  </z-marker>
+</z-message-scroller-item>
+```
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideRotateCw } from '@ng-icons/lucide';
+
+import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 import { ZardMessageImports } from '@/shared/components/message/message.imports';
 import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
+import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
 
-interface Turn {
-  id: number;
-  mine: boolean;
-}
+type GroupChatItem =
+  | { id: string; type: 'event'; text: string; anchor?: boolean }
+  | { id: string; type: 'message'; sender: string; role: 'assistant' | 'participant'; text: string; anchor?: boolean };
 
-const PAGE = 6;
-const TOTAL = 30;
+const CURRENT_USER = 'Grace';
 
-const page = (from: number, to: number): Turn[] =>
-  Array.from({ length: to - from + 1 }, (_, i) => ({ id: from + i, mine: (from + i) % 2 === 0 }));
+const INITIAL_ITEMS: GroupChatItem[] = [
+  {
+    id: 'group-1',
+    type: 'message',
+    sender: 'Grace',
+    role: 'participant',
+    text: '@mary, the astrophage line keeps matching Venus energy output. Can you check my math?',
+  },
+  {
+    id: 'group-2',
+    type: 'message',
+    sender: 'Mary (Agent)',
+    role: 'assistant',
+    text: 'Yes. Confirmed. The curve points to a microorganism harvesting stellar energy and breeding near carbon dioxide. If @rocky agrees, this is the clue we need.',
+  },
+  { id: 'group-3', type: 'message', sender: 'Grace', role: 'participant', text: 'ping @rocky', anchor: true },
+];
+
+const ROCKY_MARKER: GroupChatItem = { id: 'group-4', type: 'event', text: 'Rocky has joined the chat', anchor: true };
+
+const ROCKY_MESSAGE: GroupChatItem = {
+  id: 'group-5',
+  type: 'message',
+  sender: 'Rocky',
+  role: 'participant',
+  text: 'Amaze. Astrophage eats light, makes heat, goes to carbon dioxide. Rocky has fuel model. Grace is smart.',
+};
 
 @Component({
-  selector: 'z-demo-message-scroller-load-earlier',
-  imports: [ZardButtonComponent, ...ZardMessageImports, ...ZardMessageScrollerImports],
+  selector: 'z-demo-message-scroller-group-chat',
+  imports: [
+    NgIcon,
+    ZardButtonComponent,
+    ...ZardBubbleImports,
+    ...ZardCardImports,
+    ...ZardMarkerImports,
+    ...ZardMessageImports,
+    ...ZardMessageScrollerImports,
+    ...ZardTooltipImports,
+  ],
   template: `
-    <z-message-scroller class="h-96 w-full max-w-md rounded-lg border">
-      <z-message-scroller-item zMessageId="load-earlier" class="flex justify-center">
-        <button z-button zType="outline" zSize="sm" type="button" [disabled]="loading() || !hasMore()" (click)="load()">
-          {{ loading() ? 'Loading…' : hasMore() ? 'Load earlier messages' : 'Start of the conversation' }}
-        </button>
-      </z-message-scroller-item>
+    <div class="relative flex w-full flex-col gap-4">
+      <z-card class="mx-auto h-140 w-full max-w-sm gap-0">
+        <z-card-header class="gap-1 border-b">
+          <z-card-title zTitle="Group Chat" />
+          <z-card-description
+            zDescription="A group chat with several participants and an assistant. The Marker is marked as a turn."
+          />
+          <z-card-action>
+            <button
+              type="button"
+              z-button
+              zType="outline"
+              zSize="icon"
+              aria-label="Reset conversation"
+              zTooltip="Reset"
+              [disabled]="turn() === 'idle'"
+              (click)="reset()"
+            >
+              <ng-icon name="lucideRotateCw" />
+            </button>
+          </z-card-action>
+        </z-card-header>
 
-      @for (turn of turns(); track turn.id) {
-        <z-message-scroller-item [zMessageId]="'m' + turn.id">
-          <z-message [zAlign]="turn.mine ? 'end' : 'start'" [zVariant]="turn.mine ? 'default' : 'muted'">
-            Message {{ turn.id }} of {{ total }}
-          </z-message>
-        </z-message-scroller-item>
-      }
-    </z-message-scroller>
+        <z-card-content class="min-h-0 flex-1 p-0">
+          @for (run of runs(); track run) {
+            <z-message-scroller zContentClass="p-(--card-spacing)">
+              @for (item of items(); track item.id) {
+                @if (item.type === 'message') {
+                  @let isCurrentUser = item.sender === currentUser;
+                  <z-message-scroller-item [zMessageId]="item.id" [zAnchor]="!!item.anchor">
+                    <z-message [zAlign]="isCurrentUser ? 'end' : 'start'">
+                      <z-message-content>
+                        @if (!isCurrentUser) {
+                          <z-message-header>{{ item.sender }}</z-message-header>
+                        }
+                        <z-bubble
+                          [zAlign]="isCurrentUser ? 'end' : 'start'"
+                          [zVariant]="isCurrentUser ? 'muted' : item.role === 'assistant' ? 'ghost' : 'tinted'"
+                        >
+                          <z-bubble-content>{{ item.text }}</z-bubble-content>
+                        </z-bubble>
+                      </z-message-content>
+                    </z-message>
+                  </z-message-scroller-item>
+                } @else {
+                  <z-message-scroller-item [zMessageId]="item.id" [zAnchor]="!!item.anchor">
+                    <z-marker zVariant="separator">
+                      <z-marker-content>{{ item.text }}</z-marker-content>
+                    </z-marker>
+                  </z-message-scroller-item>
+                }
+              }
+              <button type="button" z-message-scroller-button></button>
+            </z-message-scroller>
+          }
+        </z-card-content>
+
+        <z-card-footer class="flex flex-col items-center gap-2 border-t">
+          <button
+            type="button"
+            z-button
+            zType="secondary"
+            class="w-full"
+            [disabled]="turn() === 'message'"
+            (click)="advance()"
+          >
+            {{ turn() === 'idle' ? 'Add Rocky' : 'Send Message as Rocky' }}
+          </button>
+          <p class="text-muted-foreground text-xs">
+            {{
+              turn() === 'idle'
+                ? 'This will create a marker and make it the anchor'
+                : "Now send Rocky's reply into the conversation"
+            }}
+          </p>
+        </z-card-footer>
+      </z-card>
+      <p class="text-muted-foreground mx-auto max-w-sm px-0.5 text-center text-xs text-balance">
+        When a user joins, a marker is created. zAnchor on the marker marks it as the next turn
+      </p>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideRotateCw })],
   host: { class: 'contents' },
 })
-export class ZardDemoMessageScrollerLoadEarlierComponent {
-  private timer: ReturnType<typeof setTimeout> | undefined;
+export class ZardDemoMessageScrollerGroupChatComponent {
+  protected readonly currentUser = CURRENT_USER;
+  protected readonly turn = signal<'idle' | 'marker' | 'message'>('idle');
+  /** Bumped on reset so the scroller starts over at its opening position. */
+  protected readonly runs = signal([0]);
 
-  protected readonly total = TOTAL;
-  protected readonly loading = signal(false);
-  protected readonly turns = signal<Turn[]>(page(TOTAL - 11, TOTAL));
+  protected readonly items = computed(() => {
+    switch (this.turn()) {
+      case 'message':
+        return [...INITIAL_ITEMS, ROCKY_MARKER, ROCKY_MESSAGE];
+      case 'marker':
+        return [...INITIAL_ITEMS, ROCKY_MARKER];
+      default:
+        return INITIAL_ITEMS;
+    }
+  });
 
-  constructor() {
-    inject(DestroyRef).onDestroy(() => clearTimeout(this.timer));
+  protected advance(): void {
+    this.turn.update(turn => (turn === 'idle' ? 'marker' : 'message'));
   }
 
-  protected hasMore(): boolean {
-    return this.turns()[0].id > 1;
-  }
-
-  protected load(): void {
-    this.loading.set(true);
-    // Stands in for a network request; the older rows land above the ones being read.
-    this.timer = setTimeout(() => {
-      const first = this.turns()[0].id;
-      this.turns.update(turns => [...page(Math.max(1, first - PAGE), first - 1), ...turns]);
-      this.loading.set(false);
-    }, 400);
+  protected reset(): void {
+    this.turn.set('idle');
+    this.runs.update(([run]) => [run + 1]);
   }
 }
 ```
 
-### Last Anchor
+### Keeping Context Visible
 
-Use `zDefaultPosition="last-anchor"` to reopen a saved thread at the last `zAnchor` row, with its reply right below, instead of at the very bottom. It falls back to `end` when that turn fits the viewport.
+When a new turn starts, it should still feel like part of the same continuous thread. `zPreviousItemPeek` keeps a slice of the previous item visible above the anchor, so the reader keeps their context instead of feeling like the conversation restarted on a blank page.
+
+Adjust the peek amount in the example below to see how it affects the conversation.
+
+```angular-html
+<!-- Keep 64px of the previous turn visible above the newly anchored row. -->
+<z-message-scroller [zPreviousItemPeek]="64"><!-- anchored turns --></z-message-scroller>
+```
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp, lucidePlus, lucideRotateCw } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
+import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
+import { ZardSliderComponent } from '@/shared/components/slider/slider.component';
+import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
+import { SCROLL_BEHAVIOR_SCRIPT } from '@/shared/demo-utils/chat-scripts';
+import { injectScriptedChat, messageAnimationClass, ZardDemoChatRowComponent } from '@/shared/demo-utils/scripted-chat';
+
+const DEFAULT_PEEK = 64;
+
+@Component({
+  selector: 'z-demo-message-scroller-previous-context',
+  imports: [
+    NgIcon,
+    ZardButtonComponent,
+    ZardDemoChatRowComponent,
+    ZardSliderComponent,
+    ...ZardCardImports,
+    ...ZardInputGroupImports,
+    ...ZardMessageScrollerImports,
+    ...ZardTooltipImports,
+  ],
+  template: `
+    <div class="relative flex w-full flex-col gap-4">
+      <z-card class="mx-auto h-140 w-full max-w-sm gap-0">
+        <z-card-header class="gap-1 border-b">
+          <z-card-title zTitle="Keeping Context Visible" />
+          <z-card-description zDescription="New turns keep part of the previous reply in view." />
+          <z-card-action>
+            <button
+              type="button"
+              z-button
+              zType="outline"
+              zSize="icon"
+              aria-label="Reset context example"
+              zTooltip="Reset"
+              [disabled]="chat.busy()"
+              (click)="reset()"
+            >
+              <ng-icon name="lucideRotateCw" />
+            </button>
+          </z-card-action>
+        </z-card-header>
+
+        <z-card-content class="min-h-0 flex-1 overflow-hidden p-0">
+          @for (run of runs(); track run) {
+            <z-message-scroller
+              zContentClass="p-(--card-spacing)"
+              [zScrollMargin]="24"
+              [zPreviousItemPeek]="peek()"
+              [zBusy]="chat.busy()"
+            >
+              @for (message of chat.messages(); track message.id) {
+                <z-message-scroller-item
+                  [zMessageId]="message.id"
+                  [zAnchor]="message.role === 'user'"
+                  [class]="message.role === 'user' ? entrance : ''"
+                >
+                  <z-demo-chat-row [zMessage]="message" />
+                </z-message-scroller-item>
+              }
+              <button type="button" z-message-scroller-button></button>
+            </z-message-scroller>
+          }
+        </z-card-content>
+
+        <z-card-footer class="flex-col gap-2">
+          <form class="w-full" (submit)="$event.preventDefault(); chat.send()">
+            <z-input-group>
+              <div class="h-14 w-full px-3 py-2.5 text-sm">
+                <span class="line-clamp-2" [class.opacity-60]="chat.busy()">
+                  @if (chat.next(); as next) {
+                    {{ next.text }}
+                  } @else {
+                    <span class="text-muted-foreground">No messages queued. Reset the context.</span>
+                  }
+                </span>
+              </div>
+              <z-input-group-addon zAlign="block-end" class="pt-1">
+                <button type="button" z-input-group-button zVariant="outline" zSize="icon-sm" aria-label="Add files">
+                  <ng-icon name="lucidePlus" />
+                </button>
+                <div class="flex w-28 items-center gap-2">
+                  <span class="text-muted-foreground text-xs tabular-nums">{{ peek() }}px</span>
+                  <z-slider
+                    class="flex-1"
+                    aria-label="Previous context peek"
+                    [zMin]="64"
+                    [zMax]="128"
+                    [zValue]="[peek()]"
+                    [zDisabled]="chat.busy()"
+                    (zSlideIndexChange)="peek.set($event[0] ?? defaultPeek)"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  z-input-group-button
+                  zVariant="default"
+                  zSize="icon-sm"
+                  class="ms-auto"
+                  [disabled]="!chat.next() || chat.busy()"
+                >
+                  <ng-icon name="lucideArrowUp" />
+                  <span class="sr-only">Send</span>
+                </button>
+              </z-input-group-addon>
+            </z-input-group>
+          </form>
+        </z-card-footer>
+      </z-card>
+      <p class="text-muted-foreground px-0.5 text-center text-xs">
+        Adjust the slider and send. Observe the previous message peek.
+      </p>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideArrowUp, lucidePlus, lucideRotateCw })],
+  host: { class: 'contents' },
+})
+export class ZardDemoMessageScrollerPreviousContextComponent {
+  protected readonly defaultPeek = DEFAULT_PEEK;
+  protected readonly chat = injectScriptedChat(SCROLL_BEHAVIOR_SCRIPT, { initial: 2, delayMs: 35 });
+  protected readonly entrance = messageAnimationClass('slide-up');
+  protected readonly peek = signal(DEFAULT_PEEK);
+  /** Bumped on reset so the scroller starts over at its opening position. */
+  protected readonly runs = signal([0]);
+
+  protected reset(): void {
+    this.chat.reset();
+    this.peek.set(DEFAULT_PEEK);
+    this.runs.update(([run]) => [run + 1]);
+  }
+}
+```
+
+### Following the Live Edge
+
+When the reader is at the live edge, either because they stayed there or returned there, `zAutoScroll` keeps streamed replies in view as they grow. Scrolling away from the live edge releases the view, whether by wheel, touch, keyboard scroll keys, or dragging the scrollbar. An explicit message jump releases it too. New chunks can then arrive without moving the reader.
+
+`zAutoScroll` composes with turn anchoring. When a new turn anchors near the top, the view stays put while the reply streams into the room below it. Once the reply fills the viewport, the reader is back at the live edge and follow-output takes over from the anchor.
+
+```angular-html
+<z-message-scroller zAutoScroll><!-- streamed turns --></z-message-scroller>
+```
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardMessageImports } from '@/shared/components/message/message.imports';
-import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp, lucideMessageCircleDashed, lucidePlus, lucideRotateCw } from '@ng-icons/lucide';
 
-interface Turn {
-  id: string;
-  role: 'user' | 'assistant';
-  text: string;
-}
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardEmptyComponent } from '@/shared/components/empty/empty.component';
+import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
+import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
+import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
+import { SCROLL_BEHAVIOR_SCRIPT } from '@/shared/demo-utils/chat-scripts';
+import { injectScriptedChat, messageAnimationClass, ZardDemoChatRowComponent } from '@/shared/demo-utils/scripted-chat';
 
 @Component({
-  selector: 'z-demo-message-scroller-last-anchor',
-  imports: [...ZardMessageImports, ...ZardMessageScrollerImports],
+  selector: 'z-demo-message-scroller-streaming',
+  imports: [
+    NgIcon,
+    ZardButtonComponent,
+    ZardDemoChatRowComponent,
+    ZardEmptyComponent,
+    ...ZardCardImports,
+    ...ZardInputGroupImports,
+    ...ZardMessageScrollerImports,
+    ...ZardTooltipImports,
+  ],
   template: `
-    <z-message-scroller zDefaultPosition="last-anchor" class="h-96 w-full max-w-md rounded-lg border">
-      @for (turn of turns; track turn.id) {
-        <z-message-scroller-item [zMessageId]="turn.id" [zAnchor]="turn.role === 'user'">
-          <z-message
-            [zAlign]="turn.role === 'user' ? 'end' : 'start'"
-            [zVariant]="turn.role === 'user' ? 'default' : 'muted'"
-          >
-            {{ turn.text }}
-          </z-message>
-        </z-message-scroller-item>
-      }
+    <div class="relative flex w-full flex-col gap-4">
+      <z-card class="mx-auto h-140 w-full max-w-sm gap-0">
+        <z-card-header class="gap-1 border-b">
+          <z-card-title zTitle="Streaming Messages" />
+          <z-card-description zDescription="Auto-scroll follows the live edge of the conversation." />
+          <z-card-action>
+            <button
+              type="button"
+              z-button
+              zType="outline"
+              zSize="icon"
+              aria-label="Reset stream"
+              zTooltip="Reset"
+              [disabled]="chat.messages().length === 0 || chat.busy()"
+              (click)="chat.reset()"
+            >
+              <ng-icon name="lucideRotateCw" />
+            </button>
+          </z-card-action>
+        </z-card-header>
 
-      <button type="button" z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
-    </z-message-scroller>
+        <z-card-content class="min-h-0 flex-1 overflow-hidden p-0">
+          @if (chat.messages().length === 0) {
+            <z-empty
+              class="h-full"
+              zIcon="lucideMessageCircleDashed"
+              zTitle="Ready to Stream"
+              zDescription="Press send to stream a scripted conversation."
+            />
+          } @else {
+            <z-message-scroller zAutoScroll zContentClass="p-(--card-spacing)" [zBusy]="chat.busy()">
+              @for (message of chat.messages(); track message.id) {
+                <z-message-scroller-item
+                  [zMessageId]="message.id"
+                  [zAnchor]="message.role === 'user'"
+                  [class]="message.role === 'user' ? entrance : ''"
+                >
+                  <z-demo-chat-row [zMessage]="message" />
+                </z-message-scroller-item>
+              }
+              <button type="button" z-message-scroller-button></button>
+            </z-message-scroller>
+          }
+        </z-card-content>
+
+        <z-card-footer class="flex-col gap-2">
+          <form class="w-full" (submit)="$event.preventDefault(); chat.send()">
+            <z-input-group>
+              <div class="h-14 w-full px-3 py-2.5 text-sm">
+                <span class="line-clamp-2" [class.opacity-60]="chat.busy()">
+                  @if (chat.next(); as next) {
+                    {{ next.text }}
+                  } @else {
+                    <span class="text-muted-foreground">No messages queued. Reset the stream.</span>
+                  }
+                </span>
+              </div>
+              <z-input-group-addon zAlign="block-end" class="pt-1">
+                <button type="button" z-input-group-button zVariant="outline" zSize="icon-sm" aria-label="Add files">
+                  <ng-icon name="lucidePlus" />
+                </button>
+                <button
+                  type="submit"
+                  z-input-group-button
+                  zVariant="default"
+                  zSize="icon-sm"
+                  class="ms-auto"
+                  [disabled]="!chat.next() || chat.busy()"
+                >
+                  <ng-icon name="lucideArrowUp" />
+                  <span class="sr-only">Send</span>
+                </button>
+              </z-input-group-addon>
+            </z-input-group>
+          </form>
+        </z-card-footer>
+      </z-card>
+      <p class="text-muted-foreground px-0.5 text-center text-xs">Streaming is simulated. zAutoScroll is enabled.</p>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideArrowUp, lucideMessageCircleDashed, lucidePlus, lucideRotateCw })],
   host: { class: 'contents' },
 })
-export class ZardDemoMessageScrollerLastAnchorComponent {
-  protected readonly turns: Turn[] = [
-    { id: 't1', role: 'user', text: 'What does a saved thread need to reopen well?' },
-    { id: 't2', role: 'assistant', text: 'The last turn the reader was in, not the very bottom of the transcript.' },
-    { id: 't3', role: 'user', text: 'Walk me through how to choose where it opens.' },
-    {
-      id: 't4',
-      role: 'assistant',
-      text: 'Start from the last message that begins a turn, usually the one the reader sent. Everything after it is the reply they have not finished reading.',
-    },
-    {
-      id: 't5',
-      role: 'assistant',
-      text: 'If that whole turn fits on screen, there is nothing to choose: the end of the transcript already shows it, so the scroller opens there.',
-    },
-    {
-      id: 't6',
-      role: 'assistant',
-      text: 'When the reply is longer than the viewport, opening at the very end drops the reader in the middle of an answer with no sign of the question it belongs to.',
-    },
-    {
-      id: 't7',
-      role: 'assistant',
-      text: 'Opening at the last anchor puts the question at the top and the answer right below it, so the reader can simply start reading.',
-    },
-    {
-      id: 't8',
-      role: 'assistant',
-      text: 'The position is applied once, on the first non-empty render. After that the reader is in control, and new content never moves them on its own.',
-    },
-  ];
+export class ZardDemoMessageScrollerStreamingComponent {
+  protected readonly chat = injectScriptedChat(SCROLL_BEHAVIOR_SCRIPT, { delayMs: 20 });
+  protected readonly entrance = messageAnimationClass('slide-up');
 }
 ```
 
-### Jump To Message
+Calling `scrollToEnd`, or pressing the `z-message-scroller-button`, re-engages follow-output when `zAutoScroll` is enabled, so a reader who scrolled away can return to the live edge and keep following. The scroller and its viewport expose `data-autoscrolling` while that programmatic scroll to the latest message runs, so you can conditionally apply styles during the transition.
 
-Controls outside the transcript, such as search results or an outline, drive it through `ZardMessageScrollerService`. Read it from the scroller with `viewChild(ZardMessageScrollerComponent, { read: ZardMessageScrollerService })`, then call `scrollToMessage`. `visibleMessageIds` and `currentAnchorId` are signals.
+### Opening Saved Threads
+
+It can seem reasonable to reopen a saved thread at the absolute end of the transcript, but that often drops the reader into the conversation without enough context. A better default is `"last-anchor"`: show the last meaningful turn, like the user’s latest message, with the reply below it.
+
+That gives the reader an immediate place in the thread. They can see what they asked, where the answer starts, and continue from there without reconstructing the conversation from the bottom edge.
+
+```angular-html
+<z-message-scroller zDefaultPosition="last-anchor"><!-- transcript --></z-message-scroller>
+```
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardMessageImports } from '@/shared/components/message/message.imports';
-import { ZardMessageScrollerComponent } from '@/shared/components/message-scroller/message-scroller.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
-import { ZardMessageScrollerService } from '@/shared/components/message-scroller/message-scroller.service';
+import type { ZardMessageScrollerPosition } from '@/shared/components/message-scroller/message-scroller.service';
+import {
+  ZardToggleGroupComponent,
+  type ZardToggleGroupItem,
+} from '@/shared/components/toggle-group/toggle-group.component';
+import { type ChatMessage, ZardDemoChatRowComponent } from '@/shared/demo-utils/scripted-chat';
+
+const MESSAGES: ChatMessage[] = [
+  { id: 'open-1', role: 'user', text: 'This is the first message the user sent in the conversation.' },
+  {
+    id: 'open-2',
+    role: 'assistant',
+    text: 'Workspace creation rose 8%, but first invite completion only rose 2%.',
+  },
+  { id: 'open-3', role: 'user', text: 'This is the last message the user sent in the conversation.' },
+  {
+    id: 'open-4',
+    role: 'assistant',
+    text: 'Start with the invite step. Teams are creating workspaces but waiting to add collaborators.\n\nRecommended follow-up:\n\n1. Compare invite drop-off by account size.\n2. Check whether users who skip invites still return within 24 hours.\n3. Review the empty-state copy on the first project screen.\n4. Segment activation by template, since template users may not need invites right away.\n\nIf that pattern holds, the next experiment should make collaboration useful earlier instead of prompting for invites harder.',
+  },
+];
 
 @Component({
-  selector: 'z-demo-message-scroller-jump-to-message',
-  imports: [ZardButtonComponent, ...ZardMessageImports, ...ZardMessageScrollerImports],
+  selector: 'z-demo-message-scroller-opening-position',
+  imports: [ZardDemoChatRowComponent, ZardToggleGroupComponent, ...ZardCardImports, ...ZardMessageScrollerImports],
   template: `
-    <div class="flex w-full max-w-md flex-col gap-3">
-      <div class="flex flex-wrap gap-2">
-        @for (id of targets; track id) {
-          <button z-button zType="outline" zSize="sm" type="button" [attr.data-target]="id" (click)="jump(id)">
-            Message {{ id }}
-          </button>
-        }
-      </div>
+    <div class="relative flex w-full flex-col gap-4">
+      <z-card class="mx-auto h-140 w-full max-w-sm gap-0">
+        <z-card-header class="gap-1 border-b">
+          <z-card-title zTitle="Opening Position" />
+          <z-card-description zDescription="Choose where a saved transcript opens." />
+        </z-card-header>
 
-      <z-message-scroller class="h-80 rounded-lg border">
-        @for (id of ids; track id) {
-          <z-message-scroller-item [zMessageId]="'m' + id">
-            <z-message [zAlign]="id % 2 === 0 ? 'end' : 'start'" [zVariant]="id % 2 === 0 ? 'default' : 'muted'">
-              Message {{ id }}
-            </z-message>
-          </z-message-scroller-item>
-        }
+        <z-card-content class="min-h-0 flex-1 overflow-hidden p-0">
+          <!-- A new scroller per choice, so each one opens fresh at its default position. -->
+          @for (current of [position()]; track current) {
+            <z-message-scroller zContentClass="p-(--card-spacing)" [zDefaultPosition]="current" [zScrollMargin]="64">
+              @for (message of messages; track message.id) {
+                <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
+                  <z-demo-chat-row [zMessage]="message" />
+                </z-message-scroller-item>
+              }
+              <button type="button" z-message-scroller-button></button>
+            </z-message-scroller>
+          }
+        </z-card-content>
 
-        <button type="button" z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
-      </z-message-scroller>
-
-      <p class="text-muted-foreground text-xs" data-testid="visible-ids">Visible: {{ visible() }}</p>
+        <z-card-footer class="flex items-center justify-center border-t">
+          <z-toggle-group
+            class="w-full"
+            zItemClass="flex-1"
+            zMode="single"
+            zType="outline"
+            aria-label="Opening position"
+            [zItems]="positions"
+            [zValue]="position()"
+            (valueChange)="select($event)"
+          />
+        </z-card-footer>
+      </z-card>
+      <p class="text-muted-foreground mx-auto max-w-sm px-0.5 text-center text-xs">
+        Toggle zDefaultPosition to see where the transcript starts when you open the thread
+      </p>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
-export class ZardDemoMessageScrollerJumpToMessageComponent {
-  // The service is provided by the scroller, so a control outside it reads it from the component.
-  private readonly scroller = viewChild.required(ZardMessageScrollerComponent, { read: ZardMessageScrollerService });
+export class ZardDemoMessageScrollerOpeningPositionComponent {
+  protected readonly messages = MESSAGES;
+  protected readonly positions: ZardToggleGroupItem[] = [
+    { value: 'start', label: 'start' },
+    { value: 'end', label: 'end' },
+    { value: 'last-anchor', label: 'last-anchor' },
+  ];
 
-  protected readonly ids = Array.from({ length: 40 }, (_, i) => i + 1);
-  protected readonly targets = [3, 20, 38];
+  protected readonly position = signal<ZardMessageScrollerPosition>('last-anchor');
 
-  protected readonly visible = computed(() => this.scroller().visibleMessageIds().join(', ') || '-');
-
-  protected jump(id: number): void {
-    this.scroller().scrollToMessage(`m${id}`, { align: 'center', behavior: 'smooth' });
+  protected select(value: string | string[]): void {
+    const next = Array.isArray(value) ? value[0] : value;
+    if (next === 'start' || next === 'end' || next === 'last-anchor') {
+      this.position.set(next);
+    }
   }
 }
 ```
 
-### Rtl
+`"last-anchor"` is keyed on `zAnchor`, not message role. If no anchor exists, or the last anchored turn already fits in the viewport, it falls back to `"end"`.
+
+Use `"start"` when you want to resume at the beginning of a conversation, or `"end"` when the absolute latest message is the right place to land.
+
+### Avoiding a Flash on Reload
+
+A scroll container always opens at the top. HTML has no way to set `scrollTop`, so a server-rendered transcript shows the oldest messages first. Once the app hydrates, `zDefaultPosition` moves the view, and you would see a jump.
+
+When `zDefaultPosition` is `"end"` or `"last-anchor"`, the viewport has `data-pending-scroll` until that position is applied. The viewport stays hidden while the attribute is present, so you see the frame instead of the jump. `"start"` does not need this.
+
+### Loading Earlier Messages
+
+Loading earlier messages should not move the conversation the reader is already looking at. When older rows are prepended above the current transcript, the scroller preserves the visible row so the reader stays in the same place while history loads above them.
+
+This is enabled by default through `zPreserveScrollOnPrepend`.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideRotateCw } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
+import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
+import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
+import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
+import { type ChatScriptStep, scriptMessages, ZardDemoChatRowComponent } from '@/shared/demo-utils/scripted-chat';
+
+const HISTORY = scriptMessages([
+  { role: 'user', text: 'Can you summarize the incident channel?' },
+  {
+    role: 'assistant',
+    text: 'The first alert was a delayed export job. It started backing up around 09:42 UTC and triggered the warning once the retry queue crossed the threshold.\n\nNo customer-facing checkout paths were affected, but exports for larger workspaces were running about 12 minutes behind.',
+  },
+  { role: 'user', text: 'Was checkout affected?' },
+  {
+    role: 'assistant',
+    text: 'No checkout errors were reported. Payment authorization, order creation, and confirmation emails stayed inside their normal latency bands.\n\nThe only elevated metric was export queue depth, which maps to analytics downloads instead of checkout.',
+  },
+  { role: 'user', text: 'What changed in the last deploy?' },
+  {
+    role: 'assistant',
+    text: 'Only the export queue worker changed. The deploy moved large CSV jobs onto the shared retry policy, which made each failed attempt hold a worker slot longer than before.\n\nThe app deploy did not include checkout, pricing, or billing API changes.',
+  },
+  { role: 'user', text: 'Do we need to roll back?' },
+  {
+    role: 'assistant',
+    text: 'Not yet. Queue depth is recovering after we reduced retry concurrency, and the oldest pending job is now under five minutes old.\n\nKeep rollback ready if the queue starts climbing again, but the current trend points toward recovery.',
+  },
+  { role: 'user', text: 'Keep watching for customer-visible issues.' },
+  {
+    role: 'assistant',
+    text: 'I will watch the queue and support tags for another 15 minutes. I am tracking export failures, delayed download requests, and any support thread that mentions missing reports.\n\nIf those stay quiet through the next batch window, we can close this as an internal degradation.',
+  },
+] satisfies ChatScriptStep[]);
+
+const INITIAL_VISIBLE_COUNT = 5;
+
+@Component({
+  selector: 'z-demo-message-scroller-load-history',
+  imports: [
+    NgIcon,
+    ZardButtonComponent,
+    ZardDemoChatRowComponent,
+    ...ZardCardImports,
+    ...ZardMarkerImports,
+    ...ZardMessageScrollerImports,
+    ...ZardTooltipImports,
+  ],
+  template: `
+    <div class="relative flex w-full flex-col gap-4">
+      <z-card class="mx-auto h-140 w-full max-w-sm gap-0">
+        <z-card-header class="gap-1 border-b">
+          <z-card-title zTitle="Load History" />
+          <z-card-description zDescription="Prepended messages keep your place." />
+          <z-card-action>
+            <button
+              type="button"
+              z-button
+              zType="outline"
+              zSize="icon"
+              aria-label="Reset loaded messages"
+              zTooltip="Reset"
+              [disabled]="visibleCount() === initialCount"
+              (click)="reset()"
+            >
+              <ng-icon name="lucideRotateCw" />
+            </button>
+          </z-card-action>
+        </z-card-header>
+
+        <z-card-content class="min-h-0 flex-1 overflow-hidden p-0">
+          @for (run of runs(); track run) {
+            <z-message-scroller zContentClass="p-(--card-spacing)">
+              @for (message of visibleMessages(); track message.id) {
+                <z-message-scroller-item [zMessageId]="message.id">
+                  <z-demo-chat-row [zMessage]="message" />
+                </z-message-scroller-item>
+              }
+              <z-message-scroller-item>
+                <z-marker zVariant="separator">
+                  <z-marker-content>End of Conversation</z-marker-content>
+                </z-marker>
+              </z-message-scroller-item>
+              <button type="button" z-message-scroller-button></button>
+            </z-message-scroller>
+          }
+        </z-card-content>
+
+        <z-card-footer class="flex flex-col items-center gap-2 border-t">
+          <button type="button" z-button zType="secondary" class="w-full" [disabled]="!canLoad()" (click)="load()">
+            {{ canLoad() ? 'Load History' : 'History Loaded' }}
+          </button>
+          <p class="text-muted-foreground text-xs">Restore earlier messages while keeping your place.</p>
+        </z-card-footer>
+      </z-card>
+      <p class="text-muted-foreground mx-auto max-w-sm px-0.5 text-center text-xs text-balance">
+        Click Load History to load the entire conversation
+      </p>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideRotateCw })],
+  host: { class: 'contents' },
+})
+export class ZardDemoMessageScrollerLoadHistoryComponent {
+  private readonly sonner = inject(ZardSonnerService);
+
+  protected readonly initialCount = INITIAL_VISIBLE_COUNT;
+  protected readonly visibleCount = signal(INITIAL_VISIBLE_COUNT);
+  /** Bumped on reset so the scroller starts over at its opening position. */
+  protected readonly runs = signal([0]);
+
+  protected readonly visibleMessages = computed(() => HISTORY.slice(-this.visibleCount()));
+  protected readonly canLoad = computed(() => this.visibleCount() < HISTORY.length);
+
+  protected load(): void {
+    // The older rows are prepended above the ones on screen; the scroller keeps the visible row in place.
+    this.visibleCount.set(HISTORY.length);
+    this.sonner.show('History loaded', { description: 'Scroll up to see earlier messages.' });
+  }
+
+  protected reset(): void {
+    this.visibleCount.set(INITIAL_VISIBLE_COUNT);
+    this.runs.update(([run]) => [run + 1]);
+  }
+}
+```
+
+Use stable `zMessageId` values for message rows. That gives the scroller a specific row to preserve instead of guessing from whichever pixel happens to sit at the viewport edge.
+
+### Animating New Messages
+
+`z-message-scroller-item` can be animated directly. Keep `zMessageId` and `zAnchor` on it, and use transform and opacity for the entrance.
+
+A common chat pattern is to animate the user’s message when it is sent, then let the assistant reply stream into a regular row below it. Start the user row below its final position so it feels like it rises from the live edge of the viewport.
+
+```angular-html
+<!-- Transform and opacity only: the row keeps a stable height while it animates in. -->
+<z-message-scroller-item
+  [zMessageId]="message.id"
+  zAnchor
+  class="animate-in fade-in-0 slide-in-from-bottom-2.5 duration-300 motion-reduce:animate-none"
+/>
+```
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp, lucideMessageCircleDashed, lucideRotateCw } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardEmptyComponent } from '@/shared/components/empty/empty.component';
+import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
+import { ZardSelectImports } from '@/shared/components/select/select.imports';
+import {
+  type ChatScriptStep,
+  injectScriptedChat,
+  MESSAGE_ANIMATIONS,
+  messageAnimationClass,
+  type MessageAnimationId,
+  ZardDemoChatRowComponent,
+} from '@/shared/demo-utils/scripted-chat';
+
+const SCRIPT: ChatScriptStep[] = [
+  { role: 'user', text: 'Can user messages pop in like iMessage without breaking anchoring?' },
+  {
+    role: 'assistant',
+    delay: 1000,
+    text: 'Yes. Animate the user row with transform and opacity, and let the assistant response stream normally below it.\n\nThat keeps the row measurement predictable while still giving the newly sent bubble a more tactile entrance.',
+  },
+  { role: 'user', text: 'What makes the animation feel more like iMessage?' },
+  {
+    role: 'assistant',
+    delay: 1000,
+    text: 'Use a quick spring from the trailing edge: a little scale, a small upward move, and no layout animation.\n\nThe bubble feels tactile, but the measured row stays predictable, so anchoring and auto-scroll do not have to fight a changing layout.',
+  },
+  { role: 'user', text: 'Can I switch between presets while testing the same thread?' },
+  {
+    role: 'assistant',
+    delay: 1000,
+    text: 'Yes. Keep the conversation in place while you change the preset, then send the next message to compare the new entrance against the same context.\n\nThat makes it easier to judge the difference between a subtle fade, a snappy pop, and a more dramatic blur without rebuilding the scenario each time.',
+  },
+];
+
+@Component({
+  selector: 'z-demo-message-scroller-animation',
+  imports: [
+    NgIcon,
+    ZardButtonComponent,
+    ZardDemoChatRowComponent,
+    ZardEmptyComponent,
+    ...ZardCardImports,
+    ...ZardMessageScrollerImports,
+    ...ZardSelectImports,
+  ],
+  template: `
+    <div class="relative flex w-full flex-col gap-4">
+      <z-card class="mx-auto h-140 w-full max-w-sm gap-0">
+        <z-card-header class="border-b">
+          <z-card-title zTitle="Animation" />
+          <z-card-description
+            zDescription="Choose how user messages are animated when they are added to the conversation."
+          />
+          <z-card-action>
+            <button
+              type="button"
+              z-button
+              zType="outline"
+              zSize="icon"
+              aria-label="Reset animated messages"
+              [disabled]="chat.messages().length === 0 || chat.busy()"
+              (click)="chat.reset()"
+            >
+              <ng-icon name="lucideRotateCw" />
+            </button>
+          </z-card-action>
+        </z-card-header>
+
+        <z-card-content class="min-h-0 flex-1 overflow-hidden p-0">
+          @if (chat.messages().length === 0) {
+            <z-empty
+              class="h-full"
+              zIcon="lucideMessageCircleDashed"
+              zTitle="No Messages Yet"
+              zDescription="Click the button below to send the first message."
+            />
+          } @else {
+            <z-message-scroller zContentClass="p-(--card-spacing)" [zBusy]="chat.busy()">
+              @for (message of chat.messages(); track message.id) {
+                <!-- Only the sent message animates; the reply streams into a plain row. -->
+                <z-message-scroller-item
+                  [zMessageId]="message.id"
+                  [zAnchor]="message.role === 'user'"
+                  [class]="message.role === 'user' ? entrance() : ''"
+                >
+                  <z-demo-chat-row [zMessage]="message" />
+                </z-message-scroller-item>
+              }
+              <button type="button" z-message-scroller-button></button>
+            </z-message-scroller>
+          }
+        </z-card-content>
+
+        <z-card-footer class="border-t">
+          <z-select class="w-40" aria-label="Animation preset" [(zValue)]="preset">
+            @for (animation of animations; track animation.id) {
+              <z-select-item [zValue]="animation.id">{{ animation.name }}</z-select-item>
+            }
+          </z-select>
+          <button
+            type="button"
+            z-button
+            zSize="icon"
+            class="ms-auto"
+            [disabled]="!chat.next() || chat.busy()"
+            (click)="chat.send()"
+          >
+            <ng-icon name="lucideArrowUp" />
+            <span class="sr-only">Send Message</span>
+          </button>
+        </z-card-footer>
+      </z-card>
+      <p class="text-muted-foreground mx-auto max-w-sm px-0.5 text-center text-xs text-balance">
+        Select an animation then click send to see it in action.
+      </p>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideArrowUp, lucideMessageCircleDashed, lucideRotateCw })],
+  host: { class: 'contents' },
+})
+export class ZardDemoMessageScrollerAnimationComponent {
+  protected readonly animations = MESSAGE_ANIMATIONS;
+  protected readonly chat = injectScriptedChat(SCRIPT, { delayMs: 15 });
+  protected readonly preset = signal<string>('fade');
+  protected readonly entrance = computed(() => messageAnimationClass(this.preset() as MessageAnimationId));
+}
+```
+
+Avoid animating height, margin, or padding for row entrances; those changes can fight the scroller’s positioning work. If the reader prefers reduced motion, skip the entrance animation and keep the scroll behavior the same.
+
+### Jumping to Messages
+
+Search results, permalinks, outline items, and toolbar buttons often need to drive the transcript from outside the message list. Use the scroller’s `ZardMessageScrollerService` for those controls: it is provided by the scroller, so read it from the component, or from a template reference, anywhere in the same view, including controls rendered outside the transcript.
+
+```angular-ts
+// The service is provided by the scroller: read it from the component, or from a template
+// reference (`#scroller="zMessageScroller"` then `scroller.service`).
+private readonly scroller = viewChild.required(ZardMessageScrollerComponent, { read: ZardMessageScrollerService });
+
+this.scroller().scrollToMessage(id, { align: 'start', behavior: 'smooth' });
+this.scroller().scrollToEnd();
+this.scroller().scrollToStart();
+```
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
+import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
+import { type ChatScriptStep, scriptMessages, ZardDemoChatRowComponent } from '@/shared/demo-utils/scripted-chat';
+
+const MESSAGES = scriptMessages([
+  {
+    id: 'command-activation',
+    role: 'user',
+    text: "We're seeing activation dip after workspace creation. Can you help me find the likely step?",
+  },
+  {
+    role: 'assistant',
+    text: 'The sharpest drop is between creating the workspace and inviting the first teammate.\n\nWorkspace creation is still healthy, but the invite step is where users pause. That suggests the product is asking for collaboration before the user has enough confidence in the workspace.',
+  },
+  { id: 'command-compare', role: 'user', text: 'What should I compare before we change the onboarding flow?' },
+  {
+    role: 'assistant',
+    text: 'Compare three cohorts:\n\n1. Users who choose a template before inviting teammates.\n2. Users who start from a blank workspace.\n3. Users who skip invites and return within 24 hours.\n\nIf template users invite faster, the fix is probably better first-run guidance rather than a louder invite prompt.',
+  },
+  { id: 'command-experiment', role: 'user', text: 'Can you turn that into an experiment?' },
+  {
+    role: 'assistant',
+    text: 'Yes. Create a variant that shows a short checklist after workspace creation:\n\n- Pick a template.\n- Add one project detail.\n- Invite a teammate when the workspace has context.\n\nMeasure first invite completion, 24-hour return rate, and whether teams create a second project.',
+  },
+  { id: 'command-risk', role: 'user', text: "What's the risk if we delay the invite prompt?" },
+  {
+    role: 'assistant',
+    text: 'The main risk is reducing team creation for accounts that already know who they want to invite.\n\nTo protect that path, keep the invite action visible in the header and only change the primary empty-state guidance. That gives confident teams a direct route without forcing uncertain users through the invite step too early.',
+  },
+] satisfies ChatScriptStep[]);
+
+@Component({
+  selector: 'z-demo-message-scroller-commands',
+  imports: [
+    ZardButtonComponent,
+    ZardDemoChatRowComponent,
+    ...ZardCardImports,
+    ...ZardDropdownImports,
+    ...ZardMessageScrollerImports,
+  ],
+  template: `
+    <div class="relative flex w-full flex-col gap-4">
+      <z-card class="mx-auto h-140 w-full max-w-sm gap-0">
+        <z-card-header class="gap-1 border-b">
+          <z-card-title zTitle="Commands" />
+          <z-card-description zDescription="Drive the transcript from outside." />
+          <z-card-action>
+            <button type="button" z-button zType="secondary" z-dropdown [zDropdownMenu]="jumpMenu">Jump to...</button>
+          </z-card-action>
+        </z-card-header>
+
+        <z-card-content class="min-h-0 flex-1 overflow-hidden p-0">
+          <z-message-scroller #scroller="zMessageScroller" zContentClass="p-(--card-spacing)">
+            @for (message of messages; track message.id) {
+              <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
+                <z-demo-chat-row [zMessage]="message" />
+              </z-message-scroller-item>
+            }
+            <button type="button" z-message-scroller-button></button>
+          </z-message-scroller>
+        </z-card-content>
+      </z-card>
+      <p class="text-muted-foreground mx-auto max-w-sm px-0.5 text-center text-xs text-balance">
+        Use the controls to jump to any message in the conversation.
+      </p>
+    </div>
+
+    <z-dropdown-menu-content #jumpMenu="zDropdownMenuContent" zAlign="end" class="w-64">
+      <z-dropdown-menu-label>Conversations</z-dropdown-menu-label>
+      @for (message of questions; track message.id) {
+        <!-- The commands live on the scroller's service, so any control can drive it. -->
+        <z-dropdown-menu-item
+          (click)="scroller.service.scrollToMessage(message.id, { align: 'start', behavior: 'smooth' })"
+        >
+          <span class="line-clamp-1 min-w-0">{{ trim(message.text) }}</span>
+        </z-dropdown-menu-item>
+      }
+    </z-dropdown-menu-content>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
+})
+export class ZardDemoMessageScrollerCommandsComponent {
+  protected readonly messages = MESSAGES;
+  protected readonly questions = MESSAGES.filter(message => message.role === 'user');
+
+  protected trim(text: string): string {
+    return text.length > 42 ? `${text.slice(0, 39)}...` : text;
+  }
+}
+```
+
+`scrollToMessage` targets the `zMessageId` on `z-message-scroller-item`, so rows that need to be addressable should have stable ids. It returns `false` when the scroller is not mounted or the target row is not in the DOM.
+
+A `true` result means the scroll ran, not that the row is already in view: a smooth scroll is still on its way.
+
+### Tracking the Reader’s Position
+
+Use the `currentAnchorId` and `visibleMessageIds` signals to track the reader’s position in the conversation. A common example is a table of contents or a jump menu that highlights the current anchored turn.
+
+```angular-ts
+// Signals: the anchored turn being read, and the rows on screen in document order.
+const current = this.scroller().currentAnchorId();
+const visible = this.scroller().visibleMessageIds();
+```
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardHoverCardComponent, ZardHoverCardDirective } from '@/shared/components/hover-card/hover-card.component';
+import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
+import { type ChatScriptStep, scriptMessages, ZardDemoChatRowComponent } from '@/shared/demo-utils/scripted-chat';
+
+const MESSAGES = scriptMessages([
+  { id: 'vis-brief', role: 'user', text: 'Review the incident handoff and tell me what to read first.' },
+  {
+    role: 'assistant',
+    text: 'Start with the summary and the impact section. The regression affected the upload queue, but the recovery path completed for every queued job.',
+  },
+  { id: 'vis-impact', role: 'user', text: 'What was the customer impact?' },
+  {
+    role: 'assistant',
+    text: 'Impact was limited to delayed processing.\n\nNo records were dropped, and the reconciliation worker confirmed each retry batch. Support saw confusion from two customers, but there were no checkout or billing errors.',
+  },
+  { id: 'vis-actions', role: 'user', text: 'What actions are open?' },
+  {
+    role: 'assistant',
+    text: 'Keep the retry window enabled until the next deploy, then add a queue-depth alert as the long-term fix.\n\nThe alert should fire on sustained queue growth, not a single short spike.',
+  },
+  { id: 'vis-checklist', role: 'user', text: 'Give me the follow-up checklist.' },
+  {
+    role: 'assistant',
+    text: 'After that, compare the queue recovery graph with the deploy timeline so the handoff shows exactly when processing returned to baseline. That makes it easier for support and engineering to answer the same customer questions without re-reading the whole incident thread.\n\nI would also add a short owner note beside each follow-up item. The checklist is small, but ownership keeps the retry-window decision, alert tuning, and support macro from drifting into separate follow-up conversations.\n\nKeep the retry window enabled until the next deploy, then add a queue-depth alert as the long-term fix.\n\nThe alert should fire on sustained queue growth, not a single short spike.',
+  },
+] satisfies ChatScriptStep[]);
+
+@Component({
+  selector: 'z-demo-message-scroller-visibility',
+  imports: [
+    ZardDemoChatRowComponent,
+    ZardHoverCardComponent,
+    ZardHoverCardDirective,
+    ...ZardCardImports,
+    ...ZardMessageScrollerImports,
+  ],
+  template: `
+    <div class="relative flex w-full flex-col gap-4">
+      <div class="relative mx-auto w-full max-w-sm">
+        <z-card class="h-140 w-full gap-0">
+          <z-card-header class="gap-1 border-b">
+            <z-card-title zTitle="Transcript Outline" />
+            <z-card-description zDescription="Track the current anchored turn." />
+          </z-card-header>
+          <z-card-content class="min-h-0 flex-1 overflow-hidden p-0">
+            <z-message-scroller #scroller="zMessageScroller" zContentClass="p-(--card-spacing)" [zScrollMargin]="12">
+              @for (message of messages; track message.id) {
+                <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
+                  <z-demo-chat-row [zMessage]="message" />
+                </z-message-scroller-item>
+              }
+              <button type="button" z-message-scroller-button></button>
+            </z-message-scroller>
+          </z-card-content>
+        </z-card>
+
+        <!-- currentAnchorId follows the turn being read, even after its question scrolled above the viewport. -->
+        @let current = scroller.service.currentAnchorId();
+        <div class="absolute top-1/2 -right-12 -translate-y-1/2">
+          <button
+            type="button"
+            aria-label="Open transcript outline"
+            class="focus-visible:ring-ring/50 flex size-9 flex-col items-center justify-center gap-1 rounded-md outline-none focus-visible:ring-3"
+            zPlacement="left"
+            [zHoverCard]="outline"
+            [zOpenDelay]="100"
+          >
+            @for (message of questions; track message.id) {
+              <span
+                class="bg-muted-foreground/40 data-[current=true]:bg-foreground h-0.5 w-4 rounded-full"
+                [attr.data-current]="message.id === current"
+              ></span>
+            }
+          </button>
+        </div>
+
+        <ng-template #outline>
+          <z-hover-card class="flex w-64 flex-col gap-1 rounded-2xl p-1">
+            @for (message of questions; track message.id) {
+              <button
+                type="button"
+                class="hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent aria-current:bg-accent aria-current:text-accent-foreground flex min-h-7 items-center rounded-xl px-2 py-1.5 text-start text-sm transition-colors outline-none"
+                [attr.aria-current]="message.id === current ? 'location' : null"
+                (click)="scroller.service.scrollToMessage(message.id, { align: 'start', behavior: 'smooth' })"
+              >
+                <span class="line-clamp-1 min-w-0">{{ trim(message.text) }}</span>
+              </button>
+            }
+          </z-hover-card>
+        </ng-template>
+      </div>
+      <p class="text-muted-foreground mx-auto max-w-sm px-0.5 text-center text-xs">
+        Open the outline to jump between anchored turns as you read.
+      </p>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
+})
+export class ZardDemoMessageScrollerVisibilityComponent {
+  protected readonly messages = MESSAGES;
+  protected readonly questions = MESSAGES.filter(message => message.role === 'user');
+
+  protected trim(text: string): string {
+    return text.length > 42 ? `${text.slice(0, 39)}...` : text;
+  }
+}
+```
+
+`currentAnchorId` answers “where am I” by reporting the current anchored turn, and it stays set after that anchor scrolls above the viewport. `visibleMessageIds` answers “what is on screen”, in document order.
+
+Rows need a `zMessageId` to take part.
+
+### Reading Scroll State
+
+Use the `scrollable` signal when you need scroll state in code, such as a status indicator or a custom “jump to latest” control. It reports which edges the viewport can still scroll toward; “at the start/end” is the negation (`!start` / `!end`), and “scrollable at all” is `start || end`. For styling the scroller itself, prefer the `data-scrollable` attribute.
+
+```angular-ts
+// Which edges the viewport can still scroll toward.
+const { start, end } = this.scroller().scrollable();
+```
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';
+import type { ZardScrollableEdges } from '@/shared/components/message-scroller/message-scroller.service';
+import { type ChatMessage, ZardDemoChatRowComponent } from '@/shared/demo-utils/scripted-chat';
+
+const MESSAGES: ChatMessage[] = Array.from({ length: 12 }, (_, index) => ({
+  id: `scrollable-${index + 1}`,
+  role: index % 2 === 0 ? 'user' : 'assistant',
+  text:
+    index % 2 === 0
+      ? `Review scroll checkpoint ${index + 1}.`
+      : `Checkpoint ${index + 1} is synced. The scrollable signal updates as the viewport moves.\n\nWhen the reader is at the first message, the footer should only point them down. Once they move into the middle of the transcript, it should explain that both directions are available.\n\nAt the latest message, the footer should switch again and only point them back up.`,
+}));
+
+@Component({
+  selector: 'z-demo-message-scroller-scrollable',
+  imports: [ZardDemoChatRowComponent, ...ZardCardImports, ...ZardMessageScrollerImports],
+  template: `
+    <div class="mx-auto flex w-full max-w-sm flex-col gap-4">
+      <z-card class="h-140 w-full gap-0 overflow-hidden">
+        <z-card-header class="gap-1 border-b">
+          <z-card-title zTitle="Scroll Status" />
+          <z-card-description zDescription="Where the reader can scroll to, based on the current scroll position." />
+        </z-card-header>
+        <z-card-content class="min-h-0 flex-1 overflow-hidden p-0">
+          <z-message-scroller
+            #scroller="zMessageScroller"
+            zDefaultPosition="start"
+            zContentClass="gap-4 p-(--card-spacing)"
+          >
+            @for (message of messages; track message.id) {
+              <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
+                <z-demo-chat-row [zMessage]="message" />
+              </z-message-scroller-item>
+            }
+            <button type="button" z-message-scroller-button></button>
+          </z-message-scroller>
+        </z-card-content>
+        <z-card-footer class="text-muted-foreground justify-center border-t text-center text-sm">
+          {{ status(scroller.service.scrollable()) }}
+        </z-card-footer>
+      </z-card>
+      <p class="text-muted-foreground px-0.5 text-center text-xs">Scroll the transcript to see the footer update.</p>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
+})
+export class ZardDemoMessageScrollerScrollableComponent {
+  protected readonly messages = MESSAGES;
+
+  /** `start` / `end` say which edges the viewport can still scroll toward. */
+  protected status({ start, end }: ZardScrollableEdges): string {
+    if (start && end) return 'You can scroll both ways.';
+    if (end) return 'You are at the top. You can only scroll down.';
+    if (start) return 'You are at the bottom. You can only scroll up.';
+    return 'All messages fit in the viewport.';
+  }
+}
+```
+
+## Performance
+
+`z-message-scroller` is built to stay fast with large transcripts made of markdown and composed message rows.
+
+The scroll hot path stays outside change detection: scroll position, anchoring, and follow-output are tracked imperatively by the service and mirrored onto the scroller through `data-*` attributes, so scrolling and streaming do not re-render transcript rows. Only the few signals you read (`scrollable`, `visibleMessageIds`, `currentAnchorId`) change, and only when their value does.
+
+Visibility tracking only reports rows that have a `zMessageId`, and a jump menu or active turn indicator costs nothing until something reads those signals.
+
+This is comfortable for the expected range of a chat transcript: hundreds to low thousands of turns, including messages with markdown and composed components.
+
+## Virtualization
+
+Virtualization is intentionally left outside the component. `z-message-scroller` renders real DOM rows, which is what anchoring, prepend preservation and jumping measure, and it stays fast well into the thousands of turns (see [Performance](/docs/components/message-scroller#performance)), so most transcripts never need it.
+
+When a transcript does, put the rows in a `cdk-virtual-scroll-viewport` with a fixed `itemSize` and let it own the scrolling, with `scrollToIndex` standing in for `scrollToMessage`. You give up the live-edge and anchoring behavior, so reach for it only once you have measured the need.
+
+```angular-ts
+import { ScrollingModule, type CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { afterNextRender, Component, viewChild } from '@angular/core';
+
+@Component({
+  selector: 'app-virtual-transcript',
+  imports: [ScrollingModule],
+  template: `
+    <cdk-virtual-scroll-viewport
+      #viewport
+      itemSize="56"
+      role="region"
+      aria-label="Messages"
+      class="h-96 rounded-lg border"
+    >
+      <div *cdkVirtualFor="let message of messages" class="flex h-14 items-center px-4">{{ message.text }}</div>
+    </cdk-virtual-scroll-viewport>
+  `,
+})
+export class VirtualTranscript {
+  private readonly viewport = viewChild.required<CdkVirtualScrollViewport>('viewport');
+  protected readonly messages = Array.from({ length: 5000 }, (_, i) => ({ id: i, text: `Message ${i + 1}` }));
+
+  constructor() {
+    // Open at the latest message once the viewport has measured itself.
+    afterNextRender(() => requestAnimationFrame(() => this.viewport().scrollToIndex(this.messages.length - 1)));
+  }
+}
+```
+
+## RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl). The scroll button stays centered and the rows mirror.
 
@@ -1407,10 +2603,10 @@ const translations: ZardRtlTranslations<Strings> = {
   selector: 'z-demo-message-scroller-rtl',
   imports: [...ZardMessageImports, ...ZardMessageScrollerImports],
   template: `
-    <z-message-scroller class="h-80 w-full max-w-md rounded-lg border">
+    <z-message-scroller class="h-80 w-full max-w-sm rounded-xl border" zContentClass="p-4">
       @for (text of i18n.t().messages; track $index) {
         <z-message-scroller-item [zMessageId]="'m' + $index">
-          <z-message [zAlign]="$index % 2 === 0 ? 'end' : 'start'" [zVariant]="$index % 2 === 0 ? 'default' : 'muted'">
+          <z-message [zAlign]="$index % 2 === 0 ? 'end' : 'start'" [zVariant]="$index % 2 === 0 ? 'muted' : 'ghost'">
             {{ text }}
           </z-message>
         </z-message-scroller-item>
@@ -1427,6 +2623,18 @@ export class ZardDemoMessageScrollerRtlComponent {
 }
 ```
 
+## Accessibility
+
+`z-message-scroller` keeps the scroll container keyboard reachable and the transcript announceable without forcing a specific message UI.
+
+Its viewport is a labelled, keyboard-focusable scroll region by default. It uses `role="region"`, `aria-label="Messages"` (set `aria-label` on the scroller to rename it), and `tabindex="0"`, so keyboard users can focus the transcript and scroll it directly.
+
+The transcript is a live region with `role="log"` and `aria-relevant="additions"`. New rows can be announced, but streamed text mutations do not have to be announced token by token.
+
+Set `zBusy` while a turn streams if announcements should wait for the completed message row; it sets `aria-busy` on the transcript.
+
+`[z-message-scroller-button]` is a real button. When there is nothing to scroll toward, it sets `inert`, uses `tabindex="-1"`, and exposes `data-active="false"` so inactive scroll controls do not create extra focus stops.
+
 ## API Reference
 
 ### z-message-scroller
@@ -1440,6 +2648,9 @@ Scroll container for a chat transcript. It fills its parent, so give it a height
 | `[zPreserveScrollOnPrepend]` | Keep the visible row stable when older messages are prepended | `boolean` | `true` |
 | `[zEdgeThreshold]` | Distance in px that still counts as being at an edge | `number` | `8` |
 | `[zScrollMargin]` | Margin applied to the aligned edge when scrolling to a message | `number` | `0` |
+| `[zPreviousItemPeek]` | How much of the previous row, in px, stays visible above a newly anchored turn | `number` | `64` |
+| `[zBusy]` | Sets `aria-busy` on the transcript while a turn streams | `boolean` | `false` |
+| `[zContentClass]` | Classes for the transcript content, such as its padding or gap | `ClassValue` | `''` |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-message-scroller-item

@@ -22,7 +22,7 @@ export const messageScrollerViewportVariants = cva(
   ),
 );
 
-export const messageScrollerContentVariants = cva('flex h-max min-h-full flex-col gap-6 p-4');
+export const messageScrollerContentVariants = cva('flex h-max min-h-full flex-col gap-6');
 
 export const messageScrollerItemVariants = cva('min-w-0 shrink-0');
 

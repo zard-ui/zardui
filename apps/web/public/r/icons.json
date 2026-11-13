@@ -283,6 +283,9 @@
     "maximize": {
       "lucide": "lucideMaximize"
     },
+    "message-circle-dashed": {
+      "lucide": "lucideMessageCircleDashed"
+    },
     "message-square": {
       "lucide": "lucideMessageSquare"
     },
@@ -306,6 +309,9 @@
     },
     "panel-left": {
       "lucide": "lucidePanelLeft"
+    },
+    "paperclip": {
+      "lucide": "lucidePaperclip"
     },
     "pause": {
       "lucide": "lucidePause"
@@ -378,6 +384,9 @@
     },
     "tag": {
       "lucide": "lucideTag"
+    },
+    "telescope": {
+      "lucide": "lucideTelescope"
     },
     "terminal": {
       "lucide": "lucideTerminal"

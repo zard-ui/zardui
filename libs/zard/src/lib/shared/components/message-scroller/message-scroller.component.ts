@@ -59,6 +59,7 @@ import {
         data-slot="message-scroller-content"
         role="log"
         aria-relevant="additions"
+        [attr.aria-busy]="zBusy() || null"
         [class]="contentClasses()"
       >
         <ng-content />
@@ -90,6 +91,12 @@ export class ZardMessageScrollerComponent {
   readonly zEdgeThreshold = input(8, { transform: numberAttribute });
   /** Margin applied to the aligned edge when scrolling to a message. */
   readonly zScrollMargin = input(0, { transform: numberAttribute });
+  /** How much of the previous row, in px, stays visible above a newly anchored turn. */
+  readonly zPreviousItemPeek = input(64, { transform: numberAttribute });
+  /** Sets `aria-busy` on the transcript while a turn streams, so announcements wait for the finished row. */
+  readonly zBusy = input(false, { transform: booleanAttribute });
+  /** Classes for the transcript content (the `role="log"` element), such as its padding or gap. */
+  readonly zContentClass = input<ClassValue>('');
   readonly class = input<ClassValue>('');
 
   /** The state and commands of this scroller: the instance `inject(ZardMessageScrollerService)` returns inside it. */
@@ -108,11 +115,14 @@ export class ZardMessageScrollerComponent {
     preserveScrollOnPrepend: this.zPreserveScrollOnPrepend(),
     edgeThreshold: this.zEdgeThreshold(),
     scrollMargin: this.zScrollMargin(),
+    previousItemPeek: this.zPreviousItemPeek(),
   }));
 
   protected readonly classes = computed(() => mergeClasses(messageScrollerVariants(), this.class()));
   protected readonly viewportClasses = computed(() => messageScrollerViewportVariants());
-  protected readonly contentClasses = computed(() => messageScrollerContentVariants());
+  protected readonly contentClasses = computed(() =>
+    mergeClasses(messageScrollerContentVariants(), this.zContentClass()),
+  );
 
   /** `start`, `end`, `start end`, or absent when the transcript fits. */
   protected readonly scrollableAttr = computed(() => {

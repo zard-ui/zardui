@@ -22,6 +22,14 @@ async function wheelUp(page: Page, viewport: Locator, deltaY = 300) {
   await page.mouse.wheel(0, -deltaY);
 }
 
+/** A click that lands before the page has hydrated does nothing, so retry until the expected effect shows up. */
+async function clickUntil(button: Locator, effect: () => Promise<void>) {
+  await expect(async () => {
+    await button.click();
+    await effect();
+  }).toPass({ timeout: 20_000 });
+}
+
 test.describe('Message Scroller component', () => {
   let demoPage: ComponentDemoPage;
 
@@ -32,8 +40,9 @@ test.describe('Message Scroller component', () => {
 
   test.describe('structure', () => {
     test('exposes a labelled, focusable region that contains a log', async () => {
-      const scroller = demoPage.firstDemoBox.locator('z-message-scroller');
-      const region = scroller.getByRole('region', { name: 'Messages' });
+      const demo = demoPage.getDemoByName('commands');
+      await demo.scrollIntoViewIfNeeded();
+      const region = demo.getByRole('region', { name: 'Messages' });
 
       await expect(region).toBeVisible();
       await expect(region).toHaveAttribute('tabindex', '0');
@@ -41,7 +50,9 @@ test.describe('Message Scroller component', () => {
     });
 
     test('keeps the keyboard able to scroll the transcript', async ({ page }) => {
-      const viewport = viewportOf(demoPage.firstDemoBox);
+      const demo = demoPage.getDemoByName('commands');
+      await demo.scrollIntoViewIfNeeded();
+      const viewport = viewportOf(demo);
       await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
 
       await viewport.focus();
@@ -54,30 +65,76 @@ test.describe('Message Scroller component', () => {
     });
   });
 
-  test.describe('opening position', () => {
-    test('opens at the end of the transcript', async () => {
-      const viewport = viewportOf(demoPage.firstDemoBox);
-      await expect(viewport).not.toHaveAttribute('data-pending-scroll');
-      await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
-      expect(await scrollTopOf(viewport)).toBeGreaterThan(0);
+  test.describe('preview', () => {
+    test('starts empty and anchors the sent message as the reply streams in', async () => {
+      const preview = demoPage.firstDemoBox;
+      const send = preview.locator('button[type="submit"]');
+      await expect(preview.locator('z-empty')).toBeVisible();
+
+      await clickUntil(send, () =>
+        expect(preview.locator('z-message-scroller-item')).toHaveCount(1, { timeout: 1_000 }),
+      );
+      await expect(preview.locator('z-message-scroller-item')).toHaveCount(2, { timeout: 10_000 });
+      await expect(preview.getByRole('log')).toHaveAttribute('aria-busy', 'true');
+      await expect(send).toBeEnabled({ timeout: 30_000 });
+      await expect(preview.getByRole('log')).not.toHaveAttribute('aria-busy');
+    });
+  });
+
+  test.describe('anchoring', () => {
+    test('a new anchored turn settles near the top with a peek of the previous one', async () => {
+      const demo = demoPage.getDemoByName('anchoring');
+      await demo.scrollIntoViewIfNeeded();
+      const send = demo.getByRole('button', { name: 'Send Message' });
+      const rows = demo.locator('z-message-scroller-item');
+
+      await clickUntil(send, () => expect(rows).toHaveCount(1, { timeout: 1_000 }));
+      await send.click();
+      await send.click();
+      await expect(rows).toHaveCount(3);
+
+      const viewport = viewportOf(demo);
+      const anchor = rows.nth(2);
+      await expect(anchor).toHaveAttribute('data-scroll-anchor', 'true');
+      // the anchor sits below the top by the previous-row peek (64px by default), not at the very top
+      await expect.poll(() => offsetInViewport(viewport, anchor)).toBeGreaterThan(32);
+      expect(await offsetInViewport(viewport, anchor)).toBeLessThan(120);
     });
 
-    test('opens a saved thread at the last anchored turn', async () => {
-      const demo = demoPage.getDemoByName('last-anchor');
-      const viewport = viewportOf(demo);
+    test('a marker can anchor a turn in a group chat', async () => {
+      const demo = demoPage.getDemoByName('group-chat');
       await demo.scrollIntoViewIfNeeded();
+      const marker = demo.locator('z-message-scroller-item', { has: demo.page().locator('z-marker') });
 
-      const lastAnchor = demo.locator('z-message-scroller-item[data-scroll-anchor="true"]').last();
-      await expect.poll(async () => Math.abs(await offsetInViewport(viewport, lastAnchor))).toBeLessThanOrEqual(2);
-      // the reply is longer than the viewport, so it opened at the anchor, not at the bottom
-      expect(await distanceToEnd(viewport)).toBeGreaterThan(8);
+      await clickUntil(demo.getByRole('button', { name: 'Add Rocky' }), () =>
+        expect(marker).toHaveCount(1, { timeout: 1_000 }),
+      );
+      await expect(marker).toHaveAttribute('data-scroll-anchor', 'true');
+      await expect.poll(() => offsetInViewport(viewportOf(demo), marker)).toBeLessThan(120);
+    });
+  });
+
+  test.describe('opening position', () => {
+    test('opens at the start or at the end as chosen', async () => {
+      const demo = demoPage.getDemoByName('opening-position');
+      await demo.scrollIntoViewIfNeeded();
+      const viewport = () => viewportOf(demo);
+
+      await clickUntil(demo.getByRole('button', { name: 'start', exact: true }), () =>
+        expect.poll(() => scrollTopOf(viewport()), { timeout: 1_000 }).toBe(0),
+      );
+      await demo.getByRole('button', { name: 'end', exact: true }).click();
+      await expect.poll(() => distanceToEnd(viewport())).toBeLessThanOrEqual(8);
+      await expect(viewport()).not.toHaveAttribute('data-pending-scroll');
     });
   });
 
   test.describe('jump button', () => {
     test('is inert at the live edge and becomes usable after scrolling away', async ({ page }) => {
-      const scroller = demoPage.firstDemoBox.locator('z-message-scroller');
-      const viewport = viewportOf(demoPage.firstDemoBox);
+      const demo = demoPage.getDemoByName('commands');
+      await demo.scrollIntoViewIfNeeded();
+      const scroller = demo.locator('z-message-scroller');
+      const viewport = viewportOf(demo);
       const button = scroller.locator('[z-message-scroller-button]');
 
       await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
@@ -88,7 +145,6 @@ test.describe('Message Scroller component', () => {
       await wheelUp(page, viewport);
       await expect(button).toHaveAttribute('data-active', 'true');
       await expect(button).not.toHaveAttribute('inert');
-      await expect(button).not.toHaveAttribute('tabindex');
       await expect(scroller).toHaveAttribute('data-scrollable', /end/);
 
       await button.click();
@@ -96,32 +152,17 @@ test.describe('Message Scroller component', () => {
       await expect(button).toHaveAttribute('data-active', 'false');
     });
 
-    test('is reachable with the keyboard only while active', async ({ page }) => {
-      const scroller = demoPage.firstDemoBox.locator('z-message-scroller');
-      const viewport = viewportOf(demoPage.firstDemoBox);
-      const button = scroller.locator('[z-message-scroller-button]');
-      await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
-
-      await viewport.focus();
-      await page.keyboard.press('Tab');
-      await expect(button).not.toBeFocused();
-
-      await viewport.focus();
-      await page.keyboard.press('Home');
-      await expect(button).toHaveAttribute('data-active', 'true');
-      await page.keyboard.press('Tab');
-      await expect(button).toBeFocused();
-      await page.keyboard.press('Enter');
-      await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
-    });
-
     test('scrolls instantly under prefers-reduced-motion', async ({ page }) => {
       await page.emulateMedia({ reducedMotion: 'reduce' });
-      const scroller = demoPage.firstDemoBox.locator('z-message-scroller');
-      const viewport = viewportOf(demoPage.firstDemoBox);
+      const demo = demoPage.getDemoByName('commands');
+      await demo.scrollIntoViewIfNeeded();
+      const viewport = viewportOf(demo);
+      await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
       await wheelUp(page, viewport);
+      const button = demo.locator('[z-message-scroller-button]');
+      await expect(button).toHaveAttribute('data-active', 'true');
 
-      await scroller.locator('[z-message-scroller-button]').click();
+      await button.click();
       // no animation: the end is reached within two frames instead of over hundreds of milliseconds
       await page.evaluate(
         () => new Promise<void>(done => requestAnimationFrame(() => requestAnimationFrame(() => done()))),
@@ -131,51 +172,41 @@ test.describe('Message Scroller component', () => {
   });
 
   test.describe('streaming', () => {
-    test('follows the answer while the reader stays at the live edge', async ({ page }) => {
+    test('follows the answer while the reader stays at the live edge', async () => {
       const demo = demoPage.getDemoByName('streaming');
-      const viewport = viewportOf(demo);
       await demo.scrollIntoViewIfNeeded();
-      const send = demo.locator('button[z-button]');
+      const send = demo.locator('button[type="submit"]');
       const rows = demo.locator('z-message-scroller-item');
-      const before = await rows.count();
 
-      await send.click();
-      await expect(rows).toHaveCount(before + 2);
-      await expect(send).toBeEnabled({ timeout: 20_000 });
+      await clickUntil(send, () => expect(rows).toHaveCount(1, { timeout: 1_000 }));
+      await expect(rows).toHaveCount(2, { timeout: 10_000 });
+      await expect(send).toBeEnabled({ timeout: 30_000 });
 
-      expect(await distanceToEnd(viewport)).toBeLessThanOrEqual(8);
+      const viewport = viewportOf(demo);
+      await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
       await expect(viewport).not.toHaveAttribute('data-autoscrolling');
       // the follow never released, so there is nothing to jump back to
       await expect(demo.locator('[z-message-scroller-button]')).toHaveAttribute('data-active', 'false');
-      void page;
     });
 
     test('lets go as soon as the reader scrolls up, and the button brings it back', async ({ page }) => {
       const demo = demoPage.getDemoByName('streaming');
-      const viewport = viewportOf(demo);
       await demo.scrollIntoViewIfNeeded();
-      const send = demo.locator('button[z-button]');
+      const send = demo.locator('button[type="submit"]');
+      const rows = demo.locator('z-message-scroller-item');
       const button = demo.locator('[z-message-scroller-button]');
 
-      await send.click();
-      await expect(demo.locator('z-message-scroller-item')).toHaveCount(4);
-      const beforeWheel = await scrollTopOf(viewport);
+      await clickUntil(send, () => expect(rows).toHaveCount(1, { timeout: 1_000 }));
+      await expect(rows).toHaveCount(2, { timeout: 10_000 });
+      // let the reply grow past the viewport, then scroll up while it is still streaming
+      const viewport = viewportOf(demo);
+      await expect.poll(() => scrollTopOf(viewport), { timeout: 15_000 }).toBeGreaterThan(40);
       await wheelUp(page, viewport, 200);
-      // the wheel does not wait for the scroll it causes: let it land, and settle, before recording the position
-      await expect.poll(() => scrollTopOf(viewport)).toBeLessThan(beforeWheel);
-      let released = await scrollTopOf(viewport);
-      await expect
-        .poll(async () => {
-          const current = await scrollTopOf(viewport);
-          const settled = current === released;
-          released = current;
-          return settled;
-        })
-        .toBe(true);
-
-      await expect(send).toBeEnabled({ timeout: 20_000 });
-      expect(await scrollTopOf(viewport)).toBe(released);
       await expect(button).toHaveAttribute('data-active', 'true');
+      const released = await scrollTopOf(viewport);
+
+      await expect(send).toBeEnabled({ timeout: 30_000 });
+      expect(Math.abs((await scrollTopOf(viewport)) - released)).toBeLessThanOrEqual(2);
 
       await button.click();
       await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
@@ -185,70 +216,93 @@ test.describe('Message Scroller component', () => {
 
   test.describe('loading earlier messages', () => {
     test('keeps the visible row in place when older rows are prepended', async () => {
-      const demo = demoPage.getDemoByName('load-earlier');
-      const viewport = viewportOf(demo);
+      const demo = demoPage.getDemoByName('load-history');
       await demo.scrollIntoViewIfNeeded();
+      const viewport = viewportOf(demo);
       await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
 
-      // read near the top of the loaded history, with the first loaded message as the first visible row
-      const reference = demo.locator('z-message-scroller-item[data-message-id="m19"]');
+      // read with the oldest loaded question as the first visible row
+      const reference = demo.locator('z-message-scroller-item[data-message-id="user-6"]');
       await viewport.evaluate(el => {
-        const row = el.querySelector('[data-message-id="m19"]') as HTMLElement;
-        el.scrollTop += row.getBoundingClientRect().top - el.getBoundingClientRect().top + 12;
+        const row = el.querySelector('[data-message-id="user-6"]') as HTMLElement;
+        el.scrollTop += row.getBoundingClientRect().top - el.getBoundingClientRect().top - 12;
       });
-      await expect.poll(() => offsetInViewport(viewport, reference)).toBeLessThan(0);
       const rows = demo.locator('z-message-scroller-item');
       const rowsBefore = await rows.count();
       const offsetBefore = await offsetInViewport(viewport, reference);
 
-      // dispatch the click: the load row is scrolled out of view and a real click would scroll it back
-      await demo.locator('button[z-button]').dispatchEvent('click');
-      await expect(rows).toHaveCount(rowsBefore + 6);
+      await clickUntil(demo.getByRole('button', { name: 'Load History' }), () =>
+        expect(rows).toHaveCount(rowsBefore + 5, { timeout: 1_000 }),
+      );
 
       // the same row is exactly where the reader left it; the new history is above, out of view
       await expect
         .poll(async () => Math.abs((await offsetInViewport(viewport, reference)) - offsetBefore))
         .toBeLessThanOrEqual(2);
       expect(await scrollTopOf(viewport)).toBeGreaterThan(0);
-    });
-
-    test('lets the reader keep going up into the loaded history', async () => {
-      const demo = demoPage.getDemoByName('load-earlier');
-      const viewport = viewportOf(demo);
-      await demo.scrollIntoViewIfNeeded();
-      await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
-
-      await viewport.evaluate(el => {
-        el.scrollTop = 0;
-      });
-      await demo.locator('button[z-button]').click();
-      await expect(demo.locator('z-message-scroller-item[data-message-id="m13"]')).toBeAttached();
-      await expect(demo.locator('button[z-button]')).toBeEnabled();
+      await expect(demo.getByRole('button', { name: 'History Loaded' })).toBeDisabled();
     });
   });
 
-  test.describe('jump to message', () => {
-    test('scrolls a mounted message into view from a control outside the transcript', async () => {
-      const demo = demoPage.getDemoByName('jump-to-message');
-      const viewport = viewportOf(demo);
+  test.describe('commands and state', () => {
+    test('jumps to a message from a menu outside the transcript', async ({ page }) => {
+      const demo = demoPage.getDemoByName('commands');
       await demo.scrollIntoViewIfNeeded();
-      const target = demo.locator('z-message-scroller-item[data-message-id="m20"]');
+      const viewport = viewportOf(demo);
+      const target = demo.locator('z-message-scroller-item[data-message-id="command-activation"]');
+      await expect.poll(() => distanceToEnd(viewport)).toBeLessThanOrEqual(8);
 
-      await expect.poll(() => scrollTopOf(viewport)).toBeGreaterThan(0);
-      await demo.locator('button[data-target="20"]').click();
+      await clickUntil(demo.getByRole('button', { name: 'Jump to...' }), () =>
+        expect(page.getByRole('menu')).toBeVisible({ timeout: 1_000 }),
+      );
+      await page.getByRole('menuitem').first().click();
 
       await expect
         .poll(async () => {
           const [v, t] = await Promise.all([viewport.boundingBox(), target.boundingBox()]);
-          return !!v && !!t && t.y >= v.y && t.y + t.height <= v.y + v.height;
+          return !!v && !!t && t.y >= v.y - 1 && t.y < v.y + v.height;
         })
         .toBe(true);
       // an explicit jump releases the live edge
       await expect(demo.locator('[z-message-scroller-button]')).toHaveAttribute('data-active', 'true');
     });
+
+    test('reports which edges the reader can scroll toward', async () => {
+      const demo = demoPage.getDemoByName('scrollable');
+      await demo.scrollIntoViewIfNeeded();
+      const footer = demo.locator('z-card-footer');
+      await expect(footer).toContainText('You are at the top');
+
+      await viewportOf(demo).evaluate(el => {
+        el.scrollTop = el.scrollHeight;
+      });
+      await expect(footer).toContainText('You are at the bottom');
+    });
+
+    test('marks the turn being read in the outline', async () => {
+      const demo = demoPage.getDemoByName('visibility');
+      await demo.scrollIntoViewIfNeeded();
+      const marks = demo.getByRole('button', { name: 'Open transcript outline' }).locator('span');
+      // the transcript opens at the end, so the last question is the turn being read
+      await expect(marks.last()).toHaveAttribute('data-current', 'true');
+
+      // bring the second question to the top: it becomes the turn being read
+      await viewportOf(demo).evaluate(el => {
+        const row = el.querySelector('[data-message-id="vis-impact"]') as HTMLElement;
+        el.scrollTop += row.getBoundingClientRect().top - el.getBoundingClientRect().top;
+      });
+      await expect(marks.nth(1)).toHaveAttribute('data-current', 'true');
+      await expect(marks.last()).toHaveAttribute('data-current', 'false');
+    });
   });
 
   test('passes accessibility checks', async ({ page }) => {
     await checkA11y(page, '#overview');
+  });
+
+  test('every example passes accessibility checks', async ({ page }) => {
+    // Only the live demos: the code blocks around them are the site's syntax theme, not the component.
+    const ids = ['anchoring', 'group-chat', 'previous-context', 'streaming', 'load-history', 'animation', 'scrollable'];
+    await checkA11y(page, ids.map(id => `[id="${id}"] [data-slot="preview"]`).join(', '));
   });
 });

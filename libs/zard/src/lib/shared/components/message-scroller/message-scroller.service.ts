@@ -28,6 +28,7 @@ export interface ZardMessageScrollerConfig {
   preserveScrollOnPrepend: boolean;
   edgeThreshold: number;
   scrollMargin: number;
+  previousItemPeek: number;
 }
 
 /** The elements the scroller component hands to the engine. */
@@ -38,8 +39,6 @@ export interface ZardMessageScrollerElements {
 }
 
 const ITEM_SLOT = 'message-scroller-item';
-/** How much of the previous row stays visible above a freshly anchored turn. */
-const PREVIOUS_ITEM_PEEK = 64;
 /** A programmatic scroll counts as finished this long after the last scroll event. */
 const SETTLE_MS = 120;
 const REVEAL_KEYS = new Set(['ArrowUp', 'PageUp', 'Home']);
@@ -411,7 +410,7 @@ export class ZardMessageScrollerService {
 
   private anchorTop(anchor: HTMLElement): number {
     const hasPrevious = this.items.indexOf(anchor) > 0;
-    return this.contentY(anchor) - (hasPrevious ? PREVIOUS_ITEM_PEEK : 0) - this.cfg().scrollMargin;
+    return this.contentY(anchor) - (hasPrevious ? this.cfg().previousItemPeek : 0) - this.cfg().scrollMargin;
   }
 
   /**

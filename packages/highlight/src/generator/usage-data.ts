@@ -488,42 +488,28 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
 </z-message>`,
   },
   'message-scroller': {
-    importCode: `import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';`,
-    templateCode: `<z-message-scroller zAutoScroll class="h-96 rounded-lg border">
+    importCode: `import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
+import { ZardMessageImports } from '@/shared/components/message/message.imports';
+import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';`,
+    templateCode: `<z-message-scroller>
   @for (message of messages(); track message.id) {
     <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
-      <p class="w-fit rounded-lg bg-muted px-3 py-2 text-sm">{{ message.text }}</p>
+      <z-message [zAlign]="message.role === 'user' ? 'end' : 'start'">
+        <z-message-content>
+          <z-bubble><z-bubble-content>{{ message.text }}</z-bubble-content></z-bubble>
+        </z-message-content>
+      </z-message>
     </z-message-scroller-item>
   }
-
-  <button z-message-scroller-button zDirection="end" aria-label="Jump to latest"></button>
+  <button type="button" z-message-scroller-button></button>
 </z-message-scroller>`,
-    description:
-      'Virtualization is a recipe, not an input. z-message-scroller renders real rows, which is what anchoring, prepend preservation and jump-to-message measure, and it stays fast well into the thousands of rows. When a transcript needs more, put the rows in a cdk-virtual-scroll-viewport with a fixed itemSize and let it own the scrolling, with scrollToIndex standing in for scrollToMessage. You give up the live-edge and anchoring behavior, so reach for it only once you have measured the need.',
+    description: '`z-message-scroller` fills its parent, so place it inside a height-constrained container.',
     additionalCodeBlocks: [
       {
-        language: 'angular-ts',
-        code: `import { ScrollingModule, type CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { afterNextRender, Component, viewChild } from '@angular/core';
-
-@Component({
-  selector: 'app-virtual-transcript',
-  imports: [ScrollingModule],
-  template: \`
-    <cdk-virtual-scroll-viewport #viewport itemSize="56" role="region" aria-label="Messages" class="h-96 rounded-lg border">
-      <div *cdkVirtualFor="let message of messages" class="flex h-14 items-center px-4">{{ message.text }}</div>
-    </cdk-virtual-scroll-viewport>
-  \`,
-})
-export class VirtualTranscript {
-  private readonly viewport = viewChild.required<CdkVirtualScrollViewport>('viewport');
-  protected readonly messages = Array.from({ length: 5000 }, (_, i) => ({ id: i, text: \`Message \${i + 1}\` }));
-
-  constructor() {
-    // Open at the latest message once the viewport has measured itself.
-    afterNextRender(() => requestAnimationFrame(() => this.viewport().scrollToIndex(this.messages.length - 1)));
-  }
-}`,
+        language: 'angular-html',
+        code: `<div class="flex h-screen flex-col">
+  <z-message-scroller class="flex-1"><!-- transcript --></z-message-scroller>
+</div>`,
       },
     ],
   },
