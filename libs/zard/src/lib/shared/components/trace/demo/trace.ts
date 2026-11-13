@@ -68,6 +68,7 @@ export const TRACE = {
     '`z-trace` is a list of lines. Each line has an icon, a title, and an optional description and status. A line can expand to show more detail, link to a page, or open a dialog or sheet.',
     'Every line has the same shape, so reasoning, tool calls, sources and plans built from `z-trace` look and behave the same.',
     'Use `z-trace` for the steps an agent takes, like calling a tool, running a subagent or editing a file. Use [Message](/docs/components/message) for its reply, and [Marker](/docs/components/marker) for notes and dividers between turns.',
+    'For ready-made patterns built on `z-trace`, like [Reasoning](/docs/ai-elements/reasoning), [Plan](/docs/ai-elements/plan), [Task](/docs/ai-elements/task) and [Sources](/docs/ai-elements/sources), see [AI Elements](/docs/ai-elements).',
   ],
   usage: {
     intro: 'Use a `z-trace-line` for a single step:',
@@ -204,7 +205,7 @@ export const TRACE = {
     {
       id: 'sources',
       title: 'Sources',
-      description: 'A collapsible row whose detail is a `z-trace` of link rows.',
+      description: 'A collapsible row whose detail is a `z-trace` of link rows. See the [Sources](/docs/ai-elements/sources) pattern.',
       examples: [{ name: 'sources', component: ZardDemoTraceSourcesComponent, codeData: TRACE_DEMO_SOURCES }],
     },
     {
@@ -238,7 +239,7 @@ export const TRACE = {
       id: 'reasoning',
       title: 'Reasoning',
       description:
-        'Render the reasoning of a streamed reply. The row is a `z-trace-line` until the first text arrives. See [Open State](/docs/components/trace#open).',
+        'Render the reasoning of a streamed reply. The row is a `z-trace-line` until the first text arrives. See [Open State](/docs/components/trace#open) and the [Reasoning](/docs/ai-elements/reasoning) pattern.',
       examples: [{ name: 'reasoning', component: ZardDemoTraceReasoningComponent, codeData: TRACE_DEMO_REASONING }],
     },
     {

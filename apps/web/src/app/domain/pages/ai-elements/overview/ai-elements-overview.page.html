@@ -1,0 +1,72 @@
+<z-content
+  [navigationConfig]="navigationConfig"
+  [activeAnchor]="activeAnchor"
+  scrollSpy
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading title="AI Elements" [description]="description" scrollSpyItem="overview" id="overview" />
+
+  <div class="flex flex-col gap-4 leading-relaxed text-pretty">
+    <div
+      prose="AI Elements are patterns for building agentic interfaces. Each one is a composition of Zard UI components that you copy into your project. There is no package to install and no new component to learn. The code is yours."
+    ></div>
+    <div
+      prose="A chat is a list of [Message](/docs/ai-elements/message) turns. The steps an agent takes inside a turn, like [Reasoning](/docs/ai-elements/reasoning), [Plan](/docs/ai-elements/plan) and [Task](/docs/ai-elements/task), are built on [Trace](/docs/components/trace), so every step has the same shape."
+    ></div>
+  </div>
+
+  <section class="flex flex-col gap-4" scrollSpyItem="patterns" id="patterns">
+    <h2 class="font-heading scroll-m-28 text-xl font-medium tracking-tight">Patterns</h2>
+    <ul class="mt-2 grid gap-4 sm:grid-cols-2" data-slot="ai-elements-patterns">
+      @for (pattern of patterns; track pattern.slug) {
+        <li class="flex">
+          @if (pattern.available) {
+            <a
+              [routerLink]="['/docs/ai-elements', pattern.slug]"
+              class="bg-surface text-surface-foreground hover:bg-surface/80 focus-visible:ring-ring/50 flex w-full flex-col items-start gap-1 rounded-2xl p-6 text-sm transition-colors outline-none focus-visible:ring-[3px]"
+            >
+              <span class="font-medium">{{ pattern.name }}</span>
+              <span class="text-muted-foreground leading-relaxed">{{ pattern.description }}</span>
+            </a>
+          } @else {
+            <div
+              class="bg-surface/50 text-surface-foreground flex w-full flex-col items-start gap-1 rounded-2xl p-6 text-sm"
+              data-state="soon"
+            >
+              <span class="font-medium">{{ pattern.name }}</span>
+              <span class="text-muted-foreground leading-relaxed">{{ pattern.description }}</span>
+              <span class="text-muted-foreground mt-2 text-xs">Coming soon, with {{ pattern.waitingOn }}.</span>
+            </div>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="flex flex-col gap-4" scrollSpyItem="get-started" id="get-started">
+    <h2 class="font-heading scroll-m-28 text-xl font-medium tracking-tight">Get started</h2>
+    <h3 class="font-heading text-lg font-medium tracking-tight">Add the components</h3>
+    <p class="leading-relaxed">
+      Most patterns are built on Trace. Add it, and any other component a pattern lists on its page.
+    </p>
+    <z-code-tabs [data]="blocks.installTabs" />
+    <h3 class="font-heading text-lg font-medium tracking-tight">Copy a pattern</h3>
+    <p class="leading-relaxed">
+      Open a pattern above and copy the code of its example into your project. Every example is a standalone
+      component, so it runs as soon as the components it imports are installed. Or ask your coding agent to do it:
+    </p>
+    <z-code-block [data]="blocks.agentPrompt" />
+  </section>
+
+  <section class="flex flex-col gap-4" scrollSpyItem="streaming" id="streaming">
+    <h2 class="font-heading scroll-m-28 text-xl font-medium tracking-tight">Streaming</h2>
+    <div
+      class="leading-relaxed text-pretty"
+      prose="The examples that stream, like [Reasoning](/docs/ai-elements/reasoning) and [Task](/docs/ai-elements/task), simulate the agent in the browser with signals and timers. There is no backend and no AI SDK."
+    ></div>
+    <div
+      class="leading-relaxed text-pretty"
+      prose="To plug in a real model, keep the template and replace the simulated run: write each chunk your stream sends into the same signals. The pattern does not care where the text comes from, only that the signals change."
+    ></div>
+  </section>
+</z-content>

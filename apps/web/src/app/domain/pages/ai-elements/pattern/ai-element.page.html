@@ -1,0 +1,108 @@
+@for (pattern of loaded(); track pattern.entry.slug) {
+  <z-content
+    [navigationConfig]="navigationConfig"
+    [activeAnchor]="activeAnchor"
+    (scrollSpyChange)="activeAnchor = $event"
+    scrollSpy
+  >
+    <div class="relative flex flex-col gap-2" scrollSpyItem="overview" id="overview">
+      <div class="relative flex items-start justify-between">
+        <h1 class="scroll-m-24 text-3xl font-semibold tracking-tight sm:text-3xl">{{ pattern.entry.name }}</h1>
+        <z-assist></z-assist>
+      </div>
+      <p class="text-muted-foreground text-[1.05rem] sm:text-base sm:text-balance md:max-w-[80%]">
+        {{ pattern.entry.pageDescription ?? pattern.entry.description }}
+      </p>
+      <z-code-box
+        data-slot="ai-element-preview"
+        [codeData]="pattern.data.preview.codeData"
+        [dynamicComponent]="pattern.data.preview.component"
+        [previewHeight]="pattern.data.preview.previewHeight"
+      ></z-code-box>
+    </div>
+
+    <div class="flex flex-col gap-4 leading-relaxed text-pretty" data-slot="ai-element-intro">
+      @for (paragraph of pattern.data.intro; track $index) {
+        <div [prose]="paragraph"></div>
+      }
+    </div>
+
+    <section class="flex flex-col gap-4" scrollSpyItem="installation" id="installation">
+      <h2 class="font-heading scroll-m-28 text-xl font-medium tracking-tight">Installation</h2>
+      <div class="leading-relaxed" data-slot="ai-element-built-with" [prose]="builtWith(pattern.entry)"></div>
+      <z-code-tabs [data]="pattern.data.install" />
+      <p class="text-muted-foreground leading-relaxed">
+        Then copy the code of the example into your project and adapt it. There is no package to install: the pattern
+        is yours. To install a component by hand, follow the Manual tab on its page.
+      </p>
+    </section>
+
+    @for (section of pattern.data.sections; track section.id) {
+      <section class="flex flex-col gap-4" [scrollSpyItem]="section.id" [id]="section.id">
+        <h2 class="font-heading scroll-m-28 text-xl font-medium tracking-tight">{{ section.title }}</h2>
+        @for (block of section.blocks; track $index) {
+          @switch (blockKind(block)) {
+            @case ('prose') {
+              <div class="leading-relaxed text-pretty" [prose]="asProse(block)"></div>
+            }
+            @case ('example') {
+              @let example = asExample(block);
+              <z-code-box
+                [attr.data-example]="example.name"
+                [codeData]="example.codeData"
+                [dynamicComponent]="example.component"
+                [previewHeight]="example.previewHeight"
+              ></z-code-box>
+            }
+            @case ('code') {
+              <z-code-block [data]="asCode(block)" />
+            }
+            @case ('table') {
+              @let table = asTable(block);
+              <div class="overflow-x-auto rounded-lg border">
+                <table z-table [class]="tableClass">
+                  <thead z-table-header>
+                    <tr z-table-row>
+                      @for (column of table.columns; track column) {
+                        <th z-table-head scope="col" class="whitespace-nowrap">{{ column }}</th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody z-table-body>
+                    @for (row of table.rows; track $index) {
+                      <tr z-table-row>
+                        @for (cell of row; track $index; let first = $first) {
+                          <td z-table-cell [class.font-medium]="first"><span [prose]="cell"></span></td>
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          }
+        }
+      </section>
+    }
+
+    <section class="flex flex-col gap-4" scrollSpyItem="api" id="api">
+      <h2 class="font-heading scroll-m-28 text-xl font-medium tracking-tight">API Reference</h2>
+      <p class="leading-relaxed">
+        {{ pattern.entry.name }} has no API of its own. See the API of the components it is built with:
+      </p>
+      <ul class="flex list-disc flex-col gap-1.5 pl-6 leading-relaxed">
+        @for (name of pattern.entry.builtWith; track name) {
+          <li>
+            <a
+              [routerLink]="['/docs/components', name]"
+              fragment="api"
+              class="text-foreground font-medium underline underline-offset-4"
+            >
+              {{ componentLabel(name) }}
+            </a>
+          </li>
+        }
+      </ul>
+    </section>
+  </z-content>
+}

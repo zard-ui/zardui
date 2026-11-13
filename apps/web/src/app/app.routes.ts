@@ -119,6 +119,10 @@ export const appRoutes: Route[] = [
         loadChildren: () => import('./domain/pages/component/component.routes').then(m => m.COMPONENTS_ROUTES),
       },
       {
+        path: 'ai-elements',
+        loadChildren: () => import('./domain/pages/ai-elements/ai-elements.routes').then(m => m.AI_ELEMENTS_ROUTES),
+      },
+      {
         path: 'contribute',
         loadChildren: () => import('./domain/pages/contribute/contribute.routes').then(m => m.CONTRIBUTE_ROUTES),
       },
