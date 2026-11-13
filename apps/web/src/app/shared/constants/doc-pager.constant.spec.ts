@@ -1,5 +1,5 @@
 import { buildDocSequence, DOC_SEQUENCE, findDocNeighbours, normalizeDocPath } from './doc-pager.constant';
-import { type NavSection, SECTIONS } from './routes.constant';
+import { type NavSection, SIDEBAR_PATHS } from './routes.constant';
 
 describe('doc pager', () => {
   const shortcuts: NavSection = {
@@ -22,26 +22,28 @@ describe('doc pager', () => {
     data: [
       { name: 'Installation', path: '/docs/installation', available: true },
       { name: 'Typeset', path: '/docs/typeset', available: true },
+      { name: 'Figma', path: '/docs/figma', available: true },
       { name: 'llms.txt', path: '/llms.txt', available: true, external: true },
       { name: 'Roadmap', path: '/docs/roadmap', available: true },
     ],
   };
-  const sequence = buildDocSequence([shortcuts, components, gettingStarted], shortcuts);
+  const sequence = buildDocSequence([shortcuts, components, gettingStarted]);
   const paths = sequence.map(item => item.path);
 
-  it('follows the sidebar, opening with the pages only the shortcuts list', () => {
+  it('follows the sidebar top to bottom, keeping a repeated page at its first place', () => {
     expect(paths).toEqual([
       '/docs/introduction',
+      '/docs/installation',
       '/docs/components/tooltip',
       '/docs/typeset',
-      '/docs/installation',
+      '/docs/figma',
       '/docs/roadmap',
     ]);
   });
 
   it('skips llms.txt, so the page before it links straight to the one after it', () => {
-    expect(findDocNeighbours('/docs/installation', sequence).next?.path).toBe('/docs/roadmap');
-    expect(findDocNeighbours('/docs/roadmap', sequence).previous?.path).toBe('/docs/installation');
+    expect(findDocNeighbours('/docs/figma', sequence).next?.path).toBe('/docs/roadmap');
+    expect(findDocNeighbours('/docs/roadmap', sequence).previous?.path).toBe('/docs/figma');
   });
 
   it('goes from Tooltip to Typography and back', () => {
@@ -56,7 +58,7 @@ describe('doc pager', () => {
 
   it('ignores the query, the fragment and a trailing slash', () => {
     expect(normalizeDocPath('/docs/components/tooltip/?tab=api#usage')).toBe('/docs/components/tooltip');
-    expect(findDocNeighbours('/docs/typeset#overview', sequence).next?.path).toBe('/docs/installation');
+    expect(findDocNeighbours('/docs/typeset#overview', sequence).next?.path).toBe('/docs/figma');
   });
 
   it('shows nothing on a page outside the docs sequence', () => {
@@ -65,16 +67,24 @@ describe('doc pager', () => {
 
   describe('the real sidebar', () => {
     const realPaths = DOC_SEQUENCE.map(item => item.path);
+    const sidebarPages = SIDEBAR_PATHS.flatMap(section => section.data).filter(
+      item => item.available && !item.external,
+    );
 
     it('lists every page once and never llms.txt', () => {
       expect(new Set(realPaths).size).toBe(realPaths.length);
       expect(realPaths).not.toContain('/llms.txt');
-      expect(DOC_SEQUENCE.every(item => item.available && !item.external)).toBe(true);
     });
 
-    it('starts at the introduction and keeps every shortcut reachable', () => {
-      expect(realPaths[0]).toBe('/docs/introduction');
-      SECTIONS.data.forEach(item => expect(realPaths).toContain(item.path));
+    it('is the sidebar order, minus the repeats', () => {
+      const firstPlaces = sidebarPages.filter(
+        (item, index) => sidebarPages.findIndex(other => other.path === item.path) === index,
+      );
+      expect(realPaths).toEqual(firstPlaces.map(item => item.path));
+    });
+
+    it('starts like the sidebar: Introduction, Components, Installation', () => {
+      expect(realPaths.slice(0, 3)).toEqual(['/docs/introduction', '/docs/components', '/docs/installation']);
     });
 
     it('steps over llms.txt in Get Started', () => {
