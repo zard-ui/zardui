@@ -234,6 +234,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/checkbox/demo/checkbox').then(m => m.CHECKBOX),
   },
   {
+    componentName: 'code-block',
+    description: 'Displays code, terminal output and diffs with an optional header, line numbers and a copy button.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/code-block/demo/code-block').then(m => m.CODE_BLOCK),
+  },
+  {
     componentName: 'collapsible',
     description: 'An interactive component which expands and collapses a panel.',
     category: 'Layout & Navigation',

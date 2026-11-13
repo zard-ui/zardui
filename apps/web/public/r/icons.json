@@ -430,6 +430,9 @@
     "waves": {
       "lucide": "lucideWaves"
     },
+    "wrap-text": {
+      "lucide": "lucideWrapText"
+    },
     "x": {
       "lucide": "lucideX"
     },
