@@ -4,6 +4,36 @@ import { test, expect } from '@playwright/test';
 import { checkA11y } from '../utils/axe-helper';
 import { ComponentDemoPage } from '../utils/component-page';
 
+/** Examples without syntax highlighting: the full rule set applies, color-contrast included. */
+const PLAIN_EXAMPLES = [
+  'basic',
+  'header',
+  'actions',
+  'floating-actions',
+  'line-numbers',
+  'wrap',
+  'highlighted-lines',
+  'diff',
+  'height',
+  'size',
+  'destructive',
+  'trace',
+];
+
+/** Examples highlighted with Shiki. */
+const SHIKI_EXAMPLES = [
+  'start-line',
+  'show-more',
+  'show-more-scroll',
+  'tabs',
+  'message',
+  'typeset',
+  'highlighting',
+  'languages',
+  'terminal',
+  'streaming',
+];
+
 test.describe('Code Block component', () => {
   let demoPage: ComponentDemoPage;
 
@@ -45,7 +75,7 @@ test.describe('Code Block component', () => {
     await expect(liveRegion).toHaveText('Copied');
     await expect(button).toHaveAttribute('data-copied', '');
     const copied = await page.evaluate(() => navigator.clipboard.readText());
-    expect(copied).toContain('GreetingComponent');
+    expect(copied).toContain('ChatService');
     // the copied text is the code only
     expect(copied).not.toContain('Copied');
 
@@ -69,7 +99,8 @@ test.describe('Code Block component', () => {
   });
 
   test('floating actions are hidden until the block is hovered or focused', async () => {
-    const demo = demoPage.getDemoByName('basic');
+    const demo = demoPage.getDemoByName('floating-actions');
+    await demo.scrollIntoViewIfNeeded();
     const actions = demo.locator('[data-slot="code-block"] > z-code-block-actions');
     await expect(actions).toHaveCSS('opacity', '0');
 
@@ -83,14 +114,9 @@ test.describe('Code Block component', () => {
     await expect(content).toHaveAttribute('data-numbered', '');
 
     const lines = content.locator('[data-slot="code-block-line"]');
-    expect(await lines.count()).toBe(4);
+    expect(await lines.count()).toBe(8);
     // the gutter is a CSS counter on ::before: it is neither in the DOM text nor selectable
-    expect(await lines.evaluateAll(els => els.map(el => el.textContent?.trim() ?? ''))).toEqual([
-      'npm install zard-cli',
-      'npx zard-cli@latest init',
-      '',
-      'npx zard-cli@latest add button',
-    ]);
+    expect(await lines.first().evaluate(el => el.textContent?.trim())).toBe('{');
     // generated content is not part of a selection, so it is not copied either
     const selected = await content.evaluate(el => {
       const selection = window.getSelection() as Selection;
@@ -101,39 +127,52 @@ test.describe('Code Block component', () => {
       return selection.toString();
     });
     expect(selected).not.toMatch(/^\s*\d+\s*$/m);
-    expect(selected).toContain('npx zard-cli@latest init');
+    expect(selected).toContain('"start": "ng serve"');
     expect(await lines.first().evaluate(el => getComputedStyle(el, '::before').userSelect)).toBe('none');
   });
 
-  test('a start line offsets the numbers and a highlighted line is tinted', async () => {
-    const demo = demoPage.getDemoByName('line-numbers');
-    const content = demo.locator('z-code-block-content').nth(1);
+  test('a start line offsets the numbers', async () => {
+    const content = demoPage.getDemoByName('start-line').locator('z-code-block-content');
     const first = content.locator('[data-slot="code-block-line"]').first();
 
-    expect(await content.evaluate(el => (el as HTMLElement).style.counterReset)).toBe('line 11');
+    expect(await content.evaluate(el => (el as HTMLElement).style.counterReset)).toBe('line 994');
     expect(await first.evaluate(el => getComputedStyle(el).counterIncrement)).toBe('line 1');
-    await expect(first).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  });
+
+  test('highlighted lines are tinted and the others are not', async () => {
+    const content = demoPage.getDemoByName('highlighted-lines').locator('z-code-block-content');
     const highlighted = content.locator('[data-variant="highlighted"]');
-    await expect(highlighted).toHaveCount(1);
-    await expect(highlighted).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+
+    await expect(highlighted).toHaveCount(2);
+    await expect(highlighted.first()).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(content.locator('[data-variant="default"]').first()).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  });
+
+  test('long lines scroll by default and wrap with zWrap', async () => {
+    const contents = demoPage.getDemoByName('wrap').locator('z-code-block-content');
+
+    await expect(contents.first()).toHaveCSS('white-space', 'pre');
+    expect(await contents.first().evaluate(el => el.scrollWidth > el.clientWidth)).toBe(true);
+    await expect(contents.nth(1)).toHaveAttribute('data-wrap', '');
+    expect(await contents.nth(1).evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
   });
 
   test('wrap toggle changes how long lines are laid out', async () => {
-    const demo = demoPage.getDemoByName('wrap');
+    const demo = demoPage.getDemoByName('actions');
     const toggle = demo.locator('button[aria-pressed]');
-    const content = demo.locator('z-code-block-content').nth(1);
-
-    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
-    await expect(content).toHaveCSS('white-space', 'pre');
-    const scrollable = await content.evaluate(el => el.scrollWidth > el.clientWidth);
-    expect(scrollable).toBe(true);
-
-    await toggle.click();
+    const content = demo.locator('z-code-block-content');
 
     await expect(toggle).toHaveAttribute('aria-pressed', 'true');
-    await expect(content).toHaveAttribute('data-wrap', '');
     await expect(content).toHaveCSS('white-space', 'pre-wrap');
-    expect(await content.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+
+    // retried: a click that lands while the page is still hydrating is lost
+    await expect(async () => {
+      await toggle.click();
+      await expect(toggle).toHaveAttribute('aria-pressed', 'false', { timeout: 1_000 });
+    }).toPass({ timeout: 10_000 });
+
+    await expect(content).not.toHaveAttribute('data-wrap');
+    await expect(content).toHaveCSS('white-space', 'pre');
   });
 
   test('diff lines carry a marker and a tint, and the marker is not selectable text', async () => {
@@ -141,13 +180,13 @@ test.describe('Code Block component', () => {
     const added = demo.locator('z-code-block-line[data-variant="added"]');
     const removed = demo.locator('z-code-block-line[data-variant="removed"]');
 
-    await expect(added).toHaveCount(1);
+    await expect(added).toHaveCount(3);
     await expect(removed).toHaveCount(1);
-    expect(await added.evaluate(el => getComputedStyle(el, '::after').content)).toContain('+');
+    expect(await added.first().evaluate(el => getComputedStyle(el, '::after').content)).toContain('+');
     expect(await removed.evaluate(el => getComputedStyle(el, '::after').content)).toContain('−');
-    expect(await added.evaluate(el => getComputedStyle(el, '::after').userSelect)).toBe('none');
-    expect(await added.evaluate(el => el.textContent)).not.toMatch(/^\+/);
-    const addedBackground = await added.evaluate(el => getComputedStyle(el).backgroundColor);
+    expect(await added.first().evaluate(el => getComputedStyle(el, '::after').userSelect)).toBe('none');
+    expect(await added.first().evaluate(el => el.textContent)).not.toMatch(/^\+/);
+    const addedBackground = await added.first().evaluate(el => getComputedStyle(el).backgroundColor);
     const removedBackground = await removed.evaluate(el => getComputedStyle(el).backgroundColor);
     expect(addedBackground).not.toBe(removedBackground);
   });
@@ -171,9 +210,11 @@ test.describe('Code Block component', () => {
     await expect(button).toHaveAttribute('aria-controls', (await content.getAttribute('id')) ?? '');
     const collapsed = (await content.boundingBox())?.height ?? 0;
 
-    await button.click();
-
-    await expect(button).toHaveAttribute('aria-expanded', 'true');
+    // retried: a click that lands while the page is still hydrating is lost
+    await expect(async () => {
+      await button.click();
+      await expect(button).toHaveAttribute('aria-expanded', 'true', { timeout: 1_000 });
+    }).toPass({ timeout: 10_000 });
     expect((await content.boundingBox())?.height ?? 0).toBeGreaterThan(collapsed);
   });
 
@@ -196,15 +237,50 @@ test.describe('Code Block component', () => {
     await expect(content.locator('span[style*="--shiki-light"]').first()).toBeAttached({ timeout: 15_000 });
 
     await expect(content).not.toContainText('[32m');
-    await expect(content).not.toContainText('[0m');
-    await expect(content).toContainText('PASS');
-    await expect(content).toContainText('FAIL');
+    await expect(content).not.toContainText('[39m');
+    await expect(content).toContainText('13 passed');
+    await expect(content).toContainText('1 failed');
   });
 
   test('destructive and small variants are exposed as data attributes', async () => {
-    const demo = demoPage.getDemoByName('variants');
-    await expect(demo.locator('[data-slot="code-block"]').first()).toHaveAttribute('data-variant', 'destructive');
-    await expect(demo.locator('[data-slot="code-block"]').nth(1)).toHaveAttribute('data-size', 'sm');
+    await expect(demoPage.getDemoByName('destructive').locator('[data-slot="code-block"]')).toHaveAttribute(
+      'data-variant',
+      'destructive',
+    );
+    await expect(demoPage.getDemoByName('size').locator('[data-slot="code-block"]').nth(1)).toHaveAttribute(
+      'data-size',
+      'sm',
+    );
+  });
+
+  test('tabs show one file at a time', async () => {
+    const demo = demoPage.getDemoByName('tabs');
+    await demo.scrollIntoViewIfNeeded();
+    const title = demo.locator('z-code-block-title:visible');
+
+    await expect(title).toHaveText('src/app/chat/chat.service.ts');
+    await expect(async () => {
+      await demo.getByRole('tab', { name: 'proxy.conf.json' }).click();
+      await expect(title).toHaveText('proxy.conf.json', { timeout: 1_000 });
+    }).toPass({ timeout: 10_000 });
+  });
+
+  test('streaming replays the blocks and disables copying until each is complete', async () => {
+    const demo = demoPage.getDemoByName('streaming');
+    await demo.scrollIntoViewIfNeeded();
+    const replay = demo.getByRole('button', { name: 'Replay' });
+    const blocks = demo.locator('[data-slot="code-block"]');
+
+    await expect(blocks).toHaveCount(5);
+    await expect(async () => {
+      await replay.click();
+      await expect(replay).toBeDisabled({ timeout: 1_000 });
+    }).toPass({ timeout: 10_000 });
+
+    await expect(blocks.first().locator('[data-slot="code-block-copy-button"]')).toBeDisabled();
+    await expect(replay).toBeEnabled({ timeout: 20_000 });
+    await expect(blocks).toHaveCount(5);
+    await expect(blocks.first().locator('[data-slot="code-block-copy-button"]')).toBeEnabled();
   });
 
   test('rtl example keeps the code left to right while the header follows the page', async ({ page }) => {
@@ -218,33 +294,28 @@ test.describe('Code Block component', () => {
     await checkA11y(page, '#rtl');
   });
 
-  test('every example but the Shiki ones passes accessibility checks, contrast included', async ({ page }) => {
-    await expect(page.locator('[id="highlighting"] span[style*="--shiki-light"]').first()).toBeAttached({
-      timeout: 15_000,
-    });
+  test('every example without Shiki passes accessibility checks, contrast included', async ({ page }) => {
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-      .include('#examples')
-      .exclude('#highlighting')
-      .exclude('#terminal')
+      .include(PLAIN_EXAMPLES.map(id => `[id="${id}"] [data-slot="preview"]`).join(', '))
       .analyze();
 
     expect(results.violations.map(violation => `${violation.id} (${violation.nodes.length})`)).toEqual([]);
   });
 
   test('the Shiki examples pass accessibility checks but contrast', async ({ page }) => {
-    // color-contrast: both examples print the palette of the Shiki github themes as is (a few syntax tokens and the
-    // ANSI green / red are below 4.5:1 on white, the same palette as the docs site's own viewer); the words PASS and
-    // FAIL carry the meaning in the terminal, so color is not the only cue
-    for (const id of ['highlighting', 'terminal']) {
-      await expect(page.locator(`[id="${id}"] span[style*="--shiki-light"]`).first()).toBeAttached({
-        timeout: 15_000,
-      });
-      await checkA11y(page, `#${id}`, ['color-contrast']);
-    }
+    // color-contrast: these examples print the palette of the Shiki github themes as is (a few syntax tokens and the
+    // ANSI green / red are below 4.5:1, the same palette as the docs site's own viewer); the text carries the meaning
+    await expect(page.locator('[id="highlighting"] span[style*="--shiki-light"]').first()).toBeAttached({
+      timeout: 15_000,
+    });
+    await checkA11y(page, SHIKI_EXAMPLES.map(id => `[id="${id}"] [data-slot="preview"]`).join(', '), [
+      'color-contrast',
+    ]);
   });
 
   test('passes accessibility checks', async ({ page }) => {
-    await checkA11y(page, '#overview');
+    // The preview is highlighted with Shiki, so contrast is covered by the plain examples above.
+    await checkA11y(page, '#overview', ['color-contrast']);
   });
 });

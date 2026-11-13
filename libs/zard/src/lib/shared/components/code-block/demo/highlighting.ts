@@ -1,16 +1,13 @@
-import { ChangeDetectionStrategy, Component, resource } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { highlightCode } from '@/shared/components/code-block/code-block.highlight';
+import { injectHighlightedCode } from '@/shared/components/code-block/code-block.highlight';
 import { ZardCodeBlockImports } from '@/shared/components/code-block/code-block.imports';
 
-const CODE = `import { Component, input } from '@angular/core';
-
-@Component({
-  selector: 'app-greeting',
-  template: \`<p>Hello, {{ name() }}!</p>\`,
-})
-export class GreetingComponent {
-  readonly name = input('world');
+const CODE = `{
+  "location": "San Francisco",
+  "temperature": 18,
+  "unit": "celsius",
+  "conditions": ["fog", "wind"]
 }`;
 
 @Component({
@@ -19,12 +16,9 @@ export class GreetingComponent {
   template: `
     <z-code-block class="max-w-md">
       <z-code-block-header>
-        <z-code-block-title>greeting.component.ts</z-code-block-title>
-        <z-code-block-actions>
-          <z-code-block-copy-button [zValue]="code" />
-        </z-code-block-actions>
+        <z-code-block-title>getWeather output</z-code-block-title>
       </z-code-block-header>
-      <z-code-block-content zLineNumbers>
+      <z-code-block-content>
         @for (line of lines(); track $index) {
           <z-code-block-line [zTokens]="line" />
         }
@@ -32,20 +26,8 @@ export class GreetingComponent {
     </z-code-block>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
 })
 export class ZardDemoCodeBlockHighlightingComponent {
-  protected readonly code = CODE;
-
-  // Shiki is loaded on demand. A resource also holds the server render until the code is highlighted.
-  private readonly highlighted = resource({ loader: () => highlightCode(CODE, 'typescript') });
-
-  // Plain lines are shown until the highlighted ones arrive.
-  protected lines() {
-    // Reading `value()` of a failed resource throws, so check it first.
-    if (this.highlighted.hasValue()) {
-      return this.highlighted.value();
-    }
-
-    return CODE.split('\n').map(line => (line ? [{ content: line }] : []));
-  }
+  protected readonly lines = injectHighlightedCode(CODE, 'json');
 }

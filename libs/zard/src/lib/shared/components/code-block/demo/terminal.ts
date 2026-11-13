@@ -1,19 +1,22 @@
-import { ChangeDetectionStrategy, Component, resource } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { highlightCode } from '@/shared/components/code-block/code-block.highlight';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTerminal } from '@ng-icons/lucide';
+
+import { injectHighlightedCode } from '@/shared/components/code-block/code-block.highlight';
 import { ZardCodeBlockImports } from '@/shared/components/code-block/code-block.imports';
 
 const ESC = String.fromCharCode(27);
 
 const OUTPUT = [
-  `${ESC}[1m$ npm test${ESC}[0m`,
+  '$ ng test',
+  `${ESC}[32m✓${ESC}[39m src/app/format.spec.ts ${ESC}[2m(4 tests)${ESC}[22m`,
+  `${ESC}[32m✓${ESC}[39m src/app/parse.spec.ts ${ESC}[2m(7 tests)${ESC}[22m`,
+  `${ESC}[31m✗${ESC}[39m src/app/chat/chat.service.spec.ts ${ESC}[2m(3 tests | 1 failed)${ESC}[22m`,
   '',
-  `${ESC}[32m PASS ${ESC}[0m libs/zard/button.component.spec.ts`,
-  `${ESC}[32m PASS ${ESC}[0m libs/zard/card.component.spec.ts`,
-  `${ESC}[31m FAIL ${ESC}[0m libs/zard/dialog.component.spec.ts`,
-  `  ${ESC}[31m●${ESC}[0m opens and closes`,
+  `${ESC}[31mAssertionError: expected 'hello' to be 'hello world'${ESC}[39m`,
   '',
-  `${ESC}[1mTests:${ESC}[0m  ${ESC}[31m1 failed${ESC}[0m, ${ESC}[32m24 passed${ESC}[0m, 25 total`,
+  `Tests  ${ESC}[31m1 failed${ESC}[39m | ${ESC}[32m13 passed${ESC}[39m (14)`,
 ].join('\n');
 
 // The text to copy has no escape codes.
@@ -21,16 +24,19 @@ const PLAIN_OUTPUT = OUTPUT.replace(new RegExp(`${ESC}\\[[0-9;]*m`, 'g'), '');
 
 @Component({
   selector: 'z-demo-code-block-terminal',
-  imports: [ZardCodeBlockImports],
+  imports: [NgIcon, ZardCodeBlockImports],
   template: `
     <z-code-block class="max-w-md">
       <z-code-block-header>
-        <z-code-block-title>Terminal</z-code-block-title>
+        <z-code-block-title>
+          <ng-icon name="lucideTerminal" />
+          Terminal
+        </z-code-block-title>
         <z-code-block-actions>
-          <z-code-block-copy-button [zValue]="copyValue" />
+          <z-code-block-copy-button [zValue]="plainOutput" />
         </z-code-block-actions>
       </z-code-block-header>
-      <z-code-block-content>
+      <z-code-block-content zWrap>
         @for (line of lines(); track $index) {
           <z-code-block-line [zTokens]="line" />
         }
@@ -38,19 +44,10 @@ const PLAIN_OUTPUT = OUTPUT.replace(new RegExp(`${ESC}\\[[0-9;]*m`, 'g'), '');
     </z-code-block>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideTerminal })],
+  host: { class: 'contents' },
 })
 export class ZardDemoCodeBlockTerminalComponent {
-  protected readonly copyValue = PLAIN_OUTPUT;
-
-  private readonly highlighted = resource({ loader: () => highlightCode(OUTPUT, 'ansi') });
-
-  // Without the highlighter the escape codes are removed, so the output stays readable.
-  protected lines() {
-    // Reading `value()` of a failed resource throws, so check it first.
-    if (this.highlighted.hasValue()) {
-      return this.highlighted.value();
-    }
-
-    return PLAIN_OUTPUT.split('\n').map(line => (line ? [{ content: line }] : []));
-  }
+  protected readonly plainOutput = PLAIN_OUTPUT;
+  protected readonly lines = injectHighlightedCode(OUTPUT, 'ansi');
 }

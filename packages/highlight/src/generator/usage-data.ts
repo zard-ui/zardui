@@ -391,12 +391,12 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardCodeBlockImports } from '@/shared/components/code-block/code-block.imports';`,
     templateCode: `<z-code-block>
   <z-code-block-header>
-    <z-code-block-title>install.sh</z-code-block-title>
+    <z-code-block-title>Terminal</z-code-block-title>
     <z-code-block-actions>
-      <z-code-block-copy-button [zValue]="command" />
+      <z-code-block-copy-button [zValue]="output" />
     </z-code-block-actions>
   </z-code-block-header>
-  <z-code-block-content>{{ command }}</z-code-block-content>
+  <z-code-block-content>{{ output }}</z-code-block-content>
 </z-code-block>`,
   },
   collapsible: {
