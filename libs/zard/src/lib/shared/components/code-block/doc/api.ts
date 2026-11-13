@@ -44,6 +44,12 @@ export const CODE_BLOCK_API: ApiSection[] = [
       'Ghost icon button that copies its value to the clipboard and announces "Copied" in a polite live region.',
     props: [
       { name: '[zValue]', description: 'Text to copy (required)', type: 'string', default: '-' },
+      {
+        name: '[zDisabled]',
+        description: 'Disables the button, such as while streamed code is incomplete',
+        type: 'boolean',
+        default: 'false',
+      },
       { name: '[class]', description: 'Custom CSS classes for the button', type: 'ClassValue', default: "''" },
     ],
   },
@@ -96,6 +102,32 @@ export const CODE_BLOCK_API: ApiSection[] = [
     selector: 'z-code-block-footer, [z-code-block-footer]',
     description: 'Row below the content, for example for a Show more button.',
     props: [CLASS_PROP],
+  },
+  {
+    selector: 'injectHighlightedCode(code, language)',
+    description:
+      'The highlighted lines of `code` as a signal, for `@for` + `[zTokens]` (the counterpart of the shadcn/ui `useHighlightedCode` hook). Call it in an injection context. It returns plain lines until Shiki has run, highlights again when a signal argument changes, keeps the colors of unchanged lines while code streams, and holds a server render until the lines are ready.',
+    props: [
+      {
+        name: 'code',
+        description: 'The code, or a function / signal that returns it',
+        type: 'string | (() => string)',
+        default: '-',
+      },
+      {
+        name: 'language',
+        description:
+          'A language or alias of `code-block.highlight.ts`, or `ansi`; or a function / signal that returns it',
+        type: 'string | (() => string)',
+        default: '-',
+      },
+      {
+        name: 'returns',
+        description: 'One list of tokens per line',
+        type: 'Signal<ZardCodeBlockLineTokens[]>',
+        default: '-',
+      },
+    ],
   },
   {
     selector: 'highlightCode(code, language)',

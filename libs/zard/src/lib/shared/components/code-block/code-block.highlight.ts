@@ -1,3 +1,5 @@
+import { computed, effect, resource, signal, type Signal } from '@angular/core';
+
 import type { HighlighterCore } from 'shiki/core';
 
 import type { ZardCodeBlockLineTokens } from './code-block.types';
@@ -144,4 +146,63 @@ export async function highlightCode(code: string, language: string): Promise<Zar
         token.htmlStyle ? { content: token.content, style: token.htmlStyle } : { content: token.content },
       ),
   );
+}
+
+/** The rows of `code`, ignoring one trailing newline like `highlightCode()` does. */
+function toRows(code: string): string[] {
+  return (code.endsWith('\n') ? code.slice(0, -1) : code).split('\n');
+}
+
+function toPlainLine(line: string): ZardCodeBlockLineTokens {
+  return line === '' ? [] : [{ content: line }];
+}
+
+/**
+ * The lines of `code`, highlighted, as a signal: the Angular counterpart of shadcn/ui's `useHighlightedCode`. Call it
+ * in an injection context (a field initializer or the constructor of a component).
+ *
+ * - It returns plain lines until Shiki has highlighted the code, and for a language that is not in the list.
+ * - `code` and `language` can be signals: when they change, the code is highlighted again. While a new pass runs, every
+ *   line that did not change keeps its colors, so streamed code does not flicker as it grows.
+ * - It runs through a `resource`, so a server render waits for the highlighted lines.
+ *
+ * ```ts
+ * protected readonly lines = injectHighlightedCode(this.code, 'typescript');
+ * ```
+ * ```html
+ * @for (line of lines(); track $index) {
+ *   <z-code-block-line [zTokens]="line" />
+ * }
+ * ```
+ */
+export function injectHighlightedCode(
+  code: string | (() => string),
+  language: string | (() => string),
+): Signal<ZardCodeBlockLineTokens[]> {
+  const read = (value: string | (() => string)) => (typeof value === 'function' ? value() : value);
+
+  const highlighted = resource({
+    params: () => ({ code: read(code), language: read(language) }),
+    loader: async ({ params }) => ({ source: params.code, lines: await highlightCode(params.code, params.language) }),
+  });
+
+  // The last finished pass, kept while the next one runs. Recorded by an effect as soon as a pass finishes, not when
+  // the lines are next read, so a change that lands before the first read does not drop the colors.
+  const settled = signal<{ rows: string[]; lines: ZardCodeBlockLineTokens[] } | undefined>(undefined);
+
+  effect(() => {
+    // Reading `value()` of a failed resource throws, so check it first.
+    if (highlighted.hasValue()) {
+      const { source, lines } = highlighted.value();
+      settled.set({ rows: toRows(source), lines });
+    }
+  });
+
+  return computed(() => {
+    const last = highlighted.hasValue()
+      ? { rows: toRows(highlighted.value().source), ...highlighted.value() }
+      : settled();
+
+    return toRows(read(code)).map((row, index) => (last?.rows[index] === row ? last.lines[index] : toPlainLine(row)));
+  });
 }

@@ -29,7 +29,10 @@ const mockCreateJavaScriptRegexEngine = jest.fn(() => ({ engine: 'javascript' })
 jest.mock('shiki/core', () => ({ createHighlighterCore: mockCreateHighlighterCore }));
 jest.mock('shiki/engine/javascript', () => ({ createJavaScriptRegexEngine: mockCreateJavaScriptRegexEngine }));
 
-import { highlightCode } from './code-block.highlight';
+import { ApplicationRef, Injector, signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+
+import { highlightCode, injectHighlightedCode } from './code-block.highlight';
 
 const text = (line: readonly { content: string }[]) => line.map(token => token.content).join('');
 
@@ -176,5 +179,50 @@ describe('highlightCode', () => {
       globalThis.window = originalWindow;
       globalThis.document = originalDocument;
     }
+  });
+});
+
+describe('injectHighlightedCode', () => {
+  const settle = async () => {
+    await new Promise(resolve => setTimeout(resolve));
+    await TestBed.inject(ApplicationRef).whenStable();
+  };
+  const create = (code: string | (() => string), language = 'ts') =>
+    TestBed.runInInjectionContext(() => injectHighlightedCode(code, language));
+
+  it('returns plain lines first, then the highlighted ones', async () => {
+    const lines = create(['const a = 1;', '', 'const b = 2;'].join('\n'));
+
+    expect(lines().map(text)).toEqual(['const a = 1;', '', 'const b = 2;']);
+    expect(lines()[0][0]).not.toHaveProperty('style');
+
+    await settle();
+
+    expect(lines().map(text)).toEqual(['const a = 1;', '', 'const b = 2;']);
+    expect(lines()[0][0].style).toEqual({ '--shiki-light': 'light-typescript', '--shiki-dark': 'dark-typescript' });
+  });
+
+  it('keeps the colors of the lines that did not change while new code arrives', async () => {
+    const code = signal('const a = 1;');
+    const lines = create(code);
+    await settle();
+
+    code.set(['const a = 1;', 'const b'].join('\n'));
+
+    // The first line is the same, so it keeps its colors; the new one is plain until the next pass.
+    expect(lines()[0][0].style).toBeDefined();
+    expect(lines()[1][0]).toEqual({ content: 'const b' });
+
+    await settle();
+    expect(lines()[1][0].style).toBeDefined();
+  });
+
+  it('ignores one trailing newline, like highlightCode()', () => {
+    expect(create('a\n')().map(text)).toEqual(['a']);
+  });
+
+  it('needs an injection context', () => {
+    expect(() => injectHighlightedCode('a', 'ts')).toThrow();
+    expect(TestBed.inject(Injector)).toBeDefined();
   });
 });

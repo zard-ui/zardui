@@ -142,7 +142,8 @@ export class ZardCodeBlockActionsComponent {
       zType="ghost"
       zSize="icon-xs"
       data-slot="code-block-copy-button"
-      [class]="class()"
+      [class]="buttonClasses()"
+      [zDisabled]="zDisabled()"
       [attr.data-copied]="copied() ? '' : null"
       [attr.aria-label]="copied() ? 'Copied' : 'Copy'"
       (click)="copy()"
@@ -164,12 +165,17 @@ export class ZardCodeBlockCopyButtonComponent {
   private readonly clipboard = inject(Clipboard);
 
   readonly zValue = input.required<string>();
+  /** Disables the button, such as while streamed code is still incomplete. */
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
   protected readonly copied = signal(false);
 
   // The host only wraps the button and the live region, so it adds no box of its own.
   protected readonly classes = computed(() => mergeClasses('contents'));
+  protected readonly buttonClasses = computed(() =>
+    mergeClasses('hover:bg-foreground/5 dark:hover:bg-foreground/10', this.class()),
+  );
 
   private resetTimer: ReturnType<typeof setTimeout> | undefined;
 

@@ -24,7 +24,7 @@ describe('ZardCodeBlock', () => {
       expect(root).toHaveAttribute('data-slot', 'code-block');
       expect(root).toHaveAttribute('data-variant', 'default');
       expect(root).toHaveAttribute('data-size', 'default');
-      expect(root).toHaveClass('border-input', 'rounded-lg', 'w-full');
+      expect(root).toHaveClass('bg-muted', 'ring-1', 'rounded-2xl', 'w-full');
       expect(root).not.toHaveClass('text-xs');
     });
 
@@ -36,8 +36,8 @@ describe('ZardCodeBlock', () => {
       const root = container.querySelector('z-code-block') as HTMLElement;
 
       expect(root).toHaveAttribute('data-variant', 'destructive');
-      expect(root).toHaveClass('text-destructive', 'border-destructive/30');
-      expect(root).not.toHaveClass('border-input');
+      expect(root).toHaveClass('text-destructive', 'bg-destructive/2', 'ring-destructive/15');
+      expect(root).not.toHaveClass('bg-muted');
     });
 
     it('applies the sm size', async () => {
@@ -59,7 +59,7 @@ describe('ZardCodeBlock', () => {
       const root = container.querySelector('z-code-block') as HTMLElement;
 
       expect(root).toHaveClass('rounded-none', 'w-64');
-      expect(root).not.toHaveClass('rounded-lg');
+      expect(root).not.toHaveClass('rounded-2xl');
       expect(root).not.toHaveClass('w-full');
     });
 
@@ -314,7 +314,7 @@ describe('ZardCodeBlock', () => {
 
       expect(line).toHaveAttribute('data-slot', 'code-block-line');
       expect(line).toHaveAttribute('data-variant', 'default');
-      expect(line).not.toHaveClass('bg-muted');
+      expect(line).not.toHaveClass('bg-foreground/5');
       expect(line).not.toHaveClass('bg-destructive/10');
     });
 
@@ -322,7 +322,7 @@ describe('ZardCodeBlock', () => {
       const line = await renderLine('highlighted');
 
       expect(line).toHaveAttribute('data-variant', 'highlighted');
-      expect(line).toHaveClass('bg-muted');
+      expect(line).toHaveClass('bg-foreground/5');
       expect(line.className).not.toContain('after:content');
     });
 
@@ -330,7 +330,7 @@ describe('ZardCodeBlock', () => {
       const line = await renderLine('added');
 
       expect(line).toHaveAttribute('data-variant', 'added');
-      expect(line).toHaveClass('bg-muted', 'after:content-["+"]');
+      expect(line).toHaveClass('bg-foreground/5', 'after:content-["+"]');
     });
 
     it('marks a removed line with a minus', async () => {
