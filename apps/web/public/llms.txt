@@ -67,6 +67,7 @@
 - [Aspect Ratio](https://zardui.com/docs/components/aspect-ratio): Displays content within a desired ratio.
 - [Breadcrumb](https://zardui.com/docs/components/breadcrumb): Displays the path to the current resource using a hierarchy of links.
 - [Collapsible](https://zardui.com/docs/components/collapsible): An interactive component which expands and collapses a panel.
+- [Menubar](https://zardui.com/docs/components/menubar): A visually persistent bar of command menus, as found in desktop applications.
 - [Navigation Menu](https://zardui.com/docs/components/navigation-menu): A collection of links for navigating websites.
 - [Pagination](https://zardui.com/docs/components/pagination): Pagination with page navigation, next and previous links.
 - [Resizable](https://zardui.com/docs/components/resizable): Accessible resizable panel groups and layouts with keyboard support.
@@ -112,6 +113,7 @@
 - [Marker](https://zardui.com/docs/components/marker): Displays an inline status, system note, bordered row, or labeled separator in a conversation.
 - [Message](https://zardui.com/docs/components/message): Displays a message in a conversation, with optional avatar, header, footer, and alignment.
 - [Table](https://zardui.com/docs/components/table): A responsive table component.
+- [Trace](https://zardui.com/docs/components/trace): The building block for reasoning, tool calls, sources and more.
 
 ### Misc
 

@@ -13,6 +13,8 @@ export interface CodeBlockData {
 }
 
 export interface ComponentUsageData {
+  /** Prose shown before the import block, such as "Use a `z-trace-line` for a single step:". */
+  intro?: string;
   importBlock: CodeBlockData;
   codeBlock: CodeBlockData;
   description?: string;

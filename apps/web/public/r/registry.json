@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.5.1",
+  "version": "1.7.0",
   "items": [
     {
       "name": "core",
@@ -443,6 +443,25 @@
         "context-menu.directive.ts",
         "context-menu.service.ts",
         "context-menu.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "menubar",
+      "type": "registry:component",
+      "registryDependencies": [
+        "dropdown"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "menubar.component.ts",
+        "menubar-trigger.directive.ts",
+        "menubar.variants.ts",
+        "menubar.imports.ts",
         "index.ts"
       ]
     },
@@ -1371,6 +1390,29 @@
         "questionnaire.types.ts",
         "questionnaire.tokens.ts",
         "questionnaire.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "trace",
+      "type": "registry:component",
+      "registryDependencies": [
+        "collapsible",
+        "utilities"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronRight"
+        ],
+        "tokens": [
+          "chevron-right"
+        ]
+      },
+      "files": [
+        "trace.component.ts",
+        "trace.variants.ts",
+        "trace.imports.ts",
         "index.ts"
       ]
     }

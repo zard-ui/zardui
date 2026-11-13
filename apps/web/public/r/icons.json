@@ -52,6 +52,9 @@
     "book-open-check": {
       "lucide": "lucideBookOpenCheck"
     },
+    "brain": {
+      "lucide": "lucideBrain"
+    },
     "bookmark": {
       "lucide": "lucideBookmark"
     },
@@ -93,6 +96,9 @@
     },
     "chevrons-up-down": {
       "lucide": "lucideChevronsUpDown"
+    },
+    "circle": {
+      "lucide": "lucideCircle"
     },
     "circle-alert": {
       "lucide": "lucideCircleAlert"
@@ -166,6 +172,12 @@
     "file-code-2": {
       "lucide": "lucideFileCode2"
     },
+    "file-pen": {
+      "lucide": "lucideFilePen"
+    },
+    "file-plus": {
+      "lucide": "lucideFilePlus"
+    },
     "file-text": {
       "lucide": "lucideFileText"
     },
@@ -177,6 +189,9 @@
     },
     "folder-plus": {
       "lucide": "lucideFolderPlus"
+    },
+    "folder-search": {
+      "lucide": "lucideFolderSearch"
     },
     "footprints": {
       "lucide": "lucideFootprints"
@@ -192,6 +207,9 @@
     },
     "git-branch": {
       "lucide": "lucideGitBranch"
+    },
+    "git-commit-horizontal": {
+      "lucide": "lucideGitCommitHorizontal"
     },
     "globe": {
       "lucide": "lucideGlobe"
