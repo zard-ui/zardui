@@ -1362,6 +1362,29 @@
         "questionnaire.imports.ts",
         "index.ts"
       ]
+    },
+    {
+      "name": "trace",
+      "type": "registry:component",
+      "registryDependencies": [
+        "collapsible",
+        "utilities"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideChevronRight"
+        ],
+        "tokens": [
+          "chevron-right"
+        ]
+      },
+      "files": [
+        "trace.component.ts",
+        "trace.variants.ts",
+        "trace.imports.ts",
+        "index.ts"
+      ]
     }
   ]
 }

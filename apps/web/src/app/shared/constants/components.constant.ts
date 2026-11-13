@@ -32,27 +32,47 @@ export interface SectionTable {
   rows: (string | SectionTableLink)[][];
 }
 
-/** A titled block between the examples and the API, with its own anchor in the page navigation. */
+/**
+ * A titled block with its own anchor in the page navigation. By default it sits between the examples and the API;
+ * `position: 'intro'` moves it right under the introduction, before the installation.
+ *
+ * A section with a single example reads as that example: the example gets no heading of its own, and the section
+ * takes its id (set `id` to the example name so links and tests keep finding it).
+ */
 export interface ComponentSection {
   id: string;
   title: string;
+  position?: 'intro';
   description?: string;
   /** A highlighted warning shown above the description, for what readers must not miss. */
   callout?: { title: string; description: string };
   table?: SectionTable;
+  /** Shows the table under the examples instead of above them. */
+  tableAfterExamples?: boolean;
   examples?: ExampleData[];
+  /** Prose after the examples, such as a pointer to related examples. */
+  note?: string;
 }
 
 export interface ComponentData {
   componentName: string;
   description: string;
+  /** Accessibility notes. Each entry is a block of prose: `code`, **bold**, links and `- ` bullets. */
   accessibility?: string[];
   about?: AboutData;
+  /** Paragraphs right under the preview, before the installation. Each entry is a block of prose. */
+  intro?: string[];
+  /** A bullet list of what the component does, shown after the composition. */
+  features?: string[];
   preview?: ExampleData;
   examples: ExampleData[];
   installData?: ComponentInstallData;
   usage?: ComponentUsageData;
   composition?: CodeBlockData;
+  /** More composition trees after the first, each with the sentence that introduces it. */
+  compositionMore?: CodeSnippet[];
+  /** A closing sentence under the composition trees. */
+  compositionNote?: string;
   /**
    * Name of the component that replaces this one. The page then only says the component is deprecated and links
    * to the replacement — no preview, installation, examples or API (e.g. Toast → Sonner, as in shadcn/ui).
@@ -337,6 +357,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'A visually persistent bar of command menus, as found in desktop applications.',
     category: 'Layout & Navigation',
     loadData: () => import('@zard/components/menubar/demo/menubar').then(m => m.MENUBAR),
+  },
+  {
+    componentName: 'trace',
+    description: 'The building block for reasoning, tool calls, sources and more.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/trace/demo/trace').then(m => m.TRACE),
   },
   {
     componentName: 'navigation-menu',

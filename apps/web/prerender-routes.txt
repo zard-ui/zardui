@@ -104,6 +104,7 @@
 /docs/components/aspect-ratio
 /docs/components/attachment
 /docs/components/questionnaire
+/docs/components/trace
 /docs/contribute
 /docs/contribute/setup
 /docs/contribute/architecture

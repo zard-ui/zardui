@@ -58,6 +58,7 @@ export * from './lib/shared/components/textarea';
 export * from './lib/shared/components/toggle';
 export * from './lib/shared/components/toggle-group';
 export * from './lib/shared/components/tooltip';
+export * from './lib/shared/components/trace';
 export * from './lib/shared/core';
 export * from './lib/shared/services';
 export * from './lib/shared/utils';
