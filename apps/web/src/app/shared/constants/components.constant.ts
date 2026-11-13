@@ -43,6 +43,8 @@ export interface ComponentSection {
   id: string;
   title: string;
   position?: 'intro';
+  /** `3` renders an h3 listed under the section above it in the page navigation, like the parts of "Core Concepts". */
+  level?: 2 | 3;
   description?: string;
   /** A highlighted warning shown above the description, for what readers must not miss. */
   callout?: { title: string; description: string };
