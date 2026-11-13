@@ -97,6 +97,7 @@
 /docs/components/context-menu
 /docs/components/menubar
 /docs/components/message
+/docs/components/message-scroller
 /docs/components/map
 /docs/components/map-draw
 /docs/components/map-style-select
