@@ -41,6 +41,8 @@
 ## AI Elements
 
 - [AI Elements](https://zardui.com/docs/ai-elements): Patterns for agentic interfaces, each a copy-paste composition of Zard UI components.
+- [Chain of Thought](https://zardui.com/docs/ai-elements/chain-of-thought): A summary that expands into the steps an agent took.
+- [Chat](https://zardui.com/docs/ai-elements/chat): The thread. Message Scroller keeps your place while the reply streams.
 - [Checkpoint](https://zardui.com/docs/ai-elements/checkpoint): A point in the conversation you can return to.
 - [Confirmation](https://zardui.com/docs/ai-elements/confirmation): A prompt to approve or deny a tool before it runs.
 - [Context](https://zardui.com/docs/ai-elements/context): How much of the context window the conversation has used.
@@ -53,8 +55,13 @@
 - [Queue](https://zardui.com/docs/ai-elements/queue): The agent's todo list, split into what is left and what is done.
 - [Reasoning](https://zardui.com/docs/ai-elements/reasoning): The agent's thinking as it streams.
 - [Sources](https://zardui.com/docs/ai-elements/sources): The links the agent used for a reply.
+- [Stack Trace](https://zardui.com/docs/ai-elements/stack-trace): A failed tool call and its stack frames.
+- [Subagent](https://zardui.com/docs/ai-elements/subagent): A subagent run, with its tool calls and result.
 - [Suggestion](https://zardui.com/docs/ai-elements/suggestion): A short prompt you can send to the agent in one click.
 - [Task](https://zardui.com/docs/ai-elements/task): The steps the agent takes, as it takes them.
+- [Terminal](https://zardui.com/docs/ai-elements/terminal): A command the agent runs, with its output as it streams.
+- [Test Results](https://zardui.com/docs/ai-elements/test-results): A test run by the agent, with its suites and failures.
+- [Tool](https://zardui.com/docs/ai-elements/tool): A tool call the agent makes, from input to output.
 
 ## Components
 

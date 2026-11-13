@@ -175,8 +175,8 @@ export const AI_ELEMENTS_PATH: NavSection = {
   // A pattern stays `available: false` while a component it is built with is not in the library yet.
   data: [
     { name: 'Overview', path: '/docs/ai-elements', available: true },
-    { name: 'Chain of Thought', path: '/docs/ai-elements/chain-of-thought', available: false },
-    { name: 'Chat', path: '/docs/ai-elements/chat', available: false },
+    { name: 'Chain of Thought', path: '/docs/ai-elements/chain-of-thought', available: true },
+    { name: 'Chat', path: '/docs/ai-elements/chat', available: true },
     { name: 'Checkpoint', path: '/docs/ai-elements/checkpoint', available: true },
     { name: 'Confirmation', path: '/docs/ai-elements/confirmation', available: true },
     { name: 'Context', path: '/docs/ai-elements/context', available: true },
@@ -189,13 +189,13 @@ export const AI_ELEMENTS_PATH: NavSection = {
     { name: 'Queue', path: '/docs/ai-elements/queue', available: true },
     { name: 'Reasoning', path: '/docs/ai-elements/reasoning', available: true },
     { name: 'Sources', path: '/docs/ai-elements/sources', available: true },
-    { name: 'Stack Trace', path: '/docs/ai-elements/stack-trace', available: false },
-    { name: 'Subagent', path: '/docs/ai-elements/subagent', available: false },
+    { name: 'Stack Trace', path: '/docs/ai-elements/stack-trace', available: true },
+    { name: 'Subagent', path: '/docs/ai-elements/subagent', available: true },
     { name: 'Suggestion', path: '/docs/ai-elements/suggestion', available: true },
     { name: 'Task', path: '/docs/ai-elements/task', available: true },
-    { name: 'Terminal', path: '/docs/ai-elements/terminal', available: false },
-    { name: 'Test Results', path: '/docs/ai-elements/test-results', available: false },
-    { name: 'Tool', path: '/docs/ai-elements/tool', available: false },
+    { name: 'Terminal', path: '/docs/ai-elements/terminal', available: true },
+    { name: 'Test Results', path: '/docs/ai-elements/test-results', available: true },
+    { name: 'Tool', path: '/docs/ai-elements/tool', available: true },
   ],
 };
 

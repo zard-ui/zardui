@@ -29,7 +29,7 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '@/shared/compone
 </button>
 
 <ng-template #card>
-  <z-hover-card class="flex w-64 flex-col gap-1">
+  <z-hover-card class="flex w-64 flex-col gap-1 text-sm">
     <div class="font-medium">{{ title }}</div>
     <a [href]="url" target="_blank" rel="noreferrer">
       {{ hostname }}

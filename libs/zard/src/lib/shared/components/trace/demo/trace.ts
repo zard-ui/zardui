@@ -205,7 +205,8 @@ export const TRACE = {
     {
       id: 'sources',
       title: 'Sources',
-      description: 'A collapsible row whose detail is a `z-trace` of link rows. See the [Sources](/docs/ai-elements/sources) pattern.',
+      description:
+        'A collapsible row whose detail is a `z-trace` of link rows. See the [Sources](/docs/ai-elements/sources) pattern.',
       examples: [{ name: 'sources', component: ZardDemoTraceSourcesComponent, codeData: TRACE_DEMO_SOURCES }],
     },
     {

@@ -63,24 +63,24 @@ const DENIED = 'Okay, I left the dist folder in place.';
 
             <!-- A pending approval is a prompt, not activity, so it sits outside the trace. -->
             @if (tool() === 'approval-requested') {
-                <div z-item zVariant="outline" zSize="sm">
-                  <div z-item-media zVariant="icon"><ng-icon name="lucideTerminal" /></div>
-                  <div z-item-content>
-                    <div z-item-title>Run {{ command }}?</div>
-                    <p z-item-description>The command runs in this project.</p>
-                  </div>
-                  <div z-item-actions>
-                    <button type="button" z-button zType="outline" zSize="sm" (click)="answer(false)">Deny</button>
-                    <button type="button" z-button zSize="sm" (click)="answer(true)">Approve</button>
-                  </div>
+              <div z-item zVariant="outline" zSize="sm">
+                <div z-item-media zVariant="icon"><ng-icon name="lucideTerminal" /></div>
+                <div z-item-content>
+                  <div z-item-title>Run {{ command }}?</div>
+                  <p z-item-description>The command runs in this project.</p>
                 </div>
-              } @else if (tool()) {
-                <z-trace>
-                  <z-trace-line [zStatus]="tool() === 'running' ? 'running' : undefined">
-                    <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
-                    <z-trace-title>{{ toolTitle() }} {{ command }}</z-trace-title>
-                  </z-trace-line>
-                </z-trace>
+                <div z-item-actions>
+                  <button type="button" z-button zType="outline" zSize="sm" (click)="answer(false)">Deny</button>
+                  <button type="button" z-button zSize="sm" (click)="answer(true)">Approve</button>
+                </div>
+              </div>
+            } @else if (tool()) {
+              <z-trace>
+                <z-trace-line [zStatus]="tool() === 'running' ? 'running' : undefined">
+                  <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+                  <z-trace-title>{{ toolTitle() }} {{ command }}</z-trace-title>
+                </z-trace-line>
+              </z-trace>
             }
           </z-message-content>
         </z-message>
@@ -94,7 +94,7 @@ const DENIED = 'Okay, I left the dist folder in place.';
         </z-message>
       }
 
-      @if (!busy() && tool() !== 'approval-requested') {
+      @if (!busy()) {
         <button type="button" z-button zType="outline" zSize="sm" class="mt-auto self-start" (click)="next()">
           {{ sent() ? 'Reset' : 'Send message' }}
         </button>

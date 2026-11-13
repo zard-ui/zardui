@@ -55,7 +55,7 @@ const SOURCES = {
         {{ hostname(source.url) }}
       </button>
       <ng-template #card>
-        <z-hover-card class="flex w-64 flex-col gap-1">
+        <z-hover-card class="flex w-64 flex-col gap-1 text-sm">
           <div class="font-medium">{{ source.title }}</div>
           <p class="text-muted-foreground">{{ source.description }}</p>
           <a

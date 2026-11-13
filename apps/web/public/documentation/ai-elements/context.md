@@ -30,7 +30,7 @@ import { ZardProgressComponent } from '@/shared/components/progress/progress.com
 </button>
 
 <ng-template #details>
-  <z-hover-card class="flex w-64 flex-col gap-3">
+  <z-hover-card class="flex w-64 flex-col gap-3 text-sm">
     <div class="flex items-center justify-between gap-3 text-sm">
       <span class="font-medium">Context</span>
       <span class="text-muted-foreground">{{ used }} / {{ limit }}</span>

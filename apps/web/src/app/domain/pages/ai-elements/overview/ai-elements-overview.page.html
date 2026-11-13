@@ -26,7 +26,9 @@
               class="bg-surface text-surface-foreground hover:bg-surface/80 focus-visible:ring-ring/50 flex w-full flex-col items-start gap-1 rounded-2xl p-6 text-sm transition-colors outline-none focus-visible:ring-[3px]"
             >
               <span class="font-medium">{{ pattern.name }}</span>
-              <span class="text-muted-foreground leading-relaxed">{{ pattern.description }}</span>
+              <span class="text-foreground/70 dark:text-muted-foreground leading-relaxed">
+                {{ pattern.description }}
+              </span>
             </a>
           } @else {
             <div
@@ -34,8 +36,12 @@
               data-state="soon"
             >
               <span class="font-medium">{{ pattern.name }}</span>
-              <span class="text-muted-foreground leading-relaxed">{{ pattern.description }}</span>
-              <span class="text-muted-foreground mt-2 text-xs">Coming soon, with {{ pattern.waitingOn }}.</span>
+              <span class="text-foreground/70 dark:text-muted-foreground leading-relaxed">
+                {{ pattern.description }}
+              </span>
+              <span class="text-foreground/70 dark:text-muted-foreground mt-2 text-xs">
+                Coming soon, with {{ pattern.waitingOn }}.
+              </span>
             </div>
           }
         </li>
@@ -52,8 +58,8 @@
     <z-code-tabs [data]="blocks.installTabs" />
     <h3 class="font-heading text-lg font-medium tracking-tight">Copy a pattern</h3>
     <p class="leading-relaxed">
-      Open a pattern above and copy the code of its example into your project. Every example is a standalone
-      component, so it runs as soon as the components it imports are installed. Or ask your coding agent to do it:
+      Open a pattern above and copy the code of its example into your project. Every example is a standalone component,
+      so it runs as soon as the components it imports are installed. Or ask your coding agent to do it:
     </p>
     <z-code-block [data]="blocks.agentPrompt" />
   </section>

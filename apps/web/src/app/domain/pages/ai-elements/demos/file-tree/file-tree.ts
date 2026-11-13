@@ -8,8 +8,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsible.imports';
 
 type FileNode =
-  | { type: 'file'; name: string; path: string }
-  | { type: 'folder'; name: string; path: string; children: FileNode[] };
+  { type: 'file'; name: string; path: string } | { type: 'folder'; name: string; path: string; children: FileNode[] };
 
 const FILES: FileNode[] = [
   {
@@ -53,7 +52,7 @@ const FILES: FileNode[] = [
             z-collapsible-trigger
             zType="ghost"
             zSize="sm"
-            class="group/file-tree w-full justify-start font-normal"
+            class="group/file-tree aria-expanded:hover:bg-muted dark:aria-expanded:hover:bg-muted/50 w-full justify-start font-normal aria-expanded:bg-transparent"
           >
             <ng-icon
               name="lucideChevronRight"

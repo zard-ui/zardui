@@ -12,7 +12,7 @@ export const CONFIRMATION: AiElementData = {
     codeData: AI_ELEMENTS_CONFIRMATION_CONFIRMATION,
   },
   intro: [
-    'Confirmation asks the person for a yes or no before a tool runs. The question is an [Item](/docs/components/item) with Deny and Approve buttons. Once the person answers, the call becomes a [Trace](/docs/components/trace) line.',
+    'Confirmation asks the person for a yes or no before a tool runs. The question is an [Item](/docs/components/item) with Deny and Approve buttons. Once the person answers, the call becomes a [Tool](/docs/ai-elements/tool) line.',
   ],
   install: TABS_0,
   sections: [
@@ -32,7 +32,7 @@ export const CONFIRMATION: AiElementData = {
         { code: BLOCK_3 },
         {
           prose:
-            'Approve runs the tool and streams its output. Deny skips it. Either way, the call becomes a `z-trace-line`: "Ran rm -rf dist" or "Denied rm -rf dist".',
+            'Approve runs the tool and streams its output. Deny skips it. Either way, the call becomes a Tool line. See [Tool](/docs/ai-elements/tool#approval).',
         },
       ],
     },

@@ -94,6 +94,7 @@ export class ZardAiElementsPlanComponent {
       status: (index < this.current() ? 'done' : index === this.current() ? 'running' : 'pending') as StepStatus,
     })),
   );
+
   protected readonly done = computed(() => this.steps().filter(step => step.status === 'done').length);
 
   /** Bumped on every run and on destroy, so a stale run stops at its next step. */

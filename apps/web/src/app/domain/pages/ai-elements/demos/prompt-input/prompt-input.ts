@@ -40,17 +40,19 @@ let nextFileId = 0;
 
 @Component({
   selector: 'z-ai-elements-prompt-input',
-  imports: [
-    NgIcon,
-    ZardTextareaComponent,
-    ...ZardAttachmentImports,
-    ...ZardDropdownImports,
-    ...ZardInputGroupImports,
-  ],
+  imports: [NgIcon, ZardTextareaComponent, ...ZardAttachmentImports, ...ZardDropdownImports, ...ZardInputGroupImports],
   template: `
     <div class="mx-auto w-full max-w-lg py-6">
       <form (submit)="$event.preventDefault(); submit()">
-        <input #fileInput type="file" multiple class="sr-only" tabindex="-1" aria-label="Attach files" (change)="attach(fileInput)" />
+        <input
+          #fileInput
+          type="file"
+          multiple
+          class="sr-only"
+          tabindex="-1"
+          aria-label="Attach files"
+          (change)="attach(fileInput)"
+        />
 
         <z-input-group>
           @if (files().length) {

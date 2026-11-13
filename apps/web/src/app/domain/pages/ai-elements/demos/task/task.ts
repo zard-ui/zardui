@@ -91,7 +91,11 @@ export class ZardAiElementsTaskRowComponent {
   protected readonly steps = computed(() =>
     this.task().steps.map(step => ({
       title: step.title,
-      status: (step.status === 'done' ? undefined : step.status === 'running' && this.streaming() ? 'running' : 'error') as Status,
+      status: (step.status === 'done'
+        ? undefined
+        : step.status === 'running' && this.streaming()
+          ? 'running'
+          : 'error') as Status,
     })),
   );
 

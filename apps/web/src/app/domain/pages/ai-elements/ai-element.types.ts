@@ -17,10 +17,7 @@ export interface AiElementExample {
  * `code`, **bold**, [links](/docs/components/trace) and `- ` bullets.
  */
 export type AiElementBlock =
-  | { prose: string }
-  | { example: AiElementExample }
-  | { code: CodeBlockData }
-  | { table: AiElementTable };
+  { prose: string } | { example: AiElementExample } | { code: CodeBlockData } | { table: AiElementTable };
 
 /** A reference table. Cells take the same inline prose subset. */
 export interface AiElementTable {

@@ -1,19 +1,19 @@
 # Message
 
 ```bash tab="npm" copyButton
-npx zard-cli add message bubble tooltip
+npx zard-cli add message bubble tooltip code-block
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx zard-cli add message bubble tooltip
+pnpm dlx zard-cli add message bubble tooltip code-block
 ```
 
 ```bash tab="yarn" copyButton
-yarn dlx zard-cli add message bubble tooltip
+yarn dlx zard-cli add message bubble tooltip code-block
 ```
 
 ```bash tab="bun" copyButton
-bunx zard-cli add message bubble tooltip
+bunx zard-cli add message bubble tooltip code-block
 ```
 
 ## Usage

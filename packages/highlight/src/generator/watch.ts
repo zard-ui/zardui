@@ -89,7 +89,7 @@ export function startWatcher(onInstallationChange: () => Promise<void>): void {
     });
   }
 
-  // The utilities are CSS-only and the AI Elements are compositions, so in both the demo components are the whole pipeline.
+  // Utilities are CSS-only and AI Elements are compositions: in both, the demos are the whole pipeline.
   const watchPageDemos = (root: string, label: string, regenerate: (filePath: string) => Promise<void>) => {
     if (!fs.existsSync(root)) return;
 

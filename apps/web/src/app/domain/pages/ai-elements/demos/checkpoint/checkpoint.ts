@@ -19,7 +19,7 @@ const TRANSCRIPT: ChatMessage[] = [
   {
     id: 'rename',
     role: 'assistant',
-    text: 'Renamed Button to Action in src/app/shared/components/button.',
+    text: 'Renamed Button to Action in button.component.ts.',
     checkpoint: { label: 'Button renamed' },
   },
   { id: 'docs-ask', role: 'user', text: 'Update the docs to match.' },
@@ -121,7 +121,9 @@ export class ZardAiElementsCheckpointComponent {
     for (const word of reply.text.split(/(?<=\s)/)) {
       if (!(await this.wait(20, run))) return;
       shown += word;
-      this.messages.update(messages => messages.map(message => (message.id === reply.id ? { ...reply, text: shown } : message)));
+      this.messages.update(messages =>
+        messages.map(message => (message.id === reply.id ? { ...reply, text: shown } : message)),
+      );
     }
     this.busy.set(false);
   }

@@ -4,6 +4,8 @@ import { checkA11y } from '../utils/axe-helper';
 
 /** The patterns with a page. Keep in step with AI_ELEMENT_LOADERS in apps/web. */
 const PATTERNS = [
+  'chain-of-thought',
+  'chat',
   'checkpoint',
   'confirmation',
   'context',
@@ -16,12 +18,14 @@ const PATTERNS = [
   'queue',
   'reasoning',
   'sources',
+  'stack-trace',
+  'subagent',
   'suggestion',
   'task',
+  'terminal',
+  'test-results',
+  'tool',
 ];
-
-/** Patterns still waiting on a component: they are listed, but have no page yet. */
-const COMING_SOON = ['chain-of-thought', 'chat', 'stack-trace', 'subagent', 'terminal', 'test-results', 'tool'];
 
 async function gotoDocs(page: Page, path: string): Promise<void> {
   await page.goto(path);
@@ -44,13 +48,13 @@ async function startRun(button: Locator): Promise<void> {
 test.describe('AI Elements overview', () => {
   test.beforeEach(async ({ page }) => gotoDocs(page, '/docs/ai-elements'));
 
-  test('links every pattern with a page and marks the others as coming soon', async ({ page }) => {
+  test('links every pattern', async ({ page }) => {
     const grid = page.locator('[data-slot="ai-elements-patterns"]');
 
     for (const slug of PATTERNS) {
       await expect(grid.locator(`a[href="/docs/ai-elements/${slug}"]`)).toHaveCount(1);
     }
-    await expect(grid.locator('[data-state="soon"]')).toHaveCount(COMING_SOON.length);
+    await expect(grid.locator('[data-state="soon"]')).toHaveCount(0);
   });
 
   test('has no accessibility violations', async ({ page }) => {
@@ -75,8 +79,8 @@ test.describe('AI Elements pattern pages', () => {
     });
   }
 
-  test('a pattern without a page goes back to the overview', async ({ page }) => {
-    await page.goto(`/docs/ai-elements/${COMING_SOON[0]}`);
+  test('an unknown pattern goes back to the overview', async ({ page }) => {
+    await page.goto('/docs/ai-elements/not-a-pattern');
     await expect(page).toHaveURL(/\/docs\/ai-elements$/);
   });
 });

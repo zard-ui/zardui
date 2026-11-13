@@ -12,15 +12,28 @@ import {
 
 import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { injectHighlightedCode } from '@/shared/components/code-block/code-block.highlight';
+import { ZardCodeBlockImports } from '@/shared/components/code-block/code-block.imports';
 import { ZardMessageImports } from '@/shared/components/message/message.imports';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
 
 const QUESTION = 'How do I add a settings dialog? It should open from the gear icon in the header.';
 const COMMAND = 'npx zard-cli add dialog';
+const CODE = 'class="bg-muted rounded px-1 py-0.5 font-mono text-[0.8rem]"';
+/** The reply around the command, as the HTML its markdown renders to. */
+const INTRO = `Install Dialog, then open it from the gear button in <code ${CODE}>site-header.ts</code>.`;
+const OUTRO = `Wrap the button in a <code ${CODE}>z-dialog-trigger</code> and put the settings form in the dialog content. Focus moves into the dialog when it opens, and <strong>Esc</strong> closes it.`;
 
 @Component({
   selector: 'z-ai-elements-message',
-  imports: [NgIcon, ZardButtonComponent, ...ZardBubbleImports, ...ZardMessageImports, ...ZardTooltipImports],
+  imports: [
+    NgIcon,
+    ZardButtonComponent,
+    ...ZardBubbleImports,
+    ...ZardCodeBlockImports,
+    ...ZardMessageImports,
+    ...ZardTooltipImports,
+  ],
   template: `
     <div class="mx-auto flex w-full max-w-md flex-col gap-8 py-6 text-sm">
       <z-message zAlign="end">
@@ -41,15 +54,23 @@ const COMMAND = 'npx zard-cli add dialog';
 
       <z-message>
         <z-message-content class="gap-2">
+          <!-- The reply streams as markdown. Render it to HTML, and route fenced code to a code block. -->
           <div class="flex flex-col gap-3 leading-relaxed">
-            <p>
-              Install Dialog, then open it from the gear button in <code [class]="code">site-header.ts</code>.
-            </p>
-            <pre class="bg-muted/50 overflow-x-auto rounded-lg border px-3 py-2.5 font-mono text-xs">{{ command }}</pre>
-            <p>
-              Wrap the button in a <code [class]="code">z-dialog-trigger</code> and put the settings form in the
-              dialog content. Focus moves into the dialog when it opens, and <strong>Esc</strong> closes it.
-            </p>
+            <p [innerHTML]="intro"></p>
+            <z-code-block zSize="sm">
+              <z-code-block-header>
+                <z-code-block-title>bash</z-code-block-title>
+                <z-code-block-actions>
+                  <z-code-block-copy-button [zValue]="command" />
+                </z-code-block-actions>
+              </z-code-block-header>
+              <z-code-block-content zLineNumbers>
+                @for (line of commandLines(); track $index) {
+                  <z-code-block-line [zTokens]="line" />
+                }
+              </z-code-block-content>
+            </z-code-block>
+            <p [innerHTML]="outro"></p>
           </div>
           <z-message-footer class="px-0">
             <button
@@ -105,7 +126,9 @@ export class ZardAiElementsMessageComponent {
   protected readonly question = QUESTION;
   protected readonly command = COMMAND;
 
-  protected readonly code = 'bg-muted rounded px-1 py-0.5 font-mono text-[0.8rem]';
+  protected readonly intro = INTRO;
+  protected readonly outro = OUTRO;
+  protected readonly commandLines = injectHighlightedCode(COMMAND, 'bash');
   /** Fills the outlined icon of a pressed toggle. */
   protected readonly filled = '[&_svg]:fill-current';
 

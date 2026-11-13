@@ -8,7 +8,7 @@ export const MESSAGE: AiElementData = {
   slug: 'message',
   preview: { name: 'message', component: ZardAiElementsMessageComponent, codeData: AI_ELEMENTS_MESSAGE_MESSAGE },
   intro: [
-    'Use Message for one turn in a thread. The person’s text is a [Bubble](/docs/components/bubble) on a [Message](/docs/components/message) with `zAlign="end"`. The agent’s reply is markdown on a Message, with actions under it.',
+    'Use Message for one turn in a thread. The person’s text is a [Bubble](/docs/components/bubble) on a [Message](/docs/components/message) with `zAlign="end"`. The agent’s reply is markdown on a Message, with actions under it. A thread of these turns is [Chat](/docs/ai-elements/chat).',
   ],
   install: TABS_0,
   sections: [

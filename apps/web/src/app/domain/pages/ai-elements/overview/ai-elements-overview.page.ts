@@ -11,11 +11,7 @@ import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-
 import { ProseDirective } from '@doc/domain/directives/prose.directive';
 import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
-import {
-  AI_ELEMENTS,
-  componentLabel,
-  isAiElementAvailable,
-} from '@doc/shared/constants/ai-elements.constant';
+import { AI_ELEMENTS, componentLabel, isAiElementAvailable } from '@doc/shared/constants/ai-elements.constant';
 import { SeoService } from '@doc/shared/services/seo.service';
 
 const DESCRIPTION = 'Patterns for agentic interfaces, built from Zard UI components.';

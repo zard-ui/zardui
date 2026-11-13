@@ -14,13 +14,7 @@ const ANSWER =
 
 @Component({
   selector: 'z-ai-elements-reasoning',
-  imports: [
-    NgTemplateOutlet,
-    ZardButtonComponent,
-    ...ZardBubbleImports,
-    ...ZardMessageImports,
-    ...ZardTraceImports,
-  ],
+  imports: [NgTemplateOutlet, ZardButtonComponent, ...ZardBubbleImports, ...ZardMessageImports, ...ZardTraceImports],
   template: `
     <div class="flex min-h-72 w-full max-w-sm flex-col gap-4 py-6 text-sm">
       <z-message zAlign="end">

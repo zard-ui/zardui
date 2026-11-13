@@ -13,7 +13,11 @@ interface Todo {
 }
 
 const TODOS: Todo[] = [
-  { title: 'Write the migration guide', description: 'Cover the renamed inputs and the new data attributes.', done: true },
+  {
+    title: 'Write the migration guide',
+    description: 'Cover the renamed inputs and the new data attributes.',
+    done: true,
+  },
   { title: 'Add a changeset', done: true },
   {
     title: 'Fix the focus ring on the select trigger',

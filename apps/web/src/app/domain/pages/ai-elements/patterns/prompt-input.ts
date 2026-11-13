@@ -44,7 +44,11 @@ export const PROMPT_INPUT: AiElementData = {
     {
       id: 'keyboard',
       title: 'Keyboard',
-      blocks: [{ prose: 'Enter sends the message. Shift+Enter adds a new line.' }, { code: BLOCK_3 }, { code: BLOCK_4 }],
+      blocks: [
+        { prose: 'Enter sends the message. Shift+Enter adds a new line.' },
+        { code: BLOCK_3 },
+        { code: BLOCK_4 },
+      ],
     },
     {
       id: 'streaming',

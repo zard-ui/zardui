@@ -8,7 +8,7 @@ export const FILE_TREE: AiElementData = {
   slug: 'file-tree',
   preview: { name: 'file-tree', component: ZardAiElementsFileTreeComponent, codeData: AI_ELEMENTS_FILE_TREE_FILE_TREE },
   intro: [
-    'File Tree is the files the agent changed, shown as folders you can open. A folder is a [Collapsible](/docs/components/collapsible). A file is a [Button](/docs/components/button). For a single file the agent read or edited, use a [Trace](/docs/components/trace) line instead.',
+    'File Tree is the files the agent changed, shown as folders you can open. A folder is a [Collapsible](/docs/components/collapsible). A file is a [Button](/docs/components/button). For a single file the agent read or edited, use a [Tool](/docs/ai-elements/tool) line instead.',
   ],
   install: TABS_0,
   sections: [
@@ -16,7 +16,10 @@ export const FILE_TREE: AiElementData = {
       id: 'usage',
       title: 'Usage',
       blocks: [
-        { prose: 'Render nodes recursively, with a template that calls itself. Nest each folder’s children in its `z-collapsible-content`.' },
+        {
+          prose:
+            'Render nodes recursively, with a template that calls itself. Nest each folder’s children in its `z-collapsible-content`.',
+        },
         { code: BLOCK_1 },
         { code: BLOCK_2 },
         { prose: 'See [Collapsible](/docs/components/collapsible).' },

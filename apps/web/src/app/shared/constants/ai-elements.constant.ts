@@ -30,14 +30,12 @@ export const AI_ELEMENTS: AiElementEntry[] = [
     description: 'A summary that expands into the steps an agent took.',
     pageDescription: 'Displays a summary that expands into the steps an agent took.',
     builtWith: ['trace', 'code-block', 'badge'],
-    requires: ['code-block'],
   },
   {
     slug: 'chat',
     name: 'Chat',
     description: 'The thread. Message Scroller keeps your place while the reply streams.',
     builtWith: ['message-scroller', 'message', 'bubble', 'input-group'],
-    requires: ['message-scroller'],
   },
   {
     slug: 'checkpoint',
@@ -75,7 +73,7 @@ export const AI_ELEMENTS: AiElementEntry[] = [
     slug: 'message',
     name: 'Message',
     description: "One turn. The person's message, and the agent's reply with its actions.",
-    builtWith: ['message', 'bubble', 'tooltip'],
+    builtWith: ['message', 'bubble', 'tooltip', 'code-block'],
   },
   {
     slug: 'model-selector',
@@ -123,7 +121,6 @@ export const AI_ELEMENTS: AiElementEntry[] = [
     description: 'A failed tool call and its stack frames.',
     pageDescription: 'Displays a failed tool call and its stack frames.',
     builtWith: ['trace', 'code-block'],
-    requires: ['code-block'],
   },
   {
     slug: 'subagent',
@@ -131,7 +128,6 @@ export const AI_ELEMENTS: AiElementEntry[] = [
     description: 'A subagent run, with its tool calls and result.',
     pageDescription: 'Displays a subagent run, with its tool calls and result.',
     builtWith: ['trace', 'code-block', 'badge'],
-    requires: ['code-block'],
   },
   {
     slug: 'suggestion',
@@ -152,7 +148,6 @@ export const AI_ELEMENTS: AiElementEntry[] = [
     description: 'A command the agent runs, with its output as it streams.',
     pageDescription: 'Displays a command the agent runs, with its output as it streams.',
     builtWith: ['trace', 'code-block'],
-    requires: ['code-block'],
   },
   {
     slug: 'test-results',
@@ -160,7 +155,6 @@ export const AI_ELEMENTS: AiElementEntry[] = [
     description: 'A test run by the agent, with its suites and failures.',
     pageDescription: 'Displays a test run by the agent, with its suites and failures.',
     builtWith: ['trace', 'code-block'],
-    requires: ['code-block'],
   },
   {
     slug: 'tool',
@@ -168,7 +162,6 @@ export const AI_ELEMENTS: AiElementEntry[] = [
     description: 'A tool call the agent makes, from input to output.',
     pageDescription: 'Displays a tool call the agent makes, from input to output.',
     builtWith: ['trace', 'code-block'],
-    requires: ['code-block'],
   },
 ];
 

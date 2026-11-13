@@ -111,6 +111,11 @@ export class AiElementPage implements OnInit {
     this.activeAnchor = 'overview';
     this.loaded.set([{ entry, data }]);
 
-    this.seoService.setDocsSeo(entry.name, entry.pageDescription ?? entry.description, `/docs/ai-elements/${entry.slug}`, 'og-ai-elements.jpg');
+    this.seoService.setDocsSeo(
+      entry.name,
+      entry.pageDescription ?? entry.description,
+      `/docs/ai-elements/${entry.slug}`,
+      'og-ai-elements.jpg',
+    );
   }
 }

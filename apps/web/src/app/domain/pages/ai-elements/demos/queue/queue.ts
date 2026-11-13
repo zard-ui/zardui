@@ -119,9 +119,7 @@ function todosAt(current: number): Todo[] {
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [
-    provideIcons({ lucideCircle, lucideCircleCheck, lucideCircleDot, lucideListChecks, lucideListTodo }),
-  ],
+  viewProviders: [provideIcons({ lucideCircle, lucideCircleCheck, lucideCircleDot, lucideListChecks, lucideListTodo })],
   host: { class: 'contents' },
 })
 export class ZardAiElementsQueueComponent {

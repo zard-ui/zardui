@@ -23,8 +23,10 @@ const REPLIES: Record<string, string> = {
   'Fix the failing build': 'The build failed on a missing import in src/app/app.ts. I added it and the build passes.',
   'Write tests for the form':
     'Added four tests in signup-form.spec.ts. They cover the empty, invalid and valid states.',
-  'Upgrade to Angular 22': 'Ran ng update and bumped @angular/core to 22. Two components needed new inputs, so I updated them.',
-  'Add a loading state': 'Added a @defer block with a placeholder to the dashboard. It shows skeletons while the data loads.',
+  'Upgrade to Angular 22':
+    'Ran ng update and bumped @angular/core to 22. Two components needed new inputs, so I updated them.',
+  'Add a loading state':
+    'Added a @defer block with a placeholder to the dashboard. It shows skeletons while the data loads.',
   'Find unused dependencies':
     'Three packages are not imported anywhere: lodash, moment and classnames. Should I remove them?',
 };
@@ -59,7 +61,7 @@ const REPLIES: Record<string, string> = {
       }
 
       <div class="flex flex-col gap-2">
-        <div class="scroll-fade-x flex gap-2 overflow-x-auto overscroll-x-contain [scrollbar-width:none]">
+        <div class="scroll-fade-x flex [scrollbar-width:none] gap-2 overflow-x-auto overscroll-x-contain">
           @for (suggestion of suggestions; track suggestion) {
             <button type="button" z-button zType="outline" zSize="sm" class="shrink-0" (click)="send(suggestion)">
               {{ suggestion }}
