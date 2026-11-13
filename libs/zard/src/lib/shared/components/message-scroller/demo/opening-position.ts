@@ -44,7 +44,7 @@ const MESSAGES: ChatMessage[] = [
                   <z-demo-chat-row [zMessage]="message" />
                 </z-message-scroller-item>
               }
-              <button type="button" z-message-scroller-button></button>
+              <button type="button" z-message-scroller-button aria-label="Scroll to latest message"></button>
             </z-message-scroller>
           }
         </z-card-content>
