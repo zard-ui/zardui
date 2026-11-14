@@ -40,6 +40,16 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'maps',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./domain/pages/maps/maps.routes').then(m => m.MAPS_ROUTES),
+      },
+    ],
+  },
+  {
     path: 'docs',
     component: DocumentationLayout,
     children: [
@@ -107,6 +117,10 @@ export const appRoutes: Route[] = [
       {
         path: 'components',
         loadChildren: () => import('./domain/pages/component/component.routes').then(m => m.COMPONENTS_ROUTES),
+      },
+      {
+        path: 'ai-elements',
+        loadChildren: () => import('./domain/pages/ai-elements/ai-elements.routes').then(m => m.AI_ELEMENTS_ROUTES),
       },
       {
         path: 'contribute',

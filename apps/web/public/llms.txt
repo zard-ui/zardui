@@ -38,6 +38,31 @@
 - [Scroll Fade](https://zardui.com/docs/utils/scroll-fade): Fading the edges of a scroll container in sync with the scroll position, with no JavaScript.
 - [Shimmer](https://zardui.com/docs/utils/shimmer): A sweeping highlight across text, for the seconds where something is being generated.
 
+## AI Elements
+
+- [AI Elements](https://zardui.com/docs/ai-elements): Patterns for agentic interfaces, each a copy-paste composition of Zard UI components.
+- [Chain of Thought](https://zardui.com/docs/ai-elements/chain-of-thought): A summary that expands into the steps an agent took.
+- [Chat](https://zardui.com/docs/ai-elements/chat): The thread. Message Scroller keeps your place while the reply streams.
+- [Checkpoint](https://zardui.com/docs/ai-elements/checkpoint): A point in the conversation you can return to.
+- [Confirmation](https://zardui.com/docs/ai-elements/confirmation): A prompt to approve or deny a tool before it runs.
+- [Context](https://zardui.com/docs/ai-elements/context): How much of the context window the conversation has used.
+- [File Tree](https://zardui.com/docs/ai-elements/file-tree): The files the agent changed, as a folder tree.
+- [Inline Citation](https://zardui.com/docs/ai-elements/inline-citation): A source in the sentence that opens on hover.
+- [Message](https://zardui.com/docs/ai-elements/message): One turn. The person's message, and the agent's reply with its actions.
+- [Model Selector](https://zardui.com/docs/ai-elements/model-selector): Two menus. One picks the model the agent runs, the other picks how hard it thinks.
+- [Plan](https://zardui.com/docs/ai-elements/plan): The steps the agent plans to take, and how far it has got.
+- [Prompt Input](https://zardui.com/docs/ai-elements/prompt-input): A message field with attachments and a send button.
+- [Queue](https://zardui.com/docs/ai-elements/queue): The agent's todo list, split into what is left and what is done.
+- [Reasoning](https://zardui.com/docs/ai-elements/reasoning): The agent's thinking as it streams.
+- [Sources](https://zardui.com/docs/ai-elements/sources): The links the agent used for a reply.
+- [Stack Trace](https://zardui.com/docs/ai-elements/stack-trace): A failed tool call and its stack frames.
+- [Subagent](https://zardui.com/docs/ai-elements/subagent): A subagent run, with its tool calls and result.
+- [Suggestion](https://zardui.com/docs/ai-elements/suggestion): A short prompt you can send to the agent in one click.
+- [Task](https://zardui.com/docs/ai-elements/task): The steps the agent takes, as it takes them.
+- [Terminal](https://zardui.com/docs/ai-elements/terminal): A command the agent runs, with its output as it streams.
+- [Test Results](https://zardui.com/docs/ai-elements/test-results): A test run by the agent, with its suites and failures.
+- [Tool](https://zardui.com/docs/ai-elements/tool): A tool call the agent makes, from input to output.
+
 ## Components
 
 ### Form & Input
@@ -53,6 +78,8 @@
 - [Input](https://zardui.com/docs/components/input): Displays a form input field or a component that looks like an input field.
 - [Input Group](https://zardui.com/docs/components/input-group): Groups input elements together with addons.
 - [Input OTP](https://zardui.com/docs/components/input-otp): Accessible one-time password component with copy-paste functionality.
+- [Map Style Select](https://zardui.com/docs/components/map-style-select): Picks the basemap of every map on the page, live. Presets are grouped by provider.
+- [Native Select](https://zardui.com/docs/components/native-select): A styled native HTML select element with consistent design system integration.
 - [Questionnaire](https://zardui.com/docs/components/questionnaire): A multi-step questionnaire with single-choice, multiple-choice, freeform, and skippable questions.
 - [Radio Group](https://zardui.com/docs/components/radio-group): A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked at a time.
 - [Select](https://zardui.com/docs/components/select): Displays a list of options for the user to pick from — triggered by a button.
@@ -66,6 +93,7 @@
 - [Aspect Ratio](https://zardui.com/docs/components/aspect-ratio): Displays content within a desired ratio.
 - [Breadcrumb](https://zardui.com/docs/components/breadcrumb): Displays the path to the current resource using a hierarchy of links.
 - [Collapsible](https://zardui.com/docs/components/collapsible): An interactive component which expands and collapses a panel.
+- [Menubar](https://zardui.com/docs/components/menubar): A visually persistent bar of command menus, as found in desktop applications.
 - [Navigation Menu](https://zardui.com/docs/components/navigation-menu): A collection of links for navigating websites.
 - [Pagination](https://zardui.com/docs/components/pagination): Pagination with page navigation, next and previous links.
 - [Resizable](https://zardui.com/docs/components/resizable): Accessible resizable panel groups and layouts with keyboard support.
@@ -105,9 +133,15 @@
 - [Card](https://zardui.com/docs/components/card): Displays a card with header, content, and footer.
 - [Carousel](https://zardui.com/docs/components/carousel): A carousel with motion and swipe built using Embla.
 - [Chart](https://zardui.com/docs/components/chart): Beautiful charts built with Apache ECharts. Copy and paste into your apps.
+- [Code Block](https://zardui.com/docs/components/code-block): Displays code, terminal output and diffs with an optional header, line numbers and a copy button.
+- [Data Table](https://zardui.com/docs/components/data-table): Powerful table and datagrids built using TanStack Table.
+- [Map](https://zardui.com/docs/components/map): Beautiful maps built on MapLibre GL, themed with zard. Copy and paste into your apps.
+- [Map Draw](https://zardui.com/docs/components/map-draw): Draw, select and edit points, lines and polygons on a map. An optional addition to the map.
 - [Marker](https://zardui.com/docs/components/marker): Displays an inline status, system note, bordered row, or labeled separator in a conversation.
 - [Message](https://zardui.com/docs/components/message): Displays a message in a conversation, with optional avatar, header, footer, and alignment.
+- [Message Scroller](https://zardui.com/docs/components/message-scroller): A chat scroll container that opens at the right place, follows a streaming answer, keeps your place as history loads, and jumps to any message.
 - [Table](https://zardui.com/docs/components/table): A responsive table component.
+- [Trace](https://zardui.com/docs/components/trace): The building block for reasoning, tool calls, sources and more.
 
 ### Misc
 

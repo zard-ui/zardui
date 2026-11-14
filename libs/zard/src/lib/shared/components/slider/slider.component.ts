@@ -9,6 +9,7 @@ import {
   DOCUMENT,
   ElementRef,
   forwardRef,
+  HostAttributeToken,
   inject,
   input,
   linkedSignal,
@@ -141,6 +142,7 @@ export class ZardSliderRangeComponent {
       [attr.aria-valuemax]="max()"
       [attr.aria-valuenow]="value()"
       [attr.aria-disabled]="disabled() ? true : null"
+      [attr.aria-label]="label() || null"
       [class]="classes()"
       tabindex="0"
     ></span>
@@ -160,6 +162,8 @@ export class ZardSliderThumbComponent {
   readonly min = input(0);
   readonly max = input(100);
   readonly disabled = input(false);
+  /** The accessible name of the thumb, from the slider's `aria-label`. */
+  readonly label = input<string | null>(null);
   readonly percent = input(0);
   readonly offset = input(0);
 
@@ -208,6 +212,7 @@ export class ZardSliderThumbComponent {
           [min]="zMin()"
           [max]="zMax()"
           [disabled]="disabled()"
+          [label]="label"
           (keydown.{home,end,arrowleft,arrowright,arrowdown,arrowup}.prevent)="handleKeydown($event, $index)"
         />
       }
@@ -234,6 +239,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly directionality = inject(Directionality, { optional: true });
+  /** The thumbs carry `role="slider"`, so the host's `aria-label` names them instead. */
+  protected readonly label = inject(new HostAttributeToken('aria-label'), { optional: true });
 
   readonly zMin = input(0, { transform: numberAttribute });
   readonly zMax = input(100, { transform: numberAttribute });
@@ -278,6 +285,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   private onChange: OnChangeType = noopFn;
 
   constructor() {
+    // The name now lives on the thumbs; left on the role-less host it would be an axe violation.
+    this.elementRef.nativeElement.removeAttribute('aria-label');
     toObservable(this.zValue)
       .pipe(
         filter(values => values.toString() !== this.lastEmittedValue().toString()),
@@ -396,14 +405,14 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       case 'ArrowRight': {
         // horizontal keys follow the reading direction: in RTL the value grows towards the left
         const towardsEnd = (key === 'ArrowRight') !== this.isRtl();
-        newValue = towardsEnd ? Math.min(currentValue + this.zStep(), max) : Math.max(currentValue - this.zStep(), min);
+        newValue = this.snapToStep(towardsEnd ? currentValue + this.zStep() : currentValue - this.zStep());
         break;
       }
       case 'ArrowDown':
-        newValue = Math.max(currentValue - this.zStep(), min);
+        newValue = this.snapToStep(currentValue - this.zStep());
         break;
       case 'ArrowUp':
-        newValue = Math.min(currentValue + this.zStep(), max);
+        newValue = this.snapToStep(currentValue + this.zStep());
         break;
       default:
         return;

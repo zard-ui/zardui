@@ -851,25 +851,25 @@ export class ZardDemoButtonGroupRtlComponent {
 
 ### z-button-group
 
-A container that groups related buttons together with consistent styling.
+Groups related buttons.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zOrientation]` | Orientation of the button group | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `[zOrientation]` | Layout direction | `'horizontal' \| 'vertical'` | `'horizontal'` |
 
 ### z-button-group-separator
 
-Visually divides buttons within a group. Buttons with `zType="outline"` do not need a separator since they have a border.
+Divides buttons in a group; not needed for outline buttons.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zOrientation]` | Override for the separator orientation, by default it uses the parent's orientation | `'horizontal' \| 'vertical'` | `null` |
+| `[zOrientation]` | Overrides the group orientation | `'horizontal' \| 'vertical'` | `null` |
 
 ### [z-button-group-text]
 
-Applies styles to text elements so that they conform with the rest of the group, for example a label.
+Styles text, such as a label, to fit the group.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |

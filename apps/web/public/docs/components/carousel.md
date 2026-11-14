@@ -871,36 +871,36 @@ export class ZardDemoCarouselRtlComponent {
 
 ### z-carousel
 
-A carousel component with slide controls and swipe gesture support. Add `#ref="zCarousel"` on the element to call its public methods. It follows the direction of the page or of a CDK `Dir` subtree: in RTL the arrows swap sides and ArrowLeft goes to the next slide.
+Slides with controls and swipe; use `#ref="zCarousel"` to call its methods.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zOptions]` | Embla Carousel configuration options, including `align` ('start' \| 'center' \| 'end'), `loop`, and `direction` ('ltr' \| 'rtl'). `axis` is derived from `zOrientation` and should not be set here | `EmblaOptionsType` | `{loop: false}` |
-| `[zPlugins]` | Embla Carousel plugins, e.g. an autoplay plugin created with `ZardCarouselPluginsService` | `EmblaPluginType[]` | `[]` |
-| `[zOrientation]` | Carousel orientation | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| `[zControls]` | Navigation controls rendered inside the carousel | `'button' \| 'dot' \| 'none'` | `'button'` |
-| `(zInited)` | Emits the Embla Carousel instance once initialized; read the current slide (`selectedScrollSnap()`) and total slide count (`scrollSnapList().length`) off it | `EventEmitter<EmblaCarouselType>` | `-` |
-| `(zSelected)` | Emitted when the selected slide changes | `EventEmitter<void>` | `-` |
-| `slidePrevious()` | Public method that scrolls to the previous slide | `() => void` | `-` |
-| `slideNext()` | Public method that scrolls to the next slide | `() => void` | `-` |
-| `goTo(index)` | Public method that scrolls to the slide at the given index | `(index: number) => void` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zOptions]` | Embla options; `axis` comes from `zOrientation` | `EmblaOptionsType` | `{loop: false}` |
+| `[zPlugins]` | Embla plugins, e.g. autoplay | `EmblaPluginType[]` | `[]` |
+| `[zOrientation]` | Scroll axis | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `[zControls]` | Navigation controls | `'button' \| 'dot' \| 'none'` | `'button'` |
+| `(zInited)` | Emitted with the Embla instance once ready | `EventEmitter<EmblaCarouselType>` | `-` |
+| `(zSelected)` | Emitted when the slide changes | `EventEmitter<void>` | `-` |
+| `slidePrevious()` | Goes to the previous slide | `() => void` | `-` |
+| `slideNext()` | Goes to the next slide | `() => void` | `-` |
+| `goTo(index)` | Goes to the slide at `index` | `(index: number) => void` | `-` |
 
 ### z-carousel-content
 
-The content container for the carousel.
+Holds the carousel items.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-carousel-item
 
-An individual carousel item.
+A single slide.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

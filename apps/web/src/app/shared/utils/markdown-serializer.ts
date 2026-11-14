@@ -1,7 +1,13 @@
 import type { CodeBlockData } from '@highlight/types';
 
 import type { ApiSection } from '@doc/domain/components/api-reference/api-reference.types';
-import type { ComponentData, CodeSnippet, ExampleData } from '@doc/shared/constants/components.constant';
+import type {
+  CodeSnippet,
+  ComponentData,
+  ComponentSection,
+  ExampleData,
+  SectionTableLink,
+} from '@doc/shared/constants/components.constant';
 
 const BASE_URL = 'https://zardui.com';
 
@@ -55,12 +61,13 @@ function snippet(entry: CodeSnippet | CodeSnippet[] | undefined): string {
     .join('\n\n');
 }
 
-function serializeExamples(examples: ExampleData[] | undefined): string {
+/** `titled: false` drops the per-example heading, for a section that is a single example. */
+function serializeExamples(examples: ExampleData[] | undefined, titled = true): string {
   if (!examples?.length) return '';
 
   return examples
     .map(example => {
-      const parts: string[] = [`### ${titleCase(example.name)}`];
+      const parts: string[] = titled ? [`### ${titleCase(example.name)}`] : [];
       if (example.description) parts.push(example.description);
 
       const before = snippet(example.codeBefore);
@@ -129,6 +136,7 @@ function serializeInstallation(data: ComponentData): string {
 
 function serializeUsage(data: ComponentData): string {
   return [
+    data.usage?.intro,
     codeBlock(data.usage?.importBlock),
     codeBlock(data.usage?.codeBlock),
     data.usage?.description,
@@ -159,14 +167,19 @@ export function serializeComponentToMarkdown(data: ComponentData): string {
     return `${[frontmatter(title, data.description), `# ${title}\n\n${data.description}`, notice, browserLink].join('\n\n')}\n`;
   }
 
+  const sections = data.sections ?? [];
   const blocks: string[] = [
     frontmatter(title, data.description),
     `# ${title}\n\n${data.description}`,
+    ...(data.intro ?? []),
+    ...sections.filter(extra => extra.position === 'intro').map(serializeTitledSection),
     data.about?.description ? section('About', serializeAbout(data)) : '',
     section('Installation', serializeInstallation(data)),
     section('Usage', serializeUsage(data)),
-    section('Composition', codeBlock(data.composition)),
+    section('Composition', serializeComposition(data)),
+    section('Features', (data.features ?? []).map(feature => `- ${feature}`).join('\n')),
     section('Examples', serializeExamples(data.examples)),
+    ...sections.filter(extra => extra.position !== 'intro').map(serializeTitledSection),
     section('Accessibility', data.accessibility?.join('\n\n') ?? ''),
     section('API Reference', serializeApi(data.api)),
     browserLink,
@@ -175,11 +188,63 @@ export function serializeComponentToMarkdown(data: ComponentData): string {
   return `${blocks.filter(Boolean).join('\n\n')}\n`;
 }
 
+function serializeComposition(data: ComponentData): string {
+  return [
+    codeBlock(data.composition),
+    ...(data.compositionMore ?? []).flatMap(more => [more.description, codeBlock(more.codeData)]),
+    data.compositionNote,
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+}
+
 function serializeAbout(data: ComponentData): string {
   const about = data.about;
   if (!about) return '';
   const parts: string[] = [about.description];
   if (about.link) parts.push(`[${about.link.label}](${about.link.href})`);
+  if (about.links?.length) {
+    parts.push(
+      about.links
+        .map(credit => `- [${credit.label}](${credit.href})${credit.description ? `: ${credit.description}` : ''}`)
+        .join('\n'),
+    );
+  }
+  if (about.note) parts.push(about.note);
+  return parts.join('\n\n');
+}
+
+/** A section under its heading: `##`, or `###` for a `level: 3` part of the section above it. */
+function serializeTitledSection(extra: ComponentSection): string {
+  const body = serializeSection(extra);
+  return extra.level === 3 ? `### ${extra.title}\n\n${body}` : section(extra.title, body);
+}
+
+/** A titled extra block: its prose, its table, then its examples one level below the heading. */
+function serializeSection(extra: ComponentSection): string {
+  const parts: string[] = [];
+  if (extra.callout) parts.push(`> **${extra.callout.title}.** ${extra.callout.description}`);
+  if (extra.description) parts.push(extra.description);
+
+  let table = '';
+  if (extra.table) {
+    const { columns, rows } = extra.table;
+    const text = (value: string | SectionTableLink) =>
+      cell(typeof value === 'string' ? value : `[${value.text}](${value.href})`);
+    table = [
+      `| ${columns.map(cell).join(' | ')} |`,
+      `| ${columns.map(() => '---').join(' | ')} |`,
+      ...rows.map(row => `| ${row.map(text).join(' | ')} |`),
+    ].join('\n');
+  }
+
+  if (table && !extra.tableAfterExamples) parts.push(table);
+
+  const examples = serializeExamples(extra.examples, (extra.examples?.length ?? 0) > 1);
+  if (examples) parts.push(examples);
+  if (table && extra.tableAfterExamples) parts.push(table);
+  if (extra.note) parts.push(extra.note);
+
   return parts.join('\n\n');
 }
 

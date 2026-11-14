@@ -3637,81 +3637,81 @@ export class ZardDemoChartRtlComponent {
 
 ### z-chart
 
-A chart container built on Apache ECharts through ngx-echarts. In right-to-left layouts the category axis does not mirror (series order carries meaning and time reads left to right, as in Recharts and the ECharts defaults); the legend, the tooltip text and the surrounding layout follow the document direction.
+Chart container built on Apache ECharts; the category axis does not mirror in RTL.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zConfig]` | Labels, colors and icons per data key | `ZardChartConfig` | `{}` |
-| `[zData]` | The rows to plot | `Record<string, unknown>[]` | `[]` |
-| `[zType]` | Default type of every series | `'area' \| 'bar' \| 'line' \| 'pie' \| 'radar' \| 'radial'` | `'bar'` |
-| `[zSeries]` | Series to render, either as data keys or fully described | `string[] \| ZardChartSeries[]` | `[]` |
-| `[zXAxisKey]` | Key used for the category axis | `string` | `-` |
-| `[zNameKey]` | Key naming each slice or segment on pie, radar and radial charts. Falls back to zXAxisKey | `string` | `-` |
-| `[zStacked]` | Stacks every series together | `boolean` | `false` |
-| `[zStackOffset]` | 'expand' normalises the stack to 0-1, the Recharts stackOffset equivalent | `'none' \| 'expand'` | `'none'` |
-| `[zHorizontal]` | Swaps the category and value axes | `boolean` | `false` |
-| `[zGrid]` | Grid lines to draw, by direction. Equivalent to CartesianGrid | `boolean \| 'horizontal' \| 'vertical'` | `'horizontal'` |
-| `[zXAxis]` | Shows the category axis labels, whichever side `zHorizontal` puts them on | `boolean` | `true` |
-| `[zYAxis]` | Shows the value axis labels, whichever side `zHorizontal` puts them on | `boolean` | `false` |
-| `[zXAxisFormatter]` | Formats every category tick. Equivalent to tickFormatter | `(value: string) => string` | `-` |
-| `[zYAxisFormatter]` | Formats every value tick | `(value: number) => string` | `-` |
-| `[zInnerRadius]` | Inner radius of pie, donut and radial charts | `string \| number` | `-` |
-| `[zOuterRadius]` | Outer radius of pie, donut, radar and radial charts | `string \| number` | `-` |
-| `[zRadialVariant]` | How a radial chart is drawn: polar bars or a gauge | `'bar' \| 'gauge'` | `'bar'` |
-| `[zTrack]` | Radial only: the muted ring drawn behind each bar. Equivalent to RadialBar background | `boolean` | `true` |
-| `[zRadialLabel]` | Radial only: writes each category's name along its own ring. Equivalent to LabelList | `boolean` | `false` |
-| `[zRadarRadialLines]` | Radar only: the spokes running from the centre to each indicator | `boolean` | `true` |
-| `[zRadarShape]` | Shape of the radar grid. Equivalent to PolarGrid gridType | `'polygon' \| 'circle'` | `'polygon'` |
-| `[zStartAngle]` | Start angle of pie and radial charts | `number` | `-` |
-| `[zEndAngle]` | End angle of pie and radial charts | `number` | `-` |
+| `[zData]` | Rows to plot | `Record<string, unknown>[]` | `[]` |
+| `[zType]` | Default series type | `'area' \| 'bar' \| 'line' \| 'pie' \| 'radar' \| 'radial'` | `'bar'` |
+| `[zSeries]` | Series to render, as keys or full objects | `string[] \| ZardChartSeries[]` | `[]` |
+| `[zXAxisKey]` | Category axis key | `string` | `-` |
+| `[zNameKey]` | Slice name key. Falls back to `zXAxisKey` | `string` | `-` |
+| `[zStacked]` | Stacks all series | `boolean` | `false` |
+| `[zStackOffset]` | `'expand'` normalises the stack to 0–1 | `'none' \| 'expand'` | `'none'` |
+| `[zHorizontal]` | Swaps category and value axes | `boolean` | `false` |
+| `[zGrid]` | Grid lines to draw | `boolean \| 'horizontal' \| 'vertical'` | `'horizontal'` |
+| `[zXAxis]` | Shows category axis labels | `boolean` | `true` |
+| `[zYAxis]` | Shows value axis labels | `boolean` | `false` |
+| `[zXAxisFormatter]` | Formats category ticks | `(value: string) => string` | `-` |
+| `[zYAxisFormatter]` | Formats value ticks | `(value: number) => string` | `-` |
+| `[zInnerRadius]` | Inner radius (pie, donut, radial) | `string \| number` | `-` |
+| `[zOuterRadius]` | Outer radius (pie, donut, radar, radial) | `string \| number` | `-` |
+| `[zRadialVariant]` | Radial style: polar bars or gauge | `'bar' \| 'gauge'` | `'bar'` |
+| `[zTrack]` | Radial only: muted ring behind each bar | `boolean` | `true` |
+| `[zRadialLabel]` | Radial only: category name along each ring | `boolean` | `false` |
+| `[zRadarRadialLines]` | Radar only: spokes from centre to each indicator | `boolean` | `true` |
+| `[zRadarShape]` | Radar grid shape | `'polygon' \| 'circle'` | `'polygon'` |
+| `[zStartAngle]` | Start angle (pie, radial) | `number` | `-` |
+| `[zEndAngle]` | End angle (pie, radial) | `number` | `-` |
 | `[zPadAngle]` | Gap between pie slices, in degrees | `number` | `0` |
-| `[zGradient]` | Fills area series with a vertical gradient instead of a flat tint | `boolean` | `false` |
-| `[zLabel]` | Prints the value on every data point. Equivalent to LabelList | `boolean` | `false` |
-| `[zCenterValue]` | Big text in the middle of a donut or radial chart | `string` | `-` |
-| `[zCenterLabel]` | Caption under zCenterValue | `string` | `-` |
-| `[zAccessibility]` | Enables ECharts' aria description plus role and aria-label on the canvas | `boolean` | `true` |
-| `[zAnimation]` | Animates the chart on data changes | `boolean` | `true` |
-| `[zLazyRender]` | Waits for the chart to scroll into view before drawing it, so the entry animation plays where it can be seen | `boolean` | `true` |
-| `[zDataZoom]` | ECharts extra, opt-in: adds inside and slider zooming | `boolean` | `false` |
-| `[zBrush]` | ECharts extra, opt-in: adds the brush selection toolbox | `boolean` | `false` |
-| `[zToolbox]` | ECharts extra, opt-in: adds the zoom, restore and export toolbox | `boolean` | `false` |
+| `[zGradient]` | Gradient fill for area series | `boolean` | `false` |
+| `[zLabel]` | Shows the value on each data point | `boolean` | `false` |
+| `[zCenterValue]` | Centre text of a donut or radial chart | `string` | `-` |
+| `[zCenterLabel]` | Caption under `zCenterValue` | `string` | `-` |
+| `[zAccessibility]` | ECharts aria description and canvas ARIA attributes | `boolean` | `true` |
+| `[zAnimation]` | Animates data changes | `boolean` | `true` |
+| `[zLazyRender]` | Draws only once scrolled into view | `boolean` | `true` |
+| `[zDataZoom]` | Adds inside and slider zooming | `boolean` | `false` |
+| `[zBrush]` | Adds the brush selection toolbox | `boolean` | `false` |
+| `[zToolbox]` | Adds the zoom, restore and export toolbox | `boolean` | `false` |
 | `[zRenderer]` | ECharts renderer | `'canvas' \| 'svg'` | `'canvas'` |
-| `[zSsrWidth]` | Width, in pixels, of the SVG rendered on the server | `number` | `600` |
-| `[zSsrHeight]` | Height, in pixels, of the SVG rendered on the server | `number` | `300` |
-| `[zOption]` | Escape hatch deep-merged over the generated option, always winning | `EChartsOption` | `{}` |
+| `[zSsrWidth]` | Server-rendered SVG width in px | `number` | `600` |
+| `[zSsrHeight]` | Server-rendered SVG height in px | `number` | `300` |
+| `[zOption]` | Deep-merged over the generated option, always wins | `EChartsOption` | `{}` |
 | `(zChartInit)` | Emits the ECharts instance once created | `EChartsType` | `-` |
-| `(zChartClick)` | Emitted when a data item is clicked | `ECElementEvent` | `-` |
-| `(zLegendSelectChanged)` | Emitted when ECharts' legend selection changes | `unknown` | `-` |
-| `(zDataZoomChange)` | Emitted while the data zoom moves | `unknown` | `-` |
+| `(zChartClick)` | Emits when a data item is clicked | `ECElementEvent` | `-` |
+| `(zLegendSelectChanged)` | Emits when the legend selection changes | `unknown` | `-` |
+| `(zDataZoomChange)` | Emits while the data zoom moves | `unknown` | `-` |
 
 ### z-chart-tooltip
 
-Declares the tooltip the parent chart should build. Renders no DOM of its own.
+Configures the parent chart tooltip; renders no DOM.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes on the tooltip container | `ClassValue` | `''` |
-| `[zIndicator]` | Shape of the color indicator on each row | `'dot' \| 'line' \| 'dashed'` | `'dot'` |
-| `[zCursor]` | Draws the axis pointer under the tooltip: a line on curves, a band on bars | `boolean` | `false` |
-| `[zDefaultIndex]` | Opens the tooltip on this data index as soon as the chart draws | `number` | `-` |
-| `[zHideLabel]` | Hides the tooltip heading | `boolean` | `false` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zIndicator]` | Row color indicator shape | `'dot' \| 'line' \| 'dashed'` | `'dot'` |
+| `[zCursor]` | Draws the axis pointer | `boolean` | `false` |
+| `[zDefaultIndex]` | Data index shown on first draw | `number` | `-` |
+| `[zHideLabel]` | Hides the heading | `boolean` | `false` |
 | `[zHideIndicator]` | Hides the color indicator | `boolean` | `false` |
-| `[zLabelKey]` | Config key used for the heading | `string` | `-` |
-| `[zNameKey]` | Config key used for each row name | `string` | `-` |
+| `[zLabelKey]` | Config key for the heading | `string` | `-` |
+| `[zNameKey]` | Config key for row names | `string` | `-` |
 | `[zLabelFormatter]` | Formats the heading | `(value: string) => string` | `-` |
-| `[zValueFormatter]` | Formats every value | `(value: number, name: string) => string` | `-` |
-| `[zTrigger]` | 'axis' groups every series of a category, 'item' shows the hovered item only | `'axis' \| 'item'` | `'axis'` |
-| `[zLabelClass]` | Additional CSS classes on the heading | `ClassValue` | `''` |
+| `[zValueFormatter]` | Formats each value | `(value: number, name: string) => string` | `-` |
+| `[zTrigger]` | Whole category or hovered item only | `'axis' \| 'item'` | `'axis'` |
+| `[zLabelClass]` | Custom CSS classes for the heading | `ClassValue` | `''` |
 
 ### z-chart-legend
 
-Renders the shadcn legend markup below (or above) the chart and toggles series on click. Entries follow the inherited direction, so the legend reads right to left in an RTL layout.
+Legend that toggles series on click.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zVerticalAlign]` | Places the legend above or below the chart | `'top' \| 'bottom'` | `'bottom'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zVerticalAlign]` | Legend position | `'top' \| 'bottom'` | `'bottom'` |
 
 ---
 

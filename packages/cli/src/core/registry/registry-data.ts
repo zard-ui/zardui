@@ -1,9 +1,35 @@
+/**
+ * What an item needs from the project's build beyond npm packages and its own files.
+ *
+ * Declared by the item, applied by `zard-cli add`: nothing in the CLI knows which
+ * item needs it. Shipped in registry.json and in the item's own file.
+ */
+export type RegistryBuild = {
+  /**
+   * Imports the global stylesheet needs, in this order and unlayered. `import` is a
+   * specifier resolved from node_modules (`maplibre-gl/dist/maplibre-gl.css`); `file`
+   * is one of the item's own files, imported by its path relative to the stylesheet.
+   */
+  styles?: Array<{ import: string } | { file: string }>;
+  /**
+   * Static files the build has to copy to the output root, in the shape of an
+   * Angular build `assets` entry. `input` is relative to the workspace root.
+   */
+  assets?: Array<{ glob: string; input: string; output: string }>;
+};
+
 export type ComponentRegistry = {
   name: string;
   basePath?: string;
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
+  build?: RegistryBuild;
+  /**
+   * The lowest Angular major the item's source compiles on. `add` stops with a message below it, instead of
+   * installing files that fail to build (the map item is written for ng-mapcn 22, which peers on Angular 22).
+   */
+  minAngularMajor?: number;
   files: {
     name: string;
     content: string;
@@ -469,6 +495,39 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'code-block',
+    // Shiki is only reached through the dynamic imports of `code-block.highlight.ts`, so it is not bundled unless
+    // `highlightCode()` is called, but the file type-checks against it.
+    dependencies: ['shiki@^4.1.0'],
+    registryDependencies: ['button', 'utilities'],
+    files: [
+      {
+        name: 'code-block.component.ts',
+        content: '',
+      },
+      {
+        name: 'code-block.variants.ts',
+        content: '',
+      },
+      {
+        name: 'code-block.imports.ts',
+        content: '',
+      },
+      {
+        name: 'code-block.highlight.ts',
+        content: '',
+      },
+      {
+        name: 'code-block.types.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'collapsible',
     files: [
       {
@@ -604,6 +663,32 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'menubar',
+    registryDependencies: ['dropdown'],
+    files: [
+      {
+        name: 'menubar.component.ts',
+        content: '',
+      },
+      {
+        name: 'menubar-trigger.directive.ts',
+        content: '',
+      },
+      {
+        name: 'menubar.variants.ts',
+        content: '',
+      },
+      {
+        name: 'menubar.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'dropdown',
     files: [
       {
@@ -666,6 +751,23 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'input.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'native-select',
+    files: [
+      {
+        name: 'native-select.directive.ts',
+        content: '',
+      },
+      {
+        name: 'native-select.variants.ts',
         content: '',
       },
       {
@@ -1215,6 +1317,41 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'data-table',
+    dependencies: ['@tanstack/angular-table@^9.3.1'],
+    registryDependencies: ['table', 'button', 'dropdown', 'select'],
+    files: [
+      {
+        name: 'data-table.component.ts',
+        content: '',
+      },
+      {
+        name: 'data-table-column-header.component.ts',
+        content: '',
+      },
+      {
+        name: 'data-table-pagination.component.ts',
+        content: '',
+      },
+      {
+        name: 'data-table-view-options.component.ts',
+        content: '',
+      },
+      {
+        name: 'data-table.imports.ts',
+        content: '',
+      },
+      {
+        name: 'data-table.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'date-picker',
     registryDependencies: ['button', 'calendar', 'popover'],
     files: [
@@ -1638,6 +1775,80 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'map',
+    dependencies: ['ng-mapcn@22.0.0-beta.9', 'maplibre-gl@^6.11.2'],
+    devDependencies: ['@types/geojson'],
+    minAngularMajor: 22,
+    // MapLibre 6 loads its worker from the site root, and its stylesheet has to come before map.css.
+    build: {
+      styles: [{ import: 'maplibre-gl/dist/maplibre-gl.css' }, { file: 'map.css' }],
+      assets: [
+        { glob: 'maplibre-gl-worker.mjs', input: 'node_modules/maplibre-gl/dist', output: '/' },
+        { glob: 'maplibre-gl-shared.mjs', input: 'node_modules/maplibre-gl/dist', output: '/' },
+      ],
+    },
+    files: [
+      {
+        name: 'map.imports.ts',
+        content: '',
+      },
+      {
+        name: 'map.provider.ts',
+        content: '',
+      },
+      {
+        name: 'map-styles.ts',
+        content: '',
+      },
+      {
+        name: 'map-style.service.ts',
+        content: '',
+      },
+      {
+        name: 'map.css',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'map-style-select',
+    registryDependencies: ['badge', 'button', 'input', 'map', 'popover'],
+    files: [
+      {
+        name: 'map-style-select.component.ts',
+        content: '',
+      },
+      {
+        name: 'map-style-select.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'map-draw',
+    dependencies: ['terra-draw@^1.37.0', 'terra-draw-maplibre-gl-adapter@^1.5.0'],
+    registryDependencies: ['map'],
+    minAngularMajor: 22,
+    files: [
+      {
+        name: 'map-draw.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'aspect-ratio',
     files: [
       {
@@ -1684,6 +1895,27 @@ export const registry: ComponentRegistry[] = [
       { name: 'questionnaire.types.ts', content: '' },
       { name: 'questionnaire.tokens.ts', content: '' },
       { name: 'questionnaire.imports.ts', content: '' },
+      { name: 'index.ts', content: '' },
+    ],
+  },
+  {
+    name: 'trace',
+    registryDependencies: ['collapsible', 'utilities'],
+    files: [
+      { name: 'trace.component.ts', content: '' },
+      { name: 'trace.variants.ts', content: '' },
+      { name: 'trace.imports.ts', content: '' },
+      { name: 'index.ts', content: '' },
+    ],
+  },
+  {
+    name: 'message-scroller',
+    registryDependencies: ['button', 'utilities'],
+    files: [
+      { name: 'message-scroller.component.ts', content: '' },
+      { name: 'message-scroller.service.ts', content: '' },
+      { name: 'message-scroller.variants.ts', content: '' },
+      { name: 'message-scroller.imports.ts', content: '' },
       { name: 'index.ts', content: '' },
     ],
   },

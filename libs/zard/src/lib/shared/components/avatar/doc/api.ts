@@ -3,75 +3,44 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const AVATAR_API: ApiSection[] = [
   {
     selector: 'z-avatar',
-    description: 'An image element with a fallback for representing the user.',
+    description: 'User image with a fallback.',
     props: [
-      { name: '[class]', description: 'Additional CSS classes', type: 'string', default: "''" },
-      { name: '[zAlt]', description: 'Image alt text for accessibility', type: 'string', default: "''" },
-      {
-        name: '[zFallback]',
-        description: 'Fallback text displayed while loading or on error',
-        type: 'string',
-        default: "''",
-      },
-      { name: '[zPriority]', description: 'Should image load with high priority', type: 'boolean', default: 'false' },
-      {
-        name: '[zSize]',
-        description: 'Avatar size variant',
-        type: "'sm' | 'default' | 'lg'",
-        default: "'default'",
-      },
+      { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
+      { name: '[zAlt]', description: 'Image alt text', type: 'string', default: "''" },
+      { name: '[zFallback]', description: 'Text shown while loading or on error', type: 'string', default: "''" },
+      { name: '[zPriority]', description: 'Loads the image with high priority', type: 'boolean', default: 'false' },
+      { name: '[zSize]', description: 'Avatar size', type: "'sm' | 'default' | 'lg'", default: "'default'" },
       { name: '[zSrc]', description: 'Image source URL', type: 'string | SafeUrl', default: "''" },
-      {
-        name: '[zShowBadge]',
-        description: 'Show avatar badge',
-        type: 'boolean',
-        default: 'false',
-      },
-      {
-        name: '[zBadgeClass]',
-        description: 'Additional avatar badge classes',
-        type: 'ClassValue',
-        default: "''",
-      },
-      {
-        name: '[zBadgeIcon]',
-        description: 'Avatar badge icon',
-        type: 'string',
-        default: "''",
-      },
+      { name: '[zShowBadge]', description: 'Shows a badge', type: 'boolean', default: 'false' },
+      { name: '[zBadgeClass]', description: 'CSS classes for the badge', type: 'ClassValue', default: "''" },
+      { name: '[zBadgeIcon]', description: 'Badge icon', type: 'string', default: "''" },
     ],
   },
   {
     selector: 'z-avatar-group',
-    description:
-      'A group container for displaying multiple avatars. The overlap stacks toward the inline end, so it mirrors in RTL.',
+    description: 'Stacks several avatars.',
     props: [
       {
         name: '[zOrientation]',
-        description: 'Layout direction of avatars',
+        description: 'Layout direction',
         type: "'horizontal' | 'vertical'",
         default: "'horizontal'",
       },
-      { name: '[class]', description: 'Additional CSS classes', type: 'string', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
     ],
   },
   {
     selector: 'z-avatar-group-count',
-    description: 'A "+N" chip for the members a `z-avatar-group` stack does not show.',
+    description: 'A "+N" chip for hidden members.',
     props: [
-      {
-        name: '[zCount]',
-        description: 'Number of additional members represented by the chip',
-        type: 'number',
-        default: '0',
-      },
+      { name: '[zCount]', description: 'Number of hidden members', type: 'number', default: '0' },
       {
         name: '[zSize]',
-        description: 'Chip size variant, matching the sibling avatars',
+        description: 'Chip size; match the avatars',
         type: "'sm' | 'default' | 'lg'",
         default: "'default'",
       },
-      { name: '[class]', description: 'Additional CSS classes', type: 'string', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
     ],
   },
 ];

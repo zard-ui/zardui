@@ -15,18 +15,66 @@ export interface AboutData {
   title?: string;
   description: string;
   link?: { label: string; href: string };
+  /** More credits, listed under the description. */
+  links?: { label: string; href: string; description?: string }[];
+  /** A short caveat shown under the credits, such as a pre-1.0 warning. */
+  note?: string;
+}
+
+export interface SectionTableLink {
+  text: string;
+  href: string;
+}
+
+/** A plain table. Cells take `code` and **bold** like any description, or a link. */
+export interface SectionTable {
+  columns: string[];
+  rows: (string | SectionTableLink)[][];
+}
+
+/**
+ * A titled block with its own anchor in the page navigation. By default it sits between the examples and the API;
+ * `position: 'intro'` moves it right under the introduction, before the installation.
+ *
+ * A section with a single example reads as that example: the example gets no heading of its own, and the section
+ * takes its id (set `id` to the example name so links and tests keep finding it).
+ */
+export interface ComponentSection {
+  id: string;
+  title: string;
+  position?: 'intro';
+  /** `3` renders an h3 listed under the section above it in the page navigation, like the parts of "Core Concepts". */
+  level?: 2 | 3;
+  description?: string;
+  /** A highlighted warning shown above the description, for what readers must not miss. */
+  callout?: { title: string; description: string };
+  table?: SectionTable;
+  /** Shows the table under the examples instead of above them. */
+  tableAfterExamples?: boolean;
+  examples?: ExampleData[];
+  /** Prose after the examples, such as a pointer to related examples. */
+  note?: string;
 }
 
 export interface ComponentData {
   componentName: string;
   description: string;
+  /** Accessibility notes. Each entry is a block of prose: `code`, **bold**, links and `- ` bullets. */
   accessibility?: string[];
   about?: AboutData;
+  /** Paragraphs right under the preview, before the installation. Each entry is a block of prose. */
+  intro?: string[];
+  /** A bullet list of what the component does, shown after the composition. */
+  features?: string[];
   preview?: ExampleData;
   examples: ExampleData[];
   installData?: ComponentInstallData;
   usage?: ComponentUsageData;
   composition?: CodeBlockData;
+  /** More composition trees after the first, each with the sentence that introduces it. */
+  compositionMore?: CodeSnippet[];
+  /** A closing sentence under the composition trees. */
+  compositionNote?: string;
   /**
    * Name of the component that replaces this one. The page then only says the component is deprecated and links
    * to the replacement — no preview, installation, examples or API (e.g. Toast → Sonner, as in shadcn/ui).
@@ -34,6 +82,10 @@ export interface ComponentData {
   deprecatedFor?: string;
   fullWidth?: boolean;
   api?: ApiSection[];
+  /** Extra blocks after the examples, such as the "Map styles" section of the map. */
+  sections?: ComponentSection[];
+  /** A component rendered at the right of the page title, for a control that drives every demo on the page. */
+  headerAction?: ComponentType<unknown>;
 }
 
 /** A standalone code block with an optional heading/description, shown around (or instead of) a demo. */
@@ -72,6 +124,15 @@ export interface ExampleData {
   fullScreen?: boolean;
   fullWidth?: boolean;
   flexAlign?: 'start' | 'center' | 'end';
+  /**
+   * Renders the demo only while it is on (or near) the screen, and removes it again once it is far away. For demos
+   * that hold a WebGL context: a page with dozens of maps would otherwise run out of contexts.
+   */
+  lazyRender?: boolean;
+  /** Shows a message instead of the demo when the browser has no WebGL2. */
+  requiresWebgl2?: boolean;
+  /** Less padding around the demo, for demos that are a frame of their own, such as a map. */
+  compact?: boolean;
 }
 
 /** The groups the components are listed under, in `llms.txt` and anywhere else that needs them. */
@@ -173,6 +234,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/checkbox/demo/checkbox').then(m => m.CHECKBOX),
   },
   {
+    componentName: 'code-block',
+    description: 'Displays code, terminal output and diffs with an optional header, line numbers and a copy button.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/code-block/demo/code-block').then(m => m.CODE_BLOCK),
+  },
+  {
     componentName: 'collapsible',
     description: 'An interactive component which expands and collapses a panel.',
     category: 'Layout & Navigation',
@@ -270,6 +337,24 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/kbd/demo/kbd').then(m => m.KBD),
   },
   {
+    componentName: 'map',
+    description: 'Beautiful maps built on MapLibre GL, themed with zard. Copy and paste into your apps.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/map/demo/map').then(m => m.MAP),
+  },
+  {
+    componentName: 'map-draw',
+    description: 'Draw, select and edit points, lines and polygons on a map. An optional addition to the map.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/map-draw/demo/map-draw').then(m => m.MAP_DRAW),
+  },
+  {
+    componentName: 'map-style-select',
+    description: 'Picks the basemap of every map on the page, live. Presets are grouped by provider.',
+    category: 'Form & Input',
+    loadData: () => import('@zard/components/map-style-select/demo/map-style-select').then(m => m.MAP_STYLE_SELECT),
+  },
+  {
     componentName: 'marker',
     description: 'Displays an inline status, system note, bordered row, or labeled separator in a conversation.',
     category: 'Display & Media',
@@ -280,6 +365,25 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Displays a message in a conversation, with optional avatar, header, footer, and alignment.',
     category: 'Display & Media',
     loadData: () => import('@zard/components/message/demo/message').then(m => m.MESSAGE),
+  },
+  {
+    componentName: 'menubar',
+    description: 'A visually persistent bar of command menus, as found in desktop applications.',
+    category: 'Layout & Navigation',
+    loadData: () => import('@zard/components/menubar/demo/menubar').then(m => m.MENUBAR),
+  },
+  {
+    componentName: 'trace',
+    description: 'The building block for reasoning, tool calls, sources and more.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/trace/demo/trace').then(m => m.TRACE),
+  },
+  {
+    componentName: 'message-scroller',
+    description:
+      'A chat scroll container that opens at the right place, follows a streaming answer, keeps your place as history loads, and jumps to any message.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/message-scroller/demo/message-scroller').then(m => m.MESSAGE_SCROLLER),
   },
   {
     componentName: 'navigation-menu',
@@ -317,6 +421,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'Accessible resizable panel groups and layouts with keyboard support.',
     category: 'Layout & Navigation',
     loadData: () => import('@zard/components/resizable/demo/resizable').then(m => m.RESIZABLE),
+  },
+  {
+    componentName: 'native-select',
+    description: 'A styled native HTML select element with consistent design system integration.',
+    category: 'Form & Input',
+    loadData: () => import('@zard/components/native-select/demo/native-select').then(m => m.NATIVE_SELECT),
   },
   {
     componentName: 'select',
@@ -371,6 +481,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     description: 'A control that allows the user to toggle between checked and not checked.',
     category: 'Form & Input',
     loadData: () => import('@zard/components/switch/demo/switch').then(m => m.SWITCH),
+  },
+  {
+    componentName: 'data-table',
+    description: 'Powerful table and datagrids built using TanStack Table.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/data-table/demo/data-table').then(m => m.DATA_TABLE),
   },
   {
     componentName: 'table',

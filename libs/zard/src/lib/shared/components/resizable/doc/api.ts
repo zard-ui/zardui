@@ -3,44 +3,32 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const RESIZABLE_API: ApiSection[] = [
   {
     selector: 'z-resizable',
-    description:
-      "The panel group that lays out its `z-resizable-panel` children along `zLayout` and manages their sizes. Add `#ref=\"zResizable\"` on the element to call its public methods. `ZardResizeEvent` is `{ sizes: number[]; layout: 'horizontal' | 'vertical' }`, where `sizes` is the current size of every panel as a percentage (0-100) of the group, in panel order.",
+    description: 'Panel group that sizes its panels; event `sizes` are percentages in panel order.',
     props: [
-      {
-        name: '[zLayout]',
-        description: 'Layout direction of the panels',
-        type: "'horizontal' | 'vertical'",
-        default: "'horizontal'",
-      },
-      {
-        name: '[zLazy]',
-        description: 'If true, panels only update after resize ends instead of on every drag/keyboard step',
-        type: 'boolean',
-        default: 'false',
-      },
-      { name: '[class]', description: 'Additional CSS classes to apply', type: 'ClassValue', default: "''" },
+      { name: '[zLayout]', description: 'Panel direction', type: "'horizontal' | 'vertical'", default: "'horizontal'" },
+      { name: '[zLazy]', description: 'Update panels only when the resize ends', type: 'boolean', default: 'false' },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '(zResizeStart)',
-        description: 'Emitted once when a drag or keyboard resize starts, with the sizes at that moment',
+        description: 'Emitted when a resize starts',
         type: 'EventEmitter<ZardResizeEvent>',
         default: '-',
       },
       {
         name: '(zResize)',
-        description: 'Emitted with the updated sizes on every resize step (drag move, arrow key, or collapse toggle)',
+        description: 'Emitted on every resize step',
         type: 'EventEmitter<ZardResizeEvent>',
         default: '-',
       },
       {
         name: '(zResizeEnd)',
-        description: 'Emitted once when a drag or keyboard resize ends, with the final sizes',
+        description: 'Emitted when a resize ends, with the final sizes',
         type: 'EventEmitter<ZardResizeEvent>',
         default: '-',
       },
       {
         name: 'collapsePanel(index)',
-        description:
-          'Public method that toggles the panel at `index` between 0 and its `zDefaultSize` (or an even share of the group). No-ops unless that panel has `zCollapsible` set — it is what a handle\'s Enter/Space keydown calls internally, and what a consumer calls to drive an external "collapse sidebar" control.',
+        description: 'Toggles a `zCollapsible` panel between 0 and its default size',
         type: '(index: number) => void',
         default: '-',
       },
@@ -49,66 +37,49 @@ export const RESIZABLE_API: ApiSection[] = [
   {
     selector: 'z-resizable-panel',
     description:
-      'A single panel inside a `z-resizable` group. Sizes are percentages of the group along its resize axis (0-100), not pixels: pass a bare number/numeric string for a percentage, an explicit `"50%"` string, or a `"300px"` string, which is converted to a percentage of the group\'s current container size once, at layout time. The `zDefaultSize`s of the panels in one group should add up to 100 — a panel that omits it gets an even share of the remaining space.',
+      'A panel in the group; sizes are percentages (0-100) or `"px"` strings, and should add up to 100 per group.',
     props: [
       {
         name: '[zDefaultSize]',
-        description: 'Initial size of the panel (see the selector description for the unit)',
+        description: 'Initial size; omitted panels share the remaining space',
         type: 'number | string | undefined',
         default: 'undefined',
       },
-      {
-        name: '[zMin]',
-        description: 'Minimum size the panel can be resized to, in the same unit as `zDefaultSize`',
-        type: 'number | string',
-        default: '0',
-      },
-      {
-        name: '[zMax]',
-        description: 'Maximum size the panel can be resized to, in the same unit as `zDefaultSize`',
-        type: 'number | string',
-        default: '100',
-      },
+      { name: '[zMin]', description: 'Minimum size', type: 'number | string', default: '0' },
+      { name: '[zMax]', description: 'Maximum size', type: 'number | string', default: '100' },
       {
         name: '[zCollapsible]',
-        description: 'Whether the neighboring handle may collapse this panel to 0 (Enter/Space, or `collapsePanel`)',
+        description: 'Lets the handle collapse this panel to 0',
         type: 'boolean',
         default: 'false',
       },
       {
         name: '[zResizable]',
-        description: 'Whether the handles on either side of this panel are allowed to resize it',
+        description: 'Lets the adjacent handles resize this panel',
         type: 'boolean',
         default: 'true',
       },
-      { name: '[class]', description: 'Additional CSS classes to apply', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
     ],
   },
   {
     selector: 'z-resizable-handle',
-    description:
-      'The draggable divider between two `z-resizable-panel`s. Renders `role="separator"` with `aria-orientation` (perpendicular to the group\'s `zLayout`) and is keyboard-operable: arrow keys resize by 1% (10% with Shift) in the axis matching the layout, Home/End jump the adjacent panels to their min/max, and Enter/Space toggles collapse when either neighboring panel is `zCollapsible`. In a right-to-left layout the first panel sits on the right, so ArrowLeft grows it and ArrowRight shrinks it; the direction is read from the CDK `Directionality`.',
+    description: 'Draggable, keyboard-operable divider between two panels.',
     props: [
-      {
-        name: '[zWithHandle]',
-        description: 'Shows a visual grip indicator inside the divider',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: '[zWithHandle]', description: 'Shows a grip indicator', type: 'boolean', default: 'false' },
       {
         name: '[zDisabled]',
-        description: 'Disables dragging, keyboard resize, and collapse',
+        description: 'Disables dragging, keyboard resize and collapse',
         type: 'boolean',
         default: 'false',
       },
       {
         name: '[zHandleIndex]',
-        description:
-          'Position of the handle among its panel siblings — the handle at index `i` resizes the panel at `i` and the panel at `i + 1`. Must be set explicitly when a group has more than one handle; it is not computed automatically',
+        description: 'Handle position; required when the group has several handles',
         type: 'number',
         default: '0',
       },
-      { name: '[class]', description: 'Additional CSS classes to apply', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
     ],
   },
 ];

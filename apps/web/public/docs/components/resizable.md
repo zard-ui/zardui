@@ -910,41 +910,41 @@ export class ZardDemoResizableRtlComponent {
 
 ### z-resizable
 
-The panel group that lays out its `z-resizable-panel` children along `zLayout` and manages their sizes. Add `#ref="zResizable"` on the element to call its public methods. `ZardResizeEvent` is `{ sizes: number[]; layout: 'horizontal' | 'vertical' }`, where `sizes` is the current size of every panel as a percentage (0-100) of the group, in panel order.
+Panel group that sizes its panels; event `sizes` are percentages in panel order.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zLayout]` | Layout direction of the panels | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| `[zLazy]` | If true, panels only update after resize ends instead of on every drag/keyboard step | `boolean` | `false` |
-| `[class]` | Additional CSS classes to apply | `ClassValue` | `''` |
-| `(zResizeStart)` | Emitted once when a drag or keyboard resize starts, with the sizes at that moment | `EventEmitter<ZardResizeEvent>` | `-` |
-| `(zResize)` | Emitted with the updated sizes on every resize step (drag move, arrow key, or collapse toggle) | `EventEmitter<ZardResizeEvent>` | `-` |
-| `(zResizeEnd)` | Emitted once when a drag or keyboard resize ends, with the final sizes | `EventEmitter<ZardResizeEvent>` | `-` |
-| `collapsePanel(index)` | Public method that toggles the panel at `index` between 0 and its `zDefaultSize` (or an even share of the group). No-ops unless that panel has `zCollapsible` set — it is what a handle's Enter/Space keydown calls internally, and what a consumer calls to drive an external "collapse sidebar" control. | `(index: number) => void` | `-` |
+| `[zLayout]` | Panel direction | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `[zLazy]` | Update panels only when the resize ends | `boolean` | `false` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `(zResizeStart)` | Emitted when a resize starts | `EventEmitter<ZardResizeEvent>` | `-` |
+| `(zResize)` | Emitted on every resize step | `EventEmitter<ZardResizeEvent>` | `-` |
+| `(zResizeEnd)` | Emitted when a resize ends, with the final sizes | `EventEmitter<ZardResizeEvent>` | `-` |
+| `collapsePanel(index)` | Toggles a `zCollapsible` panel between 0 and its default size | `(index: number) => void` | `-` |
 
 ### z-resizable-panel
 
-A single panel inside a `z-resizable` group. Sizes are percentages of the group along its resize axis (0-100), not pixels: pass a bare number/numeric string for a percentage, an explicit `"50%"` string, or a `"300px"` string, which is converted to a percentage of the group's current container size once, at layout time. The `zDefaultSize`s of the panels in one group should add up to 100 — a panel that omits it gets an even share of the remaining space.
+A panel in the group; sizes are percentages (0-100) or `"px"` strings, and should add up to 100 per group.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zDefaultSize]` | Initial size of the panel (see the selector description for the unit) | `number \| string \| undefined` | `undefined` |
-| `[zMin]` | Minimum size the panel can be resized to, in the same unit as `zDefaultSize` | `number \| string` | `0` |
-| `[zMax]` | Maximum size the panel can be resized to, in the same unit as `zDefaultSize` | `number \| string` | `100` |
-| `[zCollapsible]` | Whether the neighboring handle may collapse this panel to 0 (Enter/Space, or `collapsePanel`) | `boolean` | `false` |
-| `[zResizable]` | Whether the handles on either side of this panel are allowed to resize it | `boolean` | `true` |
-| `[class]` | Additional CSS classes to apply | `ClassValue` | `''` |
+| `[zDefaultSize]` | Initial size; omitted panels share the remaining space | `number \| string \| undefined` | `undefined` |
+| `[zMin]` | Minimum size | `number \| string` | `0` |
+| `[zMax]` | Maximum size | `number \| string` | `100` |
+| `[zCollapsible]` | Lets the handle collapse this panel to 0 | `boolean` | `false` |
+| `[zResizable]` | Lets the adjacent handles resize this panel | `boolean` | `true` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-resizable-handle
 
-The draggable divider between two `z-resizable-panel`s. Renders `role="separator"` with `aria-orientation` (perpendicular to the group's `zLayout`) and is keyboard-operable: arrow keys resize by 1% (10% with Shift) in the axis matching the layout, Home/End jump the adjacent panels to their min/max, and Enter/Space toggles collapse when either neighboring panel is `zCollapsible`. In a right-to-left layout the first panel sits on the right, so ArrowLeft grows it and ArrowRight shrinks it; the direction is read from the CDK `Directionality`.
+Draggable, keyboard-operable divider between two panels.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zWithHandle]` | Shows a visual grip indicator inside the divider | `boolean` | `false` |
-| `[zDisabled]` | Disables dragging, keyboard resize, and collapse | `boolean` | `false` |
-| `[zHandleIndex]` | Position of the handle among its panel siblings — the handle at index `i` resizes the panel at `i` and the panel at `i + 1`. Must be set explicitly when a group has more than one handle; it is not computed automatically | `number` | `0` |
-| `[class]` | Additional CSS classes to apply | `ClassValue` | `''` |
+| `[zWithHandle]` | Shows a grip indicator | `boolean` | `false` |
+| `[zDisabled]` | Disables dragging, keyboard resize and collapse | `boolean` | `false` |
+| `[zHandleIndex]` | Handle position; required when the group has several handles | `number` | `0` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

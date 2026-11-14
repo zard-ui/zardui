@@ -384,13 +384,13 @@ export class ZardDemoTextareaRtlComponent {
 
 ### textarea[z-textarea]
 
-A directive that styles a native `<textarea>` element. All native HTML textarea attributes (`rows`, `placeholder`, `disabled`, `required`, `readonly`, `maxlength`, `aria-invalid`, etc.) keep working as-is; the control grows with its content via CSS `field-sizing: content`, with no dedicated auto-resize input and no built-in character-count display.
+Styles a native `<textarea>` that grows with its content.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[value]` | Textarea value, two-way bindable | `string` | `''` |
-| `[(value)]` | Textarea value (two-way binding) | `string` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[value]` | Textarea value | `string` | `''` |
+| `[(value)]` | Textarea value | `string` | `''` |
 
 ---
 

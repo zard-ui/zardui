@@ -558,26 +558,26 @@ export class ZardDemoTabsRtlComponent {
 
 ### z-tab-group
 
-A set of layered sections of content — known as tab panels — displayed one at a time. Arrow keys, Home and End move between enabled tabs; in right-to-left layouts the horizontal arrows follow the visual order (ArrowRight moves to the previous tab).
+Layered panels shown one at a time.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
-| `[zVariant]` | Visual variant of the tab navigation | `'default' \| 'line'` | `'default'` |
-| `[zOrientation]` | Layout direction of the tab group | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| `[zDisabled]` | Whether the entire tab group is disabled | `boolean` | `false` |
-| `(zTabChange)` | Emits when a new tab is selected | `EventEmitter<{ index: number; label: string; tab: ZardTabComponent }>` | `-` |
-| `(zDeselect)` | Emits when the current tab is deselected | `EventEmitter<{ index: number; label: string; tab: ZardTabComponent }>` | `-` |
+| `[zVariant]` | Visual variant | `'default' \| 'line'` | `'default'` |
+| `[zOrientation]` | Layout direction | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `[zDisabled]` | Disables the whole group | `boolean` | `false` |
+| `(zTabChange)` | Emitted when a tab is selected | `EventEmitter<{ index: number; label: string; tab: ZardTabComponent }>` | `-` |
+| `(zDeselect)` | Emitted when the current tab is deselected | `EventEmitter<{ index: number; label: string; tab: ZardTabComponent }>` | `-` |
 
 ### z-tab
 
-An individual tab. Label is shown in the navigation; projected content becomes the tab panel.
+A tab; its projected content is the panel.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[label]` | Label displayed in the tab button | `string` | `-` |
-| `[zIcon]` | Optional ng-icons name shown before the label | `string` | `-` |
-| `[zDisabled]` | Whether this individual tab is disabled | `boolean` | `false` |
+| `[label]` | Tab label | `string` | `-` |
+| `[zIcon]` | Icon before the label | `string` | `-` |
+| `[zDisabled]` | Disables this tab | `boolean` | `false` |
 
 ---
 

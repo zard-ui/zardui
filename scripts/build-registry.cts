@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { ICON_FAMILIES, ICON_MAP, collectIcons, type ComponentIcons } from '../packages/cli/src/core/icons/index';
-import { registry, type ComponentRegistry } from '../packages/cli/src/core/registry/registry-data';
+import { registry, type ComponentRegistry, type RegistryBuild } from '../packages/cli/src/core/registry/registry-data';
 
 /**
  * The shape of the published files. It goes up when a change breaks a reader — a
@@ -29,6 +29,8 @@ interface RegistryItem {
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
+  build?: RegistryBuild;
+  minAngularMajor?: number;
   icons?: ComponentIcons;
   files: RegistryFile[];
 }
@@ -46,6 +48,8 @@ interface RegistryIndex {
     dependencies?: string[];
     devDependencies?: string[];
     registryDependencies?: string[];
+    build?: RegistryBuild;
+    minAngularMajor?: number;
     icons?: ComponentIcons;
     files: string[];
   }>;
@@ -184,6 +188,14 @@ function buildComponentJson(component: ComponentRegistry): RegistryItem | null {
     item.registryDependencies = component.registryDependencies;
   }
 
+  if (component.build) {
+    item.build = component.build;
+  }
+
+  if (component.minAngularMajor) {
+    item.minAngularMajor = component.minAngularMajor;
+  }
+
   // The demos are read but not published: the MCP was what consumed them, and it
   // now reads the page's `.md` — one document with installation, usage, examples
   // and API at once, rather than loose code fragments. Here they serve only the
@@ -232,6 +244,8 @@ function buildRegistryIndex(items: RegistryItem[]): RegistryIndex {
       ...(item.dependencies?.length && { dependencies: item.dependencies }),
       ...(item.devDependencies?.length && { devDependencies: item.devDependencies }),
       ...(item.registryDependencies?.length && { registryDependencies: item.registryDependencies }),
+      ...(item.build && { build: item.build }),
+      ...(item.minAngularMajor && { minAngularMajor: item.minAngularMajor }),
       // The index carries only what `add` installs: the demo icons influence no
       // dependency, and the index is downloaded on every command.
       ...(item.icons && {

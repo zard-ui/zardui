@@ -345,7 +345,7 @@ Displays a badge or a component that looks like a badge.
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[zType]` | Badge type | `'default' \| 'secondary' \| 'destructive' \| 'outline' \| 'ghost' \| 'link'` | `'default'` |
-| `[class]` | Additional CSS classes | `string` | `''` |
+| `[class]` | Custom CSS classes | `string` | `''` |
 
 ---
 

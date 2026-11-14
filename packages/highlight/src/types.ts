@@ -8,9 +8,13 @@ export interface CodeBlockData {
   expandable: boolean;
   expandableTitle?: string;
   highlightLines?: number[];
+  /** When the block is a manual-install step, the heading it gets instead of "Add <title>". */
+  step?: { title: string; subtitle?: string };
 }
 
 export interface ComponentUsageData {
+  /** Prose shown before the import block, such as "Use a `z-trace-line` for a single step:". */
+  intro?: string;
   importBlock: CodeBlockData;
   codeBlock: CodeBlockData;
   description?: string;

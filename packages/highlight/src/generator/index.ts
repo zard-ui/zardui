@@ -1,3 +1,4 @@
+import { generateAiElementsDemoFiles } from './ai-elements-writer';
 import { generateDemoFiles } from './demo-writer';
 import { generateDocsFiles } from './docs-writer';
 import { generateFormDemoFiles, generateFormSnippetFiles } from './forms-writer';
@@ -24,6 +25,7 @@ async function generate(): Promise<void> {
     formDemoCount,
     formSnippetCount,
     utilsDemoCount,
+    aiElementsDemoCount,
   ] = await Promise.all([
     generateDemoFiles(),
     generateInstallationFiles(),
@@ -34,6 +36,7 @@ async function generate(): Promise<void> {
     generateFormDemoFiles(),
     generateFormSnippetFiles(),
     generateUtilsDemoFiles(),
+    generateAiElementsDemoFiles(),
   ]);
 
   console.log(`✅ Wrote ${demoCount} demo files`);
@@ -45,6 +48,7 @@ async function generate(): Promise<void> {
   console.log(`✅ Wrote ${formDemoCount} form guide demo files`);
   console.log(`✅ Wrote ${formSnippetCount} form guide snippet files`);
   console.log(`✅ Wrote ${utilsDemoCount} utility demo files`);
+  console.log(`✅ Wrote ${aiElementsDemoCount} AI Elements demo files`);
   console.log('');
 }
 

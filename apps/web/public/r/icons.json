@@ -19,6 +19,9 @@
     "archive": {
       "lucide": "lucideArchive"
     },
+    "arrow-down": {
+      "lucide": "lucideArrowDown"
+    },
     "arrow-left": {
       "lucide": "lucideArrowLeft"
     },
@@ -27,6 +30,9 @@
     },
     "arrow-up": {
       "lucide": "lucideArrowUp"
+    },
+    "arrow-up-down": {
+      "lucide": "lucideArrowUpDown"
     },
     "arrow-up-right": {
       "lucide": "lucideArrowUpRight"
@@ -51,6 +57,9 @@
     },
     "book-open-check": {
       "lucide": "lucideBookOpenCheck"
+    },
+    "brain": {
+      "lucide": "lucideBrain"
     },
     "bookmark": {
       "lucide": "lucideBookmark"
@@ -94,6 +103,9 @@
     "chevrons-up-down": {
       "lucide": "lucideChevronsUpDown"
     },
+    "circle": {
+      "lucide": "lucideCircle"
+    },
     "circle-alert": {
       "lucide": "lucideCircleAlert"
     },
@@ -112,6 +124,12 @@
     "circle-help": {
       "lucide": "lucideCircleHelp"
     },
+    "circle-off": {
+      "lucide": "lucideCircleOff"
+    },
+    "circle-plus": {
+      "lucide": "lucideCirclePlus"
+    },
     "circle-small": {
       "lucide": "lucideCircleSmall"
     },
@@ -129,6 +147,9 @@
     },
     "code": {
       "lucide": "lucideCode"
+    },
+    "coffee": {
+      "lucide": "lucideCoffee"
     },
     "copy": {
       "lucide": "lucideCopy"
@@ -163,6 +184,12 @@
     "file-code-2": {
       "lucide": "lucideFileCode2"
     },
+    "file-pen": {
+      "lucide": "lucideFilePen"
+    },
+    "file-plus": {
+      "lucide": "lucideFilePlus"
+    },
     "file-text": {
       "lucide": "lucideFileText"
     },
@@ -174,6 +201,9 @@
     },
     "folder-plus": {
       "lucide": "lucideFolderPlus"
+    },
+    "folder-search": {
+      "lucide": "lucideFolderSearch"
     },
     "footprints": {
       "lucide": "lucideFootprints"
@@ -189,6 +219,9 @@
     },
     "git-branch": {
       "lucide": "lucideGitBranch"
+    },
+    "git-commit-horizontal": {
+      "lucide": "lucideGitCommitHorizontal"
     },
     "globe": {
       "lucide": "lucideGlobe"
@@ -210,6 +243,9 @@
     },
     "keyboard": {
       "lucide": "lucideKeyboard"
+    },
+    "landmark": {
+      "lucide": "lucideLandmark"
     },
     "layout-grid": {
       "lucide": "lucideLayoutGrid"
@@ -250,8 +286,14 @@
     "map": {
       "lucide": "lucideMap"
     },
+    "map-pin": {
+      "lucide": "lucideMapPin"
+    },
     "maximize": {
       "lucide": "lucideMaximize"
+    },
+    "message-circle-dashed": {
+      "lucide": "lucideMessageCircleDashed"
     },
     "message-square": {
       "lucide": "lucideMessageSquare"
@@ -271,17 +313,38 @@
     "octagon-x": {
       "lucide": "lucideOctagonX"
     },
+    "package": {
+      "lucide": "lucidePackage"
+    },
     "panel-left": {
       "lucide": "lucidePanelLeft"
+    },
+    "paperclip": {
+      "lucide": "lucidePaperclip"
+    },
+    "pause": {
+      "lucide": "lucidePause"
     },
     "pencil": {
       "lucide": "lucidePencil"
     },
+    "phone": {
+      "lucide": "lucidePhone"
+    },
     "pie-chart": {
       "lucide": "lucidePieChart"
     },
+    "pin": {
+      "lucide": "lucidePin"
+    },
+    "pin-off": {
+      "lucide": "lucidePinOff"
+    },
     "pipette": {
       "lucide": "lucidePipette"
+    },
+    "play": {
+      "lucide": "lucidePlay"
     },
     "plus": {
       "lucide": "lucidePlus"
@@ -340,6 +403,9 @@
     "tag": {
       "lucide": "lucideTag"
     },
+    "telescope": {
+      "lucide": "lucideTelescope"
+    },
     "terminal": {
       "lucide": "lucideTerminal"
     },
@@ -348,6 +414,9 @@
     },
     "thumbs-up": {
       "lucide": "lucideThumbsUp"
+    },
+    "timer": {
+      "lucide": "lucideTimer"
     },
     "trash": {
       "lucide": "lucideTrash"
@@ -360,6 +429,9 @@
     },
     "triangle-alert": {
       "lucide": "lucideTriangleAlert"
+    },
+    "truck": {
+      "lucide": "lucideTruck"
     },
     "underline": {
       "lucide": "lucideUnderline"
@@ -378,6 +450,9 @@
     },
     "waves": {
       "lucide": "lucideWaves"
+    },
+    "wrap-text": {
+      "lucide": "lucideWrapText"
     },
     "x": {
       "lucide": "lucideX"

@@ -202,6 +202,14 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';`,
     templateCode: `<textarea z-textarea rows="6" placeholder="Type your message"></textarea>`,
   },
+  'native-select': {
+    importCode: `import { ZardNativeSelectDirective } from '@/shared/components/native-select/native-select.directive';`,
+    templateCode: `<select z-native-select>
+  <option value="todo">Todo</option>
+  <option value="in-progress">In progress</option>
+  <option value="done">Done</option>
+</select>`,
+  },
   'input-group': {
     importCode: `import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';`,
     templateCode: `<z-input-group>
@@ -336,6 +344,22 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';`,
     templateCode: `<z-switch></z-switch>`,
   },
+  'data-table': {
+    importCode: `import { injectTable, rowPaginationFeature, tableFeatures } from '@tanstack/angular-table';
+
+import { ZardDataTableImports } from '@/shared/components/data-table/data-table.imports';
+
+const features = tableFeatures({ rowPaginationFeature });
+const columns = [
+  { accessorKey: 'email', header: 'Email' },
+  { accessorKey: 'amount', header: 'Amount' },
+];
+
+// In the component class:
+readonly table = injectTable(() => ({ features, columns, data: this.data() }));`,
+    templateCode: `<z-data-table [zTable]="table" />
+<z-data-table-pagination [zTable]="table" />`,
+  },
   table: {
     importCode: `import { ZardTableImports } from '@/shared/components/table/table.imports';`,
     templateCode: `<table z-table>
@@ -382,6 +406,18 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   tooltip: {
     importCode: `import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';`,
     templateCode: `<button z-button zType="outline" zTooltip="Add to library">Hover</button>`,
+  },
+  'code-block': {
+    importCode: `import { ZardCodeBlockImports } from '@/shared/components/code-block/code-block.imports';`,
+    templateCode: `<z-code-block>
+  <z-code-block-header>
+    <z-code-block-title>Terminal</z-code-block-title>
+    <z-code-block-actions>
+      <z-code-block-copy-button [zValue]="output" />
+    </z-code-block-actions>
+  </z-code-block-header>
+  <z-code-block-content>{{ output }}</z-code-block-content>
+</z-code-block>`,
   },
   collapsible: {
     importCode: `import { ZardCollapsibleImports } from '@/shared/components/collapsible/collapsible.imports';`,
@@ -455,15 +491,118 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   <z-dropdown-menu-item zType="destructive">Delete</z-dropdown-menu-item>
 </z-dropdown-menu-content>`,
   },
+  menubar: {
+    importCode: `import { ZardMenubarImports } from '@/shared/components/menubar/menubar.imports';`,
+    templateCode: `<z-menubar>
+  <button type="button" z-menubar-trigger [zMenubarMenu]="fileMenu">File</button>
+  <button type="button" z-menubar-trigger [zMenubarMenu]="editMenu">Edit</button>
+</z-menubar>
+
+<z-dropdown-menu-content #fileMenu="zDropdownMenuContent" class="w-56">
+  <z-dropdown-menu-item>
+    New Tab
+    <z-dropdown-menu-shortcut>⌘T</z-dropdown-menu-shortcut>
+  </z-dropdown-menu-item>
+  <z-dropdown-menu-item>New Window</z-dropdown-menu-item>
+  <z-dropdown-menu-separator />
+  <z-dropdown-menu-item>Print...</z-dropdown-menu-item>
+</z-dropdown-menu-content>
+
+<z-dropdown-menu-content #editMenu="zDropdownMenuContent" class="w-56">
+  <z-dropdown-menu-item>Undo</z-dropdown-menu-item>
+  <z-dropdown-menu-item>Redo</z-dropdown-menu-item>
+</z-dropdown-menu-content>`,
+  },
   message: {
     importCode: `import { ZardMessageImports } from '@/shared/components/message/message.imports';`,
     templateCode: `<z-message zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zVariant="muted">
   How can I help you today?
 </z-message>`,
   },
+  'message-scroller': {
+    importCode: `import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
+import { ZardMessageImports } from '@/shared/components/message/message.imports';
+import { ZardMessageScrollerImports } from '@/shared/components/message-scroller/message-scroller.imports';`,
+    templateCode: `<z-message-scroller>
+  @for (message of messages(); track message.id) {
+    <z-message-scroller-item [zMessageId]="message.id" [zAnchor]="message.role === 'user'">
+      <z-message [zAlign]="message.role === 'user' ? 'end' : 'start'">
+        <z-message-content>
+          <z-bubble><z-bubble-content>{{ message.text }}</z-bubble-content></z-bubble>
+        </z-message-content>
+      </z-message>
+    </z-message-scroller-item>
+  }
+  <button type="button" z-message-scroller-button></button>
+</z-message-scroller>`,
+    description: '`z-message-scroller` fills its parent, so place it inside a height-constrained container.',
+    additionalCodeBlocks: [
+      {
+        language: 'angular-html',
+        code: `<div class="flex h-screen flex-col">
+  <z-message-scroller class="flex-1"><!-- transcript --></z-message-scroller>
+</div>`,
+      },
+    ],
+  },
+  map: {
+    importCode: `import { ZardMapImports } from '@/shared/components/map/map.imports';`,
+    templateCode: `<div class="h-96 overflow-hidden rounded-xl border">
+  <ng-map [center]="[-46.63, -23.55]" [zoom]="10">
+    <ng-map-controls />
+    <ng-map-marker [longitude]="-46.63" [latitude]="-23.55">
+      <ng-marker-content />
+      <ng-marker-popup>São Paulo</ng-marker-popup>
+    </ng-map-marker>
+  </ng-map>
+</div>`,
+  },
+  'map-draw': {
+    importCode: `import { ZardMapDrawImports } from '@/shared/components/map-draw/map-draw.imports';`,
+    templateCode: `<div class="h-96 overflow-hidden rounded-xl border">
+  <ng-map [center]="[-73.97, 40.78]" [zoom]="12">
+    <ng-map-draw [(features)]="features" [(mode)]="mode" [modes]="['point', 'line', 'polygon']" />
+  </ng-map>
+</div>`,
+  },
+  'map-style-select': {
+    importCode: `import { ZardMapStyleSelectComponent } from '@/shared/components/map-style-select/map-style-select.component';`,
+    templateCode: `<z-map-style-select />`,
+  },
   marker: {
     importCode: `import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';`,
     templateCode: `<z-marker zIcon="lucideSearch">Explored 4 files</z-marker>`,
+  },
+  trace: {
+    importCode: `import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch, lucideTerminal } from '@ng-icons/lucide';
+
+import { ZardTraceImports } from '@/shared/components/trace/trace.imports';
+
+// Add NgIcon to the component imports and provideIcons({ lucideSearch, lucideTerminal }) to its viewProviders.`,
+    templateCode: `<z-trace>
+  <z-trace-line>
+    <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
+    <z-trace-title>Searched for minimumReleaseAge</z-trace-title>
+  </z-trace-line>
+</z-trace>`,
+    description: 'Wrap the line in a `z-trace-collapsible` to show more detail when it expands:',
+    additionalCodeBlocks: [
+      {
+        language: 'angular-html',
+        code: `<z-trace>
+  <z-trace-collapsible>
+    <z-trace-collapsible-trigger>
+      <z-trace-line>
+        <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
+        <z-trace-title>Ran node --version</z-trace-title>
+      </z-trace-line>
+    </z-trace-collapsible-trigger>
+    <z-trace-collapsible-content>v24.18.0</z-trace-collapsible-content>
+  </z-trace-collapsible>
+</z-trace>`,
+      },
+    ],
   },
   'aspect-ratio': {
     importCode: `import { ZardAspectRatioComponent } from '@/shared/components/aspect-ratio/aspect-ratio.component';`,

@@ -2296,14 +2296,14 @@ export class ZardDemoNavigationMenuRtlComponent {
 
 ### z-navigation-menu
 
-Root of the navigation bar. Scopes the shared viewport to the triggers inside it. Renders no landmark role of its own — wrap it in a labelled `<nav>`, as every example on this page does, so assistive tech can identify it.
+Root of the navigation bar; wrap it in a labelled `<nav>`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zViewport]` | Share a single animated popup between every trigger. When false each trigger opens its own | `boolean` | `true` |
-| `[zAlign]` | Which edge of the active trigger the shared viewport lines up with | `'start' \| 'center' \| 'end'` | `'start'` |
-| `[zHoverDelay]` | Delay in ms before closing once the pointer leaves the bar | `number` | `100` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zViewport]` | Shares one popup between all triggers | `boolean` | `true` |
+| `[zAlign]` | Viewport alignment to the active trigger | `'start' \| 'center' \| 'end'` | `'start'` |
+| `[zHoverDelay]` | Close delay in ms after the pointer leaves | `number` | `100` |
 
 ### [z-navigation-menu-list]
 
@@ -2311,83 +2311,83 @@ The `<ul>` holding the items of the bar.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### [z-navigation-menu-item]
 
-The `<li>` wrapping a trigger and its content, or a standalone link.
+The `<li>` wrapping a trigger and its content, or a link.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### [z-navigation-menu-trigger]
 
-Opens the content it points to. Inside a root it opens on hover; standalone it opens on click.
+Opens its content; on hover inside a root, on click standalone.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zNavigationMenuTriggerFor]` | Reference to the content template | `TemplateRef<void>` | `required` |
-| `[zDisabled]` | Whether the trigger is disabled | `boolean` | `false` |
-| `[zTrigger]` | How the content is opened | `'click' \| 'hover'` | `'hover' inside a root, 'click' standalone` |
-| `[zHoverDelay]` | Delay in ms before closing on hover exit | `number` | `100` |
-| `[zPlacement]` | Popup position relative to the trigger. Overlay mode only. `bottom*` and `top*` placements align to the inline edges of the trigger (`Left` is the inline-start edge), so they mirror in RTL; `left*` and `right*` place the popup on a physical side and swap automatically in RTL | `ZardNavigationMenuPlacement` | `'bottomLeft'` |
-| `[zShowChevron]` | Render the built-in chevron | `boolean` | `true inside a root, false standalone` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zNavigationMenuTriggerFor]` | Content template | `TemplateRef<void>` | `required` |
+| `[zDisabled]` | Disables the trigger | `boolean` | `false` |
+| `[zTrigger]` | How the content opens | `'click' \| 'hover'` | `'hover' inside a root, 'click' standalone` |
+| `[zHoverDelay]` | Close delay in ms on hover exit | `number` | `100` |
+| `[zPlacement]` | Popup position; overlay mode only, mirrors in RTL | `ZardNavigationMenuPlacement` | `'bottomLeft'` |
+| `[zShowChevron]` | Shows the chevron | `boolean` | `true inside a root, false standalone` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### [z-navigation-menu-content]
 
-Container for the links of one trigger. Inside the shared viewport it is plain content; in overlay mode it is the popup itself.
+Holds the links of one trigger.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### [z-navigation-menu-link]
 
-A single entry, usable on a `<button>` or an `<a>`. Pair `[zActive]` with `routerLinkActive` to mark the current route — the directive has no router inputs of its own, so stack Angular `routerLink` directly on the element.
+A link on a `<button>` or `<a>`; pair `[zActive]` with `routerLinkActive`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zActive]` | Marks the link as the current one | `boolean` | `false` |
-| `[zDisabled]` | Whether the link is disabled | `boolean` | `false` |
-| `[zInset]` | Add left padding for alignment | `boolean` | `false` |
-| `[zType]` | Visual variant of the link | `'default' \| 'destructive'` | `'default'` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `(menuItemTriggered)` | Emits when the link is activated | `EventEmitter<void>` |  |
+| `[zActive]` | Marks the current link | `boolean` | `false` |
+| `[zDisabled]` | Disables the link | `boolean` | `false` |
+| `[zInset]` | Adds start padding for alignment | `boolean` | `false` |
+| `[zType]` | Visual variant | `'default' \| 'destructive'` | `'default'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `(menuItemTriggered)` | Emitted when the link is activated | `EventEmitter<void>` |  |
 
 ### z-navigation-menu-indicator
 
-The arrow that follows the trigger currently owning the viewport.
+Arrow that follows the active trigger.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-navigation-menu-viewport
 
-The shared popup. Rendered automatically by the root while `zViewport` is on — declare it manually only to place it yourself.
+The shared popup; rendered automatically unless you place it yourself.
 
 ### z-navigation-menu-label
 
-Label for grouping links inside a content block.
+Label for a group of links.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[inset]` | Adds left padding for alignment | `boolean` | `false` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[inset]` | Adds start padding for alignment | `boolean` | `false` |
 
 ### z-navigation-menu-shortcut
 
-Displays a keyboard shortcut aligned to the end of a link.
+Keyboard shortcut at the end of a link.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### navigationMenuTriggerVariants()
 
-Helper that returns the trigger classes, for links that must line up with the triggers of the bar.
+Returns the trigger classes, for links that must match the triggers.
 
 ---
 

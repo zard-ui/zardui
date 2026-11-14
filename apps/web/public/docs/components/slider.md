@@ -29,6 +29,7 @@ import {
   DOCUMENT,
   ElementRef,
   forwardRef,
+  HostAttributeToken,
   inject,
   input,
   linkedSignal,
@@ -161,6 +162,7 @@ export class ZardSliderRangeComponent {
       [attr.aria-valuemax]="max()"
       [attr.aria-valuenow]="value()"
       [attr.aria-disabled]="disabled() ? true : null"
+      [attr.aria-label]="label() || null"
       [class]="classes()"
       tabindex="0"
     ></span>
@@ -180,6 +182,8 @@ export class ZardSliderThumbComponent {
   readonly min = input(0);
   readonly max = input(100);
   readonly disabled = input(false);
+  /** The accessible name of the thumb, from the slider's `aria-label`. */
+  readonly label = input<string | null>(null);
   readonly percent = input(0);
   readonly offset = input(0);
 
@@ -228,6 +232,7 @@ export class ZardSliderThumbComponent {
           [min]="zMin()"
           [max]="zMax()"
           [disabled]="disabled()"
+          [label]="label"
           (keydown.{home,end,arrowleft,arrowright,arrowdown,arrowup}.prevent)="handleKeydown($event, $index)"
         />
       }
@@ -254,6 +259,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly directionality = inject(Directionality, { optional: true });
+  /** The thumbs carry `role="slider"`, so the host's `aria-label` names them instead. */
+  protected readonly label = inject(new HostAttributeToken('aria-label'), { optional: true });
 
   readonly zMin = input(0, { transform: numberAttribute });
   readonly zMax = input(100, { transform: numberAttribute });
@@ -298,6 +305,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
   private onChange: OnChangeType = noopFn;
 
   constructor() {
+    // The name now lives on the thumbs; left on the role-less host it would be an axe violation.
+    this.elementRef.nativeElement.removeAttribute('aria-label');
     toObservable(this.zValue)
       .pipe(
         filter(values => values.toString() !== this.lastEmittedValue().toString()),
@@ -416,14 +425,14 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       case 'ArrowRight': {
         // horizontal keys follow the reading direction: in RTL the value grows towards the left
         const towardsEnd = (key === 'ArrowRight') !== this.isRtl();
-        newValue = towardsEnd ? Math.min(currentValue + this.zStep(), max) : Math.max(currentValue - this.zStep(), min);
+        newValue = this.snapToStep(towardsEnd ? currentValue + this.zStep() : currentValue - this.zStep());
         break;
       }
       case 'ArrowDown':
-        newValue = Math.max(currentValue - this.zStep(), min);
+        newValue = this.snapToStep(currentValue - this.zStep());
         break;
       case 'ArrowUp':
-        newValue = Math.min(currentValue + this.zStep(), max);
+        newValue = this.snapToStep(currentValue + this.zStep());
         break;
       default:
         return;
@@ -794,19 +803,19 @@ export class ZardDemoSliderRtlComponent {
 
 ### z-slider
 
-A flexible and accessible component that allows users to select a numeric value from within a configurable range using pointer or keyboard interaction. The value is always an array of numbers, one entry per thumb: a single-element array renders one thumb, two elements render a range (see the `range` example), and three or more render that many independent thumbs (see the `multiple-thumbs` example) — values must be provided in ascending order. Implements Angular’s `ControlValueAccessor`, so `formControlName` and `[(ngModel)]` also work. In RTL (CDK `Directionality`) the range fills from the right, ArrowRight decreases and ArrowLeft increases the value, and dragging follows the pointer.
+Picks values in a range; one ascending array entry per thumb.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `string` | `''` |
-| `[zMin]` | Minimum selectable value | `number` | `0` |
-| `[zMax]` | Maximum selectable value. When zMax <= 1, values are automatically normalized to a 0-100% visual scale | `number` | `100` |
-| `[zDefault]` | Uncontrolled initial value, read once. One number per thumb, ascending: [value] for a single thumb, [lower, upper] for a range, or more entries for additional thumbs. Ignored once [zValue] is bound | `number[]` | `[0]` |
-| `[zValue]` | Controlled value — pair with (zSlideIndexChange) to own the value from the parent. Same shape as [zDefault]: one number per thumb, ascending | `number[]` | `[]` |
-| `[zStep]` | Step increment for the value | `number` | `1` |
+| `[zMin]` | Minimum value | `number` | `0` |
+| `[zMax]` | Maximum value | `number` | `100` |
+| `[zDefault]` | Uncontrolled initial value; ignored when `zValue` is bound | `number[]` | `[0]` |
+| `[zValue]` | Controlled value, one number per thumb | `number[]` | `[]` |
+| `[zStep]` | Step increment | `number` | `1` |
 | `[zDisabled]` | Disables slider interaction | `boolean` | `false` |
 | `[zOrientation]` | Slider orientation | `horizontal \| vertical` | `'horizontal'` |
-| `(zSlideIndexChange)` | Emitted when a thumb value changes. Always emits the full array of current values | `EventEmitter<number[]>` | `-` |
+| `(zSlideIndexChange)` | Emitted with all values when a thumb moves | `EventEmitter<number[]>` | `-` |
 
 ---
 

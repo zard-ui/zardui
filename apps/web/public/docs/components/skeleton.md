@@ -277,11 +277,11 @@ export class ZardDemoSkeletonRtlComponent {
 
 ### z-skeleton
 
-Renders a customizable placeholder during data loading to improve perceived performance and prevent layout shifts. `class` is the only input — size and shape the placeholder yourself with utility classes (`size-12 rounded-full`, `h-4 w-full`, ...) to match the content it stands in for.
+Loading placeholder; size and shape it with `class`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes sizing and shaping the placeholder | `string` | `''` |
+| `[class]` | Custom CSS classes | `string` | `''` |
 
 ---
 

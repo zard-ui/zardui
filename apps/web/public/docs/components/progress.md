@@ -211,12 +211,12 @@ export class ZardDemoProgressRtlComponent {
 
 ### z-progress
 
-Displays an indicator showing the completion progress of a task.
+Shows the completion progress of a task.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[value]` | Current progress value between 0 and 100. Values outside this range are clamped. | `number` | `0` |
-| `[class]` | Override or extend the default classes (height, color, etc). | `ClassValue` | `-` |
+| `[value]` | Progress from 0 to 100, clamped | `number` | `0` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ---
 

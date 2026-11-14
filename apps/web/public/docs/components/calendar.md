@@ -1417,9 +1417,9 @@ export class ZardCalendarNavigationComponent {
 
     const currentMonth = Number.parseInt(this.currentMonth());
     const currentYear = Number.parseInt(this.currentYear());
-    const lastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0);
+    const firstDayOfCurrentMonth = new Date(currentYear, currentMonth, 1);
 
-    return lastDayOfPreviousMonth.getTime() < minDate.getTime();
+    return minDate.getTime() >= firstDayOfCurrentMonth.getTime();
   });
 
   protected readonly isNextDisabled = computed(() => {
@@ -1578,7 +1578,8 @@ export function isSameDay(date1: Date, date2: Date): boolean {
 
 /**
  * Checks if a date is disabled based on min/max constraints and on the
- * individually disabled days
+ * individually disabled days. The bounds are compared by day, so a minDate
+ * with a time of day (e.g. `new Date()`) still leaves that day selectable.
  */
 export function isDateDisabled(
   date: Date,
@@ -1586,11 +1587,18 @@ export function isDateDisabled(
   maxDate: Date | null,
   disabledDates?: Date[],
 ): boolean {
-  if ((minDate && date < minDate) || (maxDate && date > maxDate)) {
+  const day = startOfDay(date);
+  if ((minDate && day < startOfDay(minDate)) || (maxDate && day > startOfDay(maxDate))) {
     return true;
   }
 
   return !!disabledDates?.some(disabledDate => isSameDay(date, disabledDate));
+}
+
+function startOfDay(date: Date): Date {
+  const day = new Date(date);
+  day.setHours(0, 0, 0, 0);
+  return day;
 }
 
 /**
@@ -2347,41 +2355,41 @@ export class ZardDemoCalendarRtlComponent {
 
 ### z-calendar
 
-A calendar component that allows users to select a date or a range of dates, with full keyboard navigation support. Every measurement derives from the --cell-size and --cell-radius CSS variables listed at the end of the table, so overriding them through the class input rescales the whole calendar.
+Date or range picker grid, sized by `--cell-size` and `--cell-radius`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes. Also where a border is opted into (`rounded-lg border`) and where the CSS variables below are overridden | `ClassValue` | `''` |
-| `[zMode]` | Selection mode of the calendar | `'single' \| 'multiple' \| 'range'` | `'single'` |
-| `[value]` | Currently selected date(s) - type depends on mode | `CalendarValue` | `null` |
-| `[minDate]` | Minimum selectable date. Also used to expand the year picker range | `Date \| null` | `null` |
-| `[maxDate]` | Maximum selectable date. Also used to expand the year picker range | `Date \| null` | `null` |
-| `[disabled]` | Whether the calendar is disabled | `boolean` | `false` |
-| `[zCaptionLayout]` | How the month/year caption is rendered: a plain label, two dropdowns, or a dropdown for only the month or only the year. The dropdowns are native `<select>` elements laid invisible over the label, so the browser owns the popup | `'label' \| 'dropdown' \| 'dropdown-months' \| 'dropdown-years'` | `'label'` |
-| `[zButtonVariant]` | Button variant used by the previous/next month arrows | `ZardButtonTypeVariants` | `'ghost'` |
-| `[zShowOutsideDays]` | Whether the days of the surrounding months are visible. When false they are hidden but keep their grid cell, so the layout never shifts | `boolean` | `true` |
-| `[zDisabledDates]` | Individual days that cannot be selected, on top of the minDate/maxDate range. Each day still keeps its grid cell and is marked with `data-disabled="true"` | `Date[]` | `[]` |
-| `[zNumberOfMonths]` | How many months are rendered side by side. They stack vertically below the `md` breakpoint, and only the first and the last month carry the navigation arrows | `number` | `1` |
-| `[zLocale]` | BCP 47 locale (for example `ar`, `he`, `fr-FR`) used for month names, weekday names and ARIA labels of this calendar only. Falls back to the application locale of `ZardI18nService`. The grid follows the reading direction: in RTL the weeks run right to left, the navigation chevrons flip and ArrowLeft moves to the next day (direction comes from CDK `Directionality`, i.e. `<html dir="rtl">` or the `Dir` directive) | `string` | `-` |
-| `[zDayTemplate]` | Template rendered inside every day button instead of the plain day number. The `CalendarDay` is the implicit context (`let-day`), so the template can read `date`, `isCurrentMonth`, `isSelected` and the range flags. A second `<span>` inside the button is styled as a small caption | `TemplateRef<CalendarDayTemplateContext> \| null` | `null` |
-| `(dateChange)` | Emitted when date selection changes | `EventEmitter<Date \| Date[]>` | `-` |
-| `resetNavigation()` | Public method that moves the visible month back to the selected value and clears the roving focus | `() => void` | `-` |
-| `[--cell-size]` | CSS variable: width and height of a day cell, e.g. `class="[--cell-size:--spacing(12)]"` | `length` | `--spacing(7)` |
-| `[--cell-radius]` | CSS variable: corner radius of a day cell, e.g. `class="[--cell-radius:var(--radius-lg)]"` | `length` | `var(--radius-md)` |
+| `[class]` | Custom CSS classes; also overrides the CSS variables | `ClassValue` | `''` |
+| `[zMode]` | Selection mode | `'single' \| 'multiple' \| 'range'` | `'single'` |
+| `[value]` | Selected date(s), shaped by `zMode` | `CalendarValue` | `null` |
+| `[minDate]` | Earliest selectable date | `Date \| null` | `null` |
+| `[maxDate]` | Latest selectable date | `Date \| null` | `null` |
+| `[disabled]` | Disables the calendar | `boolean` | `false` |
+| `[zCaptionLayout]` | Month/year caption as label or native dropdowns | `'label' \| 'dropdown' \| 'dropdown-months' \| 'dropdown-years'` | `'label'` |
+| `[zButtonVariant]` | Variant of the navigation arrows | `ZardButtonTypeVariants` | `'ghost'` |
+| `[zShowOutsideDays]` | Shows days of adjacent months | `boolean` | `true` |
+| `[zDisabledDates]` | Individual days that cannot be selected | `Date[]` | `[]` |
+| `[zNumberOfMonths]` | Months shown side by side | `number` | `1` |
+| `[zLocale]` | BCP 47 locale for this calendar only | `string` | `-` |
+| `[zDayTemplate]` | Custom day content (`let-day`) | `TemplateRef<CalendarDayTemplateContext> \| null` | `null` |
+| `(dateChange)` | Emits when the selection changes | `EventEmitter<Date \| Date[]>` | `-` |
+| `resetNavigation()` | Returns the view to the selected value | `() => void` | `-` |
+| `[--cell-size]` | Day cell width and height | `length` | `--spacing(7)` |
+| `[--cell-radius]` | Day cell corner radius | `length` | `var(--radius-md)` |
 
 ### ZardCalendarI18nService
 
-Injectable service that provides localized month names, weekday names, and week-start configuration. Driven by ZardI18nService or provideZardI18n().
+Localized month and weekday names, driven by `ZardI18nService`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `locale` | Signal emitting the current BCP-47 locale tag, e.g. "en-US", "fr-FR" | `Signal<string>` | `'en-US'` |
-| `weekStartsOn` | Signal emitting the starting day of the week (0 for Sunday, 1 for Monday, etc.) | `Signal<ZardDayOfWeek>` | `0` |
-| `shortMonths` | Signal emitting the 12 localized short month names for the current locale | `Signal<string[]>` |  |
-| `longMonths` | Signal emitting the 12 localized full month names for the current locale | `Signal<string[]>` |  |
-| `weekdays` | Signal emitting the 7 localized weekday names matching weekStartsOn | `Signal<string[]>` |  |
-| `getMonthNames(format?, locale?)` | Returns formatted month names for a given locale | `(format?: 'short' \| 'long', locale?: string) => string[]` |  |
-| `getWeekdayNames(format?, weekStartsOn?, locale?)` | Returns formatted weekday names for a given locale and starting day | `(format?: 'short' \| 'narrow' \| 'long', weekStartsOn?: ZardDayOfWeek, locale?: string) => string[]` |  |
+| `locale` | Current BCP 47 locale | `Signal<string>` | `'en-US'` |
+| `weekStartsOn` | First day of the week (0 = Sunday) | `Signal<ZardDayOfWeek>` | `0` |
+| `shortMonths` | Short month names | `Signal<string[]>` |  |
+| `longMonths` | Full month names | `Signal<string[]>` |  |
+| `weekdays` | Weekday names ordered by `weekStartsOn` | `Signal<string[]>` |  |
+| `getMonthNames(format?, locale?)` | Month names for a locale | `(format?: 'short' \| 'long', locale?: string) => string[]` |  |
+| `getWeekdayNames(format?, weekStartsOn?, locale?)` | Weekday names for a locale and start day | `(format?: 'short' \| 'narrow' \| 'long', weekStartsOn?: ZardDayOfWeek, locale?: string) => string[]` |  |
 
 ---
 

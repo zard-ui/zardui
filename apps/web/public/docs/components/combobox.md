@@ -1709,6 +1709,7 @@ import {
   ElementRef,
   inject,
   input,
+  type OnInit,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
@@ -1761,7 +1762,7 @@ let nextComboboxItemId = 0;
   },
   exportAs: 'zComboboxItem',
 })
-export class ZardComboboxItemComponent implements ZardComboboxItemRef {
+export class ZardComboboxItemComponent implements ZardComboboxItemRef, OnInit {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly root = inject(ZardComboboxRoot);
 
@@ -1788,7 +1789,6 @@ export class ZardComboboxItemComponent implements ZardComboboxItemRef {
   protected readonly indicatorClasses = computed(() => mergeClasses(comboboxItemIndicatorVariants()));
 
   constructor() {
-    this.root.registerItem(this);
     inject(DestroyRef).onDestroy(() => this.root.unregisterItem(this));
 
     afterNextRender(() => {
@@ -1797,6 +1797,11 @@ export class ZardComboboxItemComponent implements ZardComboboxItemRef {
         this.projectedLabel.set(text);
       }
     });
+  }
+
+  ngOnInit(): void {
+    // Registered here, not in the constructor: the root reads `zValue` (required) of every registered item.
+    this.root.registerItem(this);
   }
 
   protected onClick(): void {
@@ -2727,75 +2732,75 @@ export class ZardDemoComboboxRtlComponent {
 
 ### z-combobox
 
-Root of the combobox. Owns the value, the query, the open state and the keyboard navigation.
+Root that owns the value, query and open state.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zValue]` | Selected value. `string` in single mode, `string[]` when `zMultiple` is set. Two-way bindable | `model<string \| string[] \| null>` | `null` |
-| `[zOpen]` | Open state of the popup. Two-way bindable | `model<boolean>` | `false` |
-| `[zMultiple]` | Enables multiple selection with chips | `boolean` | `false` |
-| `[zFilter]` | Built-in filter strategy applied to the item labels | `'contains' \| 'startsWith' \| 'none'` | `'contains'` |
-| `[zFilterFn]` | Custom filter predicate. Takes precedence over `zFilter` | `((label: string, query: string) => boolean) \| null` | `null` |
-| `[zSide]` | Preferred side of the popup | `'top' \| 'bottom'` | `'bottom'` |
-| `[zAlign]` | Alignment of the popup against the anchor | `'start' \| 'center' \| 'end'` | `'start'` |
-| `[zSideOffset]` | Distance in px between anchor and popup | `number` | `6` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zValue]` | Selected value, an array when `zMultiple` is set | `model<string \| string[] \| null>` | `null` |
+| `[zOpen]` | Popup open state | `model<boolean>` | `false` |
+| `[zMultiple]` | Multiple selection with chips | `boolean` | `false` |
+| `[zFilter]` | Built-in filter applied to item labels | `'contains' \| 'startsWith' \| 'none'` | `'contains'` |
+| `[zFilterFn]` | Custom filter predicate. Overrides `zFilter` | `((label: string, query: string) => boolean) \| null` | `null` |
+| `[zSide]` | Preferred popup side | `'top' \| 'bottom'` | `'bottom'` |
+| `[zAlign]` | Popup alignment against the anchor | `'start' \| 'center' \| 'end'` | `'start'` |
+| `[zSideOffset]` | Gap in px from the anchor | `number` | `6` |
 | `[zAlignOffset]` | Offset in px along the alignment axis | `number` | `0` |
-| `[zAutoHighlight]` | Highlights the first selectable item while typing, so `Enter` selects it without navigating first | `boolean` | `false` |
-| `[zInvalid]` | Marks the combobox as invalid. Adds `data-invalid` to the host and `aria-invalid` to the input and the chips input | `boolean` | `false` |
-| `[zWidth]` | Width of the combobox | `'default' \| 'sm' \| 'md' \| 'lg' \| 'full'` | `'default'` |
-| `[zDisabled]` | Whether the combobox is disabled | `boolean` | `false` |
-| `[searchable]` | Whether the input filters the list while typing. When false the input is read-only | `boolean` | `true` |
-| `[placeholder]` | Placeholder shown when the popup is closed | `string` | `'Select...'` |
-| `[searchPlaceholder]` | Placeholder shown while the popup is open | `string` | `'Search...'` |
-| `[emptyText]` | Empty state text rendered by the shorthand mode | `string` | `'No results found.'` |
-| `[options]` | Shorthand mode only — flat list of options rendered by the root | `ZardComboboxOption[]` | `[]` |
-| `[groups]` | Shorthand mode only — grouped options rendered by the root | `ZardComboboxGroup[]` | `[]` |
-| `[ariaLabel]` | ARIA label forwarded to the input | `string` | `''` |
-| `[ariaDescribedBy]` | ARIA described-by forwarded to the input | `string` | `''` |
-| `[value]` | @deprecated Legacy value input, synchronised into `zValue`. Use `[(zValue)]` | `string \| null` | `null` |
-| `[buttonVariant]` | @deprecated The trigger is no longer a button, this input has no visual effect | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'outline'` |
-| `(zValueChange)` | Emitted whenever the selection changes | `output<string \| string[] \| null>` | `-` |
-| `(zOpenChange)` | Emitted when the popup opens or closes | `output<boolean>` | `-` |
-| `(zQueryChange)` | Emitted when the search query changes | `output<string>` | `-` |
-| `(zComboSelected)` | Emitted with the option that has just been selected | `output<ZardComboboxOption>` | `-` |
+| `[zAutoHighlight]` | Highlights the first match while typing | `boolean` | `false` |
+| `[zInvalid]` | Marks the combobox as invalid | `boolean` | `false` |
+| `[zWidth]` | Combobox width | `'default' \| 'sm' \| 'md' \| 'lg' \| 'full'` | `'default'` |
+| `[zDisabled]` | Disables the combobox | `boolean` | `false` |
+| `[searchable]` | Filters while typing. Input is read-only when false | `boolean` | `true` |
+| `[placeholder]` | Placeholder when closed | `string` | `'Select...'` |
+| `[searchPlaceholder]` | Placeholder while open | `string` | `'Search...'` |
+| `[emptyText]` | Empty state text (shorthand mode) | `string` | `'No results found.'` |
+| `[options]` | Flat option list (shorthand mode) | `ZardComboboxOption[]` | `[]` |
+| `[groups]` | Grouped options (shorthand mode) | `ZardComboboxGroup[]` | `[]` |
+| `[ariaLabel]` | ARIA label for the input | `string` | `''` |
+| `[ariaDescribedBy]` | ARIA described-by for the input | `string` | `''` |
+| `[value]` | @deprecated Use `[(zValue)]` | `string \| null` | `null` |
+| `[buttonVariant]` | @deprecated No visual effect | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'outline'` |
+| `(zValueChange)` | Emits when the selection changes | `output<string \| string[] \| null>` | `-` |
+| `(zOpenChange)` | Emits when the popup opens or closes | `output<boolean>` | `-` |
+| `(zQueryChange)` | Emits when the search query changes | `output<string>` | `-` |
+| `(zComboSelected)` | Emits the selected option | `output<ZardComboboxOption>` | `-` |
 
 ### z-combobox-input
 
-Input group that hosts the editable combobox input, the trigger and the clear button.
+Input group with the input, trigger and clear button.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[placeholder]` | Overrides the placeholder inherited from the root | `string` | `''` |
-| `[zShowTrigger]` | Renders the chevron trigger button | `boolean` | `true` |
-| `[zShowClear]` | Renders the clear button whenever there is a value | `boolean` | `false` |
-| `[zDisabled]` | Forces the input to be disabled. Inherits from the root when false | `boolean` | `false` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[placeholder]` | Overrides the root placeholder | `string` | `''` |
+| `[zShowTrigger]` | Shows the chevron trigger | `boolean` | `true` |
+| `[zShowClear]` | Shows the clear button when there is a value | `boolean` | `false` |
+| `[zDisabled]` | Disables the input. Inherits from the root when false | `boolean` | `false` |
 
 ### button[z-combobox-trigger]
 
-Toggles the popup. Inside a `z-input-group` it stays out of the tab order (`tabindex="-1"`) and hides itself when a clear button is visible. Applied to a standalone `button[z-button]` (popup mode, with the `z-combobox-input` moved inside the `z-combobox-content`) it becomes the popup anchor and receives `tabindex="0"`, and the focus returns to it when the popup closes.
+Toggles the popup; on a standalone `button[z-button]` it also anchors it.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### button[z-combobox-clear]
 
-Clears the current selection and the query.
+Clears the selection and the query.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-content
 
-Popup rendered through the CDK overlay and positioned against the anchor.
+Popup positioned against the anchor.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zAnchor]` | Element the popup is anchored to. Defaults to the input group (or the chips container) | `ElementRef<HTMLElement> \| HTMLElement \| null` | `null` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zAnchor]` | Anchor element. Defaults to the input group or chips | `ElementRef<HTMLElement> \| HTMLElement \| null` | `null` |
 | `[zSide]` | Overrides the root `zSide` | `'top' \| 'bottom' \| null` | `null` |
 | `[zAlign]` | Overrides the root `zAlign` | `'start' \| 'center' \| 'end' \| null` | `null` |
 | `[zSideOffset]` | Overrides the root `zSideOffset` | `number \| null` | `null` |
@@ -2803,47 +2808,47 @@ Popup rendered through the CDK overlay and positioned against the anchor.
 
 ### z-combobox-list
 
-Scrollable listbox holding the items.
+Scrollable listbox of items.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-item
 
-Selectable option. Hidden automatically when it does not match the query.
+Selectable option, hidden when it does not match the query.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zValue]` | Value of the option (required) | `string` | `-` |
-| `[zLabel]` | Label used for filtering. Falls back to the projected text content | `string` | `''` |
-| `[zDisabled]` | Whether the option can be selected | `boolean` | `false` |
-| `[zVariant]` | Visual variant of the option | `'default' \| 'destructive'` | `'default'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zValue]` | Option value (required) | `string` | `-` |
+| `[zLabel]` | Filter label. Falls back to the text content | `string` | `''` |
+| `[zDisabled]` | Disables the option | `boolean` | `false` |
+| `[zVariant]` | Visual variant | `'default' \| 'destructive'` | `'default'` |
 
 ### z-combobox-group
 
-Groups related items. Hides itself when every child item is filtered out.
+Groups items; hidden when all are filtered out.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-label
 
-Heading of a group.
+Group heading.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-empty
 
-Empty state, visible only when no item matches the query.
+Shown when no item matches the query.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-separator
 
@@ -2851,25 +2856,25 @@ Horizontal rule between groups.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-chips
 
-Container used in multiple mode. Becomes the popup anchor and focuses the chips input on click.
+Chips container and popup anchor in multiple mode.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-chip
 
-Single selected value rendered as a removable chip.
+A selected value shown as a removable chip.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zValue]` | Value represented by the chip (required) | `string` | `-` |
-| `[zShowRemove]` | Renders the remove button | `boolean` | `true` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zValue]` | Chip value (required) | `string` | `-` |
+| `[zShowRemove]` | Shows the remove button | `boolean` | `true` |
 
 ### button[z-combobox-chip-remove]
 
@@ -2877,25 +2882,25 @@ Removes a value from the selection.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zValue]` | Value to remove | `string` | `''` |
 
 ### input[z-combobox-chips-input]
 
-Editable input rendered inside the chips container. Backspace on an empty field removes the last chip.
+Input inside the chips container; Backspace when empty removes the last chip.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-combobox-value
 
-Renders the label of the current selection, typically inside a standalone trigger. Exposes `data-placeholder` while there is no selection, so the placeholder text can be styled.
+Label of the current selection, for standalone triggers.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[placeholder]` | Text rendered when there is no selection. Falls back to the root `placeholder` | `string` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[placeholder]` | Text when empty. Falls back to the root `placeholder` | `string` | `''` |
 
 ---
 

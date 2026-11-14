@@ -663,38 +663,38 @@ export class ZardDemoAvatarRtlComponent {
 
 ### z-avatar
 
-An image element with a fallback for representing the user.
+User image with a fallback.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `string` | `''` |
-| `[zAlt]` | Image alt text for accessibility | `string` | `''` |
-| `[zFallback]` | Fallback text displayed while loading or on error | `string` | `''` |
-| `[zPriority]` | Should image load with high priority | `boolean` | `false` |
-| `[zSize]` | Avatar size variant | `'sm' \| 'default' \| 'lg'` | `'default'` |
+| `[class]` | Custom CSS classes | `string` | `''` |
+| `[zAlt]` | Image alt text | `string` | `''` |
+| `[zFallback]` | Text shown while loading or on error | `string` | `''` |
+| `[zPriority]` | Loads the image with high priority | `boolean` | `false` |
+| `[zSize]` | Avatar size | `'sm' \| 'default' \| 'lg'` | `'default'` |
 | `[zSrc]` | Image source URL | `string \| SafeUrl` | `''` |
-| `[zShowBadge]` | Show avatar badge | `boolean` | `false` |
-| `[zBadgeClass]` | Additional avatar badge classes | `ClassValue` | `''` |
-| `[zBadgeIcon]` | Avatar badge icon | `string` | `''` |
+| `[zShowBadge]` | Shows a badge | `boolean` | `false` |
+| `[zBadgeClass]` | CSS classes for the badge | `ClassValue` | `''` |
+| `[zBadgeIcon]` | Badge icon | `string` | `''` |
 
 ### z-avatar-group
 
-A group container for displaying multiple avatars. The overlap stacks toward the inline end, so it mirrors in RTL.
+Stacks several avatars.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zOrientation]` | Layout direction of avatars | `'horizontal' \| 'vertical'` | `'horizontal'` |
-| `[class]` | Additional CSS classes | `string` | `''` |
+| `[zOrientation]` | Layout direction | `'horizontal' \| 'vertical'` | `'horizontal'` |
+| `[class]` | Custom CSS classes | `string` | `''` |
 
 ### z-avatar-group-count
 
-A "+N" chip for the members a `z-avatar-group` stack does not show.
+A "+N" chip for hidden members.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zCount]` | Number of additional members represented by the chip | `number` | `0` |
-| `[zSize]` | Chip size variant, matching the sibling avatars | `'sm' \| 'default' \| 'lg'` | `'default'` |
-| `[class]` | Additional CSS classes | `string` | `''` |
+| `[zCount]` | Number of hidden members | `number` | `0` |
+| `[zSize]` | Chip size; match the avatars | `'sm' \| 'default' \| 'lg'` | `'default'` |
+| `[class]` | Custom CSS classes | `string` | `''` |
 
 ---
 

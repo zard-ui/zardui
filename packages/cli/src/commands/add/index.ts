@@ -1,7 +1,10 @@
+import { setupBuild } from '@cli/commands/add/build-setup.js';
 import { installComponent, validateTargetPath } from '@cli/commands/add/component-installer.js';
 import { selectComponents } from '@cli/commands/add/component-selector.js';
 import { updateProvideZardWithDarkMode } from '@cli/commands/add/dark-mode-setup.js';
 import {
+  assertAngularSupported,
+  collectBuildRequirements,
   getAllInstallableNames,
   getTargetDir,
   resolveDependencies,
@@ -19,7 +22,7 @@ import { CliError } from '@cli/utils/errors.js';
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger, spinner } from '@cli/utils/logger.js';
-import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/package-manager.js';
+import { filterInstalledPackages, findOutdatedInstalls, installPackagesWithRetry } from '@cli/utils/package-manager.js';
 import { getRegistryUrl } from '@cli/utils/registry.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
@@ -71,20 +74,36 @@ export const add = new Command()
     const actions = {
       loadNames: () => getAllInstallableNames(),
       resolve: async (names: string[]) => {
-        const { componentsToInstall, dependenciesToInstall } = await resolveDependencies(
+        const { componentsToInstall, dependenciesToInstall, devDependenciesToInstall } = await resolveDependencies(
           names,
           resolvedConfig,
           cwd,
           options,
         );
+        assertAngularSupported(componentsToInstall, projectInfo.angularVersion);
         return {
           components: componentsToInstall,
           dependencies: pinAllForAngular(dependenciesToInstall, projectInfo.angularVersion),
+          devDependencies: pinAllForAngular(devDependenciesToInstall, projectInfo.angularVersion),
         };
       },
-      installDependencies: async (packages: string[]) => {
-        await installDependencies(packages, cwd, config.packageManager);
-        await syncLibraryPeerDependencies(cwd, config, packages);
+      installDependencies: async (packages: string[], dev = false) => {
+        await installDependencies(packages, cwd, config.packageManager, dev);
+        if (!dev) await syncLibraryPeerDependencies(cwd, config, packages);
+      },
+      setupBuild: async (names: string[], failed: string[]) => {
+        const items = await collectBuildRequirements(names, resolvedConfig, cwd, {
+          path: options.path,
+          skip: failed,
+        });
+        await setupBuild(items, {
+          cwd,
+          workspaceRoot: projectInfo.root,
+          projectType: config.projectType,
+          baseUrl: config.baseUrl,
+          globalCss: resolvedConfig.resolvedPaths.tailwindCss,
+          projects: projectInfo.projects,
+        });
       },
       installComponent: (component: ComponentMeta) =>
         installComponent(component.name, getTargetDir(component, resolvedConfig, cwd, options.path), resolvedConfig, {
@@ -139,8 +158,11 @@ export const add = new Command()
 
 type AddActions = {
   loadNames(): Promise<string[]>;
-  resolve(names: string[]): Promise<{ components: ComponentMeta[]; dependencies: string[] }>;
-  installDependencies(packages: string[]): Promise<void>;
+  resolve(
+    names: string[],
+  ): Promise<{ components: ComponentMeta[]; dependencies: string[]; devDependencies?: string[] }>;
+  installDependencies(packages: string[], dev?: boolean): Promise<void>;
+  setupBuild(names: string[], failed: string[]): Promise<void>;
   installComponent(component: ComponentMeta): Promise<void>;
   setupDarkMode(indexHtml: string): Promise<void>;
   setupTypeset(): Promise<void>;
@@ -164,17 +186,19 @@ async function runHeadless(preselected: string[], options: AddOptions, actions: 
   }
 
   const resolveSpinner = spinner('Resolving components...').start();
-  const { components, dependencies } = await actions.resolve(preselected);
+  const { components, dependencies, devDependencies = [] } = await actions.resolve(preselected);
   resolveSpinner.stop();
 
   if (components.length === 0) {
+    await actions.setupBuild(preselected, []);
     logger.info('All components already installed.');
     return;
   }
 
-  if (dependencies.length) {
+  if (dependencies.length || devDependencies.length) {
     const depsSpinner = spinner('Installing dependencies...').start();
-    await actions.installDependencies(dependencies);
+    if (dependencies.length) await actions.installDependencies(dependencies);
+    if (devDependencies.length) await actions.installDependencies(devDependencies, true);
     depsSpinner.succeed('Dependencies installed');
   }
 
@@ -201,6 +225,8 @@ async function runHeadless(preselected: string[], options: AddOptions, actions: 
   if (installed.includes('utilities')) {
     await actions.setupUtilities();
   }
+
+  await actions.setupBuild(preselected, failed);
 
   // `--index-html` answers what the wizard asks; without it, the project's own index.html.
   if (installed.includes('dark-mode')) {
@@ -266,6 +292,7 @@ async function installDependencies(
   packages: string[],
   cwd: string,
   packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
+  dev = false,
 ): Promise<void> {
   if (packages.length === 0) return;
 
@@ -277,5 +304,25 @@ async function installDependencies(
     return;
   }
 
-  await installPackagesWithRetry(missing, cwd, packageManager, false);
+  await installPackagesWithRetry(missing, cwd, packageManager, dev);
+  await assertNoOutdatedInstalls(packages, cwd, packageManager);
+}
+
+/**
+ * Stops when a package the install asked for is still on an older major.
+ *
+ * The retry with relaxed peers exists so one stubborn peer does not abort the whole install, but it also lets the
+ * manager keep an old release: a project already on `maplibre-gl@5` that another package pins would end here with
+ * 5 installed and ng-mapcn 22 needing 6, and the first sign would be a blank map.
+ */
+async function assertNoOutdatedInstalls(packages: string[], cwd: string, packageManager: string): Promise<void> {
+  const outdated = await findOutdatedInstalls(packages, cwd);
+  if (!outdated.length) return;
+
+  const list = outdated.map(item => `${item.name} ${item.installed} is installed, ${item.wanted} is required`);
+  throw new CliError(
+    `${list.join('; ')}. Another package in the project is holding it back — check \`${packageManager} ls ${outdated[0].name}\`, ` +
+      'upgrade or remove the one that depends on the old version, then run this command again.',
+    'DEPENDENCY_CONFLICT',
+  );
 }

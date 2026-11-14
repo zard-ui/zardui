@@ -17,7 +17,7 @@
     },
     {
       "name": "number.ts",
-      "content": "function clamp(value: number, [min, max]: [number, number]): number {\n  return Math.min(max, Math.max(min, value));\n}\n\nfunction roundToStep(value: number, min: number, step: number): number {\n  return Math.round((value - min) / step) * step + min;\n}\n\nfunction convertValueToPercentage(value: number, min: number, max: number): number {\n  return ((value - min) / (max - min)) * 100;\n}\n\nexport { clamp, roundToStep, convertValueToPercentage };\n"
+      "content": "function clamp(value: number, [min, max]: [number, number]): number {\n  return Math.min(max, Math.max(min, value));\n}\n\nfunction getDecimalCount(value: number): number {\n  // also handles exponent notation such as 1e-7\n  const [mantissa, exponent = '0'] = String(value).split('e');\n  return Math.max(0, (mantissa.split('.')[1] ?? '').length - Number(exponent));\n}\n\nfunction roundToStep(value: number, min: number, step: number): number {\n  const stepped = Math.round((value - min) / step) * step + min;\n  // drop floating point noise such as 0.30000000000000004 by keeping the precision of step and min\n  const decimals = Math.max(getDecimalCount(step), getDecimalCount(min));\n  return Number(stepped.toFixed(decimals));\n}\n\nfunction convertValueToPercentage(value: number, min: number, max: number): number {\n  return ((value - min) / (max - min)) * 100;\n}\n\nexport { clamp, roundToStep, convertValueToPercentage };\n"
     }
   ],
   "basePath": "utils",

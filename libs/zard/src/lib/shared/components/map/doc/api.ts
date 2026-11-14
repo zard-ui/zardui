@@ -1,0 +1,645 @@
+import type { ApiProp, ApiSection } from '@doc/domain/components/api-reference/api-reference.types';
+
+import { MAP_DRAW_API } from '../../map-draw/doc/api';
+import { MAP_STYLE_SELECT_API } from '../../map-style-select/doc/api';
+
+/**
+ * The map is powered by ng-mapcn, so most of this documents a third-party API: the inputs and outputs of the
+ * `ng-*` selectors belong to ng-mapcn and are listed here for convenience. The reference of record is
+ * https://ng-mapcn.vercel.app/docs/api-reference. `provideZardMap()`, `ZardMapStyleService` and
+ * `z-map-style-select` are zard's own.
+ */
+
+const className = (what: string): ApiProp => ({
+  name: '[className]',
+  description: `Extra classes for ${what}`,
+  type: 'string',
+  default: '-',
+});
+
+const beforeId = (what: string): ApiProp => ({
+  name: '[beforeId]',
+  description: `Layer id to insert ${what} before (creation only)`,
+  type: 'string',
+  default: '-',
+});
+
+const idProp = (what: string): ApiProp => ({
+  name: '[id]',
+  description: `Id prefix of ${what}. Changing it recreates them`,
+  type: 'string',
+  default: 'auto',
+});
+
+const labelsProp = (what: string): ApiProp => ({
+  name: '[labels]',
+  description: `Label overrides for ${what}`,
+  type: 'Partial<MapLabels>',
+  default: '-',
+});
+
+const paintProp = (name: string, what: string): ApiProp => ({
+  name,
+  description: what,
+  type: 'MapLibre paint properties',
+  default: '-',
+});
+
+export const MAP_API: ApiSection[] = [
+  {
+    selector: 'ng-map',
+    description: 'The map host. It fills its parent, so give the parent an explicit height.',
+    props: [
+      { name: '[center]', description: 'Initial [longitude, latitude]', type: '[number, number]', default: '[0, 0]' },
+      { name: '[zoom]', description: 'Initial zoom level', type: 'number', default: '2' },
+      {
+        name: '[viewport]',
+        description: 'Controlled camera; pair with `(viewportChange)`',
+        type: 'Partial<MapViewport>',
+        default: '-',
+      },
+      {
+        name: '[styles]',
+        description: 'Light and dark basemap for this map only',
+        type: 'MapStylesConfig',
+        default: 'app-wide basemap',
+      },
+      {
+        name: '[blank]',
+        description: 'Transparent, tile-less style. Ignored with `[styles]`',
+        type: 'boolean',
+        default: 'false',
+      },
+      {
+        name: '[theme]',
+        description: 'Leave on `auto` to follow the `dark` class',
+        type: "'light' | 'dark' | 'auto'",
+        default: "'auto'",
+      },
+      {
+        name: '[projection]',
+        description: 'MapLibre projection, e.g. `{ type: "globe" }`',
+        type: 'ProjectionSpecification',
+        default: '-',
+      },
+      {
+        name: '[fitBounds]',
+        description: 'Fits the camera to `bounds` or the children data',
+        type: 'MapFitBoundsOptions',
+        default: '-',
+      },
+      { name: '[loading]', description: 'Shows the loader over the map', type: 'boolean', default: 'false' },
+      labelsProp('this map'),
+      {
+        name: '[options]',
+        description: 'Raw MapLibre `MapOptions`',
+        type: 'Omit<MapOptions, "container" | "style">',
+        default: '-',
+      },
+    ],
+    outputs: [
+      { name: '(mapReady)', description: 'Emits the loaded MapLibre map', type: 'Map', default: '-' },
+      { name: '(viewportChange)', description: 'Emits on every camera frame', type: 'MapViewport', default: '-' },
+      { name: '(mapClick)', description: 'Emits when the map is clicked', type: 'MapMouseEvent', default: '-' },
+      {
+        name: '(mapError)',
+        description: 'Emits on a MapLibre error (WebGL2, style, tile, layer)',
+        type: 'Error',
+        default: '-',
+      },
+    ],
+  },
+  {
+    selector: 'ng-map-controls',
+    description: 'Zoom, compass, locate and fullscreen buttons.',
+    props: [
+      {
+        name: '[position]',
+        description: 'Corner of the map',
+        type: "'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'",
+        default: "'bottom-right'",
+      },
+      { name: '[showZoom]', description: 'Shows the zoom buttons', type: 'boolean', default: 'true' },
+      {
+        name: '[showCompass]',
+        description: 'Shows the compass (resets north and pitch)',
+        type: 'boolean',
+        default: 'false',
+      },
+      { name: '[showLocate]', description: 'Shows the geolocation button', type: 'boolean', default: 'false' },
+      { name: '[showFullscreen]', description: 'Shows the fullscreen button', type: 'boolean', default: 'false' },
+      labelsProp('the button tooltips'),
+      className('the controls'),
+    ],
+    outputs: [
+      {
+        name: '(locateChange)',
+        description: 'Emits the located coordinates',
+        type: '{ longitude: number; latitude: number }',
+        default: '-',
+      },
+      {
+        name: '(locateError)',
+        description: 'Emits when geolocation fails or is unavailable',
+        type: 'Error | GeolocationPositionError',
+        default: '-',
+      },
+    ],
+  },
+  {
+    selector: 'ng-map-marker',
+    description: 'A marker with optional content, label, popup and tooltip children.',
+    props: [
+      { name: '[longitude]', description: 'Longitude', type: 'number', default: '-' },
+      { name: '[latitude]', description: 'Latitude', type: 'number', default: '-' },
+      { name: '[draggable]', description: 'Lets the user drag the marker', type: 'boolean', default: 'false' },
+      { name: '[offset]', description: 'Pixel offset from the position', type: 'PointLike', default: '-' },
+      { name: '[rotation]', description: 'Rotation in degrees', type: 'number', default: '0' },
+      {
+        name: '[anchor]',
+        description: 'Part of the marker on the position (creation only)',
+        type: 'PositionAnchor',
+        default: "'center'",
+      },
+      {
+        name: '[rotationAlignment]',
+        description: 'What the rotation is relative to',
+        type: 'Alignment',
+        default: "'auto'",
+      },
+      { name: '[pitchAlignment]', description: 'What the pitch is relative to', type: 'Alignment', default: "'auto'" },
+      { name: '[ariaLabel]', description: 'Accessible name of the marker', type: 'string', default: '-' },
+      labelsProp('the marker'),
+      {
+        name: '[keyboardStep]',
+        description: 'Pixels moved per arrow key when dragging',
+        type: 'number',
+        default: '10',
+      },
+      { name: '[keyboardStepLarge]', description: 'Pixels moved with Shift held', type: 'number', default: '50' },
+    ],
+    outputs: [
+      { name: '(markerClick)', description: 'Emits on click, Enter or Space', type: 'MouseEvent', default: '-' },
+      { name: '(markerMouseEnter)', description: 'Emits when the pointer enters', type: 'MouseEvent', default: '-' },
+      { name: '(markerMouseLeave)', description: 'Emits when the pointer leaves', type: 'MouseEvent', default: '-' },
+      {
+        name: '(dragStart)',
+        description: 'Emits when a drag starts',
+        type: '{ lng: number; lat: number }',
+        default: '-',
+      },
+      { name: '(drag)', description: 'Emits on every drag frame', type: '{ lng: number; lat: number }', default: '-' },
+      {
+        name: '(dragEnd)',
+        description: 'Emits the new position after a drag',
+        type: '{ lng: number; lat: number }',
+        default: '-',
+      },
+    ],
+  },
+  {
+    selector: 'ng-marker-content',
+    description: 'Custom marker HTML; leave it empty for the default dot.',
+    props: [className('the marker content')],
+  },
+  {
+    selector: 'ng-marker-label',
+    description: 'A text label above or below the marker.',
+    props: [{ name: '[position]', description: 'Side of the marker', type: "'top' | 'bottom'", default: "'top'" }],
+  },
+  {
+    selector: 'ng-marker-popup',
+    description: 'A popup that opens when the marker is clicked.',
+    props: [
+      { name: '[closeButton]', description: 'Shows a close button', type: 'boolean', default: 'false' },
+      { name: '[offset]', description: 'Pixel offset from the marker', type: 'Offset', default: '-' },
+      {
+        name: '[anchor]',
+        description: 'Side the popup anchors to (creation only)',
+        type: 'PositionAnchor',
+        default: 'auto',
+      },
+      { name: '[maxWidth]', description: 'CSS max-width of the popup', type: 'string', default: "'none'" },
+      { name: '[closeOnClick]', description: 'Closes on map click (creation only)', type: 'boolean', default: 'false' },
+      labelsProp('the close button'),
+      className('the popup card'),
+    ],
+    outputs: [{ name: '(popupClose)', description: 'Emits when the popup closes', type: 'void', default: '-' }],
+  },
+  {
+    selector: 'ng-marker-tooltip',
+    description: 'A tooltip shown while the marker is hovered or focused.',
+    props: [
+      { name: '[offset]', description: 'Pixel offset from the marker', type: 'Offset', default: '16' },
+      {
+        name: '[anchor]',
+        description: 'Side the tooltip anchors to (creation only)',
+        type: 'PositionAnchor',
+        default: 'auto',
+      },
+      className('the tooltip pill'),
+    ],
+  },
+  {
+    selector: 'ng-map-popup',
+    description: 'A standalone popup at a coordinate, with no marker.',
+    props: [
+      { name: '[longitude]', description: 'Longitude', type: 'number', default: '-' },
+      { name: '[latitude]', description: 'Latitude', type: 'number', default: '-' },
+      { name: '[(open)]', description: 'Whether the popup is shown', type: 'boolean', default: 'true' },
+      { name: '[closeButton]', description: 'Shows a close button', type: 'boolean', default: 'false' },
+      { name: '[offset]', description: 'Pixel offset from the position', type: 'Offset', default: '16' },
+      { name: '[maxWidth]', description: 'CSS max-width of the popup', type: 'string', default: "'none'" },
+      { name: '[closeOnClick]', description: 'Closes on map click (creation only)', type: 'boolean', default: 'true' },
+      labelsProp('the close button'),
+      className('the popup card'),
+    ],
+    outputs: [{ name: '(popupClose)', description: 'Emits when the popup closes', type: 'void', default: '-' }],
+  },
+  {
+    selector: 'ng-map-route',
+    description: 'A line through a list of coordinates.',
+    props: [
+      {
+        name: '[coordinates]',
+        description: 'Path as [longitude, latitude] pairs',
+        type: '[number, number][]',
+        default: '-',
+      },
+      idProp('the source and layer'),
+      { name: '[color]', description: 'Line color', type: 'string', default: "'#4285F4'" },
+      { name: '[width]', description: 'Line width in pixels', type: 'number', default: '3' },
+      { name: '[opacity]', description: 'Line opacity', type: 'number', default: '0.8' },
+      { name: '[dashArray]', description: 'Dash pattern as [dash, gap]', type: '[number, number]', default: '-' },
+      { name: '[interactive]', description: 'Responds to mouse events', type: 'boolean', default: 'true' },
+      {
+        name: '[progress]',
+        description: 'Covered fraction (0–1), drawn by `ng-route-progress`',
+        type: 'number',
+        default: '-',
+      },
+      { name: '[active]', description: 'Applies the `active*` paint', type: 'boolean', default: 'false' },
+      { name: '[activeColor]', description: 'Color while `active`', type: 'string', default: '-' },
+      { name: '[activeWidth]', description: 'Width while `active`', type: 'number', default: '-' },
+      { name: '[activeOpacity]', description: 'Opacity while `active`', type: 'number', default: '-' },
+      { name: '[activeDashArray]', description: 'Dash pattern while `active`', type: '[number, number]', default: '-' },
+      beforeId('the route'),
+    ],
+    outputs: [
+      { name: '(routeClick)', description: 'Emits when the route is clicked', type: 'MapMouseEvent', default: '-' },
+      { name: '(routeMouseEnter)', description: 'Emits when the pointer enters', type: 'MapMouseEvent', default: '-' },
+      { name: '(routeMouseLeave)', description: 'Emits when the pointer leaves', type: 'MapMouseEvent', default: '-' },
+    ],
+  },
+  {
+    selector: 'ng-route-progress',
+    description: 'The covered part of the parent route, up to its `[progress]`.',
+    props: [
+      { name: '[color]', description: 'Line color', type: 'string', default: "'#22c55e'" },
+      { name: '[width]', description: 'Line width in pixels', type: 'number', default: 'width of the route' },
+      { name: '[opacity]', description: 'Line opacity', type: 'number', default: '1' },
+      { name: '[dashArray]', description: 'Dash pattern as [dash, gap]', type: '[number, number]', default: '-' },
+    ],
+  },
+  {
+    selector: 'ng-route-marker',
+    description: 'A marker placed along the parent `ng-map-route`.',
+    props: [
+      {
+        name: '[at]',
+        description: 'Position along the route; a number is a fraction',
+        type: "'start' | 'end' | 'progress' | number",
+        default: "'start'",
+      },
+    ],
+  },
+  {
+    selector: 'ng-map-arc',
+    description: 'Curved arcs between origin and destination points, such as flight paths.',
+    props: [
+      {
+        name: '[data]',
+        description: 'The arcs; extra keys reach events and paint',
+        type: 'MapArcDatum[]',
+        default: '-',
+      },
+      idProp('the source and layers'),
+      { name: '[curvature]', description: 'Bend relative to length; 0 is straight', type: 'number', default: '0.2' },
+      { name: '[samples]', description: 'Segments per arc', type: 'number', default: '64' },
+      paintProp('[paint]', 'Line paint; read datum keys with ["get", key]'),
+      { name: '[layout]', description: 'Line layout', type: 'MapLibre line layout', default: '-' },
+      paintProp('[hoverPaint]', 'Paint of the hovered arc'),
+      { name: '[interactive]', description: 'Responds to mouse events', type: 'boolean', default: 'true' },
+      beforeId('the arc layers'),
+    ],
+    outputs: [
+      { name: '(arcClick)', description: 'Emits the clicked arc', type: 'MapArcEvent', default: '-' },
+      {
+        name: '(arcHover)',
+        description: 'Emits the hovered arc, or null on leave',
+        type: 'MapArcEvent | null',
+        default: '-',
+      },
+    ],
+  },
+  {
+    selector: 'ng-map-geojson',
+    description: 'Renders GeoJSON as fill and outline layers.',
+    props: [
+      {
+        name: '[data]',
+        description: 'GeoJSON object, or a URL to fetch',
+        type: 'MapGeoJSONData | string',
+        default: '-',
+      },
+      idProp('the source and layers'),
+      {
+        name: '[promoteId]',
+        description: 'Property used as feature id. Required for hover',
+        type: 'string',
+        default: '-',
+      },
+      paintProp('[fillPaint]', 'Fill paint; `false` omits the layer'),
+      paintProp('[linePaint]', 'Outline paint; `false` omits the layer'),
+      paintProp('[fillHoverPaint]', 'Paint of the hovered feature. Requires `promoteId`'),
+      { name: '[interactive]', description: 'Responds to mouse events', type: 'boolean', default: 'false' },
+      beforeId('the layers'),
+    ],
+    outputs: [
+      { name: '(featureClick)', description: 'Emits the clicked feature', type: 'MapGeoJSONEvent', default: '-' },
+      {
+        name: '(featureHover)',
+        description: 'Emits the hovered feature, or null on leave',
+        type: 'MapGeoJSONEvent | null',
+        default: '-',
+      },
+    ],
+  },
+  {
+    selector: 'ng-map-cluster-layer',
+    description: 'Clustered points with count labels and threshold-based colors and sizes.',
+    props: [
+      {
+        name: '[data]',
+        description: 'Points, or a URL to fetch',
+        type: 'FeatureCollection<Point> | string',
+        default: '-',
+      },
+      idProp('the source and layers'),
+      { name: '[clusterMaxZoom]', description: 'Highest zoom that still clusters', type: 'number', default: '14' },
+      { name: '[clusterRadius]', description: 'Cluster radius in pixels', type: 'number', default: '50' },
+      {
+        name: '[clusterColors]',
+        description: 'Small, medium and large cluster colors',
+        type: '[string, string, string]',
+        default: "['#22c55e', '#eab308', '#ef4444']",
+      },
+      {
+        name: '[clusterThresholds]',
+        description: 'Counts where medium and large start',
+        type: '[number, number]',
+        default: '[100, 750]',
+      },
+      { name: '[pointColor]', description: 'Color of an unclustered point', type: 'string', default: "'#3b82f6'" },
+      { name: '[zoomOnClusterClick]', description: 'Zooms into a clicked cluster', type: 'boolean', default: 'true' },
+      beforeId('the cluster layers'),
+    ],
+    outputs: [
+      { name: '(pointClick)', description: 'Emits the clicked point', type: 'ClusterPointClickEvent', default: '-' },
+      { name: '(clusterClick)', description: 'Emits the clicked cluster', type: 'ClusterClickEvent', default: '-' },
+    ],
+  },
+  {
+    selector: 'ng-map-heatmap',
+    description: 'A point-density heatmap with a theme-aware gradient.',
+    props: [
+      {
+        name: '[data]',
+        description: 'Points, or a URL to fetch',
+        type: 'FeatureCollection<Point> | string',
+        default: '-',
+      },
+      idProp('the source and layer'),
+      { name: '[weightProperty]', description: 'Property used as point weight', type: 'string', default: '-' },
+      {
+        name: '[weightRange]',
+        description: 'Weight [min, max], mapped to 0–1',
+        type: '[number, number]',
+        default: '[0, 1]',
+      },
+      { name: '[radius]', description: 'Point radius in pixels', type: 'number | Expression', default: '30' },
+      { name: '[intensity]', description: 'Global intensity multiplier', type: 'number | Expression', default: '1' },
+      { name: '[opacity]', description: 'Layer opacity', type: 'number | Expression', default: '1' },
+      { name: '[gradient]', description: 'Color ramp over the density', type: 'HeatmapGradient', default: '-' },
+      { name: '[minZoom]', description: 'Lowest visible zoom', type: 'number', default: '0' },
+      { name: '[maxZoom]', description: 'Zoom from which it is hidden', type: 'number', default: '24' },
+      paintProp('[paint]', 'Heatmap paint, merged last'),
+      beforeId('the layer'),
+    ],
+  },
+  {
+    selector: 'ng-map-raster-source',
+    description: 'A raster tile source (XYZ, TMS or WMS) and its layer.',
+    props: [
+      idProp('the source and layer'),
+      { name: '[tiles]', description: 'Tile URL templates', type: 'string[]', default: '-' },
+      { name: '[url]', description: 'TileJSON URL, instead of `tiles`', type: 'string', default: '-' },
+      { name: '[tileSize]', description: 'Tile size in pixels (creation only)', type: 'number', default: '256' },
+      { name: '[minzoom]', description: 'Lowest tile zoom (creation only)', type: 'number', default: '0' },
+      { name: '[maxzoom]', description: 'Highest tile zoom (creation only)', type: 'number', default: '22' },
+      { name: '[attribution]', description: 'Attribution text (creation only)', type: 'string', default: '-' },
+      {
+        name: '[bounds]',
+        description: 'Tile bounds [west, south, east, north] (creation only)',
+        type: '[number, number, number, number]',
+        default: '-',
+      },
+      { name: '[scheme]', description: 'Tile scheme (creation only)', type: "'xyz' | 'tms'", default: "'xyz'" },
+      { name: '[opacity]', description: 'Layer opacity', type: 'number | Expression', default: '1' },
+      { name: '[visible]', description: 'Shows the layer; the source stays loaded', type: 'boolean', default: 'true' },
+      paintProp('[paint]', 'Raster paint, merged last'),
+      beforeId('the layer'),
+    ],
+  },
+  {
+    selector: 'ng-map-vector-source',
+    description: 'A vector tile source (MVT, TileJSON or `pmtiles://`), drawn by a layer component.',
+    props: [
+      idProp('the source'),
+      { name: '[tiles]', description: 'Tile URL templates', type: 'string[]', default: '-' },
+      { name: '[url]', description: 'TileJSON or `pmtiles://` URL. Overrides `tiles`', type: 'string', default: '-' },
+      { name: '[minzoom]', description: 'Lowest tile zoom (creation only)', type: 'number', default: '0' },
+      { name: '[maxzoom]', description: 'Highest tile zoom (creation only)', type: 'number', default: '22' },
+      { name: '[attribution]', description: 'Attribution text (creation only)', type: 'string', default: '-' },
+      {
+        name: '[bounds]',
+        description: 'Tile bounds [west, south, east, north] (creation only)',
+        type: '[number, number, number, number]',
+        default: '-',
+      },
+      { name: '[scheme]', description: 'Tile scheme (creation only)', type: "'xyz' | 'tms'", default: "'xyz'" },
+      {
+        name: '[promoteId]',
+        description: 'Property used as feature id, for feature-state',
+        type: 'PromoteIdSpecification',
+        default: '-',
+      },
+    ],
+  },
+  {
+    selector: 'ng-map-image-overlay',
+    description: 'An image pinned to four corner coordinates.',
+    props: [
+      idProp('the source and layer'),
+      { name: '[url]', description: 'Image URL', type: 'string', default: '-' },
+      {
+        name: '[coordinates]',
+        description: 'Four corners, clockwise from top left',
+        type: 'ImageOverlayCoordinates',
+        default: '-',
+      },
+      { name: '[opacity]', description: 'Layer opacity', type: 'number | Expression', default: '1' },
+      { name: '[visible]', description: 'Shows the layer', type: 'boolean', default: 'true' },
+      paintProp('[paint]', 'Raster paint, merged last'),
+      beforeId('the layer'),
+    ],
+  },
+  {
+    selector: 'ng-map-fill-extrusion',
+    description: '3D extruded polygons, such as buildings; tilt the map to see them.',
+    props: [
+      idProp('the layer'),
+      { name: '[source]', description: 'Id of the source to extrude', type: 'string', default: "'carto'" },
+      {
+        name: '[sourceLayer]',
+        description: 'Layer of a vector source',
+        type: 'string',
+        default: "'building' for carto",
+      },
+      {
+        name: '[heightProperty]',
+        description: 'Property with the height in meters',
+        type: 'string',
+        default: "'render_height'",
+      },
+      {
+        name: '[baseProperty]',
+        description: 'Property with the base height in meters',
+        type: 'string',
+        default: "'render_min_height'",
+      },
+      { name: '[color]', description: 'Fill color', type: 'string | Expression', default: '-' },
+      { name: '[opacity]', description: 'Layer opacity', type: 'number', default: '0.8' },
+      { name: '[minZoom]', description: 'Lowest visible zoom', type: 'number', default: '14' },
+      { name: '[maxZoom]', description: 'Zoom from which it is hidden', type: 'number', default: '24' },
+      {
+        name: '[filter]',
+        description: 'MapLibre filter; `null` for none',
+        type: 'FilterSpecification | null',
+        default: '-',
+      },
+      paintProp('[paint]', 'Fill-extrusion paint, merged last'),
+      beforeId('the layer'),
+    ],
+  },
+  {
+    selector: 'ng-map-terrain',
+    description: '3D terrain from a `raster-dem` source, with an optional hillshade. One per map.',
+    props: [
+      idProp('the sources and layers'),
+      { name: '[tiles]', description: 'Elevation tile URL templates', type: 'string[]', default: '-' },
+      { name: '[url]', description: 'TileJSON URL, instead of `tiles`', type: 'string', default: '-' },
+      {
+        name: '[encoding]',
+        description: 'Elevation tile encoding',
+        type: "'terrarium' | 'mapbox'",
+        default: "'terrarium'",
+      },
+      { name: '[tileSize]', description: 'Tile size in pixels', type: 'number', default: '256' },
+      { name: '[minzoom]', description: 'Lowest elevation tile zoom', type: 'number', default: '0' },
+      { name: '[maxzoom]', description: 'Highest elevation tile zoom', type: 'number', default: '15' },
+      { name: '[attribution]', description: 'Attribution text', type: 'string', default: '-' },
+      { name: '[exaggeration]', description: 'Vertical scale; 1 is true scale', type: 'number', default: '1' },
+      { name: '[hillshade]', description: 'Draws a hillshade layer', type: 'boolean', default: 'false' },
+      { name: '[hillshadeExaggeration]', description: 'Hillshade intensity (0–1)', type: 'number', default: '0.5' },
+      { name: '[hillshadeShadowColor]', description: 'Color of shaded slopes', type: 'string', default: '-' },
+      { name: '[hillshadeHighlightColor]', description: 'Color of lit slopes', type: 'string', default: '-' },
+      { name: '[hillshadeAccentColor]', description: 'Accent color of steep slopes', type: 'string', default: '-' },
+      paintProp('[hillshadePaint]', 'Hillshade paint, merged last'),
+      beforeId('the hillshade layer'),
+    ],
+  },
+  {
+    selector: 'provideZardMap(config?)',
+    description: 'Registers the map defaults; provide it on the lazy map route, not in `app.config.ts`.',
+    props: [
+      { name: 'style', description: 'Id of the starting preset', type: 'string', default: "'carto-positron'" },
+      {
+        name: 'keys',
+        description: 'API keys of key-based providers',
+        type: "Partial<Record<'maptiler' | 'stadia', string>>",
+        default: '{}',
+      },
+      {
+        name: 'persist',
+        description: 'Saves the pick in `localStorage`; a string sets the key',
+        type: 'boolean | string',
+        default: 'false',
+      },
+      {
+        name: 'presets',
+        description: 'Presets the picker lists',
+        type: 'readonly ZardMapPreset[]',
+        default: 'ZARD_MAP_PRESETS',
+      },
+      {
+        name: 'styles',
+        description: 'Fixed basemap per theme. Overrides the service and picker',
+        type: 'MapStylesConfig | Signal<MapStylesConfig | undefined> | (() => Signal<MapStylesConfig | undefined>)',
+        default: '-',
+      },
+      {
+        name: 'labels',
+        description: 'Translations for tooltips, loader and close button',
+        type: 'Partial<MapLabels> | Signal<Partial<MapLabels> | undefined> | (() => Signal<Partial<MapLabels> | undefined>)',
+        default: 'English',
+      },
+    ],
+  },
+  {
+    selector: 'ZardMapStyleService',
+    description: 'Root service holding the basemap preset of every map.',
+    props: [
+      {
+        name: 'select(id, key?)',
+        description: 'Switches every map to a preset',
+        type: 'ZardMapSelectResult',
+        default: '-',
+      },
+      {
+        name: 'setKey(provider, key)',
+        description: 'Stores a provider API key; empty forgets it',
+        type: 'void',
+        default: '-',
+      },
+      { name: 'reset()', description: 'Restores the default preset', type: 'void', default: '-' },
+      { name: 'presetId', description: 'Id of the preset in use', type: 'Signal<string>', default: "'carto-positron'" },
+      { name: 'preset', description: 'Preset in use', type: 'Signal<ZardMapPreset>', default: '-' },
+      {
+        name: 'presets',
+        description: 'Presets the picker lists',
+        type: 'Signal<readonly ZardMapPreset[]>',
+        default: 'ZARD_MAP_PRESETS',
+      },
+      {
+        name: 'styles',
+        description: 'Light and dark styles of the preset in use',
+        type: 'Signal<ZardMapStyles>',
+        default: '-',
+      },
+      { name: 'keys', description: 'Known API keys, by provider', type: 'Signal<ZardMapKeys>', default: '{}' },
+    ],
+  },
+  ...MAP_STYLE_SELECT_API,
+  ...MAP_DRAW_API,
+];

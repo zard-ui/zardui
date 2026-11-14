@@ -252,12 +252,17 @@
     }
 
     /* Inline code. */
-    &:where(:not(pre) > code) {
+    &:where(:not(pre, [data-slot='code-block-content']) > code) {
       background-color: var(--color-muted, color-mix(in oklab, currentColor 8%, transparent));
       font-family: var(--typeset-font-mono);
       font-size: 0.85em;
       border-radius: min(calc(var(--radius, 0.5em) * 0.6), 0.35em);
       padding: 0.125em 0.3em;
+    }
+
+    /* A z-code-block keeps its own styles and sits one paragraph below the text before it. */
+    &:where([data-slot='code-block']) {
+      margin-block-start: var(--typeset-flow);
     }
 
     /* Code blocks. */
@@ -418,7 +423,7 @@
 
     /* Forced colors strips the code background, so give it a border. */
     @media (forced-colors: active) {
-      &:where(:not(pre) > code) {
+      &:where(:not(pre, [data-slot='code-block-content']) > code) {
         border: 1px solid;
       }
     }

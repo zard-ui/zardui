@@ -1499,83 +1499,83 @@ export class ZardDemoDialogRtlComponent {
 
 ### z-dialog
 
-Root of a declarative dialog. Holds the open state and projects its content into the panel, which exposes `data-state` (`open` | `closed`) while the enter and leave transitions run. The overlay takes the direction of where the dialog is declared: in RTL the close button moves to the left corner and the footer buttons mirror, while the panel stays centered.
+Declarative dialog root that holds the open state.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zVisible]` | Open state, two-way bound | `boolean` | `false` |
-| `[zClosable]` | Renders the close (X) button in the top-right corner | `boolean` | `true` |
-| `[zMaskClosable]` | Whether clicking outside the dialog (on the mask) closes it | `boolean` | `true` |
-| `[zWidth]` | Custom width (e.g., '400px', '50%') | `string` | `-` |
-| `[zDuration]` | How long the enter and leave transitions run, in ms | `number` | `100` |
-| `[class]` | Custom CSS classes applied to the panel | `ClassValue` | `-` |
-| `(zAfterOpen)` | Emitted once the dialog is attached | `EventEmitter<void>` | `-` |
-| `(zAfterClose)` | Emitted once the exit transition has finished | `EventEmitter<void>` | `-` |
+| `[zVisible]` | Two-way bindable open state | `boolean` | `false` |
+| `[zClosable]` | Shows the close (X) button | `boolean` | `true` |
+| `[zMaskClosable]` | Clicking the mask closes it | `boolean` | `true` |
+| `[zWidth]` | Custom width | `string` | `-` |
+| `[zDuration]` | Transition duration in ms | `number` | `100` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
+| `(zAfterOpen)` | Emits once the dialog is attached | `EventEmitter<void>` | `-` |
+| `(zAfterClose)` | Emits after the exit transition | `EventEmitter<void>` | `-` |
 
 ### z-dialog-header
 
-Layout slot for the top of a dialog, next to `z-dialog-title` and `z-dialog-description`.
+Top slot for the title and description.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-dialog-footer
 
-Layout slot for the bottom of a dialog, typically the action buttons.
+Bottom slot, usually for actions.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-dialog-title
 
-Accessible name of the dialog. Wired to `aria-labelledby` automatically.
+Dialog title, wired to `aria-labelledby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zTitle]` | Title text or template, when not projecting content | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[zTitle]` | Title text or template | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-dialog-description
 
-Supporting text. Wired to `aria-describedby` automatically.
+Supporting text, wired to `aria-describedby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zDescription]` | Description text or template, when not projecting content | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[zDescription]` | Description text or template | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### [z-dialog-close]
 
-Closes the dialog it is projected into. Works for declarative and service-opened dialogs alike.
+Closes the enclosing dialog.
 
 ### ZardDialogService
 
-Opens the same dialog from code. `create()` takes the options below and returns a `ZardDialogRef`.
+Opens dialogs from code via `create()`, which returns a `ZardDialogRef`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zCancelIcon]` | Sets the cancel icon. | `string` | `-` |
-| `[zCancelText]` | Cancel button text, null to hide the button. Defaults to 'Cancel'. | `string \| null` | `'Cancel'` |
-| `[zClosable]` | Whether the close (X) button in the header is shown. Escape and clicking outside the mask still dismiss the dialog unless `zMaskClosable` is also set to false. | `boolean` | `true` |
-| `[zContent]` | Custom content component, template, or HTML. | `string \| TemplateRef<T> \| Type<T>` | `-` |
-| `[zCustomClasses]` | Additional CSS classes to apply to the dialog panel. | `ClassValue` | `-` |
-| `[zData]` | Data to pass to custom content components. | `U` | `-` |
-| `[zDescription]` | Sets the dialog description. | `string` | `-` |
-| `[zDuration]` | Animation duration (ms) used when closing. Matches the CSS transition. | `number` | `100` |
-| `[zHideFooter]` | Hides the footer. | `boolean` | `false` |
-| `[zHideHeader]` | Keeps the title and description available to screen readers only (`sr-only`). | `boolean` | `false` |
-| `[zMaskClosable]` | Whether clicking outside the dialog (on the mask) closes it. | `boolean` | `true` |
-| `[zOkDestructive]` | Whether the OK button should have destructive styling. | `boolean` | `false` |
-| `[zOkDisabled]` | Whether the OK button should be disabled. | `boolean` | `false` |
-| `[zOkIcon]` | Sets the OK button icon. | `string` | `-` |
-| `[zOkText]` | OK button text, null to hide the button. Defaults to 'OK'. | `string \| null` | `'OK'` |
-| `[zOnCancel]` | Cancel button click handler. | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `[zOnOk]` | OK button click handler. | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `[zTitle]` | Dialog title text or template. | `string \| TemplateRef<void>` | `-` |
-| `[zViewContainerRef]` | View container reference for dynamic component loading. | `ViewContainerRef` | `-` |
-| `[zWidth]` | Custom width (e.g., '400px', '50%'). | `string` | `-` |
+| `[zCancelIcon]` | Cancel button icon | `string` | `-` |
+| `[zCancelText]` | Cancel button text, `null` hides it | `string \| null` | `'Cancel'` |
+| `[zClosable]` | Shows the close (X) button | `boolean` | `true` |
+| `[zContent]` | Content component, template or HTML | `string \| TemplateRef<T> \| Type<T>` | `-` |
+| `[zCustomClasses]` | Custom CSS classes | `ClassValue` | `-` |
+| `[zData]` | Data for the content component | `U` | `-` |
+| `[zDescription]` | Description text | `string` | `-` |
+| `[zDuration]` | Close animation duration in ms | `number` | `100` |
+| `[zHideFooter]` | Hides the footer | `boolean` | `false` |
+| `[zHideHeader]` | Visually hides the title and description | `boolean` | `false` |
+| `[zMaskClosable]` | Clicking the mask closes it | `boolean` | `true` |
+| `[zOkDestructive]` | Destructive OK button | `boolean` | `false` |
+| `[zOkDisabled]` | Disables the OK button | `boolean` | `false` |
+| `[zOkIcon]` | OK button icon | `string` | `-` |
+| `[zOkText]` | OK button text, `null` hides it | `string \| null` | `'OK'` |
+| `[zOnCancel]` | Cancel click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zOnOk]` | OK click handler | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zTitle]` | Title text or template | `string \| TemplateRef<void>` | `-` |
+| `[zViewContainerRef]` | View container for the content | `ViewContainerRef` | `-` |
+| `[zWidth]` | Custom width | `string` | `-` |
 
 ---
 

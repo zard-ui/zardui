@@ -3,17 +3,17 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const INPUT_GROUP_API: ApiSection[] = [
   {
     selector: 'z-input-group',
-    description: 'Container that groups an input or textarea with addons (text, icons, buttons).',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    description: 'Groups an input or textarea with addons.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-input-group-addon',
-    description: 'A slot inside the group for prefix/suffix content. Clicking it focuses the inner input.',
+    description: 'Prefix or suffix slot; clicking it focuses the input.',
     props: [
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zAlign]',
-        description: 'Addon alignment',
+        description: 'Addon position',
         type: "'inline-start' | 'inline-end' | 'block-start' | 'block-end'",
         default: "'inline-start'",
       },
@@ -21,27 +21,21 @@ export const INPUT_GROUP_API: ApiSection[] = [
   },
   {
     selector: 'button[z-input-group-button]',
-    description:
-      'Compact button styled to fit inside a `z-input-group-addon`, with its own narrowed size and variant scale.',
+    description: 'Compact button sized to fit inside an addon.',
     props: [
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zVariant]',
-        description: 'Visual variant of the button.',
+        description: 'Visual variant',
         type: "'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'",
         default: "'ghost'",
       },
-      {
-        name: '[zSize]',
-        description: 'Button size',
-        type: "'xs' | 'sm' | 'icon-xs' | 'icon-sm'",
-        default: "'xs'",
-      },
+      { name: '[zSize]', description: 'Button size', type: "'xs' | 'sm' | 'icon-xs' | 'icon-sm'", default: "'xs'" },
     ],
   },
   {
     selector: 'z-input-group-text',
-    description: 'Inline text label inside an addon (e.g. currency symbol, unit suffix).',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    description: 'Inline text inside an addon, e.g. a currency symbol.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

@@ -10,14 +10,13 @@ export const ALERT_API: ApiSection[] = [
       { name: '[zDescription]', description: 'Alert description', type: 'string | TemplateRef<void>', default: '-' },
       {
         name: '[zIcon]',
-        description:
-          "Alert icon (an ng-icons name or a TemplateRef). When unset, defaults to 'lucideCircleAlert' for the 'destructive' zType; otherwise no icon renders.",
+        description: 'Icon name or template; destructive alerts get one by default',
         type: 'TemplateRef<void> | string',
         default: '-',
       },
       {
         name: '[zRole]',
-        description: "Overrides the ARIA role. Defaults to 'status' when [zAction] is set, otherwise 'alert'.",
+        description: 'ARIA role; `status` with `zAction`, else `alert`',
         type: "'alert' | 'status'",
         default: '-',
       },

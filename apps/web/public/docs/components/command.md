@@ -1495,64 +1495,64 @@ export class ZardDemoCommandRtlComponent {
 
 ### z-command
 
-The command palette root. Filters its `z-command-option`s as `z-command-input` is typed, and owns the arrow-key / Enter / Escape navigation. Exported as `zCommand` for a template reference (`#cmd="zCommand"`) — every example on this page uses it to read `isEmpty()` and call `focus()`. Has no trigger or open state of its own; see the `basic` example for opening it from a `⌘K` shortcut inside a `ZardDialogService` dialog.
+Command palette root that filters options; exported as `zCommand`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `(zCommandChange)` | Fired when the highlighted/committed option changes. | `EventEmitter<ZardCommandOption>` | `-` |
-| `(zCommandSelected)` | Fired when an option is chosen (click or Enter). | `EventEmitter<ZardCommandOption>` | `-` |
-| `isEmpty()` | Template-reference-only: `true` once a search term is typed and no option matches it. Zard ships no `z-command-empty`; use this to render the empty state yourself, as every example on this page does. | `Signal<boolean>` | `-` |
-| `focus()` | Template-reference-only: focuses `z-command-input`. Called after opening a dialog-hosted command so typing works immediately. | `() => void` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `(zCommandChange)` | Emitted when the highlighted option changes | `EventEmitter<ZardCommandOption>` | `-` |
+| `(zCommandSelected)` | Emitted when an option is chosen | `EventEmitter<ZardCommandOption>` | `-` |
+| `isEmpty()` | `true` when a search matches no option | `Signal<boolean>` | `-` |
+| `focus()` | Focuses the search input | `() => void` | `-` |
 
 ### z-command-input
 
-The search box. Debounced by the app-wide input event manager, forwards arrow/Enter/Escape to the parent `z-command`, and exposes `focus()` via `exportAs="zCommandInput"`. Declares no `[class]` input of its own — a `class` attribute on the tag lands on its host element (not merged through `mergeClasses()`), which is enough to reach descendants with `**:` arbitrary-variant selectors.
+The search box; exported as `zCommandInput`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[placeholder]` | Placeholder text for the input. | `string` | `'Type a command or search...'` |
-| `(valueChange)` | Fired on every keystroke, alongside the `ControlValueAccessor` value. | `EventEmitter<string>` | `-` |
+| `[placeholder]` | Placeholder text | `string` | `'Type a command or search...'` |
+| `(valueChange)` | Emitted on every keystroke | `EventEmitter<string>` | `-` |
 
 ### z-command-list
 
-The `role="listbox"` container for options and groups. Scrolls internally past `max-h-72`.
+Scrollable listbox of options and groups.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-command-option
 
-A single selectable, filterable entry (`role="option"`). Projects `[data-slot=command-option-leading]` before the label and `[data-slot=command-option-trailing]` after it — the `shortcuts` example projects a `z-kbd-group` into the trailing slot instead of using `zShortcut`, for a styled per-key hint.
+A selectable, filterable entry with leading and trailing slots.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zValue]` | Value reported on selection (required). | `unknown` | `-` |
-| `[zLabel]` | Label text, and what the search filters against (required). | `string` | `-` |
-| `[zIcon]` | Leading icon name. | `IconName` | `undefined` |
-| `[zCommand]` | Extra text the search also matches against, in addition to `zLabel`. | `string` | `''` |
-| `[zShortcut]` | Plain-text shortcut hint rendered at the trailing edge. For a styled hint built from `z-kbd`, project into `[data-slot=command-option-trailing]` instead (see `shortcuts`). | `string` | `''` |
-| `[zDisabled]` | Disables the option: skipped by keyboard navigation and clicks. | `boolean` | `false` |
-| `[variant]` | Visual variant. | `'default' \| 'destructive'` | `'default'` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zValue]` | Value emitted on selection (required) | `unknown` | `-` |
+| `[zLabel]` | Label, also used by search (required) | `string` | `-` |
+| `[zIcon]` | Leading icon | `IconName` | `undefined` |
+| `[zCommand]` | Extra search keywords | `string` | `''` |
+| `[zShortcut]` | Plain-text shortcut hint | `string` | `''` |
+| `[zDisabled]` | Disables the option | `boolean` | `false` |
+| `[variant]` | Visual variant | `'default' \| 'destructive'` | `'default'` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-command-option-group
 
-Groups related `z-command-option`s under a heading. Hides itself once every option inside it is filtered out by the current search.
+Groups options under a heading; hides when all are filtered out.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zLabel]` | Group heading (required). | `string` | `-` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[zLabel]` | Group heading (required) | `string` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ### z-command-divider
 
-A `role="separator"` line between groups. Hides itself while a search is active, rather than sit next to a group that filtered down to nothing.
+Separator between groups; hidden while searching.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

@@ -1498,89 +1498,89 @@ export class ZardDemoAlertDialogRtlComponent {
 
 ### z-alert-dialog
 
-Root of a declarative alert dialog. Holds the open state and projects its content into the panel (`role="alertdialog"`), which exposes `data-size` and `data-state` (`open` | `closed`) while the enter and leave transitions run. The overlay takes the direction of where the alert dialog is declared: in RTL the footer buttons mirror while the panel stays centered.
+Declarative alert dialog root that holds the open state.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zVisible]` | Open state, two-way bound | `boolean` | `false` |
-| `[zSize]` | Visual size. `default` widens on `sm+` and lays the media next to the title; `sm` keeps a compact, centered layout | `'default' \| 'sm'` | `'default'` |
-| `[zWidth]` | Custom width (e.g., '400px', '50%') | `string` | `-` |
-| `[zMaskClosable]` | Whether clicking outside closes the alert dialog. Off by default: the user has to decide | `boolean` | `false` |
-| `[zDuration]` | How long the enter and leave transitions run, in ms | `number` | `100` |
-| `[class]` | Custom CSS classes applied to the panel | `ClassValue` | `-` |
-| `(zAfterOpen)` | Emitted once the alert dialog is attached | `EventEmitter<void>` | `-` |
-| `(zAfterClose)` | Emitted once the exit transition has finished | `EventEmitter<void>` | `-` |
+| `[zVisible]` | Two-way bindable open state | `boolean` | `false` |
+| `[zSize]` | `sm` keeps a compact, centered layout | `'default' \| 'sm'` | `'default'` |
+| `[zWidth]` | Custom width | `string` | `-` |
+| `[zMaskClosable]` | Clicking outside closes it | `boolean` | `false` |
+| `[zDuration]` | Transition duration in ms | `number` | `100` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
+| `(zAfterOpen)` | Emits once the dialog is attached | `EventEmitter<void>` | `-` |
+| `(zAfterClose)` | Emits after the exit transition | `EventEmitter<void>` | `-` |
 
 ### z-alert-dialog-header
 
-Layout slot for the top of an alert dialog: `z-alert-dialog-media`, `z-alert-dialog-title` and `z-alert-dialog-description`.
+Top slot for the media, title and description.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-alert-dialog-media
 
-Media slot above the title, usually an icon. The header lays it next to the title on `default` size.
+Media slot above the title, usually an icon.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes to apply (e.g. tinted backgrounds for destructive) | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-alert-dialog-title
 
-Accessible name of the alert dialog. Wired to `aria-labelledby` automatically.
+Dialog title, wired to `aria-labelledby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zTitle]` | Title text or template, when not projecting content | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[zTitle]` | Title text or template | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-alert-dialog-description
 
-Supporting text. Wired to `aria-describedby` automatically.
+Supporting text, wired to `aria-describedby`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zDescription]` | Description text or template, when not projecting content | `string \| TemplateRef<void>` | `-` |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[zDescription]` | Description text or template | `string \| TemplateRef<void>` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### z-alert-dialog-footer
 
-Layout slot for the action buttons.
+Slot for the action buttons.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Custom CSS classes to apply | `ClassValue` | `-` |
+| `[class]` | Custom CSS classes | `ClassValue` | `-` |
 
 ### [z-alert-dialog-close]
 
-Closes the alert dialog it is projected into. Works for declarative and service-opened alert dialogs alike.
+Closes the enclosing alert dialog.
 
 ### ZardAlertDialogService
 
-Opens the same alert dialog from code. `create()`, `confirm()`, `warning()` and `info()` take the options below and return a `ZardAlertDialogRef`.
+Opens alert dialogs from code and returns a `ZardAlertDialogRef`.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zTitle]` | Dialog title text or template | `string \| TemplateRef<void>` | `-` |
-| `[zDescription]` | Dialog description/body text | `string` | `-` |
-| `[zMedia]` | Template rendered as a media slot above the title (e.g. an icon) | `TemplateRef<void>` | `-` |
-| `[zMediaClass]` | Extra classes applied to the media slot wrapper (e.g. tinted backgrounds for destructive) | `ClassValue` | `-` |
-| `[zData]` | Data handed to `zOnOk` and `zOnCancel`, e.g. the id of the record being confirmed | `T` | `-` |
-| `[zOkText]` | OK button text, null to hide button | `string \| null` | `'Continue'` |
-| `[zCancelText]` | Cancel button text, null to hide button | `string \| null` | `'Cancel'` |
-| `[zOkDestructive]` | Whether OK button should have destructive styling | `boolean` | `false` |
-| `[zOkDisabled]` | Whether OK button should be disabled | `boolean` | `false` |
-| `[zMaskClosable]` | Whether clicking outside closes the dialog | `boolean` | `false` |
-| `[zClosable]` | Whether dialog can be closed | `boolean` | `true` |
-| `[zSize]` | Visual size of the dialog. `default` is wider on `sm+` breakpoints; `sm` keeps a compact width | `'default' \| 'sm'` | `'default'` |
-| `[zWidth]` | Custom width (e.g., '400px', '50%') | `string` | `-` |
-| `[zCustomClasses]` | Additional CSS classes to apply | `ClassValue` | `-` |
-| `[zDuration]` | Animation duration (ms) used when closing. Matches the CSS transition | `number` | `100` |
-| `[zOnOk]` | OK button click handler. Receives `zData`; return `false` to keep the dialog open | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `[zOnCancel]` | Cancel button click handler. Receives `zData`; return `false` to keep the dialog open | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
-| `[zViewContainerRef]` | View container for rendering custom content | `ViewContainerRef` | `-` |
+| `[zTitle]` | Title text or template | `string \| TemplateRef<void>` | `-` |
+| `[zDescription]` | Description text | `string` | `-` |
+| `[zMedia]` | Media template above the title | `TemplateRef<void>` | `-` |
+| `[zMediaClass]` | Custom CSS classes for the media slot | `ClassValue` | `-` |
+| `[zData]` | Data passed to `zOnOk` and `zOnCancel` | `T` | `-` |
+| `[zOkText]` | OK button text, `null` hides it | `string \| null` | `'Continue'` |
+| `[zCancelText]` | Cancel button text, `null` hides it | `string \| null` | `'Cancel'` |
+| `[zOkDestructive]` | Destructive OK button | `boolean` | `false` |
+| `[zOkDisabled]` | Disables the OK button | `boolean` | `false` |
+| `[zMaskClosable]` | Clicking outside closes it | `boolean` | `false` |
+| `[zClosable]` | Dialog can be closed | `boolean` | `true` |
+| `[zSize]` | `sm` keeps a compact width | `'default' \| 'sm'` | `'default'` |
+| `[zWidth]` | Custom width | `string` | `-` |
+| `[zCustomClasses]` | Custom CSS classes | `ClassValue` | `-` |
+| `[zDuration]` | Close animation duration in ms | `number` | `100` |
+| `[zOnOk]` | OK click handler; return `false` to stay open | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zOnCancel]` | Cancel click handler; return `false` to stay open | `EventEmitter<T> \| OnClickCallback<T>` | `-` |
+| `[zViewContainerRef]` | View container for the content | `ViewContainerRef` | `-` |
 
 ---
 

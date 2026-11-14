@@ -631,26 +631,26 @@ export class ZardDemoCollapsibleRtlComponent {
 
 ### z-collapsible, [z-collapsible]
 
-An interactive component which expands and collapses a panel. It renders no markup of its own, so it can also be applied as an attribute to an element that is already a component — for example li[z-sidebar-menu-item].
+Expands and collapses a panel.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zOpen]` | Open state of the panel. Supports two-way binding through [(zOpen)] | `boolean` | `false` |
-| `[zDisabled]` | Blocks the trigger from toggling the panel | `boolean` | `false` |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `(zOpenChange)` | Emits the new open state whenever the panel toggles | `EventEmitter<boolean>` | `-` |
+| `[zOpen]` | Open state; supports `[(zOpen)]` | `boolean` | `false` |
+| `[zDisabled]` | Stops the trigger from toggling | `boolean` | `false` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `(zOpenChange)` | Emitted with the new open state | `EventEmitter<boolean>` | `-` |
 
 ### [z-collapsible-trigger]
 
-Toggles the panel. Apply it to your own button — the directive only wires the behaviour and the ARIA attributes, it does not style anything.
+Toggles the panel; unstyled, apply it to your own button.
 
 ### z-collapsible-content
 
-The panel revealed by the trigger. Animates its height with a CSS grid transition.
+The panel revealed by the trigger.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

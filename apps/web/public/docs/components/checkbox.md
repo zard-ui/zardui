@@ -576,15 +576,15 @@ export class ZardDemoCheckboxRtlComponent {
 
 ### z-checkbox
 
-A control that allows the user to toggle between checked and not checked.
+Toggles between checked and unchecked.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zDisabled]` | Checkbox disabled state | `boolean` | `false` |
-| `[zInvalid]` | Checkbox invalid state (sets aria-invalid) | `boolean` | `false` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
+| `[zDisabled]` | Disables the checkbox | `boolean` | `false` |
+| `[zInvalid]` | Sets `aria-invalid` | `boolean` | `false` |
 | `[zId]` | Checkbox id | `string` | `auto-generated` |
-| `(checkChange)` | Emits when the checkbox value changes | `EventEmitter<boolean>` | `-` |
+| `(checkChange)` | Emitted when the checked state changes | `EventEmitter<boolean>` | `-` |
 
 ---
 

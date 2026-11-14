@@ -1,3 +1,4 @@
+import { NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -8,19 +9,29 @@ import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.com
 import { AiAssistComponent } from '@doc/domain/components/ai-assist/ai-assist.component';
 import { ApiReferenceComponent } from '@doc/domain/components/api-reference/api-reference.component';
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
-import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { NavigationConfig, type NavigationItem } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { StepsComponent } from '@doc/domain/components/steps/steps.component';
+import { ProseDirective } from '@doc/domain/directives/prose.directive';
 import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
-import { ComponentData, COMPONENTS_REGISTRY } from '@doc/shared/constants/components.constant';
+import {
+  ComponentData,
+  COMPONENTS_REGISTRY,
+  type ComponentSection,
+  type SectionTableLink,
+} from '@doc/shared/constants/components.constant';
+import { DOCS_TABLE_CLASS } from '@doc/shared/constants/docs-table.constant';
 import { Step } from '@doc/shared/constants/install.constant';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 import { DynamicInstallationService } from '@doc/shared/services/dynamic-installation.service';
 import { SeoService } from '@doc/shared/services/seo.service';
 import { ZardCodeBoxComponent } from '@doc/widget/components/zard-code-box/zard-code-box.component';
 
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
+import { ZardTableImports } from '@zard/components/table/table.imports';
+
 /** Components whose demos are only readable at the full width of the preview. */
-const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar'];
+const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar', 'map'];
 
 @Component({
   selector: 'z-component',
@@ -31,30 +42,27 @@ const FULL_WIDTH_PREVIEWS = ['slider', 'chart', 'sidebar'];
     CodeBlockComponent,
     CodeTabsComponent,
     DocContentComponent,
+    ProseDirective,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
     StepsComponent,
     ZardCodeBoxComponent,
     HyphenToSpacePipe,
+    NgComponentOutlet,
+    NgTemplateOutlet,
     RouterLink,
+    ZardAlertComponent,
+    ZardTableImports,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComponentPage implements OnInit {
   protected readonly fillsContainer = (componentName: string) => FULL_WIDTH_PREVIEWS.includes(componentName);
-  protected readonly inlineText = (text: string): string =>
-    text
-      .split(/(`[^`]+`)/g)
-      .map(segment => {
-        const isCode = segment.startsWith('`') && segment.endsWith('`');
-        const content = isCode ? segment.slice(1, -1) : segment;
-        const escapedContent = content.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+  protected readonly isLink = (cell: string | SectionTableLink): cell is SectionTableLink => typeof cell !== 'string';
 
-        return isCode
-          ? `<code class="bg-muted rounded px-1.5 py-0.5 font-mono text-sm">${escapedContent}</code>`
-          : escapedContent;
-      })
-      .join('');
+  /** The features as `- ` bullets, which the prose directive renders as a list. */
+  protected readonly featureList = (features: string[]) => features.map(feature => `- ${feature}`).join('\n');
+  protected readonly tableClass = DOCS_TABLE_CLASS;
 
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
@@ -122,7 +130,9 @@ export class ComponentPage implements OnInit {
   }
 
   private async loadData() {
-    const componentName = this.activatedRoute.snapshot.paramMap.get('componentName');
+    // A component with its own lazy route (the map, which brings its own providers) names itself in the route data.
+    const { paramMap, data } = this.activatedRoute.snapshot;
+    const componentName = paramMap.get('componentName') ?? (data['componentName'] as string | undefined);
     if (!componentName) {
       this.router.navigateByUrl('/');
       return;
@@ -148,21 +158,46 @@ export class ComponentPage implements OnInit {
       type: 'custom' as const,
     }));
 
+    const sections = component.sections ?? [];
+    const introSections = sections.filter(section => section.position === 'intro');
+    const outroSections = sections.filter(section => section.position !== 'intro');
+    // A section with a single example reads as that example, so it lists no children.
+    const sectionNavigationItem = ({ id, title, examples = [] }: ComponentSection): NavigationItem => ({
+      id,
+      label: title,
+      type: 'core',
+      children:
+        examples.length > 1
+          ? examples.map(example => ({ id: example.name, label: example.name, type: 'custom' as const }))
+          : undefined,
+    });
+    // A `level: 3` section is listed under the section above it, like an h3 under its h2.
+    const sectionNavigationItems = (list: ComponentSection[]) =>
+      list.reduce<NavigationItem[]>((items, section) => {
+        const parent = items[items.length - 1];
+        if (section.level === 3 && parent) {
+          parent.children = [...(parent.children ?? []), { ...sectionNavigationItem(section), type: 'custom' }];
+        } else {
+          items.push(sectionNavigationItem(section));
+        }
+        return items;
+      }, []);
+
     this.navigationConfig = component.deprecatedFor
       ? { items: [] }
       : {
           items: [
             { id: 'overview', label: 'Overview', type: 'core' },
             ...(component.about ? [{ id: 'about', label: 'About', type: 'core' as const }] : []),
+            ...sectionNavigationItems(introSections),
             { id: 'installation', label: 'Installation', type: 'core' },
             { id: 'usage', label: 'Usage', type: 'core' },
             ...(component.composition ? [{ id: 'composition', label: 'Composition', type: 'core' as const }] : []),
-            {
-              id: 'examples',
-              label: 'Examples',
-              type: 'core',
-              children: exampleNavigationItems,
-            },
+            ...(component.features?.length ? [{ id: 'features', label: 'Features', type: 'core' as const }] : []),
+            ...(component.examples.length
+              ? [{ id: 'examples', label: 'Examples', type: 'core' as const, children: exampleNavigationItems }]
+              : []),
+            ...sectionNavigationItems(outroSections),
             ...(component.accessibility
               ? [{ id: 'accessibility', label: 'Accessibility', type: 'core' as const }]
               : []),

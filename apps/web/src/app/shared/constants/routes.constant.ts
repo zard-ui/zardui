@@ -19,6 +19,7 @@ export const HEADER_PATHS: NavItem[] = [
   { name: 'Components', path: '/docs/components', available: true },
   { name: 'Blocks', path: '/blocks', available: true },
   { name: 'Charts', path: '/charts', available: true },
+  { name: 'Maps', path: '/maps', available: true },
   { name: 'Themes', path: '/themes', available: true },
   { name: 'Typeset', path: '/typeset', available: true },
 ];
@@ -33,6 +34,7 @@ export const SECTIONS: NavSection = {
   data: [
     { name: 'Introduction', path: '/docs/introduction', available: true },
     { name: 'Components', path: '/docs/components', available: true },
+    { name: 'AI Elements', path: '/docs/ai-elements', available: true },
     { name: 'Installation', path: '/docs/installation', available: true },
     { name: 'Theming', path: '/docs/theming', available: true },
     { name: 'RTL', path: '/docs/rtl', available: true },
@@ -113,6 +115,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Color Picker', path: '/docs/components/color-picker', available: true },
     { name: 'Combobox', path: '/docs/components/combobox', available: true },
     { name: 'Command', path: '/docs/components/command', available: true },
+    { name: 'Data Table', path: '/docs/components/data-table', available: true },
     { name: 'Date Picker', path: '/docs/components/date-picker', available: true },
     { name: 'Separator', path: '/docs/components/separator', available: true },
     { name: 'Empty', path: '/docs/components/empty', available: true },
@@ -146,18 +149,56 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Dropdown', path: '/docs/components/dropdown', available: true },
     { name: 'Popover', path: '/docs/components/popover', available: true },
     { name: 'Kbd', path: '/docs/components/kbd', available: true },
+    { name: 'Code Block', path: '/docs/components/code-block', available: true },
     { name: 'Collapsible', path: '/docs/components/collapsible', available: true },
     { name: 'Sidebar', path: '/docs/components/sidebar', available: true },
     { name: 'Drawer', path: '/docs/components/drawer', available: true },
     { name: 'Bubble', path: '/docs/components/bubble', available: true },
     { name: 'Hover Card', path: '/docs/components/hover-card', available: true },
     { name: 'Context Menu', path: '/docs/components/context-menu', available: true },
+    { name: 'Menubar', path: '/docs/components/menubar', available: true },
     { name: 'Message', path: '/docs/components/message', available: true },
+    { name: 'Message Scroller', path: '/docs/components/message-scroller', available: true },
+    { name: 'Map', path: '/docs/components/map', available: true },
+    { name: 'Map Draw', path: '/docs/components/map-draw', available: true },
+    { name: 'Map Style Select', path: '/docs/components/map-style-select', available: true },
     { name: 'Marker', path: '/docs/components/marker', available: true },
+    { name: 'Native Select', path: '/docs/components/native-select', available: true },
     { name: 'Aspect Ratio', path: '/docs/components/aspect-ratio', available: true },
     { name: 'Attachment', path: '/docs/components/attachment', available: true },
     { name: 'Questionnaire', path: '/docs/components/questionnaire', available: true },
+    { name: 'Trace', path: '/docs/components/trace', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
+};
+
+export const AI_ELEMENTS_PATH: NavSection = {
+  title: 'AI Elements',
+  // Literal entries, so the prerender script finds them; keep in sync with AI_ELEMENTS (ai-elements.constant.ts).
+  // A pattern stays `available: false` while a component it is built with is not in the library yet.
+  data: [
+    { name: 'Overview', path: '/docs/ai-elements', available: true },
+    { name: 'Chain of Thought', path: '/docs/ai-elements/chain-of-thought', available: true },
+    { name: 'Chat', path: '/docs/ai-elements/chat', available: true },
+    { name: 'Checkpoint', path: '/docs/ai-elements/checkpoint', available: true },
+    { name: 'Confirmation', path: '/docs/ai-elements/confirmation', available: true },
+    { name: 'Context', path: '/docs/ai-elements/context', available: true },
+    { name: 'File Tree', path: '/docs/ai-elements/file-tree', available: true },
+    { name: 'Inline Citation', path: '/docs/ai-elements/inline-citation', available: true },
+    { name: 'Message', path: '/docs/ai-elements/message', available: true },
+    { name: 'Model Selector', path: '/docs/ai-elements/model-selector', available: true },
+    { name: 'Plan', path: '/docs/ai-elements/plan', available: true },
+    { name: 'Prompt Input', path: '/docs/ai-elements/prompt-input', available: true },
+    { name: 'Queue', path: '/docs/ai-elements/queue', available: true },
+    { name: 'Reasoning', path: '/docs/ai-elements/reasoning', available: true },
+    { name: 'Sources', path: '/docs/ai-elements/sources', available: true },
+    { name: 'Stack Trace', path: '/docs/ai-elements/stack-trace', available: true },
+    { name: 'Subagent', path: '/docs/ai-elements/subagent', available: true },
+    { name: 'Suggestion', path: '/docs/ai-elements/suggestion', available: true },
+    { name: 'Task', path: '/docs/ai-elements/task', available: true },
+    { name: 'Terminal', path: '/docs/ai-elements/terminal', available: true },
+    { name: 'Test Results', path: '/docs/ai-elements/test-results', available: true },
+    { name: 'Tool', path: '/docs/ai-elements/tool', available: true },
+  ],
 };
 
 export const CONTRIBUTE_PATH: NavSection = {
@@ -180,6 +221,7 @@ export const CONTRIBUTE_PATH: NavSection = {
 export const SIDEBAR_PATHS: NavSection[] = [
   SECTIONS,
   COMPONENTS_PATH,
+  AI_ELEMENTS_PATH,
   DOCS_PATH,
   FORMS_PATH,
   UTILITIES_PATH,
