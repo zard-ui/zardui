@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { AI_ELEMENTS_PATH, generateSingleAiElementsDemo } from './ai-elements-writer';
 import { generateSingleDemo } from './demo-writer';
 import { generateSingleFormDemo } from './forms-writer';
-import { generateSingleUtilsDemo } from './utils-writer';
+import { generateSingleUtilsDemo, UTILS_PATH } from './utils-writer';
 
 const COMPONENTS_PATH = path.resolve('libs/zard/src/lib/shared/components');
 const FORMS_PATH = path.resolve('apps/web/src/app/domain/pages/forms');
-const UTILS_PATH = path.resolve('apps/web/src/app/domain/pages/utils');
 const DEBOUNCE_MS = 300;
 
 type Timer = ReturnType<typeof setTimeout>;
@@ -89,20 +89,25 @@ export function startWatcher(onInstallationChange: () => Promise<void>): void {
     });
   }
 
-  if (!fs.existsSync(UTILS_PATH)) return;
+  // Utilities are CSS-only and AI Elements are compositions: in both, the demos are the whole pipeline.
+  const watchPageDemos = (root: string, label: string, regenerate: (filePath: string) => Promise<void>) => {
+    if (!fs.existsSync(root)) return;
 
-  fs.watch(UTILS_PATH, { persistent: true, recursive: true }, (eventType, fileName) => {
-    if (!fileName) return;
-    if (eventType !== 'change' && eventType !== 'rename') return;
+    fs.watch(root, { persistent: true, recursive: true }, (eventType, fileName) => {
+      if (!fileName) return;
+      if (eventType !== 'change' && eventType !== 'rename') return;
 
-    const normalized = fileName.replace(/\\/g, '/');
-    if (!normalized.endsWith('.ts')) return;
-    // The utilities are CSS-only, so the demo components are the whole pipeline.
-    if (!normalized.startsWith('demos/')) return;
+      const normalized = fileName.replace(/\\/g, '/');
+      if (!normalized.endsWith('.ts')) return;
+      if (!normalized.startsWith('demos/')) return;
 
-    const fullPath = path.join(UTILS_PATH, fileName);
-    if (!fs.existsSync(fullPath)) return;
+      const fullPath = path.join(root, fileName);
+      if (!fs.existsSync(fullPath)) return;
 
-    scheduleDemo(fullPath, `utils/${normalized}`, generateSingleUtilsDemo);
-  });
+      scheduleDemo(fullPath, `${label}/${normalized}`, regenerate);
+    });
+  };
+
+  watchPageDemos(UTILS_PATH, 'utils', generateSingleUtilsDemo);
+  watchPageDemos(AI_ELEMENTS_PATH, 'ai-elements', generateSingleAiElementsDemo);
 }

@@ -34,6 +34,7 @@ export const SECTIONS: NavSection = {
   data: [
     { name: 'Introduction', path: '/docs/introduction', available: true },
     { name: 'Components', path: '/docs/components', available: true },
+    { name: 'AI Elements', path: '/docs/ai-elements', available: true },
     { name: 'Installation', path: '/docs/installation', available: true },
     { name: 'Theming', path: '/docs/theming', available: true },
     { name: 'RTL', path: '/docs/rtl', available: true },
@@ -168,6 +169,36 @@ export const COMPONENTS_PATH: NavSection = {
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
+export const AI_ELEMENTS_PATH: NavSection = {
+  title: 'AI Elements',
+  // Literal entries, so the prerender script finds them; keep in sync with AI_ELEMENTS (ai-elements.constant.ts).
+  // A pattern stays `available: false` while a component it is built with is not in the library yet.
+  data: [
+    { name: 'Overview', path: '/docs/ai-elements', available: true },
+    { name: 'Chain of Thought', path: '/docs/ai-elements/chain-of-thought', available: true },
+    { name: 'Chat', path: '/docs/ai-elements/chat', available: true },
+    { name: 'Checkpoint', path: '/docs/ai-elements/checkpoint', available: true },
+    { name: 'Confirmation', path: '/docs/ai-elements/confirmation', available: true },
+    { name: 'Context', path: '/docs/ai-elements/context', available: true },
+    { name: 'File Tree', path: '/docs/ai-elements/file-tree', available: true },
+    { name: 'Inline Citation', path: '/docs/ai-elements/inline-citation', available: true },
+    { name: 'Message', path: '/docs/ai-elements/message', available: true },
+    { name: 'Model Selector', path: '/docs/ai-elements/model-selector', available: true },
+    { name: 'Plan', path: '/docs/ai-elements/plan', available: true },
+    { name: 'Prompt Input', path: '/docs/ai-elements/prompt-input', available: true },
+    { name: 'Queue', path: '/docs/ai-elements/queue', available: true },
+    { name: 'Reasoning', path: '/docs/ai-elements/reasoning', available: true },
+    { name: 'Sources', path: '/docs/ai-elements/sources', available: true },
+    { name: 'Stack Trace', path: '/docs/ai-elements/stack-trace', available: true },
+    { name: 'Subagent', path: '/docs/ai-elements/subagent', available: true },
+    { name: 'Suggestion', path: '/docs/ai-elements/suggestion', available: true },
+    { name: 'Task', path: '/docs/ai-elements/task', available: true },
+    { name: 'Terminal', path: '/docs/ai-elements/terminal', available: true },
+    { name: 'Test Results', path: '/docs/ai-elements/test-results', available: true },
+    { name: 'Tool', path: '/docs/ai-elements/tool', available: true },
+  ],
+};
+
 export const CONTRIBUTE_PATH: NavSection = {
   title: 'Contribute',
   data: [
@@ -188,6 +219,7 @@ export const CONTRIBUTE_PATH: NavSection = {
 export const SIDEBAR_PATHS: NavSection[] = [
   SECTIONS,
   COMPONENTS_PATH,
+  AI_ELEMENTS_PATH,
   DOCS_PATH,
   FORMS_PATH,
   UTILITIES_PATH,

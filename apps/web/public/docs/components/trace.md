@@ -13,6 +13,8 @@ Every line has the same shape, so reasoning, tool calls, sources and plans built
 
 Use `z-trace` for the steps an agent takes, like calling a tool, running a subagent or editing a file. Use [Message](/docs/components/message) for its reply, and [Marker](/docs/components/marker) for notes and dividers between turns.
 
+For ready-made patterns built on `z-trace`, like [Reasoning](/docs/ai-elements/reasoning), [Plan](/docs/ai-elements/plan), [Task](/docs/ai-elements/task) and [Sources](/docs/ai-elements/sources), see [AI Elements](/docs/ai-elements).
+
 ## Installation
 
 ### CLI
@@ -952,7 +954,7 @@ export class ZardDemoTraceGroupComponent {}
 
 ## Sources
 
-A collapsible row whose detail is a `z-trace` of link rows.
+A collapsible row whose detail is a `z-trace` of link rows. See the [Sources](/docs/ai-elements/sources) pattern.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -1306,7 +1308,7 @@ export class ZardDemoTraceWholeTurnComponent {
 
 ## Reasoning
 
-Render the reasoning of a streamed reply. The row is a `z-trace-line` until the first text arrives. See [Open State](/docs/components/trace#open).
+Render the reasoning of a streamed reply. The row is a `z-trace-line` until the first text arrives. See [Open State](/docs/components/trace#open) and the [Reasoning](/docs/ai-elements/reasoning) pattern.
 
 ```angular-ts
 import { NgTemplateOutlet } from '@angular/common';

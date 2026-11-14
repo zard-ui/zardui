@@ -83,8 +83,13 @@ describe('doc pager', () => {
       expect(realPaths).toEqual(firstPlaces.map(item => item.path));
     });
 
-    it('starts like the sidebar: Introduction, Components, Installation', () => {
-      expect(realPaths.slice(0, 3)).toEqual(['/docs/introduction', '/docs/components', '/docs/installation']);
+    it('starts like the sidebar: Introduction, Components, AI Elements, Installation', () => {
+      expect(realPaths.slice(0, 4)).toEqual([
+        '/docs/introduction',
+        '/docs/components',
+        '/docs/ai-elements',
+        '/docs/installation',
+      ]);
     });
 
     it('steps over llms.txt in Get Started', () => {
