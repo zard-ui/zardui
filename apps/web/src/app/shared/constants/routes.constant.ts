@@ -114,6 +114,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Checkbox', path: '/docs/components/checkbox', available: true },
     { name: 'Combobox', path: '/docs/components/combobox', available: true },
     { name: 'Command', path: '/docs/components/command', available: true },
+    { name: 'Data Table', path: '/docs/components/data-table', available: true },
     { name: 'Date Picker', path: '/docs/components/date-picker', available: true },
     { name: 'Separator', path: '/docs/components/separator', available: true },
     { name: 'Empty', path: '/docs/components/empty', available: true },

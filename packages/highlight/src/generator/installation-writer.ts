@@ -351,6 +351,13 @@ function analyzeComponentDependencies(componentDir: string, componentName: strin
     // That is intentional: the chart needs the wrapper and the engine.
     { pattern: 'ngx-echarts', name: 'ngx-echarts', npmPackage: 'ngx-echarts', type: 'external' },
     { pattern: 'echarts', name: 'echarts', npmPackage: 'echarts', type: 'external' },
+    // The data table renders a TanStack table; v9 is the version its feature-based API needs.
+    {
+      pattern: "'@tanstack/angular-table'",
+      name: '@tanstack/angular-table',
+      npmPackage: '@tanstack/angular-table@^9',
+      type: 'external',
+    },
     // The map is a layer over ng-mapcn, pinned to the exact beta the registry installs. MapLibre is its peer and
     // `@types/geojson` types the GeoJSON props. Terra-draw only comes with `ng-mapcn/draw`, never with the core map.
     { pattern: "from 'ng-mapcn'", name: 'ng-mapcn', npmPackage: pinnedPeer('ng-mapcn'), type: 'external' },

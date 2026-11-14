@@ -13,7 +13,8 @@ export default {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  // @tanstack ships ESM-only `.js` files, so they go through the transform like the `.mjs` bundles.
+  transformIgnorePatterns: ['node_modules/(?!(.*\\.mjs$|@tanstack/))'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

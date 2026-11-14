@@ -57,6 +57,7 @@
 /docs/components/checkbox
 /docs/components/combobox
 /docs/components/command
+/docs/components/data-table
 /docs/components/date-picker
 /docs/components/separator
 /docs/components/empty

@@ -340,6 +340,22 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';`,
     templateCode: `<z-switch></z-switch>`,
   },
+  'data-table': {
+    importCode: `import { injectTable, rowPaginationFeature, tableFeatures } from '@tanstack/angular-table';
+
+import { ZardDataTableImports } from '@/shared/components/data-table/data-table.imports';
+
+const features = tableFeatures({ rowPaginationFeature });
+const columns = [
+  { accessorKey: 'email', header: 'Email' },
+  { accessorKey: 'amount', header: 'Amount' },
+];
+
+// In the component class:
+readonly table = injectTable(() => ({ features, columns, data: this.data() }));`,
+    templateCode: `<z-data-table [zTable]="table" />
+<z-data-table-pagination [zTable]="table" />`,
+  },
   table: {
     importCode: `import { ZardTableImports } from '@/shared/components/table/table.imports';`,
     templateCode: `<table z-table>

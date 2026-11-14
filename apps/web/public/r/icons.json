@@ -31,6 +31,9 @@
     "arrow-up": {
       "lucide": "lucideArrowUp"
     },
+    "arrow-up-down": {
+      "lucide": "lucideArrowUpDown"
+    },
     "arrow-up-right": {
       "lucide": "lucideArrowUpRight"
     },
@@ -120,6 +123,12 @@
     },
     "circle-help": {
       "lucide": "lucideCircleHelp"
+    },
+    "circle-off": {
+      "lucide": "lucideCircleOff"
+    },
+    "circle-plus": {
+      "lucide": "lucideCirclePlus"
     },
     "circle-small": {
       "lucide": "lucideCircleSmall"
@@ -325,6 +334,12 @@
     "pie-chart": {
       "lucide": "lucidePieChart"
     },
+    "pin": {
+      "lucide": "lucidePin"
+    },
+    "pin-off": {
+      "lucide": "lucidePinOff"
+    },
     "play": {
       "lucide": "lucidePlay"
     },
@@ -396,6 +411,9 @@
     },
     "thumbs-up": {
       "lucide": "lucideThumbsUp"
+    },
+    "timer": {
+      "lucide": "lucideTimer"
     },
     "trash": {
       "lucide": "lucideTrash"
