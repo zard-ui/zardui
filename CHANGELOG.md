@@ -1,3 +1,7 @@
+## 1.10.0 (2026-11-14)
+
+This was a version bump only, there were no code changes.
+
 ## 1.9.0 (2026-11-13)
 
 This was a version bump only, there were no code changes.
