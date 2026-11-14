@@ -19,6 +19,7 @@ export * from './lib/shared/components/collapsible';
 export * from './lib/shared/components/combobox';
 export * from './lib/shared/components/command';
 export * from './lib/shared/components/context-menu';
+export * from './lib/shared/components/data-table';
 export * from './lib/shared/components/date-picker';
 export * from './lib/shared/components/dialog';
 export * from './lib/shared/components/drawer';

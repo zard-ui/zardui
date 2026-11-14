@@ -928,6 +928,57 @@
       ]
     },
     {
+      "name": "data-table",
+      "type": "registry:component",
+      "dependencies": [
+        "@tanstack/angular-table@^9.3.1"
+      ],
+      "registryDependencies": [
+        "table",
+        "button",
+        "dropdown",
+        "select"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [
+          "lucideArrowDown",
+          "lucideArrowUp",
+          "lucideChevronLeft",
+          "lucideChevronRight",
+          "lucideChevronsLeft",
+          "lucideChevronsRight",
+          "lucideChevronsUpDown",
+          "lucideEyeOff",
+          "lucidePin",
+          "lucidePinOff",
+          "lucideSettings2"
+        ],
+        "tokens": [
+          "arrow-down",
+          "arrow-up",
+          "chevron-left",
+          "chevron-right",
+          "chevrons-left",
+          "chevrons-right",
+          "chevrons-up-down",
+          "eye-off",
+          "pin",
+          "pin-off",
+          "settings-2"
+        ]
+      },
+      "files": [
+        "data-table.component.ts",
+        "data-table-column-header.component.ts",
+        "data-table-pagination.component.ts",
+        "data-table-view-options.component.ts",
+        "data-table.imports.ts",
+        "data-table.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "date-picker",
       "type": "registry:component",
       "registryDependencies": [

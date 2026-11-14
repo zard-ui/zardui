@@ -1317,6 +1317,41 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'data-table',
+    dependencies: ['@tanstack/angular-table@^9.3.1'],
+    registryDependencies: ['table', 'button', 'dropdown', 'select'],
+    files: [
+      {
+        name: 'data-table.component.ts',
+        content: '',
+      },
+      {
+        name: 'data-table-column-header.component.ts',
+        content: '',
+      },
+      {
+        name: 'data-table-pagination.component.ts',
+        content: '',
+      },
+      {
+        name: 'data-table-view-options.component.ts',
+        content: '',
+      },
+      {
+        name: 'data-table.imports.ts',
+        content: '',
+      },
+      {
+        name: 'data-table.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'date-picker',
     registryDependencies: ['button', 'calendar', 'popover'],
     files: [

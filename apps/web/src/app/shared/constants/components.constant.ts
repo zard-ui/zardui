@@ -477,6 +477,12 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/switch/demo/switch').then(m => m.SWITCH),
   },
   {
+    componentName: 'data-table',
+    description: 'Powerful table and datagrids built using TanStack Table.',
+    category: 'Display & Media',
+    loadData: () => import('@zard/components/data-table/demo/data-table').then(m => m.DATA_TABLE),
+  },
+  {
     componentName: 'table',
     description: 'A responsive table component.',
     category: 'Display & Media',
