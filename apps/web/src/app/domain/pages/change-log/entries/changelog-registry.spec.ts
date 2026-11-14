@@ -42,7 +42,7 @@ describe('CHANGELOG_ENTRIES', () => {
   });
 
   it('lists the newest month first, even when it is newer than the release', () => {
-    expect(CHANGELOG_ENTRIES[0].meta.id).toBe('10-2026');
+    expect(CHANGELOG_ENTRIES[0].meta.id).toBe('11-2026');
   });
 
   it('every highlight icon is one of the eight values the closed union allows', () => {
