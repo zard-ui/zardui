@@ -25,6 +25,7 @@ Here you can find all the components available in the library. We are working on
 - [Checkbox](/docs/components/checkbox)
 - [Code Block](/docs/components/code-block)
 - [Collapsible](/docs/components/collapsible)
+- [Color Picker](/docs/components/color-picker)
 - [Combobox](/docs/components/combobox)
 - [Command](/docs/components/command)
 - [Context Menu](/docs/components/context-menu)

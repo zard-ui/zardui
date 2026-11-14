@@ -132,6 +132,7 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
   'pie-chart': { lucide: 'lucidePieChart' },
   pin: { lucide: 'lucidePin' },
   'pin-off': { lucide: 'lucidePinOff' },
+  pipette: { lucide: 'lucidePipette' },
   play: { lucide: 'lucidePlay' },
   plus: { lucide: 'lucidePlus' },
   'refresh-ccw': { lucide: 'lucideRefreshCcw' },

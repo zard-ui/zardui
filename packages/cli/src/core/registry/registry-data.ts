@@ -1370,6 +1370,28 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'color-picker',
+    registryDependencies: ['button', 'input', 'popover'],
+    files: [
+      {
+        name: 'color-picker.component.ts',
+        content: '',
+      },
+      {
+        name: 'color-picker.utils.ts',
+        content: '',
+      },
+      {
+        name: 'color-picker.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'pagination',
     registryDependencies: ['button'],
     files: [

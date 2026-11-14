@@ -112,6 +112,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Carousel', path: '/docs/components/carousel', available: true },
     { name: 'Chart', path: '/docs/components/chart', available: true },
     { name: 'Checkbox', path: '/docs/components/checkbox', available: true },
+    { name: 'Color Picker', path: '/docs/components/color-picker', available: true },
     { name: 'Combobox', path: '/docs/components/combobox', available: true },
     { name: 'Command', path: '/docs/components/command', available: true },
     { name: 'Data Table', path: '/docs/components/data-table', available: true },
