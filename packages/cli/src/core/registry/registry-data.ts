@@ -1722,6 +1722,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'chart-theme-watcher.ts',
+        content: '',
+      },
+      {
         name: 'chart.types.ts',
         content: '',
       },

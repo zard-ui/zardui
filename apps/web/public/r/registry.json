@@ -1285,6 +1285,7 @@
       "files": [
         "chart.component.ts",
         "chart.variants.ts",
+        "chart-theme-watcher.ts",
         "chart.types.ts",
         "chart-context.ts",
         "chart-colors.util.ts",
