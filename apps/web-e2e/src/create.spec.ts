@@ -94,6 +94,37 @@ test.describe('Create builder', () => {
       .toContain('Lora');
   });
 
+  test('the overview charts repaint in the new chart color, without a reload', async ({ page }) => {
+    // The average color of the first chart's painted pixels (white background left out).
+    const chartColor = () =>
+      previewFrame(page).evaluate(() => {
+        const canvas = [...document.querySelectorAll('canvas')].find(c => c.width > 50);
+        if (!canvas) return null;
+        const data = canvas.getContext('2d')?.getImageData(0, 0, canvas.width, canvas.height).data ?? [];
+        let red = 0;
+        let blue = 0;
+        let count = 0;
+        for (let i = 0; i < data.length; i += 4 * 53) {
+          if (data[i + 3] > 200 && !(data[i] > 235 && data[i + 1] > 235 && data[i + 2] > 235)) {
+            red += data[i];
+            blue += data[i + 2];
+            count++;
+          }
+        }
+        return count ? { red: red / count, blue: blue / count } : null;
+      });
+
+    await expect.poll(chartColor, { timeout: 20_000 }).not.toBeNull();
+    await choose(page, 'Chart Color', 'Red');
+
+    await expect
+      .poll(async () => {
+        const color = await chartColor();
+        return color !== null && color.red > color.blue + 60;
+      })
+      .toBe(true);
+  });
+
   test('the heading font reaches the card titles', async ({ page }) => {
     await choose(page, 'Heading', 'Playfair Display');
 

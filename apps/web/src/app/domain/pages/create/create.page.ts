@@ -57,7 +57,10 @@ const SCROLL_LOCK_CLASS = 'scroll-locked';
     </section>
 
     <z-create-dialogs />
-    <z-create-get-code />
+    <!-- Fetched the first time it is opened, then kept: most visits never ask for code. -->
+    @defer (when shell.getCodeOpen()) {
+      <z-create-get-code />
+    }
   `,
 })
 export class CreatePage implements OnInit, OnDestroy {
@@ -65,7 +68,7 @@ export class CreatePage implements OnInit, OnDestroy {
   private readonly seo = inject(SeoService);
   private readonly viewportScroller = inject(ViewportScroller);
   private readonly state = inject(CreateStateService);
-  private readonly shell = inject(CreateShellService);
+  protected readonly shell = inject(CreateShellService);
 
   protected readonly mobile = injectIsMobile();
 

@@ -111,7 +111,10 @@ const COPIED_MS = 2000;
               <span class="text-foreground block text-sm leading-5 font-medium">Edit theme</span>
             </button>
           } @else {
-            <z-create-theme-editor />
+            <!-- The editor and its color pickers are fetched only once Custom is turned on. -->
+            @defer {
+              <z-create-theme-editor />
+            }
           }
         } @else {
           <z-create-picker
@@ -292,16 +295,18 @@ const COPIED_MS = 2000;
       </div>
     </section>
 
-    @if (mobile()) {
-      <z-sheet zSide="bottom" class="dark max-h-[70vh]" [(zVisible)]="editorOpen">
-        <z-sheet-header>
-          <z-sheet-title>Custom colors</z-sheet-title>
-          <z-sheet-description>Every color of the theme. A custom theme is installed by hand.</z-sheet-description>
-        </z-sheet-header>
-        <div class="no-scrollbar min-h-0 overflow-y-auto px-4 pb-4">
-          <z-create-theme-editor />
-        </div>
-      </z-sheet>
+    @if (mobile() && custom()) {
+      @defer {
+        <z-sheet zSide="bottom" class="dark max-h-[70vh]" [(zVisible)]="editorOpen">
+          <z-sheet-header>
+            <z-sheet-title>Custom colors</z-sheet-title>
+            <z-sheet-description>Every color of the theme. A custom theme is installed by hand.</z-sheet-description>
+          </z-sheet-header>
+          <div class="no-scrollbar min-h-0 overflow-y-auto px-4 pb-4">
+            <z-create-theme-editor />
+          </div>
+        </z-sheet>
+      }
     }
   `,
 })
