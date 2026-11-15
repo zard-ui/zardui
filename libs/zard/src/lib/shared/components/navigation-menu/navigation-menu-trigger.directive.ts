@@ -339,6 +339,8 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   private trackOverlayState(): void {
     const openSubscription = this.cdkTrigger.opened.subscribe(() => this.overlayOpen.set(true));
     const closeSubscription = this.cdkTrigger.closed.subscribe(() => {
+      // Closed by someone else (another trigger took over): a close this trigger still had pending is moot.
+      this.cancelScheduledClose();
       this.overlayOpen.set(false);
       this.returnFocusFromMenu();
     });
@@ -449,7 +451,10 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
   private scheduleMenuClose(): void {
     this.closeTimeout = setTimeout(() => {
-      this.cdkTrigger.close();
+      this.closeTimeout = null;
+      // The CDK's close() always closes the sibling triggers too, so a trigger that is already closed must not call
+      // it: moving from one item to the next would otherwise shut the menu that just opened.
+      if (this.cdkTrigger.isOpen()) this.cdkTrigger.close();
     }, this.zHoverDelay());
   }
 
