@@ -476,6 +476,11 @@ const PROVIDED_PEERS = (name: string) => name.startsWith('@angular/') || ['rxjs'
  * Angular itself.
  */
 function checkPeerDependencies(): void {
+  // `dependencies` may carry a version (`ng-mapcn@22.0.0-beta.9`, `@tanstack/angular-table@^9.3.1`): look up by name.
+  const nameOf = (spec: string): string => {
+    const at = spec.indexOf('@', spec.startsWith('@') ? 1 : 0);
+    return at > 0 ? spec.slice(0, at) : spec;
+  };
   const byName = new Map(registry.map(item => [item.name, item]));
 
   const installedBy = (name: string, seen = new Set<string>()): Set<string> => {
@@ -483,7 +488,7 @@ function checkPeerDependencies(): void {
     if (seen.has(name)) return installed;
     seen.add(name);
     const item = byName.get(name);
-    for (const dependency of item?.dependencies ?? []) installed.add(dependency);
+    for (const dependency of item?.dependencies ?? []) installed.add(nameOf(dependency));
     for (const other of item?.registryDependencies ?? []) {
       for (const dependency of installedBy(other, seen)) installed.add(dependency);
     }
@@ -494,7 +499,7 @@ function checkPeerDependencies(): void {
     const installed = installedBy(item.name);
 
     for (const dependency of item.dependencies ?? []) {
-      const manifestPath = path.resolve(__dirname, '../node_modules', dependency, 'package.json');
+      const manifestPath = path.resolve(__dirname, '../node_modules', nameOf(dependency), 'package.json');
       if (!fs.existsSync(manifestPath)) {
         report(item.name, `cannot read the peer dependencies of "${dependency}": it is not installed in node_modules`);
         continue;
