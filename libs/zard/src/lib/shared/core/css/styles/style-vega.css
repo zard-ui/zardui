@@ -1731,6 +1731,42 @@
     @apply bg-muted animate-pulse rounded-md;
   }
 
+  /* MARK: message-scroller */
+
+  .cn-message-scroller-content {
+    @apply gap-6;
+  }
+
+  .cn-message-scroller-button-direction-end {
+    @apply bottom-4;
+  }
+
+  .cn-message-scroller-button-direction-start {
+    @apply top-4;
+  }
+
+  /* MARK: trace */
+
+  .cn-trace {
+    @apply gap-2;
+  }
+
+  .cn-trace-line {
+    @apply gap-2 text-sm;
+  }
+
+  .cn-trace-icon {
+    @apply size-4 [--ng-icon__size:1rem];
+  }
+
+  .cn-trace-collapsible-trigger {
+    @apply gap-1 rounded-md;
+  }
+
+  .cn-trace-collapsible-content {
+    @apply mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed;
+  }
+
   /* MARK: tooltip */
 
   .cn-tooltip {
@@ -2958,6 +2994,26 @@
 
   .cn-select-item-state {
     @apply focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground [&_svg:not([class*="size-"])]:size-4 [&_svg:not([class*="text-"])]:text-muted-foreground *:data-[slot=select-item-text]:flex *:data-[slot=select-item-text]:items-center *:data-[slot=select-item-text]:gap-2;
+  }
+
+  /* MARK: message-scroller */
+
+  .cn-message-scroller-viewport {
+    @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+  }
+
+  /* MARK: trace */
+
+  .cn-trace {
+    @apply *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50;
+  }
+
+  .cn-trace-icon {
+    @apply [&_svg:not([class*=size-])]:size-4;
+  }
+
+  .cn-trace-collapsible-trigger {
+    @apply focus-visible:ring-3 focus-visible:ring-ring/50;
   }
 
   /* MARK: tooltip */
