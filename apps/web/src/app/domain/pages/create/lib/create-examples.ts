@@ -117,6 +117,14 @@ export const CREATE_EXAMPLES: readonly CreateExample[] = [
       ),
   },
   {
+    name: 'color-picker',
+    title: 'Color Picker',
+    load: () =>
+      import('@doc/domain/pages/create/examples/color-picker-example.component').then(
+        m => m.ColorPickerExampleComponent,
+      ),
+  },
+  {
     name: 'combobox',
     title: 'Combobox',
     load: () =>

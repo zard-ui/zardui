@@ -851,6 +851,154 @@
   @apply flex-1 rounded-none border-0 bg-transparent shadow-none ring-0;
 }
 
+/* MARK: color-picker */
+
+.cn-color-picker:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply flex flex-col;
+}
+
+.cn-color-picker-show-value-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply w-[212px];
+}
+
+.cn-color-picker-show-value-false:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply w-fit;
+}
+
+.cn-color-picker-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply font-normal;
+}
+
+.cn-color-picker-trigger-show-value-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply w-full justify-start text-start;
+}
+
+.cn-color-picker-swatch:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply rounded-sm;
+}
+
+.cn-color-picker-swatch-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-3.5;
+}
+
+.cn-color-picker-swatch-size-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-4;
+}
+
+.cn-color-picker-swatch-size-lg:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-5;
+}
+
+.cn-color-picker-format-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply rounded-md;
+}
+
+.cn-color-picker-format-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply rounded-sm shadow-sm;
+}
+
+.cn-color-picker-format:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-6 flex-1 rounded-sm font-mono text-[11px] font-medium;
+}
+
+.cn-color-picker-area:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-36 rounded-md;
+}
+
+.cn-color-picker-track:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-3 rounded-full;
+}
+
+.cn-color-picker-track-fill:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply rounded-full;
+}
+
+.cn-color-picker-thumb:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-4 rounded-full;
+}
+
+.cn-color-picker-preset:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-6 rounded-md;
+}
+
+.cn-color-picker-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-7 px-2 font-mono text-[11px];
+}
+
+.cn-color-picker-presets:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply flex flex-wrap gap-1.5;
+}
+
+.cn-color-picker-eyedropper-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-3.5!;
+}
+
+/* MARK: map-style-select */
+
+.cn-map-style-select:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply inline-block;
+}
+
+.cn-map-style-select-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-2 pr-2 pl-1;
+}
+
+.cn-map-style-select-trigger-caption:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-[10px] font-normal;
+}
+
+.cn-map-style-select-trigger-value:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-xs font-medium;
+}
+
+.cn-map-style-select-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply px-3.5 pt-3 pb-2;
+}
+
+.cn-map-style-select-list:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-0.5 p-1.5 pt-0;
+}
+
+.cn-map-style-select-group-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply px-1.5 pt-2 pb-0.5 text-[11px] font-medium tracking-wide uppercase;
+}
+
+.cn-map-style-select-option:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply flex items-center gap-3 rounded-md p-1.5 text-left;
+}
+
+.cn-map-style-select-option-name:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply flex items-center gap-1.5 text-sm font-medium;
+}
+
+.cn-map-style-select-option-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-xs;
+}
+
+.cn-map-style-select-badge:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply px-1.5 py-0 text-[10px];
+}
+
+.cn-map-style-select-swatch-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-6 w-9 rounded-[5px];
+}
+
+.cn-map-style-select-swatch-size-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-11 w-16 rounded-md;
+}
+
+.cn-map-style-select-form:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-2 p-3;
+}
+
+.cn-map-style-select-form-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-xs font-medium;
+}
+
+.cn-map-style-select-hint:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-xs;
+}
+
 /* MARK: combobox */
 
 .cn-combobox:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2543,6 +2691,34 @@
 
 .cn-input-group-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0 dark:bg-transparent dark:disabled:bg-transparent;
+}
+
+/* MARK: color-picker */
+
+.cn-color-picker-format:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+}
+
+.cn-color-picker-area:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+}
+
+.cn-color-picker-track:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+}
+
+.cn-color-picker-preset:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+}
+
+.cn-color-picker-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply md:text-[11px];
+}
+
+/* MARK: map-style-select */
+
+.cn-map-style-select-option:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply focus-visible:ring-[3px] focus-visible:ring-ring/50;
 }
 
 /* MARK: combobox */

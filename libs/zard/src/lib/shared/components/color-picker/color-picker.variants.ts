@@ -13,11 +13,11 @@ const checkerboard =
  * Host wrapper. With the value text the trigger is a full-width field, like `z-date-picker`;
  * without it the trigger is a square swatch button, so the host shrinks to fit it.
  */
-export const colorPickerVariants = cva('flex flex-col', {
+export const colorPickerVariants = cva('cn-color-picker', {
   variants: {
     zShowValue: {
-      true: 'w-[212px]',
-      false: 'w-fit',
+      true: 'cn-color-picker-show-value-true',
+      false: 'cn-color-picker-show-value-false',
     },
   },
   defaultVariants: {
@@ -26,10 +26,10 @@ export const colorPickerVariants = cva('flex flex-col', {
 });
 
 /** Trigger button. Height, colors and focus ring come from `buttonVariants`, so only the delta lives here. */
-export const colorPickerTriggerVariants = cva('font-normal', {
+export const colorPickerTriggerVariants = cva('cn-color-picker-trigger', {
   variants: {
     zShowValue: {
-      true: 'w-full justify-start text-start',
+      true: 'cn-color-picker-trigger-show-value-true',
       false: '',
     },
   },
@@ -39,13 +39,13 @@ export const colorPickerTriggerVariants = cva('font-normal', {
 });
 
 export const colorPickerSwatchVariants = cva(
-  `relative shrink-0 overflow-hidden rounded-sm ring-1 ring-foreground/15 ring-inset ${checkerboard}`,
+  `cn-color-picker-swatch relative shrink-0 overflow-hidden ring-1 ring-foreground/15 ring-inset ${checkerboard}`,
   {
     variants: {
       zSize: {
-        sm: 'size-3.5',
-        default: 'size-4',
-        lg: 'size-5',
+        sm: 'cn-color-picker-swatch-size-sm',
+        default: 'cn-color-picker-swatch-size-default',
+        lg: 'cn-color-picker-swatch-size-lg',
       },
     },
     defaultVariants: {
@@ -65,24 +65,24 @@ const glideUnlessDragging = `${glide} group-data-dragging/color-picker:transitio
 export const colorPickerPanelVariants = cva('group/color-picker w-72 gap-3 p-3');
 
 /** Segmented control picking the format of the text field. */
-export const colorPickerFormatGroupVariants = cva('relative isolate flex rounded-md bg-muted p-0.5');
+export const colorPickerFormatGroupVariants = cva('cn-color-picker-format-group relative isolate flex bg-muted p-0.5');
 
 /** The pill behind the active tab. Tabs share the width equally, so it only needs a `translateX` per index. */
 export const colorPickerFormatIndicatorVariants = cva(
-  'absolute inset-y-0.5 inset-s-0.5 -z-10 rounded-sm bg-background shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+  'cn-color-picker-format-indicator absolute inset-y-0.5 inset-s-0.5 -z-10 bg-background transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
 );
 
 export const colorPickerFormatVariants = cva(
-  'h-6 flex-1 rounded-sm font-mono text-[11px] font-medium text-muted-foreground outline-none transition-colors duration-200 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 aria-pressed:text-foreground',
+  'cn-color-picker-format text-muted-foreground outline-none transition-colors duration-200 hover:text-foreground aria-pressed:text-foreground',
 );
 
 /** The saturation (x) / brightness (y) area. Hue and gradients are set inline: x follows the reading direction. */
 export const colorPickerAreaVariants = cva(
-  `relative h-36 w-full cursor-crosshair touch-none rounded-md outline-none select-none transition-[background-color] focus-visible:ring-3 focus-visible:ring-ring/50 ${glideUnlessDragging}`,
+  `cn-color-picker-area relative w-full cursor-crosshair touch-none outline-none select-none transition-[background-color] ${glideUnlessDragging}`,
 );
 
 export const colorPickerTrackVariants = cva(
-  'relative h-3 w-full cursor-pointer touch-none rounded-full outline-none select-none focus-visible:ring-3 focus-visible:ring-ring/50',
+  'cn-color-picker-track relative w-full cursor-pointer touch-none outline-none select-none',
   {
     variants: {
       zChannel: {
@@ -99,7 +99,7 @@ export const colorPickerTrackVariants = cva(
 
 /** Thumb shared by the area and both tracks; positioned inline through `left` / `top`. */
 export const colorPickerThumbVariants = cva(
-  `pointer-events-none absolute top-1/2 size-4 -translate-1/2 rounded-full border-2 border-white shadow-[0_0_0_1px_rgb(0_0_0/0.3),0_1px_3px_rgb(0_0_0/0.3)] transition-[left,top,background-color,scale] ${glide} group-data-dragging/color-picker:transition-[scale] data-active:scale-125`,
+  `cn-color-picker-thumb pointer-events-none absolute top-1/2 -translate-1/2 border-2 border-white shadow-[0_0_0_1px_rgb(0_0_0/0.3),0_1px_3px_rgb(0_0_0/0.3)] transition-[left,top,background-color,scale] ${glide} group-data-dragging/color-picker:transition-[scale] data-active:scale-125`,
 );
 
 /** The color layer over a checkerboard (trigger swatch, presets), fading between colors. */
@@ -108,7 +108,7 @@ export const colorPickerFillVariants = cva(
 );
 
 export const colorPickerPresetVariants = cva(
-  `relative size-6 overflow-hidden rounded-md ring-1 ring-foreground/15 ring-inset outline-none ${checkerboard} transition-[scale,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 focus-visible:ring-3 focus-visible:ring-ring/50 aria-pressed:ring-2 aria-pressed:ring-ring motion-reduce:transition-none`,
+  `cn-color-picker-preset relative overflow-hidden ring-1 ring-foreground/15 ring-inset outline-none ${checkerboard} transition-[scale,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 aria-pressed:ring-2 aria-pressed:ring-ring motion-reduce:transition-none`,
 );
 
 export type ZardColorPickerSizeVariants = Extract<ZardButtonSizeVariants, 'sm' | 'default' | 'lg'>;

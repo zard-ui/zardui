@@ -266,6 +266,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
     'cn-collapsible-is-element-true': 'block',
+    'cn-color-picker': 'flex flex-col',
+    'cn-color-picker-area': 'h-36 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-eyedropper-icon': 'size-4!',
+    'cn-color-picker-format':
+      'h-6 flex-1 rounded-sm font-mono text-[11px] font-medium focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-format-group': 'rounded-md',
+    'cn-color-picker-format-indicator': 'rounded-sm shadow-sm',
+    'cn-color-picker-input': 'h-7 px-2 font-mono text-[11px] md:text-[11px]',
+    'cn-color-picker-preset': 'size-6 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-presets': 'flex flex-wrap gap-1.5',
+    'cn-color-picker-show-value-false': 'w-fit',
+    'cn-color-picker-show-value-true': 'w-[212px]',
+    'cn-color-picker-swatch': 'rounded-sm',
+    'cn-color-picker-swatch-size-default': 'size-4',
+    'cn-color-picker-swatch-size-lg': 'size-5',
+    'cn-color-picker-swatch-size-sm': 'size-3.5',
+    'cn-color-picker-thumb': 'size-4 rounded-full',
+    'cn-color-picker-track': 'h-3 rounded-full focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-track-fill': 'rounded-full',
+    'cn-color-picker-trigger': 'font-normal',
+    'cn-color-picker-trigger-show-value-true': 'w-full justify-start text-start',
     'cn-combobox': 'relative block',
     'cn-combobox-chip':
       'flex w-fit items-center justify-center gap-1 rounded-sm bg-muted px-1.5 text-xs font-medium whitespace-nowrap text-foreground h-[calc(--spacing(5.5))] has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0',
@@ -400,7 +421,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border border-input bg-transparent px-2.5 py-1 text-base h-9 rounded-md shadow-xs transition-[color,box-shadow] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input h-9 rounded-md shadow-xs transition-[color,box-shadow] has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
+      'relative flex w-full min-w-0 items-center border border-input h-9 rounded-md shadow-xs transition-[color,box-shadow] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
     'cn-input-group-addon-align-block-end':
@@ -471,6 +492,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
     'cn-label': 'gap-2 text-sm font-medium',
+    'cn-map-style-select': 'inline-block',
+    'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
+    'cn-map-style-select-form': 'gap-2 p-3',
+    'cn-map-style-select-form-label': 'text-xs font-medium',
+    'cn-map-style-select-group-label': 'px-1.5 pt-2 pb-0.5 text-[11px] font-medium tracking-wide uppercase',
+    'cn-map-style-select-header': 'px-3.5 pt-3 pb-2',
+    'cn-map-style-select-hint': 'text-xs',
+    'cn-map-style-select-list': 'gap-0.5 p-1.5 pt-0',
+    'cn-map-style-select-option':
+      'flex items-center gap-3 rounded-md p-1.5 text-left focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-map-style-select-option-description': 'text-xs',
+    'cn-map-style-select-option-name': 'flex items-center gap-1.5 text-sm font-medium',
+    'cn-map-style-select-swatch-size-default': 'h-11 w-16 rounded-md',
+    'cn-map-style-select-swatch-size-sm': 'h-6 w-9 rounded-[5px]',
+    'cn-map-style-select-trigger': 'gap-2 pr-2 pl-1',
+    'cn-map-style-select-trigger-caption': 'text-[10px] font-normal',
+    'cn-map-style-select-trigger-value': 'text-xs font-medium',
     'cn-marker':
       "relative flex min-h-4 w-full items-center gap-2 text-start text-sm text-muted-foreground [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground",
     'cn-marker-content':
@@ -977,6 +1015,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
     'cn-collapsible-is-element-true': 'block',
+    'cn-color-picker': 'flex flex-col',
+    'cn-color-picker-area': 'h-36 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-eyedropper-icon': 'size-3.5!',
+    'cn-color-picker-format':
+      'h-6 flex-1 rounded-sm font-mono text-[11px] font-medium focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-format-group': 'rounded-md',
+    'cn-color-picker-format-indicator': 'rounded-sm shadow-sm',
+    'cn-color-picker-input': 'h-7 px-2 font-mono text-[11px] md:text-[11px]',
+    'cn-color-picker-preset': 'size-6 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-presets': 'flex flex-wrap gap-1.5',
+    'cn-color-picker-show-value-false': 'w-fit',
+    'cn-color-picker-show-value-true': 'w-[212px]',
+    'cn-color-picker-swatch': 'rounded-sm',
+    'cn-color-picker-swatch-size-default': 'size-4',
+    'cn-color-picker-swatch-size-lg': 'size-5',
+    'cn-color-picker-swatch-size-sm': 'size-3.5',
+    'cn-color-picker-thumb': 'size-4 rounded-full',
+    'cn-color-picker-track': 'h-3 rounded-full focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-track-fill': 'rounded-full',
+    'cn-color-picker-trigger': 'font-normal',
+    'cn-color-picker-trigger-show-value-true': 'w-full justify-start text-start',
     'cn-combobox': 'relative block',
     'cn-combobox-chip':
       'flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 rounded-sm bg-muted px-1.5 text-xs font-medium whitespace-nowrap text-foreground has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0',
@@ -1059,23 +1118,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top',
     'cn-drawer-title': 'text-base font-medium text-foreground wrap-anywhere',
     'cn-dropdown-menu-content':
-      'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+      'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 animate-in duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
     'cn-dropdown-menu-item':
-      'relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
-    'cn-dropdown-menu-item-indicator': 'absolute start-2 flex size-3.5 items-center justify-center',
-    'cn-dropdown-menu-item-inset-true': 'ps-8',
+      'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
+    'cn-dropdown-menu-item-indicator': 'absolute start-1.5 flex size-4 items-center justify-center',
+    'cn-dropdown-menu-item-inset-true': 'ps-7',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
-    'cn-dropdown-menu-label': 'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
-    'cn-dropdown-menu-label-inset-true': 'ps-8',
+    'cn-dropdown-menu-label': 'relative flex items-center px-1.5 py-1 text-xs font-medium text-muted-foreground',
+    'cn-dropdown-menu-label-inset-true': 'ps-7',
     'cn-dropdown-menu-radio-dot': 'size-2 rounded-full bg-current',
     'cn-dropdown-menu-separator': 'bg-border -mx-1 my-1 block h-px',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-dropdown-menu-sub-content':
-      'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95',
+      'z-50 min-w-24 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10 animate-in duration-100 fade-in-0 zoom-in-95',
     'cn-dropdown-menu-sub-trigger':
-      'relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
-    'cn-dropdown-menu-sub-trigger-inset-true': 'ps-8',
+      'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
+    'cn-dropdown-menu-sub-trigger-inset-true': 'ps-7',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-xl border-dashed p-6 text-center text-balance',
     'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance',
@@ -1112,7 +1171,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center rounded-lg border border-input transition-colors has-disabled:bg-input/50 has-disabled:opacity-50 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-disabled:bg-input/80 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
+      'relative flex h-8 w-full min-w-0 items-center rounded-lg border border-input transition-colors has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
     'cn-input-group-addon-align-block-end':
@@ -1183,6 +1242,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
     'cn-label': '',
+    'cn-map-style-select': 'inline-block',
+    'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
+    'cn-map-style-select-form': 'gap-2 p-3',
+    'cn-map-style-select-form-label': 'text-xs font-medium',
+    'cn-map-style-select-group-label': 'px-1.5 pt-2 pb-0.5 text-[11px] font-medium tracking-wide uppercase',
+    'cn-map-style-select-header': 'px-3.5 pt-3 pb-2',
+    'cn-map-style-select-hint': 'text-xs',
+    'cn-map-style-select-list': 'gap-0.5 p-1.5 pt-0',
+    'cn-map-style-select-option':
+      'flex items-center gap-3 rounded-md p-1.5 text-left focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-map-style-select-option-description': 'text-xs',
+    'cn-map-style-select-option-name': 'flex items-center gap-1.5 text-sm font-medium',
+    'cn-map-style-select-swatch-size-default': 'h-11 w-16 rounded-md',
+    'cn-map-style-select-swatch-size-sm': 'h-6 w-9 rounded-[5px]',
+    'cn-map-style-select-trigger': 'gap-2 pr-2 pl-1',
+    'cn-map-style-select-trigger-caption': 'text-[10px] font-normal',
+    'cn-map-style-select-trigger-value': 'text-xs font-medium',
     'cn-marker':
       "relative flex min-h-4 w-full items-center gap-2 text-start text-sm text-muted-foreground [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground",
     'cn-marker-content':
@@ -1688,6 +1764,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
     'cn-collapsible-is-element-true': 'block',
+    'cn-color-picker': 'flex flex-col',
+    'cn-color-picker-area': 'h-40 rounded-xl focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-color-picker-eyedropper-icon': 'size-4!',
+    'cn-color-picker-format':
+      'h-6 flex-1 rounded-4xl font-mono text-[11px] font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-color-picker-format-group': 'rounded-4xl',
+    'cn-color-picker-format-indicator': 'rounded-4xl shadow-sm',
+    'cn-color-picker-input': 'h-7 px-3 font-mono text-[11px] md:text-[11px]',
+    'cn-color-picker-preset': 'size-6 rounded-full focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-color-picker-presets': 'flex flex-wrap gap-2',
+    'cn-color-picker-show-value-false': 'w-fit',
+    'cn-color-picker-show-value-true': 'w-[212px]',
+    'cn-color-picker-swatch': 'rounded-full',
+    'cn-color-picker-swatch-size-default': 'size-4',
+    'cn-color-picker-swatch-size-lg': 'size-5',
+    'cn-color-picker-swatch-size-sm': 'size-3.5',
+    'cn-color-picker-thumb': 'size-4 rounded-4xl',
+    'cn-color-picker-track': 'h-3.5 rounded-4xl focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-color-picker-track-fill': 'rounded-4xl',
+    'cn-color-picker-trigger': 'font-normal',
+    'cn-color-picker-trigger-show-value-true': 'w-full justify-start text-start',
     'cn-combobox': 'relative block',
     'cn-combobox-chip':
       'flex w-fit items-center justify-center gap-1 text-xs font-medium whitespace-nowrap text-foreground bg-muted-foreground/10 h-[calc(--spacing(5.5))] rounded-4xl px-2 has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0',
@@ -1822,7 +1919,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border border-input py-1 text-base transition-colors bg-input/30 h-9 rounded-4xl px-3 file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:h-7 focus-visible:ring-[3px] aria-invalid:ring-[3px]',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/30 h-9 rounded-4xl has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-data-[align=block-end]:rounded-2xl has-data-[align=block-start]:rounded-2xl has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-[3px] has-[textarea]:rounded-xl',
+      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/30 h-9 rounded-4xl has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-data-[align=block-end]:rounded-2xl has-data-[align=block-start]:rounded-2xl has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-[3px] has-[textarea]:rounded-xl',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-4xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -1892,6 +1989,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
     'cn-label': 'gap-2 text-sm font-medium',
+    'cn-map-style-select': 'inline-block',
+    'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
+    'cn-map-style-select-form': 'gap-2.5 p-4',
+    'cn-map-style-select-form-label': 'text-xs font-medium',
+    'cn-map-style-select-group-label': 'px-2 pt-3 pb-1 text-[11px] font-medium tracking-wide uppercase',
+    'cn-map-style-select-header': 'px-4 pt-4 pb-2.5',
+    'cn-map-style-select-hint': 'text-xs',
+    'cn-map-style-select-list': 'gap-1 p-2 pt-0',
+    'cn-map-style-select-option':
+      'flex items-center gap-3 rounded-xl p-2 text-left focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-map-style-select-option-description': 'text-xs',
+    'cn-map-style-select-option-name': 'flex items-center gap-1.5 text-sm font-medium',
+    'cn-map-style-select-swatch-size-default': 'h-11 w-16 rounded-xl',
+    'cn-map-style-select-swatch-size-sm': 'h-6 w-9 rounded-lg',
+    'cn-map-style-select-trigger': 'gap-2 pr-3 pl-1.5',
+    'cn-map-style-select-trigger-caption': 'text-[10px] font-normal',
+    'cn-map-style-select-trigger-value': 'text-xs font-medium',
     'cn-marker':
       "relative flex min-h-4 w-full items-center gap-2 text-start text-sm text-muted-foreground [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground",
     'cn-marker-content':
@@ -2400,6 +2514,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
     'cn-collapsible-is-element-true': 'block',
+    'cn-color-picker': 'flex flex-col',
+    'cn-color-picker-area': 'h-36 rounded-none focus-visible:ring-1 focus-visible:ring-ring/50',
+    'cn-color-picker-eyedropper-icon': 'size-3.5!',
+    'cn-color-picker-format':
+      'h-6 flex-1 rounded-none font-mono text-[11px] font-medium focus-visible:ring-1 focus-visible:ring-ring/50',
+    'cn-color-picker-format-group': 'rounded-none',
+    'cn-color-picker-format-indicator': 'rounded-none shadow-sm',
+    'cn-color-picker-input': 'h-7 px-2 font-mono text-[11px] md:text-[11px]',
+    'cn-color-picker-preset': 'size-6 rounded-none focus-visible:ring-1 focus-visible:ring-ring/50',
+    'cn-color-picker-presets': 'flex flex-wrap gap-1.5',
+    'cn-color-picker-show-value-false': 'w-fit',
+    'cn-color-picker-show-value-true': 'w-[212px]',
+    'cn-color-picker-swatch': 'rounded-none',
+    'cn-color-picker-swatch-size-default': 'size-4',
+    'cn-color-picker-swatch-size-lg': 'size-5',
+    'cn-color-picker-swatch-size-sm': 'size-3.5',
+    'cn-color-picker-thumb': 'size-4 rounded-none',
+    'cn-color-picker-track': 'h-2.5 rounded-none focus-visible:ring-1 focus-visible:ring-ring/50',
+    'cn-color-picker-track-fill': 'rounded-none',
+    'cn-color-picker-trigger': 'font-normal',
+    'cn-color-picker-trigger-show-value-true': 'w-full justify-start text-start',
     'cn-combobox': 'relative block',
     'cn-combobox-chip':
       'flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 bg-muted px-1.5 text-xs font-medium whitespace-nowrap text-foreground rounded-none has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0',
@@ -2534,7 +2669,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'h-8 w-full min-w-0 border border-input bg-transparent px-2.5 py-1 transition-colors rounded-none text-xs file:inline-flex file:h-6 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:text-xs focus-visible:ring-1 aria-invalid:ring-1 md:text-xs',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center border border-input transition-colors rounded-none has-disabled:bg-input/50 has-disabled:opacity-50 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-disabled:bg-input/80 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-1',
+      'relative flex h-8 w-full min-w-0 items-center border border-input transition-colors rounded-none has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-1',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 font-medium text-muted-foreground text-xs group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-none",
     'cn-input-group-addon-align-block-end':
@@ -2604,6 +2739,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 bg-muted px-1 font-sans text-xs font-medium text-muted-foreground rounded-none in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
     'cn-label': 'gap-2 text-xs',
+    'cn-map-style-select': 'inline-block',
+    'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
+    'cn-map-style-select-form': 'gap-2 p-3',
+    'cn-map-style-select-form-label': 'text-xs font-medium',
+    'cn-map-style-select-group-label': 'px-1.5 pt-2 pb-0.5 text-[10px] font-medium tracking-wide uppercase',
+    'cn-map-style-select-header': 'px-3 pt-3 pb-2',
+    'cn-map-style-select-hint': 'text-[11px]',
+    'cn-map-style-select-list': 'gap-0.5 p-1.5 pt-0',
+    'cn-map-style-select-option':
+      'flex items-center gap-3 rounded-none p-1.5 text-left focus-visible:ring-1 focus-visible:ring-ring/50',
+    'cn-map-style-select-option-description': 'text-[11px]',
+    'cn-map-style-select-option-name': 'flex items-center gap-1.5 text-xs font-medium',
+    'cn-map-style-select-swatch-size-default': 'h-11 w-16 rounded-none',
+    'cn-map-style-select-swatch-size-sm': 'h-6 w-9 rounded-none',
+    'cn-map-style-select-trigger': 'gap-2 pr-2 pl-1',
+    'cn-map-style-select-trigger-caption': 'text-[10px] font-normal',
+    'cn-map-style-select-trigger-value': 'text-xs font-medium',
     'cn-marker':
       "relative flex min-h-4 w-full items-center gap-2 text-start text-muted-foreground [--ng-icon__size:1rem] text-xs [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground [&_svg:not([class*='size-'])]:size-3.5",
     'cn-marker-content':
@@ -3116,6 +3268,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
     'cn-collapsible-is-element-true': 'block',
+    'cn-color-picker': 'flex flex-col',
+    'cn-color-picker-area': 'h-32 rounded-md focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-color-picker-eyedropper-icon': 'size-3!',
+    'cn-color-picker-format':
+      'h-5 flex-1 rounded-sm font-mono text-[10px] font-medium focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-color-picker-format-group': 'rounded-md',
+    'cn-color-picker-format-indicator': 'rounded-sm shadow-sm',
+    'cn-color-picker-input': 'h-6 px-2 font-mono text-[10px] md:text-[10px]',
+    'cn-color-picker-preset': 'size-5 rounded-sm focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-color-picker-presets': 'flex flex-wrap gap-1',
+    'cn-color-picker-show-value-false': 'w-fit',
+    'cn-color-picker-show-value-true': 'w-[212px]',
+    'cn-color-picker-swatch': 'rounded-sm',
+    'cn-color-picker-swatch-size-default': 'size-3.5',
+    'cn-color-picker-swatch-size-lg': 'size-4',
+    'cn-color-picker-swatch-size-sm': 'size-3',
+    'cn-color-picker-thumb': 'size-3.5 rounded-md',
+    'cn-color-picker-track': 'h-2.5 rounded-md focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-color-picker-track-fill': 'rounded-md',
+    'cn-color-picker-trigger': 'font-normal',
+    'cn-color-picker-trigger-show-value-true': 'w-full justify-start text-start',
     'cn-combobox': 'relative block',
     'cn-combobox-chip':
       'flex w-fit items-center justify-center gap-1 px-1.5 font-medium whitespace-nowrap text-foreground bg-muted-foreground/10 h-[calc(--spacing(4.75))] rounded-[calc(var(--radius-sm)-2px)] text-xs/relaxed has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0',
@@ -3251,7 +3424,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border border-input transition-colors bg-input/20 h-7 rounded-md px-2 py-0.5 text-sm file:inline-flex file:h-6 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 file:text-xs/relaxed focus-visible:ring-2 aria-invalid:ring-2 md:text-xs/relaxed',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/20 h-7 rounded-md has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-2 has-[textarea]:rounded-md',
+      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/20 h-7 rounded-md has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-2 has-[textarea]:rounded-md',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center font-medium text-muted-foreground gap-1 py-2 text-xs/relaxed group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-[calc(var(--radius-sm)-2px)] **:data-[slot=kbd]:px-1 **:data-[slot=kbd]:text-[0.625rem] [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-addon-align-block-end':
@@ -3325,6 +3498,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 bg-muted px-1 font-sans font-medium text-muted-foreground rounded-xs text-[0.625rem] in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
     'cn-label': 'gap-2 text-xs font-medium',
+    'cn-map-style-select': 'inline-block',
+    'cn-map-style-select-badge': 'px-1 py-0 text-[9px]',
+    'cn-map-style-select-form': 'gap-1.5 p-2.5',
+    'cn-map-style-select-form-label': 'text-[11px] font-medium',
+    'cn-map-style-select-group-label': 'px-1 pt-1.5 pb-0.5 text-[10px] font-medium tracking-wide uppercase',
+    'cn-map-style-select-header': 'px-3 pt-2.5 pb-1.5',
+    'cn-map-style-select-hint': 'text-[11px]',
+    'cn-map-style-select-list': 'gap-0 p-1 pt-0',
+    'cn-map-style-select-option':
+      'flex items-center gap-2.5 rounded-md p-1 text-left focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-map-style-select-option-description': 'text-[11px]',
+    'cn-map-style-select-option-name': 'flex items-center gap-1.5 text-xs/relaxed font-medium',
+    'cn-map-style-select-swatch-size-default': 'h-10 w-14 rounded-md',
+    'cn-map-style-select-swatch-size-sm': 'h-5 w-8 rounded-sm',
+    'cn-map-style-select-trigger': 'gap-1.5 pr-1.5 pl-1',
+    'cn-map-style-select-trigger-caption': 'text-[9px] font-normal',
+    'cn-map-style-select-trigger-value': 'text-[11px] font-medium',
     'cn-marker':
       "relative flex min-h-4 w-full items-center gap-2 text-start text-muted-foreground [--ng-icon__size:1rem] text-xs/relaxed [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground [&_svg:not([class*='size-'])]:size-3.5",
     'cn-marker-content':
@@ -3832,6 +4022,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
     'cn-collapsible-is-element-true': 'block',
+    'cn-color-picker': 'flex flex-col',
+    'cn-color-picker-area': 'h-40 rounded-2xl focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-color-picker-eyedropper-icon': 'size-4!',
+    'cn-color-picker-format':
+      'h-6 flex-1 rounded-3xl font-mono text-[11px] font-medium focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-color-picker-format-group': 'rounded-3xl',
+    'cn-color-picker-format-indicator': 'rounded-3xl shadow-sm',
+    'cn-color-picker-input': 'h-8 px-3 font-mono text-[11px] md:text-[11px]',
+    'cn-color-picker-preset': 'size-7 rounded-full focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-color-picker-presets': 'flex flex-wrap gap-2',
+    'cn-color-picker-show-value-false': 'w-fit',
+    'cn-color-picker-show-value-true': 'w-[212px]',
+    'cn-color-picker-swatch': 'rounded-full',
+    'cn-color-picker-swatch-size-default': 'size-4',
+    'cn-color-picker-swatch-size-lg': 'size-5',
+    'cn-color-picker-swatch-size-sm': 'size-3.5',
+    'cn-color-picker-thumb': 'size-4.5 rounded-full',
+    'cn-color-picker-track': 'h-3.5 rounded-full focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-color-picker-track-fill': 'rounded-full',
+    'cn-color-picker-trigger': 'font-normal',
+    'cn-color-picker-trigger-show-value-true': 'w-full justify-start text-start',
     'cn-combobox': 'relative block',
     'cn-combobox-chip':
       'flex w-fit items-center justify-center gap-1 text-xs font-medium whitespace-nowrap text-foreground bg-input h-[calc(--spacing(5.5))] rounded-3xl px-2 has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0 dark:bg-input/60',
@@ -3966,7 +4177,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border py-1 text-base bg-input/50 border-transparent h-9 rounded-3xl px-3 transition-[color,box-shadow,background-color] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border bg-input/50 border-transparent h-9 rounded-4xl transition-[color,box-shadow,background-color] has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-3xl has-data-[align=block-start]:rounded-3xl has-[textarea]:rounded-2xl',
+      'relative flex w-full min-w-0 items-center border bg-input/50 border-transparent h-9 rounded-4xl transition-[color,box-shadow,background-color] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-3xl has-data-[align=block-start]:rounded-3xl has-[textarea]:rounded-2xl',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-3xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -4036,6 +4247,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex w-fit items-center justify-center gap-1 bg-muted font-sans text-xs font-medium text-muted-foreground h-5.5 min-w-5.5 rounded-lg px-1.5 in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3 in-data-[slot=input-group]:bg-input",
     'cn-kbd-group': 'inline-flex items-center gap-1',
     'cn-label': 'gap-2 text-sm font-medium',
+    'cn-map-style-select': 'inline-block',
+    'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
+    'cn-map-style-select-form': 'gap-2.5 p-4',
+    'cn-map-style-select-form-label': 'text-xs font-medium',
+    'cn-map-style-select-group-label': 'px-2 pt-3 pb-1 text-[11px] font-medium tracking-wide uppercase',
+    'cn-map-style-select-header': 'px-4 pt-4 pb-2.5',
+    'cn-map-style-select-hint': 'text-xs',
+    'cn-map-style-select-list': 'gap-1 p-2 pt-0',
+    'cn-map-style-select-option':
+      'flex items-center gap-3 rounded-2xl p-2 text-left focus-visible:ring-[3px] focus-visible:ring-ring/30',
+    'cn-map-style-select-option-description': 'text-xs',
+    'cn-map-style-select-option-name': 'flex items-center gap-1.5 text-sm font-medium',
+    'cn-map-style-select-swatch-size-default': 'h-11 w-16 rounded-2xl',
+    'cn-map-style-select-swatch-size-sm': 'h-6 w-9 rounded-lg',
+    'cn-map-style-select-trigger': 'gap-2.5 pr-3 pl-1.5',
+    'cn-map-style-select-trigger-caption': 'text-[10px] font-normal',
+    'cn-map-style-select-trigger-value': 'text-xs font-medium',
     'cn-marker':
       "relative flex min-h-4 w-full items-center gap-2 text-start text-sm text-muted-foreground [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground",
     'cn-marker-content':
@@ -4545,6 +4773,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
     'cn-collapsible-is-element-true': 'block',
+    'cn-color-picker': 'flex flex-col',
+    'cn-color-picker-area': 'h-36 rounded-none focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-color-picker-eyedropper-icon': 'size-3.5!',
+    'cn-color-picker-format':
+      'h-6 flex-1 rounded-none font-mono text-[11px] font-medium focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-color-picker-format-group': 'rounded-none',
+    'cn-color-picker-format-indicator': 'rounded-none shadow-sm',
+    'cn-color-picker-input': 'h-8 px-0 font-mono text-[11px] md:text-[11px]',
+    'cn-color-picker-preset': 'size-6 rounded-none focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-color-picker-presets': 'flex flex-wrap gap-1.5',
+    'cn-color-picker-show-value-false': 'w-fit',
+    'cn-color-picker-show-value-true': 'w-[212px]',
+    'cn-color-picker-swatch': 'rounded-none',
+    'cn-color-picker-swatch-size-default': 'size-4',
+    'cn-color-picker-swatch-size-lg': 'size-5',
+    'cn-color-picker-swatch-size-sm': 'size-3.5',
+    'cn-color-picker-thumb': 'size-3.5 rounded-none',
+    'cn-color-picker-track': 'h-2 rounded-none focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-color-picker-track-fill': 'rounded-none',
+    'cn-color-picker-trigger': 'font-normal',
+    'cn-color-picker-trigger-show-value-true': 'w-full justify-start text-start',
     'cn-combobox': 'relative block',
     'cn-combobox-chip':
       'flex w-fit items-center justify-center gap-1 bg-muted text-xs font-medium whitespace-nowrap text-foreground h-[calc(--spacing(5.5))] rounded-none px-2 has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0',
@@ -4680,7 +4929,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border bg-transparent py-1 text-base border-transparent border-b-input h-10 px-0 transition-[color,border-color] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground md:text-sm focus-visible:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-transparent border-b-input bg-transparent h-10 rounded-none transition-[color,border-color] has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:border-b-ring has-[[data-slot][aria-invalid=true]]:border-b-destructive dark:has-[[data-slot][aria-invalid=true]]:border-b-destructive/50 has-data-[align=block-end]:rounded-none has-data-[align=block-start]:rounded-none has-[textarea]:rounded-none',
+      'relative flex w-full min-w-0 items-center border border-transparent border-b-input bg-transparent h-10 rounded-none transition-[color,border-color] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:border-b-ring has-[[data-slot][aria-invalid=true]]:border-b-destructive dark:has-[[data-slot][aria-invalid=true]]:border-b-destructive/50 has-data-[align=block-end]:rounded-none has-data-[align=block-start]:rounded-none has-[textarea]:rounded-none',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-none **:data-[slot=kbd]:px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-addon-align-block-end':
@@ -4753,6 +5002,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-kbd-group': 'inline-flex items-center gap-1',
     'cn-label':
       'gap-2 font-semibold text-xs uppercase tracking-wide peer-data-[slot=checkbox]:text-sm peer-data-[slot=checkbox]:font-normal peer-data-[slot=checkbox]:normal-case peer-data-[slot=checkbox]:tracking-normal peer-data-[slot=radio-group-item]:text-sm peer-data-[slot=radio-group-item]:font-normal peer-data-[slot=radio-group-item]:normal-case peer-data-[slot=radio-group-item]:tracking-normal peer-data-[slot=switch]:text-sm peer-data-[slot=switch]:font-normal peer-data-[slot=switch]:normal-case peer-data-[slot=switch]:tracking-normal',
+    'cn-map-style-select': 'inline-block',
+    'cn-map-style-select-badge': 'px-0 py-0 text-[10px]',
+    'cn-map-style-select-form': 'gap-2.5 p-4',
+    'cn-map-style-select-form-label': 'text-xs font-semibold tracking-wide uppercase',
+    'cn-map-style-select-group-label': 'px-1.5 pt-2.5 pb-0.5 text-[10px] font-semibold tracking-widest uppercase',
+    'cn-map-style-select-header': 'px-4 pt-4 pb-2.5',
+    'cn-map-style-select-hint': 'text-xs',
+    'cn-map-style-select-list': 'gap-0.5 p-2 pt-0',
+    'cn-map-style-select-option':
+      'flex items-center gap-3 rounded-none p-2 text-left focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-map-style-select-option-description': 'text-xs',
+    'cn-map-style-select-option-name': 'flex items-center gap-1.5 text-sm font-semibold',
+    'cn-map-style-select-swatch-size-default': 'h-11 w-16 rounded-none',
+    'cn-map-style-select-swatch-size-sm': 'h-6 w-9 rounded-none',
+    'cn-map-style-select-trigger': 'gap-2 pr-2 pl-0',
+    'cn-map-style-select-trigger-caption': 'text-[9px] font-semibold tracking-widest uppercase',
+    'cn-map-style-select-trigger-value': 'text-xs font-semibold',
     'cn-marker':
       "relative flex min-h-4 w-full items-center gap-2 text-start text-muted-foreground [--ng-icon__size:1rem] text-xs uppercase tracking-wide [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground",
     'cn-marker-content':
@@ -5258,6 +5524,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
     'cn-collapsible-is-element-true': 'block',
+    'cn-color-picker': 'flex flex-col',
+    'cn-color-picker-area': 'h-36 rounded-xl focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-color-picker-eyedropper-icon': 'size-3.5!',
+    'cn-color-picker-format':
+      'h-6 flex-1 rounded-2xl font-mono text-[11px] font-medium focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-color-picker-format-group': 'rounded-2xl',
+    'cn-color-picker-format-indicator': 'rounded-2xl shadow-sm',
+    'cn-color-picker-input': 'h-7 px-2.5 font-mono text-[11px] md:text-[11px]',
+    'cn-color-picker-preset': 'size-6 rounded-full focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-color-picker-presets': 'flex flex-wrap gap-2',
+    'cn-color-picker-show-value-false': 'w-fit',
+    'cn-color-picker-show-value-true': 'w-[212px]',
+    'cn-color-picker-swatch': 'rounded-full',
+    'cn-color-picker-swatch-size-default': 'size-4',
+    'cn-color-picker-swatch-size-lg': 'size-5',
+    'cn-color-picker-swatch-size-sm': 'size-3.5',
+    'cn-color-picker-thumb': 'size-4 rounded-2xl',
+    'cn-color-picker-track': 'h-3 rounded-2xl focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-color-picker-track-fill': 'rounded-2xl',
+    'cn-color-picker-trigger': 'font-normal',
+    'cn-color-picker-trigger-show-value-true': 'w-full justify-start text-start',
     'cn-combobox': 'relative block',
     'cn-combobox-chip':
       'flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 px-1.5 text-xs font-medium whitespace-nowrap text-foreground bg-input rounded-2xl has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0.5 dark:bg-input/60',
@@ -5392,7 +5679,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'h-8 w-full min-w-0 border px-2.5 py-1 text-base bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center border bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30',
+      'relative flex h-8 w-full min-w-0 items-center border bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-2xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -5462,6 +5749,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 bg-muted px-1 font-sans text-xs font-medium text-muted-foreground rounded-lg in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3 in-data-[slot=input-group]:bg-input",
     'cn-kbd-group': 'inline-flex items-center gap-1',
     'cn-label': 'gap-2 text-sm font-medium',
+    'cn-map-style-select': 'inline-block',
+    'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
+    'cn-map-style-select-form': 'gap-2.5 p-4',
+    'cn-map-style-select-form-label': 'text-xs font-medium',
+    'cn-map-style-select-group-label': 'px-2 pt-3 pb-1 text-[11px] font-medium tracking-wide uppercase',
+    'cn-map-style-select-header': 'px-4 pt-4 pb-2.5',
+    'cn-map-style-select-hint': 'text-xs',
+    'cn-map-style-select-list': 'gap-1 p-2 pt-0',
+    'cn-map-style-select-option':
+      'flex items-center gap-3 rounded-xl p-1.5 text-left focus-visible:ring-[3px] focus-visible:ring-ring/30',
+    'cn-map-style-select-option-description': 'text-xs',
+    'cn-map-style-select-option-name': 'flex items-center gap-1.5 text-sm font-medium',
+    'cn-map-style-select-swatch-size-default': 'h-11 w-16 rounded-xl',
+    'cn-map-style-select-swatch-size-sm': 'h-6 w-9 rounded-lg',
+    'cn-map-style-select-trigger': 'gap-2 pr-3 pl-1.5',
+    'cn-map-style-select-trigger-caption': 'text-[10px] font-normal',
+    'cn-map-style-select-trigger-value': 'text-xs font-medium',
     'cn-marker':
       "relative flex min-h-4 w-full items-center gap-2 text-start text-sm text-muted-foreground [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground",
     'cn-marker-content':
