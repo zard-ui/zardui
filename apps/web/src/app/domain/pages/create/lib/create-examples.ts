@@ -109,6 +109,12 @@ export const CREATE_EXAMPLES: readonly CreateExample[] = [
       import('@doc/domain/pages/create/examples/checkbox-example.component').then(m => m.CheckboxExampleComponent),
   },
   {
+    name: 'code-block',
+    title: 'Code Block',
+    load: () =>
+      import('@doc/domain/pages/create/examples/code-block-example.component').then(m => m.CodeBlockExampleComponent),
+  },
+  {
     name: 'collapsible',
     title: 'Collapsible',
     load: () =>
@@ -143,6 +149,12 @@ export const CREATE_EXAMPLES: readonly CreateExample[] = [
       import('@doc/domain/pages/create/examples/context-menu-example.component').then(
         m => m.ContextMenuExampleComponent,
       ),
+  },
+  {
+    name: 'data-table',
+    title: 'Data Table',
+    load: () =>
+      import('@doc/domain/pages/create/examples/data-table-example.component').then(m => m.DataTableExampleComponent),
   },
   {
     name: 'dialog',

@@ -4,7 +4,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export const codeBlockVariants = cva(
   mergeClasses(
-    'group/code-block relative flex w-full min-w-0 flex-col overflow-hidden rounded-2xl text-sm data-[size=sm]:rounded-xl',
+    'cn-code-block group/code-block relative flex w-full min-w-0 flex-col overflow-hidden',
     'has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/30',
   ),
   {
@@ -33,36 +33,32 @@ export type ZardCodeBlockSizeVariants = NonNullable<VariantProps<typeof codeBloc
 
 export const codeBlockHeaderVariants = cva(
   mergeClasses(
-    'flex min-w-0 shrink-0 items-center gap-2 px-4 pt-4 text-muted-foreground *:has-[>[data-slot=code-block-title]]:min-w-0',
-    'group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3',
+    'cn-code-block-header flex min-w-0 shrink-0 items-center text-muted-foreground *:has-[>[data-slot=code-block-title]]:min-w-0',
+    'group-data-[variant=destructive]/code-block:text-destructive',
   ),
 );
 
 export const codeBlockTitleVariants = cva(
   mergeClasses(
-    'min-w-0 truncate font-sans text-sm font-medium text-foreground',
-    'group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:text-xs',
+    'cn-code-block-title min-w-0 truncate text-foreground',
+    'group-data-[variant=destructive]/code-block:text-destructive',
     '[&_ng-icon]:me-1.5 [&_ng-icon]:inline-block [&_ng-icon]:align-middle [&_svg]:pointer-events-none',
-    '[--ng-icon__size:1rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5',
   ),
 );
 
 export const codeBlockActionsVariants = cva(
   mergeClasses(
-    'ms-auto -my-1 -me-1.5 flex shrink-0 items-center gap-1 *:data-[slot=button]:hover:bg-foreground/5 dark:*:data-[slot=button]:hover:bg-foreground/10',
+    'cn-code-block-actions ms-auto flex shrink-0 items-center *:data-[slot=button]:hover:bg-foreground/5 dark:*:data-[slot=button]:hover:bg-foreground/10',
     // Without a header the actions float over the top end of the block until it is hovered or focused.
-    '[[data-slot=code-block]>&]:absolute [[data-slot=code-block]>&]:end-3 [[data-slot=code-block]>&]:top-3 [[data-slot=code-block]>&]:z-10 [[data-slot=code-block]>&]:m-0',
+    '[[data-slot=code-block]>&]:absolute [[data-slot=code-block]>&]:z-10 [[data-slot=code-block]>&]:m-0',
     '[[data-slot=code-block]>&]:opacity-0 [[data-slot=code-block]>&]:transition-opacity [[data-slot=code-block]>&]:group-focus-within/code-block:opacity-100 [[data-slot=code-block]>&]:group-hover/code-block:opacity-100 [[data-slot=code-block]>&]:pointer-coarse:opacity-100',
-    'group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2',
     '[[data-slot=code-block]>&]:**:data-[slot=code-block-copy-button]:bg-background [[data-slot=code-block]>&]:**:data-[slot=code-block-copy-button]:ring-1 [[data-slot=code-block]>&]:**:data-[slot=code-block-copy-button]:ring-foreground/10',
   ),
 );
 
 export const codeBlockContentVariants = cva(
   mergeClasses(
-    'block min-h-0 min-w-0 scroll-fade-x scrollbar-thin overflow-auto px-4 py-4 text-start font-mono leading-relaxed outline-none',
-    'group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2',
-    'group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
+    'cn-code-block-content block min-h-0 min-w-0 scroll-fade-x scrollbar-thin overflow-auto text-start font-mono outline-none',
   ),
   {
     variants: {
@@ -96,7 +92,7 @@ export const codeBlockCodeVariants = cva('grid min-h-lh min-w-max content-start'
 
 export const codeBlockLineVariants = cva(
   mergeClasses(
-    'relative -mx-4 block min-h-lh px-4 group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3',
+    'cn-code-block-line relative block min-h-lh',
     // The `+` / `−` marker sits in the gutter on the start side, outside the selectable text.
     'after:absolute after:start-1 after:top-0 after:text-muted-foreground after:select-none',
     // Line numbers are a CSS counter, so they are not text: they cannot be selected or copied. The empty alternative
@@ -122,8 +118,5 @@ export const codeBlockLineVariants = cva(
 export type ZardCodeBlockLineTypeVariants = NonNullable<VariantProps<typeof codeBlockLineVariants>['zType']>;
 
 export const codeBlockFooterVariants = cva(
-  mergeClasses(
-    'flex min-w-0 shrink-0 items-center gap-2 px-4 pb-4 text-muted-foreground',
-    'group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3',
-  ),
+  mergeClasses('cn-code-block-footer flex min-w-0 shrink-0 items-center text-muted-foreground'),
 );

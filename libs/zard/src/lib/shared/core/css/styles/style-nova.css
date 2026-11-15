@@ -2222,6 +2222,78 @@
   @apply text-sm leading-none font-medium;
 }
 
+/* MARK: code-block */
+
+.cn-code-block:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply rounded-2xl text-sm;
+}
+
+.cn-code-block-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-2 px-4 pt-4;
+}
+
+.cn-code-block-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply font-sans text-sm font-medium [--ng-icon__size:1rem];
+}
+
+.cn-code-block-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply -my-1 -me-1.5 gap-1;
+}
+
+.cn-code-block-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply px-4 py-4 leading-relaxed;
+}
+
+.cn-code-block-line:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply -mx-4 px-4;
+}
+
+.cn-code-block-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-2 px-4 pb-4;
+}
+
+/* MARK: data-table */
+
+.cn-data-table:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply rounded-md border;
+}
+
+.cn-data-table-empty:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-24;
+}
+
+.cn-data-table-column-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-2;
+}
+
+.cn-data-table-column-header-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply -ms-2.5 h-8;
+}
+
+.cn-data-table-view-options:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-8;
+}
+
+.cn-data-table-pagination-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-4 px-2;
+}
+
+.cn-data-table-pagination-controls:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-4;
+}
+
+.cn-data-table-pagination-summary:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-sm;
+}
+
+.cn-data-table-pagination-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-sm font-medium;
+}
+
+.cn-data-table-pagination-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-8;
+}
+
 /* MARK: table */
 
 .cn-table:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3397,6 +3469,42 @@
 
 .cn-switch-thumb:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)];
+}
+
+/* MARK: code-block */
+
+.cn-code-block:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply data-[size=sm]:rounded-xl;
+}
+
+.cn-code-block-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3;
+}
+
+.cn-code-block-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5;
+}
+
+.cn-code-block-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply [[data-slot=code-block]>&]:end-3 [[data-slot=code-block]>&]:top-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2;
+}
+
+.cn-code-block-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5;
+}
+
+.cn-code-block-line:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3;
+}
+
+.cn-code-block-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3;
+}
+
+/* MARK: data-table */
+
+.cn-data-table-pagination-controls:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply @2xl:gap-8;
 }
 
 /* MARK: table */
