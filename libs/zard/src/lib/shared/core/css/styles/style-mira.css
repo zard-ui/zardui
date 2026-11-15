@@ -1554,6 +1554,57 @@
     @apply size-full flex-1 transition-all bg-primary;
   }
 
+  /* MARK: questionnaire */
+
+  .cn-questionnaire {
+    @apply gap-3;
+  }
+
+  .cn-questionnaire-progress {
+    @apply text-xs font-medium text-muted-foreground;
+  }
+
+  .cn-questionnaire-title {
+    @apply text-sm/snug font-medium;
+  }
+
+  .cn-questionnaire-description {
+    @apply text-xs/relaxed text-muted-foreground;
+  }
+
+  .cn-questionnaire-item {
+    @apply gap-3;
+  }
+
+  .cn-questionnaire-choices {
+    @apply gap-1.5;
+  }
+
+  .cn-questionnaire-choice {
+    @apply gap-2 rounded-md border border-input bg-transparent px-2.5 py-2 text-xs/relaxed;
+  }
+
+  .cn-questionnaire-choice-indicator {
+    @apply size-4 rounded-[4px] border border-input;
+  }
+
+  .cn-questionnaire-input {
+    @apply h-7 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-[color,box-shadow,background-color];
+  }
+
+  .cn-questionnaire-choice-shortcut {
+    @apply size-5 rounded-sm font-mono text-[0.625rem] font-medium;
+  }
+
+  .cn-questionnaire-error {
+    @apply text-xs/relaxed;
+  }
+
+  .cn-questionnaire-actions {
+    @apply gap-1.5;
+  }
+
+
   /* MARK: radio-group */
 
   .cn-radio-group {
@@ -2966,6 +3017,25 @@
   .cn-pagination-ellipsis {
     @apply [&_svg:not([class*='size-'])]:size-3.5;
   }
+
+  /* MARK: questionnaire */
+
+  .cn-questionnaire-title {
+    @apply [&:has(~[data-slot=questionnaire-description])]:-mb-3;
+  }
+
+  .cn-questionnaire-choice {
+    @apply has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-ring/30;
+  }
+
+  .cn-questionnaire-choice-indicator {
+    @apply dark:bg-input/30;
+  }
+
+  .cn-questionnaire-input {
+    @apply focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40;
+  }
+
 
   /* MARK: radio-group */
 

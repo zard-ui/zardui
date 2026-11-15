@@ -1551,6 +1551,57 @@
   @apply bg-primary size-full flex-1 transition-all;
 }
 
+/* MARK: questionnaire */
+
+.cn-questionnaire:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-4;
+}
+
+.cn-questionnaire-progress:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-xs font-medium text-muted-foreground;
+}
+
+.cn-questionnaire-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-base/snug font-medium;
+}
+
+.cn-questionnaire-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-sm text-muted-foreground;
+}
+
+.cn-questionnaire-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-4;
+}
+
+.cn-questionnaire-choices:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-2;
+}
+
+.cn-questionnaire-choice:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-2.5 rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm;
+}
+
+.cn-questionnaire-choice-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-4 rounded-[4px] border border-input;
+}
+
+.cn-questionnaire-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-8 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color];
+}
+
+.cn-questionnaire-choice-shortcut:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-5 rounded-md font-mono text-[0.625rem] font-medium;
+}
+
+.cn-questionnaire-error:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-sm;
+}
+
+.cn-questionnaire-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-2;
+}
+
+
 /* MARK: radio-group */
 
 .cn-radio-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2922,6 +2973,25 @@
 .cn-pagination-ellipsis:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply [&_svg:not([class*="size-"])]:size-4;
 }
+
+/* MARK: questionnaire */
+
+.cn-questionnaire-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply [&:has(~[data-slot=questionnaire-description])]:-mb-4;
+}
+
+.cn-questionnaire-choice:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50;
+}
+
+.cn-questionnaire-choice-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply dark:bg-input/30;
+}
+
+.cn-questionnaire-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40;
+}
+
 
 /* MARK: radio-group */
 

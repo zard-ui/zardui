@@ -1557,6 +1557,57 @@
     @apply size-full flex-1 transition-all bg-primary;
   }
 
+  /* MARK: questionnaire */
+
+  .cn-questionnaire {
+    @apply gap-4;
+  }
+
+  .cn-questionnaire-progress {
+    @apply text-xs font-semibold tracking-wider text-muted-foreground uppercase;
+  }
+
+  .cn-questionnaire-title {
+    @apply text-lg/snug font-semibold tracking-wider uppercase;
+  }
+
+  .cn-questionnaire-description {
+    @apply text-sm text-muted-foreground leading-relaxed;
+  }
+
+  .cn-questionnaire-item {
+    @apply gap-4;
+  }
+
+  .cn-questionnaire-choices {
+    @apply gap-2;
+  }
+
+  .cn-questionnaire-choice {
+    @apply gap-2.5 rounded-none border border-input bg-transparent px-3 py-2.5 text-sm;
+  }
+
+  .cn-questionnaire-choice-indicator {
+    @apply size-4.5 rounded-none border border-input bg-transparent;
+  }
+
+  .cn-questionnaire-input {
+    @apply h-10 border border-transparent border-b-input bg-transparent px-0 py-1 text-base transition-[color,border-color];
+  }
+
+  .cn-questionnaire-choice-shortcut {
+    @apply size-5.5 rounded-none font-mono text-[0.625rem] font-medium;
+  }
+
+  .cn-questionnaire-error {
+    @apply text-sm;
+  }
+
+  .cn-questionnaire-actions {
+    @apply gap-2;
+  }
+
+
   /* MARK: radio-group */
 
   .cn-radio-group {
@@ -2953,6 +3004,21 @@
   .cn-pagination-ellipsis {
     @apply [&_svg:not([class*="size-"])]:size-4;
   }
+
+  /* MARK: questionnaire */
+
+  .cn-questionnaire-title {
+    @apply [&:has(~[data-slot=questionnaire-description])]:-mb-4;
+  }
+
+  .cn-questionnaire-choice {
+    @apply has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-ring/30;
+  }
+
+  .cn-questionnaire-input {
+    @apply focus-visible:border-b-ring aria-invalid:border-b-destructive md:text-sm dark:aria-invalid:border-b-destructive/50;
+  }
+
 
   /* MARK: radio-group */
 
