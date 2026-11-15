@@ -1448,6 +1448,34 @@
     @apply text-[0.625rem] font-medium text-muted-foreground px-2.5;
   }
 
+  /* MARK: menubar */
+
+  .cn-menubar {
+    @apply h-9 rounded-lg border p-1;
+  }
+
+  .cn-menubar-trigger {
+    @apply rounded-[calc(var(--radius-md)-2px)] px-2 py-[calc(--spacing(0.85))] text-xs/relaxed font-medium;
+  }
+
+  /* MARK: native-select */
+
+  .cn-native-select {
+    @apply h-7 rounded-md border border-input bg-input/20 py-0.5 ps-2 pe-6 text-xs/relaxed transition-colors;
+  }
+
+  .cn-native-select-size-sm {
+    @apply h-6 text-[0.625rem];
+  }
+
+  .cn-native-select-size-lg {
+    @apply h-9 ps-2.5 pe-8 text-sm;
+  }
+
+  .cn-native-select-icon {
+    @apply bg-size-[0.875rem] bg-position-[right_0.375rem_center];
+  }
+
   /* MARK: navigation-menu */
 
   .cn-navigation-menu {
@@ -2885,6 +2913,31 @@
 
   .cn-message-footer {
     @apply group-data-[align=end]/message:justify-end group-has-data-[variant=ghost]/message:px-0;
+  }
+
+  /* MARK: menubar */
+
+  .cn-menubar {
+  }
+
+  .cn-menubar-trigger {
+    @apply hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted;
+  }
+
+  /* MARK: native-select */
+
+  .cn-native-select {
+    @apply focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40;
+  }
+
+  .cn-native-select-size-sm {
+  }
+
+  .cn-native-select-size-lg {
+  }
+
+  .cn-native-select-icon {
+    @apply rtl:bg-position-[left_0.375rem_center] data-[size=sm]:bg-size-[0.75rem];
   }
 
   /* MARK: navigation-menu */
