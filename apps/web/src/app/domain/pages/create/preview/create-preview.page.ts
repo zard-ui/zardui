@@ -93,7 +93,8 @@ const PREVIEW_DOCUMENT_CLASS = 'create-preview-document';
           [inert]="shown()?.kind !== 'canvas-1'"
         />
       }
-      @if (mounted().has('canvas-2')) {
+      <!-- Its own chunk: the overview opens on 01, and 02 is fetched when it is first shown (or the page is idle). -->
+      @defer (when mounted().has('canvas-2')) {
         <z-create-canvas-02
           class="block"
           [class]="shown()?.kind === 'canvas-2' ? '' : idleCanvasClass"
@@ -159,13 +160,25 @@ export class CreatePreviewPage {
 
   private applier: DesignApplier | null = null;
 
+  /**
+   * Settles once the first design is on screen. Nothing is mounted before it: a chart built against the default
+   * tokens would paint grey first and the theme's colors a moment later.
+   */
+  // Declared before the promise: a field initializer after it would overwrite the resolver the promise stored.
+  private firstDesignApplied: () => void = () => undefined;
+  private readonly firstDesign = new Promise<void>(resolve => (this.firstDesignApplied = resolve));
+
   constructor() {
     inject(Meta).updateTag({ name: 'robots', content: 'noindex' });
 
-    // Component and block items load on demand; the registry only holds loaders.
-    effect(() => void this.show(this.item()));
+    // Hidden from the very first byte, the server's included: the page shows once the design is applied, never with
+    // the default theme first. (The preview renders nothing on the server: it has no content worth indexing.)
+    this.document.documentElement.setAttribute(DESIGN_PENDING_ATTRIBUTE, '');
 
     if (!this.isBrowser) return;
+
+    // Component and block items load on demand; the registry only holds loaders.
+    effect(() => void this.show(this.item()));
 
     this.document.documentElement.classList.add(PREVIEW_DOCUMENT_CLASS);
     this.destroyRef.onDestroy(() => {
@@ -177,7 +190,6 @@ export class CreatePreviewPage {
     // render, and the page stays hidden until the design is applied: components with no style are never shown.
     const search = new URLSearchParams(this.document.defaultView?.location.search ?? '');
     const initial = parseCreateParams({ keys: Array.from(search.keys()), get: name => search.get(name) });
-    this.document.documentElement.setAttribute(DESIGN_PENDING_ATTRIBUTE, '');
     void loadStyleSheet(this.document, initial.design.style);
 
     afterNextRender(() => {
@@ -188,7 +200,9 @@ export class CreatePreviewPage {
       this.applier = applier;
 
       this.context.design.set(initial.design);
-      void applier.apply(initial.design, this.darkMode.themeMode() === 'dark', initial.custom);
+      void applier
+        .apply(initial.design, this.darkMode.themeMode() === 'dark', initial.custom)
+        .then(() => this.firstDesignApplied());
 
       const onMessage = (event: MessageEvent): void => {
         if (event.origin !== view.location.origin || event.source !== view.parent) return;
@@ -242,7 +256,7 @@ export class CreatePreviewPage {
 
   /** Loads what `item` needs, then swaps it in at once and starts it from the top-left corner. */
   private async show(item: string): Promise<void> {
-    const next = await this.resolve(item);
+    const [next] = await Promise.all([this.resolve(item), this.firstDesign]);
     // A newer item was asked for while this one loaded.
     if (!next || this.item() !== item) return;
 
