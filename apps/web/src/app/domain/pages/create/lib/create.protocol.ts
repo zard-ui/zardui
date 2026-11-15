@@ -1,5 +1,7 @@
 import type { DesignConfig } from '@zard/design';
 
+import type { CustomTheme } from './custom-theme';
+
 /**
  * The `postMessage` protocol between the `/create` page and the preview iframe it hosts.
  *
@@ -17,6 +19,8 @@ export interface DesignMessage {
   readonly type: 'design';
   readonly design: DesignConfig;
   readonly dark: boolean;
+  /** The hand-edited theme laid over the design's tokens while Custom is on. */
+  readonly custom: CustomTheme | null;
 }
 
 /** Page → iframe: show this item (a canvas, a component's demos or a block) without reloading. */

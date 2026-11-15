@@ -616,6 +616,113 @@ test.describe('Create builder', () => {
     });
   });
 
+  test.describe('Custom theme', () => {
+    const customOf = (page: Page): string | null => new URL(page.url()).searchParams.get('custom');
+    const previewToken = (page: Page, token: string): Promise<string> =>
+      previewFrame(page).evaluate(
+        name => getComputedStyle(document.documentElement).getPropertyValue(`--${name}`).trim(),
+        token,
+      );
+
+    async function turnOn(page: Page): Promise<void> {
+      await page.getByTestId('custom-theme').getByRole('switch').click();
+      await expect.poll(() => customOf(page)).toBe('~');
+    }
+
+    async function setToken(page: Page, token: string, value: string): Promise<void> {
+      const row = page.getByTestId('theme-editor').locator(`[data-token="${token}"]`);
+      await row.locator('z-color-picker button').first().click();
+      const field = page.getByRole('textbox', { name: 'Color value' });
+      await field.fill(value);
+      await field.press('Enter');
+      await page.keyboard.press('Escape');
+    }
+
+    test('swaps the color pickers for the editor and parks what a manual install cannot carry', async ({ page }) => {
+      await choose(page, 'Style', 'Lyra');
+      await turnOn(page);
+
+      await expect(page.getByTestId('theme-editor')).toBeVisible();
+      await expect(picker(page, 'Base Color')).toHaveCount(0);
+      await expect(picker(page, 'Style').locator('button[zpopover]')).toBeDisabled();
+      await expect(picker(page, 'Font').locator('button[zpopover]')).toBeDisabled();
+      await expect(picker(page, 'Radius').locator('button[zpopover]')).toBeEnabled();
+      await expect.poll(() => bodyClasses(page)).toContain('style-nova');
+    });
+
+    test('a color reaches the preview and the URL, survives a reload and can be undone', async ({ page }) => {
+      await turnOn(page);
+      const before = await previewToken(page, 'primary');
+
+      await setToken(page, 'primary', '#2563eb');
+
+      await expect.poll(() => previewToken(page, 'primary')).not.toBe(before);
+      await expect.poll(() => customOf(page)).not.toBe('~');
+      const changed = await previewToken(page, 'primary');
+
+      await page.locator('body').click({ position: { x: 1, y: 1 } });
+      await page.keyboard.press('ControlOrMeta+z');
+      await expect.poll(() => customOf(page)).toBe('~');
+      await expect.poll(() => previewToken(page, 'primary')).toBe(before);
+
+      await page.keyboard.press('ControlOrMeta+Shift+z');
+      await expect.poll(() => previewToken(page, 'primary')).toBe(changed);
+
+      await page.reload();
+      await ready(page);
+      await expect.poll(() => previewToken(page, 'primary')).toBe(changed);
+    });
+
+    test('a value that is not a color never reaches the preview', async ({ page }) => {
+      const bad = btoa(JSON.stringify({ l: { primary: 'red;}body{display:none' } })).replace(/=+$/, '');
+      await page.goto(`/create?preset=${presetOf(page)}&custom=${bad}`);
+      await ready(page);
+
+      await expect.poll(() => customOf(page)).toBe('~');
+      await expect(previewFrame(page).locator('body')).toBeVisible();
+    });
+
+    test('Get Code offers only the manual installation, with the custom CSS', async ({ page }) => {
+      await turnOn(page);
+      await setToken(page, 'primary', '#2563eb');
+      const primary = await previewToken(page, 'primary');
+
+      await page.getByRole('button', { name: 'Get Code' }).first().click();
+      const dialog = page.getByRole('dialog', { name: 'Get Code' });
+
+      await expect(dialog.locator('[data-get-code-tab]')).toHaveCount(1);
+      await expect(dialog.locator('[data-get-code-tab="manual"]')).toBeVisible();
+      await expect(dialog.getByTestId('custom-theme-css')).toContainText(`--primary: ${primary};`);
+      await expect(dialog.getByTestId('custom-theme-css')).toContainText('@theme inline');
+      await expect(dialog.getByText('--preset')).toHaveCount(0);
+    });
+
+    test('turning Custom off goes back to the preset it started from', async ({ page }) => {
+      const preset = presetOf(page);
+      await turnOn(page);
+      await setToken(page, 'primary', '#2563eb');
+
+      await page.getByTestId('custom-theme').getByRole('switch').click();
+
+      await expect.poll(() => customOf(page)).toBeNull();
+      await expect.poll(() => presetOf(page)).toBe(preset);
+      await expect(picker(page, 'Base Color')).toBeVisible();
+    });
+
+    test('the old /themes link opens Custom', async ({ page }) => {
+      await page.goto('/themes');
+      await ready(page);
+
+      await expect.poll(() => customOf(page)).toBe('~');
+      await expect(page.getByTestId('theme-editor')).toBeVisible();
+    });
+
+    test('has no accessibility violations with the editor open', async ({ page }) => {
+      await turnOn(page);
+      await checkA11y(page, 'z-create-customizer', ['scrollable-region-focusable']);
+    });
+  });
+
   test('has no accessibility violations in the customizer', async ({ page }) => {
     // `scrollable-region-focusable` is the horizontally scrolling row of cards on small screens.
     await checkA11y(page, 'z-create-customizer', ['scrollable-region-focusable']);

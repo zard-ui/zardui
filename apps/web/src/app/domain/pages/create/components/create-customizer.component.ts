@@ -2,10 +2,13 @@ import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardSheetImports } from '@zard/components/sheet/sheet.imports';
+import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 
 import { CreateGlyphComponent } from './create-glyph.component';
 import { CreateMenuComponent } from './create-menu.component';
 import { CreatePickerComponent } from './create-picker.component';
+import { CreateThemeEditorComponent } from './create-theme-editor.component';
 import { copyText } from '../lib/clipboard';
 import {
   accentLabel,
@@ -41,7 +44,15 @@ const COPIED_MS = 2000;
  */
 @Component({
   selector: 'z-create-customizer',
-  imports: [CreatePickerComponent, CreateGlyphComponent, CreateMenuComponent, ZardButtonComponent],
+  imports: [
+    CreatePickerComponent,
+    CreateGlyphComponent,
+    CreateMenuComponent,
+    CreateThemeEditorComponent,
+    ZardButtonComponent,
+    ZardSheetImports,
+    ZardSwitchComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
@@ -61,6 +72,7 @@ const COPIED_MS = 2000;
           label="Style"
           [display]="styleText()"
           [sections]="styleOptions()"
+          [disabled]="custom()"
           [locked]="isLocked('style')"
           [mobile]="mobile()"
           [anchor]="card"
@@ -73,44 +85,74 @@ const COPIED_MS = 2000;
           <div class="bg-border absolute inset-x-0 top-1/2 h-px"></div>
         </div>
 
-        <z-create-picker
-          label="Base Color"
-          [display]="baseText()"
-          [sections]="baseOptions()"
-          [locked]="isLocked('baseColor')"
-          [mobile]="mobile()"
-          [anchor]="card"
-          (picked)="pick('baseColor', $event)"
-          (lockToggled)="state.toggleLock('baseColor')"
+        <div
+          class="ring-foreground/10 flex w-36 shrink-0 flex-col justify-between gap-2 rounded-xl p-3 ring-1 md:w-full md:flex-row md:items-center md:rounded-lg md:px-2.5 md:py-2"
+          data-testid="custom-theme"
         >
-          <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().baseColor)" />
-        </z-create-picker>
-        <z-create-picker
-          label="Theme"
-          maxHeight="max-h-92"
-          [display]="themeText()"
-          [sections]="themeOptions()"
-          [locked]="isLocked('theme')"
-          [mobile]="mobile()"
-          [anchor]="card"
-          (picked)="pick('theme', $event)"
-          (lockToggled)="state.toggleLock('theme')"
-        >
-          <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().theme)" />
-        </z-create-picker>
-        <z-create-picker
-          label="Chart Color"
-          maxHeight="max-h-92"
-          [display]="chartText()"
-          [sections]="chartOptions()"
-          [locked]="isLocked('chartColor')"
-          [mobile]="mobile()"
-          [anchor]="card"
-          (picked)="pick('chartColor', $event)"
-          (lockToggled)="state.toggleLock('chartColor')"
-        >
-          <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().chartColor)" />
-        </z-create-picker>
+          <label class="flex min-w-0 flex-col" for="create-custom-theme">
+            <span class="text-muted-foreground text-xs leading-4">Theme</span>
+            <span class="text-foreground text-sm leading-5 font-medium">Custom colors</span>
+          </label>
+          <z-switch
+            zId="create-custom-theme"
+            zSize="sm"
+            [zChecked]="custom()"
+            (zCheckedChange)="state.setCustom($event)"
+          />
+        </div>
+        @if (custom()) {
+          @if (mobile()) {
+            <button
+              type="button"
+              class="ring-foreground/10 hover:bg-muted w-36 shrink-0 rounded-xl p-3 text-left ring-1"
+              (click)="editorOpen.set(true)"
+            >
+              <span class="text-muted-foreground block text-xs leading-4">Colors</span>
+              <span class="text-foreground block text-sm leading-5 font-medium">Edit theme</span>
+            </button>
+          } @else {
+            <z-create-theme-editor />
+          }
+        } @else {
+          <z-create-picker
+            label="Base Color"
+            [display]="baseText()"
+            [sections]="baseOptions()"
+            [locked]="isLocked('baseColor')"
+            [mobile]="mobile()"
+            [anchor]="card"
+            (picked)="pick('baseColor', $event)"
+            (lockToggled)="state.toggleLock('baseColor')"
+          >
+            <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().baseColor)" />
+          </z-create-picker>
+          <z-create-picker
+            label="Theme"
+            maxHeight="max-h-92"
+            [display]="themeText()"
+            [sections]="themeOptions()"
+            [locked]="isLocked('theme')"
+            [mobile]="mobile()"
+            [anchor]="card"
+            (picked)="pick('theme', $event)"
+            (lockToggled)="state.toggleLock('theme')"
+          >
+            <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().theme)" />
+          </z-create-picker>
+          <z-create-picker
+            label="Chart Color"
+            maxHeight="max-h-92"
+            [display]="chartText()"
+            [sections]="chartOptions()"
+            [locked]="isLocked('chartColor')"
+            [mobile]="mobile()"
+            [anchor]="card"
+            (picked)="pick('chartColor', $event)"
+            (lockToggled)="state.toggleLock('chartColor')"
+          >
+            <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().chartColor)" />
+          </z-create-picker>
+        }
         <div class="relative -mx-4 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
           <div class="bg-border absolute inset-x-0 top-1/2 h-px"></div>
         </div>
@@ -121,6 +163,7 @@ const COPIED_MS = 2000;
           maxHeight="max-h-96"
           [display]="headingText()"
           [sections]="headingOptions()"
+          [disabled]="custom()"
           [locked]="isLocked('fontHeading')"
           [mobile]="mobile()"
           [anchor]="card"
@@ -135,6 +178,7 @@ const COPIED_MS = 2000;
           maxHeight="max-h-96"
           [display]="fontText()"
           [sections]="fontOptions()"
+          [disabled]="custom()"
           [locked]="isLocked('font')"
           [mobile]="mobile()"
           [anchor]="card"
@@ -151,6 +195,7 @@ const COPIED_MS = 2000;
           label="Icon Library"
           [display]="iconText()"
           [sections]="iconOptions()"
+          [disabled]="custom()"
           [locked]="isLocked('iconLibrary')"
           [mobile]="mobile()"
           [anchor]="card"
@@ -181,6 +226,7 @@ const COPIED_MS = 2000;
           longValue
           [display]="menuText()"
           [sections]="menuOptions()"
+          [disabled]="custom()"
           [locked]="isLocked('menu')"
           [mobile]="mobile()"
           [anchor]="card"
@@ -213,6 +259,7 @@ const COPIED_MS = 2000;
           zType="outline"
           class="hover:bg-muted! min-w-0 flex-1 rounded-lg bg-transparent! px-2! text-sm! max-md:h-10! md:flex-none"
           data-testid="copy-preset"
+          [disabled]="custom()"
           [attr.title]="copyLabel()"
           (click)="copyPreset()"
         >
@@ -232,6 +279,7 @@ const COPIED_MS = 2000;
           z-button
           zType="outline"
           class="hover:bg-muted! max-w-20 min-w-0 flex-1 rounded-lg bg-transparent! px-2! text-sm! max-md:h-10! sm:max-w-none md:flex-none"
+          [disabled]="custom()"
           (click)="state.shuffle()"
         >
           <span class="truncate">Shuffle</span>
@@ -243,6 +291,18 @@ const COPIED_MS = 2000;
         </button>
       </div>
     </section>
+
+    @if (mobile()) {
+      <z-sheet zSide="bottom" class="dark max-h-[70vh]" [(zVisible)]="editorOpen">
+        <z-sheet-header>
+          <z-sheet-title>Custom colors</z-sheet-title>
+          <z-sheet-description>Every color of the theme. A custom theme is installed by hand.</z-sheet-description>
+        </z-sheet-header>
+        <div class="no-scrollbar min-h-0 overflow-y-auto px-4 pb-4">
+          <z-create-theme-editor />
+        </div>
+      </z-sheet>
+    }
   `,
 })
 export class CreateCustomizerComponent {
@@ -254,6 +314,9 @@ export class CreateCustomizerComponent {
   readonly mobile = input(false);
 
   protected readonly design = this.state.design;
+  protected readonly custom = this.state.isCustom;
+  /** The phone's color editor: a bottom sheet, the customizer there being a row of cards. */
+  protected readonly editorOpen = signal(false);
   private readonly constraints = this.state.constraints;
 
   protected readonly styleOptions = computed(() => styleSections(this.design()));
@@ -281,7 +344,11 @@ export class CreateCustomizerComponent {
   protected readonly fontGlyph = computed(() => fontFamily(this.design().font) ?? '');
 
   private readonly copied = signal(false);
-  protected readonly copyLabel = computed(() => (this.copied() ? 'Copied' : `--preset ${this.state.preset()}`));
+  protected readonly copyLabel = computed(() => {
+    if (this.custom()) return 'Custom theme';
+    return this.copied() ? 'Copied' : `--preset ${this.state.preset()}`;
+  });
+
   private copiedTimer: ReturnType<typeof setTimeout> | null = null;
 
   protected dot(id: string): string {

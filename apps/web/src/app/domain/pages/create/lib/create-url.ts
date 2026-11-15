@@ -3,6 +3,7 @@ import type { DesignConfig, DesignField } from '@zard/design';
 
 import { COMPONENT_LIST } from './create-items';
 import { BLOCK_ITEM_PREFIX, DEFAULT_ITEM, isCanvasItem } from './create.protocol';
+import { CUSTOM_DESIGN_DEFAULTS, decodeCustomTheme, encodeCustomTheme, type CustomTheme } from './custom-theme';
 
 /** The slice of Angular's `ParamMap` this module needs, so it can be tested with a plain object. */
 export interface ParamsLike {
@@ -15,6 +16,8 @@ export interface ParamsLike {
 export interface ParsedCreateUrl {
   readonly design: DesignConfig;
   readonly item: string;
+  /** The hand-edited theme when Custom is on (`custom` in the URL), `null` when it is off. */
+  readonly custom: CustomTheme | null;
   /** The URL is not in its canonical form: it has no valid `preset`, or carries params that fold into it. */
   readonly needsCanonicalization: boolean;
 }
@@ -46,21 +49,26 @@ export function parseCreateParams(params: ParamsLike): ParsedCreateUrl {
     else overrides[field] = value;
   }
 
-  const design = normalizeDesign({ ...base, ...overrides });
+  const customParam = params.get('custom');
+  const custom = decodeCustomTheme(customParam);
+  // Custom is CSS only: whatever the preset says about style, fonts, icons and menu is not part of it.
+  const design = normalizeDesign({ ...base, ...overrides, ...(custom ? CUSTOM_DESIGN_DEFAULTS : {}) });
   const requestedItem = params.get('item');
   const item = requestedItem && isKnownItem(requestedItem) ? requestedItem : DEFAULT_ITEM;
   const repeated = (name: string) => (params.getAll?.(name).length ?? 0) > 1;
 
-  const extraKeys = params.keys.some(key => key !== 'preset' && key !== 'item');
+  const extraKeys = params.keys.some(key => key !== 'preset' && key !== 'item' && key !== 'custom');
   const needsCanonicalization =
     !decoded?.ok ||
     decoded.code !== presetParam ||
     extraKeys ||
     repeated('preset') ||
     repeated('item') ||
+    repeated('custom') ||
+    (custom !== null && (customParam !== encodeCustomTheme(custom) || encodePreset(design) !== presetParam)) ||
     (requestedItem !== null && (requestedItem !== item || item === DEFAULT_ITEM));
 
-  return { design, item, needsCanonicalization };
+  return { design, item, custom, needsCanonicalization };
 }
 
 /**
@@ -73,9 +81,17 @@ function isKnownItem(item: string): boolean {
   return COMPONENT_LIST.some(component => component.id === item);
 }
 
-/** The canonical query: `preset` always, `item` only when it is not the default canvas. */
-export function serializeCreateParams(design: DesignConfig, item: string): Record<string, string> {
+/**
+ * The canonical query: `preset` always, `item` only when it is not the default canvas, `custom` only while Custom is
+ * on (`~` before anything was changed).
+ */
+export function serializeCreateParams(
+  design: DesignConfig,
+  item: string,
+  custom: CustomTheme | null = null,
+): Record<string, string> {
   const query: Record<string, string> = { preset: encodePreset(design) };
   if (item && item !== DEFAULT_ITEM) query['item'] = item;
+  if (custom) query['custom'] = encodeCustomTheme(custom);
   return query;
 }

@@ -1,4 +1,5 @@
-import { Route } from '@angular/router';
+import { inject } from '@angular/core';
+import { Route, Router } from '@angular/router';
 
 import { DocumentationLayout } from './core/layouts/documentation/documentation.layout';
 import { ShellLayout } from './core/layouts/shell/shell.layout';
@@ -158,7 +159,12 @@ export const appRoutes: Route[] = [
       },
     ],
   },
-  { path: 'themes', redirectTo: 'create', pathMatch: 'full' },
+  // The old theme generator lives on as /create's Custom mode: an old link opens it there.
+  {
+    path: 'themes',
+    pathMatch: 'full',
+    redirectTo: () => inject(Router).createUrlTree(['/create'], { queryParams: { custom: '~' } }),
+  },
   {
     path: 'create/preview/:item',
     loadComponent: () => import('./domain/pages/create/preview/create-preview.page').then(c => c.CreatePreviewPage),

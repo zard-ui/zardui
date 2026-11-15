@@ -1,6 +1,7 @@
 import { INHERIT_FONT, renderTokenBlocks, resolveFonts } from '@zard/design';
 import type { DesignConfig, IconLibraryId, StyleId } from '@zard/design';
 
+import { renderCustomTokenBlocks, type CustomTheme } from './custom-theme';
 import { IconSwapper } from './icon-families';
 
 const THEME_STYLE_ID = 'zard-create-theme';
@@ -68,7 +69,8 @@ const STYLE_CLASS_PREFIX = 'style-';
  *
  *  - style: `style-<id>` on `<body>` (the contract the style CSS keys off), once that style's sheet has loaded: until
  *    then the previous look stays, so a slow connection never shows components with no style at all
- *  - colors and radius: an injected `<style>` holding the `:root` and `.dark` token blocks
+ *  - colors and radius: an injected `<style>` holding the `:root` and `.dark` token blocks, with a custom theme's
+ *    changes on top when there is one
  *  - fonts: `--font-sans` (and the docs' own `--font-geist-sans`) and `--font-heading`
  *  - menu: `menu-inverted` / `menu-translucent` on `<body>`, with the rules to match in the injected `<style>`
  *  - icons: every `<ng-icon>` redrawn in the chosen family
@@ -89,23 +91,23 @@ export class DesignApplier {
    * Applies a design, resolving once it is on screen. A design whose style sheet is still on its way waits for it
    * (the newest design wins if several queue up), and the other sheets are fetched when the page is idle.
    */
-  async apply(design: DesignConfig, dark: boolean): Promise<void> {
+  async apply(design: DesignConfig, dark: boolean, custom: CustomTheme | null = null): Promise<void> {
     const request = ++this.latest;
 
     await loadStyleSheet(this.document, design.style);
     if (request !== this.latest) return;
 
-    this.render(design, dark);
+    this.render(design, dark, custom);
     this.prefetchOtherStyles(design.style);
   }
 
-  private render(design: DesignConfig, dark: boolean): void {
+  private render(design: DesignConfig, dark: boolean, custom: CustomTheme | null): void {
     const { body, documentElement } = this.document;
 
     documentElement.removeAttribute(DESIGN_PENDING_ATTRIBUTE);
     documentElement.classList.toggle('dark', dark);
     this.applyBodyClasses(design, dark);
-    this.applyTheme(design);
+    this.applyTheme(design, custom);
     this.applyFonts(design);
 
     if (design.iconLibrary !== this.iconLibrary) {
@@ -192,7 +194,7 @@ export class DesignApplier {
     if (design.menuAppearance === 'translucent') classList.add('menu-translucent');
   }
 
-  private applyTheme(design: DesignConfig): void {
+  private applyTheme(design: DesignConfig, custom: CustomTheme | null): void {
     let element = this.document.getElementById(THEME_STYLE_ID) as HTMLStyleElement | null;
     if (!element) {
       element = this.document.createElement('style');
@@ -200,7 +202,7 @@ export class DesignApplier {
       this.document.head.appendChild(element);
     }
 
-    element.textContent = renderTokenBlocks(design);
+    element.textContent = custom ? renderCustomTokenBlocks(design, custom) : renderTokenBlocks(design);
   }
 
   private applyFonts(design: DesignConfig): void {

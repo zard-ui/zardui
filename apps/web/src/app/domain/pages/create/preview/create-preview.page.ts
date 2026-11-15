@@ -38,6 +38,7 @@ import {
   isCreateMessage,
   type FromPreviewMessage,
 } from '../lib/create.protocol';
+import { sanitizeCustomTheme } from '../lib/custom-theme';
 import { DESIGN_PENDING_ATTRIBUTE, DesignApplier, loadStyleSheet } from '../lib/design-applier';
 import { PreviewDesignContext } from '../lib/preview-design.context';
 
@@ -165,7 +166,7 @@ export class CreatePreviewPage {
       this.applier = applier;
 
       this.context.design.set(initial.design);
-      void applier.apply(initial.design, this.darkMode.themeMode() === 'dark');
+      void applier.apply(initial.design, this.darkMode.themeMode() === 'dark', initial.custom);
 
       const onMessage = (event: MessageEvent): void => {
         if (event.origin !== view.location.origin || event.source !== view.parent) return;
@@ -179,7 +180,8 @@ export class CreatePreviewPage {
           });
         } else if (event.data.type === 'design') {
           this.context.design.set(event.data.design);
-          void applier.apply(event.data.design, event.data.dark);
+          // Same origin and the parent only, but it ends up in a <style>: it goes through the same gate as the URL.
+          void applier.apply(event.data.design, event.data.dark, sanitizeCustomTheme(event.data.custom));
         }
       };
 

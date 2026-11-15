@@ -230,7 +230,14 @@ export const FONT_THEME_END = '/* zard:fonts:end */';
 
 /** The `:root` and `.dark` blocks of a design. */
 export function renderTokenBlocks(design: DesignConfig, data?: DesignData): string {
-  const { light, dark } = resolveTokens(design, data);
+  return renderResolvedTokenBlocks(resolveTokens(design, data));
+}
+
+/**
+ * The `:root` and `.dark` blocks of tokens resolved elsewhere — a design's, or a hand-edited theme the `/create`
+ * page builds on top of one. Values are written as they are: a caller passing user input validates it first.
+ */
+export function renderResolvedTokenBlocks({ light, dark }: ResolvedTokens): string {
   return `:root {
 ${declarations(light)}
 }
@@ -241,11 +248,14 @@ ${declarations(dark)}
 }
 
 /** The `:root`, `.dark`, `@theme inline` and base layer — everything that colors the app. */
-export function renderThemeBlock(design: DesignConfig, options: { pointer?: boolean; data?: DesignData } = {}): string {
+export function renderThemeBlock(
+  design: DesignConfig,
+  options: { pointer?: boolean; data?: DesignData; tokens?: ResolvedTokens } = {},
+): string {
   return [
     THEME_START,
     '',
-    renderTokenBlocks(design, options.data),
+    options.tokens ? renderResolvedTokenBlocks(options.tokens) : renderTokenBlocks(design, options.data),
     INLINE_THEME,
     layerBase(options.pointer ?? false).trimStart(),
     THEME_END,

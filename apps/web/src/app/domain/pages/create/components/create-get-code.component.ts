@@ -1,8 +1,9 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCheck, lucideCopy, lucideGlobe, lucideMousePointerClick } from '@ng-icons/lucide';
+import { lucideCheck, lucideCopy, lucideDownload, lucideGlobe, lucideMousePointerClick } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDialogImports } from '@zard/components/dialog/dialog.imports';
@@ -22,19 +23,25 @@ import {
   type CreateTemplate,
   type PackageManager,
 } from '../lib/create-commands';
+import { renderCustomThemeCss } from '../lib/custom-theme';
 import { CreateShellService } from '../services/create-shell.service';
 import { CreateStateService } from '../services/create-state.service';
 
 const PACKAGE_MANAGER_KEY = 'zard-create-package-manager';
 const COPIED_MS = 2000;
 
-type GetCodeTab = 'new-project' | 'existing-project' | 'theme';
+type GetCodeTab = 'new-project' | 'existing-project' | 'theme' | 'manual';
 type CopyTarget = 'command' | 'theme';
 
 const TABS: readonly { value: GetCodeTab; label: string }[] = [
   { value: 'new-project', label: 'New Project' },
   { value: 'existing-project', label: 'Existing Project' },
   { value: 'theme', label: 'Theme' },
+];
+
+/** A custom theme is not a preset: no command can install it, only its CSS by hand. */
+const CUSTOM_TABS: readonly { value: GetCodeTab; label: string }[] = [
+  { value: 'manual', label: 'Manual Installation' },
 ];
 
 const SCOPES: readonly { value: ApplyScope; label: string; description: string }[] = [
@@ -65,9 +72,17 @@ const SCOPES: readonly { value: ApplyScope; label: string; description: string }
  */
 @Component({
   selector: 'z-create-get-code',
-  imports: [NgIcon, NgTemplateOutlet, ZardButtonComponent, ZardDialogImports, ZardFieldImports, ZardSwitchComponent],
+  imports: [
+    NgIcon,
+    NgTemplateOutlet,
+    RouterLink,
+    ZardButtonComponent,
+    ZardDialogImports,
+    ZardFieldImports,
+    ZardSwitchComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideCheck, lucideCopy, lucideGlobe, lucideMousePointerClick })],
+  viewProviders: [provideIcons({ lucideCheck, lucideCopy, lucideDownload, lucideGlobe, lucideMousePointerClick })],
   template: `
     <z-dialog
       class="dark top-16 flex max-h-[calc(100svh-2rem)] translate-y-0 flex-col gap-0 rounded-2xl p-0 shadow-xl **:data-[slot=dialog-close]:end-4 **:data-[slot=dialog-close]:top-4.5 **:data-[slot=field-separator]:h-2 sm:max-w-md"
@@ -84,7 +99,7 @@ const SCOPES: readonly { value: ApplyScope; label: string; description: string }
       <div class="flex min-w-0 flex-1 flex-col gap-0 overflow-hidden rounded-2xl">
         <div class="flex flex-col border-b px-6 py-5">
           <div class="flex gap-2" role="tablist" aria-label="Project type">
-            @for (item of tabs; track item.value) {
+            @for (item of tabs(); track item.value) {
               <button
                 type="button"
                 role="tab"
@@ -201,6 +216,76 @@ const SCOPES: readonly { value: ApplyScope; label: string; description: string }
                 </fieldset>
               </div>
               <ng-container *ngTemplateOutlet="commandFooter; context: { command: existingCommand() }" />
+            </div>
+          }
+          @case ('manual') {
+            <div
+              class="no-scrollbar overflow-y-auto"
+              role="tabpanel"
+              aria-label="Manual Installation"
+              data-tab="manual"
+            >
+              <div z-field-group class="min-w-0 px-6 py-4">
+                <fieldset z-field-set class="min-w-0 gap-3">
+                  <legend z-field-legend zVariant="label">Custom Theme</legend>
+                  <p z-field-description>A custom theme is installed by hand: no preset or CLI command carries it.</p>
+                  <ol class="text-muted-foreground list-decimal space-y-1.5 ps-5 text-sm" data-testid="manual-steps">
+                    <li>
+                      Set up zard/ui in your project following the
+                      <a routerLink="/docs/installation" class="text-foreground underline underline-offset-4">
+                        installation guide
+                      </a>
+                      (its Manual tab skips the CLI entirely).
+                    </li>
+                    <li>
+                      Replace the theme in your global stylesheet (
+                      <code class="font-mono">styles.css</code>
+                      ) with the CSS below.
+                    </li>
+                    <li>
+                      Add components as usual. They come in the default style; the
+                      <a routerLink="/docs/theming" class="text-foreground underline underline-offset-4">
+                        theming docs
+                      </a>
+                      list every variable.
+                    </li>
+                  </ol>
+                  <div class="ring-border w-full min-w-0 overflow-hidden rounded-xl ring-1">
+                    <div class="flex items-center gap-2 py-1 pr-1.5 pl-3">
+                      <div class="text-muted-foreground min-w-0 flex-1 truncate font-mono text-sm">styles.css</div>
+                      <button
+                        type="button"
+                        z-button
+                        zType="ghost"
+                        zSize="icon-sm"
+                        aria-label="Download styles.css"
+                        data-testid="download-theme"
+                        (click)="download()"
+                      >
+                        <ng-icon name="lucideDownload" />
+                      </button>
+                      <ng-container
+                        *ngTemplateOutlet="copyIcon; context: { what: 'theme', text: customCss(), label: 'Copy theme' }"
+                      />
+                    </div>
+                    <div
+                      class="bg-popover no-scrollbar max-h-[40svh] overflow-auto border-t p-3"
+                      tabindex="0"
+                      role="region"
+                      aria-label="styles.css"
+                    >
+                      <pre
+                        class="min-w-max font-mono leading-normal whitespace-pre"
+                      ><code data-testid="custom-theme-css">{{ customCss() }}</code></pre>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+              <z-dialog-footer class="m-0 min-w-0 p-6 sm:flex-col">
+                <button type="button" z-button class="h-9 w-full" (click)="copy('theme', customCss())">
+                  {{ copied() === 'theme' ? 'Copied' : 'Copy CSS' }}
+                </button>
+              </z-dialog-footer>
             </div>
           }
           @case ('theme') {
@@ -335,7 +420,7 @@ export class CreateGetCodeComponent {
   private readonly state = inject(CreateStateService);
   private readonly document = inject(DOCUMENT);
 
-  protected readonly tabs = TABS;
+  protected readonly tabs = computed(() => (this.state.isCustom() ? CUSTOM_TABS : TABS));
   protected readonly templates = TEMPLATES;
   protected readonly scopes = SCOPES;
   protected readonly managers = PACKAGE_MANAGERS;
@@ -363,10 +448,19 @@ export class CreateGetCodeComponent {
   );
 
   protected readonly themeCss = computed(() => renderTokenBlocks(this.state.design()));
+  protected readonly customCss = computed(() =>
+    renderCustomThemeCss(this.state.design(), this.state.custom() ?? { light: {}, dark: {} }),
+  );
 
   private copiedTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
+    // The tabs differ with Custom on or off: land on one that exists.
+    effect(() => {
+      const tabs = this.tabs();
+      if (!tabs.some(item => item.value === this.tab())) this.tab.set(tabs[0].value);
+    });
+
     // Read after hydration: the server has no storage, and the first paint must match what it rendered.
     afterNextRender(() => {
       try {
@@ -386,6 +480,19 @@ export class CreateGetCodeComponent {
     } catch {
       // The choice still applies for this visit.
     }
+  }
+
+  /** `styles.css` with the custom theme, as a file. */
+  protected download(): void {
+    const view = this.document.defaultView;
+    if (!view) return;
+
+    const url = view.URL.createObjectURL(new Blob([this.customCss()], { type: 'text/css' }));
+    const link = this.document.createElement('a');
+    link.href = url;
+    link.download = 'styles.css';
+    link.click();
+    view.setTimeout(() => view.URL.revokeObjectURL(url), 0);
   }
 
   protected async copy(what: CopyTarget, text: string): Promise<void> {

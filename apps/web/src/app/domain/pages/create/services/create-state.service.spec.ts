@@ -342,4 +342,71 @@ describe('CreateStateService', () => {
       dark.set('light');
     });
   });
+
+  describe('custom theme', () => {
+    const lastQuery = () => navigate.mock.calls.at(-1)?.[1].queryParams as Record<string, string>;
+
+    it('turns Custom on with no changes, putting style and fonts back to the defaults', () => {
+      const service = createService({ preset: code({ ...DEFAULT_DESIGN, style: 'lyra' }) });
+
+      service.setCustom(true);
+      TestBed.tick();
+
+      expect(lastQuery()).toMatchObject({ custom: '~' });
+      expect(service.isCustom()).toBe(true);
+      expect(service.design().style).toBe(DEFAULT_DESIGN.style);
+    });
+
+    it('previews a dragged color without navigating, and commits the one let go of', () => {
+      const service = createService({ preset: code(DEFAULT_DESIGN), custom: '~' });
+      navigate.mockClear();
+
+      service.previewCustomToken('light', 'primary', '#2563eb');
+      expect(navigate).not.toHaveBeenCalled();
+      expect(service.tokens().light['primary']).toMatch(/^oklch\(/);
+      expect(service.custom()?.light).toEqual({});
+
+      service.setCustomToken('light', 'primary', '#2563eb');
+      TestBed.tick();
+
+      expect(navigate).toHaveBeenCalledTimes(1);
+      expect(service.custom()?.light.primary).toBe(service.tokens().light['primary']);
+    });
+
+    it('undoes a color change', () => {
+      const service = createService({ preset: code(DEFAULT_DESIGN), custom: '~' });
+
+      service.setCustomToken('light', 'primary', '#2563eb');
+      TestBed.tick();
+      service.undo();
+      TestBed.tick();
+
+      expect(service.custom()?.light).toEqual({});
+      expect(service.isCustom()).toBe(true);
+    });
+
+    it('does not shuffle a custom theme, and reset clears its colors', () => {
+      const service = createService({ preset: code(DEFAULT_DESIGN), custom: '~' });
+      service.setCustomToken('dark', 'primary', '#2563eb');
+      TestBed.tick();
+      navigate.mockClear();
+
+      service.shuffle();
+      expect(navigate).not.toHaveBeenCalled();
+
+      service.reset();
+      TestBed.tick();
+      expect(service.custom()?.dark).toEqual({});
+    });
+
+    it('leaves Custom when a preset is opened or the switch is turned off', () => {
+      const service = createService({ preset: code(DEFAULT_DESIGN), custom: '~' });
+
+      service.setPreset(code({ ...DEFAULT_DESIGN, style: 'maia' }));
+      TestBed.tick();
+
+      expect(service.isCustom()).toBe(false);
+      expect(lastQuery()).not.toHaveProperty('custom');
+    });
+  });
 });

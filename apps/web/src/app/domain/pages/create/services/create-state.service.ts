@@ -21,6 +21,17 @@ import { loadBlockItems } from '../lib/create-items';
 import { parseCreateParams, serializeCreateParams } from '../lib/create-url';
 import { BLOCK_ITEM_PREFIX, DEFAULT_ITEM } from '../lib/create.protocol';
 import type { CreateAction } from '../lib/create.protocol';
+import {
+  CUSTOM_DESIGN_DEFAULTS,
+  customThemesEqual,
+  EMPTY_CUSTOM_THEME,
+  resolveCustomTokens,
+  withCustomToken,
+  withoutCustomChanges,
+  type CustomTheme,
+  type CustomToken,
+  type ThemeMode,
+} from '../lib/custom-theme';
 import { PresetHistory } from '../lib/preset-history';
 
 /** The options a lock protects. `menu` holds both the color and the appearance of the menu. */
@@ -58,6 +69,19 @@ export class CreateStateService {
   readonly item = computed(() => this.url().item);
   readonly preset = computed(() => encodePreset(this.design()));
 
+  /** The hand-edited theme while Custom is on, `null` while it is off. Lives in the URL, like the design. */
+  readonly custom = computed(() => this.url().custom);
+  readonly isCustom = computed(() => this.custom() !== null);
+  /**
+   * A custom theme being dragged in a color picker: the preview follows it live, the URL and the history only get
+   * the color the user lets go of.
+   */
+  private readonly draft = signal<CustomTheme | null>(null);
+  /** What the preview shows: the draft while a color is being dragged, else the committed custom theme. */
+  readonly previewCustom = computed(() => this.draft() ?? this.custom());
+  /** Every token the preview resolves to, custom changes included — what the theme editor shows as current. */
+  readonly tokens = computed(() => resolveCustomTokens(this.design(), this.previewCustom() ?? EMPTY_CUSTOM_THEME));
+
   readonly dark = computed(() => this.darkMode.themeMode() === 'dark');
   readonly constraints = computed(() => designConstraints(this.design(), { dark: this.dark() }));
 
@@ -72,24 +96,26 @@ export class CreateStateService {
   /** Emits when something outside the page's own document (the preview iframe) was clicked: pickers close on it. */
   readonly popupsDismissed = new Subject<void>();
 
-  private readonly history = new PresetHistory(this.preset());
+  private readonly history = new PresetHistory(historyKey(this.design(), this.custom()));
   private readonly historyVersion = signal(0);
   readonly canUndo = computed(() => (this.historyVersion(), this.history.canUndo));
   readonly canRedo = computed(() => (this.historyVersion(), this.history.canRedo));
 
   /** The newest design, ahead of the URL while a navigation is still in flight. */
   private latest: DesignConfig = this.design();
+  private latestCustom: CustomTheme | null = this.custom();
   private lastSolidAccent: MenuAccentId = 'subtle';
   /** The radius the user picked, kept apart from the one a style forces (lyra and sera square it, rhea caps it). */
   private chosenRadius: RadiusId = this.design().radius;
 
   constructor() {
     effect(() => {
-      const { design, item, needsCanonicalization } = this.url();
+      const { design, item, custom, needsCanonicalization } = this.url();
       this.latest = design;
+      this.latestCustom = custom;
       if (this.design().menuAccent === 'bold') this.lastSolidAccent = 'bold';
       if (!isRadiusForced(design)) this.chosenRadius = design.radius;
-      this.history.observe(encodePreset(design));
+      this.history.observe(historyKey(design, custom));
       this.historyVersion.update(version => version + 1);
 
       // A hand-typed or stale URL is rewritten in place, so what is in the address bar is always the canonical form.
@@ -127,7 +153,10 @@ export class CreateStateService {
 
   setPreset(input: string): boolean {
     try {
-      this.commit(parsePresetInput(input).design);
+      const { design } = parsePresetInput(input);
+      // A preset is a whole design: opening one leaves Custom.
+      this.latestCustom = null;
+      this.commit(design);
       return true;
     } catch {
       return false;
@@ -146,11 +175,59 @@ export class CreateStateService {
   }
 
   shuffle(): void {
+    // A custom theme is the user's own work: there is nothing to roll.
+    if (this.latestCustom) return;
     this.commit(shuffleDesign(this.latest, this.lockedFields()));
   }
 
   reset(): void {
+    if (this.latestCustom) {
+      this.resetCustom();
+      return;
+    }
     this.commit(resetDesign(this.latest.style));
+  }
+
+  // --- Custom theme --------------------------------------------------------------------------------
+
+  /**
+   * Turns Custom on (starting from the colors on screen, so nothing jumps) or off (back to the preset it started from).
+   * On, the style, fonts, icons and menu go back to zard's defaults: a manual install is CSS only.
+   */
+  setCustom(on: boolean): void {
+    if (on === (this.latestCustom !== null)) return;
+
+    this.draft.set(null);
+    this.latestCustom = on ? EMPTY_CUSTOM_THEME : null;
+    if (on) this.latest = normalizeDesign({ ...this.latest, ...CUSTOM_DESIGN_DEFAULTS });
+    this.navigate(this.latest, this.item(), false);
+  }
+
+  /** Shows a color in the preview while it is being picked, without touching the URL or the history. */
+  previewCustomToken(mode: ThemeMode, token: CustomToken, value: string): void {
+    const current = this.draft() ?? this.latestCustom;
+    if (!current) return;
+    this.draft.set(withCustomToken(current, this.latest, mode, token, value));
+  }
+
+  /** Commits a color: a history entry, and the URL. */
+  setCustomToken(mode: ThemeMode, token: CustomToken, value: string): void {
+    if (!this.latestCustom) return;
+    this.draft.set(null);
+    this.commitCustom(withCustomToken(this.latestCustom, this.latest, mode, token, value));
+  }
+
+  /** Drops the changes of one mode, or of both: back to the colors of the preset Custom started from. */
+  resetCustom(mode?: ThemeMode): void {
+    if (!this.latestCustom) return;
+    this.draft.set(null);
+    this.commitCustom(withoutCustomChanges(this.latestCustom, mode));
+  }
+
+  private commitCustom(next: CustomTheme): void {
+    if (customThemesEqual(next, this.latestCustom)) return;
+    this.latestCustom = next;
+    this.navigate(this.latest, this.item(), false);
   }
 
   undo(): void {
@@ -229,8 +306,11 @@ export class CreateStateService {
     if (code === null) return;
     this.historyVersion.update(version => version + 1);
 
-    const { design } = parseCreateParams({ keys: ['preset'], get: name => (name === 'preset' ? code : null) });
+    const params = new URLSearchParams(code);
+    const { design, custom } = parseCreateParams({ keys: Array.from(params.keys()), get: name => params.get(name) });
     this.latest = design;
+    this.latestCustom = custom;
+    this.draft.set(null);
     this.navigate(design, this.item(), true);
   }
 
@@ -254,10 +334,15 @@ export class CreateStateService {
   private navigate(design: DesignConfig, item: string, replaceUrl: boolean): void {
     void this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: serializeCreateParams(design, item),
+      queryParams: serializeCreateParams(design, item, this.latestCustom),
       replaceUrl,
     });
   }
+}
+
+/** One undo/redo entry: the design and, while Custom is on, its custom theme — as the query string that holds them. */
+function historyKey(design: DesignConfig, custom: CustomTheme | null): string {
+  return new URLSearchParams(serializeCreateParams(design, DEFAULT_ITEM, custom)).toString();
 }
 
 /**

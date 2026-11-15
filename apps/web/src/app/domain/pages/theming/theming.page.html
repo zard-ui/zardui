@@ -48,6 +48,15 @@
         <a class="underline underline-offset-4" routerLink="/create">Create</a>
         lets you pick colors, fonts and radius with a live preview and copies the finished CSS.
       </li>
+      <li>
+        <strong class="text-foreground font-medium">Edit every color.</strong>
+        Turn on
+        <a class="underline underline-offset-4" [routerLink]="['/create']" [queryParams]="{ custom: '~' }">
+          Custom colors
+        </a>
+        in Create to set each variable, in light and dark, by hand. A custom theme is not a preset: you install it by
+        pasting its CSS, not with the CLI.
+      </li>
     </ul>
   </div>
 

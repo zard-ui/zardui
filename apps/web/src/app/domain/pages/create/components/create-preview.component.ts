@@ -102,7 +102,7 @@ export class CreatePreviewComponent {
     untracked(() => {
       if (!this.isBrowser) return null;
       const item = this.state.item();
-      const query = new URLSearchParams(serializeCreateParams(this.state.design(), item));
+      const query = new URLSearchParams(serializeCreateParams(this.state.design(), item, this.state.custom()));
       query.delete('item');
       this.lastItem = item;
       const path = `/create/preview/${encodeURIComponent(item)}?${query.toString()}`;
@@ -139,6 +139,7 @@ export class CreatePreviewComponent {
     effect(() => {
       this.state.design();
       this.state.dark();
+      this.state.previewCustom();
       this.send();
     });
 
@@ -164,6 +165,7 @@ export class CreatePreviewComponent {
       type: 'design',
       design: this.state.design(),
       dark: this.state.dark(),
+      custom: this.state.previewCustom(),
     };
 
     const key = JSON.stringify(message);

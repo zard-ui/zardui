@@ -1,6 +1,7 @@
 import { DEFAULT_DESIGN, encodePreset } from '@zard/design';
 
 import { parseCreateParams, serializeCreateParams, type ParamsLike } from './create-url';
+import { EMPTY_CUSTOM_THEME, encodeCustomTheme, withCustomToken } from './custom-theme';
 
 function params(values: Record<string, string>): ParamsLike {
   return { keys: Object.keys(values), get: name => values[name] ?? null };
@@ -109,5 +110,43 @@ describe('create URL contract', () => {
     expect(parsed.design).toEqual(parseCreateParams(params({ preset: lyraCode })).design);
     expect(parsed.item).toBe('preview-02');
     expect(parsed.needsCanonicalization).toBe(false);
+  });
+
+  describe('custom theme', () => {
+    const custom = withCustomToken(EMPTY_CUSTOM_THEME, DEFAULT_DESIGN, 'light', 'primary', '#2563eb');
+    const customCode = encodeCustomTheme(custom);
+
+    it('reads no custom param as Custom off', () => {
+      expect(parseCreateParams(params({ preset: lyraCode })).custom).toBeNull();
+    });
+
+    it('reads the custom theme and keeps the canonical URL as it is', () => {
+      const preset = encodePreset(DEFAULT_DESIGN);
+      const parsed = parseCreateParams(params({ preset, custom: customCode }));
+
+      expect(parsed.custom).toEqual(custom);
+      expect(parsed.needsCanonicalization).toBe(false);
+    });
+
+    it('puts style, fonts, icons and menu back to the defaults while Custom is on', () => {
+      const parsed = parseCreateParams(params({ preset: lyraCode, custom: '~' }));
+
+      expect(parsed.design.style).toBe(DEFAULT_DESIGN.style);
+      expect(parsed.custom).toEqual(EMPTY_CUSTOM_THEME);
+      expect(parsed.needsCanonicalization).toBe(true);
+    });
+
+    it('rewrites a custom value it cannot read to the empty form', () => {
+      const parsed = parseCreateParams(params({ preset: encodePreset(DEFAULT_DESIGN), custom: 'garbage!' }));
+
+      expect(parsed.custom).toEqual(EMPTY_CUSTOM_THEME);
+      expect(parsed.needsCanonicalization).toBe(true);
+    });
+
+    it('serializes custom only while it is on', () => {
+      expect(serializeCreateParams(DEFAULT_DESIGN, 'preview-01')).not.toHaveProperty('custom');
+      expect(serializeCreateParams(DEFAULT_DESIGN, 'preview-01', EMPTY_CUSTOM_THEME)).toMatchObject({ custom: '~' });
+      expect(serializeCreateParams(DEFAULT_DESIGN, 'preview-01', custom)).toMatchObject({ custom: customCode });
+    });
   });
 });
