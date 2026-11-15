@@ -400,7 +400,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border border-input bg-transparent px-2.5 py-1 text-base h-9 rounded-md shadow-xs transition-[color,box-shadow] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input h-9 rounded-md shadow-xs transition-[color,box-shadow] has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
+      'relative flex w-full min-w-0 items-center border border-input h-9 rounded-md shadow-xs transition-[color,box-shadow] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
     'cn-input-group-addon-align-block-end':
@@ -489,6 +489,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-group': 'flex min-w-0 flex-col gap-2',
     'cn-message-header':
       'flex max-w-full min-w-0 items-center px-3 text-xs font-medium text-muted-foreground group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
+    'cn-message-scroller-button-direction-end': 'bottom-4',
+    'cn-message-scroller-button-direction-start': 'top-4',
+    'cn-message-scroller-content': 'gap-6',
+    'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/50',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-2 pe-2.5 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:rounded-md',
@@ -721,6 +725,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-left': 'top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5',
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
+    'cn-trace':
+      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
+    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
+    'cn-trace-line': 'gap-2 text-sm',
   },
   nova: {
     'cn-accordion': '',
@@ -1059,23 +1069,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top',
     'cn-drawer-title': 'text-base font-medium text-foreground wrap-anywhere',
     'cn-dropdown-menu-content':
-      'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+      'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 animate-in duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
     'cn-dropdown-menu-item':
-      'relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
-    'cn-dropdown-menu-item-indicator': 'absolute start-2 flex size-3.5 items-center justify-center',
-    'cn-dropdown-menu-item-inset-true': 'ps-8',
+      'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
+    'cn-dropdown-menu-item-indicator': 'absolute start-1.5 flex size-4 items-center justify-center',
+    'cn-dropdown-menu-item-inset-true': 'ps-7',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
-    'cn-dropdown-menu-label': 'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
-    'cn-dropdown-menu-label-inset-true': 'ps-8',
+    'cn-dropdown-menu-label': 'relative flex items-center px-1.5 py-1 text-xs font-medium text-muted-foreground',
+    'cn-dropdown-menu-label-inset-true': 'ps-7',
     'cn-dropdown-menu-radio-dot': 'size-2 rounded-full bg-current',
     'cn-dropdown-menu-separator': 'bg-border -mx-1 my-1 block h-px',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-dropdown-menu-sub-content':
-      'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95',
+      'z-50 min-w-24 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10 animate-in duration-100 fade-in-0 zoom-in-95',
     'cn-dropdown-menu-sub-trigger':
-      'relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
-    'cn-dropdown-menu-sub-trigger-inset-true': 'ps-8',
+      'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
+    'cn-dropdown-menu-sub-trigger-inset-true': 'ps-7',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-xl border-dashed p-6 text-center text-balance',
     'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance',
@@ -1112,7 +1122,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center rounded-lg border border-input transition-colors has-disabled:bg-input/50 has-disabled:opacity-50 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-disabled:bg-input/80 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
+      'relative flex h-8 w-full min-w-0 items-center rounded-lg border border-input transition-colors has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
     'cn-input-group-addon-align-block-end':
@@ -1200,6 +1210,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-group': 'flex min-w-0 flex-col gap-2',
     'cn-message-header':
       'flex max-w-full min-w-0 items-center px-3 text-xs font-medium text-muted-foreground group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
+    'cn-message-scroller-button-direction-end': 'bottom-4',
+    'cn-message-scroller-button-direction-start': 'top-4',
+    'cn-message-scroller-content': 'gap-6',
+    'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/50',
     'cn-navigation-menu': 'relative flex max-w-max flex-1 items-center justify-center',
     'cn-navigation-menu-content':
       'h-full w-auto p-1 transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52',
@@ -1432,6 +1446,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-left': 'top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5',
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
+    'cn-trace':
+      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
+    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
+    'cn-trace-line': 'gap-2 text-sm',
   },
   maia: {
     'cn-accordion': 'block overflow-hidden rounded-2xl border',
@@ -1822,7 +1842,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border border-input py-1 text-base transition-colors bg-input/30 h-9 rounded-4xl px-3 file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:h-7 focus-visible:ring-[3px] aria-invalid:ring-[3px]',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/30 h-9 rounded-4xl has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-data-[align=block-end]:rounded-2xl has-data-[align=block-start]:rounded-2xl has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-[3px] has-[textarea]:rounded-xl',
+      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/30 h-9 rounded-4xl has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-data-[align=block-end]:rounded-2xl has-data-[align=block-start]:rounded-2xl has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-[3px] has-[textarea]:rounded-xl',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-4xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -1910,6 +1930,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-group': 'flex min-w-0 flex-col gap-2',
     'cn-message-header':
       'flex max-w-full min-w-0 items-center text-xs font-medium text-muted-foreground px-3.5 group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
+    'cn-message-scroller-button-direction-end': 'bottom-5',
+    'cn-message-scroller-button-direction-start': 'top-5',
+    'cn-message-scroller-content': 'gap-7',
+    'cn-message-scroller-viewport': 'focus-visible:ring-[3px] focus-visible:ring-ring/50',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-2.5 pe-3 isolate z-50 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:ring-foreground/5 group-data-[viewport=false]/navigation-menu:rounded-2xl group-data-[viewport=false]/navigation-menu:shadow-2xl',
@@ -2142,6 +2166,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-left': 'top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5',
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
+    'cn-trace':
+      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-lg *:has-[>[data-slot=trace-line]]:focus-visible:ring-[3px] *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
+    'cn-trace-collapsible-content': 'mt-2.5 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-5 pe-1 leading-relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1.5 rounded-lg focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
+    'cn-trace-line': 'gap-2.5 text-sm',
   },
   lyra: {
     'cn-accordion': '',
@@ -2534,7 +2564,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'h-8 w-full min-w-0 border border-input bg-transparent px-2.5 py-1 transition-colors rounded-none text-xs file:inline-flex file:h-6 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:text-xs focus-visible:ring-1 aria-invalid:ring-1 md:text-xs',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center border border-input transition-colors rounded-none has-disabled:bg-input/50 has-disabled:opacity-50 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-disabled:bg-input/80 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-1',
+      'relative flex h-8 w-full min-w-0 items-center border border-input transition-colors rounded-none has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-1',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 font-medium text-muted-foreground text-xs group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-none",
     'cn-input-group-addon-align-block-end':
@@ -2622,6 +2652,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-group': 'flex min-w-0 flex-col gap-1.5',
     'cn-message-header':
       'flex max-w-full min-w-0 items-center text-xs font-medium text-muted-foreground px-2.5 group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
+    'cn-message-scroller-button-direction-end': 'bottom-3',
+    'cn-message-scroller-button-direction-start': 'top-3',
+    'cn-message-scroller-content': 'gap-4',
+    'cn-message-scroller-viewport': 'focus-visible:ring-1 focus-visible:ring-ring/50',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto p-1 transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:rounded-none',
@@ -2855,6 +2889,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-left': 'top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5',
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
+    'cn-trace':
+      'gap-1.5 *:has-[>[data-slot=trace-line]]:rounded-none *:has-[>[data-slot=trace-line]]:focus-visible:ring-1 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
+    'cn-trace-collapsible-content':
+      'mt-1.5 mb-1 ms-[calc(--spacing(1.75)-1px)] border-s ps-3 pe-1 leading-relaxed text-xs',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-none focus-visible:ring-1 focus-visible:ring-ring/50',
+    'cn-trace-icon': 'size-3.5 [--ng-icon__size:0.875rem] [&_svg:not([class*=size-])]:size-3.5',
+    'cn-trace-line': 'gap-1.5 text-xs',
   },
   mira: {
     'cn-accordion': 'block overflow-hidden rounded-md border',
@@ -3251,7 +3292,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border border-input transition-colors bg-input/20 h-7 rounded-md px-2 py-0.5 text-sm file:inline-flex file:h-6 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 file:text-xs/relaxed focus-visible:ring-2 aria-invalid:ring-2 md:text-xs/relaxed',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/20 h-7 rounded-md has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-2 has-[textarea]:rounded-md',
+      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/20 h-7 rounded-md has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-2 has-[textarea]:rounded-md',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center font-medium text-muted-foreground gap-1 py-2 text-xs/relaxed group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-[calc(var(--radius-sm)-2px)] **:data-[slot=kbd]:px-1 **:data-[slot=kbd]:text-[0.625rem] [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-addon-align-block-end':
@@ -3343,6 +3384,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-group': 'flex min-w-0 flex-col gap-1.5',
     'cn-message-header':
       'flex max-w-full min-w-0 items-center font-medium text-muted-foreground text-[0.625rem] px-2.5 group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
+    'cn-message-scroller-button-direction-end': 'bottom-3',
+    'cn-message-scroller-button-direction-start': 'top-3',
+    'cn-message-scroller-content': 'gap-4',
+    'cn-message-scroller-viewport': 'focus-visible:ring-2 focus-visible:ring-ring/30',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-1.5 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:rounded-xl group-data-[viewport=false]/navigation-menu:shadow-md',
@@ -3577,6 +3622,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-left': 'top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5',
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
+    'cn-trace':
+      'gap-1.5 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-2 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
+    'cn-trace-collapsible-content': 'mt-1.5 mb-1 ms-[calc(--spacing(1.75)-1px)] border-s ps-3 pe-1 text-xs/relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-md focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-trace-icon': 'size-3.5 [--ng-icon__size:0.875rem] [&_svg:not([class*=size-])]:size-3.5',
+    'cn-trace-line': 'gap-1.5 text-xs/relaxed',
   },
   luma: {
     'cn-accordion': 'block overflow-hidden rounded-2xl border',
@@ -3966,7 +4017,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border py-1 text-base bg-input/50 border-transparent h-9 rounded-3xl px-3 transition-[color,box-shadow,background-color] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border bg-input/50 border-transparent h-9 rounded-4xl transition-[color,box-shadow,background-color] has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-3xl has-data-[align=block-start]:rounded-3xl has-[textarea]:rounded-2xl',
+      'relative flex w-full min-w-0 items-center border bg-input/50 border-transparent h-9 rounded-4xl transition-[color,box-shadow,background-color] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-3xl has-data-[align=block-start]:rounded-3xl has-[textarea]:rounded-2xl',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-3xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -4054,6 +4105,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-group': 'flex min-w-0 flex-col gap-2',
     'cn-message-header':
       'flex max-w-full min-w-0 items-center text-xs font-medium text-muted-foreground px-3.5 group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
+    'cn-message-scroller-button-direction-end': 'bottom-5',
+    'cn-message-scroller-button-direction-start': 'top-5',
+    'cn-message-scroller-content': 'gap-7',
+    'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/30',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-2.5 pe-3 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:ring-foreground/5 group-data-[viewport=false]/navigation-menu:dark:ring-foreground/10 group-data-[viewport=false]/navigation-menu:rounded-3xl group-data-[viewport=false]/navigation-menu:shadow-lg',
@@ -4286,6 +4341,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-left': 'top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5',
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
+    'cn-trace':
+      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-xl *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
+    'cn-trace-collapsible-content': 'mt-2.5 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-5 pe-1 leading-relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1.5 rounded-xl focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
+    'cn-trace-line': 'gap-2.5 text-sm',
   },
   sera: {
     'cn-accordion': '',
@@ -4680,7 +4741,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border bg-transparent py-1 text-base border-transparent border-b-input h-10 px-0 transition-[color,border-color] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground md:text-sm focus-visible:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-transparent border-b-input bg-transparent h-10 rounded-none transition-[color,border-color] has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:border-b-ring has-[[data-slot][aria-invalid=true]]:border-b-destructive dark:has-[[data-slot][aria-invalid=true]]:border-b-destructive/50 has-data-[align=block-end]:rounded-none has-data-[align=block-start]:rounded-none has-[textarea]:rounded-none',
+      'relative flex w-full min-w-0 items-center border border-transparent border-b-input bg-transparent h-10 rounded-none transition-[color,border-color] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:border-b-ring has-[[data-slot][aria-invalid=true]]:border-b-destructive dark:has-[[data-slot][aria-invalid=true]]:border-b-destructive/50 has-data-[align=block-end]:rounded-none has-data-[align=block-start]:rounded-none has-[textarea]:rounded-none',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-none **:data-[slot=kbd]:px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-addon-align-block-end':
@@ -4771,6 +4832,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-group': 'flex min-w-0 flex-col gap-2',
     'cn-message-header':
       'flex max-w-full min-w-0 items-center text-xs font-medium text-muted-foreground px-4 uppercase tracking-wide group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
+    'cn-message-scroller-button-direction-end': 'bottom-4',
+    'cn-message-scroller-button-direction-start': 'top-4',
+    'cn-message-scroller-content': 'gap-6',
+    'cn-message-scroller-viewport': 'focus-visible:ring-2 focus-visible:ring-ring/30',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-2.5 pe-3 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:rounded-none group-data-[viewport=false]/navigation-menu:shadow-md',
@@ -5002,6 +5067,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-left': 'top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5',
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
+    'cn-trace':
+      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-none *:has-[>[data-slot=trace-line]]:focus-visible:ring-2 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
+    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-none focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
+    'cn-trace-line': 'gap-2 text-xs uppercase tracking-wide',
   },
   rhea: {
     'cn-accordion': 'block overflow-hidden rounded-2xl border',
@@ -5392,7 +5463,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'h-8 w-full min-w-0 border px-2.5 py-1 text-base bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center border bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30',
+      'relative flex h-8 w-full min-w-0 items-center border bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-2xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -5480,6 +5551,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-group': 'flex min-w-0 flex-col gap-2',
     'cn-message-header':
       'flex max-w-full min-w-0 items-center px-3 text-xs font-medium text-muted-foreground group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
+    'cn-message-scroller-button-direction-end': 'bottom-4',
+    'cn-message-scroller-button-direction-start': 'top-4',
+    'cn-message-scroller-content': 'gap-6',
+    'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/30',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-1.5 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:ring-foreground/5 group-data-[viewport=false]/navigation-menu:dark:ring-foreground/10 group-data-[viewport=false]/navigation-menu:rounded-2xl group-data-[viewport=false]/navigation-menu:shadow-lg',
@@ -5712,5 +5787,11 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-left': 'top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5',
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
+    'cn-trace':
+      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-lg *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
+    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-lg focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
+    'cn-trace-line': 'gap-2 text-sm',
   },
 };

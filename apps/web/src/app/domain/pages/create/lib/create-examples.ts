@@ -212,6 +212,14 @@ export const CREATE_EXAMPLES: readonly CreateExample[] = [
       import('@doc/domain/pages/create/examples/message-example.component').then(m => m.MessageExampleComponent),
   },
   {
+    name: 'message-scroller',
+    title: 'Message Scroller',
+    load: () =>
+      import('@doc/domain/pages/create/examples/message-scroller-example.component').then(
+        m => m.MessageScrollerExampleComponent,
+      ),
+  },
+  {
     name: 'navigation-menu',
     title: 'Navigation Menu',
     load: () =>
@@ -361,5 +369,10 @@ export const CREATE_EXAMPLES: readonly CreateExample[] = [
     title: 'Tooltip',
     load: () =>
       import('@doc/domain/pages/create/examples/tooltip-example.component').then(m => m.TooltipExampleComponent),
+  },
+  {
+    name: 'trace',
+    title: 'Trace',
+    load: () => import('@doc/domain/pages/create/examples/trace-example.component').then(m => m.TraceExampleComponent),
   },
 ];

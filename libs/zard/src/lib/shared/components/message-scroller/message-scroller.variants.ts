@@ -16,13 +16,13 @@ export const messageScrollerVariants = cva(
 export const messageScrollerViewportVariants = cva(
   mergeClasses(
     'size-full min-h-0 min-w-0 scroll-fade-b scrollbar-thin overflow-y-auto overscroll-contain [overflow-anchor:none] [scrollbar-gutter:stable]',
-    'focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none focus-visible:ring-inset',
+    'cn-message-scroller-viewport focus-visible:outline-none focus-visible:ring-inset',
     'data-autoscrolling:scrollbar-thumb-transparent data-autoscrolling:scrollbar-track-transparent',
     'data-pending-scroll:invisible',
   ),
 );
 
-export const messageScrollerContentVariants = cva('flex h-max min-h-full flex-col gap-6');
+export const messageScrollerContentVariants = cva('cn-message-scroller-content flex h-max min-h-full flex-col');
 
 export const messageScrollerItemVariants = cva('min-w-0 shrink-0');
 
@@ -36,8 +36,8 @@ export const messageScrollerButtonVariants = cva(
   {
     variants: {
       zDirection: {
-        end: 'bottom-4 data-[active=false]:translate-y-full',
-        start: 'top-4 data-[active=false]:-translate-y-full [&_svg]:rotate-180',
+        end: 'cn-message-scroller-button-direction-end data-[active=false]:translate-y-full',
+        start: 'cn-message-scroller-button-direction-start data-[active=false]:-translate-y-full [&_svg]:rotate-180',
       },
     },
     defaultVariants: {
