@@ -77,6 +77,9 @@
       "phosphor": "phosphorArrowDown",
       "remixicon": "remixArrowDownLine"
     },
+    "arrow-down": {
+      "lucide": "lucideArrowDown"
+    },
     "arrow-left": {
       "lucide": "lucideArrowLeft",
       "tabler": "tablerArrowLeft",
@@ -104,6 +107,9 @@
       "hugeicons": "hugeArrowUp01",
       "phosphor": "phosphorArrowUp",
       "remixicon": "remixArrowUpLine"
+    },
+    "arrow-up-down": {
+      "lucide": "lucideArrowUpDown"
     },
     "arrow-up-right": {
       "lucide": "lucideArrowUpRight",
@@ -174,6 +180,9 @@
       "hugeicons": "hugeBookOpen01",
       "phosphor": "phosphorBookOpenText",
       "remixicon": "remixBookOpenLine"
+    },
+    "brain": {
+      "lucide": "lucideBrain"
     },
     "bookmark": {
       "lucide": "lucideBookmark",
@@ -315,6 +324,9 @@
       "phosphor": "phosphorCaretUpDown",
       "remixicon": "remixExpandUpDownLine"
     },
+    "circle": {
+      "lucide": "lucideCircle"
+    },
     "circle-alert": {
       "lucide": "lucideCircleAlert",
       "tabler": "tablerAlertCircle",
@@ -377,6 +389,12 @@
       "hugeicons": "hugePlusSignCircle",
       "phosphor": "phosphorPlusCircle",
       "remixicon": "remixAddCircleLine"
+    },
+    "circle-off": {
+      "lucide": "lucideCircleOff"
+    },
+    "circle-plus": {
+      "lucide": "lucideCirclePlus"
     },
     "circle-small": {
       "lucide": "lucideCircleSmall",
@@ -468,6 +486,9 @@
       "hugeicons": "hugeContainerTruck",
       "phosphor": "phosphorShippingContainer",
       "remixicon": "remixBox3Line"
+    },
+    "coffee": {
+      "lucide": "lucideCoffee"
     },
     "copy": {
       "lucide": "lucideCopy",
@@ -595,6 +616,12 @@
       "phosphor": "phosphorFileMagnifyingGlass",
       "remixicon": "remixFileSearchLine"
     },
+    "file-pen": {
+      "lucide": "lucideFilePen"
+    },
+    "file-plus": {
+      "lucide": "lucideFilePlus"
+    },
     "file-text": {
       "lucide": "lucideFileText",
       "tabler": "tablerFileText",
@@ -644,6 +671,9 @@
       "phosphor": "phosphorFolderPlus",
       "remixicon": "remixFolderAddLine"
     },
+    "folder-search": {
+      "lucide": "lucideFolderSearch"
+    },
     "footprints": {
       "lucide": "lucideFootprints",
       "tabler": "tablerWalk",
@@ -683,6 +713,9 @@
       "hugeicons": "hugeGitBranch",
       "phosphor": "phosphorGitBranch",
       "remixicon": "remixGitBranchLine"
+    },
+    "git-commit-horizontal": {
+      "lucide": "lucideGitCommitHorizontal"
     },
     "globe": {
       "lucide": "lucideGlobe",
@@ -760,6 +793,9 @@
       "hugeicons": "hugeDashboardSquare01",
       "phosphor": "phosphorSquaresFour",
       "remixicon": "remixDashboardLine"
+    },
+    "landmark": {
+      "lucide": "lucideLandmark"
     },
     "layout-grid": {
       "lucide": "lucideLayoutGrid",
@@ -894,6 +930,9 @@
       "phosphor": "phosphorMapTrifold",
       "remixicon": "remixMapLine"
     },
+    "map-pin": {
+      "lucide": "lucideMapPin"
+    },
     "maximize": {
       "lucide": "lucideMaximize",
       "tabler": "tablerMaximize",
@@ -921,6 +960,9 @@
       "hugeicons": "hugeMessageQuestion",
       "phosphor": "phosphorChatCircleDots",
       "remixicon": "remixQuestionAnswerLine"
+    },
+    "message-circle-dashed": {
+      "lucide": "lucideMessageCircleDashed"
     },
     "message-square": {
       "lucide": "lucideMessageSquare",
@@ -978,12 +1020,21 @@
       "phosphor": "phosphorPaintBrush",
       "remixicon": "remixPaintBrushLine"
     },
+    "package": {
+      "lucide": "lucidePackage"
+    },
     "panel-left": {
       "lucide": "lucidePanelLeft",
       "tabler": "tablerLayoutSidebar",
       "hugeicons": "hugeSidebarLeft",
       "phosphor": "phosphorSidebar",
       "remixicon": "remixLayoutLeftLine"
+    },
+    "paperclip": {
+      "lucide": "lucidePaperclip"
+    },
+    "pause": {
+      "lucide": "lucidePause"
     },
     "pencil": {
       "lucide": "lucidePencil",
@@ -992,12 +1043,27 @@
       "phosphor": "phosphorPencil",
       "remixicon": "remixPencilLine"
     },
+    "phone": {
+      "lucide": "lucidePhone"
+    },
     "pie-chart": {
       "lucide": "lucidePieChart",
       "tabler": "tablerChartPie",
       "hugeicons": "hugePieChart",
       "phosphor": "phosphorChartPie",
       "remixicon": "remixPieChartLine"
+    },
+    "pin": {
+      "lucide": "lucidePin"
+    },
+    "pin-off": {
+      "lucide": "lucidePinOff"
+    },
+    "pipette": {
+      "lucide": "lucidePipette"
+    },
+    "play": {
+      "lucide": "lucidePlay"
     },
     "plus": {
       "lucide": "lucidePlus",
@@ -1215,6 +1281,9 @@
       "phosphor": "phosphorTarget",
       "remixicon": "remixFocus3Line"
     },
+    "telescope": {
+      "lucide": "lucideTelescope"
+    },
     "terminal": {
       "lucide": "lucideTerminal",
       "tabler": "tablerTerminal",
@@ -1249,6 +1318,9 @@
       "hugeicons": "hugeTimer01",
       "phosphor": "phosphorTimer",
       "remixicon": "remixTimerLine"
+    },
+    "timer": {
+      "lucide": "lucideTimer"
     },
     "trash": {
       "lucide": "lucideTrash",
@@ -1291,6 +1363,9 @@
       "hugeicons": "hugeTv01",
       "phosphor": "phosphorTelevision",
       "remixicon": "remixTvLine"
+    },
+    "truck": {
+      "lucide": "lucideTruck"
     },
     "underline": {
       "lucide": "lucideUnderline",
@@ -1360,6 +1435,9 @@
       "tabler": "tablerWaveSine",
       "phosphor": "phosphorWaves",
       "remixicon": "remixWaterFlashLine"
+    },
+    "wrap-text": {
+      "lucide": "lucideWrapText"
     },
     "x": {
       "lucide": "lucideX",

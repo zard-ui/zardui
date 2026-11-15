@@ -1,5 +1,6 @@
 import { DEFAULT_REGISTRY_URL as BUILD_REGISTRY_URL } from '@cli/config/registry-config.js';
 import { isIconFamily, retargetFiles, SOURCE_ICON_FAMILY, type IconFamily } from '@cli/core/icons/index.js';
+import type { RegistryBuild } from '@cli/core/registry/registry-data.js';
 import { resolveStyle, transformStyle, DEFAULT_STYLE } from '@cli/core/styles/index.js';
 import type { Config } from '@cli/utils/config.js';
 import { CliError, ConfigError } from '@cli/utils/errors.js';
@@ -9,6 +10,8 @@ import { logger } from '@cli/utils/logger.js';
 import { assertSupportedSchema } from '@cli/utils/schema-version.js';
 import { styleCatalog } from '@cli/utils/style-catalog.js';
 import * as path from 'node:path';
+
+export type { RegistryBuild };
 
 export const DEFAULT_REGISTRY_URL =
   process.env['ZARD_REGISTRY_URL'] ||
@@ -46,6 +49,9 @@ export interface RegistryItem {
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
+  build?: RegistryBuild;
+  /** The lowest Angular major the source compiles on. */
+  minAngularMajor?: number;
   icons?: RegistryIcons;
 }
 
@@ -96,6 +102,8 @@ export interface RegistryIndex {
     dependencies?: string[];
     devDependencies?: string[];
     registryDependencies?: string[];
+    build?: RegistryBuild;
+    minAngularMajor?: number;
     icons?: RegistryIcons;
     files: string[];
   }>;

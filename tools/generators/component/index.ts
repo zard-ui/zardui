@@ -270,18 +270,52 @@ function findNavSectionDataOpen(content: string, declaration: string): number {
 }
 
 /** Index of the `close` matching the literal that starts at `openIndex`. */
-function findLiteralClose(content: string, openIndex: number, open: string, close: string): number {
+export function findLiteralClose(content: string, openIndex: number, open: string, close: string): number {
   if (openIndex === -1) return -1;
 
   let depth = 0;
   let quote: string | null = null;
+  let escaped = false;
+  let lineComment = false;
+  let blockComment = false;
 
   for (let i = openIndex; i < content.length; i++) {
     const char = content[i];
-    const prev = content[i - 1];
+    const next = content[i + 1];
+
+    if (lineComment) {
+      if (char === '\n' || char === '\r') lineComment = false;
+      continue;
+    }
+
+    if (blockComment) {
+      if (char === '*' && next === '/') {
+        blockComment = false;
+        i++;
+      }
+      continue;
+    }
 
     if (quote) {
-      if (char === quote && prev !== '\\') quote = null;
+      if (escaped) {
+        escaped = false;
+      } else if (char === '\\') {
+        escaped = true;
+      } else if (char === quote) {
+        quote = null;
+      }
+      continue;
+    }
+
+    if (char === '/' && next === '/') {
+      lineComment = true;
+      i++;
+      continue;
+    }
+
+    if (char === '/' && next === '*') {
+      blockComment = true;
+      i++;
       continue;
     }
 

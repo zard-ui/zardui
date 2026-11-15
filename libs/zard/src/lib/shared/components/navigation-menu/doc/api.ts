@@ -3,25 +3,19 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const NAVIGATION_MENU_API: ApiSection[] = [
   {
     selector: 'z-navigation-menu',
-    description:
-      'Root of the navigation bar. Scopes the shared viewport to the triggers inside it. Renders no landmark role of its own — wrap it in a labelled `<nav>`, as every example on this page does, so assistive tech can identify it.',
+    description: 'Root of the navigation bar; wrap it in a labelled `<nav>`.',
     props: [
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
-      {
-        name: '[zViewport]',
-        description: 'Share a single animated popup between every trigger. When false each trigger opens its own',
-        type: 'boolean',
-        default: 'true',
-      },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[zViewport]', description: 'Shares one popup between all triggers', type: 'boolean', default: 'true' },
       {
         name: '[zAlign]',
-        description: 'Which edge of the active trigger the shared viewport lines up with',
+        description: 'Viewport alignment to the active trigger',
         type: "'start' | 'center' | 'end'",
         default: "'start'",
       },
       {
         name: '[zHoverDelay]',
-        description: 'Delay in ms before closing once the pointer leaves the bar',
+        description: 'Close delay in ms after the pointer leaves',
         type: 'number',
         default: '100',
       },
@@ -30,76 +24,63 @@ export const NAVIGATION_MENU_API: ApiSection[] = [
   {
     selector: '[z-navigation-menu-list]',
     description: 'The `<ul>` holding the items of the bar.',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: '[z-navigation-menu-item]',
-    description: 'The `<li>` wrapping a trigger and its content, or a standalone link.',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    description: 'The `<li>` wrapping a trigger and its content, or a link.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: '[z-navigation-menu-trigger]',
-    description: 'Opens the content it points to. Inside a root it opens on hover; standalone it opens on click.',
+    description: 'Opens its content; on hover inside a root, on click standalone.',
     props: [
       {
         name: '[zNavigationMenuTriggerFor]',
-        description: 'Reference to the content template',
+        description: 'Content template',
         type: 'TemplateRef<void>',
         default: 'required',
       },
-      { name: '[zDisabled]', description: 'Whether the trigger is disabled', type: 'boolean', default: 'false' },
+      { name: '[zDisabled]', description: 'Disables the trigger', type: 'boolean', default: 'false' },
       {
         name: '[zTrigger]',
-        description: 'How the content is opened',
+        description: 'How the content opens',
         type: "'click' | 'hover'",
         default: "'hover' inside a root, 'click' standalone",
       },
-      {
-        name: '[zHoverDelay]',
-        description: 'Delay in ms before closing on hover exit',
-        type: 'number',
-        default: '100',
-      },
+      { name: '[zHoverDelay]', description: 'Close delay in ms on hover exit', type: 'number', default: '100' },
       {
         name: '[zPlacement]',
-        description:
-          'Popup position relative to the trigger. Overlay mode only. `bottom*` and `top*` placements align to the inline edges of the trigger (`Left` is the inline-start edge), so they mirror in RTL; `left*` and `right*` place the popup on a physical side and swap automatically in RTL',
+        description: 'Popup position; overlay mode only, mirrors in RTL',
         type: 'ZardNavigationMenuPlacement',
         default: "'bottomLeft'",
       },
       {
         name: '[zShowChevron]',
-        description: 'Render the built-in chevron',
+        description: 'Shows the chevron',
         type: 'boolean',
         default: 'true inside a root, false standalone',
       },
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
     ],
   },
   {
     selector: '[z-navigation-menu-content]',
-    description:
-      'Container for the links of one trigger. Inside the shared viewport it is plain content; in overlay mode it is the popup itself.',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    description: 'Holds the links of one trigger.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: '[z-navigation-menu-link]',
-    description:
-      'A single entry, usable on a `<button>` or an `<a>`. Pair `[zActive]` with `routerLinkActive` to mark the current route — the directive has no router inputs of its own, so stack Angular `routerLink` directly on the element.',
+    description: 'A link on a `<button>` or `<a>`; pair `[zActive]` with `routerLinkActive`.',
     props: [
-      { name: '[zActive]', description: 'Marks the link as the current one', type: 'boolean', default: 'false' },
-      { name: '[zDisabled]', description: 'Whether the link is disabled', type: 'boolean', default: 'false' },
-      { name: '[zInset]', description: 'Add left padding for alignment', type: 'boolean', default: 'false' },
-      {
-        name: '[zType]',
-        description: 'Visual variant of the link',
-        type: "'default' | 'destructive'",
-        default: "'default'",
-      },
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[zActive]', description: 'Marks the current link', type: 'boolean', default: 'false' },
+      { name: '[zDisabled]', description: 'Disables the link', type: 'boolean', default: 'false' },
+      { name: '[zInset]', description: 'Adds start padding for alignment', type: 'boolean', default: 'false' },
+      { name: '[zType]', description: 'Visual variant', type: "'default' | 'destructive'", default: "'default'" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '(menuItemTriggered)',
-        description: 'Emits when the link is activated',
+        description: 'Emitted when the link is activated',
         type: 'EventEmitter<void>',
         default: '',
       },
@@ -107,31 +88,30 @@ export const NAVIGATION_MENU_API: ApiSection[] = [
   },
   {
     selector: 'z-navigation-menu-indicator',
-    description: 'The arrow that follows the trigger currently owning the viewport.',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    description: 'Arrow that follows the active trigger.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'z-navigation-menu-viewport',
-    description:
-      'The shared popup. Rendered automatically by the root while `zViewport` is on — declare it manually only to place it yourself.',
+    description: 'The shared popup; rendered automatically unless you place it yourself.',
     props: [],
   },
   {
     selector: 'z-navigation-menu-label',
-    description: 'Label for grouping links inside a content block.',
+    description: 'Label for a group of links.',
     props: [
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
-      { name: '[inset]', description: 'Adds left padding for alignment', type: 'boolean', default: 'false' },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[inset]', description: 'Adds start padding for alignment', type: 'boolean', default: 'false' },
     ],
   },
   {
     selector: 'z-navigation-menu-shortcut',
-    description: 'Displays a keyboard shortcut aligned to the end of a link.',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    description: 'Keyboard shortcut at the end of a link.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
   {
     selector: 'navigationMenuTriggerVariants()',
-    description: 'Helper that returns the trigger classes, for links that must line up with the triggers of the bar.',
+    description: 'Returns the trigger classes, for links that must match the triggers.',
     props: [],
   },
 ];

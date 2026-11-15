@@ -6,7 +6,7 @@
  * in a real `app.config.ts` or `vite.config.ts`.
  */
 
-import { arrayRange, lineEndingOf, withImport } from '@cli/utils/source-file.js';
+import { arrayRange, lineEndingOf, objectRange, withImport } from '@cli/utils/source-file.js';
 
 describe('lineEndingOf', () => {
   it('should follow whichever line ending the file already uses', () => {
@@ -98,5 +98,23 @@ describe('arrayRange', () => {
   // With no closing bracket there is no range — better to refuse than insert blind.
   it('should return null when the array is never closed', () => {
     expect(arrayRange('providers: [a(),', 'providers')).toBeNull();
+  });
+});
+
+describe('objectRange', () => {
+  it('should span the whole object, not stop at a nested one', () => {
+    const content = "resolve: { alias: { '@': 'src' }, mainFields: ['module'] }";
+
+    expect(objectRange(content, 'resolve')?.body).toBe(" alias: { '@': 'src' }, mainFields: ['module'] ");
+  });
+
+  it('should ignore braces inside strings and comments', () => {
+    const content = "resolve: { find: '}', /* } */ mainFields: ['module'] }";
+
+    expect(objectRange(content, 'resolve')?.body).toContain('mainFields');
+  });
+
+  it('should return null when the key is not there', () => {
+    expect(objectRange('export const x = 1;', 'resolve')).toBeNull();
   });
 });

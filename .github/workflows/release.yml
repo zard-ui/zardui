@@ -27,6 +27,14 @@ on:
         default: false
         type: boolean
 
+# Two merges close together used to release in parallel: both computed the same
+# version, one pushed its tag and published, then lost the race to master.
+# Runs now queue (never cancelled mid-release) and each release starts from the
+# branch tip, so it sees the version the run before it committed.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -70,6 +78,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          ref: ${{ github.ref }}
           token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Configure Git
@@ -165,6 +174,12 @@ jobs:
           git commit -m "🔖 chore(release): publish v${VERSION} [skip ci] 🔥"
           git tag -a "v${VERSION}" -m "v${VERSION}"
 
+      # Push before publishing, atomically: if master moved on, nothing lands —
+      # no orphan tag and no npm version that master never recorded.
+      - name: Push changes
+        if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' }}
+        run: git push --atomic --follow-tags origin HEAD:${{ github.ref_name }}
+
       - name: Rebuild CLI for Publish
         if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' }}
         run: npx nx run cli:build
@@ -179,10 +194,6 @@ jobs:
             TAG="latest"
           fi
           cd packages/cli/dist && npm publish --provenance --access public --tag $TAG
-
-      - name: Push changes
-        if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' }}
-        run: git push --follow-tags
 
       - name: Create GitHub Release
         if: ${{ inputs.dry_run != true && steps.release.outputs.publish == 'true' }}

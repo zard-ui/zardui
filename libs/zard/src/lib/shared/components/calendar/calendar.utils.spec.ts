@@ -1,5 +1,5 @@
 import type { CalendarDay, CalendarDayConfig } from './calendar.types';
-import { generateCalendarDays, getDayAriaLabel } from './calendar.utils';
+import { generateCalendarDays, getDayAriaLabel, isDateDisabled } from './calendar.utils';
 
 describe('Calendar Utilities', () => {
   describe('generateCalendarDays with weekStartsOn', () => {
@@ -42,6 +42,44 @@ describe('Calendar Utilities', () => {
       const days = generateCalendarDays(baseConfig);
       expect(days[0].date.getDay()).toBe(0);
       expect(days[days.length - 1].date.getDay()).toBe(6);
+    });
+  });
+
+  describe('generateCalendarDays with minDate and maxDate', () => {
+    const baseConfig: CalendarDayConfig = {
+      year: 2024,
+      month: 9,
+      mode: 'single',
+      selectedDates: [],
+      minDate: null,
+      maxDate: null,
+      disabled: false,
+    };
+
+    const findDay = (days: CalendarDay[], date: number) =>
+      days.find(day => day.isCurrentMonth && day.date.getDate() === date);
+
+    it('keeps the minDate day enabled when minDate carries a time of day', () => {
+      const days = generateCalendarDays({ ...baseConfig, minDate: new Date(2024, 9, 15, 14, 30) });
+
+      expect(findDay(days, 14)?.isDisabled).toBe(true);
+      expect(findDay(days, 15)?.isDisabled).toBe(false);
+    });
+
+    it('keeps the maxDate day enabled when maxDate carries a time of day', () => {
+      const days = generateCalendarDays({ ...baseConfig, maxDate: new Date(2024, 9, 15, 14, 30) });
+
+      expect(findDay(days, 15)?.isDisabled).toBe(false);
+      expect(findDay(days, 16)?.isDisabled).toBe(true);
+    });
+
+    it('compares bounds by day for years below 100', () => {
+      const maxDate = new Date(2024, 0, 1);
+      maxDate.setFullYear(99);
+      const candidate = new Date(2024, 0, 1);
+      candidate.setFullYear(1900);
+
+      expect(isDateDisabled(candidate, null, maxDate)).toBe(true);
     });
   });
 

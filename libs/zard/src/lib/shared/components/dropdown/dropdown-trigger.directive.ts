@@ -1,11 +1,11 @@
 import {
+  afterNextRender,
   booleanAttribute,
   computed,
   Directive,
   ElementRef,
   inject,
   input,
-  type OnInit,
   ViewContainerRef,
 } from '@angular/core';
 
@@ -31,7 +31,7 @@ import { ZardDropdownService, type ZardDropdownPlacement } from './dropdown.serv
   },
   exportAs: 'zDropdown',
 })
-export class ZardDropdownDirective implements OnInit {
+export class ZardDropdownDirective {
   private readonly elementRef = inject(ElementRef);
   private readonly viewContainerRef = inject(ViewContainerRef);
   protected readonly dropdownService = inject(ZardDropdownService);
@@ -44,13 +44,16 @@ export class ZardDropdownDirective implements OnInit {
   readonly zTrigger = input<'click' | 'hover'>('click');
   readonly zDisabled = input(false, { transform: booleanAttribute });
 
-  ngOnInit() {
-    // Ensure button has proper accessibility attributes
-    const element = this.elementRef.nativeElement;
-    if (!element.hasAttribute('aria-label') && !element.hasAttribute('aria-labelledby')) {
-      const label = element.textContent?.trim();
-      element.setAttribute('aria-label', label?.length ? label : 'Open menu');
-    }
+  constructor() {
+    // Ensure the trigger has an accessible name. This waits for the first render: text the trigger
+    // interpolates (`{{ title() }}`) is not in the DOM yet during ngOnInit.
+    afterNextRender(() => {
+      const element = this.elementRef.nativeElement;
+      if (!element.hasAttribute('aria-label') && !element.hasAttribute('aria-labelledby')) {
+        const label = element.textContent?.trim();
+        element.setAttribute('aria-label', label?.length ? label : 'Open menu');
+      }
+    });
   }
 
   protected onClick() {

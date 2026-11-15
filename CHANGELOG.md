@@ -1,3 +1,71 @@
+## 1.12.0 (2026-11-14)
+
+This was a version bump only, there were no code changes.
+
+## 1.11.0 (2026-11-14)
+
+This was a version bump only, there were no code changes.
+
+## 1.10.0 (2026-11-14)
+
+This was a version bump only, there were no code changes.
+
+## 1.9.0 (2026-11-13)
+
+This was a version bump only, there were no code changes.
+
+## 1.8.0 (2026-11-13)
+
+This was a version bump only, there were no code changes.
+
+## 1.7.0 (2026-11-13)
+
+This was a version bump only, there were no code changes.
+
+## 1.6.0 (2026-11-12)
+
+This was a version bump only, there were no code changes.
+
+## 1.5.1 (2026-11-09)
+
+This was a version bump only, there were no code changes.
+
+## 1.5.0 (2026-11-08)
+
+This was a version bump only, there were no code changes.
+
+## 1.4.2 (2026-11-08)
+
+This was a version bump only, there were no code changes.
+
+## 1.4.1 (2026-11-06)
+
+This was a version bump only, there were no code changes.
+
+## 1.4.0 (2026-11-05)
+
+This was a version bump only, there were no code changes.
+
+## 1.3.0 (2026-11-04)
+
+This was a version bump only, there were no code changes.
+
+## 1.2.0 (2026-11-04)
+
+This was a version bump only, there were no code changes.
+
+## 1.1.3 (2026-11-04)
+
+This was a version bump only, there were no code changes.
+
+## 1.1.2 (2026-11-04)
+
+This was a version bump only, there were no code changes.
+
+## 1.1.1 (2026-10-22)
+
+This was a version bump only, there were no code changes.
+
 ## 1.1.0 (2026-10-19)
 
 This was a version bump only, there were no code changes.

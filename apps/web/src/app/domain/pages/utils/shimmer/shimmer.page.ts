@@ -29,34 +29,25 @@ import { ZardUtilsShimmerSpreadAngleComponent } from '../demos/shimmer/spread-an
 import { ZardUtilsShimmerStatusComponent } from '../demos/shimmer/status';
 
 const CLASS_ROWS: UtilsClassRow[] = [
-  { name: 'shimmer', description: 'Sweeps a highlight across the text; 2s, linear, infinite.' },
-  { name: 'shimmer-once', description: 'A single sweep instead of a loop.' },
-  { name: 'shimmer-reverse', description: 'Reverses the sweep direction.' },
-  { name: 'shimmer-none', description: 'Disables the effect; the text renders in currentColor.' },
-  {
-    name: 'shimmer-color-<color>',
-    description: 'Highlight colour — a theme colour or an arbitrary one; supports the /<opacity> modifier.',
-  },
-  {
-    name: 'shimmer-duration-<number>',
-    description: 'Sweep duration in milliseconds (shimmer-duration-1000 is one second).',
-  },
-  {
-    name: 'shimmer-spread-<number>',
-    description: 'Width of the highlight band, from the spacing scale or an arbitrary length or percentage.',
-  },
-  { name: 'shimmer-angle-<number>', description: 'Tilt of the band, in degrees.' },
+  { name: 'shimmer', description: 'Sweeps a highlight across the text' },
+  { name: 'shimmer-once', description: 'Single sweep instead of a loop' },
+  { name: 'shimmer-reverse', description: 'Reverses the sweep direction' },
+  { name: 'shimmer-none', description: 'Disables the effect' },
+  { name: 'shimmer-color-<color>', description: 'Highlight color; supports `/<opacity>`' },
+  { name: 'shimmer-duration-<number>', description: 'Sweep duration in milliseconds' },
+  { name: 'shimmer-spread-<number>', description: 'Width of the highlight band' },
+  { name: 'shimmer-angle-<number>', description: 'Tilt of the band in degrees' },
 ];
 
 const PROPERTY_ROWS: UtilsClassRow[] = [
   {
     name: '--shimmer-color',
-    description: 'Highlight colour. Derived from currentColor, and brighter in dark mode.',
+    description: 'Highlight color, brighter in dark mode',
     default: 'oklch(from currentColor l c h / calc(alpha * 0.2))',
   },
-  { name: '--shimmer-duration', description: 'Sweep duration.', default: '2s' },
-  { name: '--shimmer-spread', description: 'Band width.', default: 'calc(3ch + 40px)' },
-  { name: '--shimmer-angle', description: 'Band tilt.', default: '20deg' },
+  { name: '--shimmer-duration', description: 'Sweep duration', default: '2s' },
+  { name: '--shimmer-spread', description: 'Band width', default: 'calc(3ch + 40px)' },
+  { name: '--shimmer-angle', description: 'Band tilt', default: '20deg' },
 ];
 
 @Component({

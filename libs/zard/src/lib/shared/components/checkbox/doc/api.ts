@@ -3,20 +3,15 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const CHECKBOX_API: ApiSection[] = [
   {
     selector: 'z-checkbox',
-    description: 'A control that allows the user to toggle between checked and not checked.',
+    description: 'Toggles between checked and unchecked.',
     props: [
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
-      { name: '[zDisabled]', description: 'Checkbox disabled state', type: 'boolean', default: 'false' },
-      {
-        name: '[zInvalid]',
-        description: 'Checkbox invalid state (sets aria-invalid)',
-        type: 'boolean',
-        default: 'false',
-      },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[zDisabled]', description: 'Disables the checkbox', type: 'boolean', default: 'false' },
+      { name: '[zInvalid]', description: 'Sets `aria-invalid`', type: 'boolean', default: 'false' },
       { name: '[zId]', description: 'Checkbox id', type: 'string', default: 'auto-generated' },
       {
         name: '(checkChange)',
-        description: 'Emits when the checkbox value changes',
+        description: 'Emitted when the checked state changes',
         type: 'EventEmitter<boolean>',
         default: '-',
       },

@@ -25,7 +25,7 @@ const betterTailwindBase = {
       'error',
       {
         // `cn-*` are style markers, resolved per style by `core/css/styles/` and by the CLI at install time.
-        ignore: ['animate-spinner', 'no-scrollbar', 'toaster', '^cn-'],
+        ignore: ['animate-spinner', 'no-scrollbar', 'toaster', 'typeset', '^cn-'],
       },
     ],
   },
@@ -39,6 +39,8 @@ export default [
       '@nx/dependency-checks': [
         'error',
         {
+          // `@types/geojson`: type-only imports in the map demos; the map item installs it as a devDependency.
+          ignoredDependencies: ['zod', '@types/geojson'],
           ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs}', '{projectRoot}/jest-style-transformer.cjs'],
         },
       ],

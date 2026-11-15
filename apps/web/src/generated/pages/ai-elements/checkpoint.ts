@@ -1,0 +1,58 @@
+import type { CodeBlockData, CodeTabData } from '@highlight/types';
+
+export const TABS_0: CodeTabData = {
+  "tabs": [
+    {
+      "label": "npm",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> marker</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> button</span></span></code></pre>",
+      "code": "npx zard-cli add marker button",
+      "language": "bash"
+    },
+    {
+      "label": "pnpm",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">pnpm</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> dlx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> marker</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> button</span></span></code></pre>",
+      "code": "pnpm dlx zard-cli add marker button",
+      "language": "bash"
+    },
+    {
+      "label": "yarn",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">yarn</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> dlx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> marker</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> button</span></span></code></pre>",
+      "code": "yarn dlx zard-cli add marker button",
+      "language": "bash"
+    },
+    {
+      "label": "bun",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">bunx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> marker</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> button</span></span></code></pre>",
+      "code": "bunx zard-cli add marker button",
+      "language": "bash"
+    }
+  ]
+};
+
+export const BLOCK_1: CodeBlockData = {
+  "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">import</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> { ZardButtonComponent } </span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">from</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> '@/shared/components/button/button.component'</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">;</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">import</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> { ZardMarkerImports } </span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">from</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> '@/shared/components/marker/marker.imports'</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">;</span></span></code></pre>",
+  "code": "import { ZardButtonComponent } from '@/shared/components/button/button.component';\nimport { ZardMarkerImports } from '@/shared/components/marker/marker.imports';",
+  "language": "angular-ts",
+  "showLineNumbers": true,
+  "copyButton": true,
+  "expandable": false
+};
+
+export const BLOCK_2: CodeBlockData = {
+  "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">&#x3C;</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">z-marker</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> zVariant</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">=</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"separator\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">></span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">  &#x3C;</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">z-marker-content</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> class</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">=</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"inline-flex items-center gap-2\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">></span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">    {{ label }}</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">    &#x3C;</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">button</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> type</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">=</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"button\"</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> z-button</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> zType</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">=</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"outline\"</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> zSize</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">=</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"xs\"</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> (click)</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">=</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"restore()\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">>Restore&#x3C;/</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">button</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">></span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">  &#x3C;/</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">z-marker-content</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">></span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">&#x3C;/</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">z-marker</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">></span></span></code></pre>",
+  "code": "<z-marker zVariant=\"separator\">\n  <z-marker-content class=\"inline-flex items-center gap-2\">\n    {{ label }}\n    <button type=\"button\" z-button zType=\"outline\" zSize=\"xs\" (click)=\"restore()\">Restore</button>\n  </z-marker-content>\n</z-marker>",
+  "language": "angular-html",
+  "showLineNumbers": true,
+  "copyButton": true,
+  "expandable": false
+};
+
+export const BLOCK_3: CodeBlockData = {
+  "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#6A737D;--shiki-light:#6A737D\">/** Keeps the turn with the checkpoint and drops every message after it. */</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">protected </span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">restore</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">(messageId: string): </span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">void</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> {</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">  const</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> index</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\"> =</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> this</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">.</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">messages</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">().</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">findIndex</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">(</span><span style=\"--shiki-dark:#FFAB70;--shiki-light:#E36209\">message</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\"> =></span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> message.id </span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">===</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> messageId);</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">  this</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">.messages.</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">update</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">(</span><span style=\"--shiki-dark:#FFAB70;--shiki-light:#E36209\">messages</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\"> =></span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> messages.</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">slice</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">(</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">0</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">, index </span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">+</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> 1</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">));</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">}</span></span></code></pre>",
+  "code": "/** Keeps the turn with the checkpoint and drops every message after it. */\nprotected restore(messageId: string): void {\n  const index = this.messages().findIndex(message => message.id === messageId);\n  this.messages.update(messages => messages.slice(0, index + 1));\n}",
+  "language": "angular-ts",
+  "showLineNumbers": true,
+  "copyButton": true,
+  "expandable": false
+};
+

@@ -42,15 +42,23 @@ function toConnectedPosition(
   align: ZardDropdownAlign,
   offset: number,
   rtl: boolean,
+  alignOffset: number,
 ): ConnectedPosition {
   if (isVertical(side)) {
-    return {
+    // `offsetX` is physical, while `align` follows the direction: the shift is mirrored in RTL and,
+    // like Radix's `alignOffset`, measured from the aligned edge, so it flips for `end`.
+    const logicalShift = align === 'end' ? -alignOffset : alignOffset;
+    const position: ConnectedPosition = {
       originX: align,
       originY: side === 'bottom' ? 'bottom' : 'top',
       overlayX: align,
       overlayY: side === 'bottom' ? 'top' : 'bottom',
       offsetY: side === 'bottom' ? offset : -offset,
     };
+    if (alignOffset !== 0) {
+      position.offsetX = rtl ? -logicalShift : logicalShift;
+    }
+    return position;
   }
 
   const verticalAlign = { start: 'top', center: 'center', end: 'bottom' } as const;
@@ -64,6 +72,7 @@ function toConnectedPosition(
     overlayX: cdkStart ? 'end' : 'start',
     overlayY: verticalAlign[align],
     offsetX: onLeft ? -offset : offset,
+    ...(alignOffset !== 0 ? { offsetY: align === 'end' ? -alignOffset : alignOffset } : {}),
   };
 }
 
@@ -76,13 +85,16 @@ export function buildDropdownPositions(
   align: ZardDropdownAlign,
   offset: number,
   rtl = false,
+  alignOffset = 0,
 ): ConnectedPosition[] {
   const fallbackAligns: ZardDropdownAlign[] = (['start', 'center', 'end'] as const).filter(value => value !== align);
 
   return [
-    toConnectedPosition(side, align, offset, rtl),
-    toConnectedPosition(OPPOSITE_SIDE[side], align, offset, rtl),
-    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(side, fallbackAlign, offset, rtl)),
-    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(OPPOSITE_SIDE[side], fallbackAlign, offset, rtl)),
+    toConnectedPosition(side, align, offset, rtl, alignOffset),
+    toConnectedPosition(OPPOSITE_SIDE[side], align, offset, rtl, alignOffset),
+    ...fallbackAligns.map(fallbackAlign => toConnectedPosition(side, fallbackAlign, offset, rtl, alignOffset)),
+    ...fallbackAligns.map(fallbackAlign =>
+      toConnectedPosition(OPPOSITE_SIDE[side], fallbackAlign, offset, rtl, alignOffset),
+    ),
   ];
 }

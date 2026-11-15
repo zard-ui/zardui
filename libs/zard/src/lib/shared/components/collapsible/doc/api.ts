@@ -3,25 +3,14 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const COLLAPSIBLE_API: ApiSection[] = [
   {
     selector: 'z-collapsible, [z-collapsible]',
-    description:
-      'An interactive component which expands and collapses a panel. It renders no markup of its own, so it can also be applied as an attribute to an element that is already a component — for example li[z-sidebar-menu-item].',
+    description: 'Expands and collapses a panel.',
     props: [
-      {
-        name: '[zOpen]',
-        description: 'Open state of the panel. Supports two-way binding through [(zOpen)]',
-        type: 'boolean',
-        default: 'false',
-      },
-      {
-        name: '[zDisabled]',
-        description: 'Blocks the trigger from toggling the panel',
-        type: 'boolean',
-        default: 'false',
-      },
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[zOpen]', description: 'Open state; supports `[(zOpen)]`', type: 'boolean', default: 'false' },
+      { name: '[zDisabled]', description: 'Stops the trigger from toggling', type: 'boolean', default: 'false' },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '(zOpenChange)',
-        description: 'Emits the new open state whenever the panel toggles',
+        description: 'Emitted with the new open state',
         type: 'EventEmitter<boolean>',
         default: '-',
       },
@@ -29,13 +18,12 @@ export const COLLAPSIBLE_API: ApiSection[] = [
   },
   {
     selector: '[z-collapsible-trigger]',
-    description:
-      'Toggles the panel. Apply it to your own button — the directive only wires the behaviour and the ARIA attributes, it does not style anything.',
+    description: 'Toggles the panel; unstyled, apply it to your own button.',
     props: [],
   },
   {
     selector: 'z-collapsible-content',
-    description: 'The panel revealed by the trigger. Animates its height with a CSS grid transition.',
-    props: [{ name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" }],
+    description: 'The panel revealed by the trigger.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
   },
 ];

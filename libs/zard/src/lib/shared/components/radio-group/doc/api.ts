@@ -3,21 +3,20 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const RADIO_GROUP_API: ApiSection[] = [
   {
     selector: 'z-radio-group',
-    description:
-      'Wrapper that groups radio items and manages the selected value. Arrow keys move the selection; ArrowLeft/ArrowRight follow the reading direction, so they swap in RTL.',
+    description: 'Groups radio items and holds the selected value.',
     props: [
-      { name: '[value]', description: 'Selected value, two-way bindable', type: 'unknown', default: 'null' },
-      { name: '[(value)]', description: 'Selected value (two-way binding)', type: 'unknown', default: 'null' },
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
-      { name: '[zDisabled]', description: 'Disables every item in the group', type: 'boolean', default: 'false' },
-      { name: '[name]', description: 'Optional name for native form submission', type: 'string', default: "''" },
+      { name: '[value]', description: 'Item value', type: 'unknown', default: 'null' },
+      { name: '[(value)]', description: 'Selected value', type: 'unknown', default: 'null' },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[zDisabled]', description: 'Disables every item', type: 'boolean', default: 'false' },
+      { name: '[name]', description: 'Name for native form submission', type: 'string', default: "''" },
     ],
   },
   {
     selector: 'z-radio',
-    description: 'Individual radio button. Must be a descendant of z-radio-group.',
+    description: 'A radio button inside `z-radio-group`.',
     props: [
-      { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[value]',
         description: 'Item value, compared against the group value',
@@ -25,7 +24,7 @@ export const RADIO_GROUP_API: ApiSection[] = [
         default: 'null',
       },
       { name: '[zDisabled]', description: 'Disables this item only', type: 'boolean', default: 'false' },
-      { name: '[zInvalid]', description: 'Invalid state (sets aria-invalid)', type: 'boolean', default: 'false' },
+      { name: '[zInvalid]', description: 'Sets `aria-invalid`', type: 'boolean', default: 'false' },
       { name: '[zId]', description: 'Item id', type: 'string', default: '-' },
     ],
   },

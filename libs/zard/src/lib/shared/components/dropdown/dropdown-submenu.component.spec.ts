@@ -170,6 +170,20 @@ describe('ZardDropdownMenuSubTriggerComponent', () => {
     expect(subContent()).toBeNull();
   });
 
+  it('closes the submenu when another menu takes the place of the parent without a gap', () => {
+    subTrigger().click();
+    fixture.detectChanges();
+    expect(subContent()).not.toBeNull();
+
+    // A menubar switch: the service never rests on "closed" between the two menus.
+    const menu = fixture.componentInstance.menu();
+    dropdown.openAt({ x: 10, y: 10 }, menu.contentTemplate(), menu.viewContainerRef);
+    fixture.detectChanges();
+
+    expect(dropdown.isOpen()).toBe(true);
+    expect(subContent()).toBeNull();
+  });
+
   it('stays closed while disabled', () => {
     fixture.componentInstance.disabled.set(true);
     fixture.detectChanges();

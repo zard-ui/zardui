@@ -99,6 +99,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorArrowUp',
     remixicon: 'remixArrowUpLine',
   },
+  'arrow-up-down': {
+    lucide: 'lucideArrowUpDown',
+    tabler: 'tablerArrowsUpDown',
+    hugeicons: 'hugeArrowUpDown',
+    phosphor: 'phosphorArrowsDownUp',
+    remixicon: 'remixArrowUpDownLine',
+  },
   'arrow-up-right': {
     lucide: 'lucideArrowUpRight',
     tabler: 'tablerArrowUpRight',
@@ -182,6 +189,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeBot',
     phosphor: 'phosphorRobot',
     remixicon: 'remixRobot2Line',
+  },
+  brain: {
+    lucide: 'lucideBrain',
+    tabler: 'tablerBrain',
+    hugeicons: 'hugeBrain',
+    phosphor: 'phosphorBrain',
+    remixicon: 'remixBrainLine',
   },
   'building-2': {
     lucide: 'lucideBuilding2',
@@ -309,6 +323,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorCaretUpDown',
     remixicon: 'remixExpandUpDownLine',
   },
+  circle: {
+    lucide: 'lucideCircle',
+    tabler: 'tablerCircle',
+    hugeicons: 'hugeCircle',
+    phosphor: 'phosphorCircle',
+    remixicon: 'remixCircleLine',
+  },
   'circle-alert': {
     lucide: 'lucideCircleAlert',
     tabler: 'tablerAlertCircle',
@@ -364,6 +385,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeHelpCircle',
     phosphor: 'phosphorQuestion',
     remixicon: 'remixQuestionLine',
+  },
+  'circle-off': {
+    lucide: 'lucideCircleOff',
+    tabler: 'tablerCircleOff',
+    hugeicons: 'hugeBlocked',
+    phosphor: 'phosphorProhibit',
+    remixicon: 'remixForbidLine',
   },
   'circle-plus': {
     lucide: 'lucideCirclePlus',
@@ -582,6 +610,20 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorFileCode',
     remixicon: 'remixFileCodeLine',
   },
+  'file-pen': {
+    lucide: 'lucideFilePen',
+    tabler: 'tablerFilePencil',
+    hugeicons: 'hugeFileEdit',
+    phosphor: 'phosphorPencilSimpleLine',
+    remixicon: 'remixFileEditLine',
+  },
+  'file-plus': {
+    lucide: 'lucideFilePlus',
+    tabler: 'tablerFilePlus',
+    hugeicons: 'hugeFileAdd',
+    phosphor: 'phosphorFilePlus',
+    remixicon: 'remixFileAddLine',
+  },
   'file-search': {
     lucide: 'lucideFileSearch',
     tabler: 'tablerFileSearch',
@@ -638,6 +680,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorFolderPlus',
     remixicon: 'remixFolderAddLine',
   },
+  'folder-search': {
+    lucide: 'lucideFolderSearch',
+    tabler: 'tablerFolderSearch',
+    hugeicons: 'hugeFolderSearch',
+    phosphor: 'phosphorFileMagnifyingGlass',
+    remixicon: 'remixFileSearchLine',
+  },
   footprints: {
     lucide: 'lucideFootprints',
     tabler: 'tablerWalk',
@@ -677,6 +726,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeGitBranch',
     phosphor: 'phosphorGitBranch',
     remixicon: 'remixGitBranchLine',
+  },
+  'git-commit-horizontal': {
+    lucide: 'lucideGitCommitHorizontal',
+    tabler: 'tablerGitCommit',
+    hugeicons: 'hugeGitCommit',
+    phosphor: 'phosphorGitCommit',
+    remixicon: 'remixGitCommitLine',
   },
   globe: {
     lucide: 'lucideGlobe',
@@ -740,6 +796,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeKeyboard',
     phosphor: 'phosphorKeyboard',
     remixicon: 'remixKeyboardLine',
+  },
+  landmark: {
+    lucide: 'lucideLandmark',
+    tabler: 'tablerBuildingBank',
+    hugeicons: 'hugeBank',
+    phosphor: 'phosphorBank',
+    remixicon: 'remixBankLine',
   },
   layout: {
     lucide: 'lucideLayout',
@@ -888,6 +951,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorMapTrifold',
     remixicon: 'remixMapLine',
   },
+  'map-pin': {
+    lucide: 'lucideMapPin',
+    tabler: 'tablerMapPin',
+    hugeicons: 'hugeMapPin',
+    phosphor: 'phosphorMapPin',
+    remixicon: 'remixMapPinLine',
+  },
   maximize: {
     lucide: 'lucideMaximize',
     tabler: 'tablerMaximize',
@@ -907,6 +977,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     tabler: 'tablerMessageCircle',
     hugeicons: 'hugeMessage01',
     phosphor: 'phosphorChatCircle',
+    remixicon: 'remixMessageLine',
+  },
+  'message-circle-dashed': {
+    lucide: 'lucideMessageCircleDashed',
+    tabler: 'tablerMessageCircle',
+    hugeicons: 'hugeMessage01',
+    phosphor: 'phosphorChatCircleDots',
     remixicon: 'remixMessageLine',
   },
   'message-circle-question': {
@@ -965,6 +1042,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorWarningOctagon',
     remixicon: 'remixCloseCircleLine',
   },
+  package: {
+    lucide: 'lucidePackage',
+    tabler: 'tablerPackage',
+    hugeicons: 'hugePackage',
+    phosphor: 'phosphorPackage',
+    remixicon: 'remixBox3Line',
+  },
   paintbrush: {
     lucide: 'lucidePaintbrush',
     tabler: 'tablerBrush',
@@ -979,6 +1063,20 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorSidebar',
     remixicon: 'remixLayoutLeftLine',
   },
+  paperclip: {
+    lucide: 'lucidePaperclip',
+    tabler: 'tablerPaperclip',
+    hugeicons: 'hugeAttachment',
+    phosphor: 'phosphorPaperclip',
+    remixicon: 'remixAttachmentLine',
+  },
+  pause: {
+    lucide: 'lucidePause',
+    tabler: 'tablerPlayerPause',
+    hugeicons: 'hugePause',
+    phosphor: 'phosphorPause',
+    remixicon: 'remixPauseLine',
+  },
   pencil: {
     lucide: 'lucidePencil',
     tabler: 'tablerPencil',
@@ -986,12 +1084,47 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorPencil',
     remixicon: 'remixPencilLine',
   },
+  phone: {
+    lucide: 'lucidePhone',
+    tabler: 'tablerPhone',
+    hugeicons: 'hugeCall',
+    phosphor: 'phosphorPhone',
+    remixicon: 'remixPhoneLine',
+  },
   'pie-chart': {
     lucide: 'lucidePieChart',
     tabler: 'tablerChartPie',
     hugeicons: 'hugePieChart',
     phosphor: 'phosphorChartPie',
     remixicon: 'remixPieChartLine',
+  },
+  pin: {
+    lucide: 'lucidePin',
+    tabler: 'tablerPin',
+    hugeicons: 'hugePin',
+    phosphor: 'phosphorPushPin',
+    remixicon: 'remixPushpinLine',
+  },
+  'pin-off': {
+    lucide: 'lucidePinOff',
+    tabler: 'tablerPinnedOff',
+    hugeicons: 'hugePinOff',
+    phosphor: 'phosphorPushPinSlash',
+    remixicon: 'remixUnpinLine',
+  },
+  pipette: {
+    lucide: 'lucidePipette',
+    tabler: 'tablerColorPicker',
+    hugeicons: 'hugeColorPicker',
+    phosphor: 'phosphorEyedropper',
+    remixicon: 'remixDropperLine',
+  },
+  play: {
+    lucide: 'lucidePlay',
+    tabler: 'tablerPlayerPlay',
+    hugeicons: 'hugePlay',
+    phosphor: 'phosphorPlay',
+    remixicon: 'remixPlayLine',
   },
   plus: {
     lucide: 'lucidePlus',
@@ -1209,6 +1342,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorTarget',
     remixicon: 'remixFocus3Line',
   },
+  telescope: {
+    lucide: 'lucideTelescope',
+    tabler: 'tablerTelescope',
+    hugeicons: 'hugeTelescope01',
+    phosphor: 'phosphorBinoculars',
+    remixicon: 'remixSearchEyeLine',
+  },
   terminal: {
     lucide: 'lucideTerminal',
     tabler: 'tablerTerminal',
@@ -1278,6 +1418,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     hugeicons: 'hugeAlert02',
     phosphor: 'phosphorWarning',
     remixicon: 'remixAlertLine',
+  },
+  truck: {
+    lucide: 'lucideTruck',
+    tabler: 'tablerTruck',
+    hugeicons: 'hugeTruck',
+    phosphor: 'phosphorTruck',
+    remixicon: 'remixTruckLine',
   },
   tv: {
     lucide: 'lucideTv',
@@ -1354,6 +1501,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     tabler: 'tablerWaveSine',
     phosphor: 'phosphorWaves',
     remixicon: 'remixWaterFlashLine',
+  },
+  'wrap-text': {
+    lucide: 'lucideWrapText',
+    tabler: 'tablerTextWrap',
+    hugeicons: 'hugeTextWrap',
+    phosphor: 'phosphorArrowBendDownLeft',
+    remixicon: 'remixTextWrap',
   },
   x: {
     lucide: 'lucideX',

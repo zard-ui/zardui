@@ -20,6 +20,21 @@
           {
             "glob": "**/*",
             "input": "apps/web/public"
+          },
+          {
+            "glob": "maplibre-gl.css",
+            "input": "node_modules/maplibre-gl/dist",
+            "output": "/"
+          },
+          {
+            "glob": "maplibre-gl-worker.mjs",
+            "input": "node_modules/maplibre-gl/dist",
+            "output": "/"
+          },
+          {
+            "glob": "maplibre-gl-shared.mjs",
+            "input": "node_modules/maplibre-gl/dist",
+            "output": "/"
           }
         ],
         "styles": [
@@ -57,7 +72,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1.8mb"
+              "maximumError": "1.9mb"
             },
             {
               "type": "anyComponentStyle",

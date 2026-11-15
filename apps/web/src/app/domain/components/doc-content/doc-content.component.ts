@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
+import { DocPagerComponent } from '../doc-pager/doc-pager.component';
 import { DynamicAnchorComponent, NavigationConfig } from '../dynamic-anchor/dynamic-anchor.component';
 
 @Component({
   selector: 'z-content',
-  imports: [DynamicAnchorComponent],
+  imports: [DocPagerComponent, DynamicAnchorComponent],
   templateUrl: './doc-content.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

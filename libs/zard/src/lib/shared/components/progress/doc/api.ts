@@ -3,20 +3,10 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 export const PROGRESS_API: ApiSection[] = [
   {
     selector: 'z-progress',
-    description: 'Displays an indicator showing the completion progress of a task.',
+    description: 'Shows the completion progress of a task.',
     props: [
-      {
-        name: '[value]',
-        description: 'Current progress value between 0 and 100. Values outside this range are clamped.',
-        type: 'number',
-        default: '0',
-      },
-      {
-        name: '[class]',
-        description: 'Override or extend the default classes (height, color, etc).',
-        type: 'ClassValue',
-        default: '-',
-      },
+      { name: '[value]', description: 'Progress from 0 to 100, clamped', type: 'number', default: '0' },
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: '-' },
     ],
   },
 ];
