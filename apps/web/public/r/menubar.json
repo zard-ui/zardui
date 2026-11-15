@@ -13,7 +13,8 @@
     },
     {
       "name": "menubar.variants.ts",
-      "content": "import { cva } from 'class-variance-authority';\n\nexport const menubarVariants = cva('flex h-8 items-center gap-0.5 rounded-lg border p-0.75');\n\nexport const menubarTriggerVariants = cva(\n  'flex items-center rounded-sm px-1.5 py-0.5 text-sm font-medium outline-hidden select-none hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50',\n);\n"
+      "content": "import { cva } from 'class-variance-authority';\n\nexport const menubarVariants = cva('h-8 gap-0.5 rounded-lg border p-0.75 flex items-center');\n\nexport const menubarTriggerVariants = cva(\n  'rounded-sm px-1.5 py-0.5 text-sm font-medium hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted flex items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50',\n);\n",
+      "styled": "import { cva } from 'class-variance-authority';\n\nexport const menubarVariants = cva('cn-menubar flex items-center');\n\nexport const menubarTriggerVariants = cva(\n  'cn-menubar-trigger flex items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50',\n);\n"
     },
     {
       "name": "menubar.imports.ts",

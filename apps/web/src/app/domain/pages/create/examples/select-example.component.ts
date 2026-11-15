@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChartBar, lucideChartLine, lucidePieChart, lucideChevronDown } from '@ng-icons/lucide';
+import { lucideChartBar, lucideChartLine, lucidePieChart } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button';
 import { ZardDialogImports } from '@zard/components/dialog';
 import { ZardFieldImports } from '@zard/components/field';
 import { ZardInputComponent } from '@zard/components/input';
 import { ZardItemImports } from '@zard/components/item';
+import { ZardNativeSelectDirective } from '@zard/components/native-select';
 import { ZardSelectImports } from '@zard/components/select';
 
 import { ExampleImports } from './example.component';
@@ -31,10 +32,11 @@ const PLANS = [
     ZardFieldImports,
     ZardInputComponent,
     ZardItemImports,
+    ZardNativeSelectDirective,
     ZardSelectImports,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideChartBar, lucideChartLine, lucidePieChart, lucideChevronDown })],
+  viewProviders: [provideIcons({ lucideChartBar, lucideChartLine, lucidePieChart })],
   template: `
     <z-example-wrapper>
       <z-example zTitle="Basic">
@@ -248,24 +250,12 @@ const PLANS = [
               <z-select-item zValue="inactive">Inactive</z-select-item>
             </z-select-group>
           </z-select>
-          <!-- zard has no NativeSelect: a plain <select> drawn like shadcn's. -->
-          <div data-slot="native-select-wrapper" class="relative w-[140px]">
-            <select
-              data-slot="native-select"
-              class="border-input dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 h-8 w-full min-w-0 appearance-none rounded-lg border bg-transparent py-1 ps-2.5 pe-8 text-sm shadow-xs outline-none focus-visible:ring-[3px]"
-            >
-              <option value="" class="bg-[Canvas] text-[CanvasText]">Sort by</option>
-              <option value="name" class="bg-[Canvas] text-[CanvasText]">Name</option>
-              <option value="date" class="bg-[Canvas] text-[CanvasText]">Date</option>
-              <option value="status" class="bg-[Canvas] text-[CanvasText]">Status</option>
-            </select>
-            <ng-icon
-              name="lucideChevronDown"
-              aria-hidden="true"
-              data-slot="native-select-icon"
-              class="text-muted-foreground pointer-events-none absolute end-2.5 top-1/2 size-4 -translate-y-1/2 select-none"
-            />
-          </div>
+          <select z-native-select class="w-[140px]">
+            <option value="">Sort by</option>
+            <option value="name">Name</option>
+            <option value="date">Date</option>
+            <option value="status">Status</option>
+          </select>
         </div>
       </z-example>
 

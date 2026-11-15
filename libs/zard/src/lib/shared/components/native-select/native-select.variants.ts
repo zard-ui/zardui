@@ -11,23 +11,23 @@ const CHEVRON_DARK =
 
 export const nativeSelectVariants = cva(
   mergeClasses(
-    'h-8 w-full min-w-0 appearance-none rounded-lg border border-input bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors outline-none select-none selection:bg-primary selection:text-primary-foreground',
-    'bg-no-repeat bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center]',
+    // `cn-native-select-icon` is the chevron, which is a background image of the <select> itself: it carries the
+    // size and position a style gives it.
+    'cn-native-select cn-native-select-icon w-full min-w-0 appearance-none outline-none select-none selection:bg-primary selection:text-primary-foreground',
+    'bg-no-repeat',
     CHEVRON_LIGHT,
     CHEVRON_DARK,
-    'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
-    'aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20',
-    'dark:bg-input/30 dark:scheme-dark dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'dark:scheme-dark',
     '[&[multiple]]:h-auto [&[multiple]]:bg-none dark:[&[multiple]]:bg-none',
     '[&_option]:bg-[Canvas] [&_option]:text-[CanvasText] [&_optgroup]:bg-[Canvas] [&_optgroup]:text-[CanvasText]',
   ),
   {
     variants: {
       zSize: {
-        sm: 'h-7 rounded-[min(var(--radius-md),10px)] py-0.5',
+        sm: 'cn-native-select-size-sm',
         default: '',
-        lg: 'h-10 ps-3 pe-9 text-base md:text-sm',
+        lg: 'cn-native-select-size-lg',
       },
     },
     defaultVariants: { zSize: 'default' },

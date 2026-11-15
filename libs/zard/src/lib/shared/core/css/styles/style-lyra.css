@@ -1595,6 +1595,34 @@
     @apply text-xs font-medium text-muted-foreground px-2.5;
   }
 
+  /* MARK: menubar */
+
+  .cn-menubar {
+    @apply h-8 gap-0.5 rounded-none border p-1;
+  }
+
+  .cn-menubar-trigger {
+    @apply rounded-none px-1.5 py-[calc(--spacing(0.8))] text-xs font-medium;
+  }
+
+  /* MARK: native-select */
+
+  .cn-native-select {
+    @apply h-8 rounded-none border border-input bg-transparent py-1 ps-2.5 pe-8 text-xs transition-colors;
+  }
+
+  .cn-native-select-size-sm {
+    @apply h-7 rounded-none py-0.5;
+  }
+
+  .cn-native-select-size-lg {
+    @apply h-9 ps-3 pe-9 text-sm;
+  }
+
+  .cn-native-select-icon {
+    @apply bg-size-[1rem] bg-position-[right_0.625rem_center];
+  }
+
   /* MARK: navigation-menu */
 
   .cn-navigation-menu {
@@ -3195,6 +3223,31 @@
 
   .cn-message-footer {
     @apply group-data-[align=end]/message:justify-end group-has-data-[variant=ghost]/message:px-0;
+  }
+
+  /* MARK: menubar */
+
+  .cn-menubar {
+  }
+
+  .cn-menubar-trigger {
+    @apply hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted;
+  }
+
+  /* MARK: native-select */
+
+  .cn-native-select {
+    @apply focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40;
+  }
+
+  .cn-native-select-size-sm {
+  }
+
+  .cn-native-select-size-lg {
+  }
+
+  .cn-native-select-icon {
+    @apply rtl:bg-position-[left_0.625rem_center];
   }
 
   /* MARK: navigation-menu */

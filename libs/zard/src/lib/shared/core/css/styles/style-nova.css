@@ -1593,6 +1593,34 @@
   @apply flex max-w-full min-w-0 items-center px-3 text-xs font-medium text-muted-foreground;
 }
 
+/* MARK: menubar */
+
+.cn-menubar:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-8 gap-0.5 rounded-lg border p-0.75;
+}
+
+.cn-menubar-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply rounded-sm px-1.5 py-0.5 text-sm font-medium;
+}
+
+/* MARK: native-select */
+
+.cn-native-select:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-8 rounded-lg border border-input bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors;
+}
+
+.cn-native-select-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-7 rounded-[min(var(--radius-md),10px)] py-0.5;
+}
+
+.cn-native-select-size-lg:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply h-10 ps-3 pe-9 text-base;
+}
+
+.cn-native-select-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply bg-size-[1rem] bg-position-[right_0.625rem_center];
+}
+
 /* MARK: navigation-menu */
 
 .cn-navigation-menu:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3180,6 +3208,32 @@
 
 .cn-message-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply group-data-[align=end]/message:justify-end;
+}
+
+/* MARK: menubar */
+
+.cn-menubar:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+}
+
+.cn-menubar-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted;
+}
+
+/* MARK: native-select */
+
+.cn-native-select:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40;
+}
+
+.cn-native-select-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+}
+
+.cn-native-select-size-lg:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply md:text-sm;
+}
+
+.cn-native-select-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply rtl:bg-position-[left_0.625rem_center];
 }
 
 /* MARK: navigation-menu */

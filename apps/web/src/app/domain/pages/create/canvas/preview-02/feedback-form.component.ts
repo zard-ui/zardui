@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronDown } from '@ng-icons/lucide';
-
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardImports } from '@zard/components/card/card.imports';
 import { ZardFieldImports } from '@zard/components/field/field.imports';
+import { ZardNativeSelectDirective } from '@zard/components/native-select/native-select.directive';
 import { ZardTextareaComponent } from '@zard/components/textarea/textarea.component';
 
 const TOPICS = [
@@ -23,12 +21,10 @@ const TOPICS = [
   { value: 'storage', label: 'Storage' },
 ] as const;
 
-/** zard has no NativeSelect: a plain `<select>` styled as an input, with the same chevron shadcn draws. */
 @Component({
   selector: 'z-preview-02-feedback-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIcon, ZardButtonComponent, ZardCardImports, ZardFieldImports, ZardTextareaComponent],
-  viewProviders: [provideIcons({ lucideChevronDown })],
+  imports: [ZardButtonComponent, ZardCardImports, ZardFieldImports, ZardNativeSelectDirective, ZardTextareaComponent],
   host: { class: 'block' },
   template: `
     <z-card>
@@ -37,18 +33,11 @@ const TOPICS = [
           <z-field-group>
             <z-field>
               <label z-field-label for="p2-topic">Topic</label>
-              <div data-slot="native-select-wrapper" class="group/native-select relative w-full">
-                <select id="p2-topic" data-slot="native-select" class="cn-input appearance-none pr-8 outline-none">
-                  @for (topic of topics; track topic.value) {
-                    <option [value]="topic.value" class="bg-[Canvas] text-[CanvasText]">{{ topic.label }}</option>
-                  }
-                </select>
-                <ng-icon
-                  name="lucideChevronDown"
-                  aria-hidden="true"
-                  class="text-muted-foreground pointer-events-none absolute top-1/2 right-2.5 size-4 -translate-y-1/2 opacity-50 select-none"
-                />
-              </div>
+              <select z-native-select id="p2-topic">
+                @for (topic of topics; track topic.value) {
+                  <option [value]="topic.value">{{ topic.label }}</option>
+                }
+              </select>
             </z-field>
             <z-field>
               <label z-field-label for="p2-feedback">Feedback</label>

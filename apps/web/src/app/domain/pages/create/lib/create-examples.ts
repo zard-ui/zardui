@@ -226,6 +226,12 @@ export const CREATE_EXAMPLES: readonly CreateExample[] = [
       import('@doc/domain/pages/create/examples/marker-example.component').then(m => m.MarkerExampleComponent),
   },
   {
+    name: 'menubar',
+    title: 'Menubar',
+    load: () =>
+      import('@doc/domain/pages/create/examples/menubar-example.component').then(m => m.MenubarExampleComponent),
+  },
+  {
     name: 'message',
     title: 'Message',
     load: () =>
@@ -237,6 +243,14 @@ export const CREATE_EXAMPLES: readonly CreateExample[] = [
     load: () =>
       import('@doc/domain/pages/create/examples/message-scroller-example.component').then(
         m => m.MessageScrollerExampleComponent,
+      ),
+  },
+  {
+    name: 'native-select',
+    title: 'Native Select',
+    load: () =>
+      import('@doc/domain/pages/create/examples/native-select-example.component').then(
+        m => m.NativeSelectExampleComponent,
       ),
   },
   {
