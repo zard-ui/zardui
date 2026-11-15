@@ -69,6 +69,8 @@ export const CANVAS_ITEMS = ['preview-01', 'preview-02'] as const;
 export const DEFAULT_ITEM: string = CANVAS_ITEMS[0];
 export const COMPONENT_ITEM_PREFIX = 'component:';
 export const BLOCK_ITEM_PREFIX = 'block:';
+/** A block of the /maps gallery: a map, with the providers and stylesheet only maps need. */
+export const MAP_ITEM_PREFIX = 'map:';
 
 export function isCanvasItem(item: string): boolean {
   return (CANVAS_ITEMS as readonly string[]).includes(item);

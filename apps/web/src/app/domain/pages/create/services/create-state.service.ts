@@ -19,7 +19,7 @@ import { ZardDarkMode } from '@zard/services/dark-mode';
 
 import { loadBlockItems } from '../lib/create-items';
 import { parseCreateParams, serializeCreateParams } from '../lib/create-url';
-import { BLOCK_ITEM_PREFIX, DEFAULT_ITEM } from '../lib/create.protocol';
+import { BLOCK_ITEM_PREFIX, DEFAULT_ITEM, MAP_ITEM_PREFIX } from '../lib/create.protocol';
 import type { CreateAction } from '../lib/create.protocol';
 import {
   CUSTOM_DESIGN_DEFAULTS,
@@ -120,7 +120,8 @@ export class CreateStateService {
 
       // A hand-typed or stale URL is rewritten in place, so what is in the address bar is always the canonical form.
       if (needsCanonicalization && this.isBrowser) this.navigate(design, item, true);
-      else if (this.isBrowser && item.startsWith(BLOCK_ITEM_PREFIX)) void this.dropUnknownBlock(item);
+      else if (this.isBrowser && (item.startsWith(BLOCK_ITEM_PREFIX) || item.startsWith(MAP_ITEM_PREFIX)))
+        void this.dropUnknownBlock(item);
     });
   }
 

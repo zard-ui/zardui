@@ -2,7 +2,7 @@ import { DESIGN_FIELDS, DEFAULT_DESIGN, encodePreset, normalizeDesign, tryDecode
 import type { DesignConfig, DesignField } from '@zard/design';
 
 import { COMPONENT_LIST } from './create-items';
-import { BLOCK_ITEM_PREFIX, DEFAULT_ITEM, isCanvasItem } from './create.protocol';
+import { BLOCK_ITEM_PREFIX, DEFAULT_ITEM, isCanvasItem, MAP_ITEM_PREFIX } from './create.protocol';
 import { CUSTOM_DESIGN_DEFAULTS, decodeCustomTheme, encodeCustomTheme, type CustomTheme } from './custom-theme';
 
 /** The slice of Angular's `ParamMap` this module needs, so it can be tested with a plain object. */
@@ -78,6 +78,7 @@ export function parseCreateParams(params: ParamsLike): ParsedCreateUrl {
 function isKnownItem(item: string): boolean {
   if (isCanvasItem(item)) return true;
   if (item.startsWith(BLOCK_ITEM_PREFIX)) return item.length > BLOCK_ITEM_PREFIX.length;
+  if (item.startsWith(MAP_ITEM_PREFIX)) return item.length > MAP_ITEM_PREFIX.length;
   return COMPONENT_LIST.some(component => component.id === item);
 }
 

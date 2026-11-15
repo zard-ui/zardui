@@ -11,17 +11,19 @@ const LINK_ATTRIBUTE = 'data-maplibre-css';
  * created. It runs on the server too, so the prerendered HTML already carries the link.
  */
 export function provideMapLibreStyles(): EnvironmentProviders {
-  return provideEnvironmentInitializer(() => {
-    const document = inject(DOCUMENT);
-    if (document.head.querySelector(`link[${LINK_ATTRIBUTE}]`)) {
-      return;
-    }
+  return provideEnvironmentInitializer(() => linkMapLibreStyles(inject(DOCUMENT)));
+}
 
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    // Relative on purpose: it resolves against <base href>, the same way the worker files do.
-    link.href = 'maplibre-gl.css';
-    link.setAttribute(LINK_ATTRIBUTE, '');
-    document.head.appendChild(link);
-  });
+/** Adds the `<link>` to MapLibre's stylesheet unless the document has it already. */
+export function linkMapLibreStyles(document: Document): void {
+  if (document.head.querySelector(`link[${LINK_ATTRIBUTE}]`)) {
+    return;
+  }
+
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  // Relative on purpose: it resolves against <base href>, the same way the worker files do.
+  link.href = 'maplibre-gl.css';
+  link.setAttribute(LINK_ATTRIBUTE, '');
+  document.head.appendChild(link);
 }

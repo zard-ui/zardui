@@ -199,6 +199,7 @@ test.describe('Create builder', () => {
     await page.locator('body').click({ position: { x: 5, y: 5 } });
     await page.keyboard.press('Control+p');
 
+    await page.locator('[data-navigate-card="components"]').click();
     await page.getByRole('combobox', { name: 'Search commands' }).fill('dropdown');
     await page.getByRole('option', { name: 'Dropdown Menu', exact: true }).click();
 
@@ -214,23 +215,69 @@ test.describe('Create builder', () => {
     await page.locator('body').click({ position: { x: 5, y: 5 } });
     await page.keyboard.press('Control+p');
 
-    await expect(page.getByRole('option', { name: 'Preview', exact: true })).toHaveCount(1);
+    await expect(page.locator('[data-navigate-card="preview"]')).toHaveCount(1);
     await expect(page.getByRole('option', { name: /Overview/ })).toHaveCount(0);
   });
 
-  test('Navigate lists each item once, flat, and follows the page theme', async ({ page }) => {
+  test('Navigate opens on cards with the search disabled, and follows the page theme', async ({ page }) => {
     await page.locator('body').click({ position: { x: 5, y: 5 } });
     await page.keyboard.press('Control+p');
 
     const dialog = page.getByRole('dialog', { name: 'Navigate' });
-    await expect(dialog.getByRole('option', { name: 'Sidebar 07', exact: true })).toHaveCount(1);
-    await expect(dialog.locator('z-command-option-group')).toHaveCount(0);
-    const labels = await dialog.getByRole('option').allTextContents();
-    expect(new Set(labels).size).toBe(labels.length);
+    await expect(dialog.locator('[data-navigate-card]')).toHaveCount(3);
+    await expect(dialog.locator('[data-navigate-card="blocks"]')).toBeFocused();
+    await expect(dialog.getByRole('combobox', { name: 'Search commands' })).toBeDisabled();
+    await expect(dialog.getByTestId('navigate-back')).toHaveCount(0);
     expect(await dialog.evaluate(el => (el as HTMLElement).offsetWidth)).toBe(384);
     expect(await dialog.evaluate(el => el.closest('.dark') !== null)).toBe(
       await page.evaluate(() => document.documentElement.classList.contains('dark')),
     );
+  });
+
+  test('Navigate lists the blocks by category, maps included, each once, and goes back', async ({ page }) => {
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('Control+p');
+    const dialog = page.getByRole('dialog', { name: 'Navigate' });
+
+    await dialog.locator('[data-navigate-card="blocks"]').click();
+    await expect(dialog.getByRole('combobox', { name: 'Search commands' })).toBeEnabled();
+    await expect(dialog.getByRole('combobox', { name: 'Search commands' })).toBeFocused();
+
+    const headings = await dialog.locator('[data-slot="command-group-heading"]').allTextContents();
+    expect(headings.map(text => text.trim())).toEqual(expect.arrayContaining(['Sidebar', 'Login', 'Maps · Analytics']));
+    await expect(dialog.getByRole('option', { name: 'Sidebar 07', exact: true })).toHaveCount(1);
+    const labels = await dialog.getByRole('option').allTextContents();
+    expect(new Set(labels).size).toBe(labels.length);
+    await expect(dialog.getByRole('option', { name: 'Dropdown Menu', exact: true })).toHaveCount(0);
+
+    await dialog.getByRole('combobox', { name: 'Search commands' }).fill('zzzz');
+    await expect(dialog.getByTestId('navigate-empty')).toBeVisible();
+    await dialog.getByRole('combobox', { name: 'Search commands' }).fill('');
+
+    await page.keyboard.press('Backspace');
+    await expect(dialog.locator('[data-navigate-card]')).toHaveCount(3);
+
+    await dialog.locator('[data-navigate-card="components"]').click();
+    await expect(dialog.locator('z-command-option-group')).toHaveCount(0);
+    await dialog.getByTestId('navigate-back').click();
+    await expect(dialog.locator('[data-navigate-card]')).toHaveCount(3);
+  });
+
+  test('a map opens in the preview with its notice', async ({ page }) => {
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('Control+p');
+    const dialog = page.getByRole('dialog', { name: 'Navigate' });
+    await dialog.locator('[data-navigate-card="blocks"]').click();
+    await dialog.getByRole('combobox', { name: 'Search commands' }).fill('choropleth');
+    await page.keyboard.press('Enter');
+
+    await expect.poll(() => new URL(page.url()).searchParams.get('item')).toBe('map:choropleth');
+    const frame = previewFrame(page);
+    await expect(frame.getByTestId('map-notice')).toBeVisible({ timeout: 30_000 });
+    await expect(frame.getByTestId('map-frame').locator('.maplibregl-map, [data-slot="map-state"]')).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect(frame.locator('link[data-maplibre-css]')).toHaveCount(1);
   });
 
   test('typing in Navigate right after it opens logs no error and Enter opens the item', async ({ page }) => {
@@ -238,6 +285,7 @@ test.describe('Create builder', () => {
     page.on('console', message => message.type() === 'error' && errors.push(message.text()));
     await page.locator('body').click({ position: { x: 5, y: 5 } });
     await page.keyboard.press('Control+p');
+    await page.locator('[data-navigate-card="components"]').click();
     await page.keyboard.type('dropdown');
     await page.keyboard.press('Enter');
 
@@ -684,7 +732,9 @@ test.describe('Create builder', () => {
 
     test('Get Code offers only the manual installation, with the custom CSS', async ({ page }) => {
       await turnOn(page);
+      const before = await previewToken(page, 'primary');
       await setToken(page, 'primary', '#2563eb');
+      await expect.poll(() => previewToken(page, 'primary')).not.toBe(before);
       const primary = await previewToken(page, 'primary');
 
       await page.getByRole('button', { name: 'Get Code' }).first().click();
