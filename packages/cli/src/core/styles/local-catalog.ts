@@ -537,6 +537,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-marker-variant-border': 'border-b border-border pb-2',
     'cn-marker-variant-separator':
       'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
+    'cn-menubar': 'h-9 gap-1 rounded-md border p-1 shadow-xs',
+    'cn-menubar-trigger':
+      'rounded-sm px-2 py-1 text-sm font-medium hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted',
     'cn-message': 'relative flex w-full min-w-0 text-sm gap-2 data-[align=end]:flex-row-reverse',
     'cn-message-avatar':
       'flex w-fit shrink-0 items-center justify-center self-end overflow-hidden min-w-8 rounded-full bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8',
@@ -551,6 +554,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-scroller-button-direction-start': 'top-4',
     'cn-message-scroller-content': 'gap-6',
     'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-native-select':
+      'h-9 rounded-md border border-input bg-transparent py-1 ps-2.5 pe-8 text-sm shadow-xs transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-native-select-icon':
+      'bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center]',
+    'cn-native-select-size-lg': 'h-10 ps-3 pe-9 text-base md:text-sm',
+    'cn-native-select-size-sm': 'h-8',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-2 pe-2.5 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:rounded-md',
@@ -1331,6 +1340,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-marker-variant-border': 'border-b border-border pb-2',
     'cn-marker-variant-separator':
       'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
+    'cn-menubar': 'h-8 gap-0.5 rounded-lg border p-0.75',
+    'cn-menubar-trigger':
+      'rounded-sm px-1.5 py-0.5 text-sm font-medium hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted',
     'cn-message': 'relative flex w-full min-w-0 gap-2 text-sm data-[align=end]:flex-row-reverse',
     'cn-message-avatar':
       'flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-full bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8',
@@ -1344,6 +1356,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-scroller-button-direction-start': 'top-4',
     'cn-message-scroller-content': 'gap-6',
     'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-native-select':
+      'h-8 rounded-lg border border-input bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-native-select-icon':
+      'bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center]',
+    'cn-native-select-size-lg': 'h-10 ps-3 pe-9 text-base md:text-sm',
+    'cn-native-select-size-sm': 'h-7 rounded-[min(var(--radius-md),10px)] py-0.5',
     'cn-navigation-menu': 'relative flex max-w-max flex-1 items-center justify-center',
     'cn-navigation-menu-content':
       'h-full w-auto p-1 transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52',
@@ -2122,6 +2140,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-marker-variant-border': 'border-b border-border pb-2',
     'cn-marker-variant-separator':
       'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
+    'cn-menubar': 'h-9 rounded-4xl border p-1',
+    'cn-menubar-trigger':
+      'rounded-xl px-2 py-0.75 text-sm font-medium hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted',
     'cn-message': 'relative flex w-full min-w-0 text-sm gap-2 data-[align=end]:flex-row-reverse',
     'cn-message-avatar':
       'flex w-fit shrink-0 items-center justify-center self-end overflow-hidden min-w-8 rounded-full bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8',
@@ -2136,6 +2157,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-scroller-button-direction-start': 'top-5',
     'cn-message-scroller-content': 'gap-7',
     'cn-message-scroller-viewport': 'focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-native-select':
+      'h-9 rounded-4xl border border-input bg-input/30 py-1 ps-3 pe-8 text-sm transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-native-select-icon':
+      'bg-size-[1rem] bg-position-[right_0.875rem_center] rtl:bg-position-[left_0.875rem_center]',
+    'cn-native-select-size-lg': 'h-11 ps-3.5 pe-10 text-base md:text-sm',
+    'cn-native-select-size-sm': 'h-8',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-2.5 pe-3 isolate z-50 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:ring-foreground/5 group-data-[viewport=false]/navigation-menu:rounded-2xl group-data-[viewport=false]/navigation-menu:shadow-2xl',
@@ -2916,6 +2943,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-marker-variant-border': 'border-b border-border pb-2',
     'cn-marker-variant-separator':
       'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
+    'cn-menubar': 'h-8 gap-0.5 rounded-none border p-1',
+    'cn-menubar-trigger':
+      'rounded-none px-1.5 py-[calc(--spacing(0.8))] text-xs font-medium hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted',
     'cn-message': 'relative flex w-full min-w-0 text-xs gap-1.5 data-[align=end]:flex-row-reverse',
     'cn-message-avatar':
       'flex w-fit shrink-0 items-center justify-center self-end overflow-hidden min-w-8 rounded-full bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8',
@@ -2930,6 +2960,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-scroller-button-direction-start': 'top-3',
     'cn-message-scroller-content': 'gap-4',
     'cn-message-scroller-viewport': 'focus-visible:ring-1 focus-visible:ring-ring/50',
+    'cn-native-select':
+      'h-8 rounded-none border border-input bg-transparent py-1 ps-2.5 pe-8 text-xs transition-colors focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-native-select-icon':
+      'bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center]',
+    'cn-native-select-size-lg': 'h-9 ps-3 pe-9 text-sm',
+    'cn-native-select-size-sm': 'h-7 rounded-none py-0.5',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto p-1 transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:rounded-none',
@@ -3722,6 +3758,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-marker-variant-border': 'border-b border-border pb-2',
     'cn-marker-variant-separator':
       'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
+    'cn-menubar': 'h-9 rounded-lg border p-1',
+    'cn-menubar-trigger':
+      'rounded-[calc(var(--radius-md)-2px)] px-2 py-[calc(--spacing(0.85))] text-xs/relaxed font-medium hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted',
     'cn-message': 'relative flex w-full min-w-0 text-xs/relaxed gap-1.5 data-[align=end]:flex-row-reverse',
     'cn-message-avatar':
       'flex w-fit shrink-0 items-center justify-center self-end overflow-hidden min-w-8 rounded-full bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8',
@@ -3736,6 +3775,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-scroller-button-direction-start': 'top-3',
     'cn-message-scroller-content': 'gap-4',
     'cn-message-scroller-viewport': 'focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-native-select':
+      'h-7 rounded-md border border-input bg-input/20 py-0.5 ps-2 pe-6 text-xs/relaxed transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-native-select-icon':
+      'bg-size-[0.875rem] bg-position-[right_0.375rem_center] rtl:bg-position-[left_0.375rem_center] data-[size=sm]:bg-size-[0.75rem]',
+    'cn-native-select-size-lg': 'h-9 ps-2.5 pe-8 text-sm',
+    'cn-native-select-size-sm': 'h-6 text-[0.625rem]',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-1.5 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:rounded-xl group-data-[viewport=false]/navigation-menu:shadow-md',
@@ -4515,6 +4560,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-marker-variant-border': 'border-b border-border pb-2',
     'cn-marker-variant-separator':
       'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
+    'cn-menubar': 'h-9 rounded-3xl border p-1',
+    'cn-menubar-trigger':
+      'rounded-2xl px-2 py-0.75 text-sm font-medium hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted',
     'cn-message': 'relative flex w-full min-w-0 text-sm gap-2 data-[align=end]:flex-row-reverse',
     'cn-message-avatar':
       'flex w-fit shrink-0 items-center justify-center self-end overflow-hidden min-w-8 rounded-full bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8',
@@ -4529,6 +4577,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-scroller-button-direction-start': 'top-5',
     'cn-message-scroller-content': 'gap-7',
     'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-native-select':
+      'h-9 rounded-3xl border border-transparent bg-input/50 py-1 ps-3 pe-8 text-sm transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-native-select-icon':
+      'bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center]',
+    'cn-native-select-size-lg': 'h-11 ps-3.5 pe-10 text-base md:text-sm',
+    'cn-native-select-size-sm': 'h-8',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-2.5 pe-3 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:ring-foreground/5 group-data-[viewport=false]/navigation-menu:dark:ring-foreground/10 group-data-[viewport=false]/navigation-menu:rounded-3xl group-data-[viewport=false]/navigation-menu:shadow-lg',
@@ -5314,6 +5368,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-marker-variant-border': 'border-b border-border pb-2',
     'cn-marker-variant-separator':
       'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
+    'cn-menubar': 'h-10 rounded-none border p-1',
+    'cn-menubar-trigger':
+      'rounded-none px-2 py-0.75 text-sm font-medium hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted',
     'cn-message': 'relative flex w-full min-w-0 text-sm gap-2 data-[align=end]:flex-row-reverse',
     'cn-message-avatar':
       'flex w-fit shrink-0 items-center justify-center self-end overflow-hidden min-w-8 rounded-full bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8',
@@ -5328,6 +5385,11 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-scroller-button-direction-start': 'top-4',
     'cn-message-scroller-content': 'gap-6',
     'cn-message-scroller-viewport': 'focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-native-select':
+      'h-10 rounded-none border border-transparent border-b-input bg-transparent py-2 ps-0 pe-8 text-sm transition-[color,border-color] focus-visible:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50',
+    'cn-native-select-icon': 'bg-size-[0.875rem] bg-position-[right_0_center] rtl:bg-position-[left_0_center]',
+    'cn-native-select-size-lg': 'h-12 ps-0 pe-9 text-base md:text-sm',
+    'cn-native-select-size-sm': 'h-9',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-2.5 pe-3 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:rounded-none group-data-[viewport=false]/navigation-menu:shadow-md',
@@ -6106,6 +6168,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-marker-variant-border': 'border-b border-border pb-2',
     'cn-marker-variant-separator':
       'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
+    'cn-menubar': 'h-8 rounded-2xl border p-0.75',
+    'cn-menubar-trigger':
+      'rounded-2xl px-1.5 py-0.5 text-sm font-medium hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted',
     'cn-message': 'relative flex w-full min-w-0 text-sm gap-2 data-[align=end]:flex-row-reverse',
     'cn-message-avatar':
       'flex w-fit shrink-0 items-center justify-center self-end overflow-hidden min-w-8 rounded-full bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8',
@@ -6120,6 +6185,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-message-scroller-button-direction-start': 'top-4',
     'cn-message-scroller-content': 'gap-6',
     'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-native-select':
+      'h-8 rounded-2xl border border-transparent bg-input/50 py-1 ps-2.5 pe-8 text-sm transition-[color,box-shadow] duration-200 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-native-select-icon':
+      'bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center]',
+    'cn-native-select-size-lg': 'h-10 ps-3 pe-9 text-base md:text-sm',
+    'cn-native-select-size-sm': 'h-7',
     'cn-navigation-menu': 'relative flex flex-1 items-center justify-center max-w-max',
     'cn-navigation-menu-content':
       'h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] p-1.5 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:ring-foreground/5 group-data-[viewport=false]/navigation-menu:dark:ring-foreground/10 group-data-[viewport=false]/navigation-menu:rounded-2xl group-data-[viewport=false]/navigation-menu:shadow-lg',
