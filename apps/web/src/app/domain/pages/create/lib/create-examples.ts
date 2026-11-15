@@ -238,6 +238,14 @@ export const CREATE_EXAMPLES: readonly CreateExample[] = [
       import('@doc/domain/pages/create/examples/progress-example.component').then(m => m.ProgressExampleComponent),
   },
   {
+    name: 'questionnaire',
+    title: 'Questionnaire',
+    load: () =>
+      import('@doc/domain/pages/create/examples/questionnaire-example.component').then(
+        m => m.QuestionnaireExampleComponent,
+      ),
+  },
+  {
     name: 'radio-group',
     title: 'Radio Group',
     load: () =>

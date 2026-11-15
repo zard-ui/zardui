@@ -400,7 +400,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border border-input bg-transparent px-2.5 py-1 text-base h-9 rounded-md shadow-xs transition-[color,box-shadow] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input h-9 rounded-md shadow-xs transition-[color,box-shadow] has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
+      'relative flex w-full min-w-0 items-center border border-input h-9 rounded-md shadow-xs transition-[color,box-shadow] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
     'cn-input-group-addon-align-block-end':
@@ -529,6 +529,20 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium',
     'cn-progress': 'bg-muted relative flex w-full items-center overflow-x-hidden rounded-full h-1.5',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
+    'cn-questionnaire': 'gap-4',
+    'cn-questionnaire-actions': 'gap-2',
+    'cn-questionnaire-choice':
+      'gap-2.5 rounded-md border border-input bg-transparent px-3 py-2.5 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50',
+    'cn-questionnaire-choice-indicator': 'size-4 rounded-[4px] border border-input dark:bg-input/30',
+    'cn-questionnaire-choice-shortcut': 'size-5 rounded-md font-mono text-[0.625rem] font-medium',
+    'cn-questionnaire-choices': 'gap-2',
+    'cn-questionnaire-description': 'text-sm text-muted-foreground',
+    'cn-questionnaire-error': 'text-sm',
+    'cn-questionnaire-input':
+      'h-9 rounded-md border border-input bg-transparent px-2.5 py-1 text-base shadow-xs transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-questionnaire-item': 'gap-4',
+    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
+    'cn-questionnaire-title': 'text-base/normal font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -1059,23 +1073,23 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top',
     'cn-drawer-title': 'text-base font-medium text-foreground wrap-anywhere',
     'cn-dropdown-menu-content':
-      'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+      'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 animate-in duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
     'cn-dropdown-menu-item':
-      'relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
-    'cn-dropdown-menu-item-indicator': 'absolute start-2 flex size-3.5 items-center justify-center',
-    'cn-dropdown-menu-item-inset-true': 'ps-8',
+      'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
+    'cn-dropdown-menu-item-indicator': 'absolute start-1.5 flex size-4 items-center justify-center',
+    'cn-dropdown-menu-item-inset-true': 'ps-7',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
-    'cn-dropdown-menu-label': 'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
-    'cn-dropdown-menu-label-inset-true': 'ps-8',
+    'cn-dropdown-menu-label': 'relative flex items-center px-1.5 py-1 text-xs font-medium text-muted-foreground',
+    'cn-dropdown-menu-label-inset-true': 'ps-7',
     'cn-dropdown-menu-radio-dot': 'size-2 rounded-full bg-current',
     'cn-dropdown-menu-separator': 'bg-border -mx-1 my-1 block h-px',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-dropdown-menu-sub-content':
-      'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95',
+      'z-50 min-w-24 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10 animate-in duration-100 fade-in-0 zoom-in-95',
     'cn-dropdown-menu-sub-trigger':
-      'relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
-    'cn-dropdown-menu-sub-trigger-inset-true': 'ps-8',
+      'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
+    'cn-dropdown-menu-sub-trigger-inset-true': 'ps-7',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-xl border-dashed p-6 text-center text-balance',
     'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance',
@@ -1112,7 +1126,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center rounded-lg border border-input transition-colors has-disabled:bg-input/50 has-disabled:opacity-50 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-disabled:bg-input/80 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
+      'relative flex h-8 w-full min-w-0 items-center rounded-lg border border-input transition-colors has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
     'cn-input-group-addon-align-block-end':
@@ -1240,6 +1254,20 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium',
     'cn-progress': 'bg-muted relative flex h-1 w-full items-center overflow-x-hidden rounded-full',
     'cn-progress-indicator': 'bg-primary size-full flex-1 transition-all',
+    'cn-questionnaire': 'gap-4',
+    'cn-questionnaire-actions': 'gap-2',
+    'cn-questionnaire-choice':
+      'gap-2.5 rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50',
+    'cn-questionnaire-choice-indicator': 'size-4 rounded-[4px] border border-input dark:bg-input/30',
+    'cn-questionnaire-choice-shortcut': 'size-5 rounded-md font-mono text-[0.625rem] font-medium',
+    'cn-questionnaire-choices': 'gap-2',
+    'cn-questionnaire-description': 'text-sm text-muted-foreground',
+    'cn-questionnaire-error': 'text-sm',
+    'cn-questionnaire-input':
+      'h-8 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-questionnaire-item': 'gap-4',
+    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
+    'cn-questionnaire-title': 'text-base/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-2',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -1822,7 +1850,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border border-input py-1 text-base transition-colors bg-input/30 h-9 rounded-4xl px-3 file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:h-7 focus-visible:ring-[3px] aria-invalid:ring-[3px]',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/30 h-9 rounded-4xl has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-data-[align=block-end]:rounded-2xl has-data-[align=block-start]:rounded-2xl has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-[3px] has-[textarea]:rounded-xl',
+      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/30 h-9 rounded-4xl has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-data-[align=block-end]:rounded-2xl has-data-[align=block-start]:rounded-2xl has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-[3px] has-[textarea]:rounded-xl',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-4xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -1950,6 +1978,20 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium text-base',
     'cn-progress': 'bg-muted relative flex w-full items-center overflow-x-hidden h-3 rounded-4xl',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
+    'cn-questionnaire': 'gap-5',
+    'cn-questionnaire-actions': 'gap-3',
+    'cn-questionnaire-choice':
+      'gap-3 rounded-2xl border border-input bg-transparent px-4 py-3 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-[3px] has-[input:focus-visible]:ring-ring/50',
+    'cn-questionnaire-choice-indicator': 'size-4 rounded-[6px] border border-input dark:bg-input/30',
+    'cn-questionnaire-choice-shortcut': 'size-5 rounded-lg font-mono text-[0.625rem] font-medium',
+    'cn-questionnaire-choices': 'gap-2.5',
+    'cn-questionnaire-description': 'text-sm text-muted-foreground',
+    'cn-questionnaire-error': 'text-sm',
+    'cn-questionnaire-input':
+      'h-9 rounded-4xl border border-input bg-input/30 px-3 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-questionnaire-item': 'gap-5',
+    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
+    'cn-questionnaire-title': 'text-base/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-5',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -2534,7 +2576,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'h-8 w-full min-w-0 border border-input bg-transparent px-2.5 py-1 transition-colors rounded-none text-xs file:inline-flex file:h-6 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:text-xs focus-visible:ring-1 aria-invalid:ring-1 md:text-xs',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center border border-input transition-colors rounded-none has-disabled:bg-input/50 has-disabled:opacity-50 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-disabled:bg-input/80 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-1',
+      'relative flex h-8 w-full min-w-0 items-center border border-input transition-colors rounded-none has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-1',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 font-medium text-muted-foreground text-xs group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-none",
     'cn-input-group-addon-align-block-end':
@@ -2662,6 +2704,20 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium text-sm',
     'cn-progress': 'bg-muted relative flex h-1 w-full items-center overflow-x-hidden rounded-none',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
+    'cn-questionnaire': 'gap-4',
+    'cn-questionnaire-actions': 'gap-2',
+    'cn-questionnaire-choice':
+      'gap-2.5 rounded-none border border-input bg-transparent px-3 py-2.5 text-xs has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-1 has-[input:focus-visible]:ring-ring/50',
+    'cn-questionnaire-choice-indicator': 'size-4 rounded-none border border-input dark:bg-input/30',
+    'cn-questionnaire-choice-shortcut': 'size-5 rounded-none font-mono text-[0.625rem] font-medium',
+    'cn-questionnaire-choices': 'gap-2',
+    'cn-questionnaire-description': 'text-xs/relaxed text-muted-foreground',
+    'cn-questionnaire-error': 'text-xs',
+    'cn-questionnaire-input':
+      'h-8 rounded-none border border-input bg-transparent px-2.5 py-1 text-xs transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20 md:text-xs dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-questionnaire-item': 'gap-4',
+    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
+    'cn-questionnaire-title': 'text-sm/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-2',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -3251,7 +3307,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border border-input transition-colors bg-input/20 h-7 rounded-md px-2 py-0.5 text-sm file:inline-flex file:h-6 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 file:text-xs/relaxed focus-visible:ring-2 aria-invalid:ring-2 md:text-xs/relaxed',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/20 h-7 rounded-md has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-2 has-[textarea]:rounded-md',
+      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/20 h-7 rounded-md has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-2 has-[textarea]:rounded-md',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center font-medium text-muted-foreground gap-1 py-2 text-xs/relaxed group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-[calc(var(--radius-sm)-2px)] **:data-[slot=kbd]:px-1 **:data-[slot=kbd]:text-[0.625rem] [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-addon-align-block-end':
@@ -3384,6 +3440,20 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium text-sm',
     'cn-progress': 'bg-muted relative flex h-1 w-full items-center overflow-x-hidden rounded-md',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
+    'cn-questionnaire': 'gap-3',
+    'cn-questionnaire-actions': 'gap-1.5',
+    'cn-questionnaire-choice':
+      'gap-2 rounded-md border border-input bg-transparent px-2.5 py-2 text-xs/relaxed has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-ring/30',
+    'cn-questionnaire-choice-indicator': 'size-4 rounded-[4px] border border-input dark:bg-input/30',
+    'cn-questionnaire-choice-shortcut': 'size-5 rounded-sm font-mono text-[0.625rem] font-medium',
+    'cn-questionnaire-choices': 'gap-1.5',
+    'cn-questionnaire-description': 'text-xs/relaxed text-muted-foreground',
+    'cn-questionnaire-error': 'text-xs/relaxed',
+    'cn-questionnaire-input':
+      'h-7 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-questionnaire-item': 'gap-3',
+    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
+    'cn-questionnaire-title': 'text-sm/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-3',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -3966,7 +4036,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border py-1 text-base bg-input/50 border-transparent h-9 rounded-3xl px-3 transition-[color,box-shadow,background-color] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border bg-input/50 border-transparent h-9 rounded-4xl transition-[color,box-shadow,background-color] has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-3xl has-data-[align=block-start]:rounded-3xl has-[textarea]:rounded-2xl',
+      'relative flex w-full min-w-0 items-center border bg-input/50 border-transparent h-9 rounded-4xl transition-[color,box-shadow,background-color] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-3xl has-data-[align=block-start]:rounded-3xl has-[textarea]:rounded-2xl',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-3xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -4094,6 +4164,20 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium text-base',
     'cn-progress': 'bg-muted relative flex w-full items-center overflow-x-hidden rounded-full h-3',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
+    'cn-questionnaire': 'gap-5',
+    'cn-questionnaire-actions': 'gap-3',
+    'cn-questionnaire-choice':
+      'gap-3 rounded-2xl border border-input bg-transparent px-4 py-3 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/30',
+    'cn-questionnaire-choice-indicator': 'size-4 rounded-[5px] border border-transparent bg-input/90',
+    'cn-questionnaire-choice-shortcut': 'size-5.5 rounded-lg font-mono text-[0.625rem] font-medium',
+    'cn-questionnaire-choices': 'gap-2.5',
+    'cn-questionnaire-description': 'text-sm text-muted-foreground',
+    'cn-questionnaire-error': 'text-sm',
+    'cn-questionnaire-input':
+      'h-9 rounded-3xl border border-transparent bg-input/50 px-3 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-questionnaire-item': 'gap-5',
+    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
+    'cn-questionnaire-title': 'text-base/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-5',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -4680,7 +4764,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'w-full min-w-0 border bg-transparent py-1 text-base border-transparent border-b-input h-10 px-0 transition-[color,border-color] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground md:text-sm focus-visible:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-transparent border-b-input bg-transparent h-10 rounded-none transition-[color,border-color] has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:border-b-ring has-[[data-slot][aria-invalid=true]]:border-b-destructive dark:has-[[data-slot][aria-invalid=true]]:border-b-destructive/50 has-data-[align=block-end]:rounded-none has-data-[align=block-start]:rounded-none has-[textarea]:rounded-none',
+      'relative flex w-full min-w-0 items-center border border-transparent border-b-input bg-transparent h-10 rounded-none transition-[color,border-color] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:border-b-ring has-[[data-slot][aria-invalid=true]]:border-b-destructive dark:has-[[data-slot][aria-invalid=true]]:border-b-destructive/50 has-data-[align=block-end]:rounded-none has-data-[align=block-start]:rounded-none has-[textarea]:rounded-none',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-none **:data-[slot=kbd]:px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-addon-align-block-end':
@@ -4811,6 +4895,21 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'text-xs font-semibold uppercase',
     'cn-progress': 'bg-muted relative flex w-full items-center overflow-x-hidden h-0.5 rounded-none',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
+    'cn-questionnaire': 'gap-4',
+    'cn-questionnaire-actions': 'gap-2',
+    'cn-questionnaire-choice':
+      'gap-2.5 rounded-none border border-input bg-transparent px-3 py-2.5 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-ring/30',
+    'cn-questionnaire-choice-indicator': 'size-4.5 rounded-none border border-input bg-transparent',
+    'cn-questionnaire-choice-shortcut': 'size-5.5 rounded-none font-mono text-[0.625rem] font-medium',
+    'cn-questionnaire-choices': 'gap-2',
+    'cn-questionnaire-description': 'text-sm text-muted-foreground leading-relaxed',
+    'cn-questionnaire-error': 'text-sm',
+    'cn-questionnaire-input':
+      'h-10 border border-transparent border-b-input bg-transparent px-0 py-1 text-base transition-[color,border-color] focus-visible:border-b-ring aria-invalid:border-b-destructive md:text-sm dark:aria-invalid:border-b-destructive/50',
+    'cn-questionnaire-item': 'gap-4',
+    'cn-questionnaire-progress': 'text-xs font-semibold tracking-wider text-muted-foreground uppercase',
+    'cn-questionnaire-title':
+      'text-lg/snug font-semibold tracking-wider uppercase [&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4.5 items-center justify-center',
     'cn-radio-group-indicator-dot': 'bg-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full',
@@ -5392,7 +5491,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input':
       'h-8 w-full min-w-0 border px-2.5 py-1 text-base bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center border bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30',
+      'relative flex h-8 w-full min-w-0 items-center border bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-2xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -5520,6 +5619,20 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium text-base',
     'cn-progress': 'bg-muted relative flex w-full items-center overflow-x-hidden h-2 rounded-2xl',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
+    'cn-questionnaire': 'gap-4',
+    'cn-questionnaire-actions': 'gap-2',
+    'cn-questionnaire-choice':
+      'gap-3 rounded-2xl border border-input bg-transparent px-3.5 py-3 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/30',
+    'cn-questionnaire-choice-indicator': 'size-4 rounded-[5px] border border-transparent bg-input/90',
+    'cn-questionnaire-choice-shortcut': 'size-5 rounded-lg font-mono text-[0.625rem] font-medium',
+    'cn-questionnaire-choices': 'gap-2',
+    'cn-questionnaire-description': 'text-sm text-muted-foreground',
+    'cn-questionnaire-error': 'text-sm',
+    'cn-questionnaire-input':
+      'h-8 rounded-2xl border border-transparent bg-input/50 px-2.5 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'cn-questionnaire-item': 'gap-4',
+    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
+    'cn-questionnaire-title': 'text-base/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
