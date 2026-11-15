@@ -853,6 +853,154 @@
     @apply flex-1 border-0 bg-transparent ring-0;
   }
 
+  /* MARK: color-picker */
+
+  .cn-color-picker {
+    @apply flex flex-col;
+  }
+
+  .cn-color-picker-show-value-true {
+    @apply w-[212px];
+  }
+
+  .cn-color-picker-show-value-false {
+    @apply w-fit;
+  }
+
+  .cn-color-picker-trigger {
+    @apply font-normal;
+  }
+
+  .cn-color-picker-trigger-show-value-true {
+    @apply w-full justify-start text-start;
+  }
+
+  .cn-color-picker-swatch {
+    @apply rounded-none;
+  }
+
+  .cn-color-picker-swatch-size-sm {
+    @apply size-3.5;
+  }
+
+  .cn-color-picker-swatch-size-default {
+    @apply size-4;
+  }
+
+  .cn-color-picker-swatch-size-lg {
+    @apply size-5;
+  }
+
+  .cn-color-picker-format-group {
+    @apply rounded-none;
+  }
+
+  .cn-color-picker-format-indicator {
+    @apply rounded-none shadow-sm;
+  }
+
+  .cn-color-picker-format {
+    @apply h-6 flex-1 rounded-none font-mono text-[11px] font-medium;
+  }
+
+  .cn-color-picker-area {
+    @apply h-36 rounded-none;
+  }
+
+  .cn-color-picker-track {
+    @apply h-2 rounded-none;
+  }
+
+  .cn-color-picker-track-fill {
+    @apply rounded-none;
+  }
+
+  .cn-color-picker-thumb {
+    @apply size-3.5 rounded-none;
+  }
+
+  .cn-color-picker-preset {
+    @apply size-6 rounded-none;
+  }
+
+  .cn-color-picker-input {
+    @apply h-8 px-0 font-mono text-[11px];
+  }
+
+  .cn-color-picker-presets {
+    @apply flex flex-wrap gap-1.5;
+  }
+
+  .cn-color-picker-eyedropper-icon {
+    @apply size-3.5!;
+  }
+
+  /* MARK: map-style-select */
+
+  .cn-map-style-select {
+    @apply inline-block;
+  }
+
+  .cn-map-style-select-trigger {
+    @apply gap-2 pr-2 pl-0;
+  }
+
+  .cn-map-style-select-trigger-caption {
+    @apply text-[9px] font-semibold tracking-widest uppercase;
+  }
+
+  .cn-map-style-select-trigger-value {
+    @apply text-xs font-semibold;
+  }
+
+  .cn-map-style-select-header {
+    @apply px-4 pt-4 pb-2.5;
+  }
+
+  .cn-map-style-select-list {
+    @apply gap-0.5 p-2 pt-0;
+  }
+
+  .cn-map-style-select-group-label {
+    @apply px-1.5 pt-2.5 pb-0.5 text-[10px] font-semibold tracking-widest uppercase;
+  }
+
+  .cn-map-style-select-option {
+    @apply flex items-center gap-3 rounded-none p-2 text-left;
+  }
+
+  .cn-map-style-select-option-name {
+    @apply flex items-center gap-1.5 text-sm font-semibold;
+  }
+
+  .cn-map-style-select-option-description {
+    @apply text-xs;
+  }
+
+  .cn-map-style-select-badge {
+    @apply px-0 py-0 text-[10px];
+  }
+
+  .cn-map-style-select-swatch-size-sm {
+    @apply h-6 w-9 rounded-none;
+  }
+
+  .cn-map-style-select-swatch-size-default {
+    @apply h-11 w-16 rounded-none;
+  }
+
+  .cn-map-style-select-form {
+    @apply gap-2.5 p-4;
+  }
+
+  .cn-map-style-select-form-label {
+    @apply text-xs font-semibold tracking-wide uppercase;
+  }
+
+  .cn-map-style-select-hint {
+    @apply text-xs;
+  }
+
   /* MARK: combobox */
 
   .cn-combobox {
@@ -2653,6 +2801,34 @@
 
   .cn-input-group-input {
     @apply focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent group-has-[>[data-align=inline-start]]/input-group:ps-2 group-has-[>[data-align=inline-end]]/input-group:pe-2;
+  }
+
+  /* MARK: color-picker */
+
+  .cn-color-picker-format {
+    @apply focus-visible:ring-2 focus-visible:ring-ring/30;
+  }
+
+  .cn-color-picker-area {
+    @apply focus-visible:ring-2 focus-visible:ring-ring/30;
+  }
+
+  .cn-color-picker-track {
+    @apply focus-visible:ring-2 focus-visible:ring-ring/30;
+  }
+
+  .cn-color-picker-preset {
+    @apply focus-visible:ring-2 focus-visible:ring-ring/30;
+  }
+
+  .cn-color-picker-input {
+    @apply md:text-[11px];
+  }
+
+  /* MARK: map-style-select */
+
+  .cn-map-style-select-option {
+    @apply focus-visible:ring-2 focus-visible:ring-ring/30;
   }
 
   /* MARK: combobox */

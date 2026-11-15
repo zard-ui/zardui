@@ -1,13 +1,13 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const mapStyleSelectVariants = cva('inline-block');
+export const mapStyleSelectVariants = cva('cn-map-style-select');
 
 /** The mini-map swatch: small in the trigger, large in the option rows. Painted with `--l-*` / `--d-*` variables. */
 export const mapStyleSwatchVariants = cva('block shrink-0 overflow-hidden ring-1 ring-foreground/10 ring-inset', {
   variants: {
     zSize: {
-      sm: 'h-6 w-9 rounded-[5px]',
-      default: 'h-11 w-16 rounded-md transition-transform group-hover:scale-[1.03]',
+      sm: 'cn-map-style-select-swatch-size-sm',
+      default: 'cn-map-style-select-swatch-size-default transition-transform group-hover:scale-[1.03]',
     },
   },
   defaultVariants: {
@@ -16,7 +16,7 @@ export const mapStyleSwatchVariants = cva('block shrink-0 overflow-hidden ring-1
 });
 
 export const mapStyleOptionVariants = cva(
-  'group flex items-center gap-3 rounded-md p-1.5 text-left outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[selected=true]:bg-accent',
+  'cn-map-style-select-option group outline-none hover:bg-accent data-[selected=true]:bg-accent',
 );
 
 export type ZardMapStyleSwatchSizeVariants = NonNullable<VariantProps<typeof mapStyleSwatchVariants>['zSize']>;
