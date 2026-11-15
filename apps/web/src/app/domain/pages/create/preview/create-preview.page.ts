@@ -1,3 +1,4 @@
+import { CdkScrollable } from '@angular/cdk/scrolling';
 import { isPlatformBrowser, NgComponentOutlet } from '@angular/common';
 import {
   afterNextRender,
@@ -23,6 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 
 import type { Block } from '@doc/domain/components/block-container/block-container.component';
+import type { MapBlock } from '@doc/domain/config/maps-registry';
 
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
@@ -34,6 +36,7 @@ import { parseCreateParams } from '../lib/create-url';
 import {
   BLOCK_ITEM_PREFIX,
   COMPONENT_ITEM_PREFIX,
+  MAP_ITEM_PREFIX,
   CREATE_CHANNEL,
   isCreateMessage,
   type FromPreviewMessage,
@@ -46,7 +49,14 @@ import { PreviewDesignContext } from '../lib/preview-design.context';
 type Shown =
   | { readonly kind: 'canvas-1' | 'canvas-2'; readonly item: string }
   | { readonly kind: 'component'; readonly item: string; readonly component: Type<unknown> }
-  | { readonly kind: 'block'; readonly item: string; readonly block: Block };
+  | { readonly kind: 'block'; readonly item: string; readonly block: Block }
+  | {
+      readonly kind: 'map';
+      readonly item: string;
+      /** The frame that brings the map providers and MapLibre's stylesheet, loaded with the map. */
+      readonly frame: Type<unknown>;
+      readonly inputs: { readonly block: MapBlock; readonly component: Type<unknown> };
+    };
 
 /** The document's own scroll is off: `main` is the one scroll container, on both axes. */
 const PREVIEW_DOCUMENT_CLASS = 'create-preview-document';
@@ -60,14 +70,16 @@ const PREVIEW_DOCUMENT_CLASS = 'create-preview-document';
  */
 @Component({
   selector: 'z-create-preview-page',
-  imports: [NgComponentOutlet, CanvasOneComponent, CanvasTwoComponent],
+  imports: [CdkScrollable, NgComponentOutlet, CanvasOneComponent, CanvasTwoComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrl: '../create-fonts.css',
   host: { '(click)': 'swallowAnchorNavigation($event)' },
   template: `
+    <!-- cdkScrollable: the page scrolls here, not on the document, and overlays (menus, popovers) must hear it. -->
     <main
       #scroller
+      cdkScrollable
       class="bg-background text-foreground h-svh overflow-auto overscroll-none"
       [attr.data-item]="shown()?.item"
     >
@@ -92,6 +104,11 @@ const PREVIEW_DOCUMENT_CLASS = 'create-preview-document';
         @case ('component') {
           @if (example(); as component) {
             <ng-container *ngComponentOutlet="component" />
+          }
+        }
+        @case ('map') {
+          @if (mapItem(); as m) {
+            <ng-container *ngComponentOutlet="m.frame; inputs: m.inputs" />
           }
         }
         @case ('block') {
@@ -128,6 +145,11 @@ export class CreatePreviewPage {
   protected readonly example = computed(() => {
     const shown = this.shown();
     return shown?.kind === 'component' ? shown.component : undefined;
+  });
+
+  protected readonly mapItem = computed(() => {
+    const shown = this.shown();
+    return shown?.kind === 'map' ? shown : undefined;
   });
 
   protected readonly block = computed(() => {
@@ -253,6 +275,18 @@ export class CreatePreviewPage {
       const name = item.slice(COMPONENT_ITEM_PREFIX.length);
       const component = await CREATE_EXAMPLES.find(example => example.name === name)?.load();
       return component ? { kind: 'component', item, component } : null;
+    }
+
+    if (item.startsWith(MAP_ITEM_PREFIX)) {
+      // MapLibre and ng-mapcn come only with a map: the registry, the frame and the block load together, on demand.
+      const id = item.slice(MAP_ITEM_PREFIX.length);
+      const [{ MAP_BLOCKS }, { CreateMapFrameComponent }] = await Promise.all([
+        import('@doc/domain/config/maps-registry'),
+        import('./create-map-frame.component'),
+      ]);
+      const block = MAP_BLOCKS.find(candidate => candidate.id === id);
+      if (!block) return null;
+      return { kind: 'map', item, frame: CreateMapFrameComponent, inputs: { block, component: await block.load() } };
     }
 
     if (item.startsWith(BLOCK_ITEM_PREFIX)) {

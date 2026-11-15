@@ -1,4 +1,3 @@
-import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -63,10 +62,13 @@ const LIST = [
   { title: 'Blog', description: 'Read our latest blog posts.' },
 ] as const;
 
-/** shadcn/ui's `navigation-menu-example`, in zard. Its `ListItem` is the `listItem` template. */
+/**
+ * shadcn/ui's `navigation-menu-example`, in zard. Its `ListItem` is written out inside each menu: a link has to be
+ * declared inside `z-navigation-menu`, whose menu stack it injects (a template declared outside it cannot find it).
+ */
 @Component({
   selector: 'z-navigation-menu-example',
-  imports: [ExampleImports, NgIcon, NgTemplateOutlet, ZardNavigationMenuImports],
+  imports: [ExampleImports, NgIcon, ZardNavigationMenuImports],
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCircleAlert })],
   template: `
@@ -82,7 +84,24 @@ const LIST = [
                 <div z-navigation-menu-content>
                   <ul class="w-96">
                     @for (item of gettingStartedItems; track item.title) {
-                      <ng-container *ngTemplateOutlet="listItem; context: { $implicit: item }" />
+                      <li>
+                        <a z-navigation-menu-link [href]="item.href">
+                          <div
+                            class="style-vega:text-sm style-nova:text-sm style-lyra:text-xs style-maia:text-sm style-mira:text-xs style-luma:text-sm flex flex-col gap-1"
+                          >
+                            <div
+                              class="style-sera:font-heading style-sera:tracking-wide style-sera:uppercase leading-none font-medium"
+                            >
+                              {{ item.title }}
+                            </div>
+                            <div
+                              class="text-muted-foreground style-sera:mt-0.5 style-sera:leading-relaxed line-clamp-2"
+                            >
+                              {{ item.description }}
+                            </div>
+                          </div>
+                        </a>
+                      </li>
                     }
                   </ul>
                 </div>
@@ -96,7 +115,24 @@ const LIST = [
                 <div z-navigation-menu-content>
                   <ul class="grid w-[400px] gap-1 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     @for (item of components; track item.title) {
-                      <ng-container *ngTemplateOutlet="listItem; context: { $implicit: item }" />
+                      <li>
+                        <a z-navigation-menu-link [href]="item.href">
+                          <div
+                            class="style-vega:text-sm style-nova:text-sm style-lyra:text-xs style-maia:text-sm style-mira:text-xs style-luma:text-sm flex flex-col gap-1"
+                          >
+                            <div
+                              class="style-sera:font-heading style-sera:tracking-wide style-sera:uppercase leading-none font-medium"
+                            >
+                              {{ item.title }}
+                            </div>
+                            <div
+                              class="text-muted-foreground style-sera:mt-0.5 style-sera:leading-relaxed line-clamp-2"
+                            >
+                              {{ item.description }}
+                            </div>
+                          </div>
+                        </a>
+                      </li>
                     }
                   </ul>
                 </div>
@@ -183,23 +219,6 @@ const LIST = [
         </z-navigation-menu>
       </z-example>
     </z-example-wrapper>
-
-    <ng-template #listItem let-item>
-      <li>
-        <a z-navigation-menu-link [href]="item.href">
-          <div
-            class="style-vega:text-sm style-nova:text-sm style-lyra:text-xs style-maia:text-sm style-mira:text-xs style-luma:text-sm flex flex-col gap-1"
-          >
-            <div class="style-sera:font-heading style-sera:tracking-wide style-sera:uppercase leading-none font-medium">
-              {{ item.title }}
-            </div>
-            <div class="text-muted-foreground style-sera:mt-0.5 style-sera:leading-relaxed line-clamp-2">
-              {{ item.description }}
-            </div>
-          </div>
-        </a>
-      </li>
-    </ng-template>
   `,
 })
 export class NavigationMenuExampleComponent {
