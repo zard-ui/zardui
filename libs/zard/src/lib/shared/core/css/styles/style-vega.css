@@ -1989,6 +1989,78 @@
     @apply text-sm leading-none font-medium;
   }
 
+  /* MARK: code-block */
+
+  .cn-code-block {
+    @apply rounded-xl text-sm;
+  }
+
+  .cn-code-block-header {
+    @apply gap-2 px-4 pt-4;
+  }
+
+  .cn-code-block-title {
+    @apply font-sans text-sm font-medium [--ng-icon__size:1rem];
+  }
+
+  .cn-code-block-actions {
+    @apply -my-1 -me-1.5 gap-1;
+  }
+
+  .cn-code-block-content {
+    @apply px-4 py-4 leading-relaxed;
+  }
+
+  .cn-code-block-line {
+    @apply -mx-4 px-4;
+  }
+
+  .cn-code-block-footer {
+    @apply gap-2 px-4 pb-4;
+  }
+
+  /* MARK: data-table */
+
+  .cn-data-table {
+    @apply rounded-md border;
+  }
+
+  .cn-data-table-empty {
+    @apply h-24;
+  }
+
+  .cn-data-table-column-header {
+    @apply gap-2;
+  }
+
+  .cn-data-table-column-header-trigger {
+    @apply -ms-2.5 h-8;
+  }
+
+  .cn-data-table-view-options {
+    @apply h-9;
+  }
+
+  .cn-data-table-pagination-content {
+    @apply gap-4 px-2;
+  }
+
+  .cn-data-table-pagination-controls {
+    @apply gap-4;
+  }
+
+  .cn-data-table-pagination-summary {
+    @apply text-sm;
+  }
+
+  .cn-data-table-pagination-label {
+    @apply text-sm font-medium;
+  }
+
+  .cn-data-table-pagination-button {
+    @apply size-8;
+  }
+
   /* MARK: table */
 
   .cn-table {
@@ -3126,6 +3198,42 @@
 
   .cn-switch-thumb {
     @apply data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:data-[state=unchecked]:translate-x-0 group-data-[size=sm]/switch:data-[state=unchecked]:translate-x-0;
+  }
+
+  /* MARK: code-block */
+
+  .cn-code-block {
+    @apply data-[size=sm]:rounded-lg;
+  }
+
+  .cn-code-block-header {
+    @apply group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3;
+  }
+
+  .cn-code-block-title {
+    @apply [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5;
+  }
+
+  .cn-code-block-actions {
+    @apply [[data-slot=code-block]>&]:end-3 [[data-slot=code-block]>&]:top-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2;
+  }
+
+  .cn-code-block-content {
+    @apply group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5;
+  }
+
+  .cn-code-block-line {
+    @apply group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3;
+  }
+
+  .cn-code-block-footer {
+    @apply group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3;
+  }
+
+  /* MARK: data-table */
+
+  .cn-data-table-pagination-controls {
+    @apply @2xl:gap-8;
   }
 
   /* MARK: table */

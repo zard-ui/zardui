@@ -1990,6 +1990,78 @@
     @apply text-xs leading-none font-medium;
   }
 
+  /* MARK: code-block */
+
+  .cn-code-block {
+    @apply rounded-lg text-xs;
+  }
+
+  .cn-code-block-header {
+    @apply gap-1.5 px-3 pt-3;
+  }
+
+  .cn-code-block-title {
+    @apply font-sans text-xs font-medium [--ng-icon__size:0.875rem];
+  }
+
+  .cn-code-block-actions {
+    @apply -my-1 -me-1 gap-0.5;
+  }
+
+  .cn-code-block-content {
+    @apply px-3 py-3 leading-relaxed;
+  }
+
+  .cn-code-block-line {
+    @apply -mx-3 px-3;
+  }
+
+  .cn-code-block-footer {
+    @apply gap-1.5 px-3 pb-3;
+  }
+
+  /* MARK: data-table */
+
+  .cn-data-table {
+    @apply rounded-lg border;
+  }
+
+  .cn-data-table-empty {
+    @apply h-20;
+  }
+
+  .cn-data-table-column-header {
+    @apply gap-1.5;
+  }
+
+  .cn-data-table-column-header-trigger {
+    @apply -ms-2 h-6;
+  }
+
+  .cn-data-table-view-options {
+    @apply h-7;
+  }
+
+  .cn-data-table-pagination-content {
+    @apply gap-3 px-2;
+  }
+
+  .cn-data-table-pagination-controls {
+    @apply gap-3;
+  }
+
+  .cn-data-table-pagination-summary {
+    @apply text-xs;
+  }
+
+  .cn-data-table-pagination-label {
+    @apply text-xs font-medium;
+  }
+
+  .cn-data-table-pagination-button {
+    @apply size-7;
+  }
+
   /* MARK: table */
 
   .cn-table {
@@ -3147,6 +3219,42 @@
 
   .cn-switch-thumb {
     @apply data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:data-[state=unchecked]:translate-x-0 group-data-[size=sm]/switch:data-[state=unchecked]:translate-x-0;
+  }
+
+  /* MARK: code-block */
+
+  .cn-code-block {
+    @apply data-[size=sm]:rounded-md;
+  }
+
+  .cn-code-block-header {
+    @apply group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pt-2.5;
+  }
+
+  .cn-code-block-title {
+    @apply [&_svg:not([class*="size-"])]:size-3.5 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.75rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3;
+  }
+
+  .cn-code-block-actions {
+    @apply [[data-slot=code-block]>&]:end-2.5 [[data-slot=code-block]>&]:top-2.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2;
+  }
+
+  .cn-code-block-content {
+    @apply group-has-data-[slot=code-block-header]/code-block:pt-1.5 group-has-data-[slot=code-block-footer]/code-block:pb-1.5 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:py-2.5 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1;
+  }
+
+  .cn-code-block-line {
+    @apply group-data-[size=sm]/code-block:-mx-2.5 group-data-[size=sm]/code-block:px-2.5;
+  }
+
+  .cn-code-block-footer {
+    @apply group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pb-2.5;
+  }
+
+  /* MARK: data-table */
+
+  .cn-data-table-pagination-controls {
+    @apply @2xl:gap-6;
   }
 
   /* MARK: table */
