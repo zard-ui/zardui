@@ -25,7 +25,6 @@ const NOVA_NOT =
 const PASS2 = '/* ---- PASS 2';
 
 const file = (style: Style) => join(DIR, `style-${style}.css`);
-const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /** [start, end) of each pass in the sheet text. */
 function passes(text: string): [[number, number], [number, number]] {
@@ -129,6 +128,10 @@ function main(): void {
     const pass = (Number(passArg) - 1) as 0 | 1;
     if (pass !== 0 && pass !== 1) throw new Error('Pass is 1 or 2');
     if (!/^cn-[a-z0-9-]+$/.test(marker)) throw new Error(`"${marker}" is not a marker`);
+    // `get` prints these for a missing or empty rule; copied into `set` they would become invalid classes.
+    if (classes.some(name => name === '(none)' || name === '(empty)')) {
+      throw new Error('"(none)" and "(empty)" are what get prints, not classes: pass no classes for an empty rule');
+    }
 
     withLock(() => {
       let text = readFileSync(file(style), 'utf8');
