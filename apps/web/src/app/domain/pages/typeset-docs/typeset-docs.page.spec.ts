@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 
+import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
+
 import { TypesetDocsPage } from './typeset-docs.page';
 
 describe('TypesetDocsPage', () => {
@@ -25,9 +27,11 @@ describe('TypesetDocsPage', () => {
 
   describe('navigation', () => {
     const sectionIds = () =>
+      // The spied value, not the host's id: z-doc-heading keeps its id on the inner header.
       fixture.debugElement
-        .queryAll(By.css('[scrollSpyItem]'))
-        .map(el => (el.nativeElement as HTMLElement).getAttribute('id'));
+        .queryAll(By.directive(ScrollSpyItemDirective))
+        .map(el => el.injector.get(ScrollSpyItemDirective).scrollSpyItem())
+        .filter(Boolean);
 
     it('starts at overview', () => {
       expect(component.navigationConfig.items[0]).toEqual({ id: 'overview', label: 'Overview', type: 'core' });
