@@ -210,16 +210,20 @@ export async function resolveDependencies(
   options: { all?: boolean; path?: string; overwrite?: boolean },
 ): Promise<ResolvedDependencies> {
   const componentMetas: ComponentMeta[] = [];
+  const unknown: string[] = [];
 
   for (const name of selectedComponents) {
     const meta = await getComponentMeta(name);
     if (meta) {
       componentMetas.push(meta);
+    } else {
+      unknown.push(name);
     }
   }
 
-  if (!componentMetas.length) {
-    throw new CliError('Selected components not found in registry.', 'COMPONENT_NOT_FOUND');
+  // One unknown name stops the whole add: installing the rest would hide the typo in a list of what was installed.
+  if (unknown.length) {
+    throw new CliError(`Not found in the registry: ${unknown.join(', ')}.`, 'COMPONENT_NOT_FOUND');
   }
 
   const dependenciesToInstall = new Set<string>();

@@ -136,6 +136,12 @@ describe('resolveDependencies', () => {
     expect(result.dependenciesToInstall).toContain('@angular/cdk');
   });
 
+  it('should refuse a list with an unknown name, naming it, instead of installing the rest', async () => {
+    await expect(
+      resolveDependencies(['button', 'dropdown-menu'], fakeResolvedConfig, '/project', { overwrite: true }),
+    ).rejects.toThrow('Not found in the registry: dropdown-menu.');
+  });
+
   it('should resolve registry dependencies recursively', async () => {
     const result = await resolveDependencies(['button'], fakeResolvedConfig, '/project', { overwrite: true });
 
