@@ -42,4 +42,6 @@ export interface CalendarDayConfig {
   disabledDates?: Date[];
   /** Day of week the calendar starts on (0 = Sunday, 1 = Monday, ..., 6 = Saturday). Defaults to 0. */
   weekStartsOn?: ZardDayOfWeek;
+  /** Always render six weeks, as react-day-picker's `fixedWeeks`. */
+  fixedWeeks?: boolean;
 }

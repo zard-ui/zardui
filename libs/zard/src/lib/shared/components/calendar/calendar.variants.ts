@@ -34,13 +34,13 @@ export const calendarCaptionVariants = cva('cn-calendar-caption');
 
 export const calendarDropdownsVariants = cva('cn-calendar-dropdowns');
 
-export const calendarCaptionLabelVariants = cva('cn-calendar-caption-label select-none', {
+export const calendarCaptionLabelVariants = cva('select-none', {
   variants: {
     layout: {
       label: 'cn-calendar-caption-label-layout-label',
       // In dropdown layout this label is what the user sees of the select underneath it,
-      // so it carries the control's height and padding.
-      dropdown: 'cn-calendar-caption-label-layout-dropdown',
+      // so it carries the control's height and padding (`cn-calendar-caption-label`, shadcn's marker for it).
+      dropdown: 'cn-calendar-caption-label cn-calendar-caption-label-layout-dropdown',
     },
   },
   defaultVariants: {

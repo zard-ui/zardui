@@ -79,7 +79,18 @@ function startOfDay(date: Date): Date {
  * Generates calendar days for a given month with all selection states
  */
 export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
-  const { year, month, mode, selectedDates, minDate, maxDate, disabled, disabledDates, weekStartsOn = 0 } = config;
+  const {
+    year,
+    month,
+    mode,
+    selectedDates,
+    minDate,
+    maxDate,
+    disabled,
+    disabledDates,
+    weekStartsOn = 0,
+    fixedWeeks = false,
+  } = config;
 
   const today = new Date();
 
@@ -98,6 +109,10 @@ export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
   const endDiff = (endOfWeekDay - lastDay.getDay() + 7) % 7;
   const endDate = new Date(lastDay);
   endDate.setDate(endDate.getDate() + endDiff);
+  if (fixedWeeks) {
+    // Six weeks (42 days) from the first rendered day.
+    endDate.setTime(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 41).getTime());
+  }
 
   const days: CalendarDay[] = [];
   const currentWeekDate = new Date(startDate);

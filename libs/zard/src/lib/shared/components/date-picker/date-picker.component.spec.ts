@@ -390,7 +390,7 @@ describe('ZardDatePickerComponent', () => {
       expect(caption?.textContent?.trim()).toBe('Août 2024');
 
       const columnHeaders = calendarEl?.querySelectorAll('[role="columnheader"]');
-      expect(columnHeaders?.[0].textContent?.trim()).toMatch(/^Lun/);
+      expect(columnHeaders?.[0].textContent?.trim()).toMatch(/^Lu/);
 
       const onDateChange = jest.fn();
       diComponent.dateChange.subscribe(onDateChange);

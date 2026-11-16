@@ -94,7 +94,7 @@ function asDate(value: CalendarValue): Date | null {
       <z-example zTitle="Week Numbers" zClass="justify-center">
         <z-card class="mx-auto w-fit p-0">
           <z-card-content class="p-0">
-            <z-calendar zMode="single" [(value)]="weekNumbers" />
+            <z-calendar zMode="single" zShowWeekNumbers [(value)]="weekNumbers" />
           </z-card-content>
         </z-card>
       </z-example>
@@ -123,7 +123,7 @@ function asDate(value: CalendarValue): Date | null {
       <z-example zTitle="Range Multiple Months" zContainerClass="lg:col-span-full 2xl:col-span-full" zClass="p-12">
         <z-card class="mx-auto w-fit p-0">
           <z-card-content class="p-0">
-            <z-calendar zMode="range" zNumberOfMonths="3" zLocale="es" [(value)]="rangeMultiple" />
+            <z-calendar zMode="range" zNumberOfMonths="3" zLocale="es" zFixedWeeks [(value)]="rangeMultiple" />
           </z-card-content>
         </z-card>
       </z-example>
@@ -161,7 +161,7 @@ function asDate(value: CalendarValue): Date | null {
       <z-example zTitle="With Presets">
         <z-card zSize="sm" class="mx-auto w-fit max-w-[300px]">
           <z-card-content class="px-4">
-            <z-calendar zMode="single" class="p-0 [--cell-size:--spacing(9.5)]" [(value)]="preset" />
+            <z-calendar zMode="single" zFixedWeeks class="p-0 [--cell-size:--spacing(9.5)]" [(value)]="preset" />
           </z-card-content>
           <z-card-footer class="flex flex-wrap gap-2 border-t">
             @for (item of presets; track item.value) {
@@ -349,7 +349,7 @@ export class CalendarExampleComponent {
   ]);
 
   protected readonly withTime = signal<CalendarValue>(new Date(year(), new Date().getMonth(), 12));
-  protected readonly preset = signal<CalendarValue>(new Date(year(), 1, 12));
+  protected readonly preset = signal<CalendarValue>(null);
   protected readonly customDays = signal<CalendarValue>([
     new Date(year(), 11, 8),
     addDays(new Date(year(), 11, 8), 10),
