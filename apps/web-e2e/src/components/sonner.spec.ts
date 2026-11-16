@@ -60,17 +60,18 @@ test.describe('Sonner (Toast) component', () => {
     await expect(toast).toBeVisible({ timeout: 5000 });
     await expect(dialog).toBeVisible();
 
-    const box = await toast.boundingBox();
-    expect(box).not.toBeNull();
-
-    // The toast must be the element actually hit at its own center, otherwise
-    // the dialog or its backdrop is painted above it.
-    const isTopmost = await page.evaluate(
-      ([x, y]) => !!document.elementFromPoint(x, y)?.closest('[data-sonner-toast]'),
-      [box!.x + box!.width / 2, box!.y + box!.height / 2],
-    );
-
-    expect(isTopmost).toBe(true);
+    // The toast must be the element actually hit at its own center, otherwise the dialog or its backdrop is
+    // painted above it. Polled: the toast slides in, and its box moves until the entry settles.
+    await expect
+      .poll(async () => {
+        const box = await toast.boundingBox();
+        if (!box) return false;
+        return page.evaluate(
+          ([x, y]) => !!document.elementFromPoint(x, y)?.closest('[data-sonner-toast]'),
+          [box.x + box.width / 2, box.y + box.height / 2],
+        );
+      })
+      .toBe(true);
   });
 
   test('RTL example shows a toast with the RTL direction', async ({ page }) => {
