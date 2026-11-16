@@ -315,13 +315,13 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   protected readonly scrollButtonClasses = computed(() => mergeClasses(selectScrollButtonVariants()));
   protected readonly valueClasses = computed(() =>
     mergeClasses(
-      'flex min-w-0 flex-1 items-center gap-2',
+      'flex min-w-0 flex-1 items-center',
       this.zMultiple() ? 'flex-wrap overflow-visible' : 'overflow-hidden',
     ),
   );
 
   protected readonly triggerClasses = computed(() =>
-    mergeClasses(selectTriggerVariants({}), this.zMultiple() && 'h-auto min-h-8 py-1'),
+    mergeClasses(selectTriggerVariants({}), this.zMultiple() && 'h-auto py-1'),
   );
 
   ngOnDestroy() {

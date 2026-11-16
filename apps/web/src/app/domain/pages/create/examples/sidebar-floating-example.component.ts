@@ -73,8 +73,8 @@ import { SIDEBAR_DOCS_NAV } from './sidebar-example.data';
           </z-sidebar-group>
         </z-sidebar-content>
         <z-sidebar-footer>
-          <z-sidebar-group class="pb-1">
-            <z-card zSize="sm" class="-mx-1">
+          <z-sidebar-group>
+            <z-card zSize="sm" class="-mx-2">
               <z-card-header>
                 <z-card-title class="text-sm" zTitle="Subscribe to our newsletter" />
                 <z-card-description zDescription="Opt-in to receive updates and news about the sidebar." />
@@ -103,7 +103,7 @@ import { SIDEBAR_DOCS_NAV } from './sidebar-example.data';
         <header class="flex h-16 shrink-0 items-center gap-2 px-4">
           <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
         </header>
-        <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div class="flex flex-1 flex-col gap-4 p-4">
           <div class="grid auto-rows-min gap-4 md:grid-cols-3">
             <div class="bg-muted/50 aspect-video rounded-xl"></div>
             <div class="bg-muted/50 aspect-video rounded-xl"></div>

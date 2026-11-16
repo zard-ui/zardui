@@ -6,7 +6,7 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '@zard/components
 
 import { ExampleImports } from './example.component';
 
-const HOVER_CARD_SIDES = ['top', 'right', 'bottom', 'left'] as const;
+const HOVER_CARD_SIDES = ['inline-start', 'left', 'top', 'bottom', 'right', 'inline-end'] as const;
 
 /** shadcn/ui's `hover-card-example`, in zard. */
 @Component({
@@ -15,8 +15,8 @@ const HOVER_CARD_SIDES = ['top', 'right', 'bottom', 'left'] as const;
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <z-example-wrapper>
-      <z-example zTitle="Sides">
-        <div class="flex flex-wrap items-center justify-center gap-4">
+      <z-example zTitle="Sides" zContainerClass="col-span-2">
+        <div class="flex flex-wrap items-center justify-center gap-2">
           @for (side of sides; track side) {
             <button
               type="button"
@@ -28,7 +28,7 @@ const HOVER_CARD_SIDES = ['top', 'right', 'bottom', 'left'] as const;
               [zOpenDelay]="100"
               [zCloseDelay]="100"
             >
-              {{ side }}
+              {{ label(side) }}
             </button>
             <ng-template #content>
               <z-hover-card class="w-64">
@@ -39,7 +39,7 @@ const HOVER_CARD_SIDES = ['top', 'right', 'bottom', 'left'] as const;
                     Hover Card
                   </h4>
                   <p class="style-sera:leading-relaxed">
-                    This hover card appears on the {{ side }} side of the trigger.
+                    This hover card appears on the {{ label(side) }} side of the trigger.
                   </p>
                 </div>
               </z-hover-card>
@@ -88,4 +88,8 @@ const HOVER_CARD_SIDES = ['top', 'right', 'bottom', 'left'] as const;
 export class HoverCardExampleComponent {
   protected readonly sides = HOVER_CARD_SIDES;
   protected readonly dialogOpen = signal(false);
+
+  protected label(side: string): string {
+    return side.replace('-', ' ');
+  }
 }

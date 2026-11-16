@@ -1,15 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideFile, lucideFileSearch, lucideInbox } from '@ng-icons/lucide';
+import { lucideInbox } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardDrawerImports } from '@zard/components/drawer/drawer.imports';
 import { ZardItemImports, type ZardItemSizeVariants, type ZardItemVariantVariants } from '@zard/components/item';
 
 import { ExampleImports } from './example.component';
 
-const ICONS = { lucideFile, lucideFileSearch, lucideInbox };
+const ICONS = { lucideInbox };
 
 const VARIANT_SECTIONS: readonly { title: string; variant: ZardItemVariantVariants; size: ZardItemSizeVariants }[] = [
   { title: 'Default', variant: 'default', size: 'default' },
@@ -44,11 +43,8 @@ const SEPARATED_ITEMS: readonly { title: string; description: string }[] = [
   { title: 'Archive', description: 'View archived messages.' },
 ];
 
-const EXPLORED_FILES = ['app/chat/page.tsx', 'components/message.tsx', 'lib/ai.ts', 'app/api/chat/route.ts'];
-
 /**
- * The nine items shadcn repeats for every variant and size. Extra small drops the descriptions, and only the default
- * size keeps a default-size outline button.
+ * The nine items shadcn repeats for every variant and size. Only the default size keeps a default-size outline button.
  */
 @Component({
   selector: 'z-item-example-variants',
@@ -59,7 +55,6 @@ const EXPLORED_FILES = ['app/chat/page.tsx', 'components/message.tsx', 'lib/ai.t
   template: `
     @let v = zVariant();
     @let s = zSize();
-    @let described = s !== 'xs';
     <z-item [zVariant]="v" [zSize]="s">
       <z-item-content>
         <z-item-title>Title Only</z-item-title>
@@ -76,17 +71,13 @@ const EXPLORED_FILES = ['app/chat/page.tsx', 'components/message.tsx', 'lib/ai.t
     <z-item [zVariant]="v" [zSize]="s">
       <z-item-content>
         <z-item-title>Title + Description</z-item-title>
-        @if (described) {
-          <z-item-description>This is a description that provides additional context.</z-item-description>
-        }
+        <z-item-description>This is a description that provides additional context.</z-item-description>
       </z-item-content>
     </z-item>
     <z-item [zVariant]="v" [zSize]="s">
       <z-item-content>
         <z-item-title>Title + Description + Button</z-item-title>
-        @if (described) {
-          <z-item-description>This item includes a title, description, and action button.</z-item-description>
-        }
+        <z-item-description>This item includes a title, description, and action button.</z-item-description>
       </z-item-content>
       <z-item-actions>
         <button type="button" z-button zType="outline" [zSize]="outlineButtonSize()">Action</button>
@@ -117,9 +108,7 @@ const EXPLORED_FILES = ['app/chat/page.tsx', 'components/message.tsx', 'lib/ai.t
       </z-item-media>
       <z-item-content>
         <z-item-title>Media + Title + Description</z-item-title>
-        @if (described) {
-          <z-item-description>This item includes media, title, and description.</z-item-description>
-        }
+        <z-item-description>This item includes media, title, and description.</z-item-description>
       </z-item-content>
     </z-item>
     <z-item [zVariant]="v" [zSize]="s">
@@ -128,11 +117,9 @@ const EXPLORED_FILES = ['app/chat/page.tsx', 'components/message.tsx', 'lib/ai.t
       </z-item-media>
       <z-item-content>
         <z-item-title>Media + Title + Description + Button</z-item-title>
-        @if (described) {
-          <z-item-description>
-            Complete item with all components: media, title, description, and button.
-          </z-item-description>
-        }
+        <z-item-description>
+          Complete item with all components: media, title, description, and button.
+        </z-item-description>
       </z-item-content>
       <z-item-actions>
         <button type="button" z-button zSize="sm">Action</button>
@@ -141,9 +128,7 @@ const EXPLORED_FILES = ['app/chat/page.tsx', 'components/message.tsx', 'lib/ai.t
     <z-item [zVariant]="v" [zSize]="s">
       <z-item-content>
         <z-item-title>Multiple Actions</z-item-title>
-        @if (described) {
-          <z-item-description>Item with multiple action buttons in the actions area.</z-item-description>
-        }
+        <z-item-description>Item with multiple action buttons in the actions area.</z-item-description>
       </z-item-content>
       <z-item-actions>
         <button type="button" z-button zType="outline" zSize="sm">Cancel</button>
@@ -288,7 +273,6 @@ export class ItemExampleImagesComponent {
     ExampleImports,
     NgIcon,
     ZardButtonComponent,
-    ZardDrawerImports,
     ZardItemImports,
     ItemExampleVariantsComponent,
     ItemExampleLinksComponent,
@@ -503,32 +487,6 @@ export class ItemExampleImagesComponent {
         </z-item>
       </z-example>
 
-      <z-example zTitle="Item with Drawer">
-        <button type="button" z-item zVariant="outline" (click)="drawerOpen.set(true)">
-          <z-item-media zVariant="icon"><ng-icon name="lucideFileSearch" /></z-item-media>
-          <z-item-content>
-            <z-item-title>Explored 4 files</z-item-title>
-            <z-item-description>Review the files that were searched for this answer.</z-item-description>
-          </z-item-content>
-        </button>
-        <z-drawer [(zVisible)]="drawerOpen">
-          <z-drawer-header>
-            <z-drawer-title>Explored files</z-drawer-title>
-            <z-drawer-description>Files opened while generating the response.</z-drawer-description>
-          </z-drawer-header>
-          <div class="grid gap-3 p-4">
-            @for (file of exploredFiles; track file) {
-              <z-item zVariant="muted" zSize="sm">
-                <z-item-media zVariant="icon"><ng-icon name="lucideFile" /></z-item-media>
-                <z-item-content>
-                  <z-item-title>{{ file }}</z-item-title>
-                </z-item-content>
-              </z-item>
-            }
-          </div>
-        </z-drawer>
-      </z-example>
-
       @for (section of imageSections; track section.title) {
         <z-example [zTitle]="section.title">
           <z-item-example-images [zVariant]="section.variant" [zSize]="section.size" />
@@ -542,6 +500,4 @@ export class ItemExampleComponent {
   protected readonly linkSections = LINK_SECTIONS;
   protected readonly imageSections = IMAGE_SECTIONS;
   protected readonly separatedItems = SEPARATED_ITEMS;
-  protected readonly exploredFiles = EXPLORED_FILES;
-  protected readonly drawerOpen = signal(false);
 }

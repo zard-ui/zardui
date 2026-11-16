@@ -160,7 +160,7 @@ export class ZardDropdownMenuCheckboxItemComponent {
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
   protected readonly itemVariant = computed(() => this.zType() ?? this.zVariant() ?? this.variant());
   protected readonly classes = computed(() =>
-    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), inset: true }), this.class()),
+    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), checkable: 'checkbox' }), this.class()),
   );
 
   protected onClick() {
@@ -206,7 +206,9 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
   template: `
     <span class="cn-dropdown-menu-item-indicator pointer-events-none">
       @if (isChecked()) {
-        <span class="cn-dropdown-menu-radio-dot"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="size-4">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
       }
     </span>
     <ng-content />
@@ -247,7 +249,7 @@ export class ZardDropdownMenuRadioItemComponent {
   protected readonly itemVariant = computed(() => this.zType() ?? this.zVariant() ?? this.variant());
   protected readonly isChecked = computed(() => this.radioGroup?.zValue() === this.zValue());
   protected readonly classes = computed(() =>
-    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), inset: true }), this.class()),
+    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), checkable: 'radio' }), this.class()),
   );
 
   protected onClick() {

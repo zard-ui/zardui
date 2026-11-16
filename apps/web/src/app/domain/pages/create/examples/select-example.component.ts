@@ -13,6 +13,8 @@ import { ZardSelectImports } from '@zard/components/select';
 
 import { ExampleImports } from './example.component';
 
+const SIDES = ['inline-start', 'left', 'top', 'bottom', 'right', 'inline-end'] as const;
+
 const LARGE_LIST = Array.from({ length: 100 }, (_, i) => i);
 
 const PLANS = [
@@ -51,9 +53,23 @@ const PLANS = [
         </z-select>
       </z-example>
 
+      <z-example zTitle="Sides" zContainerClass="col-span-2">
+        <div class="flex flex-wrap justify-center gap-2">
+          @for (side of sides; track side) {
+            <z-select class="w-28 capitalize" [zPlaceholder]="side.replace('-', ' ')">
+              <z-select-group>
+                <z-select-item zValue="apple">Apple</z-select-item>
+                <z-select-item zValue="banana">Banana</z-select-item>
+                <z-select-item zValue="blueberry">Blueberry</z-select-item>
+              </z-select-group>
+            </z-select>
+          }
+        </div>
+      </z-example>
+
       <z-example zTitle="With Icons">
         <div class="flex flex-col gap-4">
-          <z-select class="w-fit [&_[data-slot=select-trigger]]:h-7" zPlaceholder="Chart Type">
+          <z-select class="w-fit" zSize="sm" zPlaceholder="Chart Type">
             <z-select-group>
               <z-select-item zValue="line">
                 <ng-icon name="lucideChartLine" />
@@ -116,16 +132,30 @@ const PLANS = [
         </z-select>
       </z-example>
 
+      <z-example zTitle="Multiple Selection">
+        <z-select class="w-72" zMultiple zPlaceholder="Select fruits" [zMaxLabelCount]="1">
+          <z-select-group>
+            <z-select-item zValue="apple">Apple</z-select-item>
+            <z-select-item zValue="banana">Banana</z-select-item>
+            <z-select-item zValue="blueberry">Blueberry</z-select-item>
+            <z-select-item zValue="grapes">Grapes</z-select-item>
+            <z-select-item zValue="pineapple">Pineapple</z-select-item>
+            <z-select-item zValue="strawberry">Strawberry</z-select-item>
+            <z-select-item zValue="watermelon">Watermelon</z-select-item>
+          </z-select-group>
+        </z-select>
+      </z-example>
+
       <z-example zTitle="Sizes">
         <div class="flex flex-col gap-4">
-          <z-select class="w-fit [&_[data-slot=select-trigger]]:h-7" zPlaceholder="Small size">
+          <z-select class="w-fit" zSize="sm" zPlaceholder="Select a fruit">
             <z-select-group>
               <z-select-item zValue="apple">Apple</z-select-item>
               <z-select-item zValue="banana">Banana</z-select-item>
               <z-select-item zValue="blueberry">Blueberry</z-select-item>
             </z-select-group>
           </z-select>
-          <z-select class="w-fit" zPlaceholder="Default size">
+          <z-select class="w-fit" zPlaceholder="Select a fruit">
             <z-select-group>
               <z-select-item zValue="apple">Apple</z-select-item>
               <z-select-item zValue="banana">Banana</z-select-item>
@@ -163,7 +193,7 @@ const PLANS = [
       <z-example zTitle="With Button">
         <div class="flex flex-col gap-4">
           <div class="flex items-center gap-2">
-            <z-select class="w-fit [&_[data-slot=select-trigger]]:h-7" zPlaceholder="Small">
+            <z-select class="w-fit" zSize="sm" zPlaceholder="Select a fruit">
               <z-select-group>
                 <z-select-item zValue="apple">Apple</z-select-item>
                 <z-select-item zValue="banana">Banana</z-select-item>
@@ -173,7 +203,7 @@ const PLANS = [
             <button type="button" z-button zType="outline" zSize="sm">Submit</button>
           </div>
           <div class="flex items-center gap-2">
-            <z-select class="w-fit" zPlaceholder="Default">
+            <z-select class="w-fit" zPlaceholder="Select a fruit">
               <z-select-group>
                 <z-select-item zValue="apple">Apple</z-select-item>
                 <z-select-item zValue="banana">Banana</z-select-item>
@@ -185,8 +215,8 @@ const PLANS = [
         </div>
       </z-example>
 
-      <z-example zTitle="Popper">
-        <z-select class="w-fit" zPlaceholder="Select a fruit" zPosition="popper">
+      <z-example zTitle="Item Aligned">
+        <z-select class="w-fit" zPlaceholder="Select a fruit" zPosition="item-aligned">
           <z-select-group>
             <z-select-item zValue="apple">Apple</z-select-item>
             <z-select-item zValue="banana">Banana</z-select-item>
@@ -260,7 +290,7 @@ const PLANS = [
       </z-example>
 
       <z-example zTitle="Disabled">
-        <z-select class="w-fit" zPlaceholder="Disabled" zDisabled>
+        <z-select class="w-fit" zPlaceholder="Select a fruit" zDisabled>
           <z-select-group>
             <z-select-item zValue="apple">Apple</z-select-item>
             <z-select-item zValue="banana">Banana</z-select-item>
@@ -293,6 +323,7 @@ const PLANS = [
   `,
 })
 export class SelectExampleComponent {
+  protected readonly sides = SIDES;
   protected readonly largeList = LARGE_LIST;
   protected readonly plans = PLANS;
 

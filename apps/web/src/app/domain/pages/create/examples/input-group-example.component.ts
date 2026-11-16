@@ -21,6 +21,7 @@ import {
 } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardButtonGroupImports } from '@zard/components/button-group/button-group.imports';
 import { ZardCardImports } from '@zard/components/card/card.imports';
 import { ZardDropdownImports } from '@zard/components/dropdown/dropdown.imports';
 import { ZardFieldImports } from '@zard/components/field/field.imports';
@@ -44,6 +45,7 @@ const COUNTRY_CODES = ['+1', '+44', '+46'] as const;
   imports: [
     ExampleImports,
     ZardButtonComponent,
+    ZardButtonGroupImports,
     ZardCardImports,
     ZardDropdownImports,
     ZardFieldImports,
@@ -330,6 +332,20 @@ const COUNTRY_CODES = ['+1', '+44', '+46'] as const;
                 </div>
               </z-popover>
             </ng-template>
+          </div>
+          <div z-field>
+            <label z-field-label for="input-button-group-url">Button Group</label>
+            <z-button-group>
+              <div z-button-group-text>https://</div>
+              <z-input-group>
+                <input z-input id="input-button-group-url" />
+                <z-input-group-addon zAlign="inline-end">
+                  <ng-icon name="lucideInfo" />
+                </z-input-group-addon>
+              </z-input-group>
+              <div z-button-group-text>.com</div>
+            </z-button-group>
+            <p z-field-description>This is a description of the input group.</p>
           </div>
         </div>
       </z-example>

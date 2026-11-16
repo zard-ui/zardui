@@ -6,6 +6,7 @@ import { ZardCheckboxComponent } from '@zard/components/checkbox';
 import { ZardFieldImports } from '@zard/components/field';
 import { ZardInputComponent } from '@zard/components/input';
 import { ZardInputOtpImports } from '@zard/components/input-otp';
+import { ZardNativeSelectDirective } from '@zard/components/native-select';
 import { ZardRadioGroupImports } from '@zard/components/radio-group';
 import { ZardSelectImports } from '@zard/components/select';
 import { ZardSliderComponent } from '@zard/components/slider';
@@ -69,6 +70,7 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
     ZardFieldImports,
     ZardInputComponent,
     ZardInputOtpImports,
+    ZardNativeSelectDirective,
     ZardRadioGroupImports,
     ZardSelectImports,
     ZardSliderComponent,
@@ -204,6 +206,8 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
                 }
               </z-select-group>
             </z-select>
+            <!-- shadcn's Select ends with a hidden <input>, so its description is not "second to last": same here. -->
+            <span hidden></span>
           </div>
           <div z-field data-invalid>
             <label for="field-invalid-select-209" z-field-label>Invalid Select</label>
@@ -475,6 +479,77 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             <label z-field-label for="slider-disabled-field">Disabled Slider</label>
             <z-slider id="slider-disabled-field" zMax="100" [zDefault]="[50]" zDisabled />
             <p z-field-description>This slider is currently disabled.</p>
+          </div>
+        </div>
+      </z-example>
+
+      <z-example zTitle="Native Select Fields">
+        <div z-field-group>
+          <div z-field>
+            <label z-field-label for="native-select-basic">Basic Native Select</label>
+            <select z-native-select id="native-select-basic">
+              <option value="">Choose an option</option>
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </select>
+          </div>
+          <div z-field>
+            <label z-field-label for="native-select-country">Country</label>
+            <select z-native-select id="native-select-country">
+              <option value="">Select your country</option>
+              <option value="us">United States</option>
+              <option value="uk">United Kingdom</option>
+              <option value="ca">Canada</option>
+            </select>
+            <p z-field-description>Select the country where you currently reside.</p>
+          </div>
+          <div z-field>
+            <label z-field-label for="native-select-timezone">Timezone</label>
+            <p z-field-description>Choose your local timezone for accurate scheduling.</p>
+            <select z-native-select id="native-select-timezone">
+              <option value="">Select timezone</option>
+              <option value="utc">UTC</option>
+              <option value="est">Eastern Time</option>
+              <option value="pst">Pacific Time</option>
+            </select>
+          </div>
+          <div z-field>
+            <label z-field-label for="native-select-grouped">Grouped Options</label>
+            <select z-native-select id="native-select-grouped">
+              <option value="">Select a region</option>
+              <optgroup label="North America">
+                <option value="us">United States</option>
+                <option value="ca">Canada</option>
+                <option value="mx">Mexico</option>
+              </optgroup>
+              <optgroup label="Europe">
+                <option value="uk">United Kingdom</option>
+                <option value="fr">France</option>
+                <option value="de">Germany</option>
+              </optgroup>
+            </select>
+            <p z-field-description>Native select with grouped options using optgroup.</p>
+          </div>
+          <div z-field data-invalid>
+            <label z-field-label for="native-select-invalid">Invalid Native Select</label>
+            <select z-native-select id="native-select-invalid" aria-invalid="true">
+              <option value="">This field has an error</option>
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </select>
+            <p z-field-description>This field contains validation errors.</p>
+          </div>
+          <div z-field data-disabled>
+            <label z-field-label for="native-select-disabled-field">Disabled Field</label>
+            <select z-native-select id="native-select-disabled-field" disabled>
+              <option value="">Cannot select</option>
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </select>
+            <p z-field-description>This field is currently disabled.</p>
           </div>
         </div>
       </z-example>

@@ -40,6 +40,33 @@ const ALIGNMENTS = [
         </ng-template>
       </z-example>
 
+      <z-example zTitle="Sides">
+        <div class="flex flex-col gap-2">
+          @for (row of sideRows; track $index) {
+            <div class="flex flex-wrap gap-2">
+              @for (side of row; track side) {
+                <button
+                  type="button"
+                  z-button
+                  zType="outline"
+                  class="w-fit capitalize"
+                  zPopover
+                  [zPlacement]="side"
+                  [zContent]="sidePopover"
+                >
+                  {{ label(side) }}
+                </button>
+                <ng-template #sidePopover>
+                  <z-popover class="w-40">
+                    <p>Popover on {{ label(side) }}</p>
+                  </z-popover>
+                </ng-template>
+              }
+            </div>
+          }
+        </div>
+      </z-example>
+
       <z-example zTitle="With Form">
         <button type="button" z-button zType="outline" zPopover zAlign="start" [zContent]="form">Open Popover</button>
         <ng-template #form>
@@ -109,4 +136,13 @@ const ALIGNMENTS = [
 export class PopoverExampleComponent {
   protected readonly alignments = ALIGNMENTS;
   protected readonly dialogOpen = signal(false);
+
+  protected readonly sideRows = [
+    ['inline-start', 'left', 'top'],
+    ['bottom', 'right', 'inline-end'],
+  ] as const;
+
+  protected label(side: string): string {
+    return side.replace('-', ' ');
+  }
 }

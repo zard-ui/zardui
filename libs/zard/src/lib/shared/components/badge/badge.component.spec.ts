@@ -32,7 +32,7 @@ describe('ZardBadgeComponent', () => {
 
       const badge = screen.getByText('Badge');
       expect(badge).toHaveClass('inline-flex');
-      expect(badge).toHaveClass('rounded-full');
+      expect(badge).toHaveClass('rounded-4xl');
       expect(badge).toHaveClass('text-xs');
       expect(badge).toHaveClass('font-medium');
       expect(badge).toHaveClass('whitespace-nowrap');

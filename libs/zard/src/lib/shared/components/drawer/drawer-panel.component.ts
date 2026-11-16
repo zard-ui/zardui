@@ -122,23 +122,6 @@ const SWIPE_START_THRESHOLD = 3;
       filter: brightness(0.95);
     }
 
-    /* The pill inside the grab strip. */
-    [data-slot='drawer-swipe-handle']::after {
-      content: '';
-      border-radius: 9999px;
-      background: var(--color-muted);
-    }
-
-    z-drawer-panel[data-axis='y'] [data-slot='drawer-swipe-handle']::after {
-      width: 100px;
-      height: 6px;
-    }
-
-    z-drawer-panel[data-axis='x'] [data-slot='drawer-swipe-handle']::after {
-      width: 6px;
-      height: 100px;
-    }
-
     z-drawer-panel::after {
       content: '';
       position: absolute;

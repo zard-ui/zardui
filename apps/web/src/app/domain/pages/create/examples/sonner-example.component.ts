@@ -21,8 +21,8 @@ import { ExampleImports } from './example.component';
         <button type="button" z-button zType="outline" class="w-fit" (click)="showWithDescription()">Show Toast</button>
       </z-example>
     </z-example-wrapper>
-    <!-- The preview page has no toaster of its own; shadcn's sits bottom-right. -->
-    <z-sonner position="bottom-right" [theme]="darkMode.themeMode()" />
+    <!-- The preview page has no toaster of its own; shadcn's sits top-center (Sonner's default). -->
+    <z-sonner position="top-center" [theme]="darkMode.themeMode()" />
   `,
 })
 export class SonnerExampleComponent {

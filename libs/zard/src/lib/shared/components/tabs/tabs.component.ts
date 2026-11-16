@@ -87,7 +87,7 @@ export class ZardTabComponent {
       }
     </nav>
 
-    <div class="flex-1">
+    <div class="flex-1 not-has-[.cn-tabs-panel:not([hidden]):not(:empty)]:hidden">
       @for (tab of tabs(); track $index; let index = $index) {
         <div
           role="tabpanel"

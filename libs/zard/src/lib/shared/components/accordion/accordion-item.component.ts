@@ -50,7 +50,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         [class]="contentClasses()"
       >
         <div class="overflow-hidden">
-          <div class="cn-accordion-content-inner">
+          <div
+            class="cn-accordion-content-inner [&_a]:hover:text-foreground [&_a]:underline [&_a]:underline-offset-3 [&_p:not(:last-child)]:mb-4"
+          >
             <ng-content />
           </div>
         </div>

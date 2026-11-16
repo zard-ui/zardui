@@ -1,36 +1,20 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCircleAlert, lucideFolder } from '@ng-icons/lucide';
+import { provideIcons } from '@ng-icons/core';
+import { lucideCircleAlert } from '@ng-icons/lucide';
 
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardBadgeComponent } from '@zard/components/badge';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardCardImports } from '@zard/components/card/card.imports';
-import { ZardFieldImports } from '@zard/components/field/field.imports';
-import { ZardInputComponent } from '@zard/components/input/input.component';
-import { ZardItemImports } from '@zard/components/item/item.imports';
-import { ZardSelectImports } from '@zard/components/select/select.imports';
 
 import { ExampleImports } from './example.component';
 
 /** shadcn/ui's `alert-example`, in zard. */
 @Component({
   selector: 'z-alert-example',
-  imports: [
-    ExampleImports,
-    NgIcon,
-    ZardAlertComponent,
-    ZardBadgeComponent,
-    ZardButtonComponent,
-    ZardCardImports,
-    ZardFieldImports,
-    ZardInputComponent,
-    ZardItemImports,
-    ZardSelectImports,
-  ],
+  imports: [ExampleImports, ZardAlertComponent, ZardBadgeComponent, ZardButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideCircleAlert, lucideFolder })],
+  viewProviders: [provideIcons({ lucideCircleAlert })],
   template: `
     <z-example-wrapper zClass="lg:grid-cols-1">
       <z-example zTitle="Basic" zClass="style-sera:bg-transparent">
@@ -45,17 +29,17 @@ import { ExampleImports } from './example.component';
       </z-example>
 
       <z-example zTitle="With Icons" zClass="style-sera:bg-transparent">
+        <!-- prettier-ignore -->
         <ng-template #titleWithLink>
           Let's try one with icon, title and a
-          <a href="#" (click)="$event.preventDefault()">link</a>
-          .
+          <a href="#" (click)="$event.preventDefault()">link</a>.
         </ng-template>
+        <!-- prettier-ignore -->
         <ng-template #descriptionWithLinks>
           This one has an icon and a description only. No title.
           <a href="#" (click)="$event.preventDefault()">But it has a link</a>
           and a
-          <a href="#" (click)="$event.preventDefault()">second link</a>
-          .
+          <a href="#" (click)="$event.preventDefault()">second link</a>.
         </ng-template>
         <div class="mx-auto flex w-full max-w-lg flex-col gap-4">
           <z-alert zIcon="lucideCircleAlert" [zTitle]="titleWithLink" />
@@ -130,51 +114,6 @@ import { ExampleImports } from './example.component';
             [zAction]="badgeAction"
           />
         </div>
-      </z-example>
-
-      <z-example zTitle="Inside Card" zClass="style-sera:bg-transparent">
-        <z-card class="mx-auto w-full max-w-lg">
-          <z-card-header>
-            <z-card-title zTitle="Create project" />
-            <z-card-description zDescription="Fill in the form below to create a new project." />
-          </z-card-header>
-          <z-card-content class="style-sera:gap-8 flex flex-col gap-4">
-            <z-alert
-              zIcon="lucideCircleAlert"
-              zTitle="You have reached the limit of 3 free projects."
-              zDescription="Upgrade to Pro to create unlimited projects."
-            />
-            <z-field-group>
-              <z-field>
-                <label z-field-label for="project-name">Name</label>
-                <input z-input id="project-name" placeholder="My project" />
-              </z-field>
-              <z-field>
-                <label z-field-label for="project-framework">Framework</label>
-                <z-select id="project-framework" zPlaceholder="Select a framework">
-                  <z-select-group>
-                    <z-select-item zValue="next">Next.js</z-select-item>
-                    <z-select-item zValue="remix">Remix</z-select-item>
-                    <z-select-item zValue="astro">Astro</z-select-item>
-                    <z-select-item zValue="nuxt">Nuxt</z-select-item>
-                  </z-select-group>
-                </z-select>
-              </z-field>
-            </z-field-group>
-            <z-item zVariant="outline">
-              <z-item-media zVariant="image" class="border">
-                <ng-icon name="lucideFolder" />
-              </z-item-media>
-              <z-item-content>
-                <z-item-title>Project Alpha</z-item-title>
-                <z-item-description>Created 2 days ago</z-item-description>
-              </z-item-content>
-            </z-item>
-          </z-card-content>
-          <z-card-footer>
-            <button type="button" z-button class="w-full">Create project</button>
-          </z-card-footer>
-        </z-card>
       </z-example>
     </z-example-wrapper>
   `,

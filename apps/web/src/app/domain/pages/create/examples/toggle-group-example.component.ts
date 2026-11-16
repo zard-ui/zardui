@@ -116,7 +116,7 @@ const VERTICAL_FILTERS: readonly ZardToggleGroupItem[] = [
           zType="outline"
           zSize="sm"
           zItemClass="aria-pressed:bg-transparent aria-pressed:[&_svg]:fill-foreground aria-pressed:[&_svg]:stroke-foreground"
-          [zSpacing]="1"
+          [zSpacing]="2"
           [zItems]="withIcons()"
         />
       </z-example>
@@ -155,7 +155,7 @@ const VERTICAL_FILTERS: readonly ZardToggleGroupItem[] = [
       </z-example>
 
       <z-example zTitle="Vertical">
-        <z-toggle-group zMode="multiple" zOrientation="vertical" [zSpacing]="2" [zItems]="formatting" />
+        <z-toggle-group zMode="multiple" zOrientation="vertical" [zSpacing]="1" [zItems]="formatting" />
       </z-example>
 
       <z-example zTitle="Vertical Outline">
@@ -179,7 +179,7 @@ const VERTICAL_FILTERS: readonly ZardToggleGroupItem[] = [
           zSize="sm"
           zDefaultValue="top"
           zOrientation="vertical"
-          [zSpacing]="2"
+          [zSpacing]="1"
           [zItems]="positions"
         />
       </z-example>
@@ -207,28 +207,28 @@ const VERTICAL_FILTERS: readonly ZardToggleGroupItem[] = [
     </z-example-wrapper>
 
     <ng-template #star>
-      <ng-icon name="lucideStar" data-icon="inline-start" />
+      <ng-icon name="lucideStar" />
       Star
     </ng-template>
     <ng-template #heart>
-      <ng-icon name="lucideHeart" data-icon="inline-start" />
+      <ng-icon name="lucideHeart" />
       Heart
     </ng-template>
     <ng-template #bookmark>
-      <ng-icon name="lucideBookmark" data-icon="inline-start" />
+      <ng-icon name="lucideBookmark" />
       Bookmark
     </ng-template>
 
     <ng-template #newest>
-      <ng-icon name="lucideArrowDown" data-icon="inline-start" />
+      <ng-icon name="lucideArrowDown" />
       Newest
     </ng-template>
     <ng-template #oldest>
-      <ng-icon name="lucideArrowUp" data-icon="inline-start" />
+      <ng-icon name="lucideArrowUp" />
       Oldest
     </ng-template>
     <ng-template #popular>
-      <ng-icon name="lucideTrendingUp" data-icon="inline-start" />
+      <ng-icon name="lucideTrendingUp" />
       Popular
     </ng-template>
 

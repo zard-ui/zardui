@@ -168,7 +168,7 @@ import { ExampleImports } from './example.component';
         <div z-field>
           <label z-field-label for="amount">Amount</label>
           <z-button-group>
-            <z-select [(zValue)]="currency">
+            <z-select class="w-fit" [(zValue)]="currency">
               <z-select-group>
                 <z-select-item zValue="$">$</z-select-item>
                 <z-select-item zValue="€">€</z-select-item>
@@ -243,7 +243,7 @@ import { ExampleImports } from './example.component';
 
       <z-example zTitle="With Select and Input">
         <z-button-group>
-          <z-select zValue="hours" zPlaceholder="Select duration">
+          <z-select class="w-fit" zValue="hours" zPlaceholder="Select duration">
             <z-select-group>
               <z-select-item zValue="hours">Hours</z-select-item>
               <z-select-item zValue="days">Days</z-select-item>

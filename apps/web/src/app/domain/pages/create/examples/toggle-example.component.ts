@@ -33,11 +33,11 @@ import { ExampleImports } from './example.component';
       <z-example zTitle="Outline">
         <div class="flex flex-wrap items-center gap-2">
           <z-toggle zType="outline" zAriaLabel="Toggle italic">
-            <ng-icon name="lucideItalic" data-icon="inline-start" />
+            <ng-icon name="lucideItalic" />
             Italic
           </z-toggle>
           <z-toggle zType="outline" zAriaLabel="Toggle bold">
-            <ng-icon name="lucideBold" data-icon="inline-start" />
+            <ng-icon name="lucideBold" />
             Bold
           </z-toggle>
         </div>
@@ -101,31 +101,31 @@ import { ExampleImports } from './example.component';
         <div class="flex flex-col gap-4">
           <div class="flex items-center gap-2">
             <button z-button zSize="sm" zType="outline">
-              <ng-icon name="lucideBold" data-icon="inline-start" />
+              <ng-icon name="lucideBold" />
               Button
             </button>
             <z-toggle zType="outline" zAriaLabel="Toggle sm icon text" zSize="sm">
-              <ng-icon name="lucideBold" data-icon="inline-start" />
+              <ng-icon name="lucideBold" />
               Toggle
             </z-toggle>
           </div>
           <div class="flex items-center gap-2">
             <button z-button zSize="default" zType="outline">
-              <ng-icon name="lucideItalic" data-icon="inline-start" />
+              <ng-icon name="lucideItalic" />
               Button
             </button>
             <z-toggle zType="outline" zAriaLabel="Toggle default icon text" zSize="default">
-              <ng-icon name="lucideItalic" data-icon="inline-start" />
+              <ng-icon name="lucideItalic" />
               Toggle
             </z-toggle>
           </div>
           <div class="flex items-center gap-2">
             <button z-button zSize="lg" zType="outline">
-              <ng-icon name="lucideUnderline" data-icon="inline-start" />
+              <ng-icon name="lucideUnderline" />
               Button
             </button>
             <z-toggle zType="outline" zAriaLabel="Toggle lg icon text" zSize="lg">
-              <ng-icon name="lucideUnderline" data-icon="inline-start" />
+              <ng-icon name="lucideUnderline" />
               Toggle
             </z-toggle>
           </div>
@@ -145,11 +145,7 @@ import { ExampleImports } from './example.component';
             <ng-icon name="lucideBookmark" class="group-data-[state=on]/toggle:[&_path]:fill-accent-foreground" />
           </z-toggle>
           <z-toggle zType="outline" zAriaLabel="Toggle bookmark outline">
-            <ng-icon
-              name="lucideBookmark"
-              class="group-data-[state=on]/toggle:[&_path]:fill-accent-foreground"
-              data-icon="inline-start"
-            />
+            <ng-icon name="lucideBookmark" class="group-data-[state=on]/toggle:[&_path]:fill-accent-foreground" />
             Bookmark
           </z-toggle>
         </div>

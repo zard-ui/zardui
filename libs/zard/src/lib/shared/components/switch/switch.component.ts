@@ -26,7 +26,7 @@ type OnChangeType = (value: boolean) => void;
   selector: 'z-switch',
   imports: [ZardIdDirective],
   template: `
-    <span class="flex items-center space-x-2" zardId="switch" #z="zardId" [attr.data-checked]="zChecked() ? '' : null">
+    <span class="flex items-center" zardId="switch" #z="zardId" [attr.data-checked]="zChecked() ? '' : null">
       <button
         [id]="zId() || z.id()"
         type="button"
@@ -45,7 +45,10 @@ type OnChangeType = (value: boolean) => void;
         ></span>
       </button>
 
-      <label class="cn-switch-label peer-disabled:cursor-not-allowed peer-disabled:opacity-70" [for]="zId() || z.id()">
+      <label
+        class="cn-switch-label ms-2 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 has-[>.sr-only:only-child]:ms-0"
+        [for]="zId() || z.id()"
+      >
         <ng-content><span class="sr-only">toggle switch</span></ng-content>
       </label>
     </span>

@@ -65,7 +65,7 @@ describe('attachment composition', () => {
     }
     expect(screen.getByRole('button', { name: 'Remove' })).toHaveAttribute('data-size', 'icon-xs');
     expect(root).toHaveClass('p-8');
-    expect(root).not.toHaveClass('p-3');
+    expect(root).not.toHaveClass('p-2');
   });
 
   it('updates all 60 state/size/orientation/media combinations and clears stale busy styling', async () => {
@@ -79,7 +79,7 @@ describe('attachment composition', () => {
       error: 'text-destructive',
       done: 'border-border',
     };
-    const sizeClasses = { default: 'gap-3', sm: 'gap-2', xs: 'gap-1.5' };
+    const sizeClasses = { default: 'gap-2', sm: 'gap-2.5', xs: 'gap-1.5' };
     for (const state of ['uploading', 'processing', 'error', 'idle', 'done'] as const) {
       fixture.componentInstance.state.set(state);
       for (const size of ['default', 'sm', 'xs'] as const) {

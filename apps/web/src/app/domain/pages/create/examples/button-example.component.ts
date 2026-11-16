@@ -43,7 +43,11 @@ const VARIANTS: readonly { type: ZardButtonTypeVariants; label: string }[] = [
             @for (variant of variants; track variant.type) {
               <button z-button [zSize]="size" [zType]="variant.type">
                 {{ variant.label }}
-                <ng-icon name="lucideArrowRight" data-icon="inline-end" />
+                <!-- shadcn's own example leaves data-icon off the small outline button; same here, for parity. -->
+                <ng-icon
+                  name="lucideArrowRight"
+                  [attr.data-icon]="size === 'sm' && variant.type === 'outline' ? null : 'inline-end'"
+                />
               </button>
             }
           </div>

@@ -55,7 +55,7 @@
   }
 
   .cn-alert-icon {
-    @apply shrink-0 self-start text-sm!;
+    @apply flex shrink-0 self-start text-sm!;
   }
 
   .cn-alert-action {
@@ -72,6 +72,10 @@
 
   .cn-alert-description-variant-default {
     @apply text-muted-foreground;
+  }
+
+  .cn-alert-icon-glyph {
+    @apply size-3.5!;
   }
 
   /* MARK: button */
@@ -293,11 +297,11 @@
   }
 
   .cn-avatar-fallback {
-    @apply absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs;
+    @apply absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs text-sm;
   }
 
   .cn-avatar-image {
-    @apply absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full;
+    @apply absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full opacity-0;
   }
 
   .cn-avatar-group {
@@ -497,11 +501,11 @@
   }
 
   .cn-calendar-months {
-    @apply relative flex flex-col gap-3;
+    @apply relative flex flex-col gap-4;
   }
 
   .cn-calendar-month {
-    @apply relative flex w-full flex-col gap-3;
+    @apply relative flex w-full flex-col gap-4;
   }
 
   .cn-calendar-nav {
@@ -521,7 +525,7 @@
   }
 
   .cn-calendar-dropdowns {
-    @apply flex h-(--cell-size) w-full items-center justify-center gap-2 text-xs/relaxed font-medium;
+    @apply flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium;
   }
 
   .cn-calendar-caption-label {
@@ -529,15 +533,15 @@
   }
 
   .cn-calendar-caption-label-layout-label {
-    @apply text-xs/relaxed;
+    @apply font-medium text-sm;
   }
 
   .cn-calendar-caption-label-layout-dropdown {
-    @apply flex h-(--cell-size) items-center gap-1 rounded-(--cell-radius) px-2 text-xs/relaxed;
+    @apply flex items-center gap-1 rounded-(--cell-radius) text-sm;
   }
 
   .cn-calendar-dropdown-root {
-    @apply relative isolate border-input border;
+    @apply relative isolate border-input border rounded-(--cell-radius);
   }
 
   .cn-calendar-dropdown {
@@ -545,11 +549,11 @@
   }
 
   .cn-calendar-weekdays {
-    @apply grid w-full grid-cols-7;
+    @apply grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))];
   }
 
   .cn-calendar-weekday {
-    @apply flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground;
+    @apply flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground;
   }
 
   .cn-calendar-weeks {
@@ -557,11 +561,11 @@
   }
 
   .cn-calendar-week {
-    @apply mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2;
+    @apply mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2;
   }
 
   .cn-calendar-row {
-    @apply grid w-full grid-cols-7 gap-x-0;
+    @apply grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0;
   }
 
   .cn-calendar-day {
@@ -825,7 +829,7 @@
   }
 
   .cn-input-group-button-size-sm {
-    @apply h-8 gap-1;
+    @apply h-7 gap-1 px-2 text-xs/relaxed;
   }
 
   .cn-input-group-button-size-icon-xs {
@@ -1089,7 +1093,7 @@
   }
 
   .cn-combobox-trigger-icon {
-    @apply size-3.5!;
+    @apply size-3.5! text-muted-foreground;
   }
 
   /* MARK: command */
@@ -1099,7 +1103,7 @@
   }
 
   .cn-command-list {
-    @apply no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1;
+    @apply no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none;
   }
 
   .cn-command-group {
@@ -1107,7 +1111,7 @@
   }
 
   .cn-command-item {
-    @apply relative flex cursor-pointer items-center gap-2 py-1.5 select-none transition-colors min-h-7 rounded-md px-2.5 text-xs/relaxed;
+    @apply relative flex items-center gap-2 py-1.5 select-none transition-colors min-h-7 rounded-md px-2.5 text-xs/relaxed cursor-default outline-hidden;
   }
 
   .cn-command-item-variant-destructive {
@@ -1181,11 +1185,15 @@
   }
 
   .cn-dropdown-menu-item-indicator {
-    @apply absolute start-2 flex size-3.5 items-center justify-center;
+    @apply absolute end-2 flex items-center justify-center;
   }
 
-  .cn-dropdown-menu-radio-dot {
-    @apply size-2 rounded-full bg-current;
+  .cn-dropdown-menu-checkbox-item {
+    @apply pe-8 ps-2;
+  }
+
+  .cn-dropdown-menu-radio-item {
+    @apply pe-8 ps-2;
   }
 
   /* MARK: popover */
@@ -1281,7 +1289,7 @@
   }
 
   .cn-drawer-handle {
-    @apply relative z-10 cursor-grab bg-muted mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full;
+    @apply relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-full after:bg-muted;
   }
 
   .cn-drawer-handle-placement-top {
@@ -1317,7 +1325,7 @@
   }
 
   .cn-drawer-footer {
-    @apply mt-auto flex shrink-0 flex-col gap-2 p-4;
+    @apply mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0;
   }
 
   .cn-drawer-overlay {
@@ -1347,11 +1355,11 @@
   }
 
   .cn-empty-description {
-    @apply text-xs/relaxed;
+    @apply text-muted-foreground text-xs/relaxed;
   }
 
   .cn-empty-actions {
-    @apply flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-xs/relaxed text-balance;
+    @apply flex w-full max-w-sm min-w-0 flex-col items-center gap-2 text-xs/relaxed text-balance;
   }
 
   .cn-empty-icon-glyph {
@@ -1393,7 +1401,7 @@
   }
 
   .cn-field-label {
-    @apply flex w-fit gap-2 leading-snug;
+    @apply flex w-fit gap-2 leading-none;
   }
 
   .cn-field-title {
@@ -1423,7 +1431,7 @@
   /* MARK: hover-card */
 
   .cn-hover-card {
-    @apply z-50 rounded-md border bg-popover text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) w-72 p-2.5 text-xs/relaxed;
+    @apply z-50 origin-(--z-hover-card-transform-origin) ring-foreground/10 bg-popover text-popover-foreground w-72 rounded-lg p-2.5 text-xs/relaxed shadow-md ring-1 duration-100;
   }
 
   /* MARK: input-otp */
@@ -1471,7 +1479,7 @@
   }
 
   .cn-item-separator {
-    @apply block h-px w-full shrink-0 my-2;
+    @apply bg-border block h-px w-full shrink-0 my-2;
   }
 
   .cn-item {
@@ -1639,7 +1647,7 @@
   }
 
   .cn-navigation-menu-trigger-icon {
-    @apply relative top-px size-3 shrink-0 transition-transform duration-300;
+    @apply relative top-px size-3! shrink-0 transition-transform duration-300;
   }
 
   .cn-navigation-menu-content {
@@ -1655,7 +1663,7 @@
   }
 
   .cn-navigation-menu-viewport {
-    @apply relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/10 rounded-xl shadow-md ring-1 duration-100;
+    @apply relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/10 rounded-xl shadow ring-1 duration-100;
   }
 
   .cn-navigation-menu-link {
@@ -1840,7 +1848,7 @@
   }
 
   .cn-select-trigger {
-    @apply flex h-8 w-full items-center justify-between gap-2 rounded-md border border-input whitespace-nowrap bg-input/20 px-2 py-1.5 text-xs/relaxed transition-colors;
+    @apply border-input bg-input/20 gap-1.5 rounded-md border px-2 py-1.5 text-xs/relaxed transition-colors flex w-full items-center justify-between whitespace-nowrap;
   }
 
   .cn-select-content {
@@ -1868,7 +1876,7 @@
   }
 
   .cn-select-item {
-    @apply relative flex w-full cursor-default items-center min-h-7 gap-2 rounded-md px-2 py-1 text-xs/relaxed;
+    @apply relative flex w-full cursor-default items-center min-h-7 rounded-md px-2 py-1 text-xs/relaxed gap-2;
   }
 
   .cn-select-item-size-sm {
@@ -2192,7 +2200,7 @@
   }
 
   .cn-sidebar-menu-skeleton-icon {
-    @apply size-4;
+    @apply size-4 rounded-md;
   }
 
   /* MARK: slider */
@@ -2238,7 +2246,7 @@
   }
 
   .cn-switch-size-default {
-    @apply h-[18.4px] w-[32px];
+    @apply h-[16.6px] w-[28px];
   }
 
   .cn-switch-size-sm {
@@ -2340,11 +2348,11 @@
   }
 
   .cn-table-head {
-    @apply h-10 px-2 text-start align-middle font-medium text-muted-foreground;
+    @apply h-10 px-2 text-start align-middle font-medium text-foreground whitespace-nowrap;
   }
 
   .cn-table-cell {
-    @apply p-2 align-middle;
+    @apply p-2 align-middle whitespace-nowrap;
   }
 
   .cn-table-caption {
@@ -2386,6 +2394,7 @@
   }
 
   .cn-tabs-panel {
+    @apply text-xs/relaxed;
   }
 
   /* MARK: textarea */
@@ -2427,7 +2436,7 @@
   /* MARK: toggle-group */
 
   .cn-toggle-group {
-    @apply flex w-fit flex-row items-center rounded-md;
+    @apply flex w-fit flex-row items-center rounded-md gap-[--spacing(var(--gap))];
   }
 
   .cn-toggle-group-item {
@@ -2459,7 +2468,7 @@
   /* MARK: alert */
 
   .cn-alert {
-    @apply has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 has-[>svg]:gap-x-1.5 *:[svg:not([class*='size-'])]:size-3.5;
+    @apply has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-1.5 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 *:[svg:not([class*='size-'])]:size-3.5;
   }
 
   .cn-alert-variant-destructive {
@@ -2477,7 +2486,7 @@
   /* MARK: button */
 
   .cn-button {
-    @apply focus-visible:border-ring active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2;
+    @apply focus-visible:border-ring active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem];
   }
 
   .cn-button-variant-default {
@@ -2505,35 +2514,35 @@
   }
 
   .cn-button-size-default {
-    @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5;
+    @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.875rem];
   }
 
   .cn-button-size-xs {
-    @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-2.5;
+    @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-2.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.625rem];
   }
 
   .cn-button-size-sm {
-    @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3;
+    @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem];
   }
 
   .cn-button-size-lg {
-    @apply has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 [&_svg:not([class*='size-'])]:size-4;
+    @apply has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 [&_svg:not([class*='size-'])]:size-4 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem];
   }
 
   .cn-button-size-icon {
-    @apply [&_svg:not([class*='size-'])]:size-3.5;
+    @apply [&_svg:not([class*='size-'])]:size-3.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.875rem];
   }
 
   .cn-button-size-icon-xs {
-    @apply [&_svg:not([class*='size-'])]:size-2.5;
+    @apply [&_svg:not([class*='size-'])]:size-2.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.625rem];
   }
 
   .cn-button-size-icon-sm {
-    @apply [&_svg:not([class*='size-'])]:size-3;
+    @apply [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem];
   }
 
   .cn-button-size-icon-lg {
-    @apply [&_svg:not([class*='size-'])]:size-4;
+    @apply [&_svg:not([class*='size-'])]:size-4 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem];
   }
 
   /* MARK: alert-dialog */
@@ -2633,7 +2642,7 @@
   /* MARK: badge */
 
   .cn-badge {
-    @apply [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-2.5!;
+    @apply [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-2.5! [&>z-spinner>svg]:size-2.5!;
   }
 
   .cn-badge-variant-default {
@@ -2831,7 +2840,7 @@
   /* MARK: input-group */
 
   .cn-input-group {
-    @apply has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-2 has-[textarea]:rounded-md;
+    @apply has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-2 has-[textarea]:rounded-md;
   }
 
   .cn-input-group-addon {
@@ -2898,6 +2907,10 @@
     @apply [&_svg:not([class*='size-'])]:size-4;
   }
 
+  .cn-input-group-button-size-sm {
+    @apply has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5;
+  }
+
   /* MARK: input */
 
   .cn-input {
@@ -2947,7 +2960,7 @@
   }
 
   .cn-combobox-content {
-    @apply data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 *:data-[slot=input-group]:bg-input/20 dark:bg-popover *:data-[slot=input-group]:h-7 *:data-[slot=input-group]:border-none;
+    @apply data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 *:data-[slot=input-group]:bg-input/20 dark:bg-popover *:data-[slot=input-group]:h-7 *:data-[slot=input-group]:border-none data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2;
   }
 
   .cn-combobox-list {
@@ -2985,7 +2998,7 @@
   }
 
   .cn-command-item {
-    @apply data-selected:bg-muted data-selected:text-accent-foreground data-selected:*:[svg]:text-accent-foreground in-data-[slot=dialog-content]:rounded-md [&_svg:not([class*='size-'])]:size-3.5;
+    @apply data-selected:bg-muted in-data-[slot=dialog-content]:rounded-md [&_svg:not([class*='size-'])]:size-3.5 data-selected:text-foreground data-selected:*:[svg]:text-foreground;
   }
 
   .cn-command-item-variant-destructive {
@@ -2993,7 +3006,7 @@
   }
 
   .cn-command-shortcut {
-    @apply group-data-selected/command-item:text-accent-foreground;
+    @apply group-data-selected/command-item:text-foreground;
   }
 
   .cn-command-input-group {
@@ -3024,6 +3037,18 @@
 
   .cn-dropdown-menu-label {
     @apply data-inset:ps-7.5;
+  }
+
+  .cn-dropdown-menu-checkbox-item {
+    @apply in-data-[menu=menubar]:pe-2 in-data-[menu=menubar]:ps-7.5;
+  }
+
+  .cn-dropdown-menu-radio-item {
+    @apply in-data-[menu=menubar]:pe-2 in-data-[menu=menubar]:ps-7.5;
+  }
+
+  .cn-dropdown-menu-item-indicator {
+    @apply in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:start-2 in-data-[menu=menubar]:size-4;
   }
 
   /* MARK: popover */
@@ -3082,6 +3107,22 @@
     @apply supports-backdrop-filter:backdrop-blur-xs;
   }
 
+  .cn-drawer-handle-placement-top {
+    @apply after:h-1 after:w-12;
+  }
+
+  .cn-drawer-handle-placement-bottom {
+    @apply after:h-1 after:w-12;
+  }
+
+  .cn-drawer-handle-placement-left {
+    @apply after:h-12 after:w-1;
+  }
+
+  .cn-drawer-handle-placement-right {
+    @apply after:h-12 after:w-1;
+  }
+
   /* MARK: empty */
 
   .cn-empty-icon {
@@ -3089,7 +3130,7 @@
   }
 
   .cn-empty-description {
-    @apply [&>a]:underline [&>a]:underline-offset-4;
+    @apply [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary;
   }
 
   /* MARK: field */
@@ -3115,11 +3156,11 @@
   }
 
   .cn-field-orientation-horizontal {
-    @apply has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px;
+    @apply has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px;
   }
 
   .cn-field-orientation-responsive {
-    @apply *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px;
+    @apply *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px;
   }
 
   .cn-field-label {
@@ -3131,7 +3172,7 @@
   }
 
   .cn-field-description {
-    @apply group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5;
+    @apply [[data-variant=legend]+&]:-mt-1.5;
   }
 
   .cn-field-separator {
@@ -3141,7 +3182,7 @@
   /* MARK: hover-card */
 
   .cn-hover-card {
-    @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
+    @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
   }
 
   /* MARK: input-otp */
@@ -3173,7 +3214,7 @@
   /* MARK: item */
 
   .cn-item-group {
-    @apply has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2;
+    @apply has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2;
   }
 
   .cn-item {
@@ -3322,7 +3363,7 @@
   /* MARK: questionnaire */
 
   .cn-questionnaire-title {
-    @apply [&:has(~[data-slot=questionnaire-description])]:-mb-3;
+    @apply [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-3;
   }
 
   .cn-questionnaire-choice {
@@ -3361,7 +3402,7 @@
   }
 
   .cn-select-trigger {
-    @apply data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2 data-[size=default]:h-7 data-[size=sm]:h-6 [&_svg:not([class*='size-'])]:size-3.5;
+    @apply data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-2 aria-invalid:ring-2 data-[size=default]:h-7 data-[size=sm]:h-6 *:data-[slot=select-value]:flex *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-3.5 [&_svg:not([class*='text-'])]:text-muted-foreground *:data-[slot=select-value]:items-center data-[size=default]:min-h-7 data-[size=sm]:min-h-6;
   }
 
   .cn-select-content {
@@ -3407,7 +3448,7 @@
   /* MARK: tooltip */
 
   .cn-tooltip {
-    @apply has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
+    @apply has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-sm data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95;
   }
 
   /* MARK: sidebar */
@@ -3461,7 +3502,7 @@
   }
 
   .cn-sidebar-inner {
-    @apply group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm;
+    @apply group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:shadow-sm;
   }
 
   .cn-sidebar-mobile-backdrop {
@@ -3573,7 +3614,7 @@
   }
 
   .cn-switch-thumb {
-    @apply data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:data-[state=unchecked]:translate-x-0 group-data-[size=sm]/switch:data-[state=unchecked]:translate-x-0;
+    @apply data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:data-[state=unchecked]:translate-x-0 group-data-[size=sm]/switch:data-[state=unchecked]:translate-x-0 data-[size=default]:size-3.5;
   }
 
   /* MARK: code-block */
@@ -3615,7 +3656,7 @@
   /* MARK: table */
 
   .cn-table {
-    @apply [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4;
+    @apply [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap;
   }
 
   .cn-table-variant-striped {
@@ -3681,7 +3722,7 @@
   /* MARK: toggle */
 
   .cn-toggle {
-    @apply hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4;
+    @apply hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_ng-icon:not([class*='size-'])]:size-4!;
   }
 
   .cn-toggle-size-default {
@@ -3689,7 +3730,7 @@
   }
 
   .cn-toggle-size-sm {
-    @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3;
+    @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:size-3!;
   }
 
   .cn-toggle-size-lg {

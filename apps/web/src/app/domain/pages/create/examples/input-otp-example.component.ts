@@ -24,7 +24,6 @@ const FORM_SLOT_CLASSES = [
   'style-maia:[&_[data-slot=input-otp-slot]>input]:h-16 style-maia:[&_[data-slot=input-otp-slot]>input]:w-12',
   'style-mira:[&_[data-slot=input-otp-slot]>input]:h-12 style-mira:[&_[data-slot=input-otp-slot]>input]:w-11',
   'style-luma:[&_[data-slot=input-otp-slot]>input]:h-16 style-luma:[&_[data-slot=input-otp-slot]>input]:w-12',
-  'style-sera:[&_[data-slot=input-otp-slot]>input]:h-14 style-sera:[&_[data-slot=input-otp-slot]>input]:w-10',
 ].join(' ');
 
 const INVALID_ERRORS = [{ message: 'Invalid code. Please try again.' }] as const;
@@ -169,6 +168,8 @@ const INVALID_ERRORS = [{ message: 'Invalid code. Please try again.' }] as const
               <z-input-otp-slot [zIndex]="5" />
             </z-input-otp-group>
           </z-input-otp>
+          <!-- shadcn's InputOTP renders a second element after it, so the description above is not "second to last". -->
+          <span hidden></span>
         </div>
       </z-example>
 
@@ -203,6 +204,8 @@ const INVALID_ERRORS = [{ message: 'Invalid code. Please try again.' }] as const
               <z-input-otp-slot [zIndex]="3" />
             </z-input-otp-group>
           </z-input-otp>
+          <!-- shadcn's InputOTP renders a second element after it, so the description above is not "second to last". -->
+          <span hidden></span>
         </div>
       </z-example>
 

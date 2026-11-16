@@ -53,6 +53,11 @@ export interface ZardDropdownOpenOptions {
    * Without it the menu surface itself is focused, which is what a pointer opening wants.
    */
   initialFocus?: 'first' | 'last';
+  /**
+   * Which kind of menu this is, published as `data-menu` on the overlay so a style can tell a menubar's rows from a
+   * dropdown's (shadcn puts the check of a checkbox item at the start in a menubar and at the end in a dropdown).
+   */
+  menu?: 'menubar';
 }
 
 @Injectable({
@@ -133,6 +138,9 @@ export class ZardDropdownService {
     this.skipFirstAuxClick = false;
     const directionality = this.directionalityOf(viewContainerRef);
     this.createOverlay(triggerElement, placement, directionality?.value ?? 'ltr');
+    if (options?.menu) {
+      this.renderer.setAttribute(this.overlayRef?.hostElement, 'data-menu', options.menu);
+    }
     this.watchDirection(directionality);
     this.attach(template, viewContainerRef, options?.initialFocus);
   }

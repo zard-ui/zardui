@@ -26,7 +26,7 @@ import { ExampleImports } from './example.component';
   viewProviders: [provideIcons({ lucideArrowUpRight, lucideCircleDashed, lucideFolder, lucidePlus })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <z-example-wrapper zClass="grid-cols-1!">
+    <z-example-wrapper>
       <z-example zTitle="Basic">
         <z-empty
           zTitle="No projects yet"
@@ -119,10 +119,10 @@ import { ExampleImports } from './example.component';
       </div>
     </ng-template>
 
+    <!-- prettier-ignore -->
     <ng-template #noPosts>
       No posts have been created yet. Get started by
-      <a href="#" (click)="$event.preventDefault()">creating your first post</a>
-      .
+      <a href="#" (click)="$event.preventDefault()">creating your first post</a>.
     </ng-template>
 
     <ng-template #newPost>

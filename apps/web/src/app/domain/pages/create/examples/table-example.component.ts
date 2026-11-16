@@ -228,7 +228,7 @@ const ASSIGNEES = [
               <tr z-table-row>
                 <td z-table-cell class="font-medium">{{ row.task }}</td>
                 <td z-table-cell>
-                  <z-select class="w-40" [zValue]="row.assignee">
+                  <z-select class="w-40" zSize="sm" [zValue]="row.assignee">
                     <z-select-group>
                       @for (person of assignees; track person.value) {
                         <z-select-item [zValue]="person.value">{{ person.label }}</z-select-item>

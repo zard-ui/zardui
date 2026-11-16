@@ -13,6 +13,7 @@ import { kbdVariants } from './kbd.variants';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: { class: 'contents' },
   exportAs: 'zKbd',
 })
 export class ZardKbdComponent {

@@ -17,7 +17,7 @@ import { ZardDialogImports } from '@zard/components/dialog';
 
 import { ExampleImports } from './example.component';
 
-const MENU_SIDES = ['top', 'right', 'bottom', 'left'] as const;
+const MENU_SIDES = ['inline-start', 'left', 'top', 'bottom', 'right', 'inline-end'] as const;
 
 /** shadcn/ui's `context-menu-example`, in zard. */
 @Component({
@@ -54,27 +54,6 @@ const MENU_SIDES = ['top', 'right', 'bottom', 'left'] as const;
         </z-dropdown-menu-content>
       </z-example>
 
-      <z-example zTitle="With Sides">
-        <div class="grid grid-cols-2 gap-6">
-          @for (side of sides; track side) {
-            <div
-              z-context-menu
-              [zContextMenuTriggerFor]="sideMenu"
-              class="flex aspect-[2/0.5] w-full items-center justify-center rounded-lg border text-sm"
-            >
-              Right click ({{ side }})
-            </div>
-            <z-dropdown-menu-content #sideMenu="zDropdownMenuContent" [zSide]="side">
-              <z-dropdown-menu-group>
-                <z-dropdown-menu-item>Back</z-dropdown-menu-item>
-                <z-dropdown-menu-item>Forward</z-dropdown-menu-item>
-                <z-dropdown-menu-item>Reload</z-dropdown-menu-item>
-              </z-dropdown-menu-group>
-            </z-dropdown-menu-content>
-          }
-        </div>
-      </z-example>
-
       <z-example zTitle="With Icons">
         <div
           z-context-menu
@@ -106,6 +85,27 @@ const MENU_SIDES = ['top', 'right', 'bottom', 'left'] as const;
             </z-dropdown-menu-item>
           </z-dropdown-menu-group>
         </z-dropdown-menu-content>
+      </z-example>
+
+      <z-example zTitle="With Sides" zContainerClass="col-span-2">
+        <div class="flex flex-wrap justify-center gap-2">
+          @for (side of sides; track side) {
+            <div
+              z-context-menu
+              [zContextMenuTriggerFor]="sideMenu"
+              class="flex aspect-[2/0.5] items-center justify-center rounded-lg border p-4 text-sm capitalize"
+            >
+              {{ label(side) }}
+            </div>
+            <z-dropdown-menu-content #sideMenu="zDropdownMenuContent" [zSide]="side">
+              <z-dropdown-menu-group>
+                <z-dropdown-menu-item>Back</z-dropdown-menu-item>
+                <z-dropdown-menu-item>Forward</z-dropdown-menu-item>
+                <z-dropdown-menu-item>Reload</z-dropdown-menu-item>
+              </z-dropdown-menu-group>
+            </z-dropdown-menu-content>
+          }
+        </div>
       </z-example>
 
       <z-example zTitle="With Shortcuts">
@@ -428,6 +428,10 @@ const MENU_SIDES = ['top', 'right', 'bottom', 'left'] as const;
 })
 export class ContextMenuExampleComponent {
   protected readonly sides = MENU_SIDES;
+
+  protected label(side: string): string {
+    return side.replace('-', ' ');
+  }
 
   protected readonly showBookmarksBar = signal(true);
   protected readonly showFullUrls = signal(false);

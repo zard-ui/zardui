@@ -29,6 +29,8 @@ import { ZardMenubarImports } from '@zard/components/menubar';
 
 import { ExampleImports } from './example.component';
 
+const SIDES = ['inline-start', 'left', 'top', 'bottom', 'right', 'inline-end'] as const;
+
 /** shadcn/ui's `menubar-example`, in zard. */
 @Component({
   selector: 'z-menubar-example',
@@ -153,6 +155,25 @@ import { ExampleImports } from './example.component';
             <z-dropdown-menu-item>Paste</z-dropdown-menu-item>
           </z-dropdown-menu-group>
         </z-dropdown-menu-content>
+      </z-example>
+
+      <z-example zTitle="Sides" zContainerClass="col-span-2">
+        <div class="flex flex-wrap justify-center gap-2">
+          @for (side of sides; track side) {
+            <z-menubar>
+              <button type="button" z-menubar-trigger class="capitalize" [zMenubarMenu]="sideMenu">
+                {{ label(side) }}
+              </button>
+            </z-menubar>
+            <z-dropdown-menu-content #sideMenu="zDropdownMenuContent" [zSide]="side">
+              <z-dropdown-menu-group>
+                <z-dropdown-menu-item>New Tab</z-dropdown-menu-item>
+                <z-dropdown-menu-item>New Window</z-dropdown-menu-item>
+                <z-dropdown-menu-item>New Incognito Window</z-dropdown-menu-item>
+              </z-dropdown-menu-group>
+            </z-dropdown-menu-content>
+          }
+        </div>
       </z-example>
 
       <z-example zTitle="With Checkboxes">
@@ -556,6 +577,12 @@ import { ExampleImports } from './example.component';
   `,
 })
 export class MenubarExampleComponent {
+  protected readonly sides = SIDES;
+
+  protected label(side: string): string {
+    return side.replace('-', ' ');
+  }
+
   protected readonly checkBookmarks = signal(false);
   protected readonly checkUrls = signal(true);
   protected readonly checkStrike = signal(true);

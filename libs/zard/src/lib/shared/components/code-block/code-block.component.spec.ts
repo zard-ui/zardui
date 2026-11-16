@@ -24,7 +24,7 @@ describe('ZardCodeBlock', () => {
       expect(root).toHaveAttribute('data-slot', 'code-block');
       expect(root).toHaveAttribute('data-variant', 'default');
       expect(root).toHaveAttribute('data-size', 'default');
-      expect(root).toHaveClass('bg-muted', 'ring-1', 'rounded-2xl', 'w-full');
+      expect(root).toHaveClass('bg-muted', 'ring-1', 'rounded-lg', 'w-full');
       expect(root).not.toHaveClass('text-xs');
     });
 
@@ -59,7 +59,7 @@ describe('ZardCodeBlock', () => {
       const root = container.querySelector('z-code-block') as HTMLElement;
 
       expect(root).toHaveClass('rounded-none', 'w-64');
-      expect(root).not.toHaveClass('rounded-2xl');
+      expect(root).not.toHaveClass('rounded-lg');
       expect(root).not.toHaveClass('w-full');
     });
 

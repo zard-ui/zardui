@@ -20,7 +20,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'cursor-pointer flex flex-1 items-start justify-between gap-4 text-start text-sm font-medium transition-all w-full rounded-md py-4 hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
     'cn-accordion-trigger-icon': 'text-muted-foreground size-4 translate-y-0.5 transition-transform duration-200',
     'cn-alert':
-      "relative grid w-full gap-0.5 rounded-lg border text-start text-sm px-4 py-3 has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 has-[>svg]:gap-x-2.5",
+      "relative grid w-full gap-0.5 rounded-lg border text-start text-sm px-4 py-3 has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2.5 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4",
     'cn-alert-action': 'absolute top-2.5 end-3',
     'cn-alert-description':
       'text-sm text-balance md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4',
@@ -38,7 +38,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-dialog-overlay': 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs',
     'cn-alert-dialog-title':
       'font-medium wrap-anywhere text-lg sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
-    'cn-alert-icon': 'shrink-0 self-start text-base!',
+    'cn-alert-icon': 'flex shrink-0 self-start text-base!',
+    'cn-alert-icon-glyph': 'size-4!',
     'cn-alert-title':
       "font-medium [&_a]:hover:text-foreground group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 group-has-[>svg]/alert:col-start-2",
     'cn-alert-variant-default': 'bg-card text-card-foreground',
@@ -81,7 +82,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
-      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs',
+      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs text-sm',
     'cn-avatar-group': 'flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
     'cn-avatar-group-count':
       'relative flex shrink-0 items-center justify-center bg-muted text-muted-foreground size-8 rounded-full text-sm ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',
@@ -91,12 +92,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
-      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
+      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full opacity-0',
     'cn-avatar-size-default': 'size-8',
     'cn-avatar-size-lg': 'size-10',
     'cn-avatar-size-sm': 'size-6',
     'cn-badge':
-      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3!',
+      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3! [&>z-spinner>svg]:size-3!',
     'cn-badge-variant-default': 'bg-primary text-primary-foreground [a&]:hover:bg-primary/90',
     'cn-badge-variant-destructive':
       'bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20',
@@ -148,7 +149,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-bubble-variant-tinted':
       '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
     'cn-button':
-      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all rounded-md focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4",
+      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all rounded-md focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem]",
     'cn-button-disabled-true': 'opacity-50',
     'cn-button-group':
       'flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>input]:flex-1 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-e-md',
@@ -169,12 +170,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-button-size-icon-lg': 'size-10',
     'cn-button-size-icon-sm': 'size-8 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md',
     'cn-button-size-icon-xs':
-      "size-6 rounded-[min(var(--radius-md),8px)] [&_svg:not([class*='size-'])]:size-3 in-data-[slot=button-group]:rounded-md",
+      "size-6 rounded-[min(var(--radius-md),8px)] [&_svg:not([class*='size-'])]:size-3 in-data-[slot=button-group]:rounded-md [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-size-lg': 'gap-1.5 px-2.5 h-10 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
     'cn-button-size-sm':
       'gap-1 px-2.5 h-8 rounded-[min(var(--radius-md),10px)] has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 in-data-[slot=button-group]:rounded-md',
     'cn-button-size-xs':
-      "h-6 gap-1 px-2 text-xs rounded-[min(var(--radius-md),8px)] has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3 in-data-[slot=button-group]:rounded-md",
+      "h-6 gap-1 px-2 text-xs rounded-[min(var(--radius-md),8px)] has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3 in-data-[slot=button-group]:rounded-md [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-variant-default': 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
     'cn-button-variant-destructive':
       'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
@@ -189,9 +190,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'block w-fit bg-background [--cell-radius:var(--radius-md)] p-3 [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
     'cn-calendar-caption': 'flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)',
     'cn-calendar-caption-label': 'h-8 pe-1 ps-2',
-    'cn-calendar-caption-label-layout-dropdown':
-      'flex h-(--cell-size) items-center gap-1.5 rounded-(--cell-radius) px-2 text-sm',
-    'cn-calendar-caption-label-layout-label': 'text-sm',
+    'cn-calendar-caption-label-layout-dropdown': 'flex items-center gap-1 rounded-(--cell-radius) text-sm',
+    'cn-calendar-caption-label-layout-label': 'font-medium text-sm',
     'cn-calendar-day':
       'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
     'cn-calendar-day-button':
@@ -213,18 +213,18 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-calendar-day-today-true': 'rounded-(--cell-radius) bg-muted text-foreground',
     'cn-calendar-dropdown': 'absolute inset-0 z-10 cursor-pointer bg-popover opacity-0',
     'cn-calendar-dropdown-root':
-      'relative isolate border-input border shadow-xs has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/50 has-focus:ring-3',
-    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-2 text-sm font-medium',
-    'cn-calendar-month': 'relative flex w-full flex-col gap-6',
-    'cn-calendar-months': 'relative flex flex-col gap-6 md:flex-row',
+      'relative isolate border-input border shadow-xs rounded-(--cell-radius) has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/50 has-focus:ring-3',
+    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
+    'cn-calendar-month': 'relative flex w-full flex-col gap-4',
+    'cn-calendar-months': 'relative flex flex-col gap-4 md:flex-row',
     'cn-calendar-nav': 'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1.5',
     'cn-calendar-nav-button': 'size-(--cell-size) p-0',
     'cn-calendar-nav-spacer': 'size-(--cell-size)',
-    'cn-calendar-row': 'grid w-full grid-cols-7 gap-x-0',
-    'cn-calendar-week': 'mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2',
+    'cn-calendar-row': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0',
+    'cn-calendar-week': 'mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2',
     'cn-calendar-weekday':
-      'flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
-    'cn-calendar-weekdays': 'grid w-full grid-cols-7',
+      'flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
+    'cn-calendar-weekdays': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))]',
     'cn-calendar-weeks': 'mt-2 flex w-full flex-col gap-y-2',
     'cn-card':
       'flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 shadow-xs [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl data-[size=sm]:[--card-spacing:--spacing(4)]',
@@ -305,7 +305,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex flex-wrap items-center border border-input bg-transparent bg-clip-padding px-2.5 text-sm min-h-9 gap-1.5 rounded-md py-1.5 shadow-xs transition-[color,box-shadow] focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40 has-data-[slot=combobox-chip]:px-1.5',
     'cn-combobox-chips-input': 'min-w-16 flex-1 bg-transparent',
     'cn-combobox-content':
-      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 rounded-md data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:bg-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 rounded-md data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:bg-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
     'cn-combobox-empty':
       'hidden w-full justify-center py-2 text-center text-sm text-muted-foreground group-data-empty/combobox-content:flex',
     'cn-combobox-group': 'block',
@@ -321,7 +321,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'no-scrollbar block scroll-py-1 overflow-y-auto overscroll-contain p-1 max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] data-empty:p-0',
     'cn-combobox-separator': '-mx-1 my-1 block h-px bg-border',
     'cn-combobox-trigger': "[&_svg:not([class*='size-'])]:size-4",
-    'cn-combobox-trigger-icon': 'size-4!',
+    'cn-combobox-trigger-icon': 'size-4! text-muted-foreground',
     'cn-combobox-trigger-standalone-false':
       'group-has-data-[slot=combobox-clear]/input-group:hidden aria-expanded:bg-transparent',
     'cn-combobox-value': 'block truncate text-sm',
@@ -338,13 +338,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-command-input-icon': 'size-4!',
     'cn-command-input-wrapper': 'p-1 pb-0',
     'cn-command-item':
-      "relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm select-none transition-colors data-selected:bg-muted data-selected:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground data-selected:**:[svg]:text-foreground",
+      "relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm select-none transition-colors cursor-default outline-hidden data-selected:bg-muted [&_svg:not([class*='size-'])]:size-4 data-selected:**:[svg]:text-foreground in-data-[slot=dialog-content]:rounded-lg! data-selected:text-foreground data-selected:*:[svg]:text-foreground",
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
-    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1',
+    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
     'cn-command-separator': '-mx-1 my-1 h-px bg-border w-auto',
     'cn-command-shortcut':
-      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground',
+      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-md border',
     'cn-data-table-column-header': 'gap-2',
     'cn-data-table-column-header-trigger': '-ms-2.5 h-8',
@@ -373,13 +373,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'fixed z-50 min-h-0 will-change-transform bg-popover text-popover-foreground flex h-auto flex-col text-sm',
     'cn-drawer-body': 'flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit]',
     'cn-drawer-description': 'text-sm text-balance text-muted-foreground wrap-anywhere',
-    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4',
+    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0',
     'cn-drawer-handle':
-      'relative z-10 cursor-grab bg-muted mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full active:cursor-grabbing',
-    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center',
-    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end',
-    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start',
-    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center',
+      'relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-full after:bg-muted active:cursor-grabbing',
+    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center after:h-1.5 after:w-[100px]',
+    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end after:h-[100px] after:w-1.5',
+    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start after:h-[100px] after:w-1.5',
+    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center after:h-1.5 after:w-[100px]',
     'cn-drawer-header':
       'flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start',
     'cn-drawer-overlay': 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs',
@@ -388,17 +388,19 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-drawer-placement-right': 'inset-y-0 right-0 w-3/4 origin-right flex-row rounded-s-xl border-s sm:w-96',
     'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top rounded-b-xl border-b',
     'cn-drawer-title': 'font-medium text-foreground wrap-anywhere',
+    'cn-dropdown-menu-checkbox-item': 'pe-8 ps-2 in-data-[menu=menubar]:pe-2 in-data-[menu=menubar]:ps-8',
     'cn-dropdown-menu-content':
       'z-50 max-h-96 overflow-x-hidden overflow-y-auto animate-in ring-foreground/10 bg-popover text-popover-foreground min-w-32 rounded-md p-1 shadow-md ring-1 duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-dropdown-menu-item':
       "relative flex cursor-default items-center transition-colors gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[variant=destructive]:hover:bg-destructive/10 dark:data-[variant=destructive]:hover:bg-destructive/20 data-[variant=destructive]:hover:text-destructive not-data-[variant=destructive]:hover:**:text-accent-foreground data-[variant=destructive]:data-highlighted:bg-destructive/10 dark:data-[variant=destructive]:data-highlighted:bg-destructive/20 data-[variant=destructive]:data-highlighted:text-destructive data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:ps-8 [&_svg:not([class*='size-'])]:size-4",
-    'cn-dropdown-menu-item-indicator': 'absolute start-2 flex size-3.5 items-center justify-center',
+    'cn-dropdown-menu-item-indicator':
+      'absolute end-2 flex items-center justify-center in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:start-2 in-data-[menu=menubar]:size-4',
     'cn-dropdown-menu-item-inset-true': 'ps-8',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
     'cn-dropdown-menu-label': 'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
     'cn-dropdown-menu-label-inset-true': 'ps-8',
-    'cn-dropdown-menu-radio-dot': 'size-2 rounded-full bg-current',
+    'cn-dropdown-menu-radio-item': 'pe-8 ps-2 in-data-[menu=menubar]:pe-2 in-data-[menu=menubar]:ps-8',
     'cn-dropdown-menu-separator': 'bg-border -mx-1 my-1 block h-px',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-dropdown-menu-sub-content':
@@ -408,8 +410,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-dropdown-menu-sub-trigger-inset-true': 'ps-8',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 border-dashed text-center text-balance rounded-lg p-12',
-    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-4 text-sm text-balance',
-    'cn-empty-description': 'text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4',
+    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance',
+    'cn-empty-description':
+      'text-muted-foreground text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
     'cn-empty-header': 'flex max-w-sm flex-col items-center gap-2',
     'cn-empty-icon':
       "bg-muted text-foreground mb-2 flex shrink-0 items-center justify-center rounded-lg size-10 [&_svg:not([class*='size-'])]:size-6",
@@ -418,30 +421,30 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'font-medium tracking-tight text-lg',
     'cn-field': 'flex w-full gap-3 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-1',
-    'cn-field-description':
-      'text-muted-foreground text-start text-sm group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5',
     'cn-field-error': 'text-sm font-normal text-destructive',
     'cn-field-group': 'flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
-      'flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:border dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md *:data-[slot=field]:p-3',
+      'flex w-fit gap-2 leading-none group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:border dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md *:data-[slot=field]:p-3',
     'cn-field-legend': 'font-medium mb-3 data-[variant=label]:text-sm data-[variant=legend]:text-base',
     'cn-field-orientation-horizontal':
-      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-responsive':
-      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-vertical': 'flex-col *:w-full [&>.sr-only]:w-auto',
     'cn-field-separator': 'relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2',
     'cn-field-separator-content': 'relative mx-auto block w-fit text-muted-foreground px-2',
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
-    'cn-field-title': 'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+    'cn-field-title':
+      'flex w-fit items-center gap-2 text-sm font-medium leading-snug group-data-[disabled=true]/field:opacity-50',
     'cn-font-heading': 'font-heading',
     'cn-hover-card':
-      'z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+      'z-50 origin-(--z-hover-card-transform-origin) ring-foreground/10 bg-popover text-popover-foreground w-64 rounded-lg p-4 text-sm shadow-md ring-1 duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
       'w-full min-w-0 border border-input bg-transparent px-2.5 py-1 text-base h-9 rounded-md shadow-xs transition-[color,box-shadow] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input h-9 rounded-md shadow-xs transition-[color,box-shadow] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
+      'relative flex w-full min-w-0 items-center border border-input h-9 rounded-md shadow-xs transition-[color,box-shadow] has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
     'cn-input-group-addon-align-block-end':
@@ -454,7 +457,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex cursor-pointer items-center justify-center whitespace-nowrap transition-all shrink-0 gap-2 text-sm rounded-md border border-transparent bg-clip-padding font-medium shadow-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:ring-3 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed [&_svg:not([class*='size-'])]:size-4 active:not-aria-[haspopup]:translate-y-px",
     'cn-input-group-button-size-icon-sm': 'size-8 p-0 has-[>svg]:p-0',
     'cn-input-group-button-size-icon-xs': 'size-6 p-0 rounded-[calc(var(--radius)-5px)] has-[>svg]:p-0',
-    'cn-input-group-button-size-sm': 'h-8 px-3',
+    'cn-input-group-button-size-sm':
+      'h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
     'cn-input-group-button-size-xs':
       "h-6 gap-1 px-1.5 rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-button-variant-default': 'bg-primary text-primary-foreground hover:bg-primary/80',
@@ -492,7 +496,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-description':
       'line-clamp-2 text-muted-foreground text-start text-sm leading-normal [&>a]:underline [&>a]:underline-offset-4 group-data-[size=xs]/item:text-xs',
     'cn-item-footer': 'flex basis-full items-center justify-between gap-2',
-    'cn-item-group': 'flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
+    'cn-item-group':
+      'flex w-full flex-col gap-4 has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2',
     'cn-item-header': 'flex basis-full items-center justify-between gap-2',
     'cn-item-media':
       'flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start',
@@ -500,7 +505,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-media-variant-icon': "[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
     'cn-item-media-variant-image':
       'size-10 overflow-hidden rounded-sm group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover',
-    'cn-item-separator': 'block h-px w-full shrink-0 my-2',
+    'cn-item-separator': 'bg-border block h-px w-full shrink-0 my-2',
     'cn-item-size-default': 'gap-3.5 px-4 py-3.5',
     'cn-item-size-sm': 'gap-2.5 px-3 py-2.5',
     'cn-item-size-xs': 'gap-2 px-2.5 py-2 in-data-[slot=dropdown-menu-content]:p-0',
@@ -583,7 +588,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-navigation-menu-trigger':
       'inline-flex h-9 w-max items-center justify-center gap-1 text-sm font-medium transition-all rounded-md px-4 py-2 hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50',
     'cn-navigation-menu-trigger-icon':
-      'relative top-px size-3 shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
+      'relative top-px size-3! shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
     'cn-navigation-menu-viewport':
       'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/10 rounded-lg shadow ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90',
     'cn-navigation-menu-viewport-wrapper':
@@ -613,7 +618,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'h-9 rounded-md border border-input bg-transparent px-2.5 py-1 text-base shadow-xs transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
     'cn-questionnaire-item': 'gap-4',
     'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title': 'text-base/normal font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-4',
+    'cn-questionnaire-title':
+      'text-base/normal font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -636,7 +642,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-content-position-popper':
       'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
     'cn-select-item':
-      "relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pe-8 ps-2 text-sm focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+      "relative flex w-full cursor-default items-center rounded-sm py-1.5 pe-8 ps-2 text-sm gap-2 focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
     'cn-select-item-icon': 'absolute flex size-3.5 items-center justify-center',
     'cn-select-item-icon-mode-compact': 'end-2',
     'cn-select-item-icon-mode-normal': 'end-2',
@@ -653,7 +659,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-scroll-icon': 'size-4!',
     'cn-select-separator': '-mx-1 block my-1 h-px bg-border',
     'cn-select-trigger':
-      'flex h-8 px-3 py-2 w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 data-[size=default]:h-9 data-[size=sm]:h-8',
+      "border-input gap-1.5 rounded-md border bg-transparent py-2 pr-2 pl-2.5 text-sm shadow-xs transition-[color,box-shadow] flex w-full items-center justify-between whitespace-nowrap data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-3 aria-invalid:ring-3 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:flex *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:data-[slot=select-value]:items-center data-[size=default]:min-h-9 data-[size=sm]:min-h-8",
     'cn-select-trigger-icon': 'size-4!',
     'cn-select-viewport': 'min-h-0 flex-1 box-border overflow-x-hidden overflow-y-auto p-1',
     'cn-select-viewport-position-popper': 'w-full min-w-(--z-select-trigger-width) scroll-my-1',
@@ -696,7 +702,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
     'cn-sidebar-header': 'flex flex-col gap-2 p-2',
     'cn-sidebar-inner':
-      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm',
+      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:shadow-sm',
     'cn-sidebar-input': 'h-8 w-full bg-background shadow-none',
     'cn-sidebar-inset':
       'relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2',
@@ -717,7 +723,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
     'cn-sidebar-menu-item': 'relative',
     'cn-sidebar-menu-skeleton': 'flex h-8 items-center gap-2 rounded-md px-2',
-    'cn-sidebar-menu-skeleton-icon': 'size-4',
+    'cn-sidebar-menu-skeleton-icon': 'size-4 rounded-md',
     'cn-sidebar-menu-sub':
       'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 rtl:-translate-x-px group-data-[collapsible=icon]:hidden',
     'cn-sidebar-menu-sub-button':
@@ -757,13 +763,14 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-switch-thumb':
       'block transition-transform bg-background rounded-full ring-0 data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:data-[state=unchecked]:translate-x-0 group-data-[size=sm]/switch:data-[state=unchecked]:translate-x-0',
     'cn-table':
-      'w-full caption-bottom text-sm [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4',
+      'w-full caption-bottom text-sm [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap',
     'cn-table-body': '[&_tr:last-child]:border-0',
     'cn-table-caption': 'mt-4 text-sm text-muted-foreground',
-    'cn-table-cell': 'p-2 align-middle has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+    'cn-table-cell':
+      'p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-footer': 'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
     'cn-table-head':
-      'h-10 px-2 text-start align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+      'h-10 px-2 text-start align-middle font-medium text-foreground whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-header': '[&_tr]:border-b',
     'cn-table-row':
       'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
@@ -771,10 +778,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-table-size-compact': '[&_td]:py-2 [&_th]:py-2',
     'cn-table-variant-bordered': 'border border-border',
     'cn-table-variant-striped': '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-    'cn-tabs-panel': 'focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-tabs-panel': 'text-sm focus-visible:ring-[3px] focus-visible:ring-ring/50',
     'cn-tabs-tab-button':
       "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all cursor-pointer gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:outline-1 focus-visible:outline-ring [&_svg]:shrink-0 after:absolute after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none [&_svg:not([class*='size-'])]:size-4 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 text-foreground/60 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground after:opacity-0 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
-    'cn-tabs-tab-container': 'flex gap-3',
+    'cn-tabs-tab-container': 'flex gap-2',
     'cn-tabs-tab-container-orientation-horizontal': 'flex-col',
     'cn-tabs-tab-container-orientation-vertical': 'flex-row',
     'cn-tabs-tab-nav':
@@ -787,9 +794,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent',
     'cn-toast': 'rounded-2xl',
     'cn-toggle':
-      "inline-flex items-center justify-center gap-1 text-sm font-medium whitespace-nowrap cursor-pointer rounded-md transition-[color,box-shadow] hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4",
+      "inline-flex items-center justify-center gap-1 text-sm font-medium whitespace-nowrap cursor-pointer rounded-md transition-[color,box-shadow] hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_ng-icon:not([class*='size-'])]:size-4!",
     'cn-toggle-group':
-      'flex w-fit flex-row items-center rounded-md data-vertical:flex-col data-vertical:items-stretch data-[spacing=0]:data-[variant=outline]:shadow-xs',
+      'flex w-fit flex-row items-center rounded-md gap-[--spacing(var(--gap))] data-vertical:flex-col data-vertical:items-stretch data-[spacing=0]:data-[variant=outline]:shadow-xs',
     'cn-toggle-group-item':
       'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t data-[state=on]:bg-muted group-data-[spacing=0]/toggle-group:shadow-none group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-md group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-md group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-md group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-md',
     'cn-toggle-size-default': 'px-2.5 h-9 min-w-9 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
@@ -798,7 +805,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-toggle-variant-default': 'bg-transparent',
     'cn-toggle-variant-outline': 'border border-input bg-transparent shadow-xs',
     'cn-tooltip':
-      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-sm data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95',
     'cn-tooltip-arrow':
       'bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px]',
     'cn-tooltip-position': 'absolute',
@@ -816,62 +823,65 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
   nova: {
     'cn-accordion': '',
     'cn-accordion-content': 'grid text-sm transition-all',
-    'cn-accordion-content-inner': 'pt-0 pb-4',
+    'cn-accordion-content-inner': 'pt-0 pb-2.5',
     'cn-accordion-content-is-open-false': 'grid-rows-[0fr]',
     'cn-accordion-content-is-open-true': 'grid-rows-[1fr]',
-    'cn-accordion-item': 'border-b flex flex-1 flex-col last:border-b-0',
+    'cn-accordion-item': 'flex flex-1 flex-col not-last:border-b',
     'cn-accordion-trigger':
-      'cursor-pointer flex flex-1 items-start justify-between gap-4 rounded-md py-2.5 text-start text-sm font-medium transition-all w-full hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+      'flex w-full flex-1 cursor-pointer items-start justify-between gap-4 rounded-lg py-2.5 text-start text-sm font-medium transition-all focus-visible:border-ring focus-visible:ring-ring/50 hover:underline focus-visible:ring-[3px]',
     'cn-accordion-trigger-icon': 'text-muted-foreground size-4 translate-y-0.5 transition-transform duration-200',
     'cn-alert':
       "relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-start text-sm has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4",
-    'cn-alert-action': 'absolute top-2 end-2',
+    'cn-alert-action': 'absolute end-2 top-2',
     'cn-alert-description':
-      'text-sm text-balance md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4',
+      'text-sm text-balance [&_a]:hover:text-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_p:not(:last-child)]:mb-4',
     'cn-alert-description-variant-default': 'text-muted-foreground',
     'cn-alert-dialog':
-      'fixed top-1/2 left-1/2 z-50 grid w-full -translate-1/2 gap-4 rounded-xl bg-popover p-4 text-popover-foreground ring-1 ring-foreground/10 data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm',
+      'bg-popover text-popover-foreground ring-foreground/10 fixed top-1/2 left-1/2 z-50 grid w-full -translate-1/2 gap-4 rounded-xl p-4 ring-1 data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm',
     'cn-alert-dialog-description':
-      'text-sm text-balance text-muted-foreground wrap-anywhere md:text-pretty [&_a]:underline [&_a]:underline-offset-[3px] [&_a]:hover:text-foreground',
+      'text-muted-foreground text-sm text-balance wrap-anywhere [&_a]:hover:text-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-[3px]',
     'cn-alert-dialog-footer':
-      '-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end',
+      'bg-muted/50 -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t p-4 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end',
     'cn-alert-dialog-header':
       'grid grid-rows-[auto_1fr] place-items-center gap-1.5 text-center has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] has-data-[slot=alert-dialog-media]:gap-x-4 sm:group-data-[size=default]/alert-dialog-content:place-items-start sm:group-data-[size=default]/alert-dialog-content:text-start sm:group-data-[size=default]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr]',
     'cn-alert-dialog-media':
-      "mb-2 inline-flex size-10 items-center justify-center rounded-md bg-muted sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6",
+      "bg-muted mb-2 inline-flex size-10 items-center justify-center rounded-md sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6",
     'cn-alert-dialog-overlay': 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs',
     'cn-alert-dialog-title':
       'text-base font-medium wrap-anywhere sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
-    'cn-alert-icon': 'shrink-0 self-start text-base!',
+    'cn-alert-icon': 'flex shrink-0 self-start text-base!',
+    'cn-alert-icon-glyph': 'size-4!',
     'cn-alert-title':
-      "font-medium group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground",
+      "[&_a]:hover:text-foreground font-medium group-has-data-[slot='alert-icon']/alert:col-start-2 group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3",
     'cn-alert-variant-default': 'bg-card text-card-foreground',
     'cn-alert-variant-destructive':
       "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current",
     'cn-aspect-ratio': 'relative block',
     'cn-attachment':
-      'relative isolate flex w-fit max-w-full min-w-0 shrink-0 snap-start items-center rounded-[calc(var(--radius)*1.6)] border bg-card text-card-foreground transition-colors text-sm focus-within:ring-1 focus-within:ring-ring/30 has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/50 data-[state=idle]:border-dashed',
+      'bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 relative isolate flex w-fit max-w-full min-w-0 shrink-0 snap-start items-center rounded-xl border transition-colors data-[state=idle]:border-dashed focus-within:ring-ring/50 focus-within:ring-1',
     'cn-attachment-action':
-      'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background',
+      'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:hover:bg-background group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:backdrop-blur-xs',
     'cn-attachment-actions':
-      'relative z-20 flex shrink-0 items-center gap-1 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-2.5 group-data-[orientation=vertical]/attachment:end-2.5',
+      'relative z-20 flex shrink-0 items-center group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:gap-1',
     'cn-attachment-content':
-      'flex min-w-0 flex-1 flex-col gap-0.5 leading-tight group-data-[orientation=vertical]/attachment:w-full',
+      'flex min-w-0 flex-1 flex-col leading-tight group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1',
     'cn-attachment-description':
-      'text-muted-foreground text-xs group-data-[state=error]/attachment:text-destructive/80',
+      'text-muted-foreground group-data-[state=error]/attachment:text-destructive/80 mt-0.5 text-xs',
     'cn-attachment-group':
-      'flex w-full min-w-0 gap-3 overflow-x-auto snap-x snap-mandatory scroll-px-1 scrollbar-none py-1 rounded-lg focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+      'focus-visible:ring-ring flex w-full min-w-0 snap-x snap-mandatory scroll-px-1 scrollbar-none gap-3 overflow-x-auto py-1 focus-visible:ring-2 *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
     'cn-attachment-media':
-      'relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-foreground group-data-[orientation=vertical]/attachment:w-full group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5',
+      'bg-muted text-foreground relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[orientation=vertical]/attachment:w-full group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5',
     'cn-attachment-media-variant-icon':
-      'size-10 bg-muted text-muted-foreground group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4',
+      'bg-muted text-muted-foreground size-10 group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4',
     'cn-attachment-media-variant-image':
-      'size-16 opacity-60 group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 [&_img]:size-full [&_img]:object-cover group-data-[state=done]/attachment:opacity-100 group-data-[state=idle]/attachment:opacity-100 *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full',
-    'cn-attachment-orientation-horizontal': 'flex-row',
-    'cn-attachment-orientation-vertical': 'flex-col items-start',
-    'cn-attachment-size-default': 'gap-3 p-3',
-    'cn-attachment-size-sm': 'gap-2 p-2.5 text-sm',
-    'cn-attachment-size-xs': 'gap-1.5 p-2 text-xs rounded-xl',
+      'size-16 opacity-60 group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 group-data-[state=done]/attachment:opacity-100 group-data-[state=idle]/attachment:opacity-100 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover',
+    'cn-attachment-orientation-horizontal': 'min-w-40 flex-row',
+    'cn-attachment-orientation-vertical': 'w-24 flex-col items-start has-data-[slot=attachment-content]:w-30',
+    'cn-attachment-size-default':
+      'gap-2 text-sm has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2',
+    'cn-attachment-size-sm':
+      'gap-2.5 text-xs has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
+    'cn-attachment-size-xs': 'gap-1.5 rounded-lg p-2 text-xs',
     'cn-attachment-state-done': 'border-border',
     'cn-attachment-state-error': 'border-destructive/50 text-destructive',
     'cn-attachment-state-idle': 'border-border border-dashed',
@@ -879,14 +889,14 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-attachment-state-uploading': 'border-border bg-muted/50',
     'cn-attachment-title': 'block w-fit max-w-full truncate font-medium',
     'cn-attachment-trigger':
-      'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
+      'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-ring focus-visible:ring-2',
     'cn-avatar':
-      'relative flex shrink-0 rounded-full after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten',
+      'after:border-border relative flex size-8 shrink-0 rounded-full after:border after:absolute after:inset-0 after:rounded-full after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten',
     'cn-avatar-fallback':
       'bg-muted text-muted-foreground absolute inset-0 flex size-full items-center justify-center rounded-full text-sm group-data-[size=sm]/avatar:text-xs',
-    'cn-avatar-group': 'flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
+    'cn-avatar-group': 'flex *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:ring-2',
     'cn-avatar-group-count':
-      'relative flex shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground font-medium ring-2 ring-background',
+      'bg-muted text-muted-foreground ring-background relative flex size-8 shrink-0 items-center justify-center rounded-full text-sm ring-2 group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',
     'cn-avatar-group-count-size-default': 'size-8 text-xs',
     'cn-avatar-group-count-size-lg': 'size-10 text-sm',
     'cn-avatar-group-count-size-sm': 'size-6 text-xs',
@@ -898,7 +908,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-size-lg': 'size-10',
     'cn-avatar-size-sm': 'size-6',
     'cn-badge':
-      'inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3',
+      'focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all focus-visible:ring-[3px] has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3 [&>svg]:size-3! [&>z-spinner>svg]:size-3!',
     'cn-badge-variant-default': 'bg-primary text-primary-foreground [a&]:hover:bg-primary/90',
     'cn-badge-variant-destructive':
       'bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20',
@@ -907,30 +917,30 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-badge-variant-outline': 'border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
     'cn-badge-variant-secondary': 'bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90',
     'cn-breadcrumb': 'w-full',
-    'cn-breadcrumb-ellipsis': 'flex size-9 items-center justify-center',
+    'cn-breadcrumb-ellipsis': 'flex size-5 items-center justify-center [&>svg]:size-4',
     'cn-breadcrumb-ellipsis-color-muted': 'text-muted-foreground',
     'cn-breadcrumb-ellipsis-color-strong': 'text-foreground',
-    'cn-breadcrumb-item': 'inline-flex items-center gap-1.5',
+    'cn-breadcrumb-item': 'inline-flex items-center gap-1',
     'cn-breadcrumb-link': 'transition-colors hover:text-foreground',
-    'cn-breadcrumb-list': 'text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word sm:gap-2.5',
+    'cn-breadcrumb-list': 'text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word',
     'cn-breadcrumb-list-align-center': 'justify-center',
     'cn-breadcrumb-list-align-end': 'justify-end',
     'cn-breadcrumb-list-align-start': 'justify-start',
     'cn-breadcrumb-list-wrap-nowrap': 'flex-nowrap',
     'cn-breadcrumb-list-wrap-wrap': 'flex-wrap',
-    'cn-breadcrumb-page': 'font-normal text-foreground',
+    'cn-breadcrumb-page': 'text-foreground font-normal',
     'cn-breadcrumb-separator':
-      'text-muted-foreground [&_svg]:size-3.5 [&_ng-icon]:flex! [&_ng-icon]:items-center! [&_ng-icon]:size-3.5!',
+      '[&_ng-icon]:flex! [&_ng-icon]:size-3.5! [&_ng-icon]:items-center! [&_svg]:size-3.5 [&>svg]:size-3.5',
     'cn-breadcrumb-size-lg': 'text-base',
     'cn-breadcrumb-size-md': 'text-sm',
     'cn-breadcrumb-size-sm': 'text-xs',
     'cn-bubble':
-      'relative flex w-fit min-w-0 max-w-[80%] flex-col gap-1 data-[align=end]:self-end data-[variant=ghost]:max-w-full group-data-[align=end]/message:self-end',
+      'relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 group-data-[align=end]/message:self-end data-[align=end]:self-end data-[variant=ghost]:max-w-full',
     'cn-bubble-content':
-      'w-fit min-w-0 max-w-full overflow-hidden rounded-[calc(var(--radius)*2.4)] border border-transparent px-3 py-2.5 text-sm/relaxed wrap-break-word group-data-[align=end]/bubble:self-end [button]:text-start [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-3 [button,a]:focus-visible:ring-ring/30',
+      'w-fit max-w-full min-w-0 overflow-hidden rounded-xl border border-transparent px-3 py-2 text-sm/relaxed wrap-break-word [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-ring/50 group-data-[align=end]/bubble:self-end [button]:text-start [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:ring-3',
     'cn-bubble-group': 'flex min-w-0 flex-col gap-2',
     'cn-bubble-reactions':
-      'absolute z-10 flex w-fit shrink-0 items-center justify-center gap-1 rounded-full bg-muted px-1.5 py-0.5 text-sm ring-3 ring-card has-[button]:p-0',
+      'bg-muted ring-card absolute z-10 flex w-fit shrink-0 items-center justify-center gap-1 rounded-full px-1.5 py-0.5 text-sm ring-3 has-[button]:p-0',
     'cn-bubble-reactions-align-end': 'end-3',
     'cn-bubble-reactions-align-start': 'start-3',
     'cn-bubble-reactions-side-bottom': 'bottom-0 translate-y-3/4',
@@ -940,7 +950,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-bubble-variant-destructive':
       '*:data-[slot=bubble-content]:bg-destructive/10 *:data-[slot=bubble-content]:text-destructive dark:*:data-[slot=bubble-content]:bg-destructive/20 [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/20 dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/30',
     'cn-bubble-variant-ghost':
-      'border-none *:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0 [&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:text-foreground dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted/50',
+      'border-none [&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:text-foreground dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted/50 *:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0',
     'cn-bubble-variant-muted':
       '*:data-[slot=bubble-content]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--muted),var(--foreground)_5%)]',
     'cn-bubble-variant-outline':
@@ -948,17 +958,17 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-bubble-variant-secondary':
       '*:data-[slot=bubble-content]:bg-secondary *:data-[slot=bubble-content]:text-secondary-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]',
     'cn-bubble-variant-tinted':
-      '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
+      '*:data-[slot=bubble-content]:text-foreground *:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
     'cn-button':
-      "inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4",
+      "inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px aria-invalid:ring-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
     'cn-button-disabled-true': 'opacity-50',
     'cn-button-group':
       'flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 [&>input]:flex-1',
     'cn-button-group-orientation-horizontal':
-      '[&>*:not(:first-child)]:rounded-s-none [&>*:not(:first-child)]:border-s-0 [&>z-select:not(:first-child)>button]:rounded-s-none [&>z-select:not(:first-child)>button]:border-s-0 [&>*:not(:last-child)]:rounded-e-none [&>z-select:not(:last-child)>button]:rounded-e-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-e-lg!',
+      '[&>*:not(:first-child)]:rounded-s-none [&>*:not(:first-child)]:border-s-0 [&>*:not(:last-child)]:rounded-e-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-e-lg! [&>z-select:not(:first-child)>button]:rounded-s-none [&>z-select:not(:first-child)>button]:border-s-0 [&>z-select:not(:last-child)>button]:rounded-e-none',
     'cn-button-group-orientation-vertical':
-      'flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>z-select:not(:first-child)>button]:rounded-t-none [&>z-select:not(:first-child)>button]:border-t-0 [&>*:not(:last-child)]:rounded-b-none [&>z-select:not(:last-child)>button]:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg!',
-    'cn-button-group-separator': 'bg-input relative self-stretch grow-0 shrink-0',
+      'flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg! [&>z-select:not(:first-child)>button]:rounded-t-none [&>z-select:not(:first-child)>button]:border-t-0 [&>z-select:not(:last-child)>button]:rounded-b-none',
+    'cn-button-group-separator': 'bg-input relative shrink-0 grow-0 self-stretch',
     'cn-button-group-separator-orientation-horizontal': 'mx-px w-auto',
     'cn-button-group-separator-orientation-vertical': 'my-px h-auto',
     'cn-button-group-text':
@@ -972,12 +982,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-button-size-icon-lg': 'size-9',
     'cn-button-size-icon-sm': 'size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg',
     'cn-button-size-icon-xs':
-      "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
+      "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem] [&_svg:not([class*='size-'])]:size-3",
     'cn-button-size-lg': 'h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
     'cn-button-size-sm':
-      "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+      "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.875rem] [&_svg:not([class*='size-'])]:size-3.5",
     'cn-button-size-xs':
-      "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3",
+      "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem] [&_svg:not([class*='size-'])]:size-3",
     'cn-button-variant-default': 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
     'cn-button-variant-destructive':
       'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
@@ -989,51 +999,51 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-button-variant-secondary':
       'bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
     'cn-calendar':
-      'block w-fit bg-background p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
+      'bg-background block w-fit p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
     'cn-calendar-caption': 'flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)',
-    'cn-calendar-caption-label': 'font-medium',
-    'cn-calendar-caption-label-layout-dropdown':
-      'flex h-(--cell-size) items-center gap-1 rounded-(--cell-radius) px-2 text-sm',
-    'cn-calendar-caption-label-layout-label': 'text-sm',
+    'cn-calendar-caption-label': 'h-6 ps-1.5 pe-1',
+    'cn-calendar-caption-label-layout-dropdown': 'flex items-center gap-1 rounded-(--cell-radius) text-sm',
+    'cn-calendar-caption-label-layout-label': 'text-sm font-medium',
     'cn-calendar-day':
-      'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
+      'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius)',
     'cn-calendar-day-button':
-      'relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1 rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal transition-colors hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 dark:hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50 [&>span]:text-xs [&>span]:opacity-70',
-    'cn-calendar-day-button-disabled-true': 'text-muted-foreground opacity-50 cursor-not-allowed',
+      'relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1 rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal transition-colors hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 dark:hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 disabled:opacity-50 [&>span]:text-xs [&>span]:opacity-70',
+    'cn-calendar-day-button-disabled-true': 'text-muted-foreground cursor-not-allowed opacity-50',
     'cn-calendar-day-button-outside-true': 'text-muted-foreground aria-selected:text-muted-foreground',
     'cn-calendar-day-button-range-end-true':
-      'rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
+      'bg-primary text-primary-foreground rounded-(--cell-radius) rounded-e-(--cell-radius) hover:bg-muted hover:text-foreground',
     'cn-calendar-day-button-range-middle-true':
-      'rounded-none bg-muted text-foreground hover:bg-muted hover:text-foreground',
+      'bg-muted text-foreground rounded-none hover:bg-muted hover:text-foreground',
     'cn-calendar-day-button-range-start-true':
-      'rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
+      'bg-primary text-primary-foreground rounded-(--cell-radius) rounded-s-(--cell-radius) hover:bg-muted hover:text-foreground',
     'cn-calendar-day-button-selected-true': 'bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
     'cn-calendar-day-range-end-true':
-      'relative isolate z-0 rounded-e-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-muted [&:first-child]:after:hidden [&:nth-child(7n+1)]:after:hidden',
-    'cn-calendar-day-range-middle-true': 'rounded-none bg-muted',
+      'bg-muted relative isolate z-0 rounded-e-(--cell-radius) after:bg-muted after:absolute after:inset-y-0 after:start-0 after:w-4 [&:first-child]:after:hidden [&:nth-child(7n+1)]:after:hidden',
+    'cn-calendar-day-range-middle-true': 'bg-muted rounded-none',
     'cn-calendar-day-range-start-true':
-      'relative isolate z-0 rounded-s-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-muted [&:last-child]:after:hidden [&:nth-child(7n)]:after:hidden',
-    'cn-calendar-day-today-true': 'rounded-(--cell-radius) bg-muted text-foreground',
-    'cn-calendar-dropdown': 'absolute inset-0 z-10 cursor-pointer bg-popover opacity-0',
-    'cn-calendar-dropdown-root': 'relative isolate has-disabled:pointer-events-none has-disabled:opacity-50',
+      'bg-muted relative isolate z-0 rounded-s-(--cell-radius) after:bg-muted after:absolute after:inset-y-0 after:end-0 after:w-4 [&:last-child]:after:hidden [&:nth-child(7n)]:after:hidden',
+    'cn-calendar-day-today-true': 'bg-muted text-foreground rounded-(--cell-radius)',
+    'cn-calendar-dropdown': 'bg-popover absolute inset-0 z-10 cursor-pointer opacity-0',
+    'cn-calendar-dropdown-root':
+      'border-input relative isolate rounded-(--cell-radius) border has-focus:border-ring has-focus:ring-ring/50 has-focus:ring-3 has-disabled:pointer-events-none has-disabled:opacity-50',
     'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
     'cn-calendar-month': 'relative flex w-full flex-col gap-4',
     'cn-calendar-months': 'relative flex flex-col gap-4 md:flex-row',
     'cn-calendar-nav': 'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1',
     'cn-calendar-nav-button': 'size-(--cell-size) p-0',
     'cn-calendar-nav-spacer': 'size-(--cell-size)',
-    'cn-calendar-row': 'grid w-full grid-cols-7 gap-x-0',
-    'cn-calendar-week': 'mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2',
+    'cn-calendar-row': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0',
+    'cn-calendar-week': 'mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2',
     'cn-calendar-weekday':
-      'flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
-    'cn-calendar-weekdays': 'grid w-full grid-cols-7',
+      'text-muted-foreground flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal',
+    'cn-calendar-weekdays': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))]',
     'cn-calendar-weeks': 'mt-2 flex w-full flex-col gap-y-2',
     'cn-card':
-      'flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl',
+      'bg-card text-card-foreground ring-foreground/10 flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm ring-1 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl',
     'cn-card-action': 'col-start-2 row-span-2 row-start-1 self-start justify-self-end',
     'cn-card-content': 'px-(--card-spacing)',
-    'cn-card-description': 'text-sm text-muted-foreground',
-    'cn-card-footer': 'flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing)',
+    'cn-card-description': 'text-muted-foreground text-sm',
+    'cn-card-footer': 'bg-muted/50 flex items-center rounded-b-xl border-t p-(--card-spacing)',
     'cn-card-header':
       'grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [&.border-b]:pb-(--card-spacing)',
     'cn-card-title': 'text-base/snug font-medium group-data-[size=sm]/card:text-sm',
@@ -1045,48 +1055,50 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-carousel-item-orientation-horizontal': 'ps-4',
     'cn-carousel-item-orientation-vertical': 'pt-4',
     'cn-carousel-next-button': 'absolute size-8 rounded-full px-0',
-    'cn-carousel-next-button-orientation-horizontal': 'top-1/2 -end-12 -translate-y-1/2 rtl:rotate-180',
+    'cn-carousel-next-button-orientation-horizontal': '-end-12 top-1/2 -translate-y-1/2 rtl:rotate-180',
     'cn-carousel-next-button-orientation-vertical': '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
     'cn-carousel-orientation-vertical': 'h-full',
     'cn-carousel-previous-button': 'absolute size-8 rounded-full px-0',
-    'cn-carousel-previous-button-orientation-horizontal': 'top-1/2 -start-12 -translate-y-1/2 rtl:rotate-180',
+    'cn-carousel-previous-button-orientation-horizontal': '-start-12 top-1/2 -translate-y-1/2 rtl:rotate-180',
     'cn-carousel-previous-button-orientation-vertical': '-top-12 left-1/2 -translate-x-1/2 rotate-90',
     'cn-chart': 'flex aspect-video w-full flex-col justify-center text-xs',
     'cn-chart-canvas': 'order-1 min-h-0 w-full flex-1',
     'cn-chart-legend': 'flex items-center justify-center gap-4 pt-3',
-    'cn-chart-legend-item': 'flex cursor-pointer items-center gap-1.5 text-xs text-muted-foreground transition-opacity',
+    'cn-chart-legend-item': 'text-muted-foreground flex cursor-pointer items-center gap-1.5 text-xs transition-opacity',
     'cn-chart-legend-item-inactive-true': 'opacity-50',
     'cn-chart-legend-swatch': 'size-2 shrink-0 rounded-[2px]',
     'cn-chart-legend-vertical-align-bottom': 'order-2',
     'cn-chart-legend-vertical-align-top': 'order-0 pt-0 pb-3',
     'cn-chart-tooltip':
-      'grid min-w-[8rem] items-start gap-1.5 text-start rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl',
+      'border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-start text-xs shadow-xl',
     'cn-checkbox':
-      'cursor-[unset] size-4 shrink-0 rounded-[4px] border border-input shadow-sm transition hover:shadow-md focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:border-ring disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary',
+      'border-input size-4 shrink-0 cursor-[unset] rounded-[4px] border shadow-sm transition focus-visible:ring-ring/50 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary hover:shadow-md focus-visible:ring-3 disabled:cursor-not-allowed aria-invalid:ring-3',
     'cn-checkbox-label': 'cursor-[unset] text-sm text-current empty:hidden',
-    'cn-code-block': 'rounded-2xl text-sm data-[size=sm]:rounded-xl',
+    'cn-code-block': 'rounded-lg text-sm data-[size=sm]:text-xs',
     'cn-code-block-actions':
-      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:end-3 [[data-slot=code-block]>&]:top-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2',
+      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:top-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-1.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-1.5',
     'cn-code-block-content':
-      'px-4 py-4 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
-    'cn-code-block-footer': 'gap-2 px-4 pb-4 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3',
-    'cn-code-block-header': 'gap-2 px-4 pt-4 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3',
-    'cn-code-block-line': '-mx-4 px-4 group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3',
+      'px-3 py-3 leading-relaxed group-has-data-[slot=code-block-footer]/code-block:pb-2 group-has-data-[slot=code-block-header]/code-block:pt-2 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:py-2.5 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
+    'cn-code-block-footer':
+      'gap-2 px-3 pb-3 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pb-2.5',
+    'cn-code-block-header':
+      'gap-2 px-3 pt-3 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pt-2.5',
+    'cn-code-block-line': '-mx-3 px-3 group-data-[size=sm]/code-block:-mx-2.5 group-data-[size=sm]/code-block:px-2.5',
     'cn-code-block-title':
-      'font-sans text-sm font-medium [--ng-icon__size:1rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5',
+      'font-sans text-sm font-medium [--ng-icon__size:1rem] group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5',
     'cn-collapsible-content': 'grid transition-[grid-template-rows,visibility] duration-200 ease-out',
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
     'cn-collapsible-is-element-true': 'block',
     'cn-color-picker': 'flex flex-col',
-    'cn-color-picker-area': 'h-36 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-area': 'h-36 rounded-md focus-visible:ring-ring/50 focus-visible:ring-3',
     'cn-color-picker-eyedropper-icon': 'size-3.5!',
     'cn-color-picker-format':
-      'h-6 flex-1 rounded-sm font-mono text-[11px] font-medium focus-visible:ring-3 focus-visible:ring-ring/50',
+      'h-6 flex-1 rounded-sm font-mono text-[11px] font-medium focus-visible:ring-ring/50 focus-visible:ring-3',
     'cn-color-picker-format-group': 'rounded-md',
     'cn-color-picker-format-indicator': 'rounded-sm shadow-sm',
     'cn-color-picker-input': 'h-7 px-2 font-mono text-[11px] md:text-[11px]',
-    'cn-color-picker-preset': 'size-6 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-preset': 'size-6 rounded-md focus-visible:ring-ring/50 focus-visible:ring-3',
     'cn-color-picker-presets': 'flex flex-wrap gap-1.5',
     'cn-color-picker-show-value-false': 'w-fit',
     'cn-color-picker-show-value-true': 'w-[212px]',
@@ -1095,35 +1107,35 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-color-picker-swatch-size-lg': 'size-5',
     'cn-color-picker-swatch-size-sm': 'size-3.5',
     'cn-color-picker-thumb': 'size-4 rounded-full',
-    'cn-color-picker-track': 'h-3 rounded-full focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-color-picker-track': 'h-3 rounded-full focus-visible:ring-ring/50 focus-visible:ring-3',
     'cn-color-picker-track-fill': 'rounded-full',
     'cn-color-picker-trigger': 'font-normal',
     'cn-color-picker-trigger-show-value-true': 'w-full justify-start text-start',
     'cn-combobox': 'relative block',
     'cn-combobox-chip':
-      'flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 rounded-sm bg-muted px-1.5 text-xs font-medium whitespace-nowrap text-foreground has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0',
+      'bg-muted text-foreground flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 rounded-sm px-1.5 text-xs font-medium whitespace-nowrap has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0',
     'cn-combobox-chip-remove': '-ms-1 opacity-50 hover:opacity-100',
     'cn-combobox-chips':
-      'flex min-h-8 flex-wrap items-center gap-1 rounded-lg border border-input bg-transparent bg-clip-padding px-2.5 py-1 text-sm transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 has-data-[slot=combobox-chip]:px-1 dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40',
+      'border-input flex min-h-8 flex-wrap items-center gap-1 rounded-lg border bg-transparent bg-clip-padding px-2.5 py-1 text-sm transition-colors focus-within:border-ring focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40 focus-within:ring-3 has-aria-invalid:ring-3 has-data-[slot=combobox-chip]:px-1',
     'cn-combobox-chips-input': 'min-w-16 flex-1 bg-transparent',
     'cn-combobox-content':
-      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:bg-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+      'bg-popover text-popover-foreground ring-foreground/10 relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden rounded-lg shadow-md ring-1 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:bg-input/30 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:shadow-none',
     'cn-combobox-empty':
-      'hidden w-full justify-center py-2 text-center text-sm text-muted-foreground group-data-empty/combobox-content:flex',
+      'text-muted-foreground hidden w-full justify-center py-2 text-center text-sm group-data-empty/combobox-content:flex',
     'cn-combobox-group': 'block',
     'cn-combobox-input-group': 'w-auto',
     'cn-combobox-input-host': 'contents',
     'cn-combobox-item':
-      "relative flex w-full cursor-default items-center gap-2 rounded-md py-1 pe-8 ps-1.5 text-sm data-highlighted:bg-accent data-highlighted:text-accent-foreground not-data-[variant=destructive]:data-highlighted:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4",
+      "relative flex w-full cursor-default items-center gap-2 rounded-md py-1 ps-1.5 pe-8 text-sm data-highlighted:bg-accent data-highlighted:text-accent-foreground not-data-[variant=destructive]:data-highlighted:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4",
     'cn-combobox-item-indicator': 'pointer-events-none absolute inset-e-2 flex size-4 items-center justify-center',
     'cn-combobox-item-variant-destructive':
       'text-destructive data-highlighted:bg-destructive/10 data-highlighted:text-destructive',
-    'cn-combobox-label': 'block px-2 py-1.5 text-xs text-muted-foreground',
+    'cn-combobox-label': 'text-muted-foreground block px-2 py-1.5 text-xs',
     'cn-combobox-list':
-      'no-scrollbar block scroll-py-1 overflow-y-auto overscroll-contain p-1 max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] data-empty:p-0',
-    'cn-combobox-separator': '-mx-1 my-1 block h-px bg-border',
+      'no-scrollbar block max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] scroll-py-1 overflow-y-auto overscroll-contain p-1 data-empty:p-0',
+    'cn-combobox-separator': 'bg-border -mx-1 my-1 block h-px',
     'cn-combobox-trigger': "[&_svg:not([class*='size-'])]:size-4",
-    'cn-combobox-trigger-icon': 'size-4',
+    'cn-combobox-trigger-icon': 'text-muted-foreground size-4',
     'cn-combobox-trigger-standalone-false':
       'group-has-data-[slot=combobox-clear]/input-group:hidden aria-expanded:bg-transparent',
     'cn-combobox-value': 'block truncate text-sm',
@@ -1133,20 +1145,20 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-combobox-width-md': 'w-62.5',
     'cn-combobox-width-sm': 'w-37.5',
     'cn-command':
-      'flex size-full flex-col overflow-hidden rounded-xl bg-popover p-1 text-popover-foreground border shadow-md',
+      'bg-popover text-popover-foreground flex size-full flex-col overflow-hidden rounded-xl border p-1 shadow-md',
     'cn-command-group':
-      'overflow-hidden text-foreground **:data-[slot=command-group-heading]:px-2 **:data-[slot=command-group-heading]:py-1.5 **:data-[slot=command-group-heading]:text-xs **:data-[slot=command-group-heading]:font-medium **:data-[slot=command-group-heading]:text-muted-foreground',
+      'text-foreground overflow-hidden p-1 **:data-[slot=command-group-heading]:text-muted-foreground **:data-[slot=command-group-heading]:px-2 **:data-[slot=command-group-heading]:py-1.5 **:data-[slot=command-group-heading]:text-xs **:data-[slot=command-group-heading]:font-medium',
     'cn-command-input-group': 'border-input/30 shadow-none!',
     'cn-command-input-icon': 'size-4!',
     'cn-command-input-wrapper': 'p-1 pb-0',
     'cn-command-item':
-      "relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm select-none transition-colors data-selected:bg-muted data-selected:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground",
+      "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden transition-colors select-none data-selected:bg-muted data-selected:text-foreground data-selected:*:[svg]:text-foreground in-data-[slot=dialog-content]:rounded-lg! [&_svg:not([class*='size-'])]:size-4",
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
-    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1',
-    'cn-command-separator': '-mx-1 my-1 h-px bg-border',
+    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
+    'cn-command-separator': 'bg-border -mx-1 my-1 h-px',
     'cn-command-shortcut':
-      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground',
+      'text-muted-foreground ms-auto text-xs tracking-widest group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-md border',
     'cn-data-table-column-header': 'gap-2',
     'cn-data-table-column-header-trigger': '-ms-2.5 h-8',
@@ -1163,54 +1175,57 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-date-picker-trigger-icon-chevron': 'justify-between text-start',
     'cn-date-picker-trigger-icon-none': 'justify-start text-start',
     'cn-dialog':
-      'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 sm:max-w-sm',
+      'bg-popover text-popover-foreground ring-foreground/10 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl p-4 text-sm ring-1 sm:max-w-sm',
     'cn-dialog-close': 'absolute end-2 top-2',
     'cn-dialog-description':
-      'text-sm text-muted-foreground wrap-anywhere *:[a]:underline *:[a]:underline-offset-[3px] *:[a]:hover:text-foreground',
+      'text-muted-foreground text-sm wrap-anywhere *:[a]:hover:text-foreground *:[a]:underline *:[a]:underline-offset-[3px]',
     'cn-dialog-footer':
-      '-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end',
+      'bg-muted/50 -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t p-4 sm:flex-row sm:justify-end',
     'cn-dialog-header': 'flex flex-col gap-2',
     'cn-dialog-overlay': 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs',
     'cn-dialog-title': 'text-base leading-none font-medium wrap-anywhere',
     'cn-drawer':
-      'fixed z-50 m-2 flex min-h-0 flex-col rounded-[calc(var(--radius)*2.4)] border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform dark:border-border',
+      'bg-popover text-popover-foreground fixed z-50 flex h-auto min-h-0 flex-col text-sm will-change-transform',
     'cn-drawer-body': 'flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit]',
-    'cn-drawer-description': 'text-sm text-balance text-muted-foreground wrap-anywhere',
+    'cn-drawer-description': 'text-muted-foreground text-sm text-balance wrap-anywhere',
     'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0',
-    'cn-drawer-handle': 'relative z-10 flex shrink-0 cursor-grab active:cursor-grabbing',
-    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center',
-    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end',
-    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start',
-    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center',
+    'cn-drawer-handle':
+      'after:bg-muted relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-full active:cursor-grabbing',
+    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center after:h-1 after:w-24',
+    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end after:h-24 after:w-1',
+    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start after:h-24 after:w-1',
+    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center after:h-1 after:w-24',
     'cn-drawer-header':
-      'flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start',
-    'cn-drawer-overlay': 'bg-black/30 supports-backdrop-filter:backdrop-blur-sm',
-    'cn-drawer-placement-bottom': 'inset-x-0 bottom-0 origin-bottom',
-    'cn-drawer-placement-left': 'inset-y-0 left-0 w-3/4 origin-left flex-row sm:w-96',
-    'cn-drawer-placement-right': 'inset-y-0 right-0 w-3/4 origin-right flex-row sm:w-96',
-    'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top',
-    'cn-drawer-title': 'text-base font-medium text-foreground wrap-anywhere',
+      'flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-0.5 md:text-start',
+    'cn-drawer-overlay': 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs',
+    'cn-drawer-placement-bottom': 'inset-x-0 bottom-0 origin-bottom rounded-t-xl border-t',
+    'cn-drawer-placement-left': 'inset-y-0 left-0 w-3/4 origin-left flex-row rounded-e-xl border-e sm:w-96',
+    'cn-drawer-placement-right': 'inset-y-0 right-0 w-3/4 origin-right flex-row rounded-s-xl border-s sm:w-96',
+    'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top rounded-b-xl border-b',
+    'cn-drawer-title': 'text-foreground text-base font-medium wrap-anywhere',
+    'cn-dropdown-menu-checkbox-item': 'ps-1.5 pe-8 in-data-[menu=menubar]:ps-7 in-data-[menu=menubar]:pe-1.5',
     'cn-dropdown-menu-content':
-      'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 animate-in duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+      'bg-popover text-popover-foreground ring-foreground/10 animate-in z-50 max-h-96 min-w-32 overflow-x-hidden overflow-y-auto rounded-lg p-1 shadow-md ring-1 duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
     'cn-dropdown-menu-item':
       'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
-    'cn-dropdown-menu-item-indicator': 'absolute start-1.5 flex size-4 items-center justify-center',
+    'cn-dropdown-menu-item-indicator':
+      'absolute end-2 flex items-center justify-center in-data-[menu=menubar]:start-1.5 in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:size-4',
     'cn-dropdown-menu-item-inset-true': 'ps-7',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
-    'cn-dropdown-menu-label': 'relative flex items-center px-1.5 py-1 text-xs font-medium text-muted-foreground',
+    'cn-dropdown-menu-label': 'text-muted-foreground relative flex items-center px-1.5 py-1 text-xs font-medium',
     'cn-dropdown-menu-label-inset-true': 'ps-7',
-    'cn-dropdown-menu-radio-dot': 'size-2 rounded-full bg-current',
+    'cn-dropdown-menu-radio-item': 'ps-1.5 pe-8 in-data-[menu=menubar]:ps-7 in-data-[menu=menubar]:pe-1.5',
     'cn-dropdown-menu-separator': 'bg-border -mx-1 my-1 block h-px',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-dropdown-menu-sub-content':
-      'z-50 min-w-24 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10 animate-in duration-100 fade-in-0 zoom-in-95',
+      'bg-popover text-popover-foreground ring-foreground/10 animate-in fade-in-0 zoom-in-95 z-50 max-h-96 min-w-24 overflow-x-hidden overflow-y-auto rounded-lg p-1 shadow-lg ring-1 duration-100',
     'cn-dropdown-menu-sub-trigger':
       'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4',
     'cn-dropdown-menu-sub-trigger-inset-true': 'ps-7',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-xl border-dashed p-6 text-center text-balance',
-    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance',
+    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 flex-col items-center gap-2.5 text-sm text-balance',
     'cn-empty-description':
       'text-muted-foreground text-sm/relaxed [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4',
     'cn-empty-header': 'flex max-w-sm flex-col items-center gap-2',
@@ -1220,33 +1235,33 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-image': 'mb-2 flex shrink-0 items-center justify-center bg-transparent',
     'cn-empty-title': 'text-sm font-medium tracking-tight',
     'cn-field': 'flex w-full gap-2 data-[invalid=true]:text-destructive',
-    'cn-field-content': 'flex flex-1 flex-col gap-0.5 leading-snug',
-    'cn-field-description':
-      'text-start text-sm/normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
-    'cn-field-error': 'text-sm font-normal text-destructive',
+    'cn-field-content': 'flex flex-1 flex-col gap-0.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-error': 'text-destructive text-sm font-normal',
     'cn-field-group': 'flex w-full flex-col gap-5 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
-      'flex w-fit gap-2 text-sm/snug font-medium group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col',
+      'flex w-fit gap-2 text-sm leading-none font-medium has-data-checked:border-primary/30 has-data-checked:bg-primary/5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5',
     'cn-field-legend': 'mb-1.5 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base',
     'cn-field-orientation-horizontal':
-      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-responsive':
-      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-vertical': 'flex-col *:w-full [&>.sr-only]:w-auto',
     'cn-field-separator': 'relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2',
     'cn-field-separator-content': 'bg-background text-muted-foreground relative mx-auto block w-fit px-2',
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-4 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
-    'cn-field-title': 'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+    'cn-field-title':
+      'flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50',
     'cn-font-heading': 'font-heading',
     'cn-hover-card':
-      'z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+      'ring-foreground/10 bg-popover text-popover-foreground z-50 w-64 origin-(--z-hover-card-transform-origin) rounded-lg p-2.5 text-sm shadow-md ring-1 duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
-      'h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+      'border-input h-8 w-full min-w-0 rounded-lg border bg-transparent px-2.5 py-1 text-base transition-colors file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-3 aria-invalid:ring-3 md:text-sm',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center rounded-lg border border-input transition-colors has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
+      'border-input relative flex h-8 w-full min-w-0 items-center rounded-lg border transition-colors has-[[data-slot=input-group-control]:disabled]:bg-input/50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[[data-slot=input-group-control]:disabled]:opacity-50 has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-3 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2',
     'cn-input-group-addon':
-      "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
+      "text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
     'cn-input-group-addon-align-block-end':
       'order-last w-full justify-start px-2.5 pb-2 group-has-[>input]/input-group:pb-2 [.border-t]:pt-2',
     'cn-input-group-addon-align-block-start':
@@ -1254,10 +1269,11 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-input-group-addon-align-inline-end': 'order-last pe-2 has-[>button]:me-[-0.3rem] has-[>kbd]:me-[-0.15rem]',
     'cn-input-group-addon-align-inline-start': 'order-first ps-2 has-[>button]:ms-[-0.3rem] has-[>kbd]:ms-[-0.15rem]',
     'cn-input-group-button':
-      "inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-transparent bg-clip-padding whitespace-nowrap text-sm font-medium shadow-none transition-all shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:ring-3 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed [&_svg:not([class*='size-'])]:size-4 active:not-aria-[haspopup]:translate-y-px",
+      "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap shadow-none transition-all focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:cursor-not-allowed aria-invalid:ring-3 [&_svg:not([class*='size-'])]:size-4",
     'cn-input-group-button-size-icon-sm': 'size-8 p-0 has-[>svg]:p-0',
     'cn-input-group-button-size-icon-xs': 'size-6 rounded-[calc(var(--radius)-3px)] p-0 has-[>svg]:p-0',
-    'cn-input-group-button-size-sm': 'h-8 px-3',
+    'cn-input-group-button-size-sm':
+      'h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
     'cn-input-group-button-size-xs':
       "h-6 gap-1 rounded-[calc(var(--radius)-3px)] px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-button-variant-default': 'bg-primary text-primary-foreground hover:bg-primary/80',
@@ -1272,30 +1288,31 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
     'cn-input-group-input':
       'flex-1 rounded-none border-0 bg-transparent shadow-none ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0 dark:bg-transparent dark:disabled:bg-transparent',
-    'cn-input-group-text': "flex items-center gap-2 text-sm text-muted-foreground [&_svg:not([class*='size-'])]:size-4",
-    'cn-input-otp': 'flex items-center has-disabled:opacity-50',
+    'cn-input-group-text': "text-muted-foreground flex items-center gap-2 text-sm [&_svg:not([class*='size-'])]:size-4",
+    'cn-input-otp': 'flex items-center gap-2 has-disabled:opacity-50',
     'cn-input-otp-group':
-      'flex items-center rounded-lg has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 [&>z-input-otp-slot:first-child_input]:rounded-s-lg [&>z-input-otp-slot:first-child_input]:border-s [&>z-input-otp-slot:last-child_input]:rounded-e-lg dark:has-aria-invalid:ring-destructive/40',
+      'flex items-center rounded-lg has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 has-aria-invalid:ring-3 [&>z-input-otp-slot:first-child_input]:rounded-s-lg [&>z-input-otp-slot:first-child_input]:border-s [&>z-input-otp-slot:last-child_input]:rounded-e-lg',
     'cn-input-otp-separator': 'flex items-center',
     'cn-input-otp-separator-size-default': "[&_svg:not([class*='size-'])]:size-4",
     'cn-input-otp-separator-size-lg': "[&_svg:not([class*='size-'])]:size-5",
     'cn-input-otp-separator-size-sm': "[&_svg:not([class*='size-'])]:size-3",
     'cn-input-otp-slot':
-      'relative flex items-center justify-center border-y border-e border-input bg-transparent text-center transition-all outline-none focus:z-10 focus:border-ring focus:ring-3 focus:ring-ring/50 aria-invalid:border-destructive data-active:z-10 data-active:border-ring data-active:ring-3 data-active:ring-ring/50 data-active:aria-invalid:border-destructive data-active:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-active:aria-invalid:ring-destructive/40',
+      'border-input relative flex items-center justify-center border-y border-e bg-transparent text-center transition-all outline-none focus:border-ring focus:ring-ring/50 aria-invalid:border-destructive data-active:border-ring data-active:ring-ring/50 data-active:aria-invalid:border-destructive data-active:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-active:aria-invalid:ring-destructive/40 focus:z-10 focus:ring-3 data-active:z-10 data-active:ring-3',
     'cn-input-otp-slot-first': 'rounded-s-lg border-s',
     'cn-input-otp-slot-last': 'rounded-e-lg',
     'cn-input-otp-slot-size-default': 'size-8 text-sm',
     'cn-input-otp-slot-size-lg': 'size-10 text-base',
     'cn-input-otp-slot-size-sm': 'size-7 text-xs',
     'cn-item':
-      'flex w-full flex-wrap items-center rounded-lg border text-sm transition-colors duration-100 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-muted',
+      'flex w-full flex-wrap items-center rounded-lg border text-sm transition-colors duration-100 focus-visible:border-ring focus-visible:ring-ring/50 [a]:hover:bg-muted focus-visible:ring-3 [a]:transition-colors',
     'cn-item-actions': 'flex items-center gap-2',
     'cn-item-content':
       'flex flex-1 flex-col gap-1 group-data-[size=xs]/item:gap-0 [&+[data-slot=item-content]]:flex-none',
     'cn-item-description':
-      'line-clamp-2 text-start text-sm/normal font-normal text-muted-foreground group-data-[size=xs]/item:text-xs [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
+      'text-muted-foreground line-clamp-2 text-start text-sm leading-normal group-data-[size=xs]/item:text-xs [&>a]:underline [&>a]:underline-offset-4',
     'cn-item-footer': 'flex basis-full items-center justify-between gap-2',
-    'cn-item-group': 'flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
+    'cn-item-group':
+      'flex w-full flex-col gap-4 has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2',
     'cn-item-header': 'flex basis-full items-center justify-between gap-2',
     'cn-item-media':
       'flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start',
@@ -1307,12 +1324,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-size-default': 'gap-2.5 px-3 py-2.5',
     'cn-item-size-sm': 'gap-2.5 px-3 py-2.5',
     'cn-item-size-xs': 'gap-2 px-2.5 py-2 in-data-[slot=dropdown-menu-content]:p-0',
-    'cn-item-title': 'line-clamp-1 flex w-fit items-center gap-2 text-sm/snug font-medium underline-offset-4',
+    'cn-item-title': 'line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-medium underline-offset-4',
     'cn-item-variant-default': 'border-transparent',
-    'cn-item-variant-muted': 'border-transparent bg-muted/50',
+    'cn-item-variant-muted': 'bg-muted/50 border-transparent',
     'cn-item-variant-outline': 'border-border',
     'cn-kbd':
-      "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
+      "bg-muted text-muted-foreground inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm px-1 font-sans text-xs font-medium in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
     'cn-label': '',
     'cn-map-style-select': 'inline-block',
@@ -1324,7 +1341,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-map-style-select-hint': 'text-xs',
     'cn-map-style-select-list': 'gap-0.5 p-1.5 pt-0',
     'cn-map-style-select-option':
-      'flex items-center gap-3 rounded-md p-1.5 text-left focus-visible:ring-[3px] focus-visible:ring-ring/50',
+      'flex items-center gap-3 rounded-md p-1.5 text-left focus-visible:ring-ring/50 focus-visible:ring-[3px]',
     'cn-map-style-select-option-description': 'text-xs',
     'cn-map-style-select-option-name': 'flex items-center gap-1.5 text-sm font-medium',
     'cn-map-style-select-swatch-size-default': 'h-11 w-16 rounded-md',
@@ -1333,31 +1350,32 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-map-style-select-trigger-caption': 'text-[10px] font-normal',
     'cn-map-style-select-trigger-value': 'text-xs font-medium',
     'cn-marker':
-      "relative flex min-h-4 w-full items-center gap-2 text-start text-sm text-muted-foreground [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground",
+      "text-muted-foreground relative flex min-h-4 w-full items-center gap-2 text-start text-sm [--ng-icon__size:1rem] [a]:hover:text-foreground [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3",
     'cn-marker-content':
-      'min-w-0 wrap-break-word group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
+      'min-w-0 wrap-break-word *:[a]:hover:text-foreground group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3',
     'cn-marker-icon': "size-4 shrink-0 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
-    'cn-marker-variant-border': 'border-b border-border pb-2',
+    'cn-marker-variant-border': 'border-border border-b pb-2',
     'cn-marker-variant-separator':
-      'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
+      'before:bg-border after:bg-border before:me-1 before:h-px before:min-w-0 before:flex-1 after:ms-1 after:h-px after:min-w-0 after:flex-1',
     'cn-menubar': 'h-8 gap-0.5 rounded-lg border p-0.75',
     'cn-menubar-trigger':
       'rounded-sm px-1.5 py-0.5 text-sm font-medium hover:bg-muted focus-visible:bg-muted aria-expanded:bg-muted',
     'cn-message': 'relative flex w-full min-w-0 gap-2 text-sm data-[align=end]:flex-row-reverse',
     'cn-message-avatar':
-      'flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-full bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8',
+      'bg-muted flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-full group-has-data-[slot=message-footer]/message:-translate-y-8',
     'cn-message-content':
       'flex w-full min-w-0 flex-col gap-2.5 wrap-break-word group-data-[align=end]/message:*:data-slot:self-end',
-    'cn-message-footer': 'group-data-[align=end]/message:justify-end',
+    'cn-message-footer':
+      'text-muted-foreground px-3 text-xs font-medium group-has-data-[variant=ghost]/message:px-0 group-data-[align=end]/message:justify-end',
     'cn-message-group': 'flex min-w-0 flex-col gap-2',
     'cn-message-header':
-      'flex max-w-full min-w-0 items-center px-3 text-xs font-medium text-muted-foreground group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
+      'text-muted-foreground flex max-w-full min-w-0 items-center px-3 text-xs font-medium group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
     'cn-message-scroller-button-direction-end': 'bottom-4',
     'cn-message-scroller-button-direction-start': 'top-4',
     'cn-message-scroller-content': 'gap-6',
-    'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-message-scroller-viewport': 'focus-visible:ring-ring/50 focus-visible:ring-3',
     'cn-native-select':
-      'h-8 rounded-lg border border-input bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+      'border-input h-8 rounded-lg border bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 aria-invalid:ring-3',
     'cn-native-select-icon':
       'bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center]',
     'cn-native-select-size-lg': 'h-10 ps-3 pe-9 text-base md:text-sm',
@@ -1366,28 +1384,28 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-navigation-menu-content':
       'h-full w-auto p-1 transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52',
     'cn-navigation-menu-content-viewport-false':
-      "relative z-50 min-w-32 rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10 animate-in before:absolute before:-inset-2 before:-z-10 before:content-[''] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+      "bg-popover text-popover-foreground ring-foreground/10 animate-in relative z-50 min-w-32 rounded-lg shadow-sm ring-1 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 before:absolute before:-inset-2 before:-z-10 before:content-['']",
     'cn-navigation-menu-indicator':
       'absolute top-full left-0 z-1 flex h-1.5 items-end justify-center overflow-hidden transition-[translate,width,opacity] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]',
     'cn-navigation-menu-indicator-arrow': 'rounded-tl-sm',
     'cn-navigation-menu-item': 'relative',
-    'cn-navigation-menu-label': 'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
+    'cn-navigation-menu-label': 'text-muted-foreground relative flex items-center px-2 py-1.5 text-sm font-medium',
     'cn-navigation-menu-label-inset-true': 'ps-8',
     'cn-navigation-menu-link':
-      "relative flex w-full cursor-default items-center gap-2 rounded-md p-2 text-start text-sm transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted [&_svg:not([class*='size-'])]:size-4 [&>i]:me-2 [&>z-icon]:me-2 [&>ng-icon]:shrink-0",
+      "relative flex w-full cursor-default items-center gap-2 rounded-md p-2 text-start text-sm transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-ring/50 data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 [&>i]:me-2 [&>ng-icon]:shrink-0 [&>z-icon]:me-2",
     'cn-navigation-menu-link-inset-true': 'ps-8',
     'cn-navigation-menu-link-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 focus:text-destructive',
     'cn-navigation-menu-list': 'flex flex-1 list-none items-center justify-center gap-0',
-    'cn-navigation-menu-shortcut': 'ms-auto text-xs tracking-widest text-muted-foreground',
+    'cn-navigation-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-navigation-menu-submenu-arrow':
-      'ms-auto opacity-60 transition-opacity duration-150 text-muted-foreground dark:text-gray-400 group-hover:opacity-100 group-focus:opacity-100',
+      'text-muted-foreground ms-auto opacity-60 transition-opacity duration-150 group-hover:opacity-100 group-focus:opacity-100 dark:text-gray-400',
     'cn-navigation-menu-trigger':
-      'inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:bg-muted/50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted',
+      'inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all hover:bg-muted focus:bg-muted focus-visible:ring-ring/50 data-[state=open]:bg-muted/50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 disabled:opacity-50',
     'cn-navigation-menu-trigger-icon':
-      'relative top-px size-3 shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
+      'relative top-px size-3! shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
     'cn-navigation-menu-viewport':
-      'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10 transition-[opacity,transform,width,height] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150',
+      'bg-popover text-popover-foreground ring-foreground/10 relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden rounded-lg shadow ring-1 transition-[opacity,transform,width,height] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150',
     'cn-navigation-menu-viewport-wrapper':
       'flex pt-1.5 transition-[translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]',
     'cn-pagination': 'mx-auto flex w-full justify-center',
@@ -1396,7 +1414,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-pagination-next': 'pe-1.5!',
     'cn-pagination-previous': 'ps-1.5!',
     'cn-popover':
-      'z-50 flex w-72 origin-(--transform-origin) flex-col gap-2.5 rounded-lg bg-popover p-2.5 text-sm text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+      'bg-popover text-popover-foreground ring-foreground/10 z-50 flex w-72 origin-(--transform-origin) flex-col gap-2.5 rounded-lg p-2.5 text-sm shadow-md ring-1 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
     'cn-popover-description': 'text-muted-foreground',
     'cn-popover-header': 'flex flex-col gap-0.5 text-sm',
     'cn-popover-title': 'font-medium',
@@ -1405,63 +1423,64 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-questionnaire': 'gap-4',
     'cn-questionnaire-actions': 'gap-2',
     'cn-questionnaire-choice':
-      'gap-2.5 rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50',
-    'cn-questionnaire-choice-indicator': 'size-4 rounded-[4px] border border-input dark:bg-input/30',
+      'border-input gap-2.5 rounded-lg border bg-transparent px-3 py-2.5 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3',
+    'cn-questionnaire-choice-indicator': 'border-input size-4 rounded-[4px] border dark:bg-input/30',
     'cn-questionnaire-choice-shortcut': 'size-5 rounded-md font-mono text-[0.625rem] font-medium',
     'cn-questionnaire-choices': 'gap-2',
-    'cn-questionnaire-description': 'text-sm text-muted-foreground',
+    'cn-questionnaire-description': 'text-muted-foreground text-sm',
     'cn-questionnaire-error': 'text-sm',
     'cn-questionnaire-input':
-      'h-8 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+      'border-input h-8 rounded-lg border bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm',
     'cn-questionnaire-item': 'gap-4',
-    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title': 'text-base/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-4',
+    'cn-questionnaire-progress': 'text-muted-foreground text-xs font-medium',
+    'cn-questionnaire-title':
+      'text-base/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-2',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
       'bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full',
     'cn-radio-group-radio':
-      'relative flex aspect-square size-4 shrink-0 rounded-full border border-input after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary',
+      'border-input relative flex aspect-square size-4 shrink-0 rounded-full border focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:ring-3 aria-invalid:ring-3',
     'cn-resizable': 'flex size-full aria-[orientation=vertical]:flex-col',
     'cn-resizable-handle':
-      'relative flex min-w-px items-center justify-center bg-border ring-offset-background after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden aria-[orientation=horizontal]:min-h-px aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:h-1 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:translate-x-0 aria-[orientation=horizontal]:after:-translate-y-1/2 [&[aria-orientation=horizontal]>div]:rotate-90',
+      'bg-border ring-offset-background relative flex min-w-px items-center justify-center focus-visible:ring-ring after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:outline-hidden aria-[orientation=horizontal]:min-h-px aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:h-1 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:translate-x-0 aria-[orientation=horizontal]:after:-translate-y-1/2 [&[aria-orientation=horizontal]>div]:rotate-90',
     'cn-resizable-handle-disabled-true': 'cursor-default opacity-50',
-    'cn-resizable-handle-indicator': 'z-10 flex h-6 w-1 shrink-0 rounded-lg bg-border',
+    'cn-resizable-handle-indicator': 'bg-border z-10 flex h-6 w-1 shrink-0 rounded-lg',
     'cn-resizable-handle-layout-horizontal': 'cursor-ns-resize',
     'cn-resizable-handle-layout-vertical': 'cursor-ew-resize',
-    'cn-resizable-panel': 'relative overflow-hidden shrink-0 h-full',
+    'cn-resizable-panel': 'relative h-full shrink-0 overflow-hidden',
     'cn-resizable-panel-collapsed-true': 'hidden',
     'cn-select':
-      'relative inline-block w-full rounded-lg [&_button]:focus-visible:border [&_button]:focus-visible:border-ring [&_button]:focus-visible:ring-ring/50 [&_button]:focus-visible:ring-[3px]',
+      'relative inline-block w-full rounded-lg [&_button]:focus-visible:border-ring [&_button]:focus-visible:ring-ring/50 [&_button]:focus-visible:border [&_button]:focus-visible:ring-[3px]',
     'cn-select-content':
-      'relative z-50 flex max-h-96 w-full min-w-32 origin-(--z-select-content-transform-origin) flex-col overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[align-trigger=true]:animate-none!',
+      'bg-popover text-popover-foreground ring-foreground/10 relative z-50 flex max-h-96 w-full min-w-36 origin-(--z-select-content-transform-origin) flex-col overflow-hidden rounded-lg shadow-md ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[align-trigger=true]:animate-none!',
     'cn-select-content-position-popper':
       'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
-    'cn-select-item': 'relative flex w-full cursor-default items-center gap-2 rounded-md',
+    'cn-select-item': 'relative flex w-full cursor-default items-center gap-1.5 rounded-md',
     'cn-select-item-icon': 'absolute flex size-3.5 items-center justify-center',
     'cn-select-item-icon-mode-compact': 'end-2',
     'cn-select-item-icon-mode-normal': 'end-2',
-    'cn-select-item-mode-compact': 'pe-8 ps-2',
-    'cn-select-item-mode-normal': 'pe-8 ps-2',
+    'cn-select-item-mode-compact': 'ps-1.5 pe-8',
+    'cn-select-item-mode-normal': 'ps-1.5 pe-8',
     'cn-select-item-size-default': 'py-1 text-sm',
     'cn-select-item-size-lg': 'py-2 text-base',
     'cn-select-item-size-sm': 'py-1 text-xs',
     'cn-select-item-state':
-      'focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground [&_svg:not([class*="size-"])]:size-4 [&_svg:not([class*="text-"])]:text-muted-foreground *:data-[slot=select-item-text]:flex *:data-[slot=select-item-text]:items-center *:data-[slot=select-item-text]:gap-2',
-    'cn-select-label': 'px-2 py-1.5 text-xs text-muted-foreground',
+      'focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground [&_svg:not([class*="text-"])]:text-muted-foreground *:data-[slot=select-item-text]:flex *:data-[slot=select-item-text]:items-center *:data-[slot=select-item-text]:gap-2 [&_svg:not([class*="size-"])]:size-4',
+    'cn-select-label': 'text-muted-foreground px-1.5 py-1 text-xs',
     'cn-select-scroll-button':
-      'z-10 flex cursor-default items-center justify-center bg-popover py-1 [&_svg:not([class*="size-"])]:size-4',
+      'bg-popover z-10 flex cursor-default items-center justify-center py-1 [&_svg:not([class*="size-"])]:size-4',
     'cn-select-scroll-icon': 'size-4!',
-    'cn-select-separator': '-mx-1 block my-1 h-px bg-border',
+    'cn-select-separator': 'bg-border -mx-1 my-1 block h-px',
     'cn-select-trigger':
-      'flex h-8 px-3 py-2 w-full items-center justify-between gap-2 rounded-lg border border-input bg-transparent text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 data-[size=sm]:h-7',
+      "border-input flex w-full items-center justify-between gap-1.5 rounded-lg border bg-transparent py-2 pr-2 pl-2.5 text-sm whitespace-nowrap transition-colors select-none data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:ring-3 aria-invalid:ring-3 data-[size=default]:h-8 data-[size=default]:min-h-8 data-[size=sm]:h-7 data-[size=sm]:min-h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4",
     'cn-select-trigger-icon': 'size-4!',
-    'cn-select-viewport': 'min-h-0 flex-1 box-border overflow-x-hidden overflow-y-auto p-1',
+    'cn-select-viewport': 'box-border min-h-0 flex-1 overflow-x-hidden overflow-y-auto p-1',
     'cn-select-viewport-position-popper': 'w-full min-w-(--z-select-trigger-width) scroll-my-1',
     'cn-separator':
       'bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px data-[orientation=vertical]:self-stretch',
-    'cn-sheet': 'fixed z-50 flex flex-col gap-4 bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg',
-    'cn-sheet-description': 'text-sm text-muted-foreground wrap-anywhere',
+    'cn-sheet': 'bg-popover text-popover-foreground fixed z-50 flex flex-col gap-4 bg-clip-padding text-sm shadow-lg',
+    'cn-sheet-description': 'text-muted-foreground text-sm wrap-anywhere',
     'cn-sheet-footer': 'mt-auto flex flex-col gap-2 p-4',
     'cn-sheet-header': 'flex flex-col gap-0.5 p-4',
     'cn-sheet-overlay': 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs',
@@ -1469,7 +1488,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-sheet-side-left': 'inset-y-0 left-0 h-full w-3/4 border-r',
     'cn-sheet-side-right': 'inset-y-0 right-0 h-full w-3/4 border-l',
     'cn-sheet-side-top': 'inset-x-0 top-0 h-auto border-b',
-    'cn-sheet-title': 'text-base font-medium text-foreground wrap-anywhere',
+    'cn-sheet-title': 'text-foreground text-base font-medium wrap-anywhere',
     'cn-sidebar-container':
       'fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex',
     'cn-sidebar-container-side-left': 'left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)',
@@ -1481,7 +1500,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-sidebar-container-variant-sidebar':
       'group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l',
     'cn-sidebar-content':
-      'flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
+      'no-scrollbar flex min-h-0 flex-1 flex-col gap-0 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
     'cn-sidebar-footer': 'flex flex-col gap-2 p-2',
     'cn-sidebar-gap':
       'relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear group-data-[collapsible=offcanvas]:w-0 group-data-[side=right]:rotate-180',
@@ -1491,25 +1510,25 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-sidebar-gap-variant-sidebar': 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',
     'cn-sidebar-group': 'relative flex w-full min-w-0 flex-col p-2',
     'cn-sidebar-group-action':
-      "absolute end-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! after:absolute after:-inset-2 md:after:hidden group-data-[collapsible=icon]:hidden",
+      "text-sidebar-foreground ring-sidebar-ring absolute end-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 focus-visible:ring-2 md:after:hidden [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0",
     'cn-sidebar-group-content': 'w-full text-sm',
     'cn-sidebar-group-label':
-      "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
+      "text-sidebar-foreground/70 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium transition-[margin,opacity] duration-200 ease-linear group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 focus-visible:ring-2 [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0",
     'cn-sidebar-header': 'flex flex-col gap-2 p-2',
     'cn-sidebar-inner':
-      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm',
-    'cn-sidebar-input': 'h-8 w-full bg-background shadow-none',
+      'bg-sidebar flex size-full flex-col group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:ring-1',
+    'cn-sidebar-input': 'bg-background h-8 w-full shadow-none',
     'cn-sidebar-inset':
-      'relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2',
-    'cn-sidebar-menu': 'flex w-full min-w-0 flex-col gap-1',
+      'bg-background relative flex w-full flex-1 flex-col md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2',
+    'cn-sidebar-menu': 'flex w-full min-w-0 flex-col gap-0',
     'cn-sidebar-menu-action':
-      "absolute end-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring transition-transform peer-hover/menu-button:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! after:absolute after:-inset-2 md:after:hidden peer-data-[size=sm]/menu-button:top-1 peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 group-data-[collapsible=icon]:hidden",
+      "text-sidebar-foreground ring-sidebar-ring absolute end-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 transition-transform peer-hover/menu-button:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 focus-visible:ring-2 md:after:hidden [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0",
     'cn-sidebar-menu-action-show-on-hover-true':
-      'group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground data-[state=open]:opacity-100 md:opacity-0',
+      'peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0',
     'cn-sidebar-menu-badge':
-      'pointer-events-none absolute end-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium text-sidebar-foreground tabular-nums peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground peer-data-[size=sm]/menu-button:top-1 peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 group-data-[collapsible=icon]:hidden',
+      'text-sidebar-foreground pointer-events-none absolute end-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1',
     'cn-sidebar-menu-button':
-      "flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-start text-sm ring-sidebar-ring transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4!",
+      "ring-sidebar-ring flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-start text-sm transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 data-[active=true]:font-medium [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0 [&>span:last-child]:truncate",
     'cn-sidebar-menu-button-size-default': 'h-8 text-sm',
     'cn-sidebar-menu-button-size-lg': 'h-12 text-sm group-data-[collapsible=icon]:p-0!',
     'cn-sidebar-menu-button-size-sm': 'h-7 text-xs',
@@ -1518,25 +1537,25 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
     'cn-sidebar-menu-item': 'relative',
     'cn-sidebar-menu-skeleton': 'flex h-8 items-center gap-2 rounded-md px-2',
-    'cn-sidebar-menu-skeleton-icon': 'size-4',
+    'cn-sidebar-menu-skeleton-icon': 'size-4 rounded-md',
     'cn-sidebar-menu-sub':
-      'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 rtl:-translate-x-px group-data-[collapsible=icon]:hidden',
+      'border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s px-2.5 py-0.5 group-data-[collapsible=icon]:hidden rtl:-translate-x-px',
     'cn-sidebar-menu-sub-button':
-      "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground ring-sidebar-ring rtl:translate-x-px hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden",
+      "text-sidebar-foreground ring-sidebar-ring flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&_svg]:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden focus-visible:ring-2 rtl:translate-x-px [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0 [&>span:last-child]:truncate",
     'cn-sidebar-menu-sub-button-size-md': 'text-sm',
     'cn-sidebar-menu-sub-button-size-sm': 'text-xs',
     'cn-sidebar-menu-sub-item': 'relative',
     'cn-sidebar-mobile':
-      'fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) flex-col bg-sidebar p-0 text-sidebar-foreground shadow-lg transition-transform ease-in-out data-closed:duration-300 data-open:duration-500',
+      'bg-sidebar text-sidebar-foreground fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) flex-col p-0 shadow-lg transition-transform ease-in-out data-closed:duration-300 data-open:duration-500',
     'cn-sidebar-mobile-backdrop':
       'fixed inset-0 z-50 bg-black/50 transition-opacity duration-150 ease-in-out data-closed:pointer-events-none data-closed:opacity-0 data-open:opacity-100',
     'cn-sidebar-mobile-side-left': 'left-0 data-closed:-translate-x-full',
     'cn-sidebar-mobile-side-right': 'right-0 data-closed:translate-x-full',
-    'cn-sidebar-none': 'flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground',
+    'cn-sidebar-none': 'bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col',
     'cn-sidebar-rail':
-      'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize [[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar [[data-side=left][data-collapsible=offcanvas]_&]:-right-2 [[data-side=right][data-collapsible=offcanvas]_&]:-left-2',
-    'cn-sidebar-root': 'hidden text-sidebar-foreground md:block',
-    'cn-sidebar-separator': 'mx-2 w-auto bg-sidebar-border',
+      'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear hover:after:bg-sidebar-border hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] group-data-[collapsible=offcanvas]:after:left-full in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize sm:flex [[data-side=left][data-collapsible=offcanvas]_&]:-right-2 [[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-collapsible=offcanvas]_&]:-left-2 [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
+    'cn-sidebar-root': 'text-sidebar-foreground hidden md:block',
+    'cn-sidebar-separator': 'bg-sidebar-border mx-2 w-auto',
     'cn-sidebar-trigger': "size-7 [&_ng-icon:not([class*='size-'])]:size-4!",
     'cn-sidebar-wrapper': 'flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar',
     'cn-skeleton': 'bg-muted animate-pulse rounded-md',
@@ -1547,71 +1566,72 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-slider-orientation-orientation-vertical': 'translate-y-[50%]',
     'cn-slider-range': 'bg-primary absolute data-horizontal:h-full data-vertical:w-full',
     'cn-slider-thumb':
-      'relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3',
+      'border-ring ring-ring/50 relative block size-3 shrink-0 rounded-full border bg-white transition-[color,box-shadow] after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3',
     'cn-slider-track':
       'bg-muted relative grow overflow-hidden rounded-full data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1',
     'cn-switch':
-      'relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 disabled:cursor-not-allowed',
+      'relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:ring-[3px] disabled:cursor-not-allowed aria-invalid:ring-[3px]',
     'cn-switch-label': 'text-sm leading-none font-medium',
     'cn-switch-size-default': 'h-[18.4px] w-[32px]',
     'cn-switch-size-sm': 'h-[14px] w-[24px]',
     'cn-switch-thumb':
       'bg-background block rounded-full ring-0 transition-transform dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)]',
     'cn-table':
-      'w-full caption-bottom text-sm [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pe-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pe-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground',
+      'w-full caption-bottom text-sm [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:text-foreground [&_caption]:text-muted-foreground [&_caption]:mt-4 [&_caption]:text-sm [&_tbody]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr:last-child]:border-0 [&_td]:p-2 [&_td]:align-middle [&_td]:whitespace-nowrap [&_td:has([role=checkbox])]:pe-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:whitespace-nowrap [&_th:has([role=checkbox])]:pe-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_thead_tr]:border-b',
     'cn-table-body': '[&_tr:last-child]:border-0',
-    'cn-table-caption': 'mt-4 text-sm text-muted-foreground',
-    'cn-table-cell': 'p-2 align-middle has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
-    'cn-table-footer': 'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
+    'cn-table-caption': 'text-muted-foreground mt-4 text-sm',
+    'cn-table-cell':
+      'p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+    'cn-table-footer': 'bg-muted/50 border-t font-medium [&>tr]:last:border-b-0',
     'cn-table-head':
-      'h-10 px-2 text-start align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+      'text-foreground h-10 px-2 text-start align-middle font-medium whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-header': '[&_tr]:border-b',
     'cn-table-row':
       'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
     'cn-table-size-comfortable': '[&_td]:py-4 [&_th]:py-4',
     'cn-table-size-compact': '[&_td]:py-2 [&_th]:py-2',
-    'cn-table-variant-bordered': 'border border-border',
+    'cn-table-variant-bordered': 'border-border border',
     'cn-table-variant-striped': '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-    'cn-tabs-panel': 'focus-visible:ring-primary/50 focus-visible:ring-2',
+    'cn-tabs-panel': 'text-sm focus-visible:ring-primary/50 focus-visible:ring-2',
     'cn-tabs-tab-button':
-      "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all cursor-pointer group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:opacity-50 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
+      "text-foreground/60 relative inline-flex h-[calc(100%-1px)] flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-sm font-medium whitespace-nowrap transition-all hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:text-muted-foreground dark:hover:text-foreground data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start group-data-[variant=line]/tabs-list:bg-transparent after:absolute after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 focus-visible:ring-[3px] focus-visible:outline-1 disabled:opacity-50 group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:bg-transparent group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:data-active:after:opacity-100 dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
     'cn-tabs-tab-container': 'flex gap-2',
     'cn-tabs-tab-container-orientation-horizontal': 'flex-col',
     'cn-tabs-tab-container-orientation-vertical': 'flex-row',
     'cn-tabs-tab-nav':
-      'inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground group-data-[orientation=horizontal]/tabs:h-8 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col data-[variant=line]:rounded-none',
+      'text-muted-foreground inline-flex w-fit items-center justify-center rounded-lg p-[3px] group-data-[orientation=horizontal]/tabs:h-8 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col data-[variant=line]:rounded-none',
     'cn-tabs-tab-nav-variant-default': 'bg-muted',
     'cn-tabs-tab-nav-variant-line': 'gap-1 bg-transparent',
     'cn-textarea':
-      'flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+      'border-input flex field-sizing-content min-h-16 w-full rounded-lg border bg-transparent px-2.5 py-2 text-base transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm',
     'cn-textarea-input-group-text-area':
       'flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0 dark:bg-transparent dark:disabled:bg-transparent',
     'cn-toast': '',
     'cn-toggle':
-      "inline-flex items-center justify-center gap-1 rounded-lg text-sm font-medium whitespace-nowrap transition-all cursor-pointer hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4",
+      "inline-flex cursor-pointer items-center justify-center gap-1 rounded-lg text-sm font-medium whitespace-nowrap transition-all hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/40 focus-visible:ring-[3px] [&_ng-icon:not([class*='size-'])]:size-4! [&_svg:not([class*='size-'])]:size-4",
     'cn-toggle-group':
-      'flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-vertical:flex-col data-vertical:items-stretch',
+      'flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-lg data-vertical:flex-col data-vertical:items-stretch data-[size=sm]:rounded-[min(var(--radius-md),10px)]',
     'cn-toggle-group-item':
       'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
     'cn-toggle-size-default': 'h-8 min-w-8 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
     'cn-toggle-size-lg': 'h-9 min-w-9 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
     'cn-toggle-size-sm':
-      "h-7 min-w-7 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+      "h-7 min-w-7 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_ng-icon:not([class*='size-'])]:size-3.5! [&_svg:not([class*='size-'])]:size-3.5",
     'cn-toggle-variant-default': 'bg-transparent',
-    'cn-toggle-variant-outline': 'border border-input bg-transparent',
+    'cn-toggle-variant-outline': 'border-input border bg-transparent',
     'cn-tooltip':
-      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+      'bg-foreground text-background z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md px-3 py-1.5 text-xs data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 has-data-[slot=kbd]:pe-1.5 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-sm',
     'cn-tooltip-arrow':
       'bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px]',
     'cn-tooltip-position': 'absolute',
-    'cn-tooltip-position-position-bottom': '-top-2.5 translate-y-0 rotate-180 left-[calc(50%-5px)]',
-    'cn-tooltip-position-position-left': 'top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5',
-    'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
-    'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
+    'cn-tooltip-position-position-bottom': '-top-2.5 left-[calc(50%-5px)] translate-y-0 rotate-180',
+    'cn-tooltip-position-position-left': 'top-[calc(50%-5px)] -right-2.5 translate-y-0 rotate-270',
+    'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] -left-2.5 translate-y-0 rotate-90',
+    'cn-tooltip-position-position-top': 'bottom-0 left-[calc(50%-5px)] translate-y-full',
     'cn-trace':
-      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
-    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed',
-    'cn-trace-collapsible-trigger': 'gap-1 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
+      'gap-2 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3',
+    'cn-trace-collapsible-content': 'ms-[calc(--spacing(2)-1px)] mt-2 mb-1 border-s ps-4 pe-1 leading-relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-md focus-visible:ring-ring/50 focus-visible:ring-3',
     'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
     'cn-trace-line': 'gap-2 text-sm',
   },
@@ -1626,7 +1646,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'cursor-pointer flex flex-1 items-start justify-between rounded-md text-start text-sm font-medium transition-all w-full gap-6 p-4 hover:underline focus-visible:ring-[3px]',
     'cn-accordion-trigger-icon': 'text-muted-foreground size-4 translate-y-0.5 transition-transform duration-200',
     'cn-alert':
-      "relative grid w-full gap-0.5 rounded-lg border text-start text-sm px-4 py-3 has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 has-[>svg]:gap-x-2.5",
+      "relative grid w-full gap-0.5 rounded-lg border text-start text-sm px-4 py-3 has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2.5 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4",
     'cn-alert-action': 'absolute top-2.5 end-3',
     'cn-alert-description':
       'text-sm text-balance md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4',
@@ -1644,7 +1664,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-dialog-overlay': 'bg-black/80 supports-backdrop-filter:backdrop-blur-xs',
     'cn-alert-dialog-title':
       'font-medium wrap-anywhere text-lg sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
-    'cn-alert-icon': 'shrink-0 self-start text-base!',
+    'cn-alert-icon': 'flex shrink-0 self-start text-base!',
+    'cn-alert-icon-glyph': 'size-4!',
     'cn-alert-title':
       "font-medium [&_a]:hover:text-foreground group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 group-has-[>svg]/alert:col-start-2",
     'cn-alert-variant-default': 'bg-card text-card-foreground',
@@ -1687,7 +1708,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
-      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs',
+      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs text-sm',
     'cn-avatar-group': 'flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
     'cn-avatar-group-count':
       'relative flex shrink-0 items-center justify-center bg-muted text-muted-foreground size-8 rounded-full text-sm ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',
@@ -1697,12 +1718,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
-      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
+      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full opacity-0',
     'cn-avatar-size-default': 'size-8',
     'cn-avatar-size-lg': 'size-10',
     'cn-avatar-size-sm': 'size-6',
     'cn-badge':
-      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3!',
+      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3! [&>z-spinner>svg]:size-3!',
     'cn-badge-variant-default': 'bg-primary text-primary-foreground [a&]:hover:bg-primary/90',
     'cn-badge-variant-destructive':
       'bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20',
@@ -1755,7 +1776,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-bubble-variant-tinted':
       '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
     'cn-button':
-      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all rounded-4xl focus-visible:border-ring focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-[3px] aria-invalid:ring-[3px]",
+      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all rounded-4xl focus-visible:border-ring focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-[3px] aria-invalid:ring-[3px] [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem]",
     'cn-button-disabled-true': 'opacity-50',
     'cn-button-group':
       'flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>input]:flex-1 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-e-4xl',
@@ -1774,11 +1795,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-button-size-icon': 'size-9',
     'cn-button-size-icon-lg': 'size-10',
     'cn-button-size-icon-sm': 'size-8',
-    'cn-button-size-icon-xs': "size-6 [&_svg:not([class*='size-'])]:size-3",
+    'cn-button-size-icon-xs':
+      "size-6 [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-size-lg': 'gap-1.5 h-10 px-4 has-data-[icon=inline-end]:pe-3 has-data-[icon=inline-start]:ps-3',
     'cn-button-size-sm': 'gap-1 h-8 px-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
     'cn-button-size-xs':
-      "h-6 gap-1 text-xs px-2.5 [&_svg:not([class*='size-'])]:size-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2",
+      "h-6 gap-1 text-xs px-2.5 [&_svg:not([class*='size-'])]:size-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-variant-default': 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
     'cn-button-variant-destructive':
       'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
@@ -1793,9 +1815,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'block w-fit bg-background p-3 [--cell-radius:var(--radius-4xl)] [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
     'cn-calendar-caption': 'flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)',
     'cn-calendar-caption-label': 'h-8 pe-2 ps-3',
-    'cn-calendar-caption-label-layout-dropdown':
-      'flex h-(--cell-size) items-center gap-1.5 rounded-(--cell-radius) px-3 text-sm',
-    'cn-calendar-caption-label-layout-label': 'text-sm',
+    'cn-calendar-caption-label-layout-dropdown': 'flex items-center gap-1 rounded-(--cell-radius) text-sm',
+    'cn-calendar-caption-label-layout-label': 'font-medium text-sm',
     'cn-calendar-day':
       'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
     'cn-calendar-day-button':
@@ -1817,18 +1838,18 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-calendar-day-today-true': 'rounded-(--cell-radius) bg-muted text-foreground',
     'cn-calendar-dropdown': 'absolute inset-0 z-10 cursor-pointer bg-popover opacity-0',
     'cn-calendar-dropdown-root':
-      'relative isolate border-input border has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/50 has-focus:ring-[3px]',
-    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-2.5 text-sm font-medium',
-    'cn-calendar-month': 'relative flex w-full flex-col gap-6',
-    'cn-calendar-months': 'relative flex flex-col gap-6 md:flex-row',
+      'relative isolate border-input border rounded-(--cell-radius) has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/50 has-focus:ring-[3px]',
+    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
+    'cn-calendar-month': 'relative flex w-full flex-col gap-4',
+    'cn-calendar-months': 'relative flex flex-col gap-4 md:flex-row',
     'cn-calendar-nav': 'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1.5',
     'cn-calendar-nav-button': 'size-(--cell-size) p-0',
     'cn-calendar-nav-spacer': 'size-(--cell-size)',
-    'cn-calendar-row': 'grid w-full grid-cols-7 gap-x-0',
-    'cn-calendar-week': 'mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2',
+    'cn-calendar-row': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0',
+    'cn-calendar-week': 'mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2',
     'cn-calendar-weekday':
-      'flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
-    'cn-calendar-weekdays': 'grid w-full grid-cols-7',
+      'flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
+    'cn-calendar-weekdays': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))]',
     'cn-calendar-weeks': 'mt-2 flex w-full flex-col gap-y-2',
     'cn-card':
       'flex flex-col gap-(--card-spacing) overflow-hidden bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 rounded-2xl [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl data-[size=sm]:[--card-spacing:--spacing(4)]',
@@ -1909,7 +1930,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex flex-wrap items-center border border-input bg-clip-padding px-2.5 text-sm transition-colors bg-input/30 min-h-9 gap-1.5 rounded-4xl py-1.5 focus-within:border-ring focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40 focus-within:ring-[3px] has-aria-invalid:ring-[3px] has-data-[slot=combobox-chip]:px-1.5',
     'cn-combobox-chips-input': 'min-w-16 flex-1 bg-transparent',
     'cn-combobox-content':
-      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground ring-1 duration-100 ring-foreground/5 rounded-2xl shadow-2xl data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:bg-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 *:data-[slot=input-group]:h-9 *:data-[slot=input-group]:border-none',
+      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground ring-1 duration-100 ring-foreground/5 rounded-2xl shadow-2xl data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:bg-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 *:data-[slot=input-group]:h-9 *:data-[slot=input-group]:border-none data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
     'cn-combobox-empty':
       'hidden w-full justify-center py-2 text-center text-sm text-muted-foreground group-data-empty/combobox-content:flex',
     'cn-combobox-group': 'block',
@@ -1925,7 +1946,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'no-scrollbar block scroll-py-1 overflow-y-auto overscroll-contain p-1 max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] data-empty:p-0',
     'cn-combobox-separator': '-mx-1 my-1 block h-px bg-border/50',
     'cn-combobox-trigger': "[&_svg:not([class*='size-'])]:size-4",
-    'cn-combobox-trigger-icon': 'size-4!',
+    'cn-combobox-trigger-icon': 'size-4! text-muted-foreground',
     'cn-combobox-trigger-standalone-false':
       'group-has-data-[slot=combobox-clear]/input-group:hidden aria-expanded:bg-transparent',
     'cn-combobox-value': 'block truncate text-sm',
@@ -1942,13 +1963,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-command-input-icon': 'size-4!',
     'cn-command-input-wrapper': 'p-1 pb-0',
     'cn-command-item':
-      "relative flex cursor-pointer items-center gap-2 text-sm select-none transition-colors rounded-lg px-3 py-2 data-selected:bg-muted data-selected:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground in-data-[slot=dialog-content]:rounded-2xl",
+      "relative flex items-center gap-2 text-sm select-none transition-colors rounded-lg px-3 py-2 cursor-default outline-hidden data-selected:bg-muted [&_svg:not([class*='size-'])]:size-4 in-data-[slot=dialog-content]:rounded-2xl data-selected:text-foreground data-selected:*:[svg]:text-foreground",
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
-    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1',
+    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
     'cn-command-separator': 'h-px bg-border/50 my-1',
     'cn-command-shortcut':
-      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground',
+      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-2xl border',
     'cn-data-table-column-header': 'gap-2',
     'cn-data-table-column-header-trigger': '-ms-3 h-8',
@@ -1977,13 +1998,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'fixed z-50 m-2 flex min-h-0 flex-col rounded-4xl border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform dark:border-border',
     'cn-drawer-body': 'flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit]',
     'cn-drawer-description': 'text-sm text-balance text-muted-foreground wrap-anywhere',
-    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4',
+    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0',
     'cn-drawer-handle':
-      'relative z-10 cursor-grab bg-muted mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full active:cursor-grabbing',
-    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center',
-    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end',
-    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start',
-    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center',
+      'relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-full after:bg-muted active:cursor-grabbing',
+    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center after:h-1.5 after:w-[100px]',
+    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end after:h-[100px] after:w-1.5',
+    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start after:h-[100px] after:w-1.5',
+    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center after:h-1.5 after:w-[100px]',
     'cn-drawer-header':
       'flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start',
     'cn-drawer-overlay': 'bg-black/80 supports-backdrop-filter:backdrop-blur-xs',
@@ -1992,17 +2013,19 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-drawer-placement-right': 'inset-y-0 right-0 w-3/4 origin-right flex-row sm:w-96',
     'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top',
     'cn-drawer-title': 'text-base font-medium text-foreground wrap-anywhere',
+    'cn-dropdown-menu-checkbox-item': 'pe-8 ps-3 in-data-[menu=menubar]:pe-3 in-data-[menu=menubar]:ps-9.5',
     'cn-dropdown-menu-content':
       'z-50 max-h-96 overflow-x-hidden overflow-y-auto animate-in ring-foreground/5 bg-popover text-popover-foreground min-w-48 rounded-2xl p-1 shadow-2xl ring-1 duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10',
     'cn-dropdown-menu-item':
       "relative flex cursor-default items-center transition-colors gap-2.5 rounded-xl px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[variant=destructive]:hover:bg-destructive/10 dark:data-[variant=destructive]:hover:bg-destructive/20 data-[variant=destructive]:hover:text-destructive not-data-[variant=destructive]:hover:**:text-accent-foreground data-[variant=destructive]:data-highlighted:bg-destructive/10 dark:data-[variant=destructive]:data-highlighted:bg-destructive/20 data-[variant=destructive]:data-highlighted:text-destructive data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:ps-9.5 [&_svg:not([class*='size-'])]:size-4",
-    'cn-dropdown-menu-item-indicator': 'absolute start-2 flex size-3.5 items-center justify-center',
+    'cn-dropdown-menu-item-indicator':
+      'absolute end-2 flex items-center justify-center in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:start-3 in-data-[menu=menubar]:size-4',
     'cn-dropdown-menu-item-inset-true': 'ps-8',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
     'cn-dropdown-menu-label': 'relative flex items-center text-sm text-muted-foreground px-3 py-2.5 data-inset:ps-9.5',
     'cn-dropdown-menu-label-inset-true': 'ps-8',
-    'cn-dropdown-menu-radio-dot': 'size-2 rounded-4xl bg-current',
+    'cn-dropdown-menu-radio-item': 'pe-8 ps-3 in-data-[menu=menubar]:pe-3 in-data-[menu=menubar]:ps-9.5',
     'cn-dropdown-menu-separator': '-mx-1 my-1 block h-px bg-border/50',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-dropdown-menu-sub-content':
@@ -2012,8 +2035,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-dropdown-menu-sub-trigger-inset-true': 'ps-8',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 border-dashed text-center text-balance rounded-lg p-12',
-    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-4 text-sm text-balance',
-    'cn-empty-description': 'text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4',
+    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance',
+    'cn-empty-description':
+      'text-muted-foreground text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
     'cn-empty-header': 'flex max-w-sm flex-col items-center gap-2',
     'cn-empty-icon':
       "bg-muted text-foreground mb-2 flex shrink-0 items-center justify-center rounded-lg size-10 [&_svg:not([class*='size-'])]:size-6",
@@ -2022,30 +2046,30 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'font-medium tracking-tight text-lg',
     'cn-field': 'flex w-full gap-3 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-1',
-    'cn-field-description':
-      'text-muted-foreground text-start text-sm group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5',
     'cn-field-error': 'text-sm font-normal text-destructive',
     'cn-field-group': 'flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
-      'flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:border dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-xl has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-input/40 has-[>[data-slot=field]]:has-[:focus-visible]:ring-[3px] *:data-[slot=field]:p-4',
+      'flex w-fit gap-2 leading-none group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:border dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-xl has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-input/40 has-[>[data-slot=field]]:has-[:focus-visible]:ring-[3px] *:data-[slot=field]:p-4',
     'cn-field-legend': 'font-medium mb-3 data-[variant=label]:text-sm data-[variant=legend]:text-base',
     'cn-field-orientation-horizontal':
-      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-responsive':
-      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-vertical': 'flex-col *:w-full [&>.sr-only]:w-auto',
     'cn-field-separator': 'relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2',
     'cn-field-separator-content': 'relative mx-auto block w-fit text-muted-foreground px-2',
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
-    'cn-field-title': 'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+    'cn-field-title':
+      'flex w-fit items-center gap-2 text-sm font-medium leading-snug group-data-[disabled=true]/field:opacity-50',
     'cn-font-heading': 'font-heading',
     'cn-hover-card':
-      'z-50 border bg-popover p-4 text-popover-foreground origin-(--z-hover-card-transform-origin) ring-foreground/5 w-72 rounded-2xl shadow-2xl data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+      'z-50 origin-(--z-hover-card-transform-origin) ring-foreground/5 bg-popover text-popover-foreground w-72 rounded-2xl p-4 text-sm shadow-2xl ring-1 duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
       'w-full min-w-0 border border-input py-1 text-base transition-colors bg-input/30 h-9 rounded-4xl px-3 file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:h-7 focus-visible:ring-[3px] aria-invalid:ring-[3px]',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/30 h-9 rounded-4xl has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-data-[align=block-end]:rounded-2xl has-data-[align=block-start]:rounded-2xl has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-[3px] has-[textarea]:rounded-xl',
+      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/30 h-9 rounded-4xl has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-data-[align=block-end]:rounded-2xl has-data-[align=block-start]:rounded-2xl has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-[3px] has-[textarea]:rounded-xl',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-4xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -2058,7 +2082,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex cursor-pointer items-center justify-center whitespace-nowrap transition-all shrink-0 gap-2 rounded-4xl text-sm border border-transparent bg-clip-padding font-medium shadow-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:ring-3 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed [&_svg:not([class*='size-'])]:size-4 active:not-aria-[haspopup]:translate-y-px",
     'cn-input-group-button-size-icon-sm': 'size-8 p-0 has-[>svg]:p-0',
     'cn-input-group-button-size-icon-xs': 'size-6 p-0 has-[>svg]:p-0',
-    'cn-input-group-button-size-sm': 'h-8 px-3',
+    'cn-input-group-button-size-sm':
+      'h-9 gap-1.5 px-3 has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5',
     'cn-input-group-button-size-xs': "h-6 gap-1 px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-button-variant-default': 'bg-primary text-primary-foreground hover:bg-primary/80',
     'cn-input-group-button-variant-destructive':
@@ -2095,7 +2120,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-description':
       'line-clamp-2 text-muted-foreground text-start text-sm [&>a]:underline [&>a]:underline-offset-4',
     'cn-item-footer': 'flex basis-full items-center justify-between gap-2',
-    'cn-item-group': 'flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
+    'cn-item-group':
+      'flex w-full flex-col gap-4 has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2',
     'cn-item-header': 'flex basis-full items-center justify-between gap-2',
     'cn-item-media':
       'flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start',
@@ -2103,7 +2129,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-media-variant-icon': "[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
     'cn-item-media-variant-image':
       'size-10 overflow-hidden rounded-lg group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover group-data-[size=xs]/item:rounded-md',
-    'cn-item-separator': 'block h-px w-full shrink-0 my-2',
+    'cn-item-separator': 'bg-border block h-px w-full shrink-0 my-2',
     'cn-item-size-default': 'gap-3.5 px-4 py-3.5',
     'cn-item-size-sm': 'gap-3.5 px-3.5 py-3',
     'cn-item-size-xs': 'gap-2.5 px-3 py-2.5 in-data-[slot=dropdown-menu-content]:p-0',
@@ -2186,9 +2212,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-navigation-menu-trigger':
       'inline-flex h-9 w-max items-center justify-center gap-1 text-sm font-medium transition-all rounded-2xl px-4.5 py-2.5 hover:bg-muted focus:bg-muted focus-visible:ring-ring/50 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50 focus-visible:ring-[3px]',
     'cn-navigation-menu-trigger-icon':
-      'relative top-px size-3 shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
+      'relative top-px size-3! shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
     'cn-navigation-menu-viewport':
-      'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/5 rounded-2xl shadow-2xl ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90',
+      'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/5 rounded-2xl shadow ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90',
     'cn-navigation-menu-viewport-wrapper':
       'flex pt-1.5 transition-[translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]',
     'cn-pagination': 'mx-auto flex w-full justify-center gap-1',
@@ -2216,7 +2242,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'h-9 rounded-4xl border border-input bg-input/30 px-3 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
     'cn-questionnaire-item': 'gap-5',
     'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title': 'text-base/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-5',
+    'cn-questionnaire-title':
+      'text-base/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-5',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -2239,7 +2266,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-content-position-popper':
       'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
     'cn-select-item':
-      "relative flex w-full cursor-default items-center gap-2.5 rounded-xl py-2 pe-8 ps-3 text-sm focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+      "relative flex w-full cursor-default items-center rounded-xl py-2 pe-8 ps-3 text-sm gap-2.5 focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
     'cn-select-item-icon': 'absolute flex size-3.5 items-center justify-center',
     'cn-select-item-icon-mode-compact': 'end-2',
     'cn-select-item-icon-mode-normal': 'end-2',
@@ -2256,7 +2283,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-scroll-icon': 'size-4!',
     'cn-select-separator': '-mx-1 block my-1 h-px bg-border/50',
     'cn-select-trigger':
-      'flex h-8 py-2 w-full items-center justify-between gap-2 border border-input text-sm whitespace-nowrap bg-input/30 rounded-4xl px-3 transition-colors data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 focus-visible:ring-[3px] aria-invalid:ring-[3px] data-[size=default]:h-9 data-[size=sm]:h-8',
+      "border-input bg-input/30 gap-1.5 rounded-4xl border px-3 py-2 text-sm transition-colors flex w-full items-center justify-between whitespace-nowrap data-placeholder:text-muted-foreground dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-[3px] aria-invalid:ring-[3px] data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:flex *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:data-[slot=select-value]:items-center data-[size=default]:min-h-9 data-[size=sm]:min-h-8",
     'cn-select-trigger-icon': 'size-4!',
     'cn-select-viewport': 'min-h-0 flex-1 box-border overflow-x-hidden overflow-y-auto p-1',
     'cn-select-viewport-position-popper': 'w-full min-w-(--z-select-trigger-width) scroll-my-1',
@@ -2277,9 +2304,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-sidebar-container-side-left': 'left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)',
     'cn-sidebar-container-side-right': 'right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)',
     'cn-sidebar-container-variant-floating':
-      'p-3 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
+      'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
     'cn-sidebar-container-variant-inset':
-      'p-3 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
+      'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
     'cn-sidebar-container-variant-sidebar':
       'group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l',
     'cn-sidebar-content':
@@ -2299,7 +2326,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "flex h-8 shrink-0 items-center rounded-md text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear px-3 focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
     'cn-sidebar-header': 'flex flex-col gap-2 p-2 [--radius:var(--radius-xl)]',
     'cn-sidebar-inner':
-      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm',
+      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:shadow-sm',
     'cn-sidebar-input': 'h-8 w-full bg-background shadow-none',
     'cn-sidebar-inset':
       'relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2',
@@ -2320,7 +2347,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
     'cn-sidebar-menu-item': 'relative',
     'cn-sidebar-menu-skeleton': 'flex h-8 items-center gap-2 rounded-md px-2',
-    'cn-sidebar-menu-skeleton-icon': 'size-4',
+    'cn-sidebar-menu-skeleton-icon': 'size-4 rounded-md',
     'cn-sidebar-menu-sub':
       'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 rtl:-translate-x-px group-data-[collapsible=icon]:hidden',
     'cn-sidebar-menu-sub-button':
@@ -2360,13 +2387,14 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-switch-thumb':
       'block transition-transform bg-background rounded-full ring-0 data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:data-[state=unchecked]:translate-x-0 group-data-[size=sm]/switch:data-[state=unchecked]:translate-x-0',
     'cn-table':
-      'w-full caption-bottom text-sm [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4',
+      'w-full caption-bottom text-sm [&_tbody_tr]:transition-colors [&_th]:h-12 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap',
     'cn-table-body': '[&_tr:last-child]:border-0',
     'cn-table-caption': 'mt-4 text-sm text-muted-foreground',
-    'cn-table-cell': 'align-middle p-3 has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+    'cn-table-cell':
+      'align-middle p-3 whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-footer': 'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
     'cn-table-head':
-      'text-start align-middle font-medium text-muted-foreground h-12 px-3 has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+      'text-start align-middle font-medium text-foreground h-12 px-3 whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-header': '[&_tr]:border-b',
     'cn-table-row':
       'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
@@ -2374,7 +2402,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-table-size-compact': '[&_td]:py-2 [&_th]:py-2',
     'cn-table-variant-bordered': 'border border-border',
     'cn-table-variant-striped': '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-    'cn-tabs-panel': 'focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-tabs-panel': 'text-sm focus-visible:ring-[3px] focus-visible:ring-ring/50',
     'cn-tabs-tab-button':
       "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all cursor-pointer gap-1.5 rounded-xl border border-transparent px-2 py-1 text-sm font-medium group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:outline-1 focus-visible:outline-ring [&_svg]:shrink-0 after:absolute after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[orientation=vertical]/tabs:px-2.5 group-data-[orientation=vertical]/tabs:py-1.5 [&_svg:not([class*='size-'])]:size-4 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 text-foreground/60 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground after:opacity-0 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
     'cn-tabs-tab-container': 'flex gap-2',
@@ -2390,9 +2418,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent',
     'cn-toast': 'rounded-2xl',
     'cn-toggle':
-      "inline-flex items-center justify-center gap-1 text-sm font-medium whitespace-nowrap cursor-pointer rounded-4xl transition-colors hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4",
+      "inline-flex items-center justify-center gap-1 text-sm font-medium whitespace-nowrap cursor-pointer rounded-4xl transition-colors hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_ng-icon:not([class*='size-'])]:size-4!",
     'cn-toggle-group':
-      'flex w-fit flex-row items-center data-vertical:flex-col data-vertical:items-stretch data-[spacing=0]:data-[variant=outline]:rounded-4xl',
+      'flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-vertical:flex-col data-vertical:items-stretch data-[spacing=0]:data-[variant=outline]:rounded-4xl',
     'cn-toggle-group-item':
       'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none focus:z-10 focus-visible:z-10 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t data-[state=on]:bg-muted group-data-[spacing=0]/toggle-group:px-3 group-data-[spacing=0]/toggle-group:shadow-none group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-2.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-2.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-3xl group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-3xl group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-3xl group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-3xl',
     'cn-toggle-size-default': 'h-9 min-w-9 px-3 has-data-[icon=inline-end]:pe-2.5 has-data-[icon=inline-start]:ps-2.5',
@@ -2401,7 +2429,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-toggle-variant-default': 'bg-transparent',
     'cn-toggle-variant-outline': 'border border-input bg-transparent',
     'cn-tooltip':
-      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 bg-foreground px-3 py-1.5 text-xs text-background rounded-2xl has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 **:data-[slot=kbd]:rounded-4xl',
+      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 bg-foreground px-3 py-1.5 text-xs text-background rounded-2xl has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 **:data-[slot=kbd]:rounded-4xl data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95',
     'cn-tooltip-arrow':
       'bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] data-[side=left]:translate-x-[-1.5px] data-[side=right]:translate-x-[1.5px]',
     'cn-tooltip-position': 'absolute',
@@ -2445,7 +2473,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-dialog-overlay': 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs',
     'cn-alert-dialog-title':
       'font-medium wrap-anywhere text-sm sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
-    'cn-alert-icon': 'shrink-0 self-start text-sm!',
+    'cn-alert-icon': 'flex shrink-0 self-start text-sm!',
+    'cn-alert-icon-glyph': 'size-4!',
     'cn-alert-title':
       "font-medium [&_a]:hover:text-foreground group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 group-has-[>svg]/alert:col-start-2",
     'cn-alert-variant-default': 'bg-card text-card-foreground',
@@ -2488,7 +2517,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
-      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs',
+      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs text-sm',
     'cn-avatar-group': 'flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
     'cn-avatar-group-count':
       'relative flex shrink-0 items-center justify-center bg-muted text-muted-foreground size-8 rounded-full text-xs ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',
@@ -2498,12 +2527,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
-      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
+      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full opacity-0',
     'cn-avatar-size-default': 'size-8',
     'cn-avatar-size-lg': 'size-10',
     'cn-avatar-size-sm': 'size-6',
     'cn-badge':
-      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-none border border-transparent px-2 py-0.5 text-xs font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3!',
+      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-none border border-transparent px-2 py-0.5 text-xs font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3! [&>z-spinner>svg]:size-3!',
     'cn-badge-variant-default': 'bg-primary text-primary-foreground [a&]:hover:bg-primary/90',
     'cn-badge-variant-destructive':
       'bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20',
@@ -2555,7 +2584,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-bubble-variant-tinted':
       '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
     'cn-button':
-      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all rounded-none text-xs focus-visible:border-ring focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-1 aria-invalid:ring-1",
+      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all rounded-none text-xs focus-visible:border-ring focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-1 aria-invalid:ring-1 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem]",
     'cn-button-disabled-true': 'opacity-50',
     'cn-button-group':
       'flex w-fit items-stretch rounded-none *:focus-visible:relative *:focus-visible:z-10 [&>input]:flex-1 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-none',
@@ -2576,12 +2605,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-button-size-icon': 'size-8',
     'cn-button-size-icon-lg': 'size-9',
     'cn-button-size-icon-sm': 'size-7 rounded-none',
-    'cn-button-size-icon-xs': "size-6 rounded-none [&_svg:not([class*='size-'])]:size-3",
+    'cn-button-size-icon-xs':
+      "size-6 rounded-none [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-size-lg': 'h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
     'cn-button-size-sm':
-      "h-7 gap-1 px-2.5 rounded-none has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+      "h-7 gap-1 px-2.5 rounded-none has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.875rem]",
     'cn-button-size-xs':
-      "h-6 gap-1 px-2 text-xs rounded-none has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3",
+      "h-6 gap-1 px-2 text-xs rounded-none has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-variant-default': 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
     'cn-button-variant-destructive':
       'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
@@ -2596,9 +2626,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'block w-fit bg-background p-2 [--cell-size:--spacing(7)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
     'cn-calendar-caption': 'flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)',
     'cn-calendar-caption-label': 'h-6 rounded-none pe-1 ps-1.5',
-    'cn-calendar-caption-label-layout-dropdown':
-      'flex h-(--cell-size) items-center gap-1 rounded-(--cell-radius) px-2 text-xs',
-    'cn-calendar-caption-label-layout-label': 'text-xs',
+    'cn-calendar-caption-label-layout-dropdown': 'flex items-center gap-1 rounded-(--cell-radius) text-sm',
+    'cn-calendar-caption-label-layout-label': 'font-medium text-sm',
     'cn-calendar-day':
       'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
     'cn-calendar-day-button':
@@ -2621,24 +2650,24 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-calendar-dropdown': 'absolute inset-0 z-10 cursor-pointer bg-popover opacity-0',
     'cn-calendar-dropdown-root':
       'relative isolate border-input rounded-none border has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/50 has-focus:ring-1',
-    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-2 text-xs font-medium',
+    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
     'cn-calendar-month': 'relative flex w-full flex-col gap-4',
     'cn-calendar-months': 'relative flex flex-col gap-4 md:flex-row',
     'cn-calendar-nav': 'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1',
     'cn-calendar-nav-button': 'size-(--cell-size) p-0',
     'cn-calendar-nav-spacer': 'size-(--cell-size)',
-    'cn-calendar-row': 'grid w-full grid-cols-7 gap-x-0',
-    'cn-calendar-week': 'mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2',
+    'cn-calendar-row': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0',
+    'cn-calendar-week': 'mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2',
     'cn-calendar-weekday':
-      'flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
-    'cn-calendar-weekdays': 'grid w-full grid-cols-7',
+      'flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
+    'cn-calendar-weekdays': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))]',
     'cn-calendar-weeks': 'mt-2 flex w-full flex-col gap-y-2',
     'cn-card':
       'flex flex-col gap-(--card-spacing) overflow-hidden bg-card py-(--card-spacing) text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] rounded-none text-xs/relaxed has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-none *:[img:last-child]:rounded-none',
     'cn-card-action': 'col-start-2 row-span-2 row-start-1 self-start justify-self-end',
     'cn-card-content': 'px-(--card-spacing)',
     'cn-card-description': 'text-muted-foreground text-xs/relaxed',
-    'cn-card-footer': 'flex items-center p-(--card-spacing) rounded-none',
+    'cn-card-footer': 'flex items-center border-t p-(--card-spacing) rounded-none',
     'cn-card-header':
       'grid auto-rows-min items-start gap-1 px-(--card-spacing) rounded-none has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [&.border-b]:pb-(--card-spacing)',
     'cn-card-title': 'text-sm font-medium group-data-[size=sm]/card:text-sm',
@@ -2712,7 +2741,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex min-h-8 flex-wrap items-center gap-1 border border-input bg-transparent bg-clip-padding px-2.5 py-1 transition-colors rounded-none text-xs focus-within:border-ring focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 has-data-[slot=combobox-chip]:px-1 dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40 focus-within:ring-1 has-aria-invalid:ring-1',
     'cn-combobox-chips-input': 'min-w-16 flex-1 bg-transparent',
     'cn-combobox-content':
-      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 rounded-none data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:bg-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 rounded-none data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:bg-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
     'cn-combobox-empty':
       'hidden w-full justify-center py-2 text-center text-muted-foreground text-xs group-data-empty/combobox-content:flex',
     'cn-combobox-group': 'block',
@@ -2728,7 +2757,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'no-scrollbar block scroll-py-1 overflow-y-auto overscroll-contain max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] data-empty:p-0',
     'cn-combobox-separator': '-mx-1 block h-px bg-border',
     'cn-combobox-trigger': "[&_svg:not([class*='size-'])]:size-4",
-    'cn-combobox-trigger-icon': 'size-4!',
+    'cn-combobox-trigger-icon': 'size-4! text-muted-foreground',
     'cn-combobox-trigger-standalone-false':
       'group-has-data-[slot=combobox-clear]/input-group:hidden aria-expanded:bg-transparent',
     'cn-combobox-value': 'block truncate text-xs',
@@ -2745,13 +2774,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-command-input-icon': 'size-4!',
     'cn-command-input-wrapper': 'border-b pb-0',
     'cn-command-item':
-      "relative flex cursor-pointer items-center gap-2 px-2 select-none transition-colors rounded-none py-2 text-xs data-selected:bg-muted data-selected:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground in-data-[slot=dialog-content]:rounded-none!",
+      "relative flex items-center gap-2 px-2 select-none transition-colors rounded-none py-2 text-xs cursor-default outline-hidden data-selected:bg-muted [&_svg:not([class*='size-'])]:size-4 in-data-[slot=dialog-content]:rounded-none! data-selected:text-foreground data-selected:*:[svg]:text-foreground",
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
-    'cn-command-list': 'no-scrollbar max-h-72 overflow-x-hidden overflow-y-auto outline-none p-1 scroll-py-0',
+    'cn-command-list': 'no-scrollbar max-h-72 overflow-x-hidden overflow-y-auto outline-none scroll-py-0',
     'cn-command-separator': '-mx-1 my-1 h-px bg-border',
     'cn-command-shortcut':
-      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground',
+      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-none border',
     'cn-data-table-column-header': 'gap-2',
     'cn-data-table-column-header-trigger': '-ms-2.5 h-7',
@@ -2780,13 +2809,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'fixed z-50 min-h-0 will-change-transform bg-popover text-popover-foreground flex h-auto flex-col text-xs/relaxed',
     'cn-drawer-body': 'flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit]',
     'cn-drawer-description': 'text-balance text-muted-foreground wrap-anywhere text-xs/relaxed',
-    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4',
+    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0',
     'cn-drawer-handle':
-      'relative z-10 cursor-grab bg-muted mx-auto mt-4 hidden h-1 w-[100px] shrink-0 rounded-none active:cursor-grabbing',
-    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center',
-    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end',
-    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start',
-    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center',
+      'relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-none after:bg-muted active:cursor-grabbing',
+    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center after:h-1 after:w-12',
+    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end after:h-12 after:w-1',
+    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start after:h-12 after:w-1',
+    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center after:h-1 after:w-12',
     'cn-drawer-header':
       'flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:text-start md:gap-0.5',
     'cn-drawer-overlay': 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs',
@@ -2795,17 +2824,19 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-drawer-placement-right': 'inset-y-0 right-0 w-3/4 origin-right flex-row rounded-none border-s sm:w-96',
     'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top rounded-none border-b',
     'cn-drawer-title': 'font-medium text-foreground wrap-anywhere text-sm',
+    'cn-dropdown-menu-checkbox-item': 'pe-8 ps-2 in-data-[menu=menubar]:pe-2 in-data-[menu=menubar]:ps-8',
     'cn-dropdown-menu-content':
       'z-50 max-h-96 overflow-x-hidden overflow-y-auto animate-in ring-foreground/10 bg-popover text-popover-foreground min-w-32 rounded-none shadow-md ring-1 duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-dropdown-menu-item':
       "relative flex cursor-default items-center transition-colors gap-2 rounded-none px-2 py-2 text-xs hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[variant=destructive]:hover:bg-destructive/10 dark:data-[variant=destructive]:hover:bg-destructive/20 data-[variant=destructive]:hover:text-destructive not-data-[variant=destructive]:hover:**:text-accent-foreground data-[variant=destructive]:data-highlighted:bg-destructive/10 dark:data-[variant=destructive]:data-highlighted:bg-destructive/20 data-[variant=destructive]:data-highlighted:text-destructive data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:ps-7 [&_svg:not([class*='size-'])]:size-4",
-    'cn-dropdown-menu-item-indicator': 'absolute start-2 flex size-3.5 items-center justify-center',
+    'cn-dropdown-menu-item-indicator':
+      'absolute end-2 flex items-center justify-center in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:start-1.5 in-data-[menu=menubar]:size-4',
     'cn-dropdown-menu-item-inset-true': 'ps-8',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
     'cn-dropdown-menu-label': 'relative flex items-center px-2 text-sm text-muted-foreground py-2 data-inset:ps-7',
     'cn-dropdown-menu-label-inset-true': 'ps-8',
-    'cn-dropdown-menu-radio-dot': 'size-2 rounded-none bg-current',
+    'cn-dropdown-menu-radio-item': 'pe-8 ps-2 in-data-[menu=menubar]:pe-2 in-data-[menu=menubar]:ps-8',
     'cn-dropdown-menu-separator': 'bg-border -mx-1 block h-px',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-dropdown-menu-sub-content':
@@ -2815,8 +2846,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-dropdown-menu-sub-trigger-inset-true': 'ps-8',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 border-dashed p-6 text-center text-balance rounded-none',
-    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-1.5 text-xs text-balance',
-    'cn-empty-description': 'text-xs/relaxed [&>a]:underline [&>a]:underline-offset-4',
+    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 flex-col items-center gap-2.5 text-xs text-balance',
+    'cn-empty-description':
+      'text-muted-foreground text-xs/relaxed [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
     'cn-empty-header': 'flex max-w-sm flex-col items-center gap-2',
     'cn-empty-icon':
       "bg-muted text-foreground mb-2 flex size-8 shrink-0 items-center justify-center rounded-none [&_svg:not([class*='size-'])]:size-4",
@@ -2825,17 +2857,16 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'text-sm font-medium',
     'cn-field': 'flex w-full gap-2 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-0.5',
-    'cn-field-description':
-      'text-muted-foreground text-start text-xs/relaxed group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-xs/relaxed [[data-variant=legend]+&]:-mt-1.5',
     'cn-field-error': 'font-normal text-destructive text-xs',
     'cn-field-group': 'flex w-full flex-col gap-5 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
-      'flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:border dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-none has-[>[data-slot=field]]:has-[:focus-visible]:ring-1 *:data-[slot=field]:p-2',
+      'flex w-fit gap-2 leading-none group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:border dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-none has-[>[data-slot=field]]:has-[:focus-visible]:ring-1 *:data-[slot=field]:p-2',
     'cn-field-legend': 'font-medium mb-2.5 data-[variant=label]:text-xs data-[variant=legend]:text-sm',
     'cn-field-orientation-horizontal':
-      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-responsive':
-      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-vertical': 'flex-col *:w-full [&>.sr-only]:w-auto',
     'cn-field-separator': 'relative -my-2 flex h-5 items-center text-xs group-data-[variant=outline]/field-group:-mb-2',
     'cn-field-separator-content': 'relative mx-auto block w-fit text-muted-foreground px-2',
@@ -2844,7 +2875,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-field-title': 'flex w-fit items-center gap-2 text-xs/relaxed group-data-[disabled=true]/field:opacity-50',
     'cn-font-heading': 'font-heading',
     'cn-hover-card':
-      'z-50 w-64 border bg-popover text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) rounded-none p-2.5 text-xs/relaxed data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+      'z-50 origin-(--z-hover-card-transform-origin) ring-foreground/10 bg-popover text-popover-foreground w-64 rounded-none p-2.5 text-xs/relaxed shadow-md ring-1 duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
       'h-8 w-full min-w-0 border border-input bg-transparent px-2.5 py-1 transition-colors rounded-none text-xs file:inline-flex file:h-6 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:text-xs focus-visible:ring-1 aria-invalid:ring-1 md:text-xs',
     'cn-input-group':
@@ -2861,7 +2892,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex cursor-pointer items-center justify-center whitespace-nowrap transition-all shrink-0 gap-2 text-xs rounded-none border border-transparent bg-clip-padding font-medium shadow-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:ring-3 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed [&_svg:not([class*='size-'])]:size-4 active:not-aria-[haspopup]:translate-y-px",
     'cn-input-group-button-size-icon-sm': 'p-0 size-7 has-[>svg]:p-0',
     'cn-input-group-button-size-icon-xs': 'size-6 p-0 rounded-none has-[>svg]:p-0',
-    'cn-input-group-button-size-sm': 'h-8 gap-1',
+    'cn-input-group-button-size-sm':
+      'h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
     'cn-input-group-button-size-xs': "h-6 gap-1 px-1.5 rounded-none [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-button-variant-default': 'bg-primary text-primary-foreground hover:bg-primary/80',
     'cn-input-group-button-variant-destructive':
@@ -2898,7 +2930,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-description':
       'line-clamp-2 text-muted-foreground text-start text-xs/relaxed [&>a]:underline [&>a]:underline-offset-4 group-data-[size=xs]/item:text-xs/relaxed',
     'cn-item-footer': 'flex basis-full items-center justify-between gap-2',
-    'cn-item-group': 'flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
+    'cn-item-group':
+      'flex w-full flex-col gap-4 has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2',
     'cn-item-header': 'flex basis-full items-center justify-between gap-2',
     'cn-item-media':
       'flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start',
@@ -2906,7 +2939,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-media-variant-icon': "[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
     'cn-item-media-variant-image':
       'size-10 overflow-hidden rounded-none group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover',
-    'cn-item-separator': 'block h-px w-full shrink-0 my-2',
+    'cn-item-separator': 'bg-border block h-px w-full shrink-0 my-2',
     'cn-item-size-default': 'gap-2.5 px-3 py-2.5',
     'cn-item-size-sm': 'gap-2.5 px-3 py-2.5',
     'cn-item-size-xs': 'gap-2 px-2.5 py-2 in-data-[slot=dropdown-menu-content]:p-0',
@@ -2989,7 +3022,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-navigation-menu-trigger':
       'inline-flex h-9 w-max items-center justify-center gap-1 px-2.5 py-1.5 font-medium transition-all rounded-none text-xs hover:bg-muted focus:bg-muted focus-visible:ring-ring/50 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50 focus-visible:ring-1',
     'cn-navigation-menu-trigger-icon':
-      'relative top-px size-3 shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
+      'relative top-px size-3! shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
     'cn-navigation-menu-viewport':
       'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/10 rounded-none shadow ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90',
     'cn-navigation-menu-viewport-wrapper':
@@ -3019,7 +3052,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'h-8 rounded-none border border-input bg-transparent px-2.5 py-1 text-xs transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20 md:text-xs dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
     'cn-questionnaire-item': 'gap-4',
     'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title': 'text-sm/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-4',
+    'cn-questionnaire-title': 'text-sm/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-2',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -3042,7 +3075,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-content-position-popper':
       'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
     'cn-select-item':
-      "relative flex w-full cursor-default items-center gap-2 rounded-none py-2 pe-8 ps-2 text-xs focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+      "relative flex w-full cursor-default items-center rounded-none py-2 pe-8 ps-2 text-xs gap-2 focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
     'cn-select-item-icon': 'absolute flex size-3.5 items-center justify-center',
     'cn-select-item-icon-mode-compact': 'end-2',
     'cn-select-item-icon-mode-normal': 'end-2',
@@ -3059,7 +3092,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-scroll-icon': 'size-4!',
     'cn-select-separator': '-mx-1 block h-px bg-border',
     'cn-select-trigger':
-      'flex h-8 px-3 py-2 w-full items-center justify-between gap-2 border border-input bg-transparent whitespace-nowrap rounded-none text-xs transition-colors select-none data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 focus-visible:ring-1 aria-invalid:ring-1 data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:rounded-none',
+      "border-input gap-1.5 rounded-none border bg-transparent py-2 pr-2 pl-2.5 text-xs transition-colors select-none flex w-full items-center justify-between whitespace-nowrap data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-1 aria-invalid:ring-1 data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:rounded-none *:data-[slot=select-value]:flex *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:data-[slot=select-value]:items-center data-[size=default]:min-h-8 data-[size=sm]:min-h-7",
     'cn-select-trigger-icon': 'size-4!',
     'cn-select-viewport': 'min-h-0 flex-1 box-border overflow-x-hidden overflow-y-auto p-1',
     'cn-select-viewport-position-popper': 'w-full min-w-(--z-select-trigger-width) scroll-my-1',
@@ -3102,7 +3135,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "flex h-8 shrink-0 items-center px-2 text-xs text-sidebar-foreground/70 ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear rounded-none focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
     'cn-sidebar-header': 'flex flex-col gap-2 p-2',
     'cn-sidebar-inner':
-      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:rounded-none',
+      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:rounded-none',
     'cn-sidebar-input': 'h-8 w-full bg-background shadow-none',
     'cn-sidebar-inset':
       'relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2 md:peer-data-[variant=inset]:rounded-none',
@@ -3123,7 +3156,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
     'cn-sidebar-menu-item': 'relative',
     'cn-sidebar-menu-skeleton': 'flex h-8 items-center gap-2 px-2 rounded-none',
-    'cn-sidebar-menu-skeleton-icon': 'size-4',
+    'cn-sidebar-menu-skeleton-icon': 'size-4 rounded-none',
     'cn-sidebar-menu-sub':
       'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 rtl:-translate-x-px group-data-[collapsible=icon]:hidden',
     'cn-sidebar-menu-sub-button':
@@ -3163,13 +3196,14 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-switch-thumb':
       'block transition-transform bg-background rounded-full ring-0 data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:data-[state=unchecked]:translate-x-0 group-data-[size=sm]/switch:data-[state=unchecked]:translate-x-0',
     'cn-table':
-      'w-full caption-bottom text-xs [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4',
+      'w-full caption-bottom text-xs [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap',
     'cn-table-body': '[&_tr:last-child]:border-0',
     'cn-table-caption': 'mt-4 text-muted-foreground text-xs',
-    'cn-table-cell': 'p-2 align-middle has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+    'cn-table-cell':
+      'p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-footer': 'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
     'cn-table-head':
-      'h-10 px-2 text-start align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+      'h-10 px-2 text-start align-middle font-medium text-foreground whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-header': '[&_tr]:border-b',
     'cn-table-row':
       'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
@@ -3177,10 +3211,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-table-size-compact': '[&_td]:py-2 [&_th]:py-2',
     'cn-table-variant-bordered': 'border border-border',
     'cn-table-variant-striped': '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-    'cn-tabs-panel': 'focus-visible:ring-1 focus-visible:ring-ring/50',
+    'cn-tabs-panel': 'text-xs/relaxed focus-visible:ring-1 focus-visible:ring-ring/50',
     'cn-tabs-tab-button':
       "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all cursor-pointer gap-1.5 rounded-none border border-transparent px-1.5 py-0.5 text-xs font-medium group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:outline-1 focus-visible:outline-ring [&_svg]:shrink-0 after:absolute after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[orientation=vertical]/tabs:py-[calc(--spacing(1.25))] [&_svg:not([class*='size-'])]:size-4 has-data-[icon=inline-end]:pe-1 has-data-[icon=inline-start]:ps-1 text-foreground/60 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground after:opacity-0 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
-    'cn-tabs-tab-container': 'flex gap-1.5',
+    'cn-tabs-tab-container': 'flex gap-2',
     'cn-tabs-tab-container-orientation-horizontal': 'flex-col',
     'cn-tabs-tab-container-orientation-vertical': 'flex-row',
     'cn-tabs-tab-nav':
@@ -3193,9 +3227,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0 dark:bg-transparent dark:disabled:bg-transparent',
     'cn-toast': 'rounded-none',
     'cn-toggle':
-      "inline-flex items-center justify-center gap-1 font-medium whitespace-nowrap transition-all cursor-pointer rounded-none text-xs hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4",
+      "inline-flex items-center justify-center gap-1 font-medium whitespace-nowrap transition-all cursor-pointer rounded-none text-xs hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_ng-icon:not([class*='size-'])]:size-4!",
     'cn-toggle-group':
-      'flex w-fit flex-row items-center rounded-none data-vertical:flex-col data-vertical:items-stretch data-[size=sm]:rounded-none',
+      'flex w-fit flex-row items-center rounded-none gap-[--spacing(var(--gap))] data-vertical:flex-col data-vertical:items-stretch data-[size=sm]:rounded-none',
     'cn-toggle-group-item':
       'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-none group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-none group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-none group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-none',
     'cn-toggle-size-default': 'h-8 min-w-8 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
@@ -3205,7 +3239,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-toggle-variant-default': 'bg-transparent',
     'cn-toggle-variant-outline': 'border border-input bg-transparent',
     'cn-tooltip':
-      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 bg-foreground px-3 py-1.5 text-xs text-background rounded-none has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 **:data-[slot=kbd]:rounded-none',
+      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 bg-foreground px-3 py-1.5 text-xs text-background rounded-none has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 **:data-[slot=kbd]:rounded-none data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95',
     'cn-tooltip-arrow':
       'bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-none',
     'cn-tooltip-position': 'absolute',
@@ -3232,7 +3266,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'cursor-pointer flex flex-1 items-start justify-between rounded-md text-start font-medium transition-all w-full gap-6 p-2 text-xs/relaxed hover:underline focus-visible:ring-[3px]',
     'cn-accordion-trigger-icon': 'text-muted-foreground size-3.5 translate-y-0.5 transition-transform duration-200',
     'cn-alert':
-      "relative grid w-full gap-0.5 rounded-lg border text-start px-2 py-1.5 text-xs/relaxed has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 has-[>svg]:gap-x-1.5 *:[svg:not([class*='size-'])]:size-3.5",
+      "relative grid w-full gap-0.5 rounded-lg border text-start px-2 py-1.5 text-xs/relaxed has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-1.5 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 *:[svg:not([class*='size-'])]:size-3.5",
     'cn-alert-action': 'absolute end-2 top-1.5',
     'cn-alert-description':
       'text-balance text-xs/relaxed md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4',
@@ -3250,7 +3284,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-dialog-overlay': 'bg-black/80 supports-backdrop-filter:backdrop-blur-xs',
     'cn-alert-dialog-title':
       'font-medium wrap-anywhere text-sm sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
-    'cn-alert-icon': 'shrink-0 self-start text-sm!',
+    'cn-alert-icon': 'flex shrink-0 self-start text-sm!',
+    'cn-alert-icon-glyph': 'size-3.5!',
     'cn-alert-title':
       "font-medium [&_a]:hover:text-foreground group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 group-has-[>svg]/alert:col-start-2",
     'cn-alert-variant-default': 'bg-card text-card-foreground',
@@ -3293,7 +3328,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
-      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs',
+      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs text-sm',
     'cn-avatar-group': 'flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
     'cn-avatar-group-count':
       'relative flex shrink-0 items-center justify-center bg-muted text-muted-foreground size-8 rounded-full text-xs/relaxed ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',
@@ -3303,12 +3338,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
-      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
+      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full opacity-0',
     'cn-avatar-size-default': 'size-8',
     'cn-avatar-size-lg': 'size-10',
     'cn-avatar-size-sm': 'size-6',
     'cn-badge':
-      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-full border border-transparent px-2 py-0.5 text-[0.625rem] font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-2.5!',
+      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-full border border-transparent px-2 py-0.5 text-[0.625rem] font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-2.5! [&>z-spinner>svg]:size-2.5!',
     'cn-badge-variant-default': 'bg-primary text-primary-foreground [a&]:hover:bg-primary/90',
     'cn-badge-variant-destructive':
       'bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20',
@@ -3361,7 +3396,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-bubble-variant-tinted':
       '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
     'cn-button':
-      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all rounded-md text-xs/relaxed focus-visible:border-ring active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2",
+      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding font-medium whitespace-nowrap transition-all rounded-md text-xs/relaxed focus-visible:border-ring active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem]",
     'cn-button-disabled-true': 'opacity-50',
     'cn-button-group':
       'flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>input]:flex-1 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-e-md',
@@ -3377,17 +3412,21 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-button-shape-default': '',
     'cn-button-shape-square': 'rounded-none',
     'cn-button-size-default':
-      "h-7 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-    'cn-button-size-icon': "size-7 [&_svg:not([class*='size-'])]:size-3.5",
-    'cn-button-size-icon-lg': "size-8 [&_svg:not([class*='size-'])]:size-4",
-    'cn-button-size-icon-sm': "size-6 [&_svg:not([class*='size-'])]:size-3",
-    'cn-button-size-icon-xs': "size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5",
+      "h-7 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.875rem]",
+    'cn-button-size-icon':
+      "size-7 [&_svg:not([class*='size-'])]:size-3.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.875rem]",
+    'cn-button-size-icon-lg':
+      "size-8 [&_svg:not([class*='size-'])]:size-4 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem]",
+    'cn-button-size-icon-sm':
+      "size-6 [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
+    'cn-button-size-icon-xs':
+      "size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.625rem]",
     'cn-button-size-lg':
-      "px-2.5 h-8 gap-1 text-xs/relaxed has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 [&_svg:not([class*='size-'])]:size-4",
+      "px-2.5 h-8 gap-1 text-xs/relaxed has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 [&_svg:not([class*='size-'])]:size-4 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem]",
     'cn-button-size-sm':
-      "gap-1 h-6 px-2 text-xs/relaxed has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3",
+      "gap-1 h-6 px-2 text-xs/relaxed has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-size-xs':
-      "gap-1 px-2 h-5 rounded-sm text-[0.625rem]/relaxed has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-2.5",
+      "gap-1 px-2 h-5 rounded-sm text-[0.625rem]/relaxed has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-2.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.625rem]",
     'cn-button-variant-default': 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
     'cn-button-variant-destructive':
       'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
@@ -3402,9 +3441,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'block w-fit bg-background [--cell-radius:var(--radius-md)] p-3 [--cell-size:--spacing(6)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
     'cn-calendar-caption': 'flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)',
     'cn-calendar-caption-label': 'bg-input/20 h-7 pe-1.5 ps-2 dark:bg-input/30',
-    'cn-calendar-caption-label-layout-dropdown':
-      'flex h-(--cell-size) items-center gap-1 rounded-(--cell-radius) px-2 text-xs/relaxed',
-    'cn-calendar-caption-label-layout-label': 'text-xs/relaxed',
+    'cn-calendar-caption-label-layout-dropdown': 'flex items-center gap-1 rounded-(--cell-radius) text-sm',
+    'cn-calendar-caption-label-layout-label': 'font-medium text-sm',
     'cn-calendar-day':
       'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
     'cn-calendar-day-button':
@@ -3426,19 +3464,18 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-calendar-day-today-true': 'rounded-(--cell-radius) bg-muted text-foreground',
     'cn-calendar-dropdown': 'absolute inset-0 z-10 cursor-pointer bg-popover opacity-0',
     'cn-calendar-dropdown-root':
-      'relative isolate border-input border has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/30 has-focus:ring-2',
-    'cn-calendar-dropdowns':
-      'flex h-(--cell-size) w-full items-center justify-center gap-2 text-xs/relaxed font-medium',
-    'cn-calendar-month': 'relative flex w-full flex-col gap-3',
-    'cn-calendar-months': 'relative flex flex-col gap-3 md:flex-row',
+      'relative isolate border-input border rounded-(--cell-radius) has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/30 has-focus:ring-2',
+    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
+    'cn-calendar-month': 'relative flex w-full flex-col gap-4',
+    'cn-calendar-months': 'relative flex flex-col gap-4 md:flex-row',
     'cn-calendar-nav': 'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1',
     'cn-calendar-nav-button': 'size-(--cell-size) p-0',
     'cn-calendar-nav-spacer': 'size-(--cell-size)',
-    'cn-calendar-row': 'grid w-full grid-cols-7 gap-x-0',
-    'cn-calendar-week': 'mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2',
+    'cn-calendar-row': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0',
+    'cn-calendar-week': 'mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2',
     'cn-calendar-weekday':
-      'flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
-    'cn-calendar-weekdays': 'grid w-full grid-cols-7',
+      'flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
+    'cn-calendar-weekdays': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))]',
     'cn-calendar-weeks': 'mt-2 flex w-full flex-col gap-y-2',
     'cn-card':
       'flex flex-col gap-(--card-spacing) overflow-hidden bg-card py-(--card-spacing) text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] rounded-lg text-xs/relaxed has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] *:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg',
@@ -3522,7 +3559,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex flex-wrap items-center gap-1 border border-input bg-clip-padding transition-colors bg-input/20 min-h-7 rounded-md px-2 py-0.5 text-xs/relaxed focus-within:border-ring has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 has-data-[slot=combobox-chip]:px-1 dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40 focus-within:ring-ring/30 focus-within:ring-2 has-aria-invalid:ring-2',
     'cn-combobox-chips-input': 'min-w-16 flex-1 bg-transparent',
     'cn-combobox-content':
-      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) origin-(--z-combobox-transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 min-w-32 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 *:data-[slot=input-group]:bg-input/20 dark:bg-popover *:data-[slot=input-group]:h-7 *:data-[slot=input-group]:border-none',
+      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) origin-(--z-combobox-transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 min-w-32 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 *:data-[slot=input-group]:bg-input/20 dark:bg-popover *:data-[slot=input-group]:h-7 *:data-[slot=input-group]:border-none data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
     'cn-combobox-empty':
       'hidden w-full justify-center py-2 text-center text-muted-foreground text-xs/relaxed group-data-empty/combobox-content:flex',
     'cn-combobox-group': 'block',
@@ -3538,7 +3575,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'no-scrollbar block scroll-py-1 overflow-y-auto overscroll-contain p-1 max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] data-empty:p-0',
     'cn-combobox-separator': '-mx-1 my-1 block h-px bg-border/50',
     'cn-combobox-trigger': "[&_svg:not([class*='size-'])]:size-3.5",
-    'cn-combobox-trigger-icon': 'size-3.5!',
+    'cn-combobox-trigger-icon': 'size-3.5! text-muted-foreground',
     'cn-combobox-trigger-standalone-false':
       'group-has-data-[slot=combobox-clear]/input-group:hidden aria-expanded:bg-transparent',
     'cn-combobox-value': 'block truncate text-xs/relaxed',
@@ -3555,13 +3592,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-command-input-icon': 'size-3.5!',
     'cn-command-input-wrapper': 'p-1 pb-0',
     'cn-command-item':
-      "relative flex cursor-pointer items-center gap-2 py-1.5 select-none transition-colors min-h-7 rounded-md px-2.5 text-xs/relaxed data-selected:bg-muted data-selected:text-accent-foreground data-selected:*:[svg]:text-accent-foreground in-data-[slot=dialog-content]:rounded-md [&_svg:not([class*='size-'])]:size-3.5",
+      "relative flex items-center gap-2 py-1.5 select-none transition-colors min-h-7 rounded-md px-2.5 text-xs/relaxed cursor-default outline-hidden data-selected:bg-muted in-data-[slot=dialog-content]:rounded-md [&_svg:not([class*='size-'])]:size-3.5 data-selected:text-foreground data-selected:*:[svg]:text-foreground",
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
-    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1',
+    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
     'cn-command-separator': '-mx-1 h-px bg-border/50 my-1',
     'cn-command-shortcut':
-      'ms-auto tracking-widest text-muted-foreground text-[0.625rem] group-data-selected/command-item:text-accent-foreground',
+      'ms-auto tracking-widest text-muted-foreground text-[0.625rem] group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-lg border',
     'cn-data-table-column-header': 'gap-1.5',
     'cn-data-table-column-header-trigger': '-ms-2 h-6',
@@ -3590,13 +3627,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'fixed z-50 m-2 flex min-h-0 flex-col rounded-xl border border-popover bg-popover text-xs/relaxed text-popover-foreground will-change-transform dark:border-border',
     'cn-drawer-body': 'flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit]',
     'cn-drawer-description': 'text-balance text-muted-foreground wrap-anywhere text-xs/relaxed',
-    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4',
+    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0',
     'cn-drawer-handle':
-      'relative z-10 cursor-grab bg-muted mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full active:cursor-grabbing',
-    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center',
-    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end',
-    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start',
-    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center',
+      'relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-full after:bg-muted active:cursor-grabbing',
+    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center after:h-1 after:w-12',
+    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end after:h-12 after:w-1',
+    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start after:h-12 after:w-1',
+    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center after:h-1 after:w-12',
     'cn-drawer-header': 'flex shrink-0 flex-col p-4 pb-0 gap-1 group-data-[axis=y]/drawer:text-center md:text-start',
     'cn-drawer-overlay': 'bg-black/80 supports-backdrop-filter:backdrop-blur-xs',
     'cn-drawer-placement-bottom': 'inset-x-0 bottom-0 origin-bottom',
@@ -3604,17 +3641,19 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-drawer-placement-right': 'inset-y-0 right-0 w-3/4 origin-right flex-row sm:w-96',
     'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top',
     'cn-drawer-title': 'font-medium text-foreground wrap-anywhere text-sm',
+    'cn-dropdown-menu-checkbox-item': 'pe-8 ps-2 in-data-[menu=menubar]:pe-2 in-data-[menu=menubar]:ps-7.5',
     'cn-dropdown-menu-content':
       'z-50 max-h-96 overflow-x-hidden overflow-y-auto animate-in ring-foreground/10 bg-popover text-popover-foreground min-w-32 rounded-lg p-1 shadow-md ring-1 duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-dropdown-menu-item':
       "relative flex cursor-default items-center transition-colors min-h-7 gap-2 rounded-md px-2 py-1 text-xs/relaxed hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[variant=destructive]:hover:bg-destructive/10 dark:data-[variant=destructive]:hover:bg-destructive/20 data-[variant=destructive]:hover:text-destructive not-data-[variant=destructive]:hover:**:text-accent-foreground data-[variant=destructive]:data-highlighted:bg-destructive/10 dark:data-[variant=destructive]:data-highlighted:bg-destructive/20 data-[variant=destructive]:data-highlighted:text-destructive data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:ps-7.5 [&_svg:not([class*='size-'])]:size-3.5",
-    'cn-dropdown-menu-item-indicator': 'absolute start-2 flex size-3.5 items-center justify-center',
+    'cn-dropdown-menu-item-indicator':
+      'absolute end-2 flex items-center justify-center in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:start-2 in-data-[menu=menubar]:size-4',
     'cn-dropdown-menu-item-inset-true': 'ps-8',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
     'cn-dropdown-menu-label': 'relative flex items-center px-2 py-1.5 text-sm text-muted-foreground data-inset:ps-7.5',
     'cn-dropdown-menu-label-inset-true': 'ps-8',
-    'cn-dropdown-menu-radio-dot': 'size-2 rounded-full bg-current',
+    'cn-dropdown-menu-radio-item': 'pe-8 ps-2 in-data-[menu=menubar]:pe-2 in-data-[menu=menubar]:ps-7.5',
     'cn-dropdown-menu-separator': '-mx-1 my-1 block h-px bg-border/50',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto tracking-widest text-[0.625rem]',
     'cn-dropdown-menu-sub-content':
@@ -3624,8 +3663,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-dropdown-menu-sub-trigger-inset-true': 'ps-8',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-xl border-dashed p-6 text-center text-balance',
-    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-xs/relaxed text-balance',
-    'cn-empty-description': 'text-xs/relaxed [&>a]:underline [&>a]:underline-offset-4',
+    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 flex-col items-center gap-2 text-xs/relaxed text-balance',
+    'cn-empty-description':
+      'text-muted-foreground text-xs/relaxed [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
     'cn-empty-header': 'flex max-w-sm flex-col items-center gap-1',
     'cn-empty-icon':
       "bg-muted text-foreground mb-2 flex size-8 shrink-0 items-center justify-center rounded-md [&_svg:not([class*='size-'])]:size-4",
@@ -3634,17 +3674,16 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'text-sm font-medium tracking-tight',
     'cn-field': 'flex w-full gap-2 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-0.5',
-    'cn-field-description':
-      'text-muted-foreground text-start text-xs/relaxed group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-xs/relaxed [[data-variant=legend]+&]:-mt-1.5',
     'cn-field-error': 'font-normal text-destructive text-xs/relaxed',
     'cn-field-group': 'flex w-full flex-col gap-4 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
-      'flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:border dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-input/40 has-[>[data-slot=field]]:has-[:focus-visible]:ring-ring/30 has-[>[data-slot=field]]:has-[:focus-visible]:ring-2 *:data-[slot=field]:p-2',
+      'flex w-fit gap-2 leading-none group-data-[disabled=true]/field:opacity-50 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:border dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-input/40 has-[>[data-slot=field]]:has-[:focus-visible]:ring-ring/30 has-[>[data-slot=field]]:has-[:focus-visible]:ring-2 *:data-[slot=field]:p-2',
     'cn-field-legend': 'font-medium mb-2 data-[variant=label]:text-xs/relaxed data-[variant=legend]:text-sm',
     'cn-field-orientation-horizontal':
-      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-responsive':
-      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-vertical': 'flex-col *:w-full [&>.sr-only]:w-auto',
     'cn-field-separator':
       'relative -my-2 flex h-5 items-center text-xs/relaxed group-data-[variant=outline]/field-group:-mb-2',
@@ -3655,11 +3694,11 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex w-fit items-center gap-2 font-medium text-xs/relaxed group-data-[disabled=true]/field:opacity-50',
     'cn-font-heading': 'font-heading',
     'cn-hover-card':
-      'z-50 rounded-md border bg-popover text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) w-72 p-2.5 text-xs/relaxed data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+      'z-50 origin-(--z-hover-card-transform-origin) ring-foreground/10 bg-popover text-popover-foreground w-72 rounded-lg p-2.5 text-xs/relaxed shadow-md ring-1 duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
       'w-full min-w-0 border border-input transition-colors bg-input/20 h-7 rounded-md px-2 py-0.5 text-sm file:inline-flex file:h-6 file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 file:text-xs/relaxed focus-visible:ring-2 aria-invalid:ring-2 md:text-xs/relaxed',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/20 h-7 rounded-md has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-2 has-[textarea]:rounded-md',
+      'relative flex w-full min-w-0 items-center border border-input transition-colors bg-input/20 h-7 rounded-md has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-md has-data-[align=block-start]:rounded-md has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot][aria-invalid=true]]:ring-2 has-[textarea]:rounded-md',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center font-medium text-muted-foreground gap-1 py-2 text-xs/relaxed group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-[calc(var(--radius-sm)-2px)] **:data-[slot=kbd]:px-1 **:data-[slot=kbd]:text-[0.625rem] [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-addon-align-block-end':
@@ -3673,7 +3712,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex cursor-pointer items-center justify-center whitespace-nowrap transition-all shrink-0 gap-2 rounded-md text-xs/relaxed border border-transparent bg-clip-padding font-medium shadow-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:ring-3 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed [&_svg:not([class*='size-'])]:size-4 active:not-aria-[haspopup]:translate-y-px",
     'cn-input-group-button-size-icon-sm': 'p-0 size-7 has-[>svg]:p-0',
     'cn-input-group-button-size-icon-xs': 'size-6 p-0 has-[>svg]:p-0',
-    'cn-input-group-button-size-sm': 'h-8 gap-1',
+    'cn-input-group-button-size-sm':
+      "h-7 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-button-size-xs':
       "gap-1 h-5 rounded-[calc(var(--radius-sm)-2px)] px-1 [&>svg:not([class*='size-'])]:size-3",
     'cn-input-group-button-variant-default': 'bg-primary text-primary-foreground hover:bg-primary/80',
@@ -3712,7 +3752,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-description':
       'line-clamp-2 text-muted-foreground text-start text-xs/relaxed [&>a]:underline [&>a]:underline-offset-4',
     'cn-item-footer': 'flex basis-full items-center justify-between gap-2',
-    'cn-item-group': 'flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
+    'cn-item-group':
+      'flex w-full flex-col gap-4 has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2',
     'cn-item-header': 'flex basis-full items-center justify-between gap-2',
     'cn-item-media':
       'flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start',
@@ -3720,7 +3761,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-media-variant-icon': "[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
     'cn-item-media-variant-image':
       'overflow-hidden rounded-sm size-8 group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover',
-    'cn-item-separator': 'block h-px w-full shrink-0 my-2',
+    'cn-item-separator': 'bg-border block h-px w-full shrink-0 my-2',
     'cn-item-size-default': 'gap-2.5 px-3 py-2.5',
     'cn-item-size-sm': 'gap-2.5 px-3 py-2.5',
     'cn-item-size-xs': 'px-2.5 py-2 gap-2.5 in-data-[slot=dropdown-menu-content]:p-0',
@@ -3805,9 +3846,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-navigation-menu-trigger':
       'inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 font-medium transition-all text-xs/relaxed hover:bg-muted focus:bg-muted focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50 focus-visible:ring-ring/30 focus-visible:ring-2',
     'cn-navigation-menu-trigger-icon':
-      'relative top-px size-3 shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
+      'relative top-px size-3! shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
     'cn-navigation-menu-viewport':
-      'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/10 rounded-xl shadow-md ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90',
+      'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/10 rounded-xl shadow ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90',
     'cn-navigation-menu-viewport-wrapper':
       'flex pt-1.5 transition-[translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]',
     'cn-pagination': 'mx-auto flex w-full justify-center gap-0.5',
@@ -3835,7 +3876,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'h-7 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
     'cn-questionnaire-item': 'gap-3',
     'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title': 'text-sm/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-3',
+    'cn-questionnaire-title': 'text-sm/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-3',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -3858,7 +3899,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-content-position-popper':
       'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
     'cn-select-item':
-      "relative flex w-full cursor-default items-center min-h-7 gap-2 rounded-md px-2 py-1 text-xs/relaxed focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-3.5 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+      "relative flex w-full cursor-default items-center min-h-7 rounded-md px-2 py-1 text-xs/relaxed gap-2 focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-3.5 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
     'cn-select-item-icon': 'absolute flex size-3.5 items-center justify-center',
     'cn-select-item-icon-mode-compact': 'end-2',
     'cn-select-item-icon-mode-normal': 'end-2',
@@ -3875,7 +3916,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-scroll-icon': 'size-3.5!',
     'cn-select-separator': '-mx-1 block my-1 h-px bg-border/50',
     'cn-select-trigger':
-      'flex h-8 w-full items-center justify-between gap-2 rounded-md border border-input whitespace-nowrap bg-input/20 px-2 py-1.5 text-xs/relaxed transition-colors data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2 data-[size=default]:h-7 data-[size=sm]:h-6 [&_svg:not([class*=\'size-\'])]:size-3.5',
+      "border-input bg-input/20 gap-1.5 rounded-md border px-2 py-1.5 text-xs/relaxed transition-colors flex w-full items-center justify-between whitespace-nowrap data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-2 aria-invalid:ring-2 data-[size=default]:h-7 data-[size=sm]:h-6 *:data-[slot=select-value]:flex *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-3.5 [&_svg:not([class*='text-'])]:text-muted-foreground *:data-[slot=select-value]:items-center data-[size=default]:min-h-7 data-[size=sm]:min-h-6",
     'cn-select-trigger-icon': 'size-3.5!',
     'cn-select-viewport': 'min-h-0 flex-1 box-border overflow-x-hidden overflow-y-auto p-1',
     'cn-select-viewport-position-popper': 'w-full min-w-(--z-select-trigger-width) scroll-my-1',
@@ -3918,7 +3959,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "flex h-8 shrink-0 items-center rounded-md px-2 text-xs text-sidebar-foreground/70 ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
     'cn-sidebar-header': 'flex flex-col gap-2 p-2',
     'cn-sidebar-inner':
-      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm',
+      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:shadow-sm',
     'cn-sidebar-input': 'h-8 w-full bg-muted/20 border-input dark:bg-muted/30',
     'cn-sidebar-inset':
       'relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2',
@@ -3939,7 +3980,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
     'cn-sidebar-menu-item': 'relative',
     'cn-sidebar-menu-skeleton': 'flex h-8 items-center gap-2 rounded-md px-2',
-    'cn-sidebar-menu-skeleton-icon': 'size-4',
+    'cn-sidebar-menu-skeleton-icon': 'size-4 rounded-md',
     'cn-sidebar-menu-sub':
       'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 rtl:-translate-x-px group-data-[collapsible=icon]:hidden',
     'cn-sidebar-menu-sub-button':
@@ -3974,18 +4015,19 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-switch':
       'relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:ring-ring/30 dark:data-[state=unchecked]:bg-input/80 focus-visible:ring-2 aria-invalid:ring-2 data-[size=default]:h-[16.6px] data-[size=default]:w-[28px]',
     'cn-switch-label': 'text-xs leading-none font-medium',
-    'cn-switch-size-default': 'h-[18.4px] w-[32px]',
+    'cn-switch-size-default': 'h-[16.6px] w-[28px]',
     'cn-switch-size-sm': 'h-[14px] w-[24px]',
     'cn-switch-thumb':
-      'block transition-transform bg-background rounded-full ring-0 data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:data-[state=unchecked]:translate-x-0 group-data-[size=sm]/switch:data-[state=unchecked]:translate-x-0',
+      'block transition-transform bg-background rounded-full ring-0 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-[state=checked]:translate-x-[calc(100%-2px)] group-data-[size=default]/switch:data-[state=unchecked]:translate-x-0 group-data-[size=sm]/switch:data-[state=unchecked]:translate-x-0 data-[size=default]:size-3.5',
     'cn-table':
-      'w-full caption-bottom text-xs [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4',
+      'w-full caption-bottom text-xs [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap',
     'cn-table-body': '[&_tr:last-child]:border-0',
     'cn-table-caption': 'mt-4 text-muted-foreground text-xs',
-    'cn-table-cell': 'p-2 align-middle has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+    'cn-table-cell':
+      'p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-footer': 'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
     'cn-table-head':
-      'h-10 px-2 text-start align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+      'h-10 px-2 text-start align-middle font-medium text-foreground whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-header': '[&_tr]:border-b',
     'cn-table-row':
       'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
@@ -3993,7 +4035,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-table-size-compact': '[&_td]:py-2 [&_th]:py-2',
     'cn-table-variant-bordered': 'border border-border',
     'cn-table-variant-striped': '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-    'cn-tabs-panel': 'focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-tabs-panel': 'text-xs/relaxed focus-visible:ring-2 focus-visible:ring-ring/30',
     'cn-tabs-tab-button':
       "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all cursor-pointer gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-xs font-medium group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:outline-1 focus-visible:outline-ring [&_svg]:shrink-0 after:absolute after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[orientation=vertical]/tabs:py-[calc(--spacing(1.25))] [&_svg:not([class*='size-'])]:size-3.5 has-data-[icon=inline-end]:pe-1 has-data-[icon=inline-start]:ps-1 text-foreground/60 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground after:opacity-0 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
     'cn-tabs-tab-container': 'flex gap-2',
@@ -4009,19 +4051,19 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent',
     'cn-toast': 'rounded-md',
     'cn-toggle':
-      "inline-flex items-center justify-center gap-1 font-medium whitespace-nowrap transition-all cursor-pointer rounded-md text-xs hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4",
+      "inline-flex items-center justify-center gap-1 font-medium whitespace-nowrap transition-all cursor-pointer rounded-md text-xs hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_ng-icon:not([class*='size-'])]:size-4!",
     'cn-toggle-group':
-      'flex w-fit flex-row items-center rounded-md data-vertical:flex-col data-vertical:items-stretch data-[size=sm]:rounded-[min(var(--radius-md),8px)]',
+      'flex w-fit flex-row items-center rounded-md gap-[--spacing(var(--gap))] data-vertical:flex-col data-vertical:items-stretch data-[size=sm]:rounded-[min(var(--radius-md),8px)]',
     'cn-toggle-group-item':
       'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-md group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-md group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-md group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-md',
     'cn-toggle-size-default': 'h-7 min-w-7 px-2 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5',
     'cn-toggle-size-lg': 'px-2.5 h-8 min-w-8 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
     'cn-toggle-size-sm':
-      "h-6 min-w-6 rounded-[min(var(--radius-md),8px)] px-2 text-[0.625rem] has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3",
+      "h-6 min-w-6 rounded-[min(var(--radius-md),8px)] px-2 text-[0.625rem] has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:size-3!",
     'cn-toggle-variant-default': 'bg-transparent',
     'cn-toggle-variant-outline': 'border border-input bg-transparent',
     'cn-tooltip':
-      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-sm data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95',
     'cn-tooltip-arrow':
       'bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px]',
     'cn-tooltip-position': 'absolute',
@@ -4047,7 +4089,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'cursor-pointer flex flex-1 items-start justify-between rounded-md text-start text-sm font-medium transition-all w-full gap-6 p-4 hover:underline focus-visible:ring-[3px]',
     'cn-accordion-trigger-icon': 'text-muted-foreground size-4 translate-y-0.5 transition-transform duration-200',
     'cn-alert':
-      "relative grid w-full gap-0.5 border text-start text-sm rounded-2xl px-4 py-3 has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 has-[>svg]:gap-x-2.5",
+      "relative grid w-full gap-0.5 border text-start text-sm rounded-2xl px-4 py-3 has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2.5 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4",
     'cn-alert-action': 'absolute top-2.5 end-3',
     'cn-alert-description':
       'text-sm text-balance md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4',
@@ -4065,7 +4107,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-dialog-overlay': 'bg-black/30 supports-backdrop-filter:backdrop-blur-sm',
     'cn-alert-dialog-title':
       'font-medium wrap-anywhere text-lg sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
-    'cn-alert-icon': 'shrink-0 self-start text-base!',
+    'cn-alert-icon': 'flex shrink-0 self-start text-base!',
+    'cn-alert-icon-glyph': 'size-4!',
     'cn-alert-title':
       "font-medium [&_a]:hover:text-foreground group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 group-has-[>svg]/alert:col-start-2",
     'cn-alert-variant-default': 'bg-card text-card-foreground',
@@ -4108,7 +4151,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
-      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs',
+      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs text-sm',
     'cn-avatar-group': 'flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
     'cn-avatar-group-count':
       'relative flex shrink-0 items-center justify-center bg-muted text-muted-foreground size-8 rounded-full text-sm ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',
@@ -4118,12 +4161,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
-      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
+      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full opacity-0',
     'cn-avatar-size-default': 'size-8',
     'cn-avatar-size-lg': 'size-10',
     'cn-avatar-size-sm': 'size-6',
     'cn-badge':
-      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-3xl border border-transparent px-2 py-0.5 text-xs font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3!',
+      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-3xl border border-transparent px-2 py-0.5 text-xs font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3! [&>z-spinner>svg]:size-3!',
     'cn-badge-variant-default': 'bg-primary text-primary-foreground [a&]:hover:bg-primary/90',
     'cn-badge-variant-destructive':
       'bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20',
@@ -4175,7 +4218,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-bubble-variant-tinted':
       '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
     'cn-button':
-      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all rounded-4xl focus-visible:border-ring focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30",
+      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all rounded-4xl focus-visible:border-ring focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem]",
     'cn-button-disabled-true': 'opacity-50',
     'cn-button-group':
       'flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>input]:flex-1 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-e-4xl has-[>[data-variant=outline]]:[&>input]:border-border has-[>[data-variant=outline]]:[&>input:focus-visible]:border-ring has-[>[data-variant=outline]]:*:data-[slot=input-group]:border-border has-[>[data-variant=outline]]:[&>[data-slot=input-group]:has(:focus-visible)]:border-ring has-[>[data-variant=outline]]:*:data-[slot=select-trigger]:border-border has-[>[data-variant=outline]]:[&>[data-slot=select-trigger]:focus-visible]:border-ring',
@@ -4194,11 +4237,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-button-size-icon': 'size-9',
     'cn-button-size-icon-lg': 'size-10',
     'cn-button-size-icon-sm': 'size-8',
-    'cn-button-size-icon-xs': "size-6 [&_svg:not([class*='size-'])]:size-3",
+    'cn-button-size-icon-xs':
+      "size-6 [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-size-lg': 'gap-1.5 h-10 px-4 has-data-[icon=inline-end]:pe-3 has-data-[icon=inline-start]:ps-3',
     'cn-button-size-sm': 'gap-1 h-8 px-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
     'cn-button-size-xs':
-      "h-6 gap-1 text-xs px-2.5 [&_svg:not([class*='size-'])]:size-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2",
+      "h-6 gap-1 text-xs px-2.5 [&_svg:not([class*='size-'])]:size-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-variant-default': 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
     'cn-button-variant-destructive':
       'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
@@ -4213,9 +4257,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'block w-fit bg-background p-3 [--cell-radius:var(--radius-4xl)] [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
     'cn-calendar-caption': 'flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)',
     'cn-calendar-caption-label': 'h-8 pe-2 ps-3',
-    'cn-calendar-caption-label-layout-dropdown':
-      'flex h-(--cell-size) items-center gap-1.5 rounded-(--cell-radius) px-3 text-sm',
-    'cn-calendar-caption-label-layout-label': 'text-sm',
+    'cn-calendar-caption-label-layout-dropdown': 'flex items-center gap-1 rounded-(--cell-radius) text-sm',
+    'cn-calendar-caption-label-layout-label': 'font-medium text-sm',
     'cn-calendar-day':
       'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
     'cn-calendar-day-button':
@@ -4237,18 +4280,18 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-calendar-day-today-true': 'rounded-(--cell-radius) bg-muted text-foreground',
     'cn-calendar-dropdown': 'absolute inset-0 z-10 cursor-pointer bg-popover opacity-0',
     'cn-calendar-dropdown-root':
-      'relative isolate border-input border has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/30 has-focus:ring-3',
-    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-2.5 text-sm font-medium',
-    'cn-calendar-month': 'relative flex w-full flex-col gap-6',
-    'cn-calendar-months': 'relative flex flex-col gap-6 md:flex-row',
+      'relative isolate border-input border rounded-(--cell-radius) has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/30 has-focus:ring-3',
+    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
+    'cn-calendar-month': 'relative flex w-full flex-col gap-4',
+    'cn-calendar-months': 'relative flex flex-col gap-4 md:flex-row',
     'cn-calendar-nav': 'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1.5',
     'cn-calendar-nav-button': 'size-(--cell-size) p-0',
     'cn-calendar-nav-spacer': 'size-(--cell-size)',
-    'cn-calendar-row': 'grid w-full grid-cols-7 gap-x-0',
-    'cn-calendar-week': 'mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2',
+    'cn-calendar-row': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0',
+    'cn-calendar-week': 'mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2',
     'cn-calendar-weekday':
-      'flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
-    'cn-calendar-weekdays': 'grid w-full grid-cols-7',
+      'flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
+    'cn-calendar-weekdays': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))]',
     'cn-calendar-weeks': 'mt-2 flex w-full flex-col gap-y-2',
     'cn-card':
       'flex flex-col gap-(--card-spacing) overflow-hidden bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/5 rounded-4xl shadow-md [--card-spacing:--spacing(6)] has-[>img:first-child]:pt-0 dark:ring-foreground/10 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-4xl *:[img:last-child]:rounded-b-4xl',
@@ -4329,7 +4372,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex flex-wrap items-center border bg-clip-padding text-sm bg-input/50 border-transparent min-h-9 gap-1.5 rounded-3xl px-3 py-1.5 transition-[color,box-shadow,background-color] focus-within:border-ring focus-within:ring-3 has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40 focus-within:ring-ring/30 has-data-[slot=combobox-chip]:px-1.5',
     'cn-combobox-chips-input': 'min-w-16 flex-1 bg-transparent',
     'cn-combobox-content':
-      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground ring-1 duration-100 ring-foreground/5 rounded-3xl shadow-lg data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 dark:ring-foreground/10 *:data-[slot=input-group]:bg-input/50 *:data-[slot=input-group]:m-1.5',
+      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground ring-1 duration-100 ring-foreground/5 rounded-3xl shadow-lg data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 dark:ring-foreground/10 *:data-[slot=input-group]:bg-input/50 *:data-[slot=input-group]:m-1.5 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
     'cn-combobox-empty':
       'hidden w-full justify-center py-2 text-center text-sm text-muted-foreground group-data-empty/combobox-content:flex',
     'cn-combobox-group': 'block',
@@ -4345,7 +4388,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'no-scrollbar block overflow-y-auto overscroll-contain max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] scroll-py-1.5 p-1.5 data-empty:p-0',
     'cn-combobox-separator': 'block h-px bg-border -mx-1.5 my-1.5',
     'cn-combobox-trigger': "[&_svg:not([class*='size-'])]:size-4",
-    'cn-combobox-trigger-icon': 'size-4!',
+    'cn-combobox-trigger-icon': 'size-4! text-muted-foreground',
     'cn-combobox-trigger-standalone-false':
       'group-has-data-[slot=combobox-clear]/input-group:hidden aria-expanded:bg-transparent',
     'cn-combobox-value': 'block truncate text-sm',
@@ -4362,13 +4405,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-command-input-icon': 'size-4!',
     'cn-command-input-wrapper': 'p-1 pb-0',
     'cn-command-item':
-      "relative flex cursor-pointer items-center gap-2 text-sm select-none transition-colors rounded-2xl px-3 py-2 font-medium data-selected:bg-muted data-selected:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground in-data-[slot=dialog-content]:rounded-3xl",
+      "relative flex items-center gap-2 text-sm select-none transition-colors rounded-2xl px-3 py-2 font-medium cursor-default outline-hidden data-selected:bg-muted [&_svg:not([class*='size-'])]:size-4 in-data-[slot=dialog-content]:rounded-3xl data-selected:text-foreground data-selected:*:[svg]:text-foreground",
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
-    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1',
+    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
     'cn-command-separator': 'h-px bg-border/50 my-1.5',
     'cn-command-shortcut':
-      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground',
+      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-3xl border',
     'cn-data-table-column-header': 'gap-2',
     'cn-data-table-column-header-trigger': '-ms-3 h-8',
@@ -4397,13 +4440,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'fixed z-50 m-2 flex min-h-0 flex-col rounded-4xl border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform dark:border-border',
     'cn-drawer-body': 'flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit]',
     'cn-drawer-description': 'text-sm text-balance text-muted-foreground wrap-anywhere',
-    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4',
+    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0',
     'cn-drawer-handle':
-      'relative z-10 cursor-grab bg-muted mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full active:cursor-grabbing',
-    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center',
-    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end',
-    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start',
-    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center',
+      'relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-full after:bg-muted active:cursor-grabbing',
+    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center after:h-1.5 after:w-[100px]',
+    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end after:h-[100px] after:w-1.5',
+    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start after:h-[100px] after:w-1.5',
+    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center after:h-1.5 after:w-[100px]',
     'cn-drawer-header':
       'flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start',
     'cn-drawer-overlay': 'bg-black/30 supports-backdrop-filter:backdrop-blur-sm',
@@ -4412,17 +4455,19 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-drawer-placement-right': 'inset-y-0 right-0 w-3/4 origin-right flex-row sm:w-96',
     'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top',
     'cn-drawer-title': 'text-base font-medium text-foreground wrap-anywhere',
+    'cn-dropdown-menu-checkbox-item': 'pe-8 ps-3 in-data-[menu=menubar]:pe-3 in-data-[menu=menubar]:ps-9.5',
     'cn-dropdown-menu-content':
       'z-50 max-h-96 overflow-x-hidden overflow-y-auto animate-in ring-foreground/5 bg-popover text-popover-foreground min-w-48 rounded-3xl p-1.5 shadow-lg ring-1 duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10',
     'cn-dropdown-menu-item':
       "relative flex cursor-default items-center transition-colors gap-2.5 rounded-2xl px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[variant=destructive]:hover:bg-destructive/10 dark:data-[variant=destructive]:hover:bg-destructive/20 data-[variant=destructive]:hover:text-destructive not-data-[variant=destructive]:hover:**:text-accent-foreground data-[variant=destructive]:data-highlighted:bg-destructive/10 dark:data-[variant=destructive]:data-highlighted:bg-destructive/20 data-[variant=destructive]:data-highlighted:text-destructive data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:ps-9.5 [&_svg:not([class*='size-'])]:size-4",
-    'cn-dropdown-menu-item-indicator': 'absolute start-2 flex size-3.5 items-center justify-center',
+    'cn-dropdown-menu-item-indicator':
+      'absolute end-2 flex items-center justify-center in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:start-3 in-data-[menu=menubar]:size-4',
     'cn-dropdown-menu-item-inset-true': 'ps-8',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
     'cn-dropdown-menu-label': 'relative flex items-center text-sm text-muted-foreground px-3 py-2.5 data-inset:ps-9.5',
     'cn-dropdown-menu-label-inset-true': 'ps-8',
-    'cn-dropdown-menu-radio-dot': 'size-2 rounded-full bg-current',
+    'cn-dropdown-menu-radio-item': 'pe-8 ps-3 in-data-[menu=menubar]:pe-3 in-data-[menu=menubar]:ps-9.5',
     'cn-dropdown-menu-separator': 'block h-px bg-border/50 -mx-1.5 my-1.5',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-dropdown-menu-sub-content':
@@ -4432,8 +4477,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-dropdown-menu-sub-trigger-inset-true': 'ps-8',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 border-dashed text-center text-balance rounded-2xl p-12',
-    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-4 text-sm text-balance',
-    'cn-empty-description': 'text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4',
+    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance',
+    'cn-empty-description':
+      'text-muted-foreground text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
     'cn-empty-header': 'flex max-w-sm flex-col items-center gap-2',
     'cn-empty-icon':
       "bg-muted text-foreground mb-2 flex shrink-0 items-center justify-center size-10 rounded-xl [&_svg:not([class*='size-'])]:size-5",
@@ -4442,30 +4488,30 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'font-medium tracking-tight text-lg',
     'cn-field': 'flex w-full gap-3 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-1',
-    'cn-field-description':
-      'text-muted-foreground text-start text-sm group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5',
     'cn-field-error': 'text-sm font-normal text-destructive',
     'cn-field-group': 'flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
-      'flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:border has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-data-checked:bg-input/30 has-[>[data-slot=field]]:rounded-2xl has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-input/40 *:data-[slot=field]:p-4',
+      'flex w-fit gap-2 leading-none group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:border has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-data-checked:bg-input/30 has-[>[data-slot=field]]:rounded-2xl has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-input/40 *:data-[slot=field]:p-4',
     'cn-field-legend': 'font-medium mb-3 data-[variant=label]:text-sm data-[variant=legend]:text-base',
     'cn-field-orientation-horizontal':
-      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-responsive':
-      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-vertical': 'flex-col *:w-full [&>.sr-only]:w-auto',
     'cn-field-separator': 'relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2',
     'cn-field-separator-content': 'relative mx-auto block w-fit text-muted-foreground px-2',
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
-    'cn-field-title': 'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+    'cn-field-title':
+      'flex w-fit items-center gap-2 text-sm font-medium leading-snug group-data-[disabled=true]/field:opacity-50',
     'cn-font-heading': 'font-heading',
     'cn-hover-card':
-      'z-50 border bg-popover p-4 text-popover-foreground origin-(--z-hover-card-transform-origin) ring-foreground/5 w-72 rounded-3xl shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10',
+      'z-50 origin-(--z-hover-card-transform-origin) ring-foreground/5 bg-popover text-popover-foreground w-72 rounded-3xl p-4 text-sm shadow-lg ring-1 duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10',
     'cn-input':
       'w-full min-w-0 border py-1 text-base bg-input/50 border-transparent h-9 rounded-3xl px-3 transition-[color,box-shadow,background-color] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border bg-input/50 border-transparent h-9 rounded-4xl transition-[color,box-shadow,background-color] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-3xl has-data-[align=block-start]:rounded-3xl has-[textarea]:rounded-2xl',
+      'relative flex w-full min-w-0 items-center border bg-input/50 border-transparent h-9 rounded-4xl transition-[color,box-shadow,background-color] has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30 has-data-[align=block-end]:rounded-3xl has-data-[align=block-start]:rounded-3xl has-[textarea]:rounded-2xl',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-3xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -4478,7 +4524,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex cursor-pointer items-center justify-center whitespace-nowrap transition-all shrink-0 gap-2 rounded-4xl text-sm border border-transparent bg-clip-padding font-medium shadow-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:ring-3 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed [&_svg:not([class*='size-'])]:size-4 active:not-aria-[haspopup]:translate-y-px",
     'cn-input-group-button-size-icon-sm': 'size-8 p-0 has-[>svg]:p-0',
     'cn-input-group-button-size-icon-xs': 'size-6 p-0 rounded-xl has-[>svg]:p-0',
-    'cn-input-group-button-size-sm': 'h-8 px-3',
+    'cn-input-group-button-size-sm':
+      'h-9 gap-1.5 px-3 has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5',
     'cn-input-group-button-size-xs': "h-6 gap-1 px-1.5 rounded-xl [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-button-variant-default': 'bg-primary text-primary-foreground hover:bg-primary/80',
     'cn-input-group-button-variant-destructive':
@@ -4515,7 +4562,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-description':
       'line-clamp-2 text-muted-foreground text-start text-sm [&>a]:underline [&>a]:underline-offset-4',
     'cn-item-footer': 'flex basis-full items-center justify-between gap-2',
-    'cn-item-group': 'flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
+    'cn-item-group':
+      'flex w-full flex-col gap-4 has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2',
     'cn-item-header': 'flex basis-full items-center justify-between gap-2',
     'cn-item-media':
       'flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start',
@@ -4523,7 +4571,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-media-variant-icon': "[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
     'cn-item-media-variant-image':
       'size-10 overflow-hidden rounded-xl group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover group-data-[size=xs]/item:rounded-lg',
-    'cn-item-separator': 'block h-px w-full shrink-0 my-2',
+    'cn-item-separator': 'bg-border block h-px w-full shrink-0 my-2',
     'cn-item-size-default': 'gap-3.5 px-4 py-3.5',
     'cn-item-size-sm': 'gap-3.5 px-3.5 py-3',
     'cn-item-size-xs': 'gap-2.5 px-3 py-2.5 in-data-[slot=dropdown-menu-content]:p-0',
@@ -4606,7 +4654,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-navigation-menu-trigger':
       'inline-flex h-9 w-max items-center justify-center gap-1 text-sm font-medium transition-all rounded-3xl px-4.5 py-2.5 hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50 focus-visible:ring-ring/30',
     'cn-navigation-menu-trigger-icon':
-      'relative top-px size-3 shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
+      'relative top-px size-3! shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
     'cn-navigation-menu-viewport':
       'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/5 rounded-3xl shadow-lg ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90 dark:ring-foreground/10',
     'cn-navigation-menu-viewport-wrapper':
@@ -4636,7 +4684,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'h-9 rounded-3xl border border-transparent bg-input/50 px-3 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
     'cn-questionnaire-item': 'gap-5',
     'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title': 'text-base/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-5',
+    'cn-questionnaire-title':
+      'text-base/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-5',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -4659,7 +4708,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-content-position-popper':
       'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
     'cn-select-item':
-      "relative flex w-full cursor-default items-center gap-2.5 rounded-2xl py-2 pe-8 ps-3 text-sm font-medium focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+      "relative flex w-full cursor-default items-center rounded-2xl py-2 pe-8 ps-3 text-sm font-medium gap-2.5 focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
     'cn-select-item-icon': 'absolute flex size-3.5 items-center justify-center',
     'cn-select-item-icon-mode-compact': 'end-2',
     'cn-select-item-icon-mode-normal': 'end-2',
@@ -4676,7 +4725,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-scroll-icon': 'size-4!',
     'cn-select-separator': 'block h-px bg-border -mx-1.5 my-1.5',
     'cn-select-trigger':
-      'flex h-8 py-2 w-full items-center justify-between gap-2 border text-sm whitespace-nowrap bg-input/50 border-transparent rounded-3xl px-3 transition-[color,box-shadow,background-color] data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 focus-visible:ring-ring/30 data-[size=default]:h-9 data-[size=sm]:h-8',
+      "bg-input/50 border-transparent gap-1.5 rounded-3xl border py-2 px-3 text-sm transition-[color,box-shadow,background-color] flex w-full items-center justify-between whitespace-nowrap data-placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-3 aria-invalid:ring-3 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:flex *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:data-[slot=select-value]:items-center data-[size=default]:min-h-9 data-[size=sm]:min-h-8",
     'cn-select-trigger-icon': 'size-4!',
     'cn-select-viewport': 'min-h-0 flex-1 box-border overflow-x-hidden overflow-y-auto p-1.5',
     'cn-select-viewport-position-popper': 'w-full min-w-(--z-select-trigger-width) scroll-my-1',
@@ -4697,9 +4746,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-sidebar-container-side-left': 'left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)',
     'cn-sidebar-container-side-right': 'right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)',
     'cn-sidebar-container-variant-floating':
-      'p-3 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
+      'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
     'cn-sidebar-container-variant-inset':
-      'p-3 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
+      'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
     'cn-sidebar-container-variant-sidebar':
       'group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l',
     'cn-sidebar-content':
@@ -4719,7 +4768,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "flex h-8 shrink-0 items-center text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear rounded-xl px-3 focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
     'cn-sidebar-header': 'flex flex-col gap-2 p-2 [--radius:var(--radius-xl)]',
     'cn-sidebar-inner':
-      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:rounded-2xl',
+      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:rounded-2xl',
     'cn-sidebar-input': 'h-8 w-full shadow-none bg-input/50',
     'cn-sidebar-inset':
       'relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2 md:peer-data-[variant=inset]:rounded-2xl',
@@ -4740,7 +4789,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
     'cn-sidebar-menu-item': 'relative',
     'cn-sidebar-menu-skeleton': 'flex h-8 items-center gap-2 px-2 rounded-xl',
-    'cn-sidebar-menu-skeleton-icon': 'size-4',
+    'cn-sidebar-menu-skeleton-icon': 'size-4 rounded-xl',
     'cn-sidebar-menu-sub':
       'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 rtl:-translate-x-px group-data-[collapsible=icon]:hidden',
     'cn-sidebar-menu-sub-button':
@@ -4775,18 +4824,19 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-switch':
       'relative inline-flex shrink-0 cursor-pointer items-center rounded-full transition-all border-2 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed data-[state=checked]:bg-primary data-[state=unchecked]:bg-input/90 data-[state=checked]:border-primary data-[state=unchecked]:border-transparent focus-visible:ring-ring/30 focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:data-[state=unchecked]:border-transparent group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary data-[size=default]:h-5 data-[size=default]:w-11 data-[size=sm]:h-4 data-[size=sm]:w-7',
     'cn-switch-label': 'text-sm leading-none font-medium',
-    'cn-switch-size-default': 'h-[18.4px] w-[32px]',
-    'cn-switch-size-sm': 'h-[14px] w-[24px]',
+    'cn-switch-size-default': 'h-5 w-11',
+    'cn-switch-size-sm': 'h-4 w-7',
     'cn-switch-thumb':
-      'block transition-transform bg-background rounded-full shadow-sm ring-0 data-[size=default]:size-4 data-[size=sm]:size-3 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:h-4 group-data-[size=default]/switch:w-6 group-data-[size=sm]/switch:h-3 group-data-[size=sm]/switch:w-4 data-[state=checked]:translate-x-[calc(100%-8px)] data-[state=unchecked]:translate-x-0 not-dark:bg-clip-padding',
+      'block transition-transform bg-background rounded-full shadow-sm ring-0 dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:h-4 group-data-[size=default]/switch:w-6 group-data-[size=sm]/switch:h-3 group-data-[size=sm]/switch:w-4 not-dark:bg-clip-padding data-[size=default]:h-4 data-[size=default]:w-6 data-[size=sm]:h-3 data-[size=sm]:w-4 ltr:data-[state=checked]:translate-x-[calc(100%-8px)] rtl:data-[state=checked]:-translate-x-[calc(100%-8px)] data-[state=unchecked]:translate-x-0',
     'cn-table':
-      'w-full caption-bottom text-sm [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4',
+      'w-full caption-bottom text-sm [&_tbody_tr]:transition-colors [&_th]:h-12 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap',
     'cn-table-body': '[&_tr:last-child]:border-0',
     'cn-table-caption': 'mt-4 text-sm text-muted-foreground',
-    'cn-table-cell': 'align-middle p-3 has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+    'cn-table-cell':
+      'align-middle p-3 whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-footer': 'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
     'cn-table-head':
-      'text-start align-middle font-medium text-muted-foreground h-12 px-3 has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+      'text-start align-middle font-medium text-foreground h-12 px-3 whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-header': '[&_tr]:border-b',
     'cn-table-row':
       'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
@@ -4794,7 +4844,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-table-size-compact': '[&_td]:py-2 [&_th]:py-2',
     'cn-table-variant-bordered': 'border border-border',
     'cn-table-variant-striped': '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-    'cn-tabs-panel': 'focus-visible:ring-[3px] focus-visible:ring-ring/30',
+    'cn-tabs-panel': 'text-sm focus-visible:ring-[3px] focus-visible:ring-ring/30',
     'cn-tabs-tab-button':
       "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all cursor-pointer gap-2 rounded-full border border-transparent! px-3 py-1 text-sm font-medium group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:outline-1 focus-visible:outline-ring [&_svg]:shrink-0 after:absolute after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[orientation=vertical]/tabs:px-3 group-data-[orientation=vertical]/tabs:py-1.5 group-data-[orientation=vertical]/tabs:rounded-2xl [&_svg:not([class*='size-'])]:size-4 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 text-foreground/60 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground after:opacity-0 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
     'cn-tabs-tab-container': 'flex gap-2',
@@ -4810,9 +4860,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex-1 resize-none rounded-none border-0 bg-transparent shadow-none ring-0 py-2.5 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent',
     'cn-toast': 'rounded-2xl',
     'cn-toggle':
-      "inline-flex items-center justify-center gap-1 text-sm font-medium whitespace-nowrap cursor-pointer rounded-3xl transition-colors hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30",
+      "inline-flex items-center justify-center gap-1 text-sm font-medium whitespace-nowrap cursor-pointer rounded-3xl transition-colors hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 [&_ng-icon:not([class*='size-'])]:size-4!",
     'cn-toggle-group':
-      'flex w-fit flex-row items-center data-vertical:flex-col data-vertical:items-stretch data-[spacing=0]:data-[variant=outline]:rounded-3xl',
+      'flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-vertical:flex-col data-vertical:items-stretch data-[spacing=0]:data-[variant=outline]:rounded-3xl',
     'cn-toggle-group-item':
       'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none focus:z-10 focus-visible:z-10 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t data-[state=on]:bg-muted group-data-[spacing=0]/toggle-group:px-3 group-data-[spacing=0]/toggle-group:shadow-none group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-3xl group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-3xl group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-3xl group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-3xl group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-2.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-2.5',
     'cn-toggle-size-default': 'h-9 min-w-9 px-3 has-data-[icon=inline-end]:pe-2.5 has-data-[icon=inline-start]:ps-2.5',
@@ -4821,7 +4871,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-toggle-variant-default': 'bg-transparent',
     'cn-toggle-variant-outline': 'border border-input bg-transparent',
     'cn-tooltip':
-      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 bg-foreground px-3 py-1.5 text-xs text-background rounded-xl has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 **:data-[slot=kbd]:rounded-lg',
+      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 bg-foreground px-3 py-1.5 text-xs text-background rounded-xl has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 **:data-[slot=kbd]:rounded-lg data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95',
     'cn-tooltip-arrow':
       'bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] data-[side=left]:translate-x-[-1.5px] data-[side=right]:translate-x-[1.5px]',
     'cn-tooltip-position': 'absolute',
@@ -4847,7 +4897,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'cursor-pointer flex flex-1 items-start justify-between text-start text-sm transition-all w-full rounded-none gap-6 py-4 font-semibold hover:underline focus-visible:border-ring focus-visible:ring-ring/30 focus-visible:ring-2',
     'cn-accordion-trigger-icon': 'text-muted-foreground size-3.5 translate-y-0.5 transition-transform duration-200',
     'cn-alert':
-      "grid w-full border text-start text-sm gap-1 bg-background px-4 py-3 relative has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 has-[>svg]:gap-x-2.5 after:-inset-y-px after:-start-px after:w-0.5 after:absolute",
+      "grid w-full border text-start text-sm gap-1 bg-background px-4 py-3 relative has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2.5 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 after:-inset-y-px after:-start-px after:w-0.5 after:absolute",
     'cn-alert-action': 'absolute top-2.5 end-3',
     'cn-alert-description':
       'text-sm text-balance md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4',
@@ -4865,7 +4915,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-dialog-overlay': 'bg-black/20 supports-backdrop-filter:backdrop-blur-sm',
     'cn-alert-dialog-title':
       'wrap-anywhere text-lg font-semibold uppercase tracking-wider sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
-    'cn-alert-icon': 'shrink-0 self-start text-lg!',
+    'cn-alert-icon': 'flex shrink-0 self-start text-lg!',
+    'cn-alert-icon-glyph': 'size-4!',
     'cn-alert-title':
       "font-semibold text-sm [&_a]:hover:text-foreground group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 group-has-[>svg]/alert:col-start-2",
     'cn-alert-variant-default': 'bg-card text-card-foreground after:bg-foreground',
@@ -4909,7 +4960,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
-      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs',
+      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs text-sm',
     'cn-avatar-group': 'flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
     'cn-avatar-group-count':
       'relative flex shrink-0 items-center justify-center bg-muted text-muted-foreground size-8 rounded-full text-sm ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',
@@ -4919,12 +4970,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
-      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
+      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full opacity-0',
     'cn-avatar-size-default': 'size-8',
     'cn-avatar-size-lg': 'size-10',
     'cn-avatar-size-sm': 'size-6',
     'cn-badge':
-      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap gap-1.5 rounded-none border-0 bg-transparent px-0 py-0 text-[0.625rem] font-semibold uppercase tracking-widest transition-colors focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-0 has-data-[icon=inline-start]:ps-0 [&>svg]:size-3!',
+      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap gap-1.5 rounded-none border-0 bg-transparent px-0 py-0 text-[0.625rem] font-semibold uppercase tracking-widest transition-colors focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-0 has-data-[icon=inline-start]:ps-0 [&>svg]:size-3! [&>z-spinner>svg]:size-3!',
     'cn-badge-variant-default': 'text-foreground [a&]:hover:bg-primary/90 [a]:hover:text-foreground/70',
     'cn-badge-variant-destructive':
       'text-destructive focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:text-destructive/70',
@@ -4978,7 +5029,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-bubble-variant-tinted':
       '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
     'cn-button':
-      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all rounded-none text-xs font-semibold uppercase tracking-widest focus-visible:border-ring active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2 [&_svg:not([class*='size-'])]:size-3.5",
+      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap transition-all rounded-none text-xs font-semibold uppercase tracking-widest focus-visible:border-ring active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2 [&_svg:not([class*='size-'])]:size-3.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.875rem]",
     'cn-button-disabled-true': 'opacity-50',
     'cn-button-group':
       'flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>input]:flex-1 *:data-[slot=input]:px-4 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-none has-[>[data-variant=outline]]:[&>input]:border-border has-[>[data-variant=outline]]:[&>input:focus-visible]:border-ring has-[>[data-variant=outline]]:*:data-[slot=input-group]:border-border has-[>[data-variant=outline]]:[&>[data-slot=input-group]:has(:focus-visible)]:border-ring has-[>[data-variant=outline]]:*:data-[slot=select-trigger]:border-border has-[>[data-variant=outline]]:[&>[data-slot=select-trigger]:focus-visible]:border-ring has-[>[data-variant=outline]]:*:data-[slot=input-group]:px-2.5 has-[>[data-variant=outline]]:*:[[role=combobox]]:px-2.5',
@@ -4997,11 +5048,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-button-size-icon': 'size-10',
     'cn-button-size-icon-lg': 'size-11',
     'cn-button-size-icon-sm': 'size-9',
-    'cn-button-size-icon-xs': "size-7 [&_svg:not([class*='size-'])]:size-3",
+    'cn-button-size-icon-xs':
+      "size-7 [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-size-lg': 'gap-1.5 h-11 px-8 has-data-[icon=inline-end]:pe-5 has-data-[icon=inline-start]:ps-5',
     'cn-button-size-sm': 'gap-1 h-9 px-4 has-data-[icon=inline-end]:pe-3 has-data-[icon=inline-start]:ps-3',
     'cn-button-size-xs':
-      "gap-1 h-7 px-3 [&_svg:not([class*='size-'])]:size-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2",
+      "gap-1 h-7 px-3 [&_svg:not([class*='size-'])]:size-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-variant-default': 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
     'cn-button-variant-destructive':
       'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
@@ -5014,12 +5066,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
     'cn-calendar':
       'block w-fit bg-background p-3 [--cell-radius:0] [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
-    'cn-calendar-caption':
-      'flex h-(--cell-size) w-full items-center justify-center text-xs font-semibold uppercase tracking-wide',
+    'cn-calendar-caption': 'flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)',
     'cn-calendar-caption-label': 'h-8 pe-2 ps-3 text-xs font-semibold uppercase tracking-wide',
-    'cn-calendar-caption-label-layout-dropdown':
-      'flex h-(--cell-size) items-center gap-1.5 rounded-(--cell-radius) px-3 text-xs',
-    'cn-calendar-caption-label-layout-label': 'text-xs',
+    'cn-calendar-caption-label-layout-dropdown': 'flex items-center gap-1 rounded-(--cell-radius)',
+    'cn-calendar-caption-label-layout-label': 'text-xs font-semibold uppercase tracking-wide',
     'cn-calendar-day':
       'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
     'cn-calendar-day-button':
@@ -5042,17 +5092,17 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-calendar-dropdown': 'absolute inset-0 z-10 cursor-pointer bg-popover opacity-0',
     'cn-calendar-dropdown-root':
       'relative isolate border-input rounded-none border has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/30 has-focus:ring-2',
-    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-2.5 text-xs font-semibold',
-    'cn-calendar-month': 'relative flex w-full flex-col gap-6',
-    'cn-calendar-months': 'relative flex flex-col gap-6 md:flex-row',
+    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
+    'cn-calendar-month': 'relative flex w-full flex-col gap-4',
+    'cn-calendar-months': 'relative flex flex-col gap-4 md:flex-row',
     'cn-calendar-nav': 'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1.5',
     'cn-calendar-nav-button': 'size-(--cell-size) p-0',
     'cn-calendar-nav-spacer': 'size-(--cell-size)',
-    'cn-calendar-row': 'grid w-full grid-cols-7 gap-x-0',
-    'cn-calendar-week': 'mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2',
+    'cn-calendar-row': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0',
+    'cn-calendar-week': 'mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2',
     'cn-calendar-weekday':
-      'flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
-    'cn-calendar-weekdays': 'grid w-full grid-cols-7',
+      'flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
+    'cn-calendar-weekdays': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))]',
     'cn-calendar-weeks': 'mt-2 flex w-full flex-col gap-y-2',
     'cn-card':
       'flex flex-col gap-(--card-spacing) overflow-hidden bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/5 shadow-sm [--card-spacing:--spacing(8)] has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(5)] *:[img:first-child]:rounded-none *:[img:last-child]:rounded-none',
@@ -5133,7 +5183,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex flex-wrap items-center border bg-transparent bg-clip-padding text-sm border-transparent border-b-input min-h-10 gap-1.5 rounded-none px-0 py-1.5 transition-[color,border-color] focus-within:border-b-ring has-aria-invalid:border-b-destructive dark:has-aria-invalid:border-b-destructive/50 has-data-[slot=combobox-chip]:px-0',
     'cn-combobox-chips-input': 'min-w-16 flex-1 bg-transparent',
     'cn-combobox-content':
-      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 rounded-none data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:h-8 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 *:data-[slot=input-group]:bg-transparent *:data-[slot=input-group]:m-1.5 *:data-[slot=input-group]:border-transparent *:data-[slot=input-group]:focus-within:border-transparent *:data-[slot=input-group]:px-2.5',
+      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 rounded-none data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:h-8 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 *:data-[slot=input-group]:bg-transparent *:data-[slot=input-group]:m-1.5 *:data-[slot=input-group]:border-transparent *:data-[slot=input-group]:focus-within:border-transparent *:data-[slot=input-group]:px-2.5 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
     'cn-combobox-empty':
       'hidden w-full justify-center py-2 text-center text-sm text-muted-foreground group-data-empty/combobox-content:flex',
     'cn-combobox-group': 'block',
@@ -5149,7 +5199,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'no-scrollbar block overflow-y-auto overscroll-contain max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] scroll-py-1.5 p-1.5 data-empty:p-0',
     'cn-combobox-separator': 'block h-px bg-border/50 -mx-1.5 my-1.5',
     'cn-combobox-trigger': "[&_svg:not([class*='size-'])]:size-3.5",
-    'cn-combobox-trigger-icon': 'size-3.5!',
+    'cn-combobox-trigger-icon': 'size-3.5! text-muted-foreground',
     'cn-combobox-trigger-standalone-false':
       'group-has-data-[slot=combobox-clear]/input-group:hidden aria-expanded:bg-transparent',
     'cn-combobox-value': 'block truncate text-xs',
@@ -5165,13 +5215,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-command-input-icon': 'size-3.5!',
     'cn-command-input-wrapper': 'p-1',
     'cn-command-item':
-      "relative flex cursor-pointer items-center gap-2 text-sm select-none transition-colors rounded-none px-3 py-2 data-selected:bg-muted data-selected:text-accent-foreground data-selected:*:[svg]:text-accent-foreground in-data-[slot=dialog-content]:rounded-none [&_svg:not([class*='size-'])]:size-3.5",
+      "relative flex items-center gap-2 text-sm select-none transition-colors rounded-none px-3 py-2 cursor-default outline-hidden data-selected:bg-muted in-data-[slot=dialog-content]:rounded-none [&_svg:not([class*='size-'])]:size-3.5 data-selected:text-foreground data-selected:*:[svg]:text-foreground",
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
-    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1',
+    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
     'cn-command-separator': 'h-px bg-border/50 -mx-1.5 my-1.5',
     'cn-command-shortcut':
-      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground',
+      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-none border',
     'cn-data-table-column-header': 'gap-2',
     'cn-data-table-column-header-trigger': '-ms-4 h-9',
@@ -5195,18 +5245,18 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-dialog-footer': 'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
     'cn-dialog-header': 'flex flex-col gap-2',
     'cn-dialog-overlay': 'bg-black/20 supports-backdrop-filter:backdrop-blur-sm',
-    'cn-dialog-title': 'wrap-anywhere text-lg font-semibold uppercase tracking-wider',
+    'cn-dialog-title': 'wrap-anywhere text-lg font-semibold uppercase tracking-wider leading-none',
     'cn-drawer':
       'fixed z-50 min-h-0 will-change-transform bg-popover text-popover-foreground flex h-auto flex-col text-sm',
     'cn-drawer-body': 'flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit]',
     'cn-drawer-description': 'text-sm text-balance text-muted-foreground wrap-anywhere leading-relaxed mt-0.5',
-    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4',
+    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0',
     'cn-drawer-handle':
-      'relative z-10 cursor-grab bg-muted mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-none active:cursor-grabbing',
-    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center',
-    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end',
-    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start',
-    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center',
+      'relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-none after:bg-muted active:cursor-grabbing',
+    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center after:h-1.5 after:w-[100px]',
+    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end after:h-[100px] after:w-1.5',
+    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start after:h-[100px] after:w-1.5',
+    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center after:h-1.5 after:w-[100px]',
     'cn-drawer-header':
       'flex shrink-0 flex-col p-4 pb-0 gap-1 group-data-[axis=y]/drawer:text-center md:text-start md:gap-2',
     'cn-drawer-overlay': 'bg-black/20 supports-backdrop-filter:backdrop-blur-sm',
@@ -5215,18 +5265,20 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-drawer-placement-right': 'inset-y-0 right-0 w-3/4 origin-right flex-row rounded-none border-s sm:w-96',
     'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top rounded-none border-b',
     'cn-drawer-title': 'text-foreground wrap-anywhere text-lg font-semibold uppercase tracking-wider',
+    'cn-dropdown-menu-checkbox-item': 'pe-8 ps-3 in-data-[menu=menubar]:pe-3 in-data-[menu=menubar]:ps-9.5',
     'cn-dropdown-menu-content':
       'z-50 max-h-96 overflow-x-hidden overflow-y-auto animate-in ring-foreground/10 bg-popover text-popover-foreground min-w-48 rounded-none p-1.5 shadow-md ring-1 duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-dropdown-menu-item':
       "relative flex cursor-default items-center transition-colors gap-2.5 rounded-none px-3 py-2 text-xs font-medium uppercase tracking-wider hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[variant=destructive]:hover:bg-destructive/10 dark:data-[variant=destructive]:hover:bg-destructive/20 data-[variant=destructive]:hover:text-destructive not-data-[variant=destructive]:hover:**:text-accent-foreground data-[variant=destructive]:data-highlighted:bg-destructive/10 dark:data-[variant=destructive]:data-highlighted:bg-destructive/20 data-[variant=destructive]:data-highlighted:text-destructive data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:ps-9.5 [&_svg:not([class*='size-'])]:size-3.5",
-    'cn-dropdown-menu-item-indicator': 'absolute start-2 flex size-3.5 items-center justify-center',
+    'cn-dropdown-menu-item-indicator':
+      'absolute end-2 flex items-center justify-center in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:start-3 in-data-[menu=menubar]:size-4',
     'cn-dropdown-menu-item-inset-true': 'ps-8',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
     'cn-dropdown-menu-label':
       'relative flex items-center text-sm text-muted-foreground px-3 py-2 uppercase tracking-wider font-semibold data-inset:ps-9.5',
     'cn-dropdown-menu-label-inset-true': 'ps-8',
-    'cn-dropdown-menu-radio-dot': 'size-2 rounded-none bg-current',
+    'cn-dropdown-menu-radio-item': 'pe-8 ps-3 in-data-[menu=menubar]:pe-3 in-data-[menu=menubar]:ps-9.5',
     'cn-dropdown-menu-separator': 'block h-px bg-border/50 -mx-1.5 my-1.5',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-dropdown-menu-sub-content':
@@ -5236,8 +5288,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-dropdown-menu-sub-trigger-inset-true': 'ps-8',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 border-dashed text-center text-balance p-12',
-    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-4 text-xs text-balance',
-    'cn-empty-description': 'text-sm/relaxed mt-0.5 [&>a]:underline [&>a]:underline-offset-4',
+    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance',
+    'cn-empty-description':
+      'text-muted-foreground text-sm/relaxed mt-0.5 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
     'cn-empty-header': 'flex max-w-sm flex-col items-center gap-2',
     'cn-empty-icon':
       "bg-muted text-foreground mb-2 flex shrink-0 items-center justify-center size-10 rounded-none [&_svg:not([class*='size-'])]:size-5",
@@ -5247,30 +5300,30 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-field': 'flex w-full gap-3 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-1',
     'cn-field-description':
-      'text-muted-foreground text-start text-sm normal-case tracking-normal group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
+      'text-muted-foreground text-start text-sm normal-case tracking-normal [[data-variant=legend]+&]:-mt-1.5',
     'cn-field-error': 'text-sm font-normal text-destructive',
     'cn-field-group': 'flex w-full flex-col gap-10 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
       'flex w-fit gap-2 leading-relaxed group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:border dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-none has-[>[data-slot=field]]:has-[:focus-visible]:ring-ring/30 has-[>[data-slot=field]]:has-[:focus-visible]:ring-2 *:data-[slot=field]:p-4',
     'cn-field-legend': 'mb-3 font-semibold uppercase data-[variant=label]:text-xs data-[variant=legend]:text-xs',
     'cn-field-orientation-horizontal':
-      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-responsive':
-      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-vertical': 'flex-col *:w-full [&>.sr-only]:w-auto',
     'cn-field-separator': 'relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2',
     'cn-field-separator-content': 'relative mx-auto block w-fit text-muted-foreground px-2',
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
     'cn-field-title':
-      'flex w-fit items-center gap-2 font-semibold uppercase text-xs group-data-[disabled=true]/field:opacity-50 in-data-[slot=field-label]:font-semibold',
+      'flex w-fit items-center gap-2 font-semibold uppercase text-xs leading-normal group-data-[disabled=true]/field:opacity-50 in-data-[slot=field-label]:font-semibold',
     'cn-font-heading': 'font-heading',
     'cn-hover-card':
-      'z-50 rounded-none border bg-popover p-4 text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin) w-72 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+      'z-50 origin-(--z-hover-card-transform-origin) ring-foreground/10 bg-popover text-popover-foreground w-72 p-4 text-sm shadow-md ring-1 duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
     'cn-input':
       'w-full min-w-0 border bg-transparent py-1 text-base border-transparent border-b-input h-10 px-0 transition-[color,border-color] file:inline-flex file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground md:text-sm focus-visible:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50 file:h-7',
     'cn-input-group':
-      'relative flex w-full min-w-0 items-center border border-transparent border-b-input bg-transparent h-10 rounded-none transition-[color,border-color] has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:border-b-ring has-[[data-slot][aria-invalid=true]]:border-b-destructive dark:has-[[data-slot][aria-invalid=true]]:border-b-destructive/50 has-data-[align=block-end]:rounded-none has-data-[align=block-start]:rounded-none has-[textarea]:rounded-none',
+      'relative flex w-full min-w-0 items-center border border-transparent border-b-input bg-transparent h-10 rounded-none transition-[color,border-color] has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:border-b-ring has-[[data-slot][aria-invalid=true]]:border-b-destructive dark:has-[[data-slot][aria-invalid=true]]:border-b-destructive/50 has-data-[align=block-end]:rounded-none has-data-[align=block-start]:rounded-none has-[textarea]:rounded-none',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 text-sm font-medium text-muted-foreground py-2 group-data-[disabled=true]/input-group:opacity-50 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-none **:data-[slot=kbd]:px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-addon-align-block-end':
@@ -5283,7 +5336,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex cursor-pointer items-center justify-center whitespace-nowrap transition-all shrink-0 gap-2 rounded-none text-sm border border-transparent bg-clip-padding font-medium shadow-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:ring-3 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed [&_svg:not([class*='size-'])]:size-4 active:not-aria-[haspopup]:translate-y-px",
     'cn-input-group-button-size-icon-sm': 'size-8 p-0 has-[>svg]:p-0',
     'cn-input-group-button-size-icon-xs': 'size-6 p-0 text-xs has-[>svg]:p-0',
-    'cn-input-group-button-size-sm': 'h-8 px-3',
+    'cn-input-group-button-size-sm':
+      'h-10 gap-1.5 px-6 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4',
     'cn-input-group-button-size-xs': "h-6 gap-1 px-1.5 rounded-none text-xs [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-button-variant-default': 'bg-primary text-primary-foreground hover:bg-primary/80',
     'cn-input-group-button-variant-destructive':
@@ -5321,7 +5375,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-description':
       'line-clamp-2 text-muted-foreground text-start text-sm leading-relaxed [&>a]:underline [&>a]:underline-offset-4',
     'cn-item-footer': 'flex basis-full items-center justify-between gap-2',
-    'cn-item-group': 'flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
+    'cn-item-group':
+      'flex w-full flex-col gap-4 has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2',
     'cn-item-header': 'flex basis-full items-center justify-between gap-2',
     'cn-item-media':
       'flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start',
@@ -5329,7 +5384,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-media-variant-icon': "[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
     'cn-item-media-variant-image':
       'size-10 overflow-hidden rounded-none group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover group-data-[size=xs]/item:rounded-none',
-    'cn-item-separator': 'block h-px w-full shrink-0 my-2',
+    'cn-item-separator': 'bg-border block h-px w-full shrink-0 my-2',
     'cn-item-size-default': 'gap-3.5 px-4 py-3.5',
     'cn-item-size-sm': 'gap-3.5 px-3.5 py-3',
     'cn-item-size-xs': 'gap-2.5 px-3 py-2.5 in-data-[slot=dropdown-menu-content]:p-0',
@@ -5413,7 +5468,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-navigation-menu-trigger':
       'inline-flex h-9 w-max items-center justify-center gap-1 text-sm font-medium transition-all rounded-none px-4.5 py-2.5 hover:bg-muted focus:bg-muted focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50 focus-visible:ring-ring/30 focus-visible:ring-2',
     'cn-navigation-menu-trigger-icon':
-      'relative top-px size-3 shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
+      'relative top-px size-3! shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
     'cn-navigation-menu-viewport':
       'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/10 rounded-none shadow-md ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90',
     'cn-navigation-menu-viewport-wrapper':
@@ -5444,7 +5499,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-questionnaire-item': 'gap-4',
     'cn-questionnaire-progress': 'text-xs font-semibold tracking-wider text-muted-foreground uppercase',
     'cn-questionnaire-title':
-      'text-lg/snug font-semibold tracking-wider uppercase [&:has(~[data-slot=questionnaire-description])]:-mb-4',
+      'text-lg/snug font-semibold tracking-wider uppercase [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4.5 items-center justify-center',
     'cn-radio-group-indicator-dot': 'bg-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full',
@@ -5466,7 +5521,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-content-position-popper':
       'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
     'cn-select-item':
-      "relative flex w-full cursor-default items-center gap-2.5 rounded-none py-2 pe-8 ps-3 text-sm focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-3.5 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+      "relative flex w-full cursor-default items-center rounded-none py-2 pe-8 ps-3 text-sm gap-2.5 focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-3.5 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
     'cn-select-item-icon': 'absolute flex size-3.5 items-center justify-center',
     'cn-select-item-icon-mode-compact': 'end-2',
     'cn-select-item-icon-mode-normal': 'end-2',
@@ -5483,7 +5538,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-scroll-icon': 'size-3.5!',
     'cn-select-separator': 'block h-px bg-border/50 -mx-1.5 my-1.5',
     'cn-select-trigger':
-      'flex h-8 py-2 w-full items-center justify-between gap-2 border bg-transparent text-sm whitespace-nowrap border-transparent border-b-input rounded-none px-0 transition-[color,border-color] data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 focus-visible:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50 data-[size=default]:h-10 data-[size=sm]:h-9 [&_svg:not([class*=\'size-\'])]:size-3.5',
+      "border-transparent border-b-input bg-transparent gap-1.5 rounded-none border py-2 px-0 text-sm transition-[color,border-color] flex w-full items-center justify-between whitespace-nowrap data-placeholder:text-muted-foreground focus-visible:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50 data-[size=default]:h-10 data-[size=sm]:h-9 *:data-[slot=select-value]:flex *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-3.5 [&_svg:not([class*='text-'])]:text-muted-foreground *:data-[slot=select-value]:items-center data-[size=default]:min-h-10 data-[size=sm]:min-h-9",
     'cn-select-trigger-icon': 'size-3.5!',
     'cn-select-viewport': 'min-h-0 flex-1 box-border overflow-x-hidden overflow-y-auto p-1.5',
     'cn-select-viewport-position-popper': 'w-full min-w-(--z-select-trigger-width) scroll-my-1',
@@ -5504,9 +5559,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-sidebar-container-side-left': 'left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)',
     'cn-sidebar-container-side-right': 'right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)',
     'cn-sidebar-container-variant-floating':
-      'p-3 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
+      'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
     'cn-sidebar-container-variant-inset':
-      'p-3 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
+      'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
     'cn-sidebar-container-variant-sidebar':
       'group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l',
     'cn-sidebar-content':
@@ -5526,7 +5581,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "flex h-8 shrink-0 items-center text-xs text-sidebar-foreground/70 ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear rounded-none px-3 font-semibold uppercase tracking-wider focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 [&>svg]:size-3.5",
     'cn-sidebar-header': 'flex flex-col gap-2 p-2 [--radius:0]',
     'cn-sidebar-inner':
-      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:rounded-none',
+      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:rounded-none',
     'cn-sidebar-input': 'h-8 w-full shadow-none bg-transparent border-input',
     'cn-sidebar-inset':
       'relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2 md:peer-data-[variant=inset]:rounded-none',
@@ -5547,7 +5602,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
     'cn-sidebar-menu-item': 'relative',
     'cn-sidebar-menu-skeleton': 'flex h-8 items-center gap-2 px-2 rounded-none',
-    'cn-sidebar-menu-skeleton-icon': 'size-3.5',
+    'cn-sidebar-menu-skeleton-icon': 'size-3.5 rounded-none',
     'cn-sidebar-menu-sub':
       'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 rtl:-translate-x-px group-data-[collapsible=icon]:hidden',
     'cn-sidebar-menu-sub-button':
@@ -5581,19 +5636,20 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'relative grow overflow-hidden bg-input/50 data-horizontal:w-full data-vertical:h-full data-horizontal:h-0.5 data-vertical:w-0.5',
     'cn-switch':
       'relative inline-flex shrink-0 cursor-pointer items-center border transition-all rounded-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed data-[state=checked]:bg-primary data-[state=unchecked]:bg-input data-[state=checked]:border-primary data-[state=unchecked]:border-input/50 focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:data-[state=unchecked]:border-input/50 group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary data-[size=default]:h-4.5 data-[size=default]:w-8.25 data-[size=sm]:h-3.5 data-[size=sm]:w-6.25',
-    'cn-switch-label': 'text-sm leading-none font-normal',
-    'cn-switch-size-default': 'h-[18.4px] w-[32px]',
-    'cn-switch-size-sm': 'h-[14px] w-[24px]',
+    'cn-switch-label': 'text-sm font-normal leading-relaxed',
+    'cn-switch-size-default': 'h-4.5 w-8.25',
+    'cn-switch-size-sm': 'h-3.5 w-6.25',
     'cn-switch-thumb':
-      'block transition-transform bg-background ring-0 data-[size=default]:size-4 data-[size=sm]:size-3 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-2.5 data-[state=checked]:translate-x-[calc(100%+2px)] data-[state=unchecked]:translate-x-0.25',
+      'block transition-transform bg-background ring-0 dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-2.5 data-[size=default]:size-3.5 data-[size=sm]:size-2.5 ltr:data-[state=checked]:translate-x-[calc(100%+2px)] rtl:data-[state=checked]:-translate-x-[calc(100%+2px)] ltr:data-[state=unchecked]:translate-x-0.25 rtl:data-[state=unchecked]:-translate-x-0.25',
     'cn-table':
-      'w-full caption-bottom text-sm [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4',
+      'w-full caption-bottom text-sm [&_tbody_tr]:transition-colors [&_th]:h-12 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap',
     'cn-table-body': '[&_tr:last-child]:border-0',
     'cn-table-caption': 'mt-4 text-sm text-muted-foreground',
-    'cn-table-cell': 'align-middle p-3 has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+    'cn-table-cell':
+      'align-middle p-3 whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-footer': 'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
     'cn-table-head':
-      'text-start align-middle font-medium text-muted-foreground h-12 px-3 text-xs uppercase tracking-wider has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+      'text-start align-middle font-medium text-muted-foreground h-12 px-3 text-xs uppercase tracking-wider whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-header': '[&_tr]:border-b',
     'cn-table-row':
       'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
@@ -5601,7 +5657,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-table-size-compact': '[&_td]:py-2 [&_th]:py-2',
     'cn-table-variant-bordered': 'border border-border',
     'cn-table-variant-striped': '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-    'cn-tabs-panel': 'focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-tabs-panel': 'text-sm focus-visible:ring-2 focus-visible:ring-ring/30',
     'cn-tabs-tab-button':
       "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all cursor-pointer gap-2 border border-transparent px-4 py-1.5 text-xs font-semibold uppercase tracking-wider group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:outline-1 focus-visible:outline-ring [&_svg]:shrink-0 after:absolute after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[orientation=vertical]/tabs:px-4 group-data-[orientation=vertical]/tabs:py-2 [&_svg:not([class*='size-'])]:size-3.5 has-data-[icon=inline-end]:pe-2.5 has-data-[icon=inline-start]:ps-2.5 text-foreground/60 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground after:opacity-0 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
     'cn-tabs-tab-container': 'flex gap-2',
@@ -5617,9 +5673,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex-1 resize-none border-0 bg-transparent ring-0 py-2.5 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent',
     'cn-toast': 'rounded-none!',
     'cn-toggle':
-      "inline-flex items-center justify-center whitespace-nowrap cursor-pointer gap-1.5 rounded-none text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 [&_svg:not([class*='size-'])]:size-3.5",
+      "inline-flex items-center justify-center whitespace-nowrap cursor-pointer gap-1.5 rounded-none text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30 [&_svg:not([class*='size-'])]:size-3.5 [&_ng-icon:not([class*='size-'])]:size-3.5!",
     'cn-toggle-group':
-      'flex w-fit flex-row items-center data-vertical:flex-col data-vertical:items-stretch data-[spacing=0]:data-[variant=outline]:rounded-none',
+      'flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-vertical:flex-col data-vertical:items-stretch data-[spacing=0]:data-[variant=outline]:rounded-none',
     'cn-toggle-group-item':
       'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none focus:z-10 focus-visible:z-10 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t data-[state=on]:bg-muted data-[state=on]:text-foreground group-data-[spacing=0]/toggle-group:px-6 group-data-[spacing=0]/toggle-group:shadow-none group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-none group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-none group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-none group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-none group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-4 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-4',
     'cn-toggle-size-default': 'h-10 min-w-10 px-6 has-data-[icon=inline-end]:pe-4 has-data-[icon=inline-start]:ps-4',
@@ -5628,7 +5684,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-toggle-variant-default': 'bg-transparent',
     'cn-toggle-variant-outline': 'border border-input bg-transparent',
     'cn-tooltip':
-      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 bg-foreground px-3 py-1.5 text-xs text-background rounded-none has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 **:data-[slot=kbd]:rounded-none',
+      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 bg-foreground px-3 py-1.5 text-xs text-background rounded-none has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 **:data-[slot=kbd]:rounded-none data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95',
     'cn-tooltip-arrow':
       'bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-none',
     'cn-tooltip-position': 'absolute',
@@ -5654,7 +5710,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'cursor-pointer flex flex-1 items-start justify-between rounded-md text-start text-sm font-medium transition-all w-full gap-6 p-4 hover:underline focus-visible:ring-[3px]',
     'cn-accordion-trigger-icon': 'text-muted-foreground size-4 translate-y-0.5 transition-transform duration-200',
     'cn-alert':
-      "relative grid w-full gap-0.5 border text-start text-sm rounded-2xl px-4 py-3 has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 has-[>svg]:gap-x-2.5",
+      "relative grid w-full gap-0.5 border text-start text-sm rounded-2xl px-4 py-3 has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2.5 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4",
     'cn-alert-action': 'absolute top-2.5 end-3',
     'cn-alert-description':
       'text-sm text-balance md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4',
@@ -5672,7 +5728,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-dialog-overlay': 'bg-black/30 supports-backdrop-filter:backdrop-blur-sm',
     'cn-alert-dialog-title':
       'font-medium wrap-anywhere text-lg sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
-    'cn-alert-icon': 'shrink-0 self-start text-base!',
+    'cn-alert-icon': 'flex shrink-0 self-start text-base!',
+    'cn-alert-icon-glyph': 'size-4!',
     'cn-alert-title':
       "font-medium [&_a]:hover:text-foreground group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 group-has-[>svg]/alert:col-start-2",
     'cn-alert-variant-default': 'bg-card text-card-foreground',
@@ -5715,7 +5772,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
-      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs',
+      'absolute inset-0 flex size-full items-center justify-center bg-muted text-muted-foreground rounded-full group-data-[size=sm]/avatar:text-xs text-sm',
     'cn-avatar-group': 'flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
     'cn-avatar-group-count':
       'relative flex shrink-0 items-center justify-center bg-muted text-muted-foreground size-8 rounded-full text-sm ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',
@@ -5725,12 +5782,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-avatar-group-orientation-horizontal': 'flex-row -space-x-2',
     'cn-avatar-group-orientation-vertical': 'flex-col -space-y-2',
     'cn-avatar-image':
-      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full',
+      'absolute inset-0 aspect-square size-full object-cover transition-opacity duration-200 rounded-full opacity-0',
     'cn-avatar-size-default': 'size-8',
     'cn-avatar-size-lg': 'size-10',
     'cn-avatar-size-sm': 'size-6',
     'cn-badge':
-      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-2xl border border-transparent px-2 py-0.5 text-xs font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3!',
+      'inline-flex w-fit shrink-0 items-center justify-center overflow-hidden whitespace-nowrap h-5 gap-1 rounded-2xl border border-transparent px-2 py-0.5 text-xs font-medium transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3 has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3! [&>z-spinner>svg]:size-3!',
     'cn-badge-variant-default': 'bg-primary text-primary-foreground [a&]:hover:bg-primary/90',
     'cn-badge-variant-destructive':
       'bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20',
@@ -5782,7 +5839,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-bubble-variant-tinted':
       '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
     'cn-button':
-      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all rounded-2xl focus-visible:border-ring focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30",
+      "inline-flex shrink-0 items-center justify-center border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all rounded-2xl focus-visible:border-ring focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem]",
     'cn-button-disabled-true': 'opacity-50',
     'cn-button-group':
       'flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>input]:flex-1 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-e-2xl has-[>[data-variant=outline]]:[&>input]:border-border has-[>[data-variant=outline]]:[&>input:focus-visible]:border-ring has-[>[data-variant=outline]]:*:data-[slot=input-group]:border-border has-[>[data-variant=outline]]:[&>[data-slot=input-group]:has(:focus-visible)]:border-ring has-[>[data-variant=outline]]:*:data-[slot=select-trigger]:border-border has-[>[data-variant=outline]]:[&>[data-slot=select-trigger]:focus-visible]:border-ring',
@@ -5801,11 +5858,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-button-size-icon': 'size-8',
     'cn-button-size-icon-lg': 'size-9',
     'cn-button-size-icon-sm': 'size-7',
-    'cn-button-size-icon-xs': "size-6 [&_svg:not([class*='size-'])]:size-3",
+    'cn-button-size-icon-xs':
+      "size-6 [&_svg:not([class*='size-'])]:size-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-size-lg': 'h-9 gap-1.5 px-4 has-data-[icon=inline-end]:pe-3 has-data-[icon=inline-start]:ps-3',
     'cn-button-size-sm': 'h-7 gap-1 px-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
     'cn-button-size-xs':
-      "h-6 gap-1 text-xs px-2.5 [&_svg:not([class*='size-'])]:size-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2",
+      "h-6 gap-1 text-xs px-2.5 [&_svg:not([class*='size-'])]:size-3 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem]",
     'cn-button-variant-default': 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
     'cn-button-variant-destructive':
       'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
@@ -5820,9 +5878,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'block w-fit bg-background p-3 [--cell-radius:var(--radius-2xl)] [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
     'cn-calendar-caption': 'flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)',
     'cn-calendar-caption-label': 'h-8 pe-2 ps-3',
-    'cn-calendar-caption-label-layout-dropdown':
-      'flex h-(--cell-size) items-center gap-1.5 rounded-(--cell-radius) px-3 text-sm',
-    'cn-calendar-caption-label-layout-label': 'text-sm',
+    'cn-calendar-caption-label-layout-dropdown': 'flex items-center gap-1 rounded-(--cell-radius) text-sm',
+    'cn-calendar-caption-label-layout-label': 'font-medium text-sm',
     'cn-calendar-day':
       'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius)',
     'cn-calendar-day-button':
@@ -5844,18 +5901,18 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-calendar-day-today-true': 'rounded-(--cell-radius) bg-muted text-foreground',
     'cn-calendar-dropdown': 'absolute inset-0 z-10 cursor-pointer bg-popover opacity-0',
     'cn-calendar-dropdown-root':
-      'relative isolate border-transparent border has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/30 has-focus:ring-3',
-    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-2 text-sm font-medium',
-    'cn-calendar-month': 'relative flex w-full flex-col gap-6',
-    'cn-calendar-months': 'relative flex flex-col gap-6 md:flex-row',
+      'relative isolate border-transparent border rounded-(--cell-radius) has-disabled:pointer-events-none has-focus:border-ring has-focus:ring-ring/30 has-focus:ring-3',
+    'cn-calendar-dropdowns': 'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
+    'cn-calendar-month': 'relative flex w-full flex-col gap-4',
+    'cn-calendar-months': 'relative flex flex-col gap-4 md:flex-row',
     'cn-calendar-nav': 'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1.5',
     'cn-calendar-nav-button': 'size-(--cell-size) p-0',
     'cn-calendar-nav-spacer': 'size-(--cell-size)',
-    'cn-calendar-row': 'grid w-full grid-cols-7 gap-x-0',
-    'cn-calendar-week': 'mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2',
+    'cn-calendar-row': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0',
+    'cn-calendar-week': 'mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2',
     'cn-calendar-weekday':
-      'flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
-    'cn-calendar-weekdays': 'grid w-full grid-cols-7',
+      'flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground',
+    'cn-calendar-weekdays': 'grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))]',
     'cn-calendar-weeks': 'mt-2 flex w-full flex-col gap-y-2',
     'cn-card':
       'flex flex-col gap-(--card-spacing) overflow-hidden bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/5 rounded-[min(var(--radius-4xl),24px)] shadow-sm [--card-spacing:--spacing(5)] has-[>img:first-child]:pt-0 dark:ring-foreground/10 data-[size=sm]:[--card-spacing:--spacing(4)] *:[img:first-child]:rounded-t-[min(var(--radius-4xl),24px)] *:[img:last-child]:rounded-b-[min(var(--radius-4xl),24px)]',
@@ -5937,7 +5994,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex min-h-8 flex-wrap items-center gap-1 border bg-clip-padding px-2.5 py-1 text-sm bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 focus-within:border-ring focus-within:ring-3 has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 has-data-[slot=combobox-chip]:px-1 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40 focus-within:ring-ring/30',
     'cn-combobox-chips-input': 'min-w-16 flex-1 bg-transparent',
     'cn-combobox-content':
-      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground ring-1 duration-100 ring-foreground/5 rounded-2xl shadow-lg data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 dark:ring-foreground/10 *:data-[slot=input-group]:bg-input/50',
+      'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden bg-popover text-popover-foreground ring-1 duration-100 ring-foreground/5 rounded-2xl shadow-lg data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 dark:ring-foreground/10 *:data-[slot=input-group]:bg-input/50 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2',
     'cn-combobox-empty':
       'hidden w-full justify-center py-2 text-center text-sm text-muted-foreground group-data-empty/combobox-content:flex',
     'cn-combobox-group': 'block',
@@ -5953,7 +6010,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'no-scrollbar block scroll-py-1 overflow-y-auto overscroll-contain p-1 max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] data-empty:p-0',
     'cn-combobox-separator': '-mx-1 my-1 block h-px bg-border',
     'cn-combobox-trigger': "[&_svg:not([class*='size-'])]:size-4",
-    'cn-combobox-trigger-icon': 'size-4!',
+    'cn-combobox-trigger-icon': 'size-4! text-muted-foreground',
     'cn-combobox-trigger-standalone-false':
       'group-has-data-[slot=combobox-clear]/input-group:hidden aria-expanded:bg-transparent',
     'cn-combobox-value': 'block truncate text-sm',
@@ -5970,13 +6027,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-command-input-icon': 'size-4!',
     'cn-command-input-wrapper': 'p-1 pb-0',
     'cn-command-item':
-      "relative flex cursor-pointer items-center gap-2 px-2 py-1.5 text-sm select-none transition-colors min-h-7 rounded-xl data-selected:bg-muted data-selected:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground in-data-[slot=dialog-content]:rounded-2xl",
+      "relative flex items-center gap-2 px-2 py-1.5 text-sm select-none transition-colors min-h-7 rounded-xl cursor-default outline-hidden data-selected:bg-muted [&_svg:not([class*='size-'])]:size-4 in-data-[slot=dialog-content]:rounded-2xl data-selected:text-foreground data-selected:*:[svg]:text-foreground",
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
-    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1',
+    'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
     'cn-command-separator': 'h-px bg-border/50 my-1',
     'cn-command-shortcut':
-      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground',
+      'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-2xl border',
     'cn-data-table-column-header': 'gap-2',
     'cn-data-table-column-header-trigger': '-ms-3 h-7',
@@ -6005,13 +6062,13 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'fixed z-50 m-2 flex min-h-0 flex-col rounded-[min(var(--radius-4xl),24px)] border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform dark:border-border',
     'cn-drawer-body': 'flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit]',
     'cn-drawer-description': 'text-sm text-balance text-muted-foreground wrap-anywhere',
-    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4',
+    'cn-drawer-footer': 'mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0',
     'cn-drawer-handle':
-      'relative z-10 cursor-grab bg-muted mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full active:cursor-grabbing',
-    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center',
-    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end',
-    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start',
-    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center',
+      'relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-full after:bg-muted active:cursor-grabbing',
+    'cn-drawer-handle-placement-bottom': 'h-3 w-full items-end justify-center after:h-1.5 after:w-[100px]',
+    'cn-drawer-handle-placement-left': 'order-last h-full w-3 items-center justify-end after:h-[100px] after:w-1.5',
+    'cn-drawer-handle-placement-right': 'h-full w-3 items-center justify-start after:h-[100px] after:w-1.5',
+    'cn-drawer-handle-placement-top': 'order-last h-3 w-full items-start justify-center after:h-1.5 after:w-[100px]',
     'cn-drawer-header':
       'flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start',
     'cn-drawer-overlay': 'bg-black/30 supports-backdrop-filter:backdrop-blur-sm',
@@ -6020,17 +6077,19 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-drawer-placement-right': 'inset-y-0 right-0 w-3/4 origin-right flex-row sm:w-96',
     'cn-drawer-placement-top': 'inset-x-0 top-0 origin-top',
     'cn-drawer-title': 'text-base font-medium text-foreground wrap-anywhere',
+    'cn-dropdown-menu-checkbox-item': 'pe-8 ps-2 in-data-[menu=menubar]:pe-1.5 in-data-[menu=menubar]:ps-7',
     'cn-dropdown-menu-content':
       'z-50 max-h-96 overflow-x-hidden overflow-y-auto animate-in ring-foreground/5 bg-popover text-popover-foreground min-w-32 rounded-2xl p-1 shadow-lg ring-1 duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10',
     'cn-dropdown-menu-item':
       "relative flex cursor-default items-center transition-colors gap-2 min-h-7 rounded-xl px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[variant=destructive]:hover:bg-destructive/10 dark:data-[variant=destructive]:hover:bg-destructive/20 data-[variant=destructive]:hover:text-destructive not-data-[variant=destructive]:hover:**:text-accent-foreground data-[variant=destructive]:data-highlighted:bg-destructive/10 dark:data-[variant=destructive]:data-highlighted:bg-destructive/20 data-[variant=destructive]:data-highlighted:text-destructive data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive not-data-[variant=destructive]:focus:**:text-accent-foreground data-inset:ps-7 [&_svg:not([class*='size-'])]:size-4",
-    'cn-dropdown-menu-item-indicator': 'absolute start-2 flex size-3.5 items-center justify-center',
+    'cn-dropdown-menu-item-indicator':
+      'absolute end-2 flex items-center justify-center in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:start-1.5 in-data-[menu=menubar]:size-4',
     'cn-dropdown-menu-item-inset-true': 'ps-8',
     'cn-dropdown-menu-item-variant-destructive':
       'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
     'cn-dropdown-menu-label': 'relative flex items-center px-2 text-sm text-muted-foreground py-1 data-inset:ps-7',
     'cn-dropdown-menu-label-inset-true': 'ps-8',
-    'cn-dropdown-menu-radio-dot': 'size-2 rounded-2xl bg-current',
+    'cn-dropdown-menu-radio-item': 'pe-8 ps-2 in-data-[menu=menubar]:pe-1.5 in-data-[menu=menubar]:ps-7',
     'cn-dropdown-menu-separator': '-mx-1 my-1 block h-px bg-border/50',
     'cn-dropdown-menu-shortcut': 'text-muted-foreground ms-auto text-xs tracking-widest',
     'cn-dropdown-menu-sub-content':
@@ -6040,8 +6099,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-dropdown-menu-sub-trigger-inset-true': 'ps-8',
     'cn-empty':
       'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 border-dashed text-center text-balance rounded-3xl p-12',
-    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 items-center justify-center gap-4 text-sm text-balance',
-    'cn-empty-description': 'text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4',
+    'cn-empty-actions': 'flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance',
+    'cn-empty-description':
+      'text-muted-foreground text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
     'cn-empty-header': 'flex max-w-sm flex-col items-center gap-2',
     'cn-empty-icon':
       "bg-muted text-foreground mb-2 flex shrink-0 items-center justify-center size-10 rounded-xl [&_svg:not([class*='size-'])]:size-5",
@@ -6050,30 +6110,30 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'font-medium tracking-tight text-lg',
     'cn-field': 'flex w-full gap-3 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-1',
-    'cn-field-description':
-      'text-muted-foreground text-start text-sm group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5',
     'cn-field-error': 'text-sm font-normal text-destructive',
     'cn-field-group': 'flex w-full flex-col gap-6 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
-      'flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:border has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-data-checked:bg-input/30 has-[>[data-slot=field]]:rounded-2xl has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-input/40 *:data-[slot=field]:p-4',
+      'flex w-fit gap-2 leading-none group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:border has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-data-checked:bg-input/30 has-[>[data-slot=field]]:rounded-2xl has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-input/40 *:data-[slot=field]:p-4',
     'cn-field-legend': 'font-medium mb-3 data-[variant=label]:text-sm data-[variant=legend]:text-base',
     'cn-field-orientation-horizontal':
-      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-responsive':
-      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     'cn-field-orientation-vertical': 'flex-col *:w-full [&>.sr-only]:w-auto',
     'cn-field-separator': 'relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2',
     'cn-field-separator-content': 'relative mx-auto block w-fit text-muted-foreground px-2',
     'cn-field-separator-line': 'bg-border absolute inset-0 top-1/2 h-px',
     'cn-field-set': 'flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
-    'cn-field-title': 'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+    'cn-field-title':
+      'flex w-fit items-center gap-2 text-sm font-medium leading-snug group-data-[disabled=true]/field:opacity-50',
     'cn-font-heading': 'font-heading',
     'cn-hover-card':
-      'z-50 border bg-popover p-4 text-popover-foreground origin-(--z-hover-card-transform-origin) ring-foreground/5 w-72 rounded-3xl shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10',
+      'z-50 origin-(--z-hover-card-transform-origin) ring-foreground/5 bg-popover text-popover-foreground w-72 rounded-3xl p-4 text-sm shadow-lg ring-1 duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10',
     'cn-input':
       'h-8 w-full min-w-0 border px-2.5 py-1 text-base bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-ring/30',
     'cn-input-group':
-      'relative flex h-8 w-full min-w-0 items-center border bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30',
+      'relative flex h-8 w-full min-w-0 items-center border bg-input/50 border-transparent rounded-2xl transition-[color,box-shadow] duration-200 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/30',
     'cn-input-group-addon':
       "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4 **:data-[slot=kbd]:bg-muted-foreground/10 **:data-[slot=kbd]:rounded-2xl **:data-[slot=kbd]:px-1.5",
     'cn-input-group-addon-align-block-end':
@@ -6086,7 +6146,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex cursor-pointer items-center justify-center whitespace-nowrap transition-all shrink-0 gap-2 rounded-2xl text-sm border border-transparent bg-clip-padding font-medium shadow-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:ring-3 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed [&_svg:not([class*='size-'])]:size-4 active:not-aria-[haspopup]:translate-y-px",
     'cn-input-group-button-size-icon-sm': 'size-8 p-0 has-[>svg]:p-0',
     'cn-input-group-button-size-icon-xs': 'size-6 p-0 rounded-xl has-[>svg]:p-0',
-    'cn-input-group-button-size-sm': 'h-8 px-3',
+    'cn-input-group-button-size-sm':
+      'h-8 gap-1.5 px-3 has-data-[icon=inline-end]:pr-2.5 has-data-[icon=inline-start]:pl-2.5',
     'cn-input-group-button-size-xs': "h-6 gap-1 px-1.5 rounded-xl [&>svg:not([class*='size-'])]:size-3.5",
     'cn-input-group-button-variant-default': 'bg-primary text-primary-foreground hover:bg-primary/80',
     'cn-input-group-button-variant-destructive':
@@ -6123,7 +6184,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-description':
       'line-clamp-2 text-muted-foreground text-start text-sm [&>a]:underline [&>a]:underline-offset-4',
     'cn-item-footer': 'flex basis-full items-center justify-between gap-2',
-    'cn-item-group': 'flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
+    'cn-item-group':
+      'flex w-full flex-col gap-4 has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2',
     'cn-item-header': 'flex basis-full items-center justify-between gap-2',
     'cn-item-media':
       'flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start',
@@ -6131,7 +6193,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-item-media-variant-icon': "[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
     'cn-item-media-variant-image':
       'size-10 overflow-hidden rounded-xl group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover group-data-[size=xs]/item:rounded-lg',
-    'cn-item-separator': 'block h-px w-full shrink-0 my-2',
+    'cn-item-separator': 'bg-border block h-px w-full shrink-0 my-2',
     'cn-item-size-default': 'gap-3.5 px-4 py-3.5',
     'cn-item-size-sm': 'gap-3.5 px-3.5 py-3',
     'cn-item-size-xs': 'gap-2 px-2.5 py-2 in-data-[slot=dropdown-menu-content]:p-0',
@@ -6214,9 +6276,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-navigation-menu-trigger':
       'inline-flex h-9 w-max items-center justify-center gap-1 px-2.5 py-1.5 text-sm font-medium transition-all rounded-2xl hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted data-[state=open]:bg-muted/50 focus-visible:ring-ring/30',
     'cn-navigation-menu-trigger-icon':
-      'relative top-px size-3 shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
+      'relative top-px size-3! shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180',
     'cn-navigation-menu-viewport':
-      'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/5 rounded-2xl shadow-lg ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90 dark:ring-foreground/10',
+      'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden transition-[opacity,transform,width,height] ease-[cubic-bezier(0.22,1,0.36,1)] bg-popover text-popover-foreground ring-foreground/5 rounded-3xl shadow-lg ring-1 duration-100 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90 dark:ring-foreground/10',
     'cn-navigation-menu-viewport-wrapper':
       'flex pt-1.5 transition-[translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]',
     'cn-pagination': 'mx-auto flex w-full justify-center gap-1',
@@ -6244,7 +6306,8 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'h-8 rounded-2xl border border-transparent bg-input/50 px-2.5 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
     'cn-questionnaire-item': 'gap-4',
     'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title': 'text-base/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-4',
+    'cn-questionnaire-title':
+      'text-base/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -6267,7 +6330,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-content-position-popper':
       'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
     'cn-select-item':
-      "relative flex w-full cursor-default items-center gap-2 min-h-7 rounded-xl py-1.5 pe-8 ps-2 text-sm focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+      "relative flex w-full cursor-default items-center min-h-7 rounded-xl py-1.5 pe-8 ps-2 text-sm gap-2 focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
     'cn-select-item-icon': 'absolute flex size-3.5 items-center justify-center',
     'cn-select-item-icon-mode-compact': 'end-2',
     'cn-select-item-icon-mode-normal': 'end-2',
@@ -6284,7 +6347,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-select-scroll-icon': 'size-4!',
     'cn-select-separator': '-mx-1 block my-1 h-px bg-border',
     'cn-select-trigger':
-      'flex h-8 py-2 w-full items-center justify-between gap-2 border text-sm whitespace-nowrap transition-[color,box-shadow] bg-input/50 border-transparent rounded-2xl px-3 duration-200 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 focus-visible:ring-ring/30 data-[size=default]:h-8 data-[size=sm]:h-7',
+      "bg-input/50 border-transparent gap-1.5 rounded-2xl border py-2 px-3 text-sm transition-[color,box-shadow] duration-200 flex w-full items-center justify-between whitespace-nowrap data-placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-3 aria-invalid:ring-3 data-[size=default]:h-8 data-[size=sm]:h-7 *:data-[slot=select-value]:flex *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:data-[slot=select-value]:items-center data-[size=default]:min-h-8 data-[size=sm]:min-h-7",
     'cn-select-trigger-icon': 'size-4!',
     'cn-select-viewport': 'min-h-0 flex-1 box-border overflow-x-hidden overflow-y-auto p-1',
     'cn-select-viewport-position-popper': 'w-full min-w-(--z-select-trigger-width) scroll-my-1',
@@ -6327,7 +6390,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "flex h-8 shrink-0 items-center text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear rounded-xl px-3 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 focus-visible:ring-3",
     'cn-sidebar-header': 'flex flex-col gap-2 p-2 [--radius:var(--radius-xl)]',
     'cn-sidebar-inner':
-      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:rounded-2xl',
+      'flex size-full flex-col bg-sidebar group-data-[variant=floating]:ring-1 group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:rounded-2xl',
     'cn-sidebar-input': 'h-8 w-full shadow-none bg-input/50',
     'cn-sidebar-inset':
       'relative flex w-full flex-1 flex-col bg-background md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2 md:peer-data-[variant=inset]:rounded-2xl',
@@ -6348,7 +6411,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]',
     'cn-sidebar-menu-item': 'relative',
     'cn-sidebar-menu-skeleton': 'flex h-8 items-center gap-2 px-2 rounded-xl',
-    'cn-sidebar-menu-skeleton-icon': 'size-4',
+    'cn-sidebar-menu-skeleton-icon': 'size-4 rounded-xl',
     'cn-sidebar-menu-sub':
       'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 rtl:-translate-x-px group-data-[collapsible=icon]:hidden',
     'cn-sidebar-menu-sub-button':
@@ -6383,18 +6446,19 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-switch':
       'relative inline-flex shrink-0 cursor-pointer items-center transition-all border-2 rounded-2xl after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed data-[state=checked]:bg-primary data-[state=unchecked]:bg-input/90 data-[state=checked]:border-primary data-[state=unchecked]:border-transparent focus-visible:ring-ring/30 focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:data-[state=unchecked]:border-transparent group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary data-[size=default]:h-5 data-[size=default]:w-8 data-[size=sm]:h-4 data-[size=sm]:w-6',
     'cn-switch-label': 'text-sm leading-none font-medium',
-    'cn-switch-size-default': 'h-[18.4px] w-[32px]',
-    'cn-switch-size-sm': 'h-[14px] w-[24px]',
+    'cn-switch-size-default': 'h-5 w-8',
+    'cn-switch-size-sm': 'h-4 w-6',
     'cn-switch-thumb':
-      'block transition-transform bg-background rounded-2xl shadow-sm ring-0 data-[size=default]:size-4 data-[size=sm]:size-3 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 data-[state=checked]:translate-x-[calc(100%-4px)] data-[state=unchecked]:translate-x-0 not-dark:bg-clip-padding',
+      'block transition-transform bg-background rounded-2xl shadow-sm ring-0 data-[size=default]:size-4 data-[size=sm]:size-3 dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 data-[state=unchecked]:translate-x-0 not-dark:bg-clip-padding ltr:data-[state=checked]:translate-x-[calc(100%-4px)] rtl:data-[state=checked]:-translate-x-[calc(100%-4px)]',
     'cn-table':
-      'w-full caption-bottom text-sm [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4',
+      'w-full caption-bottom text-sm [&_tbody_tr]:transition-colors [&_th]:h-10 [&_th]:align-middle [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:align-middle [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap',
     'cn-table-body': '[&_tr:last-child]:border-0',
     'cn-table-caption': 'mt-4 text-sm text-muted-foreground',
-    'cn-table-cell': 'p-2 align-middle has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+    'cn-table-cell':
+      'p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-footer': 'border-t bg-muted/50 font-medium [&>tr]:last:border-b-0',
     'cn-table-head':
-      'h-10 px-2 text-start align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
+      'h-10 px-2 text-start align-middle font-medium text-foreground whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
     'cn-table-header': '[&_tr]:border-b',
     'cn-table-row':
       'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
@@ -6402,10 +6466,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-table-size-compact': '[&_td]:py-2 [&_th]:py-2',
     'cn-table-variant-bordered': 'border border-border',
     'cn-table-variant-striped': '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-    'cn-tabs-panel': 'focus-visible:ring-[3px] focus-visible:ring-ring/30',
+    'cn-tabs-panel': 'text-sm focus-visible:ring-[3px] focus-visible:ring-ring/30',
     'cn-tabs-tab-button':
       "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all cursor-pointer gap-1.5 rounded-2xl border border-transparent! px-1.5 py-0.5 text-sm font-medium group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:outline-1 focus-visible:outline-ring [&_svg]:shrink-0 after:absolute after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[orientation=vertical]/tabs:px-3 group-data-[orientation=vertical]/tabs:py-0.5 [&_svg:not([class*='size-'])]:size-4 text-foreground/60 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground after:opacity-0 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
-    'cn-tabs-tab-container': 'flex gap-3',
+    'cn-tabs-tab-container': 'flex gap-2',
     'cn-tabs-tab-container-orientation-horizontal': 'flex-col',
     'cn-tabs-tab-container-orientation-vertical': 'flex-row',
     'cn-tabs-tab-nav':
@@ -6418,9 +6482,9 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none ring-0 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent',
     'cn-toast': 'rounded-2xl!',
     'cn-toggle':
-      "inline-flex items-center justify-center gap-1 text-sm font-medium whitespace-nowrap cursor-pointer rounded-2xl transition-colors hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30",
+      "inline-flex items-center justify-center gap-1 text-sm font-medium whitespace-nowrap cursor-pointer rounded-2xl transition-colors hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 focus-visible:ring-ring/30 [&_ng-icon:not([class*='size-'])]:size-4!",
     'cn-toggle-group':
-      'flex w-fit flex-row items-center data-vertical:flex-col data-vertical:items-stretch data-[spacing=0]:data-[variant=outline]:rounded-2xl',
+      'flex w-fit flex-row items-center gap-[--spacing(var(--gap))] data-vertical:flex-col data-vertical:items-stretch data-[spacing=0]:data-[variant=outline]:rounded-2xl',
     'cn-toggle-group-item':
       'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pe-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:ps-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-s-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-s group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t data-[state=on]:bg-muted group-data-[spacing=0]/toggle-group:shadow-none group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-s-2xl group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-2xl group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-e-2xl group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-2xl',
     'cn-toggle-size-default': 'h-8 min-w-8 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
@@ -6429,7 +6493,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-toggle-variant-default': 'bg-transparent',
     'cn-toggle-variant-outline': 'border border-input bg-transparent',
     'cn-tooltip':
-      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 bg-foreground px-3 py-1.5 text-xs text-background rounded-xl has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 **:data-[slot=kbd]:rounded-lg',
+      'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 bg-foreground px-3 py-1.5 text-xs text-background rounded-xl has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 **:data-[slot=kbd]:rounded-lg data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95',
     'cn-tooltip-arrow':
       'bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] data-[side=left]:translate-x-[-1.5px] data-[side=right]:translate-x-[1.5px]',
     'cn-tooltip-position': 'absolute',

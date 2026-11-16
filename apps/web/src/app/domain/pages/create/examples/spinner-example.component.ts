@@ -105,7 +105,7 @@ import { ExampleImports } from './example.component';
 
     <ng-template #spinnerMedia>
       <!-- zard's empty has no icon media slot for arbitrary content: this is the box shadcn's EmptyMedia draws. -->
-      <div data-slot="empty-icon" data-variant="icon" class="cn-empty-icon">
+      <div data-slot="empty-icon" data-variant="icon" class="cn-empty-icon mb-0">
         <z-spinner />
       </div>
     </ng-template>

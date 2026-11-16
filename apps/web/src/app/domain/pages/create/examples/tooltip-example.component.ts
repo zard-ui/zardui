@@ -9,7 +9,7 @@ import { ZardTooltipImports } from '@zard/components/tooltip';
 
 import { ExampleImports } from './example.component';
 
-const SIDES = ['top', 'right', 'bottom', 'left'] as const;
+const SIDES = ['inline-start', 'left', 'top', 'bottom', 'right', 'inline-end'] as const;
 
 /** shadcn/ui's `tooltip-example`, in zard. */
 @Component({
@@ -34,7 +34,7 @@ const SIDES = ['top', 'right', 'bottom', 'left'] as const;
               [zTooltip]="addToLibrary"
               [zPosition]="side"
             >
-              {{ side }}
+              {{ label(side) }}
             </button>
           }
         </div>
@@ -105,4 +105,8 @@ const SIDES = ['top', 'right', 'bottom', 'left'] as const;
 })
 export class TooltipExampleComponent {
   protected readonly sides = SIDES;
+
+  protected label(side: string): string {
+    return side.replace('-', ' ');
+  }
 }

@@ -3,14 +3,22 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardFieldImports } from '@zard/components/field/field.imports';
 import { ZardInputComponent } from '@zard/components/input/input.component';
+import { ZardNativeSelectDirective } from '@zard/components/native-select';
 import { ZardSelectImports } from '@zard/components/select/select.imports';
 
 import { ExampleImports } from './example.component';
 
-/** shadcn/ui's `input-example`, in zard. "With Native Select" is left out: zard has no NativeSelect. */
+/** shadcn/ui's `input-example`, in zard. */
 @Component({
   selector: 'z-input-example',
-  imports: [ExampleImports, ZardButtonComponent, ZardFieldImports, ZardInputComponent, ZardSelectImports],
+  imports: [
+    ExampleImports,
+    ZardButtonComponent,
+    ZardFieldImports,
+    ZardInputComponent,
+    ZardNativeSelectDirective,
+    ZardSelectImports,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <z-example-wrapper>
@@ -101,6 +109,17 @@ import { ExampleImports } from './example.component';
         </div>
       </z-example>
 
+      <z-example zTitle="With Native Select">
+        <div class="flex w-full gap-2">
+          <input z-input type="tel" placeholder="(555) 123-4567" class="flex-1" />
+          <select z-native-select>
+            <option value="+1">+1</option>
+            <option value="+44">+44</option>
+            <option value="+46">+46</option>
+          </select>
+        </div>
+      </z-example>
+
       <z-example zTitle="Form">
         <form class="w-full" (submit)="$event.preventDefault()">
           <div z-field-group>
@@ -120,7 +139,7 @@ import { ExampleImports } from './example.component';
               </div>
               <div z-field>
                 <label for="input-country-122" z-field-label>Country</label>
-                <z-select id="input-country-122" zValue="us">
+                <z-select class="w-fit" id="input-country-122" zValue="us">
                   <z-select-group>
                     <z-select-item zValue="us">United States</z-select-item>
                     <z-select-item zValue="uk">United Kingdom</z-select-item>

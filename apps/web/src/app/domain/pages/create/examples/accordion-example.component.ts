@@ -88,10 +88,10 @@ const BORDERS_ITEM_CLASS = [
 ].join(' ');
 
 const DISABLED_ITEM_CLASS = [
-  'data-open:bg-muted/50 style-sera:p-0 p-1',
-  'style-vega:[&>button]:px-4 style-nova:[&>button]:px-2.5 style-lyra:[&>button]:px-2 style-sera:[&>button]:px-4',
+  'data-open:bg-muted/50 p-1',
+  'style-vega:[&>button]:px-4 style-nova:[&>button]:px-2.5 style-lyra:[&>button]:px-2',
   'style-vega:[&_.cn-accordion-content-inner]:px-4 style-nova:[&_.cn-accordion-content-inner]:px-2.5',
-  'style-lyra:[&_.cn-accordion-content-inner]:px-2 style-sera:[&_.cn-accordion-content-inner]:px-4',
+  'style-lyra:[&_.cn-accordion-content-inner]:px-2',
 ].join(' ');
 
 /** shadcn/ui's `accordion-example`, in zard. */

@@ -38,6 +38,8 @@ import { ZardDropdownImports } from '@zard/components/dropdown';
 
 import { ExampleImports } from './example.component';
 
+const SIDES = ['inline-start', 'left', 'top', 'bottom', 'right', 'inline-end'] as const;
+
 /** shadcn/ui's `dropdown-menu-example`, in zard. */
 @Component({
   selector: 'z-dropdown-menu-example',
@@ -170,6 +172,30 @@ import { ExampleImports } from './example.component';
             </z-dropdown-menu-item>
           </z-dropdown-menu-group>
         </z-dropdown-menu-content>
+      </z-example>
+
+      <z-example zTitle="Sides" zContainerClass="col-span-2">
+        <div class="flex flex-wrap justify-center gap-2">
+          @for (side of sides; track side) {
+            <button
+              type="button"
+              z-button
+              zType="outline"
+              class="w-fit capitalize"
+              z-dropdown
+              [zDropdownMenu]="sideMenu"
+            >
+              {{ label(side) }}
+            </button>
+            <z-dropdown-menu-content #sideMenu="zDropdownMenuContent" [zSide]="side">
+              <z-dropdown-menu-group>
+                <z-dropdown-menu-item>Profile</z-dropdown-menu-item>
+                <z-dropdown-menu-item>Billing</z-dropdown-menu-item>
+                <z-dropdown-menu-item>Settings</z-dropdown-menu-item>
+              </z-dropdown-menu-group>
+            </z-dropdown-menu-content>
+          }
+        </div>
       </z-example>
 
       <z-example zTitle="With Icons">
@@ -559,6 +585,12 @@ import { ExampleImports } from './example.component';
   `,
 })
 export class DropdownMenuExampleComponent {
+  protected readonly sides = SIDES;
+
+  protected label(side: string): string {
+    return side.replace('-', ' ');
+  }
+
   protected readonly complexSidebar = signal(true);
   protected readonly complexStatusBar = signal(false);
 

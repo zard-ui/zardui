@@ -14,10 +14,17 @@ export const dropdownItemVariants = cva(
         true: 'cn-dropdown-menu-item-inset-true',
         false: '',
       },
+      /** Rows that carry a check: the style decides where the room for it goes (the end, or the start in a menubar). */
+      checkable: {
+        checkbox: 'cn-dropdown-menu-checkbox-item',
+        radio: 'cn-dropdown-menu-radio-item',
+        false: '',
+      },
     },
     defaultVariants: {
       variant: 'default',
       inset: false,
+      checkable: false,
     },
   },
 );

@@ -7,11 +7,11 @@
 /* MARK: accordion */
 
 .cn-accordion-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-b flex flex-1 flex-col;
+  @apply flex flex-1 flex-col;
 }
 
 .cn-accordion-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply cursor-pointer flex flex-1 items-start justify-between gap-4 rounded-md py-2.5 text-start text-sm font-medium transition-all w-full;
+  @apply flex w-full flex-1 cursor-pointer items-start justify-between gap-4 rounded-lg py-2.5 text-start text-sm font-medium transition-all;
 }
 
 .cn-accordion-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -31,7 +31,7 @@
 }
 
 .cn-accordion-content-inner:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply pt-0 pb-4;
+  @apply pt-0 pb-2.5;
 }
 
 .cn-accordion:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -52,15 +52,15 @@
 }
 
 .cn-alert-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply shrink-0 self-start text-base!;
+  @apply flex shrink-0 self-start text-base!;
 }
 
 .cn-alert-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply absolute top-2 end-2;
+  @apply absolute end-2 top-2;
 }
 
 .cn-alert-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply font-medium;
+  @apply [&_a]:hover:text-foreground font-medium;
 }
 
 .cn-alert-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -69,6 +69,10 @@
 
 .cn-alert-description-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply text-muted-foreground;
+}
+
+.cn-alert-icon-glyph:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-4!;
 }
 
 /* MARK: button */
@@ -152,7 +156,7 @@
 /* MARK: alert-dialog */
 
 .cn-alert-dialog:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply fixed top-1/2 left-1/2 z-50 grid w-full -translate-1/2 gap-4 rounded-xl bg-popover p-4 text-popover-foreground ring-1 ring-foreground/10;
+  @apply bg-popover text-popover-foreground ring-foreground/10 fixed top-1/2 left-1/2 z-50 grid w-full -translate-1/2 gap-4 rounded-xl p-4 ring-1;
 }
 
 .cn-alert-dialog-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -164,15 +168,15 @@
 }
 
 .cn-alert-dialog-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-sm text-balance text-muted-foreground wrap-anywhere;
+  @apply text-muted-foreground text-sm text-balance wrap-anywhere;
 }
 
 .cn-alert-dialog-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4;
+  @apply bg-muted/50 -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t p-4;
 }
 
 .cn-alert-dialog-media:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply mb-2 inline-flex size-10 items-center justify-center rounded-md bg-muted;
+  @apply bg-muted mb-2 inline-flex size-10 items-center justify-center rounded-md;
 }
 
 .cn-alert-dialog-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -188,7 +192,7 @@
 /* MARK: attachment */
 
 .cn-attachment:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative isolate flex w-fit max-w-full min-w-0 shrink-0 snap-start items-center rounded-[calc(var(--radius)*1.6)] border bg-card text-card-foreground transition-colors text-sm;
+  @apply bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 relative isolate flex w-fit max-w-full min-w-0 shrink-0 snap-start items-center rounded-xl border transition-colors data-[state=idle]:border-dashed;
 }
 
 .cn-attachment-state-idle:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -212,31 +216,31 @@
 }
 
 .cn-attachment-size-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply gap-3 p-3;
+  @apply gap-2 text-sm;
 }
 
 .cn-attachment-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply gap-2 p-2.5 text-sm;
+  @apply gap-2.5 text-xs;
 }
 
 .cn-attachment-size-xs:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply gap-1.5 p-2 text-xs rounded-xl;
+  @apply gap-1.5 rounded-lg p-2 text-xs;
 }
 
 .cn-attachment-orientation-horizontal:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex-row;
+  @apply min-w-40 flex-row;
 }
 
 .cn-attachment-orientation-vertical:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex-col items-start;
+  @apply w-24 flex-col items-start;
 }
 
 .cn-attachment-media:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-foreground;
+  @apply bg-muted text-foreground relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg;
 }
 
 .cn-attachment-media-variant-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply size-10 bg-muted text-muted-foreground;
+  @apply bg-muted text-muted-foreground size-10;
 }
 
 .cn-attachment-media-variant-image:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -244,7 +248,7 @@
 }
 
 .cn-attachment-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex min-w-0 flex-1 flex-col gap-0.5 leading-tight;
+  @apply flex min-w-0 flex-1 flex-col leading-tight;
 }
 
 .cn-attachment-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -252,11 +256,11 @@
 }
 
 .cn-attachment-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-muted-foreground text-xs;
+  @apply text-muted-foreground group-data-[state=error]/attachment:text-destructive/80 mt-0.5 text-xs;
 }
 
 .cn-attachment-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative z-20 flex shrink-0 items-center gap-1;
+  @apply relative z-20 flex shrink-0 items-center;
 }
 
 .cn-attachment-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -268,13 +272,13 @@
 }
 
 .cn-attachment-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex w-full min-w-0 gap-3 overflow-x-auto snap-x snap-mandatory scroll-px-1 scrollbar-none py-1 rounded-lg;
+  @apply focus-visible:ring-ring flex w-full min-w-0 snap-x snap-mandatory scroll-px-1 scrollbar-none gap-3 overflow-x-auto py-1 focus-visible:ring-2;
 }
 
 /* MARK: avatar */
 
 .cn-avatar:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex shrink-0 rounded-full;
+  @apply after:border-border relative flex size-8 shrink-0 rounded-full after:border;
 }
 
 .cn-avatar-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -290,7 +294,7 @@
 }
 
 .cn-avatar-fallback:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply bg-muted text-muted-foreground absolute inset-0 flex size-full items-center justify-center rounded-full text-sm;
+  @apply bg-muted text-muted-foreground absolute inset-0 flex size-full items-center justify-center rounded-full text-sm group-data-[size=sm]/avatar:text-xs;
 }
 
 .cn-avatar-image:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -310,7 +314,7 @@
 }
 
 .cn-avatar-group-count:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground font-medium ring-2 ring-background;
+  @apply bg-muted text-muted-foreground ring-background relative flex size-8 shrink-0 items-center justify-center rounded-full text-sm ring-2;
 }
 
 .cn-avatar-group-count-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -328,7 +332,7 @@
 /* MARK: badge */
 
 .cn-badge:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow];
+  @apply focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all focus-visible:ring-[3px];
 }
 
 .cn-badge-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -394,7 +398,7 @@
 }
 
 .cn-breadcrumb-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inline-flex items-center gap-1.5;
+  @apply inline-flex items-center gap-1;
 }
 
 .cn-breadcrumb-link:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -402,15 +406,14 @@
 }
 
 .cn-breadcrumb-page:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply font-normal text-foreground;
+  @apply text-foreground font-normal;
 }
 
 .cn-breadcrumb-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-muted-foreground;
 }
 
 .cn-breadcrumb-ellipsis:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex size-9 items-center justify-center;
+  @apply flex size-5 items-center justify-center;
 }
 
 .cn-breadcrumb-ellipsis-color-muted:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -428,7 +431,7 @@
 }
 
 .cn-bubble:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex w-fit min-w-0 max-w-[80%] flex-col gap-1;
+  @apply relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1;
 }
 
 .cn-bubble-variant-ghost:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -436,11 +439,11 @@
 }
 
 .cn-bubble-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply w-fit min-w-0 max-w-full overflow-hidden rounded-[calc(var(--radius)*2.4)] border border-transparent px-3 py-2.5 text-sm/relaxed wrap-break-word;
+  @apply w-fit max-w-full min-w-0 overflow-hidden rounded-xl border border-transparent px-3 py-2 text-sm/relaxed wrap-break-word;
 }
 
 .cn-bubble-reactions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply absolute z-10 flex w-fit shrink-0 items-center justify-center gap-1 rounded-full bg-muted px-1.5 py-0.5 text-sm ring-3 ring-card;
+  @apply bg-muted ring-card absolute z-10 flex w-fit shrink-0 items-center justify-center gap-1 rounded-full px-1.5 py-0.5 text-sm ring-3;
 }
 
 .cn-bubble-reactions-side-top:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -476,7 +479,7 @@
 }
 
 .cn-button-group-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply bg-input relative self-stretch grow-0 shrink-0;
+  @apply bg-input relative shrink-0 grow-0 self-stretch;
 }
 
 .cn-button-group-separator-orientation-horizontal:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -494,7 +497,7 @@
 /* MARK: calendar */
 
 .cn-calendar:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply block w-fit bg-background p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)];
+  @apply bg-background block w-fit p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)];
 }
 
 .cn-calendar-months:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -526,31 +529,31 @@
 }
 
 .cn-calendar-caption-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply font-medium;
+  @apply h-6 ps-1.5 pe-1;
 }
 
 .cn-calendar-caption-label-layout-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-sm;
+  @apply text-sm font-medium;
 }
 
 .cn-calendar-caption-label-layout-dropdown:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex h-(--cell-size) items-center gap-1 rounded-(--cell-radius) px-2 text-sm;
+  @apply flex items-center gap-1 rounded-(--cell-radius) text-sm;
 }
 
 .cn-calendar-dropdown-root:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative isolate;
+  @apply border-input relative isolate rounded-(--cell-radius) border;
 }
 
 .cn-calendar-dropdown:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply absolute inset-0 z-10 cursor-pointer bg-popover opacity-0;
+  @apply bg-popover absolute inset-0 z-10 cursor-pointer opacity-0;
 }
 
 .cn-calendar-weekdays:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply grid w-full grid-cols-7;
+  @apply grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))];
 }
 
 .cn-calendar-weekday:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground;
+  @apply text-muted-foreground flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal;
 }
 
 .cn-calendar-weeks:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -558,11 +561,11 @@
 }
 
 .cn-calendar-week:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2;
+  @apply mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2;
 }
 
 .cn-calendar-row:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply grid w-full grid-cols-7 gap-x-0;
+  @apply grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0;
 }
 
 .cn-calendar-day:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -570,19 +573,19 @@
 }
 
 .cn-calendar-day-today-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply rounded-(--cell-radius) bg-muted text-foreground;
+  @apply bg-muted text-foreground rounded-(--cell-radius);
 }
 
 .cn-calendar-day-range-start-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative isolate z-0 rounded-s-(--cell-radius) bg-muted;
+  @apply bg-muted relative isolate z-0 rounded-s-(--cell-radius);
 }
 
 .cn-calendar-day-range-middle-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply rounded-none bg-muted;
+  @apply bg-muted rounded-none;
 }
 
 .cn-calendar-day-range-end-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative isolate z-0 rounded-e-(--cell-radius) bg-muted;
+  @apply bg-muted relative isolate z-0 rounded-e-(--cell-radius);
 }
 
 .cn-calendar-day-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -594,15 +597,15 @@
 }
 
 .cn-calendar-day-button-range-start-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground;
+  @apply bg-primary text-primary-foreground rounded-(--cell-radius) rounded-s-(--cell-radius);
 }
 
 .cn-calendar-day-button-range-end-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground;
+  @apply bg-primary text-primary-foreground rounded-(--cell-radius) rounded-e-(--cell-radius);
 }
 
 .cn-calendar-day-button-range-middle-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply rounded-none bg-muted text-foreground;
+  @apply bg-muted text-foreground rounded-none;
 }
 
 .cn-calendar-day-button-outside-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -610,13 +613,13 @@
 }
 
 .cn-calendar-day-button-disabled-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-muted-foreground opacity-50 cursor-not-allowed;
+  @apply text-muted-foreground cursor-not-allowed opacity-50;
 }
 
 /* MARK: card */
 
 .cn-card:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)];
+  @apply bg-card text-card-foreground ring-foreground/10 flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm ring-1 [--card-spacing:--spacing(4)];
 }
 
 .cn-card-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -632,7 +635,7 @@
 }
 
 .cn-card-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-sm text-muted-foreground;
+  @apply text-muted-foreground text-sm;
 }
 
 .cn-card-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -644,7 +647,7 @@
 }
 
 .cn-card-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing);
+  @apply bg-muted/50 flex items-center rounded-b-xl border-t p-(--card-spacing);
 }
 
 /* MARK: carousel */
@@ -686,7 +689,7 @@
 }
 
 .cn-carousel-previous-button-orientation-horizontal:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply top-1/2 -start-12 -translate-y-1/2;
+  @apply -start-12 top-1/2 -translate-y-1/2;
 }
 
 .cn-carousel-previous-button-orientation-vertical:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -698,7 +701,7 @@
 }
 
 .cn-carousel-next-button-orientation-horizontal:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply top-1/2 -end-12 -translate-y-1/2;
+  @apply -end-12 top-1/2 -translate-y-1/2;
 }
 
 .cn-carousel-next-button-orientation-vertical:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -728,7 +731,7 @@
 }
 
 .cn-chart-legend-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex cursor-pointer items-center gap-1.5 text-xs text-muted-foreground transition-opacity;
+  @apply text-muted-foreground flex cursor-pointer items-center gap-1.5 text-xs transition-opacity;
 }
 
 .cn-chart-legend-item-inactive-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -740,13 +743,13 @@
 }
 
 .cn-chart-tooltip:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply grid min-w-[8rem] items-start gap-1.5 text-start rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl;
+  @apply border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-start text-xs shadow-xl;
 }
 
 /* MARK: checkbox */
 
 .cn-checkbox:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply cursor-[unset] size-4 shrink-0 rounded-[4px] border border-input shadow-sm transition;
+  @apply border-input size-4 shrink-0 cursor-[unset] rounded-[4px] border shadow-sm transition;
 }
 
 .cn-checkbox-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -774,11 +777,11 @@
 /* MARK: input-group */
 
 .cn-input-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex h-8 w-full min-w-0 items-center rounded-lg border border-input transition-colors;
+  @apply border-input relative flex h-8 w-full min-w-0 items-center rounded-lg border transition-colors;
 }
 
 .cn-input-group-addon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground;
+  @apply text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium;
 }
 
 .cn-input-group-addon-align-inline-start:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -798,7 +801,7 @@
 }
 
 .cn-input-group-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-transparent bg-clip-padding whitespace-nowrap text-sm font-medium shadow-none transition-all shrink-0;
+  @apply inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap shadow-none transition-all;
 }
 
 .cn-input-group-button-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -826,7 +829,7 @@
 }
 
 .cn-input-group-button-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply h-8 px-3;
+  @apply h-8 gap-1.5 px-2.5;
 }
 
 .cn-input-group-button-size-icon-xs:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -838,13 +841,13 @@
 }
 
 .cn-input-group-text:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex items-center gap-2 text-sm text-muted-foreground;
+  @apply text-muted-foreground flex items-center gap-2 text-sm;
 }
 
 /* MARK: input */
 
 .cn-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors;
+  @apply border-input h-8 w-full min-w-0 rounded-lg border bg-transparent px-2.5 py-1 text-base transition-colors;
 }
 
 .cn-input-group-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1038,15 +1041,15 @@
 }
 
 .cn-combobox-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100;
+  @apply bg-popover text-popover-foreground ring-foreground/10 relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden rounded-lg shadow-md ring-1 duration-100;
 }
 
 .cn-combobox-list:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply no-scrollbar block scroll-py-1 overflow-y-auto overscroll-contain p-1 max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))];
+  @apply no-scrollbar block max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] scroll-py-1 overflow-y-auto overscroll-contain p-1;
 }
 
 .cn-combobox-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex w-full cursor-default items-center gap-2 rounded-md py-1 pe-8 ps-1.5 text-sm;
+  @apply relative flex w-full cursor-default items-center gap-2 rounded-md py-1 ps-1.5 pe-8 text-sm;
 }
 
 .cn-combobox-item-variant-destructive:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1062,23 +1065,23 @@
 }
 
 .cn-combobox-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply block px-2 py-1.5 text-xs text-muted-foreground;
+  @apply text-muted-foreground block px-2 py-1.5 text-xs;
 }
 
 .cn-combobox-empty:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply hidden w-full justify-center py-2 text-center text-sm text-muted-foreground;
+  @apply text-muted-foreground hidden w-full justify-center py-2 text-center text-sm;
 }
 
 .cn-combobox-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply -mx-1 my-1 block h-px bg-border;
+  @apply bg-border -mx-1 my-1 block h-px;
 }
 
 .cn-combobox-chips:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex min-h-8 flex-wrap items-center gap-1 rounded-lg border border-input bg-transparent bg-clip-padding px-2.5 py-1 text-sm transition-colors;
+  @apply border-input flex min-h-8 flex-wrap items-center gap-1 rounded-lg border bg-transparent bg-clip-padding px-2.5 py-1 text-sm transition-colors;
 }
 
 .cn-combobox-chip:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 rounded-sm bg-muted px-1.5 text-xs font-medium whitespace-nowrap text-foreground;
+  @apply bg-muted text-foreground flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 rounded-sm px-1.5 text-xs font-medium whitespace-nowrap;
 }
 
 .cn-combobox-chip-remove:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1090,25 +1093,25 @@
 }
 
 .cn-combobox-trigger-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply size-4;
+  @apply text-muted-foreground size-4;
 }
 
 /* MARK: command */
 
 .cn-command:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex size-full flex-col overflow-hidden rounded-xl bg-popover p-1 text-popover-foreground border shadow-md;
+  @apply bg-popover text-popover-foreground flex size-full flex-col overflow-hidden rounded-xl border p-1 shadow-md;
 }
 
 .cn-command-list:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1;
+  @apply no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none;
 }
 
 .cn-command-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply overflow-hidden text-foreground;
+  @apply text-foreground overflow-hidden p-1;
 }
 
 .cn-command-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm select-none transition-colors;
+  @apply relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden transition-colors select-none;
 }
 
 .cn-command-item-variant-destructive:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1116,11 +1119,11 @@
 }
 
 .cn-command-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply -mx-1 my-1 h-px bg-border;
+  @apply bg-border -mx-1 my-1 h-px;
 }
 
 .cn-command-shortcut:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply ms-auto text-xs tracking-widest text-muted-foreground;
+  @apply text-muted-foreground ms-auto text-xs tracking-widest;
 }
 
 .cn-command-input-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1138,7 +1141,7 @@
 /* MARK: dropdown */
 
 .cn-dropdown-menu-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 animate-in duration-100;
+  @apply bg-popover text-popover-foreground ring-foreground/10 animate-in z-50 max-h-96 min-w-32 overflow-x-hidden overflow-y-auto rounded-lg p-1 shadow-md ring-1 duration-100;
 }
 
 .cn-dropdown-menu-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1154,7 +1157,7 @@
 }
 
 .cn-dropdown-menu-sub-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply z-50 min-w-24 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10 animate-in duration-100 fade-in-0 zoom-in-95;
+  @apply bg-popover text-popover-foreground ring-foreground/10 animate-in fade-in-0 zoom-in-95 z-50 max-h-96 min-w-24 overflow-x-hidden overflow-y-auto rounded-lg p-1 shadow-lg ring-1 duration-100;
 }
 
 .cn-dropdown-menu-sub-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1166,7 +1169,7 @@
 }
 
 .cn-dropdown-menu-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex items-center px-1.5 py-1 text-xs font-medium text-muted-foreground;
+  @apply text-muted-foreground relative flex items-center px-1.5 py-1 text-xs font-medium;
 }
 
 .cn-dropdown-menu-label-inset-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1182,17 +1185,21 @@
 }
 
 .cn-dropdown-menu-item-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply absolute start-1.5 flex size-4 items-center justify-center;
+  @apply absolute end-2 flex items-center justify-center;
 }
 
-.cn-dropdown-menu-radio-dot:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply size-2 rounded-full bg-current;
+.cn-dropdown-menu-checkbox-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply ps-1.5 pe-8;
+}
+
+.cn-dropdown-menu-radio-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply ps-1.5 pe-8;
 }
 
 /* MARK: popover */
 
 .cn-popover:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply z-50 flex w-72 origin-(--transform-origin) flex-col gap-2.5 rounded-lg bg-popover p-2.5 text-sm text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100;
+  @apply bg-popover text-popover-foreground ring-foreground/10 z-50 flex w-72 origin-(--transform-origin) flex-col gap-2.5 rounded-lg p-2.5 text-sm shadow-md ring-1 duration-100;
 }
 
 .cn-popover-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1232,7 +1239,7 @@
 /* MARK: dialog */
 
 .cn-dialog:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10;
+  @apply bg-popover text-popover-foreground ring-foreground/10 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl p-4 text-sm ring-1;
 }
 
 .cn-dialog-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1244,11 +1251,11 @@
 }
 
 .cn-dialog-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-sm text-muted-foreground wrap-anywhere;
+  @apply text-muted-foreground text-sm wrap-anywhere;
 }
 
 .cn-dialog-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4;
+  @apply bg-muted/50 -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t p-4;
 }
 
 .cn-dialog-close:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1262,27 +1269,27 @@
 /* MARK: drawer */
 
 .cn-drawer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply fixed z-50 m-2 flex min-h-0 flex-col rounded-[calc(var(--radius)*2.4)] border border-popover bg-popover text-sm text-popover-foreground shadow-xl will-change-transform;
+  @apply bg-popover text-popover-foreground fixed z-50 flex h-auto min-h-0 flex-col text-sm will-change-transform;
 }
 
 .cn-drawer-placement-top:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inset-x-0 top-0 origin-top;
+  @apply inset-x-0 top-0 origin-top rounded-b-xl border-b;
 }
 
 .cn-drawer-placement-right:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inset-y-0 right-0 w-3/4 origin-right flex-row;
+  @apply inset-y-0 right-0 w-3/4 origin-right flex-row rounded-s-xl border-s;
 }
 
 .cn-drawer-placement-bottom:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inset-x-0 bottom-0 origin-bottom;
+  @apply inset-x-0 bottom-0 origin-bottom rounded-t-xl border-t;
 }
 
 .cn-drawer-placement-left:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inset-y-0 left-0 w-3/4 origin-left flex-row;
+  @apply inset-y-0 left-0 w-3/4 origin-left flex-row rounded-e-xl border-e;
 }
 
 .cn-drawer-handle:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative z-10 flex shrink-0 cursor-grab;
+  @apply after:bg-muted relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-full;
 }
 
 .cn-drawer-handle-placement-top:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1310,11 +1317,11 @@
 }
 
 .cn-drawer-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-base font-medium text-foreground wrap-anywhere;
+  @apply text-foreground text-base font-medium wrap-anywhere;
 }
 
 .cn-drawer-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-sm text-balance text-muted-foreground wrap-anywhere;
+  @apply text-muted-foreground text-sm text-balance wrap-anywhere;
 }
 
 .cn-drawer-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1322,7 +1329,7 @@
 }
 
 .cn-drawer-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply bg-black/30;
+  @apply bg-black/10;
 }
 
 /* MARK: empty */
@@ -1352,7 +1359,7 @@
 }
 
 .cn-empty-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance;
+  @apply flex w-full max-w-sm min-w-0 flex-col items-center gap-2.5 text-sm text-balance;
 }
 
 .cn-empty-icon-glyph:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1390,19 +1397,19 @@
 }
 
 .cn-field-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex flex-1 flex-col gap-0.5 leading-snug;
+  @apply flex flex-1 flex-col gap-0.5;
 }
 
 .cn-field-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex w-fit gap-2 text-sm/snug font-medium;
+  @apply flex w-fit gap-2 text-sm leading-none font-medium;
 }
 
 .cn-field-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex w-fit items-center gap-2 text-sm font-medium;
+  @apply flex w-fit items-center gap-2 text-sm leading-snug font-medium;
 }
 
 .cn-field-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-start text-sm/normal font-normal text-muted-foreground;
+  @apply text-muted-foreground text-start text-sm;
 }
 
 .cn-field-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1410,7 +1417,7 @@
 }
 
 .cn-field-error:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-sm font-normal text-destructive;
+  @apply text-destructive text-sm font-normal;
 }
 
 .cn-field-separator-line:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1424,13 +1431,13 @@
 /* MARK: hover-card */
 
 .cn-hover-card:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md origin-(--z-hover-card-transform-origin);
+  @apply ring-foreground/10 bg-popover text-popover-foreground z-50 w-64 origin-(--z-hover-card-transform-origin) rounded-lg p-2.5 text-sm shadow-md ring-1 duration-100;
 }
 
 /* MARK: input-otp */
 
 .cn-input-otp:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex items-center;
+  @apply flex items-center gap-2;
 }
 
 .cn-input-otp-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1438,7 +1445,7 @@
 }
 
 .cn-input-otp-slot:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex items-center justify-center border-y border-e border-input bg-transparent text-center transition-all outline-none;
+  @apply border-input relative flex items-center justify-center border-y border-e bg-transparent text-center transition-all outline-none;
 }
 
 .cn-input-otp-slot-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1488,7 +1495,7 @@
 }
 
 .cn-item-variant-muted:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-transparent bg-muted/50;
+  @apply bg-muted/50 border-transparent;
 }
 
 .cn-item-size-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1524,11 +1531,11 @@
 }
 
 .cn-item-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply line-clamp-1 flex w-fit items-center gap-2 text-sm/snug font-medium underline-offset-4;
+  @apply line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-medium underline-offset-4;
 }
 
 .cn-item-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply line-clamp-2 text-start text-sm/normal font-normal text-muted-foreground;
+  @apply text-muted-foreground line-clamp-2 text-start text-sm leading-normal;
 }
 
 .cn-item-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1546,7 +1553,7 @@
 /* MARK: kbd */
 
 .cn-kbd:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground;
+  @apply bg-muted text-muted-foreground inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm px-1 font-sans text-xs font-medium;
 }
 
 .cn-kbd-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1556,11 +1563,11 @@
 /* MARK: marker */
 
 .cn-marker:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex min-h-4 w-full items-center gap-2 text-start text-sm text-muted-foreground [--ng-icon__size:1rem];
+  @apply text-muted-foreground relative flex min-h-4 w-full items-center gap-2 text-start text-sm [--ng-icon__size:1rem];
 }
 
 .cn-marker-variant-border:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-b border-border pb-2;
+  @apply border-border border-b pb-2;
 }
 
 .cn-marker-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1582,7 +1589,7 @@
 }
 
 .cn-message-avatar:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-full bg-muted;
+  @apply bg-muted flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-full;
 }
 
 .cn-message-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1590,7 +1597,11 @@
 }
 
 .cn-message-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex max-w-full min-w-0 items-center px-3 text-xs font-medium text-muted-foreground;
+  @apply text-muted-foreground flex max-w-full min-w-0 items-center px-3 text-xs font-medium;
+}
+
+.cn-message-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-muted-foreground px-3 text-xs font-medium;
 }
 
 /* MARK: menubar */
@@ -1606,7 +1617,7 @@
 /* MARK: native-select */
 
 .cn-native-select:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply h-8 rounded-lg border border-input bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors;
+  @apply border-input h-8 rounded-lg border bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors;
 }
 
 .cn-native-select-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1636,7 +1647,7 @@
 }
 
 .cn-navigation-menu-trigger-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative top-px size-3 shrink-0 transition-transform duration-300;
+  @apply relative top-px size-3! shrink-0 transition-transform duration-300;
 }
 
 .cn-navigation-menu-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1644,7 +1655,7 @@
 }
 
 .cn-navigation-menu-content-viewport-false:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative z-50 min-w-32 rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10 animate-in;
+  @apply bg-popover text-popover-foreground ring-foreground/10 animate-in relative z-50 min-w-32 rounded-lg shadow-sm ring-1;
 }
 
 .cn-navigation-menu-viewport-wrapper:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1652,7 +1663,7 @@
 }
 
 .cn-navigation-menu-viewport:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10 transition-[opacity,transform,width,height] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)];
+  @apply bg-popover text-popover-foreground ring-foreground/10 relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden rounded-lg shadow ring-1 transition-[opacity,transform,width,height] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)];
 }
 
 .cn-navigation-menu-link:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1676,11 +1687,11 @@
 }
 
 .cn-navigation-menu-submenu-arrow:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply ms-auto opacity-60 transition-opacity duration-150 text-muted-foreground;
+  @apply text-muted-foreground ms-auto opacity-60 transition-opacity duration-150;
 }
 
 .cn-navigation-menu-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground;
+  @apply text-muted-foreground relative flex items-center px-2 py-1.5 text-sm font-medium;
 }
 
 .cn-navigation-menu-label-inset-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1688,7 +1699,7 @@
 }
 
 .cn-navigation-menu-shortcut:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply ms-auto text-xs tracking-widest text-muted-foreground;
+  @apply text-muted-foreground ms-auto text-xs tracking-widest;
 }
 
 .cn-navigation-menu-indicator-arrow:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1734,7 +1745,7 @@
 }
 
 .cn-questionnaire-progress:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-xs font-medium text-muted-foreground;
+  @apply text-muted-foreground text-xs font-medium;
 }
 
 .cn-questionnaire-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1742,7 +1753,7 @@
 }
 
 .cn-questionnaire-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-sm text-muted-foreground;
+  @apply text-muted-foreground text-sm;
 }
 
 .cn-questionnaire-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1754,15 +1765,15 @@
 }
 
 .cn-questionnaire-choice:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply gap-2.5 rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm;
+  @apply border-input gap-2.5 rounded-lg border bg-transparent px-3 py-2.5 text-sm;
 }
 
 .cn-questionnaire-choice-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply size-4 rounded-[4px] border border-input;
+  @apply border-input size-4 rounded-[4px] border;
 }
 
 .cn-questionnaire-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply h-8 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color];
+  @apply border-input h-8 rounded-lg border bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color];
 }
 
 .cn-questionnaire-choice-shortcut:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1777,7 +1788,6 @@
   @apply gap-2;
 }
 
-
 /* MARK: radio-group */
 
 .cn-radio-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1785,7 +1795,7 @@
 }
 
 .cn-radio-group-radio:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex aspect-square size-4 shrink-0 rounded-full border border-input;
+  @apply border-input relative flex aspect-square size-4 shrink-0 rounded-full border;
 }
 
 .cn-radio-group-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1803,7 +1813,7 @@
 }
 
 .cn-resizable-panel:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative overflow-hidden shrink-0 h-full;
+  @apply relative h-full shrink-0 overflow-hidden;
 }
 
 .cn-resizable-panel-collapsed-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1811,7 +1821,7 @@
 }
 
 .cn-resizable-handle:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex min-w-px items-center justify-center bg-border ring-offset-background;
+  @apply bg-border ring-offset-background relative flex min-w-px items-center justify-center;
 }
 
 .cn-resizable-handle-layout-horizontal:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1827,7 +1837,7 @@
 }
 
 .cn-resizable-handle-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply z-10 flex h-6 w-1 shrink-0 rounded-lg bg-border;
+  @apply bg-border z-10 flex h-6 w-1 shrink-0 rounded-lg;
 }
 
 /* MARK: select */
@@ -1837,15 +1847,15 @@
 }
 
 .cn-select-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex h-8 px-3 py-2 w-full items-center justify-between gap-2 rounded-lg border border-input bg-transparent text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow];
+  @apply border-input flex w-full items-center justify-between gap-1.5 rounded-lg border bg-transparent py-2 pr-2 pl-2.5 text-sm whitespace-nowrap transition-colors select-none;
 }
 
 .cn-select-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative z-50 flex max-h-96 w-full min-w-32 origin-(--z-select-content-transform-origin) flex-col overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md;
+  @apply bg-popover text-popover-foreground ring-foreground/10 relative z-50 flex max-h-96 w-full min-w-36 origin-(--z-select-content-transform-origin) flex-col overflow-hidden rounded-lg shadow-md ring-1 duration-100;
 }
 
 .cn-select-viewport:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply min-h-0 flex-1 box-border overflow-x-hidden overflow-y-auto p-1;
+  @apply box-border min-h-0 flex-1 overflow-x-hidden overflow-y-auto p-1;
 }
 
 .cn-select-viewport-position-popper:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1853,19 +1863,19 @@
 }
 
 .cn-select-scroll-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply z-10 flex cursor-default items-center justify-center bg-popover py-1;
+  @apply bg-popover z-10 flex cursor-default items-center justify-center py-1;
 }
 
 .cn-select-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply px-2 py-1.5 text-xs text-muted-foreground;
+  @apply text-muted-foreground px-1.5 py-1 text-xs;
 }
 
 .cn-select-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply -mx-1 block my-1 h-px bg-border;
+  @apply bg-border -mx-1 my-1 block h-px;
 }
 
 .cn-select-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex w-full cursor-default items-center gap-2 rounded-md;
+  @apply relative flex w-full cursor-default items-center gap-1.5 rounded-md;
 }
 
 .cn-select-item-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1881,11 +1891,11 @@
 }
 
 .cn-select-item-mode-normal:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply pe-8 ps-2;
+  @apply ps-1.5 pe-8;
 }
 
 .cn-select-item-mode-compact:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply pe-8 ps-2;
+  @apply ps-1.5 pe-8;
 }
 
 .cn-select-item-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1911,7 +1921,7 @@
 /* MARK: sheet */
 
 .cn-sheet:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply fixed z-50 flex flex-col gap-4 bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg;
+  @apply bg-popover text-popover-foreground fixed z-50 flex flex-col gap-4 bg-clip-padding text-sm shadow-lg;
 }
 
 .cn-sheet-side-top:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1935,11 +1945,11 @@
 }
 
 .cn-sheet-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-base font-medium text-foreground wrap-anywhere;
+  @apply text-foreground text-base font-medium wrap-anywhere;
 }
 
 .cn-sheet-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-sm text-muted-foreground wrap-anywhere;
+  @apply text-muted-foreground text-sm wrap-anywhere;
 }
 
 .cn-sheet-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1989,13 +1999,13 @@
 }
 
 .cn-trace-collapsible-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed;
+  @apply ms-[calc(--spacing(2)-1px)] mt-2 mb-1 border-s ps-4 pe-1 leading-relaxed;
 }
 
 /* MARK: tooltip */
 
 .cn-tooltip:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-xs text-background;
+  @apply bg-foreground text-background z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center gap-1.5 rounded-md px-3 py-1.5 text-xs;
 }
 
 .cn-tooltip-position:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2003,19 +2013,19 @@
 }
 
 .cn-tooltip-position-position-top:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply bottom-0 translate-y-full left-[calc(50%-5px)];
+  @apply bottom-0 left-[calc(50%-5px)] translate-y-full;
 }
 
 .cn-tooltip-position-position-bottom:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply -top-2.5 translate-y-0 rotate-180 left-[calc(50%-5px)];
+  @apply -top-2.5 left-[calc(50%-5px)] translate-y-0 rotate-180;
 }
 
 .cn-tooltip-position-position-left:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5;
+  @apply top-[calc(50%-5px)] -right-2.5 translate-y-0 rotate-270;
 }
 
 .cn-tooltip-position-position-right:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5;
+  @apply top-[calc(50%-5px)] -left-2.5 translate-y-0 rotate-90;
 }
 
 .cn-tooltip-arrow:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2029,11 +2039,11 @@
 }
 
 .cn-sidebar-none:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground;
+  @apply bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col;
 }
 
 .cn-sidebar-root:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply hidden text-sidebar-foreground;
+  @apply text-sidebar-foreground hidden;
 }
 
 .cn-sidebar-gap:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2061,7 +2071,7 @@
 }
 
 .cn-sidebar-inner:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex size-full flex-col bg-sidebar;
+  @apply bg-sidebar flex size-full flex-col;
 }
 
 .cn-sidebar-mobile-backdrop:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2069,7 +2079,7 @@
 }
 
 .cn-sidebar-mobile:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) flex-col bg-sidebar p-0 text-sidebar-foreground shadow-lg transition-transform ease-in-out;
+  @apply bg-sidebar text-sidebar-foreground fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) flex-col p-0 shadow-lg transition-transform ease-in-out;
 }
 
 .cn-sidebar-mobile-side-left:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2089,11 +2099,11 @@
 }
 
 .cn-sidebar-inset:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative flex w-full flex-1 flex-col bg-background;
+  @apply bg-background relative flex w-full flex-1 flex-col;
 }
 
 .cn-sidebar-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply h-8 w-full bg-background shadow-none;
+  @apply bg-background h-8 w-full shadow-none;
 }
 
 .cn-sidebar-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2105,11 +2115,11 @@
 }
 
 .cn-sidebar-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply mx-2 w-auto bg-sidebar-border;
+  @apply bg-sidebar-border mx-2 w-auto;
 }
 
 .cn-sidebar-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex min-h-0 flex-1 flex-col gap-2 overflow-auto;
+  @apply no-scrollbar flex min-h-0 flex-1 flex-col gap-0 overflow-auto;
 }
 
 .cn-sidebar-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2117,11 +2127,11 @@
 }
 
 .cn-sidebar-group-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear;
+  @apply text-sidebar-foreground/70 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium transition-[margin,opacity] duration-200 ease-linear;
 }
 
 .cn-sidebar-group-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply absolute end-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring transition-transform;
+  @apply text-sidebar-foreground ring-sidebar-ring absolute end-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 transition-transform;
 }
 
 .cn-sidebar-group-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2129,7 +2139,7 @@
 }
 
 .cn-sidebar-menu:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex w-full min-w-0 flex-col gap-1;
+  @apply flex w-full min-w-0 flex-col gap-0;
 }
 
 .cn-sidebar-menu-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2137,7 +2147,7 @@
 }
 
 .cn-sidebar-menu-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-start text-sm ring-sidebar-ring transition-[width,height,padding];
+  @apply ring-sidebar-ring flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-start text-sm transition-[width,height,padding];
 }
 
 .cn-sidebar-menu-button-variant-outline:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2157,11 +2167,11 @@
 }
 
 .cn-sidebar-menu-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply absolute end-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring transition-transform;
+  @apply text-sidebar-foreground ring-sidebar-ring absolute end-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 transition-transform;
 }
 
 .cn-sidebar-menu-badge:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply pointer-events-none absolute end-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium text-sidebar-foreground tabular-nums;
+  @apply text-sidebar-foreground pointer-events-none absolute end-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums;
 }
 
 .cn-sidebar-menu-skeleton:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2169,7 +2179,7 @@
 }
 
 .cn-sidebar-menu-sub:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5;
+  @apply border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s px-2.5 py-0.5;
 }
 
 .cn-sidebar-menu-sub-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2177,7 +2187,7 @@
 }
 
 .cn-sidebar-menu-sub-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground ring-sidebar-ring;
+  @apply text-sidebar-foreground ring-sidebar-ring flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2;
 }
 
 .cn-sidebar-menu-sub-button-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2189,7 +2199,7 @@
 }
 
 .cn-sidebar-menu-skeleton-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply size-4;
+  @apply size-4 rounded-md;
 }
 
 /* MARK: slider */
@@ -2207,7 +2217,7 @@
 }
 
 .cn-slider-thumb:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow];
+  @apply border-ring ring-ring/50 relative block size-3 shrink-0 rounded-full border bg-white transition-[color,box-shadow];
 }
 
 .cn-slider-orientation:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2253,11 +2263,11 @@
 /* MARK: code-block */
 
 .cn-code-block:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply rounded-2xl text-sm;
+  @apply rounded-lg text-sm;
 }
 
 .cn-code-block-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply gap-2 px-4 pt-4;
+  @apply gap-2 px-3 pt-3;
 }
 
 .cn-code-block-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2269,15 +2279,15 @@
 }
 
 .cn-code-block-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply px-4 py-4 leading-relaxed;
+  @apply px-3 py-3 leading-relaxed;
 }
 
 .cn-code-block-line:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply -mx-4 px-4;
+  @apply -mx-3 px-3;
 }
 
 .cn-code-block-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply gap-2 px-4 pb-4;
+  @apply gap-2 px-3 pb-3;
 }
 
 /* MARK: data-table */
@@ -2329,7 +2339,7 @@
 }
 
 .cn-table-variant-bordered:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border border-border;
+  @apply border-border border;
 }
 
 .cn-table-row:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2337,19 +2347,19 @@
 }
 
 .cn-table-head:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply h-10 px-2 text-start align-middle font-medium text-muted-foreground;
+  @apply text-foreground h-10 px-2 text-start align-middle font-medium whitespace-nowrap;
 }
 
 .cn-table-cell:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply p-2 align-middle;
+  @apply p-2 align-middle whitespace-nowrap;
 }
 
 .cn-table-caption:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply mt-4 text-sm text-muted-foreground;
+  @apply text-muted-foreground mt-4 text-sm;
 }
 
 .cn-table-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-t bg-muted/50 font-medium;
+  @apply bg-muted/50 border-t font-medium;
 }
 
 /* MARK: tabs */
@@ -2367,7 +2377,7 @@
 }
 
 .cn-tabs-tab-nav:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground;
+  @apply text-muted-foreground inline-flex w-fit items-center justify-center rounded-lg p-[3px];
 }
 
 .cn-tabs-tab-nav-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2379,16 +2389,17 @@
 }
 
 .cn-tabs-tab-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all cursor-pointer;
+  @apply text-foreground/60 relative inline-flex h-[calc(100%-1px)] flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-sm font-medium whitespace-nowrap transition-all;
 }
 
 .cn-tabs-panel:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-sm;
 }
 
 /* MARK: textarea */
 
 .cn-textarea:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors;
+  @apply border-input flex field-sizing-content min-h-16 w-full rounded-lg border bg-transparent px-2.5 py-2 text-base transition-colors;
 }
 
 .cn-textarea-input-group-text-area:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2398,7 +2409,7 @@
 /* MARK: toggle */
 
 .cn-toggle:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply inline-flex items-center justify-center gap-1 rounded-lg text-sm font-medium whitespace-nowrap transition-all cursor-pointer;
+  @apply inline-flex cursor-pointer items-center justify-center gap-1 rounded-lg text-sm font-medium whitespace-nowrap transition-all;
 }
 
 .cn-toggle-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2406,7 +2417,7 @@
 }
 
 .cn-toggle-variant-outline:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border border-input bg-transparent;
+  @apply border-input border bg-transparent;
 }
 
 .cn-toggle-size-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2441,11 +2452,11 @@
 /* MARK: accordion */
 
 .cn-accordion-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply last:border-b-0;
+  @apply not-last:border-b;
 }
 
 .cn-accordion-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px];
+  @apply focus-visible:border-ring focus-visible:ring-ring/50 hover:underline focus-visible:ring-[3px];
 }
 
 /* MARK: alert */
@@ -2459,17 +2470,17 @@
 }
 
 .cn-alert-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground;
+  @apply group-has-data-[slot='alert-icon']/alert:col-start-2 group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3;
 }
 
 .cn-alert-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4;
+  @apply [&_a]:hover:text-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_p:not(:last-child)]:mb-4;
 }
 
 /* MARK: button */
 
 .cn-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4;
+  @apply focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px aria-invalid:ring-3 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-button-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2501,11 +2512,11 @@
 }
 
 .cn-button-size-xs:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3;
+  @apply in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem] [&_svg:not([class*='size-'])]:size-3;
 }
 
 .cn-button-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5;
+  @apply in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.875rem] [&_svg:not([class*='size-'])]:size-3.5;
 }
 
 .cn-button-size-lg:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2513,7 +2524,7 @@
 }
 
 .cn-button-size-icon-xs:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3;
+  @apply in-data-[slot=button-group]:rounded-lg [&_ng-icon:not([class*='size-'])]:[--ng-icon__size:0.75rem] [&_svg:not([class*='size-'])]:size-3;
 }
 
 .cn-button-size-icon-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2535,7 +2546,7 @@
 }
 
 .cn-alert-dialog-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply md:text-pretty [&_a]:underline [&_a]:underline-offset-[3px] [&_a]:hover:text-foreground;
+  @apply [&_a]:hover:text-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-[3px];
 }
 
 .cn-alert-dialog-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2553,11 +2564,11 @@
 /* MARK: attachment */
 
 .cn-attachment:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-within:ring-1 focus-within:ring-ring/30 has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/50 data-[state=idle]:border-dashed;
+  @apply focus-within:ring-ring/50 focus-within:ring-1;
 }
 
 .cn-attachment-media:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[orientation=vertical]/attachment:w-full group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5;
+  @apply group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[orientation=vertical]/attachment:w-full group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5;
 }
 
 .cn-attachment-media-variant-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2565,51 +2576,59 @@
 }
 
 .cn-attachment-media-variant-image:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 [&_img]:size-full [&_img]:object-cover group-data-[state=done]/attachment:opacity-100 group-data-[state=idle]/attachment:opacity-100 *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full;
+  @apply group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 group-data-[state=done]/attachment:opacity-100 group-data-[state=idle]/attachment:opacity-100 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover;
 }
 
 .cn-attachment-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[orientation=vertical]/attachment:w-full;
-}
-
-.cn-attachment-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[state=error]/attachment:text-destructive/80;
+  @apply group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1;
 }
 
 .cn-attachment-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-2.5 group-data-[orientation=vertical]/attachment:end-2.5;
+  @apply group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:gap-1;
 }
 
 .cn-attachment-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background;
+  @apply group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:hover:bg-background group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:backdrop-blur-xs;
 }
 
 .cn-attachment-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-2 focus-visible:ring-ring;
+  @apply focus-visible:ring-ring focus-visible:ring-2;
 }
 
 .cn-attachment-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start;
+  @apply *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start;
+}
+
+.cn-attachment-orientation-vertical:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply has-data-[slot=attachment-content]:w-30;
+}
+
+.cn-attachment-size-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2;
+}
+
+.cn-attachment-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5;
 }
 
 /* MARK: avatar */
 
 .cn-avatar:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten;
-}
-
-.cn-avatar-fallback:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[size=sm]/avatar:text-xs;
+  @apply after:absolute after:inset-0 after:rounded-full after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten;
 }
 
 .cn-avatar-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background;
+  @apply *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:ring-2;
+}
+
+.cn-avatar-group-count:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3;
 }
 
 /* MARK: badge */
 
 .cn-badge:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:size-3;
+  @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&>svg]:size-3 [&>svg]:size-3! [&>z-spinner>svg]:size-3!;
 }
 
 .cn-badge-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2638,22 +2657,22 @@
 
 /* MARK: breadcrumb */
 
-.cn-breadcrumb-list:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply sm:gap-2.5;
-}
-
 .cn-breadcrumb-link:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply hover:text-foreground;
 }
 
 .cn-breadcrumb-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [&_svg]:size-3.5 [&_ng-icon]:flex! [&_ng-icon]:items-center! [&_ng-icon]:size-3.5!;
+  @apply [&_ng-icon]:flex! [&_ng-icon]:size-3.5! [&_ng-icon]:items-center! [&_svg]:size-3.5 [&>svg]:size-3.5;
+}
+
+.cn-breadcrumb-ellipsis:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply [&>svg]:size-4;
 }
 
 /* MARK: bubble */
 
 .cn-bubble:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply data-[align=end]:self-end data-[variant=ghost]:max-w-full group-data-[align=end]/message:self-end;
+  @apply group-data-[align=end]/message:self-end data-[align=end]:self-end data-[variant=ghost]:max-w-full;
 }
 
 .cn-bubble-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2669,7 +2688,7 @@
 }
 
 .cn-bubble-variant-tinted:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply *:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)];
+  @apply *:data-[slot=bubble-content]:text-foreground *:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)];
 }
 
 .cn-bubble-variant-outline:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2677,7 +2696,7 @@
 }
 
 .cn-bubble-variant-ghost:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply *:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0 [&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:text-foreground dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted/50;
+  @apply [&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:text-foreground dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted/50 *:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0;
 }
 
 .cn-bubble-variant-destructive:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2685,7 +2704,7 @@
 }
 
 .cn-bubble-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[align=end]/bubble:self-end [button]:text-start [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-3 [button,a]:focus-visible:ring-ring/30;
+  @apply [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-ring/50 group-data-[align=end]/bubble:self-end [button]:text-start [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:ring-3;
 }
 
 .cn-bubble-reactions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2705,11 +2724,11 @@
 }
 
 .cn-button-group-orientation-horizontal:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [&>*:not(:first-child)]:rounded-s-none [&>*:not(:first-child)]:border-s-0 [&>z-select:not(:first-child)>button]:rounded-s-none [&>z-select:not(:first-child)>button]:border-s-0 [&>*:not(:last-child)]:rounded-e-none [&>z-select:not(:last-child)>button]:rounded-e-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-e-lg!;
+  @apply [&>*:not(:first-child)]:rounded-s-none [&>*:not(:first-child)]:border-s-0 [&>*:not(:last-child)]:rounded-e-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-e-lg! [&>z-select:not(:first-child)>button]:rounded-s-none [&>z-select:not(:first-child)>button]:border-s-0 [&>z-select:not(:last-child)>button]:rounded-e-none;
 }
 
 .cn-button-group-orientation-vertical:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>z-select:not(:first-child)>button]:rounded-t-none [&>z-select:not(:first-child)>button]:border-t-0 [&>*:not(:last-child)]:rounded-b-none [&>z-select:not(:last-child)>button]:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg!;
+  @apply [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg! [&>z-select:not(:first-child)>button]:rounded-t-none [&>z-select:not(:first-child)>button]:border-t-0 [&>z-select:not(:last-child)>button]:rounded-b-none;
 }
 
 .cn-button-group-text:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2727,23 +2746,23 @@
 }
 
 .cn-calendar-dropdown-root:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply has-disabled:pointer-events-none has-disabled:opacity-50;
+  @apply has-focus:border-ring has-focus:ring-ring/50 has-focus:ring-3 has-disabled:pointer-events-none has-disabled:opacity-50;
 }
 
 .cn-calendar-day:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius);
+  @apply first:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius);
 }
 
 .cn-calendar-day-range-start-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-muted [&:last-child]:after:hidden [&:nth-child(7n)]:after:hidden;
+  @apply after:bg-muted after:absolute after:inset-y-0 after:end-0 after:w-4 [&:last-child]:after:hidden [&:nth-child(7n)]:after:hidden;
 }
 
 .cn-calendar-day-range-end-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-muted [&:first-child]:after:hidden [&:nth-child(7n+1)]:after:hidden;
+  @apply after:bg-muted after:absolute after:inset-y-0 after:start-0 after:w-4 [&:first-child]:after:hidden [&:nth-child(7n+1)]:after:hidden;
 }
 
 .cn-calendar-day-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 dark:hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50 [&>span]:text-xs [&>span]:opacity-70;
+  @apply hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 dark:hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 disabled:opacity-50 [&>span]:text-xs [&>span]:opacity-70;
 }
 
 .cn-calendar-day-button-selected-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2793,7 +2812,7 @@
 /* MARK: checkbox */
 
 .cn-checkbox:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply hover:shadow-md focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:border-ring disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary;
+  @apply focus-visible:ring-ring/50 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary hover:shadow-md focus-visible:ring-3 disabled:cursor-not-allowed aria-invalid:ring-3;
 }
 
 .cn-checkbox-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2803,7 +2822,7 @@
 /* MARK: input-group */
 
 .cn-input-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply has-[[data-slot=input-group-control]:disabled]:bg-input/50 has-[[data-slot=input-group-control]:disabled]:opacity-50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2;
+  @apply has-[[data-slot=input-group-control]:disabled]:bg-input/50 dark:has-[[data-slot=input-group-control]:disabled]:bg-input/80 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 dark:bg-input/30 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 has-[[data-slot=input-group-control]:disabled]:opacity-50 has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot][aria-invalid=true]]:ring-3 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>textarea]:h-auto *:data-[slot=input-group-control]:flex-1 *:data-[slot=input-group-control]:rounded-none *:data-[slot=input-group-control]:border-0! *:data-[slot=input-group-control]:bg-transparent! *:data-[slot=input-group-control]:shadow-none *:data-[slot=input-group-control]:ring-0! [&>[data-slot=input-group-control]:focus-visible]:ring-0! [&>[data-slot=input-group-control][aria-invalid=true]]:ring-0! has-[>[data-align=block-end]]:[&>input]:pt-3 has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=inline-end]]:[&>input]:pe-1.5 has-[>[data-align=inline-start]]:[&>input]:ps-1.5 [&>textarea[data-slot=input-group-control]]:resize-none [&>textarea[data-slot=input-group-control]]:py-2;
 }
 
 .cn-input-group-addon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2827,7 +2846,7 @@
 }
 
 .cn-input-group-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:ring-3 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 disabled:cursor-not-allowed [&_svg:not([class*='size-'])]:size-4 active:not-aria-[haspopup]:translate-y-px;
+  @apply focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:cursor-not-allowed aria-invalid:ring-3 [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-input-group-button-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2870,10 +2889,14 @@
   @apply [&_svg:not([class*='size-'])]:size-4;
 }
 
+.cn-input-group-button-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2;
+}
+
 /* MARK: input */
 
 .cn-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40;
+  @apply file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-3 aria-invalid:ring-3 md:text-sm;
 }
 
 .cn-input-group-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2883,19 +2906,19 @@
 /* MARK: color-picker */
 
 .cn-color-picker-format:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+  @apply focus-visible:ring-ring/50 focus-visible:ring-3;
 }
 
 .cn-color-picker-area:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+  @apply focus-visible:ring-ring/50 focus-visible:ring-3;
 }
 
 .cn-color-picker-track:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+  @apply focus-visible:ring-ring/50 focus-visible:ring-3;
 }
 
 .cn-color-picker-preset:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+  @apply focus-visible:ring-ring/50 focus-visible:ring-3;
 }
 
 .cn-color-picker-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2905,7 +2928,7 @@
 /* MARK: map-style-select */
 
 .cn-map-style-select-option:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-[3px] focus-visible:ring-ring/50;
+  @apply focus-visible:ring-ring/50 focus-visible:ring-[3px];
 }
 
 /* MARK: combobox */
@@ -2919,7 +2942,7 @@
 }
 
 .cn-combobox-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:bg-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
+  @apply data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:bg-input/30 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:shadow-none;
 }
 
 .cn-combobox-list:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2939,7 +2962,7 @@
 }
 
 .cn-combobox-chips:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 has-data-[slot=combobox-chip]:px-1 dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40;
+  @apply focus-within:border-ring focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40 focus-within:ring-3 has-aria-invalid:ring-3 has-data-[slot=combobox-chip]:px-1;
 }
 
 .cn-combobox-chip:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2953,11 +2976,11 @@
 /* MARK: command */
 
 .cn-command-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply **:data-[slot=command-group-heading]:px-2 **:data-[slot=command-group-heading]:py-1.5 **:data-[slot=command-group-heading]:text-xs **:data-[slot=command-group-heading]:font-medium **:data-[slot=command-group-heading]:text-muted-foreground;
+  @apply **:data-[slot=command-group-heading]:text-muted-foreground **:data-[slot=command-group-heading]:px-2 **:data-[slot=command-group-heading]:py-1.5 **:data-[slot=command-group-heading]:text-xs **:data-[slot=command-group-heading]:font-medium;
 }
 
 .cn-command-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply data-selected:bg-muted data-selected:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground;
+  @apply data-selected:bg-muted data-selected:text-foreground data-selected:*:[svg]:text-foreground in-data-[slot=dialog-content]:rounded-lg! [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-command-item-variant-destructive:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2965,7 +2988,7 @@
 }
 
 .cn-command-shortcut:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-selected/command-item:text-accent-foreground;
+  @apply group-data-selected/command-item:text-foreground;
 }
 
 /* MARK: dropdown */
@@ -2984,6 +3007,18 @@
 
 .cn-dropdown-menu-sub-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4;
+}
+
+.cn-dropdown-menu-checkbox-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply in-data-[menu=menubar]:ps-7 in-data-[menu=menubar]:pe-1.5;
+}
+
+.cn-dropdown-menu-radio-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply in-data-[menu=menubar]:ps-7 in-data-[menu=menubar]:pe-1.5;
+}
+
+.cn-dropdown-menu-item-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply in-data-[menu=menubar]:start-1.5 in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:size-4;
 }
 
 /* MARK: popover */
@@ -3005,7 +3040,7 @@
 }
 
 .cn-dialog-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply *:[a]:underline *:[a]:underline-offset-[3px] *:[a]:hover:text-foreground;
+  @apply *:[a]:hover:text-foreground *:[a]:underline *:[a]:underline-offset-[3px];
 }
 
 .cn-dialog-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3019,7 +3054,6 @@
 /* MARK: drawer */
 
 .cn-drawer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply dark:border-border;
 }
 
 .cn-drawer-placement-right:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3035,11 +3069,27 @@
 }
 
 .cn-drawer-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start;
+  @apply group-data-[axis=y]/drawer:text-center md:gap-0.5 md:text-start;
 }
 
 .cn-drawer-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply supports-backdrop-filter:backdrop-blur-sm;
+  @apply supports-backdrop-filter:backdrop-blur-xs;
+}
+
+.cn-drawer-handle-placement-top:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply after:h-1 after:w-24;
+}
+
+.cn-drawer-handle-placement-bottom:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply after:h-1 after:w-24;
+}
+
+.cn-drawer-handle-placement-left:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply after:h-24 after:w-1;
+}
+
+.cn-drawer-handle-placement-right:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply after:h-24 after:w-1;
 }
 
 /* MARK: empty */
@@ -3075,15 +3125,15 @@
 }
 
 .cn-field-orientation-horizontal:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px;
+  @apply has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px;
 }
 
 .cn-field-orientation-responsive:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px;
+  @apply *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px;
 }
 
 .cn-field-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col;
+  @apply has-data-checked:border-primary/30 has-data-checked:bg-primary/5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5;
 }
 
 .cn-field-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3091,7 +3141,7 @@
 }
 
 .cn-field-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary;
+  @apply [[data-variant=legend]+&]:-mt-1.5;
 }
 
 .cn-field-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3101,7 +3151,7 @@
 /* MARK: hover-card */
 
 .cn-hover-card:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
 }
 
 /* MARK: input-otp */
@@ -3111,11 +3161,11 @@
 }
 
 .cn-input-otp-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 [&>z-input-otp-slot:first-child_input]:rounded-s-lg [&>z-input-otp-slot:first-child_input]:border-s [&>z-input-otp-slot:last-child_input]:rounded-e-lg dark:has-aria-invalid:ring-destructive/40;
+  @apply has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 has-aria-invalid:ring-3 [&>z-input-otp-slot:first-child_input]:rounded-s-lg [&>z-input-otp-slot:first-child_input]:border-s [&>z-input-otp-slot:last-child_input]:rounded-e-lg;
 }
 
 .cn-input-otp-slot:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus:z-10 focus:border-ring focus:ring-3 focus:ring-ring/50 aria-invalid:border-destructive data-active:z-10 data-active:border-ring data-active:ring-3 data-active:ring-ring/50 data-active:aria-invalid:border-destructive data-active:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-active:aria-invalid:ring-destructive/40;
+  @apply focus:border-ring focus:ring-ring/50 aria-invalid:border-destructive data-active:border-ring data-active:ring-ring/50 data-active:aria-invalid:border-destructive data-active:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-active:aria-invalid:ring-destructive/40 focus:z-10 focus:ring-3 data-active:z-10 data-active:ring-3;
 }
 
 .cn-input-otp-separator-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3133,11 +3183,11 @@
 /* MARK: item */
 
 .cn-item-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2;
+  @apply has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2;
 }
 
 .cn-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-muted;
+  @apply focus-visible:border-ring focus-visible:ring-ring/50 [a]:hover:bg-muted focus-visible:ring-3 [a]:transition-colors;
 }
 
 .cn-item-size-xs:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3161,7 +3211,7 @@
 }
 
 .cn-item-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[size=xs]/item:text-xs [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary;
+  @apply group-data-[size=xs]/item:text-xs [&>a]:underline [&>a]:underline-offset-4;
 }
 
 /* MARK: kbd */
@@ -3173,11 +3223,11 @@
 /* MARK: marker */
 
 .cn-marker:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground;
+  @apply [a]:hover:text-foreground [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3;
 }
 
 .cn-marker-variant-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border;
+  @apply before:bg-border after:bg-border before:me-1 before:h-px before:min-w-0 before:flex-1 after:ms-1 after:h-px after:min-w-0 after:flex-1;
 }
 
 .cn-marker-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3185,7 +3235,7 @@
 }
 
 .cn-marker-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground;
+  @apply *:[a]:hover:text-foreground group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3;
 }
 
 /* MARK: message */
@@ -3207,7 +3257,7 @@
 }
 
 .cn-message-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[align=end]/message:justify-end;
+  @apply group-has-data-[variant=ghost]/message:px-0 group-data-[align=end]/message:justify-end;
 }
 
 /* MARK: menubar */
@@ -3222,7 +3272,7 @@
 /* MARK: native-select */
 
 .cn-native-select:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40;
+  @apply focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 aria-invalid:ring-3;
 }
 
 .cn-native-select-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3247,7 +3297,7 @@
 }
 
 .cn-navigation-menu-content-viewport-false:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply before:absolute before:-inset-2 before:-z-10 before:content-[''] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 before:absolute before:-inset-2 before:-z-10 before:content-[''];
 }
 
 .cn-navigation-menu-viewport:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3255,7 +3305,7 @@
 }
 
 .cn-navigation-menu-link:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted [&_svg:not([class*='size-'])]:size-4 [&>i]:me-2 [&>z-icon]:me-2 [&>ng-icon]:shrink-0;
+  @apply hover:bg-muted focus:bg-muted focus-visible:ring-ring/50 data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 [&>i]:me-2 [&>ng-icon]:shrink-0 [&>z-icon]:me-2;
 }
 
 .cn-navigation-menu-link-variant-destructive:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3263,11 +3313,11 @@
 }
 
 .cn-navigation-menu-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:bg-muted/50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted;
+  @apply hover:bg-muted focus:bg-muted focus-visible:ring-ring/50 data-[state=open]:bg-muted/50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 disabled:opacity-50;
 }
 
 .cn-navigation-menu-submenu-arrow:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply dark:text-gray-400 group-hover:opacity-100 group-focus:opacity-100;
+  @apply group-hover:opacity-100 group-focus:opacity-100 dark:text-gray-400;
 }
 
 /* MARK: pagination */
@@ -3279,11 +3329,11 @@
 /* MARK: questionnaire */
 
 .cn-questionnaire-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [&:has(~[data-slot=questionnaire-description])]:-mb-4;
+  @apply [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4;
 }
 
 .cn-questionnaire-choice:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50;
+  @apply has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3;
 }
 
 .cn-questionnaire-choice-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3291,14 +3341,13 @@
 }
 
 .cn-questionnaire-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40;
+  @apply focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm;
 }
-
 
 /* MARK: radio-group */
 
 .cn-radio-group-radio:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary;
+  @apply focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:ring-3 aria-invalid:ring-3;
 }
 
 /* MARK: resizable */
@@ -3308,17 +3357,17 @@
 }
 
 .cn-resizable-handle:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden aria-[orientation=horizontal]:min-h-px aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:h-1 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:translate-x-0 aria-[orientation=horizontal]:after:-translate-y-1/2 [&[aria-orientation=horizontal]>div]:rotate-90;
+  @apply focus-visible:ring-ring after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:outline-hidden aria-[orientation=horizontal]:min-h-px aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:h-1 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:translate-x-0 aria-[orientation=horizontal]:after:-translate-y-1/2 [&[aria-orientation=horizontal]>div]:rotate-90;
 }
 
 /* MARK: select */
 
 .cn-select:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [&_button]:focus-visible:border [&_button]:focus-visible:border-ring [&_button]:focus-visible:ring-ring/50 [&_button]:focus-visible:ring-[3px];
+  @apply [&_button]:focus-visible:border-ring [&_button]:focus-visible:ring-ring/50 [&_button]:focus-visible:border [&_button]:focus-visible:ring-[3px];
 }
 
 .cn-select-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg:not([class*="size-"])]:size-4 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 data-[size=sm]:h-7;
+  @apply data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:ring-3 aria-invalid:ring-3 data-[size=default]:h-8 data-[size=default]:min-h-8 data-[size=sm]:h-7 data-[size=sm]:min-h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-select-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3334,19 +3383,19 @@
 }
 
 .cn-select-item-state:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground [&_svg:not([class*="size-"])]:size-4 [&_svg:not([class*="text-"])]:text-muted-foreground *:data-[slot=select-item-text]:flex *:data-[slot=select-item-text]:items-center *:data-[slot=select-item-text]:gap-2;
+  @apply focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground [&_svg:not([class*="text-"])]:text-muted-foreground *:data-[slot=select-item-text]:flex *:data-[slot=select-item-text]:items-center *:data-[slot=select-item-text]:gap-2 [&_svg:not([class*="size-"])]:size-4;
 }
 
 /* MARK: message-scroller */
 
 .cn-message-scroller-viewport:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+  @apply focus-visible:ring-ring/50 focus-visible:ring-3;
 }
 
 /* MARK: trace */
 
 .cn-trace:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50;
+  @apply *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3;
 }
 
 .cn-trace-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3354,13 +3403,13 @@
 }
 
 .cn-trace-collapsible-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
+  @apply focus-visible:ring-ring/50 focus-visible:ring-3;
 }
 
 /* MARK: tooltip */
 
 .cn-tooltip:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply has-data-[slot=kbd]:pe-1.5 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-lg data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
+  @apply data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=opened]:animate-in data-[state=opened]:fade-in-0 data-[state=opened]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 has-data-[slot=kbd]:pe-1.5 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-sm;
 }
 
 /* MARK: sidebar */
@@ -3414,7 +3463,7 @@
 }
 
 .cn-sidebar-inner:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm;
+  @apply group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:ring-1;
 }
 
 .cn-sidebar-mobile-backdrop:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3438,7 +3487,7 @@
 }
 
 .cn-sidebar-rail:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize [[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar [[data-side=left][data-collapsible=offcanvas]_&]:-right-2 [[data-side=right][data-collapsible=offcanvas]_&]:-left-2;
+  @apply hover:after:bg-sidebar-border hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] group-data-[collapsible=offcanvas]:after:left-full in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize sm:flex [[data-side=left][data-collapsible=offcanvas]_&]:-right-2 [[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-collapsible=offcanvas]_&]:-left-2 [[data-side=right][data-state=collapsed]_&]:cursor-w-resize;
 }
 
 .cn-sidebar-inset:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3450,15 +3499,15 @@
 }
 
 .cn-sidebar-group-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0;
+  @apply group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 focus-visible:ring-2 [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0;
 }
 
 .cn-sidebar-group-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! after:absolute after:-inset-2 md:after:hidden group-data-[collapsible=icon]:hidden;
+  @apply hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 focus-visible:ring-2 md:after:hidden [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0;
 }
 
 .cn-sidebar-menu-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4!;
+  @apply hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 data-[active=true]:font-medium [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0 [&>span:last-child]:truncate;
 }
 
 .cn-sidebar-menu-button-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3474,23 +3523,23 @@
 }
 
 .cn-sidebar-menu-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply peer-hover/menu-button:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! after:absolute after:-inset-2 md:after:hidden peer-data-[size=sm]/menu-button:top-1 peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 group-data-[collapsible=icon]:hidden;
+  @apply peer-hover/menu-button:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 focus-visible:ring-2 md:after:hidden [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0;
 }
 
 .cn-sidebar-menu-action-show-on-hover-true:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground data-[state=open]:opacity-100 md:opacity-0;
+  @apply peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0;
 }
 
 .cn-sidebar-menu-badge:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground peer-data-[size=sm]/menu-button:top-1 peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 group-data-[collapsible=icon]:hidden;
+  @apply peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1;
 }
 
 .cn-sidebar-menu-sub:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply rtl:-translate-x-px group-data-[collapsible=icon]:hidden;
+  @apply group-data-[collapsible=icon]:hidden rtl:-translate-x-px;
 }
 
 .cn-sidebar-menu-sub-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply rtl:translate-x-px hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&_svg]:size-4 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden;
+  @apply hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&_svg]:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden focus-visible:ring-2 rtl:translate-x-px [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0 [&>span:last-child]:truncate;
 }
 
 /* MARK: slider */
@@ -3518,7 +3567,7 @@
 /* MARK: switch */
 
 .cn-switch:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 disabled:cursor-not-allowed;
+  @apply focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:ring-[3px] disabled:cursor-not-allowed aria-invalid:ring-[3px];
 }
 
 .cn-switch-thumb:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3528,31 +3577,31 @@
 /* MARK: code-block */
 
 .cn-code-block:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply data-[size=sm]:rounded-xl;
+  @apply data-[size=sm]:text-xs;
 }
 
 .cn-code-block-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3;
+  @apply group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pt-2.5;
 }
 
 .cn-code-block-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5;
+  @apply group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5;
 }
 
 .cn-code-block-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [[data-slot=code-block]>&]:end-3 [[data-slot=code-block]>&]:top-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2;
+  @apply [[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:top-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-1.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-1.5;
 }
 
 .cn-code-block-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5;
+  @apply group-has-data-[slot=code-block-footer]/code-block:pb-2 group-has-data-[slot=code-block-header]/code-block:pt-2 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:py-2.5 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5;
 }
 
 .cn-code-block-line:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3;
+  @apply group-data-[size=sm]/code-block:-mx-2.5 group-data-[size=sm]/code-block:px-2.5;
 }
 
 .cn-code-block-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3;
+  @apply group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pb-2.5;
 }
 
 /* MARK: data-table */
@@ -3564,7 +3613,7 @@
 /* MARK: table */
 
 .cn-table:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pe-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pe-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground;
+  @apply [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:text-foreground [&_caption]:text-muted-foreground [&_caption]:mt-4 [&_caption]:text-sm [&_tbody]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr:last-child]:border-0 [&_td]:p-2 [&_td]:align-middle [&_td]:whitespace-nowrap [&_td:has([role=checkbox])]:pe-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:whitespace-nowrap [&_th:has([role=checkbox])]:pe-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_thead_tr]:border-b;
 }
 
 .cn-table-variant-striped:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3610,7 +3659,7 @@
 }
 
 .cn-tabs-tab-button:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:opacity-50 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 dark:text-muted-foreground dark:hover:text-foreground group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100;
+  @apply hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:text-muted-foreground dark:hover:text-foreground data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start group-data-[variant=line]/tabs-list:bg-transparent after:absolute after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 focus-visible:ring-[3px] focus-visible:outline-1 disabled:opacity-50 group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:bg-transparent group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:data-active:after:opacity-100 dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-tabs-panel:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3620,7 +3669,7 @@
 /* MARK: textarea */
 
 .cn-textarea:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40;
+  @apply placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm;
 }
 
 .cn-textarea-input-group-text-area:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3630,7 +3679,7 @@
 /* MARK: toggle */
 
 .cn-toggle:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4;
+  @apply hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-pressed:bg-muted data-[state=on]:bg-muted dark:aria-invalid:ring-destructive/40 focus-visible:ring-[3px] [&_ng-icon:not([class*='size-'])]:size-4! [&_svg:not([class*='size-'])]:size-4;
 }
 
 .cn-toggle-size-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3638,7 +3687,7 @@
 }
 
 .cn-toggle-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_svg:not([class*='size-'])]:size-3.5;
+  @apply has-data-[icon=inline-end]:pe-1.5 has-data-[icon=inline-start]:ps-1.5 [&_ng-icon:not([class*='size-'])]:size-3.5! [&_svg:not([class*='size-'])]:size-3.5;
 }
 
 .cn-toggle-size-lg:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3648,7 +3697,7 @@
 /* MARK: toggle-group */
 
 .cn-toggle-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-vertical:flex-col data-vertical:items-stretch;
+  @apply data-vertical:flex-col data-vertical:items-stretch data-[size=sm]:rounded-[min(var(--radius-md),10px)];
 }
 
 .cn-toggle-group-item:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {

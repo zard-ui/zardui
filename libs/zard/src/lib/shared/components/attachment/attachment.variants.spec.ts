@@ -3,7 +3,7 @@ import { attachmentVariants, attachmentMediaVariants } from './attachment.varian
 describe('attachment variants', () => {
   it('provides the documented defaults', () => {
     expect(attachmentVariants()).toContain('border-border');
-    expect(attachmentVariants()).toContain('gap-3 p-3');
+    expect(attachmentVariants()).toContain('gap-2 text-sm');
     expect(attachmentVariants()).toContain('flex-row');
     expect(attachmentMediaVariants()).toContain('size-10');
   });
@@ -22,17 +22,20 @@ describe('attachment variants', () => {
   });
 
   it.each([
-    ['default', 'gap-3 p-3'],
-    ['sm', 'gap-2 p-2.5 text-sm'],
+    ['default', 'gap-2 text-sm'],
+    ['sm', 'gap-2.5 text-xs'],
     ['xs', 'gap-1.5 p-2 text-xs'],
   ] as const)('styles size %s', (zSize, expected) => {
-    expect(attachmentVariants({ zSize })).toContain(expected);
+    // Token by token: the style sheet sets them, and its order is not the contract.
+    expect(attachmentVariants({ zSize }).split(' ')).toEqual(expect.arrayContaining(expected.split(' ')));
   });
 
   it('styles orientation and both media modes', () => {
     expect(attachmentVariants({ zOrientation: 'horizontal' })).toContain('flex-row');
     expect(attachmentVariants({ zOrientation: 'vertical' })).toContain('flex-col items-start');
-    expect(attachmentMediaVariants({ zVariant: 'icon' })).toContain('size-10 bg-muted text-muted-foreground');
+    expect(attachmentMediaVariants({ zVariant: 'icon' }).split(' ')).toEqual(
+      expect.arrayContaining(['size-10', 'bg-muted', 'text-muted-foreground']),
+    );
     expect(attachmentMediaVariants({ zVariant: 'image' })).toContain('size-16');
     expect(attachmentMediaVariants({ zVariant: 'image' })).toContain('[&_img]:object-cover');
   });

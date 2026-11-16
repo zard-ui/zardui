@@ -8,7 +8,7 @@ export const accordionItemVariants = cva('cn-accordion-item', {
 });
 
 export const accordionTriggerVariants = cva(
-  'cn-accordion-trigger group outline-none disabled:pointer-events-none disabled:opacity-50',
+  'cn-accordion-trigger group border border-transparent outline-none disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {},
     defaultVariants: {},
