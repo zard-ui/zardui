@@ -19,6 +19,8 @@ import { ExampleImports } from './example.component';
 
 const FRAMEWORKS = ['Next.js', 'SvelteKit', 'Nuxt.js', 'Remix', 'Astro'] as const;
 
+const SIDES = ['inline-start', 'left', 'top', 'bottom', 'right', 'inline-end'] as const;
+
 const DISABLED_FRAMEWORKS: readonly string[] = ['Nuxt.js', 'Remix'];
 
 const TIMEZONES = [
@@ -100,6 +102,27 @@ type ComboboxValue = string | string[] | null;
             </z-combobox-list>
           </z-combobox-content>
         </z-combobox>
+      </z-example>
+
+      <z-example zTitle="Sides" zContainerClass="col-span-2">
+        <div class="flex flex-wrap justify-center gap-2">
+          @for (side of sides; track side) {
+            <z-combobox class="w-fit">
+              <z-combobox-input
+                [placeholder]="label(side)"
+                class="w-32 **:data-[slot=input-group-control]:capitalize"
+              />
+              <z-combobox-content [zSide]="side">
+                <z-combobox-empty>No items found.</z-combobox-empty>
+                <z-combobox-list>
+                  @for (item of frameworks; track item) {
+                    <z-combobox-item [zValue]="item">{{ item }}</z-combobox-item>
+                  }
+                </z-combobox-list>
+              </z-combobox-content>
+            </z-combobox>
+          }
+        </div>
       </z-example>
 
       <z-example zTitle="Invalid">
@@ -487,6 +510,12 @@ type ComboboxValue = string | string[] | null;
   `,
 })
 export class ComboboxExampleComponent {
+  protected readonly sides = SIDES;
+
+  protected label(side: string): string {
+    return side.replace('-', ' ');
+  }
+
   protected readonly frameworks = FRAMEWORKS;
   protected readonly disabledFrameworks = DISABLED_FRAMEWORKS;
   protected readonly timezones = TIMEZONES;

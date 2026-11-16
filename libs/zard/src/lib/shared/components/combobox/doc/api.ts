@@ -26,7 +26,12 @@ export const COMBOBOX_API: ApiSection[] = [
         type: '((label: string, query: string) => boolean) | null',
         default: 'null',
       },
-      { name: '[zSide]', description: 'Preferred popup side', type: "'top' | 'bottom'", default: "'bottom'" },
+      {
+        name: '[zSide]',
+        description: 'Preferred popup side (`inline-*` follow the text direction)',
+        type: "'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end'",
+        default: "'bottom'",
+      },
       {
         name: '[zAlign]',
         description: 'Popup alignment against the anchor',
@@ -147,7 +152,12 @@ export const COMBOBOX_API: ApiSection[] = [
         type: 'ElementRef<HTMLElement> | HTMLElement | null',
         default: 'null',
       },
-      { name: '[zSide]', description: 'Overrides the root `zSide`', type: "'top' | 'bottom' | null", default: 'null' },
+      {
+        name: '[zSide]',
+        description: 'Overrides the root `zSide`',
+        type: "'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end' | null",
+        default: 'null',
+      },
       {
         name: '[zAlign]',
         description: 'Overrides the root `zAlign`',

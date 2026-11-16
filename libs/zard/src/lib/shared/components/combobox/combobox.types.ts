@@ -15,7 +15,9 @@ export interface ZardComboboxGroup {
 }
 
 export type ZardComboboxFilterVariants = 'contains' | 'startsWith' | 'none';
-export type ZardComboboxSideVariants = 'top' | 'bottom';
+export type ZardComboboxSideVariants = 'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end';
+/** The side the panel really sits on, once `inline-*` has been resolved against the direction. */
+export type ZardComboboxPhysicalSide = 'top' | 'bottom' | 'left' | 'right';
 export type ZardComboboxAlignVariants = 'start' | 'center' | 'end';
 export type ZardComboboxAnchorKind = 'input' | 'chips' | 'trigger';
 
