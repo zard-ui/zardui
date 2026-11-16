@@ -102,6 +102,7 @@ export class ZardTabComponent {
       }
     </div>
   `,
+  providers: [{ provide: ZARD_TAB_GROUP, useExisting: forwardRef(() => ZardTabGroupComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -110,7 +111,6 @@ export class ZardTabComponent {
     '[attr.data-orientation]': 'zOrientation()',
   },
   hostDirectives: [ZardIdDirective],
-  providers: [{ provide: ZARD_TAB_GROUP, useExisting: forwardRef(() => ZardTabGroupComponent) }],
   exportAs: 'zTabGroup',
 })
 export class ZardTabGroupComponent {

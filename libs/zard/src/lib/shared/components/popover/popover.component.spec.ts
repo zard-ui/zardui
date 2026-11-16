@@ -3,7 +3,7 @@ import { type ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
 import {
   Component,
   type DebugElement,
-  ElementRef,
+  type ElementRef,
   type TemplateRef,
   viewChild,
   ChangeDetectionStrategy,

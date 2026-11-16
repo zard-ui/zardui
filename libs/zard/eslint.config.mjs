@@ -40,7 +40,8 @@ export default [
         'error',
         {
           // `@types/geojson`: type-only imports in the map demos; the map item installs it as a devDependency.
-          ignoredDependencies: ['zod', '@types/geojson'],
+          // embla-carousel-reactive-utils: a peer of embla-carousel-angular, installed, never imported.
+          ignoredDependencies: ['zod', '@types/geojson', 'embla-carousel-reactive-utils'],
           ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs}', '{projectRoot}/jest-style-transformer.cjs'],
         },
       ],

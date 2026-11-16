@@ -69,7 +69,7 @@ class TestHostWithFormControlComponent {
       <z-select-item zValue="apple">Apple</z-select-item>
       <z-select-item zValue="banana">Banana</z-select-item>
     </z-select>
-    <z-select class="compact" zSize="sm">
+    <z-select class="w-48" zSize="sm">
       <z-select-item zValue="apple">Apple</z-select-item>
     </z-select>
   `,
