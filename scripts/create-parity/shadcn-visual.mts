@@ -93,6 +93,15 @@ async function zardPage(page: Page, item: string): Promise<void> {
     { timeout: 60_000 },
   );
   await page.addStyleTag({ content: STILL + ZARD_UNCLAMP });
+  // Charts paint when they enter the viewport: a pass to the bottom and back draws every one.
+  await page.evaluate(async () => {
+    const step = window.innerHeight;
+    for (let y = 0; y < document.body.scrollHeight; y += step) {
+      window.scrollTo(0, y);
+      await new Promise(resolve => setTimeout(resolve, 150));
+    }
+    window.scrollTo(0, 0);
+  });
 }
 
 async function zardSet(page: Page, style: StyleId, mode: string): Promise<void> {
