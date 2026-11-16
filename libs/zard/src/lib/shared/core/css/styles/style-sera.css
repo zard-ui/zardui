@@ -194,27 +194,22 @@
   /* MARK: attachment */
 
   .cn-attachment {
-    @apply relative isolate flex max-w-full min-w-0 shrink-0 snap-start items-center transition-colors rounded-none w-fit border bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed;
+    @apply rounded-none w-fit;
   }
 
   .cn-attachment-state-idle {
-    @apply border-border border-dashed;
   }
 
   .cn-attachment-state-uploading {
-    @apply border-border bg-muted/50;
   }
 
   .cn-attachment-state-processing {
-    @apply border-border bg-muted/50;
   }
 
   .cn-attachment-state-error {
-    @apply border-destructive/50 text-destructive;
   }
 
   .cn-attachment-state-done {
-    @apply border-border;
   }
 
   .cn-attachment-size-default {
@@ -226,55 +221,53 @@
   }
 
   .cn-attachment-size-xs {
-    @apply gap-1.5 p-2 text-xs rounded-none;
+    @apply gap-1.5 text-xs rounded-none;
   }
 
   .cn-attachment-orientation-horizontal {
-    @apply flex-row min-w-40;
+    @apply min-w-40;
   }
 
   .cn-attachment-orientation-vertical {
-    @apply flex-col items-start w-24;
+    @apply w-24;
   }
 
   .cn-attachment-media {
-    @apply relative flex shrink-0 items-center justify-center overflow-hidden bg-muted text-foreground rounded-none;
+    @apply bg-muted text-foreground w-10 rounded-none [--ng-icon__size:1rem];
   }
 
   .cn-attachment-media-variant-icon {
-    @apply size-10 bg-muted text-muted-foreground;
   }
 
   .cn-attachment-media-variant-image {
-    @apply size-16 opacity-60;
+    @apply opacity-60;
   }
 
   .cn-attachment-content {
-    @apply flex min-w-0 flex-1 flex-col leading-tight;
+    @apply leading-tight;
   }
 
   .cn-attachment-title {
-    @apply block w-fit max-w-full truncate font-medium;
+    @apply font-medium;
   }
 
   .cn-attachment-description {
-    @apply mt-0.5 text-xs text-muted-foreground group-data-[state=error]/attachment:text-destructive/80;
+    @apply mt-0.5 text-xs;
   }
 
   .cn-attachment-actions {
-    @apply flex shrink-0 items-center relative z-20;
-  }
-
-  .cn-attachment-action {
     @apply relative z-20;
   }
 
+  .cn-attachment-action {
+  }
+
   .cn-attachment-trigger {
-    @apply absolute inset-0 z-10 rounded-[inherit] outline-none;
+    @apply absolute inset-0 z-10 outline-none;
   }
 
   .cn-attachment-group {
-    @apply flex w-full min-w-0 overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3 scroll-px-1 py-1 focus-visible:ring-2 focus-visible:ring-ring;
+    @apply gap-3 scroll-px-1 py-1;
   }
 
   /* MARK: avatar */
@@ -1744,53 +1737,72 @@
   /* MARK: questionnaire */
 
   .cn-questionnaire {
-    @apply gap-4;
+    @apply gap-6;
   }
 
   .cn-questionnaire-progress {
-    @apply text-xs font-semibold tracking-wider text-muted-foreground uppercase;
+    @apply text-xs uppercase tracking-wide;
   }
 
   .cn-questionnaire-title {
-    @apply text-lg/snug font-semibold tracking-wider uppercase;
+    @apply text-xs font-semibold uppercase tracking-wide;
   }
 
   .cn-questionnaire-description {
-    @apply text-sm text-muted-foreground leading-relaxed;
+    @apply text-sm normal-case tracking-normal;
   }
 
   .cn-questionnaire-item {
-    @apply gap-4;
+    @apply gap-5;
   }
 
   .cn-questionnaire-choices {
-    @apply gap-2;
+    @apply gap-3;
   }
 
   .cn-questionnaire-choice {
-    @apply gap-2.5 rounded-none border border-input bg-transparent px-3 py-2.5 text-sm;
+    @apply gap-3 rounded-none border border-input bg-transparent px-4 py-4 text-sm;
   }
 
   .cn-questionnaire-choice-indicator {
-    @apply size-4.5 rounded-none border border-input bg-transparent;
+    @apply border-input size-4.5 translate-y-[--spacing(0.45)];
   }
 
   .cn-questionnaire-input {
-    @apply h-10 border border-transparent border-b-input bg-transparent px-0 py-1 text-base transition-[color,border-color];
+    @apply border-transparent border-b-input bg-transparent h-10 border px-0 py-1 text-base;
   }
 
   .cn-questionnaire-choice-shortcut {
-    @apply size-5.5 rounded-none font-mono text-[0.625rem] font-medium;
+    @apply border-input bg-background text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-none border font-mono text-[0.625rem] font-medium leading-none;
   }
 
   .cn-questionnaire-error {
-    @apply text-sm;
+    @apply mt-2 text-sm;
   }
 
   .cn-questionnaire-actions {
     @apply gap-2;
   }
 
+  .cn-questionnaire-choice-indicator-dot {
+    @apply bg-foreground size-2;
+  }
+
+  .cn-questionnaire-choice-indicator-check {
+    @apply size-3.5 [--ng-icon__size:0.875rem];
+  }
+
+  .cn-questionnaire-choice-content {
+    @apply gap-1;
+  }
+
+  .cn-questionnaire-choice-description {
+    @apply text-muted-foreground;
+  }
+
+  .cn-questionnaire-input-wrapper {
+    @apply w-full;
+  }
 
   /* MARK: radio-group */
 
@@ -1973,7 +1985,7 @@
   /* MARK: message-scroller */
 
   .cn-message-scroller-content {
-    @apply gap-6;
+    @apply gap-8;
   }
 
   .cn-message-scroller-button-direction-end {
@@ -1987,11 +1999,11 @@
   /* MARK: trace */
 
   .cn-trace {
-    @apply gap-2;
+    @apply gap-3;
   }
 
   .cn-trace-line {
-    @apply gap-2 text-xs uppercase tracking-wide;
+    @apply gap-2 text-sm;
   }
 
   .cn-trace-icon {
@@ -2003,7 +2015,7 @@
   }
 
   .cn-trace-collapsible-content {
-    @apply mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed;
+    @apply mt-3 mb-1 ms-[calc(--spacing(2)-1px)] border-s pe-1 ps-4 leading-relaxed;
   }
 
   /* MARK: tooltip */
@@ -2271,11 +2283,11 @@
   }
 
   .cn-code-block-header {
-    @apply gap-2 px-6 pt-6;
+    @apply gap-2 px-4 pt-4 text-muted-foreground;
   }
 
   .cn-code-block-title {
-    @apply font-sans text-sm font-medium [--ng-icon__size:1rem];
+    @apply font-sans text-sm font-medium text-foreground [--ng-icon__size:1rem];
   }
 
   .cn-code-block-actions {
@@ -2283,15 +2295,35 @@
   }
 
   .cn-code-block-content {
-    @apply px-6 py-6 leading-relaxed;
+    @apply px-4 py-4 leading-relaxed;
   }
 
   .cn-code-block-line {
-    @apply -mx-6 px-6;
+    @apply -mx-4 px-4;
   }
 
   .cn-code-block-footer {
-    @apply gap-2 px-6 pb-6;
+    @apply gap-2 px-4 pb-4 text-muted-foreground;
+  }
+
+  .cn-code-block-variant-default {
+    @apply border border-input text-foreground;
+  }
+
+  .cn-code-block-variant-destructive {
+    @apply border border-destructive/30 text-destructive;
+  }
+
+  .cn-code-block-line-variant-highlighted {
+    @apply bg-muted;
+  }
+
+  .cn-code-block-line-variant-added {
+    @apply bg-muted;
+  }
+
+  .cn-code-block-line-variant-removed {
+    @apply bg-destructive/10;
   }
 
   /* MARK: data-table */
@@ -2593,35 +2625,19 @@
   }
 
   .cn-attachment-media {
-    @apply group-data-[orientation=vertical]/attachment:w-full group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5 group-data-[size=xs]/attachment:rounded-none;
-  }
-
-  .cn-attachment-media-variant-icon {
-    @apply group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4;
+    @apply group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-none [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! group-data-[size=xs]/attachment:[--ng-icon__size:0.875rem] group-data-[orientation=vertical]/attachment:[--ng-icon__size:1.5rem];
   }
 
   .cn-attachment-media-variant-image {
-    @apply group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100;
+    @apply group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100;
   }
 
   .cn-attachment-content {
-    @apply group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1;
+    @apply group-data-[orientation=vertical]/attachment:px-1;
   }
 
   .cn-attachment-actions {
     @apply group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1;
-  }
-
-  .cn-attachment-action {
-    @apply group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background;
-  }
-
-  .cn-attachment-trigger {
-    @apply focus-visible:ring-2 focus-visible:ring-ring;
-  }
-
-  .cn-attachment-group {
-    @apply *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start;
   }
 
   /* MARK: avatar */
@@ -3351,17 +3367,24 @@
   /* MARK: questionnaire */
 
   .cn-questionnaire-title {
-    @apply [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4;
+    @apply [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-5;
   }
 
   .cn-questionnaire-choice {
-    @apply has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-ring/30;
+    @apply hover:bg-muted/50 has-[input:checked]:bg-primary/5 has-[input:checked]:border-primary/30 dark:has-[input:checked]:border-primary/20 dark:has-[input:checked]:bg-primary/10 data-invalid:border-destructive has-[input:focus-visible]:ring-ring/30 has-[input:focus-visible]:ring-2;
   }
 
   .cn-questionnaire-input {
-    @apply focus-visible:border-b-ring aria-invalid:border-b-destructive md:text-sm dark:aria-invalid:border-b-destructive/50;
+    @apply focus-visible:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50 md:text-sm;
   }
 
+  .cn-questionnaire-choice-indicator {
+    @apply group-has-[input:checked]/questionnaire-choice:border-foreground group-has-[input[type=checkbox]]/questionnaire-choice:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input[type=checkbox]]/questionnaire-choice:group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input[type=checkbox]]/questionnaire-choice:group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5;
+  }
+
+  .cn-questionnaire-choice-shortcut {
+    @apply group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5;
+  }
 
   /* MARK: radio-group */
 
@@ -3422,7 +3445,7 @@
   }
 
   .cn-trace-icon {
-    @apply [&_svg:not([class*=size-])]:size-4;
+    @apply [&_svg:not([class*='size-'])]:size-4 [[data-slot=trace-title]~&]:-ms-1;
   }
 
   .cn-trace-collapsible-trigger {
@@ -3600,31 +3623,47 @@
   /* MARK: code-block */
 
   .cn-code-block {
-    @apply data-[size=sm]:rounded-none;
+    @apply data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-2 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/30;
   }
 
   .cn-code-block-header {
-    @apply group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:pt-4;
+    @apply group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3;
   }
 
   .cn-code-block-title {
-    @apply [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5;
+    @apply group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[&_svg:not([class*='size-'])]:size-3.5 group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem];
   }
 
   .cn-code-block-actions {
-    @apply [[data-slot=code-block]>&]:end-4 [[data-slot=code-block]>&]:top-4 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-3;
+    @apply [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-3 [[data-slot=code-block]>&]:end-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10;
   }
 
   .cn-code-block-content {
-    @apply group-has-data-[slot=code-block-header]/code-block:pt-3 group-has-data-[slot=code-block-footer]/code-block:pb-3 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:py-4 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-2;
+    @apply group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5;
   }
 
   .cn-code-block-line {
-    @apply group-data-[size=sm]/code-block:-mx-4 group-data-[size=sm]/code-block:px-4;
+    @apply in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3;
   }
 
   .cn-code-block-footer {
-    @apply group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:pb-4;
+    @apply group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3;
+  }
+
+  .cn-code-block-variant-default {
+    @apply dark:bg-input/30 has-[>[data-slot=code-block-content]:focus-visible]:border-ring;
+  }
+
+  .cn-code-block-variant-destructive {
+    @apply dark:border-destructive/40;
+  }
+
+  .cn-code-block-line-variant-added {
+    @apply after:content-['+'];
+  }
+
+  .cn-code-block-line-variant-removed {
+    @apply after:text-destructive after:content-['−'];
   }
 
   /* MARK: data-table */

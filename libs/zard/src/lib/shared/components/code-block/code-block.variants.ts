@@ -3,22 +3,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export const codeBlockVariants = cva(
-  mergeClasses(
-    'cn-code-block group/code-block relative flex w-full min-w-0 flex-col overflow-hidden',
-    'has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/30',
-  ),
+  'cn-code-block group/code-block relative flex w-full min-w-0 flex-col overflow-hidden',
   {
     variants: {
       zType: {
-        default: 'bg-muted text-foreground ring-1 ring-foreground/5 dark:ring-foreground/10',
-        // shadcn/ui tints the light surface with `bg-destructive/5`, which takes the red text to 4.36:1. A 2% tint
-        // keeps the same look and stays above the 4.5:1 that WCAG AA asks of body text.
-        destructive:
-          'bg-destructive/2 text-destructive ring-1 ring-destructive/15 dark:bg-destructive/10 dark:ring-destructive/20',
+        default: 'cn-code-block-variant-default',
+        destructive: 'cn-code-block-variant-destructive',
       },
       zSize: {
         default: '',
-        sm: 'text-xs',
+        sm: '',
       },
     },
     defaultVariants: {
@@ -42,7 +36,7 @@ export const codeBlockTitleVariants = cva(
   mergeClasses(
     'cn-code-block-title min-w-0 truncate text-foreground',
     'group-data-[variant=destructive]/code-block:text-destructive',
-    '[&_ng-icon]:me-1.5 [&_ng-icon]:inline-block [&_ng-icon]:align-middle [&_svg]:pointer-events-none',
+    '[&_ng-icon]:me-1.5 [&_ng-icon]:inline-block [&_ng-icon]:align-middle! [&_svg]:pointer-events-none',
   ),
 );
 
@@ -104,9 +98,9 @@ export const codeBlockLineVariants = cva(
     variants: {
       zType: {
         default: '',
-        added: 'bg-foreground/5 after:content-["+"]',
-        removed: 'bg-destructive/10 after:text-destructive after:content-["−"]',
-        highlighted: 'bg-foreground/5',
+        added: 'cn-code-block-line-variant-added',
+        removed: 'cn-code-block-line-variant-removed',
+        highlighted: 'cn-code-block-line-variant-highlighted',
       },
     },
     defaultVariants: {

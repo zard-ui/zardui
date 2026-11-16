@@ -46,39 +46,33 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-variant-destructive':
       "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current",
     'cn-aspect-ratio': 'relative block',
-    'cn-attachment':
-      'relative isolate flex max-w-full min-w-0 shrink-0 snap-start items-center transition-colors rounded-xl w-fit border bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed focus-within:ring-1 focus-within:ring-ring/50',
-    'cn-attachment-action':
-      'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background',
+    'cn-attachment': 'rounded-xl w-fit focus-within:ring-1 focus-within:ring-ring/50',
+    'cn-attachment-action': '',
     'cn-attachment-actions':
-      'flex shrink-0 items-center relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
-    'cn-attachment-content':
-      'flex min-w-0 flex-1 flex-col leading-tight group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1',
-    'cn-attachment-description':
-      'mt-0.5 text-xs text-muted-foreground group-data-[state=error]/attachment:text-destructive/80',
-    'cn-attachment-group':
-      'flex w-full min-w-0 overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3 scroll-px-1 py-1 focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+      'relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
+    'cn-attachment-content': 'leading-tight group-data-[orientation=vertical]/attachment:px-1',
+    'cn-attachment-description': 'mt-0.5 text-xs',
+    'cn-attachment-group': 'gap-3 scroll-px-1 py-1',
     'cn-attachment-media':
-      'relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-foreground group-data-[orientation=vertical]/attachment:w-full group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5',
-    'cn-attachment-media-variant-icon':
-      'size-10 bg-muted text-muted-foreground group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4',
+      "bg-muted text-foreground w-10 rounded-lg [--ng-icon__size:1rem] group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! group-data-[size=xs]/attachment:[--ng-icon__size:0.875rem] group-data-[orientation=vertical]/attachment:[--ng-icon__size:1.5rem]",
+    'cn-attachment-media-variant-icon': '',
     'cn-attachment-media-variant-image':
-      'size-16 opacity-60 group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
-    'cn-attachment-orientation-horizontal': 'flex-row min-w-40',
-    'cn-attachment-orientation-vertical': 'flex-col items-start w-24 has-data-[slot=attachment-content]:w-30',
+      'opacity-60 group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
+    'cn-attachment-orientation-horizontal': 'min-w-40',
+    'cn-attachment-orientation-vertical': 'w-24 has-data-[slot=attachment-content]:w-30',
     'cn-attachment-size-default':
       'gap-2 text-sm has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2',
     'cn-attachment-size-sm':
       'gap-2.5 text-xs has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
-    'cn-attachment-size-xs': 'gap-1.5 p-2 text-xs rounded-lg',
-    'cn-attachment-state-done': 'border-border',
-    'cn-attachment-state-error': 'border-destructive/50 text-destructive',
-    'cn-attachment-state-idle': 'border-border border-dashed',
-    'cn-attachment-state-processing': 'border-border bg-muted/50',
-    'cn-attachment-state-uploading': 'border-border bg-muted/50',
-    'cn-attachment-title': 'block w-fit max-w-full truncate font-medium',
-    'cn-attachment-trigger':
-      'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'cn-attachment-size-xs':
+      'gap-1.5 text-xs rounded-lg has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
+    'cn-attachment-state-done': '',
+    'cn-attachment-state-error': '',
+    'cn-attachment-state-idle': '',
+    'cn-attachment-state-processing': '',
+    'cn-attachment-state-uploading': '',
+    'cn-attachment-title': 'font-medium',
+    'cn-attachment-trigger': 'absolute inset-0 z-10 outline-none',
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
@@ -262,16 +256,26 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-checkbox':
       'cursor-[unset] size-4 shrink-0 rounded-[4px] border border-input shadow-xs transition-shadow hover:shadow-md focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:border-ring disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary group-has-[:focus-visible]/field-label:not-data-[state=checked]:border-input group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary',
     'cn-checkbox-label': 'cursor-[unset] text-sm text-current empty:hidden',
-    'cn-code-block': 'rounded-xl text-sm data-[size=sm]:rounded-lg',
+    'cn-code-block':
+      'rounded-lg text-sm data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/50',
     'cn-code-block-actions':
-      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:end-3 [[data-slot=code-block]>&]:top-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2',
+      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-3 [[data-slot=code-block]>&]:end-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10',
     'cn-code-block-content':
       'px-4 py-4 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
-    'cn-code-block-footer': 'gap-2 px-4 pb-4 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3',
-    'cn-code-block-header': 'gap-2 px-4 pt-4 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3',
-    'cn-code-block-line': '-mx-4 px-4 group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3',
+    'cn-code-block-footer':
+      'gap-2 px-4 pb-4 text-muted-foreground group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3',
+    'cn-code-block-header':
+      'gap-2 px-4 pt-4 text-muted-foreground group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3',
+    'cn-code-block-line':
+      '-mx-4 px-4 in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3',
+    'cn-code-block-line-variant-added': "bg-muted after:content-['+']",
+    'cn-code-block-line-variant-highlighted': 'bg-muted',
+    'cn-code-block-line-variant-removed': "bg-destructive/10 after:text-destructive after:content-['−']",
     'cn-code-block-title':
-      'font-sans text-sm font-medium [--ng-icon__size:1rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5',
+      "font-sans text-sm font-medium text-foreground [--ng-icon__size:1rem] group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[&_svg:not([class*='size-'])]:size-3.5 group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem]",
+    'cn-code-block-variant-default':
+      'border border-input text-foreground dark:bg-input/30 has-[>[data-slot=code-block-content]:focus-visible]:border-ring',
+    'cn-code-block-variant-destructive': 'border border-destructive/30 text-destructive dark:border-destructive/40',
     'cn-collapsible-content': 'grid transition-[grid-template-rows,visibility] duration-200 ease-out',
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
@@ -557,7 +561,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex max-w-full min-w-0 items-center px-3 text-xs font-medium text-muted-foreground group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
     'cn-message-scroller-button-direction-end': 'bottom-4',
     'cn-message-scroller-button-direction-start': 'top-4',
-    'cn-message-scroller-content': 'gap-6',
+    'cn-message-scroller-content': 'gap-8',
     'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/50',
     'cn-native-select':
       'h-9 rounded-md border border-input bg-transparent py-1 ps-2.5 pe-8 text-sm shadow-xs transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
@@ -605,21 +609,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium',
     'cn-progress': 'bg-muted relative flex w-full items-center overflow-x-hidden rounded-full h-1.5',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
-    'cn-questionnaire': 'gap-4',
+    'cn-questionnaire': 'gap-6',
     'cn-questionnaire-actions': 'gap-2',
     'cn-questionnaire-choice':
-      'gap-2.5 rounded-md border border-input bg-transparent px-3 py-2.5 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50',
-    'cn-questionnaire-choice-indicator': 'size-4 rounded-[4px] border border-input dark:bg-input/30',
-    'cn-questionnaire-choice-shortcut': 'size-5 rounded-md font-mono text-[0.625rem] font-medium',
-    'cn-questionnaire-choices': 'gap-2',
-    'cn-questionnaire-description': 'text-sm text-muted-foreground',
+      'border-input gap-3 rounded-md border bg-transparent px-4 py-3.5 text-sm shadow-xs dark:bg-input/20 hover:bg-muted/50 has-[input:checked]:border-primary/40 has-[input:checked]:bg-muted dark:has-[input:checked]:bg-muted data-invalid:border-destructive has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3',
+    'cn-questionnaire-choice-content': 'gap-1',
+    'cn-questionnaire-choice-description': 'text-muted-foreground',
+    'cn-questionnaire-choice-indicator':
+      'border-input size-4 translate-y-[--spacing(0.45)] rounded-[4px] dark:bg-input/30 group-has-[input:checked]/questionnaire-choice:bg-primary dark:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choice-indicator-check': 'size-3.5 [--ng-icon__size:0.875rem]',
+    'cn-questionnaire-choice-indicator-dot': 'bg-primary-foreground size-2',
+    'cn-questionnaire-choice-shortcut':
+      'border-input bg-background text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-md border font-mono text-[0.625rem] font-medium leading-none shadow-xs group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choices': 'gap-3',
+    'cn-questionnaire-description': 'text-sm',
     'cn-questionnaire-error': 'text-sm',
     'cn-questionnaire-input':
-      'h-9 rounded-md border border-input bg-transparent px-2.5 py-1 text-base shadow-xs transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
-    'cn-questionnaire-item': 'gap-4',
-    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title':
-      'text-base/normal font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
+      'border-input h-9 rounded-md border bg-transparent px-2.5 py-1 text-base shadow-xs dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm',
+    'cn-questionnaire-input-wrapper': 'w-full',
+    'cn-questionnaire-item': 'gap-5',
+    'cn-questionnaire-progress': 'text-xs',
+    'cn-questionnaire-title': 'text-base font-semibold [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-5',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -815,9 +825,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
     'cn-trace':
       'gap-2 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
-    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed',
+    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s pe-1 ps-4 leading-relaxed',
     'cn-trace-collapsible-trigger': 'gap-1 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
-    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
+    'cn-trace-icon':
+      "size-4 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [[data-slot=trace-title]~&]:-ms-1",
     'cn-trace-line': 'gap-2 text-sm',
   },
   nova: {
@@ -857,39 +868,33 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-variant-destructive':
       "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current",
     'cn-aspect-ratio': 'relative block',
-    'cn-attachment':
-      'bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 relative isolate flex w-fit max-w-full min-w-0 shrink-0 snap-start items-center rounded-xl border transition-colors data-[state=idle]:border-dashed focus-within:ring-ring/50 focus-within:ring-1',
-    'cn-attachment-action':
-      'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:hover:bg-background group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:backdrop-blur-xs',
+    'cn-attachment': 'rounded-xl w-fit focus-within:ring-1 focus-within:ring-ring/50',
+    'cn-attachment-action': '',
     'cn-attachment-actions':
-      'relative z-20 flex shrink-0 items-center group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:gap-1',
-    'cn-attachment-content':
-      'flex min-w-0 flex-1 flex-col leading-tight group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1',
-    'cn-attachment-description':
-      'text-muted-foreground group-data-[state=error]/attachment:text-destructive/80 mt-0.5 text-xs',
-    'cn-attachment-group':
-      'focus-visible:ring-ring flex w-full min-w-0 snap-x snap-mandatory scroll-px-1 scrollbar-none gap-3 overflow-x-auto py-1 focus-visible:ring-2 *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+      'relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
+    'cn-attachment-content': 'leading-tight group-data-[orientation=vertical]/attachment:px-1',
+    'cn-attachment-description': 'mt-0.5 text-xs',
+    'cn-attachment-group': 'gap-3 scroll-px-1 py-1',
     'cn-attachment-media':
-      'bg-muted text-foreground relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[orientation=vertical]/attachment:w-full group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5',
-    'cn-attachment-media-variant-icon':
-      'bg-muted text-muted-foreground size-10 group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4',
+      "bg-muted text-foreground w-10 rounded-lg [--ng-icon__size:1rem] group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! group-data-[size=xs]/attachment:[--ng-icon__size:0.875rem] group-data-[orientation=vertical]/attachment:[--ng-icon__size:1.5rem]",
+    'cn-attachment-media-variant-icon': '',
     'cn-attachment-media-variant-image':
-      'size-16 opacity-60 group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 group-data-[state=done]/attachment:opacity-100 group-data-[state=idle]/attachment:opacity-100 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover',
-    'cn-attachment-orientation-horizontal': 'min-w-40 flex-row',
-    'cn-attachment-orientation-vertical': 'w-24 flex-col items-start has-data-[slot=attachment-content]:w-30',
+      'opacity-60 group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
+    'cn-attachment-orientation-horizontal': 'min-w-40',
+    'cn-attachment-orientation-vertical': 'w-24 has-data-[slot=attachment-content]:w-30',
     'cn-attachment-size-default':
       'gap-2 text-sm has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2',
     'cn-attachment-size-sm':
       'gap-2.5 text-xs has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
-    'cn-attachment-size-xs': 'gap-1.5 rounded-lg p-2 text-xs',
-    'cn-attachment-state-done': 'border-border',
-    'cn-attachment-state-error': 'border-destructive/50 text-destructive',
-    'cn-attachment-state-idle': 'border-border border-dashed',
-    'cn-attachment-state-processing': 'border-border bg-muted/50',
-    'cn-attachment-state-uploading': 'border-border bg-muted/50',
-    'cn-attachment-title': 'block w-fit max-w-full truncate font-medium',
-    'cn-attachment-trigger':
-      'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-ring focus-visible:ring-2',
+    'cn-attachment-size-xs':
+      'gap-1.5 text-xs rounded-lg has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
+    'cn-attachment-state-done': '',
+    'cn-attachment-state-error': '',
+    'cn-attachment-state-idle': '',
+    'cn-attachment-state-processing': '',
+    'cn-attachment-state-uploading': '',
+    'cn-attachment-title': 'font-medium',
+    'cn-attachment-trigger': 'absolute inset-0 z-10 outline-none',
     'cn-avatar':
       'after:border-border relative flex size-8 shrink-0 rounded-full after:border after:absolute after:inset-0 after:rounded-full after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten',
     'cn-avatar-fallback':
@@ -975,7 +980,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "bg-muted flex items-center gap-2 rounded-lg border px-2.5 text-sm font-medium [&_svg:not([class*='size-'])]:size-4",
     'cn-button-loading-true': 'opacity-50',
     'cn-button-shape-circle': 'rounded-full',
-    'cn-button-shape-default': 'rounded-md',
+    'cn-button-shape-default': '',
     'cn-button-shape-square': 'rounded-none',
     'cn-button-size-default': 'h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pe-2 has-data-[icon=inline-start]:ps-2',
     'cn-button-size-icon': 'size-8',
@@ -1074,18 +1079,26 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-checkbox':
       'border-input size-4 shrink-0 cursor-[unset] rounded-[4px] border shadow-sm transition focus-visible:ring-ring/50 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary hover:shadow-md focus-visible:ring-3 disabled:cursor-not-allowed aria-invalid:ring-3',
     'cn-checkbox-label': 'cursor-[unset] text-sm text-current empty:hidden',
-    'cn-code-block': 'rounded-lg text-sm data-[size=sm]:text-xs',
+    'cn-code-block':
+      'rounded-lg text-sm data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/50',
     'cn-code-block-actions':
-      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:top-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-1.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-1.5',
+      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-2 [[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-1.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-1.5 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10',
     'cn-code-block-content':
-      'px-3 py-3 leading-relaxed group-has-data-[slot=code-block-footer]/code-block:pb-2 group-has-data-[slot=code-block-header]/code-block:pt-2 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:py-2.5 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
+      'px-3 py-3 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:py-2.5 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
     'cn-code-block-footer':
-      'gap-2 px-3 pb-3 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pb-2.5',
+      'gap-2 px-3 pb-3 text-muted-foreground group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pb-2.5',
     'cn-code-block-header':
-      'gap-2 px-3 pt-3 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pt-2.5',
-    'cn-code-block-line': '-mx-3 px-3 group-data-[size=sm]/code-block:-mx-2.5 group-data-[size=sm]/code-block:px-2.5',
+      'gap-2 px-3 pt-3 text-muted-foreground group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pt-2.5',
+    'cn-code-block-line':
+      '-mx-3 px-3 in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-2.5 group-data-[size=sm]/code-block:px-2.5',
+    'cn-code-block-line-variant-added': "bg-muted after:content-['+']",
+    'cn-code-block-line-variant-highlighted': 'bg-muted',
+    'cn-code-block-line-variant-removed': "bg-destructive/10 after:text-destructive after:content-['−']",
     'cn-code-block-title':
-      'font-sans text-sm font-medium [--ng-icon__size:1rem] group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5',
+      "font-sans text-sm font-medium text-foreground [--ng-icon__size:0.875rem] group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-3.5 group-data-[size=sm]/code-block:text-xs",
+    'cn-code-block-variant-default':
+      'border border-input text-foreground dark:bg-input/30 has-[>[data-slot=code-block-content]:focus-visible]:border-ring',
+    'cn-code-block-variant-destructive': 'border border-destructive/30 text-destructive dark:border-destructive/40',
     'cn-collapsible-content': 'grid transition-[grid-template-rows,visibility] duration-200 ease-out',
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
@@ -1423,18 +1436,25 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-questionnaire': 'gap-4',
     'cn-questionnaire-actions': 'gap-2',
     'cn-questionnaire-choice':
-      'border-input gap-2.5 rounded-lg border bg-transparent px-3 py-2.5 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3',
-    'cn-questionnaire-choice-indicator': 'border-input size-4 rounded-[4px] border dark:bg-input/30',
-    'cn-questionnaire-choice-shortcut': 'size-5 rounded-md font-mono text-[0.625rem] font-medium',
+      'border-input gap-2.5 rounded-lg border bg-transparent px-3 py-2.5 text-sm dark:bg-input/20 hover:bg-muted/50 has-[input:checked]:border-primary/40 has-[input:checked]:bg-muted dark:has-[input:checked]:bg-muted data-invalid:border-destructive has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3',
+    'cn-questionnaire-choice-content': 'gap-0.5',
+    'cn-questionnaire-choice-description': 'text-muted-foreground',
+    'cn-questionnaire-choice-indicator':
+      'border-input size-4 translate-y-[--spacing(0.45)] rounded-[4px] dark:bg-input/30 group-has-[input:checked]/questionnaire-choice:bg-primary dark:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choice-indicator-check': 'size-3.5 [--ng-icon__size:0.875rem]',
+    'cn-questionnaire-choice-indicator-dot': 'bg-primary-foreground size-2',
+    'cn-questionnaire-choice-shortcut':
+      'border-input bg-background text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-md border font-mono text-[0.625rem] font-medium leading-none group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
     'cn-questionnaire-choices': 'gap-2',
     'cn-questionnaire-description': 'text-muted-foreground text-sm',
-    'cn-questionnaire-error': 'text-sm',
+    'cn-questionnaire-error': 'mt-2 text-sm',
     'cn-questionnaire-input':
-      'border-input h-8 rounded-lg border bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm',
+      'border-input h-8 rounded-lg border bg-transparent px-2.5 py-1 text-base dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 disabled:bg-input/50 dark:disabled:bg-input/80 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm',
+    'cn-questionnaire-input-wrapper': 'w-full',
     'cn-questionnaire-item': 'gap-4',
-    'cn-questionnaire-progress': 'text-muted-foreground text-xs font-medium',
+    'cn-questionnaire-progress': 'text-xs',
     'cn-questionnaire-title':
-      'text-base/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
+      'text-base leading-snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-2',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -1629,10 +1649,11 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] -left-2.5 translate-y-0 rotate-90',
     'cn-tooltip-position-position-top': 'bottom-0 left-[calc(50%-5px)] translate-y-full',
     'cn-trace':
-      'gap-2 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3',
-    'cn-trace-collapsible-content': 'ms-[calc(--spacing(2)-1px)] mt-2 mb-1 border-s ps-4 pe-1 leading-relaxed',
-    'cn-trace-collapsible-trigger': 'gap-1 rounded-md focus-visible:ring-ring/50 focus-visible:ring-3',
-    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
+      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
+    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s pe-1 ps-4 leading-relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-trace-icon':
+      "size-4 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [[data-slot=trace-title]~&]:-ms-1",
     'cn-trace-line': 'gap-2 text-sm',
   },
   maia: {
@@ -1672,39 +1693,33 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-variant-destructive':
       "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current",
     'cn-aspect-ratio': 'relative block',
-    'cn-attachment':
-      'relative isolate flex max-w-full min-w-0 shrink-0 snap-start items-center transition-colors rounded-2xl w-fit border bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed focus-within:ring-1 focus-within:ring-ring/50',
-    'cn-attachment-action':
-      'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background',
+    'cn-attachment': 'rounded-2xl w-fit focus-within:ring-1 focus-within:ring-ring/50',
+    'cn-attachment-action': '',
     'cn-attachment-actions':
-      'flex shrink-0 items-center relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
-    'cn-attachment-content':
-      'flex min-w-0 flex-1 flex-col leading-tight group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1',
-    'cn-attachment-description':
-      'mt-0.5 text-xs text-muted-foreground group-data-[state=error]/attachment:text-destructive/80',
-    'cn-attachment-group':
-      'flex w-full min-w-0 overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3 scroll-px-1 py-1 focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+      'relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
+    'cn-attachment-content': 'leading-tight group-data-[orientation=vertical]/attachment:px-1',
+    'cn-attachment-description': 'mt-0.5 text-xs',
+    'cn-attachment-group': 'gap-3 scroll-px-1 py-1',
     'cn-attachment-media':
-      'relative flex shrink-0 items-center justify-center overflow-hidden bg-muted text-foreground rounded-xl group-data-[orientation=vertical]/attachment:w-full group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5 group-data-[size=xs]/attachment:rounded-lg',
-    'cn-attachment-media-variant-icon':
-      'size-10 bg-muted text-muted-foreground group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4',
+      "bg-muted text-foreground w-10 rounded-xl [--ng-icon__size:1rem] group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-lg [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! group-data-[size=xs]/attachment:[--ng-icon__size:0.875rem] group-data-[orientation=vertical]/attachment:[--ng-icon__size:1.5rem]",
+    'cn-attachment-media-variant-icon': '',
     'cn-attachment-media-variant-image':
-      'size-16 opacity-60 group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
-    'cn-attachment-orientation-horizontal': 'flex-row min-w-40',
-    'cn-attachment-orientation-vertical': 'flex-col items-start w-24 has-data-[slot=attachment-content]:w-30',
+      'opacity-60 group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
+    'cn-attachment-orientation-horizontal': 'min-w-40',
+    'cn-attachment-orientation-vertical': 'w-24 has-data-[slot=attachment-content]:w-30',
     'cn-attachment-size-default':
       'gap-2 text-sm has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2',
     'cn-attachment-size-sm':
       'gap-2.5 text-xs has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
-    'cn-attachment-size-xs': 'gap-1.5 p-2 text-xs rounded-xl',
-    'cn-attachment-state-done': 'border-border',
-    'cn-attachment-state-error': 'border-destructive/50 text-destructive',
-    'cn-attachment-state-idle': 'border-border border-dashed',
-    'cn-attachment-state-processing': 'border-border bg-muted/50',
-    'cn-attachment-state-uploading': 'border-border bg-muted/50',
-    'cn-attachment-title': 'block w-fit max-w-full truncate font-medium',
-    'cn-attachment-trigger':
-      'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'cn-attachment-size-xs':
+      'gap-1.5 text-xs rounded-xl has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
+    'cn-attachment-state-done': '',
+    'cn-attachment-state-error': '',
+    'cn-attachment-state-idle': '',
+    'cn-attachment-state-processing': '',
+    'cn-attachment-state-uploading': '',
+    'cn-attachment-title': 'font-medium',
+    'cn-attachment-trigger': 'absolute inset-0 z-10 outline-none',
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
@@ -1887,16 +1902,26 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-checkbox':
       'cursor-[unset] size-4 shrink-0 border border-input shadow-sm rounded-[6px] transition-shadow hover:shadow-md focus-visible:ring-ring/50 focus-visible:border-ring disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:ring-[3px] aria-invalid:ring-[3px] group-has-[:focus-visible]/field-label:not-data-[state=checked]:border-input group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary',
     'cn-checkbox-label': 'cursor-[unset] text-sm text-current empty:hidden',
-    'cn-code-block': 'rounded-2xl text-sm data-[size=sm]:rounded-xl',
+    'cn-code-block':
+      'rounded-xl text-sm data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-[3px] has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/50 data-[size=sm]:rounded-lg',
     'cn-code-block-actions':
-      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:end-4 [[data-slot=code-block]>&]:top-4 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-3',
+      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-3 [[data-slot=code-block]>&]:end-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10',
     'cn-code-block-content':
-      'px-5 py-5 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2.5 group-has-data-[slot=code-block-footer]/code-block:pb-2.5 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:py-4 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-2',
-    'cn-code-block-footer': 'gap-2 px-5 pb-5 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:pb-4',
-    'cn-code-block-header': 'gap-2 px-5 pt-5 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:pt-4',
-    'cn-code-block-line': '-mx-5 px-5 group-data-[size=sm]/code-block:-mx-4 group-data-[size=sm]/code-block:px-4',
+      'px-4 py-4 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
+    'cn-code-block-footer':
+      'gap-2 px-4 pb-4 text-muted-foreground group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3',
+    'cn-code-block-header':
+      'gap-2 px-4 pt-4 text-muted-foreground group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3',
+    'cn-code-block-line':
+      '-mx-4 px-4 in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3',
+    'cn-code-block-line-variant-added': "bg-muted after:content-['+']",
+    'cn-code-block-line-variant-highlighted': 'bg-muted',
+    'cn-code-block-line-variant-removed': "bg-destructive/10 after:text-destructive after:content-['−']",
     'cn-code-block-title':
-      'font-sans text-sm font-medium [--ng-icon__size:1rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5',
+      "font-sans text-sm font-medium text-foreground [--ng-icon__size:1rem] group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[&_svg:not([class*='size-'])]:size-3.5 group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem]",
+    'cn-code-block-variant-default':
+      'border border-input text-foreground dark:bg-input/30 has-[>[data-slot=code-block-content]:focus-visible]:border-ring',
+    'cn-code-block-variant-destructive': 'border border-destructive/30 text-destructive dark:border-destructive/40',
     'cn-collapsible-content': 'grid transition-[grid-template-rows,visibility] duration-200 ease-out',
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
@@ -2181,7 +2206,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex max-w-full min-w-0 items-center text-xs font-medium text-muted-foreground px-3.5 group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
     'cn-message-scroller-button-direction-end': 'bottom-5',
     'cn-message-scroller-button-direction-start': 'top-5',
-    'cn-message-scroller-content': 'gap-7',
+    'cn-message-scroller-content': 'gap-8',
     'cn-message-scroller-viewport': 'focus-visible:ring-[3px] focus-visible:ring-ring/50',
     'cn-native-select':
       'h-9 rounded-4xl border border-input bg-input/30 py-1 ps-3 pe-8 text-sm transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
@@ -2229,21 +2254,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium text-base',
     'cn-progress': 'bg-muted relative flex w-full items-center overflow-x-hidden h-3 rounded-4xl',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
-    'cn-questionnaire': 'gap-5',
-    'cn-questionnaire-actions': 'gap-3',
+    'cn-questionnaire': 'gap-6',
+    'cn-questionnaire-actions': 'gap-2',
     'cn-questionnaire-choice':
-      'gap-3 rounded-2xl border border-input bg-transparent px-4 py-3 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-[3px] has-[input:focus-visible]:ring-ring/50',
-    'cn-questionnaire-choice-indicator': 'size-4 rounded-[6px] border border-input dark:bg-input/30',
-    'cn-questionnaire-choice-shortcut': 'size-5 rounded-lg font-mono text-[0.625rem] font-medium',
-    'cn-questionnaire-choices': 'gap-2.5',
-    'cn-questionnaire-description': 'text-sm text-muted-foreground',
-    'cn-questionnaire-error': 'text-sm',
+      'border-input gap-3 rounded-4xl border px-4 py-3.5 text-sm hover:bg-input/40 has-[input:checked]:border-primary/40 has-[input:checked]:bg-primary/10 data-invalid:border-destructive has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-[3px]',
+    'cn-questionnaire-choice-content': 'gap-1',
+    'cn-questionnaire-choice-description': 'text-muted-foreground',
+    'cn-questionnaire-choice-indicator':
+      'border-input size-4 translate-y-[--spacing(0.45)] rounded-[6px] dark:bg-input/30 group-has-[input:checked]/questionnaire-choice:bg-primary dark:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choice-indicator-check': 'size-3.5 [--ng-icon__size:0.875rem]',
+    'cn-questionnaire-choice-indicator-dot': 'bg-primary-foreground size-2',
+    'cn-questionnaire-choice-shortcut':
+      'border-input bg-background/80 text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-full border font-mono text-[0.625rem] font-medium leading-none group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choices': 'gap-3',
+    'cn-questionnaire-description': 'text-sm',
+    'cn-questionnaire-error': 'mt-2 text-sm',
     'cn-questionnaire-input':
-      'h-9 rounded-4xl border border-input bg-input/30 px-3 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+      'bg-input/30 border-input h-9 rounded-4xl border px-3 py-1 text-base focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-[3px] aria-invalid:ring-[3px] md:text-sm',
+    'cn-questionnaire-input-wrapper': 'w-full',
     'cn-questionnaire-item': 'gap-5',
-    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title':
-      'text-base/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-5',
+    'cn-questionnaire-progress': 'text-xs',
+    'cn-questionnaire-title': 'text-base font-semibold [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-5',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -2438,11 +2469,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
     'cn-trace':
-      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-lg *:has-[>[data-slot=trace-line]]:focus-visible:ring-[3px] *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
-    'cn-trace-collapsible-content': 'mt-2.5 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-5 pe-1 leading-relaxed',
-    'cn-trace-collapsible-trigger': 'gap-1.5 rounded-lg focus-visible:ring-[3px] focus-visible:ring-ring/50',
-    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
-    'cn-trace-line': 'gap-2.5 text-sm',
+      'gap-3 *:has-[>[data-slot=trace-line]]:rounded-lg *:has-[>[data-slot=trace-line]]:focus-visible:ring-[3px] *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
+    'cn-trace-collapsible-content': 'mt-2.5 mb-1 ms-[calc(--spacing(2)-1px)] border-s pe-1 ps-4 leading-relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-lg focus-visible:ring-[3px] focus-visible:ring-ring/50',
+    'cn-trace-icon':
+      "size-4 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [[data-slot=trace-title]~&]:-ms-1",
+    'cn-trace-line': 'gap-2 text-sm',
   },
   lyra: {
     'cn-accordion': '',
@@ -2481,39 +2513,33 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-variant-destructive':
       "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current",
     'cn-aspect-ratio': 'relative block',
-    'cn-attachment':
-      'relative isolate flex max-w-full min-w-0 shrink-0 snap-start items-center transition-colors rounded-none w-fit border bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed focus-within:ring-1 focus-within:ring-ring/50',
-    'cn-attachment-action':
-      'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background',
+    'cn-attachment': 'rounded-none w-fit focus-within:ring-1 focus-within:ring-ring/50',
+    'cn-attachment-action': '',
     'cn-attachment-actions':
-      'flex shrink-0 items-center relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
-    'cn-attachment-content':
-      'flex min-w-0 flex-1 flex-col leading-tight group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1',
-    'cn-attachment-description':
-      'mt-0.5 text-xs text-muted-foreground group-data-[state=error]/attachment:text-destructive/80',
-    'cn-attachment-group':
-      'flex w-full min-w-0 overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3 scroll-px-1 py-1 focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+      'relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
+    'cn-attachment-content': 'leading-tight group-data-[orientation=vertical]/attachment:px-1',
+    'cn-attachment-description': 'mt-0.5 text-xs',
+    'cn-attachment-group': 'gap-3 scroll-px-1 py-1',
     'cn-attachment-media':
-      'relative flex shrink-0 items-center justify-center overflow-hidden bg-muted text-foreground rounded-none group-data-[orientation=vertical]/attachment:w-full group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5 group-data-[size=xs]/attachment:rounded-none',
-    'cn-attachment-media-variant-icon':
-      'size-10 bg-muted text-muted-foreground group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4',
+      "bg-muted text-foreground w-10 rounded-none [--ng-icon__size:1rem] group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-none [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! group-data-[size=xs]/attachment:[--ng-icon__size:0.875rem] group-data-[orientation=vertical]/attachment:[--ng-icon__size:1.5rem]",
+    'cn-attachment-media-variant-icon': '',
     'cn-attachment-media-variant-image':
-      'size-16 opacity-60 group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
-    'cn-attachment-orientation-horizontal': 'flex-row min-w-40',
-    'cn-attachment-orientation-vertical': 'flex-col items-start w-24 has-data-[slot=attachment-content]:w-30',
+      'opacity-60 group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
+    'cn-attachment-orientation-horizontal': 'min-w-40',
+    'cn-attachment-orientation-vertical': 'w-24 has-data-[slot=attachment-content]:w-30',
     'cn-attachment-size-default':
       'gap-2 text-xs has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
     'cn-attachment-size-sm':
       'gap-2.5 text-xs has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
-    'cn-attachment-size-xs': 'gap-1.5 p-2 text-xs rounded-none',
-    'cn-attachment-state-done': 'border-border',
-    'cn-attachment-state-error': 'border-destructive/50 text-destructive',
-    'cn-attachment-state-idle': 'border-border border-dashed',
-    'cn-attachment-state-processing': 'border-border bg-muted/50',
-    'cn-attachment-state-uploading': 'border-border bg-muted/50',
-    'cn-attachment-title': 'block w-fit max-w-full truncate font-medium',
-    'cn-attachment-trigger':
-      'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'cn-attachment-size-xs':
+      'gap-1.5 text-xs rounded-none has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
+    'cn-attachment-state-done': '',
+    'cn-attachment-state-error': '',
+    'cn-attachment-state-idle': '',
+    'cn-attachment-state-processing': '',
+    'cn-attachment-state-uploading': '',
+    'cn-attachment-title': 'font-medium',
+    'cn-attachment-trigger': 'absolute inset-0 z-10 outline-none',
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
@@ -2561,7 +2587,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-bubble':
       'relative flex w-fit min-w-0 max-w-[80%] flex-col gap-1 data-[align=end]:self-end data-[variant=ghost]:max-w-full group-data-[align=end]/message:self-end',
     'cn-bubble-content':
-      'w-fit min-w-0 max-w-full overflow-hidden border border-transparent wrap-break-word rounded-none px-2.5 py-2 text-xs group-data-[align=end]/bubble:self-end [button]:text-start [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-1 [button,a]:focus-visible:ring-ring/50',
+      'w-fit min-w-0 max-w-full overflow-hidden border border-transparent wrap-break-word rounded-none px-2.5 py-2 text-xs leading-relaxed group-data-[align=end]/bubble:self-end [button]:text-start [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-1 [button,a]:focus-visible:ring-ring/50',
     'cn-bubble-group': 'flex min-w-0 flex-col gap-2',
     'cn-bubble-reactions':
       'absolute z-10 flex w-fit shrink-0 items-center justify-center gap-1 bg-muted px-1.5 py-0.5 ring-card rounded-none ring-2 text-xs has-[button]:p-0',
@@ -2698,16 +2724,26 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-checkbox':
       'cursor-[unset] size-4 shrink-0 border border-input shadow-sm transition rounded-none hover:shadow-md focus-visible:ring-ring/50 focus-visible:border-ring disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:ring-1 aria-invalid:ring-1 group-has-[:focus-visible]/field-label:not-data-[state=checked]:border-input group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary',
     'cn-checkbox-label': 'cursor-[unset] text-xs text-current empty:hidden',
-    'cn-code-block': 'rounded-none text-xs data-[size=sm]:rounded-none',
+    'cn-code-block':
+      'rounded-none text-sm data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-1 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/50',
     'cn-code-block-actions':
-      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:end-3 [[data-slot=code-block]>&]:top-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2',
+      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-2 [[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-1.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-1.5 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10',
     'cn-code-block-content':
-      'px-4 py-4 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
-    'cn-code-block-footer': 'gap-2 px-4 pb-4 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3',
-    'cn-code-block-header': 'gap-2 px-4 pt-4 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3',
-    'cn-code-block-line': '-mx-4 px-4 group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3',
+      'px-3 py-3 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-2 group-data-[size=sm]/code-block:py-2 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
+    'cn-code-block-footer':
+      'gap-2 px-3 pb-3 text-muted-foreground group-data-[size=sm]/code-block:px-2 group-data-[size=sm]/code-block:pb-2',
+    'cn-code-block-header':
+      'gap-2 px-3 pt-3 text-muted-foreground group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-2 group-data-[size=sm]/code-block:pt-2',
+    'cn-code-block-line':
+      '-mx-3 px-3 in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-2 group-data-[size=sm]/code-block:px-2',
+    'cn-code-block-line-variant-added': "bg-muted after:content-['+']",
+    'cn-code-block-line-variant-highlighted': 'bg-muted',
+    'cn-code-block-line-variant-removed': "bg-destructive/10 after:text-destructive after:content-['−']",
     'cn-code-block-title':
-      'font-sans text-xs font-medium [--ng-icon__size:0.875rem] [&_svg:not([class*="size-"])]:size-3.5 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.75rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3',
+      "font-sans text-xs font-medium text-foreground [--ng-icon__size:0.875rem] group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+    'cn-code-block-variant-default':
+      'border border-input text-foreground dark:bg-input/30 has-[>[data-slot=code-block-content]:focus-visible]:border-ring',
+    'cn-code-block-variant-destructive': 'border border-destructive/30 text-destructive dark:border-destructive/40',
     'cn-collapsible-content': 'grid transition-[grid-template-rows,visibility] duration-200 ease-out',
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
@@ -2991,7 +3027,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex max-w-full min-w-0 items-center text-xs font-medium text-muted-foreground px-2.5 group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
     'cn-message-scroller-button-direction-end': 'bottom-3',
     'cn-message-scroller-button-direction-start': 'top-3',
-    'cn-message-scroller-content': 'gap-4',
+    'cn-message-scroller-content': 'gap-6',
     'cn-message-scroller-viewport': 'focus-visible:ring-1 focus-visible:ring-ring/50',
     'cn-native-select':
       'h-8 rounded-none border border-input bg-transparent py-1 ps-2.5 pe-8 text-xs transition-colors focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
@@ -3040,19 +3076,26 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-progress': 'bg-muted relative flex h-1 w-full items-center overflow-x-hidden rounded-none',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
     'cn-questionnaire': 'gap-4',
-    'cn-questionnaire-actions': 'gap-2',
+    'cn-questionnaire-actions': 'gap-1.5',
     'cn-questionnaire-choice':
-      'gap-2.5 rounded-none border border-input bg-transparent px-3 py-2.5 text-xs has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-1 has-[input:focus-visible]:ring-ring/50',
-    'cn-questionnaire-choice-indicator': 'size-4 rounded-none border border-input dark:bg-input/30',
-    'cn-questionnaire-choice-shortcut': 'size-5 rounded-none font-mono text-[0.625rem] font-medium',
+      'border-input gap-2.5 rounded-none border bg-transparent px-3 py-2.5 text-xs hover:bg-muted/50 has-[input:checked]:bg-muted has-[input:checked]:border-foreground/30 data-invalid:border-destructive has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-1',
+    'cn-questionnaire-choice-content': 'gap-0.5',
+    'cn-questionnaire-choice-description': 'text-muted-foreground',
+    'cn-questionnaire-choice-indicator':
+      'border-input size-4 translate-y-[--spacing(0.45)] rounded-none group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choice-indicator-check': 'size-3.5 [--ng-icon__size:0.875rem]',
+    'cn-questionnaire-choice-indicator-dot': 'bg-primary-foreground size-2',
+    'cn-questionnaire-choice-shortcut':
+      'border-input bg-background text-muted-foreground size-4 translate-y-[--spacing(0.45)] items-center justify-center rounded-none border font-mono text-[0.625rem] font-medium leading-none group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
     'cn-questionnaire-choices': 'gap-2',
-    'cn-questionnaire-description': 'text-xs/relaxed text-muted-foreground',
-    'cn-questionnaire-error': 'text-xs',
+    'cn-questionnaire-description': 'text-xs/relaxed',
+    'cn-questionnaire-error': 'mt-2 text-xs',
     'cn-questionnaire-input':
-      'h-8 rounded-none border border-input bg-transparent px-2.5 py-1 text-xs transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20 md:text-xs dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+      'border-input h-8 rounded-none border bg-transparent px-2.5 py-1 text-xs dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 disabled:bg-input/50 dark:disabled:bg-input/80 focus-visible:ring-1 aria-invalid:ring-1 md:text-xs',
+    'cn-questionnaire-input-wrapper': 'w-full',
     'cn-questionnaire-item': 'gap-4',
-    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title': 'text-sm/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
+    'cn-questionnaire-progress': 'text-xs',
+    'cn-questionnaire-title': 'text-sm font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
     'cn-radio-group': 'grid w-full gap-2',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -3248,12 +3291,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
     'cn-trace':
-      'gap-1.5 *:has-[>[data-slot=trace-line]]:rounded-none *:has-[>[data-slot=trace-line]]:focus-visible:ring-1 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
-    'cn-trace-collapsible-content':
-      'mt-1.5 mb-1 ms-[calc(--spacing(1.75)-1px)] border-s ps-3 pe-1 leading-relaxed text-xs',
+      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-none *:has-[>[data-slot=trace-line]]:focus-visible:ring-1 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
+    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(1.75)-1px)] border-s pe-1 ps-3.75 leading-relaxed',
     'cn-trace-collapsible-trigger': 'gap-1 rounded-none focus-visible:ring-1 focus-visible:ring-ring/50',
-    'cn-trace-icon': 'size-3.5 [--ng-icon__size:0.875rem] [&_svg:not([class*=size-])]:size-3.5',
-    'cn-trace-line': 'gap-1.5 text-xs',
+    'cn-trace-icon':
+      "size-3.5 [--ng-icon__size:0.875rem] [&_svg:not([class*='size-'])]:size-3.5 [[data-slot=trace-title]~&]:-ms-1",
+    'cn-trace-line': 'gap-2 text-xs',
   },
   mira: {
     'cn-accordion': 'block overflow-hidden rounded-md border',
@@ -3292,39 +3335,33 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-variant-destructive':
       "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current",
     'cn-aspect-ratio': 'relative block',
-    'cn-attachment':
-      'relative isolate flex max-w-full min-w-0 shrink-0 snap-start items-center transition-colors rounded-lg w-fit border bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed focus-within:ring-1 focus-within:ring-ring/30',
-    'cn-attachment-action':
-      'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background',
+    'cn-attachment': 'rounded-lg w-fit focus-within:ring-1 focus-within:ring-ring/30',
+    'cn-attachment-action': '',
     'cn-attachment-actions':
-      'flex shrink-0 items-center relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
-    'cn-attachment-content':
-      'flex min-w-0 flex-1 flex-col leading-tight group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1',
-    'cn-attachment-description':
-      'mt-0.5 text-xs text-muted-foreground group-data-[state=error]/attachment:text-destructive/80',
-    'cn-attachment-group':
-      'flex w-full min-w-0 overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3 scroll-px-1 py-1 focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+      'relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
+    'cn-attachment-content': 'leading-tight group-data-[orientation=vertical]/attachment:px-1',
+    'cn-attachment-description': 'mt-0.5 text-xs',
+    'cn-attachment-group': 'gap-3 scroll-px-1 py-1',
     'cn-attachment-media':
-      'relative flex shrink-0 items-center justify-center overflow-hidden bg-muted text-foreground rounded-md group-data-[orientation=vertical]/attachment:w-full group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5 group-data-[size=xs]/attachment:rounded-sm',
-    'cn-attachment-media-variant-icon':
-      'size-8 bg-muted text-muted-foreground group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4',
+      "bg-muted text-foreground w-10 rounded-md [--ng-icon__size:1rem] group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-sm [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! group-data-[size=xs]/attachment:[--ng-icon__size:0.875rem] group-data-[orientation=vertical]/attachment:[--ng-icon__size:1.5rem]",
+    'cn-attachment-media-variant-icon': '',
     'cn-attachment-media-variant-image':
-      'size-16 opacity-60 group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
-    'cn-attachment-orientation-horizontal': 'flex-row min-w-40',
-    'cn-attachment-orientation-vertical': 'flex-col items-start w-24 has-data-[slot=attachment-content]:w-30',
+      'opacity-60 group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
+    'cn-attachment-orientation-horizontal': 'min-w-40',
+    'cn-attachment-orientation-vertical': 'w-24 has-data-[slot=attachment-content]:w-30',
     'cn-attachment-size-default':
       'gap-2 text-xs has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
     'cn-attachment-size-sm':
       'gap-2.5 text-xs has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
-    'cn-attachment-size-xs': 'gap-1.5 p-2 text-xs rounded-md',
-    'cn-attachment-state-done': 'border-border',
-    'cn-attachment-state-error': 'border-destructive/50 text-destructive',
-    'cn-attachment-state-idle': 'border-border border-dashed',
-    'cn-attachment-state-processing': 'border-border bg-muted/50',
-    'cn-attachment-state-uploading': 'border-border bg-muted/50',
-    'cn-attachment-title': 'block w-fit max-w-full truncate font-medium',
-    'cn-attachment-trigger':
-      'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'cn-attachment-size-xs':
+      'gap-1.5 text-xs rounded-md has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
+    'cn-attachment-state-done': '',
+    'cn-attachment-state-error': '',
+    'cn-attachment-state-idle': '',
+    'cn-attachment-state-processing': '',
+    'cn-attachment-state-uploading': '',
+    'cn-attachment-title': 'font-medium',
+    'cn-attachment-trigger': 'absolute inset-0 z-10 outline-none',
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
@@ -3514,18 +3551,26 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-checkbox':
       'cursor-[unset] size-4 shrink-0 rounded-[4px] border border-input shadow-sm transition-shadow hover:shadow-md focus-visible:border-ring disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:not-data-[state=checked]:border-input group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary',
     'cn-checkbox-label': 'cursor-[unset] text-xs/relaxed text-current empty:hidden',
-    'cn-code-block': 'rounded-lg text-xs data-[size=sm]:rounded-md',
+    'cn-code-block':
+      'rounded-md text-sm data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-2 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/30',
     'cn-code-block-actions':
-      '-my-1 -me-1 gap-0.5 [[data-slot=code-block]>&]:end-2.5 [[data-slot=code-block]>&]:top-2.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2',
+      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-2 [[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-1.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-1.5 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10',
     'cn-code-block-content':
-      'px-3 py-3 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-1.5 group-has-data-[slot=code-block-footer]/code-block:pb-1.5 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:py-2.5 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1',
+      'px-3 py-3 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-2 group-data-[size=sm]/code-block:py-2 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
     'cn-code-block-footer':
-      'gap-1.5 px-3 pb-3 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pb-2.5',
+      'gap-2 px-3 pb-3 text-muted-foreground group-data-[size=sm]/code-block:px-2 group-data-[size=sm]/code-block:pb-2',
     'cn-code-block-header':
-      'gap-1.5 px-3 pt-3 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pt-2.5',
-    'cn-code-block-line': '-mx-3 px-3 group-data-[size=sm]/code-block:-mx-2.5 group-data-[size=sm]/code-block:px-2.5',
+      'gap-2 px-3 pt-3 text-muted-foreground group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-2 group-data-[size=sm]/code-block:pt-2',
+    'cn-code-block-line':
+      '-mx-3 px-3 in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-2 group-data-[size=sm]/code-block:px-2',
+    'cn-code-block-line-variant-added': "bg-muted after:content-['+']",
+    'cn-code-block-line-variant-highlighted': 'bg-muted',
+    'cn-code-block-line-variant-removed': "bg-destructive/10 after:text-destructive after:content-['−']",
     'cn-code-block-title':
-      'font-sans text-xs font-medium [--ng-icon__size:0.875rem] [&_svg:not([class*="size-"])]:size-3.5 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.75rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3',
+      "font-sans text-xs font-medium text-foreground [--ng-icon__size:0.875rem] group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+    'cn-code-block-variant-default':
+      'border border-input text-foreground dark:bg-input/30 has-[>[data-slot=code-block-content]:focus-visible]:border-ring',
+    'cn-code-block-variant-destructive': 'border border-destructive/30 text-destructive dark:border-destructive/40',
     'cn-collapsible-content': 'grid transition-[grid-template-rows,visibility] duration-200 ease-out',
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
@@ -3814,7 +3859,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex max-w-full min-w-0 items-center font-medium text-muted-foreground text-[0.625rem] px-2.5 group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
     'cn-message-scroller-button-direction-end': 'bottom-3',
     'cn-message-scroller-button-direction-start': 'top-3',
-    'cn-message-scroller-content': 'gap-4',
+    'cn-message-scroller-content': 'gap-6',
     'cn-message-scroller-viewport': 'focus-visible:ring-2 focus-visible:ring-ring/30',
     'cn-native-select':
       'h-7 rounded-md border border-input bg-input/20 py-0.5 ps-2 pe-6 text-xs/relaxed transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
@@ -3863,20 +3908,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium text-sm',
     'cn-progress': 'bg-muted relative flex h-1 w-full items-center overflow-x-hidden rounded-md',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
-    'cn-questionnaire': 'gap-3',
+    'cn-questionnaire': 'gap-4',
     'cn-questionnaire-actions': 'gap-1.5',
     'cn-questionnaire-choice':
-      'gap-2 rounded-md border border-input bg-transparent px-2.5 py-2 text-xs/relaxed has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-ring/30',
-    'cn-questionnaire-choice-indicator': 'size-4 rounded-[4px] border border-input dark:bg-input/30',
-    'cn-questionnaire-choice-shortcut': 'size-5 rounded-sm font-mono text-[0.625rem] font-medium',
+      'border-input gap-2.5 rounded-xl border px-3 py-2.5 text-xs/relaxed hover:bg-input/40 has-[input:checked]:border-primary/40 has-[input:checked]:bg-primary/10 data-invalid:border-destructive has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/30 has-[input:focus-visible]:ring-2',
+    'cn-questionnaire-choice-content': 'gap-0.5',
+    'cn-questionnaire-choice-description': 'text-muted-foreground',
+    'cn-questionnaire-choice-indicator':
+      'border-input size-4 translate-y-[--spacing(0.45)] rounded-[4px] dark:bg-input/30 group-has-[input:checked]/questionnaire-choice:bg-primary dark:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choice-indicator-check': 'size-3.5 [--ng-icon__size:0.875rem]',
+    'cn-questionnaire-choice-indicator-dot': 'bg-primary-foreground size-2',
+    'cn-questionnaire-choice-shortcut':
+      'border-input bg-background/80 text-muted-foreground size-4 translate-y-[--spacing(0.45)] items-center justify-center rounded-sm border font-mono text-[0.5625rem] font-medium leading-none group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
     'cn-questionnaire-choices': 'gap-1.5',
-    'cn-questionnaire-description': 'text-xs/relaxed text-muted-foreground',
-    'cn-questionnaire-error': 'text-xs/relaxed',
+    'cn-questionnaire-description': 'text-xs/relaxed',
+    'cn-questionnaire-error': 'mt-2 text-xs/relaxed',
     'cn-questionnaire-input':
-      'h-7 rounded-md border border-input bg-input/20 px-2 py-0.5 text-sm transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+      'bg-input/20 border-input h-7 rounded-md border px-2 py-0.5 text-sm dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-2 aria-invalid:ring-2 md:text-xs/relaxed',
+    'cn-questionnaire-input-wrapper': 'w-full',
     'cn-questionnaire-item': 'gap-3',
-    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title': 'text-sm/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-3',
+    'cn-questionnaire-progress': 'text-[0.625rem]',
+    'cn-questionnaire-title': 'text-sm font-semibold [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-3',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -4072,11 +4124,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
     'cn-trace':
-      'gap-1.5 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-2 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
-    'cn-trace-collapsible-content': 'mt-1.5 mb-1 ms-[calc(--spacing(1.75)-1px)] border-s ps-3 pe-1 text-xs/relaxed',
-    'cn-trace-collapsible-trigger': 'gap-1 rounded-md focus-visible:ring-2 focus-visible:ring-ring/30',
-    'cn-trace-icon': 'size-3.5 [--ng-icon__size:0.875rem] [&_svg:not([class*=size-])]:size-3.5',
-    'cn-trace-line': 'gap-1.5 text-xs/relaxed',
+      'gap-1.5 *:has-[>[data-slot=trace-line]]:rounded-sm *:has-[>[data-slot=trace-line]]:focus-visible:ring-2 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
+    'cn-trace-collapsible-content': 'mt-1.5 mb-1 ms-[calc(--spacing(1.75)-1px)] border-s pe-1 ps-3.75',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-sm focus-visible:ring-2 focus-visible:ring-ring/30',
+    'cn-trace-icon':
+      "size-3.5 [--ng-icon__size:0.875rem] [&_svg:not([class*='size-'])]:size-3.5 [[data-slot=trace-title]~&]:-ms-1",
+    'cn-trace-line': 'gap-2 text-xs/relaxed',
   },
   luma: {
     'cn-accordion': 'block overflow-hidden rounded-2xl border',
@@ -4115,39 +4168,33 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-variant-destructive':
       "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current",
     'cn-aspect-ratio': 'relative block',
-    'cn-attachment':
-      'relative isolate flex max-w-full min-w-0 shrink-0 snap-start items-center transition-colors rounded-3xl w-fit border bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed focus-within:ring-1 focus-within:ring-ring/30',
-    'cn-attachment-action':
-      'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background',
+    'cn-attachment': 'rounded-3xl w-fit focus-within:ring-1 focus-within:ring-ring/30',
+    'cn-attachment-action': '',
     'cn-attachment-actions':
-      'flex shrink-0 items-center relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
-    'cn-attachment-content':
-      'flex min-w-0 flex-1 flex-col leading-tight group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1',
-    'cn-attachment-description':
-      'mt-0.5 text-xs text-muted-foreground group-data-[state=error]/attachment:text-destructive/80',
-    'cn-attachment-group':
-      'flex w-full min-w-0 overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3 scroll-px-1 py-1 focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+      'relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
+    'cn-attachment-content': 'leading-tight group-data-[orientation=vertical]/attachment:px-1',
+    'cn-attachment-description': 'mt-0.5 text-xs',
+    'cn-attachment-group': 'gap-3 scroll-px-1 py-1',
     'cn-attachment-media':
-      'relative flex shrink-0 items-center justify-center overflow-hidden bg-muted text-foreground rounded-2xl group-data-[orientation=vertical]/attachment:w-full group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5 group-data-[size=xs]/attachment:rounded-xl',
-    'cn-attachment-media-variant-icon':
-      'size-10 bg-muted text-muted-foreground group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4',
+      "bg-muted text-foreground w-10 rounded-2xl [--ng-icon__size:1rem] group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-xl [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! group-data-[size=xs]/attachment:[--ng-icon__size:0.875rem] group-data-[orientation=vertical]/attachment:[--ng-icon__size:1.5rem]",
+    'cn-attachment-media-variant-icon': '',
     'cn-attachment-media-variant-image':
-      'size-16 opacity-60 group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
-    'cn-attachment-orientation-horizontal': 'flex-row min-w-40',
-    'cn-attachment-orientation-vertical': 'flex-col items-start w-24 has-data-[slot=attachment-content]:w-30',
+      'opacity-60 group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
+    'cn-attachment-orientation-horizontal': 'min-w-40',
+    'cn-attachment-orientation-vertical': 'w-24 has-data-[slot=attachment-content]:w-30',
     'cn-attachment-size-default':
       'gap-2 text-sm has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2',
     'cn-attachment-size-sm':
       'gap-2.5 text-xs has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
-    'cn-attachment-size-xs': 'gap-1.5 p-2 text-xs rounded-2xl',
-    'cn-attachment-state-done': 'border-border',
-    'cn-attachment-state-error': 'border-destructive/50 text-destructive',
-    'cn-attachment-state-idle': 'border-border border-dashed',
-    'cn-attachment-state-processing': 'border-border bg-muted/50',
-    'cn-attachment-state-uploading': 'border-border bg-muted/50',
-    'cn-attachment-title': 'block w-fit max-w-full truncate font-medium',
-    'cn-attachment-trigger':
-      'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'cn-attachment-size-xs':
+      'gap-1.5 text-xs rounded-2xl has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
+    'cn-attachment-state-done': '',
+    'cn-attachment-state-error': '',
+    'cn-attachment-state-idle': '',
+    'cn-attachment-state-processing': '',
+    'cn-attachment-state-uploading': '',
+    'cn-attachment-title': 'font-medium',
+    'cn-attachment-trigger': 'absolute inset-0 z-10 outline-none',
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
@@ -4329,16 +4376,26 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-checkbox':
       'cursor-[unset] size-4 shrink-0 border shadow-sm bg-input/90 border-transparent rounded-[5px] transition-shadow hover:shadow-md focus-visible:ring-3 focus-visible:border-ring disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:ring-ring/30 group-has-[:focus-visible]/field-label:not-data-[state=checked]:border-transparent group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary',
     'cn-checkbox-label': 'cursor-[unset] text-sm text-current empty:hidden',
-    'cn-code-block': 'rounded-3xl text-sm data-[size=sm]:rounded-2xl',
+    'cn-code-block':
+      'rounded-2xl text-sm data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/30 data-[size=sm]:rounded-xl',
     'cn-code-block-actions':
-      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:end-4 [[data-slot=code-block]>&]:top-4 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-3',
+      '-my-1 -me-1.5 gap-1 *:data-[slot=button]:hover:bg-foreground/5 dark:*:data-[slot=button]:hover:bg-foreground/10 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-4 [[data-slot=code-block]>&]:end-4 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10',
     'cn-code-block-content':
-      'px-6 py-6 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-3 group-has-data-[slot=code-block-footer]/code-block:pb-3 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:py-4 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-2',
-    'cn-code-block-footer': 'gap-2 px-6 pb-6 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:pb-4',
-    'cn-code-block-header': 'gap-2 px-6 pt-6 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:pt-4',
-    'cn-code-block-line': '-mx-6 px-6 group-data-[size=sm]/code-block:-mx-4 group-data-[size=sm]/code-block:px-4',
+      'px-5 py-5 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
+    'cn-code-block-footer':
+      'gap-2 px-5 pb-5 text-muted-foreground group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3',
+    'cn-code-block-header':
+      'gap-2 px-5 pt-5 text-muted-foreground group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3',
+    'cn-code-block-line':
+      '-mx-5 px-5 in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3',
+    'cn-code-block-line-variant-added': "bg-foreground/5 after:content-['+']",
+    'cn-code-block-line-variant-highlighted': 'bg-foreground/5',
+    'cn-code-block-line-variant-removed': "bg-destructive/10 after:text-destructive after:content-['−']",
     'cn-code-block-title':
-      'font-sans text-sm font-medium [--ng-icon__size:1rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5',
+      "font-sans text-sm font-medium text-foreground [--ng-icon__size:1rem] group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[&_svg:not([class*='size-'])]:size-3.5 group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem]",
+    'cn-code-block-variant-default': 'bg-muted text-foreground ring-1 ring-foreground/5 dark:ring-foreground/10',
+    'cn-code-block-variant-destructive':
+      'bg-destructive/5 text-destructive ring-1 ring-destructive/15 dark:bg-destructive/10 dark:ring-destructive/20',
     'cn-collapsible-content': 'grid transition-[grid-template-rows,visibility] duration-200 ease-out',
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
@@ -4623,7 +4680,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex max-w-full min-w-0 items-center text-xs font-medium text-muted-foreground px-3.5 group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
     'cn-message-scroller-button-direction-end': 'bottom-5',
     'cn-message-scroller-button-direction-start': 'top-5',
-    'cn-message-scroller-content': 'gap-7',
+    'cn-message-scroller-content': 'gap-8',
     'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/30',
     'cn-native-select':
       'h-9 rounded-3xl border border-transparent bg-input/50 py-1 ps-3 pe-8 text-sm transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
@@ -4671,21 +4728,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium text-base',
     'cn-progress': 'bg-muted relative flex w-full items-center overflow-x-hidden rounded-full h-3',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
-    'cn-questionnaire': 'gap-5',
-    'cn-questionnaire-actions': 'gap-3',
+    'cn-questionnaire': 'gap-6',
+    'cn-questionnaire-actions': 'gap-2',
     'cn-questionnaire-choice':
-      'gap-3 rounded-2xl border border-input bg-transparent px-4 py-3 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/30',
-    'cn-questionnaire-choice-indicator': 'size-4 rounded-[5px] border border-transparent bg-input/90',
-    'cn-questionnaire-choice-shortcut': 'size-5.5 rounded-lg font-mono text-[0.625rem] font-medium',
-    'cn-questionnaire-choices': 'gap-2.5',
-    'cn-questionnaire-description': 'text-sm text-muted-foreground',
-    'cn-questionnaire-error': 'text-sm',
+      'border-input gap-2.5 rounded-3xl border px-4 py-3 text-sm hover:bg-input/40 has-[input:checked]:border-primary/40 has-[input:checked]:bg-primary/10 data-invalid:border-destructive has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3',
+    'cn-questionnaire-choice-content': 'gap-1',
+    'cn-questionnaire-choice-description': 'text-muted-foreground',
+    'cn-questionnaire-choice-indicator':
+      'bg-input/90 size-4 translate-y-[--spacing(0.45)] rounded-[5px] border-transparent group-has-[input:checked]/questionnaire-choice:bg-primary dark:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choice-indicator-check': 'size-3.5 [--ng-icon__size:0.875rem]',
+    'cn-questionnaire-choice-indicator-dot': 'bg-primary-foreground size-2 dark:size-2.5',
+    'cn-questionnaire-choice-shortcut':
+      'border-primary/10 bg-background/80 text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-full border font-mono text-[0.625rem] font-medium leading-none group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choices': 'gap-3',
+    'cn-questionnaire-description': 'text-sm',
+    'cn-questionnaire-error': 'mt-2 text-sm',
     'cn-questionnaire-input':
-      'h-9 rounded-3xl border border-transparent bg-input/50 px-3 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+      'bg-input/50 border-transparent h-9 rounded-3xl border px-3 py-1 text-base focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm',
+    'cn-questionnaire-input-wrapper': 'w-full',
     'cn-questionnaire-item': 'gap-5',
-    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title':
-      'text-base/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-5',
+    'cn-questionnaire-progress': 'text-xs',
+    'cn-questionnaire-title': 'text-base font-semibold [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-5',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -4880,11 +4943,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
     'cn-trace':
-      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-xl *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
-    'cn-trace-collapsible-content': 'mt-2.5 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-5 pe-1 leading-relaxed',
-    'cn-trace-collapsible-trigger': 'gap-1.5 rounded-xl focus-visible:ring-3 focus-visible:ring-ring/30',
-    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
-    'cn-trace-line': 'gap-2.5 text-sm',
+      'gap-3 *:has-[>[data-slot=trace-line]]:rounded-lg *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
+    'cn-trace-collapsible-content': 'mt-2.5 mb-1 ms-[calc(--spacing(2)-1px)] border-s pe-1 ps-4 leading-relaxed',
+    'cn-trace-collapsible-trigger': 'gap-1 rounded-lg focus-visible:ring-3 focus-visible:ring-ring/30',
+    'cn-trace-icon':
+      "size-4 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [[data-slot=trace-title]~&]:-ms-1",
+    'cn-trace-line': 'gap-2 text-sm',
   },
   sera: {
     'cn-accordion': '',
@@ -4923,40 +4987,33 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-variant-destructive':
       "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current after:bg-destructive",
     'cn-aspect-ratio': 'relative block',
-    'cn-attachment':
-      'relative isolate flex max-w-full min-w-0 shrink-0 snap-start items-center transition-colors rounded-none w-fit border bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed focus-within:ring-1 focus-within:ring-ring/30',
-    'cn-attachment-action':
-      'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background',
+    'cn-attachment': 'rounded-none w-fit focus-within:ring-1 focus-within:ring-ring/30',
+    'cn-attachment-action': '',
     'cn-attachment-actions':
-      'flex shrink-0 items-center relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
-    'cn-attachment-content':
-      'flex min-w-0 flex-1 flex-col leading-tight group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1',
-    'cn-attachment-description':
-      'mt-0.5 text-xs text-muted-foreground group-data-[state=error]/attachment:text-destructive/80',
-    'cn-attachment-group':
-      'flex w-full min-w-0 overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3 scroll-px-1 py-1 focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+      'relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
+    'cn-attachment-content': 'leading-tight group-data-[orientation=vertical]/attachment:px-1',
+    'cn-attachment-description': 'mt-0.5 text-xs',
+    'cn-attachment-group': 'gap-3 scroll-px-1 py-1',
     'cn-attachment-media':
-      'relative flex shrink-0 items-center justify-center overflow-hidden bg-muted text-foreground rounded-none group-data-[orientation=vertical]/attachment:w-full group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5 group-data-[size=xs]/attachment:rounded-none',
-    'cn-attachment-media-variant-icon':
-      'size-10 bg-muted text-muted-foreground group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4',
+      "bg-muted text-foreground w-10 rounded-none [--ng-icon__size:1rem] group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-none [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! group-data-[size=xs]/attachment:[--ng-icon__size:0.875rem] group-data-[orientation=vertical]/attachment:[--ng-icon__size:1.5rem]",
+    'cn-attachment-media-variant-icon': '',
     'cn-attachment-media-variant-image':
-      'size-16 opacity-60 group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
-    'cn-attachment-orientation-horizontal': 'flex-row min-w-40',
-    'cn-attachment-orientation-vertical': 'flex-col items-start w-24 has-data-[slot=attachment-content]:w-30',
+      'opacity-60 group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
+    'cn-attachment-orientation-horizontal': 'min-w-40',
+    'cn-attachment-orientation-vertical': 'w-24 has-data-[slot=attachment-content]:w-30',
     'cn-attachment-size-default':
       'gap-2 text-sm has-data-[slot=attachment-content]:px-3 has-data-[slot=attachment-content]:py-2.5 has-data-[slot=attachment-media]:p-2.5',
     'cn-attachment-size-sm':
       'gap-2.5 text-xs has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2',
     'cn-attachment-size-xs':
-      'gap-1.5 p-2 text-xs rounded-none has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
-    'cn-attachment-state-done': 'border-border',
-    'cn-attachment-state-error': 'border-destructive/50 text-destructive',
-    'cn-attachment-state-idle': 'border-border border-dashed',
-    'cn-attachment-state-processing': 'border-border bg-muted/50',
-    'cn-attachment-state-uploading': 'border-border bg-muted/50',
-    'cn-attachment-title': 'block w-fit max-w-full truncate font-medium',
-    'cn-attachment-trigger':
-      'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
+      'gap-1.5 text-xs rounded-none has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
+    'cn-attachment-state-done': '',
+    'cn-attachment-state-error': '',
+    'cn-attachment-state-idle': '',
+    'cn-attachment-state-processing': '',
+    'cn-attachment-state-uploading': '',
+    'cn-attachment-title': 'font-medium',
+    'cn-attachment-trigger': 'absolute inset-0 z-10 outline-none',
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
@@ -5140,16 +5197,26 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-checkbox':
       'cursor-[unset] shrink-0 border border-input shadow-sm bg-transparent size-4.5 rounded-none transition-shadow hover:shadow-md focus-visible:border-ring disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:ring-ring/30 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:not-data-[state=checked]:border-input group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary',
     'cn-checkbox-label': 'cursor-[unset] text-xs text-current empty:hidden',
-    'cn-code-block': 'rounded-none text-sm data-[size=sm]:rounded-none',
+    'cn-code-block':
+      'rounded-none text-sm data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-2 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/30',
     'cn-code-block-actions':
-      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:end-4 [[data-slot=code-block]>&]:top-4 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-3',
+      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-3 [[data-slot=code-block]>&]:end-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10',
     'cn-code-block-content':
-      'px-6 py-6 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-3 group-has-data-[slot=code-block-footer]/code-block:pb-3 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:py-4 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-2',
-    'cn-code-block-footer': 'gap-2 px-6 pb-6 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:pb-4',
-    'cn-code-block-header': 'gap-2 px-6 pt-6 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:pt-4',
-    'cn-code-block-line': '-mx-6 px-6 group-data-[size=sm]/code-block:-mx-4 group-data-[size=sm]/code-block:px-4',
+      'px-4 py-4 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
+    'cn-code-block-footer':
+      'gap-2 px-4 pb-4 text-muted-foreground group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3',
+    'cn-code-block-header':
+      'gap-2 px-4 pt-4 text-muted-foreground group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3',
+    'cn-code-block-line':
+      '-mx-4 px-4 in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3',
+    'cn-code-block-line-variant-added': "bg-muted after:content-['+']",
+    'cn-code-block-line-variant-highlighted': 'bg-muted',
+    'cn-code-block-line-variant-removed': "bg-destructive/10 after:text-destructive after:content-['−']",
     'cn-code-block-title':
-      'font-sans text-sm font-medium [--ng-icon__size:1rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5',
+      "font-sans text-sm font-medium text-foreground [--ng-icon__size:1rem] group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[&_svg:not([class*='size-'])]:size-3.5 group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem]",
+    'cn-code-block-variant-default':
+      'border border-input text-foreground dark:bg-input/30 has-[>[data-slot=code-block-content]:focus-visible]:border-ring',
+    'cn-code-block-variant-destructive': 'border border-destructive/30 text-destructive dark:border-destructive/40',
     'cn-collapsible-content': 'grid transition-[grid-template-rows,visibility] duration-200 ease-out',
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
@@ -5438,7 +5505,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex max-w-full min-w-0 items-center text-xs font-medium text-muted-foreground px-4 uppercase tracking-wide group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
     'cn-message-scroller-button-direction-end': 'bottom-4',
     'cn-message-scroller-button-direction-start': 'top-4',
-    'cn-message-scroller-content': 'gap-6',
+    'cn-message-scroller-content': 'gap-8',
     'cn-message-scroller-viewport': 'focus-visible:ring-2 focus-visible:ring-ring/30',
     'cn-native-select':
       'h-10 rounded-none border border-transparent border-b-input bg-transparent py-2 ps-0 pe-8 text-sm transition-[color,border-color] focus-visible:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50',
@@ -5485,21 +5552,28 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'text-xs font-semibold uppercase',
     'cn-progress': 'bg-muted relative flex w-full items-center overflow-x-hidden h-0.5 rounded-none',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
-    'cn-questionnaire': 'gap-4',
+    'cn-questionnaire': 'gap-6',
     'cn-questionnaire-actions': 'gap-2',
     'cn-questionnaire-choice':
-      'gap-2.5 rounded-none border border-input bg-transparent px-3 py-2.5 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-ring/30',
-    'cn-questionnaire-choice-indicator': 'size-4.5 rounded-none border border-input bg-transparent',
-    'cn-questionnaire-choice-shortcut': 'size-5.5 rounded-none font-mono text-[0.625rem] font-medium',
-    'cn-questionnaire-choices': 'gap-2',
-    'cn-questionnaire-description': 'text-sm text-muted-foreground leading-relaxed',
-    'cn-questionnaire-error': 'text-sm',
+      'gap-3 rounded-none border border-input bg-transparent px-4 py-4 text-sm hover:bg-muted/50 has-[input:checked]:bg-primary/5 has-[input:checked]:border-primary/30 dark:has-[input:checked]:border-primary/20 dark:has-[input:checked]:bg-primary/10 data-invalid:border-destructive has-[input:focus-visible]:ring-ring/30 has-[input:focus-visible]:ring-2',
+    'cn-questionnaire-choice-content': 'gap-1',
+    'cn-questionnaire-choice-description': 'text-muted-foreground',
+    'cn-questionnaire-choice-indicator':
+      'border-input size-4.5 translate-y-[--spacing(0.45)] group-has-[input:checked]/questionnaire-choice:border-foreground group-has-[input[type=checkbox]]/questionnaire-choice:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input[type=checkbox]]/questionnaire-choice:group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input[type=checkbox]]/questionnaire-choice:group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choice-indicator-check': 'size-3.5 [--ng-icon__size:0.875rem]',
+    'cn-questionnaire-choice-indicator-dot': 'bg-foreground size-2',
+    'cn-questionnaire-choice-shortcut':
+      'border-input bg-background text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-none border font-mono text-[0.625rem] font-medium leading-none group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choices': 'gap-3',
+    'cn-questionnaire-description': 'text-sm normal-case tracking-normal',
+    'cn-questionnaire-error': 'mt-2 text-sm',
     'cn-questionnaire-input':
-      'h-10 border border-transparent border-b-input bg-transparent px-0 py-1 text-base transition-[color,border-color] focus-visible:border-b-ring aria-invalid:border-b-destructive md:text-sm dark:aria-invalid:border-b-destructive/50',
-    'cn-questionnaire-item': 'gap-4',
-    'cn-questionnaire-progress': 'text-xs font-semibold tracking-wider text-muted-foreground uppercase',
+      'border-transparent border-b-input bg-transparent h-10 border px-0 py-1 text-base focus-visible:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50 md:text-sm',
+    'cn-questionnaire-input-wrapper': 'w-full',
+    'cn-questionnaire-item': 'gap-5',
+    'cn-questionnaire-progress': 'text-xs uppercase tracking-wide',
     'cn-questionnaire-title':
-      'text-lg/snug font-semibold tracking-wider uppercase [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
+      'text-xs font-semibold uppercase tracking-wide [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-5',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4.5 items-center justify-center',
     'cn-radio-group-indicator-dot': 'bg-foreground absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full',
@@ -5693,11 +5767,12 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-right': 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
     'cn-trace':
-      'gap-2 *:has-[>[data-slot=trace-line]]:rounded-none *:has-[>[data-slot=trace-line]]:focus-visible:ring-2 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
-    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed',
+      'gap-3 *:has-[>[data-slot=trace-line]]:rounded-none *:has-[>[data-slot=trace-line]]:focus-visible:ring-2 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
+    'cn-trace-collapsible-content': 'mt-3 mb-1 ms-[calc(--spacing(2)-1px)] border-s pe-1 ps-4 leading-relaxed',
     'cn-trace-collapsible-trigger': 'gap-1 rounded-none focus-visible:ring-2 focus-visible:ring-ring/30',
-    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
-    'cn-trace-line': 'gap-2 text-xs uppercase tracking-wide',
+    'cn-trace-icon':
+      "size-4 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [[data-slot=trace-title]~&]:-ms-1",
+    'cn-trace-line': 'gap-2 text-sm',
   },
   rhea: {
     'cn-accordion': 'block overflow-hidden rounded-2xl border',
@@ -5736,39 +5811,33 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-alert-variant-destructive':
       "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current",
     'cn-aspect-ratio': 'relative block',
-    'cn-attachment':
-      'relative isolate flex max-w-full min-w-0 shrink-0 snap-start items-center transition-colors rounded-2xl w-fit border bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed focus-within:ring-1 focus-within:ring-ring/30',
-    'cn-attachment-action':
-      'relative z-20 group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:backdrop-blur-xs group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:hover:bg-background',
+    'cn-attachment': 'rounded-2xl w-fit focus-within:ring-1 focus-within:ring-ring/30',
+    'cn-attachment-action': '',
     'cn-attachment-actions':
-      'flex shrink-0 items-center relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
-    'cn-attachment-content':
-      'flex min-w-0 flex-1 flex-col leading-tight group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1',
-    'cn-attachment-description':
-      'mt-0.5 text-xs text-muted-foreground group-data-[state=error]/attachment:text-destructive/80',
-    'cn-attachment-group':
-      'flex w-full min-w-0 overflow-x-auto snap-x snap-mandatory scrollbar-none gap-3 scroll-px-1 py-1 focus-visible:ring-2 focus-visible:ring-ring *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start',
+      'relative z-20 group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1',
+    'cn-attachment-content': 'leading-tight group-data-[orientation=vertical]/attachment:px-1',
+    'cn-attachment-description': 'mt-0.5 text-xs',
+    'cn-attachment-group': 'gap-3 scroll-px-1 py-1',
     'cn-attachment-media':
-      'relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-foreground group-data-[orientation=vertical]/attachment:w-full group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5',
-    'cn-attachment-media-variant-icon':
-      'size-10 bg-muted text-muted-foreground group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4',
+      "bg-muted text-foreground w-10 rounded-lg [--ng-icon__size:1rem] group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! group-data-[size=xs]/attachment:[--ng-icon__size:0.875rem] group-data-[orientation=vertical]/attachment:[--ng-icon__size:1.5rem]",
+    'cn-attachment-media-variant-icon': '',
     'cn-attachment-media-variant-image':
-      'size-16 opacity-60 group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
-    'cn-attachment-orientation-horizontal': 'flex-row min-w-40',
-    'cn-attachment-orientation-vertical': 'flex-col items-start w-24 has-data-[slot=attachment-content]:w-30',
+      'opacity-60 group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100',
+    'cn-attachment-orientation-horizontal': 'min-w-40',
+    'cn-attachment-orientation-vertical': 'w-24 has-data-[slot=attachment-content]:w-30',
     'cn-attachment-size-default':
       'gap-2 text-sm has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2',
     'cn-attachment-size-sm':
       'gap-2.5 text-xs has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
-    'cn-attachment-size-xs': 'gap-1.5 p-2 text-xs rounded-xl',
-    'cn-attachment-state-done': 'border-border',
-    'cn-attachment-state-error': 'border-destructive/50 text-destructive',
-    'cn-attachment-state-idle': 'border-border border-dashed',
-    'cn-attachment-state-processing': 'border-border bg-muted/50',
-    'cn-attachment-state-uploading': 'border-border bg-muted/50',
-    'cn-attachment-title': 'block w-fit max-w-full truncate font-medium',
-    'cn-attachment-trigger':
-      'absolute inset-0 z-10 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'cn-attachment-size-xs':
+      'gap-1.5 text-xs rounded-xl has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
+    'cn-attachment-state-done': '',
+    'cn-attachment-state-error': '',
+    'cn-attachment-state-idle': '',
+    'cn-attachment-state-processing': '',
+    'cn-attachment-state-uploading': '',
+    'cn-attachment-title': 'font-medium',
+    'cn-attachment-trigger': 'absolute inset-0 z-10 outline-none',
     'cn-avatar':
       'relative flex shrink-0 size-8 rounded-full after:border after:border-border after:absolute after:inset-0 after:mix-blend-darken dark:after:mix-blend-lighten after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6',
     'cn-avatar-fallback':
@@ -5951,16 +6020,26 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-checkbox':
       'cursor-[unset] size-4 shrink-0 border shadow-sm bg-input/90 border-transparent rounded-[5px] transition-shadow hover:shadow-md focus-visible:ring-3 focus-visible:border-ring disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:ring-ring/30 group-has-[:focus-visible]/field-label:not-data-[state=checked]:border-transparent group-has-[:focus-visible]/field-label:data-[state=checked]:border-primary',
     'cn-checkbox-label': 'cursor-[unset] text-sm text-current empty:hidden',
-    'cn-code-block': 'rounded-[min(var(--radius-4xl),24px)] text-sm data-[size=sm]:rounded-2xl',
+    'cn-code-block':
+      'rounded-2xl text-sm data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/30 data-[size=sm]:rounded-xl',
     'cn-code-block-actions':
-      '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:end-4 [[data-slot=code-block]>&]:top-4 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-3',
+      '-my-1 -me-1.5 gap-1 *:data-[slot=button]:hover:bg-foreground/5 dark:*:data-[slot=button]:hover:bg-foreground/10 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-3 [[data-slot=code-block]>&]:end-3 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10',
     'cn-code-block-content':
-      'px-5 py-5 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2.5 group-has-data-[slot=code-block-footer]/code-block:pb-2.5 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:py-4 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-2',
-    'cn-code-block-footer': 'gap-2 px-5 pb-5 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:pb-4',
-    'cn-code-block-header': 'gap-2 px-5 pt-5 group-data-[size=sm]/code-block:px-4 group-data-[size=sm]/code-block:pt-4',
-    'cn-code-block-line': '-mx-5 px-5 group-data-[size=sm]/code-block:-mx-4 group-data-[size=sm]/code-block:px-4',
+      'px-4 py-4 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
+    'cn-code-block-footer':
+      'gap-2 px-4 pb-4 text-muted-foreground group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3',
+    'cn-code-block-header':
+      'gap-2 px-4 pt-4 text-muted-foreground group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3',
+    'cn-code-block-line':
+      '-mx-4 px-4 in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3',
+    'cn-code-block-line-variant-added': "bg-foreground/5 after:content-['+']",
+    'cn-code-block-line-variant-highlighted': 'bg-foreground/5',
+    'cn-code-block-line-variant-removed': "bg-destructive/10 after:text-destructive after:content-['−']",
     'cn-code-block-title':
-      'font-sans text-sm font-medium [--ng-icon__size:1rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5',
+      "font-sans text-sm font-medium text-foreground [--ng-icon__size:1rem] group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-4 group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[&_svg:not([class*='size-'])]:size-3.5 group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem]",
+    'cn-code-block-variant-default': 'bg-muted text-foreground ring-1 ring-foreground/5 dark:ring-foreground/10',
+    'cn-code-block-variant-destructive':
+      'bg-destructive/5 text-destructive ring-1 ring-destructive/15 dark:bg-destructive/10 dark:ring-destructive/20',
     'cn-collapsible-content': 'grid transition-[grid-template-rows,visibility] duration-200 ease-out',
     'cn-collapsible-content-is-open-false': 'invisible grid-rows-[0fr]',
     'cn-collapsible-content-is-open-true': 'visible grid-rows-[1fr]',
@@ -6245,7 +6324,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       'flex max-w-full min-w-0 items-center px-3 text-xs font-medium text-muted-foreground group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
     'cn-message-scroller-button-direction-end': 'bottom-4',
     'cn-message-scroller-button-direction-start': 'top-4',
-    'cn-message-scroller-content': 'gap-6',
+    'cn-message-scroller-content': 'gap-8',
     'cn-message-scroller-viewport': 'focus-visible:ring-3 focus-visible:ring-ring/30',
     'cn-native-select':
       'h-8 rounded-2xl border border-transparent bg-input/50 py-1 ps-2.5 pe-8 text-sm transition-[color,box-shadow] duration-200 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
@@ -6293,21 +6372,27 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-popover-title': 'font-medium text-base',
     'cn-progress': 'bg-muted relative flex w-full items-center overflow-x-hidden h-2 rounded-2xl',
     'cn-progress-indicator': 'size-full flex-1 transition-all bg-primary',
-    'cn-questionnaire': 'gap-4',
+    'cn-questionnaire': 'gap-6',
     'cn-questionnaire-actions': 'gap-2',
     'cn-questionnaire-choice':
-      'gap-3 rounded-2xl border border-input bg-transparent px-3.5 py-3 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/30',
-    'cn-questionnaire-choice-indicator': 'size-4 rounded-[5px] border border-transparent bg-input/90',
-    'cn-questionnaire-choice-shortcut': 'size-5 rounded-lg font-mono text-[0.625rem] font-medium',
-    'cn-questionnaire-choices': 'gap-2',
-    'cn-questionnaire-description': 'text-sm text-muted-foreground',
-    'cn-questionnaire-error': 'text-sm',
+      'border-input gap-3 rounded-2xl border px-4 py-3 text-sm hover:bg-input/40 has-[input:checked]:border-primary/40 has-[input:checked]:bg-primary/10 data-invalid:border-destructive has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3',
+    'cn-questionnaire-choice-content': 'gap-1',
+    'cn-questionnaire-choice-description': 'text-muted-foreground',
+    'cn-questionnaire-choice-indicator':
+      'bg-input/90 size-4 translate-y-[--spacing(0.45)] rounded-[5px] border-transparent group-has-[input:checked]/questionnaire-choice:bg-primary dark:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choice-indicator-check': 'size-3.5 [--ng-icon__size:0.875rem]',
+    'cn-questionnaire-choice-indicator-dot': 'bg-primary-foreground size-2 dark:size-2.5',
+    'cn-questionnaire-choice-shortcut':
+      'border-primary/10 bg-background/80 text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-full border font-mono text-[0.625rem] font-medium leading-none group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+    'cn-questionnaire-choices': 'gap-3',
+    'cn-questionnaire-description': 'text-sm',
+    'cn-questionnaire-error': 'mt-2 text-sm',
     'cn-questionnaire-input':
-      'h-8 rounded-2xl border border-transparent bg-input/50 px-2.5 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
-    'cn-questionnaire-item': 'gap-4',
-    'cn-questionnaire-progress': 'text-xs font-medium text-muted-foreground',
-    'cn-questionnaire-title':
-      'text-base/snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4',
+      'bg-input/50 border-transparent h-8 rounded-2xl border px-2.5 py-1 text-base duration-200 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm',
+    'cn-questionnaire-input-wrapper': 'w-full',
+    'cn-questionnaire-item': 'gap-5',
+    'cn-questionnaire-progress': 'text-xs',
+    'cn-questionnaire-title': 'text-base font-semibold [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-5',
     'cn-radio-group': 'grid w-full gap-3',
     'cn-radio-group-indicator': 'flex size-4 items-center justify-center',
     'cn-radio-group-indicator-dot':
@@ -6503,9 +6588,10 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-tooltip-position-position-top': 'bottom-0 translate-y-full left-[calc(50%-5px)]',
     'cn-trace':
       'gap-2 *:has-[>[data-slot=trace-line]]:rounded-lg *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/30',
-    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed',
+    'cn-trace-collapsible-content': 'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s pe-1 ps-4 leading-relaxed',
     'cn-trace-collapsible-trigger': 'gap-1 rounded-lg focus-visible:ring-3 focus-visible:ring-ring/30',
-    'cn-trace-icon': 'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4',
+    'cn-trace-icon':
+      "size-4 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [[data-slot=trace-title]~&]:-ms-1",
     'cn-trace-line': 'gap-2 text-sm',
   },
 };

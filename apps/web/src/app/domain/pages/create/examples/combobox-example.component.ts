@@ -473,12 +473,7 @@ type ComboboxValue = string | string[] | null;
             }
           </z-select-group>
         </z-select>
-        <button
-          type="button"
-          z-button
-          zType="outline"
-          class="text-muted-foreground style-sera:hidden w-52 justify-between font-normal"
-        >
+        <button type="button" z-button zType="outline" class="text-muted-foreground w-52 justify-between font-normal">
           Select a framework
           <ng-icon name="lucideChevronDown" />
         </button>

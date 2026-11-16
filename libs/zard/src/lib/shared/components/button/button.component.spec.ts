@@ -221,7 +221,7 @@ describe('ZardButtonComponent', () => {
       });
 
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('rounded-md');
+      expect(button).toHaveClass('rounded-lg');
     });
 
     it('applies circle shape classes', async () => {

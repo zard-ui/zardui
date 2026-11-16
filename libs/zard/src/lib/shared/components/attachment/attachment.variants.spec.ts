@@ -2,41 +2,35 @@ import { attachmentVariants, attachmentMediaVariants } from './attachment.varian
 
 describe('attachment variants', () => {
   it('provides the documented defaults', () => {
-    expect(attachmentVariants()).toContain('border-border');
-    expect(attachmentVariants()).toContain('gap-2 text-sm');
-    expect(attachmentVariants()).toContain('flex-row');
-    expect(attachmentMediaVariants()).toContain('size-10');
+    const classes = attachmentVariants().split(' ');
+    expect(classes).toEqual(expect.arrayContaining(['border', 'bg-card', 'gap-2', 'text-sm', 'items-center']));
+    expect(attachmentMediaVariants().split(' ')).toEqual(expect.arrayContaining(['w-10', 'aspect-square', 'bg-muted']));
   });
 
   it.each([
-    ['idle', 'border-border'],
-    ['uploading', 'bg-muted/50'],
-    ['processing', 'bg-muted/50'],
-    ['error', 'border-destructive/50 text-destructive'],
-    ['done', 'border-border'],
-  ] as const)('styles state %s', (zState, expected) => {
-    expect(attachmentVariants({ zState })).toContain(expected);
-    if (zState !== 'error') {
-      expect(attachmentVariants({ zState })).not.toContain('text-destructive');
-    }
+    ['idle', 'data-[state=idle]:border-dashed'],
+    ['error', 'data-[state=error]:border-destructive/30'],
+  ] as const)('styles state %s through data-state', (zState, expected) => {
+    expect(attachmentVariants({ zState }).split(' ')).toContain(expected);
   });
 
   it.each([
     ['default', 'gap-2 text-sm'],
     ['sm', 'gap-2.5 text-xs'],
-    ['xs', 'gap-1.5 p-2 text-xs'],
+    ['xs', 'gap-1.5 text-xs rounded-lg'],
   ] as const)('styles size %s', (zSize, expected) => {
     // Token by token: the style sheet sets them, and its order is not the contract.
     expect(attachmentVariants({ zSize }).split(' ')).toEqual(expect.arrayContaining(expected.split(' ')));
   });
 
   it('styles orientation and both media modes', () => {
-    expect(attachmentVariants({ zOrientation: 'horizontal' })).toContain('flex-row');
-    expect(attachmentVariants({ zOrientation: 'vertical' })).toContain('flex-col items-start');
+    expect(attachmentVariants({ zOrientation: 'horizontal' }).split(' ')).toContain('items-center');
+    expect(attachmentVariants({ zOrientation: 'vertical' }).split(' ')).toContain('flex-col');
     expect(attachmentMediaVariants({ zVariant: 'icon' }).split(' ')).toEqual(
-      expect.arrayContaining(['size-10', 'bg-muted', 'text-muted-foreground']),
+      expect.arrayContaining(['w-10', 'bg-muted', 'text-foreground']),
     );
-    expect(attachmentMediaVariants({ zVariant: 'image' })).toContain('size-16');
-    expect(attachmentMediaVariants({ zVariant: 'image' })).toContain('[&_img]:object-cover');
+    expect(attachmentMediaVariants({ zVariant: 'image' }).split(' ')).toEqual(
+      expect.arrayContaining(['opacity-60', '*:[img]:object-cover']),
+    );
   });
 });

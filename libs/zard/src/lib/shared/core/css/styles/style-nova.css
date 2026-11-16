@@ -134,7 +134,6 @@
 }
 
 .cn-button-shape-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply rounded-md;
 }
 
 .cn-button-shape-circle:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -192,27 +191,22 @@
 /* MARK: attachment */
 
 .cn-attachment:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply bg-card text-card-foreground has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 relative isolate flex w-fit max-w-full min-w-0 shrink-0 snap-start items-center rounded-xl border transition-colors data-[state=idle]:border-dashed;
+  @apply rounded-xl w-fit;
 }
 
 .cn-attachment-state-idle:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-border border-dashed;
 }
 
 .cn-attachment-state-uploading:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-border bg-muted/50;
 }
 
 .cn-attachment-state-processing:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-border bg-muted/50;
 }
 
 .cn-attachment-state-error:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-destructive/50 text-destructive;
 }
 
 .cn-attachment-state-done:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-border;
 }
 
 .cn-attachment-size-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -224,55 +218,53 @@
 }
 
 .cn-attachment-size-xs:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply gap-1.5 rounded-lg p-2 text-xs;
+  @apply gap-1.5 text-xs rounded-lg;
 }
 
 .cn-attachment-orientation-horizontal:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply min-w-40 flex-row;
+  @apply min-w-40;
 }
 
 .cn-attachment-orientation-vertical:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply w-24 flex-col items-start;
+  @apply w-24;
 }
 
 .cn-attachment-media:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply bg-muted text-foreground relative flex shrink-0 items-center justify-center overflow-hidden rounded-lg;
+  @apply bg-muted text-foreground w-10 rounded-lg [--ng-icon__size:1rem];
 }
 
 .cn-attachment-media-variant-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply bg-muted text-muted-foreground size-10;
 }
 
 .cn-attachment-media-variant-image:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply size-16 opacity-60;
+  @apply opacity-60;
 }
 
 .cn-attachment-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply flex min-w-0 flex-1 flex-col leading-tight;
+  @apply leading-tight;
 }
 
 .cn-attachment-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply block w-fit max-w-full truncate font-medium;
+  @apply font-medium;
 }
 
 .cn-attachment-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-muted-foreground group-data-[state=error]/attachment:text-destructive/80 mt-0.5 text-xs;
+  @apply mt-0.5 text-xs;
 }
 
 .cn-attachment-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply relative z-20 flex shrink-0 items-center;
-}
-
-.cn-attachment-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply relative z-20;
 }
 
+.cn-attachment-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+}
+
 .cn-attachment-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply absolute inset-0 z-10 rounded-[inherit] outline-none;
+  @apply absolute inset-0 z-10 outline-none;
 }
 
 .cn-attachment-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-ring flex w-full min-w-0 snap-x snap-mandatory scroll-px-1 scrollbar-none gap-3 overflow-x-auto py-1 focus-visible:ring-2;
+  @apply gap-3 scroll-px-1 py-1;
 }
 
 /* MARK: avatar */
@@ -1745,11 +1737,11 @@
 }
 
 .cn-questionnaire-progress:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-muted-foreground text-xs font-medium;
+  @apply text-xs;
 }
 
 .cn-questionnaire-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-base/snug font-medium;
+  @apply text-base leading-snug font-medium;
 }
 
 .cn-questionnaire-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -1769,23 +1761,43 @@
 }
 
 .cn-questionnaire-choice-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-input size-4 rounded-[4px] border;
+  @apply border-input size-4 translate-y-[--spacing(0.45)] rounded-[4px];
 }
 
 .cn-questionnaire-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply border-input h-8 rounded-lg border bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color];
+  @apply border-input h-8 rounded-lg border bg-transparent px-2.5 py-1 text-base;
 }
 
 .cn-questionnaire-choice-shortcut:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply size-5 rounded-md font-mono text-[0.625rem] font-medium;
+  @apply border-input bg-background text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-md border font-mono text-[0.625rem] font-medium leading-none;
 }
 
 .cn-questionnaire-error:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply text-sm;
+  @apply mt-2 text-sm;
 }
 
 .cn-questionnaire-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply gap-2;
+}
+
+.cn-questionnaire-choice-indicator-dot:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply bg-primary-foreground size-2;
+}
+
+.cn-questionnaire-choice-indicator-check:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply size-3.5 [--ng-icon__size:0.875rem];
+}
+
+.cn-questionnaire-choice-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply gap-0.5;
+}
+
+.cn-questionnaire-choice-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply text-muted-foreground;
+}
+
+.cn-questionnaire-input-wrapper:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply w-full;
 }
 
 /* MARK: radio-group */
@@ -1999,7 +2011,7 @@
 }
 
 .cn-trace-collapsible-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply ms-[calc(--spacing(2)-1px)] mt-2 mb-1 border-s ps-4 pe-1 leading-relaxed;
+  @apply mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s pe-1 ps-4 leading-relaxed;
 }
 
 /* MARK: tooltip */
@@ -2267,11 +2279,11 @@
 }
 
 .cn-code-block-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply gap-2 px-3 pt-3;
+  @apply gap-2 px-3 pt-3 text-muted-foreground;
 }
 
 .cn-code-block-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply font-sans text-sm font-medium [--ng-icon__size:1rem];
+  @apply font-sans text-sm font-medium text-foreground [--ng-icon__size:0.875rem];
 }
 
 .cn-code-block-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2287,7 +2299,27 @@
 }
 
 .cn-code-block-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply gap-2 px-3 pb-3;
+  @apply gap-2 px-3 pb-3 text-muted-foreground;
+}
+
+.cn-code-block-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply border border-input text-foreground;
+}
+
+.cn-code-block-variant-destructive:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply border border-destructive/30 text-destructive;
+}
+
+.cn-code-block-line-variant-highlighted:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply bg-muted;
+}
+
+.cn-code-block-line-variant-added:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply bg-muted;
+}
+
+.cn-code-block-line-variant-removed:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply bg-destructive/10;
 }
 
 /* MARK: data-table */
@@ -2564,39 +2596,23 @@
 /* MARK: attachment */
 
 .cn-attachment:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-within:ring-ring/50 focus-within:ring-1;
+  @apply focus-within:ring-1 focus-within:ring-ring/50;
 }
 
 .cn-attachment-media:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[orientation=vertical]/attachment:w-full group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*="size-"])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*="size-"])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*="size-"])]:size-3.5;
-}
-
-.cn-attachment-media-variant-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[size=sm]/attachment:size-8 group-data-[size=xs]/attachment:size-6 [&_svg]:size-4;
+  @apply group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-md [&_svg:not([class*='size-'])]:size-4 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5 group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! group-data-[size=xs]/attachment:[--ng-icon__size:0.875rem] group-data-[orientation=vertical]/attachment:[--ng-icon__size:1.5rem];
 }
 
 .cn-attachment-media-variant-image:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[orientation=vertical]/attachment:size-auto group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:size-12 group-data-[size=xs]/attachment:size-8 group-data-[state=done]/attachment:opacity-100 group-data-[state=idle]/attachment:opacity-100 [&_img]:size-full [&_img]:object-cover *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover;
+  @apply group-data-[state=idle]/attachment:opacity-100 group-data-[state=done]/attachment:opacity-100;
 }
 
 .cn-attachment-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[orientation=vertical]/attachment:w-full group-data-[orientation=vertical]/attachment:px-1;
+  @apply group-data-[orientation=vertical]/attachment:px-1;
 }
 
 .cn-attachment-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:gap-1;
-}
-
-.cn-attachment-action:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[orientation=vertical]/attachment:bg-background/80 group-data-[orientation=vertical]/attachment:hover:bg-background group-data-[orientation=vertical]/attachment:rounded-full group-data-[orientation=vertical]/attachment:shadow-xs group-data-[orientation=vertical]/attachment:backdrop-blur-xs;
-}
-
-.cn-attachment-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-ring focus-visible:ring-2;
-}
-
-.cn-attachment-group:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start;
+  @apply group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:end-3 group-data-[orientation=vertical]/attachment:gap-1;
 }
 
 .cn-attachment-orientation-vertical:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -2609,6 +2625,10 @@
 
 .cn-attachment-size-sm:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5;
+}
+
+.cn-attachment-size-xs:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1;
 }
 
 /* MARK: avatar */
@@ -3333,15 +3353,19 @@
 }
 
 .cn-questionnaire-choice:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3;
+  @apply dark:bg-input/20 hover:bg-muted/50 has-[input:checked]:border-primary/40 has-[input:checked]:bg-muted dark:has-[input:checked]:bg-muted data-invalid:border-destructive has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3;
 }
 
 .cn-questionnaire-choice-indicator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply dark:bg-input/30;
+  @apply dark:bg-input/30 group-has-[input:checked]/questionnaire-choice:bg-primary dark:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5;
 }
 
 .cn-questionnaire-input:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm;
+  @apply dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 disabled:bg-input/50 dark:disabled:bg-input/80 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm;
+}
+
+.cn-questionnaire-choice-shortcut:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5;
 }
 
 /* MARK: radio-group */
@@ -3395,15 +3419,15 @@
 /* MARK: trace */
 
 .cn-trace:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50 *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3;
+  @apply *:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50;
 }
 
 .cn-trace-icon:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [&_svg:not([class*=size-])]:size-4;
+  @apply [&_svg:not([class*='size-'])]:size-4 [[data-slot=trace-title]~&]:-ms-1;
 }
 
 .cn-trace-collapsible-trigger:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply focus-visible:ring-ring/50 focus-visible:ring-3;
+  @apply focus-visible:ring-3 focus-visible:ring-ring/50;
 }
 
 /* MARK: tooltip */
@@ -3577,31 +3601,47 @@
 /* MARK: code-block */
 
 .cn-code-block:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply data-[size=sm]:text-xs;
+  @apply data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/50;
 }
 
 .cn-code-block-header:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pt-2.5;
+  @apply group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pt-2.5;
 }
 
 .cn-code-block-title:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[size=sm]/code-block:text-xs group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5;
+  @apply group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-3.5 group-data-[size=sm]/code-block:text-xs;
 }
 
 .cn-code-block-actions:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [[data-slot=code-block]>&]:end-2 [[data-slot=code-block]>&]:top-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-1.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-1.5;
+  @apply [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-2 [[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-1.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-1.5 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10;
 }
 
 .cn-code-block-content:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-has-data-[slot=code-block-footer]/code-block:pb-2 group-has-data-[slot=code-block-header]/code-block:pt-2 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:py-2.5 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5;
+  @apply group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:py-2.5 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5;
 }
 
 .cn-code-block-line:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply group-data-[size=sm]/code-block:-mx-2.5 group-data-[size=sm]/code-block:px-2.5;
+  @apply in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-2.5 group-data-[size=sm]/code-block:px-2.5;
 }
 
 .cn-code-block-footer:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pb-2.5;
+}
+
+.cn-code-block-variant-default:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply dark:bg-input/30 has-[>[data-slot=code-block-content]:focus-visible]:border-ring;
+}
+
+.cn-code-block-variant-destructive:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply dark:border-destructive/40;
+}
+
+.cn-code-block-line-variant-added:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply after:content-['+'];
+}
+
+.cn-code-block-line-variant-removed:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply after:text-destructive after:content-['−'];
 }
 
 /* MARK: data-table */

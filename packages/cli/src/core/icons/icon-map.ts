@@ -393,6 +393,13 @@ export const ICON_MAP: Record<string, Record<string, string>> = {
     phosphor: 'phosphorProhibit',
     remixicon: 'remixForbidLine',
   },
+  'circle-stop': {
+    lucide: 'lucideCircleStop',
+    tabler: 'tablerCircleSquare',
+    hugeicons: 'hugeStop',
+    phosphor: 'phosphorStopCircle',
+    remixicon: 'remixStopCircleLine',
+  },
   'circle-plus': {
     lucide: 'lucideCirclePlus',
     tabler: 'tablerCirclePlus',
