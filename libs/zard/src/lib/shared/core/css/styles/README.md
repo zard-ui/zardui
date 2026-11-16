@@ -1,8 +1,8 @@
 # Styles
 
 Eight looks for every component — `vega`, `nova` (the default), `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea` — the same
-names shadcn/ui uses. `nova` is zard's own default look (the one the library always had), not a copy of shadcn's
-nova; the other seven follow shadcn's style family. They change spacing, radius, density and typography, never a component's API.
+names shadcn/ui uses, each matching shadcn's style of that name (`nova` included, see ADR-0002 §5). They change
+spacing, radius, density and typography, never a component's API.
 
 ## How a component carries a style
 

@@ -128,7 +128,7 @@
     {
       "value": "nova",
       "label": "Nova",
-      "description": "Zard's own default look: compact padding and margins"
+      "description": "Compact padding and margins, the default"
     },
     {
       "value": "maia",
