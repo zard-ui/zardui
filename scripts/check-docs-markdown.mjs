@@ -102,8 +102,15 @@ function componentCode(html) {
   const blocks = [];
   const pre = /<pre\b[^>]*>([\s\S]*?)<\/pre>/g;
   const hiddenPanel = /role="tabpanel"[^>]*class="[^"]*\bhidden\b[^"]*"[^>]*>\s*$/;
+  // A live demo can render a <pre> of its own (trace shows a command's output): that is the preview, not a block
+  // the page documents, so anything inside a `z-demo-*` host is skipped.
+  const demoDepthAt = index => {
+    const before = html.slice(0, index);
+    return (before.match(/<z-demo-/g) ?? []).length - (before.match(/<\/z-demo-/g) ?? []).length;
+  };
   let match;
   while ((match = pre.exec(html))) {
+    if (demoDepthAt(match.index) > 0) continue;
     const text = match[1].replace(/<[^>]+>/g, '').replace(/&(?:lt|gt|quot|amp|#39|#x27);/g, e => ENTITIES[e]);
     const before = html.slice(Math.max(0, match.index - 400), match.index);
     blocks.push({ text: normalize(text), hidden: hiddenPanel.test(before) });
