@@ -98,6 +98,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
             [calendarDays]="month.days"
             [disabled]="disabled()"
             [zShowOutsideDays]="zShowOutsideDays()"
+            [zShowWeekNumbers]="zShowWeekNumbers()"
             [zMonthIndex]="i"
             [zDayTemplate]="zDayTemplate()"
             (dateSelect)="onDateSelect($event)"
@@ -167,6 +168,10 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
+  /** Adds a leading column with the number of each week. */
+  readonly zShowWeekNumbers = input(false, { transform: booleanAttribute });
+  /** Always render six weeks per month, so the calendar keeps its height from month to month. */
+  readonly zFixedWeeks = input(false, { transform: booleanAttribute });
   /**
    * BCP 47 locale for month names, weekday names and labels (for example `ar`, `he`, `fr-FR`).
    * Falls back to the application locale of `ZardI18nService`.
@@ -258,6 +263,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
           disabled: this.disabled(),
           disabledDates: this.zDisabledDates(),
           weekStartsOn,
+          fixedWeeks: this.zFixedWeeks(),
         }),
       };
     });
@@ -535,7 +541,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
  */
 export const calendarVariants = cva(
   // `block` because these classes land on the `<z-calendar>` host, which is inline by default.
-  'block w-fit bg-background p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent group/calendar',
+  'bg-background block w-fit p-2 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent group/calendar',
 );
 
 /** Wraps every rendered month. Stacks on small screens and sits side by side from `md` up. */
@@ -558,13 +564,13 @@ export const calendarCaptionVariants = cva('flex h-(--cell-size) w-full items-ce
 
 export const calendarDropdownsVariants = cva('flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium');
 
-export const calendarCaptionLabelVariants = cva('font-medium select-none', {
+export const calendarCaptionLabelVariants = cva('select-none', {
   variants: {
     layout: {
-      label: 'text-sm',
+      label: 'text-sm font-medium',
       // In dropdown layout this label is what the user sees of the select underneath it,
-      // so it carries the control's height and padding.
-      dropdown: 'flex h-(--cell-size) items-center gap-1 rounded-(--cell-radius) px-2 text-sm',
+      // so it carries the control's height and padding (`cn-calendar-caption-label`, shadcn's marker for it).
+      dropdown: 'h-6 ps-1.5 pe-1 flex items-center gap-1 rounded-(--cell-radius) text-sm',
     },
   },
   defaultVariants: {
@@ -577,26 +583,26 @@ export const calendarCaptionLabelVariants = cva('font-medium select-none', {
  * so the browser owns the popup while the label owns the looks — the same trick shadcn uses.
  * The focus ring therefore has to come from the select, through `has-[:focus-visible]`.
  */
-export const calendarDropdownRootVariants = cva('relative isolate has-disabled:pointer-events-none has-disabled:opacity-50');
+export const calendarDropdownRootVariants = cva('border-input relative isolate rounded-(--cell-radius) border has-focus:border-ring has-focus:ring-ring/50 has-focus:ring-3 has-disabled:pointer-events-none has-disabled:opacity-50');
 
 /** The native select itself: invisible, but on top and still clickable. */
-export const calendarDropdownVariants = cva('absolute inset-0 z-10 cursor-pointer bg-popover opacity-0');
+export const calendarDropdownVariants = cva('bg-popover absolute inset-0 z-10 cursor-pointer opacity-0');
 
-export const calendarWeekdaysVariants = cva('grid w-full grid-cols-7');
+export const calendarWeekdaysVariants = cva('grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))]');
 
-export const calendarWeekdayVariants = cva('flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none');
+export const calendarWeekdayVariants = cva('text-muted-foreground flex w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal select-none');
 
 /** The container for the day rows. */
 export const calendarWeeksVariants = cva('mt-2 flex w-full flex-col gap-y-2');
 /** @deprecated Use `calendarWeeksVariants` and `calendarRowVariants`. Kept for backward compatibility. */
-export const calendarWeekVariants = cva('mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2');
+export const calendarWeekVariants = cva('mt-2 grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0 gap-y-2');
 
 /** The day row: 7 columns for the days of the week. `gap-x-0` keeps the range rail continuous. */
-export const calendarRowVariants = cva('grid w-full grid-cols-7 gap-x-0');
+export const calendarRowVariants = cva('grid w-full grid-cols-[repeat(7,minmax(var(--cell-size),1fr))] gap-x-0');
 
 export const calendarDayVariants = cva(
   // Round the range rail at both ends of every week row (supports both nested rows and flat grid).
-  'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius) group/day select-none',
+  'relative aspect-square size-full rounded-(--cell-radius) p-0 text-center first:rounded-s-(--cell-radius) last:rounded-e-(--cell-radius) nth-[7n]:rounded-e-(--cell-radius) nth-[7n+1]:rounded-s-(--cell-radius) group/day select-none',
   {
     variants: {
       selected: {
@@ -604,20 +610,20 @@ export const calendarDayVariants = cva(
         false: '',
       },
       today: {
-        true: 'rounded-(--cell-radius) bg-muted text-foreground',
+        true: 'bg-muted text-foreground rounded-(--cell-radius)',
         false: '',
       },
       rangeStart: {
         // No neighbour to bridge to at the end of a week — do not bleed outside the grid.
-        true: 'relative isolate z-0 rounded-s-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-muted [&:last-child]:after:hidden [&:nth-child(7n)]:after:hidden',
+        true: 'bg-muted relative isolate z-0 rounded-s-(--cell-radius) after:bg-muted after:absolute after:inset-y-0 after:end-0 after:w-4 [&:last-child]:after:hidden [&:nth-child(7n)]:after:hidden',
         false: '',
       },
       rangeMiddle: {
-        true: 'rounded-none bg-muted',
+        true: 'bg-muted rounded-none',
         false: '',
       },
       rangeEnd: {
-        true: 'relative isolate z-0 rounded-e-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-muted [&:first-child]:after:hidden [&:nth-child(7n+1)]:after:hidden',
+        true: 'bg-muted relative isolate z-0 rounded-e-(--cell-radius) after:bg-muted after:absolute after:inset-y-0 after:start-0 after:w-4 [&:first-child]:after:hidden [&:nth-child(7n+1)]:after:hidden',
         false: '',
       },
     },
@@ -648,22 +654,22 @@ export const calendarDayVariants = cva(
   },
 );
 
-export const calendarDayButtonVariants = cva('relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1 rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal transition-colors hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 dark:hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50 [&>span]:text-xs [&>span]:opacity-70 outline-none disabled:pointer-events-none', {
+export const calendarDayButtonVariants = cva('relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1 rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal transition-colors hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 dark:hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3 disabled:opacity-50 [&>span]:text-xs [&>span]:opacity-70 outline-none disabled:pointer-events-none', {
   variants: {
     selected: {
       true: 'bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
       false: '',
     },
     rangeStart: {
-      true: 'rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
+      true: 'bg-primary text-primary-foreground rounded-(--cell-radius) rounded-s-(--cell-radius) hover:bg-muted hover:text-foreground',
       false: '',
     },
     rangeEnd: {
-      true: 'rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-muted hover:text-foreground',
+      true: 'bg-primary text-primary-foreground rounded-(--cell-radius) rounded-e-(--cell-radius) hover:bg-muted hover:text-foreground',
       false: '',
     },
     rangeMiddle: {
-      true: 'rounded-none bg-muted text-foreground hover:bg-muted hover:text-foreground',
+      true: 'bg-muted text-foreground rounded-none hover:bg-muted hover:text-foreground',
       false: '',
     },
     outside: {
@@ -671,7 +677,7 @@ export const calendarDayButtonVariants = cva('relative isolate z-10 flex aspect-
       false: '',
     },
     disabled: {
-      true: 'text-muted-foreground opacity-50 cursor-not-allowed',
+      true: 'text-muted-foreground cursor-not-allowed opacity-50',
       false: '',
     },
   },
@@ -731,6 +737,9 @@ import {
   calendarWeeksVariants,
 } from './calendar.variants';
 
+/** Row template when week numbers are on: the number column, then the seven days. */
+const WEEK_NUMBER_COLUMNS = 'grid-cols-[var(--cell-size)_repeat(7,minmax(var(--cell-size),1fr))]';
+
 @Component({
   selector: 'z-calendar-grid',
   imports: [NgTemplateOutlet],
@@ -738,9 +747,12 @@ import {
     <div #gridContainer class="w-full">
       <!-- Weekdays Header -->
       <div [class]="weekdaysClasses()" role="row">
+        @if (zShowWeekNumbers()) {
+          <div class="w-(--cell-size) select-none" role="columnheader"></div>
+        }
         @for (weekday of effectiveWeekdays(); track weekday) {
-          <div [class]="weekdayClasses()" role="columnheader">
-            {{ weekday }}
+          <div [class]="weekdayClasses()" role="columnheader" [attr.aria-label]="weekday">
+            {{ shortWeekday(weekday) }}
           </div>
         }
       </div>
@@ -749,6 +761,14 @@ import {
       <div [class]="weeksClasses()" role="rowgroup">
         @for (week of weeks(); track $index; let weekIndex = $index) {
           <div [class]="rowClasses()" role="row">
+            @if (zShowWeekNumbers()) {
+              <div
+                role="rowheader"
+                class="text-muted-foreground flex size-(--cell-size) items-center justify-center text-center text-[0.8rem] select-none"
+              >
+                {{ weekNumber(week[0].date) }}
+              </div>
+            }
             @for (day of week; track day.date.getTime(); let dayIndex = $index) {
               @let i = weekIndex * 7 + dayIndex;
               <div
@@ -805,6 +825,8 @@ export class ZardCalendarGridComponent {
   readonly calendarDays = input.required<CalendarDay[]>();
   readonly disabled = input<boolean>(false);
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
+  /** Adds a leading column with the number of each week. */
+  readonly zShowWeekNumbers = input(false, { transform: booleanAttribute });
   /** Position of this grid inside a multi-month calendar. Only used to scope the day ids. */
   readonly zMonthIndex = input(0, { transform: numberAttribute });
   /** Custom content for each day button; falls back to the day number. */
@@ -818,15 +840,39 @@ export class ZardCalendarGridComponent {
 
   protected readonly effectiveWeekdays = this.calendarI18n.weekdays;
 
+  /** Week of the year as react-day-picker numbers it (the week that holds January 1st is week 1), two digits. */
+  protected weekNumber(weekStart: Date): string {
+    const weekStartsOn = this.calendarI18n.weekStartsOn();
+    const startOfWeek = (date: Date): Date => {
+      const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      start.setDate(start.getDate() - ((start.getDay() - weekStartsOn + 7) % 7));
+      return start;
+    };
+    const first = startOfWeek(weekStart);
+    const last = new Date(first.getFullYear(), first.getMonth(), first.getDate() + 6);
+    const firstWeek = startOfWeek(new Date(last.getFullYear(), 0, 1));
+    const diff = Math.round((first.getTime() - firstWeek.getTime()) / (7 * 24 * 60 * 60 * 1000));
+    return String(diff + 1).padStart(2, '0');
+  }
+
+  /** The header shows two letters ("Su", "Mo"), like shadcn/ui; the full short name stays as the accessible name. */
+  protected shortWeekday(weekday: string): string {
+    return Array.from(weekday).slice(0, 2).join('');
+  }
+
   private readonly focusedDayIndex = signal<number>(-1);
 
-  protected readonly weekdaysClasses = computed(() => mergeClasses(calendarWeekdaysVariants()));
+  protected readonly weekdaysClasses = computed(() =>
+    mergeClasses(calendarWeekdaysVariants(), this.zShowWeekNumbers() && WEEK_NUMBER_COLUMNS),
+  );
 
   protected readonly weekdayClasses = computed(() => mergeClasses(calendarWeekdayVariants()));
 
   protected readonly weeksClasses = computed(() => mergeClasses(calendarWeeksVariants()));
 
-  protected readonly rowClasses = computed(() => mergeClasses(calendarRowVariants()));
+  protected readonly rowClasses = computed(() =>
+    mergeClasses(calendarRowVariants(), this.zShowWeekNumbers() && WEEK_NUMBER_COLUMNS),
+  );
 
   protected readonly weeks = computed(() => {
     const days = this.calendarDays();
@@ -1496,6 +1542,8 @@ export interface CalendarDayConfig {
   disabledDates?: Date[];
   /** Day of week the calendar starts on (0 = Sunday, 1 = Monday, ..., 6 = Saturday). Defaults to 0. */
   weekStartsOn?: ZardDayOfWeek;
+  /** Always render six weeks, as react-day-picker's `fixedWeeks`. */
+  fixedWeeks?: boolean;
 }
 ```
 
@@ -1583,7 +1631,18 @@ function startOfDay(date: Date): Date {
  * Generates calendar days for a given month with all selection states
  */
 export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
-  const { year, month, mode, selectedDates, minDate, maxDate, disabled, disabledDates, weekStartsOn = 0 } = config;
+  const {
+    year,
+    month,
+    mode,
+    selectedDates,
+    minDate,
+    maxDate,
+    disabled,
+    disabledDates,
+    weekStartsOn = 0,
+    fixedWeeks = false,
+  } = config;
 
   const today = new Date();
 
@@ -1602,6 +1661,10 @@ export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
   const endDiff = (endOfWeekDay - lastDay.getDay() + 7) % 7;
   const endDate = new Date(lastDay);
   endDate.setDate(endDate.getDate() + endDiff);
+  if (fixedWeeks) {
+    // Six weeks (42 days) from the first rendered day.
+    endDate.setTime(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 41).getTime());
+  }
 
   const days: CalendarDay[] = [];
   const currentWeekDate = new Date(startDate);
@@ -2370,6 +2433,8 @@ Date or range picker grid, sized by `--cell-size` and `--cell-radius`.
 | `[zShowOutsideDays]` | Shows days of adjacent months | `boolean` | `true` |
 | `[zDisabledDates]` | Individual days that cannot be selected | `Date[]` | `[]` |
 | `[zNumberOfMonths]` | Months shown side by side | `number` | `1` |
+| `[zShowWeekNumbers]` | Adds a leading column with each week number | `boolean` | `false` |
+| `[zFixedWeeks]` | Always render six weeks per month, so the height does not change between months | `boolean` | `false` |
 | `[zLocale]` | BCP 47 locale for this calendar only | `string` | `-` |
 | `[zDayTemplate]` | Custom day content (`let-day`) | `TemplateRef<CalendarDayTemplateContext> \| null` | `null` |
 | `(dateChange)` | Emits when the selection changes | `EventEmitter<Date \| Date[]>` | `-` |

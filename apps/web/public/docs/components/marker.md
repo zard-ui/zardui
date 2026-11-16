@@ -136,12 +136,12 @@ export class ZardMarkerComponent {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const markerVariants = cva("relative flex min-h-4 w-full items-center gap-2 text-start text-sm text-muted-foreground [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground group/marker", {
+export const markerVariants = cva("text-muted-foreground relative flex min-h-4 w-full items-center gap-2 text-start text-sm [--ng-icon__size:1rem] [a]:hover:text-foreground [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 group/marker", {
   variants: {
     zVariant: {
       default: '',
-      border: 'border-b border-border pb-2',
-      separator: 'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
+      border: 'border-border border-b pb-2',
+      separator: 'before:bg-border after:bg-border before:me-1 before:h-px before:min-w-0 before:flex-1 after:ms-1 after:h-px after:min-w-0 after:flex-1',
     },
   },
   defaultVariants: {
@@ -151,7 +151,7 @@ export const markerVariants = cva("relative flex min-h-4 w-full items-center gap
 
 export const markerIconVariants = cva("size-4 shrink-0 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4");
 
-export const markerContentVariants = cva('min-w-0 wrap-break-word group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground');
+export const markerContentVariants = cva('min-w-0 wrap-break-word *:[a]:hover:text-foreground group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3');
 
 export type ZardMarkerVariants = NonNullable<VariantProps<typeof markerVariants>['zVariant']>;
 ```

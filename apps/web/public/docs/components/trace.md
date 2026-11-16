@@ -354,7 +354,7 @@ export const traceLineVariants = cva(
 
 export const traceIconVariants = cva(
   mergeClasses(
-    'size-4 [--ng-icon__size:1rem] [&_svg:not([class*=size-])]:size-4 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none',
+    "size-4 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4 [[data-slot=trace-title]~&]:-ms-1 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none",
     // A trailing icon (a chevron, an "opens in a new tab" arrow) tucks in toward the title.
     '[[data-slot=trace-title]~&]:-ms-1',
   ),
@@ -382,7 +382,7 @@ export const traceChevronVariants = cva(
 );
 
 export const traceCollapsibleContentVariants = cva(
-  'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s ps-4 pe-1 leading-relaxed min-w-0 wrap-break-word text-muted-foreground',
+  'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] border-s pe-1 ps-4 leading-relaxed min-w-0 wrap-break-word text-muted-foreground',
 );
 
 export type ZardTraceStatusVariants = NonNullable<VariantProps<typeof traceLineVariants>['zStatus']>;

@@ -807,16 +807,16 @@ export const colorPickerFormatIndicatorVariants = cva(
 );
 
 export const colorPickerFormatVariants = cva(
-  'h-6 flex-1 rounded-sm font-mono text-[11px] font-medium focus-visible:ring-3 focus-visible:ring-ring/50 text-muted-foreground outline-none transition-colors duration-200 hover:text-foreground aria-pressed:text-foreground',
+  'h-6 flex-1 rounded-sm font-mono text-[11px] font-medium focus-visible:ring-ring/50 focus-visible:ring-3 text-muted-foreground outline-none transition-colors duration-200 hover:text-foreground aria-pressed:text-foreground',
 );
 
 /** The saturation (x) / brightness (y) area. Hue and gradients are set inline: x follows the reading direction. */
 export const colorPickerAreaVariants = cva(
-  `h-36 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50 relative w-full cursor-crosshair touch-none outline-none select-none transition-[background-color] ${glideUnlessDragging}`,
+  `h-36 rounded-md focus-visible:ring-ring/50 focus-visible:ring-3 relative w-full cursor-crosshair touch-none outline-none select-none transition-[background-color] ${glideUnlessDragging}`,
 );
 
 export const colorPickerTrackVariants = cva(
-  'h-3 rounded-full focus-visible:ring-3 focus-visible:ring-ring/50 relative w-full cursor-pointer touch-none outline-none select-none',
+  'h-3 rounded-full focus-visible:ring-ring/50 focus-visible:ring-3 relative w-full cursor-pointer touch-none outline-none select-none',
   {
     variants: {
       zChannel: {
@@ -842,7 +842,7 @@ export const colorPickerFillVariants = cva(
 );
 
 export const colorPickerPresetVariants = cva(
-  `size-6 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50 relative overflow-hidden ring-1 ring-foreground/15 ring-inset outline-none ${checkerboard} transition-[scale,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 aria-pressed:ring-2 aria-pressed:ring-ring motion-reduce:transition-none`,
+  `size-6 rounded-md focus-visible:ring-ring/50 focus-visible:ring-3 relative overflow-hidden ring-1 ring-foreground/15 ring-inset outline-none ${checkerboard} transition-[scale,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 aria-pressed:ring-2 aria-pressed:ring-ring motion-reduce:transition-none`,
 );
 
 export type ZardColorPickerSizeVariants = Extract<ZardButtonSizeVariants, 'sm' | 'default' | 'lg'>;

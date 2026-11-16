@@ -231,16 +231,16 @@ export class ZardItemFooterComponent {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const itemGroupVariants = cva('flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2 group/item-group');
+export const itemGroupVariants = cva('flex w-full flex-col gap-4 has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2 group/item-group');
 
 export const itemSeparatorVariants = cva('bg-border my-2 block h-px w-full shrink-0');
 
-export const itemVariants = cva('flex w-full flex-wrap items-center rounded-lg border text-sm transition-colors duration-100 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-muted group/item outline-none', {
+export const itemVariants = cva('flex w-full flex-wrap items-center rounded-lg border text-sm transition-colors duration-100 focus-visible:border-ring focus-visible:ring-ring/50 [a]:hover:bg-muted focus-visible:ring-3 [a]:transition-colors group/item outline-none', {
   variants: {
     zVariant: {
       default: 'border-transparent',
       outline: 'border-border',
-      muted: 'border-transparent bg-muted/50',
+      muted: 'bg-muted/50 border-transparent',
     },
     zSize: {
       default: 'gap-2.5 px-3 py-2.5',
@@ -269,9 +269,9 @@ export const itemMediaVariants = cva('flex shrink-0 items-center justify-center 
 
 export const itemContentVariants = cva('flex flex-1 flex-col gap-1 group-data-[size=xs]/item:gap-0 [&+[data-slot=item-content]]:flex-none');
 
-export const itemTitleVariants = cva('line-clamp-1 flex w-fit items-center gap-2 text-sm/snug font-medium underline-offset-4');
+export const itemTitleVariants = cva('line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-medium underline-offset-4');
 
-export const itemDescriptionVariants = cva('line-clamp-2 text-start text-sm/normal font-normal text-muted-foreground group-data-[size=xs]/item:text-xs [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary');
+export const itemDescriptionVariants = cva('text-muted-foreground line-clamp-2 text-start text-sm leading-normal group-data-[size=xs]/item:text-xs [&>a]:underline [&>a]:underline-offset-4');
 
 export const itemActionsVariants = cva('flex items-center gap-2');
 

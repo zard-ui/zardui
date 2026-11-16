@@ -242,7 +242,7 @@ export const messageGroupVariants = cva('flex min-w-0 flex-col gap-2');
 
 export const messageVariants = cva('relative flex w-full min-w-0 gap-2 text-sm data-[align=end]:flex-row-reverse group/message');
 
-export const messageAvatarVariants = cva('flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-full bg-muted group-has-data-[slot=message-footer]/message:-translate-y-8');
+export const messageAvatarVariants = cva('bg-muted flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-full group-has-data-[slot=message-footer]/message:-translate-y-8');
 
 export const messageContentVariants = cva('flex w-full min-w-0 flex-col gap-2.5 wrap-break-word group-data-[align=end]/message:*:data-slot:self-end');
 
@@ -253,11 +253,11 @@ export const messageContentVariants = cva('flex w-full min-w-0 flex-col gap-2.5 
  * `data-variant`, and a ghost action button in the footer must not flatten the
  * padding of the whole row.
  */
-const messageMetaVariants = 'flex max-w-full min-w-0 items-center px-3 text-xs font-medium text-muted-foreground group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0';
+const messageMetaVariants = 'text-muted-foreground flex max-w-full min-w-0 items-center px-3 text-xs font-medium group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0';
 
 export const messageHeaderVariants = cva(messageMetaVariants);
 
-export const messageFooterVariants = cva(mergeClasses(messageMetaVariants, 'group-data-[align=end]/message:justify-end'));
+export const messageFooterVariants = cva(mergeClasses(messageMetaVariants, 'text-muted-foreground px-3 text-xs font-medium group-has-data-[variant=ghost]/message:px-0 group-data-[align=end]/message:justify-end'));
 
 export type ZardMessageAlignVariants = 'start' | 'end';
 ```

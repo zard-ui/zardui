@@ -121,7 +121,7 @@ Accessibility
 
 #### Deliverables (10/10)
 
-- 55+ components, including Chart (Apache ECharts)
+- 68+ components, including Chart (Apache ECharts)
 - 10 ready-made blocks
 - Public registry with a versioned format and JSON Schemas
 - Icon catalog served by the registry, family set in components.json

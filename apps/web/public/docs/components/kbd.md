@@ -35,6 +35,7 @@ import { kbdVariants } from './kbd.variants';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: { class: 'contents' },
   exportAs: 'zKbd',
 })
 export class ZardKbdComponent {
@@ -49,7 +50,7 @@ export class ZardKbdComponent {
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
-export const kbdVariants = cva("inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3 pointer-events-none select-none");
+export const kbdVariants = cva("bg-muted text-muted-foreground inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm px-1 font-sans text-xs font-medium in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3 pointer-events-none select-none");
 
 export const kbdGroupVariants = cva('inline-flex items-center gap-1');
 ```

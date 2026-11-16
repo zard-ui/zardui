@@ -419,30 +419,30 @@ The scroll-aware behaviour needs scroll-driven animations. Where they are missin
 
 | Class |
 | --- |
-| `scroll-fade`Fades the top and bottom edges |
-| `scroll-fade-y`Same as `scroll-fade` |
-| `scroll-fade-x`Fades the inline edges; mirrors under RTL |
-| `scroll-fade-t`Top edge only |
-| `scroll-fade-b`Bottom edge only |
-| `scroll-fade-l`Left edge only; does not mirror |
-| `scroll-fade-r`Right edge only; does not mirror |
-| `scroll-fade-s`Inline start edge only |
-| `scroll-fade-e`Inline end edge only |
-| `scroll-fade-<number>`Fade depth from the spacing scale |
-| `scroll-fade-[<value>]`Arbitrary fade depth |
-| `scroll-fade-t-<number>`Top edge depth |
-| `scroll-fade-b-<number>`Bottom edge depth |
-| `scroll-fade-s-<number>`Inline start depth |
-| `scroll-fade-e-<number>`Inline end depth |
-| `scroll-fade-none`Disables the mask |
+| `scroll-fade` Fades the top and bottom edges |
+| `scroll-fade-y` Same as `scroll-fade` |
+| `scroll-fade-x` Fades the inline edges; mirrors under RTL |
+| `scroll-fade-t` Top edge only |
+| `scroll-fade-b` Bottom edge only |
+| `scroll-fade-l` Left edge only; does not mirror |
+| `scroll-fade-r` Right edge only; does not mirror |
+| `scroll-fade-s` Inline start edge only |
+| `scroll-fade-e` Inline end edge only |
+| `scroll-fade-<number>` Fade depth from the spacing scale |
+| `scroll-fade-[<value>]` Arbitrary fade depth |
+| `scroll-fade-t-<number>` Top edge depth |
+| `scroll-fade-b-<number>` Bottom edge depth |
+| `scroll-fade-s-<number>` Inline start depth |
+| `scroll-fade-e-<number>` Inline end depth |
+| `scroll-fade-none` Disables the mask |
 
 ### Custom properties
 
 | Property | Default |
 | --- | --- |
-| `--scroll-fade-size`Fade depth of every edge | `min(12%, calc(var(--spacing) * 10))` |
-| `--scroll-fade-t-size`Top edge depth | `--scroll-fade-size` |
-| `--scroll-fade-b-size`Bottom edge depth | `--scroll-fade-size` |
-| `--scroll-fade-s-size`Inline start depth | `--scroll-fade-size` |
-| `--scroll-fade-e-size`Inline end depth | `--scroll-fade-size` |
-| `--scroll-fade-reveal`Scroll distance to a full fade | `calc(var(--spacing) * 24)` |
+| `--scroll-fade-size` Fade depth of every edge | `min(12%, calc(var(--spacing) * 10))` |
+| `--scroll-fade-t-size` Top edge depth | `--scroll-fade-size` |
+| `--scroll-fade-b-size` Bottom edge depth | `--scroll-fade-size` |
+| `--scroll-fade-s-size` Inline start depth | `--scroll-fade-size` |
+| `--scroll-fade-e-size` Inline end depth | `--scroll-fade-size` |
+| `--scroll-fade-reveal` Scroll distance to a full fade | `calc(var(--spacing) * 24)` |

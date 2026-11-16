@@ -308,7 +308,7 @@ export const messageScrollerVariants = cva(
 export const messageScrollerViewportVariants = cva(
   mergeClasses(
     'size-full min-h-0 min-w-0 scroll-fade-b scrollbar-thin overflow-y-auto overscroll-contain [overflow-anchor:none] [scrollbar-gutter:stable]',
-    'focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none focus-visible:ring-inset',
+    'focus-visible:ring-ring/50 focus-visible:ring-3 focus-visible:outline-none focus-visible:ring-inset',
     'data-autoscrolling:scrollbar-thumb-transparent data-autoscrolling:scrollbar-track-transparent',
     'data-pending-scroll:invisible',
   ),

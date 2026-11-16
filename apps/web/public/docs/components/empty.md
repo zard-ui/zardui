@@ -147,7 +147,7 @@ export const emptyDescriptionVariants = cva('text-muted-foreground text-sm/relax
   variants: {},
 });
 
-export const emptyActionsVariants = cva('flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance', {
+export const emptyActionsVariants = cva('flex w-full max-w-sm min-w-0 flex-col items-center gap-2.5 text-sm text-balance', {
   variants: {},
 });
 ```

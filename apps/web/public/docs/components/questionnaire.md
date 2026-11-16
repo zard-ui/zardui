@@ -484,13 +484,18 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
+// Structure lives here, the look in the `cn-*` markers (style sheets). shadcn/ui reads the choice state from
+// `data-checked` / `data-type`; zard reads it from the native control (`has-[input:checked]`, `input[type=radio]`).
+
 export const questionnaireVariants = cva('gap-4 flex w-full min-w-0 flex-col mx-auto max-w-md');
 
-export const questionnaireProgressVariants = cva('text-xs font-medium text-muted-foreground min-h-lh w-fit min-w-[14ch] tabular-nums');
+export const questionnaireProgressVariants = cva(
+  'text-xs block min-h-lh w-fit min-w-[14ch] font-medium text-muted-foreground tabular-nums',
+);
 
-export const questionnaireTitleVariants = cva('text-base/snug font-medium [&:has(~[data-slot=questionnaire-description])]:-mb-4 text-pretty');
+export const questionnaireTitleVariants = cva('text-base leading-snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4 font-heading text-pretty');
 
-export const questionnaireDescriptionVariants = cva('text-sm text-muted-foreground text-pretty');
+export const questionnaireDescriptionVariants = cva('text-muted-foreground text-sm text-pretty text-muted-foreground');
 
 export const questionnaireItemVariants = cva(
   'gap-4 flex w-full min-w-0 flex-col border-0 p-0 outline-none [&[hidden]]:hidden',
@@ -499,41 +504,45 @@ export const questionnaireItemVariants = cva(
 export const questionnaireChoicesVariants = cva('gap-2 group/questionnaire-choices grid min-w-0');
 
 export const questionnaireChoiceVariants = cva(
-  'gap-2.5 rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50 group/questionnaire-choice relative flex min-h-11 cursor-pointer items-start text-start transition-colors outline-none select-none hover:bg-muted/50 data-invalid:border-destructive dark:bg-input/20 has-[input:checked]:border-primary/40 has-[input:checked]:bg-muted dark:has-[input:checked]:bg-muted data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
+  'border-input gap-2.5 rounded-lg border bg-transparent px-3 py-2.5 text-sm dark:bg-input/20 hover:bg-muted/50 has-[input:checked]:border-primary/40 has-[input:checked]:bg-muted dark:has-[input:checked]:bg-muted data-invalid:border-destructive has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3 group/questionnaire-choice relative flex min-h-11 cursor-pointer items-start text-start transition-colors outline-none select-none data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
 );
 
 export const questionnaireChoiceControlVariants = cva('absolute inset-0 z-10 size-full cursor-pointer opacity-0');
 
 export const questionnaireChoiceIndicatorVariants = cva(
-  'size-4 rounded-[4px] border border-input dark:bg-input/30 pointer-events-none relative flex shrink-0 translate-y-[calc(var(--spacing)*0.45)] items-center justify-center group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 group-has-[input[type=radio]]/questionnaire-choice:rounded-full group-has-[input:checked]/questionnaire-choice:border-primary group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground dark:group-has-[input:checked]/questionnaire-choice:bg-primary',
+  'border-input size-4 translate-y-[--spacing(0.45)] rounded-[4px] dark:bg-input/30 group-has-[input:checked]/questionnaire-choice:bg-primary dark:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 pointer-events-none relative flex shrink-0 items-center justify-center border group-has-[input[type=radio]]/questionnaire-choice:rounded-full',
 );
 
 export const questionnaireChoiceIndicatorDotVariants = cva(
-  'hidden size-2 rounded-full bg-primary-foreground group-has-[input[type=radio]:checked]/questionnaire-choice:block',
+  'bg-primary-foreground size-2 hidden rounded-full group-has-[input[type=checkbox]]/questionnaire-choice:hidden group-has-[input:checked]/questionnaire-choice:block',
 );
 
 export const questionnaireChoiceIndicatorCheckVariants = cva(
-  'hidden size-3.5 group-has-[input[type=checkbox]:checked]/questionnaire-choice:block',
+  'size-3.5 [--ng-icon__size:0.875rem] hidden group-has-[input[type=radio]]/questionnaire-choice:hidden group-has-[input:checked]/questionnaire-choice:block',
 );
 
 export const questionnaireInputVariants = cva(
-  'h-8 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 min-h-11 w-full min-w-0 outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 sm:min-h-0 dark:disabled:bg-input/80 selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground',
+  'border-input h-8 rounded-lg border bg-transparent px-2.5 py-1 text-base dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 disabled:bg-input/50 dark:disabled:bg-input/80 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm min-h-11 w-full min-w-0 transition-[color,box-shadow,background-color] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0 selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground',
 );
 
-export const questionnaireChoiceLabelVariants = cva('flex min-w-0 flex-1 flex-col gap-0.5 leading-snug');
+export const questionnaireChoiceLabelVariants = cva(
+  'gap-0.5 flex min-w-0 flex-1 flex-col leading-snug',
+);
 
-export const questionnaireChoiceDescriptionVariants = cva('block text-muted-foreground');
+export const questionnaireChoiceDescriptionVariants = cva('text-muted-foreground block');
 
 export const questionnaireChoiceShortcutVariants = cva(
-  'size-5 rounded-md font-mono text-[0.625rem] font-medium pointer-events-none ms-auto inline-flex shrink-0 translate-y-[calc(var(--spacing)*0.45)] items-center justify-center border border-input bg-background leading-none text-muted-foreground group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+  'border-input bg-background text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-md border font-mono text-[0.625rem] font-medium leading-none group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 pointer-events-none ms-auto inline-flex shrink-0',
 );
 
-export const questionnaireInputWrapperVariants = cva('group/questionnaire-input relative block w-full min-w-0');
+export const questionnaireInputWrapperVariants = cva(
+  'w-full group/questionnaire-input relative block min-w-0',
+);
 
-export const questionnaireErrorVariants = cva('text-sm mt-2 text-destructive');
+export const questionnaireErrorVariants = cva('mt-2 text-sm text-destructive');
 
 export const questionnaireActionsVariants = cva(
-  'gap-2 grid min-h-11 w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center sm:min-h-8',
+  'gap-2 grid min-h-11 w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center',
 );
 
 export const questionnairePreviousVariants = cva(

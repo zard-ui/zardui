@@ -237,20 +237,20 @@ Under `prefers-reduced-motion: reduce` the animation and the gradient are both s
 
 | Class |
 | --- |
-| `shimmer`Sweeps a highlight across the text |
-| `shimmer-once`Single sweep instead of a loop |
-| `shimmer-reverse`Reverses the sweep direction |
-| `shimmer-none`Disables the effect |
-| `shimmer-color-<color>`Highlight color; supports `/<opacity>` |
-| `shimmer-duration-<number>`Sweep duration in milliseconds |
-| `shimmer-spread-<number>`Width of the highlight band |
-| `shimmer-angle-<number>`Tilt of the band in degrees |
+| `shimmer` Sweeps a highlight across the text |
+| `shimmer-once` Single sweep instead of a loop |
+| `shimmer-reverse` Reverses the sweep direction |
+| `shimmer-none` Disables the effect |
+| `shimmer-color-<color>` Highlight color; supports `/<opacity>` |
+| `shimmer-duration-<number>` Sweep duration in milliseconds |
+| `shimmer-spread-<number>` Width of the highlight band |
+| `shimmer-angle-<number>` Tilt of the band in degrees |
 
 ### Custom properties
 
 | Property | Default |
 | --- | --- |
-| `--shimmer-color`Highlight color, brighter in dark mode | `oklch(from currentColor l c h / calc(alpha * 0.2))` |
-| `--shimmer-duration`Sweep duration | `2s` |
-| `--shimmer-spread`Band width | `calc(3ch + 40px)` |
-| `--shimmer-angle`Band tilt | `20deg` |
+| `--shimmer-color` Highlight color, brighter in dark mode | `oklch(from currentColor l c h / calc(alpha * 0.2))` |
+| `--shimmer-duration` Sweep duration | `2s` |
+| `--shimmer-spread` Band width | `calc(3ch + 40px)` |
+| `--shimmer-angle` Band tilt | `20deg` |

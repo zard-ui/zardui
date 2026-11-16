@@ -388,7 +388,7 @@ export const mapStyleSwatchVariants = cva('block shrink-0 overflow-hidden ring-1
 });
 
 export const mapStyleOptionVariants = cva(
-  'flex items-center gap-3 rounded-md p-1.5 text-left focus-visible:ring-[3px] focus-visible:ring-ring/50 group outline-none hover:bg-accent data-[selected=true]:bg-accent',
+  'flex items-center gap-3 rounded-md p-1.5 text-left focus-visible:ring-ring/50 focus-visible:ring-[3px] group outline-none hover:bg-accent data-[selected=true]:bg-accent',
 );
 
 export type ZardMapStyleSwatchSizeVariants = NonNullable<VariantProps<typeof mapStyleSwatchVariants>['zSize']>;

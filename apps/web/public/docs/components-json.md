@@ -49,7 +49,7 @@ The style of your design: the look a preset picks for spacing, radius, density a
 }
 ```
 
-The eight named styles are written by `zard-cli init --preset` , `zard-cli apply` and `zard-cli create` — pick one on the [create page](/create) . The default design uses `nova` , zard's own look (the one the library has always had), not a copy of shadcn's nova.
+The eight named styles are written by `zard-cli init --preset` , `zard-cli apply` and `zard-cli create` — pick one on the [create page](/create) . The default design uses `nova` , the same look as shadcn's nova.
 
 `css` is what every project initialized before styles existed carries, and what the CLI reads when the key is missing. It keeps working and is the same look as `nova` , so nothing needs to change in an existing project. A plain `zard-cli init` without a preset writes it; the others come from a preset.
 

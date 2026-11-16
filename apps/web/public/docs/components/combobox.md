@@ -694,13 +694,13 @@ export const comboboxTriggerVariants = cva("[&_svg:not([class*='size-'])]:size-4
 export const comboboxClearVariants = cva('');
 
 export const comboboxContentVariants = cva(
-  'relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:bg-input/30 *:data-[slot=input-group]:shadow-none data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 group/combobox-content',
+  'bg-popover text-popover-foreground ring-foreground/10 relative max-h-(--z-combobox-available-height) w-(--z-combobox-anchor-width) max-w-(--z-combobox-available-width) min-w-(--z-combobox-anchor-width) origin-(--z-combobox-transform-origin) overflow-hidden rounded-lg shadow-md ring-1 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 *:data-[slot=input-group]:border-input/30 *:data-[slot=input-group]:bg-input/30 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 *:data-[slot=input-group]:m-1 *:data-[slot=input-group]:mb-0 *:data-[slot=input-group]:h-8 *:data-[slot=input-group]:shadow-none group/combobox-content',
 );
 
-export const comboboxListVariants = cva('no-scrollbar block scroll-py-1 overflow-y-auto overscroll-contain p-1 max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] data-empty:p-0');
+export const comboboxListVariants = cva('no-scrollbar block max-h-[min(calc(--spacing(72)-(--spacing(9))),calc(var(--z-combobox-available-height)-(--spacing(9))))] scroll-py-1 overflow-y-auto overscroll-contain p-1 data-empty:p-0');
 
 export const comboboxItemVariants = cva(
-  "relative flex w-full cursor-default items-center gap-2 rounded-md py-1 pe-8 ps-1.5 text-sm data-highlighted:bg-accent data-highlighted:text-accent-foreground not-data-[variant=destructive]:data-highlighted:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "relative flex w-full cursor-default items-center gap-2 rounded-md py-1 ps-1.5 pe-8 text-sm data-highlighted:bg-accent data-highlighted:text-accent-foreground not-data-[variant=destructive]:data-highlighted:**:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       zVariant: {
@@ -718,15 +718,15 @@ export const comboboxItemIndicatorVariants = cva('pointer-events-none absolute i
 
 export const comboboxGroupVariants = cva('block');
 
-export const comboboxLabelVariants = cva('block px-2 py-1.5 text-xs text-muted-foreground');
+export const comboboxLabelVariants = cva('text-muted-foreground block px-2 py-1.5 text-xs');
 
-export const comboboxEmptyVariants = cva('hidden w-full justify-center py-2 text-center text-sm text-muted-foreground group-data-empty/combobox-content:flex');
+export const comboboxEmptyVariants = cva('text-muted-foreground hidden w-full justify-center py-2 text-center text-sm group-data-empty/combobox-content:flex');
 
-export const comboboxSeparatorVariants = cva('-mx-1 my-1 block h-px bg-border');
+export const comboboxSeparatorVariants = cva('bg-border -mx-1 my-1 block h-px');
 
-export const comboboxChipsVariants = cva('flex min-h-8 flex-wrap items-center gap-1 rounded-lg border border-input bg-transparent bg-clip-padding px-2.5 py-1 text-sm transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 has-data-[slot=combobox-chip]:px-1 dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40');
+export const comboboxChipsVariants = cva('border-input flex min-h-8 flex-wrap items-center gap-1 rounded-lg border bg-transparent bg-clip-padding px-2.5 py-1 text-sm transition-colors focus-within:border-ring focus-within:ring-ring/50 has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 dark:bg-input/30 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40 focus-within:ring-3 has-aria-invalid:ring-3 has-data-[slot=combobox-chip]:px-1');
 
-export const comboboxChipVariants = cva('flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 rounded-sm bg-muted px-1.5 text-xs font-medium whitespace-nowrap text-foreground has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0');
+export const comboboxChipVariants = cva('bg-muted text-foreground flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 rounded-sm px-1.5 text-xs font-medium whitespace-nowrap has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50 has-data-[slot=combobox-chip-remove]:pe-0');
 
 export const comboboxChipRemoveVariants = cva('-ms-1 opacity-50 hover:opacity-100');
 
@@ -977,7 +977,12 @@ import {
 } from '@/shared/components/combobox/combobox.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { type ZardComboboxAlignVariants, ZardComboboxRoot, type ZardComboboxSideVariants } from './combobox.types';
+import {
+  type ZardComboboxAlignVariants,
+  type ZardComboboxPhysicalSide,
+  ZardComboboxRoot,
+  type ZardComboboxSideVariants,
+} from './combobox.types';
 
 @Component({
   selector: 'z-combobox-list, [z-combobox-list]',
@@ -1101,7 +1106,7 @@ export class ZardComboboxContentComponent implements OnDestroy {
   private portal?: TemplatePortal;
   private positionStrategy?: FlexibleConnectedPositionStrategy;
 
-  protected readonly resolvedSide = signal<ZardComboboxSideVariants>('bottom');
+  protected readonly resolvedSide = signal<ZardComboboxPhysicalSide>('bottom');
   protected readonly anchorWidth = signal('0px');
   protected readonly availableWidth = signal('0px');
   protected readonly availableHeight = signal('0px');
@@ -1115,8 +1120,13 @@ export class ZardComboboxContentComponent implements OnDestroy {
   protected readonly isChips = computed(() => this.zAnchor() !== null || this.root.hasChips());
 
   protected readonly transformOrigin = computed(() => {
-    const block = this.resolvedSide() === 'bottom' ? 'top' : 'bottom';
     const align = this.alignValue();
+    const side = this.resolvedSide();
+    if (side === 'left' || side === 'right') {
+      const vertical = align === 'center' ? 'center' : align === 'end' ? 'bottom' : 'top';
+      return `${vertical} ${side === 'left' ? 'right' : 'left'}`;
+    }
+    const block = side === 'bottom' ? 'top' : 'bottom';
     // `start`/`end` are logical: the start edge is the physical right in RTL.
     const inline = align === 'center' ? 'center' : (align === 'start') !== this.isRtl() ? 'left' : 'right';
     return `${block} ${inline}`;
@@ -1174,7 +1184,7 @@ export class ZardComboboxContentComponent implements OnDestroy {
       return;
     }
 
-    this.resolvedSide.set(this.sideValue());
+    this.resolvedSide.set(this.physicalSide(this.sideValue()));
     this.createOverlay(anchor);
 
     if (!this.overlayRef || this.overlayRef.hasAttached()) {
@@ -1215,7 +1225,14 @@ export class ZardComboboxContentComponent implements OnDestroy {
     });
 
     this.positionStrategy.positionChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(change => {
-      this.resolvedSide.set(change.connectionPair.originY === 'top' ? 'top' : 'bottom');
+      const pair = change.connectionPair;
+      if (pair.originY !== pair.overlayY) {
+        this.resolvedSide.set(pair.originY === 'top' ? 'top' : 'bottom');
+      } else {
+        // Horizontal pairs: `start` is the physical left in LTR and the physical right in RTL.
+        const startSide = this.isRtl() ? 'right' : 'left';
+        this.resolvedSide.set(pair.originX === 'start' ? startSide : startSide === 'left' ? 'right' : 'left');
+      }
       this.updateMeasurements();
     });
 
@@ -1237,8 +1254,40 @@ export class ZardComboboxContentComponent implements OnDestroy {
     return !!anchor?.contains(target);
   }
 
+  private physicalSide(side: ZardComboboxSideVariants): ZardComboboxPhysicalSide {
+    if (side === 'inline-start') return this.isRtl() ? 'right' : 'left';
+    if (side === 'inline-end') return this.isRtl() ? 'left' : 'right';
+    return side;
+  }
+
+  /** The panel beside the anchor: the preferred side first, then the opposite one. */
+  private sidewaysPositions(side: ZardComboboxSideVariants, align: ZardComboboxAlignVariants): ConnectedPosition[] {
+    const rtl = this.isRtl();
+    const vertical = { start: 'top', center: 'center', end: 'bottom' } as const;
+    const offset = this.sideOffsetValue();
+    const alignOffset = this.alignOffsetValue();
+    const beside = (onLeft: boolean): ConnectedPosition => {
+      // CDK `start` is the physical left in LTR and the physical right in RTL.
+      const cdkStart = onLeft !== rtl;
+      return {
+        originX: cdkStart ? 'start' : 'end',
+        originY: vertical[align],
+        overlayX: cdkStart ? 'end' : 'start',
+        overlayY: vertical[align],
+        offsetX: onLeft ? -offset : offset,
+        ...(alignOffset !== 0 ? { offsetY: align === 'end' ? -alignOffset : alignOffset } : {}),
+      };
+    };
+    const onLeft = this.physicalSide(side) === 'left';
+    return [beside(onLeft), beside(!onLeft)];
+  }
+
   private connectedPositions(): ConnectedPosition[] {
     const align = this.alignValue();
+    const side = this.sideValue();
+    if (side !== 'top' && side !== 'bottom') {
+      return this.sidewaysPositions(side, align);
+    }
     const x = align === 'center' ? 'center' : align === 'end' ? 'end' : 'start';
     const sideOffset = this.sideOffsetValue();
     // `offsetX` is physical while `start`/`end` follow the direction, so the align offset is mirrored.
@@ -1276,10 +1325,24 @@ export class ZardComboboxContentComponent implements OnDestroy {
     const viewportWidth = window.innerWidth || 0;
     const align = this.alignValue();
 
-    const height = this.resolvedSide() === 'bottom' ? viewportHeight - rect.bottom - offset : rect.top - offset;
+    const resolved = this.resolvedSide();
+    const sideways = resolved === 'left' || resolved === 'right';
+    const height = sideways
+      ? viewportHeight
+      : resolved === 'bottom'
+        ? viewportHeight - rect.bottom - offset
+        : rect.top - offset;
     // The start edge is the physical right in RTL, so the room it grows into is measured from the other side.
     const growsRight = (align === 'start') !== this.isRtl();
-    const width = align === 'center' ? viewportWidth : growsRight ? viewportWidth - rect.left : rect.right;
+    const width = sideways
+      ? resolved === 'left'
+        ? rect.left - offset
+        : viewportWidth - rect.right - offset
+      : align === 'center'
+        ? viewportWidth
+        : growsRight
+          ? viewportWidth - rect.left
+          : rect.right;
 
     this.anchorWidth.set(`${Math.round(anchor.offsetWidth || rect.width)}px`);
     this.availableHeight.set(`${Math.max(Math.round(height), 0)}px`);
@@ -1550,7 +1613,7 @@ export class ZardComboboxClearDirective {
           >
             <ng-icon
               name="lucideChevronDown"
-              class="size-4 text-muted-foreground pointer-events-none"
+              class="text-muted-foreground size-4 text-muted-foreground pointer-events-none"
             />
           </button>
         }
@@ -1609,8 +1672,9 @@ export class ZardComboboxInputComponent {
     return this.root.open() && this.root.searchable() ? this.root.searchPlaceholder() : this.root.placeholder();
   });
 
-  protected readonly classes = computed(() => mergeClasses(comboboxInputHostVariants(), this.class()));
-  protected readonly inputGroupClasses = computed(() => mergeClasses(comboboxInputGroupVariants()));
+  /** The host is `display: contents`, so a consumer's `class` (a width, say) goes on the group, as shadcn's does. */
+  protected readonly classes = computed(() => mergeClasses(comboboxInputHostVariants()));
+  protected readonly inputGroupClasses = computed(() => mergeClasses(comboboxInputGroupVariants(), this.class()));
 
   constructor() {
     effect(() => {
@@ -1882,7 +1946,9 @@ export interface ZardComboboxGroup {
 }
 
 export type ZardComboboxFilterVariants = 'contains' | 'startsWith' | 'none';
-export type ZardComboboxSideVariants = 'top' | 'bottom';
+export type ZardComboboxSideVariants = 'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end';
+/** The side the panel really sits on, once `inline-*` has been resolved against the direction. */
+export type ZardComboboxPhysicalSide = 'top' | 'bottom' | 'left' | 'right';
 export type ZardComboboxAlignVariants = 'start' | 'center' | 'end';
 export type ZardComboboxAnchorKind = 'input' | 'chips' | 'trigger';
 
@@ -2762,7 +2828,7 @@ Root that owns the value, query and open state.
 | `[zMultiple]` | Multiple selection with chips | `boolean` | `false` |
 | `[zFilter]` | Built-in filter applied to item labels | `'contains' \| 'startsWith' \| 'none'` | `'contains'` |
 | `[zFilterFn]` | Custom filter predicate. Overrides `zFilter` | `((label: string, query: string) => boolean) \| null` | `null` |
-| `[zSide]` | Preferred popup side | `'top' \| 'bottom'` | `'bottom'` |
+| `[zSide]` | Preferred popup side (`inline-*` follow the text direction) | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
 | `[zAlign]` | Popup alignment against the anchor | `'start' \| 'center' \| 'end'` | `'start'` |
 | `[zSideOffset]` | Gap in px from the anchor | `number` | `6` |
 | `[zAlignOffset]` | Offset in px along the alignment axis | `number` | `0` |
@@ -2821,7 +2887,7 @@ Popup positioned against the anchor.
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zAnchor]` | Anchor element. Defaults to the input group or chips | `ElementRef<HTMLElement> \| HTMLElement \| null` | `null` |
-| `[zSide]` | Overrides the root `zSide` | `'top' \| 'bottom' \| null` | `null` |
+| `[zSide]` | Overrides the root `zSide` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end' \| null` | `null` |
 | `[zAlign]` | Overrides the root `zAlign` | `'start' \| 'center' \| 'end' \| null` | `null` |
 | `[zSideOffset]` | Overrides the root `zSideOffset` | `number \| null` | `null` |
 | `[zAlignOffset]` | Overrides the root `zAlignOffset` | `number \| null` | `null` |

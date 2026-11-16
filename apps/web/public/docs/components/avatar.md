@@ -154,7 +154,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { mergeClasses } from '@/shared/utils';
 
-export const avatarVariants = cva('relative flex shrink-0 rounded-full after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten group/avatar select-none', {
+export const avatarVariants = cva('after:border-border relative flex size-8 shrink-0 rounded-full after:border after:absolute after:inset-0 after:rounded-full after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten group/avatar select-none', {
   variants: {
     zSize: {
       sm: 'size-6',
@@ -189,7 +189,7 @@ export const avatarBadgeVariants = mergeClasses(
   'group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg]:size-2',
 );
 
-export const avatarGroupVariants = cva('flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background group/avatar-group', {
+export const avatarGroupVariants = cva('flex *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:ring-2 group/avatar-group', {
   variants: {
     zOrientation: {
       horizontal: 'flex-row -space-x-2',
@@ -205,7 +205,7 @@ export const avatarGroupVariants = cva('flex *:data-[slot=avatar]:ring-2 *:data-
  * The "+N" chip appended to a `z-avatar-group` for members the stack does not show.
  * Carries `data-slot="avatar"` so it also picks up the group's own ring/spacing rules.
  */
-export const avatarGroupCountVariants = cva('relative flex shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground font-medium ring-2 ring-background select-none', {
+export const avatarGroupCountVariants = cva('bg-muted text-muted-foreground ring-background relative flex size-8 shrink-0 items-center justify-center rounded-full text-sm ring-2 group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3 select-none', {
   variants: {
     zSize: {
       sm: 'size-6 text-xs',

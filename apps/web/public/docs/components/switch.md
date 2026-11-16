@@ -48,7 +48,7 @@ type OnChangeType = (value: boolean) => void;
   selector: 'z-switch',
   imports: [ZardIdDirective],
   template: `
-    <span class="flex items-center space-x-2" zardId="switch" #z="zardId" [attr.data-checked]="zChecked() ? '' : null">
+    <span class="flex items-center" zardId="switch" #z="zardId" [attr.data-checked]="zChecked() ? '' : null">
       <button
         [id]="zId() || z.id()"
         type="button"
@@ -67,7 +67,10 @@ type OnChangeType = (value: boolean) => void;
         ></span>
       </button>
 
-      <label class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70" [for]="zId() || z.id()">
+      <label
+        class="text-sm leading-none font-medium ms-2 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 has-[>.sr-only:only-child]:ms-0"
+        [for]="zId() || z.id()"
+      >
         <ng-content><span class="sr-only">toggle switch</span></ng-content>
       </label>
     </span>
@@ -136,7 +139,7 @@ export class ZardSwitchComponent implements ControlValueAccessor {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const switchVariants = cva('relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 disabled:cursor-not-allowed peer outline-none disabled:opacity-50', {
+export const switchVariants = cva('relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:ring-[3px] disabled:cursor-not-allowed aria-invalid:ring-[3px] peer outline-none disabled:opacity-50', {
   variants: {
     zSize: {
       default: 'h-[18.4px] w-[32px]',

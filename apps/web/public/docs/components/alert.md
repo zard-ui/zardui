@@ -50,7 +50,7 @@ import {
       </span>
     }
 
-    <div class="flex-1">
+    <div [class]="contentClasses()">
       @if (zTitle()) {
         <div [class]="titleClasses()" data-slot="alert-title">
           <ng-container *zStringTemplateOutlet="zTitle()">{{ zTitle() }}</ng-container>
@@ -91,6 +91,17 @@ export class ZardAlertComponent {
 
   protected readonly actionClasses = computed(() => alertActionVariants());
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
+  /**
+   * The icon spans two grid rows (shadcn gives the title and the description one each). The wrapper takes both rows
+   * only when it holds both, so an alert with a single line keeps the gap of the empty second row, like shadcn.
+   */
+  protected readonly contentClasses = computed(() =>
+    mergeClasses(
+      'flex flex-1 flex-col gap-[inherit]',
+      this.zTitle() && this.zDescription() && "group-has-data-[slot='alert-icon']/alert:row-span-2",
+    ),
+  );
+
   protected readonly descriptionClasses = computed(() => alertDescriptionVariants({ zType: this.zType() }));
   protected readonly iconClasses = computed(() => alertIconVariants());
   protected readonly role = computed(() => this.zRole() ?? (this.zAction() ? 'status' : 'alert'));
@@ -128,13 +139,13 @@ export const alertVariants = cva("relative grid w-full gap-0.5 rounded-lg border
   },
 });
 
-export const alertIconVariants = cva('shrink-0 self-start text-base!');
+export const alertIconVariants = cva('flex shrink-0 self-start text-base!');
 
-export const alertActionVariants = cva('absolute top-2 end-2');
+export const alertActionVariants = cva('absolute end-2 top-2');
 
-export const alertTitleVariants = cva("font-medium group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground");
+export const alertTitleVariants = cva("[&_a]:hover:text-foreground font-medium group-has-data-[slot='alert-icon']/alert:col-start-2 group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3");
 
-export const alertDescriptionVariants = cva('text-sm text-balance md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4', {
+export const alertDescriptionVariants = cva('text-sm text-balance [&_a]:hover:text-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_p:not(:last-child)]:mb-4', {
   variants: {
     zType: {
       default: 'text-muted-foreground',

@@ -119,13 +119,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 export const accordionVariants = cva('');
 
-export const accordionItemVariants = cva('border-b flex flex-1 flex-col last:border-b-0', {
+export const accordionItemVariants = cva('flex flex-1 flex-col not-last:border-b', {
   variants: {},
   defaultVariants: {},
 });
 
 export const accordionTriggerVariants = cva(
-  'cursor-pointer flex flex-1 items-start justify-between gap-4 rounded-md py-2.5 text-start text-sm font-medium transition-all w-full hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] group outline-none disabled:pointer-events-none disabled:opacity-50',
+  'flex w-full flex-1 cursor-pointer items-start justify-between gap-4 rounded-lg py-2.5 text-start text-sm font-medium transition-all focus-visible:border-ring focus-visible:ring-ring/50 hover:underline focus-visible:ring-[3px] group border border-transparent outline-none disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {},
     defaultVariants: {},
@@ -205,7 +205,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         [class]="contentClasses()"
       >
         <div class="overflow-hidden">
-          <div class="pt-0 pb-4">
+          <div
+            class="pt-0 pb-2.5 [&_a]:hover:text-foreground [&_a]:underline [&_a]:underline-offset-3 [&_p:not(:last-child)]:mb-4"
+          >
             <ng-content />
           </div>
         </div>

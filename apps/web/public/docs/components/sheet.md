@@ -413,7 +413,7 @@ export class ZardSheetCloseDirective {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const sheetVariants = cva('fixed z-50 flex flex-col gap-4 bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg outline-none', {
+export const sheetVariants = cva('bg-popover text-popover-foreground fixed z-50 flex flex-col gap-4 bg-clip-padding text-sm shadow-lg outline-none', {
   variants: {
     zSide: {
       top: 'inset-x-0 top-0 h-auto border-b',
@@ -468,9 +468,9 @@ export const SHEET_BACKDROP_CLASSES = 'bg-black/10 supports-backdrop-filter:back
 
 export const sheetHeaderVariants = cva('flex flex-col gap-0.5 p-4');
 
-export const sheetTitleVariants = cva('text-base font-medium text-foreground wrap-anywhere font-heading');
+export const sheetTitleVariants = cva('text-foreground text-base font-medium wrap-anywhere font-heading');
 
-export const sheetDescriptionVariants = cva('text-sm text-muted-foreground wrap-anywhere');
+export const sheetDescriptionVariants = cva('text-muted-foreground text-sm wrap-anywhere');
 
 export const sheetFooterVariants = cva('mt-auto flex flex-col gap-2 p-4');
 

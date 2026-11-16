@@ -469,7 +469,7 @@ export const breadcrumbVariants = cva('w-full', {
 });
 export type ZardBreadcrumbSizeVariants = NonNullable<VariantProps<typeof breadcrumbVariants>['zSize']>;
 
-export const breadcrumbListVariants = cva('text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word sm:gap-2.5', {
+export const breadcrumbListVariants = cva('text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word', {
   variants: {
     zAlign: {
       start: 'justify-start',
@@ -489,19 +489,19 @@ export const breadcrumbListVariants = cva('text-muted-foreground flex flex-wrap 
 export type ZardBreadcrumbAlignVariants = NonNullable<VariantProps<typeof breadcrumbListVariants>['zAlign']>;
 export type ZardBreadcrumbWrapVariants = NonNullable<VariantProps<typeof breadcrumbListVariants>['zWrap']>;
 
-export const breadcrumbItemVariants = cva('inline-flex items-center gap-1.5');
+export const breadcrumbItemVariants = cva('inline-flex items-center gap-1');
 export type ZardBreadcrumbItemVariants = VariantProps<typeof breadcrumbItemVariants>;
 
 export const breadcrumbLinkVariants = cva('transition-colors hover:text-foreground');
 export type ZardBreadcrumbLinkVariants = VariantProps<typeof breadcrumbLinkVariants>;
 
-export const breadcrumbPageVariants = cva('font-normal text-foreground');
+export const breadcrumbPageVariants = cva('text-foreground font-normal');
 export type ZardBreadcrumbPageVariants = VariantProps<typeof breadcrumbPageVariants>;
 
-export const breadcrumbSeparatorVariants = cva('text-muted-foreground [&_svg]:size-3.5 [&_ng-icon]:flex! [&_ng-icon]:items-center! [&_ng-icon]:size-3.5!');
+export const breadcrumbSeparatorVariants = cva('[&_ng-icon]:flex! [&_ng-icon]:size-3.5! [&_ng-icon]:items-center! [&_svg]:size-3.5 [&>svg]:size-3.5');
 export type ZardBreadcrumbSeparatorVariants = VariantProps<typeof breadcrumbSeparatorVariants>;
 
-export const breadcrumbEllipsisVariants = cva('flex size-9 items-center justify-center', {
+export const breadcrumbEllipsisVariants = cva('flex size-5 items-center justify-center [&>svg]:size-4', {
   variants: {
     zColor: {
       muted: 'text-muted-foreground',

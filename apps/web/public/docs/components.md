@@ -29,6 +29,7 @@ Here you can find all the components available in the library. We are working on
 - [Combobox](/docs/components/combobox)
 - [Command](/docs/components/command)
 - [Context Menu](/docs/components/context-menu)
+- [Data Table](/docs/components/data-table)
 - [Date Picker](/docs/components/date-picker)
 - [Dialog](/docs/components/dialog)
 - [Drawer](/docs/components/drawer)

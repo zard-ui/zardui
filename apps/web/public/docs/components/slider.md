@@ -549,7 +549,7 @@ export const sliderTrackVariants = cva('bg-muted relative grow overflow-hidden r
 
 export const sliderRangeVariants = cva('bg-primary absolute data-horizontal:h-full data-vertical:w-full select-none');
 
-export const sliderThumbVariants = cva('relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 select-none disabled:pointer-events-none disabled:opacity-50');
+export const sliderThumbVariants = cva('border-ring ring-ring/50 relative block size-3 shrink-0 rounded-full border bg-white transition-[color,box-shadow] after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 select-none disabled:pointer-events-none disabled:opacity-50');
 
 export const sliderOrientationVariants = cva('absolute', {
   variants: {

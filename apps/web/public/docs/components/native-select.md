@@ -65,7 +65,7 @@ export const nativeSelectVariants = cva(
   mergeClasses(
     // `cn-native-select-icon` is the chevron, which is a background image of the <select> itself: it carries the
     // size and position a style gives it.
-    'h-8 rounded-lg border border-input bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center] w-full min-w-0 appearance-none outline-none select-none selection:bg-primary selection:text-primary-foreground',
+    'border-input h-8 rounded-lg border bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 aria-invalid:ring-3 bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center] w-full min-w-0 appearance-none outline-none select-none selection:bg-primary selection:text-primary-foreground',
     'bg-no-repeat',
     CHEVRON_LIGHT,
     CHEVRON_DARK,

@@ -372,7 +372,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const dropdownContentVariants = cva('z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 animate-in duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 outline-none');
+export const dropdownContentVariants = cva('bg-popover text-popover-foreground ring-foreground/10 animate-in z-50 max-h-96 min-w-32 overflow-x-hidden overflow-y-auto rounded-lg p-1 shadow-md ring-1 duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 outline-none');
 
 export const dropdownItemVariants = cva(
   'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 select-none outline-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
@@ -386,16 +386,23 @@ export const dropdownItemVariants = cva(
         true: 'ps-7',
         false: '',
       },
+      /** Rows that carry a check: the style decides where the room for it goes (the end, or the start in a menubar). */
+      checkable: {
+        checkbox: 'ps-1.5 pe-8 in-data-[menu=menubar]:ps-7 in-data-[menu=menubar]:pe-1.5',
+        radio: 'ps-1.5 pe-8 in-data-[menu=menubar]:ps-7 in-data-[menu=menubar]:pe-1.5',
+        false: '',
+      },
     },
     defaultVariants: {
       variant: 'default',
       inset: false,
+      checkable: false,
     },
   },
 );
 
 export const dropdownSubContentVariants = cva(
-  'z-50 min-w-24 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-lg ring-1 ring-foreground/10 animate-in duration-100 fade-in-0 zoom-in-95 outline-none',
+  'bg-popover text-popover-foreground ring-foreground/10 animate-in fade-in-0 zoom-in-95 z-50 max-h-96 min-w-24 overflow-x-hidden overflow-y-auto rounded-lg p-1 shadow-lg ring-1 duration-100 outline-none',
 );
 
 export const dropdownSubTriggerVariants = cva(
@@ -413,7 +420,7 @@ export const dropdownSubTriggerVariants = cva(
   },
 );
 
-export const dropdownLabelVariants = cva('relative flex items-center px-1.5 py-1 text-xs font-medium text-muted-foreground', {
+export const dropdownLabelVariants = cva('text-muted-foreground relative flex items-center px-1.5 py-1 text-xs font-medium', {
   variants: {
     inset: {
       true: 'ps-7',
@@ -807,7 +814,7 @@ export class ZardDropdownMenuShortcutComponent {
 @Component({
   selector: 'z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item]',
   template: `
-    <span class="absolute start-1.5 flex size-4 items-center justify-center pointer-events-none">
+    <span class="absolute end-2 flex items-center justify-center in-data-[menu=menubar]:start-1.5 in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:size-4 pointer-events-none">
       @if (zChecked()) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="size-4">
           <path d="M20 6 9 17l-5-5" />
@@ -850,7 +857,7 @@ export class ZardDropdownMenuCheckboxItemComponent {
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
   protected readonly itemVariant = computed(() => this.zType() ?? this.zVariant() ?? this.variant());
   protected readonly classes = computed(() =>
-    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), inset: true }), this.class()),
+    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), checkable: 'checkbox' }), this.class()),
   );
 
   protected onClick() {
@@ -894,9 +901,11 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
 @Component({
   selector: 'z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
   template: `
-    <span class="absolute start-1.5 flex size-4 items-center justify-center pointer-events-none">
+    <span class="absolute end-2 flex items-center justify-center in-data-[menu=menubar]:start-1.5 in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:size-4 pointer-events-none">
       @if (isChecked()) {
-        <span class="size-2 rounded-full bg-current"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="size-4">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
       }
     </span>
     <ng-content />
@@ -937,7 +946,7 @@ export class ZardDropdownMenuRadioItemComponent {
   protected readonly itemVariant = computed(() => this.zType() ?? this.zVariant() ?? this.variant());
   protected readonly isChecked = computed(() => this.radioGroup?.zValue() === this.zValue());
   protected readonly classes = computed(() =>
-    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), inset: true }), this.class()),
+    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), checkable: 'radio' }), this.class()),
   );
 
   protected onClick() {
@@ -970,6 +979,7 @@ import {
   input,
   type OnDestroy,
   PLATFORM_ID,
+  Renderer2,
   signal,
   type TemplateRef,
   viewChild,
@@ -1081,6 +1091,7 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   private readonly dropdownService = inject(ZardDropdownService);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly overlay = inject(Overlay);
+  private readonly renderer = inject(Renderer2);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewContainerRef = inject(ViewContainerRef);
@@ -1284,6 +1295,12 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
+
+    // A submenu is a menu of the same kind as the one it opens from (see `ZardDropdownOpenOptions.menu`).
+    const menu = (this.elementRef.nativeElement as HTMLElement).closest('[data-menu]')?.getAttribute('data-menu');
+    if (menu) {
+      this.renderer.setAttribute(this.overlayRef.hostElement, 'data-menu', menu);
+    }
   }
 
   /**
@@ -1621,6 +1638,11 @@ export interface ZardDropdownOpenOptions {
    * Without it the menu surface itself is focused, which is what a pointer opening wants.
    */
   initialFocus?: 'first' | 'last';
+  /**
+   * Which kind of menu this is, published as `data-menu` on the overlay so a style can tell a menubar's rows from a
+   * dropdown's (shadcn puts the check of a checkbox item at the start in a menubar and at the end in a dropdown).
+   */
+  menu?: 'menubar';
 }
 
 @Injectable({
@@ -1701,6 +1723,9 @@ export class ZardDropdownService {
     this.skipFirstAuxClick = false;
     const directionality = this.directionalityOf(viewContainerRef);
     this.createOverlay(triggerElement, placement, directionality?.value ?? 'ltr');
+    if (options?.menu) {
+      this.renderer.setAttribute(this.overlayRef?.hostElement, 'data-menu', options.menu);
+    }
     this.watchDirection(directionality);
     this.attach(template, viewContainerRef, options?.initialFocus);
   }

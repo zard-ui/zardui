@@ -14,6 +14,7 @@ There are three ways to get a theme:
 - **Run the CLI.** `zard-cli init` writes the whole file and asks which base color you want — see [Installation](/docs/installation) .
 - **Copy the CSS.** The complete stylesheet is in How it works , explained line by line.
 - **Build your own.** [Create](/create) lets you pick colors, fonts and radius with a live preview and copies the finished CSS.
+- **Edit every color.** Turn on [Custom colors](/create?custom=~) in Create to set each variable, in light and dark, by hand. A custom theme is not a preset: you install it by pasting its CSS, not with the CLI.
 
 ## How it works
 

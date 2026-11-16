@@ -206,12 +206,12 @@ export class ZardTableFooterComponent {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const tableVariants = cva('w-full caption-bottom text-sm [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pe-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pe-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground', {
+export const tableVariants = cva('w-full caption-bottom text-sm [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:text-foreground [&_caption]:text-muted-foreground [&_caption]:mt-4 [&_caption]:text-sm [&_tbody]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr:last-child]:border-0 [&_td]:p-2 [&_td]:align-middle [&_td]:whitespace-nowrap [&_td:has([role=checkbox])]:pe-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:whitespace-nowrap [&_th:has([role=checkbox])]:pe-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_thead_tr]:border-b', {
   variants: {
     zType: {
       default: '',
       striped: '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-      bordered: 'border border-border',
+      bordered: 'border-border border',
     },
     zSize: {
       default: '',
@@ -240,22 +240,22 @@ export const tableRowVariants = cva('border-b transition-colors hover:bg-muted/5
   defaultVariants: {},
 });
 
-export const tableHeadVariants = cva('h-10 px-2 text-start align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5', {
+export const tableHeadVariants = cva('text-foreground h-10 px-2 text-start align-middle font-medium whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5', {
   variants: {},
   defaultVariants: {},
 });
 
-export const tableCellVariants = cva('p-2 align-middle has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5', {
+export const tableCellVariants = cva('p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5', {
   variants: {},
   defaultVariants: {},
 });
 
-export const tableCaptionVariants = cva('mt-4 text-sm text-muted-foreground', {
+export const tableCaptionVariants = cva('text-muted-foreground mt-4 text-sm', {
   variants: {},
   defaultVariants: {},
 });
 
-export const tableFooterVariants = cva('border-t bg-muted/50 font-medium [&>tr]:last:border-b-0');
+export const tableFooterVariants = cva('bg-muted/50 border-t font-medium [&>tr]:last:border-b-0');
 
 export type ZardTableSizeVariants = NonNullable<VariantProps<typeof tableVariants>['zSize']>;
 export type ZardTableTypeVariants = NonNullable<VariantProps<typeof tableVariants>['zType']>;

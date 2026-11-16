@@ -127,10 +127,10 @@ export const navigationMenuListVariants = cva('flex flex-1 list-none items-cente
 export const navigationMenuItemVariants = cva('relative');
 
 export const navigationMenuTriggerVariants = cva(
-  'inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 disabled:opacity-50 data-[state=open]:bg-muted/50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted group/navigation-menu-trigger outline-none disabled:pointer-events-none data-disabled:pointer-events-none data-disabled:opacity-50',
+  'inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all hover:bg-muted focus:bg-muted focus-visible:ring-ring/50 data-[state=open]:bg-muted/50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 disabled:opacity-50 group/navigation-menu-trigger outline-none disabled:pointer-events-none data-disabled:pointer-events-none data-disabled:opacity-50',
 );
 
-export const navigationMenuTriggerIconVariants = cva('relative top-px size-3 shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180');
+export const navigationMenuTriggerIconVariants = cva('relative top-px size-3! shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180');
 
 export const navigationMenuContentVariants = cva('h-full w-auto p-1 transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 outline-none', {
   variants: {
@@ -140,7 +140,7 @@ export const navigationMenuContentVariants = cva('h-full w-auto p-1 transition-[
       false:
         // pointer crossing it slowly would schedule the close before reaching the popup. This
         // invisible collar covers the offset on every side, since submenus open sideways too.
-        "relative z-50 min-w-32 rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10 animate-in before:absolute before:-inset-2 before:-z-10 before:content-[''] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "bg-popover text-popover-foreground ring-foreground/10 animate-in relative z-50 min-w-32 rounded-lg shadow-sm ring-1 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 before:absolute before:-inset-2 before:-z-10 before:content-['']",
     },
   },
   defaultVariants: {
@@ -156,10 +156,10 @@ export const navigationMenuContentVariants = cva('h-full w-auto p-1 transition-[
  */
 export const navigationMenuViewportWrapperVariants = cva('flex pt-1.5 transition-[translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]');
 
-export const navigationMenuViewportVariants = cva('relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10 transition-[opacity,transform,width,height] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 outline-none');
+export const navigationMenuViewportVariants = cva('bg-popover text-popover-foreground ring-foreground/10 relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden rounded-lg shadow ring-1 transition-[opacity,transform,width,height] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 outline-none');
 
 export const navigationMenuLinkVariants = cva(
-  "relative flex w-full cursor-default items-center gap-2 rounded-md p-2 text-start text-sm transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1 data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted [&_svg:not([class*='size-'])]:size-4 [&>i]:me-2 [&>z-icon]:me-2 [&>ng-icon]:shrink-0 select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:shrink-0",
+  "relative flex w-full cursor-default items-center gap-2 rounded-md p-2 text-start text-sm transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-ring/50 data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 [&>i]:me-2 [&>ng-icon]:shrink-0 [&>z-icon]:me-2 select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:shrink-0",
   {
     variants: {
       inset: {
@@ -180,9 +180,9 @@ export const navigationMenuLinkVariants = cva(
 
 export const navigationMenuIndicatorVariants = cva('absolute top-full left-0 z-1 flex h-1.5 items-end justify-center overflow-hidden transition-[translate,width,opacity] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none');
 
-export const navigationMenuSubmenuArrowVariants = cva('ms-auto opacity-60 transition-opacity duration-150 text-muted-foreground dark:text-gray-400 group-hover:opacity-100 group-focus:opacity-100');
+export const navigationMenuSubmenuArrowVariants = cva('text-muted-foreground ms-auto opacity-60 transition-opacity duration-150 group-hover:opacity-100 group-focus:opacity-100 dark:text-gray-400');
 
-export const navigationMenuLabelVariants = cva('relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground', {
+export const navigationMenuLabelVariants = cva('text-muted-foreground relative flex items-center px-2 py-1.5 text-sm font-medium', {
   variants: {
     inset: {
       true: 'ps-8',
@@ -194,7 +194,7 @@ export const navigationMenuLabelVariants = cva('relative flex items-center px-2 
   },
 });
 
-export const navigationMenuShortcutVariants = cva('ms-auto text-xs tracking-widest text-muted-foreground');
+export const navigationMenuShortcutVariants = cva('text-muted-foreground ms-auto text-xs tracking-widest');
 
 export type ZardNavigationMenuLinkTypeVariants = NonNullable<VariantProps<typeof navigationMenuLinkVariants>['zType']>;
 
@@ -965,6 +965,8 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   private readonly service = inject(ZardNavigationMenuService, { optional: true });
 
   private closeTimeout: ReturnType<typeof setTimeout> | null = null;
+  /** The menu was opened by the pointer entering the trigger, and no click has confirmed it yet. */
+  private openedByHover = false;
   private readonly cleanupFunctions: Array<() => void> = [];
   private index = -1;
   /** Mirrors the CDK overlay state, whose own `isOpen()` is a plain method and so not reactive. */
@@ -1059,6 +1061,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
   close(): void {
     this.cancelScheduledClose();
+    this.openedByHover = false;
 
     if (this.isViewportMode()) {
       this.service?.close(this.index);
@@ -1107,6 +1110,13 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
     // The CDK trigger is inert here, so the viewport toggle is ours to drive.
     event.preventDefault();
+
+    // A click that follows the hover which opened the menu confirms it instead of closing it.
+    if (this.openedByHover && this.service?.isActive(this.index)) {
+      this.openedByHover = false;
+      return;
+    }
+
     this.toggle();
   }
 
@@ -1199,6 +1209,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
       }
 
       if (this.isViewportMode()) {
+        this.openedByHover = !this.service?.isActive(this.index);
         this.service?.open({
           index: this.index,
           template: this.zNavigationMenuTriggerFor(),
@@ -1221,6 +1232,8 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   private trackOverlayState(): void {
     const openSubscription = this.cdkTrigger.opened.subscribe(() => this.overlayOpen.set(true));
     const closeSubscription = this.cdkTrigger.closed.subscribe(() => {
+      // Closed by someone else (another trigger took over): a close this trigger still had pending is moot.
+      this.cancelScheduledClose();
       this.overlayOpen.set(false);
       this.returnFocusFromMenu();
     });
@@ -1331,7 +1344,10 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
   private scheduleMenuClose(): void {
     this.closeTimeout = setTimeout(() => {
-      this.cdkTrigger.close();
+      this.closeTimeout = null;
+      // The CDK's close() always closes the sibling triggers too, so a trigger that is already closed must not call
+      // it: moving from one item to the next would otherwise shut the menu that just opened.
+      if (this.cdkTrigger.isOpen()) this.cdkTrigger.close();
     }, this.zHoverDelay());
   }
 

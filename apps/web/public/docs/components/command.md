@@ -364,14 +364,14 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const commandVariants = cva('flex size-full flex-col overflow-hidden rounded-xl bg-popover p-1 text-popover-foreground border shadow-md');
+export const commandVariants = cva('bg-popover text-popover-foreground flex size-full flex-col overflow-hidden rounded-xl border p-1 shadow-md');
 
-export const commandListVariants = cva('no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1');
+export const commandListVariants = cva('no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none');
 
-export const commandGroupVariants = cva('overflow-hidden text-foreground **:data-[slot=command-group-heading]:px-2 **:data-[slot=command-group-heading]:py-1.5 **:data-[slot=command-group-heading]:text-xs **:data-[slot=command-group-heading]:font-medium **:data-[slot=command-group-heading]:text-muted-foreground');
+export const commandGroupVariants = cva('text-foreground overflow-hidden p-1 **:data-[slot=command-group-heading]:text-muted-foreground **:data-[slot=command-group-heading]:px-2 **:data-[slot=command-group-heading]:py-1.5 **:data-[slot=command-group-heading]:text-xs **:data-[slot=command-group-heading]:font-medium');
 
 export const commandItemVariants = cva(
-  "relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm select-none transition-colors data-selected:bg-muted data-selected:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground group/command-item outline-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden transition-colors select-none data-selected:bg-muted data-selected:text-foreground data-selected:*:[svg]:text-foreground in-data-[slot=dialog-content]:rounded-lg! [&_svg:not([class*='size-'])]:size-4 group/command-item outline-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -389,9 +389,9 @@ export const commandItemVariants = cva(
   },
 );
 
-export const commandSeparatorVariants = cva('-mx-1 my-1 h-px bg-border');
+export const commandSeparatorVariants = cva('bg-border -mx-1 my-1 h-px');
 
-export const commandShortcutVariants = cva('ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground');
+export const commandShortcutVariants = cva('text-muted-foreground ms-auto text-xs tracking-widest group-data-selected/command-item:text-foreground');
 
 export type ZardCommandItemVariants = NonNullable<VariantProps<typeof commandItemVariants>['variant']>;
 ```
