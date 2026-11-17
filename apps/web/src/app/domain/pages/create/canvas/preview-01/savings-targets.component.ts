@@ -6,8 +6,8 @@ import { ZardFieldImports } from '@zard/components/field';
 import { ZardInputComponent } from '@zard/components/input';
 import { ZardInputGroupImports } from '@zard/components/input-group';
 import { ZardItemImports } from '@zard/components/item';
+import { ZardNativeSelectDirective } from '@zard/components/native-select';
 import { ZardProgressComponent } from '@zard/components/progress';
-import { ZardSelectImports } from '@zard/components/select';
 
 const TARGETS = [
   { label: 'Retirement', target: '$420,000', progress: 65, saved: '$273,000' },
@@ -31,7 +31,7 @@ const ORDER_TYPES = [
     ZardInputComponent,
     ZardItemImports,
     ZardProgressComponent,
-    ZardSelectImports,
+    ZardNativeSelectDirective,
     ZardButtonComponent,
   ],
   template: `
@@ -87,11 +87,12 @@ const ORDER_TYPES = [
             </z-field>
             <z-field>
               <label z-field-label for="p01-invest-type">Order Type</label>
-              <z-select id="p01-invest-type" class="w-full" zValue="market">
+              <!-- shadcn uses a NativeSelect here: the browser's own picker. -->
+              <select z-native-select id="p01-invest-type" class="w-full">
                 @for (type of orderTypes; track type.value) {
-                  <z-select-item [zValue]="type.value">{{ type.label }}</z-select-item>
+                  <option [value]="type.value" [selected]="type.value === 'market'">{{ type.label }}</option>
                 }
-              </z-select>
+              </select>
               <p z-field-description>Market orders execute at the current price.</p>
             </z-field>
             <div class="flex flex-col gap-2">

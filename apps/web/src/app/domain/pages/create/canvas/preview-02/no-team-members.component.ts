@@ -5,10 +5,11 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardImports } from '@zard/components/card/card.imports';
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
 
+/** zard/ui's two founders and a maintainer. */
 const MEMBERS = [
-  { src: 'https://github.com/shadcn.png', alt: '@shadcn', fallback: 'CN' },
-  { src: 'https://github.com/maxleiter.png', alt: '@maxleiter', fallback: 'LR' },
-  { src: 'https://github.com/evilrabbit.png', alt: '@evilrabbit', fallback: 'ER' },
+  { src: 'https://github.com/Luizgomess.png', alt: '@Luizgomess', fallback: 'LG' },
+  { src: 'https://github.com/srizzon.png', alt: '@srizzon', fallback: 'SR' },
+  { src: 'https://github.com/mikij.png', alt: '@mikij', fallback: 'ML' },
 ] as const;
 
 @Component({

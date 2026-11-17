@@ -18,13 +18,13 @@ import { ZardItemImports } from '@zard/components/item';
       <z-card-content class="flex flex-col gap-3">
         <label
           for="p01-cover-art"
-          class="text-muted-foreground flex items-center justify-center gap-2 text-center text-xs leading-none font-normal tracking-wider uppercase select-none"
+          class="text-muted-foreground flex items-center gap-2 text-xs leading-none font-normal tracking-wider uppercase select-none"
         >
           Cover Art
         </label>
         <z-item class="aspect-square" zVariant="outline">
           <label for="p01-cover-art" class="flex size-full cursor-pointer items-center justify-center">
-            <ng-icon name="lucideImage" class="text-muted-foreground/50 size-10" />
+            <ng-icon name="lucideImage" class="text-muted-foreground/50 size-10 [--ng-icon__size:2.5rem]" />
           </label>
         </z-item>
         <input #file id="p01-cover-art" type="file" accept="image/jpeg,image/png" class="sr-only" />

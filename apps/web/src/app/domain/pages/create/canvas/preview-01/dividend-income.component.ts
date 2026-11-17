@@ -98,7 +98,7 @@ const MINI_CHART_OPTION: ZardChartOptionOverride = {
                 [zXAxis]="false"
                 [zGrid]="false"
                 [zOption]="option"
-                class="hidden h-8 w-24 md:block"
+                class="hidden h-8 w-24 md:flex"
               >
                 <z-chart-tooltip zHideLabel />
               </z-chart>

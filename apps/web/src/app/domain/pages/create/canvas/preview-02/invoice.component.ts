@@ -38,38 +38,41 @@ const TAX = 0;
         </z-card-action>
       </z-card-header>
       <z-card-content>
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Item</th>
-              <th z-table-head class="text-right">Qty</th>
-              <th z-table-head class="text-right">Rate</th>
-              <th z-table-head class="text-right">Amount</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (row of rows; track row.item) {
+        <!-- shadcn's Table sits in a scrolling container: a narrow card scrolls the table, not the page. -->
+        <div data-slot="table-container" class="relative w-full overflow-x-auto">
+          <table z-table>
+            <thead z-table-header>
               <tr z-table-row>
-                <td z-table-cell>{{ row.item }}</td>
-                <td z-table-cell class="text-right tabular-nums">{{ row.qty }}</td>
-                <td z-table-cell class="text-right tabular-nums">{{ row.rate }}</td>
-                <td z-table-cell class="text-right tabular-nums">{{ row.amount }}</td>
+                <th z-table-head>Item</th>
+                <th z-table-head class="text-right">Qty</th>
+                <th z-table-head class="text-right">Rate</th>
+                <th z-table-head class="text-right">Amount</th>
               </tr>
-            }
-            <tr z-table-row>
-              <td z-table-cell colspan="3" class="text-right">Subtotal</td>
-              <td z-table-cell class="text-right tabular-nums">{{ subtotal }}</td>
-            </tr>
-            <tr z-table-row>
-              <td z-table-cell colspan="3" class="text-right">Tax</td>
-              <td z-table-cell class="text-right tabular-nums">$0.00</td>
-            </tr>
-            <tr z-table-row>
-              <td z-table-cell colspan="3" class="text-right">Total Due</td>
-              <td z-table-cell class="text-right tabular-nums">{{ totalDue }}</td>
-            </tr>
-          </tbody>
-        </table>
+            </thead>
+            <tbody z-table-body>
+              @for (row of rows; track row.item) {
+                <tr z-table-row>
+                  <td z-table-cell>{{ row.item }}</td>
+                  <td z-table-cell class="text-right tabular-nums">{{ row.qty }}</td>
+                  <td z-table-cell class="text-right tabular-nums">{{ row.rate }}</td>
+                  <td z-table-cell class="text-right tabular-nums">{{ row.amount }}</td>
+                </tr>
+              }
+              <tr z-table-row>
+                <td z-table-cell colspan="3" class="text-right">Subtotal</td>
+                <td z-table-cell class="text-right tabular-nums">{{ subtotal }}</td>
+              </tr>
+              <tr z-table-row>
+                <td z-table-cell colspan="3" class="text-right">Tax</td>
+                <td z-table-cell class="text-right tabular-nums">$0.00</td>
+              </tr>
+              <tr z-table-row>
+                <td z-table-cell colspan="3" class="text-right">Total Due</td>
+                <td z-table-cell class="text-right tabular-nums">{{ totalDue }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </z-card-content>
       <z-card-footer>
         <button type="button" z-button zType="outline" zSize="sm">Download PDF</button>
