@@ -477,15 +477,15 @@ describe('ZardCalendarComponent', () => {
 
         const host = diFixture.nativeElement as HTMLElement;
         const caption = host.querySelector('[data-slot="calendar-caption"]');
-        expect(caption?.textContent?.trim()).toBe('Août 2024');
+        expect(caption?.textContent?.trim()).toBe('août 2024');
 
         const prevButton = host.querySelector('z-calendar-navigation button');
         expect(prevButton?.getAttribute('aria-label')).toBe('Mois précédent');
 
         const columnHeaders = host.querySelectorAll('[role="columnheader"]');
         expect(columnHeaders).toHaveLength(7);
-        expect(columnHeaders[0].textContent?.trim()).toBe('Lu');
-        expect(columnHeaders[0].getAttribute('aria-label')).toMatch(/^Lun/);
+        expect(columnHeaders[0].textContent?.trim()).toBe('lu');
+        expect(columnHeaders[0].getAttribute('aria-label')).toMatch(/^lun/);
       });
 
       it('reactively updates when ZardI18nService locale changes', () => {
@@ -493,12 +493,12 @@ describe('ZardCalendarComponent', () => {
         diFixture.detectChanges();
 
         const host = diFixture.nativeElement as HTMLElement;
-        expect(host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('Août 2024');
+        expect(host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('août 2024');
 
         i18nService.setLocale('es-ES');
         diFixture.detectChanges();
 
-        expect(host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('Agosto 2024');
+        expect(host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('agosto 2024');
         const prevButton = host.querySelector('z-calendar-navigation button');
         expect(prevButton?.getAttribute('aria-label')).toBe('Mes anterior');
       });

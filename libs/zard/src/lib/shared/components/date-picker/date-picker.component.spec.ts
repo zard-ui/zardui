@@ -387,10 +387,10 @@ describe('ZardDatePickerComponent', () => {
       expect(calendarEl).toBeTruthy();
 
       const caption = calendarEl?.querySelector('[data-slot="calendar-caption"]');
-      expect(caption?.textContent?.trim()).toBe('Août 2024');
+      expect(caption?.textContent?.trim()).toBe('août 2024');
 
       const columnHeaders = calendarEl?.querySelectorAll('[role="columnheader"]');
-      expect(columnHeaders?.[0].textContent?.trim()).toMatch(/^Lu/);
+      expect(columnHeaders?.[0].textContent?.trim()).toMatch(/^lu/);
 
       const onDateChange = jest.fn();
       diComponent.dateChange.subscribe(onDateChange);
@@ -408,13 +408,13 @@ describe('ZardDatePickerComponent', () => {
       diFixture.detectChanges();
 
       let calendarEl = await openDiPopover();
-      expect(calendarEl?.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('Août 2024');
+      expect(calendarEl?.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('août 2024');
 
       i18nService.setLocale('es-ES');
       diFixture.detectChanges();
 
       calendarEl = document.querySelector('.cdk-overlay-container z-calendar') as HTMLElement | null;
-      expect(calendarEl?.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('Agosto 2024');
+      expect(calendarEl?.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('agosto 2024');
     });
   });
 });
