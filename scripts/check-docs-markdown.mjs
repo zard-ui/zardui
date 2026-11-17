@@ -111,7 +111,13 @@ function componentCode(html) {
   let match;
   while ((match = pre.exec(html))) {
     if (demoDepthAt(match.index) > 0) continue;
-    const text = match[1].replace(/<[^>]+>/g, '').replace(/&(?:lt|gt|quot|amp|#39|#x27);/g, e => ENTITIES[e]);
+    // Strip tags until none is left: one pass would turn `<<b>script>` into a fresh `<script>`.
+    let text = match[1];
+    for (let previous; previous !== text;) {
+      previous = text;
+      text = text.replace(/<[^>]*>/g, '');
+    }
+    text = text.replace(/&(?:lt|gt|quot|amp|#39|#x27);/g, e => ENTITIES[e]);
     const before = html.slice(Math.max(0, match.index - 400), match.index);
     blocks.push({ text: normalize(text), hidden: hiddenPanel.test(before) });
   }
