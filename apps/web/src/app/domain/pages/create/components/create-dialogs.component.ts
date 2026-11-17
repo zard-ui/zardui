@@ -84,22 +84,23 @@ type NavigateView = 'root' | 'blocks' | 'components';
     } @else {
       <z-command #cmd="zCommand" (zCommandSelected)="go(asId($event.value))">
         <z-command-input [placeholder]="view() === 'blocks' ? 'Search blocks' : 'Search components'" />
-        <div class="flex items-center gap-1 border-b px-1.5 py-1">
+        <!-- Back sits in the corner, under the search icon; the list's name is centered on the bar. -->
+        <div class="relative flex h-10 items-center justify-center border-b px-10">
           <button
             type="button"
             z-button
             zType="ghost"
-            zSize="sm"
-            class="gap-1 px-2"
+            zSize="icon-sm"
+            class="text-muted-foreground absolute start-1.5 top-1/2 -translate-y-1/2"
+            aria-label="Back"
             data-testid="navigate-back"
             (click)="back()"
           >
             <ng-icon name="lucideChevronLeft" aria-hidden="true" />
-            Back
           </button>
-          <span class="text-muted-foreground text-xs" data-testid="navigate-title">{{ title() }}</span>
+          <span class="truncate text-sm font-medium" data-testid="navigate-title">{{ title() }}</span>
         </div>
-        <z-command-list>
+        <z-command-list [class]="view() === 'components' ? 'p-1' : 'pt-1'">
           @if (cmd.isEmpty()) {
             <z-empty
               class="py-8"

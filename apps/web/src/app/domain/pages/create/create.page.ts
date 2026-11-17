@@ -76,7 +76,7 @@ export class CreatePage implements OnInit, OnDestroy {
     this.document.documentElement.classList.add(SCROLL_LOCK_CLASS);
     this.viewportScroller.scrollToPosition([0, 0]);
     this.seo.setDocsSeo(
-      'Create',
+      'New Project',
       'Pick a style, base color, theme, fonts, icons and radius, see them live on real components, and take away one command that scaffolds a project configured that way.',
       '/create',
       'og-typeset-generator.jpg',

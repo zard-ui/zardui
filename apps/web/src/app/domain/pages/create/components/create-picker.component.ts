@@ -89,7 +89,7 @@ export type { PickerEvent, PickerOption, PickerSection } from '../lib/picker.typ
     <ng-template #options>
       <z-popover
         role="presentation"
-        class="dark w-52 gap-0 overflow-y-auto rounded-xl border-0 bg-neutral-950/80 p-1.5 text-neutral-100 shadow-none ring-1 ring-neutral-950/80 backdrop-blur-xl data-closed:hidden data-open:animate-none max-md:w-[calc(100vw-34px)] dark:bg-neutral-800/90 dark:ring-neutral-700/50"
+        class="dark no-scrollbar w-52 gap-0 overflow-y-auto rounded-xl border-0 bg-neutral-950/80 p-1.5 text-neutral-100 shadow-none ring-1 ring-neutral-950/80 backdrop-blur-xl data-closed:hidden data-open:animate-none max-md:w-[calc(100vw-34px)] dark:bg-neutral-800/90 dark:ring-neutral-700/50"
         [class]="maxHeight()"
       >
         <div role="menu" tabindex="-1" class="outline-hidden" [attr.aria-label]="label()" (keydown)="onKeydown($event)">
