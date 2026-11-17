@@ -109,7 +109,8 @@ export class ZardTabComponent {
       }
     </nav>
 
-    <div class="flex-1 not-has-[.text-sm focus-visible:ring-primary/50 focus-visible:ring-2:not([hidden]):not(:empty)]:hidden">
+    <!-- Matched by role, not by the text-sm focus-visible:ring-primary/50 focus-visible:ring-2 marker: an install replaces markers with the style's classes. -->
+    <div class="flex-1 not-has-[[role=tabpanel]:not([hidden]):not(:empty)]:hidden">
       @for (tab of tabs(); track $index; let index = $index) {
         <div
           role="tabpanel"

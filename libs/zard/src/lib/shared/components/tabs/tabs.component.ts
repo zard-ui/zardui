@@ -87,7 +87,8 @@ export class ZardTabComponent {
       }
     </nav>
 
-    <div class="flex-1 not-has-[.cn-tabs-panel:not([hidden]):not(:empty)]:hidden">
+    <!-- Matched by role, not by the cn-tabs-panel marker: an install replaces markers with the style's classes. -->
+    <div class="flex-1 not-has-[[role=tabpanel]:not([hidden]):not(:empty)]:hidden">
       @for (tab of tabs(); track $index; let index = $index) {
         <div
           role="tabpanel"
