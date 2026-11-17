@@ -389,7 +389,7 @@ const COUNTRY_CODES = ['+1', '+44', '+46'] as const;
           <div z-field>
             <label z-field-label for="input-username-26">Username</label>
             <z-input-group>
-              <input z-input id="input-username-26" value="shadcn" />
+              <input z-input id="input-username-26" value="zard" />
               <z-input-group-addon zAlign="inline-end">
                 <div class="flex size-4 items-center justify-center rounded-full bg-green-500 dark:bg-green-800">
                   <ng-icon name="lucideCheck" class="size-3 text-white" />
@@ -435,7 +435,7 @@ const COUNTRY_CODES = ['+1', '+44', '+46'] as const;
           <div z-field data-disabled="true">
             <label z-field-label for="input-group-29">Loading ("data-disabled="true")</label>
             <z-input-group>
-              <input z-input id="input-group-29" disabled value="shadcn" />
+              <input z-input id="input-group-29" disabled value="zard" />
               <z-input-group-addon zAlign="inline-end">
                 <z-spinner />
               </z-input-group-addon>

@@ -28,9 +28,9 @@ import { ZardTabsImports } from '@zard/components/tabs/tabs.imports';
 import { ZardTooltipImports } from '@zard/components/tooltip';
 
 const CLONE_OPTIONS = [
-  { label: 'HTTPS', id: 'p2-https-url', name: 'HTTPS URL', value: 'https://github.com/shadcn-ui/ui.git' },
-  { label: 'SSH', id: 'p2-ssh-url', name: 'SSH URL', value: 'git@github.com:shadcn-ui/ui.git' },
-  { label: 'GitHub CLI', id: 'p2-cli-command', name: 'CLI Command', value: 'gh repo clone shadcn-ui/ui' },
+  { label: 'HTTPS', id: 'p2-https-url', name: 'HTTPS URL', value: 'https://github.com/zard-ui/zardui.git' },
+  { label: 'SSH', id: 'p2-ssh-url', name: 'SSH URL', value: 'git@github.com:zard-ui/zardui.git' },
+  { label: 'GitHub CLI', id: 'p2-cli-command', name: 'CLI Command', value: 'gh repo clone zard-ui/zardui' },
 ] as const;
 
 @Component({
@@ -160,7 +160,7 @@ const CLONE_OPTIONS = [
             <z-separator class="-mx-2 my-2 w-auto!" />
             <!-- prettier-ignore -->
             <div class="text-muted-foreground p-1.5 text-xs">
-              Codespace usage for this repository is paid for by <span class="font-medium">shadcn</span>.
+              Codespace usage for this repository is paid for by <span class="font-medium">zard-ui</span>.
             </div>
           </z-tab>
           <z-tab label="Local">

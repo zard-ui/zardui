@@ -39,7 +39,7 @@ export const SIDEBAR_DOCS_NAV: readonly SidebarDocsSection[] = [
       { title: 'Components', url: '#' },
       { title: 'File Conventions', url: '#' },
       { title: 'Functions', url: '#' },
-      { title: 'next.config.js Options', url: '#' },
+      { title: 'angular.json Options', url: '#' },
       { title: 'CLI', url: '#' },
       { title: 'Edge Runtime', url: '#' },
     ],
@@ -49,10 +49,10 @@ export const SIDEBAR_DOCS_NAV: readonly SidebarDocsSection[] = [
     url: '#',
     items: [
       { title: 'Accessibility', url: '#' },
-      { title: 'Fast Refresh', url: '#' },
-      { title: 'Next.js Compiler', url: '#' },
+      { title: 'Hot Module Replacement', url: '#' },
+      { title: 'Angular Compiler', url: '#' },
       { title: 'Supported Browsers', url: '#' },
-      { title: 'Turbopack', url: '#' },
+      { title: 'esbuild', url: '#' },
     ],
   },
 ];

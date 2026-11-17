@@ -14,7 +14,7 @@ import { ExampleImports } from './example.component';
       <z-example zTitle="Horizontal">
         <div class="style-lyra:text-xs/relaxed flex flex-col gap-4 text-sm">
           <div class="flex flex-col gap-1">
-            <div class="leading-none font-medium">shadcn/ui</div>
+            <div class="leading-none font-medium">zard/ui</div>
             <div class="text-muted-foreground">The Foundation for your Design System</div>
           </div>
           <z-separator />

@@ -18,84 +18,87 @@ import { ZardTraceImports } from '@zard/components/trace/trace.imports';
 import { ExampleImports } from './example.component';
 
 const BUILD = `$ pnpm build
-> next build
+> ng build
 
-   ▲ Next.js 16.0.0
-   Creating an optimized production build ...
- ✓ Compiled successfully in 4.2s
- ✓ Generating static pages (12/12)
+Initial chunk files   | Names         |  Raw size | Estimated transfer size
+main-3QK4SFDW.js      | main          | 212.41 kB |                58.73 kB
+styles-5INURTSO.css   | styles        |  18.06 kB |                 3.92 kB
 
-Route (app)                Size  First Load JS
-┌ ○ /                    1.9 kB         112 kB
-├ ○ /_not-found           993 B         103 kB
-└ ƒ /api/chat             141 B         102 kB`;
+                      | Initial total | 230.47 kB |                62.65 kB
 
-const INSTALL = `$ pnpm add ai @ai-sdk/react zod
+Prerendered 12 static routes.
+Application bundle generation complete. [4.218 seconds]`;
+
+const INSTALL = `$ pnpm add ai @ai-sdk/angular zod
 Progress: resolved 412, reused 398, downloaded 14, added 14, done
 dependencies:
-+ @ai-sdk/react 3.0.12
++ @ai-sdk/angular 1.0.12
 + ai 6.0.12
 + zod 4.1.12
 Done in 2.8s using pnpm v10.18.0`;
 
 const ERROR = `TypeError: Cannot read properties of undefined (reading 'map')
-    at MessageList (components/message-list.tsx:18:22)
-    at renderWithHooks (react-dom.development.js:16305:18)
-    at mountIndeterminateComponent (react-dom.development.js:20069:13)`;
+    at MessageListComponent_Template (components/message-list.component.ts:18:22)
+    at executeTemplate (core.mjs:12162:9)
+    at refreshView (core.mjs:13696:13)`;
 
-const SOURCE = `import { streamText } from "ai"
+const SOURCE = `import { defineEventHandler, readBody } from "h3"
+import { streamText } from "ai"
 
-export async function POST(request: Request) {
-  const { messages } = await request.json()
-
+export default defineEventHandler(async (event) => {
+  const { messages } = await readBody(event)
   const result = streamText({
     model: "anthropic/claude-sonnet-4.5",
     messages,
   })
 
   return result.toUIMessageStreamResponse()
-}`;
+})`;
 
-const CHAT = `"use client"
+const CHAT = `import { Component, signal } from "@angular/core"
+import { FormsModule } from "@angular/forms"
+import { Chat } from "@ai-sdk/angular"
 
-import * as React from "react"
-import { useChat } from "@ai-sdk/react"
+import { ZardButtonComponent } from "@/shared/components/button"
+import { ZardInputDirective } from "@/shared/components/input"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-
-export function Chat() {
-  const [input, setInput] = React.useState("")
-  const { messages, sendMessage, status } = useChat()
-
-  return (
-    <div className="flex flex-col gap-4">
-      {messages.map((message) => (
-        <div key={message.id}>
-          {message.parts.map((part, index) =>
-            part.type === "text" ? <p key={index}>{part.text}</p> : null
-          )}
+@Component({
+  selector: "app-chat",
+  imports: [FormsModule, ZardButtonComponent, ZardInputDirective],
+  template: \`
+    <div class="flex flex-col gap-4">
+      @for (message of chat.messages; track message.id) {
+        <div>
+          @for (part of message.parts; track $index) {
+            @if (part.type === "text") {
+              <p>{{ part.text }}</p>
+            }
+          }
         </div>
-      ))}
-      <form
-        onSubmit={(event) => {
-          event.preventDefault()
-          sendMessage({ text: input })
-          setInput("")
-        }}
-      >
-        <Input value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask anything" />
-        <Button disabled={status !== "ready"}>Send</Button>
+      }
+      <form (ngSubmit)="send()">
+        <input z-input name="input" [(ngModel)]="input" placeholder="Ask anything" />
+        <button z-button [disabled]="chat.status !== 'ready'">Send</button>
       </form>
     </div>
-  )
+  \`,
+})
+export class ChatComponent {
+  protected readonly chat = new Chat({})
+  protected readonly input = signal("")
+
+  protected send() {
+    this.chat.sendMessage({ text: this.input() })
+    this.input.set("")
+  }
 }`;
 
 const DIFF: readonly { type: ZardCodeBlockLineTypeVariants; text: string }[] = [
-  { type: 'default', text: 'export function Greeting({ name }: Props) {' },
-  { type: 'removed', text: '  return <p>Hello, {name}</p>' },
-  { type: 'added', text: '  return <p className="text-sm">Hello, {name}!</p>' },
-  { type: 'default', text: '}' },
+  { type: 'default', text: '@Component({' },
+  { type: 'default', text: '  selector: "app-greeting",' },
+  { type: 'removed', text: '  template: `<p>Hello, {{ name() }}</p>`,' },
+  { type: 'added', text: '  template: `<p class="text-sm">Hello, {{ name() }}!</p>`,' },
+  { type: 'default', text: '})' },
 ];
 
 const LOG = Array.from(
@@ -104,7 +107,7 @@ const LOG = Array.from(
 ).join('\n');
 
 const MIDDLE = `  if (!session) {
-    redirect("/login")
+    return router.parseUrl("/login")
   }
 
   const projects = await db.project.findMany({
@@ -112,22 +115,22 @@ const MIDDLE = `  if (!session) {
     orderBy: { updatedAt: "desc" },
   })
 
-  return <ProjectList projects={projects} />
+  return projects
 }`;
 
 const LONG_DIFF: readonly { type: ZardCodeBlockLineTypeVariants; text: string }[] = [
-  { type: 'default', text: 'export async function GET(request: Request) {' },
+  { type: 'default', text: 'export default defineEventHandler(async (event) => {' },
   {
     type: 'removed',
-    text: '  const { searchParams } = new URL(request.url, "http://localhost:3000/api/projects?include=owner,members")',
+    text: '  const { searchParams } = new URL(event.path, "http://localhost:4200/api/projects?include=owner,members")',
   },
   {
     type: 'added',
-    text: '  const { searchParams } = new URL(request.url, process.env.NEXT_PUBLIC_APP_URL ?? request.headers.get("origin") ?? undefined)',
+    text: '  const { searchParams } = new URL(event.path, process.env["NG_APP_URL"] ?? getRequestHeader(event, "origin") ?? undefined)',
   },
   { type: 'added', text: '  const include = searchParams.get("include")?.split(",") ?? []' },
-  { type: 'default', text: '  return Response.json(await getProjects({ include }))' },
-  { type: 'default', text: '}' },
+  { type: 'default', text: '  return getProjects({ include })' },
+  { type: 'default', text: '})' },
 ];
 
 const SAMPLES = [
@@ -136,13 +139,13 @@ const SAMPLES = [
     title: 'package.json',
     code: `{
   "name": "acme-chat",
-  "scripts": { "dev": "next dev --turbopack" },
+  "scripts": { "dev": "ng serve" },
   "dependencies": { "ai": "^6.0.12", "zod": "^4.1.12" }
 }`,
   },
   {
     language: 'css',
-    title: 'app/globals.css',
+    title: 'src/styles.css',
     code: `@import "tailwindcss";
 
 :root {
@@ -164,31 +167,32 @@ const ANSI = `$ pnpm test
 
 Tests  \x1b[31m1 failed\x1b[39m | \x1b[32m6 passed\x1b[39m (7)`;
 
-const ANSWER = `Wrap the input in a \`useDebounce\` hook:
+const ANSWER = `Wrap the input in a \`debounced\` signal:
 
-\`\`\`tsx
-export function useDebounce<T>(value: T, delay = 300) {
-  const [debounced, setDebounced] = React.useState(value)
+\`\`\`ts
+export function debounced<T>(source: Signal<T>, delay = 300): Signal<T> {
+  const value = signal(source())
 
-  React.useEffect(() => {
-    const timeout = setTimeout(() => setDebounced(value), delay)
-    return () => clearTimeout(timeout)
-  }, [value, delay])
+  effect((onCleanup) => {
+    const next = source()
+    const timeout = setTimeout(() => value.set(next), delay)
+    onCleanup(() => clearTimeout(timeout))
+  })
 
-  return debounced
+  return value.asReadonly()
 }
 \`\`\`
 
-Then install it:
+Then add the input:
 
 \`\`\`bash
-pnpm dlx shadcn@latest add use-debounce
+npx zard-cli@latest add input
 \`\`\``;
 
 const FILES = [
-  { id: 'route', title: 'app/api/chat/route.ts', language: 'ts', code: SOURCE },
-  { id: 'chat', title: 'components/chat.tsx', language: 'tsx', code: CHAT },
-  { id: 'env', title: '.env.local', language: 'bash', code: 'AI_GATEWAY_API_KEY=your-api-key' },
+  { id: 'route', title: 'src/server/routes/api/chat.post.ts', language: 'ts', code: SOURCE },
+  { id: 'chat', title: 'components/chat.component.ts', language: 'angular-ts', code: CHAT },
+  { id: 'env', title: '.env', language: 'bash', code: 'AI_GATEWAY_API_KEY=your-api-key' },
 ];
 
 interface StreamedBlock {
@@ -201,20 +205,24 @@ interface StreamedBlock {
 }
 
 const STREAMED: readonly StreamedBlock[] = [
-  { title: 'app/api/chat/route.ts', language: 'ts', lineNumbers: true, highlight: [5, 6, 7, 8], code: SOURCE },
-  { language: 'bash', code: 'pnpm dlx shadcn@latest add code-block' },
   {
-    title: 'components/search.tsx',
-    language: 'tsx',
+    title: 'src/server/routes/api/chat.post.ts',
+    language: 'ts',
+    lineNumbers: true,
+    highlight: [5, 6, 7, 8],
+    code: SOURCE,
+  },
+  { language: 'bash', code: 'npx zard-cli@latest add code-block' },
+  {
+    title: 'components/search.component.ts',
+    language: 'ts',
     lineNumbers: true,
     diff: true,
-    code: ` export function Search() {
-   const [query, setQuery] = React.useState("")
--  const results = useSearch(query)
-+  const debounced = useDebounce(query, 300)
-+  const results = useSearch(debounced)
-
-   return <SearchResults results={results} />
+    code: ` export class SearchComponent {
+   protected readonly query = signal("")
+-  protected readonly results = search(this.query)
++  private readonly debouncedQuery = debounced(this.query, 300)
++  protected readonly results = search(this.debouncedQuery)
  }`,
   },
 ];
@@ -335,7 +343,7 @@ function injectStream(length: number) {
       <z-example zTitle="Actions">
         <z-code-block>
           <z-code-block-header>
-            <z-code-block-title>app/api/chat/route.ts</z-code-block-title>
+            <z-code-block-title>src/server/routes/api/chat.post.ts</z-code-block-title>
             <z-code-block-actions>
               <button
                 type="button"
@@ -355,7 +363,7 @@ function injectStream(length: number) {
                 zType="ghost"
                 zSize="icon-xs"
                 aria-label="Download"
-                (click)="download(source, 'route.ts')"
+                (click)="download(source, 'chat.post.ts')"
               >
                 <ng-icon name="lucideDownload" />
               </button>
@@ -385,7 +393,7 @@ function injectStream(length: number) {
       <z-example zTitle="Diff">
         <z-code-block>
           <z-code-block-header>
-            <z-code-block-title>components/greeting.tsx</z-code-block-title>
+            <z-code-block-title>components/greeting.component.ts</z-code-block-title>
           </z-code-block-header>
           <z-code-block-content zLineNumbers>
             @for (line of diffLines(); track $index) {
@@ -420,7 +428,7 @@ function injectStream(length: number) {
       <z-example zTitle="Show More">
         <z-code-block>
           <z-code-block-header>
-            <z-code-block-title>components/chat.tsx</z-code-block-title>
+            <z-code-block-title>components/chat.component.ts</z-code-block-title>
             <z-code-block-actions>
               <z-code-block-copy-button [zValue]="chat" />
             </z-code-block-actions>
@@ -454,7 +462,7 @@ function injectStream(length: number) {
       <z-example zTitle="Show More with Max Height">
         <z-code-block>
           <z-code-block-header>
-            <z-code-block-title>components/chat.tsx</z-code-block-title>
+            <z-code-block-title>components/chat.component.ts</z-code-block-title>
             <z-code-block-actions>
               <z-code-block-copy-button [zValue]="chat" />
             </z-code-block-actions>
@@ -490,7 +498,7 @@ function injectStream(length: number) {
           <z-code-block-header>
             <z-code-block-title>
               <ng-icon name="lucideFileCode" />
-              app/api/chat/route.ts
+              src/server/routes/api/chat.post.ts
             </z-code-block-title>
             <z-code-block-actions>
               <z-code-block-copy-button [zValue]="source" />
@@ -515,7 +523,7 @@ function injectStream(length: number) {
           <z-code-block-header>
             <z-code-block-title>
               <ng-icon name="lucideTerminal" />
-              pnpm add ai &#64;ai-sdk/react zod
+              pnpm add ai &#64;ai-sdk/angular zod
             </z-code-block-title>
             <z-code-block-actions>
               <z-code-block-copy-button [zValue]="install" />
@@ -537,7 +545,7 @@ function injectStream(length: number) {
             <z-trace-collapsible-trigger>
               <z-trace-line>
                 <z-trace-icon><ng-icon name="lucideTerminal" /></z-trace-icon>
-                <z-trace-title>Ran pnpm add ai &#64;ai-sdk/react zod</z-trace-title>
+                <z-trace-title>Ran pnpm add ai &#64;ai-sdk/angular zod</z-trace-title>
               </z-trace-line>
             </z-trace-collapsible-trigger>
             <z-trace-collapsible-content>
@@ -569,14 +577,14 @@ function injectStream(length: number) {
             Create a route handler that calls
             <code>streamText</code>
             and returns the stream to the client. The
-            <code>useChat</code>
-            hook reads it on the other side.
+            <code>Chat</code>
+            class of the Angular SDK reads it on the other side.
           </p>
           <z-code-block>
             <z-code-block-header>
               <z-code-block-title>
                 <ng-icon name="lucideFileCode" />
-                app/api/chat/route.ts
+                src/server/routes/api/chat.post.ts
               </z-code-block-title>
               <z-code-block-actions>
                 <z-code-block-copy-button [zValue]="source" />
@@ -603,7 +611,7 @@ function injectStream(length: number) {
       <z-example zTitle="Wrap and Line Numbers">
         <z-code-block>
           <z-code-block-header>
-            <z-code-block-title>components/chat.tsx</z-code-block-title>
+            <z-code-block-title>components/chat.component.ts</z-code-block-title>
           </z-code-block-header>
           <z-code-block-content zWrap zLineNumbers>
             @for (line of chatLines(); track $index) {
@@ -616,7 +624,7 @@ function injectStream(length: number) {
       <z-example zTitle="Start Line">
         <z-code-block>
           <z-code-block-header>
-            <z-code-block-title>app/dashboard/page.tsx</z-code-block-title>
+            <z-code-block-title>app/dashboard/projects.resolver.ts</z-code-block-title>
           </z-code-block-header>
           <z-code-block-content zLineNumbers [zStartLine]="995">
             @for (line of middleLines(); track $index) {
@@ -629,7 +637,7 @@ function injectStream(length: number) {
       <z-example zTitle="Diff, Wrap and Highlighting">
         <z-code-block>
           <z-code-block-header>
-            <z-code-block-title>app/api/projects/route.ts</z-code-block-title>
+            <z-code-block-title>src/server/routes/api/projects.get.ts</z-code-block-title>
           </z-code-block-header>
           <z-code-block-content zWrap zLineNumbers [zStartLine]="12">
             @for (line of longDiffLines(); track $index) {
@@ -657,7 +665,7 @@ function injectStream(length: number) {
             <z-code-block-header>
               <z-code-block-title>
                 <ng-icon name="lucideFileCode" />
-                apps/web/app/(dashboard)/settings/organizations/[organizationId]/members/invitations/page.tsx
+                apps/web/src/app/pages/(dashboard)/settings/organizations/[organizationId]/members/invitations/index.page.ts
               </z-code-block-title>
               <z-code-block-actions>
                 <z-code-block-copy-button [zValue]="source" />
@@ -703,7 +711,7 @@ function injectStream(length: number) {
         <div class="flex flex-col gap-4">
           <z-code-block zSize="sm">
             <z-code-block-header>
-              <z-code-block-title>components/greeting.tsx</z-code-block-title>
+              <z-code-block-title>components/greeting.component.ts</z-code-block-title>
               <z-code-block-actions>
                 <z-code-block-copy-button [zValue]="source" />
               </z-code-block-actions>
@@ -857,7 +865,7 @@ function injectStream(length: number) {
           <button type="button" z-button zType="outline" (click)="dialogOpen.set(true)">View route</button>
           <z-dialog class="sm:max-w-xl" [(zVisible)]="dialogOpen">
             <z-dialog-header>
-              <z-dialog-title>app/api/chat/route.ts</z-dialog-title>
+              <z-dialog-title>src/server/routes/api/chat.post.ts</z-dialog-title>
               <z-dialog-description>The route that streams the answer.</z-dialog-description>
             </z-dialog-header>
             <z-code-block>
@@ -885,7 +893,7 @@ function injectStream(length: number) {
               <p>Create a route handler that returns the stream:</p>
               <z-code-block>
                 <z-code-block-header>
-                  <z-code-block-title>app/api/chat/route.ts</z-code-block-title>
+                  <z-code-block-title>src/server/routes/api/chat.post.ts</z-code-block-title>
                   <z-code-block-actions>
                     <z-code-block-copy-button [zValue]="source" />
                   </z-code-block-actions>
@@ -896,7 +904,7 @@ function injectStream(length: number) {
                   }
                 </z-code-block-content>
               </z-code-block>
-              <p>The client reads it with useChat.</p>
+              <p>The client reads it with the Chat class.</p>
             </z-message-content>
           </z-message>
         </div>
@@ -929,7 +937,7 @@ function injectStream(length: number) {
           <p>أنشئ ملف المسار وأعد البث إلى العميل.</p>
           <z-code-block>
             <z-code-block-header>
-              <z-code-block-title>app/api/chat/route.ts</z-code-block-title>
+              <z-code-block-title>src/server/routes/api/chat.post.ts</z-code-block-title>
               <z-code-block-actions>
                 <z-code-block-copy-button [zValue]="source" />
               </z-code-block-actions>
@@ -954,9 +962,9 @@ export class CodeBlockExampleComponent {
   protected readonly log = LOG;
   protected readonly diff = DIFF;
   protected readonly longDiff = LONG_DIFF;
-  protected readonly emptyPage = 'export default function Page() {}';
-  protected readonly addCodeBlock = 'pnpm dlx shadcn@latest add code-block';
-  protected readonly addPackages = 'pnpm add ai @ai-sdk/react zod';
+  protected readonly emptyPage = 'export default class InvitationsPage {}';
+  protected readonly addCodeBlock = 'npx zard-cli@latest add code-block';
+  protected readonly addPackages = 'pnpm add ai @ai-sdk/angular zod';
   protected readonly streamedLength = STREAMED_LENGTH;
   protected readonly answerLength = ANSWER.length;
 
@@ -966,13 +974,13 @@ export class CodeBlockExampleComponent {
   protected readonly dialogOpen = signal(false);
 
   protected readonly sourceLines = injectHighlightedCode(SOURCE, 'ts');
-  protected readonly chatLines = injectHighlightedCode(CHAT, 'tsx');
-  protected readonly diffLines = injectHighlightedCode(DIFF.map(line => line.text).join('\n'), 'tsx');
+  protected readonly chatLines = injectHighlightedCode(CHAT, 'angular-ts');
+  protected readonly diffLines = injectHighlightedCode(DIFF.map(line => line.text).join('\n'), 'angular-ts');
   protected readonly longDiffLines = injectHighlightedCode(LONG_DIFF.map(line => line.text).join('\n'), 'ts');
-  protected readonly middleLines = injectHighlightedCode(MIDDLE, 'tsx');
-  protected readonly commandLines = injectHighlightedCode('pnpm add ai @ai-sdk/react zod', 'bash');
-  protected readonly addCodeBlockLines = injectHighlightedCode('pnpm dlx shadcn@latest add code-block', 'bash');
-  protected readonly addPackagesLines = injectHighlightedCode('pnpm add ai @ai-sdk/react zod', 'bash');
+  protected readonly middleLines = injectHighlightedCode(MIDDLE, 'ts');
+  protected readonly commandLines = injectHighlightedCode('pnpm add ai @ai-sdk/angular zod', 'bash');
+  protected readonly addCodeBlockLines = injectHighlightedCode('npx zard-cli@latest add code-block', 'bash');
+  protected readonly addPackagesLines = injectHighlightedCode('pnpm add ai @ai-sdk/angular zod', 'bash');
   protected readonly devLines = injectHighlightedCode('pnpm dev', 'bash');
   protected readonly ansiLines = injectHighlightedCode(ANSI, 'ansi');
   protected readonly samples = SAMPLES.map(sample => ({

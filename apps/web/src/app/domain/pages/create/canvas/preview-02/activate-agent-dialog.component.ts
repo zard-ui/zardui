@@ -18,10 +18,10 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
   template: `
     <z-card>
       <z-card-header>
-        <z-card-title zTitle="Ship faster & safer with Vercel Agent" />
+        <z-card-title zTitle="Ship faster & safer with Acme Agent" />
         <!-- prettier-ignore -->
         <ng-template #terms>
-          Your use is subject to Vercel's <a href="#" (click)="$event.preventDefault()">Public Beta Agreement</a> and
+          Your use is subject to Acme's <a href="#" (click)="$event.preventDefault()">Public Beta Agreement</a> and
           <a href="#" (click)="$event.preventDefault()">AI Product Terms</a>.
         </ng-template>
         <z-card-description [zDescription]="terms" />
@@ -60,7 +60,7 @@ import { ZardItemImports } from '@zard/components/item/item.imports';
             </div>
           }
         </div>
-        <z-alert zDescription="Pro teams get $100 in Vercel Agent trial credit for 2 weeks after activation." />
+        <z-alert zDescription="Pro teams get $100 in Acme Agent trial credit for 2 weeks after activation." />
       </z-card-content>
       <z-card-footer class="justify-end gap-2">
         <button type="button" z-button zType="outline" class="style-sera:hidden">Cancel</button>

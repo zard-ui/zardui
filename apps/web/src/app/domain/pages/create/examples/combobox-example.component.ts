@@ -17,11 +17,11 @@ import { ZardSelectImports } from '@zard/components/select';
 import { COMBOBOX_COUNTRIES } from './combobox-example.data';
 import { ExampleImports } from './example.component';
 
-const FRAMEWORKS = ['Next.js', 'SvelteKit', 'Nuxt.js', 'Remix', 'Astro'] as const;
+const FRAMEWORKS = ['Angular', 'Analog', 'SvelteKit', 'Nuxt.js', 'Astro'] as const;
 
 const SIDES = ['inline-start', 'left', 'top', 'bottom', 'right', 'inline-end'] as const;
 
-const DISABLED_FRAMEWORKS: readonly string[] = ['Nuxt.js', 'Remix'];
+const DISABLED_FRAMEWORKS: readonly string[] = ['Nuxt.js', 'Astro'];
 
 const TIMEZONES = [
   {

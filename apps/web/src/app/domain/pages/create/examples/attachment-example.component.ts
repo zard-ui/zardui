@@ -66,7 +66,7 @@ const vertical = (items: readonly AttachmentItem[]): AttachmentItem[] =>
 const FILES: readonly AttachmentItem[] = [
   { icon: 'lucideFileText', title: 'sales-dashboard.pdf', description: 'PDF · 2.4 MB', cls: 'w-full' },
   { icon: 'lucideTable', title: 'customer-import.csv', description: 'CSV · 18 KB', cls: 'w-full' },
-  { icon: 'lucideFileCode', title: 'message-renderer.tsx', description: 'TypeScript · 12 KB', cls: 'w-full' },
+  { icon: 'lucideFileCode', title: 'message-renderer.component.ts', description: 'TypeScript · 12 KB', cls: 'w-full' },
 ];
 
 const FILES_VERTICAL = vertical([
@@ -76,31 +76,31 @@ const FILES_VERTICAL = vertical([
 ]);
 
 const CONTENT_TITLE: readonly AttachmentItem[] = [
-  { title: 'React Documentation', cls: 'w-full' },
+  { title: 'Angular Documentation', cls: 'w-full' },
   { title: 'Tailwind CSS', cls: 'w-full' },
   {
-    title: 'shadcn/ui',
+    title: 'zard/ui',
     size: 'sm',
     cls: 'w-48',
     noActions: true,
-    href: 'https://ui.shadcn.com',
+    href: 'https://zardui.com',
     rel: 'noopener noreferrer',
-    openLabel: 'Open shadcn/ui',
+    openLabel: 'Open zard/ui',
   },
 ];
 
 const CONTENT_DESCRIPTION: readonly AttachmentItem[] = [
-  { title: 'Building accessible components', description: 'react.dev · 8 min read', cls: 'w-full' },
+  { title: 'Building accessible components', description: 'angular.dev · 8 min read', cls: 'w-full' },
   { title: 'Utility-first CSS framework', description: 'tailwindcss.com', cls: 'w-full' },
   {
-    title: 'Compound components in React',
-    description: 'ui.shadcn.com/docs',
+    title: 'Content projection in Angular',
+    description: 'zardui.com/docs',
     size: 'sm',
     cls: 'w-full max-w-80',
     noActions: true,
-    href: 'https://ui.shadcn.com/docs',
+    href: 'https://zardui.com/docs',
     rel: 'noopener noreferrer',
-    openLabel: 'Open Compound components in React',
+    openLabel: 'Open Content projection in Angular',
   },
 ];
 
@@ -201,7 +201,7 @@ const SCROLLABLE: readonly AttachmentItem[] = [
   { icon: 'lucideFileText', title: 'briefing-notes.pdf', description: 'PDF · 1.4 MB' },
   { image: WORKSPACE, alt: 'Workspace', title: 'workspace.png', description: 'PNG · 820 KB' },
   { icon: 'lucideTable', title: 'customers.csv', description: 'CSV · 18 KB' },
-  { icon: 'lucideFileCode', title: 'renderer.tsx', description: 'TSX · 12 KB' },
+  { icon: 'lucideFileCode', title: 'renderer.component.ts', description: 'TS · 12 KB' },
 ].map(item => ({ ...item, cls: 'w-64' }));
 
 const SCROLLABLE_VERTICAL = vertical([

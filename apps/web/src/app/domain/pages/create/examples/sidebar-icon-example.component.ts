@@ -20,7 +20,7 @@ import { ZardDropdownImports } from '@zard/components/dropdown';
 import { ZardItemImports } from '@zard/components/item';
 import { ZardSidebarImports } from '@zard/components/sidebar';
 
-const USER = { name: 'shadcn', email: 'm@example.com', avatar: '/avatars/shadcn.jpg' } as const;
+const USER = { name: 'zard', email: 'm@example.com', avatar: '/avatars/shadcn.jpg' } as const;
 
 const TEAMS = [
   { name: 'Acme Inc', plan: 'Enterprise' },

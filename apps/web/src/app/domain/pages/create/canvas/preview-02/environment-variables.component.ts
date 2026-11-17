@@ -5,7 +5,7 @@ import { ZardCardImports } from '@zard/components/card/card.imports';
 
 const ENVS = [
   { key: 'DATABASE_URL', masked: true },
-  { key: 'NEXT_PUBLIC_API', masked: false },
+  { key: 'NG_APP_API_URL', masked: false },
   { key: 'STRIPE_SECRET', masked: true },
 ] as const;
 

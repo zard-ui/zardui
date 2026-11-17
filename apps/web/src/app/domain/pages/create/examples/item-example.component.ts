@@ -468,7 +468,7 @@ export class ItemExampleImagesComponent {
           <z-item-content>
             <z-item-title>Mobile App Development</z-item-title>
             <z-item-description>
-              Building a cross-platform mobile application for iOS and Android with React Native.
+              Building a cross-platform mobile application for iOS and Android with Ionic and Angular.
             </z-item-description>
           </z-item-content>
           <z-item-footer><span class="text-muted-foreground text-sm">Status: In Progress</span></z-item-footer>

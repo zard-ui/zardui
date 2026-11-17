@@ -35,7 +35,7 @@ Keying the cache on the lockfile and the image directory should let most deploys
 
 const README = `# Acme Chat
 
-A chat app built with Next.js and the AI SDK.
+A chat app built with Angular and the AI SDK.
 
 ## Getting started
 
@@ -44,8 +44,8 @@ pnpm dev
 
 ## Chat route
 
-app/api/chat/route.ts streams responses through the AI Gateway.
-Set AI_GATEWAY_API_KEY in .env.local.`;
+src/server/routes/api/chat.post.ts streams responses through the AI Gateway.
+Set AI_GATEWAY_API_KEY in .env.`;
 
 const SOURCES = [
   { title: 'Caching build outputs | example.com', href: 'https://example.com/docs/caching' },
@@ -423,10 +423,10 @@ const CHAT_TURNS = 3;
             <z-sheet-description>Files read while preparing the response.</z-sheet-description>
           </z-sheet-header>
           <ul class="flex flex-col gap-2 px-4 font-mono text-xs">
-            <li>apps/v4/lib/docs.ts</li>
-            <li>apps/v4/lib/components.ts</li>
-            <li>apps/v4/next.config.mjs</li>
-            <li>apps/v4/package.json</li>
+            <li>apps/web/src/app/docs.service.ts</li>
+            <li>apps/web/src/app/components.ts</li>
+            <li>apps/web/angular.json</li>
+            <li>apps/web/package.json</li>
           </ul>
         </z-sheet>
 
@@ -562,9 +562,9 @@ const CHAT_TURNS = 3;
                   </z-trace-line>
                 </z-trace-collapsible-trigger>
                 <z-trace-collapsible-content class="flex flex-wrap gap-1.5">
-                  <z-badge zType="secondary">vercel.com</z-badge>
+                  <z-badge zType="secondary">nx.dev</z-badge>
                   <z-badge zType="secondary">github.com</z-badge>
-                  <z-badge zType="secondary">nextjs.org</z-badge>
+                  <z-badge zType="secondary">angular.dev</z-badge>
                 </z-trace-collapsible-content>
               </z-trace-collapsible>
               <z-trace-collapsible zOpen>
@@ -608,12 +608,12 @@ const CHAT_TURNS = 3;
             <z-trace>
               <z-trace-line>
                 <z-trace-icon><ng-icon name="lucideSearch" /></z-trace-icon>
-                <z-trace-title>Searched for app/page.tsx</z-trace-title>
+                <z-trace-title>Searched for app/app.component.ts</z-trace-title>
               </z-trace-line>
               <a href="#task">
                 <z-trace-line>
                   <z-trace-icon><ng-icon name="lucideFileText" /></z-trace-icon>
-                  <z-trace-title>Read app/page.tsx</z-trace-title>
+                  <z-trace-title>Read app/app.component.ts</z-trace-title>
                   <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
                 </z-trace-line>
               </a>
@@ -624,7 +624,7 @@ const CHAT_TURNS = 3;
               <a href="#task">
                 <z-trace-line>
                   <z-trace-icon><ng-icon name="lucideFileText" /></z-trace-icon>
-                  <z-trace-title>Read app/layout.tsx</z-trace-title>
+                  <z-trace-title>Read app/app.config.ts</z-trace-title>
                   <z-trace-icon><ng-icon name="lucideChevronRight" class="rtl:-scale-x-100" /></z-trace-icon>
                 </z-trace-line>
               </a>

@@ -21,7 +21,7 @@ import { ZardDarkMode } from '@zard/services/dark-mode';
 
 import { ExampleImports } from './example.component';
 
-const DRAWER_FILES = ['app/chat/page.tsx', 'components/message.tsx', 'lib/ai.ts'] as const;
+const DRAWER_FILES = ['app/chat/chat.page.ts', 'components/message.component.ts', 'lib/ai.ts'] as const;
 
 /** shadcn/ui's `marker-example`, in zard. */
 @Component({

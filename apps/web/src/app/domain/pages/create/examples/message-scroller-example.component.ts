@@ -44,19 +44,19 @@ Treat the chat as three layers so scrolling and the composer never fight each ot
 
 ### Suggested component split
 
-\`\`\`tsx
-<ChatCard>
-  <ChatHeader status={status} />
-  <ChatTranscript messages={messages} />
-  <ChatComposer onSubmit={sendMessage} onStop={stop} />
-</ChatCard>
+\`\`\`html
+<app-chat-card>
+  <app-chat-header [status]="status()" />
+  <app-chat-transcript [messages]="messages()" />
+  <app-chat-composer (submitted)="sendMessage($event)" (stopped)="stop()" />
+</app-chat-card>
 \`\`\`
 
 ### v1 pitfalls to avoid
 
 1. **Inlining transport logic in the UI** — keep scripted/demo transport beside your example, not inside shared components.
 2. **Fixed transcript height without \`overflow-hidden\`** — parent must clip, child must scroll, or the composer jumps.
-3. **Not giving the scroller a ref or auto-scroll flag** — long replies should stay pinned to the bottom unless the user scrolls up.
+3. **Not giving the scroller a viewChild or auto-scroll flag** — long replies should stay pinned to the bottom unless the user scrolls up.
 
 ### Practical next step
 

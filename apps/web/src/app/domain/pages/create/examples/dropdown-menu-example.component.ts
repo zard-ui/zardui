@@ -420,10 +420,10 @@ const SIDES = ['inline-start', 'left', 'top', 'bottom', 'right', 'inline-end'] a
             z-dropdown
             [zDropdownMenu]="avatarMenu"
           >
-            <z-avatar zSrc="https://github.com/shadcn.png" zAlt="Shadcn" zFallback="CN" />
+            <z-avatar zSrc="https://github.com/zard-ui.png" zAlt="zard/ui" zFallback="ZU" />
             <div class="grid flex-1 text-left text-sm leading-tight">
-              <span class="truncate font-semibold">shadcn</span>
-              <span class="text-muted-foreground truncate text-xs">shadcn@example.com</span>
+              <span class="truncate font-semibold">zard</span>
+              <span class="text-muted-foreground truncate text-xs">zard@example.com</span>
             </div>
             <ng-icon name="lucideChevronsUpDown" class="text-muted-foreground ml-auto" />
           </button>

@@ -30,7 +30,7 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
           <z-field-group>
             <z-field>
               <label z-field-label for="p2-name">Name</label>
-              <input z-input id="p2-name" placeholder="shadcn" />
+              <input z-input id="p2-name" placeholder="zard" />
               <p z-field-description>
                 Your name may appear around GitHub where you contribute or are mentioned. You can remove it at any time.
               </p>
@@ -38,7 +38,7 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
             <z-field>
               <label z-field-label for="p2-email">Public Email</label>
               <select z-native-select id="p2-email">
-                <option value="m@shadcn.com">m&#64;shadcn.com</option>
+                <option value="m@zardui.com">m&#64;zardui.com</option>
                 <option value="m@gmail.com">m&#64;gmail.com</option>
               </select>
               <!-- prettier-ignore -->
