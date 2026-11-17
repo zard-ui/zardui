@@ -212,9 +212,9 @@ export type ZardCardSizeType = NonNullable<VariantProps<typeof cardVariants>['zS
 
 export const cardHeaderVariants = cva('grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [&.border-b]:pb-(--card-spacing) group/card-header @container/card-header');
 
-export const cardTitleVariants = cva('text-base/snug font-medium group-data-[size=sm]/card:text-sm font-heading');
+export const cardTitleVariants = cva('text-base/snug font-medium group-data-[size=sm]/card:text-sm font-heading block');
 
-export const cardDescriptionVariants = cva('text-muted-foreground text-sm');
+export const cardDescriptionVariants = cva('text-muted-foreground text-sm block');
 
 export const cardActionVariants = cva('col-start-2 row-span-2 row-start-1 self-start justify-self-end');
 

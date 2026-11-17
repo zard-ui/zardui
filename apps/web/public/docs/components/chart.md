@@ -913,10 +913,31 @@ export function resolveChartColors(
   return resolved;
 }
 
+/**
+ * The color actually painted behind the chart: the first ancestor with a background, else the page's.
+ *
+ * A pie's slice gaps are drawn in this color. Painted in `--background` inside a card, they showed as a
+ * dark ring around the chart instead of as gaps.
+ */
+function surfaceBehind(host: HTMLElement | null | undefined): string | null {
+  if (!host || typeof getComputedStyle !== 'function') {
+    return null;
+  }
+
+  for (let el = host.parentElement; el; el = el.parentElement) {
+    const color = getComputedStyle(el).backgroundColor;
+    if (color && color !== 'transparent' && !/^rgba\([^)]*,\s*0\)$/.test(color)) {
+      return toCanvasColor(color);
+    }
+  }
+
+  return null;
+}
+
 /** Resolves the grid, axis and surface colors the chart chrome is painted with. */
 export function resolveChartChrome(host: HTMLElement | null | undefined): ZardChartChromeColors {
   return {
-    background: resolveCssColor(host, 'var(--background)'),
+    background: surfaceBehind(host) ?? resolveCssColor(host, 'var(--background)'),
     border: resolveCssColor(host, 'var(--border)'),
     foreground: resolveCssColor(host, 'var(--foreground)'),
     mutedForeground: resolveCssColor(host, 'var(--muted-foreground)'),

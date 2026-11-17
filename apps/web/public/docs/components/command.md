@@ -389,7 +389,7 @@ export const commandItemVariants = cva(
   },
 );
 
-export const commandSeparatorVariants = cva('bg-border -mx-1 my-1 h-px');
+export const commandSeparatorVariants = cva('bg-border -mx-1 h-px');
 
 export const commandShortcutVariants = cva('text-muted-foreground ms-auto text-xs tracking-widest group-data-selected/command-item:text-foreground');
 

@@ -310,7 +310,7 @@ export const fieldVariants = cva('flex w-full gap-2 data-[invalid=true]:text-des
 
 export const fieldContentVariants = cva('flex flex-1 flex-col gap-0.5 group/field-content leading-snug');
 
-export const fieldLabelVariants = cva('flex w-fit gap-2 text-sm leading-none font-medium has-data-checked:border-primary/30 has-data-checked:bg-primary/5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5 group/field-label peer/field-label');
+export const fieldLabelVariants = cva('group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50 flex w-fit gap-2 text-sm leading-none font-medium has-data-checked:border-primary/30 has-data-checked:bg-primary/5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5 group/field-label peer/field-label');
 
 export const fieldTitleVariants = cva('flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50');
 
