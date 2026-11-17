@@ -55,6 +55,7 @@ function retarget(source: string): string {
     .replaceAll(/'@zard\/components\//g, `'${aliases['components']}/`)
     .replaceAll(/'@zard\/utils\//g, `'${aliases['utils']}/`)
     .replaceAll(/'@zard\/services\//g, `'${aliases['services']}/`)
+    .replaceAll(/'@zard\/demo-utils\//g, `'@/parity/demo-utils/`)
     .replaceAll(/'@zard\/design'/g, `'@/parity/design'`);
 }
 
@@ -71,6 +72,8 @@ function copyTree(from: string, to: string): void {
 copyTree(join(createDir, 'canvas'), join(parity, 'canvas'));
 copyTree(join(createDir, 'examples'), join(parity, 'examples'));
 copyTree(designDir, join(parity, 'design'));
+// The docs-only helpers some examples use (the scripted chat of message-scroller).
+copyTree(join(root, 'libs/zard/src/lib/shared/demo-utils'), join(parity, 'demo-utils'));
 writeFileSync(
   join(parity, 'lib/preview-design.context.ts'),
   retarget(readFileSync(join(createDir, 'lib/preview-design.context.ts'), 'utf8')),
