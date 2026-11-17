@@ -37,9 +37,9 @@ function codeBlock(block: CodeBlockData | undefined): string {
   return block?.code ? fence(block.code, block.language) : '';
 }
 
-/** Markdown-table cells must not contain raw pipes or newlines. */
+/** Markdown-table cells must not contain raw pipes or newlines; backslashes first, so `\|` stays escaped. */
 function cell(value: string | undefined): string {
-  return (value ?? '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ').trim();
+  return (value ?? '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ').trim();
 }
 
 function code(value: string | undefined): string {

@@ -18,7 +18,7 @@
  */
 import { createServer, type Server } from 'node:http';
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
-import { extname, join, resolve, sep } from 'node:path';
+import { extname, join, resolve } from 'node:path';
 
 import { chromium, type Browser, type Page } from 'playwright';
 import sharp from 'sharp';
@@ -67,14 +67,20 @@ function serve(dir: string, port: number): Server {
     '.ico': 'image/x-icon',
     '.png': 'image/png',
   };
-  const server = createServer((req, res) => {
-    const path = decodeURIComponent((req.url ?? '/').split('?')[0]);
-    // Resolved against the root and kept inside it: `join` + a bare prefix check let `/../<root>-other/` through.
-    const root = resolve(dir);
-    let file = resolve(root, `.${path}`);
-    if (!file.startsWith(root + sep) || !existsSync(file) || statSync(file).isDirectory()) {
-      file = join(root, 'index.html');
+  // Only the files listed here at startup are served: the request path is a key, never a path on disk.
+  const root = resolve(dir);
+  const files = new Map<string, string>();
+  const list = (sub: string): void => {
+    for (const name of readdirSync(join(root, sub))) {
+      const rel = sub ? `${sub}/${name}` : name;
+      if (statSync(join(root, rel)).isDirectory()) list(rel);
+      else files.set(rel, join(root, rel));
     }
+  };
+  list('');
+  const server = createServer((req, res) => {
+    const path = decodeURIComponent((req.url ?? '/').split('?')[0]).replace(/^\/+/, '');
+    const file = files.get(path) ?? join(root, 'index.html');
     res.writeHead(200, { 'content-type': types[extname(file)] ?? 'application/octet-stream' });
     res.end(readFileSync(file));
   });

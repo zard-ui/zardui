@@ -3,9 +3,11 @@ import type { ZardChartChromeColors, ZardChartConfig } from './chart.types';
 /** How many `--chart-*` tokens the default palette cycles through. */
 export const CHART_PALETTE_SIZE = 5;
 
-const VAR_PATTERN = /^var\(\s*(--[^,)\s]+)\s*(?:,\s*([\s\S]+?))?\s*\)$/;
+// Each `\s*` borders a character class it cannot overlap, and the captured bodies are trimmed in code: a lazy group
+// between two `\s*` backtracks polynomially on long runs of spaces.
+const VAR_PATTERN = /^var\(\s*(--[^,)\s]+)\s*(?:,([\s\S]*))?\)$/;
 const HEX_PATTERN = /^#([0-9a-f]{3,8})$/i;
-const FUNCTION_PATTERN = /^([a-z-]+)\(\s*([\s\S]*?)\s*\)$/i;
+const FUNCTION_PATTERN = /^([a-z-]+)\(([\s\S]*)\)$/i;
 const MAX_VAR_DEPTH = 8;
 
 /** CSS color functions that accept the modern `<channels> / <alpha>` syntax. */
@@ -122,7 +124,8 @@ function readCssColor(host: HTMLElement | null | undefined, value: string, depth
     return raw;
   }
 
-  const [, token, fallback] = match;
+  const [, token] = match;
+  const fallback = match[2]?.trim();
   const computed = readCssVariable(host, token);
   if (computed) {
     return readCssColor(host, computed, depth + 1);
@@ -172,7 +175,7 @@ function applyAlpha(color: string, alpha: number): string {
   const fn = FUNCTION_PATTERN.exec(raw);
   if (fn) {
     const name = fn[1].toLowerCase();
-    const body = fn[2];
+    const body = fn[2].trim();
 
     if (SLASH_ALPHA_FUNCTIONS.has(name)) {
       if (!body.includes(',')) {
