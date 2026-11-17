@@ -299,7 +299,6 @@ export class ZardDropdownService {
       direction,
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
-      minWidth: 200,
       maxHeight: 400,
     });
 
