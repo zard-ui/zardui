@@ -425,7 +425,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'font-medium tracking-tight text-lg',
     'cn-field': 'flex w-full gap-3 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-1',
-    'cn-field-description': 'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm',
     'cn-field-error': 'text-sm font-normal text-destructive',
     'cn-field-group': 'flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
@@ -1249,7 +1249,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'text-sm font-medium tracking-tight',
     'cn-field': 'flex w-full gap-2 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-0.5',
-    'cn-field-description': 'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm',
     'cn-field-error': 'text-destructive text-sm font-normal',
     'cn-field-group': 'flex w-full flex-col gap-5 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
@@ -2071,7 +2071,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'font-medium tracking-tight text-lg',
     'cn-field': 'flex w-full gap-3 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-1',
-    'cn-field-description': 'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm',
     'cn-field-error': 'text-sm font-normal text-destructive',
     'cn-field-group': 'flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
@@ -2893,7 +2893,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'text-sm font-medium',
     'cn-field': 'flex w-full gap-2 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-0.5',
-    'cn-field-description': 'text-muted-foreground text-start text-xs/relaxed [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-xs/relaxed',
     'cn-field-error': 'font-normal text-destructive text-xs',
     'cn-field-group': 'flex w-full flex-col gap-5 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
@@ -3719,7 +3719,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'text-sm font-medium tracking-tight',
     'cn-field': 'flex w-full gap-2 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-0.5',
-    'cn-field-description': 'text-muted-foreground text-start text-xs/relaxed [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-xs/relaxed',
     'cn-field-error': 'font-normal text-destructive text-xs/relaxed',
     'cn-field-group': 'flex w-full flex-col gap-4 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
@@ -4545,7 +4545,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'font-medium tracking-tight text-lg',
     'cn-field': 'flex w-full gap-3 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-1',
-    'cn-field-description': 'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm',
     'cn-field-error': 'text-sm font-normal text-destructive',
     'cn-field-group': 'flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
@@ -5366,8 +5366,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'text-lg font-semibold tracking-wider uppercase',
     'cn-field': 'flex w-full gap-3 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-1',
-    'cn-field-description':
-      'text-muted-foreground text-start text-sm normal-case tracking-normal [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm normal-case tracking-normal',
     'cn-field-error': 'text-sm font-normal text-destructive',
     'cn-field-group': 'flex w-full flex-col gap-10 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':
@@ -6189,7 +6188,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-empty-title': 'font-medium tracking-tight text-lg',
     'cn-field': 'flex w-full gap-3 data-[invalid=true]:text-destructive',
     'cn-field-content': 'flex flex-1 flex-col gap-1',
-    'cn-field-description': 'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5',
+    'cn-field-description': 'text-muted-foreground text-start text-sm',
     'cn-field-error': 'text-sm font-normal text-destructive',
     'cn-field-group': 'flex w-full flex-col gap-6 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
     'cn-field-label':

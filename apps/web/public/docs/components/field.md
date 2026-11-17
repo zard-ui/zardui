@@ -315,7 +315,7 @@ export const fieldLabelVariants = cva('group-data-[disabled=true]:opacity-50 pee
 export const fieldTitleVariants = cva('flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50');
 
 export const fieldDescriptionVariants = cva(
-  'text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5 leading-normal font-normal group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
+  'text-muted-foreground text-start text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
 );
 
 export const fieldSeparatorVariants = cva('relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2');

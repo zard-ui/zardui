@@ -3191,10 +3191,6 @@
     @apply group-data-[disabled=true]/field:opacity-50;
   }
 
-  .cn-field-description {
-    @apply [[data-variant=legend]+&]:-mt-1.5;
-  }
-
   .cn-field-separator {
     @apply group-data-[variant=outline]/field-group:-mb-2;
   }

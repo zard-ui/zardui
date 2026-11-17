@@ -323,7 +323,7 @@
     "cn-empty-title": "font-medium tracking-tight text-lg",
     "cn-field": "flex w-full gap-3 data-[invalid=true]:text-destructive",
     "cn-field-content": "flex flex-1 flex-col gap-1",
-    "cn-field-description": "text-muted-foreground text-start text-sm [[data-variant=legend]+&]:-mt-1.5",
+    "cn-field-description": "text-muted-foreground text-start text-sm",
     "cn-field-error": "text-sm font-normal text-destructive",
     "cn-field-group": "flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4",
     "cn-field-label": "flex w-fit gap-2 leading-none group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:border dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md *:data-[slot=field]:p-3",

@@ -3160,10 +3160,6 @@
   @apply group-data-[disabled=true]/field:opacity-50;
 }
 
-.cn-field-description:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply [[data-variant=legend]+&]:-mt-1.5;
-}
-
 .cn-field-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply group-data-[variant=outline]/field-group:-mb-2;
 }

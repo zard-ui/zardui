@@ -26,7 +26,7 @@ export const fieldLabelVariants = cva('cn-label cn-field-label group/field-label
 export const fieldTitleVariants = cva('cn-field-title');
 
 export const fieldDescriptionVariants = cva(
-  'cn-field-description leading-normal font-normal group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
+  'cn-field-description leading-normal font-normal group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
 );
 
 export const fieldSeparatorVariants = cva('cn-field-separator');
