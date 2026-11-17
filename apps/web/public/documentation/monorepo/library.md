@@ -49,6 +49,7 @@ bunx zard-cli@latest init --type nx-library --project ui
 
 ```ts title="libs/ui/src/index.ts" copyButton
 export * from './lib/shared/core';
+export * from './lib/shared/utils';
 export * from './lib/shared/components/button';
 ```
 

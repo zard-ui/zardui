@@ -1618,7 +1618,7 @@ You can now start adding components to your project.
 
 ### Wire it up in the consuming app
 
-The application that installs this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme with @import "<your-library>/styles.css", and imports the components from the library entry point — export them from public-api.ts. Inside the library the CLI writes relative imports, so the published package resolves without the @/ alias.
+The application that installs this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme with @import "<your-library>/styles.css", and imports the components from the library entry point. Export them from public-api.ts together with the core and utils folders, which they depend on, or ng-packagr stops with NG3001. Inside the library the CLI writes relative imports, so the published package resolves without the @/ alias. In the app, always import from the package name: reaching into the library source through @/ makes the app compile those files itself, and Angular rejects their imports arrays with NG3004.
 
 **.postcssrc.json**
 

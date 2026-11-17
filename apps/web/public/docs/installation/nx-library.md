@@ -1595,7 +1595,7 @@ You can now start adding components to your project.
 
 ### Wire it up in the consuming app
 
-The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts and imports the theme from the library styles.css.
+The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme from the library styles.css, and imports the components from the library entry point (src/index.ts), which has to export them along with the core and utils folders. Always import from the library path alias, such as @acme/ui: reaching into its source through @/ makes the app compile those files itself, and Angular rejects their imports arrays with NG3004.
 
 **.postcssrc.json**
 

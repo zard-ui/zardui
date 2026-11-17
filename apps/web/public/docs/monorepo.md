@@ -138,8 +138,11 @@ One step is the library's, and it is easy to miss: `provideZard()` is installed 
 
 ```
 export * from './lib/shared/core';
+export * from './lib/shared/utils';
 export * from './lib/shared/components/button';
 ```
+
+Export `utils` next to the components as well: they depend on it, and a buildable library refuses to compile a component whose dependencies the entry point leaves out. In the app, import everything from the library's path, never from its source through `@/` — that makes the app compile the library files itself, and Angular rejects their `imports` arrays with NG3004.
 
 **apps/web/src/app/app.config.ts**
 

@@ -77,6 +77,17 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       , or the import below has nothing to resolve to.
     </p>
     <z-code-block [data]="entryPoint" />
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Export
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">utils</code>
+      next to the components as well: they depend on it, and a buildable library refuses to compile a component whose
+      dependencies the entry point leaves out. In the app, import everything from the library's path, never from its
+      source through
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;/</code>
+      — that makes the app compile the library files itself, and Angular rejects their
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">imports</code>
+      arrays with NG3004.
+    </p>
     <z-code-block [data]="appConfig" />
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       The stylesheet import resolves to the asset published at the package root. Tailwind is the application's to
