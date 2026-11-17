@@ -56,7 +56,7 @@ const PLANS = [
       <z-example zTitle="Sides" zContainerClass="col-span-2">
         <div class="flex flex-wrap justify-center gap-2">
           @for (side of sides; track side) {
-            <z-select class="w-28 capitalize" [zPlaceholder]="side.replace('-', ' ')">
+            <z-select class="w-28 capitalize" zPlaceholder="Select" [attr.aria-label]="side.replace('-', ' ')">
               <z-select-group>
                 <z-select-item zValue="apple">Apple</z-select-item>
                 <z-select-item zValue="banana">Banana</z-select-item>
@@ -256,7 +256,7 @@ const PLANS = [
           </z-select>
           <div z-field data-invalid="true">
             <label for="select-favorite-fruit-226" z-field-label>Favorite Fruit</label>
-            <z-select id="select-favorite-fruit-226" class="w-fit" zPlaceholder="Select a fruit" zInvalid>
+            <z-select id="select-favorite-fruit-226" zPlaceholder="Select a fruit" zInvalid>
               <z-select-group>
                 <z-select-item zValue="apple">Apple</z-select-item>
                 <z-select-item zValue="banana">Banana</z-select-item>

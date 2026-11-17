@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideFile } from '@ng-icons/lucide';
 
-import { ZardFieldImports } from '@zard/components/field';
 import { ZardItemImports } from '@zard/components/item';
 import { ZardProgressComponent } from '@zard/components/progress/progress.component';
 import { ZardSliderComponent } from '@zard/components/slider';
@@ -20,7 +19,7 @@ const FILES = [
 /** shadcn/ui's `progress-example`, in zard. */
 @Component({
   selector: 'z-progress-example',
-  imports: [ExampleImports, NgIcon, ZardFieldImports, ZardItemImports, ZardProgressComponent, ZardSliderComponent],
+  imports: [ExampleImports, NgIcon, ZardItemImports, ZardProgressComponent, ZardSliderComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideFile })],
   template: `
@@ -36,12 +35,11 @@ const FILES = [
       </z-example>
 
       <z-example zTitle="With Label">
-        <div z-field>
-          <label z-field-label for="progress-upload">
-            <span>Upload progress</span>
-            <span class="ml-auto">66%</span>
-          </label>
-          <z-progress id="progress-upload" [value]="66" class="w-full" />
+        <!-- shadcn's Progress root: a wrapping row of label, value and the full-width track. -->
+        <div class="flex w-full flex-wrap gap-3">
+          <span id="progress-upload-label" class="text-sm font-medium">Upload progress</span>
+          <span class="text-muted-foreground ms-auto text-sm tabular-nums">56%</span>
+          <z-progress aria-labelledby="progress-upload-label" [value]="56" class="w-full" />
         </div>
       </z-example>
 

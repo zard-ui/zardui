@@ -121,7 +121,7 @@ const NOTIFICATIONS = [
           <p z-field-description>Choose how you want to receive notifications.</p>
           <z-radio-group value="email">
             @for (option of notifications; track option.value) {
-              <div z-field zOrientation="horizontal" data-invalid>
+              <div z-field zOrientation="horizontal" data-invalid="true">
                 <z-radio [value]="option.value" [zId]="option.id" zInvalid />
                 <label z-field-label [for]="option.id" class="font-normal">{{ option.label }}</label>
               </div>

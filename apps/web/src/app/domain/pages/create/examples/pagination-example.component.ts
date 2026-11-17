@@ -42,7 +42,7 @@ import { ExampleImports } from './example.component';
         </ng-template>
       </z-example>
 
-      <z-example zTitle="With Select" zContainerClass="col-span-2">
+      <z-example zTitle="With Select">
         <div class="flex items-center justify-between gap-4">
           <div z-field zOrientation="horizontal" class="w-fit">
             <label z-field-label for="select-rows-per-page">Rows per page</label>

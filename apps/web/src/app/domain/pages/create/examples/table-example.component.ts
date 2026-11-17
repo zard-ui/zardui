@@ -75,195 +75,209 @@ const ASSIGNEES = [
   template: `
     <z-example-wrapper>
       <z-example zTitle="Basic">
-        <table z-table>
-          <caption z-table-caption>A list of your recent invoices.</caption>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head class="w-[100px]">Invoice</th>
-              <th z-table-head>Status</th>
-              <th z-table-head>Method</th>
-              <th z-table-head class="text-right">Amount</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (invoice of recentInvoices; track invoice.invoice) {
+        <div data-slot="table-container" class="relative w-full overflow-x-auto">
+          <table z-table>
+            <caption z-table-caption>A list of your recent invoices.</caption>
+            <thead z-table-header>
               <tr z-table-row>
-                <td z-table-cell class="font-medium">{{ invoice.invoice }}</td>
-                <td z-table-cell>{{ invoice.paymentStatus }}</td>
-                <td z-table-cell>{{ invoice.paymentMethod }}</td>
-                <td z-table-cell class="text-right">{{ invoice.totalAmount }}</td>
+                <th z-table-head class="w-[100px]">Invoice</th>
+                <th z-table-head>Status</th>
+                <th z-table-head>Method</th>
+                <th z-table-head class="text-right">Amount</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody z-table-body>
+              @for (invoice of recentInvoices; track invoice.invoice) {
+                <tr z-table-row>
+                  <td z-table-cell class="font-medium">{{ invoice.invoice }}</td>
+                  <td z-table-cell>{{ invoice.paymentStatus }}</td>
+                  <td z-table-cell>{{ invoice.paymentMethod }}</td>
+                  <td z-table-cell class="text-right">{{ invoice.totalAmount }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </z-example>
 
       <z-example zTitle="With Footer">
-        <table z-table>
-          <caption z-table-caption>A list of your recent invoices.</caption>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head class="w-[100px]">Invoice</th>
-              <th z-table-head>Status</th>
-              <th z-table-head>Method</th>
-              <th z-table-head class="text-right">Amount</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (invoice of recentInvoices; track invoice.invoice) {
+        <div data-slot="table-container" class="relative w-full overflow-x-auto">
+          <table z-table>
+            <caption z-table-caption>A list of your recent invoices.</caption>
+            <thead z-table-header>
               <tr z-table-row>
-                <td z-table-cell class="font-medium">{{ invoice.invoice }}</td>
-                <td z-table-cell>{{ invoice.paymentStatus }}</td>
-                <td z-table-cell>{{ invoice.paymentMethod }}</td>
-                <td z-table-cell class="text-right">{{ invoice.totalAmount }}</td>
+                <th z-table-head class="w-[100px]">Invoice</th>
+                <th z-table-head>Status</th>
+                <th z-table-head>Method</th>
+                <th z-table-head class="text-right">Amount</th>
               </tr>
-            }
-          </tbody>
-          <tfoot z-table-footer>
-            <tr z-table-row>
-              <td z-table-cell colspan="3">Total</td>
-              <td z-table-cell class="text-right">$2,500.00</td>
-            </tr>
-          </tfoot>
-        </table>
+            </thead>
+            <tbody z-table-body>
+              @for (invoice of recentInvoices; track invoice.invoice) {
+                <tr z-table-row>
+                  <td z-table-cell class="font-medium">{{ invoice.invoice }}</td>
+                  <td z-table-cell>{{ invoice.paymentStatus }}</td>
+                  <td z-table-cell>{{ invoice.paymentMethod }}</td>
+                  <td z-table-cell class="text-right">{{ invoice.totalAmount }}</td>
+                </tr>
+              }
+            </tbody>
+            <tfoot z-table-footer>
+              <tr z-table-row>
+                <td z-table-cell colspan="3">Total</td>
+                <td z-table-cell class="text-right">$2,500.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </z-example>
 
       <z-example zTitle="Simple">
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Name</th>
-              <th z-table-head>Email</th>
-              <th z-table-head class="text-right">Role</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (person of people; track person.email) {
+        <div data-slot="table-container" class="relative w-full overflow-x-auto">
+          <table z-table>
+            <thead z-table-header>
               <tr z-table-row>
-                <td z-table-cell class="font-medium">{{ person.name }}</td>
-                <td z-table-cell>{{ person.email }}</td>
-                <td z-table-cell class="text-right">{{ person.role }}</td>
+                <th z-table-head>Name</th>
+                <th z-table-head>Email</th>
+                <th z-table-head class="text-right">Role</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody z-table-body>
+              @for (person of people; track person.email) {
+                <tr z-table-row>
+                  <td z-table-cell class="font-medium">{{ person.name }}</td>
+                  <td z-table-cell>{{ person.email }}</td>
+                  <td z-table-cell class="text-right">{{ person.role }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </z-example>
 
       <z-example zTitle="With Badges">
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Task</th>
-              <th z-table-head>Status</th>
-              <th z-table-head class="text-right">Priority</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (row of tasks; track row.task) {
+        <div data-slot="table-container" class="relative w-full overflow-x-auto">
+          <table z-table>
+            <thead z-table-header>
               <tr z-table-row>
-                <td z-table-cell class="font-medium">{{ row.task }}</td>
-                <td z-table-cell>
-                  <span [class]="row.statusClass">{{ row.status }}</span>
-                </td>
-                <td z-table-cell class="text-right">
-                  <span [class]="row.priorityClass">{{ row.priority }}</span>
-                </td>
+                <th z-table-head>Task</th>
+                <th z-table-head>Status</th>
+                <th z-table-head class="text-right">Priority</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody z-table-body>
+              @for (row of tasks; track row.task) {
+                <tr z-table-row>
+                  <td z-table-cell class="font-medium">{{ row.task }}</td>
+                  <td z-table-cell>
+                    <span [class]="row.statusClass">{{ row.status }}</span>
+                  </td>
+                  <td z-table-cell class="text-right">
+                    <span [class]="row.priorityClass">{{ row.priority }}</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </z-example>
 
       <z-example zTitle="With Actions">
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Product</th>
-              <th z-table-head>Price</th>
-              <th z-table-head class="text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (row of products; track row.product) {
+        <div data-slot="table-container" class="relative w-full overflow-x-auto">
+          <table z-table>
+            <thead z-table-header>
               <tr z-table-row>
-                <td z-table-cell class="font-medium">{{ row.product }}</td>
-                <td z-table-cell>{{ row.price }}</td>
-                <td z-table-cell class="text-right">
-                  <button
-                    type="button"
-                    z-button
-                    zType="ghost"
-                    zSize="icon"
-                    class="size-8"
-                    z-dropdown
-                    [zDropdownMenu]="actions"
-                  >
-                    <ng-icon name="lucideMoreHorizontal" />
-                    <span class="sr-only">Open menu</span>
-                  </button>
-                  <z-dropdown-menu-content #actions="zDropdownMenuContent" zAlign="end">
-                    <z-dropdown-menu-item>Edit</z-dropdown-menu-item>
-                    <z-dropdown-menu-item>Duplicate</z-dropdown-menu-item>
-                    <z-dropdown-menu-separator />
-                    <z-dropdown-menu-item zVariant="destructive">Delete</z-dropdown-menu-item>
-                  </z-dropdown-menu-content>
-                </td>
+                <th z-table-head>Product</th>
+                <th z-table-head>Price</th>
+                <th z-table-head class="text-right">Actions</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody z-table-body>
+              @for (row of products; track row.product) {
+                <tr z-table-row>
+                  <td z-table-cell class="font-medium">{{ row.product }}</td>
+                  <td z-table-cell>{{ row.price }}</td>
+                  <td z-table-cell class="text-right">
+                    <button
+                      type="button"
+                      z-button
+                      zType="ghost"
+                      zSize="icon"
+                      class="size-8"
+                      z-dropdown
+                      [zDropdownMenu]="actions"
+                    >
+                      <ng-icon name="lucideMoreHorizontal" />
+                      <span class="sr-only">Open menu</span>
+                    </button>
+                    <z-dropdown-menu-content #actions="zDropdownMenuContent" zAlign="end">
+                      <z-dropdown-menu-item>Edit</z-dropdown-menu-item>
+                      <z-dropdown-menu-item>Duplicate</z-dropdown-menu-item>
+                      <z-dropdown-menu-separator />
+                      <z-dropdown-menu-item zVariant="destructive">Delete</z-dropdown-menu-item>
+                    </z-dropdown-menu-content>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </z-example>
 
       <z-example zTitle="With Select">
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Task</th>
-              <th z-table-head>Assignee</th>
-              <th z-table-head>Status</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (row of assignments; track row.task) {
+        <div data-slot="table-container" class="relative w-full overflow-x-auto">
+          <table z-table>
+            <thead z-table-header>
               <tr z-table-row>
-                <td z-table-cell class="font-medium">{{ row.task }}</td>
-                <td z-table-cell>
-                  <z-select class="w-40" zSize="sm" [zValue]="row.assignee">
-                    <z-select-group>
-                      @for (person of assignees; track person.value) {
-                        <z-select-item [zValue]="person.value">{{ person.label }}</z-select-item>
-                      }
-                    </z-select-group>
-                  </z-select>
-                </td>
-                <td z-table-cell>{{ row.status }}</td>
+                <th z-table-head>Task</th>
+                <th z-table-head>Assignee</th>
+                <th z-table-head>Status</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody z-table-body>
+              @for (row of assignments; track row.task) {
+                <tr z-table-row>
+                  <td z-table-cell class="font-medium">{{ row.task }}</td>
+                  <td z-table-cell>
+                    <z-select class="w-40" zSize="sm" [zValue]="row.assignee">
+                      <z-select-group>
+                        @for (person of assignees; track person.value) {
+                          <z-select-item [zValue]="person.value">{{ person.label }}</z-select-item>
+                        }
+                      </z-select-group>
+                    </z-select>
+                  </td>
+                  <td z-table-cell>{{ row.status }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </z-example>
 
       <z-example zTitle="With Input">
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Product</th>
-              <th z-table-head>Quantity</th>
-              <th z-table-head>Price</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (row of products; track row.product) {
+        <div data-slot="table-container" class="relative w-full overflow-x-auto">
+          <table z-table>
+            <thead z-table-header>
               <tr z-table-row>
-                <td z-table-cell class="font-medium">{{ row.product }}</td>
-                <td z-table-cell>
-                  <input z-input type="number" class="h-8 w-20" min="0" [value]="row.quantity" />
-                </td>
-                <td z-table-cell>{{ row.price }}</td>
+                <th z-table-head>Product</th>
+                <th z-table-head>Quantity</th>
+                <th z-table-head>Price</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody z-table-body>
+              @for (row of products; track row.product) {
+                <tr z-table-row>
+                  <td z-table-cell class="font-medium">{{ row.product }}</td>
+                  <td z-table-cell>
+                    <input z-input type="number" class="h-8 w-20" min="0" [value]="row.quantity" />
+                  </td>
+                  <td z-table-cell>{{ row.price }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </z-example>
     </z-example-wrapper>
   `,

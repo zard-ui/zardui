@@ -116,12 +116,12 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             </label>
             <input z-input id="input-badge" placeholder="Enter value" />
           </div>
-          <div z-field data-invalid>
+          <div z-field data-invalid="true">
             <label z-field-label for="input-invalid">Invalid Input</label>
             <input z-input id="input-invalid" placeholder="This field has an error" aria-invalid="true" />
             <p z-field-description>This field contains validation errors.</p>
           </div>
-          <div z-field data-disabled>
+          <div z-field data-disabled="true">
             <label z-field-label for="input-disabled-field">Disabled Field</label>
             <input z-input id="input-disabled-field" placeholder="Cannot edit" disabled />
             <p z-field-description>This field is currently disabled.</p>
@@ -155,7 +155,7 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             <textarea z-textarea id="textarea-desc-after" placeholder="Enter your message"></textarea>
             <p z-field-description>Enter your message so it is long enough to test the layout.</p>
           </div>
-          <div z-field data-invalid>
+          <div z-field data-invalid="true">
             <label z-field-label for="textarea-invalid">Invalid Textarea</label>
             <textarea
               z-textarea
@@ -165,7 +165,7 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             ></textarea>
             <p z-field-description>This field contains validation errors.</p>
           </div>
-          <div z-field data-disabled>
+          <div z-field data-disabled="true">
             <label z-field-label for="textarea-disabled-field">Disabled Field</label>
             <textarea z-textarea id="textarea-disabled-field" placeholder="Cannot edit" disabled></textarea>
             <p z-field-description>This field is currently disabled.</p>
@@ -209,7 +209,7 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             <!-- shadcn's Select ends with a hidden <input>, so its description is not "second to last": same here. -->
             <span hidden></span>
           </div>
-          <div z-field data-invalid>
+          <div z-field data-invalid="true">
             <label for="field-invalid-select-209" z-field-label>Invalid Select</label>
             <z-select id="field-invalid-select-209" zPlaceholder="This field has an error" zPosition="popper" zInvalid>
               <z-select-group>
@@ -220,7 +220,7 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             </z-select>
             <p z-field-description>This field contains validation errors.</p>
           </div>
-          <div z-field data-disabled>
+          <div z-field data-disabled="true">
             <label for="field-disabled-field-220" z-field-label>Disabled Field</label>
             <z-select id="field-disabled-field-220" zPlaceholder="Cannot select" zPosition="popper" zDisabled>
               <z-select-group>
@@ -272,11 +272,11 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
               }
             </div>
           </fieldset>
-          <div z-field data-invalid zOrientation="horizontal">
+          <div z-field data-invalid="true" zOrientation="horizontal">
             <z-checkbox zId="checkbox-invalid" zInvalid />
             <label z-field-label for="checkbox-invalid">Invalid checkbox</label>
           </div>
-          <div z-field data-disabled zOrientation="horizontal">
+          <div z-field data-disabled="true" zOrientation="horizontal">
             <z-checkbox zId="checkbox-disabled-field" zDisabled />
             <label z-field-label for="checkbox-disabled-field">Disabled checkbox</label>
           </div>
@@ -331,11 +331,11 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
           <fieldset z-field-set>
             <legend z-field-legend zVariant="label">Invalid Radio Group</legend>
             <z-radio-group>
-              <div z-field data-invalid zOrientation="horizontal">
+              <div z-field data-invalid="true" zOrientation="horizontal">
                 <z-radio value="invalid1" zId="radio-invalid-1" zInvalid />
                 <label z-field-label for="radio-invalid-1">Invalid Option 1</label>
               </div>
-              <div z-field data-invalid zOrientation="horizontal">
+              <div z-field data-invalid="true" zOrientation="horizontal">
                 <z-radio value="invalid2" zId="radio-invalid-2" zInvalid />
                 <label z-field-label for="radio-invalid-2">Invalid Option 2</label>
               </div>
@@ -344,11 +344,11 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
           <fieldset z-field-set>
             <legend z-field-legend zVariant="label">Disabled Radio Group</legend>
             <z-radio-group zDisabled>
-              <div z-field data-disabled zOrientation="horizontal">
+              <div z-field data-disabled="true" zOrientation="horizontal">
                 <z-radio value="disabled1" zId="radio-disabled-1" zDisabled />
                 <label z-field-label for="radio-disabled-1">Disabled Option 1</label>
               </div>
-              <div z-field data-disabled zOrientation="horizontal">
+              <div z-field data-disabled="true" zOrientation="horizontal">
                 <z-radio value="disabled2" zId="radio-disabled-2" zDisabled />
                 <label z-field-label for="radio-disabled-2">Disabled Option 2</label>
               </div>
@@ -389,14 +389,14 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
               <label z-field-label for="switch-email">Show email on profile</label>
             </div>
           </div>
-          <div z-field data-invalid zOrientation="horizontal">
+          <div z-field data-invalid="true" zOrientation="horizontal">
             <div z-field-content>
               <label z-field-label for="switch-invalid">Invalid Switch</label>
               <p z-field-description>This switch has validation errors.</p>
             </div>
             <z-switch zId="switch-invalid" zInvalid />
           </div>
-          <div z-field data-disabled zOrientation="horizontal">
+          <div z-field data-disabled="true" zOrientation="horizontal">
             <div z-field-content>
               <label z-field-label for="switch-disabled-field">Disabled Switch</label>
               <p z-field-description>This switch is currently disabled.</p>
@@ -470,12 +470,12 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
               Red: {{ colorBalance()[0] }}%, Green: {{ colorBalance()[1] }}%, Blue: {{ colorBalance()[2] }}%
             </p>
           </div>
-          <div z-field data-invalid>
+          <div z-field data-invalid="true">
             <label z-field-label for="slider-invalid">Invalid Slider</label>
             <z-slider id="slider-invalid" zMax="100" [zDefault]="[30]" aria-invalid="true" />
             <p z-field-description>This slider has validation errors.</p>
           </div>
-          <div z-field data-disabled>
+          <div z-field data-disabled="true">
             <label z-field-label for="slider-disabled-field">Disabled Slider</label>
             <z-slider id="slider-disabled-field" zMax="100" [zDefault]="[50]" zDisabled />
             <p z-field-description>This slider is currently disabled.</p>
@@ -531,7 +531,7 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             </select>
             <p z-field-description>Native select with grouped options using optgroup.</p>
           </div>
-          <div z-field data-invalid>
+          <div z-field data-invalid="true">
             <label z-field-label for="native-select-invalid">Invalid Native Select</label>
             <select z-native-select id="native-select-invalid" aria-invalid="true">
               <option value="">This field has an error</option>
@@ -541,7 +541,7 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             </select>
             <p z-field-description>This field contains validation errors.</p>
           </div>
-          <div z-field data-disabled>
+          <div z-field data-disabled="true">
             <label z-field-label for="native-select-disabled-field">Disabled Field</label>
             <select z-native-select id="native-select-disabled-field" disabled>
               <option value="">Cannot select</option>
@@ -606,7 +606,7 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             </z-input-otp>
             <p z-field-description>Enter your 4-digit PIN (numbers only).</p>
           </div>
-          <div z-field data-invalid>
+          <div z-field data-invalid="true">
             <label z-field-label for="otp-invalid">Invalid OTP</label>
             <z-input-otp id="otp-invalid" [zMaxLength]="6">
               <z-input-otp-group>
@@ -617,7 +617,7 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
             </z-input-otp>
             <p z-field-description>This OTP field contains validation errors.</p>
           </div>
-          <div z-field data-disabled>
+          <div z-field data-disabled="true">
             <label z-field-label for="otp-disabled-field">Disabled OTP</label>
             <z-input-otp id="otp-disabled-field" [zMaxLength]="6" [ngModel]="''" [disabled]="true">
               <z-input-otp-group>
@@ -666,6 +666,18 @@ const SIX_SLOTS = [0, 1, 2, 3, 4, 5] as const;
                 }
               </z-select-group>
             </z-select>
+          </div>
+          <div z-field zOrientation="horizontal">
+            <div z-field-content>
+              <label z-field-label for="horizontal-native-select">Country</label>
+              <p z-field-description>Select your country.</p>
+            </div>
+            <select z-native-select id="horizontal-native-select">
+              <option value="">Select a country</option>
+              <option value="us">United States</option>
+              <option value="uk">United Kingdom</option>
+              <option value="ca">Canada</option>
+            </select>
           </div>
           <div z-field zOrientation="horizontal">
             <div z-field-content>

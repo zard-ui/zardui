@@ -46,7 +46,7 @@ const DESKTOP_ITEMS = [
       </z-example>
 
       <z-example zTitle="Invalid">
-        <div z-field zOrientation="horizontal" data-invalid>
+        <div z-field zOrientation="horizontal" data-invalid="true">
           <z-checkbox zId="terms-3" zInvalid />
           <label z-field-label for="terms-3">Accept terms and conditions</label>
         </div>
@@ -71,7 +71,7 @@ const DESKTOP_ITEMS = [
             </div>
           </label>
           <label z-field-label for="toggle-4">
-            <div z-field zOrientation="horizontal" data-disabled>
+            <div z-field zOrientation="horizontal" data-disabled="true">
               <z-checkbox zId="toggle-4" zDisabled />
               <div z-field-content>
                 <div z-field-title>Enable notifications</div>
@@ -83,34 +83,36 @@ const DESKTOP_ITEMS = [
       </z-example>
 
       <z-example zTitle="In Table">
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head class="w-8">
-                <z-checkbox zId="select-all" [ngModel]="allSelected()" (checkChange)="toggleAll($event)" />
-              </th>
-              <th z-table-head>Name</th>
-              <th z-table-head>Email</th>
-              <th z-table-head>Role</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (row of rows; track row.id) {
-              <tr z-table-row [attr.data-state]="selectedRows().has(row.id) ? 'selected' : null">
-                <td z-table-cell>
-                  <z-checkbox
-                    [zId]="'row-' + row.id"
-                    [ngModel]="selectedRows().has(row.id)"
-                    (checkChange)="toggleRow(row.id, $event)"
-                  />
-                </td>
-                <td z-table-cell class="font-medium">{{ row.name }}</td>
-                <td z-table-cell>{{ row.email }}</td>
-                <td z-table-cell>{{ row.role }}</td>
+        <div data-slot="table-container" class="relative w-full overflow-x-auto">
+          <table z-table>
+            <thead z-table-header>
+              <tr z-table-row>
+                <th z-table-head class="w-8">
+                  <z-checkbox zId="select-all" [ngModel]="allSelected()" (checkChange)="toggleAll($event)" />
+                </th>
+                <th z-table-head>Name</th>
+                <th z-table-head>Email</th>
+                <th z-table-head>Role</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody z-table-body>
+              @for (row of rows; track row.id) {
+                <tr z-table-row [attr.data-state]="selectedRows().has(row.id) ? 'selected' : null">
+                  <td z-table-cell>
+                    <z-checkbox
+                      [zId]="'row-' + row.id"
+                      [ngModel]="selectedRows().has(row.id)"
+                      (checkChange)="toggleRow(row.id, $event)"
+                    />
+                  </td>
+                  <td z-table-cell class="font-medium">{{ row.name }}</td>
+                  <td z-table-cell>{{ row.email }}</td>
+                  <td z-table-cell>{{ row.role }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </z-example>
 
       <z-example zTitle="Group">
