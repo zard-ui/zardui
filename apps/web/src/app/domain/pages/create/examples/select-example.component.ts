@@ -230,7 +230,7 @@ const PLANS = [
       <z-example zTitle="With Field">
         <div z-field>
           <label for="select-favorite-fruit-200" z-field-label>Favorite Fruit</label>
-          <z-select id="select-favorite-fruit-200" class="w-fit" zPlaceholder="Select a fruit">
+          <z-select id="select-favorite-fruit-200" class="w-fit!" zPlaceholder="Select a fruit">
             <z-select-group>
               <z-select-item zValue="apple">Apple</z-select-item>
               <z-select-item zValue="banana">Banana</z-select-item>

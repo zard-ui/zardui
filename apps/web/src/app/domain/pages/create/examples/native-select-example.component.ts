@@ -59,7 +59,7 @@ import { ExampleImports } from './example.component';
       <z-example zTitle="With Field">
         <div z-field>
           <label z-field-label for="native-select-country">Country</label>
-          <select z-native-select id="native-select-country" class="w-fit">
+          <select z-native-select id="native-select-country" class="w-fit!">
             <option value="">Select a country</option>
             <option value="us">United States</option>
             <option value="uk">United Kingdom</option>
