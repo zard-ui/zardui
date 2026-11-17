@@ -30,13 +30,20 @@
             <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars() }}</span>
           </a>
         }
-        <z-separator zOrientation="vertical" class="3xl:block hidden h-4! self-center!" />
+        <z-separator zOrientation="vertical" class="hidden h-4! self-center! lg:block" />
         <button z-button zType="ghost" zSize="icon" (click)="toggleTheme()">
           <ng-icon name="darkMode" class="size-4.5!" />
           <span class="sr-only">Toggle theme</span>
         </button>
-        @if (showGetCode()) {
+        <!-- Always there on desktop: the builder's Get Code on /create, a way into it everywhere else. -->
+        <z-separator zOrientation="vertical" class="hidden h-4! self-center! md:block" />
+        @if (onCreate()) {
           <button z-button class="hidden md:inline-flex" (click)="openGetCode()">Get Code</button>
+        } @else {
+          <a z-button class="hidden md:inline-flex" routerLink="/create">
+            <ng-icon name="lucidePlus" />
+            New
+          </a>
         }
       </aside>
     </menu>

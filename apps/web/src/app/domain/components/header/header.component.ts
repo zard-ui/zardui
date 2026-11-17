@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideGalleryHorizontal } from '@ng-icons/lucide';
+import { lucideGalleryHorizontal, lucidePlus } from '@ng-icons/lucide';
 import { filter } from 'rxjs';
 
 import { DocResearcherComponent } from '@doc/domain/components/doc-researcher/doc-researcher.component';
@@ -47,6 +47,7 @@ const DarkModeSvg = `
   viewProviders: [
     provideIcons({
       lucideGalleryHorizontal,
+      lucidePlus,
       darkMode: DarkModeSvg,
     }),
   ],
@@ -61,8 +62,8 @@ export class HeaderComponent {
   private readonly router = inject(Router);
   private readonly createShell = inject(CreateShellService);
   private readonly path = signal(this.router.url.split('?')[0]);
-  /** "Get Code" only means something on the /create builder, and the builder hides it on phones. */
-  protected readonly showGetCode = computed(() => this.path() === '/create');
+  /** "Get Code" only means something on the /create builder; every other page offers "New", a link to it. */
+  protected readonly onCreate = computed(() => this.path() === '/create');
   readonly repoStars = this.githubService.starsCountFormatted;
 
   constructor() {
