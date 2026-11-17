@@ -346,7 +346,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
     'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
-    'cn-command-separator': '-mx-1 my-1 h-px bg-border w-auto',
+    'cn-command-separator': '-mx-1 h-px bg-border w-auto',
     'cn-command-shortcut':
       'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-md border',
@@ -520,7 +520,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-kbd':
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
-    'cn-label': 'gap-2 text-sm font-medium',
+    'cn-label': 'gap-2 text-sm font-medium group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50',
     'cn-map-style-select': 'inline-block',
     'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
     'cn-map-style-select-form': 'gap-2 p-3',
@@ -1169,7 +1169,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
     'cn-command-list': 'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
-    'cn-command-separator': 'bg-border -mx-1 my-1 h-px',
+    'cn-command-separator': 'bg-border -mx-1 h-px',
     'cn-command-shortcut':
       'text-muted-foreground ms-auto text-xs tracking-widest group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-md border',
@@ -1344,7 +1344,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-kbd':
       "bg-muted text-muted-foreground inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm px-1 font-sans text-xs font-medium in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
-    'cn-label': '',
+    'cn-label': 'group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50',
     'cn-map-style-select': 'inline-block',
     'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
     'cn-map-style-select-form': 'gap-2 p-3',
@@ -2165,7 +2165,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-kbd':
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
-    'cn-label': 'gap-2 text-sm font-medium',
+    'cn-label': 'gap-2 text-sm font-medium group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50',
     'cn-map-style-select': 'inline-block',
     'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
     'cn-map-style-select-form': 'gap-2.5 p-4',
@@ -2814,7 +2814,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-command-item-variant-destructive':
       'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
     'cn-command-list': 'no-scrollbar max-h-72 overflow-x-hidden overflow-y-auto outline-none scroll-py-0',
-    'cn-command-separator': '-mx-1 my-1 h-px bg-border',
+    'cn-command-separator': '-mx-1 h-px bg-border',
     'cn-command-shortcut':
       'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-foreground',
     'cn-data-table': 'rounded-none border',
@@ -2986,7 +2986,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-kbd':
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 bg-muted px-1 font-sans text-xs font-medium text-muted-foreground rounded-none in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
-    'cn-label': 'gap-2 text-xs',
+    'cn-label': 'gap-2 text-xs group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50',
     'cn-map-style-select': 'inline-block',
     'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
     'cn-map-style-select-form': 'gap-2 p-3',
@@ -3818,7 +3818,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-kbd':
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 bg-muted px-1 font-sans font-medium text-muted-foreground rounded-xs text-[0.625rem] in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3",
     'cn-kbd-group': 'inline-flex items-center gap-1',
-    'cn-label': 'gap-2 text-xs font-medium',
+    'cn-label': 'gap-2 text-xs font-medium group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50',
     'cn-map-style-select': 'inline-block',
     'cn-map-style-select-badge': 'px-1 py-0 text-[9px]',
     'cn-map-style-select-form': 'gap-1.5 p-2.5',
@@ -4639,7 +4639,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-kbd':
       "inline-flex w-fit items-center justify-center gap-1 bg-muted font-sans text-xs font-medium text-muted-foreground h-5.5 min-w-5.5 rounded-lg px-1.5 in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3 in-data-[slot=input-group]:bg-input",
     'cn-kbd-group': 'inline-flex items-center gap-1',
-    'cn-label': 'gap-2 text-sm font-medium',
+    'cn-label': 'gap-2 text-sm font-medium group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50',
     'cn-map-style-select': 'inline-block',
     'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
     'cn-map-style-select-form': 'gap-2.5 p-4',
@@ -5464,7 +5464,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
       "inline-flex w-fit items-center justify-center gap-1 bg-muted font-sans text-xs font-medium text-muted-foreground h-5.5 min-w-5.5 rounded-none px-1.5 in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3 in-data-[slot=input-group]:bg-input",
     'cn-kbd-group': 'inline-flex items-center gap-1',
     'cn-label':
-      'gap-2 font-semibold text-xs uppercase tracking-wide peer-data-[slot=checkbox]:text-sm peer-data-[slot=checkbox]:font-normal peer-data-[slot=checkbox]:normal-case peer-data-[slot=checkbox]:tracking-normal peer-data-[slot=radio-group-item]:text-sm peer-data-[slot=radio-group-item]:font-normal peer-data-[slot=radio-group-item]:normal-case peer-data-[slot=radio-group-item]:tracking-normal peer-data-[slot=switch]:text-sm peer-data-[slot=switch]:font-normal peer-data-[slot=switch]:normal-case peer-data-[slot=switch]:tracking-normal',
+      'gap-2 font-semibold text-xs uppercase tracking-wide group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50 peer-data-[slot=checkbox]:text-sm peer-data-[slot=checkbox]:font-normal peer-data-[slot=checkbox]:normal-case peer-data-[slot=checkbox]:tracking-normal peer-data-[slot=radio-group-item]:text-sm peer-data-[slot=radio-group-item]:font-normal peer-data-[slot=radio-group-item]:normal-case peer-data-[slot=radio-group-item]:tracking-normal peer-data-[slot=switch]:text-sm peer-data-[slot=switch]:font-normal peer-data-[slot=switch]:normal-case peer-data-[slot=switch]:tracking-normal',
     'cn-map-style-select': 'inline-block',
     'cn-map-style-select-badge': 'px-0 py-0 text-[10px]',
     'cn-map-style-select-form': 'gap-2.5 p-4',
@@ -6283,7 +6283,7 @@ export const LOCAL_STYLE_CATALOG: StyleCatalog = {
     'cn-kbd':
       "inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 bg-muted px-1 font-sans text-xs font-medium text-muted-foreground rounded-lg in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background dark:in-data-[slot=tooltip-content]:bg-background/10 [&_svg:not([class*='size-'])]:size-3 in-data-[slot=input-group]:bg-input",
     'cn-kbd-group': 'inline-flex items-center gap-1',
-    'cn-label': 'gap-2 text-sm font-medium',
+    'cn-label': 'gap-2 text-sm font-medium group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50',
     'cn-map-style-select': 'inline-block',
     'cn-map-style-select-badge': 'px-1.5 py-0 text-[10px]',
     'cn-map-style-select-form': 'gap-2.5 p-4',

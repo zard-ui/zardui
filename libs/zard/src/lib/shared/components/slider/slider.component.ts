@@ -229,6 +229,8 @@ export class ZardSliderThumbComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    // shadcn's Slider root: `data-horizontal:w-full data-vertical:h-full`.
+    class: 'block data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full',
     '[attr.data-orientation]': 'zOrientation()',
     '[attr.aria-disabled]': 'disabled() ? true : null',
     '[attr.data-disabled]': 'disabled() ? true : null',

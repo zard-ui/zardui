@@ -1111,7 +1111,7 @@
   }
 
   .cn-command-separator {
-    @apply -mx-1 my-1 h-px bg-border;
+    @apply -mx-1 h-px bg-border;
   }
 
   .cn-command-shortcut {
@@ -3761,6 +3761,12 @@
 
   .cn-sheet-overlay {
     @apply supports-backdrop-filter:backdrop-blur-xs;
+  }
+
+  /* MARK: label */
+
+  .cn-label {
+    @apply group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50;
   }
 
 }

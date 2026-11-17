@@ -1111,7 +1111,7 @@
 }
 
 .cn-command-separator:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
-  @apply bg-border -mx-1 my-1 h-px;
+  @apply bg-border -mx-1 h-px;
 }
 
 .cn-command-shortcut:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
@@ -3749,3 +3749,10 @@
 .cn-sheet-overlay:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
   @apply supports-backdrop-filter:backdrop-blur-xs;
 }
+
+/* MARK: label */
+
+.cn-label:not(:where(.style-vega, .style-maia, .style-lyra, .style-mira, .style-luma, .style-sera, .style-rhea) *) {
+  @apply group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50;
+}
+

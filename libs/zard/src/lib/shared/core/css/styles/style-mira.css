@@ -3792,4 +3792,10 @@
     @apply supports-backdrop-filter:backdrop-blur-xs;
   }
 
+  /* MARK: label */
+
+  .cn-label {
+    @apply group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50;
+  }
+
 }
