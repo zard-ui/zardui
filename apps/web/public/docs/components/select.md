@@ -343,7 +343,12 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   );
 
   protected readonly triggerClasses = computed(() =>
-    mergeClasses(selectTriggerVariants({}), this.zMultiple() && 'h-auto py-1'),
+    // The chips wrap, so the trigger grows. Overridden per size too: an installed style fixes the height with
+    // `data-[size=…]:h-*`, which a plain `h-auto` does not replace.
+    mergeClasses(
+      selectTriggerVariants({}),
+      this.zMultiple() && 'h-auto py-1 data-[size=default]:h-auto data-[size=sm]:h-auto',
+    ),
   );
 
   ngOnDestroy() {
