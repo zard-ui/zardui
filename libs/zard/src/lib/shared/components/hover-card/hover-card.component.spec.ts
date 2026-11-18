@@ -16,7 +16,7 @@ import { Subject } from 'rxjs';
 
 import { ZardHoverCardComponent, ZardHoverCardDirective } from './hover-card.component';
 
-const CARD_CONTENT = 'The React Framework - created and maintained by @vercel.';
+const CARD_CONTENT = 'The web framework that empowers developers - created and maintained by @angular.';
 
 @Component({
   imports: [OverlayModule, ZardHoverCardDirective, ZardHoverCardComponent],

@@ -559,7 +559,7 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '@/shared/compone
 
 <ng-template #content>
   <z-hover-card>
-    The React Framework - created and maintained by @vercel.
+    The web framework that empowers developers - created and maintained by @angular.
   </z-hover-card>
 </ng-template>
 ```
@@ -592,9 +592,9 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.co
     <ng-template #content>
       <z-hover-card>
         <div class="space-y-1">
-          <h4 class="text-sm font-semibold">Next.js</h4>
-          <p class="text-sm">The React Framework - created and maintained by @vercel.</p>
-          <div class="text-muted-foreground text-xs">Released December 2021</div>
+          <h4 class="text-sm font-semibold">Angular</h4>
+          <p class="text-sm">The web framework that empowers developers - created and maintained by @angular.</p>
+          <div class="text-muted-foreground text-xs">Released September 2016</div>
         </div>
       </z-hover-card>
     </ng-template>

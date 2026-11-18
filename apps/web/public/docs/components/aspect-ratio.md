@@ -92,7 +92,7 @@ import { ZardAspectRatioComponent } from '../aspect-ratio.component';
   template: `
     <z-aspect-ratio [zRatio]="16 / 9" class="bg-muted w-full max-w-sm rounded-lg">
       <img
-        ngSrc="https://avatar.vercel.sh/shadcn1"
+        ngSrc="https://avatar.vercel.sh/zardui"
         alt="Photo"
         fill
         priority
@@ -122,7 +122,7 @@ import { ZardAspectRatioComponent } from '../aspect-ratio.component';
   template: `
     <z-aspect-ratio [zRatio]="1 / 1" class="bg-muted w-full max-w-48 rounded-lg">
       <img
-        ngSrc="https://avatar.vercel.sh/shadcn1"
+        ngSrc="https://avatar.vercel.sh/zardui"
         alt="Photo"
         fill
         class="rounded-lg object-cover grayscale dark:brightness-20"
@@ -151,7 +151,7 @@ import { ZardAspectRatioComponent } from '../aspect-ratio.component';
   template: `
     <z-aspect-ratio [zRatio]="9 / 16" class="bg-muted w-full max-w-40 rounded-lg">
       <img
-        ngSrc="https://avatar.vercel.sh/shadcn1"
+        ngSrc="https://avatar.vercel.sh/zardui"
         alt="Photo"
         fill
         class="rounded-lg object-cover grayscale dark:brightness-20"
@@ -208,7 +208,7 @@ const translations: ZardRtlTranslations<{ caption: string }> = {
     <figure class="w-full max-w-sm">
       <z-aspect-ratio [zRatio]="16 / 9" class="bg-muted rounded-lg">
         <img
-          ngSrc="https://avatar.vercel.sh/shadcn1"
+          ngSrc="https://avatar.vercel.sh/zardui"
           alt="Photo"
           fill
           class="rounded-lg object-cover grayscale dark:brightness-20"

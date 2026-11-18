@@ -35,10 +35,10 @@ export class ZardDemoComboboxInvalidComponent {
 
   frameworks: ZardComboboxOption[] = [
     { value: 'angular', label: 'Angular' },
-    { value: 'react', label: 'React' },
+    { value: 'analog', label: 'Analog' },
     { value: 'vue', label: 'Vue.js' },
     { value: 'svelte', label: 'Svelte' },
     { value: 'ember', label: 'Ember.js' },
-    { value: 'nextjs', label: 'Next.js' },
+    { value: 'nx', label: 'Nx' },
   ];
 }

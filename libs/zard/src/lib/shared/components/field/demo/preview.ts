@@ -30,7 +30,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
             <div z-field-group>
               <div z-field>
                 <label z-field-label for="checkout-card-name">Name on Card</label>
-                <input z-input id="checkout-card-name" placeholder="Evil Rabbit" zSize="sm" required />
+                <input z-input id="checkout-card-name" placeholder="Luiz Gomes" zSize="sm" required />
               </div>
 
               <div z-field>

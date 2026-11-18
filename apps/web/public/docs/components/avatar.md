@@ -333,7 +333,7 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
 ```
 
 ```angular-html
-<z-avatar zSrc="https://github.com/shadcn.png" zAlt="@shadcn"></z-avatar>
+<z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess"></z-avatar>
 ```
 
 ## Examples

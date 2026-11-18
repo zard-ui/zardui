@@ -32,7 +32,7 @@ const translations: ZardRtlTranslations<{ caption: string }> = {
     <figure class="w-full max-w-sm">
       <z-aspect-ratio [zRatio]="16 / 9" class="bg-muted rounded-lg">
         <img
-          ngSrc="https://avatar.vercel.sh/shadcn1"
+          ngSrc="https://avatar.vercel.sh/zardui"
           alt="Photo"
           fill
           class="rounded-lg object-cover grayscale dark:brightness-20"

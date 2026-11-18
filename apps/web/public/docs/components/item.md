@@ -560,10 +560,10 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
     <div class="flex w-full min-w-lg flex-col gap-6">
       <z-item zVariant="outline">
         <z-item-media>
-          <z-avatar zSrc="https://github.com/evilrabbit.png" zFallback="ER" class="size-10" />
+          <z-avatar zSrc="https://github.com/mikij.png" zAlt="@mikij" zFallback="ML" class="size-10" />
         </z-item-media>
         <z-item-content>
-          <z-item-title>Evil Rabbit</z-item-title>
+          <z-item-title>Mickey Lazarevic</z-item-title>
           <z-item-description>Last seen 5 months ago</z-item-description>
         </z-item-content>
         <z-item-actions>
