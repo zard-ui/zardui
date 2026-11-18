@@ -85,7 +85,7 @@ import { ExampleImports } from './example.component';
           <z-questionnaire-item zName="direction" zRequired>
             <z-card class="mx-auto w-full max-w-lg">
               <z-card-header>
-                <z-questionnaire-title id="create-direction-title" class="cn-card-title">
+                <z-questionnaire-title id="create-direction-title">
                   What should we prototype next?
                 </z-questionnaire-title>
                 <z-questionnaire-description class="cn-card-description">
@@ -133,7 +133,7 @@ import { ExampleImports } from './example.component';
           <z-questionnaire-item zName="signals" zMultiple>
             <z-card class="mx-auto w-full max-w-lg">
               <z-card-header>
-                <z-questionnaire-title id="create-signals-title" class="cn-card-title">
+                <z-questionnaire-title id="create-signals-title">
                   What should every progress update include?
                 </z-questionnaire-title>
                 <z-questionnaire-description class="cn-card-description">
@@ -165,9 +165,7 @@ import { ExampleImports } from './example.component';
           <z-questionnaire-item zName="timing" zRequired>
             <z-card class="mx-auto w-full max-w-lg">
               <z-card-header>
-                <z-questionnaire-title id="create-timing-title" class="cn-card-title">
-                  When should this be revisited?
-                </z-questionnaire-title>
+                <z-questionnaire-title id="create-timing-title">When should this be revisited?</z-questionnaire-title>
                 <z-questionnaire-description class="cn-card-description">
                   Choose when this should be revisited.
                 </z-questionnaire-description>
