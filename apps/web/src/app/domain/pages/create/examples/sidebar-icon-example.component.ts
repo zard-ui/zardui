@@ -20,7 +20,7 @@ import { ZardDropdownImports } from '@zard/components/dropdown';
 import { ZardItemImports } from '@zard/components/item';
 import { ZardSidebarImports } from '@zard/components/sidebar';
 
-const USER = { name: 'zard', email: 'm@example.com', avatar: '/avatars/shadcn.jpg' } as const;
+const USER = { name: 'zard', email: 'zard@example.com', avatar: 'https://github.com/zard-ui.png' } as const;
 
 const TEAMS = [
   { name: 'Acme Inc', plan: 'Enterprise' },
@@ -221,7 +221,7 @@ const PROJECTS = [
                 z-dropdown
                 [zDropdownMenu]="userMenu"
               >
-                <z-avatar [zSrc]="user.avatar" [zAlt]="user.name" zFallback="CN" />
+                <z-avatar [zSrc]="user.avatar" [zAlt]="user.name" zFallback="ZU" />
                 <div class="grid flex-1 text-left text-sm leading-tight">
                   <span class="truncate font-medium">{{ user.name }}</span>
                   <span class="truncate text-xs">{{ user.email }}</span>
@@ -233,7 +233,7 @@ const PROJECTS = [
                   <z-dropdown-menu-label>
                     <div z-item zSize="xs">
                       <div z-item-media>
-                        <z-avatar [zSrc]="user.avatar" [zAlt]="user.name" zFallback="CN" />
+                        <z-avatar [zSrc]="user.avatar" [zAlt]="user.name" zFallback="ZU" />
                       </div>
                       <div z-item-content>
                         <div z-item-title>{{ user.name }}</div>

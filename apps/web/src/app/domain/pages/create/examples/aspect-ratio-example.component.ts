@@ -26,7 +26,7 @@ const EXAMPLES: readonly { title: string; ratio: number; class: string }[] = [
             class="bg-muted style-lyra:rounded-none style-luma:rounded-3xl style-sera:rounded-none w-full rounded-lg"
           >
             <img
-              src="https://avatar.vercel.sh/shadcn1"
+              src="https://avatar.vercel.sh/zardui"
               alt="Photo"
               class="style-lyra:rounded-none style-luma:rounded-3xl style-sera:rounded-none absolute inset-0 h-full w-full rounded-lg object-cover grayscale dark:brightness-20"
             />

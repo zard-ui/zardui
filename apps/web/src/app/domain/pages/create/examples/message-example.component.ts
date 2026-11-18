@@ -124,7 +124,7 @@ const BRAND_FILES = [
         <div class="flex w-full max-w-md flex-col gap-10">
           <z-message>
             <z-message-avatar>
-              <z-avatar zSrc="https://github.com/shadcn.png" zAlt="@shadcn" zFallback="CN" class="grayscale" />
+              <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess" zFallback="LG" class="grayscale" />
             </z-message-avatar>
             <z-message-content>
               <z-bubble zVariant="muted">
@@ -134,7 +134,7 @@ const BRAND_FILES = [
           </z-message>
           <z-message>
             <z-message-avatar>
-              <z-avatar zSrc="https://github.com/evilrabbit.png" zAlt="@evilrabbit" zFallback="ER" />
+              <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
             </z-message-avatar>
             <z-message-content>
               <z-bubble zVariant="muted">
@@ -146,7 +146,7 @@ const BRAND_FILES = [
           </z-message>
           <z-message zAlign="end">
             <z-message-avatar>
-              <z-avatar zSrc="https://github.com/evilrabbit.png" zAlt="@evilrabbit" zFallback="ER" />
+              <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
             </z-message-avatar>
             <z-message-content>
               <z-bubble zVariant="muted">
@@ -156,7 +156,7 @@ const BRAND_FILES = [
           </z-message>
           <z-message>
             <z-message-avatar>
-              <z-avatar zSrc="https://avatar.vercel.sh/shadcn" zAlt="@shadcn" zFallback="CN" />
+              <z-avatar zSrc="https://github.com/mikij.png" zAlt="@mikij" zFallback="ML" />
             </z-message-avatar>
             <z-message-content>
               <z-bubble zVariant="muted">
@@ -169,7 +169,7 @@ const BRAND_FILES = [
           </z-message>
           <z-message>
             <z-message-avatar>
-              <z-avatar zFallback="CN" />
+              <z-avatar zFallback="LG" />
             </z-message-avatar>
             <z-message-content>
               <z-bubble zVariant="destructive">
@@ -225,7 +225,7 @@ const BRAND_FILES = [
             </z-message>
             <z-message zAlign="end">
               <z-message-avatar>
-                <z-avatar zSrc="https://avatar.vercel.sh/shadcn" zAlt="@shadcn" zFallback="CN" />
+                <z-avatar zSrc="https://github.com/mikij.png" zAlt="@mikij" zFallback="ML" />
               </z-message-avatar>
               <z-message-content>
                 <z-bubble zVariant="muted">
@@ -245,7 +245,7 @@ const BRAND_FILES = [
             </z-message>
             <z-message>
               <z-message-avatar>
-                <z-avatar zSrc="https://avatar.vercel.sh/shadcn" zAlt="@shadcn" zFallback="CN" />
+                <z-avatar zSrc="https://github.com/mikij.png" zAlt="@mikij" zFallback="ML" />
               </z-message-avatar>
               <z-message-content>
                 <z-bubble zVariant="muted">
@@ -277,7 +277,7 @@ const BRAND_FILES = [
             </z-message>
             <z-message>
               <z-message-avatar>
-                <z-avatar zSrc="https://github.com/evilrabbit.png" zAlt="@evilrabbit" zFallback="ER" />
+                <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
               </z-message-avatar>
               <z-message-content>
                 <z-bubble zVariant="muted">
@@ -418,7 +418,7 @@ const BRAND_FILES = [
           </z-message>
           <z-message>
             <z-message-avatar>
-              <z-avatar zSrc="https://github.com/evilrabbit.png" zAlt="@evilrabbit" zFallback="ER" />
+              <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
             </z-message-avatar>
             <z-message-content>
               <z-bubble zVariant="muted">

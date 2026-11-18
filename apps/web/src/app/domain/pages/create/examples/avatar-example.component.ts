@@ -11,10 +11,11 @@ import { ExampleImports } from './example.component';
 
 const SIZES: readonly ZardAvatarSizeVariants[] = ['sm', 'default', 'lg'];
 
+/** zard/ui's founders and a maintainer; the other maintainers wear the badges. */
 const GROUP: readonly { src: string; alt: string; fallback: string }[] = [
-  { src: 'https://github.com/shadcn.png', alt: '@shadcn', fallback: 'CN' },
-  { src: 'https://github.com/maxleiter.png', alt: '@maxleiter', fallback: 'LR' },
-  { src: 'https://github.com/evilrabbit.png', alt: '@evilrabbit', fallback: 'ER' },
+  { src: 'https://github.com/Luizgomess.png', alt: '@Luizgomess', fallback: 'LG' },
+  { src: 'https://github.com/srizzon.png', alt: '@srizzon', fallback: 'SR' },
+  { src: 'https://github.com/mikij.png', alt: '@mikij', fallback: 'ML' },
 ];
 
 /*
@@ -38,12 +39,12 @@ const ICON_COUNT_CLASS: Record<ZardAvatarSizeVariants, string> = {
       <z-example zTitle="Sizes">
         <div class="flex flex-wrap items-center gap-2">
           @for (size of sizes; track size) {
-            <z-avatar [zSize]="size" zSrc="https://github.com/shadcn.png" zAlt="@shadcn" zFallback="CN" />
+            <z-avatar [zSize]="size" zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess" zFallback="LG" />
           }
         </div>
         <div class="flex flex-wrap items-center gap-2">
           @for (size of sizes; track size) {
-            <z-avatar [zSize]="size" zFallback="CN" />
+            <z-avatar [zSize]="size" zFallback="LG" />
           }
         </div>
       </z-example>
@@ -53,16 +54,16 @@ const ICON_COUNT_CLASS: Record<ZardAvatarSizeVariants, string> = {
           @for (size of sizes; track size) {
             <z-avatar
               [zSize]="size"
-              zSrc="https://github.com/jorgezreik.png"
-              zAlt="@jorgezreik"
-              zFallback="JZ"
+              zSrc="https://github.com/ribeiromatheuss.png"
+              zAlt="@ribeiromatheuss"
+              zFallback="MR"
               zShowBadge
             />
           }
         </div>
         <div class="flex flex-wrap items-center gap-2">
           @for (size of sizes; track size) {
-            <z-avatar [zSize]="size" zFallback="JZ" zShowBadge />
+            <z-avatar [zSize]="size" zFallback="MR" zShowBadge />
           }
         </div>
       </z-example>
@@ -72,9 +73,9 @@ const ICON_COUNT_CLASS: Record<ZardAvatarSizeVariants, string> = {
           @for (size of sizes; track size) {
             <z-avatar
               [zSize]="size"
-              zSrc="https://github.com/pranathip.png"
-              zAlt="@pranathip"
-              zFallback="PP"
+              zSrc="https://github.com/neopavan.png"
+              zAlt="@neopavan"
+              zFallback="PM"
               zShowBadge
               zBadgeIcon="lucidePlus"
             />
@@ -82,7 +83,7 @@ const ICON_COUNT_CLASS: Record<ZardAvatarSizeVariants, string> = {
         </div>
         <div class="flex flex-wrap items-center gap-2">
           @for (size of sizes; track size) {
-            <z-avatar [zSize]="size" zFallback="PP" zShowBadge zBadgeIcon="lucideCheck" />
+            <z-avatar [zSize]="size" zFallback="PM" zShowBadge zBadgeIcon="lucideCheck" />
           }
         </div>
       </z-example>

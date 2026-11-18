@@ -302,9 +302,9 @@ const IMAGE_URL =
           </z-card-content>
           <z-card-footer>
             <z-avatar-group>
-              <z-avatar zSrc="https://github.com/shadcn.png" zAlt="@shadcn" zFallback="CN" />
-              <z-avatar zSrc="https://github.com/maxleiter.png" zAlt="@maxleiter" zFallback="LR" />
-              <z-avatar zSrc="https://github.com/evilrabbit.png" zAlt="@evilrabbit" zFallback="ER" />
+              <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess" zFallback="LG" />
+              <z-avatar zSrc="https://github.com/ribeiromatheuss.png" zAlt="@ribeiromatheuss" zFallback="MR" />
+              <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
               <z-avatar-group-count [zCount]="8" />
             </z-avatar-group>
           </z-card-footer>

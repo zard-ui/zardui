@@ -462,7 +462,7 @@ const SIDES = ['inline-start', 'left', 'top', 'bottom', 'right', 'inline-end'] a
             z-dropdown
             [zDropdownMenu]="avatarIconMenu"
           >
-            <z-avatar zSrc="https://github.com/shadcn.png" zAlt="shadcn" zFallback="LR" />
+            <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess" zFallback="LG" />
           </button>
           <z-dropdown-menu-content #avatarIconMenu="zDropdownMenuContent" zAlign="end" zSide="top">
             <z-dropdown-menu-group>
