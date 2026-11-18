@@ -139,7 +139,9 @@ async function capture(page: Page, url: string, item: string, dark: boolean, rtl
   // No hover state from wherever the pointer was left: parked in the corner before anything draws (a chart opens its
   // default tooltip once it exists and closes it on a pointer leaving, so the pointer must not move after that).
   await page.mouse.move(page.viewportSize()!.width - 1, page.viewportSize()!.height - 1);
-  await page.waitForSelector('main[data-item] > *', { timeout: 120000 });
+  // Not `> *`: the idle canvas is mounted hidden and inert, and when it lands before the shown one (02 is deferred) the
+  // wait would hold on to it and never see it become visible.
+  await page.waitForSelector('main[data-item] > :not([inert])', { timeout: 120000 });
   await page.waitForFunction(() => !document.documentElement.hasAttribute('data-design-pending'), null, {
     timeout: 30000,
   });
