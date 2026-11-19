@@ -4,7 +4,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ZardPopoverImports } from '@zard/components/popover/popover.imports';
 
-import { CreateGlyphComponent } from './create-glyph.component';
 import { isApplePlatform } from '../lib/create-shortcuts';
 import type { CreateAction } from '../lib/create.protocol';
 import { MenuKeyboard } from '../lib/menu-keyboard';
@@ -23,7 +22,7 @@ interface MenuEntry {
  */
 @Component({
   selector: 'z-create-menu',
-  imports: [CreateGlyphComponent, ...ZardPopoverImports],
+  imports: [...ZardPopoverImports],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
@@ -42,7 +41,19 @@ interface MenuEntry {
       (keydown)="onTriggerKeydown($event)"
     >
       <span>Menu</span>
-      <z-create-glyph kind="menu" />
+      <svg
+        viewBox="0 0 24 24"
+        class="size-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M4 8.5L20 8.5" />
+        <path d="M4 15.5L20 15.5" />
+      </svg>
     </button>
 
     <ng-template #entries>
