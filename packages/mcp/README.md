@@ -67,18 +67,26 @@ Describe what you want, not which tool to call. Naming zard/ui in the prompt kee
 
 Nine tools read, and one writes to your project. A wrong name comes back with a suggestion, so asking for `toast` points the assistant to `sonner`.
 
-| Tool                     | Input                    | Description                                                                                        |
-| ------------------------ | ------------------------ | -------------------------------------------------------------------------------------------------- |
-| `list-components`        | —                        | Every component, with a one-line description and category                                          |
-| `search-components`      | `query, limit?`          | Find components by name, purpose or the name other libraries use ("modal", "toast")                |
-| `get-component`          | `name`                   | The full source code of a component                                                                |
-| `get-component-docs`     | `name`                   | The documentation page: installation, usage, examples and API reference                            |
-| `get-component-examples` | `name`                   | The usage examples, with the code of each one                                                      |
-| `get-dependencies`       | `name`                   | Everything an install brings: registry components, npm packages and the tree                       |
-| `get-docs`               | `topic?, section?`       | A guide on theming, dark mode, forms or setup                                                      |
-| `install-component`      | `name, cwd?, overwrite?` | Installs a component into the project through [`zard-cli`](https://www.npmjs.com/package/zard-cli) |
-| `list-blocks`            | `category?`              | Every available block, optionally filtered by category                                             |
-| `get-block`              | `id`                     | The full source code of a block                                                                    |
+| Tool                     | Input                                                                                 | Description                                                                                        |
+| ------------------------ | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `list-components`        | —                                                                                     | Every component, with a one-line description and category                                          |
+| `search-components`      | `query, limit?`                                                                       | Find components by name, purpose or the name other libraries use ("modal", "toast")                |
+| `get-component`          | `name`                                                                                | The full source code of a component                                                                |
+| `get-component-docs`     | `name`                                                                                | The documentation page: installation, usage, examples and API reference                            |
+| `get-component-examples` | `name`                                                                                | The usage examples, with the code of each one                                                      |
+| `get-dependencies`       | `name`                                                                                | Everything an install brings: registry components, npm packages and the tree                       |
+| `get-docs`               | `topic?, section?`                                                                    | A guide on theming, dark mode, forms or setup                                                      |
+| `install-component`      | `name, cwd?, overwrite?`                                                              | Installs a component into the project through [`zard-cli`](https://www.npmjs.com/package/zard-cli) |
+| `list-blocks`            | `category?`                                                                           | Every available block, optionally filtered by category                                             |
+| `get-block`              | `id`                                                                                  | The full source code of a block                                                                    |
+| `get-design-options`     | —                                                                                     | Every style, color, font, icon library, radius and menu choice, the default design and its rules   |
+| `get-create-command`     | `name, template, preset?, design?, packageManager?, pointer?, rtl?`                   | The command that starts a new Angular, Nx or Analog project already configured with the design     |
+| `get-init-command`       | `type, project?, preset?, design?, baseColor?, css?, rtl?, pointer?, packageManager?` | The command that sets zard/ui up in an existing project or library                                 |
+| `get-apply-command`      | `preset?, design?, only?, pointer?, packageManager?`                                  | The command that restyles a project already set up                                                 |
+| `get-add-command`        | `items, overwrite?, packageManager?`                                                  | The command that adds several components or blocks at once                                         |
+| `get-audit-checklist`    | —                                                                                     | What to check after writing code with the components                                               |
+
+The `get-*-command` tools return the command instead of running it, always with `--no-interactive` so it never stops at a question. The assistant runs it in its own shell: `create` takes minutes. A design given as choices is encoded into the same preset code the [create page](https://zardui.com/create) builds.
 
 ## Configuration
 

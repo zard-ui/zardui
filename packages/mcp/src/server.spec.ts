@@ -164,7 +164,7 @@ describe('zard-mcp over the protocol', () => {
 
   it('marks every tool but install-component as read-only, and gives each a title', async () => {
     const { tools } = await client.listTools();
-    expect(tools).toHaveLength(10);
+    expect(tools).toHaveLength(16);
     for (const tool of tools) {
       expect(tool.title).toBeTruthy();
       expect(tool.annotations?.readOnlyHint).toBe(tool.name !== 'install-component');

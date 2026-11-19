@@ -48,7 +48,7 @@ const SERVER = { command: 'npx', args: ['-y', 'zard-mcp'] };
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Restart the client and look for
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-ui</code>
-      with ten tools. In Claude Code or Codex run
+      with sixteen tools. In Claude Code or Codex run
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">/mcp</code>
       to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">mcp.json</code>

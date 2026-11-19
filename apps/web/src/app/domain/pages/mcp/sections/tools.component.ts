@@ -12,8 +12,12 @@ interface ToolRow {
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Tools</h2>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Ten tools, in two groups: nine that read, and one that writes to your project. A wrong name comes back with a
-      suggestion, so asking for
+      Sixteen tools: fifteen that read, and one that writes to your project. Six of them cover the project itself: they
+      return the zard-cli command that creates, sets up, restyles or adds to it, with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-interactive</code>
+      so it never stops at a question, and they build the preset code from design choices the way the create page does.
+      The assistant runs the command in its own shell, where a create that takes minutes is not cut short. A wrong name
+      comes back with a suggestion, so asking for
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">toast</code>
       points the assistant to
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">sonner</code>
@@ -99,5 +103,36 @@ export class McpToolsSectionComponent {
       description: 'Every available block, optionally filtered by category.',
     },
     { name: 'get-block', input: 'id', description: 'The full source code of a block.' },
+    {
+      name: 'get-design-options',
+      input: '',
+      description:
+        'Every style, color, font, icon library, radius and menu choice, the default design and their rules.',
+    },
+    {
+      name: 'get-create-command',
+      input: 'name, template, preset?, design?, packageManager?, pointer?, rtl?',
+      description: 'The command that starts a new Angular, Nx or Analog project already configured with the design.',
+    },
+    {
+      name: 'get-init-command',
+      input: 'type, project?, preset?, design?, baseColor?, css?, rtl?, pointer?, packageManager?',
+      description: 'The command that sets zard/ui up in an existing project or library.',
+    },
+    {
+      name: 'get-apply-command',
+      input: 'preset?, design?, only?, pointer?, packageManager?',
+      description: 'The command that restyles a project already set up, whole or only its theme or fonts.',
+    },
+    {
+      name: 'get-add-command',
+      input: 'items, overwrite?, packageManager?',
+      description: 'The command that adds several components or blocks at once.',
+    },
+    {
+      name: 'get-audit-checklist',
+      input: '',
+      description: 'What to check after writing code with the components, before calling it done.',
+    },
   ];
 }

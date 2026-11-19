@@ -127,7 +127,7 @@ args = ["-y", "zard-mcp"]
 
 ### Check that it works
 
-Restart the client and look for `zard-ui` with ten tools. In Claude Code or Codex run `/mcp` to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in `mcp.json` to connect it.
+Restart the client and look for `zard-ui` with sixteen tools. In Claude Code or Codex run `/mcp` to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in `mcp.json` to connect it.
 
 ## Usage
 
@@ -140,7 +140,7 @@ Describe what you want, not which tool to call. Naming zard/ui in the prompt kee
 
 ## Tools
 
-Ten tools, in two groups: nine that read, and one that writes to your project. A wrong name comes back with a suggestion, so asking for `toast` points the assistant to `sonner` without a second search.
+Sixteen tools: fifteen that read, and one that writes to your project. Six of them cover the project itself: they return the zard-cli command that creates, sets up, restyles or adds to it, with `--no-interactive` so it never stops at a question, and they build the preset code from design choices the way the create page does. The assistant runs the command in its own shell, where a create that takes minutes is not cut short. A wrong name comes back with a suggestion, so asking for `toast` points the assistant to `sonner` without a second search.
 
 | Tool | Input | Description |
 | --- | --- | --- |
@@ -154,6 +154,12 @@ Ten tools, in two groups: nine that read, and one that writes to your project. A
 | `install-component` | `name`, `cwd?`, `overwrite?` | Installs a component into the project, via CLI. Existing files are kept unless overwrite. |
 | `list-blocks` | `category?` | Every available block, optionally filtered by category. |
 | `get-block` | `id` | The full source code of a block. |
+| `get-design-options` | — | Every style, color, font, icon library, radius and menu choice, the default design and their rules. |
+| `get-create-command` | `name`, `template`, `preset?`, `design?`, `packageManager?`, `pointer?`, `rtl?` | The command that starts a new Angular, Nx or Analog project already configured with the design. |
+| `get-init-command` | `type`, `project?`, `preset?`, `design?`, `baseColor?`, `css?`, `rtl?`, `pointer?`, `packageManager?` | The command that sets zard/ui up in an existing project or library. |
+| `get-apply-command` | `preset?`, `design?`, `only?`, `pointer?`, `packageManager?` | The command that restyles a project already set up, whole or only its theme or fonts. |
+| `get-add-command` | `items`, `overwrite?`, `packageManager?` | The command that adds several components or blocks at once. |
+| `get-audit-checklist` | — | What to check after writing code with the components, before calling it done. |
 
 ### Where the answers come from
 
