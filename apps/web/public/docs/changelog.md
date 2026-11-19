@@ -1160,7 +1160,7 @@ We made every component read right to left, so Arabic, Hebrew and Persian apps g
 
 #### Design your look on the create page
 
-Pick one of eight styles, a base color out of nine (Mauve, Olive, Mist and Taupe are new), the theme and chart colors, fonts, one of five icon libraries, the radius and the menu look, with a live preview. The preset code it produces works in `create`, `init --preset` and `apply`.
+Pick one of eight styles, a base color out of seven (Mauve, Olive, Mist and Taupe are new), the theme and chart colors, fonts, one of five icon libraries, the radius and the menu look, with a live preview. The preset code it produces works in `create`, `init --preset` and `apply`.
 
 #### Restyle an existing project
 
