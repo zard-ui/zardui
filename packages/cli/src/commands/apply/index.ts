@@ -45,6 +45,7 @@ export const apply = new Command()
   .option('--pointer', 'add the pointer cursor rule for buttons to the theme.')
   .option('--no-pointer', 'remove the pointer cursor rule from the theme.')
   .option('-y, --yes', 'accepted for scripts; apply never prompts.', false)
+  .option('--no-interactive', 'accepted for scripts and AI agents, like on every command; apply never prompts.')
   .action(options => runApply(options));
 
 /** Reads `--only`, turning an unknown part into an error that names it. */

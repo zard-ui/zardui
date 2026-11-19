@@ -146,6 +146,7 @@ npx zard-cli@latest init
 **Options:**
 
 `-y, --yes` — Skip the confirmation prompt
+`--no-interactive` — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For scripts and AI agents
 `-c, --cwd <cwd>` — Working directory, defaults to the current one
 `-t, --type <type>` — Project type: `angular` , `angular-library` , `nx` , `nx-library` or `analog`
 `-p, --project <name>` — Which workspace project to configure, when more than one is compatible
@@ -200,6 +201,7 @@ npx zard-cli@latest add [components...]
 **Options:**
 
 `-y, --yes` — Skip the confirmation prompt
+`--no-interactive` — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For scripts and AI agents
 `-o, --overwrite` — Overwrite existing files
 `-c, --cwd <cwd>` — Working directory, defaults to the current one
 `-a, --all` — Add every available component. Blocks are not included; they are added by name
@@ -266,6 +268,7 @@ npx zard-cli@latest create [name]
 `--package-manager <manager>` — `npm` , `pnpm` , `yarn` or `bun` . Defaults to the one that ran the CLI, else npm
 `-c, --cwd <cwd>` — The directory the project is created in, defaults to the current one
 `-y, --yes` — Skip confirmations and use the default design when no preset is given
+`--no-interactive` — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For scripts and AI agents
 
 **What it does:**
 
@@ -313,6 +316,7 @@ npx zard-cli@latest apply --preset <code> [--only theme|font]
 `--no-pointer` — Remove it
 `-c, --cwd <cwd>` — Working directory, defaults to the current one
 `-y, --yes` — Accepted for scripts; apply never prompts
+`--no-interactive` — Accepted like on every command; apply never prompts
 
 - **Full preset** (no `--only` ) — theme tokens, fonts, icon library and the `style` , `icons` , `menuColor` , `menuAppearance` , `menuAccent` and `preset` keys of `components.json`
 - **theme** — the base color, theme and chart colors, radius, bold or subtle menu accent and base layer in your stylesheet, and the matching keys in `components.json` . The menu color and appearance (inverted, translucent) are written into the components when they are added, so they belong to the full preset and `--only theme` leaves them alone

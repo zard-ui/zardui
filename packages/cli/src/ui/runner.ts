@@ -84,6 +84,18 @@ export interface WizardResult<T> {
  * where npm runs the binary through a shell and hands over stdin as a pipe. The
  * controlling terminal is still reachable, and it is what decides.
  */
+/**
+ * `--no-interactive`, on every command: never mount the wizard, even in a terminal. Everything comes from the flags and
+ * a missing one is an error that names it, so a script or an AI agent can run the whole flow in one call.
+ */
+export const NO_INTERACTIVE_HELP =
+  'never prompt, even in a terminal: every answer comes from the flags and a missing one fails. for scripts and AI agents.';
+
+/** What Commander makes of `--no-interactive`: `interactive: false` when it is given. */
+export interface Interactivity {
+  interactive?: boolean;
+}
+
 export function isInteractive(resolve: () => TerminalStreams | null = resolveTerminalStreams): boolean {
   const streams = resolve();
   if (!streams) return false;

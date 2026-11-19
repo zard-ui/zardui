@@ -16,7 +16,14 @@ import {
 } from '@cli/commands/init/project-kind.js';
 import { buildInitSteps, type InitStep } from '@cli/commands/init/steps.js';
 import { runInitWizard } from '@cli/commands/init/wizard.js';
-import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
+import {
+  isInteractive,
+  NO_INTERACTIVE_HELP,
+  printReport,
+  WizardCancelledError,
+  type Interactivity,
+  type LogRecord,
+} from '@cli/ui/index.js';
 import { type Config } from '@cli/utils/config.js';
 import { loadDesignData } from '@cli/utils/design-catalog.js';
 import { CliError } from '@cli/utils/errors.js';
@@ -51,7 +58,10 @@ export const init = new Command()
     'apply a design preset (style, base color, theme, fonts, icons, radius, menu). build one at https://zardui.com/create.',
   )
   .option('--pointer', 'use the pointer cursor on buttons. only with --preset.')
-  .action(options => runInit(options));
+  .option('--no-interactive', NO_INTERACTIVE_HELP)
+  .action(({ interactive, ...options }: InitOptions & Interactivity) =>
+    runInit({ ...options, headless: interactive === false }),
+  );
 
 /** What `zard-cli init` takes — the Commander options, and the programmatic entry's input. */
 export interface InitOptions {

@@ -20,7 +20,13 @@ import { type AppliedPreset } from '@cli/commands/init/config-prompter.js';
 import { initWithPreset } from '@cli/commands/init/index.js';
 import { resolvePreset } from '@cli/commands/init/preset.js';
 import { DEFAULT_PRESET_CODE } from '@cli/core/design/index.js';
-import { isInteractive, printReport, WizardCancelledError } from '@cli/ui/index.js';
+import {
+  isInteractive,
+  NO_INTERACTIVE_HELP,
+  printReport,
+  WizardCancelledError,
+  type Interactivity,
+} from '@cli/ui/index.js';
 import { loadDesignData } from '@cli/utils/design-catalog.js';
 import { CliError } from '@cli/utils/errors.js';
 import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
@@ -49,7 +55,10 @@ export const create = new Command()
   .option('-c, --cwd <cwd>', 'the directory the project is created in. defaults to the current directory.')
   .option('--allow-nested', 'create the project even when the directory is inside an existing Nx/Angular workspace.')
   .option('-y, --yes', 'skip confirmations and use the default design when no --preset is given.', false)
-  .action((name: string | undefined, options: Omit<CreateOptions, 'name'>) => runCreate({ ...options, name }));
+  .option('--no-interactive', NO_INTERACTIVE_HELP)
+  .action((name: string | undefined, { interactive, ...options }: Omit<CreateOptions, 'name'> & Interactivity) =>
+    runCreate({ ...options, name, headless: interactive === false }),
+  );
 
 /** Everything `create` needs, decided and validated. */
 interface Plan {

@@ -44,6 +44,10 @@ import type { CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-y, --yes</code>
       — Skip the confirmation prompt
       <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-interactive</code>
+      — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For
+      scripts and AI agents
+      <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-c, --cwd &lt;cwd&gt;</code>
       — Working directory, defaults to the current one
       <br />
@@ -218,6 +222,10 @@ import type { CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-y, --yes</code>
       — Skip the confirmation prompt
       <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-interactive</code>
+      — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For
+      scripts and AI agents
+      <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-o, --overwrite</code>
       — Overwrite existing files
       <br />
@@ -344,6 +352,10 @@ import type { CodeTabData } from '@highlight/types';
       <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-y, --yes</code>
       — Skip confirmations and use the default design when no preset is given
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-interactive</code>
+      — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For
+      scripts and AI agents
     </p>
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
@@ -467,6 +479,9 @@ import type { CodeTabData } from '@highlight/types';
       <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-y, --yes</code>
       — Accepted for scripts; apply never prompts
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-interactive</code>
+      — Accepted like on every command; apply never prompts
     </p>
 
     <ul class="text-muted-foreground mt-4 list-disc space-y-2 pl-6 text-base leading-relaxed">

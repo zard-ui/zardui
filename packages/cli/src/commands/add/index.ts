@@ -16,7 +16,14 @@ import { syncLibraryPeerDependencies } from '@cli/commands/init/library-peers.js
 import { indexHtmlFor } from '@cli/commands/init/project-kind.js';
 import { injectThemeScript } from '@cli/commands/init/theme-loader.js';
 import { SOURCE_ICON_FAMILY } from '@cli/core/icons/index.js';
-import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
+import {
+  isInteractive,
+  NO_INTERACTIVE_HELP,
+  printReport,
+  WizardCancelledError,
+  type Interactivity,
+  type LogRecord,
+} from '@cli/ui/index.js';
 import { pinAllForAngular } from '@cli/utils/angular-compat.js';
 import { getConfig, resolveConfigPaths, type Config } from '@cli/utils/config.js';
 import { CliError } from '@cli/utils/errors.js';
@@ -56,7 +63,10 @@ export const add = new Command()
   .option('-a, --all', 'add all available components', false)
   .option('-p, --path <path>', 'the path to add the component to.')
   .option('--index-html <path>', 'the index.html that receives the dark-mode theme script.')
-  .action((components: string[], options: AddOptions) => runAdd(components, options));
+  .option('--no-interactive', NO_INTERACTIVE_HELP)
+  .action((components: string[], { interactive, ...options }: AddOptions & Interactivity) =>
+    runAdd(components, { ...options, headless: interactive === false }),
+  );
 
 /**
  * Adds components to the project in `options.cwd`. The action of `zard-cli add`, and the entry `create`
