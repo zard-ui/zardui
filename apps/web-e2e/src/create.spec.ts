@@ -445,7 +445,8 @@ test.describe('Create builder', () => {
       ]);
       await expect(dialog.getByRole('tab', { name: 'New Project' })).toHaveAttribute('aria-selected', 'true');
       expect(await dialog.locator('z-field-separator').count()).toBeGreaterThan(0);
-      await expect(dialog.locator('[data-template] svg')).toHaveCount(3);
+      // The installation guides' logos.
+      await expect(dialog.locator('[data-template] img[src^="images/envs/"]')).toHaveCount(3);
 
       // The command is one line that scrolls sideways; it never breaks in the middle of a word.
       const code = dialog.getByTestId('command');

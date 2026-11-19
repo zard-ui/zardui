@@ -130,9 +130,12 @@ const SCOPES: readonly { value: ApplyScope; label: string; description: string }
                         [attr.data-template]="item.value"
                         (click)="template.set(item.value)"
                       >
-                        <span class="size-4 shrink-0 text-neutral-100" aria-hidden="true">
-                          <ng-container *ngTemplateOutlet="logo; context: { name: item.value }" />
-                        </span>
+                        <!-- The logos of the installation guides: black artwork, inverted in the dialog's dark scheme. -->
+                        <img
+                          [src]="'images/envs/' + item.value + '.svg'"
+                          alt=""
+                          class="h-5 w-6 shrink-0 object-contain dark:invert"
+                        />
                         {{ item.label }}
                       </button>
                     }
@@ -366,52 +369,6 @@ const SCOPES: readonly { value: ApplyScope; label: string; description: string }
         <ng-icon [name]="copied() === what ? 'lucideCheck' : 'lucideCopy'" class="size-4!" />
         <span class="sr-only">{{ label }}</span>
       </button>
-    </ng-template>
-
-    <ng-template #logo let-name="name">
-      @switch (name) {
-        @case ('angular') {
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-            class="size-4"
-          >
-            <path d="M12 2.5 3.5 5.5l1.3 11.2L12 21.5l7.2-4.8 1.3-11.2z" />
-            <path d="m8.6 16 3.4-8 3.4 8M9.8 13.2h4.4" />
-          </svg>
-        }
-        @case ('nx') {
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-            class="size-4"
-          >
-            <path d="M4.5 20V4l15 16V4" />
-          </svg>
-        }
-        @case ('analog') {
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-            class="size-4"
-          >
-            <path d="M3.5 20.5C5 9 8 3.5 12 3.5s7 5.5 8.5 17" />
-            <path d="m8.5 20.5 3.5-8.5 3.5 8.5" />
-          </svg>
-        }
-      }
     </ng-template>
   `,
 })
