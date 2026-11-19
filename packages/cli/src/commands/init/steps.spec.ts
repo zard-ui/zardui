@@ -135,6 +135,58 @@ describe('ng-package.json step outcome', () => {
   });
 });
 
+// Angular 22 generates libraries for @angular/build:library: no ng-package.json, the assets live in angular.json.
+describe('ng-package.json step on an @angular/build:library project', () => {
+  async function runOnAngularJson(builder: string, assets?: unknown[]) {
+    const cwd = await mkdtemp(path.join(tmpdir(), 'zard-angular-build-'));
+    const libraryRoot = path.join(cwd, 'projects', 'ui');
+    await mkdir(libraryRoot, { recursive: true });
+    await writeFile(path.join(libraryRoot, 'package.json'), JSON.stringify({ name: 'ui' }));
+    const options = assets ? { tsConfig: 'projects/ui/tsconfig.lib.json', assets } : undefined;
+    await writeFile(
+      path.join(cwd, 'angular.json'),
+      JSON.stringify({ projects: { ui: { root: 'projects/ui', architect: { build: { builder, options } } } } }),
+    );
+
+    const config = buildConfig(answers, 'npm');
+    const step = buildInitSteps(cwd, config, projectInfo, false).find(item => item.label === 'ng-package.json');
+    const outcome = await step?.run();
+
+    return {
+      outcome,
+      angularJson: JSON.parse(await readFile(path.join(cwd, 'angular.json'), 'utf8')),
+      packageJson: JSON.parse(await readFile(path.join(libraryRoot, 'package.json'), 'utf8')),
+    };
+  }
+
+  it('declares the CSS assets in the build options, relative to the workspace', async () => {
+    const { outcome, angularJson, packageJson } = await runOnAngularJson('@angular/build:library');
+
+    expect(outcome).toBeUndefined();
+    expect(angularJson.projects.ui.architect.build.options.assets).toEqual([
+      { glob: '**/*.css', input: 'projects/ui/src', output: '/' },
+    ]);
+    expect(packageJson.exports['./styles.css']).toEqual({ style: './styles.css', default: './styles.css' });
+  });
+
+  it('keeps the options and assets already there, and does not repeat the entry', async () => {
+    const entry = { glob: '**/*.css', input: 'projects/ui/src', output: '/' };
+    const { angularJson } = await runOnAngularJson('@angular/build:library', ['projects/ui/src/logo.svg', entry]);
+
+    expect(angularJson.projects.ui.architect.build.options).toEqual({
+      tsConfig: 'projects/ui/tsconfig.lib.json',
+      assets: ['projects/ui/src/logo.svg', entry],
+    });
+  });
+
+  it('still skips a library built by another builder', async () => {
+    const { outcome, angularJson } = await runOnAngularJson('@nx/angular:ng-packagr-lite');
+
+    expect(outcome).toMatchObject({ skipped: expect.stringContaining('ng-package.json not found') });
+    expect(angularJson.projects.ui.architect.build.options).toBeUndefined();
+  });
+});
+
 describe('library package.json exports', () => {
   /** Runs the ng-package.json step on a library whose package.json declares `exports`. */
   async function runWithExports(exports: unknown): Promise<unknown> {

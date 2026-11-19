@@ -213,15 +213,21 @@ async function registerStylesAsset(cwd: string, config: Config): Promise<StepOut
   const libraryRoot = path.resolve(cwd, projectRootOf(config.baseUrl));
   const ngPackagePath = path.join(libraryRoot, 'ng-package.json');
 
+  const relative = path.relative(libraryRoot, path.resolve(cwd, config.tailwind.css)).split(path.sep).join('/');
+  const input = path.posix.dirname(relative);
+
   if (!existsSync(ngPackagePath)) {
+    // Angular 22 generates libraries for `@angular/build:library`, which has no
+    // ng-package.json: the assets go in the build options in angular.json.
+    if (await registerStylesAssetInAngularJson(cwd, libraryRoot, input)) {
+      await exportStylesheet(libraryRoot, path.posix.basename(relative));
+      return;
+    }
     // An Nx library only gets an ng-package.json when it is publishable; in the
     // others there is no package to assemble and the CSS is consumed straight
     // from the source.
     return { skipped: `ng-package.json not found in ${path.relative(cwd, libraryRoot)}: no theme asset to register` };
   }
-
-  const relative = path.relative(libraryRoot, path.resolve(cwd, config.tailwind.css)).split(path.sep).join('/');
-  const input = path.posix.dirname(relative);
   // Every stylesheet under the theme's folder, not just the theme: it imports
   // the core's `zard.css` from `lib/shared/core/css`, and `add` writes
   // `typeset.css` and `utilities.css` beside it. Shipping the theme alone left
@@ -246,6 +252,39 @@ async function registerStylesAsset(cwd: string, config: Config): Promise<StepOut
   }
 
   await exportStylesheet(libraryRoot, path.posix.basename(relative));
+}
+
+/**
+ * The same asset, declared where `@angular/build:library` reads it: the build options of the library project in
+ * angular.json, with `input` relative to the workspace root. Returns false when no angular.json project at
+ * `libraryRoot` builds with that builder.
+ */
+async function registerStylesAssetInAngularJson(cwd: string, libraryRoot: string, input: string): Promise<boolean> {
+  const angularJsonPath = path.join(cwd, 'angular.json');
+  if (!existsSync(angularJsonPath)) return false;
+
+  interface WorkspaceProject {
+    root?: string;
+    architect?: { build?: { builder?: string; options?: { assets?: unknown[] } } };
+  }
+  const angularJson: { projects?: Record<string, WorkspaceProject> } = JSON.parse(
+    await readFile(angularJsonPath, 'utf8'),
+  );
+  const root = path.relative(cwd, libraryRoot).split(path.sep).join('/');
+  const project = Object.values(angularJson.projects ?? {}).find(
+    candidate => (candidate?.root ?? '').replace(/\/$/, '') === root,
+  );
+  const build = project?.architect?.build;
+  if (build?.builder !== '@angular/build:library') return false;
+
+  const entry = { glob: '**/*.css', input: path.posix.join(root, input), output: '/' };
+  build.options ??= {};
+  const assets: unknown[] = Array.isArray(build.options.assets) ? build.options.assets : [];
+  if (hasEntry(assets, entry)) return true;
+
+  build.options.assets = [...assets.filter(asset => !describesSameFile(asset, '', entry)), entry];
+  await writeFile(angularJsonPath, `${JSON.stringify(angularJson, null, 2)}\n`, 'utf8');
+  return true;
 }
 
 /**
