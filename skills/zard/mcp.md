@@ -47,7 +47,7 @@ By configuration file:
 
 ## Tools
 
-Nine, in two groups: eight that read, one that writes.
+Sixteen, in three groups: eight that read the registry, six that build CLI commands without running them, and one that writes.
 
 | Tool                     | Input          | Returns                                                               |
 | ------------------------ | -------------- | --------------------------------------------------------------------- |
@@ -61,7 +61,20 @@ Nine, in two groups: eight that read, one that writes.
 | `list-blocks`            | —              | Every available block — pre-built compositions.                       |
 | `get-block`              | `id`           | The full source code of a block (`login-01`, `signup-01`, …).         |
 
-Everything except `install-component` only fetches published files. That one runs the CLI in a working directory and writes into the project, so it is the one worth approving deliberately.
+The command tools work offline and run nothing. Each returns a command that ends in `--no-interactive`, so it never stops at a prompt, and you run it yourself.
+
+| Tool                  | Input                                                                 | Returns                                                                                        |
+| --------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `get-design-options`  | —                                                                     | The styles, colors, fonts, icon libraries and radii `create` accepts.                          |
+| `get-create-command`  | `name`, `template`, `preset?` or `design?`, `packageManager?`, `rtl?` | The `create` command for a new app, and the preset code the design becomes.                    |
+| `get-init-command`    | `type`, `project?`, `preset?` or `design?`, `baseColor?`              | The `init` command for an existing project.                                                    |
+| `get-apply-command`   | `preset` or `design`, `only?`, `pointer?`                             | The `apply` command that changes the design of a project already set up.                       |
+| `get-add-command`     | `items`, `overwrite?`                                                 | The `add` command for several components or blocks at once.                                    |
+| `get-audit-checklist` | —                                                                     | What to check after adding components or writing code with them, before calling the work done. |
+
+`preset` takes the code from zardui.com/create or the whole command the page gives. A `design` is rebuilt the same way the page does it, and the reply says which choices the design rules changed.
+
+Everything except `install-component` only fetches published files or builds a command. That one runs the CLI in a working directory and writes into the project, so it is the one worth approving deliberately.
 
 It never builds a shell command: the name is validated and passed as a discrete argument, so nothing in it can start a second one. The working directory must exist, because it decides which `zard-cli` runs — a copy installed in the project is preferred over downloading one.
 

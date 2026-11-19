@@ -225,7 +225,7 @@ There is no `search`, `view`, `diff`, `info`, or `build` command — those are s
 
 - [cli.md](./cli.md) — `create`, `init`, `apply` and `add`, every flag, presets, the five project types, headless behaviour
 - [registry.md](./registry.md) — the index, item and icon-catalog formats, JSON Schemas, pointing at your own registry
-- [mcp.md](./mcp.md) — the nine MCP tools, how to connect, `ZARD_REGISTRY_URL` / `ZARD_DOCS_URL`
+- [mcp.md](./mcp.md) — the sixteen MCP tools, how to connect, `ZARD_REGISTRY_URL` / `ZARD_DOCS_URL`
 - [customization.md](./customization.md) — theme tokens, CVA variants, `mergeClasses`, extending a component
 - [rules/angular.md](./rules/angular.md) — standalone, `input()`, OnPush, `ViewEncapsulation.None`, selectors
 - [rules/styling.md](./rules/styling.md) — Tailwind v4, semantic tokens, `mergeClasses`, variants before raw classes, the `scroll-fade` / `shimmer` utilities

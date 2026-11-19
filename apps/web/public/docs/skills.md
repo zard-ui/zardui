@@ -46,7 +46,7 @@ zard/
   SKILL.md          project context, principles, critical rules
   cli.md            init and add, every flag, the project types
   registry.md       index, item and icon formats; your own registry
-  mcp.md            the nine MCP tools and how to connect them
+  mcp.md            the sixteen MCP tools and how to connect them
   customization.md  theme tokens, CVA variants, mergeClasses
   rules/
     angular.md      standalone, input(), OnPush, selectors
@@ -81,7 +81,7 @@ The three published files — the index, the items, the icon catalog — with th
 
 ### MCP server
 
-The nine tools with their inputs, how to connect the server in each client, and the two environment variables that point it at another registry. Mostly a pointer to [the same thing documented here](/docs/mcp) , so the assistant knows the tools exist and reaches for them before guessing at an API.
+The sixteen tools with their inputs, how to connect the server in each client, and the two environment variables that point it at another registry. Mostly a pointer to [the same thing documented here](/docs/mcp) , so the assistant knows the tools exist and reaches for them before guessing at an API.
 
 ### Theming and customization
 

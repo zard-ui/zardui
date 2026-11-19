@@ -193,7 +193,7 @@ Two environment variables, both optional, for teams serving their own components
 
 ## Security
 
-Nine tools only read published files. Only `install-component` writes to your project, so keep your client asking before it runs. It never builds a shell command: names are validated and passed as discrete arguments, and the project's own `zard-cli` is preferred over downloading one.
+Nine tools only read published files and six only build commands without running them. Only `install-component` writes to your project, so keep your client asking before it runs. It never builds a shell command: names are validated and passed as discrete arguments, and the project's own `zard-cli` is preferred over downloading one.
 
 Whatever the registry serves ends up in the model's context, so trust a custom registry as you would a dependency. Teams can pin the server to a version:
 
