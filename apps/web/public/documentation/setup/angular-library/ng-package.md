@@ -1,3 +1,25 @@
+```json title="angular.json" copyButton showLineNumbers
+{
+  "projects": {
+    "ui": {
+      "architect": {
+        "build": {
+          "options": {
+            "assets": [
+              {
+                "glob": "**/*.css",
+                "input": "projects/ui/src",
+                "output": "/"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
 ```json title="projects/ui/ng-package.json" copyButton showLineNumbers
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
@@ -7,7 +29,7 @@
   },
   "assets": [
     {
-      "glob": "styles.css",
+      "glob": "**/*.css",
       "input": "src",
       "output": "/"
     }

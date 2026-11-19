@@ -3,6 +3,7 @@
 @import 'tailwindcss';
 @import './lib/shared/core/css/zard';
 @plugin "tailwindcss-animate";
+@source './';
 
 @custom-variant dark (&:is(.dark *));
 

@@ -40,6 +40,14 @@
         [class]="activeTab() === 'cli' ? 'translate-x-0' : ['translate-x-full', 'sr-only']"
       >
         <z-steps [steps]="installGuide.cli"></z-steps>
+        @if (installGuide.existingProject; as existing) {
+          <!-- Not a step: it replaces creating the project, so it reads as the alternative, after the path it skips. -->
+          <aside class="bg-muted/50 mt-2 space-y-4 rounded-lg border p-6">
+            <h2 class="text-primary font-medium">Already have a project?</h2>
+            <p>{{ existing.subtitle }}</p>
+            <z-code-tabs [data]="existing.codeTabData" />
+          </aside>
+        }
       </section>
     </main>
   </z-content>

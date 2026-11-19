@@ -9,35 +9,25 @@ Install and configure zard/ui for Angular.
 
 ## CLI
 
-### Create with zard/ui
-
-The fastest path: one command scaffolds the project and configures it from a design preset, with a button already installed. If you use it, you are done: skip to the last step. To choose your own design, build it on the [create page.](/create)
-
-```
-npx zard-cli@latest create my-app --template angular
-```
-
 ### Create project
 
-Prefer to start from your own project? Start the cli and create an application that uses Tailwind as default styling. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/pre-processors)
-
-**Terminal**
+One command creates the application and configures zard/ui in it. Pick "Angular" when it asks for the template. It starts from the default design; to choose your own, build it on the create page and run the command it gives you instead. [Open the create page](/create)
 
 ```
-ng new my-app --style=tailwind
-```
-
-### Add Zard/ui
-
-Prepare your entire project using the zard/ui cli. Pick "Angular" on the first question:
-
-```
-npx zard-cli@latest init
+npx zard-cli@latest create
 ```
 
 ### That's it
 
 You can now start adding components to your project. [Open the components page and select what component you want to install](/docs/components)
+
+### Already have a project?
+
+Run init at its root instead. Pick "Angular" on the first question. It configures zard/ui with the default design and asks only for the theme color.
+
+```
+npx zard-cli@latest init
+```
 
 ## Manual
 
@@ -69,7 +59,7 @@ npm install -D tailwindcss-animate
 
 ### Configure path aliases
 
-Add these lines inside compilerOptions on your tsconfig.json. Do not add baseUrl, it is an error from TypeScript 6 on.
+Add these lines inside compilerOptions on your tsconfig.json. If it already has a paths object, add the entry to it instead of a second one. Do not add baseUrl, it is an error from TypeScript 6 on.
 
 **tsconfig.json**
 
@@ -1103,12 +1093,13 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
       element,
       event,
       (event: Event) => {
-        const isKeyboardEvent = event instanceof KeyboardEvent;
-        const isElementDisabled = element.getAttribute('aria-disabled') === 'true';
-        const shouldApplyModifier =
-          (!keys.length || (isKeyboardEvent && keys.includes(event.key.toLowerCase()))) && !isElementDisabled;
+        // A key list filters the event like `keydown.enter` does: other keys never reach the handler.
+        if (keys.length && !(event instanceof KeyboardEvent && keys.includes(event.key.toLowerCase()))) {
+          return;
+        }
 
-        if (shouldApplyModifier) {
+        const isElementDisabled = element.getAttribute('aria-disabled') === 'true';
+        if (!isElementDisabled) {
           switch (keyword) {
             case 'stop':
               event.stopPropagation();
@@ -1351,6 +1342,16 @@ Create src/app/shared/core/css/ with:
     @slot;
   }
 }
+
+/*
+ * ng-icon sizes its host with an unlayered `width: var(--ng-icon__size, 1em)`, which beats every Tailwind utility
+ * (utilities live in a layer), so `<ng-icon class="size-5">` stayed at the inherited size. An icon given an explicit
+ * `size-*` class takes it, as an svg does in shadcn/ui: `revert-layer` hands those two properties back to the layers.
+ */
+ng-icon[class*='size-'] {
+  width: revert-layer;
+  height: revert-layer;
+}
 ```
 
 ### Add the core barrel
@@ -1367,6 +1368,7 @@ export * from './overlay/overlay-stack';
 export * from './provider/providezard';
 export * from './provider/event-manager-plugins/zard-debounce-event-manager-plugin';
 export * from './provider/event-manager-plugins/zard-event-manager-plugin';
+export * from './i18n';
 ```
 
 ### Add a lib helper
@@ -1385,9 +1387,22 @@ export * from './number';
 
 ```
 import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
 
 export type { ClassValue };
+
+/**
+ * `tailwind-merge`, told how Tailwind v4 really cascades a font size and a line height.
+ *
+ * Out of the box a later `text-xs` drops an earlier `leading-normal`, as if `text-xs` always set its own line height.
+ * In v4 it does not: it reads `--tw-leading`, which any `leading-*` sets, so the two never compete and the leading
+ * survives. Dropping it made an installed component (where the style's classes and the consumer's are one string)
+ * differ from the same component in the docs (where the style's rule sits in a lower layer and nothing is merged).
+ * `text-xs/relaxed` (a size that carries its leading) still conflicts with a later `leading-*`, as it should.
+ */
+const twMerge = extendTailwindMerge({
+  override: { conflictingClassGroups: { 'font-size': [] } },
+});
 
 /** Merges CVA variants with a consumer's `class` input, last write winning. */
 export function mergeClasses(...inputs: ClassValue[]): string {
@@ -1409,8 +1424,17 @@ function clamp(value: number, [min, max]: [number, number]): number {
   return Math.min(max, Math.max(min, value));
 }
 
+function getDecimalCount(value: number): number {
+  // also handles exponent notation such as 1e-7
+  const [mantissa, exponent = '0'] = String(value).split('e');
+  return Math.max(0, (mantissa.split('.')[1] ?? '').length - Number(exponent));
+}
+
 function roundToStep(value: number, min: number, step: number): number {
-  return Math.round((value - min) / step) * step + min;
+  const stepped = Math.round((value - min) / step) * step + min;
+  // drop floating point noise such as 0.30000000000000004 by keeping the precision of step and min
+  const decimals = Math.max(getDecimalCount(step), getDecimalCount(min));
+  return Number(stepped.toFixed(decimals));
 }
 
 function convertValueToPercentage(value: number, min: number, max: number): number {
