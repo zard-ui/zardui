@@ -7,6 +7,8 @@ export const MAY_2025: ChangelogEntry = {
     monthNumber: 5,
     date: new Date(2025, 4, 1),
     id: '05-2025',
+    slug: '2025-05-form-controls',
+    title: 'Form Controls',
   },
 
   overview:

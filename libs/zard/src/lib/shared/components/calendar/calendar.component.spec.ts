@@ -223,6 +223,33 @@ describe('ZardCalendarComponent', () => {
     });
   });
 
+  describe('Week numbers and fixed weeks', () => {
+    it('adds a leading week-number column, numbered like react-day-picker, when zShowWeekNumbers is set', () => {
+      fixture.componentRef.setInput('value', new Date(2026, 1, 3));
+      fixture.componentRef.setInput('zShowWeekNumbers', true);
+      fixture.detectChanges();
+
+      const host = fixture.nativeElement as HTMLElement;
+      const numbers = Array.from(host.querySelectorAll('[role="rowheader"]')).map(cell => cell.textContent?.trim());
+      expect(numbers).toEqual(['06', '07', '08', '09']);
+    });
+
+    it('renders no week numbers by default', () => {
+      fixture.componentRef.setInput('value', new Date(2026, 1, 3));
+      fixture.detectChanges();
+
+      expect((fixture.nativeElement as HTMLElement).querySelectorAll('[role="rowheader"]')).toHaveLength(0);
+    });
+
+    it('always renders six weeks when zFixedWeeks is set', () => {
+      fixture.componentRef.setInput('value', new Date(2026, 1, 3));
+      fixture.componentRef.setInput('zFixedWeeks', true);
+      fixture.detectChanges();
+
+      expect(component.calendarDays()).toHaveLength(42);
+    });
+  });
+
   describe('Button variant', () => {
     it('should forward zButtonVariant to the navigation arrows', () => {
       fixture.componentRef.setInput('zButtonVariant', 'outline');
@@ -408,7 +435,7 @@ describe('ZardCalendarComponent', () => {
       expect(firstGridDay.date.getDay()).toBe(0);
 
       const columnHeaders = host.querySelectorAll('[role="columnheader"]');
-      expect(columnHeaders[0].textContent?.trim()).toBe('Sun');
+      expect(columnHeaders[0].textContent?.trim()).toBe('Su');
     });
 
     describe('with DI provideZardI18n', () => {
@@ -450,14 +477,15 @@ describe('ZardCalendarComponent', () => {
 
         const host = diFixture.nativeElement as HTMLElement;
         const caption = host.querySelector('[data-slot="calendar-caption"]');
-        expect(caption?.textContent?.trim()).toBe('Août 2024');
+        expect(caption?.textContent?.trim()).toBe('août 2024');
 
         const prevButton = host.querySelector('z-calendar-navigation button');
         expect(prevButton?.getAttribute('aria-label')).toBe('Mois précédent');
 
         const columnHeaders = host.querySelectorAll('[role="columnheader"]');
         expect(columnHeaders).toHaveLength(7);
-        expect(columnHeaders[0].textContent?.trim()).toMatch(/^Lun/);
+        expect(columnHeaders[0].textContent?.trim()).toBe('lu');
+        expect(columnHeaders[0].getAttribute('aria-label')).toMatch(/^lun/);
       });
 
       it('reactively updates when ZardI18nService locale changes', () => {
@@ -465,12 +493,12 @@ describe('ZardCalendarComponent', () => {
         diFixture.detectChanges();
 
         const host = diFixture.nativeElement as HTMLElement;
-        expect(host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('Août 2024');
+        expect(host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('août 2024');
 
         i18nService.setLocale('es-ES');
         diFixture.detectChanges();
 
-        expect(host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('Agosto 2024');
+        expect(host.querySelector('[data-slot="calendar-caption"]')?.textContent?.trim()).toBe('agosto 2024');
         const prevButton = host.querySelector('z-calendar-navigation button');
         expect(prevButton?.getAttribute('aria-label')).toBe('Mes anterior');
       });

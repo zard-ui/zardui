@@ -14,7 +14,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
       <div z-field-group>
         <div z-field>
           <label z-field-label for="form-name">Name</label>
-          <input z-input id="form-name" type="text" placeholder="Evil Rabbit" formControlName="name" />
+          <input z-input id="form-name" type="text" placeholder="Luiz Gomes" formControlName="name" />
         </div>
         @let emailControl = form.controls.email;
         @let emailInvalid = emailControl.invalid && emailControl.touched;

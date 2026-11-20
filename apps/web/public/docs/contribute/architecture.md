@@ -80,7 +80,7 @@ SSR and prerendering
 
 The site is prerendered from apps/web/prerender-routes.txt, which is itself generated from the route constants.
 
-Component anatomy — signals, CVA and mergeClasses
+**Component anatomy — signals, CVA and mergeClasses**
 
 ```
 @Component({
@@ -123,7 +123,7 @@ Aliases are declared per project, not globally. An alias that resolves inside `a
 | `@doc/*` | apps/web/src/app/* | libs/zard/tsconfig.json |
 | `@zardui/generators` | tools/generators/component/index.ts | tsconfig.base.json |
 
-apps/web/tsconfig.json
+**apps/web/tsconfig.json**
 
 ```
 {
@@ -143,7 +143,7 @@ apps/web/tsconfig.json
 }
 ```
 
-libs/zard/tsconfig.json
+**libs/zard/tsconfig.json**
 
 ```
 {

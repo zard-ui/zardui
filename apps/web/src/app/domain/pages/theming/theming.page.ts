@@ -3,9 +3,13 @@ import { RouterModule } from '@angular/router';
 
 import { THEMING_ADDING_COLORS_EXAMPLE } from '@generated/documentation/theming/adding-colors-example';
 import { THEMING_BASE_COLORS_GRAY } from '@generated/documentation/theming/base-colors-gray';
+import { THEMING_BASE_COLORS_MAUVE } from '@generated/documentation/theming/base-colors-mauve';
+import { THEMING_BASE_COLORS_MIST } from '@generated/documentation/theming/base-colors-mist';
 import { THEMING_BASE_COLORS_NEUTRAL } from '@generated/documentation/theming/base-colors-neutral';
+import { THEMING_BASE_COLORS_OLIVE } from '@generated/documentation/theming/base-colors-olive';
 import { THEMING_BASE_COLORS_SLATE } from '@generated/documentation/theming/base-colors-slate';
 import { THEMING_BASE_COLORS_STONE } from '@generated/documentation/theming/base-colors-stone';
+import { THEMING_BASE_COLORS_TAUPE } from '@generated/documentation/theming/base-colors-taupe';
 import { THEMING_BASE_COLORS_ZINC } from '@generated/documentation/theming/base-colors-zinc';
 import { THEMING_CONVENTION_EXAMPLE } from '@generated/documentation/theming/convention-example';
 import { THEMING_CSS_VARIABLES_INTRO } from '@generated/documentation/theming/css-variables-intro';
@@ -84,6 +88,10 @@ export class ThemingPage implements OnInit {
     zinc: THEMING_BASE_COLORS_ZINC,
     gray: THEMING_BASE_COLORS_GRAY,
     slate: THEMING_BASE_COLORS_SLATE,
+    mauve: THEMING_BASE_COLORS_MAUVE,
+    olive: THEMING_BASE_COLORS_OLIVE,
+    mist: THEMING_BASE_COLORS_MIST,
+    taupe: THEMING_BASE_COLORS_TAUPE,
   };
 
   readonly tokenCount = THEME_TOKENS.length;

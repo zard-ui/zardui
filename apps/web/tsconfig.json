@@ -12,6 +12,7 @@
     "paths": {
       "@blocks": ["../../libs/blocks/src/index.ts"],
       "@zard-package": ["../../libs/zard/package.json"],
+      "@zard/design": ["../../packages/cli/src/core/design/index.ts"],
       "@zard/*": ["../../libs/zard/src/lib/shared/*"],
       "@/*": ["../../libs/zard/src/lib/*"],
       "@doc/domain/*": ["./src/app/domain/*"],

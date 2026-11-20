@@ -2,6 +2,8 @@ import { Component, DestroyRef, inject, OnInit, signal, ChangeDetectionStrategy 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
+
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
@@ -13,7 +15,7 @@ import { SeoService } from '@doc/shared/services/seo.service';
   selector: 'z-install',
   templateUrl: './install.page.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [StepsComponent, DocContentComponent, DocHeadingComponent],
+  imports: [StepsComponent, DocContentComponent, DocHeadingComponent, CodeTabsComponent],
 })
 export class InstallPage implements OnInit {
   private readonly seoService = inject(SeoService);

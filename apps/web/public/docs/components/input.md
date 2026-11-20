@@ -17,6 +17,8 @@ npx zard-cli@latest add input
 
 ### Manual
 
+**Add input.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -157,17 +159,19 @@ export class ZardInputComponent implements ControlValueAccessor {
 }
 ```
 
+**Add input.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
 export const inputVariants = cva(
-  'h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+  'border-input h-8 w-full min-w-0 rounded-lg border bg-transparent px-2.5 py-1 text-base transition-colors file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 disabled:bg-input/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-3 aria-invalid:ring-3 md:text-sm outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
 );
 
-export const inputGroupInputVariants = cva(
-  'flex-1 rounded-none border-0 bg-transparent shadow-none ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0 dark:bg-transparent dark:disabled:bg-transparent',
-);
+export const inputGroupInputVariants = cva('flex-1 rounded-none border-0 bg-transparent shadow-none ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0 dark:bg-transparent dark:disabled:bg-transparent');
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './input.component';
@@ -185,6 +189,29 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+
+@Component({
+  selector: 'z-demo-input-preview',
+  imports: [ZardInputComponent, ...ZardFieldImports],
+  template: `
+    <div z-field class="w-72">
+      <label z-field-label for="input-demo-api-key">API Key</label>
+      <input z-input id="input-demo-api-key" type="password" placeholder="sk-..." />
+      <p z-field-description>Your API key is encrypted and stored securely.</p>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoInputPreviewComponent {}
+```
 
 ### Basic
 
@@ -540,7 +567,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
       <div z-field-group>
         <div z-field>
           <label z-field-label for="form-name">Name</label>
-          <input z-input id="form-name" type="text" placeholder="Evil Rabbit" formControlName="name" />
+          <input z-input id="form-name" type="text" placeholder="Luiz Gomes" formControlName="name" />
         </div>
         @let emailControl = form.controls.email;
         @let emailInvalid = emailControl.invalid && emailControl.touched;
@@ -615,7 +642,7 @@ export class ZardDemoInputFormComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

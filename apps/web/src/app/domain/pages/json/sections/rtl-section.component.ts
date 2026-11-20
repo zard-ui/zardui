@@ -25,9 +25,27 @@ import type { CodeBlockData } from '@highlight/types';
         </p>
         <z-code-block [data]="rtlExample" />
         <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
-          Turning it on does not change what the CLI installs yet — the components are the same either way. It is the
-          place where that preference will live once they ship right-to-left variants, and it is in the file now so that
-          a project can record the intent before then.
+          The components are direction-agnostic, so the files the CLI installs are identical either way.
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli init --rtl</code>
+          and
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli create --rtl</code>
+          record
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">true</code>
+          here and set
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">dir="rtl"</code>
+          on
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&lt;html&gt;</code>
+          in the app's
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">index.html</code>
+          . They leave
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">lang</code>
+          alone — set it to your content's language (
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ar</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">he</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">fa</code>
+          …) yourself.
         </p>
       </div>
     </section>

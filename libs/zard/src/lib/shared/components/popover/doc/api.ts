@@ -27,6 +27,12 @@ export const POPOVER_API: ApiSection[] = [
       { name: '[zSideOffset]', description: 'Distance from the trigger in px', type: 'number', default: '4' },
       { name: '[zAlignOffset]', description: 'Offset along the alignment axis in px', type: 'number', default: '0' },
       { name: '[zOrigin]', description: 'Custom anchor element', type: 'ElementRef', default: '-' },
+      {
+        name: '[zHasPopup]',
+        description: "What the trigger announces through aria-haspopup; use 'menu' when the content is a menu",
+        type: "'dialog' | 'menu' | 'listbox' | 'tree' | 'grid'",
+        default: "'dialog'",
+      },
       { name: '[zVisible]', description: 'Controls visibility programmatically', type: 'boolean', default: 'false' },
       { name: '[zOverlayClickable]', description: 'Closes on outside click', type: 'boolean', default: 'true' },
       {

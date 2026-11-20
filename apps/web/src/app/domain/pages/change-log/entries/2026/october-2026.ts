@@ -7,6 +7,8 @@ export const OCTOBER_2026: ChangelogEntry = {
     monthNumber: 10,
     date: new Date(2026, 9, 1),
     id: '10-2026',
+    slug: '2026-10-rtl',
+    title: 'Right to Left',
   },
 
   overview:

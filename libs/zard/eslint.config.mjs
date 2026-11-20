@@ -24,7 +24,8 @@ const betterTailwindBase = {
     'better-tailwindcss/no-unknown-classes': [
       'error',
       {
-        ignore: ['animate-spinner', 'no-scrollbar', 'toaster', 'typeset'],
+        // `cn-*` are style markers, resolved per style by `core/css/styles/` and by the CLI at install time.
+        ignore: ['animate-spinner', 'no-scrollbar', 'toaster', 'typeset', '^cn-'],
       },
     ],
   },
@@ -39,8 +40,9 @@ export default [
         'error',
         {
           // `@types/geojson`: type-only imports in the map demos; the map item installs it as a devDependency.
-          ignoredDependencies: ['zod', '@types/geojson'],
-          ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs}'],
+          // embla-carousel-reactive-utils: a peer of embla-carousel-angular, installed, never imported.
+          ignoredDependencies: ['zod', '@types/geojson', 'embla-carousel-reactive-utils'],
+          ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs}', '{projectRoot}/jest-style-transformer.cjs'],
         },
       ],
     },

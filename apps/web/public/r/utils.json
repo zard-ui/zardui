@@ -9,7 +9,7 @@
     },
     {
       "name": "merge-classes.ts",
-      "content": "import { type ClassValue, clsx } from 'clsx';\nimport { twMerge } from 'tailwind-merge';\n\nexport type { ClassValue };\n\n/** Merges CVA variants with a consumer's `class` input, last write winning. */\nexport function mergeClasses(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n"
+      "content": "import { type ClassValue, clsx } from 'clsx';\nimport { extendTailwindMerge } from 'tailwind-merge';\n\nexport type { ClassValue };\n\n/**\n * `tailwind-merge`, told how Tailwind v4 really cascades a font size and a line height.\n *\n * Out of the box a later `text-xs` drops an earlier `leading-normal`, as if `text-xs` always set its own line height.\n * In v4 it does not: it reads `--tw-leading`, which any `leading-*` sets, so the two never compete and the leading\n * survives. Dropping it made an installed component (where the style's classes and the consumer's are one string)\n * differ from the same component in the docs (where the style's rule sits in a lower layer and nothing is merged).\n * `text-xs/relaxed` (a size that carries its leading) still conflicts with a later `leading-*`, as it should.\n */\nconst twMerge = extendTailwindMerge({\n  override: { conflictingClassGroups: { 'font-size': [] } },\n});\n\n/** Merges CVA variants with a consumer's `class` input, last write winning. */\nexport function mergeClasses(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n"
     },
     {
       "name": "noop.ts",

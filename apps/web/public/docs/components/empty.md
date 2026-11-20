@@ -17,6 +17,8 @@ npx zard-cli@latest add empty
 
 ### Manual
 
+**Add empty.component.ts**
+
 ```angular-ts
 import { NgOptimizedImage } from '@angular/common';
 import {
@@ -116,52 +118,41 @@ export class ZardEmptyComponent {
 }
 ```
 
+**Add empty.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
-export const emptyVariants = cva(
-  'flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-xl border-dashed p-6 text-center text-balance',
-  {
-    variants: {},
-  },
-);
+export const emptyVariants = cva('flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-xl border-dashed p-6 text-center text-balance', {
+  variants: {},
+});
 
 export const emptyHeaderVariants = cva('flex max-w-sm flex-col items-center gap-2', {
   variants: {},
 });
 
-export const emptyImageVariants = cva(
-  'mb-2 flex shrink-0 items-center justify-center bg-transparent [&_svg]:pointer-events-none [&_svg]:shrink-0',
-  {
-    variants: {},
-  },
-);
-
-export const emptyIconVariants = cva(
-  `bg-muted text-foreground mb-2 flex size-8 shrink-0 items-center justify-center rounded-lg [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4`,
-  {
-    variants: {},
-  },
-);
-
-export const emptyTitleVariants = cva('text-sm font-medium tracking-tight', {
+export const emptyImageVariants = cva('mb-2 flex shrink-0 items-center justify-center bg-transparent [&_svg]:pointer-events-none [&_svg]:shrink-0', {
   variants: {},
 });
 
-export const emptyDescriptionVariants = cva(
-  'text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4',
-  {
-    variants: {},
-  },
-);
+export const emptyIconVariants = cva("bg-muted text-foreground mb-2 flex size-8 shrink-0 items-center justify-center rounded-lg [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0", {
+  variants: {},
+});
 
-export const emptyActionsVariants = cva(
-  'flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance',
-  {
-    variants: {},
-  },
-);
+export const emptyTitleVariants = cva('text-sm font-medium tracking-tight font-heading', {
+  variants: {},
+});
+
+export const emptyDescriptionVariants = cva('text-muted-foreground text-sm/relaxed [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4', {
+  variants: {},
+});
+
+export const emptyActionsVariants = cva('flex w-full max-w-sm min-w-0 flex-col items-center gap-2.5 text-sm text-balance', {
+  variants: {},
+});
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './empty.component';
@@ -179,6 +170,52 @@ import { ZardEmptyComponent } from '@/shared/components/empty/empty.component';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUpRight, lucideFolderCode } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardEmptyComponent } from '@/shared/components/empty';
+
+@Component({
+  selector: 'z-demo-empty-preview',
+  imports: [ZardButtonComponent, ZardEmptyComponent, NgIcon],
+  template: `
+    <z-empty
+      zIcon="lucideFolderCode"
+      zTitle="No Projects Yet"
+      zDescription="You haven't created any projects yet. Get started by creating your first project."
+      [zActions]="[actionPrimary, actionSecondary]"
+    >
+      <ng-template #actionPrimary>
+        <button type="button" z-button>Create Project</button>
+      </ng-template>
+
+      <ng-template #actionSecondary>
+        <button type="button" z-button zType="outline">Import Project</button>
+      </ng-template>
+
+      <a z-button zType="link" zSize="sm" class="text-muted-foreground" href="#">
+        Learn More
+        <ng-icon name="lucideArrowUpRight" />
+      </a>
+    </z-empty>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideArrowUpRight,
+      lucideFolderCode,
+    }),
+  ],
+})
+export class ZardDemoEmptyPreviewComponent {}
+```
 
 ### Outline
 
@@ -394,7 +431,7 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
 export class ZardDemoEmptyInputGroupComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

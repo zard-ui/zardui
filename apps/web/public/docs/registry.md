@@ -36,13 +36,7 @@ libs/zard/src/lib/shared/
 
 Every component, service and utility lives in the monorepo as ordinary Angular source. Nothing in these files is registry-specific.
 
-components/
-
-core/
-
-services/
-
-utils/
+`components/`, `core/`, `services/`, `utils/`
 
 ### Manifest
 
@@ -50,17 +44,7 @@ packages/cli/src/core/registry/registry-data.ts
 
 A single TypeScript array declares what ships. Each entry names the item, where it should land in the consumer project, and which files and dependencies it needs.
 
-name
-
-basePath
-
-dependencies
-
-devDependencies
-
-registryDependencies
-
-files
+`name`, `basePath`, `dependencies`, `devDependencies`, `registryDependencies`, `files`
 
 ### Build
 
@@ -68,7 +52,7 @@ scripts/build-registry.cts
 
 Running npm run build:registry reads each declared file from disk, inlines its full content and writes one JSON per item plus the index. When a component ships doc/overview.md, doc/api.md or demo files, they are folded into the docs and demos fields.
 
-npm run build:registry
+`npm run build:registry`
 
 ### Serve
 
@@ -76,23 +60,19 @@ apps/web/public/r/ → https://zardui.com/r
 
 The generated files are plain static assets of this website. There is no API and no runtime: any HTTP client can read them.
 
-registry.json
-
-<name>.json
-
-blocks/
+`registry.json`, `<name>.json`, `blocks/`
 
 ### Caching and CORS
 
 The two kinds of file change at different rates, so they are cached differently.
 
-/r/*
+`/r/*`
 
 public, max-age=31536000, immutable
 
 An item file describes one published version of a component, so it never changes once written and is cached for a year.
 
-/r/registry.json
+`/r/registry.json`
 
 public, max-age=3600, must-revalidate
 
@@ -106,7 +86,7 @@ Both rules answer with `Access-Control-Allow-Origin: *` and `Content-Type: appli
 
 The excerpt below is the real index reduced to three items — `core` , `utils` and `button` . The published file contains every component of the library.
 
-registry.json
+**registry.json**
 
 ```
 {
@@ -170,7 +150,7 @@ Each entry of `items` exposes `name` , `type` , `basePath` , `dependencies` , `d
 
 Each item has its own file at `/r/<name>.json` . This is where the source code lives: every entry of `files` carries the complete content of one file. The example below is `button.json` with the contents truncated for readability.
 
-button.json
+**button.json**
 
 ```
 {
@@ -236,7 +216,7 @@ Whichever route is taken, the CLI checks that the resolved destination stays ins
 
 `icons.json` declares the icon sets a registry supports and the table that translates between them. The CLI reads it at run time rather than relying on the copy it was built with, so a set added here works for the CLIs that are already installed.
 
-icons.json
+**icons.json**
 
 ```
 {
@@ -262,6 +242,8 @@ icons.json
 `icons` is one row per icon, keyed by what it means rather than by what any set calls it. Items are published in one set, and a client installing with another rewrites the symbols through this table. A row with no entry for the target set means that set has no equivalent — the symbol is left alone and reported, never guessed.
 
 What makes the rewrite tractable is that the components write the symbol identically everywhere: the import, the `provideIcons` call and the `name` in the template are the same word, so replacing it is one substitution. Note that ng-icons also accepts the hyphenated form and converts it — a `name` of `lucide-arrow-left` resolves to the `lucideArrowLeft` you provided. Nothing published here uses that form, and a custom registry that does should expect the rewrite to leave it alone.
+
+The rewrite is decided over all the files of an item together, not file by file. A template file or a data file that only names an icon, such as `icon: 'lucideBot'` in a list the component renders, follows the icons its component imports. Every icon used by a published component, block or demo needs a row here for every set, or a declared gap.
 
 ## Dependencies
 
@@ -313,7 +295,7 @@ The code stored in the registry is the code of this monorepo, so it uses the int
 - `@/shared/<key>/<x>` becomes `<aliases[key]>/<x>` , for every alias you configured.
 - `ClassValue` imported from `class-variance-authority` is re-pointed at `clsx` .
 
-components.json
+**components.json**
 
 ```
 {
@@ -326,7 +308,7 @@ components.json
 }
 ```
 
-Stored in the registry
+**Stored in the registry**
 
 ```
 import { mergeClasses } from '@/shared/utils/merge-classes';
@@ -334,7 +316,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 import { ZardButtonComponent } from '../button/button.component';
 ```
 
-Written to your project
+**Written to your project**
 
 ```
 import { mergeClasses } from '@app/ui/utils/merge-classes';
@@ -355,7 +337,7 @@ When the detected Angular version is a pre-release — `-rc` , `-next` or `-cana
 The CLI is the intended client. It fetches the index, resolves the item and its dependencies, rewrites the imports and writes the files into your project.
 
 ```
-npx zard-cli add button
+npx zard-cli@latest add button
 ```
 
 - The index is cached in memory for 5 minutes within a single CLI run.
@@ -385,7 +367,7 @@ The same build step that produces the component registry also emits `apps/web/pu
 
 ### The blocks index
 
-blocks-registry.json
+**blocks-registry.json**
 
 ```
 {
@@ -414,7 +396,7 @@ blocks-registry.json
 
 ### A block
 
-blocks/login-01.json
+**blocks/login-01.json**
 
 ```
 {
@@ -457,7 +439,7 @@ ZARD_REGISTRY_URL=https://my-registry.example.com/r npx zard-cli add button
 
 The configuration schema also accepts a `registryUrl` field, which is validated whenever the configuration is loaded.
 
-components.json
+**components.json**
 
 ```
 {
@@ -520,7 +502,7 @@ A component only reaches the registry once it is declared in the manifest. Writi
 3. Run `npm run build:registry` and check the output in `apps/web/public/r/` .
 4. Test the whole flow against the local registry before opening the pull request.
 
-packages/cli/src/core/registry/registry-data.ts
+**packages/cli/src/core/registry/registry-data.ts**
 
 ```
 {

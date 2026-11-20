@@ -17,6 +17,8 @@ npx zard-cli@latest add aspect-ratio
 
 ### Manual
 
+**Add aspect-ratio.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -48,12 +50,16 @@ export class ZardAspectRatioComponent {
 }
 ```
 
+**Add aspect-ratio.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const aspectRatioVariants = cva('relative block');
 export type ZardAspectRatioVariants = VariantProps<typeof aspectRatioVariants>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './aspect-ratio.component';
@@ -72,6 +78,34 @@ import { ZardAspectRatioComponent } from '@/shared/components/aspect-ratio/aspec
 
 ## Examples
 
+### Preview
+
+```angular-ts
+import { NgOptimizedImage } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardAspectRatioComponent } from '../aspect-ratio.component';
+
+@Component({
+  selector: 'z-demo-aspect-ratio-preview',
+  imports: [ZardAspectRatioComponent, NgOptimizedImage],
+  template: `
+    <z-aspect-ratio [zRatio]="16 / 9" class="bg-muted w-full max-w-sm rounded-lg">
+      <img
+        ngSrc="https://avatar.vercel.sh/zardui"
+        alt="Photo"
+        fill
+        priority
+        class="rounded-lg object-cover grayscale dark:brightness-20"
+      />
+    </z-aspect-ratio>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
+})
+export class ZardDemoAspectRatioPreviewComponent {}
+```
+
 ### Square
 
 A square aspect ratio component using `[zRatio]="1 / 1"`. This is useful for displaying images in a square format.
@@ -88,7 +122,7 @@ import { ZardAspectRatioComponent } from '../aspect-ratio.component';
   template: `
     <z-aspect-ratio [zRatio]="1 / 1" class="bg-muted w-full max-w-48 rounded-lg">
       <img
-        ngSrc="https://avatar.vercel.sh/shadcn1"
+        ngSrc="https://avatar.vercel.sh/zardui"
         alt="Photo"
         fill
         class="rounded-lg object-cover grayscale dark:brightness-20"
@@ -117,7 +151,7 @@ import { ZardAspectRatioComponent } from '../aspect-ratio.component';
   template: `
     <z-aspect-ratio [zRatio]="9 / 16" class="bg-muted w-full max-w-40 rounded-lg">
       <img
-        ngSrc="https://avatar.vercel.sh/shadcn1"
+        ngSrc="https://avatar.vercel.sh/zardui"
         alt="Photo"
         fill
         class="rounded-lg object-cover grayscale dark:brightness-20"
@@ -130,7 +164,7 @@ import { ZardAspectRatioComponent } from '../aspect-ratio.component';
 export class ZardDemoAspectRatioPortraitComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 
@@ -174,7 +208,7 @@ const translations: ZardRtlTranslations<{ caption: string }> = {
     <figure class="w-full max-w-sm">
       <z-aspect-ratio [zRatio]="16 / 9" class="bg-muted rounded-lg">
         <img
-          ngSrc="https://avatar.vercel.sh/shadcn1"
+          ngSrc="https://avatar.vercel.sh/zardui"
           alt="Photo"
           fill
           class="rounded-lg object-cover grayscale dark:brightness-20"
@@ -199,8 +233,8 @@ Displays content within a desired ratio.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `zRatio` | Width-to-height ratio, e.g. `16 / 9` | `number \| string` | `1` |
-| `class` | Custom CSS classes | `ClassValue` | `''` |
+| `[zRatio]` | Width-to-height ratio, e.g. `16 / 9` | `number \| string` | `1` |
+| `[class]` | Custom CSS classes | `ClassValue` | `''` |
 
 ---
 

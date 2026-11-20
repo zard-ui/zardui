@@ -46,15 +46,18 @@ export function withImport(content: string, importLine: string): string {
   return content.slice(0, end) + (alreadyBroken ? '' : eol) + importLine + eol + content.slice(end);
 }
 
-/** Where an array (or object) literal starts and ends, as indices into the content. */
-export interface ArrayRange {
-  /** Index of the opening `[` (or `{`). */
+/** Where a bracketed literal (`[...]` or `{...}`) starts and ends, as indices into the content. */
+export interface BracketRange {
+  /** Index of the opening bracket. */
   readonly open: number;
-  /** Index of the closing `]` (or `}`). */
+  /** Index of the closing bracket. */
   readonly close: number;
   /** What sits between the two, without the brackets. */
   readonly body: string;
 }
+
+/** Where an array literal starts and ends. */
+export type ArrayRange = BracketRange;
 
 /**
  * The range of the array assigned to `key`, found by counting brackets.
@@ -68,21 +71,21 @@ export interface ArrayRange {
  * Strings and comments are skipped, so a `]` written inside one does not count
  * as a closing bracket.
  */
-export function arrayRange(content: string, key: string): ArrayRange | null {
-  return delimitedRange(content, key, '[', ']');
+export function arrayRange(content: string, key: string, from = 0): ArrayRange | null {
+  return bracketRange(content, key, '[', ']', from);
 }
 
-/** The range of the object literal assigned to `key` (`resolve: { ... }`), found the same way as `arrayRange`. */
-export function objectRange(content: string, key: string): ArrayRange | null {
-  return delimitedRange(content, key, '{', '}');
+/** The range of the object literal assigned to `key`; same rules as {@link arrayRange}. */
+export function objectRange(content: string, key: string, from = 0): BracketRange | null {
+  return bracketRange(content, key, '{', '}', from);
 }
 
-function delimitedRange(content: string, key: string, opener: string, closer: string): ArrayRange | null {
-  const opening = new RegExp(`\\b${key}\\s*:\\s*\\${opener}`).exec(content);
+function bracketRange(content: string, key: string, opener: string, closer: string, from: number): BracketRange | null {
+  const opening = new RegExp(`\\b${key}\\s*:\\s*\\${opener}`).exec(content.slice(from));
 
   if (!opening) return null;
 
-  const open = opening.index + opening[0].length - 1;
+  const open = from + opening.index + opening[0].length - 1;
   let depth = 0;
 
   for (let index = open; index < content.length; index++) {

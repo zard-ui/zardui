@@ -17,6 +17,8 @@ npx zard-cli@latest add radio-group
 
 ### Manual
 
+**Add radio-group.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import {
@@ -177,6 +179,10 @@ export class ZardRadioGroupComponent implements ControlValueAccessor {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    class: 'peer',
+    'data-slot': 'radio-group-item',
+  },
   exportAs: 'zRadio',
 })
 export class ZardRadioComponent {
@@ -207,21 +213,27 @@ export class ZardRadioComponent {
 }
 ```
 
+**Add radio-group.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
 export const radioGroupVariants = cva('grid w-full gap-2');
 
 export const radioVariants = cva(
-  'group/radio-group-item peer relative flex aspect-square size-4 shrink-0 rounded-full border border-input outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary',
+  'border-input relative flex aspect-square size-4 shrink-0 rounded-full border focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:ring-3 aria-invalid:ring-3 group/radio-group-item peer outline-none disabled:cursor-not-allowed disabled:opacity-50',
 );
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './radio-group.component';
 export * from './radio-group.imports';
 export * from './radio-group.variants';
 ```
+
+**Add radio-group.imports.ts**
 
 ```angular-ts
 export { ZardRadioComponent, ZardRadioGroupComponent } from './radio-group.component';
@@ -245,6 +257,40 @@ import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-gro
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
+
+@Component({
+  selector: 'z-demo-radio-group-preview',
+  imports: [...ZardRadioGroupImports, ...ZardFieldImports],
+  template: `
+    <z-radio-group [(value)]="selected" class="w-fit">
+      <div class="flex items-center gap-3">
+        <z-radio zId="r1" value="default" />
+        <label z-field-label for="r1">Default</label>
+      </div>
+      <div class="flex items-center gap-3">
+        <z-radio zId="r2" value="comfortable" />
+        <label z-field-label for="r2">Comfortable</label>
+      </div>
+      <div class="flex items-center gap-3">
+        <z-radio zId="r3" value="compact" />
+        <label z-field-label for="r3">Compact</label>
+      </div>
+    </z-radio-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoRadioGroupPreviewComponent {
+  selected: unknown = 'comfortable';
+}
+```
 
 ### Description
 
@@ -517,7 +563,7 @@ export class ZardDemoRadioGroupReactiveFormsComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

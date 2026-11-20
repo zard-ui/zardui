@@ -17,6 +17,8 @@ npx zard-cli@latest add hover-card
 
 ### Manual
 
+**Add hover-card.component.ts**
+
 ```angular-ts
 import { Directionality, type Direction } from '@angular/cdk/bidi';
 import {
@@ -525,25 +527,19 @@ export class ZardHoverCardComponent {
 }
 ```
 
+**Add hover-card.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
 /** Base visual styles and placement-aware animations for hover card content. */
-export const hoverCardVariants = cva(
-  [
-    'z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none',
-    'origin-(--z-hover-card-transform-origin)',
-    'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
-    'data-[side=bottom]:slide-in-from-top-2',
-    'data-[side=left]:slide-in-from-right-2',
-    'data-[side=right]:slide-in-from-left-2',
-    'data-[side=top]:slide-in-from-bottom-2',
-  ].join(' '),
-);
+export const hoverCardVariants = cva('ring-foreground/10 bg-popover text-popover-foreground z-50 w-64 origin-(--z-hover-card-transform-origin) rounded-lg p-2.5 text-sm shadow-md ring-1 duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 outline-none');
 
 /** Variant properties accepted by the hover card style generator. */
 export type ZardHoverCardVariants = VariantProps<typeof hoverCardVariants>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './hover-card.component';
@@ -563,7 +559,7 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '@/shared/compone
 
 <ng-template #content>
   <z-hover-card>
-    The React Framework - created and maintained by @vercel.
+    The web framework that empowers developers - created and maintained by @angular.
   </z-hover-card>
 </ng-template>
 ```
@@ -577,6 +573,36 @@ trigger[zHoverCard]
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.component';
+
+/** Demonstrates the default hover card behavior and content composition. */
+@Component({
+  selector: 'z-demo-hover-card-preview',
+  imports: [ZardButtonComponent, ZardHoverCardComponent, ZardHoverCardDirective],
+  template: `
+    <button type="button" z-button zType="link" [zHoverCard]="content">Hover Here</button>
+
+    <ng-template #content>
+      <z-hover-card>
+        <div class="space-y-1">
+          <h4 class="text-sm font-semibold">Angular</h4>
+          <p class="text-sm">The web framework that empowers developers - created and maintained by @angular.</p>
+          <div class="text-muted-foreground text-xs">Released September 2016</div>
+        </div>
+      </z-hover-card>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoHoverCardPreviewComponent {}
+```
 
 ### Sides
 
@@ -729,7 +755,7 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.co
 export class ZardDemoHoverCardDelayComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 
@@ -864,7 +890,7 @@ Directive that opens rich content on hover or focus.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `[zContent]` | Hover card template (required) | `TemplateRef<void>` | `-` |
+| `[zHoverCard]` | Hover card template (required), bound on the trigger: `[zHoverCard]="content"` | `TemplateRef<void>` | `-` |
 | `[zPlacement]` | Side of the trigger; `inline-*` flips in RTL | `'top' \| 'bottom' \| 'left' \| 'right' \| 'inline-start' \| 'inline-end'` | `'bottom'` |
 | `[zOpenDelay]` | Open delay in ms | `number` | `700` |
 | `[zCloseDelay]` | Close delay in ms | `number` | `300` |

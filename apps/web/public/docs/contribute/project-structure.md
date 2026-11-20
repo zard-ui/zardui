@@ -13,7 +13,7 @@ The repository mixes hand-written source with committed build artifacts. Knowing
 
 The directories a contributor actually touches, annotated.
 
-Repository layout
+**Repository layout**
 
 ```
 zardui/
@@ -46,7 +46,7 @@ zardui/
 
 Every component follows the same shape. The generator creates all of it except the extra demos.
 
-Anatomy of a component folder
+**Anatomy of a component folder**
 
 ```
 libs/zard/src/lib/shared/components/button/

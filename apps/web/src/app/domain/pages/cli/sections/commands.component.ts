@@ -1,34 +1,41 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import {
-  BLOCK_0,
-  BLOCK_1,
-  BLOCK_2,
+  TABS_0,
+  TABS_1,
+  TABS_2,
   TABS_3,
-  BLOCK_4,
-  BLOCK_5,
-  BLOCK_6,
-  BLOCK_7,
-  BLOCK_8,
-  BLOCK_9,
-  BLOCK_10,
+  TABS_4,
+  TABS_5,
+  TABS_6,
+  TABS_7,
+  TABS_8,
+  TABS_9,
+  TABS_10,
+  TABS_11,
+  TABS_12,
+  TABS_13,
+  TABS_14,
+  TABS_15,
+  TABS_16,
+  TABS_17,
 } from '@generated/pages/cli/commands';
-import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
-import type { CodeBlockData, CodeTabData } from '@highlight/types';
+import type { CodeTabData } from '@highlight/types';
 
 @Component({
   selector: 'z-cli-commands-section',
-  imports: [CodeBlockComponent, CodeTabsComponent],
+  imports: [CodeTabsComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-semibold tracking-tight first:mt-0 lg:mt-20">Commands</h2>
 
-    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">init</h3>
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight" id="command-init">init</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Initialize your project and install dependencies.
     </p>
-    <z-code-block [data]="initUsage" />
+    <z-code-tabs [data]="initUsage" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Options:</strong>
@@ -36,6 +43,10 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-y, --yes</code>
       — Skip the confirmation prompt
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-interactive</code>
+      — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For
+      scripts and AI agents
       <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-c, --cwd &lt;cwd&gt;</code>
       — Working directory, defaults to the current one
@@ -70,8 +81,16 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zinc</code>
       ,
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">gray</code>
-      or
+      ,
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">slate</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">mauve</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">olive</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">mist</code>
+      or
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">taupe</code>
       <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--components-alias &lt;alias&gt;</code>
       ,
@@ -80,6 +99,27 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;/shared/components</code>
       and
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;/shared/utils</code>
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--rtl</code>
+      — The project reads right to left: records
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">"rtl": true</code>
+      and sets
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">dir="rtl"</code>
+      on
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&lt;html&gt;</code>
+      in
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">index.html</code>
+      .
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-rtl</code>
+      is the default
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--preset &lt;code&gt;</code>
+      — Apply a design preset (style, base color, theme, fonts, icons, radius, menu). Build one at
+      <a class="text-foreground underline underline-offset-4" routerLink="/create">zardui.com/create</a>
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--pointer</code>
+      — Use the pointer cursor on buttons. Only with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--preset</code>
     </p>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Every question the wizard asks has a flag. In a terminal they fill the answers in advance; headless (CI, pipes)
@@ -139,13 +179,41 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--yes</code>
       , because it overwrites your global CSS.
     </p>
-    <z-code-block [data]="initHeadless" />
+    <z-code-tabs [data]="initHeadless" />
 
-    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">add</h3>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <strong>With a preset:</strong>
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--preset</code>
+      configures a project that already exists with a whole design in one go — the style, base color, theme and chart
+      colors, fonts, icon library, radius and menu look. Any of the five project types accepts it, libraries included.
+      It writes the same
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
+      and theme tokens as a plain init, plus the font packages with their imports, the icon library's
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ng-icons</code>
+      package and the
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">preset</code>
+      key. It cannot be combined with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--base-color</code>
+      , since the preset already chooses it.
+    </p>
+    <z-code-tabs [data]="initPreset" />
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      A preset code starts with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">Z</code>
+      and is built on the
+      <a class="text-foreground underline underline-offset-4" routerLink="/create">create page</a>
+      . The CLI decodes it locally and rejects a malformed code, or one that comes from another tool, before it touches
+      a single file. Components you add afterwards are installed with the preset's icon library; components already in
+      the project keep their current look until you add them again with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--overwrite</code>
+      .
+    </p>
+
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight" id="command-add">add</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Add components to your project, resolving their dependencies.
     </p>
-    <z-code-block [data]="addUsage" />
+    <z-code-tabs [data]="addUsage" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Options:</strong>
@@ -153,6 +221,10 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-y, --yes</code>
       — Skip the confirmation prompt
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-interactive</code>
+      — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For
+      scripts and AI agents
       <br />
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-o, --overwrite</code>
       — Overwrite existing files
@@ -176,10 +248,10 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
     <z-code-tabs [data]="addExampleTabs" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">Several at once:</p>
-    <z-code-block [data]="addMultiple" />
+    <z-code-tabs [data]="addMultiple" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">Everything:</p>
-    <z-code-block [data]="addAll" />
+    <z-code-tabs [data]="addAll" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       With no arguments, a searchable list opens — pick with
@@ -190,7 +262,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--all</code>
       , since there is no list to pick from.
     </p>
-    <z-code-block [data]="addInteractive" />
+    <z-code-tabs [data]="addInteractive" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Dark mode:</strong>
@@ -204,7 +276,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--index-html</code>
       or that suggested path.
     </p>
-    <z-code-block [data]="addDarkMode" />
+    <z-code-tabs [data]="addDarkMode" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <strong>Blocks:</strong>
@@ -212,7 +284,7 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       component. It carries the components it uses, so running it on a project that has none of them still leaves you
       with a block that compiles.
     </p>
-    <z-code-block [data]="addBlock" />
+    <z-code-tabs [data]="addBlock" />
 
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Each block is written to a directory of its own, under the
@@ -225,9 +297,257 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--path</code>
       moves them elsewhere, still one directory per block, and the components they need follow along.
     </p>
-    <z-code-block [data]="addBlockPath" />
+    <z-code-tabs [data]="addBlockPath" />
 
-    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Global options</h3>
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight" id="command-create">create</h3>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Create a new project with the framework's own generator, already configured with a design preset. It is the
+      one-command alternative to creating the project yourself and then running
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">init</code>
+      .
+    </p>
+    <z-code-tabs [data]="createUsage" />
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <strong>Options:</strong>
+    </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">[name]</code>
+      — The name of the project and of the directory it is created in: lowercase letters, digits and dashes, starting
+      with a letter
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--template &lt;template&gt;</code>
+      — The project to scaffold:
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">angular</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">nx</code>
+      or
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">analog</code>
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--preset &lt;code&gt;</code>
+      — The design preset. Build one at
+      <a class="text-foreground underline underline-offset-4" routerLink="/create">zardui.com/create</a>
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--pointer</code>
+      — Use the pointer cursor on buttons
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--rtl</code>
+      — The project reads right to left.
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-rtl</code>
+      is the default
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--package-manager &lt;manager&gt;</code>
+      —
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">npm</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">pnpm</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">yarn</code>
+      or
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">bun</code>
+      . Defaults to the one that ran the CLI, else npm
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-c, --cwd &lt;cwd&gt;</code>
+      — The directory the project is created in, defaults to the current one
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-y, --yes</code>
+      — Skip confirmations and use the default design when no preset is given
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-interactive</code>
+      — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For
+      scripts and AI agents
+    </p>
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <strong>What it does:</strong>
+    </p>
+    <ul class="text-muted-foreground mt-4 list-disc space-y-2 pl-6 text-base leading-relaxed">
+      <li>
+        scaffolds the project:
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ng new</code>
+        for Angular,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">create-nx-workspace</code>
+        plus the Angular application generator for Nx,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">create-analog</code>
+        for Analog — every prompt answered by a flag, with plain CSS styles
+      </li>
+      <li>
+        runs
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">init --preset</code>
+        on the new project, as the type that matches the template
+      </li>
+      <li>
+        installs
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">button</code>
+        , so there is a component to start from
+      </li>
+    </ul>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">create</code>
+      only creates applications. For a library, or a project that already exists, use
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">init --preset</code>
+      .
+    </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <strong>Interactive:</strong>
+      with no flags, the command asks for the template first — the cursor starts on the first item, it is never chosen
+      for you — then the name, then the preset. The preset question lists the default design and a curated set;
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">Custom…</code>
+      prints the link to the create page so you can design one and paste its code.
+    </p>
+    <z-code-tabs [data]="createInteractive" />
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Whatever you pass as a flag is not asked again, so a command copied from the create page runs without a single
+      question:
+    </p>
+    <z-code-tabs [data]="createFlags" />
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <strong>Non-interactive use:</strong>
+      outside a terminal — CI, pipes — nobody can be asked, so the name and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--template</code>
+      are always required, and the preset must come from
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--preset</code>
+      or from
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--yes</code>
+      , which accepts the default design. Errors name the flag or the preset that is wrong.
+    </p>
+    <z-code-tabs [data]="createHeadless" />
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <strong>Safe by design:</strong>
+      every flag, the preset, the project name and the registry are checked before anything is written. A name that
+      already exists in the target directory is refused —
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">create</code>
+      never writes into an existing directory — and an unreachable registry stops it before the scaffold starts, so a
+      failure leaves no half-created project. If configuring fails after the scaffold, the project is kept and the
+      message tells you how to resume with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">init --preset</code>
+      .
+    </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <strong>Right to left:</strong>
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--rtl</code>
+      sets
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">dir="rtl"</code>
+      on
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&lt;html&gt;</code>
+      and nothing else.
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">lang</code>
+      stays
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">"en"</code>
+      , because direction does not say which language the content is in — set it yourself to the right one (
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ar</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">he</code>
+      ,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">fa</code>
+      …).
+    </p>
+
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight" id="command-apply">apply</h3>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Apply a design preset to a project that is already initialized, without running init again. This is the command to
+      use on an existing project: init rewrites your global CSS, apply replaces only the regions zard-cli manages. It
+      never prompts and never rewrites a component.
+    </p>
+    <z-code-tabs [data]="applyUsage" />
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <strong>Options:</strong>
+    </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--preset &lt;code&gt;</code>
+      — The preset to apply (required)
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--only &lt;parts&gt;</code>
+      — Apply only part of it:
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">theme</code>
+      or
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">font</code>
+      , comma-separated for both. Defaults to all of it
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--pointer</code>
+      — Add the pointer cursor rule for buttons to the theme
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-pointer</code>
+      — Remove it
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-c, --cwd &lt;cwd&gt;</code>
+      — Working directory, defaults to the current one
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-y, --yes</code>
+      — Accepted for scripts; apply never prompts
+      <br />
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-interactive</code>
+      — Accepted like on every command; apply never prompts
+    </p>
+
+    <ul class="text-muted-foreground mt-4 list-disc space-y-2 pl-6 text-base leading-relaxed">
+      <li>
+        <strong>Full preset</strong>
+        (no
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--only</code>
+        ) — theme tokens, fonts, icon library and the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">style</code>
+        ,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">icons</code>
+        ,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">menuColor</code>
+        ,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">menuAppearance</code>
+        ,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">menuAccent</code>
+        and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">preset</code>
+        keys of
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
+      </li>
+      <li>
+        <strong>theme</strong>
+        — the base color, theme and chart colors, radius, bold or subtle menu accent and base layer in your stylesheet,
+        and the matching keys in
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
+        . The menu color and appearance (inverted, translucent) are written into the components when they are added, so
+        they belong to the full preset and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--only theme</code>
+        leaves them alone
+      </li>
+      <li>
+        <strong>font</strong>
+        — the font packages, their imports and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--font-sans</code>
+        /
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--font-heading</code>
+      </li>
+    </ul>
+    <z-code-tabs [data]="applyExamples" />
+
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Everything outside the regions zard-cli manages survives byte for byte: your own rules and variables, including
+      your overrides of theme tokens such as
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--background</code>
+      , plus the aliases and every other key of
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
+      . A stylesheet written by an older zard-cli, with no markers, has only its generated theme replaced.
+    </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      Components already in your project keep their current style, icons and menu look. When the preset changes any of
+      those, a full apply prints the exact
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">add … --overwrite</code>
+      command for the components and blocks you have installed (it replaces their files, so commit your own edits
+      first), and the font and icon packages of the previous design that nothing uses anymore, with the command to
+      remove them.
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--pointer</code>
+      and
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--no-pointer</code>
+      belong to the theme, so combining them with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--only font</code>
+      is refused.
+    </p>
+
+    <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight" id="command-global-options">Global options</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-v, --version</code>
       — Print the version
@@ -237,19 +557,26 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ZARD_DEBUG</code>
       environment variable.
     </p>
-    <z-code-block [data]="globalOptions" />
+    <z-code-tabs [data]="globalOptions" />
   `,
 })
 export class CliCommandsSectionComponent {
-  readonly initUsage: CodeBlockData = BLOCK_0;
-  readonly initHeadless: CodeBlockData = BLOCK_1;
-  readonly addUsage: CodeBlockData = BLOCK_2;
+  readonly initUsage: CodeTabData = TABS_0;
+  readonly initHeadless: CodeTabData = TABS_1;
+  readonly addUsage: CodeTabData = TABS_2;
   readonly addExampleTabs: CodeTabData = TABS_3;
-  readonly addMultiple: CodeBlockData = BLOCK_4;
-  readonly addAll: CodeBlockData = BLOCK_5;
-  readonly addInteractive: CodeBlockData = BLOCK_6;
-  readonly addDarkMode: CodeBlockData = BLOCK_7;
-  readonly globalOptions: CodeBlockData = BLOCK_8;
-  readonly addBlock: CodeBlockData = BLOCK_9;
-  readonly addBlockPath: CodeBlockData = BLOCK_10;
+  readonly addMultiple: CodeTabData = TABS_4;
+  readonly addAll: CodeTabData = TABS_5;
+  readonly addInteractive: CodeTabData = TABS_6;
+  readonly addDarkMode: CodeTabData = TABS_7;
+  readonly globalOptions: CodeTabData = TABS_8;
+  readonly addBlock: CodeTabData = TABS_9;
+  readonly addBlockPath: CodeTabData = TABS_10;
+  readonly createUsage: CodeTabData = TABS_11;
+  readonly createInteractive: CodeTabData = TABS_12;
+  readonly createFlags: CodeTabData = TABS_13;
+  readonly createHeadless: CodeTabData = TABS_14;
+  readonly initPreset: CodeTabData = TABS_15;
+  readonly applyUsage: CodeTabData = TABS_16;
+  readonly applyExamples: CodeTabData = TABS_17;
 }

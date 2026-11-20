@@ -65,7 +65,7 @@ describe('attachment composition', () => {
     }
     expect(screen.getByRole('button', { name: 'Remove' })).toHaveAttribute('data-size', 'icon-xs');
     expect(root).toHaveClass('p-8');
-    expect(root).not.toHaveClass('p-3');
+    expect(root).not.toHaveClass('p-2');
   });
 
   it('updates all 60 state/size/orientation/media combinations and clears stale busy styling', async () => {
@@ -73,13 +73,13 @@ describe('attachment composition', () => {
     const root = container.querySelector('z-attachment')!;
     const title = container.querySelector('z-attachment-title')!;
     const stateClasses = {
-      idle: 'border-border',
-      uploading: 'bg-muted/50',
-      processing: 'bg-muted/50',
-      error: 'text-destructive',
-      done: 'border-border',
+      idle: 'data-[state=idle]:border-dashed',
+      uploading: 'border',
+      processing: 'border',
+      error: 'data-[state=error]:border-destructive/30',
+      done: 'border',
     };
-    const sizeClasses = { default: 'gap-3', sm: 'gap-2', xs: 'gap-1.5' };
+    const sizeClasses = { default: 'gap-2', sm: 'gap-2.5', xs: 'gap-1.5' };
     for (const state of ['uploading', 'processing', 'error', 'idle', 'done'] as const) {
       fixture.componentInstance.state.set(state);
       for (const size of ['default', 'sm', 'xs'] as const) {
@@ -95,11 +95,11 @@ describe('attachment composition', () => {
             expect(root).toHaveClass(
               stateClasses[state],
               sizeClasses[size],
-              orientation === 'vertical' ? 'flex-col' : 'flex-row',
+              orientation === 'vertical' ? 'flex-col' : 'items-center',
             );
             expect(container.querySelector('z-attachment-media')).toHaveAttribute('data-variant', media);
             expect(container.querySelector('z-attachment-media')).toHaveClass(
-              media === 'image' ? 'size-16' : 'size-10',
+              media === 'image' ? 'opacity-60' : 'w-10',
             );
             expect(title.classList.contains('shimmer')).toBe(state === 'uploading' || state === 'processing');
             expect(root.getAttribute('aria-busy')).toBe(
@@ -291,7 +291,6 @@ describe('attachment native interactions', () => {
     fireEvent.click(container.querySelector('z-attachment-title')!);
     expect(fixture.componentInstance.previews).toBe(1);
     expect(screen.getByRole('button', { name: 'Preview' })).toHaveClass('z-10');
-    expect(screen.getByRole('button', { name: 'Remove' })).toHaveClass('z-20');
     expect(container.querySelector('z-attachment-actions')).toHaveClass('z-20');
   });
 
@@ -325,7 +324,7 @@ describe('attachment group', () => {
     });
     expect(group).toHaveAttribute('tabindex', '0');
     expect(group).toHaveClass('overflow-x-auto', 'snap-x', 'snap-mandatory');
-    expect(group.querySelector('z-attachment')).toHaveClass('snap-start');
+    expect(group).toHaveClass('*:data-[slot=attachment]:snap-start');
     expect(fireEvent.keyDown(group, { key: 'ArrowRight' })).toBe(false);
     expect(scrollBy).toHaveBeenLastCalledWith({ left: 300, behavior: 'auto' });
     expect(fireEvent.keyDown(group, { key: 'ArrowLeft' })).toBe(false);

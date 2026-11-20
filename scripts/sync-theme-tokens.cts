@@ -26,6 +26,10 @@ const LABELS: Record<string, string> = {
   zinc: 'Zinc',
   gray: 'Gray',
   slate: 'Slate',
+  mauve: 'Mauve',
+  olive: 'Olive',
+  mist: 'Mist',
+  taupe: 'Taupe',
 };
 
 /** The declarations inside one CSS block, in source order. */
@@ -81,7 +85,7 @@ ${renderTokens(dark, '      ')}
 const output = `import type { BaseColorTheme } from '../models/theming.model';
 
 /**
- * The five base colors \`zard-cli init\` can write.
+ * The base colors \`zard-cli init\` can write.
  *
  * GENERATED — do not edit. Run \`npm run generate:theme-tokens\` after changing
  * \`packages/cli/src/core/themes/theme-definitions.ts\`; the build regenerates it too.

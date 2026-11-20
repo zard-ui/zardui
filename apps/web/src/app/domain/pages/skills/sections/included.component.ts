@@ -51,8 +51,8 @@ import { RouterLink } from '@angular/router';
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">MCP server</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      The nine tools with their inputs, how to connect the server in each client, and the two environment variables that
-      point it at another registry. Mostly a pointer to
+      The sixteen tools with their inputs, how to connect the server in each client, and the two environment variables
+      that point it at another registry. Mostly a pointer to
       <a class="text-foreground underline underline-offset-4" routerLink="/docs/mcp">the same thing documented here</a>
       , so the assistant knows the tools exist and reaches for them before guessing at an API.
     </p>

@@ -1446,7 +1446,7 @@ describe('ZardQuestionnaireComponent', () => {
     expect(item.classList).toContain('gap-4');
     expect(itemHost.classList).toContain('contents');
     expect(title.classList).toContain('font-medium');
-    expect(title.classList).toContain('text-base/snug');
+    expect(title.classList).toContain('leading-snug');
     expect(description.classList).toContain('text-muted-foreground');
     expect(description.classList).toContain('text-sm');
     expect(choices.classList).toContain('grid');
@@ -1490,7 +1490,7 @@ describe('ZardQuestionnaireComponent', () => {
     expect(itemClasses).toContain('gap-6');
     expect(itemClasses).not.toContain('gap-4');
     expect(classListFor('questionnaire-title')).toContain('text-lg');
-    expect(classListFor('questionnaire-title')).not.toContain('text-base/snug');
+    expect(classListFor('questionnaire-title')).not.toContain('text-base');
     expect(classListFor('questionnaire-description')).toContain('text-base');
     expect(classListFor('questionnaire-description')).not.toContain('text-sm');
     expect(classListFor('questionnaire-choices')).toContain('gap-3');

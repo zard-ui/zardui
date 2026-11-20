@@ -17,6 +17,8 @@ npx zard-cli@latest add command
 
 ### Manual
 
+**Add command.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -97,6 +99,7 @@ export interface ZardCommandConfig {
   host: {
     'data-slot': 'command',
     role: 'combobox',
+    'aria-controls': 'command-list',
     'aria-haspopup': 'listbox',
     '[attr.aria-expanded]': 'true',
     '(keydown.{arrowdown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',
@@ -356,29 +359,19 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
 }
 ```
 
+**Add command.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const commandVariants = cva(
-  'flex size-full flex-col overflow-hidden rounded-xl bg-popover p-1 text-popover-foreground border shadow-md',
-);
+export const commandVariants = cva('bg-popover text-popover-foreground flex size-full flex-col overflow-hidden rounded-xl border p-1 shadow-md');
 
-export const commandListVariants = cva(
-  'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none p-1',
-);
+export const commandListVariants = cva('no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none');
 
-export const commandGroupVariants = cva(
-  'overflow-hidden text-foreground **:data-[slot=command-group-heading]:px-2 **:data-[slot=command-group-heading]:py-1.5 **:data-[slot=command-group-heading]:text-xs **:data-[slot=command-group-heading]:font-medium **:data-[slot=command-group-heading]:text-muted-foreground',
-);
+export const commandGroupVariants = cva('text-foreground overflow-hidden p-1 **:data-[slot=command-group-heading]:text-muted-foreground **:data-[slot=command-group-heading]:px-2 **:data-[slot=command-group-heading]:py-1.5 **:data-[slot=command-group-heading]:text-xs **:data-[slot=command-group-heading]:font-medium');
 
 export const commandItemVariants = cva(
-  [
-    'group/command-item relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none transition-colors',
-    'data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50',
-    'data-selected:bg-muted data-selected:text-accent-foreground',
-    "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-    'data-selected:*:[svg]:text-accent-foreground',
-  ],
+  "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden transition-colors select-none data-selected:bg-muted data-selected:text-foreground data-selected:*:[svg]:text-foreground in-data-[slot=dialog-content]:rounded-lg! [&_svg:not([class*='size-'])]:size-4 group/command-item outline-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -387,8 +380,7 @@ export const commandItemVariants = cva(
         // destructive button and dropdown item. It used to be a solid
         // `bg-destructive` with `text-destructive-foreground`, a token no theme
         // ever defined, so the text stayed dark on red.
-        destructive:
-          'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
+        destructive: 'text-destructive data-selected:bg-destructive/10 data-selected:text-destructive dark:data-selected:bg-destructive/20',
       },
     },
     defaultVariants: {
@@ -397,14 +389,14 @@ export const commandItemVariants = cva(
   },
 );
 
-export const commandSeparatorVariants = cva('-mx-1 my-1 h-px bg-border');
+export const commandSeparatorVariants = cva('bg-border -mx-1 h-px');
 
-export const commandShortcutVariants = cva(
-  'ms-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-accent-foreground',
-);
+export const commandShortcutVariants = cva('text-muted-foreground ms-auto text-xs tracking-widest group-data-selected/command-item:text-foreground');
 
 export type ZardCommandItemVariants = NonNullable<VariantProps<typeof commandItemVariants>['variant']>;
 ```
+
+**Add command-divider.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -452,6 +444,8 @@ export class ZardCommandDividerComponent {
 }
 ```
 
+**Add command-input.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -480,7 +474,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
   template: `
     <div data-slot="command-input-wrapper" class="p-1 pb-0">
       <z-input-group
-        class="border-input/30 has-[input:focus-visible]:border-input/30! shadow-none! has-[input:focus-visible]:ring-0!"
+        class="border-input/30 shadow-none! has-[input:focus-visible]:border-input/30! has-[input:focus-visible]:ring-0!"
       >
         <z-input-group-addon>
           <ng-icon name="lucideSearch" class="size-4! shrink-0 opacity-50" />
@@ -585,6 +579,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
 }
 ```
 
+**Add command-list.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -610,6 +606,8 @@ export class ZardCommandListComponent {
   protected readonly classes = computed(() => mergeClasses(commandListVariants(), this.class()));
 }
 ```
+
+**Add command-option-group.component.ts**
 
 ```angular-ts
 import {
@@ -693,6 +691,8 @@ export class ZardCommandOptionGroupComponent implements ZardCommandOptionGroup {
   }
 }
 ```
+
+**Add command-option.component.ts**
 
 ```angular-ts
 import {
@@ -848,6 +848,8 @@ export class ZardCommandOptionComponent {
 }
 ```
 
+**Add command.imports.ts**
+
 ```angular-ts
 import { ZardCommandDividerComponent } from '@/shared/components/command/command-divider.component';
 import { ZardCommandInputComponent } from '@/shared/components/command/command-input.component';
@@ -865,6 +867,8 @@ export const ZardCommandImports = [
   ZardCommandDividerComponent,
 ] as const;
 ```
+
+**Add command.tokens.ts**
 
 ```angular-ts
 import type { Signal, WritableSignal } from '@angular/core';
@@ -904,6 +908,8 @@ export abstract class ZardCommand {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './command.component';
 export * from './command-input.component';
@@ -937,6 +943,65 @@ import { ZardCommandImports } from '@/shared/components/command/command.imports'
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { provideIcons } from '@ng-icons/core';
+import {
+  lucideCalculator,
+  lucideCalendar,
+  lucideCreditCard,
+  lucideSettings,
+  lucideSmile,
+  lucideUser,
+} from '@ng-icons/lucide';
+
+import { ZardCommandImports } from '@/shared/components/command/command.imports';
+
+@Component({
+  selector: 'z-demo-command-preview',
+  imports: [ZardCommandImports],
+  template: `
+    <z-command class="min-w-sm" #cmd="zCommand">
+      <z-command-input placeholder="Type a command or search..." />
+      <z-command-list>
+        @if (cmd.isEmpty()) {
+          <div class="py-6 text-center text-sm">No results found.</div>
+        }
+
+        <z-command-option-group zLabel="Suggestions">
+          <z-command-option zLabel="Calendar" zValue="calendar" zIcon="lucideCalendar" />
+          <z-command-option zLabel="Search Emoji" zValue="emoji" zIcon="lucideSmile" />
+          <z-command-option zLabel="Calculator" zValue="calculator" zIcon="lucideCalculator" [zDisabled]="true" />
+        </z-command-option-group>
+
+        <z-command-divider />
+
+        <z-command-option-group zLabel="Settings">
+          <z-command-option zLabel="Profile" zValue="profile" zIcon="lucideUser" zShortcut="⌘P" />
+          <z-command-option zLabel="Billing" zValue="billing" zIcon="lucideCreditCard" zShortcut="⌘B" />
+          <z-command-option zLabel="Settings" zValue="settings" zIcon="lucideSettings" zShortcut="⌘S" />
+        </z-command-option-group>
+      </z-command-list>
+    </z-command>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideCalendar,
+      lucideSmile,
+      lucideCalculator,
+      lucideUser,
+      lucideCreditCard,
+      lucideSettings,
+    }),
+  ],
+})
+export class ZardDemoCommandPreviewComponent {}
+```
 
 ### Basic
 
@@ -1360,7 +1425,7 @@ export class ZardDemoCommandScrollableComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

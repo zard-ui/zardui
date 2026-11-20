@@ -34,7 +34,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         z-button
         zType="ghost"
         zSize="sm"
-        class="data-[state=open]:bg-accent -ms-2.5 h-8"
+        class="data-[state=open]:bg-accent cn-data-table-column-header-trigger"
         z-dropdown
         [zDropdownMenu]="menu"
       >

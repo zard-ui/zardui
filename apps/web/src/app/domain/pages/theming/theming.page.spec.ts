@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 
+import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
+
 import { BASE_COLORS } from './data/base-colors.data';
 import { THEME_TOKENS } from './data/tokens.data';
 import { ThemingPage } from './theming.page';
@@ -31,9 +33,11 @@ describe('ThemingPage', () => {
 
   describe('navigation', () => {
     const sectionIds = () =>
+      // The spied value, not the host's id: z-doc-heading keeps its id on the inner header.
       fixture.debugElement
-        .queryAll(By.css('[scrollSpyItem]'))
-        .map(el => (el.nativeElement as HTMLElement).getAttribute('id'));
+        .queryAll(By.directive(ScrollSpyItemDirective))
+        .map(el => el.injector.get(ScrollSpyItemDirective).scrollSpyItem())
+        .filter(Boolean);
 
     it('has a navigation entry for every section in the template', () => {
       const configured = component.navigationConfig.items.map(item => item.id);

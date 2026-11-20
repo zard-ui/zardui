@@ -13,7 +13,8 @@
     },
     {
       "name": "pagination.variants.ts",
-      "content": "import { cva } from 'class-variance-authority';\n\nexport const paginationContentVariants = cva('flex items-center gap-0.5');\n\nexport const paginationPreviousVariants = cva('ps-1.5!');\n\nexport const paginationNextVariants = cva('pe-1.5!');\n\nexport const paginationEllipsisVariants = cva(\n  'flex size-8 items-center justify-center [&_svg:not([class*=\"size-\"])]:size-4',\n);\n\nexport const paginationVariants = cva('mx-auto flex w-full justify-center');\n"
+      "content": "import { cva } from 'class-variance-authority';\n\nexport const paginationContentVariants = cva('flex items-center gap-0.5');\n\nexport const paginationPreviousVariants = cva('ps-1.5!');\n\nexport const paginationNextVariants = cva('pe-1.5!');\n\nexport const paginationEllipsisVariants = cva('flex size-8 items-center justify-center [&_svg:not([class*=\"size-\"])]:size-4');\n\nexport const paginationVariants = cva('mx-auto flex w-full justify-center');\n",
+      "styled": "import { cva } from 'class-variance-authority';\n\nexport const paginationContentVariants = cva('cn-pagination-content');\n\nexport const paginationPreviousVariants = cva('cn-pagination-previous');\n\nexport const paginationNextVariants = cva('cn-pagination-next');\n\nexport const paginationEllipsisVariants = cva('cn-pagination-ellipsis');\n\nexport const paginationVariants = cva('cn-pagination');\n"
     },
     {
       "name": "index.ts",

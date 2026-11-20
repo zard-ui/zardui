@@ -76,6 +76,7 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
             [calendarDays]="month.days"
             [disabled]="disabled()"
             [zShowOutsideDays]="zShowOutsideDays()"
+            [zShowWeekNumbers]="zShowWeekNumbers()"
             [zMonthIndex]="i"
             [zDayTemplate]="zDayTemplate()"
             (dateSelect)="onDateSelect($event)"
@@ -145,6 +146,10 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
   readonly zDisabledDates = input<Date[]>([]);
   readonly zNumberOfMonths = input(1, { transform: numberAttribute });
+  /** Adds a leading column with the number of each week. */
+  readonly zShowWeekNumbers = input(false, { transform: booleanAttribute });
+  /** Always render six weeks per month, so the calendar keeps its height from month to month. */
+  readonly zFixedWeeks = input(false, { transform: booleanAttribute });
   /**
    * BCP 47 locale for month names, weekday names and labels (for example `ar`, `he`, `fr-FR`).
    * Falls back to the application locale of `ZardI18nService`.
@@ -236,6 +241,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
           disabled: this.disabled(),
           disabledDates: this.zDisabledDates(),
           weekStartsOn,
+          fixedWeeks: this.zFixedWeeks(),
         }),
       };
     });

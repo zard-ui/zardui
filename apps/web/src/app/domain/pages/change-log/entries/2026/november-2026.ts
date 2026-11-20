@@ -7,6 +7,8 @@ export const NOVEMBER_2026: ChangelogEntry = {
     monthNumber: 11,
     date: new Date(2026, 10, 1),
     id: '11-2026',
+    slug: '2026-11-ai-elements',
+    title: 'Data Table, Map and AI Elements',
   },
 
   overview:
@@ -17,13 +19,11 @@ export const NOVEMBER_2026: ChangelogEntry = {
       title: 'AI Elements',
       description:
         'A new docs section with 21 ready-made patterns for chat and agent interfaces, such as reasoning, tool calls, plans, sources and the prompt input. Each one is composed from Zard components and lists the ones it needs.',
-      icon: 'code',
     },
     {
       title: 'Map',
       description:
         'An interactive MapLibre map with markers, popups, routes, clusters and heatmaps, whose basemap follows your light or dark theme. It needs a short setup for the MapLibre assets, covered on its page.',
-      icon: 'package',
       code: 'npx zard-cli@latest add map',
     },
   ],

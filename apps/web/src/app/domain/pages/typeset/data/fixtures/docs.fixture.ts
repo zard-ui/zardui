@@ -14,7 +14,7 @@ export const DOCS_FIXTURE = `
 <li><strong>Managed Signals</strong>: The function manages the signals for input, messages, status, error and more for you.</li>
 <li><strong>Seamless Integration</strong>: Easily integrate your chat AI into any design or layout with minimal effort.</li>
 </ul>
-<p>In this guide, you will learn how to use <code>injectChat</code> to create a chatbot application with real-time message streaming. Check out our <a href="/docs/chatbot-tool-usage">chatbot with tools guide</a> to learn how to use tools in your chatbot.</p>
+<p>In this guide, you will learn how to use <code>injectChat</code> to create a chatbot application with real-time message streaming. Check out our <a href="https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-tool-usage">chatbot with tools guide</a> to learn how to use tools in your chatbot.</p>
 <h2>Example</h2>
 <p>The request flow works like this:</p>
 <ol>

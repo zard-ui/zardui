@@ -93,6 +93,108 @@ describe('getConfig', () => {
     expect(mockValidateRegistryUrl).not.toHaveBeenCalled();
   });
 
+  describe('styles and presets', () => {
+    async function load(json: object) {
+      mockAccess.mockResolvedValueOnce(undefined);
+      mockReadFile.mockResolvedValueOnce(JSON.stringify(json) as any);
+      return getConfig('/project');
+    }
+
+    it.each(['css', 'vega', 'nova', 'maia', 'lyra', 'mira', 'luma', 'sera', 'rhea'])(
+      'should accept style "%s"',
+      async style => {
+        expect((await load({ style }))!.style).toBe(style);
+      },
+    );
+
+    it('should reject a style that does not exist', async () => {
+      await expect(load({ style: 'brutalist' })).rejects.toThrow(ConfigError);
+    });
+
+    it('should keep reading a legacy file as css, with no menu settings or preset', async () => {
+      const result = await load({ icons: 'lucide' });
+
+      expect(result!.style).toBe('css');
+      expect(result!.menuColor).toBeUndefined();
+      expect(result!.preset).toBeUndefined();
+    });
+
+    it('should read the menu settings and the preset a preset init writes', async () => {
+      const result = await load({
+        style: 'lyra',
+        icons: 'phosphor',
+        menuColor: 'inverted',
+        menuAppearance: 'translucent',
+        menuAccent: 'subtle',
+        preset: 'Z6KtfCaQt',
+      });
+
+      expect(result).toMatchObject({
+        style: 'lyra',
+        icons: 'phosphor',
+        menuColor: 'inverted',
+        menuAppearance: 'translucent',
+        preset: 'Z6KtfCaQt',
+      });
+    });
+
+    it('should not read the preset code: one from a newer CLI must not break add', async () => {
+      expect((await load({ preset: 'Zzzzzzzzzz' }))!.preset).toBe('Zzzzzzzzzz');
+    });
+
+    it('should reject a menu setting that does not exist', async () => {
+      await expect(load({ menuAccent: 'loud' })).rejects.toThrow(ConfigError);
+    });
+
+    describe('values from a newer CLI', () => {
+      it('should name the field and the value, and suggest updating, for an unknown style', async () => {
+        const error = await load({ style: 'brutalist' }).catch(e => e);
+
+        expect(error).toBeInstanceOf(ConfigError);
+        expect(error.message).toContain('"style" is "brutalist"');
+        expect(error.message).toContain('nova');
+        expect(error.message).toContain('npx zard-cli@latest');
+      });
+
+      it.each([
+        ['menuColor', 'neon'],
+        ['menuAppearance', 'frosted'],
+        ['menuAccent', 'loud'],
+        ['projectType', 'astro'],
+      ])('should name %s and suggest updating for the unknown value "%s"', async (field, value) => {
+        const error = await load({ [field]: value }).catch(e => e);
+
+        expect(error.message).toContain(`"${field}" is "${value}"`);
+        expect(error.message).toContain('npx zard-cli@latest');
+      });
+
+      it('should not suggest updating for a value that cannot be a newer id', async () => {
+        const error = await load({ style: 'Not An Id!' }).catch(e => e);
+
+        expect(error.message).toContain('"style" is "Not An Id!"');
+        expect(error.message).not.toContain('zard-cli@latest');
+      });
+
+      it('should not suggest updating for a wrong type, and still name the field', async () => {
+        const error = await load({ rtl: 'yes' }).catch(e => e);
+
+        expect(error.message).toContain('"rtl"');
+        expect(error.message).not.toContain('zard-cli@latest');
+      });
+
+      it('should name every offending field', async () => {
+        const error = await load({ style: 'brutalist', menuAccent: 'loud' }).catch(e => e);
+
+        expect(error.message).toContain('"style"');
+        expect(error.message).toContain('"menuAccent"');
+      });
+
+      it('should ignore fields it does not know instead of failing', async () => {
+        expect((await load({ style: 'nova', futureThing: { a: 1 } }))!.style).toBe('nova');
+      });
+    });
+  });
+
   it('should re-throw ConfigError from validateRegistryUrl', async () => {
     mockAccess.mockResolvedValue(undefined);
     mockReadFile.mockResolvedValue(

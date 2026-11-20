@@ -23,6 +23,8 @@ npx zard-cli@latest add sidebar
 
 ### Manual
 
+**Add sidebar.component.ts**
+
 ```angular-ts
 import { A11yModule } from '@angular/cdk/a11y';
 import { NgTemplateOutlet } from '@angular/common';
@@ -325,84 +327,70 @@ export class ZardSidebarInsetComponent {
 }
 ```
 
+**Add sidebar.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const sidebarWrapperVariants = cva(
-  'group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar',
-);
+export const sidebarWrapperVariants = cva('flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar group/sidebar-wrapper');
 
 /** `collapsible="none"` — a plain, always-visible column. */
-export const sidebarNoneVariants = cva('flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground');
+export const sidebarNoneVariants = cva('bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col');
 
 /** The desktop wrapper. Carries `group` and `peer`, so it has to sit on the host element. */
-export const sidebarRootVariants = cva('group peer hidden text-sidebar-foreground md:block');
+export const sidebarRootVariants = cva('text-sidebar-foreground hidden md:block group peer');
 
-export const sidebarGapVariants = cva(
-  'relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear group-data-[collapsible=offcanvas]:w-0 group-data-[side=right]:rotate-180',
-  {
-    variants: {
-      zVariant: {
-        sidebar: 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',
-        floating: 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]',
-        inset: 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]',
-      },
-    },
-    defaultVariants: {
-      zVariant: 'sidebar',
+export const sidebarGapVariants = cva('relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear group-data-[collapsible=offcanvas]:w-0 group-data-[side=right]:rotate-180', {
+  variants: {
+    zVariant: {
+      sidebar: 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',
+      floating: 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]',
+      inset: 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]',
     },
   },
-);
+  defaultVariants: {
+    zVariant: 'sidebar',
+  },
+});
 
-export const sidebarContainerVariants = cva(
-  'fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex',
-  {
-    variants: {
-      zSide: {
-        left: 'left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)',
-        right: 'right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)',
-      },
-      zVariant: {
-        sidebar:
-          'group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l',
-        floating: 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
-        inset: 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
-      },
+export const sidebarContainerVariants = cva('fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex', {
+  variants: {
+    zSide: {
+      left: 'left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)',
+      right: 'right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)',
     },
-    defaultVariants: {
-      zSide: 'left',
-      zVariant: 'sidebar',
+    zVariant: {
+      sidebar: 'group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l',
+      floating: 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
+      inset: 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]',
     },
   },
-);
+  defaultVariants: {
+    zSide: 'left',
+    zVariant: 'sidebar',
+  },
+});
 
-export const sidebarInnerVariants = cva(
-  'flex size-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm',
-);
+export const sidebarInnerVariants = cva('bg-sidebar flex size-full flex-col group-data-[variant=floating]:ring-sidebar-border group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:ring-1');
 
 /**
  * Mobile drawer — replaces shadcn's `Sheet`, which is imperative in Zard. Both parts stay mounted
  * and animate off `data-state`, so the drawer slides out as well as in; `inert` keeps the closed
  * drawer out of the tab order and the accessibility tree.
  */
-export const sidebarMobileBackdropVariants = cva(
-  'fixed inset-0 z-50 bg-black/50 transition-opacity duration-150 ease-in-out data-closed:pointer-events-none data-closed:opacity-0 data-open:opacity-100',
-);
+export const sidebarMobileBackdropVariants = cva('fixed inset-0 z-50 bg-black/50 transition-opacity duration-150 ease-in-out data-closed:pointer-events-none data-closed:opacity-0 data-open:opacity-100');
 
-export const sidebarMobileVariants = cva(
-  'fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) flex-col bg-sidebar p-0 text-sidebar-foreground shadow-lg transition-transform ease-in-out data-closed:duration-300 data-open:duration-500',
-  {
-    variants: {
-      zSide: {
-        left: 'left-0 data-closed:-translate-x-full',
-        right: 'right-0 data-closed:translate-x-full',
-      },
-    },
-    defaultVariants: {
-      zSide: 'left',
+export const sidebarMobileVariants = cva('bg-sidebar text-sidebar-foreground fixed inset-y-0 z-50 flex h-full w-(--sidebar-width) flex-col p-0 shadow-lg transition-transform ease-in-out data-closed:duration-300 data-open:duration-500', {
+  variants: {
+    zSide: {
+      left: 'left-0 data-closed:-translate-x-full',
+      right: 'right-0 data-closed:translate-x-full',
     },
   },
-);
+  defaultVariants: {
+    zSide: 'left',
+  },
+});
 
 /**
  * `buttonVariants` already carries `[&_svg:not([class*='size-'])]:size-4`, but @ng-icons styles the
@@ -411,60 +399,42 @@ export const sidebarMobileVariants = cva(
  */
 export const sidebarTriggerVariants = cva("size-7 [&_ng-icon:not([class*='size-'])]:size-4!");
 
-export const sidebarRailVariants = cva([
-  'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border sm:flex',
-  'in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize',
-  '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
-  'group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar',
-  '[[data-side=left][data-collapsible=offcanvas]_&]:-right-2',
-  '[[data-side=right][data-collapsible=offcanvas]_&]:-left-2',
-]);
+export const sidebarRailVariants = cva('absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear hover:after:bg-sidebar-border hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] group-data-[collapsible=offcanvas]:after:left-full in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize sm:flex [[data-side=left][data-collapsible=offcanvas]_&]:-right-2 [[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-collapsible=offcanvas]_&]:-left-2 [[data-side=right][data-state=collapsed]_&]:cursor-w-resize');
 
-export const sidebarInsetVariants = cva([
-  'relative flex w-full flex-1 flex-col bg-background',
-  'md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2',
-]);
+export const sidebarInsetVariants = cva('bg-background relative flex w-full flex-1 flex-col md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ms-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ms-2');
 
-export const sidebarInputVariants = cva('h-8 w-full bg-background shadow-none');
+export const sidebarInputVariants = cva('bg-background h-8 w-full shadow-none');
 
 export const sidebarHeaderVariants = cva('flex flex-col gap-2 p-2');
 
 export const sidebarFooterVariants = cva('flex flex-col gap-2 p-2');
 
-export const sidebarSeparatorVariants = cva('mx-2 w-auto bg-sidebar-border');
+export const sidebarSeparatorVariants = cva('bg-sidebar-border mx-2 w-auto');
 
-export const sidebarContentVariants = cva(
-  'flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
-);
+export const sidebarContentVariants = cva('no-scrollbar flex min-h-0 flex-1 flex-col gap-0 overflow-auto group-data-[collapsible=icon]:overflow-hidden');
 
 export const sidebarGroupVariants = cva('relative flex w-full min-w-0 flex-col p-2');
 
-export const sidebarGroupLabelVariants = cva([
-  "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 ring-sidebar-ring outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&_svg]:size-4 [&_svg]:shrink-0 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4!",
-  'group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0',
-]);
+export const sidebarGroupLabelVariants = cva("text-sidebar-foreground/70 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium transition-[margin,opacity] duration-200 ease-linear group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 focus-visible:ring-2 [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0 outline-hidden [&_svg]:shrink-0");
 
-export const sidebarGroupActionVariants = cva([
-  "absolute end-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&_svg]:size-4 [&_svg]:shrink-0 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4!",
+export const sidebarGroupActionVariants = cva(
   // Increases the hit area of the button on mobile.
-  'after:absolute after:-inset-2 md:after:hidden',
-  'group-data-[collapsible=icon]:hidden',
-]);
+  "text-sidebar-foreground ring-sidebar-ring absolute end-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 focus-visible:ring-2 md:after:hidden [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0 outline-hidden [&_svg]:shrink-0",
+);
 
 export const sidebarGroupContentVariants = cva('w-full text-sm');
 
-export const sidebarMenuVariants = cva('flex w-full min-w-0 flex-col gap-1');
+export const sidebarMenuVariants = cva('flex w-full min-w-0 flex-col gap-0');
 
-export const sidebarMenuItemVariants = cva('group/menu-item relative');
+export const sidebarMenuItemVariants = cva('relative group/menu-item');
 
 export const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-start text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&_svg]:size-4 [&_svg]:shrink-0 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4!",
+  "ring-sidebar-ring flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-start text-sm transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! focus-visible:ring-2 data-[active=true]:font-medium [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0 [&>span:last-child]:truncate peer/menu-button outline-hidden disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:shrink-0",
   {
     variants: {
       zType: {
         default: 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-        outline:
-          'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
+        outline: 'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
       },
       zSize: {
         default: 'h-8 text-sm',
@@ -480,19 +450,12 @@ export const sidebarMenuButtonVariants = cva(
 );
 
 export const sidebarMenuActionVariants = cva(
-  [
-    "absolute end-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform peer-hover/menu-button:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&_svg]:size-4 [&_svg]:shrink-0 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4!",
-    // Increases the hit area of the button on mobile.
-    'after:absolute after:-inset-2 md:after:hidden',
-    'peer-data-[size=sm]/menu-button:top-1',
-    'peer-data-[size=default]/menu-button:top-1.5',
-    'peer-data-[size=lg]/menu-button:top-2.5',
-    'group-data-[collapsible=icon]:hidden',
-  ],
+  // Increases the hit area of the button on mobile.
+  "text-sidebar-foreground ring-sidebar-ring absolute end-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 transition-transform peer-hover/menu-button:text-sidebar-accent-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 after:absolute after:-inset-2 focus-visible:ring-2 md:after:hidden [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0 outline-hidden [&_svg]:shrink-0",
   {
     variants: {
       zShowOnHover: {
-        true: 'group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground data-[state=open]:opacity-100 md:opacity-0',
+        true: 'peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0',
         false: '',
       },
     },
@@ -502,30 +465,16 @@ export const sidebarMenuActionVariants = cva(
   },
 );
 
-export const sidebarMenuBadgeVariants = cva([
-  'pointer-events-none absolute end-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium text-sidebar-foreground tabular-nums select-none',
-  'peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
-  'peer-data-[size=sm]/menu-button:top-1',
-  'peer-data-[size=default]/menu-button:top-1.5',
-  'peer-data-[size=lg]/menu-button:top-2.5',
-  'group-data-[collapsible=icon]:hidden',
-]);
+export const sidebarMenuBadgeVariants = cva('text-sidebar-foreground pointer-events-none absolute end-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden peer-data-[size=default]/menu-button:top-1.5 peer-data-[size=lg]/menu-button:top-2.5 peer-data-[size=sm]/menu-button:top-1 select-none');
 
 export const sidebarMenuSkeletonVariants = cva('flex h-8 items-center gap-2 rounded-md px-2');
 
-export const sidebarMenuSubVariants = cva([
-  'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s border-sidebar-border rtl:-translate-x-px px-2.5 py-0.5',
-  'group-data-[collapsible=icon]:hidden',
-]);
+export const sidebarMenuSubVariants = cva('border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-s px-2.5 py-0.5 group-data-[collapsible=icon]:hidden rtl:-translate-x-px');
 
-export const sidebarMenuSubItemVariants = cva('group/menu-sub-item relative');
+export const sidebarMenuSubItemVariants = cva('relative group/menu-sub-item');
 
 export const sidebarMenuSubButtonVariants = cva(
-  [
-    "flex h-7 min-w-0 -translate-x-px items-center rtl:translate-x-px gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground ring-sidebar-ring outline-hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&_svg]:size-4 [&_svg]:shrink-0 [&>ng-icon]:shrink-0 [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:text-sidebar-accent-foreground",
-    'data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground',
-    'group-data-[collapsible=icon]:hidden',
-  ],
+  "text-sidebar-foreground ring-sidebar-ring flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&_svg]:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden focus-visible:ring-2 rtl:translate-x-px [&_ng-icon:not([class*='size-'])]:size-4! [&_svg]:size-4 [&>ng-icon]:shrink-0 [&>span:last-child]:truncate outline-hidden disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:shrink-0",
   {
     variants: {
       zSize: {
@@ -549,6 +498,8 @@ export type ZardSidebarMenuSubButtonSizeVariants = NonNullable<
 >;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from '@/shared/components/sidebar/sidebar.component';
 export * from '@/shared/components/sidebar/sidebar-primitives.component';
@@ -558,6 +509,8 @@ export * from '@/shared/components/sidebar/sidebar.service';
 export * from '@/shared/components/sidebar/sidebar.variants';
 export * from '@/shared/components/sidebar/sidebar.imports';
 ```
+
+**Add sidebar-menu.component.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -924,6 +877,8 @@ export class ZardSidebarMenuSubButtonComponent {
 }
 ```
 
+**Add sidebar-primitives.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, Directive, input, ViewEncapsulation } from '@angular/core';
 
@@ -1040,7 +995,7 @@ export class ZardSidebarSeparatorComponent {
   host: {
     'data-slot': 'sidebar-input',
     'data-sidebar': 'input',
-    class: 'h-8 w-full bg-background! shadow-none dark:bg-input/30!',
+    class: 'h-8! w-full bg-background! shadow-none dark:bg-input/30!',
   },
   exportAs: 'zSidebarInput',
 })
@@ -1128,6 +1083,8 @@ export class ZardSidebarGroupContentComponent {
 }
 ```
 
+**Add sidebar.constants.ts**
+
 ```angular-ts
 export const ZARD_SIDEBAR_COOKIE_NAME = 'sidebar_state';
 export const ZARD_SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -1137,6 +1094,8 @@ export const ZARD_SIDEBAR_WIDTH_ICON = '3rem';
 export const ZARD_SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 export const ZARD_SIDEBAR_MOBILE_BREAKPOINT = '(max-width: 767.98px)';
 ```
+
+**Add sidebar.imports.ts**
 
 ```angular-ts
 import {
@@ -1195,6 +1154,8 @@ export const ZardSidebarImports = [
   ZardSidebarMenuSubButtonComponent,
 ] as const;
 ```
+
+**Add sidebar.service.ts**
 
 ```angular-ts
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -1372,6 +1333,223 @@ z-sidebar-provider
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideCalendar,
+  lucideChevronDown,
+  lucideChevronsUpDown,
+  lucideGalleryVerticalEnd,
+  lucideHouse,
+  lucideInbox,
+  lucideLogOut,
+  lucideSearch,
+  lucideSettings,
+  lucideUser,
+} from '@ng-icons/lucide';
+
+import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
+import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
+import { ZardSeparatorComponent } from '@/shared/components/separator/separator.component';
+import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports';
+import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';
+
+interface NavItem {
+  readonly title: string;
+  readonly icon: string;
+}
+
+@Component({
+  selector: 'z-demo-sidebar-preview',
+  imports: [
+    ZardSidebarImports,
+    ZardDropdownImports,
+    ZardBreadcrumbImports,
+    ZardSeparatorComponent,
+    ZardSkeletonComponent,
+    ZardAvatarComponent,
+    NgIcon,
+  ],
+  template: `
+    <!--
+      In a real app the provider is the page shell and needs no extra classes. Here transform-gpu
+      turns it into the containing block for the sidebar's fixed panel, so the demo stays inside the
+      documentation page instead of covering the viewport.
+    -->
+    <z-sidebar-provider
+      zDefaultOpen="true"
+      class="relative h-128 min-h-0 transform-gpu overflow-hidden rounded-xl border"
+    >
+      <z-sidebar zCollapsible="icon" class="h-full">
+        <div z-sidebar-header>
+          <ul z-sidebar-menu>
+            <li z-sidebar-menu-item>
+              <button z-sidebar-menu-button zSize="lg" z-dropdown [zDropdownMenu]="workspaces">
+                <div
+                  class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
+                >
+                  <ng-icon name="lucideGalleryVerticalEnd" class="size-4" />
+                </div>
+
+                <div class="grid flex-1 text-left text-sm/tight">
+                  <span class="truncate font-medium">{{ workspace() }}</span>
+                  <span class="text-muted-foreground truncate text-xs">Enterprise</span>
+                </div>
+
+                <ng-icon name="lucideChevronDown" class="ml-auto" />
+              </button>
+
+              <z-dropdown-menu-content
+                #workspaces="zDropdownMenuContent"
+                class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                zAlign="start"
+              >
+                @for (name of workspaceNames; track name) {
+                  <z-dropdown-menu-item (click)="workspace.set(name)">{{ name }}</z-dropdown-menu-item>
+                }
+              </z-dropdown-menu-content>
+            </li>
+          </ul>
+        </div>
+
+        <z-sidebar-content>
+          <div z-sidebar-group>
+            <div z-sidebar-group-label>Platform</div>
+
+            <div z-sidebar-group-content>
+              <ul z-sidebar-menu>
+                @for (item of navItems; track item.title) {
+                  <li z-sidebar-menu-item>
+                    <button
+                      z-sidebar-menu-button
+                      [zActive]="item.title === active()"
+                      [zTooltip]="item.title"
+                      (click)="active.set(item.title)"
+                    >
+                      <ng-icon [name]="item.icon" />
+                      <span>{{ item.title }}</span>
+                    </button>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </z-sidebar-content>
+
+        <div z-sidebar-footer>
+          <ul z-sidebar-menu>
+            <li z-sidebar-menu-item>
+              <button z-sidebar-menu-button zSize="lg" z-dropdown [zDropdownMenu]="account">
+                <z-avatar
+                  class="size-8 rounded-lg"
+                  zSrc="https://github.com/zard-ui.png"
+                  zAlt="zard ui"
+                  zFallback="ZU"
+                />
+
+                <div class="grid flex-1 text-left text-sm/tight">
+                  <span class="truncate font-medium">zard ui</span>
+                  <span class="text-muted-foreground truncate text-xs">m&#64;example.com</span>
+                </div>
+
+                <ng-icon name="lucideChevronsUpDown" class="ml-auto" />
+              </button>
+
+              <z-dropdown-menu-content
+                #account="zDropdownMenuContent"
+                class="w-(--z-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                zSide="right"
+                zAlign="end"
+              >
+                <z-dropdown-menu-item>
+                  <ng-icon name="lucideUser" />
+                  Profile
+                </z-dropdown-menu-item>
+                <z-dropdown-menu-item>
+                  <ng-icon name="lucideSettings" />
+                  Settings
+                </z-dropdown-menu-item>
+                <z-dropdown-menu-separator />
+                <z-dropdown-menu-item>
+                  <ng-icon name="lucideLogOut" />
+                  Log out
+                </z-dropdown-menu-item>
+              </z-dropdown-menu-content>
+            </li>
+          </ul>
+        </div>
+
+        <button z-sidebar-rail aria-label="Toggle Sidebar"></button>
+      </z-sidebar>
+
+      <main z-sidebar-inset class="overflow-auto">
+        <header class="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4">
+          <button z-sidebar-trigger class="-ml-1" aria-label="Toggle Sidebar"></button>
+
+          <z-separator
+            zOrientation="vertical"
+            class="mr-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+          />
+
+          <z-breadcrumb zLabel="Breadcrumb">
+            <z-breadcrumb-item>
+              <span z-breadcrumb-page class="text-muted-foreground">Platform</span>
+            </z-breadcrumb-item>
+            <z-breadcrumb-item>
+              <span z-breadcrumb-page>{{ active() }}</span>
+            </z-breadcrumb-item>
+          </z-breadcrumb>
+        </header>
+
+        <div class="flex flex-1 flex-col gap-4 p-4">
+          <div class="grid auto-rows-min grid-cols-2 gap-4">
+            @for (tile of tiles; track tile) {
+              <z-skeleton class="bg-muted/50 aspect-video rounded-xl" />
+            }
+          </div>
+
+          <z-skeleton class="bg-muted/50 min-h-64 flex-1 rounded-xl" />
+        </div>
+      </main>
+    </z-sidebar-provider>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideCalendar,
+      lucideChevronDown,
+      lucideChevronsUpDown,
+      lucideGalleryVerticalEnd,
+      lucideHouse,
+      lucideInbox,
+      lucideLogOut,
+      lucideSearch,
+      lucideSettings,
+      lucideUser,
+    }),
+  ],
+})
+export class ZardDemoSidebarPreviewComponent {
+  readonly workspaceNames = ['Acme Inc', 'Acme Corp.', 'Evil Corp.'] as const;
+  readonly workspace = signal<string>(this.workspaceNames[0]);
+  readonly active = signal('Home');
+  readonly tiles = [1, 2];
+
+  readonly navItems: readonly NavItem[] = [
+    { title: 'Home', icon: 'lucideHouse' },
+    { title: 'Inbox', icon: 'lucideInbox' },
+    { title: 'Calendar', icon: 'lucideCalendar' },
+    { title: 'Search', icon: 'lucideSearch' },
+    { title: 'Settings', icon: 'lucideSettings' },
+  ];
+}
+```
 
 ### Structure
 
@@ -2774,7 +2952,7 @@ import { ZardSidebarImports } from '@/shared/components/sidebar/sidebar.imports'
 export class ZardDemoSidebarRailComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

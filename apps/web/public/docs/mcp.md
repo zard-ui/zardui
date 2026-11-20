@@ -21,9 +21,21 @@ The server is published as `zard-mcp` and runs over stdio: your client starts it
 
 ### From the command line
 
+**Claude Code**
+
 ```
 claude mcp add zard-ui -- npx -y zard-mcp
+```
+
+**Codex CLI**
+
+```
 codex mcp add zard-ui -- npx -y zard-mcp
+```
+
+**Gemini CLI**
+
+```
 gemini mcp add zard-ui npx -y zard-mcp
 ```
 
@@ -38,7 +50,7 @@ Commit the project file and everyone on the repository gets the server.
 - Zed `.zed/settings.json`
 - Codex `~/.codex/config.toml`
 
-.mcp.json · .cursor/mcp.json · Windsurf
+**.mcp.json**
 
 ```
 {
@@ -51,7 +63,20 @@ Commit the project file and everyone on the repository gets the server.
 }
 ```
 
-.vscode/mcp.json
+**Cursor**
+
+```
+{
+  "mcpServers": {
+    "zard-ui": {
+      "command": "npx",
+      "args": ["-y", "zard-mcp"]
+    }
+  }
+}
+```
+
+**VS Code**
 
 ```
 {
@@ -65,7 +90,20 @@ Commit the project file and everyone on the repository gets the server.
 }
 ```
 
-Zed .zed/settings.json
+**Windsurf**
+
+```
+{
+  "mcpServers": {
+    "zard-ui": {
+      "command": "npx",
+      "args": ["-y", "zard-mcp"]
+    }
+  }
+}
+```
+
+**Zed**
 
 ```
 {
@@ -79,7 +117,7 @@ Zed .zed/settings.json
 }
 ```
 
-~/.codex/config.toml
+**Codex**
 
 ```
 [mcp_servers.zard-ui]
@@ -89,7 +127,7 @@ args = ["-y", "zard-mcp"]
 
 ### Check that it works
 
-Restart the client and look for `zard-ui` with ten tools. In Claude Code or Codex run `/mcp` to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in `mcp.json` to connect it.
+Restart the client and look for `zard-ui` with sixteen tools. In Claude Code or Codex run `/mcp` to list servers; in Cursor and Windsurf open Settings → MCP; in VS Code press Start above the server in `mcp.json` to connect it.
 
 ## Usage
 
@@ -102,20 +140,26 @@ Describe what you want, not which tool to call. Naming zard/ui in the prompt kee
 
 ## Tools
 
-Ten tools, in two groups: nine that read, and one that writes to your project. A wrong name comes back with a suggestion, so asking for `toast` points the assistant to `sonner` without a second search.
+Sixteen tools: fifteen that read, and one that writes to your project. Six of them cover the project itself: they return the zard-cli command that creates, sets up, restyles or adds to it, with `--no-interactive` so it never stops at a question, and they build the preset code from design choices the way the create page does. The assistant runs the command in its own shell, where a create that takes minutes is not cut short. A wrong name comes back with a suggestion, so asking for `toast` points the assistant to `sonner` without a second search.
 
 | Tool | Input | Description |
 | --- | --- | --- |
 | `list-components` | — | Every component, with a one-line description and category. |
-| `search-components` | `query, limit?` | Find components by name, purpose or the name other libraries use ("modal", "toast"). |
+| `search-components` | `query`, `limit?` | Find components by name, purpose or the name other libraries use ("modal", "toast"). |
 | `get-component` | `name` | The full source code of a component. |
 | `get-component-docs` | `name` | The documentation page: installation, usage, examples and API reference. |
 | `get-component-examples` | `name` | The usage examples, with the code of each one. |
 | `get-dependencies` | `name` | Everything an install brings: registry components in install order, npm packages, and the tree. |
-| `get-docs` | `topic?, section?` | A guide on theming, dark mode, forms or setup, whole or one section. Without a topic, the list of guides. |
-| `install-component` | `name, cwd?, overwrite?` | Installs a component into the project, via CLI. Existing files are kept unless overwrite. |
+| `get-docs` | `topic?`, `section?` | A guide on theming, dark mode, forms or setup, whole or one section. Without a topic, the list of guides. |
+| `install-component` | `name`, `cwd?`, `overwrite?` | Installs a component into the project, via CLI. Existing files are kept unless overwrite. |
 | `list-blocks` | `category?` | Every available block, optionally filtered by category. |
 | `get-block` | `id` | The full source code of a block. |
+| `get-design-options` | — | Every style, color, font, icon library, radius and menu choice, the default design and their rules. |
+| `get-create-command` | `name`, `template`, `preset?`, `design?`, `packageManager?`, `pointer?`, `rtl?` | The command that starts a new Angular, Nx or Analog project already configured with the design. |
+| `get-init-command` | `type`, `project?`, `preset?`, `design?`, `baseColor?`, `css?`, `rtl?`, `pointer?`, `packageManager?` | The command that sets zard/ui up in an existing project or library. |
+| `get-apply-command` | `preset?`, `design?`, `only?`, `pointer?`, `packageManager?` | The command that restyles a project already set up, whole or only its theme or fonts. |
+| `get-add-command` | `items`, `overwrite?`, `packageManager?` | The command that adds several components or blocks at once. |
+| `get-audit-checklist` | — | What to check after writing code with the components, before calling it done. |
 
 ### Where the answers come from
 
@@ -130,7 +174,7 @@ Two environment variables, both optional, for teams serving their own components
 | `ZARD_REGISTRY_URL` | `https://zardui.com/r` | Where component source and metadata are read from. See the [registry page](/docs/registry) for the format a custom one has to publish. |
 | `ZARD_DOCS_URL` | `https://zardui.com` | The site whose component pages are read, as markdown. Separate from the registry because a custom registry serves files, not pages. |
 
-.mcp.json
+**.mcp.json**
 
 ```
 {
@@ -149,11 +193,11 @@ Two environment variables, both optional, for teams serving their own components
 
 ## Security
 
-Nine tools only read published files. Only `install-component` writes to your project, so keep your client asking before it runs. It never builds a shell command: names are validated and passed as discrete arguments, and the project's own `zard-cli` is preferred over downloading one.
+Nine tools only read published files and six only build commands without running them. Only `install-component` writes to your project, so keep your client asking before it runs. It never builds a shell command: names are validated and passed as discrete arguments, and the project's own `zard-cli` is preferred over downloading one.
 
 Whatever the registry serves ends up in the model's context, so trust a custom registry as you would a dependency. Teams can pin the server to a version:
 
-.mcp.json
+**.mcp.json**
 
 ```
 {
@@ -168,10 +212,18 @@ Whatever the registry serves ends up in the model's context, so trust a custom r
 
 ## Troubleshooting
 
-**The server shows no tools, or fails to start.** Check that `node --version` is 20 or newer, then delete the npx cache in `~/.npm/_npx` and restart the client. On Windows, some clients need the command as `cmd /c npx -y zard-mcp` instead.
+**The server shows no tools, or fails to start**
 
-**The assistant invents an API instead of using the server.** Name zard/ui in the prompt, or ask it to read the component docs first. If it still guesses, check that the server shows as connected.
+Check that `node --version` is 20 or newer, then delete the npx cache in `~/.npm/_npx` and restart the client. On Windows, some clients need the command as `cmd /c npx -y zard-mcp` instead.
 
-**Installing fails with "Configuration not found".** The project has not been set up yet. Run `npx zard-cli init` at its root, then try again.
+**The assistant invents an API instead of using the server**
 
-**Components land in the wrong project.** The server process does not always start in your project, so the assistant must pass its root as `cwd` for the install. Ask it to install into the absolute path.
+Name zard/ui in the prompt, or ask it to read the component docs first. If it still guesses, check that the server shows as connected.
+
+**Installing fails with "Configuration not found"**
+
+The project has not been set up yet. Run `npx zard-cli init` at its root, then try again.
+
+**Components land in the wrong project**
+
+The server process does not always start in your project, so the assistant must pass its root as `cwd` for the install. Ask it to install into the absolute path.

@@ -1,5 +1,6 @@
 import { installComponent } from '@cli/commands/add/component-installer.js';
 import { installDependencies } from '@cli/commands/init/dependencies.js';
+import { fontPackagesFor } from '@cli/commands/init/preset.js';
 import {
   bundlerFor,
   indexHtmlFor,
@@ -11,12 +12,16 @@ import { setupRtlDirection } from '@cli/commands/init/rtl-setup.js';
 import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { updateAngularConfig } from '@cli/commands/init/update-angular-config.js';
-import { setupVitePlugin, setupViteTsconfigPaths } from '@cli/commands/init/vite-setup.js';
+import {
+  setupCssTarget,
+  setupViteAlias,
+  setupVitePlugin,
+  setupViteTsconfigPaths,
+} from '@cli/commands/init/vite-setup.js';
 import { iconFamily } from '@cli/core/icons/index.js';
 import { resolveConfigPaths, type Config } from '@cli/utils/config.js';
 import { type ProjectInfo } from '@cli/utils/get-project-info.js';
 import { iconCatalog } from '@cli/utils/icon-catalog.js';
-import { logger } from '@cli/utils/logger.js';
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
@@ -30,7 +35,15 @@ import * as path from 'node:path';
 export interface InitStep {
   readonly label: string;
   readonly note: string;
-  run(): Promise<void>;
+  /** Resolves with `{ skipped }` when there was nothing to do and the step did not run: it is not a ✔. */
+  run(): Promise<StepOutcome>;
+}
+
+export type StepOutcome = void | { readonly skipped: string };
+
+export interface InitStepOptions {
+  /** Add the cursor-pointer rule for buttons to the theme (`--pointer`). Only meaningful with a preset. */
+  pointer?: boolean;
 }
 
 export function buildInitSteps(
@@ -38,6 +51,7 @@ export function buildInitSteps(
   config: Config,
   projectInfo: ProjectInfo,
   isReInitializing: boolean,
+  options: InitStepOptions = {},
 ): InitStep[] {
   const kind = config.projectType;
   const isLibrary = isLibraryKind(kind);
@@ -54,7 +68,9 @@ export function buildInitSteps(
     },
     {
       label: 'dependencies',
-      note: `CDK, CVA, tailwind-merge, ng-icons (${iconFamily(config.icons, iconCatalog())?.label ?? config.icons})`,
+      note: `CDK, CVA, tailwind-merge, ng-icons (${iconFamily(config.icons, iconCatalog())?.label ?? config.icons})${
+        fontPackagesFor(config).length > 0 ? ', fonts' : ''
+      }`,
       run: () => installDependencies(cwd, config, projectInfo),
     },
   ];
@@ -68,13 +84,15 @@ export function buildInitSteps(
       run: () => updateAngularConfig(cwd, config),
     });
 
-    steps.push(tailwindPipelineStep(cwd, projectRoot, kind, projectInfo, isReInitializing));
+    steps.push(tailwindPipelineStep(cwd, projectRoot, config, projectInfo, isReInitializing));
   }
 
   steps.push({
     label: config.tailwind.css,
-    note: `theme tokens (${config.tailwind.baseColor})`,
-    run: () => applyThemeToStyles(cwd, config),
+    note: config.preset
+      ? `preset ${config.preset}: theme, fonts, radius (${config.tailwind.baseColor})`
+      : `theme tokens (${config.tailwind.baseColor})`,
+    run: () => applyThemeToStyles(cwd, config, { pointer: options.pointer }),
   });
 
   if (isLibrary) {
@@ -146,15 +164,21 @@ function indexHtmlOf(config: Config, projectInfo: ProjectInfo): string {
 function tailwindPipelineStep(
   cwd: string,
   projectRoot: string,
-  kind: Config['projectType'],
+  config: Config,
   projectInfo: ProjectInfo,
   isReInitializing: boolean,
 ): InitStep {
+  const kind = config.projectType;
+
   if (bundlerFor(kind) === 'vite') {
     return {
       label: 'vite.config.ts',
-      note: 'Tailwind Vite plugin',
-      run: () => setupVitePlugin(cwd),
+      note: 'Tailwind Vite plugin, cssTarget (logical CSS for RTL), @ alias',
+      run: async () => {
+        await setupVitePlugin(cwd);
+        await setupCssTarget(cwd);
+        await setupViteAlias(cwd, config);
+      },
     };
   }
 
@@ -185,20 +209,25 @@ function tailwindPipelineStep(
  * end up importing `<lib>/src/styles.css` — a `src/` that is a detail of the
  * library's repository, not something whoever installs it should know.
  */
-async function registerStylesAsset(cwd: string, config: Config): Promise<void> {
+async function registerStylesAsset(cwd: string, config: Config): Promise<StepOutcome> {
   const libraryRoot = path.resolve(cwd, projectRootOf(config.baseUrl));
   const ngPackagePath = path.join(libraryRoot, 'ng-package.json');
 
+  const relative = path.relative(libraryRoot, path.resolve(cwd, config.tailwind.css)).split(path.sep).join('/');
+  const input = path.posix.dirname(relative);
+
   if (!existsSync(ngPackagePath)) {
+    // Angular 22 generates libraries for `@angular/build:library`, which has no
+    // ng-package.json: the assets go in the build options in angular.json.
+    if (await registerStylesAssetInAngularJson(cwd, libraryRoot, input)) {
+      await exportStylesheet(libraryRoot, path.posix.basename(relative));
+      return;
+    }
     // An Nx library only gets an ng-package.json when it is publishable; in the
     // others there is no package to assemble and the CSS is consumed straight
     // from the source.
-    logger.warn(`ng-package.json not found in ${path.relative(cwd, libraryRoot)}; skipping the theme asset.`);
-    return;
+    return { skipped: `ng-package.json not found in ${path.relative(cwd, libraryRoot)}: no theme asset to register` };
   }
-
-  const relative = path.relative(libraryRoot, path.resolve(cwd, config.tailwind.css)).split(path.sep).join('/');
-  const input = path.posix.dirname(relative);
   // Every stylesheet under the theme's folder, not just the theme: it imports
   // the core's `zard.css` from `lib/shared/core/css`, and `add` writes
   // `typeset.css` and `utilities.css` beside it. Shipping the theme alone left
@@ -223,6 +252,39 @@ async function registerStylesAsset(cwd: string, config: Config): Promise<void> {
   }
 
   await exportStylesheet(libraryRoot, path.posix.basename(relative));
+}
+
+/**
+ * The same asset, declared where `@angular/build:library` reads it: the build options of the library project in
+ * angular.json, with `input` relative to the workspace root. Returns false when no angular.json project at
+ * `libraryRoot` builds with that builder.
+ */
+async function registerStylesAssetInAngularJson(cwd: string, libraryRoot: string, input: string): Promise<boolean> {
+  const angularJsonPath = path.join(cwd, 'angular.json');
+  if (!existsSync(angularJsonPath)) return false;
+
+  interface WorkspaceProject {
+    root?: string;
+    architect?: { build?: { builder?: string; options?: { assets?: unknown[] } } };
+  }
+  const angularJson: { projects?: Record<string, WorkspaceProject> } = JSON.parse(
+    await readFile(angularJsonPath, 'utf8'),
+  );
+  const root = path.relative(cwd, libraryRoot).split(path.sep).join('/');
+  const project = Object.values(angularJson.projects ?? {}).find(
+    candidate => (candidate?.root ?? '').replace(/\/$/, '') === root,
+  );
+  const build = project?.architect?.build;
+  if (build?.builder !== '@angular/build:library') return false;
+
+  const entry = { glob: '**/*.css', input: path.posix.join(root, input), output: '/' };
+  build.options ??= {};
+  const assets: unknown[] = Array.isArray(build.options.assets) ? build.options.assets : [];
+  if (hasEntry(assets, entry)) return true;
+
+  build.options.assets = [...assets.filter(asset => !describesSameFile(asset, '', entry)), entry];
+  await writeFile(angularJsonPath, `${JSON.stringify(angularJson, null, 2)}\n`, 'utf8');
+  return true;
 }
 
 /**

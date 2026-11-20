@@ -17,6 +17,8 @@ npx zard-cli@latest add alert
 
 ### Manual
 
+**Add alert.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
@@ -48,7 +50,7 @@ import {
       </span>
     }
 
-    <div class="flex-1">
+    <div [class]="contentClasses()">
       @if (zTitle()) {
         <div [class]="titleClasses()" data-slot="alert-title">
           <ng-container *zStringTemplateOutlet="zTitle()">{{ zTitle() }}</ng-container>
@@ -89,6 +91,17 @@ export class ZardAlertComponent {
 
   protected readonly actionClasses = computed(() => alertActionVariants());
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
+  /**
+   * The icon spans two grid rows (shadcn gives the title and the description one each). The wrapper takes both rows
+   * only when it holds both, so an alert with a single line keeps the gap of the empty second row, like shadcn.
+   */
+  protected readonly contentClasses = computed(() =>
+    mergeClasses(
+      'flex flex-1 flex-col gap-[inherit]',
+      this.zTitle() && this.zDescription() && "group-has-data-[slot='alert-icon']/alert:row-span-2",
+    ),
+  );
+
   protected readonly descriptionClasses = computed(() => alertDescriptionVariants({ zType: this.zType() }));
   protected readonly iconClasses = computed(() => alertIconVariants());
   protected readonly role = computed(() => this.zRole() ?? (this.zAction() ? 'status' : 'alert'));
@@ -109,50 +122,45 @@ export class ZardAlertComponent {
 }
 ```
 
+**Add alert.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const alertVariants = cva(
-  "group/alert relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-start text-sm has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4",
-  {
-    variants: {
-      zType: {
-        default: 'bg-card text-card-foreground',
-        destructive:
-          "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current",
-      },
-    },
-    defaultVariants: {
-      zType: 'default',
+export const alertVariants = cva("relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-start text-sm has-data-[slot='alert-action']:pe-18 has-data-[slot='alert-icon']:grid-cols-[auto_1fr] has-data-[slot='alert-icon']:gap-x-2 **:data-[slot='alert-icon']:row-span-2 **:data-[slot='alert-icon']:translate-y-0.5 **:data-[slot='alert-icon']:text-current [&_[data-slot='alert-icon']_svg:not([class*='size-'])]:size-4 group/alert", {
+  variants: {
+    zType: {
+      default: 'bg-card text-card-foreground',
+      destructive: "bg-card text-destructive **:data-[slot='alert-description']:text-destructive/90 [&_[data-slot='alert-icon']_svg]:text-current",
     },
   },
-);
+  defaultVariants: {
+    zType: 'default',
+  },
+});
 
-export const alertIconVariants = cva('shrink-0 self-start text-base!');
+export const alertIconVariants = cva('flex shrink-0 self-start text-base!');
 
-export const alertActionVariants = cva('absolute top-2 end-2');
+export const alertActionVariants = cva('absolute end-2 top-2');
 
-export const alertTitleVariants = cva(
-  "font-medium group-has-data-[slot='alert-icon']/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground",
-);
+export const alertTitleVariants = cva("[&_a]:hover:text-foreground font-medium group-has-data-[slot='alert-icon']/alert:col-start-2 group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3");
 
-export const alertDescriptionVariants = cva(
-  'text-sm text-balance md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4',
-  {
-    variants: {
-      zType: {
-        default: 'text-muted-foreground',
-        destructive: '',
-      },
-    },
-    defaultVariants: {
-      zType: 'default',
+export const alertDescriptionVariants = cva('text-sm text-balance [&_a]:hover:text-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_p:not(:last-child)]:mb-4', {
+  variants: {
+    zType: {
+      default: 'text-muted-foreground',
+      destructive: '',
     },
   },
-);
+  defaultVariants: {
+    zType: 'default',
+  },
+});
 
 export type ZardAlertTypeVariants = NonNullable<VariantProps<typeof alertVariants>['zType']>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './alert.component';
@@ -170,6 +178,40 @@ import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { provideIcons } from '@ng-icons/core';
+import { lucideCircleCheck } from '@ng-icons/lucide';
+
+import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
+
+@Component({
+  selector: 'z-demo-alert-preview',
+  imports: [ZardAlertComponent],
+  template: `
+    <div class="grid w-full max-w-md items-start gap-4">
+      <z-alert
+        zIcon="lucideCircleCheck"
+        zTitle="Success! Your changes have been saved"
+        zDescription="This is an alert with icon, title and description."
+      />
+
+      <z-alert
+        zType="destructive"
+        zTitle="Unable to process your payment"
+        zDescription="Please verify your billing information and try again."
+      />
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCircleCheck })],
+})
+export class ZardDemoAlertPreviewComponent {}
+```
 
 ### Basic
 
@@ -296,7 +338,7 @@ import { ZardAlertComponent } from '@/shared/components/alert/alert.component';
 export class ZardDemoAlertCustomColorsComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

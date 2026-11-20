@@ -22,7 +22,7 @@ const EMPTY_DEFAULTS = new Set(['', '-', '—', 'undefined']);
           <h3 class="font-mono text-sm font-semibold">{{ section.selector }}</h3>
           @if (section.description) {
             <p
-              class="text-muted-foreground api-inline text-sm leading-relaxed"
+              class="text-muted-foreground api-inline text-sm leading-relaxed [overflow-wrap:anywhere]"
               [innerHTML]="inline(section.description)"
             ></p>
           }

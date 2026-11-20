@@ -9,12 +9,15 @@ export interface ChangelogEntryMeta {
   year: number;
   monthNumber: number;
   date: Date;
-  id: string; // '11-2025'
+  id: string; // '11-2025', also the entry's anchor on the changelog index
+  /**
+   * The entry's page, `/docs/changelog/<slug>`: '<year>-<month>-<topic>', e.g. '2026-11-create'.
+   * Never change it once published: the RSS feed and every shared link point at it.
+   */
+  slug: string;
+  /** What the entry is about, shown after the month: 'November 2026 - Create'. */
+  title: string;
 }
-
-/** Closed set of highlight icons; the page maps each one to a Lucide icon. */
-export type ChangelogHighlightIcon =
-  'zap' | 'terminal' | 'moon' | 'package' | 'rocket' | 'shield' | 'code' | 'settings';
 
 /** A public symbol that changed name; `to` holds several names when it was split. */
 export interface ChangelogRename {
@@ -25,7 +28,6 @@ export interface ChangelogRename {
 export interface ChangelogHighlight {
   title: string;
   description: string; // `backticks` render as inline code
-  icon: ChangelogHighlightIcon;
   code?: string; // Optional snippet to display (e.g. a CLI command)
   renames?: ChangelogRename[]; // Listed as "old → new" under the description
 }
@@ -52,36 +54,40 @@ export interface ChangelogExample {
 }
 
 /**
- * A release moment — the data behind `z-changelog-release`. Present only on the
- * entry for the month a major version ships; every other entry omits it entirely.
- * `version` must come from the single source of truth (see `ZARD_VERSION`), never
- * be typed as a literal here.
+ * A launch moment — the data behind `z-changelog-release`: a clip with a title and a summary under it.
+ * Present only on the entries for a major version or a launch big enough to have its own clip; every
+ * other entry omits it. `version` must come from the single source of truth (see `ZARD_VERSION`),
+ * never be typed as a literal here.
  */
 export interface ChangelogRelease {
-  version: string;
+  /** The version the clip announces; the clip is named after it. */
+  version?: string;
+  /** Names the clip for screen readers when it announces something other than a version: 'zard/ui create'. */
+  label?: string;
   title: string;
   summary: string;
   /**
-   * Path of the release clip under `apps/web/public`, e.g. `/video/release-1.0.mp4`.
+   * Path of the clip under `apps/web/public`, e.g. `/video/release-1.0.mp4`.
    * Shown like a GIF: it plays on its own, muted and in a loop, with no controls.
    */
   video: string;
 }
 
 /**
- * A month of the changelog. Plain data — never an Angular component — so the
- * registry can read it without instantiating anything.
+ * One changelog entry, with a page of its own and an item in the RSS feed. Usually a month; a launch big
+ * enough can get an entry of its own in the same month. Plain data — never an Angular component — so the
+ * registry, the feed generator and the prerender list can read it without instantiating anything.
  */
 export interface ChangelogEntry {
   meta: ChangelogEntryMeta;
-  overview: string; // Summary of the month's changes
+  overview: string; // The RSS description and the page subtitle; `backticks` render as inline code
   highlights?: ChangelogHighlight[]; // Structural/DX improvements (no visual component)
   loadExamples?: () => Promise<ChangelogExample[]>; // Present when the month ships components
   examplesTitle?: string; // Heading of the examples block; defaults to 'New Components'
   /**
-   * Present only on the entry for the month a major version ships. The page renders
-   * `z-changelog-release` above the timeline for it — a release moment, not a card
-   * in the monthly grid. Optional, so the other entries need no change.
+   * Present only on the entries for a major version or a launch with a clip of its own. The entry
+   * renders `z-changelog-release` after its overview — a launch moment, not another highlight.
+   * Optional, so the other entries need no change.
    */
   release?: ChangelogRelease;
 }

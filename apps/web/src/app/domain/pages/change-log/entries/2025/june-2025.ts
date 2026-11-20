@@ -7,6 +7,8 @@ export const JUNE_2025: ChangelogEntry = {
     monthNumber: 6,
     date: new Date(2025, 5, 1),
     id: '06-2025',
+    slug: '2025-06-overlays',
+    title: 'Dialog, Popover and Dropdown Menu',
   },
 
   overview:

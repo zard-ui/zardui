@@ -17,6 +17,8 @@ npx zard-cli@latest add dropdown
 
 ### Manual
 
+**Add dropdown.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
@@ -265,7 +267,6 @@ export class ZardDropdownMenuComponent implements OnDestroy {
           direction: this.directionality?.value ?? 'ltr',
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
-          minWidth: 200,
           maxHeight: 400,
         });
       } catch (error) {
@@ -365,42 +366,46 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 }
 ```
 
+**Add dropdown.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const dropdownContentVariants = cva([
-  'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground',
-  'shadow-md ring-1 ring-foreground/10 outline-none animate-in duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
-]);
+export const dropdownContentVariants = cva('bg-popover text-popover-foreground ring-foreground/10 animate-in z-50 max-h-96 min-w-32 overflow-x-hidden overflow-y-auto rounded-lg p-1 shadow-md ring-1 duration-100 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 outline-none');
 
 export const dropdownItemVariants = cva(
-  'relative flex cursor-default select-none items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 select-none outline-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
         default: '',
-        destructive:
-          'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
+        destructive: 'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
       },
       inset: {
         true: 'ps-7',
+        false: '',
+      },
+      /** Rows that carry a check: the style decides where the room for it goes (the end, or the start in a menubar). */
+      checkable: {
+        checkbox: 'ps-1.5 pe-8 in-data-[menu=menubar]:ps-7 in-data-[menu=menubar]:pe-1.5',
+        radio: 'ps-1.5 pe-8 in-data-[menu=menubar]:ps-7 in-data-[menu=menubar]:pe-1.5',
         false: '',
       },
     },
     defaultVariants: {
       variant: 'default',
       inset: false,
+      checkable: false,
     },
   },
 );
 
-export const dropdownSubContentVariants = cva([
-  'z-50 min-w-24 max-h-96 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground',
-  'shadow-lg ring-1 ring-foreground/10 outline-none animate-in duration-100 fade-in-0 zoom-in-95',
-]);
+export const dropdownSubContentVariants = cva(
+  'bg-popover text-popover-foreground ring-foreground/10 animate-in fade-in-0 zoom-in-95 z-50 max-h-96 min-w-24 overflow-x-hidden overflow-y-auto rounded-lg p-1 shadow-lg ring-1 duration-100 outline-none',
+);
 
 export const dropdownSubTriggerVariants = cva(
-  'relative flex cursor-default select-none items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 select-none outline-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       inset: {
@@ -414,24 +419,23 @@ export const dropdownSubTriggerVariants = cva(
   },
 );
 
-export const dropdownLabelVariants = cva(
-  'relative flex items-center px-1.5 py-1 text-xs font-medium text-muted-foreground',
-  {
-    variants: {
-      inset: {
-        true: 'ps-7',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      inset: false,
+export const dropdownLabelVariants = cva('text-muted-foreground relative flex items-center px-1.5 py-1 text-xs font-medium', {
+  variants: {
+    inset: {
+      true: 'ps-7',
+      false: '',
     },
   },
-);
+  defaultVariants: {
+    inset: false,
+  },
+});
 
 export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>;
 export type ZardDropdownItemTypeVariants = NonNullable<ZardDropdownItemVariants['variant']>;
 ```
+
+**Add dropdown-item.component.ts**
 
 ```angular-ts
 import {
@@ -515,6 +519,8 @@ export class ZardDropdownMenuItemComponent {
 }
 ```
 
+**Add dropdown-menu-content.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -579,6 +585,8 @@ export class ZardDropdownMenuContentComponent {
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
 }
 ```
+
+**Add dropdown-positions.ts**
 
 ```angular-ts
 import type { ConnectedPosition } from '@angular/cdk/overlay';
@@ -682,6 +690,8 @@ export function buildDropdownPositions(
   ];
 }
 ```
+
+**Add dropdown-primitives.component.ts**
 
 ```angular-ts
 import {
@@ -797,15 +807,13 @@ export class ZardDropdownMenuLabelComponent {
 export class ZardDropdownMenuShortcutComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() =>
-    mergeClasses('text-muted-foreground ms-auto text-xs tracking-widest', this.class()),
-  );
+  protected readonly classes = computed(() => mergeClasses('text-muted-foreground ms-auto text-xs tracking-widest', this.class()));
 }
 
 @Component({
   selector: 'z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item]',
   template: `
-    <span class="pointer-events-none absolute start-1.5 flex size-4 items-center justify-center">
+    <span class="absolute end-2 flex items-center justify-center in-data-[menu=menubar]:start-1.5 in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:size-4 pointer-events-none">
       @if (zChecked()) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="size-4">
           <path d="M20 6 9 17l-5-5" />
@@ -848,7 +856,7 @@ export class ZardDropdownMenuCheckboxItemComponent {
   protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
   protected readonly itemVariant = computed(() => this.zType() ?? this.zVariant() ?? this.variant());
   protected readonly classes = computed(() =>
-    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), inset: true }), this.class()),
+    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), checkable: 'checkbox' }), this.class()),
   );
 
   protected onClick() {
@@ -892,9 +900,11 @@ export class ZardDropdownMenuRadioGroupComponent implements ZardDropdownRadioGro
 @Component({
   selector: 'z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
   template: `
-    <span class="pointer-events-none absolute start-1.5 flex size-4 items-center justify-center">
+    <span class="absolute end-2 flex items-center justify-center in-data-[menu=menubar]:start-1.5 in-data-[menu=menubar]:end-auto in-data-[menu=menubar]:size-4 pointer-events-none">
       @if (isChecked()) {
-        <span class="size-2 rounded-full bg-current"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="size-4">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
       }
     </span>
     <ng-content />
@@ -935,7 +945,7 @@ export class ZardDropdownMenuRadioItemComponent {
   protected readonly itemVariant = computed(() => this.zType() ?? this.zVariant() ?? this.variant());
   protected readonly isChecked = computed(() => this.radioGroup?.zValue() === this.zValue());
   protected readonly classes = computed(() =>
-    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), inset: true }), this.class()),
+    mergeClasses(dropdownItemVariants({ variant: this.itemVariant(), checkable: 'radio' }), this.class()),
   );
 
   protected onClick() {
@@ -948,6 +958,8 @@ export class ZardDropdownMenuRadioItemComponent {
   }
 }
 ```
+
+**Add dropdown-submenu.component.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -966,6 +978,7 @@ import {
   input,
   type OnDestroy,
   PLATFORM_ID,
+  Renderer2,
   signal,
   type TemplateRef,
   viewChild,
@@ -1077,6 +1090,7 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   private readonly dropdownService = inject(ZardDropdownService);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly overlay = inject(Overlay);
+  private readonly renderer = inject(Renderer2);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewContainerRef = inject(ViewContainerRef);
@@ -1280,6 +1294,12 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
+
+    // A submenu is a menu of the same kind as the one it opens from (see `ZardDropdownOpenOptions.menu`).
+    const menu = (this.elementRef.nativeElement as HTMLElement).closest('[data-menu]')?.getAttribute('data-menu');
+    if (menu) {
+      this.renderer.setAttribute(this.overlayRef.hostElement, 'data-menu', menu);
+    }
   }
 
   /**
@@ -1392,6 +1412,8 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   }
 }
 ```
+
+**Add dropdown-trigger.directive.ts**
 
 ```angular-ts
 import {
@@ -1519,6 +1541,8 @@ export class ZardDropdownDirective {
 }
 ```
 
+**Add dropdown.imports.ts**
+
 ```angular-ts
 import { ZardDropdownMenuItemComponent } from '@/shared/components/dropdown/dropdown-item.component';
 import { ZardDropdownMenuContentComponent } from '@/shared/components/dropdown/dropdown-menu-content.component';
@@ -1554,6 +1578,8 @@ export const ZardDropdownImports = [
   ZardDropdownDirective,
 ] as const;
 ```
+
+**Add dropdown.service.ts**
 
 ```angular-ts
 import { Directionality, type Direction } from '@angular/cdk/bidi';
@@ -1611,6 +1637,11 @@ export interface ZardDropdownOpenOptions {
    * Without it the menu surface itself is focused, which is what a pointer opening wants.
    */
   initialFocus?: 'first' | 'last';
+  /**
+   * Which kind of menu this is, published as `data-menu` on the overlay so a style can tell a menubar's rows from a
+   * dropdown's (shadcn puts the check of a checkbox item at the start in a menubar and at the end in a dropdown).
+   */
+  menu?: 'menubar';
 }
 
 @Injectable({
@@ -1691,6 +1722,9 @@ export class ZardDropdownService {
     this.skipFirstAuxClick = false;
     const directionality = this.directionalityOf(viewContainerRef);
     this.createOverlay(triggerElement, placement, directionality?.value ?? 'ltr');
+    if (options?.menu) {
+      this.renderer.setAttribute(this.overlayRef?.hostElement, 'data-menu', options.menu);
+    }
     this.watchDirection(directionality);
     this.attach(template, viewContainerRef, options?.initialFocus);
   }
@@ -1849,7 +1883,6 @@ export class ZardDropdownService {
       direction,
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
-      minWidth: 200,
       maxHeight: 400,
     });
 
@@ -2035,6 +2068,8 @@ export class ZardDropdownService {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './dropdown.component';
 export * from './dropdown-item.component';
@@ -2048,6 +2083,8 @@ export * from './dropdown.imports';
 export * from './dropdown.variants';
 export * from './menu-keyboard';
 ```
+
+**Add menu-keyboard.ts**
 
 ```angular-ts
 /**
@@ -2195,6 +2232,64 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
+
+@Component({
+  selector: 'z-demo-dropdown-preview',
+  imports: [ZardDropdownImports, ZardButtonComponent],
+  template: `
+    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
+
+    <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-40">
+      <z-dropdown-menu-label>My Account</z-dropdown-menu-label>
+      <z-dropdown-menu-item (click)="log('Profile')">
+        Profile
+        <z-dropdown-menu-shortcut>⇧⌘P</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Billing')">
+        Billing
+        <z-dropdown-menu-shortcut>⌘B</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Settings')">
+        Settings
+        <z-dropdown-menu-shortcut>⌘S</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Keyboard shortcuts')">
+        Keyboard shortcuts
+        <z-dropdown-menu-shortcut>⌘K</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-separator />
+      <z-dropdown-menu-item (click)="log('Team')">Team</z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('New Team')">
+        New Team
+        <z-dropdown-menu-shortcut>⌘+T</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+      <z-dropdown-menu-separator />
+      <z-dropdown-menu-item (click)="log('GitHub')">GitHub</z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Support')">Support</z-dropdown-menu-item>
+      <z-dropdown-menu-item [disabled]="true">API</z-dropdown-menu-item>
+      <z-dropdown-menu-separator />
+      <z-dropdown-menu-item (click)="log('Log out')">
+        Log out
+        <z-dropdown-menu-shortcut>⇧⌘Q</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+    </z-dropdown-menu-content>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDropdownPreviewComponent {
+  log(item: string) {
+    console.log(`${item} clicked`);
+  }
+}
+```
 
 ### Basic
 
@@ -2760,7 +2855,7 @@ export class ZardDemoDropdownHoverComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

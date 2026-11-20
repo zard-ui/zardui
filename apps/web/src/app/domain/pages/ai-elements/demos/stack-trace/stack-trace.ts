@@ -84,7 +84,7 @@ function parseFrame(line: string): Frame {
         <p class="text-destructive font-mono text-xs">{{ parsed().error }}</p>
         <z-trace>
           @for (frame of parsed().app; track frame.line) {
-            <a [href]="'#' + frame.file + ':' + frame.lineNumber">
+            <a [href]="'vscode://file/' + frame.file + ':' + frame.lineNumber">
               <z-trace-line>
                 <z-trace-icon><ng-icon name="lucideFileCode" /></z-trace-icon>
                 <z-trace-title>{{ frame.name }} in {{ frame.file }}:{{ frame.lineNumber }}</z-trace-title>

@@ -14,6 +14,7 @@ import {
   input,
   type OnDestroy,
   PLATFORM_ID,
+  Renderer2,
   signal,
   type TemplateRef,
   viewChild,
@@ -125,6 +126,7 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
   private readonly dropdownService = inject(ZardDropdownService);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly overlay = inject(Overlay);
+  private readonly renderer = inject(Renderer2);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly viewContainerRef = inject(ViewContainerRef);
@@ -328,6 +330,12 @@ export class ZardDropdownMenuSubTriggerComponent implements OnDestroy {
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
+
+    // A submenu is a menu of the same kind as the one it opens from (see `ZardDropdownOpenOptions.menu`).
+    const menu = (this.elementRef.nativeElement as HTMLElement).closest('[data-menu]')?.getAttribute('data-menu');
+    if (menu) {
+      this.renderer.setAttribute(this.overlayRef.hostElement, 'data-menu', menu);
+    }
   }
 
   /**

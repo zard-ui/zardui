@@ -17,6 +17,8 @@ npx zard-cli@latest add sheet
 
 ### Manual
 
+**Add sheet.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
@@ -406,77 +408,76 @@ export class ZardSheetCloseDirective {
 }
 ```
 
+**Add sheet.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const sheetVariants = cva(
-  [
-    'fixed z-50 flex flex-col gap-4',
-    'bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg outline-none',
-  ],
-  {
-    variants: {
-      zSide: {
-        top: 'inset-x-0 top-0 h-auto border-b',
-        right: 'inset-y-0 right-0 h-full w-3/4 border-l',
-        bottom: 'inset-x-0 bottom-0 h-auto border-t',
-        left: 'inset-y-0 left-0 h-full w-3/4 border-r',
-      },
-      zSize: {
-        default: '',
-        sm: '',
-        lg: '',
-        // Dimensions come from zWidth/zHeight as inline styles.
-        custom: '',
-      },
+export const sheetVariants = cva('bg-popover text-popover-foreground fixed z-50 flex flex-col gap-4 bg-clip-padding text-sm shadow-lg outline-none', {
+  variants: {
+    zSide: {
+      top: 'inset-x-0 top-0 h-auto border-b',
+      right: 'inset-y-0 right-0 h-full w-3/4 border-l',
+      bottom: 'inset-x-0 bottom-0 h-auto border-t',
+      left: 'inset-y-0 left-0 h-full w-3/4 border-r',
     },
-    compoundVariants: [
-      {
-        zSide: ['left', 'right'],
-        zSize: 'default',
-        class: 'sm:max-w-sm',
-      },
-      {
-        zSide: ['left', 'right'],
-        zSize: 'sm',
-        class: 'w-1/2 sm:max-w-xs',
-      },
-      {
-        zSide: ['left', 'right'],
-        zSize: 'lg',
-        class: 'w-full sm:max-w-lg',
-      },
-      {
-        zSide: ['top', 'bottom'],
-        zSize: 'sm',
-        class: 'h-1/3',
-      },
-      {
-        zSide: ['top', 'bottom'],
-        zSize: 'lg',
-        class: 'h-3/4',
-      },
-    ],
-    defaultVariants: {
-      zSide: 'right',
-      zSize: 'default',
+    zSize: {
+      default: '',
+      sm: '',
+      lg: '',
+      // Dimensions come from zWidth/zHeight as inline styles.
+      custom: '',
     },
   },
-);
+  compoundVariants: [
+    {
+      zSide: ['left', 'right'],
+      zSize: 'default',
+      class: 'sm:max-w-sm',
+    },
+    {
+      zSide: ['left', 'right'],
+      zSize: 'sm',
+      class: 'w-1/2 sm:max-w-xs',
+    },
+    {
+      zSide: ['left', 'right'],
+      zSize: 'lg',
+      class: 'w-full sm:max-w-lg',
+    },
+    {
+      zSide: ['top', 'bottom'],
+      zSize: 'sm',
+      class: 'h-1/3',
+    },
+    {
+      zSide: ['top', 'bottom'],
+      zSize: 'lg',
+      class: 'h-3/4',
+    },
+  ],
+  defaultVariants: {
+    zSide: 'right',
+    zSize: 'default',
+  },
+});
 
 /** Classes of the mask behind a sheet, shared by the declarative form and the service. */
-export const SHEET_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+// A marker, so the style decides how dark and how blurred the mask is. The CDK takes one class per entry.
+export const SHEET_BACKDROP_CLASSES = 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs'.split(' ').filter(Boolean);
 
 export const sheetHeaderVariants = cva('flex flex-col gap-0.5 p-4');
 
-export const sheetTitleVariants = cva('text-base font-medium text-foreground wrap-anywhere');
+export const sheetTitleVariants = cva('text-foreground text-base font-medium wrap-anywhere font-heading');
 
-export const sheetDescriptionVariants = cva('text-sm text-muted-foreground wrap-anywhere');
+export const sheetDescriptionVariants = cva('text-muted-foreground text-sm wrap-anywhere');
 
 export const sheetFooterVariants = cva('mt-auto flex flex-col gap-2 p-4');
 
 export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export { type OnClickCallback as SheetOnClickCallback } from './sheet-container.component';
@@ -489,6 +490,8 @@ export * from './sheet.imports';
 export * from './sheet.service';
 export * from './sheet.variants';
 ```
+
+**Add sheet-container.component.ts**
 
 ```angular-ts
 import {
@@ -724,6 +727,8 @@ export class ZardSheetContainerComponent<T, U> extends BasePortalOutlet implemen
 }
 ```
 
+**Add sheet-host.ts**
+
 ```angular-ts
 import type { WritableSignal } from '@angular/core';
 
@@ -746,6 +751,8 @@ export abstract class ZardSheetHost {
   abstract requestClose(): void;
 }
 ```
+
+**Add sheet-panel.component.ts**
 
 ```angular-ts
 import { FocusTrapFactory } from '@angular/cdk/a11y';
@@ -912,6 +919,8 @@ export class ZardSheetPanelComponent {
 }
 ```
 
+**Add sheet-ref.ts**
+
 ```angular-ts
 import type { OverlayRef } from '@angular/cdk/overlay';
 
@@ -955,6 +964,8 @@ export class ZardSheetRef<T = unknown, R = unknown, U = unknown> extends ZardOve
 }
 ```
 
+**Add sheet.imports.ts**
+
 ```angular-ts
 import {
   ZardSheetCloseDirective,
@@ -975,6 +986,8 @@ export const ZardSheetImports = [
   ZardSheetCloseDirective,
 ] as const;
 ```
+
+**Add sheet.service.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -1172,6 +1185,111 @@ z-sheet
 
 ## Examples
 
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardInputComponent } from '@/shared/components/input';
+import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
+import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+/** Content the service renders inside the sheet. */
+@Component({
+  selector: 'z-demo-sheet-preview-form',
+  imports: [ReactiveFormsModule, ZardInputComponent],
+  template: `
+    <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
+      <div class="grid gap-3">
+        <label for="sheet-service-name" class="text-sm leading-none font-medium select-none">Name</label>
+        <input z-input id="sheet-service-name" formControlName="name" />
+      </div>
+      <div class="grid gap-3">
+        <label for="sheet-service-username" class="text-sm leading-none font-medium select-none">Username</label>
+        <input z-input id="sheet-service-username" formControlName="username" />
+      </div>
+    </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  exportAs: 'zardDemoSheetPreviewForm',
+})
+export class ZardDemoSheetPreviewFormComponent {
+  readonly form = new FormGroup({
+    name: new FormControl('Pedro Duarte'),
+    username: new FormControl('@peduarte'),
+  });
+}
+
+@Component({
+  selector: 'z-demo-sheet-preview',
+  imports: [ZardButtonComponent, ZardInputComponent, ZardSheetImports, ZardTabsImports, ReactiveFormsModule],
+  template: `
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Open</button>
+
+        <z-sheet [(zVisible)]="visible">
+          <z-sheet-header>
+            <z-sheet-title>Edit profile</z-sheet-title>
+            <z-sheet-description>Make changes to your profile here. Click save when you're done.</z-sheet-description>
+          </z-sheet-header>
+          <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
+            <div class="grid gap-3">
+              <label for="sheet-name" class="text-sm leading-none font-medium select-none">Name</label>
+              <input z-input id="sheet-name" formControlName="name" />
+            </div>
+            <div class="grid gap-3">
+              <label for="sheet-username" class="text-sm leading-none font-medium select-none">Username</label>
+              <input z-input id="sheet-username" formControlName="username" />
+            </div>
+          </form>
+          <z-sheet-footer>
+            <button type="button" z-button (click)="save()">Save changes</button>
+            <button type="button" z-button zType="outline" z-sheet-close>Close</button>
+          </z-sheet-footer>
+        </z-sheet>
+      </z-tab>
+
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="openSheet()">Open</button>
+      </z-tab>
+    </z-tab-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSheetPreviewComponent {
+  private readonly sheetService = inject(ZardSheetService);
+
+  readonly visible = signal(false);
+
+  readonly form = new FormGroup({
+    name: new FormControl('Pedro Duarte'),
+    username: new FormControl('@peduarte'),
+  });
+
+  save() {
+    console.log('Form submitted:', this.form.value);
+    this.visible.set(false);
+  }
+
+  openSheet() {
+    this.sheetService.create({
+      zTitle: 'Edit profile',
+      zDescription: `Make changes to your profile here. Click save when you're done.`,
+      zContent: ZardDemoSheetPreviewFormComponent,
+      zOkText: 'Save changes',
+      zCancelText: 'Close',
+      zOnOk: instance => {
+        console.log('Form submitted:', instance.form.value);
+      },
+    });
+  }
+}
+```
+
 ### Side
 
 Use `zSide`, as an input or an option, to set the edge of the screen where the sheet appears. Values are `top`, `right`, `bottom`, or `left`.
@@ -1335,7 +1453,7 @@ export class ZardDemoSheetNoCloseButtonComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

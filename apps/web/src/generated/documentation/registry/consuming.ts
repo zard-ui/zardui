@@ -1,0 +1,36 @@
+import type { CodeTabData } from '@highlight/types';
+
+export const REGISTRY_CONSUMING: CodeTabData = {
+  "tabs": [
+    {
+      "label": "npm",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli@latest</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> button</span></span></code></pre>",
+      "code": "npx zard-cli@latest add button",
+      "language": "bash"
+    },
+    {
+      "label": "pnpm",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">pnpm</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> dlx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli@latest</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> button</span></span></code></pre>",
+      "code": "pnpm dlx zard-cli@latest add button",
+      "language": "bash"
+    },
+    {
+      "label": "yarn",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">npx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli@latest</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> button</span></span></code></pre>",
+      "code": "npx zard-cli@latest add button",
+      "language": "bash"
+    },
+    {
+      "label": "bun",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">bunx</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> zard-cli@latest</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> add</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> button</span></span></code></pre>",
+      "code": "bunx zard-cli@latest add button",
+      "language": "bash"
+    },
+    {
+      "label": "bash",
+      "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">curl</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> https://zardui.com/r/registry.json</span></span>\n<span class=\"line\"></span>\n<span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">curl</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\"> https://zardui.com/r/button.json</span></span></code></pre>",
+      "code": "curl https://zardui.com/r/registry.json\n\ncurl https://zardui.com/r/button.json",
+      "language": "bash"
+    }
+  ]
+};

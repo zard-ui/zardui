@@ -19,6 +19,12 @@ export interface IconFamilyInfo {
   readonly label: string;
   /** The npm package the project needs installed. */
   readonly package: string;
+  /**
+   * What the symbols are imported from, when that is not the package itself. Phosphor splits its
+   * weights into subpaths, so its regular weight lives at `@ng-icons/phosphor-icons/regular` while
+   * the package to install is `@ng-icons/phosphor-icons`.
+   */
+  readonly importFrom?: string;
   /** The prefix of the symbols that package exports (`lucide` → `lucideCheck`). */
   readonly prefix: string;
 }
@@ -40,7 +46,37 @@ export const ICON_FAMILIES: Record<string, IconFamilyInfo> = {
     package: '@ng-icons/lucide',
     prefix: 'lucide',
   },
+  tabler: {
+    value: 'tabler',
+    label: 'Tabler Icons',
+    package: '@ng-icons/tabler-icons',
+    prefix: 'tabler',
+  },
+  hugeicons: {
+    value: 'hugeicons',
+    label: 'HugeIcons',
+    package: '@ng-icons/huge-icons',
+    prefix: 'huge',
+  },
+  phosphor: {
+    value: 'phosphor',
+    label: 'Phosphor Icons',
+    package: '@ng-icons/phosphor-icons',
+    importFrom: '@ng-icons/phosphor-icons/regular',
+    prefix: 'phosphor',
+  },
+  remixicon: {
+    value: 'remixicon',
+    label: 'Remix Icon',
+    package: '@ng-icons/remixicon',
+    prefix: 'remix',
+  },
 };
+
+/** The module specifier a family's symbols are imported from. */
+export function importSpecifier(info: Pick<IconFamilyInfo, 'package' | 'importFrom'>): string {
+  return info.importFrom ?? info.package;
+}
 
 /** The family `libs/zard` uses — the one the registry files are written in. */
 export const SOURCE_ICON_FAMILY: IconFamily = 'lucide';

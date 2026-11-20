@@ -17,6 +17,8 @@ npx zard-cli@latest add slider
 
 ### Manual
 
+**Add slider.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import {
@@ -157,6 +159,7 @@ export class ZardSliderRangeComponent {
     <span
       #thumb
       data-slot="slider-thumb"
+      [attr.data-orientation]="orientation()"
       [attr.role]="'slider'"
       [attr.aria-valuemin]="min()"
       [attr.aria-valuemax]="max()"
@@ -248,6 +251,8 @@ export class ZardSliderThumbComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    // shadcn's Slider root: `data-horizontal:w-full data-vertical:h-full`.
+    class: 'block data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full',
     '[attr.data-orientation]': 'zOrientation()',
     '[attr.aria-disabled]': 'disabled() ? true : null',
     '[attr.data-disabled]': 'disabled() ? true : null',
@@ -535,22 +540,18 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
 }
 ```
 
+**Add slider.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
-export const sliderVariants = cva(
-  'relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col',
-);
+export const sliderVariants = cva('relative flex w-full items-center data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col touch-none select-none data-disabled:opacity-50');
 
-export const sliderTrackVariants = cva(
-  'bg-muted relative grow overflow-hidden rounded-full data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1',
-);
+export const sliderTrackVariants = cva('bg-muted relative grow overflow-hidden rounded-full data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1');
 
-export const sliderRangeVariants = cva('bg-primary absolute select-none data-horizontal:h-full data-vertical:w-full');
+export const sliderRangeVariants = cva('bg-primary absolute data-horizontal:h-full data-vertical:w-full select-none');
 
-export const sliderThumbVariants = cva(
-  'relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 disabled:pointer-events-none disabled:opacity-50',
-);
+export const sliderThumbVariants = cva('border-ring ring-ring/50 relative block size-3 shrink-0 rounded-full border bg-white transition-[color,box-shadow] after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 select-none disabled:pointer-events-none disabled:opacity-50');
 
 export const sliderOrientationVariants = cva('absolute', {
   variants: {
@@ -565,11 +566,15 @@ export const sliderOrientationVariants = cva('absolute', {
 });
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './slider.component';
 export * from './slider.imports';
 export * from './slider.variants';
 ```
+
+**Add slider.imports.ts**
 
 ```angular-ts
 /*
@@ -604,6 +609,26 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardSliderComponent } from '../slider.component';
+
+@Component({
+  selector: 'z-demo-slider-preview',
+  imports: [ZardSliderComponent],
+  template: `
+    <div class="flex min-h-50 w-full items-center p-10">
+      <z-slider class="mx-auto w-full max-w-xs" [zDefault]="[75]" />
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSliderPreviewComponent {}
+```
 
 ### Range
 
@@ -738,7 +763,7 @@ import { ZardSliderComponent } from '../slider.component';
 export class ZardDemoSliderDisabledComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

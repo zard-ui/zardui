@@ -17,6 +17,8 @@ npx zard-cli@latest add message
 
 ### Manual
 
+**Add message.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -229,6 +231,8 @@ export class ZardMessageComponent {
 }
 ```
 
+**Add message.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
@@ -236,23 +240,11 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export const messageGroupVariants = cva('flex min-w-0 flex-col gap-2');
 
-export const messageVariants = cva(
-  mergeClasses('group/message relative flex w-full min-w-0 gap-2 text-sm', 'data-[align=end]:flex-row-reverse'),
-);
+export const messageVariants = cva('relative flex w-full min-w-0 gap-2 text-sm data-[align=end]:flex-row-reverse group/message');
 
-export const messageAvatarVariants = cva(
-  mergeClasses(
-    'flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-full bg-muted',
-    'group-has-data-[slot=message-footer]/message:-translate-y-8',
-  ),
-);
+export const messageAvatarVariants = cva('bg-muted flex w-fit min-w-8 shrink-0 items-center justify-center self-end overflow-hidden rounded-full group-has-data-[slot=message-footer]/message:-translate-y-8');
 
-export const messageContentVariants = cva(
-  mergeClasses(
-    'flex w-full min-w-0 flex-col gap-2.5 wrap-break-word',
-    'group-data-[align=end]/message:*:data-slot:self-end',
-  ),
-);
+export const messageContentVariants = cva('flex w-full min-w-0 flex-col gap-2.5 wrap-break-word group-data-[align=end]/message:*:data-slot:self-end');
 
 /**
  * A ghost bubble has no surface of its own, so the header and footer drop the
@@ -261,25 +253,24 @@ export const messageContentVariants = cva(
  * `data-variant`, and a ghost action button in the footer must not flatten the
  * padding of the whole row.
  */
-const messageMetaVariants = mergeClasses(
-  'flex max-w-full min-w-0 items-center px-3 text-xs font-medium text-muted-foreground',
-  'group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0',
-);
+const messageMetaVariants = 'text-muted-foreground flex max-w-full min-w-0 items-center px-3 text-xs font-medium group-has-[[data-slot=bubble][data-variant=ghost]]/message:px-0';
 
 export const messageHeaderVariants = cva(messageMetaVariants);
 
-export const messageFooterVariants = cva(
-  mergeClasses(messageMetaVariants, 'group-data-[align=end]/message:justify-end'),
-);
+export const messageFooterVariants = cva(mergeClasses(messageMetaVariants, 'text-muted-foreground px-3 text-xs font-medium group-has-data-[variant=ghost]/message:px-0 group-data-[align=end]/message:justify-end'));
 
 export type ZardMessageAlignVariants = 'start' | 'end';
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './message.component';
 export * from './message.imports';
 export * from './message.variants';
 ```
+
+**Add message.imports.ts**
 
 ```angular-ts
 export {
@@ -323,6 +314,80 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardAvatarComponent } from '@/shared/components/avatar';
+import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
+import { ZardMessageImports } from '@/shared/components/message/message.imports';
+
+@Component({
+  selector: 'z-demo-message-preview',
+  imports: [ZardAvatarComponent, ...ZardBubbleImports, ...ZardMessageImports],
+  template: `
+    <div class="flex w-full max-w-sm flex-col gap-6 py-12">
+      <z-message zAlign="end">
+        <z-message-avatar>
+          <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
+        </z-message-avatar>
+        <z-message-content>
+          <z-bubble>
+            <z-bubble-content>Deploying to prod real quick.</z-bubble-content>
+          </z-bubble>
+        </z-message-content>
+      </z-message>
+
+      <z-message>
+        <z-message-avatar>
+          <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@luizgomess" zFallback="LG" />
+        </z-message-avatar>
+        <z-message-content>
+          <z-bubble zVariant="muted">
+            <z-bubble-content>It's 4:55 PM. On a Friday.</z-bubble-content>
+          </z-bubble>
+        </z-message-content>
+      </z-message>
+
+      <z-message zAlign="end">
+        <z-message-avatar>
+          <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
+        </z-message-avatar>
+        <z-message-content>
+          <z-bubble>
+            <z-bubble-content>It's a one-line change.</z-bubble-content>
+          </z-bubble>
+          <z-message-footer>Delivered</z-message-footer>
+        </z-message-content>
+      </z-message>
+
+      <z-message>
+        <z-message-avatar>
+          <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@luizgomess" zFallback="LG" />
+        </z-message-avatar>
+        <z-message-content>
+          <z-bubble-group>
+            <z-bubble zVariant="muted">
+              <z-bubble-content>It's always a one-line change 😭.</z-bubble-content>
+            </z-bubble>
+            <z-bubble zVariant="muted">
+              <z-bubble-content>Alright, let me take a look.</z-bubble-content>
+              <z-bubble-reactions role="img" aria-label="Reactions: thumbs up">
+                <span>👍</span>
+              </z-bubble-reactions>
+            </z-bubble>
+          </z-bubble-group>
+        </z-message-content>
+      </z-message>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
+})
+export class ZardDemoMessagePreviewComponent {}
+```
 
 ### Avatar
 
@@ -658,7 +723,7 @@ import { ZardMessageImports } from '@/shared/components/message/message.imports'
 export class ZardDemoMessageShorthandComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

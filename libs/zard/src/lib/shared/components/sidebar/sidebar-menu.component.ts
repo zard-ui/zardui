@@ -261,7 +261,7 @@ export class ZardSidebarMenuBadgeComponent {
   imports: [ZardSkeletonComponent],
   template: `
     @if (zShowIcon()) {
-      <z-skeleton class="size-4 rounded-md" data-sidebar="menu-skeleton-icon" />
+      <z-skeleton class="cn-sidebar-menu-skeleton-icon" data-sidebar="menu-skeleton-icon" />
     }
 
     <z-skeleton

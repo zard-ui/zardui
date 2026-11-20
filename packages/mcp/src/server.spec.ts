@@ -28,12 +28,36 @@ const REGISTRY = {
   ],
 };
 
+const CLI_MD = [
+  '# CLI',
+  '',
+  '## Commands',
+  '',
+  '### init',
+  '',
+  'Run init.',
+  '',
+  '### create',
+  '',
+  '```',
+  '## not a heading',
+  'npx zard-cli@latest create [name] --template angular --preset <code>',
+  '```',
+  '',
+  '### apply',
+  '',
+  'npx zard-cli@latest apply --preset <code>',
+  '',
+  '## Configuration',
+].join('\n');
+
 const LLMS = `# Zard UI
 
 ## Get Started
 
 - [Theming](https://zardui.com/docs/theming): Design tokens in OKLCH.
 - [RTL](https://zardui.com/docs/rtl): Right-to-left support.
+- [CLI](https://zardui.com/docs/cli): Command-line tool to create projects from a design preset, set them up and restyle them.
 - [Changelog](https://zardui.com/docs/changelog): Release notes.
 
 ## Forms
@@ -107,6 +131,7 @@ const fetchMock = jest.fn((url: string) => {
   if (url.endsWith('/docs/theming.md'))
     return respond('# Theming\n\n## Colors\n\n--primary\n\n## Radius\n\n--radius', 200, 'text/markdown');
   if (url.endsWith('/docs/rtl.md')) return respond('# RTL', 200, 'text/markdown');
+  if (url.endsWith('/docs/cli.md')) return respond(CLI_MD, 200, 'text/markdown');
   if (url.endsWith('/docs/forms/signal-forms.md')) return respond('# Signal Forms', 200, 'text/markdown');
   // The site answers unknown paths with its HTML shell, not 404.
   if (url.includes('/docs/components/')) return respond('<!doctype html><html></html>', 200, 'text/html');
@@ -139,7 +164,7 @@ describe('zard-mcp over the protocol', () => {
 
   it('marks every tool but install-component as read-only, and gives each a title', async () => {
     const { tools } = await client.listTools();
-    expect(tools).toHaveLength(10);
+    expect(tools).toHaveLength(16);
     for (const tool of tools) {
       expect(tool.title).toBeTruthy();
       expect(tool.annotations?.readOnlyHint).toBe(tool.name !== 'install-component');
@@ -172,6 +197,29 @@ describe('zard-mcp over the protocol', () => {
   ])('search "%s" puts %s first', async (query, expected) => {
     const { matches } = (await call('search-components', { query })).data();
     expect(matches[0].name).toBe(expected);
+  });
+
+  it.each([
+    ['create project', 'create'],
+    ['new project', 'create'],
+    ['start a zard project with a preset', 'create'],
+    ['zard-cli create', 'create'],
+    ['apply', 'apply'],
+    ['theme preset', 'apply'],
+  ])('search "%s" points at the %s section of the CLI guide', async (query, section) => {
+    const data = (await call('search-components', { query })).data();
+    expect(data.guides[0]).toMatchObject({ topic: 'cli', section, read: { tool: 'get-docs', topic: 'cli', section } });
+  });
+
+  it('search "preset" points at the CLI guide', async () => {
+    const data = (await call('search-components', { query: 'preset' })).data();
+    expect(data.total).toBe(0);
+    expect(data.guides).toEqual([expect.objectContaining({ topic: 'cli' })]);
+  });
+
+  it('does not offer the CLI guide for an ordinary component query', async () => {
+    const data = (await call('search-components', { query: 'create a button' })).data();
+    expect(data.guides).toBeUndefined();
   });
 
   it('suggests the right name for a misspelled component', async () => {
@@ -240,6 +288,7 @@ describe('zard-mcp over the protocol', () => {
     expect(guides.map((g: { topic: string }) => g.topic)).toEqual([
       'theming',
       'rtl',
+      'cli',
       'forms/signal-forms',
       'utils/shimmer',
     ]);
@@ -275,6 +324,42 @@ describe('zard-mcp over the protocol', () => {
       expect(res.text).toBe('# RTL');
     },
   );
+
+  it.each(['create', 'create project', 'new project', 'scaffold', 'zard-cli create'])(
+    'hands over the create command for the topic %s',
+    async topic => {
+      const res = await call('get-docs', { topic });
+      expect(res.isError).toBe(false);
+      expect(res.text).toMatch(/^### create/);
+      expect(res.text).toContain('create [name] --template angular --preset <code>');
+      expect(res.text).not.toContain('### apply');
+    },
+  );
+
+  it.each(['apply', 'apply preset', 'theme preset', 'restyle'])(
+    'hands over the apply command for the topic %s',
+    async topic => {
+      const res = await call('get-docs', { topic });
+      expect(res.isError).toBe(false);
+      expect(res.text).toBe('### apply\n\nnpx zard-cli@latest apply --preset <code>');
+    },
+  );
+
+  it('returns the whole CLI guide for the topic preset', async () => {
+    expect((await call('get-docs', { topic: 'preset' })).text).toBe(CLI_MD);
+  });
+
+  it('reads a level-three section, by its name or by a synonym', async () => {
+    const byName = await call('get-docs', { topic: 'cli', section: 'create' });
+    expect(byName.text).toMatch(/^### create/);
+    expect((await call('get-docs', { topic: 'cli', section: 'new project' })).text).toBe(byName.text);
+  });
+
+  it('lists the level-three sections too when one is missing, ignoring code fences', async () => {
+    const res = await call('get-docs', { topic: 'cli', section: 'nothing' });
+    expect(res.isError).toBe(true);
+    expect(res.text).toContain('Sections: Commands, init, create, apply, Configuration.');
+  });
 
   it('suggests a guide for a misspelled topic', async () => {
     const res = await call('get-docs', { topic: 'theme' });

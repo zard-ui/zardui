@@ -17,6 +17,8 @@ npx zard-cli@latest add resizable
 
 ### Manual
 
+**Add resizable.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { isPlatformBrowser } from '@angular/common';
@@ -343,6 +345,8 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 }
 ```
 
+**Add resizable.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -358,7 +362,7 @@ export const resizableVariants = cva('flex size-full aria-[orientation=vertical]
   },
 });
 
-export const resizablePanelVariants = cva('relative overflow-hidden shrink-0 h-full', {
+export const resizablePanelVariants = cva('relative h-full shrink-0 overflow-hidden', {
   variants: {
     zCollapsed: {
       true: 'hidden',
@@ -370,29 +374,28 @@ export const resizablePanelVariants = cva('relative overflow-hidden shrink-0 h-f
   },
 });
 
-export const resizableHandleVariants = cva(
-  'relative flex min-w-px items-center justify-center bg-border ring-offset-background after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden aria-[orientation=horizontal]:min-h-px aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:h-1 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:translate-x-0 aria-[orientation=horizontal]:after:-translate-y-1/2 [&[aria-orientation=horizontal]>div]:rotate-90',
-  {
-    variants: {
-      zLayout: {
-        horizontal: 'cursor-ns-resize',
-        vertical: 'cursor-ew-resize',
-      },
-      zDisabled: {
-        true: 'cursor-default pointer-events-none opacity-50',
-        false: '',
-      },
+export const resizableHandleVariants = cva('bg-border ring-offset-background relative flex min-w-px items-center justify-center focus-visible:ring-ring after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:outline-hidden aria-[orientation=horizontal]:min-h-px aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:h-1 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:translate-x-0 aria-[orientation=horizontal]:after:-translate-y-1/2 [&[aria-orientation=horizontal]>div]:rotate-90', {
+  variants: {
+    zLayout: {
+      horizontal: 'cursor-ns-resize',
+      vertical: 'cursor-ew-resize',
     },
-    defaultVariants: {
-      zDisabled: false,
+    zDisabled: {
+      true: 'cursor-default opacity-50 pointer-events-none',
+      false: '',
     },
   },
-);
+  defaultVariants: {
+    zDisabled: false,
+  },
+});
 
-export const resizableHandleIndicatorVariants = cva('z-10 flex h-6 w-1 shrink-0 rounded-lg bg-border');
+export const resizableHandleIndicatorVariants = cva('bg-border z-10 flex h-6 w-1 shrink-0 rounded-lg');
 
 export type ZardResizableLayoutVariants = NonNullable<VariantProps<typeof resizableVariants>['zLayout']>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './resizable.component';
@@ -401,6 +404,8 @@ export * from './resizable-handle.component';
 export * from './resizable.imports';
 export * from './resizable.variants';
 ```
+
+**Add resizable-handle.component.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -699,6 +704,8 @@ export class ZardResizableHandleComponent {
 }
 ```
 
+**Add resizable-panel.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -754,6 +761,8 @@ export class ZardResizablePanelComponent {
 }
 ```
 
+**Add resizable.imports.ts**
+
 ```angular-ts
 import { ZardResizableHandleComponent } from '@/shared/components/resizable/resizable-handle.component';
 import { ZardResizablePanelComponent } from '@/shared/components/resizable/resizable-panel.component';
@@ -781,6 +790,47 @@ import { ZardResizableImports } from '@/shared/components/resizable/resizable.im
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+
+import { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';
+
+@Component({
+  selector: 'z-demo-resizable-preview',
+  imports: [...ZardResizableImports],
+  template: `
+    <z-resizable class="h-60 w-80 rounded-lg border sm:w-96">
+      <z-resizable-panel>
+        <div class="flex h-full items-center justify-center p-6">
+          <span class="font-semibold">One</span>
+        </div>
+      </z-resizable-panel>
+      <z-resizable-handle zWithHandle />
+      <z-resizable-panel>
+        <z-resizable zLayout="vertical">
+          <z-resizable-panel zDefaultSize="25">
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Two</span>
+            </div>
+          </z-resizable-panel>
+          <z-resizable-handle zWithHandle />
+          <z-resizable-panel zDefaultSize="75">
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Three</span>
+            </div>
+          </z-resizable-panel>
+        </z-resizable>
+      </z-resizable-panel>
+    </z-resizable>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+})
+export class ZardDemoResizablePreviewComponent {}
+```
 
 ### Vertical
 
@@ -848,7 +898,7 @@ import { ZardResizableImports } from '@/shared/components/resizable/resizable.im
 export class ZardDemoResizableHandleComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

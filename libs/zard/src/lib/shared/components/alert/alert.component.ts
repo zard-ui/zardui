@@ -23,12 +23,12 @@ import {
     @if (zIcon() || iconName()) {
       <span [class]="iconClasses()" data-slot="alert-icon">
         <ng-container *zStringTemplateOutlet="zIcon()">
-          <ng-icon [name]="iconName()" class="size-4!" />
+          <ng-icon [name]="iconName()" class="cn-alert-icon-glyph" />
         </ng-container>
       </span>
     }
 
-    <div class="flex-1">
+    <div [class]="contentClasses()">
       @if (zTitle()) {
         <div [class]="titleClasses()" data-slot="alert-title">
           <ng-container *zStringTemplateOutlet="zTitle()">{{ zTitle() }}</ng-container>
@@ -69,6 +69,17 @@ export class ZardAlertComponent {
 
   protected readonly actionClasses = computed(() => alertActionVariants());
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
+  /**
+   * The icon spans two grid rows (shadcn gives the title and the description one each). The wrapper takes both rows
+   * only when it holds both, so an alert with a single line keeps the gap of the empty second row, like shadcn.
+   */
+  protected readonly contentClasses = computed(() =>
+    mergeClasses(
+      'flex flex-1 flex-col gap-[inherit]',
+      this.zTitle() && this.zDescription() && "group-has-data-[slot='alert-icon']/alert:row-span-2",
+    ),
+  );
+
   protected readonly descriptionClasses = computed(() => alertDescriptionVariants({ zType: this.zType() }));
   protected readonly iconClasses = computed(() => alertIconVariants());
   protected readonly role = computed(() => this.zRole() ?? (this.zAction() ? 'status' : 'alert'));

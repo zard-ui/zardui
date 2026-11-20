@@ -77,6 +77,13 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
     expect(host.getAttribute('data-orientation')).toBe('horizontal');
   });
 
+  it('should expose the orientation on the thumb so a style can size it (luma)', () => {
+    const thumb = fixture.debugElement
+      .query(By.directive(ZardSliderThumbComponent))
+      .nativeElement.querySelector('span');
+    expect(thumb.getAttribute('data-orientation')).toBe('horizontal');
+  });
+
   it('should apply aria attributes on thumb', () => {
     const thumb = fixture.debugElement
       .query(By.directive(ZardSliderThumbComponent))
@@ -129,6 +136,19 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
     const thumbHost = fixture.debugElement.query(By.directive(ZardSliderThumbComponent)).nativeElement;
     const styleLeft = thumbHost.style.left;
     expect(styleLeft).toContain('%');
+  });
+
+  it('places the thumb by its share of a range other than 0–100', () => {
+    component.min = 50;
+    component.max = 10000;
+    component.step = 50;
+    component.value = [2500];
+    fixture.detectChanges();
+
+    const thumb = fixture.debugElement.query(By.directive(ZardSliderThumbComponent)).nativeElement;
+    const percent = parseFloat(/([\d.]+)%/.exec(thumb.style.left)?.[1] ?? '');
+    expect(percent).toBeCloseTo(((2500 - 50) / (10000 - 50)) * 100, 1);
+    expect(thumb.querySelector('span').getAttribute('aria-valuenow')).toBe('2500');
   });
 
   it('should apply zMin, zMax, and zStep correctly', () => {

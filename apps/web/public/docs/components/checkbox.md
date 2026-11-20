@@ -17,6 +17,8 @@ npx zard-cli@latest add checkbox
 
 ### Manual
 
+**Add checkbox.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -85,7 +87,7 @@ type OnChangeType = (value: boolean) => void;
   viewProviders: [provideIcons({ lucideCheck })],
   host: {
     'data-slot': 'checkbox',
-    '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' flex items-center gap-2'",
+    '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' peer flex items-center gap-2'",
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.aria-invalid]': 'zInvalid() ? "true" : null',
     '[attr.data-checked]': "checked() ? '' : null",
@@ -143,15 +145,17 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
 }
 ```
 
+**Add checkbox.variants.ts**
+
 ```angular-ts
 import { cva } from 'class-variance-authority';
 
-export const checkboxVariants = cva(
-  'cursor-[unset] peer size-4 shrink-0 appearance-none rounded-[4px] border border-input shadow-sm transition outline-none hover:shadow-md focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary',
-);
+export const checkboxVariants = cva('border-input size-4 shrink-0 cursor-[unset] rounded-[4px] border shadow-sm transition focus-visible:ring-ring/50 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 checked:border-primary checked:bg-primary checked:text-primary-foreground dark:checked:bg-primary hover:shadow-md focus-visible:ring-3 disabled:cursor-not-allowed aria-invalid:ring-3 peer appearance-none outline-none disabled:opacity-50');
 
 export const checkboxLabelVariants = cva('cursor-[unset] text-sm text-current empty:hidden select-none');
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './checkbox.component';
@@ -169,6 +173,55 @@ import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.com
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+
+@Component({
+  selector: 'z-demo-checkbox-preview',
+  imports: [ZardCheckboxComponent, ...ZardFieldImports, FormsModule],
+  template: `
+    <div z-field-group class="min-w-sm">
+      <div z-field zOrientation="horizontal">
+        <z-checkbox zId="terms-checkbox" [(ngModel)]="terms" />
+        <label z-field-label for="terms-checkbox">Accept terms and conditions</label>
+      </div>
+      <div z-field zOrientation="horizontal">
+        <z-checkbox zId="terms-checkbox-2" [(ngModel)]="termsWithDesc" />
+        <div z-field-content>
+          <label z-field-label for="terms-checkbox-2">Accept terms and conditions</label>
+          <p z-field-description>By clicking this checkbox, you agree to the terms.</p>
+        </div>
+      </div>
+      <div z-field zOrientation="horizontal" data-disabled="true">
+        <z-checkbox zId="toggle-checkbox" zDisabled />
+        <label z-field-label for="toggle-checkbox">Enable notifications</label>
+      </div>
+      <label z-field-label for="toggle-checkbox-2">
+        <div z-field zOrientation="horizontal">
+          <z-checkbox zId="toggle-checkbox-2" [(ngModel)]="notifications" />
+          <div z-field-content>
+            <div z-field-title>Enable notifications</div>
+            <p z-field-description>You can enable or disable notifications at any time.</p>
+          </div>
+        </div>
+      </label>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCheckboxPreviewComponent {
+  terms = false;
+  termsWithDesc = true;
+  notifications = false;
+}
+```
 
 ### Invalid
 
@@ -510,7 +563,7 @@ export class ZardDemoCheckboxReactiveFormsComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

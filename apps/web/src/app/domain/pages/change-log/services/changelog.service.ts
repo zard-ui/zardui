@@ -3,26 +3,45 @@ import { Injectable, signal } from '@angular/core';
 import { type ChangelogEntry, type ChangelogExample } from '../entries/changelog-entry.interface';
 import { CHANGELOG_ENTRIES } from '../entries/changelog-registry';
 
+/** How many entries the changelog index shows in full; the older ones are listed as links, as on shadcn/ui. */
+export const CHANGELOG_INDEX_SIZE = 5;
+
 /**
- * Owns the changelog data: the (static, lightweight) list of months plus the
- * cache of demo payloads, which are fetched on demand — one module per month.
+ * Owns the changelog data: the (static, lightweight) list of entries plus the
+ * cache of demo payloads, which are fetched on demand — one module per entry.
  */
 @Injectable({
   providedIn: 'root',
 })
 export class ChangelogService {
-  /** Every published month, newest first. */
+  /** Every published entry, newest first. */
   readonly entries = CHANGELOG_ENTRIES;
+
+  /** The entries the index shows in full. */
+  readonly latest = this.entries.slice(0, CHANGELOG_INDEX_SIZE);
+
+  /** The rest, listed under "More Updates". */
+  readonly older = this.entries.slice(CHANGELOG_INDEX_SIZE);
 
   private readonly loaded = signal<Record<string, ChangelogExample[]>>({});
   private readonly requests = new Map<string, Promise<void>>();
 
-  /** A month's demos, or `undefined` while its payload has not been loaded yet. */
+  /** The entry published at `/docs/changelog/<slug>`. */
+  bySlug(slug: string | null | undefined): ChangelogEntry | undefined {
+    return this.entries.find(entry => entry.meta.slug === slug);
+  }
+
+  /** The entry an old `/docs/changelog#<id>` link pointed to. */
+  byId(id: string | null | undefined): ChangelogEntry | undefined {
+    return this.entries.find(entry => entry.meta.id === id);
+  }
+
+  /** An entry's demos, or `undefined` while its payload has not been loaded yet. */
   examplesOf(id: string): ChangelogExample[] | undefined {
     return this.loaded()[id];
   }
 
-  /** Loads a month's demo payload. Concurrent calls share a single import. */
+  /** Loads an entry's demo payload. Concurrent calls share a single import. */
   load(entry: ChangelogEntry): Promise<void> {
     const { id } = entry.meta;
     const pending = this.requests.get(id);
@@ -36,8 +55,8 @@ export class ChangelogService {
     return request;
   }
 
-  /** Loads every month's payload — used on the server, where the prerendered HTML must be complete. */
-  loadAll(): Promise<void> {
-    return Promise.all(this.entries.map(entry => this.load(entry))).then(() => undefined);
+  /** Loads the payload of several entries — used on the server, where the prerendered HTML must be complete. */
+  loadAll(entries: readonly ChangelogEntry[] = this.entries): Promise<void> {
+    return Promise.all(entries.map(entry => this.load(entry))).then(() => undefined);
   }
 }

@@ -19,7 +19,7 @@ npx zard-cli add utilities
 
 The CLI writes `utilities.css` next to your global stylesheet and adds its `@import` after the ones already there. If you install by hand, copy the file there and add the same line yourself.
 
-src/styles.css
+**src/styles.css**
 
 ```
 @import 'tailwindcss';
@@ -36,56 +36,6 @@ The utility only paints a mask — it does not make the container scrollable. Pa
   <!-- enough content to scroll -->
 </div>
 ```
-
-Activity
-
-Ana Lima opened a pull request
-
-2m
-
-Bruno Reis approved a review
-
-9m
-
-Clara Matos pushed 3 commits
-
-14m
-
-Diego Faria closed an issue
-
-31m
-
-Elisa Nunes left a comment
-
-48m
-
-Felipe Souza merged a branch
-
-1h
-
-Gabriela Pinto published a release
-
-2h
-
-Hugo Castro requested changes
-
-3h
-
-Ines Moreira reopened an issue
-
-5h
-
-Joao Teles added a label
-
-8h
-
-Karina Vieira renamed a branch
-
-11h
-
-Lucas Braga deleted a stale tag
-
-1d
 
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -150,18 +100,6 @@ export class ZardUtilsScrollFadeBasicComponent {
 ```
 
 `scroll-fade-x` is the horizontal pair. Same rule: it needs `overflow-x-auto` and content wide enough to overflow.
-
-Scroll-driven masks and a smaller runtime.
-
-Focus ring fixes across every overlay.
-
-Signal forms land on every field component.
-
-Dark mode contrast pass on the code blocks.
-
-New chart primitives and a themed tooltip.
-
-Registry v2, with per-item dependency graphs.
 
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -239,50 +177,6 @@ scroll-fade and scroll-fade-y are the same utility. The rest fade a single edge.
 
 `-l` and `-r` are physical and always mean left and right. `-s` and `-e` are logical: under `dir="rtl"` they swap to follow the reading direction.
 
-scroll-fade-t
-
-Resolving dependencies
-
-Fetching registry index
-
-Downloading core
-
-Writing css/zard.css
-
-Writing utils/merge-classes.ts
-
-Linking peer dependencies
-
-Patching components.json
-
-Formatting written files
-
-Verifying the install
-
-Done in 4.21s
-
-scroll-fade-b
-
-Resolving dependencies
-
-Fetching registry index
-
-Downloading core
-
-Writing css/zard.css
-
-Writing utils/merge-classes.ts
-
-Linking peer dependencies
-
-Patching components.json
-
-Formatting written files
-
-Verifying the install
-
-Done in 4.21s
-
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -341,72 +235,6 @@ The sizing classes carry a value, not a mask — keep the mask utility next to t
 <div class="scroll-fade scroll-fade-t-4 scroll-fade-b-16 h-72 overflow-y-auto">One depth per edge</div>
 ```
 
-scroll-fade-4
-
-Berlin
-
-Bogota
-
-Cairo
-
-Dublin
-
-Helsinki
-
-Kyoto
-
-Lisbon
-
-Nairobi
-
-Oslo
-
-Quito
-
-scroll-fade-12
-
-Berlin
-
-Bogota
-
-Cairo
-
-Dublin
-
-Helsinki
-
-Kyoto
-
-Lisbon
-
-Nairobi
-
-Oslo
-
-Quito
-
-scroll-fade-[15%]
-
-Berlin
-
-Bogota
-
-Cairo
-
-Dublin
-
-Helsinki
-
-Kyoto
-
-Lisbon
-
-Nairobi
-
-Oslo
-
-Quito
-
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -454,28 +282,6 @@ export class ZardUtilsScrollFadeSizeComponent {
 
 The per-edge classes size one edge and leave the others on the shared default, which is how you get an asymmetric fade out of a single container.
 
-scroll-fade scroll-fade-t-4 scroll-fade-b-16
-
-feat(button): add a loading state
-
-fix(select): keep the popover width in sync
-
-docs(cli): document the --overwrite flag
-
-refactor(card): drop the redundant wrapper
-
-fix(dialog): restore focus on close
-
-feat(table): sortable column headers
-
-chore(deps): bump angular to 21.1
-
-fix(tabs): announce the active tab
-
-feat(chart): themed tooltip content
-
-test(input): cover the disabled path
-
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
@@ -515,7 +321,7 @@ export class ZardUtilsScrollFadePerEdgeComponent {
 
 Every class writes one of these custom properties, so a stylesheet can set them directly instead.
 
-src/styles.css
+**src/styles.css**
 
 ```
 .timeline {
@@ -536,46 +342,6 @@ How far you scroll before an edge reaches its full depth. Shorter feels snappier
   <!-- reaches full fade after 64px of scrolling -->
 </div>
 ```
-
-default reveal
-
-Attach a payment method
-
-Confirm the billing address
-
-Choose an invoice cadence
-
-Set a spending alert
-
-Invite a billing contact
-
-Review the tax settings
-
-Enable receipts by email
-
-Download the last statement
-
-Close the account
-
-[--scroll-fade-reveal:32px]
-
-Attach a payment method
-
-Confirm the billing address
-
-Choose an invoice cadence
-
-Set a spending alert
-
-Invite a billing contact
-
-Review the tax settings
-
-Enable receipts by email
-
-Download the last statement
-
-Close the account
 
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -640,7 +406,7 @@ The inline utilities read the direction from the document, so one class covers b
 
 The scroll-aware behaviour needs scroll-driven animations. Where they are missing, the `@supports not` branch pins both edges to their full size: you get a static double fade instead of a scroll-aware one. It is a plain fallback, not a polyfill — the fade no longer tracks the scroll position, and the leading edge stays faded at rest.
 
-css/utilities.css
+**css/utilities.css**
 
 ```
 @supports not (animation-timeline: scroll()) {
@@ -653,30 +419,30 @@ css/utilities.css
 
 | Class |
 | --- |
-| `scroll-fade`Fades the top and bottom edges |
-| `scroll-fade-y`Same as `scroll-fade` |
-| `scroll-fade-x`Fades the inline edges; mirrors under RTL |
-| `scroll-fade-t`Top edge only |
-| `scroll-fade-b`Bottom edge only |
-| `scroll-fade-l`Left edge only; does not mirror |
-| `scroll-fade-r`Right edge only; does not mirror |
-| `scroll-fade-s`Inline start edge only |
-| `scroll-fade-e`Inline end edge only |
-| `scroll-fade-<number>`Fade depth from the spacing scale |
-| `scroll-fade-[<value>]`Arbitrary fade depth |
-| `scroll-fade-t-<number>`Top edge depth |
-| `scroll-fade-b-<number>`Bottom edge depth |
-| `scroll-fade-s-<number>`Inline start depth |
-| `scroll-fade-e-<number>`Inline end depth |
-| `scroll-fade-none`Disables the mask |
+| `scroll-fade` Fades the top and bottom edges |
+| `scroll-fade-y` Same as `scroll-fade` |
+| `scroll-fade-x` Fades the inline edges; mirrors under RTL |
+| `scroll-fade-t` Top edge only |
+| `scroll-fade-b` Bottom edge only |
+| `scroll-fade-l` Left edge only; does not mirror |
+| `scroll-fade-r` Right edge only; does not mirror |
+| `scroll-fade-s` Inline start edge only |
+| `scroll-fade-e` Inline end edge only |
+| `scroll-fade-<number>` Fade depth from the spacing scale |
+| `scroll-fade-[<value>]` Arbitrary fade depth |
+| `scroll-fade-t-<number>` Top edge depth |
+| `scroll-fade-b-<number>` Bottom edge depth |
+| `scroll-fade-s-<number>` Inline start depth |
+| `scroll-fade-e-<number>` Inline end depth |
+| `scroll-fade-none` Disables the mask |
 
 ### Custom properties
 
 | Property | Default |
 | --- | --- |
-| `--scroll-fade-size`Fade depth of every edge | `min(12%, calc(var(--spacing) * 10))` |
-| `--scroll-fade-t-size`Top edge depth | `--scroll-fade-size` |
-| `--scroll-fade-b-size`Bottom edge depth | `--scroll-fade-size` |
-| `--scroll-fade-s-size`Inline start depth | `--scroll-fade-size` |
-| `--scroll-fade-e-size`Inline end depth | `--scroll-fade-size` |
-| `--scroll-fade-reveal`Scroll distance to a full fade | `calc(var(--spacing) * 24)` |
+| `--scroll-fade-size` Fade depth of every edge | `min(12%, calc(var(--spacing) * 10))` |
+| `--scroll-fade-t-size` Top edge depth | `--scroll-fade-size` |
+| `--scroll-fade-b-size` Bottom edge depth | `--scroll-fade-size` |
+| `--scroll-fade-s-size` Inline start depth | `--scroll-fade-size` |
+| `--scroll-fade-e-size` Inline end depth | `--scroll-fade-size` |
+| `--scroll-fade-reveal` Scroll distance to a full fade | `calc(var(--spacing) * 24)` |

@@ -9,7 +9,7 @@ import { ZardAspectRatioComponent } from '../aspect-ratio.component';
   template: `
     <z-aspect-ratio [zRatio]="9 / 16" class="bg-muted w-full max-w-40 rounded-lg">
       <img
-        ngSrc="https://avatar.vercel.sh/shadcn1"
+        ngSrc="https://avatar.vercel.sh/zardui"
         alt="Photo"
         fill
         class="rounded-lg object-cover grayscale dark:brightness-20"

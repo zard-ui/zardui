@@ -3,9 +3,11 @@ import type { ZardChartChromeColors, ZardChartConfig } from './chart.types';
 /** How many `--chart-*` tokens the default palette cycles through. */
 export const CHART_PALETTE_SIZE = 5;
 
-const VAR_PATTERN = /^var\(\s*(--[^,)\s]+)\s*(?:,\s*([\s\S]+?))?\s*\)$/;
+// Each `\s*` borders a character class it cannot overlap, and the captured bodies are trimmed in code: a lazy group
+// between two `\s*` backtracks polynomially on long runs of spaces.
+const VAR_PATTERN = /^var\(\s*(--[^,)\s]+)\s*(?:,([\s\S]*))?\)$/;
 const HEX_PATTERN = /^#([0-9a-f]{3,8})$/i;
-const FUNCTION_PATTERN = /^([a-z-]+)\(\s*([\s\S]*?)\s*\)$/i;
+const FUNCTION_PATTERN = /^([a-z-]+)\(([\s\S]*)\)$/i;
 const MAX_VAR_DEPTH = 8;
 
 /** CSS color functions that accept the modern `<channels> / <alpha>` syntax. */
@@ -122,7 +124,8 @@ function readCssColor(host: HTMLElement | null | undefined, value: string, depth
     return raw;
   }
 
-  const [, token, fallback] = match;
+  const [, token] = match;
+  const fallback = match[2]?.trim();
   const computed = readCssVariable(host, token);
   if (computed) {
     return readCssColor(host, computed, depth + 1);
@@ -172,7 +175,7 @@ function applyAlpha(color: string, alpha: number): string {
   const fn = FUNCTION_PATTERN.exec(raw);
   if (fn) {
     const name = fn[1].toLowerCase();
-    const body = fn[2];
+    const body = fn[2].trim();
 
     if (SLASH_ALPHA_FUNCTIONS.has(name)) {
       if (!body.includes(',')) {
@@ -223,10 +226,31 @@ export function resolveChartColors(
   return resolved;
 }
 
+/**
+ * The color actually painted behind the chart: the first ancestor with a background, else the page's.
+ *
+ * A pie's slice gaps are drawn in this color. Painted in `--background` inside a card, they showed as a
+ * dark ring around the chart instead of as gaps.
+ */
+function surfaceBehind(host: HTMLElement | null | undefined): string | null {
+  if (!host || typeof getComputedStyle !== 'function') {
+    return null;
+  }
+
+  for (let el = host.parentElement; el; el = el.parentElement) {
+    const color = getComputedStyle(el).backgroundColor;
+    if (color && color !== 'transparent' && !/^rgba\([^)]*,\s*0\)$/.test(color)) {
+      return toCanvasColor(color);
+    }
+  }
+
+  return null;
+}
+
 /** Resolves the grid, axis and surface colors the chart chrome is painted with. */
 export function resolveChartChrome(host: HTMLElement | null | undefined): ZardChartChromeColors {
   return {
-    background: resolveCssColor(host, 'var(--background)'),
+    background: surfaceBehind(host) ?? resolveCssColor(host, 'var(--background)'),
     border: resolveCssColor(host, 'var(--border)'),
     foreground: resolveCssColor(host, 'var(--foreground)'),
     mutedForeground: resolveCssColor(host, 'var(--muted-foreground)'),

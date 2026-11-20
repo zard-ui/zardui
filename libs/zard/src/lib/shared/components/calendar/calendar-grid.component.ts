@@ -30,6 +30,9 @@ import {
   calendarWeeksVariants,
 } from './calendar.variants';
 
+/** Row template when week numbers are on: the number column, then the seven days. */
+const WEEK_NUMBER_COLUMNS = 'grid-cols-[var(--cell-size)_repeat(7,minmax(var(--cell-size),1fr))]';
+
 @Component({
   selector: 'z-calendar-grid',
   imports: [NgTemplateOutlet],
@@ -37,9 +40,12 @@ import {
     <div #gridContainer class="w-full">
       <!-- Weekdays Header -->
       <div [class]="weekdaysClasses()" role="row">
+        @if (zShowWeekNumbers()) {
+          <div class="w-(--cell-size) select-none" role="columnheader"></div>
+        }
         @for (weekday of effectiveWeekdays(); track weekday) {
-          <div [class]="weekdayClasses()" role="columnheader">
-            {{ weekday }}
+          <div [class]="weekdayClasses()" role="columnheader" [attr.aria-label]="weekday">
+            {{ shortWeekday(weekday) }}
           </div>
         }
       </div>
@@ -48,6 +54,14 @@ import {
       <div [class]="weeksClasses()" role="rowgroup">
         @for (week of weeks(); track $index; let weekIndex = $index) {
           <div [class]="rowClasses()" role="row">
+            @if (zShowWeekNumbers()) {
+              <div
+                role="rowheader"
+                class="text-muted-foreground flex size-(--cell-size) items-center justify-center text-center text-[0.8rem] select-none"
+              >
+                {{ weekNumber(week[0].date) }}
+              </div>
+            }
             @for (day of week; track day.date.getTime(); let dayIndex = $index) {
               @let i = weekIndex * 7 + dayIndex;
               <div
@@ -104,6 +118,8 @@ export class ZardCalendarGridComponent {
   readonly calendarDays = input.required<CalendarDay[]>();
   readonly disabled = input<boolean>(false);
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
+  /** Adds a leading column with the number of each week. */
+  readonly zShowWeekNumbers = input(false, { transform: booleanAttribute });
   /** Position of this grid inside a multi-month calendar. Only used to scope the day ids. */
   readonly zMonthIndex = input(0, { transform: numberAttribute });
   /** Custom content for each day button; falls back to the day number. */
@@ -117,15 +133,39 @@ export class ZardCalendarGridComponent {
 
   protected readonly effectiveWeekdays = this.calendarI18n.weekdays;
 
+  /** Week of the year as react-day-picker numbers it (the week that holds January 1st is week 1), two digits. */
+  protected weekNumber(weekStart: Date): string {
+    const weekStartsOn = this.calendarI18n.weekStartsOn();
+    const startOfWeek = (date: Date): Date => {
+      const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      start.setDate(start.getDate() - ((start.getDay() - weekStartsOn + 7) % 7));
+      return start;
+    };
+    const first = startOfWeek(weekStart);
+    const last = new Date(first.getFullYear(), first.getMonth(), first.getDate() + 6);
+    const firstWeek = startOfWeek(new Date(last.getFullYear(), 0, 1));
+    const diff = Math.round((first.getTime() - firstWeek.getTime()) / (7 * 24 * 60 * 60 * 1000));
+    return String(diff + 1).padStart(2, '0');
+  }
+
+  /** The header shows two letters ("Su", "Mo"), like shadcn/ui; the full short name stays as the accessible name. */
+  protected shortWeekday(weekday: string): string {
+    return Array.from(weekday).slice(0, 2).join('');
+  }
+
   private readonly focusedDayIndex = signal<number>(-1);
 
-  protected readonly weekdaysClasses = computed(() => mergeClasses(calendarWeekdaysVariants()));
+  protected readonly weekdaysClasses = computed(() =>
+    mergeClasses(calendarWeekdaysVariants(), this.zShowWeekNumbers() && WEEK_NUMBER_COLUMNS),
+  );
 
   protected readonly weekdayClasses = computed(() => mergeClasses(calendarWeekdayVariants()));
 
   protected readonly weeksClasses = computed(() => mergeClasses(calendarWeeksVariants()));
 
-  protected readonly rowClasses = computed(() => mergeClasses(calendarRowVariants()));
+  protected readonly rowClasses = computed(() =>
+    mergeClasses(calendarRowVariants(), this.zShowWeekNumbers() && WEEK_NUMBER_COLUMNS),
+  );
 
   protected readonly weeks = computed(() => {
     const days = this.calendarDays();

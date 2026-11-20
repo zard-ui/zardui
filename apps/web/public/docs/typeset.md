@@ -13,7 +13,7 @@ Typeset is one CSS file that styles everything inside a `typeset` container. The
 
 A typeset is a small preset class. You can keep several in one app, one per context.
 
-src/styles.css
+**src/styles.css**
 
 ```
 .typeset-docs {
@@ -61,8 +61,17 @@ A rule closes a section, and the heading after it starts the next one without ex
 
 The CLI writes `typeset.css` next to your global stylesheet and adds the import for you. Manually, copy the file and import it after Tailwind.
 
+**CLI**
+
 ```
 npx zard-cli@latest add typeset
+```
+
+**Manual**
+
+```
+@import 'tailwindcss';
+@import './typeset.css';
 ```
 
 ### Then wrap your content
@@ -79,7 +88,7 @@ npx zard-cli@latest add typeset
 
 Six variables govern the whole system. Three of them name font families; the other three are the rhythm.
 
-typeset.css
+**typeset.css**
 
 ```
 .typeset {
@@ -105,7 +114,7 @@ Your layout owns the measure. The builder's Measure control puts it on the wrapp
 
 One per context. They all read the same stylesheet; only the variables differ.
 
-src/styles.css
+**src/styles.css**
 
 ```
 .typeset-chat {
@@ -133,7 +142,7 @@ The three font variables tell typeset which families to use. Leave them alone an
 
 `--font-sans` and `--font-mono` already exist in a zard theme. `--font-heading` does not: define it only if you want headings on a different face from body text — otherwise typeset falls back to `--font-sans` .
 
-src/styles.css
+**src/styles.css**
 
 ```
 @import '@fontsource-variable/lora';
@@ -152,7 +161,7 @@ src/styles.css
 
 Two presets that change the reading experience, not just the size.
 
-src/styles.css
+**src/styles.css**
 
 ```
 /* Reading: serif, larger type, roomy rhythm. */
@@ -178,7 +187,7 @@ src/styles.css
 
 A larger preset for readers who need one, and a touch more leading in the dark theme, where thinner strokes read tighter than they measure.
 
-src/styles.css
+**src/styles.css**
 
 ```
 .typeset-large {
@@ -227,8 +236,8 @@ Typeset lives in the `components` layer and wraps every element selector in `:wh
 
 Text that arrives token by token restyles itself if the CSS looks forward. Three rules keep that from happening.
 
-- **No forward-looking selectors.**`:last-child` , `:has()` and `:empty` are kept out of layout rules, because their matches change as content is appended.
-- **Spacing flows one way.**`margin-block-start` only. A new block brings its own space.
+- **No forward-looking selectors.** `:last-child` , `:has()` and `:empty` are kept out of layout rules, because their matches change as content is appended.
+- **Spacing flows one way.** `margin-block-start` only. A new block brings its own space.
 - **Table separators live on the cells being added** , so a new row never restyles the row above it.
 
 ## Prior art

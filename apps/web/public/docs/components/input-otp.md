@@ -17,6 +17,8 @@ npx zard-cli@latest add input-otp
 
 ### Manual
 
+**Add input-otp.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import {
@@ -540,30 +542,27 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 }
 ```
 
+**Add input-otp.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const inputOtpVariants = cva('flex items-center has-disabled:opacity-50');
+export const inputOtpVariants = cva('flex items-center gap-2 has-disabled:opacity-50');
 
-export const inputOtpGroupVariants = cva(
-  'flex items-center rounded-lg has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 [&>z-input-otp-slot:first-child_input]:rounded-s-lg [&>z-input-otp-slot:first-child_input]:border-s [&>z-input-otp-slot:last-child_input]:rounded-e-lg dark:has-aria-invalid:ring-destructive/40',
-);
+export const inputOtpGroupVariants = cva('flex items-center rounded-lg has-aria-invalid:border-destructive has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 has-aria-invalid:ring-3 [&>z-input-otp-slot:first-child_input]:rounded-s-lg [&>z-input-otp-slot:first-child_input]:border-s [&>z-input-otp-slot:last-child_input]:rounded-e-lg');
 
-export const inputOtpSlotVariants = cva(
-  'relative flex items-center justify-center border-y border-e border-input bg-transparent text-center transition-all outline-none focus:z-10 focus:border-ring focus:ring-3 focus:ring-ring/50 disabled:cursor-not-allowed aria-invalid:border-destructive data-active:z-10 data-active:border-ring data-active:ring-3 data-active:ring-ring/50 data-active:aria-invalid:border-destructive data-active:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-active:aria-invalid:ring-destructive/40',
-  {
-    variants: {
-      zSize: {
-        sm: 'size-7 text-xs',
-        default: 'size-8 text-sm',
-        lg: 'size-10 text-base',
-      },
-    },
-    defaultVariants: {
-      zSize: 'default',
+export const inputOtpSlotVariants = cva('border-input relative flex items-center justify-center border-y border-e bg-transparent text-center transition-all outline-none focus:border-ring focus:ring-ring/50 aria-invalid:border-destructive data-active:border-ring data-active:ring-ring/50 data-active:aria-invalid:border-destructive data-active:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-active:aria-invalid:ring-destructive/40 focus:z-10 focus:ring-3 data-active:z-10 data-active:ring-3 disabled:cursor-not-allowed', {
+  variants: {
+    zSize: {
+      sm: 'size-7 text-xs',
+      default: 'size-8 text-sm',
+      lg: 'size-10 text-base',
     },
   },
-);
+  defaultVariants: {
+    zSize: 'default',
+  },
+});
 
 export const inputOtpSeparatorVariants = cva('flex items-center', {
   variants: {
@@ -585,6 +584,8 @@ export type ZardInputOtpGroupVariants = VariantProps<typeof inputOtpGroupVariant
 export type ZardInputOtpSeparatorVariants = VariantProps<typeof inputOtpSeparatorVariants>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './input-otp.component';
 export * from './input-otp-signal.component';
@@ -596,6 +597,8 @@ export * from './input-otp.tokens';
 export * from './input-otp.variants';
 export { REGEXP_ONLY_CHARS, REGEXP_ONLY_DIGITS, REGEXP_ONLY_DIGITS_AND_CHARS } from './input-otp.utils';
 ```
+
+**Add input-otp-group.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -627,6 +630,8 @@ export class ZardInputOtpGroupComponent {
   readonly classes = computed(() => mergeClasses(inputOtpGroupVariants(), this.class()));
 }
 ```
+
+**Add input-otp-separator.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -674,6 +679,8 @@ export class ZardInputOtpSeparatorComponent {
   );
 }
 ```
+
+**Add input-otp-signal.component.ts**
 
 ```angular-ts
 import {
@@ -751,6 +758,8 @@ export class ZardInputOtpSignalComponent extends ZardInputOtpComponent implement
   }
 }
 ```
+
+**Add input-otp-slot.component.ts**
 
 ```angular-ts
 import {
@@ -913,6 +922,8 @@ export class ZardInputOtpSlotComponent {
 }
 ```
 
+**Add input-otp.imports.ts**
+
 ```angular-ts
 import { ZardInputOtpGroupComponent } from '@/shared/components/input-otp/input-otp-group.component';
 import { ZardInputOtpSeparatorComponent } from '@/shared/components/input-otp/input-otp-separator.component';
@@ -929,6 +940,8 @@ export const ZardInputOtpImports = [
 ] as const;
 ```
 
+**Add input-otp.tokens.ts**
+
 ```angular-ts
 import { InjectionToken, type Signal } from '@angular/core';
 
@@ -940,6 +953,8 @@ export interface ZardInputOtpSlotApi {
 
 export const ZARD_INPUT_OTP_SLOT = new InjectionToken<ZardInputOtpSlotApi>('ZardInputOtpSlot');
 ```
+
+**Add input-otp.utils.ts**
 
 ```angular-ts
 /** Ready-made `zPattern` values, mirroring the ones shipped by the `input-otp` library. */
@@ -979,6 +994,36 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
+
+@Component({
+  selector: 'z-demo-input-otp-preview',
+  imports: [ZardInputOtpImports, FormsModule],
+  template: `
+    <z-input-otp [zMaxLength]="6" [(ngModel)]="value">
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="0" />
+        <z-input-otp-slot [zIndex]="1" />
+        <z-input-otp-slot [zIndex]="2" />
+        <z-input-otp-slot [zIndex]="3" />
+        <z-input-otp-slot [zIndex]="4" />
+        <z-input-otp-slot [zIndex]="5" />
+      </z-input-otp-group>
+    </z-input-otp>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoInputOtpPreviewComponent {
+  value = '123456';
+}
+```
 
 ### Pattern
 
@@ -1344,7 +1389,7 @@ export class ZardDemoInputOtpFormComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

@@ -46,13 +46,13 @@ export class ZardDemoComboboxDisabledComponent {
 
   frameworks: ZardComboboxOption[] = [
     { value: 'angular', label: 'Angular' },
-    { value: 'react', label: 'React' },
+    { value: 'analog', label: 'Analog' },
     { value: 'vue', label: 'Vue.js' },
   ];
 
   frameworksWithDisabled: ZardComboboxOption[] = [
     { value: 'angular', label: 'Angular' },
-    { value: 'react', label: 'React', disabled: true },
+    { value: 'analog', label: 'Analog', disabled: true },
     { value: 'vue', label: 'Vue.js' },
     { value: 'svelte', label: 'Svelte', disabled: true },
     { value: 'ember', label: 'Ember.js' },

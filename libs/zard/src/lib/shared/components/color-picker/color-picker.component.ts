@@ -198,7 +198,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
                 (pointercancel)="onPointerUp()"
                 (keydown)="onKeydown($event, 'alpha')"
               >
-                <span class="absolute inset-0 rounded-full" [style.background]="alphaBackground()"></span>
+                <span class="cn-color-picker-track-fill absolute inset-0" [style.background]="alphaBackground()"></span>
                 <span
                   [class]="thumbClasses"
                   [style.left.%]="inline(color().a) * 100"
@@ -219,7 +219,7 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
               class="shrink-0"
               (click)="pickFromScreen()"
             >
-              <ng-icon name="lucidePipette" class="size-3.5!" />
+              <ng-icon name="lucidePipette" class="cn-color-picker-eyedropper-icon" />
             </button>
           }
         </div>
@@ -252,14 +252,14 @@ function keepHue(color: ZardHsva, current: ZardHsva | undefined): ZardHsva {
           dir="ltr"
           spellcheck="false"
           autocomplete="off"
-          class="h-7 px-2 font-mono text-[11px] md:text-[11px]"
+          class="cn-color-picker-input"
           [value]="inputText()"
           (change)="onTextCommit($event)"
           (keydown.enter)="onTextCommit($event)"
         />
 
         @if (presets().length) {
-          <div data-slot="color-picker-presets" class="flex flex-wrap gap-1.5">
+          <div data-slot="color-picker-presets" class="cn-color-picker-presets">
             @for (preset of presets(); track $index) {
               <button
                 type="button"

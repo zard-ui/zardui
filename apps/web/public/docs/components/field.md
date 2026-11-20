@@ -17,6 +17,8 @@ npx zard-cli@latest add field
 
 ### Manual
 
+**Add field.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -207,10 +209,7 @@ export class ZardFieldDescriptionComponent {
     <div class="bg-border absolute inset-0 top-1/2 h-px"></div>
     @let content = zContent();
     @if (content) {
-      <span
-        class="bg-background text-muted-foreground relative mx-auto block w-fit px-2"
-        data-slot="field-separator-content"
-      >
+      <span class="bg-background text-muted-foreground relative mx-auto block w-fit px-2" data-slot="field-separator-content">
         <ng-container *zStringTemplateOutlet="content">{{ content }}</ng-container>
       </span>
     }
@@ -285,29 +284,23 @@ export class ZardFieldErrorComponent {
 }
 ```
 
+**Add field.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const fieldSetVariants = cva(
-  'flex flex-col gap-4 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3',
-);
+export const fieldSetVariants = cva('flex flex-col gap-4 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3');
 
-export const fieldLegendVariants = cva(
-  'mb-1.5 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base',
-);
+export const fieldLegendVariants = cva('mb-1.5 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base');
 
-export const fieldGroupVariants = cva(
-  'group/field-group @container/field-group flex w-full flex-col gap-5 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
-);
+export const fieldGroupVariants = cva('flex w-full flex-col gap-5 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4 group/field-group @container/field-group');
 
-export const fieldVariants = cva('group/field flex w-full gap-2 data-[invalid=true]:text-destructive', {
+export const fieldVariants = cva('flex w-full gap-2 data-[invalid=true]:text-destructive group/field', {
   variants: {
     zOrientation: {
       vertical: 'flex-col *:w-full [&>.sr-only]:w-auto',
-      horizontal:
-        'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
-      responsive:
-        'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      horizontal: 'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
+      responsive: 'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[data-slot=checkbox],[data-slot=radio-group-item]]:mt-px',
     },
   },
   defaultVariants: {
@@ -315,38 +308,25 @@ export const fieldVariants = cva('group/field flex w-full gap-2 data-[invalid=tr
   },
 });
 
-export const fieldContentVariants = cva('group/field-content flex flex-1 flex-col gap-0.5 leading-snug');
+export const fieldContentVariants = cva('flex flex-1 flex-col gap-0.5 group/field-content leading-snug');
 
-export const fieldLabelVariants = cva([
-  'group/field-label peer/field-label flex w-fit gap-2 text-sm/snug font-medium',
-  'group-data-[disabled=true]/field:opacity-50',
-  'has-data-checked:border-primary/30 has-data-checked:bg-primary/5',
-  'has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5',
-  'dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10',
-  'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col',
-]);
+export const fieldLabelVariants = cva('group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50 flex w-fit gap-2 text-sm leading-none font-medium has-data-checked:border-primary/30 has-data-checked:bg-primary/5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10 group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-2.5 group/field-label peer/field-label');
 
-export const fieldTitleVariants = cva(
-  'flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50',
+export const fieldTitleVariants = cva('flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50');
+
+export const fieldDescriptionVariants = cva(
+  'text-muted-foreground text-start text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
 );
 
-export const fieldDescriptionVariants = cva([
-  'text-start text-sm/normal font-normal text-muted-foreground',
-  'group-has-data-horizontal/field:text-balance',
-  '[[data-variant=legend]+&]:-mt-1.5',
-  'last:mt-0 nth-last-2:-mt-1',
-  '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
-]);
+export const fieldSeparatorVariants = cva('relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2');
 
-export const fieldSeparatorVariants = cva(
-  'relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2',
-);
-
-export const fieldErrorVariants = cva('text-sm font-normal text-destructive');
+export const fieldErrorVariants = cva('text-destructive text-sm font-normal');
 
 export type ZardFieldOrientationVariants = NonNullable<VariantProps<typeof fieldVariants>['zOrientation']>;
 export type ZardFieldLegendVariants = 'legend' | 'label';
 ```
+
+**Add field.imports.ts**
 
 ```angular-ts
 export {
@@ -389,6 +369,8 @@ export const ZardFieldImports = [
 ] as const;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './field.component';
 export * from './field.imports';
@@ -412,6 +394,139 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
 ```
 
 ## Examples
+
+### Preview
+
+A checkout form composing `z-field-group`, `z-field-set` / `z-field-legend`, `z-field`, `z-field-label`, `z-field-description` and `z-field-separator` around `z-input`, `z-select`, `z-checkbox` and `z-textarea`.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardSelectImports } from '@/shared/components/select/select.imports';
+import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
+
+@Component({
+  selector: 'z-demo-field-preview',
+  imports: [
+    ...ZardFieldImports,
+    ZardButtonComponent,
+    ZardCheckboxComponent,
+    ZardInputComponent,
+    ZardTextareaComponent,
+    ZardSelectImports,
+    FormsModule,
+  ],
+  template: `
+    <div class="w-full min-w-md">
+      <form>
+        <div z-field-group>
+          <fieldset z-field-set>
+            <legend z-field-legend>Payment Method</legend>
+            <p z-field-description>All transactions are secure and encrypted.</p>
+
+            <div z-field-group>
+              <div z-field>
+                <label z-field-label for="checkout-card-name">Name on Card</label>
+                <input z-input id="checkout-card-name" placeholder="Luiz Gomes" zSize="sm" required />
+              </div>
+
+              <div z-field>
+                <label z-field-label for="checkout-card-number">Card Number</label>
+                <input z-input id="checkout-card-number" placeholder="1234 5678 9012 3456" zSize="sm" required />
+                <p z-field-description>Enter your 16-digit card number.</p>
+              </div>
+
+              <div class="grid grid-cols-3 gap-4">
+                <div z-field>
+                  <label z-field-label for="checkout-exp-month" class="w-fit">Month</label>
+                  <z-select id="checkout-exp-month" zPlaceholder="MM" zSize="sm">
+                    <z-select-item zValue="01">01</z-select-item>
+                    <z-select-item zValue="02">02</z-select-item>
+                    <z-select-item zValue="03">03</z-select-item>
+                    <z-select-item zValue="04">04</z-select-item>
+                    <z-select-item zValue="05">05</z-select-item>
+                    <z-select-item zValue="06">06</z-select-item>
+                    <z-select-item zValue="07">07</z-select-item>
+                    <z-select-item zValue="08">08</z-select-item>
+                    <z-select-item zValue="09">09</z-select-item>
+                    <z-select-item zValue="10">10</z-select-item>
+                    <z-select-item zValue="11">11</z-select-item>
+                    <z-select-item zValue="12">12</z-select-item>
+                  </z-select>
+                </div>
+                <div z-field>
+                  <label z-field-label for="checkout-exp-year">Year</label>
+                  <z-select id="checkout-exp-year" zPlaceholder="YYYY" zSize="sm">
+                    <z-select-item zValue="2024">2024</z-select-item>
+                    <z-select-item zValue="2025">2025</z-select-item>
+                    <z-select-item zValue="2026">2026</z-select-item>
+                    <z-select-item zValue="2027">2027</z-select-item>
+                    <z-select-item zValue="2028">2028</z-select-item>
+                    <z-select-item zValue="2029">2029</z-select-item>
+                  </z-select>
+                </div>
+                <div z-field>
+                  <label z-field-label for="checkout-cvv">CVV</label>
+                  <input z-input id="checkout-cvv" placeholder="123" zSize="sm" required />
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <z-field-separator />
+
+          <fieldset z-field-set>
+            <legend z-field-legend>Billing Address</legend>
+            <p z-field-description>The billing address associated with your payment method.</p>
+
+            <div z-field-group>
+              <div z-field zOrientation="horizontal">
+                <span
+                  z-checkbox
+                  zId="checkout-same-as-shipping"
+                  [(ngModel)]="sameAsShipping"
+                  name="sameAsShipping"
+                ></span>
+                <label z-field-label for="checkout-same-as-shipping" class="font-normal">
+                  Same as shipping address
+                </label>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset z-field-set>
+            <div z-field-group>
+              <div z-field>
+                <label z-field-label for="checkout-comments">Comments</label>
+                <textarea
+                  z-textarea
+                  id="checkout-comments"
+                  placeholder="Add any additional comments"
+                  class="resize-none"
+                ></textarea>
+              </div>
+            </div>
+          </fieldset>
+
+          <div z-field zOrientation="horizontal">
+            <button z-button type="submit">Submit</button>
+            <button z-button zType="outline" type="button">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoFieldPreviewComponent {
+  protected sameAsShipping = true;
+}
+```
 
 ### Input
 
@@ -906,7 +1021,7 @@ export class ZardDemoFieldInvalidComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

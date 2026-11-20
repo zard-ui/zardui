@@ -38,10 +38,11 @@ test.describe('Attachment', () => {
       await expect(card).toHaveAttribute('data-state', state);
       if (state === 'uploading' || state === 'processing') {
         await expect(card).toHaveAttribute('aria-busy', 'true');
-        await expect(card.locator('[data-slot="attachment-title"]')).toHaveClass(/shimmer/);
+        // The shimmer is a state variant on the title's classes, so it is checked where it shows: the painted gradient.
+        await expect(card.locator('[data-slot="attachment-title"]')).toHaveCSS('background-image', /gradient/);
       } else {
         await expect(card).not.toHaveAttribute('aria-busy');
-        await expect(card.locator('[data-slot="attachment-title"]')).not.toHaveClass(/shimmer/);
+        await expect(card.locator('[data-slot="attachment-title"]')).toHaveCSS('background-image', 'none');
       }
       await expect(states.locator('[data-slot="attachment"]').last()).toHaveAttribute('data-state', 'done');
     }

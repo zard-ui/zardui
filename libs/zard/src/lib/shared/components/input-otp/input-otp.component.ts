@@ -138,11 +138,11 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     const extras: string[] = [];
 
     if (index === 0) {
-      extras.push('rounded-s-lg border-s');
+      extras.push('cn-input-otp-slot-first');
     }
 
     if (index === this.effectiveMaxLength() - 1) {
-      extras.push('rounded-e-lg');
+      extras.push('cn-input-otp-slot-last');
     }
 
     return mergeClasses(inputOtpSlotVariants({ zSize: this.zSize() }), extras);

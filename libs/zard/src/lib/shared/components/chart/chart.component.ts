@@ -42,6 +42,7 @@ import {
   type ZardChartBuildContext,
 } from './chart-option.builder';
 import { renderChartToSvg, type ZardEchartsSsrApi } from './chart-ssr.util';
+import { ZardChartThemeWatcher } from './chart-theme-watcher';
 import { ZardChartTooltipComponent } from './chart-tooltip.component';
 import type {
   ZardChartConfig,
@@ -115,6 +116,7 @@ export class ZardChartComponent implements ZardChartHost {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly darkMode = inject(ZardDarkMode);
+  private readonly themeWatcher = inject(ZardChartThemeWatcher);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly destroyRef = inject(DestroyRef);
   private readonly pendingTasks = inject(PendingTasks);
@@ -199,8 +201,12 @@ export class ZardChartComponent implements ZardChartHost {
     this.restoreHiddenSeries();
 
     if (this.isBrowser) {
+      // A theme switched at run time (a class, an attribute, an injected stylesheet) repaints the chart too.
+      this.destroyRef.onDestroy(this.themeWatcher.watch());
+
       effect(() => {
         this.darkMode.themeMode();
+        this.themeWatcher.revision();
         // The `.dark` class lands on <html> in a separate effect, so the computed colors are
         // only trustworthy on the next frame.
         this.scheduleColorRefresh();

@@ -126,7 +126,8 @@ describe('ZardNavigationMenuTriggerDirective', () => {
     fixture.detectChanges();
 
     const cdkTrigger = directive['cdkTrigger'];
-    jest.spyOn(cdkTrigger, 'close');
+    jest.spyOn(cdkTrigger, 'isOpen').mockReturnValue(true);
+    jest.spyOn(cdkTrigger, 'close').mockImplementation(() => undefined);
 
     directive.ngOnInit();
 
@@ -157,6 +158,42 @@ describe('ZardNavigationMenuTriggerDirective', () => {
     triggerElement.dispatchEvent(mouseEnterEvent);
 
     expect(directive['closeTimeout']).toBeNull();
+  });
+
+  // Moving from item A to item B: the CDK opens B and closes A itself. A's pending close must not run, because the
+  // CDK's close() also closes every sibling trigger — B included.
+  describe('a close that is no longer needed', () => {
+    beforeEach(() => jest.useFakeTimers());
+    afterEach(() => jest.useRealTimers());
+
+    it('does not call close() (which closes the siblings) once the menu is already closed', () => {
+      component.trigger = 'hover';
+      fixture.detectChanges();
+      const cdkTrigger = directive['cdkTrigger'];
+      jest.spyOn(cdkTrigger, 'isOpen').mockReturnValue(false);
+      const close = jest.spyOn(cdkTrigger, 'close');
+
+      directive['scheduleMenuClose']();
+      jest.advanceTimersByTime(150);
+
+      expect(close).not.toHaveBeenCalled();
+      expect(directive['closeTimeout']).toBeNull();
+    });
+
+    it('drops its pending close when another trigger closed its menu', () => {
+      component.trigger = 'hover';
+      fixture.detectChanges();
+      directive.ngOnInit();
+      const cdkTrigger = directive['cdkTrigger'];
+      const close = jest.spyOn(cdkTrigger, 'close');
+
+      directive['scheduleMenuClose']();
+      cdkTrigger.closed.emit();
+      jest.advanceTimersByTime(150);
+
+      expect(directive['closeTimeout']).toBeNull();
+      expect(close).not.toHaveBeenCalled();
+    });
   });
 
   it('should clean up on destroy', () => {

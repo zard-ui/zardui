@@ -136,7 +136,7 @@ export class ZardMenubarTriggerDirective implements ZardMenubarItem, OnDestroy {
         sideOffset: menu.zSideOffset() + BAR_SIDE_OFFSET,
         alignOffset: BAR_ALIGN_OFFSET,
       },
-      { initialFocus },
+      { initialFocus, menu: 'menubar' },
     );
   }
 

@@ -7,6 +7,8 @@ import {
   libraryStylesPath,
   type ProjectKind,
 } from '@cli/commands/init/project-kind.js';
+import { type DesignConfig } from '@cli/core/design/config.js';
+import { CONFIG_STYLES, MENU_ACCENT_IDS, MENU_APPEARANCE_IDS, MENU_COLOR_IDS } from '@cli/core/design/options.js';
 import { SOURCE_ICON_FAMILY } from '@cli/core/icons/index.js';
 import { type Config } from '@cli/utils/config.js';
 import { type ProjectInfo, type WorkspaceProject } from '@cli/utils/get-project-info.js';
@@ -19,12 +21,16 @@ export const SCHEMA_URL = 'https://zardui.com/schema.json';
 
 export const configSchema = z.object({
   $schema: z.string(),
-  style: z.enum(['css']),
+  style: z.enum(CONFIG_STYLES),
   icons: z.string(),
   rtl: z.boolean(),
   projectType: z.enum(['angular', 'angular-library', 'nx', 'nx-library', 'analog']),
   appConfigFile: z.string(),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']),
+  menuColor: z.enum(MENU_COLOR_IDS).optional(),
+  menuAppearance: z.enum(MENU_APPEARANCE_IDS).optional(),
+  menuAccent: z.enum(MENU_ACCENT_IDS).optional(),
+  preset: z.string().optional(),
   tailwind: z.object({
     css: z.string(),
     baseColor: z.string(),
@@ -51,6 +57,18 @@ export interface InitAnswers {
   utilsAlias: string;
   /** Whether the project reads right to left — always the user's answer, never inferred. */
   rtl: boolean;
+}
+
+/**
+ * A preset resolved for init: the design it decodes to and its canonical code.
+ *
+ * Kept apart from `InitAnswers` — which is a flat bag of strings the wizard edits one step at a
+ * time — because the design is not something a step asks: it arrives whole, from `--preset`, and
+ * decides style, icon family, base color and menu on its own.
+ */
+export interface AppliedPreset {
+  design: DesignConfig;
+  code: string;
 }
 
 /**
@@ -155,24 +173,36 @@ function baseUrlFor(answers: InitAnswers): string {
   return isLibraryKind(answers.kind) ? libraryBaseUrl(answers.projectRoot) : deriveBaseUrl(answers.appConfig);
 }
 
-export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun'): Config {
+export function buildConfig(
+  answers: InitAnswers,
+  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
+  preset?: AppliedPreset,
+): Config {
   const sharedBase = path.posix.dirname(answers.componentsAlias.replace(/\\/g, '/'));
+
+  const design = preset?.design;
 
   return configSchema.parse({
     $schema: SCHEMA_URL,
-    style: 'css',
+    style: design?.style ?? 'css',
     // The icon family is not asked in the wizard: today there is only one. It goes
     // into the file with its default so it can be edited later. RTL is asked (or
     // given by `--rtl`): the components are direction-agnostic, so it only decides
     // whether init sets `dir="rtl"` on the app's index.html.
-    icons: SOURCE_ICON_FAMILY,
+    icons: design?.iconLibrary ?? SOURCE_ICON_FAMILY,
     rtl: answers.rtl,
+    ...(design && {
+      menuColor: design.menuColor,
+      menuAppearance: design.menuAppearance,
+      menuAccent: design.menuAccent,
+      preset: preset?.code,
+    }),
     projectType: answers.kind,
     appConfigFile: answers.appConfig,
     packageManager,
     tailwind: {
       css: answers.globalCss,
-      baseColor: answers.theme,
+      baseColor: design?.baseColor ?? answers.theme,
     },
     baseUrl: baseUrlFor(answers),
     aliases: {

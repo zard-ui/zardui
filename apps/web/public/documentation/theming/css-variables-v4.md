@@ -1,15 +1,21 @@
 # TailwindCSS v4 configuration
 
-The complete `src/styles.css` a ZardUI project needs. Identical to what `npx @ngzard/ui init`
-writes for the `neutral` base color, plus the `--destructive-foreground` definition.
+The complete `src/styles.css` a ZardUI project needs, as `npx zard-cli@latest create` writes it for the
+default design (preset `Z0`, Neutral base color, Inter). A plain `zard-cli init` writes the same file without
+the `zard:*` markers and the font regions, and with the blue chart ramp instead of the grey one.
 
 ```css title="src/styles.css" copyButton expandable="true"
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
 @import './app/shared/core/css/zard';
+/* zard:font-imports:start */
+@import '@fontsource-variable/inter';
+/* zard:font-imports:end */
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
+
+/* zard:theme:start — managed by zard-cli, rules below this block are yours */
 
 :root {
   --radius: 0.625rem;
@@ -32,11 +38,11 @@ writes for the `neutral` base color, plus the `--destructive-foreground` definit
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -67,11 +73,11 @@ writes for the `neutral` base color, plus the `--destructive-foreground` definit
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -107,10 +113,13 @@ writes for the `neutral` base color, plus the `--destructive-foreground` definit
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -141,18 +150,12 @@ writes for the `neutral` base color, plus the `--destructive-foreground` definit
   }
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+/* zard:theme:end */
 
-::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 5px;
+/* zard:fonts:start */
+@theme inline {
+  --font-sans: 'Inter Variable', sans-serif;
+  --font-heading: var(--font-sans);
 }
-
-::-webkit-scrollbar-track {
-  border-radius: 5px;
-  background: var(--muted);
-}
+/* zard:fonts:end */
 ```

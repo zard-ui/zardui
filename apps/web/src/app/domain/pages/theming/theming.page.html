@@ -45,9 +45,17 @@
       </li>
       <li>
         <strong class="text-foreground font-medium">Build your own.</strong>
-        The
-        <a class="underline underline-offset-4" routerLink="/themes">theme generator</a>
-        gives you every token with a live preview and exports finished CSS.
+        <a class="underline underline-offset-4" routerLink="/create">Create</a>
+        lets you pick colors, fonts and radius with a live preview and copies the finished CSS.
+      </li>
+      <li>
+        <strong class="text-foreground font-medium">Edit every color.</strong>
+        Turn on
+        <a class="underline underline-offset-4" [routerLink]="['/create']" [queryParams]="{ custom: '~' }">
+          Custom colors
+        </a>
+        in Create to set each variable, in light and dark, by hand. A custom theme is not a preset: you install it by
+        pasting its CSS, not with the CLI.
       </li>
     </ul>
   </div>
@@ -60,10 +68,24 @@
       </h2>
       <p>
         This is the whole file, exactly as
-        <code>zard-cli init</code>
-        writes it for the Neutral base color. Paste it into
+        <code>zard-cli create</code>
+        (or
+        <code>zard-cli init --preset</code>
+        ) writes it for the default design: Neutral base color, Inter and the 0.625rem radius. Paste it into
         <code>src/styles.css</code>
         and every component is themed.
+      </p>
+      <p>
+        A plain
+        <code>zard-cli init</code>
+        writes the same tokens without the
+        <code>zard:*</code>
+        markers and the font regions, and its
+        <code>--chart-*</code>
+        tokens are the blue ramp of the base color instead of the grey one a preset writes. Both are valid; pick the
+        chart colors you want in the
+        <a class="underline underline-offset-4" routerLink="/create">create</a>
+        page.
       </p>
     </div>
 
@@ -72,7 +94,7 @@
     <div class="typeset typeset-docs text-muted-foreground">
       <h3 class="text-base font-semibold sm:text-lg">Line by line</h3>
       <p>
-        Nine parts, in the order they appear above. Each one earns its place — the last line of every entry says what
+        Twelve parts, in the order they appear above. Each one earns its place — the last line of every entry says what
         breaks without it.
       </p>
     </div>
@@ -152,7 +174,7 @@
       </h2>
       <p>
         <code>--radius</code>
-        is the single knob for corner rounding. The four utilities below are derived from it in
+        is the single knob for corner rounding. The utilities below are derived from it in
         <code>&#64;theme inline</code>
         , so changing one value reshapes every component.
       </p>
@@ -168,7 +190,8 @@
         Base colors
       </h2>
       <p>
-        Five neutral scales ship with the CLI. They differ only in the hue mixed into the greys — pick one, then adjust
+        Nine neutral scales ship with the CLI: Neutral, Stone, Zinc, Gray, Slate, Mauve, Olive, Mist and Taupe. They
+        differ only in the hue mixed into the greys — pick one, then adjust
         <code>--primary</code>
         to taste.
       </p>
@@ -260,8 +283,15 @@
       <z-code-block class="not-typeset" [data]="otherColorFormatsBlock" />
       <p>
         Need the values? The
-        <a class="underline underline-offset-4" routerLink="/colors">colors page</a>
-        lists the full Tailwind palette in OKLCH, HEX, RGB and HSL.
+        <a
+          class="underline underline-offset-4"
+          href="https://tailwindcss.com/docs/colors"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Tailwind colors reference
+        </a>
+        lists the full palette in OKLCH, HEX, RGB and HSL.
       </p>
     </div>
   </section>

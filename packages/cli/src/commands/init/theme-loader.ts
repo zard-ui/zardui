@@ -1,3 +1,4 @@
+import { CliError } from '@cli/utils/errors.js';
 import { logger } from '@cli/utils/logger.js';
 import * as fsPromises from 'fs/promises';
 import * as path from 'path';
@@ -52,14 +53,14 @@ export async function injectThemeScript(cwd: string, indexFile: string): Promise
     // 4. Write the updated content back to the file
     await fsPromises.writeFile(indexConfigPath, content, 'utf8');
   } catch (e) {
+    // Thrown, not `process.exit`: the CLI's top-level handler prints it and sets the exit code, and the
+    // process leaves by itself once its handles are closed.
     if (e && typeof e === 'object' && 'code' in e && e.code === 'ENOENT') {
-      logger.error(`Error: index.html file not found at ${indexConfigPath}. Please check the path.`);
-    } else if (e instanceof Error) {
-      logger.error('An error occurred during file operation:', e.message);
-    } else {
-      logger.error('An unknown error occurred:', e);
+      throw new CliError(`index.html file not found at ${indexConfigPath}. Please check the path.`, 'INDEX_NOT_FOUND');
     }
-    // Exit process with error status
-    process.exit(1);
+    throw new CliError(
+      `An error occurred during file operation: ${e instanceof Error ? e.message : String(e)}`,
+      'INDEX_WRITE_FAILED',
+    );
   }
 }

@@ -21,6 +21,8 @@ npx zard-cli@latest add code-block
 
 ### Manual
 
+**Add code-block.component.ts**
+
 ```angular-ts
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
@@ -379,28 +381,24 @@ export class ZardCodeBlockFooterComponent {
 }
 ```
 
+**Add code-block.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export const codeBlockVariants = cva(
-  mergeClasses(
-    'group/code-block relative flex w-full min-w-0 flex-col overflow-hidden rounded-2xl text-sm data-[size=sm]:rounded-xl',
-    'has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/30',
-  ),
+  'rounded-lg text-sm data-[size=sm]:text-xs has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/50 group/code-block relative flex w-full min-w-0 flex-col overflow-hidden',
   {
     variants: {
       zType: {
-        default: 'bg-muted text-foreground ring-1 ring-foreground/5 dark:ring-foreground/10',
-        // shadcn/ui tints the light surface with `bg-destructive/5`, which takes the red text to 4.36:1. A 2% tint
-        // keeps the same look and stays above the 4.5:1 that WCAG AA asks of body text.
-        destructive:
-          'bg-destructive/2 text-destructive ring-1 ring-destructive/15 dark:bg-destructive/10 dark:ring-destructive/20',
+        default: 'border border-input text-foreground dark:bg-input/30 has-[>[data-slot=code-block-content]:focus-visible]:border-ring',
+        destructive: 'border border-destructive/30 text-destructive dark:border-destructive/40',
       },
       zSize: {
         default: '',
-        sm: 'text-xs',
+        sm: '',
       },
     },
     defaultVariants: {
@@ -415,36 +413,32 @@ export type ZardCodeBlockSizeVariants = NonNullable<VariantProps<typeof codeBloc
 
 export const codeBlockHeaderVariants = cva(
   mergeClasses(
-    'flex min-w-0 shrink-0 items-center gap-2 px-4 pt-4 text-muted-foreground *:has-[>[data-slot=code-block-title]]:min-w-0',
-    'group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pt-3',
+    'gap-2 px-3 pt-3 text-muted-foreground group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pt-2.5 flex min-w-0 shrink-0 items-center text-muted-foreground *:has-[>[data-slot=code-block-title]]:min-w-0',
+    'group-data-[variant=destructive]/code-block:text-destructive',
   ),
 );
 
 export const codeBlockTitleVariants = cva(
   mergeClasses(
-    'min-w-0 truncate font-sans text-sm font-medium text-foreground',
-    'group-data-[variant=destructive]/code-block:text-destructive group-data-[size=sm]/code-block:text-xs',
-    '[&_ng-icon]:me-1.5 [&_ng-icon]:inline-block [&_ng-icon]:align-middle [&_svg]:pointer-events-none',
-    '[--ng-icon__size:1rem] [&_svg:not([class*="size-"])]:size-4 group-data-[size=sm]/code-block:[--ng-icon__size:0.875rem] group-data-[size=sm]/code-block:[&_svg:not([class*="size-"])]:size-3.5',
+    "font-sans text-sm font-medium text-foreground [--ng-icon__size:0.875rem] group-data-[variant=destructive]/code-block:text-destructive *:[svg]:me-1.5 [&_svg:not([class*='size-'])]:size-3.5 group-data-[size=sm]/code-block:text-xs min-w-0 truncate text-foreground",
+    'group-data-[variant=destructive]/code-block:text-destructive',
+    '[&_ng-icon]:me-1.5 [&_ng-icon]:inline-block [&_ng-icon]:align-middle! [&_svg]:pointer-events-none',
   ),
 );
 
 export const codeBlockActionsVariants = cva(
   mergeClasses(
-    'ms-auto -my-1 -me-1.5 flex shrink-0 items-center gap-1 *:data-[slot=button]:hover:bg-foreground/5 dark:*:data-[slot=button]:hover:bg-foreground/10',
+    '-my-1 -me-1.5 gap-1 [[data-slot=code-block]>&]:m-0 [[data-slot=code-block]>&]:top-2 [[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-1.5 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-1.5 [[data-slot=code-block]>&]:*:[button]:bg-background [[data-slot=code-block]>&]:*:[button]:ring-1 [[data-slot=code-block]>&]:*:[button]:ring-foreground/10 ms-auto flex shrink-0 items-center *:data-[slot=button]:hover:bg-foreground/5 dark:*:data-[slot=button]:hover:bg-foreground/10',
     // Without a header the actions float over the top end of the block until it is hovered or focused.
-    '[[data-slot=code-block]>&]:absolute [[data-slot=code-block]>&]:end-3 [[data-slot=code-block]>&]:top-3 [[data-slot=code-block]>&]:z-10 [[data-slot=code-block]>&]:m-0',
+    '[[data-slot=code-block]>&]:absolute [[data-slot=code-block]>&]:z-10 [[data-slot=code-block]>&]:m-0',
     '[[data-slot=code-block]>&]:opacity-0 [[data-slot=code-block]>&]:transition-opacity [[data-slot=code-block]>&]:group-focus-within/code-block:opacity-100 [[data-slot=code-block]>&]:group-hover/code-block:opacity-100 [[data-slot=code-block]>&]:pointer-coarse:opacity-100',
-    'group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:end-2 group-data-[size=sm]/code-block:[[data-slot=code-block]>&]:top-2',
     '[[data-slot=code-block]>&]:**:data-[slot=code-block-copy-button]:bg-background [[data-slot=code-block]>&]:**:data-[slot=code-block-copy-button]:ring-1 [[data-slot=code-block]>&]:**:data-[slot=code-block-copy-button]:ring-foreground/10',
   ),
 );
 
 export const codeBlockContentVariants = cva(
   mergeClasses(
-    'block min-h-0 min-w-0 scroll-fade-x scrollbar-thin overflow-auto px-4 py-4 text-start font-mono leading-relaxed outline-none',
-    'group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2',
-    'group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:py-3 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5',
+    'px-3 py-3 leading-relaxed group-has-data-[slot=code-block-header]/code-block:pt-2 group-has-data-[slot=code-block-footer]/code-block:pb-2 group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:py-2.5 group-data-[size=sm]/code-block:group-has-data-[slot=code-block-header]/code-block:pt-1.5 block min-h-0 min-w-0 scroll-fade-x scrollbar-thin overflow-auto text-start font-mono outline-none',
   ),
   {
     variants: {
@@ -478,7 +472,7 @@ export const codeBlockCodeVariants = cva('grid min-h-lh min-w-max content-start'
 
 export const codeBlockLineVariants = cva(
   mergeClasses(
-    'relative -mx-4 block min-h-lh px-4 group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3',
+    '-mx-3 px-3 in-data-numbered:gap-x-3 before:min-w-6 before:text-end before:text-muted-foreground after:start-1 after:text-muted-foreground group-data-[size=sm]/code-block:-mx-2.5 group-data-[size=sm]/code-block:px-2.5 relative block min-h-lh',
     // The `+` / `−` marker sits in the gutter on the start side, outside the selectable text.
     'after:absolute after:start-1 after:top-0 after:text-muted-foreground after:select-none',
     // Line numbers are a CSS counter, so they are not text: they cannot be selected or copied. The empty alternative
@@ -490,9 +484,9 @@ export const codeBlockLineVariants = cva(
     variants: {
       zType: {
         default: '',
-        added: 'bg-foreground/5 after:content-["+"]',
-        removed: 'bg-destructive/10 after:text-destructive after:content-["−"]',
-        highlighted: 'bg-foreground/5',
+        added: "bg-muted after:content-['+']",
+        removed: "bg-destructive/10 after:text-destructive after:content-['−']",
+        highlighted: 'bg-muted',
       },
     },
     defaultVariants: {
@@ -504,12 +498,11 @@ export const codeBlockLineVariants = cva(
 export type ZardCodeBlockLineTypeVariants = NonNullable<VariantProps<typeof codeBlockLineVariants>['zType']>;
 
 export const codeBlockFooterVariants = cva(
-  mergeClasses(
-    'flex min-w-0 shrink-0 items-center gap-2 px-4 pb-4 text-muted-foreground',
-    'group-data-[size=sm]/code-block:px-3 group-data-[size=sm]/code-block:pb-3',
-  ),
+  mergeClasses('gap-2 px-3 pb-3 text-muted-foreground group-data-[size=sm]/code-block:px-2.5 group-data-[size=sm]/code-block:pb-2.5 flex min-w-0 shrink-0 items-center text-muted-foreground'),
 );
 ```
+
+**Add code-block.highlight.ts**
 
 ```angular-ts
 import { computed, effect, resource, signal, type Signal } from '@angular/core';
@@ -722,6 +715,8 @@ export function injectHighlightedCode(
 }
 ```
 
+**Add code-block.imports.ts**
+
 ```angular-ts
 import {
   ZardCodeBlockActionsComponent,
@@ -746,6 +741,8 @@ export const ZardCodeBlockImports = [
 ] as const;
 ```
 
+**Add code-block.types.ts**
+
 ```angular-ts
 /**
  * One piece of a highlighted line.
@@ -761,6 +758,8 @@ export interface ZardCodeBlockToken {
 /** The tokens of one line, as returned by `highlightCode()` and consumed by `z-code-block-line` through `[zTokens]`. */
 export type ZardCodeBlockLineTokens = readonly ZardCodeBlockToken[];
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './code-block.component';
@@ -812,6 +811,103 @@ z-code-block
 - **It highlights without WASM.** `highlightCode()` uses Shiki's JavaScript engine, loads each language on first use and renders ANSI colors in terminal output. It also runs on the server, so prerendered pages ship highlighted.
 - **It fits where code shows up.** Use it in a message, a Trace line, Tabs, a Dialog or a `typeset` container.
 - **It scrolls by keyboard.** The content is focusable, and floating actions show on focus as well as on hover.
+
+## Examples
+
+### Preview
+
+```angular-ts
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, PLATFORM_ID, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideDownload, lucideFileCode, lucideWrapText } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { injectHighlightedCode } from '@/shared/components/code-block/code-block.highlight';
+import { ZardCodeBlockImports } from '@/shared/components/code-block/code-block.imports';
+
+const CODE = `import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+
+@Injectable({ providedIn: 'root' })
+export class ChatService {
+  private readonly http = inject(HttpClient);
+
+  send(messages: ChatMessage[]) {
+    return this.http.post('/api/chat', { messages }, {
+      observe: 'events',
+      reportProgress: true,
+      responseType: 'text',
+    });
+  }
+}`;
+
+/** The lines that call the API, highlighted in the block. */
+const HIGHLIGHTED = [8, 9, 10, 11, 12];
+
+@Component({
+  selector: 'z-demo-code-block-preview',
+  imports: [NgIcon, ZardButtonComponent, ...ZardCodeBlockImports],
+  template: `
+    <z-code-block class="max-w-lg">
+      <z-code-block-header>
+        <z-code-block-title>
+          <ng-icon name="lucideFileCode" />
+          src/app/chat/chat.service.ts
+        </z-code-block-title>
+        <z-code-block-actions>
+          <button
+            type="button"
+            z-button
+            zType="ghost"
+            zSize="icon-xs"
+            aria-label="Wrap lines"
+            class="aria-pressed:text-foreground"
+            [attr.aria-pressed]="wrap()"
+            (click)="wrap.set(!wrap())"
+          >
+            <ng-icon name="lucideWrapText" />
+          </button>
+          <button type="button" z-button zType="ghost" zSize="icon-xs" aria-label="Download" (click)="download()">
+            <ng-icon name="lucideDownload" />
+          </button>
+          <z-code-block-copy-button [zValue]="code" />
+        </z-code-block-actions>
+      </z-code-block-header>
+      <z-code-block-content zLineNumbers [zWrap]="wrap()">
+        @for (line of lines(); track $index) {
+          <z-code-block-line [zTokens]="line" [zType]="highlighted.includes($index) ? 'highlighted' : 'default'" />
+        }
+      </z-code-block-content>
+    </z-code-block>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideDownload, lucideFileCode, lucideWrapText })],
+  host: { class: 'contents' },
+})
+export class ZardDemoCodeBlockPreviewComponent {
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  protected readonly code = CODE;
+  protected readonly highlighted = HIGHLIGHTED;
+  protected readonly wrap = signal(false);
+  protected readonly lines = injectHighlightedCode(CODE, 'typescript');
+
+  protected download(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
+    const url = URL.createObjectURL(new Blob([CODE], { type: 'text/plain' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'chat.service.ts';
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+}
+```
 
 ## Basic
 

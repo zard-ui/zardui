@@ -17,6 +17,8 @@ npx zard-cli@latest add marker
 
 ### Manual
 
+**Add marker.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -129,50 +131,40 @@ export class ZardMarkerComponent {
 }
 ```
 
+**Add marker.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
-export const markerVariants = cva(
-  mergeClasses(
-    'group/marker relative flex min-h-4 w-full items-center gap-2 text-start text-sm text-muted-foreground',
-    "[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
-    '[a]:underline [a]:underline-offset-3 [a]:hover:text-foreground',
-  ),
-  {
-    variants: {
-      zVariant: {
-        default: '',
-        border: 'border-b border-border pb-2',
-        separator:
-          'before:me-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ms-1 after:h-px after:min-w-0 after:flex-1 after:bg-border',
-      },
-    },
-    defaultVariants: {
-      zVariant: 'default',
+export const markerVariants = cva("text-muted-foreground relative flex min-h-4 w-full items-center gap-2 text-start text-sm [--ng-icon__size:1rem] [a]:hover:text-foreground [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 group/marker", {
+  variants: {
+    zVariant: {
+      default: '',
+      border: 'border-border border-b pb-2',
+      separator: 'before:bg-border after:bg-border before:me-1 before:h-px before:min-w-0 before:flex-1 after:ms-1 after:h-px after:min-w-0 after:flex-1',
     },
   },
-);
+  defaultVariants: {
+    zVariant: 'default',
+  },
+});
 
 export const markerIconVariants = cva("size-4 shrink-0 [--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4");
 
-export const markerContentVariants = cva(
-  mergeClasses(
-    'min-w-0 wrap-break-word',
-    'group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center',
-    '*:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
-  ),
-);
+export const markerContentVariants = cva('min-w-0 wrap-break-word *:[a]:hover:text-foreground group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3');
 
 export type ZardMarkerVariants = NonNullable<VariantProps<typeof markerVariants>['zVariant']>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './marker.component';
 export * from './marker.imports';
 export * from './marker.variants';
 ```
+
+**Add marker.imports.ts**
 
 ```angular-ts
 export { ZardMarkerComponent, ZardMarkerContentComponent, ZardMarkerIconComponent } from './marker.component';
@@ -193,6 +185,48 @@ import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideGitBranch, lucideSearch } from '@ng-icons/lucide';
+
+import { ZardMarkerImports } from '@/shared/components/marker/marker.imports';
+import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';
+
+@Component({
+  selector: 'z-demo-marker-preview',
+  imports: [NgIcon, ZardSpinnerComponent, ...ZardMarkerImports],
+  template: `
+    <div class="flex w-full max-w-sm min-w-sm flex-col gap-8">
+      <z-marker>
+        <z-marker-icon><ng-icon name="lucideGitBranch" /></z-marker-icon>
+        <z-marker-content>Switched to a new branch</z-marker-content>
+      </z-marker>
+
+      <z-marker role="status">
+        <z-marker-icon><z-spinner /></z-marker-icon>
+        <z-marker-content class="shimmer">Thinking...</z-marker-content>
+      </z-marker>
+
+      <z-marker zVariant="separator">
+        <z-marker-content>Conversation compacted</z-marker-content>
+      </z-marker>
+
+      <z-marker>
+        <z-marker-icon><ng-icon name="lucideSearch" /></z-marker-icon>
+        <z-marker-content>Explored 4 files</z-marker-content>
+      </z-marker>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideGitBranch, lucideSearch })],
+})
+export class ZardDemoMarkerPreviewComponent {}
+```
 
 ### Variants
 
@@ -474,7 +508,7 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
 export class ZardDemoMarkerShorthandComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

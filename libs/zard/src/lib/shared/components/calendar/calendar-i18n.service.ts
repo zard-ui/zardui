@@ -12,13 +12,6 @@ import {
 
 import { makeSafeDate } from './calendar.utils';
 
-export function capitalize(str: string, locale?: string): string {
-  if (!str) {
-    return str;
-  }
-  return str.charAt(0).toLocaleUpperCase(locale) + str.slice(1);
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -61,7 +54,7 @@ export class ZardCalendarI18nService {
     const formatter = new Intl.DateTimeFormat(locale, { month: format });
     return Array.from({ length: 12 }, (_, i) => {
       const date = makeSafeDate(2024, i, 1);
-      return capitalize(formatter.format(date), locale);
+      return formatter.format(date);
     });
   }
 
@@ -74,7 +67,7 @@ export class ZardCalendarI18nService {
     return Array.from({ length: 7 }, (_, i) => {
       const dayIndex = (weekStartsOn + i) % 7;
       const date = makeSafeDate(2024, 0, 7 + dayIndex);
-      return capitalize(formatter.format(date).replace(/\.$/, ''), locale);
+      return formatter.format(date).replace(/\.$/, '');
     });
   }
 

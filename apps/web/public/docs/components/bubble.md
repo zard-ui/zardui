@@ -17,6 +17,8 @@ npx zard-cli@latest add bubble
 
 ### Manual
 
+**Add bubble.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, contentChild, input, ViewEncapsulation } from '@angular/core';
 
@@ -134,97 +136,56 @@ export class ZardBubbleReactionsComponent {
 }
 ```
 
+**Add bubble.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
 export const bubbleGroupVariants = cva('flex min-w-0 flex-col gap-2');
 
-export const bubbleVariants = cva(
-  mergeClasses(
-    'group/bubble relative flex w-fit min-w-0 max-w-[80%] flex-col gap-1',
-    'data-[align=end]:self-end data-[variant=ghost]:max-w-full group-data-[align=end]/message:self-end',
-  ),
-  {
-    variants: {
-      zVariant: {
-        default: mergeClasses(
-          '*:data-[slot=bubble-content]:bg-primary *:data-[slot=bubble-content]:text-primary-foreground',
-          '[&>[data-slot=bubble-content]:is(button,a):hover]:bg-primary/80',
-        ),
-        secondary: mergeClasses(
-          '*:data-[slot=bubble-content]:bg-secondary *:data-[slot=bubble-content]:text-secondary-foreground',
-          '[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]',
-        ),
-        muted: mergeClasses(
-          '*:data-[slot=bubble-content]:bg-muted',
-          '[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--muted),var(--foreground)_5%)]',
-        ),
-        tinted: mergeClasses(
-          '*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground',
-          'dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)]',
-          '[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)]',
-          'dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
-        ),
-        outline: mergeClasses(
-          '*:data-[slot=bubble-content]:border-border *:data-[slot=bubble-content]:bg-background',
-          '[&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:text-foreground',
-          'dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-input/30',
-        ),
-        ghost: mergeClasses(
-          'border-none *:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0',
-          '[&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:text-foreground',
-          'dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted/50',
-        ),
-        destructive: mergeClasses(
-          '*:data-[slot=bubble-content]:bg-destructive/10 *:data-[slot=bubble-content]:text-destructive',
-          'dark:*:data-[slot=bubble-content]:bg-destructive/20',
-          '[&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/20',
-          'dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/30',
-        ),
-      },
-    },
-    defaultVariants: {
-      zVariant: 'default',
+export const bubbleVariants = cva('relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 group-data-[align=end]/message:self-end data-[align=end]:self-end data-[variant=ghost]:max-w-full group/bubble', {
+  variants: {
+    zVariant: {
+      default: '*:data-[slot=bubble-content]:bg-primary *:data-[slot=bubble-content]:text-primary-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-primary/80',
+      secondary: '*:data-[slot=bubble-content]:bg-secondary *:data-[slot=bubble-content]:text-secondary-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]',
+      muted: '*:data-[slot=bubble-content]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--muted),var(--foreground)_5%)]',
+      tinted: '*:data-[slot=bubble-content]:text-foreground *:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
+      outline: '*:data-[slot=bubble-content]:border-border *:data-[slot=bubble-content]:bg-background [&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:text-foreground dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-input/30',
+      ghost: 'border-none [&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:text-foreground dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted/50 *:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0',
+      destructive: '*:data-[slot=bubble-content]:bg-destructive/10 *:data-[slot=bubble-content]:text-destructive dark:*:data-[slot=bubble-content]:bg-destructive/20 [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/20 dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/30',
     },
   },
-);
+  defaultVariants: {
+    zVariant: 'default',
+  },
+});
 
-export const bubbleContentVariants = cva(
-  mergeClasses(
-    'w-fit min-w-0 max-w-full overflow-hidden rounded-3xl border border-transparent px-3 py-2.5 text-sm/relaxed wrap-break-word',
-    'group-data-[align=end]/bubble:self-end',
-    '[button]:text-start [button,a]:transition-colors [button,a]:outline-none',
-    '[button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-3 [button,a]:focus-visible:ring-ring/30',
-  ),
-);
+export const bubbleContentVariants = cva('w-fit max-w-full min-w-0 overflow-hidden rounded-xl border border-transparent px-3 py-2 text-sm/relaxed wrap-break-word [button,a]:focus-visible:border-ring [button,a]:focus-visible:ring-ring/50 group-data-[align=end]/bubble:self-end [button]:text-start [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:ring-3');
 
-export const bubbleReactionsVariants = cva(
-  'absolute z-10 flex w-fit shrink-0 items-center justify-center gap-1 rounded-full bg-muted px-1.5 py-0.5 text-sm ring-3 ring-card has-[button]:p-0',
-  {
-    variants: {
-      zSide: {
-        top: 'top-0 -translate-y-3/4',
-        bottom: 'bottom-0 translate-y-3/4',
-      },
-      zAlign: {
-        start: 'start-3',
-        end: 'end-3',
-      },
+export const bubbleReactionsVariants = cva('bg-muted ring-card absolute z-10 flex w-fit shrink-0 items-center justify-center gap-1 rounded-full px-1.5 py-0.5 text-sm ring-3 has-[button]:p-0', {
+  variants: {
+    zSide: {
+      top: 'top-0 -translate-y-3/4',
+      bottom: 'bottom-0 translate-y-3/4',
     },
-    defaultVariants: {
-      zSide: 'bottom',
-      zAlign: 'end',
+    zAlign: {
+      start: 'start-3',
+      end: 'end-3',
     },
   },
-);
+  defaultVariants: {
+    zSide: 'bottom',
+    zAlign: 'end',
+  },
+});
 
 export type ZardBubbleVariantVariants = NonNullable<VariantProps<typeof bubbleVariants>['zVariant']>;
 export type ZardBubbleAlignVariants = 'start' | 'end';
 export type ZardBubbleReactionsSideVariants = NonNullable<VariantProps<typeof bubbleReactionsVariants>['zSide']>;
 export type ZardBubbleReactionsAlignVariants = NonNullable<VariantProps<typeof bubbleReactionsVariants>['zAlign']>;
 ```
+
+**Add bubble.imports.ts**
 
 ```angular-ts
 export {
@@ -249,6 +210,8 @@ export const ZardBubbleImports = [
 ] as const;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './bubble.component';
 export * from './bubble.imports';
@@ -271,6 +234,56 @@ import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardBubbleImports } from '@/shared/components/bubble/bubble.imports';
+
+@Component({
+  selector: 'z-demo-bubble-preview',
+  imports: [...ZardBubbleImports],
+  template: `
+    <div class="flex w-full max-w-sm flex-col gap-8 py-12">
+      <z-bubble zAlign="end">
+        <z-bubble-content>Hey there! what's up?</z-bubble-content>
+      </z-bubble>
+      <z-bubble-group>
+        <z-bubble zVariant="muted">
+          <z-bubble-content>Hey! Want to see chat bubbles?</z-bubble-content>
+        </z-bubble>
+        <z-bubble zVariant="muted">
+          <z-bubble-content>
+            I can group messages, switch sides, and keep the whole thread easy to scan.
+          </z-bubble-content>
+          <z-bubble-reactions role="img" aria-label="Reaction: thumbs up">
+            <span>👍</span>
+          </z-bubble-reactions>
+        </z-bubble>
+      </z-bubble-group>
+      <z-bubble zAlign="end">
+        <z-bubble-content>Sure. Hit me with your best demo.</z-bubble-content>
+      </z-bubble>
+      <z-bubble zVariant="muted">
+        <z-bubble-content>
+          Yes. You are reading a demo that is demoing itself. Very meta. Very on-brand.
+        </z-bubble-content>
+        <z-bubble-reactions role="img" aria-label="Reactions: thumbs up, fire, eyes, and 2 more">
+          <span>👍</span>
+          <span>🔥</span>
+          <span>👀</span>
+          <span>+2</span>
+        </z-bubble-reactions>
+      </z-bubble>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'contents' },
+})
+export class ZardDemoBubblePreviewComponent {}
+```
 
 ### Variants
 
@@ -704,7 +717,7 @@ import { ZardPopoverImports } from '@/shared/components/popover/popover.imports'
 export class ZardDemoBubblePopoverComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

@@ -14,6 +14,11 @@
  *   closure pass — for the JSON already written to `apps/web/public/r`, every
  *                  relative and aliased import resolves to a file that ships,
  *                  either in the item itself or in one of its dependencies.
+ *   peer pass    — every peer dependency of a listed npm package is installed by
+ *                  the item (or by Angular), so Yarn Classic and legacy-peer-deps work.
+ *   icon pass    — every lucide icon a component, block or /create canvas uses has a
+ *                  row in the icon map for every family (or a declared gap), so a
+ *                  preset with another icon library never meets a name it cannot draw.
  *
  * Run it with `npm run check:registry`. It is also the last step of
  * `npm run build:registry`, so a drifting registry fails the build.
@@ -22,7 +27,22 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+import {
+  ACCENT_COLOR_IDS,
+  BASE_COLOR_IDS,
+  DEFAULT_PRESET_CODE,
+  FONTS,
+  ICON_LIBRARY_IDS,
+  PRESET_TABLES,
+  STYLE_IDS,
+  decodePreset,
+  designDataFrom,
+  encodePreset,
+  resolveTokens,
+} from '../packages/cli/src/core/design/index';
+import { ICON_FAMILIES, ICON_MAP, KNOWN_ICON_GAPS } from '../packages/cli/src/core/icons/index';
 import { registry } from '../packages/cli/src/core/registry/registry-data';
+import { checkPublishedItems, checkStyleSelectors, checkStyleSheets } from './styles-registry.cts';
 
 const LIB_PATH = path.resolve(__dirname, '../libs/zard/src/lib/shared');
 const UTILITIES_CSS = path.join(LIB_PATH, 'core/css/utilities.css');
@@ -63,7 +83,8 @@ function sourceFilesOf(dir: string, relative = ''): string[] {
   const files: string[] = [];
 
   for (const entry of fs.readdirSync(dir).sort()) {
-    if (entry === 'demo' || entry === 'doc') continue;
+    // The style sheets (`core/css/styles`) are the style system's source, not a registry item's files.
+    if (entry === 'demo' || entry === 'doc' || (entry === 'styles' && (relative === 'css' || relative === ''))) continue;
 
     const absolute = path.join(dir, entry);
     if (fs.statSync(absolute).isDirectory()) {
@@ -223,7 +244,7 @@ function checkClosurePass(): void {
 
   const items = new Map<string, PublishedItem>();
   for (const file of fs.readdirSync(REGISTRY_OUTPUT)) {
-    if (!file.endsWith('.json') || file === 'registry.json' || file === 'icons.json') continue;
+    if (!file.endsWith('.json') || ['registry.json', 'icons.json', 'design.json'].includes(file)) continue;
     const item = JSON.parse(fs.readFileSync(path.join(REGISTRY_OUTPUT, file), 'utf8')) as PublishedItem;
     if (item.files) items.set(item.name, item);
   }
@@ -289,8 +310,285 @@ function checkClosurePass(): void {
   }
 }
 
+/**
+ * The design half of the registry: what the CLI needs to resolve a preset code.
+ *
+ *   icons.json   — every family declared, with a column in the table for each, and the table agrees
+ *                  with the bundled copy.
+ *   design.json  — the option lists agree with the codec tables (a font or style in one and not the
+ *                  other is a code that cannot be written or read), every color has a complete token
+ *                  set, and the curated presets decode.
+ */
+function checkDesignPass(): void {
+  // Source side: the lists a picker shows and the tables a code is made of must be the same set.
+  const sameSet = (name: string, shown: readonly string[], coded: readonly string[]) => {
+    const missingFromCodec = shown.filter(id => !coded.includes(id));
+    const missingFromOptions = coded.filter(id => !shown.includes(id));
+    for (const id of missingFromCodec)
+      report('design', `${name} "${id}" is offered but the preset codec has no index for it`);
+    for (const id of missingFromOptions) report('design', `${name} "${id}" is in the preset codec but not offered`);
+  };
+  sameSet('style', STYLE_IDS, PRESET_TABLES.style);
+  sameSet('base color', BASE_COLOR_IDS, PRESET_TABLES.baseColor);
+  sameSet('theme', [...BASE_COLOR_IDS, ...ACCENT_COLOR_IDS], PRESET_TABLES.theme);
+  sameSet(
+    'font',
+    FONTS.map(font => font.id),
+    PRESET_TABLES.font,
+  );
+  sameSet('icon library', ICON_LIBRARY_IDS, PRESET_TABLES.iconLibrary);
+  sameSet('icon family', Object.keys(ICON_FAMILIES), PRESET_TABLES.iconLibrary);
+
+  if (decodePreset(DEFAULT_PRESET_CODE).style !== 'nova')
+    report('design', 'the default preset does not decode to nova');
+  for (const field of Object.keys(PRESET_TABLES) as Array<keyof typeof PRESET_TABLES>) {
+    if (PRESET_TABLES[field].length === 0) report('design', `the codec table for ${field} is empty`);
+  }
+
+  if (!fs.existsSync(REGISTRY_OUTPUT)) {
+    console.log('· no built registry in apps/web/public/r — skipping the published design files');
+    return;
+  }
+
+  // Published side.
+  const read = (name: string) => {
+    const file = path.join(REGISTRY_OUTPUT, name);
+    if (!fs.existsSync(file)) {
+      report(name, 'is not published');
+      return undefined;
+    }
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  };
+
+  const icons = read('icons.json');
+  if (icons) {
+    for (const family of ICON_LIBRARY_IDS) {
+      if (!icons.families?.[family]) report('icons.json', `declares no "${family}" family`);
+    }
+    const tokens = Object.keys(icons.icons ?? {});
+    if (tokens.length !== Object.keys(ICON_MAP).length)
+      report('icons.json', 'does not match the bundled table; rebuild the registry');
+    for (const family of ICON_LIBRARY_IDS) {
+      const covered = tokens.filter(token => icons.icons[token]?.[family]).length;
+      // Gaps are allowed (the CLI reports them), but a family with most of the table empty is a mistake.
+      if (covered < tokens.length * 0.9)
+        report('icons.json', `"${family}" covers only ${covered}/${tokens.length} icons`);
+    }
+  }
+
+  const design = read('design.json');
+  if (design) {
+    if (design.schemaVersion !== 1) report('design.json', `unexpected schemaVersion ${design.schemaVersion}`);
+    if (design.defaultPreset !== DEFAULT_PRESET_CODE)
+      report('design.json', 'defaultPreset is out of date; rebuild the registry');
+    if ((design.fonts ?? []).length !== FONTS.length)
+      report('design.json', 'font list is out of date; rebuild the registry');
+
+    for (const font of design.fonts ?? []) {
+      if (!font.package || !font.family) report('design.json', `font "${font.id}" has no package or family`);
+    }
+
+    for (const id of [...(design.presets?.shuffle ?? []), ...Object.values<string>(design.presets?.reset ?? {})]) {
+      try {
+        if (encodePreset(decodePreset(id)) !== id) report('design.json', `curated preset ${id} is not canonical`);
+      } catch (error) {
+        report('design.json', `curated preset ${id} does not decode: ${(error as Error).message}`);
+      }
+    }
+    if ((design.presets?.shuffle ?? []).length !== 25) report('design.json', 'expected 25 curated shuffle presets');
+
+    // A design resolved from the published data must render for every base color and theme.
+    const data = designDataFrom(design);
+    for (const baseColor of BASE_COLOR_IDS) {
+      for (const theme of [baseColor, ...ACCENT_COLOR_IDS]) {
+        try {
+          const { light, dark } = resolveTokens(
+            decodePreset(encodePreset({ baseColor, theme, chartColor: theme })),
+            data,
+          );
+          for (const key of [
+            'background',
+            'foreground',
+            'primary',
+            'primary-foreground',
+            'destructive-foreground',
+            'chart-1',
+            'chart-5',
+            'sidebar',
+            'ring',
+          ]) {
+            if (!light[key] || !dark[key])
+              report('design.json', `${baseColor}/${theme} lacks --${key} in light or dark`);
+          }
+        } catch (error) {
+          report('design.json', `${baseColor}/${theme}: ${(error as Error).message}`);
+        }
+      }
+    }
+  }
+}
+
+/*
+ * The style sheets cover every marker the sources use, and what the registry
+ * published is what the default style makes of the marked sources (ADR-0002).
+ * The checks live in `styles-registry.cts`, next to the code that publishes.
+ */
+function checkStylePass(): void {
+  const sources: Array<{ item: string; file: string; source: string }> = [];
+
+  for (const item of registry) {
+    const dir = sourceDirOf(item.name, item.basePath);
+    for (const file of item.files) {
+      if (!file.name.endsWith('.ts')) continue;
+      const absolute = path.join(dir, file.name);
+      if (fs.existsSync(absolute)) {
+        sources.push({ item: item.name, file: file.name, source: fs.readFileSync(absolute, 'utf8').replace(/\r\n/g, '\n') });
+      }
+    }
+  }
+
+  problems.push(...checkStyleSheets(sources));
+  problems.push(...checkStyleSelectors(sources));
+
+  if (fs.existsSync(REGISTRY_OUTPUT)) {
+    const published = fs
+      .readdirSync(REGISTRY_OUTPUT)
+      .filter(file => file.endsWith('.json') && file !== 'registry.json' && file !== 'icons.json')
+      .map(file => JSON.parse(fs.readFileSync(path.join(REGISTRY_OUTPUT, file), 'utf8')))
+      .filter(item => Array.isArray(item.files));
+
+    problems.push(...checkPublishedItems(published));
+  }
+}
+
+/**
+ * Peers an Angular project always has. Anything else a listed package asks
+ * for as a peer must be installed by the registry too.
+ */
+const PROVIDED_PEERS = (name: string) => name.startsWith('@angular/') || ['rxjs', 'zone.js', 'tslib'].includes(name);
+
+/**
+ * Every npm package a registry item lists must find its peer dependencies
+ * installed. npm >= 7 installs missing peers on its own, which is why this
+ * goes unnoticed there; Yarn Classic and `npm --legacy-peer-deps` do not, and
+ * the build (or, for lazy imports, the runtime) breaks. A peer is satisfied by
+ * the item's own `dependencies`, by those of the items it depends on, or by
+ * Angular itself.
+ */
+function checkPeerDependencies(): void {
+  // `dependencies` may carry a version (`ng-mapcn@22.0.0-beta.9`, `@tanstack/angular-table@^9.3.1`): look up by name.
+  const nameOf = (spec: string): string => {
+    const at = spec.indexOf('@', spec.startsWith('@') ? 1 : 0);
+    return at > 0 ? spec.slice(0, at) : spec;
+  };
+  const byName = new Map(registry.map(item => [item.name, item]));
+
+  const installedBy = (name: string, seen = new Set<string>()): Set<string> => {
+    const installed = new Set<string>();
+    if (seen.has(name)) return installed;
+    seen.add(name);
+    const item = byName.get(name);
+    for (const dependency of item?.dependencies ?? []) installed.add(nameOf(dependency));
+    for (const other of item?.registryDependencies ?? []) {
+      for (const dependency of installedBy(other, seen)) installed.add(dependency);
+    }
+    return installed;
+  };
+
+  for (const item of registry) {
+    const installed = installedBy(item.name);
+
+    for (const dependency of item.dependencies ?? []) {
+      const manifestPath = path.resolve(__dirname, '../node_modules', nameOf(dependency), 'package.json');
+      if (!fs.existsSync(manifestPath)) {
+        report(item.name, `cannot read the peer dependencies of "${dependency}": it is not installed in node_modules`);
+        continue;
+      }
+
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      for (const peer of Object.keys(manifest.peerDependencies ?? {})) {
+        if (manifest.peerDependenciesMeta?.[peer]?.optional) continue;
+        if (PROVIDED_PEERS(peer) || installed.has(peer)) continue;
+        report(item.name, `"${dependency}" has "${peer}" as a peer dependency, but the item does not install it`);
+      }
+    }
+  }
+}
+
+/**
+ * Where icons are drawn: the library (components and demos), the blocks and the /create canvas. A
+ * lucide name in any of them is something `add` or the preview will have to translate.
+ */
+const ICON_SURFACES = [
+  LIB_PATH,
+  path.resolve(__dirname, '../libs/blocks/src'),
+  path.resolve(__dirname, '../apps/web/src/app/domain/pages/create/canvas'),
+  path.resolve(__dirname, '../apps/web/src/app/domain/pages/create/examples'),
+];
+
+function sourcesUnder(dir: string): string[] {
+  return fs.readdirSync(dir).flatMap(entry => {
+    const absolute = path.join(dir, entry);
+    if (fs.statSync(absolute).isDirectory()) return sourcesUnder(absolute);
+    return absolute.endsWith('.ts') || absolute.endsWith('.html') ? [absolute] : [];
+  });
+}
+
+/**
+ * `lucideCheck` in a template or in a data file draws nothing in another family unless the icon map
+ * knows it, and `retargetFiles` can only rewrite what the map names. So the map has to cover every icon
+ * the code uses, in every family — the only exceptions are the gaps declared in `KNOWN_ICON_GAPS`, which
+ * `add` reports. Only names that are real exports of `@ng-icons/lucide` count, so an unrelated
+ * identifier that starts with "lucide" is not an icon.
+ */
+function checkIconCoverage(): void {
+  const declarations = path.resolve(__dirname, '../node_modules/@ng-icons/lucide/types/ng-icons-lucide.d.ts');
+  if (!fs.existsSync(declarations)) {
+    report('icons', 'cannot check icon coverage: @ng-icons/lucide is not installed in node_modules');
+    return;
+  }
+
+  const exported = new Set(
+    [...fs.readFileSync(declarations, 'utf8').matchAll(/declare const ([A-Za-z0-9_]+)/g)].map(match => match[1]),
+  );
+  const tokenBySymbol = new Map(Object.entries(ICON_MAP).map(([token, row]) => [row['lucide'], token]));
+  const usedIn = new Map<string, string>();
+
+  for (const surface of ICON_SURFACES) {
+    if (!fs.existsSync(surface)) continue;
+    for (const file of sourcesUnder(surface)) {
+      for (const match of fs.readFileSync(file, 'utf8').matchAll(/\blucide[A-Z0-9][A-Za-z0-9]*\b/g)) {
+        if (exported.has(match[0]) && !usedIn.has(match[0])) usedIn.set(match[0], path.relative(process.cwd(), file));
+      }
+    }
+  }
+
+  for (const [symbol, file] of [...usedIn].sort()) {
+    const token = tokenBySymbol.get(symbol);
+
+    if (token === undefined) {
+      report('icons', `${symbol} (used in ${file}) has no row in icon-map.ts`);
+      continue;
+    }
+
+    for (const family of Object.keys(ICON_FAMILIES)) {
+      if (ICON_MAP[token]?.[family] === undefined && !KNOWN_ICON_GAPS[family]?.includes(token)) {
+        report(
+          'icons',
+          `${symbol} (used in ${file}) has no ${family} equivalent in icon-map.ts and is not a declared gap`,
+        );
+      }
+    }
+  }
+}
+
 checkSourcePass();
 checkClosurePass();
+checkDesignPass();
+
+checkStylePass();
+checkPeerDependencies();
+checkIconCoverage();
 
 if (problems.length > 0) {
   console.error(`\n✖ registry is not self-consistent — ${problems.length} problem(s):\n`);

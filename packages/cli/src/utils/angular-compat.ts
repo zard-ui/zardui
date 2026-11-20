@@ -21,9 +21,16 @@ const TRACKS_ANGULAR_MAJOR = new Set(['@angular/cdk', 'embla-carousel-angular', 
  * unconstrained to `latest`, which is the release made for it. So when Angular
  * N+1 ships, N gets its entry here.
  */
+const NG_ICONS_RELEASES: Record<number, string> = { 19: '^31', 20: '^32', 21: '^34' };
+
 const LAST_COMPATIBLE: Record<string, Record<number, string>> = {
-  '@ng-icons/core': { 19: '^31', 20: '^32', 21: '^34' },
-  '@ng-icons/lucide': { 19: '^31', 20: '^32', 21: '^34' },
+  // Every ng-icons package is released in lockstep with `@ng-icons/core`.
+  '@ng-icons/core': NG_ICONS_RELEASES,
+  '@ng-icons/lucide': NG_ICONS_RELEASES,
+  '@ng-icons/tabler-icons': NG_ICONS_RELEASES,
+  '@ng-icons/huge-icons': NG_ICONS_RELEASES,
+  '@ng-icons/phosphor-icons': NG_ICONS_RELEASES,
+  '@ng-icons/remixicon': NG_ICONS_RELEASES,
   // ng-mapcn publishes only pre-releases, and a caret range never matches one: `ng-mapcn@^21` is ETARGET.
   // So its lines are exact versions, one per Angular major it was built for (npm view ng-mapcn peerDependencies):
   //   18.0.0-beta.4  peers Angular ^18.2.14

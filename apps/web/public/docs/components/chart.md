@@ -23,6 +23,14 @@ npx zard-cli@latest add chart
 
 ### Manual
 
+**Install dependencies**
+
+```bash
+npm install ngx-echarts echarts
+```
+
+**Add chart.component.ts**
+
 ```angular-ts
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -68,6 +76,7 @@ import {
   type ZardChartBuildContext,
 } from './chart-option.builder';
 import { renderChartToSvg, type ZardEchartsSsrApi } from './chart-ssr.util';
+import { ZardChartThemeWatcher } from './chart-theme-watcher';
 import { ZardChartTooltipComponent } from './chart-tooltip.component';
 import type {
   ZardChartConfig,
@@ -141,6 +150,7 @@ export class ZardChartComponent implements ZardChartHost {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly darkMode = inject(ZardDarkMode);
+  private readonly themeWatcher = inject(ZardChartThemeWatcher);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly destroyRef = inject(DestroyRef);
   private readonly pendingTasks = inject(PendingTasks);
@@ -225,8 +235,12 @@ export class ZardChartComponent implements ZardChartHost {
     this.restoreHiddenSeries();
 
     if (this.isBrowser) {
+      // A theme switched at run time (a class, an attribute, an injected stylesheet) repaints the chart too.
+      this.destroyRef.onDestroy(this.themeWatcher.watch());
+
       effect(() => {
         this.darkMode.themeMode();
+        this.themeWatcher.revision();
         // The `.dark` class lands on <html> in a separate effect, so the computed colors are
         // only trustworthy on the next frame.
         this.scheduleColorRefresh();
@@ -507,6 +521,8 @@ export class ZardChartComponent implements ZardChartHost {
 }
 ```
 
+**Add chart.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -547,23 +563,22 @@ export const chartLegendVariants = cva('flex items-center justify-center gap-4 p
 
 export type ZardChartLegendAlignVariants = NonNullable<VariantProps<typeof chartLegendVariants>['zVerticalAlign']>;
 
-export const chartLegendItemVariants = cva(
-  'flex cursor-pointer items-center gap-1.5 text-xs text-muted-foreground transition-opacity',
-  {
-    variants: {
-      zInactive: {
-        false: '',
-        true: 'opacity-50',
-      },
-    },
-    defaultVariants: {
-      zInactive: false,
+export const chartLegendItemVariants = cva('text-muted-foreground flex cursor-pointer items-center gap-1.5 text-xs transition-opacity', {
+  variants: {
+    zInactive: {
+      false: '',
+      true: 'opacity-50',
     },
   },
-);
+  defaultVariants: {
+    zInactive: false,
+  },
+});
 
 export const chartLegendSwatchVariants = cva('size-2 shrink-0 rounded-[2px]');
 ```
+
+**Add chart-arc-label.util.ts**
 
 ```angular-ts
 /**
@@ -670,15 +685,19 @@ export function resolveRadius(value: string | number | undefined, base: number, 
 }
 ```
 
+**Add chart-colors.util.ts**
+
 ```angular-ts
 import type { ZardChartChromeColors, ZardChartConfig } from './chart.types';
 
 /** How many `--chart-*` tokens the default palette cycles through. */
 export const CHART_PALETTE_SIZE = 5;
 
-const VAR_PATTERN = /^var\(\s*(--[^,)\s]+)\s*(?:,\s*([\s\S]+?))?\s*\)$/;
+// Each `\s*` borders a character class it cannot overlap, and the captured bodies are trimmed in code: a lazy group
+// between two `\s*` backtracks polynomially on long runs of spaces.
+const VAR_PATTERN = /^var\(\s*(--[^,)\s]+)\s*(?:,([\s\S]*))?\)$/;
 const HEX_PATTERN = /^#([0-9a-f]{3,8})$/i;
-const FUNCTION_PATTERN = /^([a-z-]+)\(\s*([\s\S]*?)\s*\)$/i;
+const FUNCTION_PATTERN = /^([a-z-]+)\(([\s\S]*)\)$/i;
 const MAX_VAR_DEPTH = 8;
 
 /** CSS color functions that accept the modern `<channels> / <alpha>` syntax. */
@@ -795,7 +814,8 @@ function readCssColor(host: HTMLElement | null | undefined, value: string, depth
     return raw;
   }
 
-  const [, token, fallback] = match;
+  const [, token] = match;
+  const fallback = match[2]?.trim();
   const computed = readCssVariable(host, token);
   if (computed) {
     return readCssColor(host, computed, depth + 1);
@@ -845,7 +865,7 @@ function applyAlpha(color: string, alpha: number): string {
   const fn = FUNCTION_PATTERN.exec(raw);
   if (fn) {
     const name = fn[1].toLowerCase();
-    const body = fn[2];
+    const body = fn[2].trim();
 
     if (SLASH_ALPHA_FUNCTIONS.has(name)) {
       if (!body.includes(',')) {
@@ -896,16 +916,39 @@ export function resolveChartColors(
   return resolved;
 }
 
+/**
+ * The color actually painted behind the chart: the first ancestor with a background, else the page's.
+ *
+ * A pie's slice gaps are drawn in this color. Painted in `--background` inside a card, they showed as a
+ * dark ring around the chart instead of as gaps.
+ */
+function surfaceBehind(host: HTMLElement | null | undefined): string | null {
+  if (!host || typeof getComputedStyle !== 'function') {
+    return null;
+  }
+
+  for (let el = host.parentElement; el; el = el.parentElement) {
+    const color = getComputedStyle(el).backgroundColor;
+    if (color && color !== 'transparent' && !/^rgba\([^)]*,\s*0\)$/.test(color)) {
+      return toCanvasColor(color);
+    }
+  }
+
+  return null;
+}
+
 /** Resolves the grid, axis and surface colors the chart chrome is painted with. */
 export function resolveChartChrome(host: HTMLElement | null | undefined): ZardChartChromeColors {
   return {
-    background: resolveCssColor(host, 'var(--background)'),
+    background: surfaceBehind(host) ?? resolveCssColor(host, 'var(--background)'),
     border: resolveCssColor(host, 'var(--border)'),
     foreground: resolveCssColor(host, 'var(--foreground)'),
     mutedForeground: resolveCssColor(host, 'var(--muted-foreground)'),
   };
 }
 ```
+
+**Add chart-context.ts**
 
 ```angular-ts
 import { InjectionToken, type Signal } from '@angular/core';
@@ -929,6 +972,8 @@ export interface ZardChartHost {
 export const ZARD_CHART = new InjectionToken<ZardChartHost>('ZARD_CHART');
 ```
 
+**Add chart-echarts.provider.ts**
+
 ```angular-ts
 import { provideEchartsCore } from 'ngx-echarts';
 
@@ -942,6 +987,8 @@ import { provideEchartsCore } from 'ngx-echarts';
 export const provideZardCharts = () =>
   provideEchartsCore({ echarts: () => import('./chart-echarts.registry').then(module => module.zardEcharts) });
 ```
+
+**Add chart-echarts.registry.ts**
 
 ```angular-ts
 import { BarChart, GaugeChart, LineChart, PieChart, RadarChart } from 'echarts/charts';
@@ -1008,6 +1055,8 @@ echarts.use([
 /** The registered ECharts core. Also what `z-chart` renders with on the server. */
 export const zardEcharts = echarts;
 ```
+
+**Add chart-legend.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -1080,6 +1129,8 @@ export class ZardChartLegendComponent {
   }
 }
 ```
+
+**Add chart-option.builder.ts**
 
 ```angular-ts
 import type { EChartsOption } from 'echarts';
@@ -1976,6 +2027,8 @@ export function buildChartOption(ctx: ZardChartBuildContext): EChartsOption {
 }
 ```
 
+**Add chart-ssr.util.ts**
+
 ```angular-ts
 import type { EChartsOption } from 'echarts';
 
@@ -2037,6 +2090,109 @@ export function renderChartToSvg(
 }
 ```
 
+**Add chart-theme-watcher.ts**
+
+```angular-ts
+import { DOCUMENT } from '@angular/common';
+import { inject, Injectable, signal } from '@angular/core';
+
+/** The tokens a chart paints with: when one of their values changes, every chart has to resolve its colors again. */
+const WATCHED_TOKENS = [
+  '--chart-1',
+  '--chart-2',
+  '--chart-3',
+  '--chart-4',
+  '--chart-5',
+  '--background',
+  '--foreground',
+  '--border',
+  '--muted-foreground',
+  '--card',
+  '--popover',
+] as const;
+
+/**
+ * Tells the charts when the theme's colors changed at run time.
+ *
+ * ECharts paints on a canvas, so a chart turns `var(--chart-1)` into a literal color when it builds its option. A
+ * theme switched by a class on `<html>`, an attribute or a stylesheet added to `<head>` changes the variables but
+ * nothing the chart reads, and it would keep the old colors. One observer, shared by every chart on the page, watches
+ * those places and bumps `revision` (at most once a frame) only when the resolved value of a watched token changed:
+ * a stylesheet that does not touch the theme costs a style read, not a repaint.
+ */
+@Injectable({ providedIn: 'root' })
+export class ZardChartThemeWatcher {
+  private readonly document = inject(DOCUMENT);
+
+  /** Bumped each time the theme's colors changed. */
+  readonly revision = signal(0);
+
+  private observer: MutationObserver | null = null;
+  private users = 0;
+  private signature = '';
+  private frame: number | null = null;
+
+  /** Starts watching while at least one chart is on the page; call the returned function when the chart goes away. */
+  watch(): () => void {
+    const view = this.document.defaultView;
+    if (!view || typeof view.MutationObserver !== 'function') return () => undefined;
+
+    this.users++;
+    if (!this.observer) this.start(view);
+
+    let stopped = false;
+    return () => {
+      if (stopped) return;
+      stopped = true;
+      this.users--;
+      if (this.users === 0) this.stop();
+    };
+  }
+
+  private start(view: Window & typeof globalThis): void {
+    this.signature = this.readSignature();
+    this.observer = new view.MutationObserver(() => this.scheduleCheck());
+    this.observer.observe(this.document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'style', 'data-theme'],
+    });
+    this.observer.observe(this.document.head, { childList: true, subtree: true, characterData: true });
+  }
+
+  private stop(): void {
+    this.observer?.disconnect();
+    this.observer = null;
+    const view = this.document.defaultView;
+    if (this.frame !== null && view) view.cancelAnimationFrame(this.frame);
+    this.frame = null;
+  }
+
+  private scheduleCheck(): void {
+    const view = this.document.defaultView;
+    if (!view || this.frame !== null) return;
+
+    this.frame = view.requestAnimationFrame(() => {
+      this.frame = null;
+      const signature = this.readSignature();
+      if (signature === this.signature) return;
+
+      this.signature = signature;
+      this.revision.update(value => value + 1);
+    });
+  }
+
+  private readSignature(): string {
+    const view = this.document.defaultView;
+    if (!view) return '';
+
+    const style = view.getComputedStyle(this.document.documentElement);
+    return WATCHED_TOKENS.map(token => style.getPropertyValue(token).trim()).join('|');
+  }
+}
+```
+
+**Add chart-tooltip.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -2087,6 +2243,8 @@ export class ZardChartTooltipComponent {
 }
 ```
 
+**Add chart-tooltip.formatter.ts**
+
 ```angular-ts
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -2128,8 +2286,7 @@ export interface ZardChartTooltipContext {
   indicators?: readonly string[];
 }
 
-const CONTAINER_CLASSES =
-  'grid min-w-[8rem] items-start gap-1.5 text-start rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl';
+const CONTAINER_CLASSES = 'border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-start text-xs shadow-xl';
 
 const ROW_CLASSES =
   'flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground';
@@ -2326,6 +2483,8 @@ export function buildTooltipHtml(
 }
 ```
 
+**Add chart.imports.ts**
+
 ```angular-ts
 import { ZardChartLegendComponent } from '@/shared/components/chart/chart-legend.component';
 import { ZardChartTooltipComponent } from '@/shared/components/chart/chart-tooltip.component';
@@ -2333,6 +2492,8 @@ import { ZardChartComponent } from '@/shared/components/chart/chart.component';
 
 export const ZardChartImports = [ZardChartComponent, ZardChartTooltipComponent, ZardChartLegendComponent] as const;
 ```
+
+**Add chart.types.ts**
 
 ```angular-ts
 import type { EChartsOption } from 'echarts';
@@ -2419,6 +2580,8 @@ export interface ZardChartLegendEntry {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './chart.component';
 export * from './chart-legend.component';
@@ -2471,6 +2634,63 @@ import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardChartImports } from '@/shared/components/chart/chart.imports';
+import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
+
+@Component({
+  selector: 'z-demo-chart-preview',
+  imports: [ZardCardImports, ZardChartImports],
+  template: `
+    <z-card class="w-full">
+      <z-card-header>
+        <z-card-title zTitle="Bar Chart" />
+        <z-card-description zDescription="Showing total visitors for the last 6 months" />
+      </z-card-header>
+      <z-card-content>
+        <z-chart
+          zType="bar"
+          [zConfig]="chartConfig"
+          [zData]="chartData"
+          [zSeries]="series"
+          zXAxisKey="month"
+          [zXAxisFormatter]="shortMonth"
+          class="w-full"
+        >
+          <z-chart-tooltip zIndicator="dashed" />
+          <z-chart-legend />
+        </z-chart>
+      </z-card-content>
+    </z-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoChartPreviewComponent {
+  protected readonly chartConfig: ZardChartConfig = {
+    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
+    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
+  };
+
+  protected readonly chartData = [
+    { month: 'January', desktop: 186, mobile: 80 },
+    { month: 'February', desktop: 305, mobile: 200 },
+    { month: 'March', desktop: 237, mobile: 120 },
+    { month: 'April', desktop: 73, mobile: 190 },
+    { month: 'May', desktop: 209, mobile: 130 },
+    { month: 'June', desktop: 214, mobile: 140 },
+  ];
+
+  protected readonly series = ['desktop', 'mobile'];
+
+  protected readonly shortMonth = (value: string) => value.slice(0, 3);
+}
+```
 
 ### Chart Config
 
@@ -3516,7 +3736,7 @@ export class ZardDemoChartRadialSimpleComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl). The category axis keeps its left-to-right order in RTL; the legend, tooltip text and surrounding layout mirror.
 

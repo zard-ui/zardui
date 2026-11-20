@@ -266,29 +266,47 @@ describe('rewriteIcons', () => {
 
 /**
  * The table exists to translate the icons the library uses. A new icon in
- * `libs/zard` with no matching row would go unnoticed until someone switched
- * family and found that component left behind — this is the test that warns
- * first.
+ * `libs/zard`, in a block or on the /create canvas with no matching row would go
+ * unnoticed until someone switched family and found that piece left behind — this
+ * is the test that warns first. `npm run check:registry` runs the same comparison
+ * in the build.
  *
- * It runs from the repository; in the published package, where `libs/zard` does
- * not exist, there is nothing to compare against.
+ * It runs from the repository; in the published package, where those directories
+ * do not exist, there is nothing to compare against.
  */
 describe('coverage of the icons the library actually uses', () => {
-  const LIB = path.resolve(__dirname, '../../../../../libs/zard/src/lib/shared');
-  const available = existsSync(LIB);
+  const ROOT = path.resolve(__dirname, '../../../../..');
+  const LIB = path.join(ROOT, 'libs/zard/src/lib/shared');
+  const BLOCKS = path.join(ROOT, 'libs/blocks/src');
+  const CREATE = path.join(ROOT, 'apps/web/src/app/domain/pages/create');
+  const SURFACES = [LIB, BLOCKS, path.join(CREATE, 'canvas'), path.join(CREATE, 'examples')];
+  const available = SURFACES.every(dir => existsSync(dir));
 
-  function sourceFiles(dir: string): string[] {
+  function sourceFiles(dir: string, extensions: readonly string[]): string[] {
     return readdirSync(dir).flatMap(entry => {
       const full = path.join(dir, entry);
-      if (statSync(full).isDirectory()) return sourceFiles(full);
-      return full.endsWith('.ts') ? [full] : [];
+      if (statSync(full).isDirectory()) return sourceFiles(full, extensions);
+      return extensions.some(extension => full.endsWith(extension)) ? [full] : [];
     });
+  }
+
+  /** Every lucide name a surface mentions, in code or in a template — the names a user would see. */
+  function usedSymbols(dirs: readonly string[]): Set<string> {
+    const used = new Set<string>();
+
+    for (const dir of dirs) {
+      for (const file of sourceFiles(dir, ['.ts', '.html'])) {
+        for (const match of readFileSync(file, 'utf8').matchAll(/\blucide[A-Z0-9][A-Za-z0-9]*\b/g)) used.add(match[0]);
+      }
+    }
+
+    return used;
   }
 
   (available ? it : it.skip)('has a row for every icon a component or demo imports', () => {
     const used = new Set<string>();
 
-    for (const file of sourceFiles(LIB)) {
+    for (const file of sourceFiles(LIB, ['.ts'])) {
       for (const symbol of extractIcons(readFileSync(file, 'utf8'))) {
         // The family package also exports types; only the icons matter here.
         if (symbol.startsWith('lucide')) used.add(symbol);
@@ -299,11 +317,18 @@ describe('coverage of the icons the library actually uses', () => {
     expect([...used].filter(symbol => tokenFor(symbol) === undefined).sort()).toEqual([]);
   });
 
+  (available ? it : it.skip)('has a row for every icon a block or the /create canvas names', () => {
+    const used = usedSymbols([BLOCKS, path.join(CREATE, 'canvas'), path.join(CREATE, 'examples')]);
+
+    expect(used.size).toBeGreaterThan(0);
+    expect([...used].filter(symbol => tokenFor(symbol) === undefined).sort()).toEqual([]);
+  });
+
   (available ? it : it.skip)('has no rows left over from an icon that is no longer used', () => {
-    const used = new Set(sourceFiles(LIB).flatMap(file => extractIcons(readFileSync(file, 'utf8'))));
+    const used = usedSymbols(SURFACES);
 
     const orphans = Object.entries(ICON_MAP)
-      .filter(([, byFamily]) => !used.has(byFamily.lucide))
+      .filter(([, byFamily]) => !used.has(byFamily.lucide ?? ''))
       .map(([token]) => token);
 
     expect(orphans).toEqual([]);

@@ -37,7 +37,7 @@ Presets, chosen at `init` and recorded as `tailwind.baseColor`: `neutral`, `ston
 | `--ring`                                 | Focus ring                                         |
 | `--chart-1` … `--chart-5`                | Data visualisation                                 |
 | `--sidebar-*`                            | Sidebar-specific surfaces                          |
-| `--radius`                               | Base radius; `--radius-sm/md/lg/xl` derive from it |
+| `--radius`                               | Base radius; `--radius-sm` to `--radius-4xl` derive from it (multiplicative, like shadcn) |
 
 Colours are OKLCH: `oklch(0.205 0 0)` — lightness (0–1), chroma (0 = grey), hue (0–360).
 

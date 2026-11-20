@@ -17,6 +17,8 @@ npx zard-cli@latest add popover
 
 ### Manual
 
+**Add popover.component.ts**
+
 ```angular-ts
 import { Directionality, type Direction } from '@angular/cdk/bidi';
 import {
@@ -70,6 +72,8 @@ import {
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end';
 export type ZardPopoverAlign = 'start' | 'center' | 'end';
+/** What the trigger announces it opens; `dialog` unless the content is a menu. */
+export type ZardPopoverHasPopup = 'dialog' | 'menu' | 'listbox' | 'tree' | 'grid';
 
 /**
  * Kept in sync with the `duration-100` utility of `popoverVariants`. The exit animation runs for this long
@@ -157,7 +161,7 @@ function transformOriginFor(side: ZardPopoverPlacement, align: ZardPopoverAlign,
   selector: '[zPopover]',
   host: {
     'data-slot': 'popover-trigger',
-    '[attr.aria-haspopup]': '"dialog"',
+    '[attr.aria-haspopup]': 'zHasPopup()',
     '[attr.aria-expanded]': 'isVisible()',
     '[attr.aria-controls]': 'contentId()',
   },
@@ -189,6 +193,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   readonly zSideOffset = input(4, { transform: numberAttribute });
   readonly zAlignOffset = input(0, { transform: numberAttribute });
   readonly zOrigin = input<ElementRef>();
+  readonly zHasPopup = input<ZardPopoverHasPopup>('dialog');
   readonly zVisible = input<boolean>(false);
   readonly zOverlayClickable = input<boolean>(true);
   readonly zVisibleChange = output<boolean>();
@@ -196,8 +201,14 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   protected readonly isVisible = signal(false);
   protected readonly contentId = signal<string | null>(null);
 
+  /** The element the panel is positioned against: `zOrigin` when given, otherwise the trigger. */
   get nativeElement() {
-    return this.zOrigin()?.nativeElement ?? this.elementRef.nativeElement;
+    return this.zOrigin()?.nativeElement ?? this.triggerElement;
+  }
+
+  /** The element that owns the listeners, the ARIA state and the focus restore. Never replaced by `zOrigin`. */
+  private get triggerElement(): HTMLElement {
+    return this.elementRef.nativeElement;
   }
 
   constructor() {
@@ -302,7 +313,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.contentId.set(null);
 
     if (restoreFocus) {
-      this.nativeElement?.focus?.();
+      this.triggerElement?.focus?.();
     }
 
     this.scheduleDetach(content);
@@ -359,7 +370,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     ) {
       this.overlayRefSubscription = this.overlayRef
         .outsidePointerEvents()
-        .pipe(filter(event => !this.nativeElement.contains(event.target)))
+        .pipe(filter(event => !this.triggerElement.contains(event.target as Node)))
         .subscribe(() => this.hide());
     }
   }
@@ -371,11 +382,11 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     }
 
     if (trigger === 'click') {
-      this.listeners.push(this.renderer.listen(this.nativeElement, 'click.stop', () => this.toggle()));
+      this.listeners.push(this.renderer.listen(this.triggerElement, 'click.stop', () => this.toggle()));
     } else if (trigger === 'hover') {
-      this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseenter', () => this.show()));
+      this.listeners.push(this.renderer.listen(this.triggerElement, 'mouseenter', () => this.show()));
 
-      this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseleave', () => this.hide()));
+      this.listeners.push(this.renderer.listen(this.triggerElement, 'mouseleave', () => this.hide()));
     }
   }
 
@@ -635,12 +646,12 @@ export class ZardPopoverComponent {
 }
 ```
 
+**Add popover.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const popoverVariants = cva(
-  'z-50 flex w-72 origin-(--transform-origin) flex-col gap-2.5 rounded-lg bg-popover p-2.5 text-sm text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-hidden duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
-);
+export const popoverVariants = cva('bg-popover text-popover-foreground ring-foreground/10 z-50 flex w-72 origin-(--transform-origin) flex-col gap-2.5 rounded-lg p-2.5 text-sm shadow-md ring-1 duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 rtl:data-[side=inline-end]:slide-in-from-right-2 rtl:data-[side=inline-start]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 outline-hidden');
 
 export const popoverHeaderVariants = cva('flex flex-col gap-0.5 text-sm');
 
@@ -651,11 +662,15 @@ export const popoverDescriptionVariants = cva('text-muted-foreground');
 export type ZardPopoverVariants = VariantProps<typeof popoverVariants>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './popover.component';
 export * from './popover.imports';
 export * from './popover.variants';
 ```
+
+**Add popover.imports.ts**
 
 ```angular-ts
 export {
@@ -713,6 +728,58 @@ button[zPopover]
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
+
+@Component({
+  selector: 'z-demo-popover-preview',
+  imports: [ZardButtonComponent, ZardInputComponent, ...ZardPopoverImports],
+  template: `
+    <button type="button" z-button zPopover zType="outline" [zContent]="popoverContent">Open popover</button>
+
+    <ng-template #popoverContent>
+      <z-popover class="w-80">
+        <div z-popover-header>
+          <h4 z-popover-title>Dimensions</h4>
+          <p z-popover-description>Set the dimensions for the layer.</p>
+        </div>
+
+        <div class="grid gap-2">
+          @for (dimension of dimensions; track dimension.id) {
+            <div class="grid grid-cols-3 items-center gap-4">
+              <label class="text-sm" [attr.for]="dimension.id">{{ dimension.label }}</label>
+              <input
+                z-input
+                type="text"
+                class="col-span-2 h-8"
+                [id]="dimension.id"
+                [value]="dimension.value"
+                [attr.aria-label]="dimension.label"
+              />
+            </div>
+          }
+        </div>
+      </z-popover>
+    </ng-template>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoPopoverPreviewComponent {
+  readonly dimensions = [
+    { id: 'width', label: 'Width', value: '100%' },
+    { id: 'maxWidth', label: 'Max. width', value: '300px' },
+    { id: 'height', label: 'Height', value: '25px' },
+    { id: 'maxHeight', label: 'Max. height', value: 'none' },
+  ];
+}
+```
 
 ### Basic
 
@@ -973,7 +1040,7 @@ export class ZardDemoPopoverCloseOnActionComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 
@@ -1098,6 +1165,7 @@ Directive that opens a popover from its host element.
 | `[zSideOffset]` | Distance from the trigger in px | `number` | `4` |
 | `[zAlignOffset]` | Offset along the alignment axis in px | `number` | `0` |
 | `[zOrigin]` | Custom anchor element | `ElementRef` | `-` |
+| `[zHasPopup]` | What the trigger announces through aria-haspopup; use 'menu' when the content is a menu | `'dialog' \| 'menu' \| 'listbox' \| 'tree' \| 'grid'` | `'dialog'` |
 | `[zVisible]` | Controls visibility programmatically | `boolean` | `false` |
 | `[zOverlayClickable]` | Closes on outside click | `boolean` | `true` |
 | `(zVisibleChange)` | Emitted when visibility changes, before the exit animation | `EventEmitter<boolean>` | `-` |

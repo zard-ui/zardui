@@ -27,6 +27,14 @@ npx zard-cli@latest add map
 
 ### Manual
 
+**Install dependencies**
+
+```bash
+npm install ng-mapcn@22.0.0-beta.9 maplibre-gl@6 @types/geojson maplibre-gl@^6.11.2
+```
+
+**Add index.ts**
+
 ```angular-ts
 // Nothing here touches MapLibre when the module is evaluated: `ng-mapcn` only creates a map inside
 // `afterNextRender`, so the barrel is safe to import on the server. Lazy-load the routes or `@defer`
@@ -36,6 +44,8 @@ export * from './map.provider';
 export * from './map-style.service';
 export * from './map-styles';
 ```
+
+**Add map-style.service.ts**
 
 ```angular-ts
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
@@ -271,6 +281,8 @@ function parseKeys(raw: string | null): ZardMapKeys {
   }
 }
 ```
+
+**Add map-styles.ts**
 
 ```angular-ts
 import type { StyleSpecification } from 'maplibre-gl';
@@ -900,6 +912,8 @@ export function findZardMapPreset(
 }
 ```
 
+**Add map.css**
+
 ```css
 /*
  * Global map styles: import after `maplibre-gl/dist/maplibre-gl.css`, both unlayered, so MapLibre wins over
@@ -1119,6 +1133,8 @@ export function findZardMapPreset(
 }
 ```
 
+**Add map.imports.ts**
+
 ```angular-ts
 import {
   MapArcComponent,
@@ -1171,6 +1187,8 @@ export const ZardMapImports = [
 ] as const;
 ```
 
+**Add map.provider.ts**
+
 ```angular-ts
 import { inject, type Provider, type Signal } from '@angular/core';
 
@@ -1217,10 +1235,14 @@ export function provideZardMap(config: ZardMapConfig = {}): Provider[] {
 }
 ```
 
+**Add styles.css**
+
 ```css
 @import 'maplibre-gl/dist/maplibre-gl.css';
 @import './app/shared/components/map/map.css';
 ```
+
+**Add angular.json**
 
 ```json
 {
@@ -1278,6 +1300,38 @@ import { ZardMapImports } from '@/shared/components/map/map.imports';
 ```
 
 ## Examples
+
+### Preview
+
+A basemap with zoom controls and a marker that opens a popup and shows a tooltip on hover.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardMapImports } from '@/shared/components/map/map.imports';
+
+@Component({
+  selector: 'z-demo-map-preview',
+  imports: [ZardMapImports],
+  template: `
+    <div class="h-[420px] w-full overflow-hidden rounded-xl border">
+      <ng-map [center]="[-46.6333, -23.5505]" [zoom]="11">
+        <ng-map-controls />
+        <ng-map-marker [longitude]="-46.6333" [latitude]="-23.5505">
+          <ng-marker-content />
+          <ng-marker-tooltip>Praça da Sé</ng-marker-tooltip>
+          <ng-marker-popup>
+            <p class="font-medium">São Paulo</p>
+            <p class="text-muted-foreground">The largest city in Brazil.</p>
+          </ng-marker-popup>
+        </ng-map-marker>
+      </ng-map>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoMapPreviewComponent {}
+```
 
 ### Basic
 

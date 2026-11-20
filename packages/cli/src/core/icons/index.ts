@@ -8,7 +8,8 @@
  * release and no hunting for `lucide` through the code.
  *
  *   `extractIcons`    reads which icons a source uses (the registry publishes this)
- *   `retargetIcons`   rewrites a source from one family to another (install uses it)
+ *   `retargetIcons`   rewrites a source from one family to another
+ *   `retargetFiles`   the same, decided over all the files of one item (install uses it)
  *   `iconPackagesFor` says which packages the project needs (init uses it)
  */
 
@@ -16,6 +17,7 @@ import {
   ICON_CORE_PACKAGE,
   ICON_FAMILIES,
   SOURCE_ICON_FAMILY,
+  importSpecifier,
   type IconFamily,
   type IconFamilyInfo,
 } from './families.js';
@@ -25,10 +27,11 @@ export {
   ICON_CORE_PACKAGE,
   ICON_FAMILIES,
   SOURCE_ICON_FAMILY,
+  importSpecifier,
   type IconFamily,
   type IconFamilyInfo,
 } from './families.js';
-export { ICON_MAP } from './icon-map.js';
+export { ICON_MAP, KNOWN_ICON_GAPS } from './icon-map.js';
 
 /** An icon by what it means: `check`, `chevron-down`. */
 export type IconToken = string;
@@ -142,10 +145,14 @@ export function missingTokensFor(family: IconFamily, catalog: IconCatalog = LOCA
  * several, with a leading `type` or aliased. What matters is the package (which
  * gives the family) and the names imported from it.
  */
-const ICON_IMPORT = /import\s*(?:type\s+)?\{([^}]*)\}\s*from\s*['"]@ng-icons\/([a-z0-9-]+)['"]/g;
+const ICON_IMPORT = /import\s*(?:type\s+)?\{([^}]*)\}\s*from\s*['"]@ng-icons\/([a-z0-9-]+(?:\/[a-z0-9-]+)*)['"]/g;
 
+/** The family whose symbols are imported from `@ng-icons/<suffix>` (a subpath counts: `phosphor-icons/regular`). */
 function familyByPackageSuffix(suffix: string, catalog: IconCatalog): IconFamily | undefined {
-  return Object.keys(catalog.families).find(name => catalog.families[name]?.package === `@ng-icons/${suffix}`);
+  return Object.keys(catalog.families).find(name => {
+    const info = catalog.families[name];
+    return info !== undefined && importSpecifier(info) === `@ng-icons/${suffix}`;
+  });
 }
 
 /**
@@ -265,7 +272,79 @@ export function retargetIcons(
 
   if (replacements.size === 0) return { content: source, missing };
 
-  return { content: rewriteIcons(source, origin.package, target.package, replacements), missing };
+  return {
+    content: rewriteIcons(source, importSpecifier(origin), importSpecifier(target), replacements, new Set(missing)),
+    missing,
+  };
+}
+
+export interface RetargetFile {
+  readonly name: string;
+  readonly content: string;
+}
+
+export interface RetargetedFile extends RetargetFile {
+  /** Symbols of this file the target family does not declare — left untouched. */
+  readonly missing: string[];
+}
+
+/**
+ * Every symbol a file mentions, by import or by name.
+ *
+ * `extractIcons` stops at imports, which is right for what a component *provides*. What a block
+ * *draws* is wider: a `.html` template refers to the icon by name (`name="lucideCheck"`), and a data
+ * file holds the names as strings (`icon: 'lucideBot'`) without importing anything. Both are the same
+ * word as the import, so they have to follow it — a name left behind renders nothing in the new family.
+ */
+function mentionedIcons(source: string, from: IconFamily, catalog: IconCatalog): string[] {
+  const origin = iconFamily(from, catalog);
+  const found = new Set(extractIcons(source, from, catalog));
+
+  if (origin?.prefix) {
+    const named = new RegExp(`\\b${escapeRegExp(origin.prefix)}[A-Z0-9][A-Za-z0-9]*\\b`, 'g');
+    for (const match of source.matchAll(named)) found.add(match[0]);
+  }
+
+  return [...found].sort();
+}
+
+/**
+ * Rewrites the files of one installable item from one icon family to another, as a set.
+ *
+ * `retargetIcons` decides file by file, from each file's own imports. A block is several files that
+ * share icons — the component imports and provides them, its template and its data refer to them
+ * by name — so the decision is made once over all the files and applied to each. A symbol without an
+ * equivalent in the target keeps its source name in every file and is reported against the files that
+ * mention it.
+ */
+export function retargetFiles(
+  files: readonly RetargetFile[],
+  from: IconFamily,
+  to: IconFamily,
+  catalog: IconCatalog = LOCAL_ICON_CATALOG,
+): RetargetedFile[] {
+  const origin = iconFamily(from, catalog);
+  const target = iconFamily(to, catalog);
+
+  if (from === to || !origin || !target) return files.map(file => ({ ...file, missing: [] }));
+
+  const mentions = files.map(file => mentionedIcons(file.content, from, catalog));
+  const replacements = new Map<string, string>();
+  const unmapped = new Set<string>();
+
+  for (const symbol of new Set(mentions.flat())) {
+    const token = tokenFor(symbol, from, catalog);
+    const replacement = token !== undefined ? symbolFor(token, to, catalog) : undefined;
+
+    if (replacement === undefined) unmapped.add(symbol);
+    else replacements.set(symbol, replacement);
+  }
+
+  return files.map((file, index) => ({
+    name: file.name,
+    content: rewriteIcons(file.content, importSpecifier(origin), importSpecifier(target), replacements, unmapped),
+    missing: (mentions[index] ?? []).filter(symbol => unmapped.has(symbol)),
+  }));
 }
 
 /**
@@ -280,6 +359,7 @@ export function rewriteIcons(
   fromPackage: string,
   toPackage: string,
   replacements: ReadonlyMap<string, string>,
+  keep: ReadonlySet<string> = new Set(),
 ): string {
   if (replacements.size === 0) return source;
 
@@ -288,12 +368,87 @@ export function rewriteIcons(
   // and only the trailing `\b` would save it — cheaper not to rely on that.
   const pattern = new RegExp(`\\b(${[...replacements.keys()].sort((a, b) => b.length - a.length).join('|')})\\b`, 'g');
 
+  const swapped =
+    keep.size === 0
+      ? source.replace(
+          new RegExp(`(['"])${escapeRegExp(fromPackage)}\\1`, 'g'),
+          (_match, quote: string) => `${quote}${toPackage}${quote}`,
+        )
+      : swapImports(source, fromPackage, toPackage, keep);
+
+  return dropRepeatedIcons(swapped.replace(pattern, symbol => replacements.get(symbol) ?? symbol));
+}
+
+/**
+ * Two lucide icons can share one symbol in a smaller family (`trash` and `trash-2` are both
+ * `tablerTrash`). After the swap that leaves the same name twice in an import and in
+ * `provideIcons({ … })` — a compile error — so the repeats are dropped and the first stays.
+ */
+function dropRepeatedIcons(source: string): string {
+  const dedupe = (list: string): string => {
+    const pieces = list.split(',');
+    const seen = new Set<string>();
+    const kept: string[] = [];
+    let tail = '';
+
+    pieces.forEach((piece, index) => {
+      const key = piece.trim();
+
+      if (key && seen.has(key)) {
+        // The last piece is whatever follows the final comma: blank in `{ a, b, }`, an entry in `{ a, b }`.
+        // Dropping the entry also drops the comma before it, and its trailing space stays.
+        if (index === pieces.length - 1) tail = /\s*$/.exec(piece)?.[0] ?? '';
+        return;
+      }
+
+      if (key) seen.add(key);
+      kept.push(piece);
+    });
+
+    return kept.join(',') + tail;
+  };
+
   return source
     .replace(
-      new RegExp(`(['"])${escapeRegExp(fromPackage)}\\1`, 'g'),
-      (_match, quote: string) => `${quote}${toPackage}${quote}`,
+      /(import\s*(?:type\s+)?\{)([^}]*)(\}\s*from\s*['"]@ng-icons\/[^'"]+['"])/g,
+      (_match, open: string, names: string, close: string) => `${open}${dedupe(names)}${close}`,
     )
-    .replace(pattern, symbol => replacements.get(symbol) ?? symbol);
+    .replace(
+      /(provideIcons\(\s*\{)([^{}]*)(\}\s*\))/g,
+      (_match, open: string, entries: string, close: string) => `${open}${dedupe(entries)}${close}`,
+    );
+}
+
+/**
+ * Moves each import of the source package to the target, except for the symbols in `keep`.
+ *
+ * Those are the ones the target family has no equivalent for. Pointing them at the target package
+ * would break the import, so they stay on a line of their own from the source package — the
+ * component keeps compiling, and the warning says which icons to swap by hand.
+ */
+function swapImports(source: string, fromPackage: string, toPackage: string, keep: ReadonlySet<string>): string {
+  const statement = new RegExp(
+    `import(\\s*(?:type\\s+)?)\\{([^}]*)\\}(\\s*from\\s*)(['"])${escapeRegExp(fromPackage)}\\4`,
+    'g',
+  );
+
+  return source.replace(statement, (match, type: string, names: string, from: string, quote: string) => {
+    const specifiers = names
+      .split(',')
+      .map(name => name.trim())
+      .filter(Boolean);
+    const nameOf = (specifier: string): string => (specifier.replace(/^type\s+/, '').split(/\s+as\s+/)[0] ?? '').trim();
+    const kept = specifiers.filter(specifier => keep.has(nameOf(specifier)));
+    const moved = specifiers.filter(specifier => !keep.has(nameOf(specifier)));
+
+    if (kept.length === 0) return `import${type}{${names}}${from}${quote}${toPackage}${quote}`;
+    if (moved.length === 0) return match;
+
+    return (
+      `import${type}{ ${moved.join(', ')} }${from}${quote}${toPackage}${quote};\n` +
+      `import${type}{ ${kept.join(', ')} }${from}${quote}${fromPackage}${quote}`
+    );
+  });
 }
 
 function escapeRegExp(value: string): string {

@@ -17,6 +17,8 @@ npx zard-cli@latest add map-style-select
 
 ### Manual
 
+**Add map-style-select.component.ts**
+
 ```angular-ts
 import { NgTemplateOutlet } from '@angular/common';
 import {
@@ -110,7 +112,7 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
 
     <ng-template #content>
       <z-popover class="max-h-[min(30rem,50dvh)] w-80 gap-0 overflow-hidden p-0">
-        <div z-popover-header class="shrink-0 px-3.5 pt-3 pb-2">
+        <div z-popover-header class="px-3.5 pt-3 pb-2 shrink-0">
           <h4 z-popover-title>{{ zAriaLabel() }}</h4>
           <p z-popover-description class="text-xs">Every map on this page follows your pick.</p>
         </div>
@@ -118,7 +120,7 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
         <div
           role="radiogroup"
           [attr.aria-label]="zAriaLabel()"
-          class="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto p-1.5 pt-0"
+          class="gap-0.5 p-1.5 pt-0 flex min-h-0 flex-1 flex-col overflow-y-auto"
         >
           @for (group of groups(); track group.provider.id) {
             <p class="text-muted-foreground px-1.5 pt-2 pb-0.5 text-[11px] font-medium tracking-wide uppercase">
@@ -161,7 +163,7 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
 
         @if (pending(); as preset) {
           <form
-            class="flex shrink-0 flex-col gap-2 border-t p-3"
+            class="gap-2 p-3 flex shrink-0 flex-col border-t"
             (submit)="applyKey($event, popover)"
             (keydown.escape)="cancel()"
           >
@@ -365,6 +367,8 @@ export class ZardMapStyleSelectComponent {
 }
 ```
 
+**Add map-style-select.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -384,11 +388,13 @@ export const mapStyleSwatchVariants = cva('block shrink-0 overflow-hidden ring-1
 });
 
 export const mapStyleOptionVariants = cva(
-  'group flex items-center gap-3 rounded-md p-1.5 text-left outline-none hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[selected=true]:bg-accent',
+  'flex items-center gap-3 rounded-md p-1.5 text-left focus-visible:ring-ring/50 focus-visible:ring-[3px] group outline-none hover:bg-accent data-[selected=true]:bg-accent',
 );
 
 export type ZardMapStyleSwatchSizeVariants = NonNullable<VariantProps<typeof mapStyleSwatchVariants>['zSize']>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './map-style-select.component';
@@ -406,6 +412,38 @@ import { ZardMapStyleSelectComponent } from '@/shared/components/map-style-selec
 ```
 
 ## Examples
+
+### Preview
+
+Over a corner of a map here, but it is plain HTML: put it in a toolbar or your app header. Key-based presets ask for the key inline.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardMapImports } from '@/shared/components/map/map.imports';
+import { ZardMapStyleSelectComponent } from '@/shared/components/map-style-select/map-style-select.component';
+
+@Component({
+  selector: 'z-demo-map-style-picker',
+  imports: [ZardMapImports, ZardMapStyleSelectComponent],
+  template: `
+    <div class="relative h-[420px] w-full overflow-hidden rounded-xl border">
+      <!-- No [styles] here: this map follows the app-wide basemap that provideZardMap() registers. -->
+      <ng-map [center]="[-0.1276, 51.5072]" [zoom]="11.5">
+        <ng-map-controls />
+        <ng-map-marker [longitude]="-0.1276" [latitude]="51.5072" ariaLabel="London">
+          <ng-marker-content />
+        </ng-map-marker>
+      </ng-map>
+
+      <!-- The picker is plain HTML, so it can sit over a corner of the map, in a toolbar or in your app header. -->
+      <z-map-style-select class="absolute top-3 left-3" />
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoMapStylePickerComponent {}
+```
 
 ### Style Override
 

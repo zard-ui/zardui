@@ -137,6 +137,7 @@ export class ZardSliderRangeComponent {
     <span
       #thumb
       data-slot="slider-thumb"
+      [attr.data-orientation]="orientation()"
       [attr.role]="'slider'"
       [attr.aria-valuemin]="min()"
       [attr.aria-valuemax]="max()"
@@ -228,6 +229,8 @@ export class ZardSliderThumbComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    // shadcn's Slider root: `data-horizontal:w-full data-vertical:h-full`.
+    class: 'block data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full',
     '[attr.data-orientation]': 'zOrientation()',
     '[attr.aria-disabled]': 'disabled() ? true : null',
     '[attr.data-disabled]': 'disabled() ? true : null',

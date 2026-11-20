@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>zard/ui Changelog</title>
+    <link>https://zardui.com/docs/changelog</link>
+    <description>Latest updates and announcements from zard/ui: beautifully-designed, accessible Angular components inspired by shadcn/ui.</description>
+    <language>en-us</language>
+    <atom:link href="https://zardui.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title><![CDATA[November 2026 - Create]]></title>
+      <link>https://zardui.com/docs/changelog/2026-11-create</link>
+      <guid>https://zardui.com/docs/changelog/2026-11-create</guid>
+      <description><![CDATA[Design how your app looks on the create page, then start it with one command. zard-cli create builds a new Angular, Nx or Analog app that already has your theme, fonts, icons and radius, so the first screen you open looks like yours and not like a template.]]></description>
+      <pubDate>Mon, 23 Nov 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[November 2026 - Data Table, Map and AI Elements]]></title>
+      <link>https://zardui.com/docs/changelog/2026-11-ai-elements</link>
+      <guid>https://zardui.com/docs/changelog/2026-11-ai-elements</guid>
+      <description><![CDATA[Our biggest month for new components yet. We added Data Table, Color Picker, Menubar, Native Select and Questionnaire, plus Code Block, Message Scroller and Trace for chat and agent interfaces, an interactive Map, and the AI Elements patterns built on top of them.]]></description>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[October 2026 - Right to Left]]></title>
+      <link>https://zardui.com/docs/changelog/2026-10-rtl</link>
+      <guid>https://zardui.com/docs/changelog/2026-10-rtl</guid>
+      <description><![CDATA[We made every component read right to left, so Arabic, Hebrew and Persian apps get the same library as everyone else. Turn it on when you run zard-cli init, or set dir="rtl" on your html tag, and see the RTL guide for fonts and migration.]]></description>
+      <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[September 2026 - Zard UI v1.0]]></title>
+      <link>https://zardui.com/docs/changelog/2026-09-v1</link>
+      <guid>https://zardui.com/docs/changelog/2026-09-v1</guid>
+      <description><![CDATA[The month v1.0.0 ships. The announcement below says what a stable 1.0 means.]]></description>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[August 2026 - Input OTP]]></title>
+      <link>https://zardui.com/docs/changelog/2026-08-input-otp</link>
+      <guid>https://zardui.com/docs/changelog/2026-08-input-otp</guid>
+      <description><![CDATA[One-time passwords land this month. We added the Input OTP component, with grouped slots, separators, pattern validation, and paste support out of the box.]]></description>
+      <pubDate>Sat, 01 Aug 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[July 2026 - Field, Item, Textarea and Sonner]]></title>
+      <link>https://zardui.com/docs/changelog/2026-07-field-item-sonner</link>
+      <guid>https://zardui.com/docs/changelog/2026-07-field-item-sonner</guid>
+      <description><![CDATA[Four new components this month — Field, Item, Textarea, and Sonner — and a reorganisation that moved every demo and API doc next to the component it documents.]]></description>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[May 2026 - Numeric Inputs and Alert Dialog]]></title>
+      <link>https://zardui.com/docs/changelog/2026-05-numeric-inputs</link>
+      <guid>https://zardui.com/docs/changelog/2026-05-numeric-inputs</guid>
+      <description><![CDATA[A quieter month focused on form correctness. We taught the input directive to speak numbers, and we changed one dialog default that had been surprising people.]]></description>
+      <pubDate>Fri, 01 May 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[April 2026 - Avatar Sizes and Dynamic Select]]></title>
+      <link>https://zardui.com/docs/changelog/2026-04-avatar-select</link>
+      <guid>https://zardui.com/docs/changelog/2026-04-avatar-select</guid>
+      <description><![CDATA[A thin month — two releases, no new components. One quietly narrows the Avatar zSize API to named sizes only; the other makes Select track option lists that keep changing after render.]]></description>
+      <pubDate>Wed, 01 Apr 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[March 2026 - Icons from ng-icons]]></title>
+      <link>https://zardui.com/docs/changelog/2026-03-ng-icons</link>
+      <guid>https://zardui.com/docs/changelog/2026-03-ng-icons</guid>
+      <description><![CDATA[Complete icon system migration! We replaced the custom ZardIconComponent with @ng-icons/lucide, bringing better tree-shaking, a wider icon selection, and a simpler API across all components.]]></description>
+      <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[February 2026 - zard-cli, Tree and SSR Dark Mode]]></title>
+      <link>https://zardui.com/docs/changelog/2026-02-zard-cli</link>
+      <guid>https://zardui.com/docs/changelog/2026-02-zard-cli</guid>
+      <description><![CDATA[The busiest month of the year outside August — 77 commits, most of them release automation. Underneath that: the CLI is renamed to zard-cli and hardened for monorepos, dark mode becomes safe under SSR, Button is restyled to match the latest shadcn/ui, Switch moves to a breaking model-input API, and Tree lands (it was removed again in August, see that entry).]]></description>
+      <pubDate>Sun, 01 Feb 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[January 2026 - Angular 21 and SSR-stable IDs]]></title>
+      <link>https://zardui.com/docs/changelog/2026-01-angular-21</link>
+      <guid>https://zardui.com/docs/changelog/2026-01-angular-21</guid>
+      <description><![CDATA[A quiet month by commit count but not by API surface: Angular 21 becomes the floor, every generated id moves to a new ZardIdDirective so server and client stop disagreeing, and both the input directive and Checkbox learn to honour the Reactive Forms disabled state.]]></description>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[December 2025 - provideZard() and a Private Registry]]></title>
+      <link>https://zardui.com/docs/changelog/2025-12-provide-zard</link>
+      <guid>https://zardui.com/docs/changelog/2025-12-provide-zard</guid>
+      <description><![CDATA[Major infrastructure improvements this month! We focused on developer experience with a new provider system, CLI enhancements with our own private registry, and streamlined dark-mode setup.]]></description>
+      <pubDate>Mon, 01 Dec 2025 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[November 2025 - Carousel and Kbd]]></title>
+      <link>https://zardui.com/docs/changelog/2025-11-carousel-kbd</link>
+      <guid>https://zardui.com/docs/changelog/2025-11-carousel-kbd</guid>
+      <description><![CDATA[Major updates this month with new interactive components including Carousel, Button Group, Input Group, and Kbd components. Enhanced user experience with better form controls and keyboard navigation support.]]></description>
+      <pubDate>Sat, 01 Nov 2025 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[October 2025 - Sheet and Empty]]></title>
+      <link>https://zardui.com/docs/changelog/2025-10-sheet-empty</link>
+      <guid>https://zardui.com/docs/changelog/2025-10-sheet-empty</guid>
+      <description><![CDATA[Breaking changes with icons migration from lucide-static to lucide-angular for better performance. New layout components including Sheet and Empty state component for better UX.]]></description>
+      <pubDate>Wed, 01 Oct 2025 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[September 2025 - Progress, Skeleton and Spinner]]></title>
+      <link>https://zardui.com/docs/changelog/2025-09-progress-skeleton</link>
+      <guid>https://zardui.com/docs/changelog/2025-09-progress-skeleton</guid>
+      <description><![CDATA[Focus on loading and feedback components this month. New Progress, Skeleton, and Loader components for better perceived performance and user feedback during async operations.]]></description>
+      <pubDate>Mon, 01 Sep 2025 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[August 2025 - Avatar, Divider and Breadcrumb]]></title>
+      <link>https://zardui.com/docs/changelog/2025-08-avatar-breadcrumb</link>
+      <guid>https://zardui.com/docs/changelog/2025-08-avatar-breadcrumb</guid>
+      <description><![CDATA[Enhanced navigation and display components. New Avatar component with fallback support, Divider for content separation, and Breadcrumb for hierarchical navigation.]]></description>
+      <pubDate>Fri, 01 Aug 2025 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[July 2025 - Tabs, Accordion and Tooltip]]></title>
+      <link>https://zardui.com/docs/changelog/2025-07-tabs-accordion</link>
+      <guid>https://zardui.com/docs/changelog/2025-07-tabs-accordion</guid>
+      <description><![CDATA[Major release of navigation and content organization components. New Tabs for multi-view interfaces, Accordion for collapsible content, and Tooltip for contextual information. Theming system improvements with new color palettes.]]></description>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[June 2025 - Dialog, Popover and Dropdown Menu]]></title>
+      <link>https://zardui.com/docs/changelog/2025-06-overlays</link>
+      <guid>https://zardui.com/docs/changelog/2025-06-overlays</guid>
+      <description><![CDATA[Overlay components release! New Dialog, Popover, Alert Dialog, and Dropdown Menu components. CVA integration for type-safe styling variants across all components.]]></description>
+      <pubDate>Sun, 01 Jun 2025 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[May 2025 - Form Controls]]></title>
+      <link>https://zardui.com/docs/changelog/2025-05-form-controls</link>
+      <guid>https://zardui.com/docs/changelog/2025-05-form-controls</guid>
+      <description><![CDATA[Comprehensive form controls release! New Select, Checkbox, Radio, Switch, and Slider components with full Angular Reactive Forms integration and ControlValueAccessor support.]]></description>
+      <pubDate>Thu, 01 May 2025 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[April 2025 - Input and the CLI]]></title>
+      <link>https://zardui.com/docs/changelog/2025-04-input-cli</link>
+      <guid>https://zardui.com/docs/changelog/2025-04-input-cli</guid>
+      <description><![CDATA[Form foundations and CLI launch! New Input and Form components with validation support. Official CLI tool released for easy project initialization and component installation. The Form component has since been discontinued — use Field instead, which covers the same ground and is what the form guides are built on.]]></description>
+      <pubDate>Tue, 01 Apr 2025 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[March 2025 - Initial Release]]></title>
+      <link>https://zardui.com/docs/changelog/2025-03-initial-release</link>
+      <guid>https://zardui.com/docs/changelog/2025-03-initial-release</guid>
+      <description><![CDATA[🎉 Initial release of ZardUI! An Angular component library built with TailwindCSS v4, featuring standalone components, signal-based reactivity, and modern Angular architecture. Core components including Button, Card, Badge, Alert, and Table.]]></description>
+      <pubDate>Sat, 01 Mar 2025 00:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

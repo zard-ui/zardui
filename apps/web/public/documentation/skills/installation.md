@@ -7,7 +7,7 @@ pnpm dlx skills add https://github.com/zard-ui/zardui --skill zard
 ```
 
 ```bash tab="yarn" copyButton
-yarn dlx skills add https://github.com/zard-ui/zardui --skill zard
+npx skills add https://github.com/zard-ui/zardui --skill zard
 ```
 
 ```bash tab="bun" copyButton
@@ -25,7 +25,7 @@ pnpm dlx skills add https://github.com/zard-ui/zardui --skill zard-migration
 ```
 
 ```bash tab="yarn" copyButton
-yarn dlx skills add https://github.com/zard-ui/zardui --skill zard-migration
+npx skills add https://github.com/zard-ui/zardui --skill zard-migration
 ```
 
 ```bash tab="bun" copyButton
@@ -39,7 +39,7 @@ zard/
   SKILL.md          project context, principles, critical rules
   cli.md            init and add, every flag, the project types
   registry.md       index, item and icon formats; your own registry
-  mcp.md            the nine MCP tools and how to connect them
+  mcp.md            the sixteen MCP tools and how to connect them
   customization.md  theme tokens, CVA variants, mergeClasses
   rules/
     angular.md      standalone, input(), OnPush, selectors

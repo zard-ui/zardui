@@ -147,6 +147,23 @@ describe('ZardNavigationMenuComponent', () => {
     expect(viewportContent('second-content')).not.toBeNull();
   });
 
+  it('should keep a menu opened by hover open when the pointer then clicks the trigger', () => {
+    const button = fixture.debugElement.queryAll(By.directive(ZardNavigationMenuTriggerDirective))[0].nativeElement;
+
+    button.dispatchEvent(new MouseEvent('mouseenter'));
+    fixture.detectChanges();
+    expect(service.isActive(0)).toBe(true);
+
+    button.click();
+    fixture.detectChanges();
+    expect(service.isActive(0)).toBe(true);
+
+    // The next click is a plain toggle again.
+    button.click();
+    fixture.detectChanges();
+    expect(service.isActive(0)).toBe(false);
+  });
+
   it('should derive the slide direction from the trigger order', () => {
     triggers[0].open();
     fixture.detectChanges();

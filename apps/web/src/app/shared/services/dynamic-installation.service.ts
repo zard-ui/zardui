@@ -65,7 +65,10 @@ export class DynamicInstallationService {
       for (const block of files) {
         steps.push({
           title: block.step?.title ?? `Add ${block.title ?? 'file'}`,
-          subtitle: block.step?.subtitle ?? `Create the following file in your project.`,
+          // The folder the CLI installs into, under the one the installation guides point `@/` at.
+          subtitle:
+            block.step?.subtitle ??
+            `Create the following file in shared/components/${componentName}/, inside the folder your @/ alias points to (src/app in an application).`,
           codeBlockData: block,
         });
       }

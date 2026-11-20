@@ -30,11 +30,15 @@ const DEFAULT_STYLE: Record<string, string> = {
   '--normal-text': 'var(--popover-foreground)',
   '--normal-border': 'var(--border)',
   '--border-radius': 'var(--radius)',
+  // Sonner's own 24px viewport offset (ngx-sonner defaults to 32px).
+  '--offset': '24px',
 };
 
 const DEFAULT_TOAST_OPTIONS: ToasterProps['toastOptions'] = {
   classes: {
     toast: 'cn-toast',
+    // Sonner's description grey (#3f3f3f) on a light toast; the foreground colour on a dark one.
+    description: 'text-[#3f3f3f] dark:text-popover-foreground',
   },
 };
 

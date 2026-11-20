@@ -23,6 +23,8 @@ npx zard-cli@latest add navigation-menu
 
 ### Manual
 
+**Add navigation-menu.component.ts**
+
 ```angular-ts
 import type { BooleanInput } from '@angular/cdk/coercion';
 import { PARENT_OR_NEW_MENU_STACK_PROVIDER } from '@angular/cdk/menu';
@@ -113,64 +115,38 @@ export class ZardNavigationMenuComponent {
 }
 ```
 
+**Add navigation-menu.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const navigationMenuVariants = cva([
-  'group/navigation-menu relative flex max-w-max flex-1 items-center justify-center',
-]);
+export const navigationMenuVariants = cva('relative flex max-w-max flex-1 items-center justify-center group/navigation-menu');
 
-export const navigationMenuListVariants = cva(['group flex flex-1 list-none items-center justify-center gap-0']);
+export const navigationMenuListVariants = cva('flex flex-1 list-none items-center justify-center gap-0 group');
 
-export const navigationMenuItemVariants = cva(['relative']);
+export const navigationMenuItemVariants = cva('relative');
 
-export const navigationMenuTriggerVariants = cva([
-  'group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5',
-  'text-sm font-medium transition-all outline-none hover:bg-muted focus:bg-muted',
-  'focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1',
-  'disabled:pointer-events-none disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50',
-  'data-[state=open]:bg-muted/50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted',
-]);
+export const navigationMenuTriggerVariants = cva(
+  'inline-flex h-9 w-max items-center justify-center gap-1 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-all hover:bg-muted focus:bg-muted focus-visible:ring-ring/50 data-[state=open]:bg-muted/50 data-[state=open]:hover:bg-muted data-[state=open]:focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 disabled:opacity-50 group/navigation-menu-trigger outline-none disabled:pointer-events-none data-disabled:pointer-events-none data-disabled:opacity-50',
+);
 
-export const navigationMenuTriggerIconVariants = cva([
-  'relative top-px size-3 shrink-0 transition-transform duration-300',
-  'group-data-[state=open]/navigation-menu-trigger:rotate-180',
-]);
+export const navigationMenuTriggerIconVariants = cva('relative top-px size-3! shrink-0 transition-transform duration-300 group-data-[state=open]/navigation-menu-trigger:rotate-180');
 
-export const navigationMenuContentVariants = cva(
-  [
-    'h-full w-auto p-1 outline-none',
-    'transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]',
-    'data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out',
-    'data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out',
-    'data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52',
-    'rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52',
-    'data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52',
-    'rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52',
-  ],
-  {
-    variants: {
-      viewport: {
-        true: '',
-        false: [
-          'relative z-50 min-w-32 rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10',
-          // The overlay is offset by 8px from the trigger, and that gap belongs to no element: a
-          // pointer crossing it slowly would schedule the close before reaching the popup. This
-          // invisible collar covers the offset on every side, since submenus open sideways too.
-          "before:absolute before:-inset-2 before:-z-10 before:content-['']",
-          'animate-in data-[state=open]:animate-in data-[state=closed]:animate-out',
-          'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
-          'data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
-          'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2',
-          'data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
-        ],
-      },
-    },
-    defaultVariants: {
-      viewport: false,
+export const navigationMenuContentVariants = cva('h-full w-auto p-1 transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 rtl:data-[motion=from-end]:slide-in-from-left-52 rtl:data-[motion=from-start]:slide-in-from-right-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 rtl:data-[motion=to-end]:slide-out-to-left-52 rtl:data-[motion=to-start]:slide-out-to-right-52 outline-none', {
+  variants: {
+    viewport: {
+      true: '',
+      // The overlay is offset by 8px from the trigger, and that gap belongs to no element: a
+      false:
+        // pointer crossing it slowly would schedule the close before reaching the popup. This
+        // invisible collar covers the offset on every side, since submenus open sideways too.
+        "bg-popover text-popover-foreground ring-foreground/10 animate-in relative z-50 min-w-32 rounded-lg shadow-sm ring-1 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 before:absolute before:-inset-2 before:-z-10 before:content-['']",
     },
   },
-);
+  defaultVariants: {
+    viewport: false,
+  },
+});
 
 /**
  * Lives inside a CDK overlay pane anchored to the bar, so it needs no positioning of its own —
@@ -178,28 +154,12 @@ export const navigationMenuContentVariants = cva(
  * the transition here is what makes that tracking slide instead of jump. The top padding doubles
  * as the bridge the pointer crosses on its way from the trigger to the popup.
  */
-export const navigationMenuViewportWrapperVariants = cva([
-  'flex pt-1.5 transition-[translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]',
-]);
+export const navigationMenuViewportWrapperVariants = cva('flex pt-1.5 transition-[translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]');
 
-export const navigationMenuViewportVariants = cva([
-  'relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width)',
-  'origin-top overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-sm ring-1 ring-foreground/10',
-  'transition-[opacity,transform,width,height] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] outline-none',
-  'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90',
-  'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90',
-  'data-[state=closed]:duration-150',
-]);
+export const navigationMenuViewportVariants = cva('bg-popover text-popover-foreground ring-foreground/10 relative h-(--zard-navigation-menu-viewport-height) w-(--zard-navigation-menu-viewport-width) origin-top overflow-hidden rounded-lg shadow ring-1 transition-[opacity,transform,width,height] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-90 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-90 data-[state=closed]:duration-150 outline-none');
 
 export const navigationMenuLinkVariants = cva(
-  [
-    'relative flex w-full cursor-default select-none items-center gap-2 rounded-md p-2 text-start text-sm',
-    'transition-all outline-none hover:bg-muted focus:bg-muted',
-    'focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-1',
-    'data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted',
-    'data-disabled:pointer-events-none data-disabled:opacity-50',
-    "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 [&>i]:me-2 [&>z-icon]:me-2 [&>ng-icon]:shrink-0",
-  ],
+  "relative flex w-full cursor-default items-center gap-2 rounded-md p-2 text-start text-sm transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-ring/50 data-active:bg-muted/50 data-active:hover:bg-muted data-active:focus:bg-muted focus-visible:ring-3 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 [&>i]:me-2 [&>ng-icon]:shrink-0 [&>z-icon]:me-2 select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:shrink-0",
   {
     variants: {
       inset: {
@@ -218,39 +178,31 @@ export const navigationMenuLinkVariants = cva(
   },
 );
 
-export const navigationMenuIndicatorVariants = cva([
-  'pointer-events-none absolute top-full left-0 z-1 flex h-1.5 items-end justify-center overflow-hidden',
-  'transition-[translate,width,opacity] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]',
-]);
+export const navigationMenuIndicatorVariants = cva('absolute top-full left-0 z-1 flex h-1.5 items-end justify-center overflow-hidden transition-[translate,width,opacity] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none');
 
-export const navigationMenuSubmenuArrowVariants = cva([
-  'ms-auto opacity-60 transition-opacity duration-150',
-  'text-muted-foreground dark:text-gray-400',
-  'group-hover:opacity-100 group-focus:opacity-100',
-]);
+export const navigationMenuSubmenuArrowVariants = cva('text-muted-foreground ms-auto opacity-60 transition-opacity duration-150 group-hover:opacity-100 group-focus:opacity-100 dark:text-gray-400');
 
-export const navigationMenuLabelVariants = cva(
-  'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
-  {
-    variants: {
-      inset: {
-        true: 'ps-8',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      inset: false,
+export const navigationMenuLabelVariants = cva('text-muted-foreground relative flex items-center px-2 py-1.5 text-sm font-medium', {
+  variants: {
+    inset: {
+      true: 'ps-8',
+      false: '',
     },
   },
-);
+  defaultVariants: {
+    inset: false,
+  },
+});
 
-export const navigationMenuShortcutVariants = cva('ms-auto text-xs tracking-widest text-muted-foreground');
+export const navigationMenuShortcutVariants = cva('text-muted-foreground ms-auto text-xs tracking-widest');
 
 export type ZardNavigationMenuLinkTypeVariants = NonNullable<VariantProps<typeof navigationMenuLinkVariants>['zType']>;
 
 /** Which edge of the active trigger the shared viewport lines up with. */
 export type ZardNavigationMenuAlign = 'start' | 'center' | 'end';
 ```
+
+**Add context-menu.directive.ts**
 
 ```angular-ts
 /**
@@ -262,6 +214,8 @@ export type ZardNavigationMenuAlign = 'start' | 'center' | 'end';
  */
 export { ZardContextMenuDirective } from '@/shared/components/context-menu/context-menu.directive';
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './context-menu.directive';
@@ -281,6 +235,8 @@ export * from './navigation-menu.imports';
 export * from './navigation-menu.service';
 export * from './navigation-menu.variants';
 ```
+
+**Add navigation-menu-content.directive.ts**
 
 ```angular-ts
 import { CdkMenu } from '@angular/cdk/menu';
@@ -329,6 +285,8 @@ export class ZardNavigationMenuContentDirective {
 }
 ```
 
+**Add navigation-menu-indicator.component.ts**
+
 ```angular-ts
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -354,7 +312,7 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
 @Component({
   selector: 'z-navigation-menu-indicator, [z-navigation-menu-indicator]',
   template: `
-    <div class="bg-border relative top-[60%] size-2 rotate-45 rounded-tl-sm shadow-md"></div>
+    <div class="rounded-tl-sm bg-border relative top-[60%] size-2 rotate-45 shadow-md"></div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -400,6 +358,8 @@ export class ZardNavigationMenuIndicatorComponent {
 }
 ```
 
+**Add navigation-menu-item.directive.ts**
+
 ```angular-ts
 import { computed, Directive, input } from '@angular/core';
 
@@ -422,6 +382,8 @@ export class ZardNavigationMenuItemDirective {
   protected readonly classes = computed(() => mergeClasses(navigationMenuItemVariants(), this.class()));
 }
 ```
+
+**Add navigation-menu-label.component.ts**
 
 ```angular-ts
 import type { BooleanInput } from '@angular/cdk/coercion';
@@ -467,6 +429,8 @@ export class ZardNavigationMenuLabelComponent {
   );
 }
 ```
+
+**Add navigation-menu-link.directive.ts**
 
 ```angular-ts
 import type { BooleanInput } from '@angular/cdk/coercion';
@@ -578,6 +542,8 @@ export class ZardNavigationMenuLinkDirective {
 }
 ```
 
+**Add navigation-menu-list.directive.ts**
+
 ```angular-ts
 import { computed, Directive, input } from '@angular/core';
 
@@ -600,6 +566,8 @@ export class ZardNavigationMenuListDirective {
   protected readonly classes = computed(() => mergeClasses(navigationMenuListVariants(), this.class()));
 }
 ```
+
+**Add navigation-menu-manager.service.ts**
 
 ```angular-ts
 import { Injectable } from '@angular/core';
@@ -638,6 +606,8 @@ export class ZardNavigationMenuManagerService {
   }
 }
 ```
+
+**Add navigation-menu-positions.ts**
 
 ```angular-ts
 import type { ConnectedPosition } from '@angular/cdk/overlay';
@@ -877,6 +847,8 @@ export function getNavigationMenuPositions(placement: ZardNavigationMenuPlacemen
 }
 ```
 
+**Add navigation-menu-shortcut.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -904,6 +876,8 @@ export class ZardNavigationMenuShortcutComponent {
   protected readonly classes = computed(() => mergeClasses(navigationMenuShortcutVariants(), this.class()));
 }
 ```
+
+**Add navigation-menu-trigger.directive.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -991,6 +965,8 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   private readonly service = inject(ZardNavigationMenuService, { optional: true });
 
   private closeTimeout: ReturnType<typeof setTimeout> | null = null;
+  /** The menu was opened by the pointer entering the trigger, and no click has confirmed it yet. */
+  private openedByHover = false;
   private readonly cleanupFunctions: Array<() => void> = [];
   private index = -1;
   /** Mirrors the CDK overlay state, whose own `isOpen()` is a plain method and so not reactive. */
@@ -1085,6 +1061,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
   close(): void {
     this.cancelScheduledClose();
+    this.openedByHover = false;
 
     if (this.isViewportMode()) {
       this.service?.close(this.index);
@@ -1133,6 +1110,13 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
     // The CDK trigger is inert here, so the viewport toggle is ours to drive.
     event.preventDefault();
+
+    // A click that follows the hover which opened the menu confirms it instead of closing it.
+    if (this.openedByHover && this.service?.isActive(this.index)) {
+      this.openedByHover = false;
+      return;
+    }
+
     this.toggle();
   }
 
@@ -1225,6 +1209,7 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
       }
 
       if (this.isViewportMode()) {
+        this.openedByHover = !this.service?.isActive(this.index);
         this.service?.open({
           index: this.index,
           template: this.zNavigationMenuTriggerFor(),
@@ -1247,6 +1232,8 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   private trackOverlayState(): void {
     const openSubscription = this.cdkTrigger.opened.subscribe(() => this.overlayOpen.set(true));
     const closeSubscription = this.cdkTrigger.closed.subscribe(() => {
+      // Closed by someone else (another trigger took over): a close this trigger still had pending is moot.
+      this.cancelScheduledClose();
       this.overlayOpen.set(false);
       this.returnFocusFromMenu();
     });
@@ -1357,7 +1344,10 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
 
   private scheduleMenuClose(): void {
     this.closeTimeout = setTimeout(() => {
-      this.cdkTrigger.close();
+      this.closeTimeout = null;
+      // The CDK's close() always closes the sibling triggers too, so a trigger that is already closed must not call
+      // it: moving from one item to the next would otherwise shut the menu that just opened.
+      if (this.cdkTrigger.isOpen()) this.cdkTrigger.close();
     }, this.zHoverDelay());
   }
 
@@ -1397,6 +1387,8 @@ export class ZardNavigationMenuTriggerDirective implements OnInit, OnDestroy {
   }
 }
 ```
+
+**Add navigation-menu-viewport.component.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -1691,6 +1683,8 @@ export class ZardNavigationMenuViewportComponent {
 }
 ```
 
+**Add navigation-menu.imports.ts**
+
 ```angular-ts
 import { ZardContextMenuDirective } from '@/shared/components/navigation-menu/context-menu.directive';
 import { ZardNavigationMenuContentDirective } from '@/shared/components/navigation-menu/navigation-menu-content.directive';
@@ -1718,6 +1712,8 @@ export const ZardNavigationMenuImports = [
   ZardContextMenuDirective,
 ] as const;
 ```
+
+**Add navigation-menu.service.ts**
 
 ```angular-ts
 import { computed, Injectable, signal, type TemplateRef } from '@angular/core';
@@ -1870,6 +1866,171 @@ z-navigation-menu
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCircleAlert, lucideCircleCheck, lucideCircleDashed } from '@ng-icons/lucide';
+
+import { navigationMenuTriggerVariants, ZardNavigationMenuImports } from '@/shared/components/navigation-menu';
+
+interface ComponentLink {
+  title: string;
+  href: string;
+  description: string;
+}
+
+@Component({
+  selector: 'z-demo-navigation-menu-preview',
+  imports: [ZardNavigationMenuImports, NgIcon],
+  template: `
+    <nav aria-label="Main" class="contents">
+      <z-navigation-menu>
+        <ul z-navigation-menu-list>
+          <li z-navigation-menu-item>
+            <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="gettingStarted">
+              Getting started
+            </button>
+
+            <ng-template #gettingStarted>
+              <div z-navigation-menu-content>
+                <ul class="w-96">
+                  <li>
+                    <a z-navigation-menu-link href="#">
+                      <div class="flex flex-col gap-1 text-sm">
+                        <div class="leading-none font-medium">Introduction</div>
+                        <div class="text-muted-foreground line-clamp-2">
+                          Re-usable components built with Tailwind CSS.
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a z-navigation-menu-link href="#">
+                      <div class="flex flex-col gap-1 text-sm">
+                        <div class="leading-none font-medium">Installation</div>
+                        <div class="text-muted-foreground line-clamp-2">
+                          How to install dependencies and structure your app.
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a z-navigation-menu-link href="#">
+                      <div class="flex flex-col gap-1 text-sm">
+                        <div class="leading-none font-medium">Typography</div>
+                        <div class="text-muted-foreground line-clamp-2">
+                          Styles for headings, paragraphs, lists...etc
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </ng-template>
+          </li>
+
+          <li z-navigation-menu-item class="hidden md:flex">
+            <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="componentsMenu">
+              Components
+            </button>
+
+            <ng-template #componentsMenu>
+              <div z-navigation-menu-content>
+                <ul class="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                  @for (component of components; track component.title) {
+                    <li>
+                      <a z-navigation-menu-link href="#">
+                        <div class="flex flex-col gap-1 text-sm">
+                          <div class="leading-none font-medium">{{ component.title }}</div>
+                          <div class="text-muted-foreground line-clamp-2">{{ component.description }}</div>
+                        </div>
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </ng-template>
+          </li>
+
+          <li z-navigation-menu-item>
+            <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="withIcon">With Icon</button>
+
+            <ng-template #withIcon>
+              <div z-navigation-menu-content>
+                <ul class="grid w-[200px]">
+                  <li>
+                    <a z-navigation-menu-link href="#" class="flex-row items-center gap-2">
+                      <ng-icon name="lucideCircleAlert" />
+                      Backlog
+                    </a>
+                    <a z-navigation-menu-link href="#" class="flex-row items-center gap-2">
+                      <ng-icon name="lucideCircleDashed" />
+                      To Do
+                    </a>
+                    <a z-navigation-menu-link href="#" class="flex-row items-center gap-2">
+                      <ng-icon name="lucideCircleCheck" />
+                      Done
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </ng-template>
+          </li>
+
+          <li z-navigation-menu-item>
+            <a z-navigation-menu-link href="#" [class]="triggerClass">Docs</a>
+          </li>
+        </ul>
+      </z-navigation-menu>
+    </nav>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCircleAlert, lucideCircleCheck, lucideCircleDashed })],
+})
+export class ZardDemoNavigationMenuPreviewComponent {
+  /** A plain link styled like a trigger, so it lines up with the rest of the bar. */
+  protected readonly triggerClass = navigationMenuTriggerVariants();
+
+  protected readonly components: ComponentLink[] = [
+    {
+      title: 'Alert Dialog',
+      href: '/docs/primitives/alert-dialog',
+      description: 'A modal dialog that interrupts the user with important content and expects a response.',
+    },
+    {
+      title: 'Hover Card',
+      href: '/docs/primitives/hover-card',
+      description: 'For sighted users to preview content available behind a link.',
+    },
+    {
+      title: 'Progress',
+      href: '/docs/primitives/progress',
+      description:
+        'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
+    },
+    {
+      title: 'Scroll-area',
+      href: '/docs/primitives/scroll-area',
+      description: 'Visually or semantically separates content.',
+    },
+    {
+      title: 'Tabs',
+      href: '/docs/primitives/tabs',
+      description: 'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
+    },
+    {
+      title: 'Tooltip',
+      href: '/docs/primitives/tooltip',
+      description:
+        'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+    },
+  ];
+}
+```
 
 ### Link
 
@@ -2027,7 +2188,7 @@ import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu';
 export class ZardDemoNavigationMenuNoViewportComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

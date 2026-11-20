@@ -19,7 +19,17 @@ import type { CodeBlockData } from '@highlight/types';
         <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
           Here's the current
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
-          structure that Zard/ui supports:
+          structure that Zard/ui supports, as
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli create</code>
+          writes it for the default design. A project made with a plain
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">init</code>
+          has
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">"style": "css"</code>
+          and no
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">menu*</code>
+          or
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">preset</code>
+          keys:
         </p>
         <z-code-block [data]="currentStructureExample" />
       </div>

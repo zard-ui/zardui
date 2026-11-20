@@ -71,6 +71,11 @@ export class RtlPage implements OnInit {
       codeBlockData: HTML_DIR_BLOCK,
     },
     {
+      title: 'Analog: set build.cssTarget',
+      subtitle:
+        'Analog builds with Vite, which reuses build.target as the CSS target. The template sets es2020, so the logical properties the components use are lowered to left/right rules chosen by the lang attribute, not by dir. Set build.cssTarget to ["chrome111", "edge111", "firefox128", "safari16.4"] in vite.config.ts. zard-cli init and create do it for you.',
+    },
+    {
       title: 'Or scope a subtree',
       subtitle:
         'Mixed-direction page? Import the CDK Dir directive and put dir on any element. Components inside, and the overlays they open, take that direction instead of the document one.',

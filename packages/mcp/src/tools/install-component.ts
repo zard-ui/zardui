@@ -82,7 +82,8 @@ export function registerInstallComponent(server: McpServer): void {
       }
 
       const cli = resolveCliInvocation(workDir);
-      const args = [...cli.prefix, 'add', name, '--yes', ...(overwrite ? ['--overwrite'] : [])];
+      // `--no-interactive`: a server launched from a terminal can still reach it, and a wizard would hang the call.
+      const args = [...cli.prefix, 'add', name, '--yes', '--no-interactive', ...(overwrite ? ['--overwrite'] : [])];
 
       try {
         const { stdout, stderr } = await execFileAsync(cli.file, args, workDir);

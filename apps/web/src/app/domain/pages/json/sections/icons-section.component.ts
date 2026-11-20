@@ -28,15 +28,41 @@ import type { CodeBlockData } from '@highlight/types';
         <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
           <strong>Supported values:</strong>
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">lucide</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">tabler</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">hugeicons</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">phosphor</code>
+          or
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">remixicon</code>
         </p>
         <z-code-block [data]="iconsExample" />
         <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
-          Lucide is the only set supported today, so this is the only value the CLI accepts — writing anything else
-          makes
-          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">add</code>
-          reject the file. The property exists ahead of the sets that will follow: every entry in the registry already
-          carries the icons it draws, in the component and in its examples, so supporting another one is a matter of
-          translating names rather than rewriting components.
+          Each value brings its own
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ng-icons</code>
+          package —
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;ng-icons/lucide</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;ng-icons/tabler-icons</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;ng-icons/huge-icons</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;ng-icons/phosphor-icons</code>
+          and
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;ng-icons/remixicon</code>
+          — and every component you add afterwards is written with that set's names.
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli init --preset</code>
+          ,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">apply</code>
+          and
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">create</code>
+          write it from the preset; the valid values are the ones the registry publishes, and the CLI lists them if you
+          write one it does not know.
+        </p>
+        <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+          When a set has no equivalent for an icon, the CLI reports it as missing when you add the component and keeps
+          the lucide import, so the build still passes.
         </p>
         <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
           A

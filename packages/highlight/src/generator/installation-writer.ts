@@ -3,9 +3,13 @@ import path from 'path';
 
 import { writeIfChanged } from './file-utils';
 import { highlightCode } from './highlighter';
+import { registry } from '../../../cli/src/core/registry/registry-data';
+import { parseStyleSheet } from '../../../cli/src/core/styles/parse-style-sheet';
+import { transformStyle, type StyleCatalog } from '../../../cli/src/core/styles/transform-style';
 import type { CodeBlockData, CodeTabData, CodeTabItem } from '../types';
 
 const COMPONENTS_PATH = path.resolve('libs/zard/src/lib/shared/components');
+const STYLE_NOVA_PATH = path.resolve('libs/zard/src/lib/shared/core/css/styles/style-nova.css');
 const OUTPUT_PATH = path.resolve('apps/web/src/generated/installation');
 // `toast` is the components-list face of `sonner`: it has no files of its own to install, so its installation
 // steps are Sonner's, reused in its demo registration.
@@ -115,7 +119,7 @@ async function generateCliFiles(componentName: string, deps: ComponentDependency
   const addTabs = await buildPackageManagerTabs([
     { manager: 'npm', command: `npx zard-cli@latest add ${componentName}` },
     { manager: 'pnpm', command: `pnpm dlx zard-cli@latest add ${componentName}` },
-    { manager: 'yarn', command: `yarn dlx zard-cli@latest add ${componentName}` },
+    { manager: 'yarn', command: `npx zard-cli@latest add ${componentName}` },
     { manager: 'bun', command: `bunx zard-cli@latest add ${componentName}` },
   ]);
 
@@ -223,6 +227,29 @@ async function buildPackageManagerTabs(commands: Array<{ manager: string; comman
   return { tabs };
 }
 
+/**
+ * The source as a user would copy it: the default style's classes, not the markers.
+ *
+ * The library writes `cn-button` where the look is decided and the docs resolve it with CSS.
+ * A reader following the manual installation has no such stylesheet — what they paste has
+ * to be the classes the registry's `content` carries, which are these same ones (ADR-0002).
+ */
+function readInstallableSource(filePath: string): string {
+  const source = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
+
+  return transformStyle(source, 'nova', defaultStyleCatalog());
+}
+
+let defaultCatalog: StyleCatalog | undefined;
+
+function defaultStyleCatalog(): StyleCatalog {
+  defaultCatalog ??= {
+    nova: parseStyleSheet(fs.readFileSync(STYLE_NOVA_PATH, 'utf-8').replace(/\r\n/g, '\n')),
+  };
+
+  return defaultCatalog;
+}
+
 async function buildComponentCodeBlocks(componentDir: string, componentName: string): Promise<CodeBlockData[]> {
   const blocks: CodeBlockData[] = [];
 
@@ -237,7 +264,7 @@ async function buildComponentCodeBlocks(componentDir: string, componentName: str
     const filePath = path.join(componentDir, fileName);
     if (!fs.existsSync(filePath)) continue;
 
-    const code = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
+    const code = readInstallableSource(filePath);
     const language = fileName.endsWith('.html') ? 'angular-html' : 'angular-ts';
     const html = await highlightCode(code, language);
 
@@ -267,8 +294,10 @@ async function buildComponentCodeBlocks(componentDir: string, componentName: str
     const filePath = path.join(componentDir, fileName);
     if (!fs.statSync(filePath).isFile()) continue;
 
-    const code = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
     const language = languageOf(fileName);
+    // Style markers only live in TypeScript and templates; a stylesheet is shown as it is.
+    const code =
+      language === 'css' ? fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n') : readInstallableSource(filePath);
     const html = await highlightCode(code, language);
 
     blocks.push({
@@ -376,6 +405,13 @@ function analyzeComponentDependencies(componentDir: string, componentName: strin
     if (content.includes(check.pattern)) {
       deps.push({ name: check.name, type: check.type, npmPackage: check.npmPackage });
     }
+  }
+
+  // The registry is what `zard-cli add` installs, so the install guides list
+  // exactly that: packages only reachable through a peer dependency or a lazy
+  // import (embla-carousel-reactive-utils, the plugins) never show in the scan above.
+  for (const npmPackage of registry.find(item => item.name === componentName)?.dependencies ?? []) {
+    deps.push({ name: npmPackage, type: 'external', npmPackage });
   }
 
   return deps;

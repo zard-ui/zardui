@@ -1238,6 +1238,7 @@
         "embla-carousel-angular",
         "embla-carousel-autoplay",
         "embla-carousel-class-names",
+        "embla-carousel-reactive-utils",
         "embla-carousel-wheel-gestures"
       ],
       "registryDependencies": [
@@ -1284,6 +1285,7 @@
       "files": [
         "chart.component.ts",
         "chart.variants.ts",
+        "chart-theme-watcher.ts",
         "chart.types.ts",
         "chart-context.ts",
         "chart-colors.util.ts",
