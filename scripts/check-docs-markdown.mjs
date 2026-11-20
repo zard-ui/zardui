@@ -22,7 +22,6 @@
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { Window } from 'happy-dom';
 
 import {
   BROWSER_DOCS,
@@ -31,15 +30,14 @@ import {
   VOLATILE,
   collectDocPaths,
   convertPage,
+  readDocument,
   skipEl,
 } from '../apps/web/generate-docs-markdown.mjs';
 
-const domParser = new new Window().DOMParser();
-
 /** Collapses whitespace so a block compares equal whatever its indentation or line wrapping. */
 const normalize = text => text.replace(/\s+/g, ' ').trim();
-/** Heading text without Markdown decoration. */
-const plain = text => normalize(text.replace(/[`*]/g, ''));
+/** Heading text without Markdown decoration: code, emphasis, and a link reduced to its text. */
+const plain = text => normalize(text.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[`*]/g, ''));
 
 /**
  * Whether the generator leaves an element out. The inactive panel of an install-page tab
@@ -62,8 +60,12 @@ const isEntry = (el, root) => {
 };
 
 /** The headings and code blocks a reader of the page sees. */
-function pageContent(html, { maxHeading = 4 } = {}) {
-  const content = domParser.parseFromString(html, 'text/html').querySelector('z-content');
+function pageContent(html, options) {
+  return readDocument(html, document => documentContent(document, options));
+}
+
+function documentContent(document, { maxHeading = 4 } = {}) {
+  const content = document.querySelector('z-content');
   if (!content) return null;
 
   const headings = [...content.querySelectorAll(['h1', 'h2', 'h3', 'h4'].slice(0, maxHeading).join(', '))]
@@ -185,7 +187,7 @@ for (const relPath of collectDocPaths(BROWSER_DOCS)) {
   const mdPath = join(PUBLIC_DOCS, `${relPath}.md`);
   const html = readFileSync(join(BROWSER_DOCS, relPath, 'index.html'), 'utf-8');
   // Volatile pages list people fetched from GitHub as h3 cards: compare the page structure only.
-  const expected = pageContent(html, { maxHeading: VOLATILE.has(relPath) ? 2 : 4 });
+  const expected = await pageContent(html, { maxHeading: VOLATILE.has(relPath) ? 2 : 4 });
   if (!expected) continue;
   if (!existsSync(mdPath)) {
     fail(relPath, `no committed Markdown (${mdPath})`);
@@ -196,7 +198,7 @@ for (const relPath of collectDocPaths(BROWSER_DOCS)) {
   compare(relPath, expected, committed);
 
   if (!VOLATILE.has(relPath)) {
-    const generated = convertPage(html, relPath.split('/').pop());
+    const generated = await convertPage(html, relPath.split('/').pop());
     if (generated !== committed)
       fail(relPath, 'stale: differs from the generator output. Run npm run generate:md:docs');
   }

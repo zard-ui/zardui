@@ -21,7 +21,19 @@ import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { Window } from 'happy-dom';
 
-const domParser = new new Window().DOMParser();
+/**
+ * Parses a page in a window of its own and closes it once `read` is done with the document. A shared
+ * DOMParser keeps every document it ever parsed alive: reading every prerendered page through one runs
+ * Node out of heap (the check reads each page twice).
+ */
+export async function readDocument(html, read) {
+  const window = new Window();
+  try {
+    return read(new window.DOMParser().parseFromString(html, 'text/html'));
+  } finally {
+    await window.happyDOM.close();
+  }
+}
 
 export const BROWSER_DOCS = 'dist/apps/web/browser/docs';
 export const PUBLIC_DOCS = 'apps/web/public/docs';
@@ -439,7 +451,10 @@ function tidy(markdown) {
 }
 
 export function convertPage(html, slug) {
-  const document = domParser.parseFromString(html, 'text/html');
+  return readDocument(html, document => convertDocument(document, slug));
+}
+
+function convertDocument(document, slug) {
   const content = document.querySelector('z-content');
   if (!content) return null;
 
@@ -493,7 +508,7 @@ export function collectDocPaths(dir, base = '') {
   return paths;
 }
 
-function generate({ volatile = false } = {}) {
+async function generate({ volatile = false } = {}) {
   if (!existsSync(BROWSER_DOCS)) {
     console.error(`❌ ${BROWSER_DOCS} not found — run the build first.`);
     process.exit(1);
@@ -505,7 +520,7 @@ function generate({ volatile = false } = {}) {
 
   for (const relPath of collectDocPaths(BROWSER_DOCS)) {
     const html = readFileSync(join(BROWSER_DOCS, relPath, 'index.html'), 'utf-8');
-    const markdown = convertPage(html, relPath.split('/').pop());
+    const markdown = await convertPage(html, relPath.split('/').pop());
     if (!markdown) {
       skipped.push(relPath);
       continue;
@@ -538,7 +553,7 @@ function generate({ volatile = false } = {}) {
       const mdPath = join(PUBLIC_DOCS, 'components', `${entry.name}.md`);
       // Keep the richer serializer output; only replace fallback stubs.
       if (existsSync(mdPath) && readFileSync(mdPath, 'utf-8').includes('## Installation')) continue;
-      const raw = convertPage(readFileSync(htmlPath, 'utf-8'), entry.name);
+      const raw = await convertPage(readFileSync(htmlPath, 'utf-8'), entry.name);
       if (!raw) continue;
       // Align with the serializer format: title-case the name, keep a single H1.
       const title = entry.name
@@ -568,5 +583,5 @@ function generate({ volatile = false } = {}) {
 
 // Run only when invoked directly, not when imported by the check script.
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  generate({ volatile: process.argv.includes('--volatile') });
+  await generate({ volatile: process.argv.includes('--volatile') });
 }
