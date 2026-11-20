@@ -72,14 +72,14 @@ describe('ChangelogReleaseComponent', () => {
 
     it('offers a button that pauses the clip, since it runs longer than five seconds', () => {
       fixture.detectChanges();
-      expect(toggle().getAttribute('aria-label')).toBe('Pause the release clip');
+      expect(toggle().getAttribute('aria-label')).toBe('Pause the clip');
 
       Object.defineProperty(video(), 'paused', { configurable: true, value: false });
       toggle().click();
       fixture.detectChanges();
 
       expect(pause).toHaveBeenCalled();
-      expect(toggle().getAttribute('aria-label')).toBe('Play the release clip');
+      expect(toggle().getAttribute('aria-label')).toBe('Play the clip');
     });
   });
 
@@ -91,7 +91,7 @@ describe('ChangelogReleaseComponent', () => {
 
     it('does not start the clip on its own, and keeps the play button visible', () => {
       expect(play).not.toHaveBeenCalled();
-      expect(toggle().getAttribute('aria-label')).toBe('Play the release clip');
+      expect(toggle().getAttribute('aria-label')).toBe('Play the clip');
       expect(toggle().classList.contains('opacity-100')).toBe(true);
     });
 
@@ -108,9 +108,30 @@ describe('ChangelogReleaseComponent', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     expect(video().getAttribute('aria-label')).toBe('zard/ui v1.0.0 release');
-    const heading = compiled.querySelector('figcaption h2');
+    // Inside an article of the changelog index, under the entry's own <h2>.
+    const heading = compiled.querySelector('figcaption h3');
     expect(heading?.textContent?.trim()).toBe(release.title);
     expect(compiled.querySelector('figcaption p')?.textContent?.trim()).toBe(release.summary);
     expect(video().compareDocumentPosition(heading as Node) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it('names a clip that announces no version by its label', async () => {
+    mockReducedMotion(true);
+    await render();
+    fixture.componentRef.setInput('release', { ...release, version: undefined, label: 'zard/ui create' });
+    fixture.detectChanges();
+
+    expect(video().getAttribute('aria-label')).toBe('zard/ui create');
+  });
+
+  it("uses an <h2> on the entry's own page, under its <h1>", async () => {
+    mockReducedMotion(true);
+    await render();
+    fixture.componentRef.setInput('headingLevel', 2);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('figcaption h2')?.textContent?.trim()).toBe(release.title);
+    expect(compiled.querySelector('figcaption h3')).toBeNull();
   });
 });

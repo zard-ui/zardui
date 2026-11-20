@@ -7,6 +7,8 @@ export const DECEMBER_2025: ChangelogEntry = {
     monthNumber: 12,
     date: new Date(2025, 11, 1),
     id: '12-2025',
+    slug: '2025-12-provide-zard',
+    title: 'provideZard() and a Private Registry',
   },
 
   overview:
@@ -17,20 +19,17 @@ export const DECEMBER_2025: ChangelogEntry = {
       title: 'provideZard()',
       description:
         'New provider function for streamlined app configuration. Add event manager plugins and other Zard utilities with a single function call in your app.config.ts.',
-      icon: 'zap',
       code: 'provideZard()',
     },
     {
       title: 'Private Registry System',
       description:
         'The CLI now uses our own private registry instead of fetching from GitHub. This brings significant performance improvements, better version control, and more reliable component installations.',
-      icon: 'package',
     },
     {
       title: 'Dark Mode via CLI',
       description:
         'Adding dark-mode support to your project is now as simple as running a single CLI command. It automatically configures everything you need.',
-      icon: 'moon',
       code: 'npx zard-cli@latest add dark-mode',
     },
   ],

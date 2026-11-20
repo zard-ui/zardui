@@ -13,16 +13,17 @@ export const SEPTEMBER_2026: ChangelogEntry = {
     monthNumber: 9,
     date: new Date(2026, 8, 1),
     id: '09-2026',
+    slug: '2026-09-v1',
+    title: 'Zard UI v1.0',
   },
 
-  overview: 'The month v1.0.0 ships — see the announcement above for what a stable 1.0 means.',
+  overview: 'The month v1.0.0 ships. The announcement below says what a stable 1.0 means.',
 
   highlights: [
     {
       title: 'Dialog, sheet and alert dialog in the template',
       description:
         'The three overlays gain the declarative form the drawer already had: compose z-dialog, z-sheet or z-alert-dialog with [(zVisible)] and header, title, description and footer children, or keep opening the same panel from code through the service. Every example on their pages now shows both.',
-      icon: 'code',
     },
   ],
 

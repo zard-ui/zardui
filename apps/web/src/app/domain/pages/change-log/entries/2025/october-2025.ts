@@ -7,6 +7,8 @@ export const OCTOBER_2025: ChangelogEntry = {
     monthNumber: 10,
     date: new Date(2025, 9, 1),
     id: '10-2025',
+    slug: '2025-10-sheet-empty',
+    title: 'Sheet and Empty',
   },
 
   overview:

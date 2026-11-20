@@ -35,22 +35,23 @@ describe('CHANGELOG_ENTRIES', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('carries the release banner data on exactly one entry', () => {
-    const withRelease = CHANGELOG_ENTRIES.filter(entry => entry.release);
-    expect(withRelease).toHaveLength(1);
-    expect(withRelease[0].meta.id).toBe('09-2026');
+  it('carries a launch clip only on the v1 release and the create launch', () => {
+    const withRelease = CHANGELOG_ENTRIES.filter(entry => entry.release).map(entry => entry.meta.id);
+    expect(withRelease).toEqual(['11-2026-create', '09-2026']);
   });
 
-  it('lists the newest month first, even when it is newer than the release', () => {
-    expect(CHANGELOG_ENTRIES[0].meta.id).toBe('11-2026');
+  it('lists the newest entry first, even when it is newer than the release', () => {
+    expect(CHANGELOG_ENTRIES[0].meta.slug).toBe('2026-11-create');
   });
 
-  it('every highlight icon is one of the eight values the closed union allows', () => {
-    const allowed = new Set(['zap', 'terminal', 'moon', 'package', 'rocket', 'shield', 'code', 'settings']);
-    for (const entry of CHANGELOG_ENTRIES) {
-      for (const highlight of entry.highlights ?? []) {
-        expect(allowed.has(highlight.icon)).toBe(true);
-      }
+  it('gives every entry a unique page slug that starts with its year and month', () => {
+    const slugs = CHANGELOG_ENTRIES.map(entry => entry.meta.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+    for (const { meta } of CHANGELOG_ENTRIES) {
+      const month = String(meta.date.getMonth() + 1).padStart(2, '0');
+      expect(meta.slug.startsWith(`${meta.date.getFullYear()}-${month}-`)).toBe(true);
+      expect(meta.slug).toMatch(/^\d{4}-\d{2}-[a-z0-9]+(-[a-z0-9]+)*$/);
+      expect(meta.title.trim()).not.toBe('');
     }
   });
 });

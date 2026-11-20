@@ -7,6 +7,8 @@ export const APRIL_2025: ChangelogEntry = {
     monthNumber: 4,
     date: new Date(2025, 3, 1),
     id: '04-2025',
+    slug: '2025-04-input-cli',
+    title: 'Input and the CLI',
   },
 
   overview:

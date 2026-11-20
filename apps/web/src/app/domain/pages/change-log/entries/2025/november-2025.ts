@@ -7,6 +7,8 @@ export const NOVEMBER_2025: ChangelogEntry = {
     monthNumber: 11,
     date: new Date(2025, 10, 1),
     id: '11-2025',
+    slug: '2025-11-carousel-kbd',
+    title: 'Carousel and Kbd',
   },
 
   overview:

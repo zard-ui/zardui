@@ -7,6 +7,8 @@ export const SEPTEMBER_2025: ChangelogEntry = {
     monthNumber: 9,
     date: new Date(2025, 8, 1),
     id: '09-2025',
+    slug: '2025-09-progress-skeleton',
+    title: 'Progress, Skeleton and Spinner',
   },
 
   overview:

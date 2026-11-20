@@ -154,6 +154,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/change-log/change-log.page').then(c => c.ChangeLogPage),
       },
       {
+        path: 'changelog/:slug',
+        loadComponent: () => import('./domain/pages/change-log/change-log-entry.page').then(c => c.ChangelogEntryPage),
+      },
+      {
         path: 'featured',
         loadChildren: () => import('./domain/pages/featured/featured.routes').then(m => m.FEATURED_ROUTES),
       },

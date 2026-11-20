@@ -7,6 +7,8 @@ export const AUGUST_2025: ChangelogEntry = {
     monthNumber: 8,
     date: new Date(2025, 7, 1),
     id: '08-2025',
+    slug: '2025-08-avatar-breadcrumb',
+    title: 'Avatar, Divider and Breadcrumb',
   },
 
   overview:
