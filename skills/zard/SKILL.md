@@ -1,6 +1,6 @@
 ---
 name: zard
-description: Manages zard/ui components and projects — adding, composing, styling, and debugging Angular UI built on TailwindCSS v4. Provides project context, component source, and the real API instead of a remembered one. Applies when working with zard/ui, zard-cli, the zard registry, or any project with a components.json that declares a zard projectType. Also triggers for "zard-cli init", "add a zard component", or "set up zard/ui in an Nx workspace".
+description: Manages zard/ui components and projects — adding, composing, styling, and debugging Angular UI built on TailwindCSS v4. Provides project context, component source, and the real API instead of a remembered one. Applies when working with zard/ui, zard-cli, the zard registry, or any project with a components.json that declares a zard projectType. Also triggers for "zard-cli init", "zard-cli create", "create a zard project", "apply a zard preset", "add a zard component", or "set up zard/ui in an Nx workspace".
 user-invocable: false
 allowed-tools: Bash(npx zard-cli *), Bash(pnpm dlx zard-cli *), Bash(bunx --bun zard-cli *)
 ---
@@ -9,7 +9,7 @@ allowed-tools: Bash(npx zard-cli *), Bash(pnpm dlx zard-cli *), Bash(bunx --bun 
 
 An Angular component library. Components are installed as source code into the user's project by the CLI — there is no runtime package to import from, and no component to `npm install`.
 
-> **IMPORTANT:** Run every CLI command with the project's own package runner: `npx zard-cli`, `pnpm dlx zard-cli`, `yarn zard-cli`, or `bunx zard-cli` — pick the one matching `packageManager` in `components.json`. The examples below use `npx zard-cli`; substitute the right runner.
+> **IMPORTANT:** Run every CLI command with the project's own package runner: `npx zard-cli`, `pnpm dlx zard-cli`, or `bunx zard-cli` (yarn uses `npx zard-cli` too: `yarn dlx` does not exist in Yarn 1) — pick the one matching `packageManager` in `components.json`. The examples below use `npx zard-cli`; substitute the right runner.
 
 ## Current Project Context
 
@@ -50,9 +50,12 @@ For anything the file does not answer — what exists, what a component's API is
 - **`projectType`** → `angular`, `angular-library`, `nx`, `nx-library`, or `analog`. Decides which tsconfig holds the aliases, where Tailwind is configured, and whether an `app.config.ts` exists at all. See [cli.md](./cli.md).
 - **`appConfigFile`** → where `provideZard()` is registered. **Empty in a library** — there the consuming app registers it.
 - **`tailwind.css`** → the global CSS file holding the theme tokens. Always edit this file; never create a second one.
-- **`tailwind.baseColor`** → the theme preset: `neutral`, `stone`, `zinc`, `gray`, or `slate`.
-- **`icons`** → the icon family the components are written with (`lucide` today). Decides the `@ng-icons/*` package and the symbol names. See [rules/icons.md](./rules/icons.md).
-- **`rtl`** → declares layout direction intent. It does not change what gets installed.
+- **`tailwind.baseColor`** → the theme preset: `neutral`, `stone`, `zinc`, `gray`, `slate`, `mauve`, `olive`, `mist`, or `taupe`.
+- **`style`** → `vega`, `nova`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea`, or the legacy `css` (read as the current look). `nova` is the default and matches shadcn's nova. Written by a preset; `add` installs components in that style (resolved to plain classes at install time). Existing files change only when re-added with `--overwrite`.
+- **`icons`** → the icon family the components are written with: `lucide`, `tabler`, `hugeicons`, `phosphor`, or `remixicon`. Decides the `@ng-icons/*` package and the symbol names. See [rules/icons.md](./rules/icons.md).
+- **`menuColor`, `menuAppearance`, `menuAccent`** → how menus and popovers look (`default`/`inverted`, `solid`/`translucent`, `subtle`/`bold`). Written by a preset; absent means the defaults.
+- **`preset`** → the `Z…` preset code the project was last fully configured from (built at https://zardui.com/create). Informational; nothing reads it to decide what to install.
+- **`rtl`** → whether the project reads right to left. It does not change what gets installed; `init --rtl` sets `dir="rtl"` on `<html>` (not `lang`).
 - **`packageManager`** → use it for every dependency install (`pnpm add date-fns`, not `npm install date-fns`) and to pick the CLI runner.
 - **`registryUrl`** → optional. Present when the project installs from a registry other than `https://zardui.com/r`. See [registry.md](./registry.md).
 
@@ -191,6 +194,14 @@ Not every registry name is a component you pick for a UI need — five install i
 ## Quick Reference
 
 ```bash
+# Create a new project already configured with a design preset (build one at https://zardui.com/create).
+npx zard-cli create my-app --template angular --preset Z0
+npx zard-cli create my-app --template nx --preset <code> --pointer --rtl --yes   # headless; template and name are required
+
+# Change the design of an existing project.
+npx zard-cli init --preset <code>                # configure a project with a whole preset (any project type)
+npx zard-cli apply --preset <code> --only theme  # only the theme tokens; --only font for fonts; omit for both
+
 # Initialise a project (full-screen wizard).
 npx zard-cli init
 npx zard-cli init --type nx --project web        # answer the wizard up front
@@ -212,9 +223,9 @@ There is no `search`, `view`, `diff`, `info`, or `build` command — those are s
 
 ## Detailed References
 
-- [cli.md](./cli.md) — `init` and `add`, every flag, the five project types, headless behaviour
+- [cli.md](./cli.md) — `create`, `init`, `apply` and `add`, every flag, presets, the five project types, headless behaviour
 - [registry.md](./registry.md) — the index, item and icon-catalog formats, JSON Schemas, pointing at your own registry
-- [mcp.md](./mcp.md) — the nine MCP tools, how to connect, `ZARD_REGISTRY_URL` / `ZARD_DOCS_URL`
+- [mcp.md](./mcp.md) — the sixteen MCP tools, how to connect, `ZARD_REGISTRY_URL` / `ZARD_DOCS_URL`
 - [customization.md](./customization.md) — theme tokens, CVA variants, `mergeClasses`, extending a component
 - [rules/angular.md](./rules/angular.md) — standalone, `input()`, OnPush, `ViewEncapsulation.None`, selectors
 - [rules/styling.md](./rules/styling.md) — Tailwind v4, semantic tokens, `mergeClasses`, variants before raw classes, the `scroll-fade` / `shimmer` utilities

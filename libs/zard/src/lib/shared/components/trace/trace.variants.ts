@@ -8,16 +8,15 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
  */
 export const traceVariants = cva(
   mergeClasses(
-    'flex w-full min-w-0 flex-col gap-2',
+    'cn-trace flex w-full min-w-0 flex-col',
     '*:has-[>[data-slot=trace-line]]:flex *:has-[>[data-slot=trace-line]]:w-fit *:has-[>[data-slot=trace-line]]:max-w-full *:has-[>[data-slot=trace-line]]:min-w-0',
-    '*:has-[>[data-slot=trace-line]]:rounded-md *:has-[>[data-slot=trace-line]]:text-start *:has-[>[data-slot=trace-line]]:outline-none',
-    '*:has-[>[data-slot=trace-line]]:focus-visible:ring-3 *:has-[>[data-slot=trace-line]]:focus-visible:ring-ring/50',
+    '*:has-[>[data-slot=trace-line]]:text-start *:has-[>[data-slot=trace-line]]:outline-none',
   ),
 );
 
 export const traceLineVariants = cva(
   mergeClasses(
-    'flex w-fit max-w-full min-w-0 items-center gap-2 text-sm text-muted-foreground transition-colors',
+    'cn-trace-line flex w-fit max-w-full min-w-0 items-center text-muted-foreground transition-colors',
     'in-[a,button]:cursor-pointer in-[a:hover,button:hover]:text-foreground',
   ),
   {
@@ -34,7 +33,7 @@ export const traceLineVariants = cva(
 
 export const traceIconVariants = cva(
   mergeClasses(
-    'flex size-4 shrink-0 items-center justify-center [--ng-icon__size:1rem] [&_svg]:pointer-events-none [&_svg:not([class*=size-])]:size-4',
+    'cn-trace-icon flex shrink-0 items-center justify-center [&_svg]:pointer-events-none',
     // A trailing icon (a chevron, an "opens in a new tab" arrow) tucks in toward the title.
     '[[data-slot=trace-title]~&]:-ms-1',
   ),
@@ -48,8 +47,8 @@ export const traceCollapsibleVariants = cva('flex w-full min-w-0 flex-col');
 
 export const traceCollapsibleTriggerVariants = cva(
   mergeClasses(
-    'group/trace-collapsible-trigger flex w-fit max-w-full min-w-0 cursor-pointer items-center gap-1 rounded-md text-start text-muted-foreground transition-colors outline-none',
-    'hover:text-foreground has-[[data-status=error]]:text-destructive focus-visible:ring-3 focus-visible:ring-ring/50',
+    'cn-trace-collapsible-trigger group/trace-collapsible-trigger flex w-fit max-w-full min-w-0 cursor-pointer items-center text-start text-muted-foreground transition-colors outline-none',
+    'hover:text-foreground has-[[data-status=error]]:text-destructive',
   ),
 );
 
@@ -62,7 +61,7 @@ export const traceChevronVariants = cva(
 );
 
 export const traceCollapsibleContentVariants = cva(
-  'mt-2 mb-1 ms-[calc(--spacing(2)-1px)] min-w-0 border-s ps-4 pe-1 leading-relaxed wrap-break-word text-muted-foreground',
+  'cn-trace-collapsible-content min-w-0 wrap-break-word text-muted-foreground',
 );
 
 export type ZardTraceStatusVariants = NonNullable<VariantProps<typeof traceLineVariants>['zStatus']>;

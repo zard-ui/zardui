@@ -48,6 +48,13 @@ import type { CodeBlockData } from '@highlight/types';
       you provided. Nothing published here uses that form, and a custom registry that does should expect the rewrite to
       leave it alone.
     </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      The rewrite is decided over all the files of an item together, not file by file. A template file or a data file
+      that only names an icon, such as
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">icon: 'lucideBot'</code>
+      in a list the component renders, follows the icons its component imports. Every icon used by a published
+      component, block or demo needs a row here for every set, or a declared gap.
+    </p>
   `,
 })
 export class RegistryIconCatalogSectionComponent {

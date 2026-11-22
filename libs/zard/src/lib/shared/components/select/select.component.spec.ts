@@ -69,6 +69,9 @@ class TestHostWithFormControlComponent {
       <z-select-item zValue="apple">Apple</z-select-item>
       <z-select-item zValue="banana">Banana</z-select-item>
     </z-select>
+    <z-select class="w-48" zSize="sm">
+      <z-select-item zValue="apple">Apple</z-select-item>
+    </z-select>
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
 })
@@ -516,7 +519,17 @@ describe('ZardSelectComponent', () => {
       const trigger = hostFixture.nativeElement.querySelector('[data-slot="select-trigger"]') as HTMLElement;
       expect(selectElement).toHaveClass('w-64');
       expect(selectElement).not.toHaveAttribute('dir');
-      expect(trigger).not.toHaveAttribute('data-size');
+      expect(trigger).toHaveAttribute('data-size', 'default');
+    });
+
+    it('renders data-size from zSize so a style can size the trigger', () => {
+      hostFixture.detectChanges();
+
+      const triggers = hostFixture.nativeElement.querySelectorAll(
+        '[data-slot="select-trigger"]',
+      ) as NodeListOf<HTMLElement>;
+      expect(triggers[0]).toHaveAttribute('data-size', 'default');
+      expect(triggers[1]).toHaveAttribute('data-size', 'sm');
     });
 
     it('applies popper positioning attributes and trigger min-width sizing when opened', fakeAsync(() => {
@@ -1324,7 +1337,7 @@ describe('ZardSelectComponent', () => {
       const trigger = hostFixture.nativeElement.querySelector('[data-slot="select-trigger"]') as HTMLElement;
       const valueSlot = trigger.querySelector('[data-slot="select-value"]') as HTMLElement;
       expect(trigger).toHaveClass('h-auto');
-      expect(trigger).toHaveClass('min-h-8');
+      expect(trigger).toHaveClass('data-[size=default]:min-h-8');
       expect(trigger).toHaveClass('py-1');
       expect(valueSlot).toHaveClass('flex-wrap');
       expect(valueSlot).toHaveClass('overflow-visible');
@@ -1632,7 +1645,7 @@ describe('ZardSelectComponent direction', () => {
     open();
     flush();
     const item = document.querySelector<HTMLElement>('.cdk-overlay-container z-select-item');
-    expect(item?.className).toContain('ps-2');
+    expect(item?.className).toContain('ps-1.5');
     expect(item?.className).toContain('pe-8');
     expect(item?.className).not.toMatch(/(^|\s)p[lr]-/);
   }));

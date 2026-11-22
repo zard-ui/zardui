@@ -17,6 +17,8 @@ npx zard-cli@latest add avatar
 
 ### Manual
 
+**Add avatar.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -145,49 +147,40 @@ export class ZardAvatarComponent {
 }
 ```
 
+**Add avatar.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { mergeClasses } from '@/shared/utils';
 
-export const avatarVariants = cva(
-  mergeClasses(
-    'group/avatar relative flex shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border',
-    'after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten',
-  ),
-  {
-    variants: {
-      zSize: {
-        sm: 'size-6',
-        default: 'size-8',
-        lg: 'size-10',
-      },
-    },
-    defaultVariants: {
-      zSize: 'default',
+export const avatarVariants = cva('after:border-border relative flex size-8 shrink-0 rounded-full after:border after:absolute after:inset-0 after:rounded-full after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten group/avatar select-none', {
+  variants: {
+    zSize: {
+      sm: 'size-6',
+      default: 'size-8',
+      lg: 'size-10',
     },
   },
-);
+  defaultVariants: {
+    zSize: 'default',
+  },
+});
 
-export const fallbackVariants = cva(
-  'bg-muted text-muted-foreground absolute inset-0 flex size-full items-center justify-center rounded-full text-sm group-data-[size=sm]/avatar:text-xs',
-);
+export const fallbackVariants = cva('bg-muted text-muted-foreground absolute inset-0 flex size-full items-center justify-center rounded-full text-sm group-data-[size=sm]/avatar:text-xs');
 
-export const imageVariants = cva(
-  'absolute inset-0 aspect-square size-full rounded-full object-cover opacity-0 transition-opacity duration-200',
-  {
-    variants: {
-      zSize: {
-        sm: '',
-        default: '',
-        lg: '',
-      },
-    },
-    defaultVariants: {
-      zSize: 'default',
+export const imageVariants = cva('absolute inset-0 aspect-square size-full rounded-full object-cover opacity-0 transition-opacity duration-200', {
+  variants: {
+    zSize: {
+      sm: '',
+      default: '',
+      lg: '',
     },
   },
-);
+  defaultVariants: {
+    zSize: 'default',
+  },
+});
 
 export const avatarBadgeVariants = mergeClasses(
   'absolute end-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground bg-blend-color ring-2 ring-background select-none',
@@ -196,44 +189,40 @@ export const avatarBadgeVariants = mergeClasses(
   'group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg]:size-2',
 );
 
-export const avatarGroupVariants = cva(
-  'group/avatar-group flex *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
-  {
-    variants: {
-      zOrientation: {
-        horizontal: 'flex-row -space-x-2',
-        vertical: 'flex-col -space-y-2',
-      },
-    },
-    defaultVariants: {
-      zOrientation: 'horizontal',
+export const avatarGroupVariants = cva('flex *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:ring-2 group/avatar-group', {
+  variants: {
+    zOrientation: {
+      horizontal: 'flex-row -space-x-2',
+      vertical: 'flex-col -space-y-2',
     },
   },
-);
+  defaultVariants: {
+    zOrientation: 'horizontal',
+  },
+});
 
 /**
  * The "+N" chip appended to a `z-avatar-group` for members the stack does not show.
  * Carries `data-slot="avatar"` so it also picks up the group's own ring/spacing rules.
  */
-export const avatarGroupCountVariants = cva(
-  'relative flex shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground font-medium ring-2 ring-background select-none',
-  {
-    variants: {
-      zSize: {
-        sm: 'size-6 text-xs',
-        default: 'size-8 text-xs',
-        lg: 'size-10 text-sm',
-      },
-    },
-    defaultVariants: {
-      zSize: 'default',
+export const avatarGroupCountVariants = cva('bg-muted text-muted-foreground ring-background relative flex size-8 shrink-0 items-center justify-center rounded-full text-sm ring-2 group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3 select-none', {
+  variants: {
+    zSize: {
+      sm: 'size-6 text-xs',
+      default: 'size-8 text-xs',
+      lg: 'size-10 text-sm',
     },
   },
-);
+  defaultVariants: {
+    zSize: 'default',
+  },
+});
 
 export type ZardAvatarSizeVariants = NonNullable<VariantProps<typeof avatarVariants>['zSize']>;
 export type ZardAvatarGroupOrientationVariants = NonNullable<VariantProps<typeof avatarGroupVariants>['zOrientation']>;
 ```
+
+**Add avatar-group-count.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -274,6 +263,8 @@ export class ZardAvatarGroupCountComponent {
 }
 ```
 
+**Add avatar-group.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -305,6 +296,8 @@ export class ZardAvatarGroupComponent {
 }
 ```
 
+**Add avatar.imports.ts**
+
 ```angular-ts
 /*
  * The alias, not a relative path: the Angular compiler re-emits these imports from
@@ -323,6 +316,8 @@ export const ZardAvatarImports = [
 ] as const;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './avatar-group-count.component';
 export * from './avatar-group.component';
@@ -338,10 +333,45 @@ import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component
 ```
 
 ```angular-html
-<z-avatar zSrc="https://github.com/shadcn.png" zAlt="@shadcn"></z-avatar>
+<z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess"></z-avatar>
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardAvatarGroupCountComponent } from '@/shared/components/avatar/avatar-group-count.component';
+import { ZardAvatarGroupComponent } from '@/shared/components/avatar/avatar-group.component';
+import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
+
+@Component({
+  selector: 'z-demo-avatar-preview',
+  imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardAvatarGroupCountComponent],
+  template: `
+    <div class="flex flex-row flex-wrap items-center gap-6 md:gap-12">
+      <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Rick Sanchez" zFallback="RS" class="grayscale" />
+      <z-avatar
+        zSrc="https://github.com/Luizgomess.png"
+        zAlt="@Luizgomess"
+        zFallback="LG"
+        [zShowBadge]="true"
+        zBadgeClass="bg-green-600 dark:bg-green-800"
+      />
+      <z-avatar-group class="grayscale">
+        <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Rick Sanchez" zFallback="RS" />
+        <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zFallback="SR" />
+        <z-avatar zSrc="https://github.com/ribeiromatheuss.png" zAlt="@ribeiromatheuss" zFallback="MR" />
+        <z-avatar-group-count [zCount]="3" />
+      </z-avatar-group>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoAvatarPreviewComponent {}
+```
 
 ### Basic
 
@@ -609,7 +639,7 @@ export class ZardDemoAvatarDropdownComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

@@ -102,7 +102,7 @@ describe('ZardSelectItemComponent', () => {
 
       const hostElement = fixture.nativeElement as HTMLElement;
       expect(hostElement).toHaveClass('pe-8');
-      expect(hostElement).toHaveClass('ps-2');
+      expect(hostElement).toHaveClass('ps-1.5');
     });
 
     it('applies correct classes for compact mode', () => {
@@ -111,7 +111,7 @@ describe('ZardSelectItemComponent', () => {
 
       const hostElement = fixture.nativeElement as HTMLElement;
       expect(hostElement).toHaveClass('pe-8');
-      expect(hostElement).toHaveClass('ps-2');
+      expect(hostElement).toHaveClass('ps-1.5');
       expect(hostElement).not.toHaveClass('pl-6.5');
     });
   });

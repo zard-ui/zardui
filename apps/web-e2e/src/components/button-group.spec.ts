@@ -30,7 +30,7 @@ test.describe('ButtonGroup component (RTL)', () => {
     expect(radii.left).toBe('0px');
     expect(radii.right).not.toBe('0px');
 
-    await expect(rtl.locator('[data-slot="preview"] ng-icon').first()).toHaveClass(/rtl:rotate-180/);
+    await expect(rtl.locator('[data-slot="preview"] ng-icon').first()).toHaveCSS('rotate', '180deg');
   });
 
   test('passes accessibility checks', async ({ page }) => {

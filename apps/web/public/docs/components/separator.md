@@ -17,6 +17,8 @@ npx zard-cli@latest add separator
 
 ### Manual
 
+**Add separator.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -58,26 +60,27 @@ export class ZardSeparatorComponent {
 }
 ```
 
+**Add separator.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const separatorVariants = cva(
-  'bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px data-[orientation=vertical]:self-stretch',
-  {
-    variants: {
-      zOrientation: {
-        horizontal: '',
-        vertical: '',
-      },
-    },
-    defaultVariants: {
-      zOrientation: 'horizontal',
+export const separatorVariants = cva('bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px data-[orientation=vertical]:self-stretch', {
+  variants: {
+    zOrientation: {
+      horizontal: '',
+      vertical: '',
     },
   },
-);
+  defaultVariants: {
+    zOrientation: 'horizontal',
+  },
+});
 
 export type ZardSeparatorVariants = VariantProps<typeof separatorVariants>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './separator.component';
@@ -95,6 +98,31 @@ import { ZardSeparatorComponent } from '@/shared/components/separator/separator.
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardSeparatorComponent } from '../separator.component';
+
+@Component({
+  selector: 'z-demo-separator-preview',
+  imports: [ZardSeparatorComponent],
+  template: `
+    <div class="flex max-w-sm flex-col gap-4 text-sm">
+      <div class="flex flex-col gap-1.5">
+        <div class="leading-none font-medium">Zard/ui</div>
+        <div class="text-muted-foreground">The Next Level for Your Angular Projects</div>
+      </div>
+      <z-separator />
+      <div>A set of beautifully designed components that you can customize, extend, and build on.</div>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSeparatorPreviewComponent {}
+```
 
 ### Vertical
 
@@ -192,7 +220,7 @@ import { ZardSeparatorComponent } from '../separator.component';
 export class ZardDemoSeparatorListComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

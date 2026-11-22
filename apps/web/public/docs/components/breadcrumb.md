@@ -17,6 +17,8 @@ npx zard-cli@latest add breadcrumb
 
 ### Manual
 
+**Add breadcrumb.component.ts**
+
 ```angular-ts
 import { LocationStrategy } from '@angular/common';
 import {
@@ -448,6 +450,8 @@ export class ZardBreadcrumbComponent {
 }
 ```
 
+**Add breadcrumb.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -465,44 +469,39 @@ export const breadcrumbVariants = cva('w-full', {
 });
 export type ZardBreadcrumbSizeVariants = NonNullable<VariantProps<typeof breadcrumbVariants>['zSize']>;
 
-export const breadcrumbListVariants = cva(
-  'text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word sm:gap-2.5',
-  {
-    variants: {
-      zAlign: {
-        start: 'justify-start',
-        center: 'justify-center',
-        end: 'justify-end',
-      },
-      zWrap: {
-        wrap: 'flex-wrap',
-        nowrap: 'flex-nowrap',
-      },
+export const breadcrumbListVariants = cva('text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word', {
+  variants: {
+    zAlign: {
+      start: 'justify-start',
+      center: 'justify-center',
+      end: 'justify-end',
     },
-    defaultVariants: {
-      zAlign: 'start',
-      zWrap: 'wrap',
+    zWrap: {
+      wrap: 'flex-wrap',
+      nowrap: 'flex-nowrap',
     },
   },
-);
+  defaultVariants: {
+    zAlign: 'start',
+    zWrap: 'wrap',
+  },
+});
 export type ZardBreadcrumbAlignVariants = NonNullable<VariantProps<typeof breadcrumbListVariants>['zAlign']>;
 export type ZardBreadcrumbWrapVariants = NonNullable<VariantProps<typeof breadcrumbListVariants>['zWrap']>;
 
-export const breadcrumbItemVariants = cva('inline-flex items-center gap-1.5');
+export const breadcrumbItemVariants = cva('inline-flex items-center gap-1');
 export type ZardBreadcrumbItemVariants = VariantProps<typeof breadcrumbItemVariants>;
 
 export const breadcrumbLinkVariants = cva('transition-colors hover:text-foreground');
 export type ZardBreadcrumbLinkVariants = VariantProps<typeof breadcrumbLinkVariants>;
 
-export const breadcrumbPageVariants = cva('font-normal text-foreground');
+export const breadcrumbPageVariants = cva('text-foreground font-normal');
 export type ZardBreadcrumbPageVariants = VariantProps<typeof breadcrumbPageVariants>;
 
-export const breadcrumbSeparatorVariants = cva(
-  'text-muted-foreground [&_svg]:size-3.5 [&_ng-icon]:flex! [&_ng-icon]:items-center! [&_ng-icon]:size-3.5!',
-);
+export const breadcrumbSeparatorVariants = cva('[&_ng-icon]:flex! [&_ng-icon]:size-3.5! [&_ng-icon]:items-center! [&_svg]:size-3.5 [&>svg]:size-3.5');
 export type ZardBreadcrumbSeparatorVariants = VariantProps<typeof breadcrumbSeparatorVariants>;
 
-export const breadcrumbEllipsisVariants = cva('flex size-9 items-center justify-center', {
+export const breadcrumbEllipsisVariants = cva('flex size-5 items-center justify-center [&>svg]:size-4', {
   variants: {
     zColor: {
       muted: 'text-muted-foreground',
@@ -517,6 +516,8 @@ export type ZardBreadcrumbEllipsisColorVariants = NonNullable<
   VariantProps<typeof breadcrumbEllipsisVariants>['zColor']
 >;
 ```
+
+**Add breadcrumb.imports.ts**
 
 ```angular-ts
 import {
@@ -537,6 +538,8 @@ export const ZardBreadcrumbImports = [
   ZardBreadcrumbEllipsisComponent,
 ] as const;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './breadcrumb.component';
@@ -565,6 +568,37 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
+
+@Component({
+  selector: 'z-demo-breadcrumb-preview',
+  imports: [ZardBreadcrumbImports],
+  template: `
+    <z-breadcrumb>
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link [routerLink]="['/']">Home</a>
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <z-breadcrumb-ellipsis />
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link [routerLink]="['/docs/components']">Components</a>
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <span z-breadcrumb-page>Breadcrumb</span>
+      </z-breadcrumb-item>
+    </z-breadcrumb>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoBreadcrumbPreviewComponent {}
+```
 
 ### Basic
 
@@ -752,7 +786,7 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
 export class ZardDemoBreadcrumbLinkComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

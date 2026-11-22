@@ -239,7 +239,7 @@ describe('ZardDrawerComponent stacking', () => {
 
     const backdrops = [...document.querySelectorAll('.cdk-overlay-backdrop')];
     expect(backdrops).toHaveLength(2);
-    expect(backdrops[0].classList.contains('bg-black/30')).toBe(true);
+    expect(backdrops[0].classList.contains('bg-black/10')).toBe(true);
     expect(backdrops[1].classList.contains('bg-transparent')).toBe(true);
   });
 });

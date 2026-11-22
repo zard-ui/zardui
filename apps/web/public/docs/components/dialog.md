@@ -17,6 +17,8 @@ npx zard-cli@latest add dialog
 
 ### Manual
 
+**Add dialog.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
@@ -392,32 +394,29 @@ export class ZardDialogCloseDirective {
 }
 ```
 
+**Add dialog.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const dialogVariants = cva([
-  'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4',
-  'rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 outline-none',
-  'sm:max-w-sm',
-]);
+export const dialogVariants = cva('bg-popover text-popover-foreground ring-foreground/10 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-1/2 gap-4 rounded-xl p-4 text-sm ring-1 sm:max-w-sm outline-none');
 
 /** Classes of the mask behind a dialog, shared by the declarative form and the service. */
-export const DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+// A marker, so the style decides how dark and how blurred the mask is. The CDK takes one class per entry.
+export const DIALOG_BACKDROP_CLASSES = 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs'.split(' ').filter(Boolean);
 
 export const dialogHeaderVariants = cva('flex flex-col gap-2');
 
-export const dialogTitleVariants = cva('text-base leading-none font-medium wrap-anywhere');
+export const dialogTitleVariants = cva('text-base leading-none font-medium wrap-anywhere font-heading');
 
-export const dialogDescriptionVariants = cva(
-  'text-sm text-muted-foreground wrap-anywhere *:[a]:underline *:[a]:underline-offset-[3px] *:[a]:hover:text-foreground',
-);
+export const dialogDescriptionVariants = cva('text-muted-foreground text-sm wrap-anywhere *:[a]:hover:text-foreground *:[a]:underline *:[a]:underline-offset-[3px]');
 
-export const dialogFooterVariants = cva(
-  '-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end',
-);
+export const dialogFooterVariants = cva('bg-muted/50 -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t p-4 sm:flex-row sm:justify-end');
 
 export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 ```
+
+**Add dialog-container.component.ts**
 
 ```angular-ts
 import {
@@ -669,6 +668,8 @@ export class ZardDialogContainerComponent<T, U> extends BasePortalOutlet impleme
 }
 ```
 
+**Add dialog-host.ts**
+
 ```angular-ts
 import type { WritableSignal } from '@angular/core';
 
@@ -691,6 +692,8 @@ export abstract class ZardDialogHost {
   abstract requestClose(): void;
 }
 ```
+
+**Add dialog-panel.component.ts**
 
 ```angular-ts
 import { FocusTrapFactory } from '@angular/cdk/a11y';
@@ -731,6 +734,7 @@ export const DIALOG_DURATION = 100;
   selector: 'z-dialog-panel',
   imports: [ZardButtonComponent, NgIcon],
   template: `
+    <ng-content />
     @if (zClosable()) {
       <button
         type="button"
@@ -746,7 +750,6 @@ export const DIALOG_DURATION = 100;
         <span class="sr-only">Close</span>
       </button>
     }
-    <ng-content />
   `,
   styles: `
     z-dialog-panel {
@@ -822,6 +825,8 @@ export class ZardDialogPanelComponent {
 }
 ```
 
+**Add dialog-ref.ts**
+
 ```angular-ts
 import type { OverlayRef } from '@angular/cdk/overlay';
 
@@ -864,6 +869,8 @@ export class ZardDialogRef<T = unknown, R = unknown, U = unknown> extends ZardOv
 }
 ```
 
+**Add dialog.imports.ts**
+
 ```angular-ts
 import {
   ZardDialogCloseDirective,
@@ -884,6 +891,8 @@ export const ZardDialogImports = [
   ZardDialogCloseDirective,
 ] as const;
 ```
+
+**Add dialog.service.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -1045,6 +1054,8 @@ export class ZardDialogService {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export { type OnClickCallback as DialogOnClickCallback } from './dialog-container.component';
 export { ZardDialogContainerComponent, ZardDialogOptions } from './dialog-container.component';
@@ -1092,6 +1103,127 @@ z-dialog
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject, signal, type AfterViewInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
+import { Z_MODAL_DATA, ZardDialogService } from '@/shared/components/dialog/dialog.service';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+interface DialogData {
+  name: string;
+  username: string;
+}
+
+/** Content the service renders inside the dialog; reads what was passed through `zData`. */
+@Component({
+  selector: 'z-demo-dialog-preview-content',
+  imports: [ReactiveFormsModule, ZardInputComponent],
+  template: `
+    <form [formGroup]="form" class="grid gap-4">
+      <div class="grid gap-3">
+        <label for="dialog-service-name" class="text-sm leading-none font-medium select-none">Name</label>
+        <input z-input id="dialog-service-name" formControlName="name" />
+      </div>
+      <div class="grid gap-3">
+        <label for="dialog-service-username" class="text-sm leading-none font-medium select-none">Username</label>
+        <input z-input id="dialog-service-username" formControlName="username" />
+      </div>
+    </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  exportAs: 'zardDemoDialogPreviewContent',
+})
+export class ZardDemoDialogPreviewContentComponent implements AfterViewInit {
+  private readonly data = inject(Z_MODAL_DATA) as DialogData;
+
+  readonly form = new FormGroup({
+    name: new FormControl('Pedro Duarte'),
+    username: new FormControl('@peduarte'),
+  });
+
+  ngAfterViewInit(): void {
+    if (this.data) {
+      this.form.patchValue(this.data);
+    }
+  }
+}
+
+@Component({
+  selector: 'z-demo-dialog-preview',
+  imports: [ZardButtonComponent, ZardDialogImports, ZardInputComponent, ZardTabsImports, ReactiveFormsModule],
+  template: `
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Edit profile</button>
+
+        <z-dialog [(zVisible)]="visible">
+          <z-dialog-header>
+            <z-dialog-title>Edit profile</z-dialog-title>
+            <z-dialog-description>Make changes to your profile here. Click save when you're done.</z-dialog-description>
+          </z-dialog-header>
+          <form [formGroup]="form" class="grid gap-4">
+            <div class="grid gap-3">
+              <label for="dialog-name" class="text-sm leading-none font-medium select-none">Name</label>
+              <input z-input id="dialog-name" formControlName="name" />
+            </div>
+            <div class="grid gap-3">
+              <label for="dialog-username" class="text-sm leading-none font-medium select-none">Username</label>
+              <input z-input id="dialog-username" formControlName="username" />
+            </div>
+          </form>
+          <z-dialog-footer>
+            <button type="button" z-button zType="outline" z-dialog-close>Cancel</button>
+            <button type="button" z-button (click)="save()">Save changes</button>
+          </z-dialog-footer>
+        </z-dialog>
+      </z-tab>
+
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="openDialog()">Edit profile</button>
+      </z-tab>
+    </z-tab-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDialogPreviewComponent {
+  private readonly dialogService = inject(ZardDialogService);
+
+  readonly visible = signal(false);
+
+  readonly form = new FormGroup({
+    name: new FormControl('Samuel Rizzon'),
+    username: new FormControl('@samuelrizzondev'),
+  });
+
+  save() {
+    console.log('Form submitted:', this.form.value);
+    this.visible.set(false);
+  }
+
+  openDialog() {
+    this.dialogService.create({
+      zTitle: 'Edit profile',
+      zDescription: `Make changes to your profile here. Click save when you're done.`,
+      zContent: ZardDemoDialogPreviewContentComponent,
+      zData: {
+        name: 'Samuel Rizzon',
+        username: '@samuelrizzondev',
+      } satisfies DialogData,
+      zOkText: 'Save changes',
+      zOnOk: instance => {
+        console.log('Form submitted:', instance.form.value);
+      },
+    });
+  }
+}
+```
 
 ### Custom Close
 
@@ -1388,7 +1520,7 @@ export class ZardDemoDialogScrollableContentComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

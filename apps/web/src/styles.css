@@ -3,6 +3,16 @@
 @import '../../../libs/zard/src/lib/shared/core/css/zard.css';
 @import '../../../libs/zard/src/lib/shared/core/css/utilities.css';
 @import '../../../libs/zard/src/lib/shared/core/css/typeset.css';
+/*
+ * The looks. Components carry style markers (`cn-button`); these sheets say what each
+ * stands for. No `style-*` class on <body> (or any ancestor) is the default look, nova;
+ * `style-vega`, `style-lyra`... switch it live. See core/css/styles/README.md.
+ * Only nova ships on every page; the other seven live in `create-styles/<id>.css`, one separate
+ * bundle each (~100 kB of CSS apiece) the /create preview links on demand, only the one in use.
+ * In the components layer, so a `class` on a component still wins over its style.
+ */
+@import '../../../libs/zard/src/lib/shared/core/css/styles/style-nova.css' layer(components);
+@import '../../../libs/zard/src/lib/shared/core/css/styles/menu.css' layer(components);
 /* maplibre-gl.css (about 90 kB) is not imported here: it is copied to the output as an asset and linked by the map
    routes only, so no other page pays for it. See apps/web/src/app/shared/utils/maplibre-styles.ts. */
 @import '../../../libs/zard/src/lib/shared/components/map/map.css';
@@ -15,6 +25,15 @@
 
 @custom-variant dark (&:is(.dark *));
 @custom-variant fixed (&:is(.layout-fixed *));
+/* `style-lyra:rounded-none` and the like: shadcn/ui's per-style tweaks, used by the /create preview's examples. */
+@custom-variant style-vega (&:is(.style-vega *));
+@custom-variant style-nova (&:is(.style-nova *));
+@custom-variant style-maia (&:is(.style-maia *));
+@custom-variant style-lyra (&:is(.style-lyra *));
+@custom-variant style-mira (&:is(.style-mira *));
+@custom-variant style-luma (&:is(.style-luma *));
+@custom-variant style-sera (&:is(.style-sera *));
+@custom-variant style-rhea (&:is(.style-rhea *));
 
 :root {
   --header-height: calc(var(--spacing) * 16);
@@ -113,15 +132,26 @@
   --selection-foreground: oklch(0.205 0 0);
 }
 
+/*
+ * The titles' heading font (`cn-font-heading` → `font-heading`). Not inline: the
+ * utility must read the variable at runtime, so the /create preview can swap it.
+ */
+@theme {
+  --font-heading: var(--font-sans);
+}
+
 @theme inline {
   --breakpoint-3xl: 1600px;
   --breakpoint-4xl: 2000px;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -291,6 +321,16 @@
    */
   .scroll-locked z-footer {
     display: none;
+  }
+
+  /*
+   * The /create preview iframe scrolls inside its own `main`, on both axes: a
+   * second, document-level scroll would put the horizontal bar of a wide canvas
+   * at the far bottom of the page, under the vertical one.
+   */
+  .create-preview-document,
+  .create-preview-document body {
+    overflow: hidden;
   }
 }
 

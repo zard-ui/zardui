@@ -7,7 +7,7 @@ pnpm dlx zard-cli@latest add dark-mode
 ```
 
 ```bash tab="yarn" copyButton
-yarn dlx zard-cli@latest add dark-mode
+npx zard-cli@latest add dark-mode
 ```
 
 ```bash tab="bun" copyButton

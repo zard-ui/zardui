@@ -17,6 +17,8 @@ npx zard-cli@latest add native-select
 
 ### Manual
 
+**Add native-select.directive.ts**
+
 ```angular-ts
 import { computed, Directive, input } from '@angular/core';
 
@@ -45,6 +47,8 @@ export class ZardNativeSelectDirective {
 }
 ```
 
+**Add native-select.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -59,14 +63,14 @@ const CHEVRON_DARK =
 
 export const nativeSelectVariants = cva(
   mergeClasses(
-    'h-8 w-full min-w-0 appearance-none rounded-lg border border-input bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors outline-none select-none selection:bg-primary selection:text-primary-foreground',
-    'bg-no-repeat bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center]',
+    // `cn-native-select-icon` is the chevron, which is a background image of the <select> itself: it carries the
+    // size and position a style gives it.
+    'border-input h-8 rounded-lg border bg-transparent py-1 ps-2.5 pe-8 text-sm transition-colors focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 focus-visible:ring-3 aria-invalid:ring-3 bg-size-[1rem] bg-position-[right_0.625rem_center] rtl:bg-position-[left_0.625rem_center] w-full min-w-0 appearance-none outline-none select-none selection:bg-primary selection:text-primary-foreground',
+    'bg-no-repeat',
     CHEVRON_LIGHT,
     CHEVRON_DARK,
-    'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
-    'aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20',
-    'dark:bg-input/30 dark:scheme-dark dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40',
+    'dark:scheme-dark',
     '[&[multiple]]:h-auto [&[multiple]]:bg-none dark:[&[multiple]]:bg-none',
     '[&_option]:bg-[Canvas] [&_option]:text-[CanvasText] [&_optgroup]:bg-[Canvas] [&_optgroup]:text-[CanvasText]',
   ),
@@ -85,6 +89,8 @@ export const nativeSelectVariants = cva(
 type Variants = VariantProps<typeof nativeSelectVariants>;
 export type ZardNativeSelectSizeVariants = NonNullable<Variants['zSize']>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './native-select.directive';
@@ -106,6 +112,34 @@ import { ZardNativeSelectDirective } from '@/shared/components/native-select/nat
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardNativeSelectDirective } from '@/shared/components/native-select/native-select.directive';
+
+@Component({
+  selector: 'z-demo-native-select-preview',
+  imports: [ZardNativeSelectDirective, ...ZardFieldImports],
+  template: `
+    <div z-field class="w-64">
+      <label z-field-label for="native-select-status">Status</label>
+      <select z-native-select id="native-select-status">
+        <option value="" disabled selected>Select status</option>
+        <option value="todo">Todo</option>
+        <option value="in-progress">In progress</option>
+        <option value="done">Done</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoNativeSelectPreviewComponent {}
+```
 
 ### Groups
 
@@ -335,7 +369,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
 export class ZardDemoNativeSelectNativeVsSelectComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl). The chevron moves to the start side.
 

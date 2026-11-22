@@ -18,8 +18,10 @@ It is only required if you're using the CLI to add components to your project. I
 You can create a `components.json` file in your project by running the following command:
 
 ```
-npx zard-cli init
+npx zard-cli@latest init
 ```
+
+Starting from scratch? `npx zard-cli create my-app` scaffolds the project and writes this file for you, from a design preset.
 
 See the CLI section for more information.
 
@@ -35,21 +37,31 @@ The `$schema` property provides JSON schema validation for your `components.json
 
 ## Style
 
-The style for your components. Currently, **Zard/ui only supports the "css" style** .
+The style of your design: the look a preset picks for spacing, radius, density and typography.
+
+**Supported values:** `vega` , `nova` , `maia` , `lyra` , `mira` , `luma` , `sera` , `rhea` or the legacy `css` .
+
+**components.json**
 
 ```
 {
-  "style": "css"
+  "style": "nova"
 }
 ```
+
+The eight named styles are written by `zard-cli init --preset` , `zard-cli apply` and `zard-cli create` — pick one on the [create page](/create) . The default design uses `nova` , the same look as shadcn's nova.
+
+`css` is what every project initialized before styles existed carries, and what the CLI reads when the key is missing. It keeps working and is the same look as `nova` , so nothing needs to change in an existing project. A plain `zard-cli init` without a preset writes it; the others come from a preset.
+
+`zard-cli add` installs each component in this style: the CLI resolves the style markers in the sources at install time, so your files hold plain Tailwind classes and no runtime style switch. Changing the style affects components added afterwards — re-add the others with `--overwrite` to restyle them.
 
 ## Icons
 
 The `icons` property names the icon set the components are written against. Every component draws through `ng-icons` , which stays the dependency either way — this picks which of its packages comes along ( `@ng-icons/lucide` ) and which names the components import.
 
-**Supported values:**`lucide`
+**Supported values:** `lucide` , `tabler` , `hugeicons` , `phosphor` or `remixicon`
 
-components.json
+**components.json**
 
 ```
 {
@@ -57,7 +69,9 @@ components.json
 }
 ```
 
-Lucide is the only set supported today, so this is the only value the CLI accepts — writing anything else makes `add` reject the file. The property exists ahead of the sets that will follow: every entry in the registry already carries the icons it draws, in the component and in its examples, so supporting another one is a matter of translating names rather than rewriting components.
+Each value brings its own `ng-icons` package — `@ng-icons/lucide` , `@ng-icons/tabler-icons` , `@ng-icons/huge-icons` , `@ng-icons/phosphor-icons` and `@ng-icons/remixicon` — and every component you add afterwards is written with that set's names. `zard-cli init --preset` , `apply` and `create` write it from the preset; the valid values are the ones the registry publishes, and the CLI lists them if you write one it does not know.
+
+When a set has no equivalent for an icon, the CLI reports it as missing when you add the component and keeps the lucide import, so the build still passes.
 
 A `components.json` written before this property existed is read as `lucide` .
 
@@ -65,7 +79,7 @@ A `components.json` written before this property existed is read as `lucide` .
 
 The `rtl` property declares that the project reads right to left. It defaults to `false` .
 
-components.json
+**components.json**
 
 ```
 {
@@ -73,15 +87,47 @@ components.json
 }
 ```
 
-Turning it on does not change what the CLI installs yet — the components are the same either way. It is the place where that preference will live once they ship right-to-left variants, and it is in the file now so that a project can record the intent before then.
+The components are direction-agnostic, so the files the CLI installs are identical either way. `zard-cli init --rtl` and `zard-cli create --rtl` record `true` here and set `dir="rtl"` on `<html>` in the app's `index.html` . They leave `lang` alone — set it to your content's language ( `ar` , `he` , `fa` …) yourself.
+
+## Menu
+
+Three properties describe how menus, popovers and dropdowns look. They are written by `zard-cli init --preset` , `apply` and `create` , and absent from a project without a preset, which then has the defaults.
+
+**components.json**
+
+```
+{
+  "menuColor": "default",
+  "menuAppearance": "solid",
+  "menuAccent": "subtle"
+}
+```
+
+- `menuColor` — `default` or `inverted` (dark in light mode and light in dark mode).
+- `menuAppearance` — `solid` or `translucent` (with a backdrop blur). A translucent menu always uses the subtle accent.
+- `menuAccent` — `subtle` (a neutral wash) or `bold` (the primary color) for the focused or hovered item.
+
+## Preset
+
+The `preset` property holds the preset code the project was last fully configured from — the short `Z…` code built on the [create page](/create) .
+
+**components.json**
+
+```
+{
+  "preset": "Z6F9MtstG"
+}
+```
+
+It is informational: it records the design and nothing reads it to decide what to install, so a code from a newer CLI never makes `add` fail. It is written by a full `init --preset` , `create` or `apply` ; a partial `apply --only` leaves it alone.
 
 ## Project Type
 
 The `projectType` property records the kind of project you chose when running init. The CLI uses it to know where the components live and how the build is wired: which file holds the TypeScript paths, whether Tailwind goes through PostCSS or a Vite plugin, and whether there is an application to register providers in.
 
-**Supported values:**`angular` , `angular-library` , `nx` , `nx-library` or `analog`
+**Supported values:** `angular` , `angular-library` , `nx` , `nx-library` or `analog`
 
-components.json
+**components.json**
 
 ```
 {
@@ -105,9 +151,9 @@ The `appConfigFile` property specifies the path to your Angular application's co
 
 The package manager to use for installing dependencies. This configuration helps the CLI use the correct package runner commands for your project.
 
-**Supported values:**`npm` , `pnpm` , `yarn` , or `bun`
+**Supported values:** `npm` , `pnpm` , `yarn` , or `bun`
 
-components.json
+**components.json**
 
 ```
 {
@@ -135,14 +181,16 @@ Path to the CSS file that imports Tailwind CSS into your project.
 
 ### tailwind.baseColor
 
-This is used to generate the default color palette for your components. **This cannot be changed after initialization.** (but if u want u can change manually, all the themes exist into the [theming page](/docs/theming) )
+This is used to generate the default color palette for your components. **Editing this value does not repaint the theme.** To change it afterwards run `zard-cli apply --preset <code> --only theme` , or copy the tokens by hand — all the themes exist in the [theming page](/docs/theming) .
 
-Currently supported base colors:
+Currently supported base colors ( `mauve` , `olive` , `mist` and `taupe` come with presets):
+
+**components.json**
 
 ```
 {
   "tailwind": {
-    "baseColor": "gray" | "neutral" | "slate" | "stone" | "zinc"
+    "baseColor": "neutral" | "stone" | "zinc" | "mauve" | "olive" | "mist" | "taupe" | "gray" | "slate"
   }
 }
 ```
@@ -158,6 +206,20 @@ When using `@/` prefix in your aliases, the CLI resolves paths relative to this 
   "baseUrl": "src/app"
 }
 ```
+
+## Registry URL
+
+Optional. Points the CLI at a registry other than the official one ( `https://zardui.com/r` ), for teams that publish their own component set. The URL must use HTTPS, or be `localhost` during development. Every command that reads the registry — `add` , `apply` and `init` — uses it. Leave the key out to use the official registry.
+
+**components.json**
+
+```
+{
+  "registryUrl": "https://registry.acme.dev/r"
+}
+```
+
+To publish a registry of your own, see the [registry docs](/docs/registry) .
 
 ## Aliases
 
@@ -213,21 +275,39 @@ Import alias for your Angular services.
 }
 ```
 
+### aliases.blocks
+
+Where `zard-cli add <block>` writes a block. Each one gets a directory of its own here, since a block is several files that only make sense together.
+
+**components.json**
+
+```
+{
+  "aliases": {
+    "blocks": "@/shared/blocks"
+  }
+}
+```
+
 ## Current Zard/ui components.json
 
-Here's the current `components.json` structure that Zard/ui supports:
+Here's the current `components.json` structure that Zard/ui supports, as `zard-cli create` writes it for the default design. A project made with a plain `init` has `"style": "css"` and no `menu*` or `preset` keys:
 
-components.json
+**components.json**
 
 ```
 {
   "$schema": "https://zardui.com/schema.json",
-  "style": "css",
+  "style": "nova",
   "icons": "lucide",
   "rtl": false,
   "projectType": "angular",
   "appConfigFile": "src/app/app.config.ts",
   "packageManager": "npm",
+  "menuColor": "default",
+  "menuAppearance": "solid",
+  "menuAccent": "subtle",
+  "preset": "Z0",
   "tailwind": {
     "css": "src/styles.css",
     "baseColor": "neutral"
@@ -237,7 +317,8 @@ components.json
     "components": "@/shared/components",
     "utils": "@/shared/utils",
     "core": "@/shared/core",
-    "services": "@/shared/services"
+    "services": "@/shared/services",
+    "blocks": "@/shared/blocks"
   }
 }
 ```

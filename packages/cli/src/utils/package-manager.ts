@@ -1,7 +1,9 @@
 import { detect } from '@antfu/ni';
 import { isCapturing } from '@cli/ui/log-sink.js';
 import { getConfig } from '@cli/utils/config.js';
+import { interruptedSoon, throwIfInterrupted, track } from '@cli/utils/interrupt.js';
 import { logger } from '@cli/utils/logger.js';
+import { probeYarnMajor, yarnMajorOf } from '@cli/utils/yarn.js';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import * as path from 'node:path';
@@ -53,6 +55,14 @@ const RUNNER: Record<PackageManager, string> = {
 };
 
 /**
+ * `yarn dlx` only exists from Yarn 2. Yarn Classic — still what a plain `yarn` is for many people — answers
+ * `Command "dlx" not found`, so anything that is not known to be Berry gets `npx`, which both can run.
+ */
+function yarnRunner(major: number | null): string {
+  return major !== null && major >= 2 ? RUNNER.yarn : RUNNER.npm;
+}
+
+/**
  * How to suggest running the CLI again.
  *
  * A different question: not which manager the project installs dependencies
@@ -60,16 +70,20 @@ const RUNNER: Record<PackageManager, string> = {
  * in a bun project does not expect to finish reading `bunx` — and the `npx`
  * they already used works. Only when that cannot be known does the project's
  * manager answer.
+ *
+ * Yarn is the exception that needs its version: the user agent of a `yarn`
+ * invocation carries it (`yarn/1.22.19`); for a project that merely uses yarn,
+ * the version is asked of yarn inside `cwd`.
  */
-export function suggestedRunner(packageManager: PackageManager): string {
+export function suggestedRunner(packageManager: PackageManager, cwd: string = process.cwd()): string {
   const userAgent = process.env.npm_config_user_agent || '';
 
   if (userAgent.startsWith('bun')) return RUNNER.bun;
   if (userAgent.startsWith('pnpm')) return RUNNER.pnpm;
-  if (userAgent.startsWith('yarn')) return RUNNER.yarn;
+  if (userAgent.startsWith('yarn')) return yarnRunner(yarnMajorOf(userAgent.split(' ')[0]));
   if (userAgent.startsWith('npm')) return RUNNER.npm;
 
-  return RUNNER[packageManager];
+  return packageManager === 'yarn' ? yarnRunner(probeYarnMajor(cwd)) : RUNNER[packageManager];
 }
 
 /** The package.json `packageManager` field — the Corepack standard, an explicit declaration. */
@@ -120,6 +134,7 @@ export async function installPackages(
   legacyPeerDeps = false,
   saveExact = false,
 ): Promise<void> {
+  throwIfInterrupted();
   const { execa } = await import('execa');
   const installCmd = await getInstallCommand(packageManager, isDev);
 
@@ -147,12 +162,14 @@ export async function installPackages(
       // stdin ignored, not piped: an open input pipe never sees EOF and the
       // package manager waits on it forever. Closing stdin also guarantees it
       // never opens a prompt, which would be invisible behind the full screen.
-      const result = await execa(packageManager, args, {
-        cwd,
-        stdin: 'ignore',
-        stdout: 'pipe',
-        stderr: 'pipe',
-      });
+      const result = await track(
+        execa(packageManager, args, {
+          cwd,
+          stdin: 'ignore',
+          stdout: 'pipe',
+          stderr: 'pipe',
+        }),
+      );
       logger.debug(`${command}\n${result.stdout}`);
     } catch (error) {
       // Without this the failure reaches the user as one generic line: the
@@ -168,7 +185,7 @@ export async function installPackages(
   // nothing to ask; inheriting a stdin that never closes (a pipe, CI, a
   // background job) leaves the manager waiting for an EOF that never comes —
   // output stays live because stdout and stderr are still inherited.
-  await execa(packageManager, args, { cwd, stdin: 'ignore', stdout: 'inherit', stderr: 'inherit' });
+  await track(execa(packageManager, args, { cwd, stdin: 'ignore', stdout: 'inherit', stderr: 'inherit' }));
 }
 
 function outputOf(error: unknown): string {
@@ -233,6 +250,8 @@ async function installBatch(
     await installPackages(packages, cwd, packageManager, isDev, false, saveExact);
   } catch (error) {
     if (!canRelaxPeers(packageManager)) throw error;
+    // A killed install is not a peer-resolution failure: do not start another one.
+    if (await interruptedSoon()) throw error;
 
     logger.warn('Installation failed, retrying with relaxed peer dependency resolution...');
     await installPackages(packages, cwd, packageManager, isDev, true, saveExact);

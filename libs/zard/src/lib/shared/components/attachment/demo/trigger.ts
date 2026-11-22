@@ -31,7 +31,12 @@ import { ZardAttachmentImports } from '../attachment.imports';
             <button type="button" z-attachment-action aria-label="Remove Preview.pdf" (click)="removed.set(true)">
               <ng-icon name="lucideX" class="size-3.5" />
             </button>
-            <a z-attachment-action href="#attachment-download" download="Preview.pdf" aria-label="Download Preview.pdf">
+            <a
+              z-attachment-action
+              href="data:text/plain;charset=utf-8,Preview.pdf"
+              download="Preview.pdf"
+              aria-label="Download Preview.pdf"
+            >
               <ng-icon name="lucideDownload" class="size-3.5" />
             </a>
           </z-attachment-actions>

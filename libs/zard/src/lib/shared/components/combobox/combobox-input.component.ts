@@ -172,7 +172,10 @@ export class ZardComboboxClearDirective {
             zVariant="ghost"
             [disabled]="disabled()"
           >
-            <ng-icon name="lucideChevronDown" class="text-muted-foreground pointer-events-none size-4" />
+            <ng-icon
+              name="lucideChevronDown"
+              class="cn-combobox-trigger-icon text-muted-foreground pointer-events-none"
+            />
           </button>
         }
         @if (showClear()) {
@@ -230,8 +233,9 @@ export class ZardComboboxInputComponent {
     return this.root.open() && this.root.searchable() ? this.root.searchPlaceholder() : this.root.placeholder();
   });
 
-  protected readonly classes = computed(() => mergeClasses(comboboxInputHostVariants(), this.class()));
-  protected readonly inputGroupClasses = computed(() => mergeClasses(comboboxInputGroupVariants()));
+  /** The host is `display: contents`, so a consumer's `class` (a width, say) goes on the group, as shadcn's does. */
+  protected readonly classes = computed(() => mergeClasses(comboboxInputHostVariants()));
+  protected readonly inputGroupClasses = computed(() => mergeClasses(comboboxInputGroupVariants(), this.class()));
 
   constructor() {
     effect(() => {

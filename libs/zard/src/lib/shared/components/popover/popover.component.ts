@@ -50,6 +50,8 @@ import {
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end';
 export type ZardPopoverAlign = 'start' | 'center' | 'end';
+/** What the trigger announces it opens; `dialog` unless the content is a menu. */
+export type ZardPopoverHasPopup = 'dialog' | 'menu' | 'listbox' | 'tree' | 'grid';
 
 /**
  * Kept in sync with the `duration-100` utility of `popoverVariants`. The exit animation runs for this long
@@ -137,7 +139,7 @@ function transformOriginFor(side: ZardPopoverPlacement, align: ZardPopoverAlign,
   selector: '[zPopover]',
   host: {
     'data-slot': 'popover-trigger',
-    '[attr.aria-haspopup]': '"dialog"',
+    '[attr.aria-haspopup]': 'zHasPopup()',
     '[attr.aria-expanded]': 'isVisible()',
     '[attr.aria-controls]': 'contentId()',
   },
@@ -169,6 +171,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   readonly zSideOffset = input(4, { transform: numberAttribute });
   readonly zAlignOffset = input(0, { transform: numberAttribute });
   readonly zOrigin = input<ElementRef>();
+  readonly zHasPopup = input<ZardPopoverHasPopup>('dialog');
   readonly zVisible = input<boolean>(false);
   readonly zOverlayClickable = input<boolean>(true);
   readonly zVisibleChange = output<boolean>();
@@ -176,8 +179,14 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   protected readonly isVisible = signal(false);
   protected readonly contentId = signal<string | null>(null);
 
+  /** The element the panel is positioned against: `zOrigin` when given, otherwise the trigger. */
   get nativeElement() {
-    return this.zOrigin()?.nativeElement ?? this.elementRef.nativeElement;
+    return this.zOrigin()?.nativeElement ?? this.triggerElement;
+  }
+
+  /** The element that owns the listeners, the ARIA state and the focus restore. Never replaced by `zOrigin`. */
+  private get triggerElement(): HTMLElement {
+    return this.elementRef.nativeElement;
   }
 
   constructor() {
@@ -282,7 +291,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.contentId.set(null);
 
     if (restoreFocus) {
-      this.nativeElement?.focus?.();
+      this.triggerElement?.focus?.();
     }
 
     this.scheduleDetach(content);
@@ -339,7 +348,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     ) {
       this.overlayRefSubscription = this.overlayRef
         .outsidePointerEvents()
-        .pipe(filter(event => !this.nativeElement.contains(event.target)))
+        .pipe(filter(event => !this.triggerElement.contains(event.target as Node)))
         .subscribe(() => this.hide());
     }
   }
@@ -351,11 +360,11 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     }
 
     if (trigger === 'click') {
-      this.listeners.push(this.renderer.listen(this.nativeElement, 'click.stop', () => this.toggle()));
+      this.listeners.push(this.renderer.listen(this.triggerElement, 'click.stop', () => this.toggle()));
     } else if (trigger === 'hover') {
-      this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseenter', () => this.show()));
+      this.listeners.push(this.renderer.listen(this.triggerElement, 'mouseenter', () => this.show()));
 
-      this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseleave', () => this.hide()));
+      this.listeners.push(this.renderer.listen(this.triggerElement, 'mouseleave', () => this.hide()));
     }
   }
 

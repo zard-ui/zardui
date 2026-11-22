@@ -17,6 +17,8 @@ npx zard-cli@latest add tabs
 
 ### Manual
 
+**Add tabs.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { NgTemplateOutlet } from '@angular/common';
@@ -26,7 +28,9 @@ import {
   Component,
   computed,
   contentChildren,
+  forwardRef,
   inject,
+  InjectionToken,
   input,
   isDevMode,
   output,
@@ -48,6 +52,9 @@ import {
 import { ZardIdDirective } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+/** The group a tab belongs to: the nearest `z-tab-group` around it, so a nested group keeps its own tabs. */
+const ZARD_TAB_GROUP = new InjectionToken<object>('ZardTabGroup');
+
 @Component({
   selector: 'z-tab',
   template: `
@@ -67,6 +74,7 @@ export class ZardTabComponent {
   readonly zIcon = input<string | undefined>(undefined);
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('content');
+  readonly group = inject(ZARD_TAB_GROUP, { optional: true });
 }
 
 @Component({
@@ -101,7 +109,8 @@ export class ZardTabComponent {
       }
     </nav>
 
-    <div class="flex-1">
+    <!-- Matched by role, not by the text-sm focus-visible:ring-primary/50 focus-visible:ring-2 marker: an install replaces markers with the style's classes. -->
+    <div class="flex-1 not-has-[[role=tabpanel]:not([hidden]):not(:empty)]:hidden">
       @for (tab of tabs(); track $index; let index = $index) {
         <div
           role="tabpanel"
@@ -109,13 +118,14 @@ export class ZardTabComponent {
           [attr.aria-labelledby]="tabId(index)"
           [attr.tabindex]="0"
           [hidden]="activeTabIndex() !== index"
-          class="focus-visible:ring-primary/50 outline-none focus-visible:ring-2"
+          class="text-sm focus-visible:ring-primary/50 focus-visible:ring-2 outline-none"
         >
           <ng-container [ngTemplateOutlet]="tab.contentTemplate()" />
         </div>
       }
     </div>
   `,
+  providers: [{ provide: ZARD_TAB_GROUP, useExisting: forwardRef(() => ZardTabGroupComponent) }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -134,7 +144,8 @@ export class ZardTabGroupComponent {
 
   private readonly tabComponents = contentChildren(ZardTabComponent, { descendants: true });
 
-  protected readonly tabs = computed(() => this.tabComponents());
+  // Descendants, so tabs inside wrappers count; but a nested group's tabs are its own, not this group's.
+  protected readonly tabs = computed(() => this.tabComponents().filter(tab => tab.group === this));
   protected readonly activeTabIndex = signal<number>(0);
 
   protected tabId(index: number): string {
@@ -255,10 +266,12 @@ export class ZardTabGroupComponent {
 }
 ```
 
+**Add tabs.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const tabContainerVariants = cva('group/tabs flex gap-2', {
+export const tabContainerVariants = cva('flex gap-2 group/tabs', {
   variants: {
     zOrientation: {
       horizontal: 'flex-col',
@@ -270,54 +283,32 @@ export const tabContainerVariants = cva('group/tabs flex gap-2', {
   },
 });
 
-export const tabNavVariants = cva(
-  [
-    'group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground',
-    'group-data-[orientation=horizontal]/tabs:h-8 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col',
-    'data-[variant=line]:rounded-none',
-  ],
-  {
-    variants: {
-      zVariant: {
-        default: 'bg-muted',
-        line: 'gap-1 bg-transparent',
-      },
-    },
-    defaultVariants: {
-      zVariant: 'default',
+export const tabNavVariants = cva('text-muted-foreground inline-flex w-fit items-center justify-center rounded-lg p-[3px] group-data-[orientation=horizontal]/tabs:h-8 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col data-[variant=line]:rounded-none group/tabs-list', {
+  variants: {
+    zVariant: {
+      default: 'bg-muted',
+      line: 'gap-1 bg-transparent',
     },
   },
-);
+  defaultVariants: {
+    zVariant: 'default',
+  },
+});
 
-export const tabButtonVariants = cva([
-  'relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5',
-  'rounded-md border border-transparent px-1.5 py-0.5 text-sm font-medium whitespace-nowrap',
-  'text-foreground/60 transition-all cursor-pointer',
-  'group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start',
-  'hover:text-foreground',
-  'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring',
-  'disabled:pointer-events-none disabled:opacity-50',
-  "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-  'dark:text-muted-foreground dark:hover:text-foreground',
-  'group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none',
-  'group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent',
-  'dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent',
-  'data-active:bg-background data-active:text-foreground',
-  'dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground',
-  'after:absolute after:bg-foreground after:opacity-0 after:transition-opacity',
-  'group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5',
-  'group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5',
-  'group-data-[variant=line]/tabs-list:data-active:after:opacity-100',
-]);
+export const tabButtonVariants = cva("text-foreground/60 relative inline-flex h-[calc(100%-1px)] flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-sm font-medium whitespace-nowrap transition-all hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:text-muted-foreground dark:hover:text-foreground data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground after:bg-foreground group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start group-data-[variant=line]/tabs-list:bg-transparent after:absolute after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-end-1 group-data-[orientation=vertical]/tabs:after:w-0.5 focus-visible:ring-[3px] focus-visible:outline-1 disabled:opacity-50 group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:bg-transparent group-data-[variant=line]/tabs-list:data-active:shadow-none group-data-[variant=line]/tabs-list:data-active:after:opacity-100 dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 disabled:pointer-events-none [&_svg]:pointer-events-none");
 
 export type ZardTabVariants = VariantProps<typeof tabContainerVariants> & VariantProps<typeof tabNavVariants>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './tabs.component';
 export * from './tabs.imports';
 export * from './tabs.variants';
 ```
+
+**Add tabs.imports.ts**
 
 ```angular-ts
 /*
@@ -345,6 +336,71 @@ import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+
+import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
+
+@Component({
+  selector: 'z-demo-tabs-preview',
+  imports: [ZardTabComponent, ZardTabGroupComponent, ZardCardImports],
+  template: `
+    <z-tab-group class="w-[400px]">
+      <z-tab label="Overview">
+        <z-card>
+          <z-card-header>
+            <z-card-title zTitle="Overview" />
+            <z-card-description
+              zDescription="View your key metrics and recent project activity. Track progress across all your active projects."
+            />
+          </z-card-header>
+          <p z-card-content class="text-muted-foreground text-sm">You have 12 active projects and 3 pending tasks.</p>
+        </z-card>
+      </z-tab>
+      <z-tab label="Analytics">
+        <z-card>
+          <z-card-header>
+            <z-card-title zTitle="Analytics" />
+            <z-card-description
+              zDescription="Track performance and user engagement metrics. Monitor trends and identify growth opportunities."
+            />
+          </z-card-header>
+          <p z-card-content class="text-muted-foreground text-sm">Page views are up 25% compared to last month.</p>
+        </z-card>
+      </z-tab>
+      <z-tab label="Reports">
+        <z-card>
+          <z-card-header>
+            <z-card-title zTitle="Reports" />
+            <z-card-description
+              zDescription="Generate and download your detailed reports. Export data in multiple formats for analysis."
+            />
+          </z-card-header>
+          <p z-card-content class="text-muted-foreground text-sm">You have 5 reports ready and available to export.</p>
+        </z-card>
+      </z-tab>
+      <z-tab label="Settings">
+        <z-card>
+          <z-card-header>
+            <z-card-title zTitle="Settings" />
+            <z-card-description
+              zDescription="Manage your account preferences and options. Customize your experience to fit your needs."
+            />
+          </z-card-header>
+          <p z-card-content class="text-muted-foreground text-sm">Configure notifications, security, and themes.</p>
+        </z-card>
+      </z-tab>
+    </z-tab-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoTabsPreviewComponent {}
+```
 
 ### Line
 
@@ -456,7 +512,7 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 export class ZardDemoTabsIconsComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

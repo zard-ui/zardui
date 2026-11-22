@@ -14,6 +14,7 @@ import { SETUP_ANGULAR_LIBRARY_CREATE } from '@generated/documentation/setup/ang
 import { SETUP_ANGULAR_LIBRARY_DEPENDENCIES } from '@generated/documentation/setup/angular-library/dependencies';
 import { SETUP_ANGULAR_LIBRARY_DEV_DEPENDENCIES } from '@generated/documentation/setup/angular-library/dev-dependencies';
 import { SETUP_ANGULAR_LIBRARY_NG_PACKAGE } from '@generated/documentation/setup/angular-library/ng-package';
+import { SETUP_ANGULAR_LIBRARY_PACKAGE } from '@generated/documentation/setup/angular-library/package';
 import { SETUP_ANGULAR_LIBRARY_TSCONFIG } from '@generated/documentation/setup/angular-library/tsconfig';
 import { SETUP_NX_CONFIG } from '@generated/documentation/setup/nx/config';
 import { SETUP_NX_CREATE } from '@generated/documentation/setup/nx/create';
@@ -25,6 +26,7 @@ import { SETUP_NX_LIBRARY_CREATE } from '@generated/documentation/setup/nx-libra
 import { SETUP_NX_LIBRARY_DEPENDENCIES } from '@generated/documentation/setup/nx-library/dependencies';
 import { SETUP_NX_LIBRARY_DEV_DEPENDENCIES } from '@generated/documentation/setup/nx-library/dev-dependencies';
 import { SETUP_NX_LIBRARY_TSCONFIG } from '@generated/documentation/setup/nx-library/tsconfig';
+import { SETUP_SHARED_CLI_CREATE } from '@generated/documentation/setup/shared/cli-create';
 import { SETUP_SHARED_CLI_INIT } from '@generated/documentation/setup/shared/cli-init';
 import { SETUP_SHARED_CORE_CSS } from '@generated/documentation/setup/shared/core-css';
 import { SETUP_SHARED_CORE_DIRECTIVES } from '@generated/documentation/setup/shared/core-directives';
@@ -60,11 +62,13 @@ export interface Installation {
   description: string;
   manual: Step[];
   cli: Step[];
+  /** Applications only: `init` for a project that already exists, shown apart from the steps that create one. */
+  existingProject?: { subtitle: string; codeTabData: CodeTabData };
 }
 
 const TAILWIND_NOTE = {
   text: 'Since Tailwind is the core of the project, we do not recommend using other pre-processors.',
-  href: '/docs/scss',
+  href: '/docs/pre-processors',
   external: false,
 };
 
@@ -144,7 +148,34 @@ const FINAL_STEP: Step = {
   subtitle: 'You can now start adding components to your project.',
 };
 
-/** The three steps of the guided path: create, run init, use. */
+/**
+ * The guided path of an application: `zard-cli create` scaffolds it with the framework's own generator and configures
+ * zard/ui. No `--template`: the CLI asks, and the guide says what to pick.
+ */
+function appCliSteps(template: string): Step[] {
+  return [
+    {
+      title: 'Create project',
+      subtitle: `One command creates the application and configures zard/ui in it. Pick "${template}" when it asks for the template. It starts from the default design; to choose your own, build it on the create page and run the command it gives you instead.`,
+      url: { text: 'Open the create page', href: '/create' },
+      codeTabData: SETUP_SHARED_CLI_CREATE,
+    },
+    {
+      title: "That's it",
+      subtitle: 'You can now start adding components to your project.',
+      url: COMPONENTS_NOTE,
+    },
+  ];
+}
+
+function existingProject(question: string): Installation['existingProject'] {
+  return {
+    subtitle: `Run init at its root instead. ${question} It configures zard/ui with the default design and asks only for the theme color.`,
+    codeTabData: SETUP_SHARED_CLI_INIT,
+  };
+}
+
+/** The steps of the guided path of a library: create it inside the workspace, run init, then use. */
 function cliSteps(options: { create: CodeBlockData; createSubtitle: string; initSubtitle: string }): Step[] {
   return [
     {
@@ -181,7 +212,7 @@ function tsconfigStep(file: string, block: CodeBlockData): Step {
     title: 'Configure path aliases',
     // baseUrl is left out: the option became an error in TypeScript 6, and since
     // 4.1 paths are resolved relative to the tsconfig itself without it.
-    subtitle: `Add these lines inside compilerOptions on your ${file}. Do not add baseUrl, it is an error from TypeScript 6 on.`,
+    subtitle: `Add these lines inside compilerOptions on your ${file}. If it already has a paths object, add the entry to it instead of a second one. Do not add baseUrl, it is an error from TypeScript 6 on.`,
     codeBlockData: block,
   };
 }
@@ -199,11 +230,8 @@ export const installations: Installation[] = [
     environment: 'angular',
     title: 'Angular',
     description: 'Install and configure zard/ui for Angular.',
-    cli: cliSteps({
-      create: SETUP_ANGULAR_CREATE,
-      createSubtitle: 'Start the cli and create an application that uses Tailwind as default styling.',
-      initSubtitle: 'Prepare your entire project using the zard/ui cli. Pick "Angular" on the first question:',
-    }),
+    cli: appCliSteps('Angular'),
+    existingProject: existingProject('Pick "Angular" on the first question.'),
     manual: [
       {
         title: 'Create project',
@@ -235,12 +263,8 @@ export const installations: Installation[] = [
     environment: 'nx',
     title: 'Nx',
     description: 'Install and configure zard/ui for an application inside an Nx workspace.',
-    cli: cliSteps({
-      create: SETUP_NX_CREATE,
-      createSubtitle: 'Create an Nx workspace with an Angular application.',
-      initSubtitle:
-        'Run the cli at the workspace root. Pick "Nx" on the first question, then the app that receives the components:',
-    }),
+    cli: appCliSteps('Nx'),
+    existingProject: existingProject('Pick "Nx" on the first question, then the app that receives the components.'),
     manual: [
       {
         title: 'Create workspace',
@@ -278,17 +302,13 @@ export const installations: Installation[] = [
     environment: 'analog',
     title: 'Analog.js',
     description: 'Install and configure zard/ui for Analog.js.',
-    cli: cliSteps({
-      create: SETUP_ANALOG_CREATE,
-      createSubtitle:
-        'Create an Analog.js application. When asked to add Tailwind, answer No — the steps below configure it.',
-      initSubtitle: 'Prepare your entire project using the zard/ui cli. Pick "Analog.js" on the first question:',
-    }),
+    cli: appCliSteps('Analog'),
+    existingProject: existingProject('Pick "Analog.js" on the first question.'),
     manual: [
       {
         title: 'Create project',
         subtitle:
-          'Create an Analog.js application. When asked to add Tailwind, answer No — the steps below configure it.',
+          'Create an Analog.js application from the full-stack template, without its Tailwind setup: the steps below configure it.',
         url: TAILWIND_NOTE,
         codeBlockData: SETUP_ANALOG_CREATE,
       },
@@ -306,7 +326,7 @@ export const installations: Installation[] = [
       {
         title: 'Configure the Tailwind pipeline',
         subtitle:
-          'Analog builds with Vite, so Tailwind is a Vite plugin and a .postcssrc.json would never be read. Register it in vite.config.ts:',
+          'Analog builds with Vite, so Tailwind is a Vite plugin and a .postcssrc.json would never be read. Register it in the vite.config.ts the template created (the file below is that one with the additions, so keep its test block), and set build.cssTarget: without it Vite lowers the logical CSS the components use to left/right rules chosen by the lang attribute, and right-to-left layouts break. Also alias @ to an absolute path: on Windows Analog resolves the tsconfig @/ paths with backslashes and relative imports with forward slashes, so Vite bundles each component twice and anything that injects a parent component (input-otp, context-menu, chart) stops working.',
         codeBlockData: SETUP_ANALOG_VITE,
       },
       tsconfigStep('tsconfig.json', SETUP_ANALOG_TSCONFIG),
@@ -351,15 +371,21 @@ export const installations: Installation[] = [
       {
         title: 'Ship the theme with the library',
         subtitle:
-          'ng-packagr only publishes what the entry point reaches, so declare the theme as an asset. With output "/" it lands at the package root:',
+          'The build only publishes what the entry point reaches, so declare every CSS file of the library as an asset: the theme imports the core one. With output "/" they land at the package root. A library generated by Angular 22 or later builds with @angular/build:library and has no ng-package.json, so the assets go in its build options in angular.json; an older one declares them in projects/ui/ng-package.json:',
         codeBlockData: SETUP_ANGULAR_LIBRARY_NG_PACKAGE,
+      },
+      {
+        title: 'Export the theme',
+        subtitle:
+          'The published package has an exports map, and Node refuses any path it does not list, so @import "ui/styles.css" fails until the library lists it. Add this to the library package.json; the build merges it into the published one:',
+        codeBlockData: SETUP_ANGULAR_LIBRARY_PACKAGE,
       },
       configStep(SETUP_ANGULAR_LIBRARY_CONFIG),
       FINAL_STEP,
       {
         title: 'Wire it up in the consuming app',
         subtitle:
-          'The application that installs this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme with @import "<your-library>/styles.css", and imports the components from the library entry point — export them from public-api.ts. Inside the library the CLI writes relative imports, so the published package resolves without the @/ alias.',
+          'The application that installs this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme with @import "<your-library>/styles.css", and imports the components from the library entry point. CSS does not read tsconfig paths, so the package has to be installed in the app: inside the same workspace, run ng build ui and then npm install ./dist/ui. Export the components from public-api.ts together with the core and utils folders, which they depend on, or the build stops with NG3001. When you copy a component into the library by hand, change its @/ imports to relative paths (the CLI does it for you): the build leaves @/ as it is, and the published package would not resolve it. In the app, always import from the package name: reaching into the library source through @/ makes the app compile those files itself, and Angular rejects their imports arrays with NG3004.',
         codeBlockData: SETUP_SHARED_POSTCSS,
       },
     ],
@@ -399,7 +425,7 @@ export const installations: Installation[] = [
       {
         title: 'Wire it up in the consuming app',
         subtitle:
-          'The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts and imports the theme from the library styles.css.',
+          'The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme from the library styles.css with a relative path, such as @import "../../../libs/ui/src/styles.css" in apps/my-app/src/styles.css (CSS does not read the tsconfig path alias), and imports the components from the library entry point (src/index.ts), which has to export them along with the core and utils folders. Always import from the library path alias, such as @acme/ui: reaching into its source through @/ makes the app compile those files itself, and Angular rejects their imports arrays with NG3004.',
         codeBlockData: SETUP_SHARED_POSTCSS,
       },
     ],

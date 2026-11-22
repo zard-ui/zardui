@@ -99,3 +99,6 @@ nx-native-file-cache-*
 .env
 .env.local
 .env.*.local
+
+# scripts/create-parity/sheet-rule.mts write lock
+.sheet-rule.lock/

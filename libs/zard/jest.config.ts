@@ -5,8 +5,9 @@ export default {
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../coverage/libs/zard',
   transform: {
+    // Resolves the style markers (`cn-button`) into nova's classes before the Angular transformer runs.
     '^.+\\.(ts|mjs|js|html)$': [
-      'jest-preset-angular',
+      '<rootDir>/jest-style-transformer.cjs',
       {
         tsconfig: '<rootDir>/tsconfig.spec.json',
         stringifyContentPathRegex: '\\.(html|svg)$',

@@ -7,7 +7,7 @@ pnpm dlx zard-cli@latest init
 ```
 
 ```bash tab="yarn" copyButton
-yarn zard-cli@latest init
+npx zard-cli@latest init
 ```
 
 ```bash tab="bun" copyButton
@@ -67,14 +67,14 @@ pnpm dlx zard-cli add button card dialog
 ```
 
 ```bash tab="yarn" copyButton
-yarn zard-cli add button card dialog
+npx zard-cli add button card dialog
 ```
 
 ```bash tab="bun" copyButton
 bunx zard-cli add button card dialog
 ```
 
-```angular-ts title="app.component.ts" copyButton showLineNumbers
+```angular-ts title="src/app/app.ts" copyButton showLineNumbers
 import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
@@ -86,5 +86,21 @@ import { ZardButtonComponent } from '@/shared/components/button';
     <z-button>Click me</z-button>
   `,
 })
-export class AppComponent {}
+export class App {}
+```
+
+```bash tab="npm" copyButton
+npx zard-cli@latest create my-app
+```
+
+```bash tab="pnpm" copyButton
+pnpm dlx zard-cli@latest create my-app
+```
+
+```bash tab="yarn" copyButton
+npx zard-cli@latest create my-app
+```
+
+```bash tab="bun" copyButton
+bunx zard-cli@latest create my-app
 ```

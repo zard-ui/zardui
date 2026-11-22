@@ -17,6 +17,8 @@ npx zard-cli@latest add drawer
 
 ### Manual
 
+**Add drawer.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
@@ -407,6 +409,8 @@ export class ZardDrawerCloseDirective {
 }
 ```
 
+**Add drawer.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -415,51 +419,44 @@ import { cva, type VariantProps } from 'class-variance-authority';
  * so the page stays visible around it. `m-2` is that inset — the enter/exit
  * transform in the component adds it back so the drawer still leaves the screen.
  */
-export const drawerVariants = cva(
-  [
-    'group/drawer pointer-events-auto fixed z-50 m-2 flex min-h-0 flex-col',
-    'rounded-3xl border border-popover bg-popover text-sm text-popover-foreground shadow-xl dark:border-border',
-    'outline-none select-none will-change-transform',
-  ],
-  {
-    variants: {
-      zPlacement: {
-        top: 'inset-x-0 top-0 origin-top',
-        right: 'inset-y-0 right-0 w-3/4 origin-right flex-row sm:w-96',
-        bottom: 'inset-x-0 bottom-0 origin-bottom',
-        left: 'inset-y-0 left-0 w-3/4 origin-left flex-row sm:w-96',
-      },
-      /**
-       * A drawer with snap points is laid out at full height and only translated, so
-       * the content-driven height that caps a plain vertical drawer has to go.
-       */
-      zSnapping: {
-        true: '',
-        false: '',
-      },
+export const drawerVariants = cva('bg-popover text-popover-foreground fixed z-50 flex h-auto min-h-0 flex-col text-sm will-change-transform group/drawer pointer-events-auto outline-none select-none', {
+  variants: {
+    zPlacement: {
+      top: 'inset-x-0 top-0 origin-top rounded-b-xl border-b',
+      right: 'inset-y-0 right-0 w-3/4 origin-right flex-row rounded-s-xl border-s sm:w-96',
+      bottom: 'inset-x-0 bottom-0 origin-bottom rounded-t-xl border-t',
+      left: 'inset-y-0 left-0 w-3/4 origin-left flex-row rounded-e-xl border-e sm:w-96',
     },
-    compoundVariants: [
-      { zPlacement: ['top', 'bottom'], zSnapping: false, class: 'max-h-[calc(100dvh-6rem)]' },
-      { zPlacement: ['top', 'bottom'], zSnapping: true, class: 'h-dvh' },
-    ],
-    defaultVariants: {
-      zPlacement: 'bottom',
-      zSnapping: false,
+    /**
+     * A drawer with snap points is laid out at full height and only translated, so
+     * the content-driven height that caps a plain vertical drawer has to go.
+     */
+    zSnapping: {
+      true: '',
+      false: '',
     },
   },
-);
+  compoundVariants: [
+    { zPlacement: ['top', 'bottom'], zSnapping: false, class: 'max-h-[calc(100dvh-6rem)]' },
+    { zPlacement: ['top', 'bottom'], zSnapping: true, class: 'h-dvh' },
+  ],
+  defaultVariants: {
+    zPlacement: 'bottom',
+    zSnapping: false,
+  },
+});
 
 /**
  * The grab strip. It only reserves space — the pill itself is an `::after` drawn by
  * the panel's stylesheet, so the slot stays a single element in the DOM.
  */
-export const drawerHandleVariants = cva('relative z-10 flex shrink-0 cursor-grab active:cursor-grabbing', {
+export const drawerHandleVariants = cva('after:bg-muted relative z-10 flex shrink-0 cursor-grab after:block after:shrink-0 after:rounded-full active:cursor-grabbing', {
   variants: {
     zPlacement: {
-      top: 'order-last h-3 w-full items-start justify-center',
-      right: 'h-full w-3 items-center justify-start',
-      bottom: 'h-3 w-full items-end justify-center',
-      left: 'order-last h-full w-3 items-center justify-end',
+      top: 'order-last h-3 w-full items-start justify-center after:h-1 after:w-24',
+      right: 'h-full w-3 items-center justify-start after:h-24 after:w-1',
+      bottom: 'h-3 w-full items-end justify-center after:h-1 after:w-24',
+      left: 'order-last h-full w-3 items-center justify-end after:h-24 after:w-1',
     },
   },
   defaultVariants: {
@@ -468,24 +465,20 @@ export const drawerHandleVariants = cva('relative z-10 flex shrink-0 cursor-grab
 });
 
 /** Everything the consumer projects, kept scrollable and clipped by the panel radius. */
-export const drawerBodyVariants = cva(
-  'flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit] select-text',
-);
+export const drawerBodyVariants = cva('flex min-h-0 w-full flex-1 flex-col overflow-hidden overscroll-contain rounded-[inherit] select-text');
 
-export const drawerHeaderVariants = cva(
-  'flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-1.5 md:text-start',
-);
+export const drawerHeaderVariants = cva('flex shrink-0 flex-col gap-0.5 p-4 pb-0 group-data-[axis=y]/drawer:text-center md:gap-0.5 md:text-start');
 
-export const drawerTitleVariants = cva('text-base font-medium text-foreground wrap-anywhere');
+export const drawerTitleVariants = cva('text-foreground text-base font-medium wrap-anywhere font-heading');
 
-export const drawerDescriptionVariants = cva('text-sm text-balance text-muted-foreground wrap-anywhere');
+export const drawerDescriptionVariants = cva('text-muted-foreground text-sm text-balance wrap-anywhere');
 
 export const drawerFooterVariants = cva('mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0');
 
 /** Mask classes handed to the CDK overlay backdrop. */
 export const DRAWER_BACKDROP_CLASSES = [
-  'bg-black/30',
-  'supports-backdrop-filter:backdrop-blur-sm',
+  // The marker carries the mask (colour and blur) of the style; the CDK takes one class per entry.
+  ...'bg-black/10 supports-backdrop-filter:backdrop-blur-xs'.split(' ').filter(Boolean),
   'transition-opacity',
   'duration-450',
   'ease-[cubic-bezier(0.32,0.72,0,1)]',
@@ -494,6 +487,8 @@ export const DRAWER_BACKDROP_CLASSES = [
 export type ZardDrawerVariants = VariantProps<typeof drawerVariants>;
 export type ZardDrawerPlacement = NonNullable<ZardDrawerVariants['zPlacement']>;
 ```
+
+**Add drawer-container.component.ts**
 
 ```angular-ts
 import {
@@ -762,6 +757,8 @@ export class ZardDrawerContainerComponent<T, U> extends BasePortalOutlet impleme
 }
 ```
 
+**Add drawer-host.ts**
+
 ```angular-ts
 import type { WritableSignal } from '@angular/core';
 
@@ -784,6 +781,8 @@ export abstract class ZardDrawerHost {
   abstract requestClose(): void;
 }
 ```
+
+**Add drawer-panel.component.ts**
 
 ```angular-ts
 import { FocusTrapFactory } from '@angular/cdk/a11y';
@@ -908,23 +907,6 @@ const SWIPE_START_THRESHOLD = 3;
     z-drawer-panel[data-nested-open] {
       overflow: hidden;
       filter: brightness(0.95);
-    }
-
-    /* The pill inside the grab strip. */
-    [data-slot='drawer-swipe-handle']::after {
-      content: '';
-      border-radius: 9999px;
-      background: var(--color-muted);
-    }
-
-    z-drawer-panel[data-axis='y'] [data-slot='drawer-swipe-handle']::after {
-      width: 100px;
-      height: 6px;
-    }
-
-    z-drawer-panel[data-axis='x'] [data-slot='drawer-swipe-handle']::after {
-      width: 6px;
-      height: 100px;
     }
 
     z-drawer-panel::after {
@@ -1369,6 +1351,8 @@ export class ZardDrawerPanelComponent {
 }
 ```
 
+**Add drawer-ref.ts**
+
 ```angular-ts
 import type { OverlayRef } from '@angular/cdk/overlay';
 
@@ -1418,6 +1402,8 @@ export class ZardDrawerRef<T = unknown, R = unknown, U = unknown> extends ZardOv
 }
 ```
 
+**Add drawer-stack.ts**
+
 ```angular-ts
 import { computed, signal, type Signal } from '@angular/core';
 
@@ -1453,6 +1439,8 @@ export function drawerDepth(panel: object): Signal<number> {
 }
 ```
 
+**Add drawer.imports.ts**
+
 ```angular-ts
 import {
   ZardDrawerCloseDirective,
@@ -1472,6 +1460,8 @@ export const ZardDrawerImports = [
   ZardDrawerCloseDirective,
 ] as const;
 ```
+
+**Add drawer.service.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -1633,6 +1623,8 @@ export class ZardDrawerService {
 }
 ```
 
+**Add drawer.utils.ts**
+
 ```angular-ts
 import type { ZardDrawerPlacement } from './drawer.variants';
 
@@ -1771,6 +1763,8 @@ export function isInteractiveTarget(target: EventTarget | null): boolean {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export { type OnClickCallback as DrawerOnClickCallback } from './drawer-container.component';
 export { ZardDrawerOptions } from './drawer-container.component';
@@ -1821,6 +1815,144 @@ z-drawer
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+
+import { ZardBadgeComponent } from '@/shared/components/badge';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDrawerImports } from '@/shared/components/drawer/drawer.imports';
+import { ZardDrawerService } from '@/shared/components/drawer/drawer.service';
+import type { ZardDrawerPlacement } from '@/shared/components/drawer/drawer.variants';
+import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+import { injectIsMobile } from './support/is-mobile';
+
+const DELIVERY_TIMES = [
+  {
+    value: 'asap',
+    id: 'delivery-asap',
+    label: 'Standard delivery',
+    description: '25–35 min · Driver assigned now',
+    badge: 'Fastest',
+  },
+  { value: '5-00', id: 'delivery-5-00', label: '5:00 PM – 5:15 PM', description: 'Prep starts at 4:45 PM' },
+  { value: '5-30', id: 'delivery-5-30', label: '5:30 PM – 5:45 PM', description: `Good if you're heading home` },
+  { value: '6-00', id: 'delivery-6-00', label: '6:00 PM – 6:15 PM', description: 'Most popular · High demand' },
+  { value: '6-30', id: 'delivery-6-30', label: '6:30 PM – 6:45 PM', description: 'Last slot before kitchen closes' },
+];
+
+/** Content the service renders: the same list, so the pick is read back from the instance in `zOnOk`. */
+@Component({
+  selector: 'z-demo-drawer-preview-content',
+  imports: [ZardBadgeComponent, ...ZardRadioGroupImports],
+  template: `
+    <z-radio-group [(value)]="deliveryTime" class="grid w-full gap-2">
+      @for (time of times; track time.value) {
+        <label
+          [for]="'service-' + time.id"
+          class="has-data-[state=checked]:bg-input/30 flex w-full items-center gap-3 rounded-2xl border p-4 select-none"
+        >
+          <span class="flex flex-1 flex-col gap-1 leading-snug">
+            <span class="flex items-center gap-2 text-sm font-medium">
+              {{ time.label }}
+              @if (time.badge) {
+                <z-badge zType="secondary">{{ time.badge }}</z-badge>
+              }
+            </span>
+            <span class="text-muted-foreground text-sm">{{ time.description }}</span>
+          </span>
+          <z-radio [zId]="'service-' + time.id" [value]="time.value" />
+        </label>
+      }
+    </z-radio-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDrawerPreviewContentComponent {
+  readonly times = DELIVERY_TIMES;
+  readonly deliveryTime = signal<unknown>('asap');
+}
+
+@Component({
+  selector: 'z-demo-drawer-preview',
+  imports: [ZardBadgeComponent, ZardButtonComponent, ZardDrawerImports, ...ZardRadioGroupImports, ZardTabsImports],
+  template: `
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="secondary" (click)="visible.set(true)">Open Drawer</button>
+
+        <z-drawer [(zVisible)]="visible" [zPlacement]="placement()" [zHandle]="isMobile()">
+          <z-drawer-header>
+            <z-drawer-title>Pick a delivery time</z-drawer-title>
+            <z-drawer-description>We'll prepare your order as soon as possible.</z-drawer-description>
+          </z-drawer-header>
+          <div class="flex-1 overflow-y-auto p-4">
+            <z-radio-group [(value)]="deliveryTime" class="grid w-full gap-2">
+              @for (time of times; track time.value) {
+                <label
+                  [for]="time.id"
+                  class="has-data-[state=checked]:bg-input/30 flex w-full items-center gap-3 rounded-2xl border p-4 select-none"
+                >
+                  <span class="flex flex-1 flex-col gap-1 leading-snug">
+                    <span class="flex items-center gap-2 text-sm font-medium">
+                      {{ time.label }}
+                      @if (time.badge) {
+                        <z-badge zType="secondary">{{ time.badge }}</z-badge>
+                      }
+                    </span>
+                    <span class="text-muted-foreground text-sm">{{ time.description }}</span>
+                  </span>
+                  <z-radio [zId]="time.id" [value]="time.value" />
+                </label>
+              }
+            </z-radio-group>
+          </div>
+          <z-drawer-footer>
+            <button type="button" z-button (click)="visible.set(false)">Confirm Delivery Time</button>
+            <button type="button" z-button zType="ghost" z-drawer-close>Cancel</button>
+          </z-drawer-footer>
+        </z-drawer>
+      </z-tab>
+
+      <z-tab label="Service">
+        <button type="button" z-button zType="secondary" (click)="openDrawer()">Open Drawer</button>
+      </z-tab>
+    </z-tab-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoDrawerPreviewComponent {
+  private readonly drawerService = inject(ZardDrawerService);
+  private readonly isMobileViewport = injectIsMobile();
+
+  readonly times = DELIVERY_TIMES;
+  readonly visible = signal(false);
+  readonly deliveryTime = signal<unknown>('asap');
+
+  /** Bottom sheet where the screen is narrow, side panel where there is room. */
+  readonly isMobile = computed(() => this.isMobileViewport());
+  readonly placement = computed<ZardDrawerPlacement>(() => (this.isMobile() ? 'bottom' : 'right'));
+
+  openDrawer() {
+    this.drawerService.create({
+      zTitle: 'Pick a delivery time',
+      zDescription: `We'll prepare your order as soon as possible.`,
+      zContent: ZardDemoDrawerPreviewContentComponent,
+      zPlacement: this.placement(),
+      zHandle: this.isMobile(),
+      zOkText: 'Confirm Delivery Time',
+      zCancelText: 'Cancel',
+      zOnOk: instance => {
+        console.log('Delivery time:', instance.deliveryTime());
+      },
+    });
+  }
+}
+```
 
 ### Custom Sizes
 
@@ -2443,7 +2575,7 @@ export class ZardDemoDrawerResponsiveComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

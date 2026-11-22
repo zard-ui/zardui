@@ -7,7 +7,7 @@ pnpm dlx zard-cli@latest add dropdown-menu popover --overwrite
 ```
 
 ```bash tab="yarn" copyButton
-yarn dlx zard-cli@latest add dropdown-menu popover --overwrite
+npx zard-cli@latest add dropdown-menu popover --overwrite
 ```
 
 ```bash tab="bun" copyButton

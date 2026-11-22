@@ -13,7 +13,7 @@ Zard UI follows a plain GitHub flow: `master` is the only long-lived branch, eve
 
 Branch from an up-to-date `master` and name the branch after the issue you are solving: `feat/#<issue>-<short-name>` or `fix/#<issue>-<short-name>` .
 
-Start from an issue
+**Start from an issue**
 
 ```
 git checkout master
@@ -23,7 +23,7 @@ git checkout -b feat/#123-button-loading
 
 Commit as often as you like — the squash merge collapses the branch into a single commit whose message is the pull request title, so that title must follow the format below too.
 
-Before you push
+**Before you push**
 
 ```
 npx nx run-many --target=lint --p=zard,blocks --parallel
@@ -49,7 +49,7 @@ The header is `<emoji> type(scope): subject` . The scope is optional; the emoji 
 | 🔧 | `ci` | CI configuration and scripts | none |
 | 🚧 | `chore` | Anything that does not touch src or tests | none |
 
-Commit — the emoji is mandatory
+**Commit — the emoji is mandatory**
 
 ```
 git add .

@@ -118,6 +118,8 @@ describe('ZardCommandComponent', () => {
     expect(commandElement).toBeTruthy();
     expect(commandElement.getAttribute('aria-expanded')).toBe('true');
     expect(commandElement.getAttribute('aria-haspopup')).toBe('listbox');
+    // An expanded combobox must say what it controls, or axe flags aria-required-attr.
+    expect(commandElement.getAttribute('aria-controls')).toBe('command-list');
   });
 
   it('should render command options', () => {

@@ -17,6 +17,8 @@ npx zard-cli@latest add switch
 
 ### Manual
 
+**Add switch.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -46,7 +48,7 @@ type OnChangeType = (value: boolean) => void;
   selector: 'z-switch',
   imports: [ZardIdDirective],
   template: `
-    <span class="flex items-center space-x-2" zardId="switch" #z="zardId" [attr.data-checked]="zChecked() ? '' : null">
+    <span class="flex items-center" zardId="switch" #z="zardId" [attr.data-checked]="zChecked() ? '' : null">
       <button
         [id]="zId() || z.id()"
         type="button"
@@ -61,12 +63,12 @@ type OnChangeType = (value: boolean) => void;
         <span
           [attr.data-size]="zSize()"
           [attr.data-state]="status()"
-          class="bg-background dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground pointer-events-none block rounded-full ring-0 transition-transform data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)]"
+          class="bg-background block rounded-full ring-0 transition-transform dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=unchecked]:translate-x-0 ltr:data-[state=checked]:translate-x-[calc(100%-2px)] rtl:data-[state=checked]:-translate-x-[calc(100%-2px)] pointer-events-none"
         ></span>
       </button>
 
       <label
-        class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        class="text-sm leading-none font-medium ms-2 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 has-[>.sr-only:only-child]:ms-0"
         [for]="zId() || z.id()"
       >
         <ng-content><span class="sr-only">toggle switch</span></ng-content>
@@ -83,6 +85,7 @@ type OnChangeType = (value: boolean) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    class: 'peer',
     'data-slot': 'switch',
   },
   exportAs: 'zSwitch',
@@ -131,26 +134,27 @@ export class ZardSwitchComponent implements ControlValueAccessor {
 }
 ```
 
+**Add switch.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const switchVariants = cva(
-  'peer relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 disabled:cursor-not-allowed disabled:opacity-50',
-  {
-    variants: {
-      zSize: {
-        default: 'h-[18.4px] w-[32px]',
-        sm: 'h-[14px] w-[24px]',
-      },
-    },
-    defaultVariants: {
-      zSize: 'default',
+export const switchVariants = cva('relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:ring-[3px] disabled:cursor-not-allowed aria-invalid:ring-[3px] peer outline-none disabled:opacity-50', {
+  variants: {
+    zSize: {
+      default: 'h-[18.4px] w-[32px]',
+      sm: 'h-[14px] w-[24px]',
     },
   },
-);
+  defaultVariants: {
+    zSize: 'default',
+  },
+});
 
 export type ZardSwitchSizeVariants = NonNullable<VariantProps<typeof switchVariants>['zSize']>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './switch.component';
@@ -168,6 +172,24 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
+
+@Component({
+  selector: 'z-demo-switch-preview',
+  imports: [ZardSwitchComponent],
+  template: `
+    <z-switch zId="airplane-mode">Airplane Mode</z-switch>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSwitchPreviewComponent {}
+```
 
 ### Description
 
@@ -398,7 +420,7 @@ export class ZardDemoSwitchReactiveFormsComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

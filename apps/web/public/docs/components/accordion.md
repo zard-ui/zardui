@@ -17,6 +17,8 @@ npx zard-cli@latest add accordion
 
 ### Manual
 
+**Add accordion.component.ts**
+
 ```angular-ts
 import {
   type AfterContentInit,
@@ -31,6 +33,7 @@ import {
 import type { ClassValue } from 'clsx';
 
 import { ZardAccordionItemComponent } from '@/shared/components/accordion/accordion-item.component';
+import { accordionVariants } from '@/shared/components/accordion/accordion.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -42,6 +45,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   encapsulation: ViewEncapsulation.None,
   host: {
     'data-slot': 'accordion',
+    '[class]': 'classes()',
   },
   exportAs: 'zAccordion',
 })
@@ -63,7 +67,7 @@ export class ZardAccordionComponent implements AfterContentInit {
     return defaultValue;
   });
 
-  protected readonly classes = computed(() => mergeClasses(this.class()));
+  protected readonly classes = computed(() => mergeClasses(accordionVariants(), this.class()));
 
   ngAfterContentInit(): void {
     for (const item of this.items()) {
@@ -108,16 +112,20 @@ export class ZardAccordionComponent implements AfterContentInit {
 }
 ```
 
+**Add accordion.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const accordionItemVariants = cva('border-b last:border-b-0 flex flex-1 flex-col', {
+export const accordionVariants = cva('');
+
+export const accordionItemVariants = cva('flex flex-1 flex-col not-last:border-b', {
   variants: {},
   defaultVariants: {},
 });
 
 export const accordionTriggerVariants = cva(
-  'cursor-pointer group flex flex-1 items-start justify-between gap-4 rounded-md py-2.5 text-start text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 w-full',
+  'flex w-full flex-1 cursor-pointer items-start justify-between gap-4 rounded-lg py-2.5 text-start text-sm font-medium transition-all focus-visible:border-ring focus-visible:ring-ring/50 hover:underline focus-visible:ring-[3px] group border border-transparent outline-none disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {},
     defaultVariants: {},
@@ -136,10 +144,13 @@ export const accordionContentVariants = cva('grid text-sm transition-all', {
   },
 });
 
+export type ZardAccordionVariants = VariantProps<typeof accordionVariants>;
 export type ZardAccordionItemVariants = VariantProps<typeof accordionItemVariants>;
 export type ZardAccordionTriggerVariants = VariantProps<typeof accordionTriggerVariants>;
 export type ZardAccordionContentVariants = VariantProps<typeof accordionContentVariants>;
 ```
+
+**Add accordion-item.component.ts**
 
 ```angular-ts
 import {
@@ -180,7 +191,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
       {{ zTitle() }}
       <ng-icon
         name="lucideChevronDown"
-        class="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
+        class="text-muted-foreground size-4 translate-y-0.5 transition-transform duration-200 pointer-events-none shrink-0"
         [class]="isOpen() ? 'rotate-180' : ''"
       />
     </button>
@@ -194,7 +205,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         [class]="contentClasses()"
       >
         <div class="overflow-hidden">
-          <div class="pt-0 pb-4">
+          <div
+            class="pt-0 pb-2.5 [&_a]:hover:text-foreground [&_a]:underline [&_a]:underline-offset-3 [&_p:not(:last-child)]:mb-4"
+          >
             <ng-content />
           </div>
         </div>
@@ -237,12 +250,16 @@ export class ZardAccordionItemComponent {
 }
 ```
 
+**Add accordion.imports.ts**
+
 ```angular-ts
 import { ZardAccordionItemComponent } from '@/shared/components/accordion/accordion-item.component';
 import { ZardAccordionComponent } from '@/shared/components/accordion/accordion.component';
 
 export const ZardAccordionImports = [ZardAccordionComponent, ZardAccordionItemComponent] as const;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './accordion.component';
@@ -266,6 +283,37 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardAccordionImports } from '@/shared/components/accordion/accordion.imports';
+
+@Component({
+  selector: 'z-demo-accordion-preview',
+  imports: [ZardAccordionImports],
+  template: `
+    <div z-accordion zDefaultValue="shipping" zType="single" class="max-w-sm">
+      <z-accordion-item zValue="shipping" zTitle="What are your shipping options?">
+        We offer standard (5-7 days), express (2-3 days), and overnight shipping. Free shipping on international orders.
+      </z-accordion-item>
+
+      <z-accordion-item zValue="returns" zTitle="What is your return policy?">
+        Returns accepted within 30 days. Items must be unused and in original packaging. Refunds processed within 5-7
+        business days.
+      </z-accordion-item>
+
+      <z-accordion-item zValue="support" zTitle="How can I contact customer support?">
+        Reach us via email, live chat, or phone. We respond within 24 hours during business days.
+      </z-accordion-item>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoAccordionPreviewComponent {}
+```
 
 ### Basic
 
@@ -452,7 +500,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 export class ZardDemoAccordionCardComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

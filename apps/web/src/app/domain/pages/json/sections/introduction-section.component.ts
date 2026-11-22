@@ -38,6 +38,12 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
         <z-code-tabs [data]="initCommand" />
       </div>
 
+      <p class="text-muted-foreground text-sm sm:text-base">
+        Starting from scratch?
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">npx zard-cli create my-app</code>
+        scaffolds the project and writes this file for you, from a design preset.
+      </p>
+
       <p class="text-muted-foreground text-sm sm:text-base">See the CLI section for more information.</p>
     </div>
   `,

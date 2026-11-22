@@ -3,8 +3,10 @@ import {
   defaultAnswers,
   inspectCssFile,
   withPresets,
+  type AppliedPreset,
   type PresetAnswers,
 } from '@cli/commands/init/config-prompter.js';
+import { resolvePreset } from '@cli/commands/init/preset.js';
 import {
   candidateProjects,
   detectProjectKind,
@@ -14,15 +16,25 @@ import {
 } from '@cli/commands/init/project-kind.js';
 import { buildInitSteps, type InitStep } from '@cli/commands/init/steps.js';
 import { runInitWizard } from '@cli/commands/init/wizard.js';
-import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
+import {
+  isInteractive,
+  NO_INTERACTIVE_HELP,
+  printReport,
+  WizardCancelledError,
+  type Interactivity,
+  type LogRecord,
+} from '@cli/ui/index.js';
 import { type Config } from '@cli/utils/config.js';
+import { loadDesignData } from '@cli/utils/design-catalog.js';
 import { CliError } from '@cli/utils/errors.js';
 import { getProjectInfo, type ProjectInfo } from '@cli/utils/get-project-info.js';
-import { loadIconCatalog } from '@cli/utils/icon-catalog.js';
+import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
+import { isInterrupting, throwIfInterrupted } from '@cli/utils/interrupt.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager, suggestedRunner } from '@cli/utils/package-manager.js';
-import { getRegistryUrl } from '@cli/utils/registry.js';
+import { assertRegistryItems, assertRegistryReachable, getRegistryUrl } from '@cli/utils/registry.js';
 import { getAvailableThemes } from '@cli/utils/theme-selector.js';
+import { assertWorkingDirectory } from '@cli/utils/working-directory.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
@@ -41,69 +53,149 @@ export const init = new Command()
   .option('--utils-alias <alias>', 'the import alias for utils. defaults to @/shared/utils.')
   .option('--rtl', 'the project reads right to left: sets dir="rtl" on <html> in index.html.')
   .option('--no-rtl', 'the project reads left to right (the default).')
-  .action(async options => {
-    const cwd = path.resolve(options.cwd);
+  .option(
+    '--preset <code>',
+    'apply a design preset (style, base color, theme, fonts, icons, radius, menu). build one at https://zardui.com/create.',
+  )
+  .option('--pointer', 'use the pointer cursor on buttons. only with --preset.')
+  .option('--no-interactive', NO_INTERACTIVE_HELP)
+  .action(({ interactive, ...options }: InitOptions & Interactivity) =>
+    runInit({ ...options, headless: interactive === false }),
+  );
 
-    validateWorkingDirectory(cwd);
+/** What `zard-cli init` takes — the Commander options, and the programmatic entry's input. */
+export interface InitOptions {
+  yes?: boolean;
+  cwd?: string;
+  type?: string;
+  project?: string;
+  css?: string;
+  appConfig?: string;
+  baseColor?: string;
+  componentsAlias?: string;
+  utilsAlias?: string;
+  rtl?: boolean;
+  /** A preset code, `--preset <code>` or a whole pasted command. */
+  preset?: string;
+  pointer?: boolean;
+  /** Never mount the full-screen wizard, even in a terminal: the caller has every answer already. */
+  headless?: boolean;
+  /** Skip the closing report: the caller (create) prints one summary for the whole run. */
+  quiet?: boolean;
+}
 
-    const projectInfo = await getProjectInfo(cwd);
-    validateAngularProject(projectInfo);
+/**
+ * Initializes the project in `options.cwd`. The action of `zard-cli init`, and the entry `create`
+ * calls once the framework's generator has produced the project.
+ */
+export async function runInit(options: InitOptions): Promise<void> {
+  // First: a bad preset is an error that names it, before anything is read or written.
+  const preset = options.preset !== undefined ? resolvePreset(options.preset) : undefined;
+  validateFlagCombination(options, preset);
 
-    const kind = resolveKind(options.type);
-    const presets = resolvePresets(options);
-    const projectRoot = resolveProjectRoot(options.project, kind ?? detectProjectKind(projectInfo), projectInfo);
+  const cwd = path.resolve(options.cwd ?? process.cwd());
 
-    const isReInitializing = existsSync(path.resolve(cwd, 'components.json'));
-    const packageManager = await detectPackageManager(cwd);
+  validateWorkingDirectory(cwd);
 
-    // Before any step: the catalog is what says which icon package to install,
-    // and it comes from the registry so it does not depend on the CLI version.
-    await loadIconCatalog(getRegistryUrl());
+  const projectInfo = await getProjectInfo(cwd);
+  validateAngularProject(projectInfo);
 
-    const buildSteps = (config: Config): InitStep[] => buildInitSteps(cwd, config, projectInfo, isReInitializing);
+  const kind = resolveKind(options.type);
+  const presets = resolvePresets(options);
+  const projectRoot = resolveProjectRoot(options.project, kind ?? detectProjectKind(projectInfo), projectInfo);
 
-    if (!isInteractive()) {
-      logHeadlessReason();
-      await runHeadless({
-        cwd,
-        projectInfo,
-        packageManager,
-        isReInitializing,
-        buildSteps,
-        yes: options.yes,
-        kind,
-        projectRoot,
-        presets,
+  const isReInitializing = existsSync(path.resolve(cwd, 'components.json'));
+  const packageManager = await detectPackageManager(cwd);
+
+  // Before any step — and before the wizard, which can take minutes to answer: the registry is the
+  // one thing the steps cannot do without (`core` and `utils` are their last), and finding it down
+  // after components.json, the dependencies, app.config and the stylesheet were rewritten leaves a
+  // project that no longer compiles. The icon catalog and the design data fall back to bundled copies.
+  const registry = getRegistryUrl();
+  const untouched = 'Nothing was changed in your project.';
+  await assertRegistryReachable(registry, untouched);
+  await assertRegistryItems(['core', 'utils'], registry, untouched);
+
+  // The catalog is what says which icon package to install, and it comes from the registry so it
+  // does not depend on the CLI version.
+  await loadIconCatalog(registry);
+  await loadDesignData(registry);
+  if (preset) assertIconFamily(preset.design.iconLibrary);
+
+  const buildSteps = (config: Config): InitStep[] =>
+    buildInitSteps(cwd, config, projectInfo, isReInitializing, { pointer: options.pointer });
+
+  if (options.headless || !isInteractive()) {
+    logHeadlessReason();
+    await runHeadless({
+      cwd,
+      projectInfo,
+      packageManager,
+      isReInitializing,
+      buildSteps,
+      yes: options.yes ?? false,
+      kind,
+      projectRoot,
+      presets,
+      preset,
+      quiet: options.quiet ?? false,
+    });
+    return;
+  }
+
+  try {
+    const { config, logs, skipped } = await runInitWizard({
+      cwd,
+      projectInfo,
+      packageManager,
+      isReInitializing,
+      skipConfirmation: options.yes ?? false,
+      buildSteps,
+      presetKind: kind,
+      presetProjectRoot: projectRoot,
+      presetAnswers: presets,
+      preset,
+    });
+
+    reportSuccess(cwd, config, buildSteps(config), logs, skipped);
+  } catch (error) {
+    if (error instanceof WizardCancelledError) {
+      printReport({
+        status: 'cancelled',
+        headline: error.message,
+        notes: ['Nothing was changed in your project.'],
       });
+      // Cancelling is not an error: exit code 0, reached by returning, not by `process.exit`.
       return;
     }
+    throw error;
+  }
+}
 
-    try {
-      const { config, logs } = await runInitWizard({
-        cwd,
-        projectInfo,
-        packageManager,
-        isReInitializing,
-        skipConfirmation: options.yes,
-        buildSteps,
-        presetKind: kind,
-        presetProjectRoot: projectRoot,
-        presetAnswers: presets,
-      });
+/**
+ * Initializes a project with a preset, headless — what `create` runs after scaffolding.
+ *
+ * `type` is required: nothing here guesses the project kind (the user chose it when picking the
+ * template). The rest are the flags `init` itself takes.
+ */
+export function initWithPreset(options: InitOptions & { cwd: string; preset: string; type: string }): Promise<void> {
+  return runInit({ yes: true, headless: true, ...options });
+}
 
-      reportSuccess(config, buildSteps(config), logs);
-    } catch (error) {
-      if (error instanceof WizardCancelledError) {
-        printReport({
-          status: 'cancelled',
-          headline: error.message,
-          notes: ['Nothing was changed in your project.'],
-        });
-        process.exit(0);
-      }
-      throw error;
-    }
-  });
+/** Flags that contradict each other are refused up front, naming both. */
+function validateFlagCombination(options: InitOptions, preset: AppliedPreset | undefined): void {
+  if (preset && options.baseColor) {
+    throw new CliError(
+      `--base-color "${options.baseColor}" conflicts with --preset ${preset.code}: the preset already ` +
+        `chooses the base color (${preset.design.baseColor}). Drop one of them.`,
+      'CONFLICTING_FLAGS',
+    );
+  }
+
+  if (options.pointer && !preset) {
+    throw new CliError('--pointer needs --preset: it is part of what a preset writes.', 'CONFLICTING_FLAGS');
+  }
+}
 
 /**
  * Why the full screen was not mounted.
@@ -121,9 +213,7 @@ function logHeadlessReason(): void {
 }
 
 function validateWorkingDirectory(cwd: string): void {
-  if (!existsSync(cwd)) {
-    throw new CliError(`The path ${cwd} does not exist. Please try again.`, 'INVALID_CWD');
-  }
+  assertWorkingDirectory(cwd);
 }
 
 function validateAngularProject(projectInfo: ProjectInfo): void {
@@ -208,12 +298,16 @@ interface HeadlessOptions {
   packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun';
   isReInitializing: boolean;
   yes: boolean;
+  /** Do not print the closing report. */
+  quiet: boolean;
   /** O que `--type` pediu; sem ele, o workspace decide. */
   kind?: ProjectKind;
   /** What `--project` asked for; without it, the first compatible project. */
   projectRoot?: string;
   /** The answers the other flags gave. */
   presets: PresetAnswers;
+  /** The design `--preset` resolved to. */
+  preset?: AppliedPreset;
   buildSteps(config: Config): InitStep[];
 }
 
@@ -244,32 +338,51 @@ async function runHeadless(options: HeadlessOptions): Promise<void> {
     );
   }
 
-  const config = buildConfig(answers, options.packageManager);
+  const config = buildConfig(answers, options.packageManager, options.preset);
   const steps = options.buildSteps(config);
 
   logger.info(options.isReInitializing ? 'Re-initializing zard/ui...' : 'Initializing zard/ui...');
 
+  const skipped = new Map<string, string>();
+
   for (const step of steps) {
+    throwIfInterrupted();
     const stepSpinner = spinner(`${step.label} — ${step.note}`).start();
     try {
-      await step.run();
-      stepSpinner.succeed(step.label);
+      const outcome = await step.run();
+      if (outcome && 'skipped' in outcome) {
+        skipped.set(step.label, outcome.skipped);
+        stepSpinner.skip(`${step.label} — skipped: ${outcome.skipped}`);
+      } else {
+        stepSpinner.succeed(step.label);
+      }
     } catch (error) {
-      stepSpinner.fail(`${step.label}: ${error instanceof Error ? error.message : String(error)}`);
+      // An interrupted step "failed" because it was killed: the interruption says so once, not this line.
+      if (isInterrupting()) stepSpinner.stop();
+      else stepSpinner.fail(`${step.label}: ${error instanceof Error ? error.message : String(error)}`);
       throw error;
     }
   }
 
-  reportSuccess(config, steps, []);
+  if (!options.quiet) reportSuccess(options.cwd, config, steps, [], skipped);
 }
 
-function reportSuccess(config: Config, steps: readonly InitStep[], logs: readonly LogRecord[]): void {
+function reportSuccess(
+  cwd: string,
+  config: Config,
+  steps: readonly InitStep[],
+  logs: readonly LogRecord[],
+  skipped: ReadonlyMap<string, string> = new Map(),
+): void {
   printReport({
     status: 'success',
     headline: 'zard/ui has been initialized successfully!',
-    items: steps.map(step => `${step.label} — ${step.note}`),
+    items: steps.filter(step => !skipped.has(step.label)).map(step => `${step.label} — ${step.note}`),
+    skipped: steps
+      .filter(step => skipped.has(step.label))
+      .map(step => `${step.label} — skipped: ${skipped.get(step.label)}`),
     notes: nextStepsFor(config),
-    commands: [{ command: `${suggestedRunner(config.packageManager)} zard-cli add`, argument: '[component]' }],
+    commands: [{ command: `${suggestedRunner(config.packageManager, cwd)} zard-cli add`, argument: '[component]' }],
     logs,
   });
 }
@@ -282,11 +395,16 @@ function reportSuccess(config: Config, steps: readonly InitStep[], logs: readonl
  * notice the user only finds out when the components do not render.
  */
 function nextStepsFor(config: Config): string[] {
+  const presetNote = config.preset
+    ? [`Preset ${config.preset} applied: components you add follow "${config.style}" with ${config.icons} icons.`, '']
+    : [];
+
   if (!isLibraryKind(config.projectType)) {
-    return ['You can now add components using:'];
+    return [...presetNote, 'You can now add components using:'];
   }
 
   return [
+    ...presetNote,
     'The consuming app still needs the Tailwind PostCSS pipeline (tailwindcss, @tailwindcss/postcss,',
     'postcss, tailwindcss-animate and a .postcssrc.json), to register provideZard() in its',
     `app.config.ts and to import the theme tokens from this library's ${path.basename(config.tailwind.css)}.`,

@@ -17,6 +17,8 @@ npx zard-cli@latest add questionnaire
 
 ### Manual
 
+**Add questionnaire.component.ts**
+
 ```angular-ts
 import {
   afterNextRender,
@@ -477,63 +479,70 @@ export class ZardQuestionnaireComponent implements ControlValueAccessor {
 }
 ```
 
+**Add questionnaire.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const questionnaireVariants = cva('flex w-full min-w-0 flex-col gap-4 mx-auto max-w-md');
+// Structure lives here, the look in the `cn-*` markers (style sheets). shadcn/ui reads the choice state from
+// `data-checked` / `data-type`; zard reads it from the native control (`has-[input:checked]`, `input[type=radio]`).
+
+export const questionnaireVariants = cva('gap-4 flex w-full min-w-0 flex-col mx-auto max-w-md');
 
 export const questionnaireProgressVariants = cva(
-  'min-h-lh w-fit min-w-[14ch] text-xs font-medium text-muted-foreground tabular-nums',
+  'text-xs block min-h-lh w-fit min-w-[14ch] font-medium text-muted-foreground tabular-nums',
 );
 
-export const questionnaireTitleVariants = cva(
-  'text-base/snug font-medium text-pretty [&:has(~[data-slot=questionnaire-description])]:-mb-4',
-);
+export const questionnaireTitleVariants = cva('text-base leading-snug font-medium [fieldset>&:has(~[data-slot=questionnaire-description])]:-mb-4 font-heading text-pretty');
 
-export const questionnaireDescriptionVariants = cva('text-sm text-pretty text-muted-foreground');
+export const questionnaireDescriptionVariants = cva('text-muted-foreground text-sm text-pretty text-muted-foreground');
 
 export const questionnaireItemVariants = cva(
-  'flex w-full min-w-0 flex-col gap-4 border-0 p-0 outline-none [&[hidden]]:hidden',
+  'gap-4 flex w-full min-w-0 flex-col border-0 p-0 outline-none [&[hidden]]:hidden',
 );
 
-export const questionnaireChoicesVariants = cva('group/questionnaire-choices grid min-w-0 gap-2');
+export const questionnaireChoicesVariants = cva('gap-2 group/questionnaire-choices grid min-w-0');
 
 export const questionnaireChoiceVariants = cva(
-  'group/questionnaire-choice relative flex min-h-11 cursor-pointer items-start gap-2.5 rounded-lg border border-input bg-transparent px-3 py-2.5 text-start text-sm transition-colors outline-none select-none hover:bg-muted/50 has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50 data-invalid:border-destructive dark:bg-input/20 has-[input:checked]:border-primary/40 has-[input:checked]:bg-muted dark:has-[input:checked]:bg-muted data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
+  'border-input gap-2.5 rounded-lg border bg-transparent px-3 py-2.5 text-sm dark:bg-input/20 hover:bg-muted/50 has-[input:checked]:border-primary/40 has-[input:checked]:bg-muted dark:has-[input:checked]:bg-muted data-invalid:border-destructive has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-ring/50 has-[input:focus-visible]:ring-3 group/questionnaire-choice relative flex min-h-11 cursor-pointer items-start text-start transition-colors outline-none select-none data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50',
 );
 
 export const questionnaireChoiceControlVariants = cva('absolute inset-0 z-10 size-full cursor-pointer opacity-0');
 
 export const questionnaireChoiceIndicatorVariants = cva(
-  'pointer-events-none relative flex size-4 shrink-0 translate-y-[calc(var(--spacing)*0.45)] items-center justify-center rounded-[4px] border border-input group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 group-has-[input[type=radio]]/questionnaire-choice:rounded-full group-has-[input:checked]/questionnaire-choice:border-primary group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground dark:bg-input/30 dark:group-has-[input:checked]/questionnaire-choice:bg-primary',
+  'border-input size-4 translate-y-[--spacing(0.45)] rounded-[4px] dark:bg-input/30 group-has-[input:checked]/questionnaire-choice:bg-primary dark:group-has-[input:checked]/questionnaire-choice:bg-primary group-has-[input:checked]/questionnaire-choice:text-primary-foreground group-has-[input:checked]/questionnaire-choice:border-primary group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 pointer-events-none relative flex shrink-0 items-center justify-center border group-has-[input[type=radio]]/questionnaire-choice:rounded-full',
 );
 
 export const questionnaireChoiceIndicatorDotVariants = cva(
-  'hidden size-2 rounded-full bg-primary-foreground group-has-[input[type=radio]:checked]/questionnaire-choice:block',
+  'bg-primary-foreground size-2 hidden rounded-full group-has-[input[type=checkbox]]/questionnaire-choice:hidden group-has-[input:checked]/questionnaire-choice:block',
 );
 
 export const questionnaireChoiceIndicatorCheckVariants = cva(
-  'hidden size-3.5 group-has-[input[type=checkbox]:checked]/questionnaire-choice:block',
+  'size-3.5 [--ng-icon__size:0.875rem] hidden group-has-[input[type=radio]]/questionnaire-choice:hidden group-has-[input:checked]/questionnaire-choice:block',
 );
 
 export const questionnaireInputVariants = cva(
-  'h-8 min-h-11 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-[color,box-shadow,background-color] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 sm:min-h-0 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground',
+  'border-input h-8 rounded-lg border bg-transparent px-2.5 py-1 text-base dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 disabled:bg-input/50 dark:disabled:bg-input/80 focus-visible:ring-3 aria-invalid:ring-3 md:text-sm min-h-11 w-full min-w-0 transition-[color,box-shadow,background-color] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-0 selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground',
 );
 
-export const questionnaireChoiceLabelVariants = cva('flex min-w-0 flex-1 flex-col gap-0.5 leading-snug');
+export const questionnaireChoiceLabelVariants = cva(
+  'gap-0.5 flex min-w-0 flex-1 flex-col leading-snug',
+);
 
-export const questionnaireChoiceDescriptionVariants = cva('block text-muted-foreground');
+export const questionnaireChoiceDescriptionVariants = cva('text-muted-foreground block');
 
 export const questionnaireChoiceShortcutVariants = cva(
-  'pointer-events-none ms-auto inline-flex size-5 shrink-0 translate-y-[calc(var(--spacing)*0.45)] items-center justify-center rounded-md border border-input bg-background font-mono text-[0.625rem] leading-none font-medium text-muted-foreground group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5',
+  'border-input bg-background text-muted-foreground size-5 translate-y-[--spacing(0.45)] items-center justify-center rounded-md border font-mono text-[0.625rem] font-medium leading-none group-has-data-[slot=questionnaire-choice-description]/questionnaire-choice:translate-y-0.5 pointer-events-none ms-auto inline-flex shrink-0',
 );
 
-export const questionnaireInputWrapperVariants = cva('group/questionnaire-input relative block w-full min-w-0');
+export const questionnaireInputWrapperVariants = cva(
+  'w-full group/questionnaire-input relative block min-w-0',
+);
 
 export const questionnaireErrorVariants = cva('mt-2 text-sm text-destructive');
 
 export const questionnaireActionsVariants = cva(
-  'grid min-h-11 w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 sm:min-h-8',
+  'gap-2 grid min-h-11 w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center',
 );
 
 export const questionnairePreviousVariants = cva(
@@ -553,12 +562,16 @@ export const questionnaireSubmitVariants = questionnaireNextVariants;
 export type ZardQuestionnaireVariants = VariantProps<typeof questionnaireVariants>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './questionnaire.component';
 export * from './questionnaire.imports';
 export * from './questionnaire.types';
 export * from './questionnaire.variants';
 ```
+
+**Add questionnaire-actions.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -585,6 +598,8 @@ export class ZardQuestionnaireActionsComponent {
   protected readonly classes = computed(() => mergeClasses(questionnaireActionsVariants(), this.class()));
 }
 ```
+
+**Add questionnaire-choice-description.component.ts**
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -613,6 +628,8 @@ export class ZardQuestionnaireChoiceDescriptionComponent {
   protected readonly classes = computed(() => mergeClasses(questionnaireChoiceDescriptionVariants(), this.class()));
 }
 ```
+
+**Add questionnaire-choice.component.ts**
 
 ```angular-ts
 import {
@@ -716,6 +733,8 @@ export class ZardQuestionnaireChoiceComponent implements ZardQuestionnaireChoice
 }
 ```
 
+**Add questionnaire-choices.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -741,6 +760,8 @@ export class ZardQuestionnaireChoicesComponent {
   protected readonly classes = computed(() => mergeClasses(questionnaireChoicesVariants(), this.class()));
 }
 ```
+
+**Add questionnaire-description.component.ts**
 
 ```angular-ts
 import {
@@ -790,6 +811,8 @@ export class ZardQuestionnaireDescriptionComponent implements OnDestroy {
   }
 }
 ```
+
+**Add questionnaire-error.component.ts**
 
 ```angular-ts
 import {
@@ -841,6 +864,8 @@ export class ZardQuestionnaireErrorComponent implements OnDestroy {
   }
 }
 ```
+
+**Add questionnaire-input.component.ts**
 
 ```angular-ts
 import {
@@ -899,6 +924,8 @@ export class ZardQuestionnaireInputComponent {
   protected readonly wrapperClasses = questionnaireInputWrapperVariants();
 }
 ```
+
+**Add questionnaire-item.component.ts**
 
 ```angular-ts
 import {
@@ -1050,6 +1077,8 @@ export class ZardQuestionnaireItemComponent implements ZardQuestionnaireItemRef 
   protected readonly classes = computed(() => mergeClasses(questionnaireItemVariants(), this.class()));
 }
 ```
+
+**Add questionnaire-navigation.directive.ts**
 
 ```angular-ts
 import {
@@ -1235,6 +1264,8 @@ export class ZardQuestionnaireSubmitDirective extends ZardQuestionnaireNavigatio
 }
 ```
 
+**Add questionnaire-progress.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
@@ -1278,6 +1309,8 @@ export class ZardQuestionnaireProgressComponent {
 }
 ```
 
+**Add questionnaire-title.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -1307,6 +1340,8 @@ export class ZardQuestionnaireTitleComponent {
   protected readonly classes = computed(() => mergeClasses(questionnaireTitleVariants(), this.class()));
 }
 ```
+
+**Add questionnaire.imports.ts**
 
 ```angular-ts
 import { ZardQuestionnaireActionsComponent } from './questionnaire-actions.component';
@@ -1364,6 +1399,8 @@ export {
 };
 ```
 
+**Add questionnaire.tokens.ts**
+
 ```angular-ts
 import { InjectionToken, type Signal } from '@angular/core';
 
@@ -1385,6 +1422,8 @@ export interface ZardQuestionnaireChoiceRef {
 export const ZARD_QUESTIONNAIRE_ITEM = new InjectionToken<ZardQuestionnaireItemRef>('ZARD_QUESTIONNAIRE_ITEM');
 export const ZARD_QUESTIONNAIRE_CHOICE = new InjectionToken<ZardQuestionnaireChoiceRef>('ZARD_QUESTIONNAIRE_CHOICE');
 ```
+
+**Add questionnaire.types.ts**
 
 ```angular-ts
 export type ZardQuestionnaireAnswer = string | string[];
@@ -1524,6 +1563,143 @@ z-questionnaire
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
+
+import { ZardQuestionnaireImports } from '../questionnaire.imports';
+import type { ZardQuestionnaireAnswer, ZardQuestionnaireAnswers, ZardQuestionnaireItem } from '../questionnaire.types';
+
+const DIRECTION_LABELS: Record<string, string> = {
+  'tool-calls': 'tool call timeline',
+  approvals: 'approval checkpoints',
+  handoffs: 'sub-agent handoffs',
+};
+
+const UPDATE_LABELS: Record<string, string> = {
+  progress: 'progress',
+  decisions: 'decisions',
+  risks: 'risks',
+  'next-step': 'next step',
+};
+
+const TIMING_LABELS: Record<string, string> = {
+  now: 'now',
+  'next-cycle': 'next development cycle',
+  backlog: 'backlog',
+};
+
+@Component({
+  selector: 'z-demo-questionnaire-default',
+  imports: [ZardQuestionnaireImports],
+  template: `
+    <z-questionnaire [zItems]="items" zShortcuts="letters" (zSubmit)="save($event)">
+      <z-questionnaire-progress />
+
+      <z-questionnaire-item zName="goal" zRequired>
+        <z-questionnaire-title>What should the agent build next?</z-questionnaire-title>
+        <z-questionnaire-description>Choose a direction or describe another task.</z-questionnaire-description>
+        <z-questionnaire-choices>
+          <z-questionnaire-choice zValue="tool-calls">
+            <span class="font-medium">Tool call timeline</span>
+            <z-questionnaire-choice-description>
+              Show what the agent ran and what came back.
+            </z-questionnaire-choice-description>
+          </z-questionnaire-choice>
+          <z-questionnaire-choice zValue="approvals">
+            <span class="font-medium">Approval checkpoints</span>
+            <z-questionnaire-choice-description>
+              Ask before sensitive or destructive actions.
+            </z-questionnaire-choice-description>
+          </z-questionnaire-choice>
+          <z-questionnaire-choice zValue="handoffs">
+            <span class="font-medium">Sub-agent handoffs</span>
+            <z-questionnaire-choice-description>
+              Make delegated work and results easier to follow.
+            </z-questionnaire-choice-description>
+          </z-questionnaire-choice>
+          <z-questionnaire-input placeholder="Describe another feature..." aria-label="Describe another feature" />
+        </z-questionnaire-choices>
+        <z-questionnaire-error />
+      </z-questionnaire-item>
+
+      <z-questionnaire-item zName="updates" zMultiple>
+        <z-questionnaire-title>What should every progress update include?</z-questionnaire-title>
+        <z-questionnaire-description>Select all that apply, or skip this question.</z-questionnaire-description>
+        <z-questionnaire-choices>
+          <z-questionnaire-choice zValue="progress">Progress made</z-questionnaire-choice>
+          <z-questionnaire-choice zValue="decisions">Decisions taken</z-questionnaire-choice>
+          <z-questionnaire-choice zValue="risks">Risks or blockers</z-questionnaire-choice>
+          <z-questionnaire-choice zValue="next-step">Next step</z-questionnaire-choice>
+        </z-questionnaire-choices>
+        <z-questionnaire-error />
+      </z-questionnaire-item>
+
+      <z-questionnaire-item zName="start" zRequired>
+        <z-questionnaire-title>When should work begin?</z-questionnaire-title>
+        <z-questionnaire-description>Choose one option.</z-questionnaire-description>
+        <z-questionnaire-choices>
+          <z-questionnaire-choice zValue="now">Start now</z-questionnaire-choice>
+          <z-questionnaire-choice zValue="next-cycle">Next development cycle</z-questionnaire-choice>
+          <z-questionnaire-choice zValue="backlog">Add it to the backlog</z-questionnaire-choice>
+        </z-questionnaire-choices>
+        <z-questionnaire-error />
+      </z-questionnaire-item>
+
+      <z-questionnaire-actions>
+        <button type="button" z-questionnaire-previous>Back</button>
+        <button type="button" z-questionnaire-skip>Skip</button>
+        <button type="button" z-questionnaire-next>Next</button>
+        <button type="submit" z-questionnaire-submit>Finish</button>
+      </z-questionnaire-actions>
+    </z-questionnaire>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block w-full' },
+})
+export class ZardDemoQuestionnaireDefaultComponent {
+  private readonly sonner = inject(ZardSonnerService);
+
+  readonly items: ZardQuestionnaireItem[] = [
+    { name: 'goal', required: true },
+    { name: 'updates', multiple: true },
+    { name: 'start', required: true },
+  ];
+
+  save(answers: ZardQuestionnaireAnswers): void {
+    this.sonner.show('Agent plan saved', {
+      description: [
+        `Direction: ${this.formatDirection(answers['goal'])}`,
+        `Progress signals: ${this.formatUpdates(answers['updates'])}`,
+        `Timing: ${this.formatTiming(answers['start'])}`,
+      ].join(' · '),
+    });
+  }
+
+  private formatDirection(answer: ZardQuestionnaireAnswer | undefined): string {
+    const value = this.singleValue(answer);
+    return value ? (DIRECTION_LABELS[value] ?? value) : 'None';
+  }
+
+  private formatUpdates(answer: ZardQuestionnaireAnswer | undefined): string {
+    const values = Array.isArray(answer) ? answer : answer ? [answer] : [];
+    return values.length ? values.map(value => UPDATE_LABELS[value] ?? value).join(', ') : 'None';
+  }
+
+  private formatTiming(answer: ZardQuestionnaireAnswer | undefined): string {
+    const value = this.singleValue(answer);
+    return value ? (TIMING_LABELS[value] ?? value) : 'None';
+  }
+
+  private singleValue(answer: ZardQuestionnaireAnswer | undefined): string | undefined {
+    return Array.isArray(answer) ? answer[0] : answer;
+  }
+}
+```
 
 ### Multiple Selection
 

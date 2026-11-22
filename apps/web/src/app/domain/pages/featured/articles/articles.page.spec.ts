@@ -57,9 +57,11 @@ describe('ArticlesPage', () => {
     // Bound as `[scrollSpyItem]`/`[id]` on the language sections, so the directive — not the
     // attribute selector — is what finds every spied section.
     const sectionIds = () =>
+      // The spied value, not the host's id: z-doc-heading keeps its id on the inner header.
       fixture.debugElement
         .queryAll(By.directive(ScrollSpyItemDirective))
-        .map(el => (el.nativeElement as HTMLElement).id);
+        .map(el => el.injector.get(ScrollSpyItemDirective).scrollSpyItem())
+        .filter(Boolean);
 
     it('has a navigation entry for every section in the template', () => {
       const configured = component['navigationConfig']().items.map(item => item.id);

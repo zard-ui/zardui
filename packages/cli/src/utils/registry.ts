@@ -1,12 +1,14 @@
 import { DEFAULT_REGISTRY_URL as BUILD_REGISTRY_URL } from '@cli/config/registry-config.js';
-import { isIconFamily, retargetIcons, SOURCE_ICON_FAMILY, type IconFamily } from '@cli/core/icons/index.js';
+import { isIconFamily, retargetFiles, SOURCE_ICON_FAMILY, type IconFamily } from '@cli/core/icons/index.js';
 import type { RegistryBuild } from '@cli/core/registry/registry-data.js';
+import { resolveStyle, transformStyle, DEFAULT_STYLE } from '@cli/core/styles/index.js';
 import type { Config } from '@cli/utils/config.js';
-import { ConfigError } from '@cli/utils/errors.js';
+import { CliError, ConfigError } from '@cli/utils/errors.js';
 import { fetchJson } from '@cli/utils/http-client.js';
 import { iconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger } from '@cli/utils/logger.js';
 import { assertSupportedSchema } from '@cli/utils/schema-version.js';
+import { styleCatalog } from '@cli/utils/style-catalog.js';
 import * as path from 'node:path';
 
 export type { RegistryBuild };
@@ -36,7 +38,13 @@ export interface RegistryItem {
   basePath?: string;
   files: Array<{
     name: string;
+    /** The file as the default style (nova) writes it — what readers that predate styles install. */
     content: string;
+    /**
+     * The same file with its style markers unresolved (`cn-button`), when it has
+     * any. `add` resolves it into the style `components.json` names.
+     */
+    styled?: string;
   }>;
   dependencies?: string[];
   devDependencies?: string[];
@@ -132,6 +140,68 @@ export function validateRegistryUrl(url: string): void {
   }
 }
 
+/**
+ * Asks the registry for its index, and turns any failure into an error that names the URL.
+ *
+ * It is the check commands run before the first byte is written: the design data and the icon
+ * catalog fall back to copies bundled in the CLI, so the component index is what decides whether
+ * the run can finish. `outcome` says what the failure left behind ("Nothing was changed in your
+ * project.").
+ */
+export async function assertRegistryReachable(registry: string, outcome: string): Promise<void> {
+  try {
+    await fetchJson(`${registry}/registry.json`, { retries: 1, timeout: 10_000 });
+  } catch (error) {
+    throw new CliError(
+      `Could not reach the zard/ui registry at ${registry}: ${error instanceof Error ? error.message : String(error)}. ` +
+        `${outcome} Check your connection and try again.`,
+      'REGISTRY_UNREACHABLE',
+    );
+  }
+}
+
+/**
+ * Items fetched ahead of time by `assertRegistryItems`, waiting for the installer to ask for them.
+ *
+ * Each is handed over once: the preflight must not make the install fetch everything twice, and a
+ * stale copy must never outlive the run that asked for it.
+ */
+const prefetchedItems = new Map<string, RegistryItem>();
+
+/**
+ * Fetches the registry items a command will install, before it changes anything.
+ *
+ * `init` installs `core` and `utils` as its last step, and `add` fetches component by component
+ * after the dependencies are in; finding one unreachable there left a half-written project. The
+ * items are kept for the install, so the check costs no extra request.
+ */
+export async function assertRegistryItems(names: readonly string[], registry: string, outcome: string): Promise<void> {
+  const pending = names.filter(name => !prefetchedItems.has(`${registry}/${name}.json`));
+
+  for (let start = 0; start < pending.length; start += PREFETCH_CONCURRENCY) {
+    await Promise.all(
+      pending.slice(start, start + PREFETCH_CONCURRENCY).map(async name => {
+        try {
+          const item = await fetchJson<RegistryItem>(`${registry}/${name}.json`);
+          if (!Array.isArray(item.files) || item.files.length === 0) {
+            throw new Error('it has no files');
+          }
+          prefetchedItems.set(`${registry}/${name}.json`, item);
+        } catch (error) {
+          throw new CliError(
+            `Could not fetch "${name}" from the zard/ui registry at ${registry}: ${
+              error instanceof Error ? error.message : String(error)
+            }. ${outcome} Check your connection and try again.`,
+            'REGISTRY_UNREACHABLE',
+          );
+        }
+      }),
+    );
+  }
+}
+
+const PREFETCH_CONCURRENCY = 8;
+
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 /**
@@ -162,11 +232,19 @@ export async function fetchRegistryIndex(registryUrl?: string): Promise<Registry
 export function invalidateRegistryCache(): void {
   registryIndexCache.clear();
   blocksIndexCache.clear();
+  prefetchedItems.clear();
 }
 
 export async function fetchComponentFromRegistry(componentName: string, registryUrl?: string): Promise<RegistryItem> {
   const baseUrl = registryUrl || DEFAULT_REGISTRY_URL;
   const url = `${baseUrl}/${componentName}.json`;
+
+  const prefetched = prefetchedItems.get(url);
+  if (prefetched) {
+    prefetchedItems.delete(url);
+    return prefetched;
+  }
+
   return fetchJson<RegistryItem>(url);
 }
 
@@ -344,6 +422,44 @@ function blockAsRegistryItem(block: BlockItem): RegistryItem {
   };
 }
 
+/**
+ * The file's source in the style `components.json` names.
+ *
+ * `content` is already the default style resolved, so that one needs no work —
+ * and keeps working when the style tables the CLI carries are older than the
+ * registry's. Any other style starts from `styled`, the source with its markers.
+ * A file with no `styled` has no markers, which is every block and every file
+ * from a registry that predates styles.
+ */
+export function styledContent(
+  file: RegistryItem['files'][number],
+  config: Pick<Config, 'style' | 'menuColor' | 'menuAppearance'>,
+): string {
+  const defaultMenu = (config.menuColor ?? 'default') === 'default' && (config.menuAppearance ?? 'solid') === 'solid';
+  if (file.styled === undefined || (resolveStyle(config.style) === DEFAULT_STYLE && defaultMenu)) return file.content;
+
+  return transformStyle(file.styled, config.style, styleCatalog(), config);
+}
+
+/** An icon the chosen family has no equivalent for, in a file that was installed anyway. */
+export interface IconGap {
+  readonly component: string;
+  readonly file: string;
+  readonly symbols: string[];
+}
+
+const iconGaps: IconGap[] = [];
+
+/**
+ * The icons left in their source family since the last call, then forgets them.
+ *
+ * `fetchComponent` warns as it goes, but a warning scrolls past between the spinners; the command reads
+ * this once at the end so the summary can say "installed, with icons to swap" instead of plain success.
+ */
+export function takeIconGaps(): IconGap[] {
+  return iconGaps.splice(0, iconGaps.length);
+}
+
 export async function fetchComponent(
   componentName: string,
   config: Config,
@@ -359,32 +475,32 @@ export async function fetchComponent(
   }
 
   const sourceFamily = sourceFamilyOf(item);
-  const missing = new Set<string>();
 
-  const transformedFiles = item.files.map(file => {
-    const retargeted = retargetIcons(
-      transformContent(file.content, config, { ...options, fileName: file.name }),
-      sourceFamily,
-      config.icons,
-      iconCatalog(),
-    );
-    for (const symbol of retargeted.missing) missing.add(symbol);
+  // The icons are decided over the whole item, not file by file: a template (.html) and a data file
+  // name the icons their component imports, and have no import of their own to follow.
+  const styled = item.files.map(file => ({
+    name: file.name,
+    content: transformContent(styledContent(file, config), config, { ...options, fileName: file.name }),
+  }));
+  const transformedFiles = retargetFiles(styled, sourceFamily, config.icons, iconCatalog());
 
-    return { name: file.name, content: retargeted.content };
-  });
+  // An icon with no equivalent in the chosen family keeps its source symbol,
+  // imported from the package it came from — which `add` installs alongside, so
+  // the component compiles. Failing the whole install over that would be worse:
+  // the rest of the component is correct and swapping the icon is one line.
+  const gaps = transformedFiles.filter(file => file.missing.length > 0);
 
-  // An icon with no equivalent in the chosen family keeps its original symbol,
-  // and its import no longer resolves. Failing the whole install over that would
-  // be worse: the rest of the component is correct and the fix is one line.
-  if (missing.size > 0) {
+  if (gaps.length > 0) {
+    const detail = gaps.map(file => `${file.name}: ${[...file.missing].sort().join(', ')}`).join('; ');
     logger.warn(
-      `"${componentName}" uses icons that ${config.icons} does not provide: ${[...missing].sort().join(', ')}. ` +
-        'They were left untouched — replace them by hand.',
+      `"${componentName}" uses icons that ${config.icons} does not provide (${detail}). ` +
+        `They keep their ${sourceFamily} name and import, which still works — swap them by hand if you want them in the new set.`,
     );
+    for (const file of gaps) iconGaps.push({ component: componentName, file: file.name, symbols: [...file.missing] });
   }
 
   return {
     ...item,
-    files: transformedFiles,
+    files: transformedFiles.map(({ name, content }) => ({ name, content })),
   };
 }

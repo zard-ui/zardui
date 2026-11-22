@@ -65,7 +65,7 @@ type OnChangeType = (value: boolean) => void;
   viewProviders: [provideIcons({ lucideCheck })],
   host: {
     'data-slot': 'checkbox',
-    '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' flex items-center gap-2'",
+    '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' peer flex items-center gap-2'",
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.aria-invalid]': 'zInvalid() ? "true" : null',
     '[attr.data-checked]': "checked() ? '' : null",

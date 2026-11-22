@@ -1,12 +1,16 @@
 ```json title="components.json" showLineNumbers copyButton
 {
   "$schema": "https://zardui.com/schema.json",
-  "style": "css",
+  "style": "nova",
   "icons": "lucide",
   "rtl": false,
   "projectType": "angular",
   "appConfigFile": "src/app/app.config.ts",
   "packageManager": "npm",
+  "menuColor": "default",
+  "menuAppearance": "solid",
+  "menuAccent": "subtle",
+  "preset": "Z0",
   "tailwind": {
     "css": "src/styles.css",
     "baseColor": "neutral"
@@ -16,7 +20,8 @@
     "components": "@/shared/components",
     "utils": "@/shared/utils",
     "core": "@/shared/core",
-    "services": "@/shared/services"
+    "services": "@/shared/services",
+    "blocks": "@/shared/blocks"
   }
 }
 ```

@@ -9,7 +9,8 @@
     },
     {
       "name": "skeleton.variants.ts",
-      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const skeletonVariants = cva('bg-muted animate-pulse rounded-md');\nexport type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;\n"
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const skeletonVariants = cva('bg-muted animate-pulse rounded-md');\nexport type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;\n",
+      "styled": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const skeletonVariants = cva('cn-skeleton');\nexport type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;\n"
     },
     {
       "name": "index.ts",

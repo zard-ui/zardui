@@ -11,6 +11,7 @@ import {
 import type { ClassValue } from 'clsx';
 
 import { ZardAccordionItemComponent } from '@/shared/components/accordion/accordion-item.component';
+import { accordionVariants } from '@/shared/components/accordion/accordion.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -22,6 +23,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   encapsulation: ViewEncapsulation.None,
   host: {
     'data-slot': 'accordion',
+    '[class]': 'classes()',
   },
   exportAs: 'zAccordion',
 })
@@ -43,7 +45,7 @@ export class ZardAccordionComponent implements AfterContentInit {
     return defaultValue;
   });
 
-  protected readonly classes = computed(() => mergeClasses(this.class()));
+  protected readonly classes = computed(() => mergeClasses(accordionVariants(), this.class()));
 
   ngAfterContentInit(): void {
     for (const item of this.items()) {

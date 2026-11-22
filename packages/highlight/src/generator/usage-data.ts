@@ -42,7 +42,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   avatar: {
     importCode: `import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';`,
-    templateCode: `<z-avatar zSrc="https://github.com/shadcn.png" zAlt="@shadcn"></z-avatar>`,
+    templateCode: `<z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess"></z-avatar>`,
   },
   badge: {
     importCode: `import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';`,
@@ -476,7 +476,7 @@ readonly table = injectTable(() => ({ features, columns, data: this.data() }));`
 
 <ng-template #content>
   <z-hover-card>
-    The React Framework - created and maintained by @vercel.
+    The web framework that empowers developers - created and maintained by @angular.
   </z-hover-card>
 </ng-template>`,
   },

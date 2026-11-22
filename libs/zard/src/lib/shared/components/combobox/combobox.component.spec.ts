@@ -11,7 +11,7 @@ import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plu
 
 import { ZardComboboxComponent } from './combobox.component';
 import { ZardComboboxImports } from './combobox.imports';
-import type { ZardComboboxGroup, ZardComboboxOption } from './combobox.types';
+import type { ZardComboboxGroup, ZardComboboxOption, ZardComboboxSideVariants } from './combobox.types';
 
 const testOptions: ZardComboboxOption[] = [
   { value: 'apple', label: 'Apple' },
@@ -75,6 +75,7 @@ class ShorthandHostComponent {
       [zFilterFn]="filterFn()"
       [zAutoHighlight]="autoHighlight()"
       [zInvalid]="invalid()"
+      [zSide]="side()"
       (zComboSelected)="selectedOptions.push($event)"
     >
       <z-combobox-input [zShowClear]="showClear()" placeholder="Search fruit..." />
@@ -100,6 +101,7 @@ class ComposableHostComponent {
   readonly showClear = signal(false);
   readonly autoHighlight = signal(false);
   readonly invalid = signal(false);
+  readonly side = signal<ZardComboboxSideVariants>('bottom');
   readonly filter = signal<'contains' | 'startsWith' | 'none'>('contains');
   readonly filterFn = signal<((label: string, query: string) => boolean) | null>(null);
   readonly selectedOptions: ZardComboboxOption[] = [];
@@ -399,6 +401,19 @@ describe('ZardComboboxComponent', () => {
       expect(document.querySelectorAll('z-combobox-empty')).toHaveLength(1);
       expect(popupElement()).toBeInTheDocument();
     });
+
+    it('opens beside the anchor when the side is sideways, following the text direction for inline sides', fakeAsync(() => {
+      combobox.closePanel();
+      host.side.set('inline-end');
+      fixture.detectChanges();
+
+      combobox.openPanel();
+      fixture.detectChanges();
+      flush();
+      fixture.detectChanges();
+
+      expect(popupElement()).toHaveAttribute('data-side', 'right');
+    }));
 
     it('reads item labels from the projected text content', () => {
       expect(combobox.labelOf('cherry')).toBe('Cherry pie');

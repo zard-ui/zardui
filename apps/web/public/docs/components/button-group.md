@@ -17,6 +17,8 @@ npx zard-cli@latest add button-group
 
 ### Manual
 
+**Add button-group.component.ts**
+
 ```angular-ts
 import {
   ChangeDetectionStrategy,
@@ -127,43 +129,37 @@ export class ZardButtonGroupTextDirective {
 }
 ```
 
+**Add button-group.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const buttonGroupVariants = cva(
-  'group/button-group flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 [&>input]:flex-1',
-  {
-    variants: {
-      zOrientation: {
-        horizontal:
-          '[&>*:not(:first-child)]:rounded-s-none [&>*:not(:first-child)]:border-s-0 [&>z-select:not(:first-child)>button]:rounded-s-none [&>z-select:not(:first-child)>button]:border-s-0 [&>*:not(:last-child)]:rounded-e-none [&>z-select:not(:last-child)>button]:rounded-e-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-e-lg!',
-        vertical:
-          'flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>z-select:not(:first-child)>button]:rounded-t-none [&>z-select:not(:first-child)>button]:border-t-0 [&>*:not(:last-child)]:rounded-b-none [&>z-select:not(:last-child)>button]:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg!',
-      },
-    },
-    defaultVariants: {
-      zOrientation: 'horizontal',
+export const buttonGroupVariants = cva('flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 [&>input]:flex-1 group/button-group', {
+  variants: {
+    zOrientation: {
+      horizontal: '[&>*:not(:first-child)]:rounded-s-none [&>*:not(:first-child)]:border-s-0 [&>*:not(:last-child)]:rounded-e-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-e-lg! [&>z-select:not(:first-child)>button]:rounded-s-none [&>z-select:not(:first-child)>button]:border-s-0 [&>z-select:not(:last-child)>button]:rounded-e-none',
+      vertical: 'flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg! [&>z-select:not(:first-child)>button]:rounded-t-none [&>z-select:not(:first-child)>button]:border-t-0 [&>z-select:not(:last-child)>button]:rounded-b-none',
     },
   },
-);
+  defaultVariants: {
+    zOrientation: 'horizontal',
+  },
+});
 export type ZardButtonGroupVariants = VariantProps<typeof buttonGroupVariants>;
 
-export const buttonGroupSeparatorVariants = cva(
-  'bg-input relative self-stretch grow-0 shrink-0 pointer-events-none select-none',
-  {
-    variants: {
-      zOrientation: {
-        horizontal: 'mx-px w-auto',
-        vertical: 'my-px h-auto',
-      },
+export const buttonGroupSeparatorVariants = cva('bg-input relative shrink-0 grow-0 self-stretch pointer-events-none select-none', {
+  variants: {
+    zOrientation: {
+      horizontal: 'mx-px w-auto',
+      vertical: 'my-px h-auto',
     },
   },
-);
+});
 
-export const buttonGroupTextVariants = cva(
-  "bg-muted flex items-center gap-2 rounded-lg border px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
-);
+export const buttonGroupTextVariants = cva("bg-muted flex items-center gap-2 rounded-lg border px-2.5 text-sm font-medium [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none");
 ```
+
+**Add button-group.imports.ts**
 
 ```angular-ts
 /*
@@ -184,6 +180,8 @@ export const ZardButtonGroupImports = [
   ZardButtonGroupTextDirective,
 ] as const;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './button-group.component';
@@ -206,6 +204,130 @@ import { ZardButtonGroupComponent } from '@/shared/components/button-group/butto
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideArchive,
+  lucideArrowLeft,
+  lucideCalendarPlus,
+  lucideCheck,
+  lucideChevronRight,
+  lucideClock,
+  lucideEllipsis,
+  lucideListFilterPlus,
+  lucideTag,
+  lucideTrash,
+} from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
+import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/navigation-menu.imports';
+import { ZardSeparatorComponent } from '@/shared/components/separator';
+
+@Component({
+  selector: 'z-demo-button-group-preview',
+  imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon, ZardNavigationMenuImports, ZardSeparatorComponent],
+  template: `
+    <z-button-group>
+      <z-button-group class="hidden sm:flex">
+        <button type="button" z-button zType="outline" aria-label="Go Back">
+          <ng-icon name="lucideArrowLeft" />
+        </button>
+      </z-button-group>
+
+      <z-button-group>
+        <button type="button" z-button zType="outline">Archive</button>
+        <button type="button" z-button zType="outline">Report</button>
+      </z-button-group>
+
+      <z-button-group>
+        <button type="button" z-button zType="outline">Snooze</button>
+        <button type="button" z-button zType="outline" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="menu">
+          <ng-icon name="lucideEllipsis" />
+
+          <ng-template #menu>
+            <div z-navigation-menu-content class="w-48">
+              <button type="button" z-navigation-menu-link>
+                <ng-icon name="lucideCheck" />
+                Mark as Read
+              </button>
+              <button type="button" z-navigation-menu-link>
+                <ng-icon name="lucideArchive" />
+                Archive
+              </button>
+
+              <z-separator class="my-2" />
+
+              <button type="button" z-navigation-menu-link>
+                <ng-icon name="lucideClock" />
+                Snooze
+              </button>
+              <button type="button" z-navigation-menu-link>
+                <ng-icon name="lucideCalendarPlus" />
+                Add to Calendar
+              </button>
+              <button type="button" z-navigation-menu-link>
+                <ng-icon name="lucideListFilterPlus" />
+                Add to List
+              </button>
+              <button
+                type="button"
+                z-navigation-menu-link
+                z-navigation-menu-trigger
+                [zNavigationMenuTriggerFor]="subMenu"
+                zPlacement="rightTop"
+                class="justify-between"
+              >
+                <div class="flex items-center">
+                  <ng-icon name="tag" class="mr-1" />
+                  Label as
+                </div>
+                <ng-icon name="lucideChevronRight" />
+
+                <ng-template #subMenu>
+                  <div z-navigation-menu-content class="w-48">
+                    <button type="button" z-navigation-menu-link>Personal</button>
+                    <button type="button" z-navigation-menu-link>Work</button>
+                    <button type="button" z-navigation-menu-link>Other</button>
+                  </div>
+                </ng-template>
+              </button>
+
+              <z-separator class="my-2" />
+
+              <button type="button" z-navigation-menu-link class="text-red-500">
+                <ng-icon name="lucideTrash" />
+                Trash
+              </button>
+            </div>
+          </ng-template>
+        </button>
+      </z-button-group>
+    </z-button-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideArrowLeft,
+      lucideEllipsis,
+      lucideCheck,
+      lucideArchive,
+      lucideClock,
+      lucideCalendarPlus,
+      lucideListFilterPlus,
+      lucideTag,
+      lucideChevronRight,
+      lucideTrash,
+    }),
+  ],
+})
+export class ZardDemoButtonGroupPreviewComponent {}
+```
 
 ### Orientation
 
@@ -743,7 +865,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 export class ZardDemoButtonGroupTextComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

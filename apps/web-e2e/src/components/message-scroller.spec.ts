@@ -283,16 +283,20 @@ test.describe('Message Scroller component', () => {
       const demo = demoPage.getDemoByName('visibility');
       await demo.scrollIntoViewIfNeeded();
       const marks = demo.getByRole('button', { name: 'Open transcript outline' }).locator('span');
-      // the transcript opens at the end, so the last question is the turn being read
-      await expect(marks.last()).toHaveAttribute('data-current', 'true');
+      // Each question is brought to the top rather than read off the opening position, which depends on how tall
+      // the style makes the turns below it.
+      const bringToTop = (id: string) =>
+        viewportOf(demo).evaluate((el, id) => {
+          const row = el.querySelector(`[data-message-id="${id}"]`) as HTMLElement;
+          el.scrollTop += row.getBoundingClientRect().top - el.getBoundingClientRect().top;
+        }, id);
 
-      // bring the second question to the top: it becomes the turn being read
-      await viewportOf(demo).evaluate(el => {
-        const row = el.querySelector('[data-message-id="vis-impact"]') as HTMLElement;
-        el.scrollTop += row.getBoundingClientRect().top - el.getBoundingClientRect().top;
-      });
+      await bringToTop('vis-actions');
+      await expect(marks.nth(2)).toHaveAttribute('data-current', 'true');
+
+      await bringToTop('vis-impact');
       await expect(marks.nth(1)).toHaveAttribute('data-current', 'true');
-      await expect(marks.last()).toHaveAttribute('data-current', 'false');
+      await expect(marks.nth(2)).toHaveAttribute('data-current', 'false');
     });
   });
 

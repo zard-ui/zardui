@@ -21,7 +21,7 @@ The CI runs both. Unit tests run on every pull request; the E2E job runs after t
 | @testing-library/jest-dom | Matchers such as toBeVisible and toHaveClass. |
 | Co-location | The spec sits next to the component as <name>.component.spec.ts. |
 
-libs/zard/src/lib/shared/components/button/button.component.spec.ts
+**libs/zard/src/lib/shared/components/button/button.component.spec.ts**
 
 ```
 import '@testing-library/jest-dom';
@@ -66,7 +66,7 @@ E2E specs run against the documentation site itself, so they exercise the compon
 | checkA11y | The axe wrapper in src/utils/axe-helper.ts, running the WCAG 2.1 A and AA rule sets. |
 | Base URL | http://localhost:4222 — the config boots the local dev server when needed. |
 
-apps/web-e2e/src/components/button.spec.ts
+**apps/web-e2e/src/components/button.spec.ts**
 
 ```
 import { test, expect } from '@playwright/test';
@@ -125,7 +125,7 @@ Prefer component selectors (z-button), attribute selectors ([z-input]) and roles
 
 Running the full E2E suite is expensive. Locally, run the unit tests on every change and the E2E suite before opening the pull request.
 
-Test commands
+**Test commands**
 
 ```
 # Unit tests (Jest) for every project under libs/

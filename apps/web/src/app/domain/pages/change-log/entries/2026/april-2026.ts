@@ -7,6 +7,8 @@ export const APRIL_2026: ChangelogEntry = {
     monthNumber: 4,
     date: new Date(2026, 3, 1),
     id: '04-2026',
+    slug: '2026-04-avatar-select',
+    title: 'Avatar Sizes and Dynamic Select',
   },
 
   overview:
@@ -17,7 +19,6 @@ export const APRIL_2026: ChangelogEntry = {
       title: 'Avatar drops numeric sizes',
       description:
         '`zSize` on `z-avatar` only takes `sm`, `default`, `md`, `lg` and `xl` now: the numeric option is gone. Swap a number for the closest name (32, 40, 48, 56 and 64 px) or for a `size-*` class. Its exported types were renamed too.',
-      icon: 'shield',
       code: '<z-avatar zSize="sm" />',
       renames: [
         { from: 'ZardAvatarVariants', to: ['ZardAvatarSizeVariants'] },
@@ -29,7 +30,6 @@ export const APRIL_2026: ChangelogEntry = {
       title: 'Select follows dynamic option lists',
       description:
         'Options added to a `z-select` after it renders, from a signal or a reactive list, are now selectable. The current value survives new options, and removing the selected one falls back to the raw value. No input or output changed.',
-      icon: 'code',
     },
   ],
 };

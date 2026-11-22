@@ -97,6 +97,17 @@ describe('Dropdown menu primitives', () => {
     expect(checkboxItem).toHaveAttribute('aria-checked', 'false');
   }));
 
+  it('draws the check of a checked radio item the way a checkbox item does, with room for it at the end', () => {
+    const radioItems = fixture.nativeElement.querySelectorAll('z-dropdown-menu-radio-item');
+    const checked = radioItems[1];
+
+    expect(checked.querySelector('svg path')).not.toBeNull();
+    expect(checked.querySelector('.cn-dropdown-menu-radio-dot')).toBeNull();
+    expect(radioItems[0].querySelector('svg')).toBeNull();
+    expect(checked).toHaveClass('pe-8');
+    expect(fixture.nativeElement.querySelector('z-dropdown-menu-checkbox-item')).toHaveClass('pe-8');
+  });
+
   it('selects radio items with menuitemradio semantics', fakeAsync(() => {
     const radioItems = fixture.nativeElement.querySelectorAll('z-dropdown-menu-radio-item');
 

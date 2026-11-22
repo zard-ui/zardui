@@ -49,7 +49,7 @@ GitHub release and notification
 
 A GitHub release is created with generated notes, and a Discord webhook announces it.
 
-What the release job runs
+**What the release job runs**
 
 ```
 npm ci
@@ -98,7 +98,7 @@ Write correct commit messages. That is the whole contract. Do not bump versions,
 
 If you are curious about what your change would release, preview it locally without touching anything.
 
-Preview a release locally
+**Preview a release locally**
 
 ```
 npm run release:dry-run

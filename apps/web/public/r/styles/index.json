@@ -1,0 +1,15 @@
+{
+  "$schema": "https://zardui.com/schema/styles.json",
+  "schemaVersion": 1,
+  "default": "nova",
+  "styles": [
+    "vega",
+    "nova",
+    "maia",
+    "lyra",
+    "mira",
+    "luma",
+    "sera",
+    "rhea"
+  ]
+}

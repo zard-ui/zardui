@@ -9,6 +9,8 @@ import type {
   SectionTableLink,
 } from '@doc/shared/constants/components.constant';
 
+import { exampleTitle } from './example-title';
+
 const BASE_URL = 'https://zardui.com';
 
 /** `date-picker` -> `Date Picker` */
@@ -35,9 +37,9 @@ function codeBlock(block: CodeBlockData | undefined): string {
   return block?.code ? fence(block.code, block.language) : '';
 }
 
-/** Markdown-table cells must not contain raw pipes or newlines. */
+/** Markdown-table cells must not contain raw pipes or newlines; backslashes first, so `\|` stays escaped. */
 function cell(value: string | undefined): string {
-  return (value ?? '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ').trim();
+  return (value ?? '').replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ').trim();
 }
 
 function code(value: string | undefined): string {
@@ -67,7 +69,7 @@ function serializeExamples(examples: ExampleData[] | undefined, titled = true): 
 
   return examples
     .map(example => {
-      const parts: string[] = titled ? [`### ${titleCase(example.name)}`] : [];
+      const parts: string[] = titled ? [`### ${exampleTitle(example.name)}`] : [];
       if (example.description) parts.push(example.description);
 
       const before = snippet(example.codeBefore);
@@ -121,9 +123,19 @@ function serializeInstallation(data: ComponentData): string {
     parts.push('### CLI', fence(cli.code, cli.language));
   }
 
-  const manual = (data.installData?.manualCode ?? []).map(codeBlock).filter(Boolean);
+  // Mirrors the Manual tab: dependencies first, then one labelled block per file, so a
+  // reader (or an AI assistant) knows which file each block belongs to.
+  const manual: string[] = [];
+  const deps = data.installData?.manualDeps?.tabs?.[0];
+  if (deps?.code) {
+    manual.push('**Install dependencies**', fence(deps.code, deps.language));
+  }
+  for (const block of data.installData?.manualCode ?? []) {
+    const rendered = codeBlock(block);
+    if (rendered) manual.push(block.title ? `**Add ${block.title}**` : '', rendered);
+  }
   if (manual.length) {
-    parts.push('### Manual', ...manual);
+    parts.push('### Manual', ...manual.filter(Boolean));
   }
 
   const register = codeBlock(data.installData?.register);
@@ -178,7 +190,7 @@ export function serializeComponentToMarkdown(data: ComponentData): string {
     section('Usage', serializeUsage(data)),
     section('Composition', serializeComposition(data)),
     section('Features', (data.features ?? []).map(feature => `- ${feature}`).join('\n')),
-    section('Examples', serializeExamples(data.examples)),
+    section('Examples', serializeExamples(data.preview ? [data.preview, ...data.examples] : data.examples)),
     ...sections.filter(extra => extra.position !== 'intro').map(serializeTitledSection),
     section('Accessibility', data.accessibility?.join('\n\n') ?? ''),
     section('API Reference', serializeApi(data.api)),

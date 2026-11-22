@@ -145,4 +145,14 @@
     @slot;
   }
 }
+
+/*
+ * ng-icon sizes its host with an unlayered `width: var(--ng-icon__size, 1em)`, which beats every Tailwind utility
+ * (utilities live in a layer), so `<ng-icon class="size-5">` stayed at the inherited size. An icon given an explicit
+ * `size-*` class takes it, as an svg does in shadcn/ui: `revert-layer` hands those two properties back to the layers.
+ */
+ng-icon[class*='size-'] {
+  width: revert-layer;
+  height: revert-layer;
+}
 ```

@@ -17,6 +17,8 @@ npx zard-cli@latest add alert-dialog
 
 ### Manual
 
+**Add alert-dialog.component.ts**
+
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
 import { Overlay, OverlayConfig, type OverlayRef } from '@angular/cdk/overlay';
@@ -414,64 +416,42 @@ export class ZardAlertDialogCloseDirective {
 }
 ```
 
+**Add alert-dialog.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const alertDialogVariants = cva(
-  [
-    'group/alert-dialog-content fixed top-1/2 left-1/2 z-50 grid w-full -translate-1/2 gap-4',
-    'rounded-xl bg-popover p-4 text-popover-foreground ring-1 ring-foreground/10 outline-none',
-    'data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm',
-  ],
-  {
-    variants: {
-      zSize: {
-        default: '',
-        sm: '',
-      },
-    },
-    defaultVariants: {
-      zSize: 'default',
+export const alertDialogVariants = cva('bg-popover text-popover-foreground ring-foreground/10 fixed top-1/2 left-1/2 z-50 grid w-full -translate-1/2 gap-4 rounded-xl p-4 ring-1 data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm group/alert-dialog-content outline-none', {
+  variants: {
+    zSize: {
+      default: '',
+      sm: '',
     },
   },
-);
+  defaultVariants: {
+    zSize: 'default',
+  },
+});
 
 /** Classes of the mask behind an alert dialog, shared by the declarative form and the service. */
-export const ALERT_DIALOG_BACKDROP_CLASSES = ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'];
+// A marker, so the style decides how dark and how blurred the mask is. The CDK takes one class per entry.
+export const ALERT_DIALOG_BACKDROP_CLASSES = 'bg-black/10 supports-backdrop-filter:backdrop-blur-xs'.split(' ').filter(Boolean);
 
-export const alertDialogHeaderVariants = cva([
-  'grid grid-rows-[auto_1fr] place-items-center gap-1.5 text-center',
-  'has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] has-data-[slot=alert-dialog-media]:gap-x-4',
-  'sm:group-data-[size=default]/alert-dialog-content:place-items-start',
-  'sm:group-data-[size=default]/alert-dialog-content:text-start',
-  'sm:group-data-[size=default]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr]',
-]);
+export const alertDialogHeaderVariants = cva('grid grid-rows-[auto_1fr] place-items-center gap-1.5 text-center has-data-[slot=alert-dialog-media]:grid-rows-[auto_auto_1fr] has-data-[slot=alert-dialog-media]:gap-x-4 sm:group-data-[size=default]/alert-dialog-content:place-items-start sm:group-data-[size=default]/alert-dialog-content:text-start sm:group-data-[size=default]/alert-dialog-content:has-data-[slot=alert-dialog-media]:grid-rows-[auto_1fr]');
 
-export const alertDialogTitleVariants = cva([
-  'text-base font-medium wrap-anywhere',
-  'sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2',
-]);
+export const alertDialogTitleVariants = cva('text-base font-medium wrap-anywhere sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2 font-heading');
 
-export const alertDialogDescriptionVariants = cva([
-  'text-sm text-balance text-muted-foreground wrap-anywhere md:text-pretty',
-  '[&_a]:underline [&_a]:underline-offset-[3px] [&_a]:hover:text-foreground',
-]);
+export const alertDialogDescriptionVariants = cva('text-muted-foreground text-sm text-balance wrap-anywhere [&_a]:hover:text-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-[3px]');
 
-export const alertDialogFooterVariants = cva([
-  '-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4',
-  'group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2',
-  'sm:flex-row sm:justify-end',
-]);
+export const alertDialogFooterVariants = cva('bg-muted/50 -mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t p-4 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end');
 
-export const alertDialogMediaVariants = cva([
-  'mb-2 inline-flex size-10 items-center justify-center rounded-md bg-muted',
-  'sm:group-data-[size=default]/alert-dialog-content:row-span-2',
-  "*:[svg:not([class*='size-'])]:size-6",
-]);
+export const alertDialogMediaVariants = cva("bg-muted mb-2 inline-flex size-10 items-center justify-center rounded-md sm:group-data-[size=default]/alert-dialog-content:row-span-2 *:[svg:not([class*='size-'])]:size-6");
 
 export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 export type ZardAlertDialogSizeVariants = NonNullable<VariantProps<typeof alertDialogVariants>['zSize']>;
 ```
+
+**Add alert-dialog-container.component.ts**
 
 ```angular-ts
 import { NgTemplateOutlet } from '@angular/common';
@@ -655,6 +635,8 @@ export class ZardAlertDialogContainerComponent<T> implements ZardAlertDialogHost
 }
 ```
 
+**Add alert-dialog-host.ts**
+
 ```angular-ts
 import type { WritableSignal } from '@angular/core';
 
@@ -677,6 +659,8 @@ export abstract class ZardAlertDialogHost {
   abstract requestClose(): void;
 }
 ```
+
+**Add alert-dialog-panel.component.ts**
 
 ```angular-ts
 import { FocusTrapFactory } from '@angular/cdk/a11y';
@@ -784,6 +768,8 @@ export class ZardAlertDialogPanelComponent {
 }
 ```
 
+**Add alert-dialog-ref.ts**
+
 ```angular-ts
 import type { OverlayRef } from '@angular/cdk/overlay';
 
@@ -835,6 +821,8 @@ export class ZardAlertDialogRef<T = unknown> extends ZardOverlayRefBase<T, void>
 }
 ```
 
+**Add alert-dialog.imports.ts**
+
 ```angular-ts
 import {
   ZardAlertDialogCloseDirective,
@@ -857,6 +845,8 @@ export const ZardAlertDialogImports = [
   ZardAlertDialogCloseDirective,
 ] as const;
 ```
+
+**Add alert-dialog.service.ts**
 
 ```angular-ts
 import { Directionality } from '@angular/cdk/bidi';
@@ -991,6 +981,8 @@ export class ZardAlertDialogService {
 }
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export { type OnClickCallback as AlertDialogOnClickCallback } from './alert-dialog-container.component';
 export { ZardAlertDialogContainerComponent, ZardAlertDialogOptions } from './alert-dialog-container.component';
@@ -1039,6 +1031,63 @@ z-alert-dialog
 ```
 
 ## Examples
+
+### Preview
+
+A basic alert dialog with a title, description, and cancel and continue buttons.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+
+import { ZardAlertDialogImports } from '@/shared/components/alert-dialog/alert-dialog.imports';
+import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-dialog.service';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardTabsImports } from '@/shared/components/tabs/tabs.imports';
+
+@Component({
+  selector: 'z-demo-alert-dialog-preview',
+  imports: [ZardAlertDialogImports, ZardButtonComponent, ZardTabsImports],
+  template: `
+    <z-tab-group>
+      <z-tab label="Template">
+        <button type="button" z-button zType="outline" (click)="visible.set(true)">Show Dialog</button>
+
+        <z-alert-dialog [(zVisible)]="visible">
+          <z-alert-dialog-header>
+            <z-alert-dialog-title>Are you absolutely sure?</z-alert-dialog-title>
+            <z-alert-dialog-description>
+              This action cannot be undone. This will permanently delete your account from our servers.
+            </z-alert-dialog-description>
+          </z-alert-dialog-header>
+          <z-alert-dialog-footer>
+            <button type="button" z-button zType="outline" z-alert-dialog-close>Cancel</button>
+            <button type="button" z-button (click)="visible.set(false)">Continue</button>
+          </z-alert-dialog-footer>
+        </z-alert-dialog>
+      </z-tab>
+
+      <z-tab label="Service">
+        <button type="button" z-button zType="outline" (click)="open()">Show Dialog</button>
+      </z-tab>
+    </z-tab-group>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoAlertDialogPreviewComponent {
+  private readonly alertDialogService = inject(ZardAlertDialogService);
+
+  readonly visible = signal(false);
+
+  open() {
+    this.alertDialogService.create({
+      zTitle: 'Are you absolutely sure?',
+      zDescription: 'This action cannot be undone. This will permanently delete your account from our servers.',
+      zOkText: 'Continue',
+      zCancelText: 'Cancel',
+    });
+  }
+}
+```
 
 ### Basic
 
@@ -1368,7 +1417,7 @@ export class ZardDemoAlertDialogDestructiveComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

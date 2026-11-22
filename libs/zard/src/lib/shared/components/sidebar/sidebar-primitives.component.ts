@@ -113,7 +113,7 @@ export class ZardSidebarSeparatorComponent {
   host: {
     'data-slot': 'sidebar-input',
     'data-sidebar': 'input',
-    class: 'h-8 w-full bg-background! shadow-none dark:bg-input/30!',
+    class: 'h-8! w-full bg-background! shadow-none dark:bg-input/30!',
   },
   exportAs: 'zSidebarInput',
 })

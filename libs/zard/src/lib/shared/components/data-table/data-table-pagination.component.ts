@@ -16,22 +16,22 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   selector: 'z-data-table-pagination',
   imports: [ZardButtonComponent, ZardSelectImports, NgIcon],
   template: `
-    <div class="flex items-center justify-between gap-4 px-2">
-      <div class="text-muted-foreground min-w-0 flex-1 truncate text-sm">
+    <div class="cn-data-table-pagination-content flex items-center justify-between">
+      <div class="text-muted-foreground cn-data-table-pagination-summary min-w-0 flex-1 truncate">
         @if (hasSelection()) {
           {{ selectedCount() }} of {{ filteredCount() }} row(s) selected.
         }
       </div>
-      <div class="flex items-center gap-4 @2xl:gap-8">
+      <div class="cn-data-table-pagination-controls flex items-center">
         <div class="flex items-center gap-2">
-          <p class="hidden text-sm font-medium whitespace-nowrap @xl:block">Rows per page</p>
+          <p class="cn-data-table-pagination-label hidden whitespace-nowrap @xl:block">Rows per page</p>
           <z-select class="w-20" [zValue]="pageSize()" (zSelectionChange)="setPageSize($event)">
             @for (size of zPageSizeOptions(); track size) {
               <z-select-item [zValue]="size.toString()">{{ size }}</z-select-item>
             }
           </z-select>
         </div>
-        <div class="flex w-25 items-center justify-center text-sm font-medium whitespace-nowrap">
+        <div class="cn-data-table-pagination-label flex w-25 items-center justify-center whitespace-nowrap">
           Page {{ pageIndex() + 1 }} of {{ pageCount() }}
         </div>
         <div class="flex items-center gap-2">
@@ -40,7 +40,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
             z-button
             zType="outline"
             zSize="icon"
-            class="hidden size-8 @2xl:flex"
+            class="cn-data-table-pagination-button hidden @2xl:flex"
             [zDisabled]="!canPrevious()"
             (click)="table().firstPage()"
           >
@@ -52,7 +52,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
             z-button
             zType="outline"
             zSize="icon"
-            class="size-8"
+            class="cn-data-table-pagination-button"
             [zDisabled]="!canPrevious()"
             (click)="table().previousPage()"
           >
@@ -64,7 +64,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
             z-button
             zType="outline"
             zSize="icon"
-            class="size-8"
+            class="cn-data-table-pagination-button"
             [zDisabled]="!canNext()"
             (click)="table().nextPage()"
           >
@@ -76,7 +76,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
             z-button
             zType="outline"
             zSize="icon"
-            class="hidden size-8 @2xl:flex"
+            class="cn-data-table-pagination-button hidden @2xl:flex"
             [zDisabled]="!canNext()"
             (click)="table().lastPage()"
           >

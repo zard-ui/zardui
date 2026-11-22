@@ -34,7 +34,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
     <z-button>Click me</z-button>
   `,
 })
-export class AppComponent {}
+export class App {}
 ```
 
 Requires Node 20 or newer and an Angular project with Tailwind CSS v4 (`init` installs and wires Tailwind for you).

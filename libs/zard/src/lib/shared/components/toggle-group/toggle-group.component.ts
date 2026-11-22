@@ -71,7 +71,7 @@ type OnChangeType = (value: string | string[]) => void;
             <ng-container [ngTemplateOutlet]="item.template" />
           } @else {
             @if (item.icon) {
-              <ng-icon [name]="item.icon" class="size-4!" />
+              <ng-icon [name]="item.icon" />
             }
             @if (item.label) {
               <span>{{ item.label }}</span>

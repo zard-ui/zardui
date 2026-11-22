@@ -2,6 +2,7 @@ const mockExeca = jest.fn().mockResolvedValue({});
 const mockDetect = jest.fn();
 const mockExistsSync = jest.fn();
 const mockReadFile = jest.fn();
+const mockProbeYarnMajor = jest.fn();
 
 jest.mock('node:fs', () => ({ existsSync: mockExistsSync }));
 jest.mock('node:fs/promises', () => ({ readFile: mockReadFile }));
@@ -12,6 +13,11 @@ jest.mock('@antfu/ni', () => ({
 
 jest.mock('execa', () => ({
   execa: mockExeca,
+}));
+
+jest.mock('@cli/utils/yarn.js', () => ({
+  ...jest.requireActual('@cli/utils/yarn.js'),
+  probeYarnMajor: mockProbeYarnMajor,
 }));
 
 jest.mock('@cli/utils/config.js', () => ({
@@ -118,6 +124,7 @@ describe('suggestedRunner', () => {
   beforeEach(() => {
     jest.resetModules();
     delete process.env.npm_config_user_agent;
+    mockProbeYarnMajor.mockReset();
     suggestedRunner = getModuleFresh().suggestedRunner;
   });
 
@@ -141,10 +148,38 @@ describe('suggestedRunner', () => {
     expect(suggestedRunner('npm')).toBe('bunx');
   });
 
-  it('should not read yarn out of the npm fragment of its user agent', () => {
+  it('should not read yarn out of the npm fragment of its user agent, and never suggest dlx to Yarn 1', () => {
     process.env.npm_config_user_agent = 'yarn/1.22.19 npm/? node/v22.0.0 linux x64';
 
+    expect(suggestedRunner('npm')).toBe('npx');
+  });
+
+  it('should suggest yarn dlx when invoked through Yarn 4', () => {
+    process.env.npm_config_user_agent = 'yarn/4.5.0 npm/? node/v22.0.0 linux x64';
+
     expect(suggestedRunner('npm')).toBe('yarn dlx');
+  });
+
+  it('should ask a yarn project for its major when nothing says how the CLI ran', () => {
+    mockProbeYarnMajor.mockReturnValue(1);
+    expect(suggestedRunner('yarn', '/project')).toBe('npx');
+    expect(mockProbeYarnMajor).toHaveBeenCalledWith('/project');
+
+    mockProbeYarnMajor.mockReturnValue(4);
+    expect(suggestedRunner('yarn', '/project')).toBe('yarn dlx');
+  });
+
+  it('should fall back to npx when the yarn version cannot be read', () => {
+    mockProbeYarnMajor.mockReturnValue(null);
+
+    expect(suggestedRunner('yarn', '/project')).toBe('npx');
+  });
+
+  it('should not probe yarn for other managers', () => {
+    mockProbeYarnMajor.mockClear();
+    suggestedRunner('pnpm', '/project');
+
+    expect(mockProbeYarnMajor).not.toHaveBeenCalled();
   });
 
   it('should fall back to the project package manager without a user agent', () => {

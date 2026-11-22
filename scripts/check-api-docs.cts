@@ -25,7 +25,7 @@ const COMPONENTS = path.resolve(__dirname, '../libs/zard/src/lib/shared/componen
 /**
  * Members a props table is right not to list, by `<selector>.<member>`.
  *
- * Two kinds only:
+ * Three kinds only:
  *   - wiring inputs the parent sets, never the consumer
  *   - shadcn-parity aliases that duplicate a `z*` input the table already
  *     documents. Dropdown accepts three names for one concept on its item
@@ -33,10 +33,14 @@ const COMPONENTS = path.resolve(__dirname, '../libs/zard/src/lib/shared/componen
  *     canonical name, documented as a row; `variant` and `zVariant` are
  *     documented as aliases of `zType` in prose instead of a row each, so
  *     they stay exempt here.
+ *   - an input whose public name is an alias: hover-card's `zContent` is
+ *     bound as `[zHoverCard]`, and the table lists the name the consumer
+ *     writes.
  */
 const UNDOCUMENTED_BY_DESIGN = new Set([
   'z-command-option.parentCommand',
   'z-command-option.commandGroup',
+  '[zHoverCard].zContent',
   'z-dropdown-menu-item.variant',
   'z-dropdown-menu-item.zVariant',
   'z-dropdown-menu-checkbox-item.variant',

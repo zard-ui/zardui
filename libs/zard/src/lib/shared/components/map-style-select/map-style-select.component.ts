@@ -76,21 +76,21 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
       zType="outline"
       zPopover
       [zAlign]="zAlign()"
-      class="gap-2 pr-2 pl-1"
+      class="cn-map-style-select-trigger"
       [zContent]="content"
       [attr.aria-label]="zAriaLabel() + ', current: ' + triggerLabel()"
     >
       <ng-container *ngTemplateOutlet="swatchTpl; context: { $implicit: current, size: 'sm' }" />
       <span class="flex flex-col items-start gap-0.5 leading-none">
-        <span class="text-muted-foreground text-[10px] font-normal">{{ zAriaLabel() }}</span>
-        <span class="text-xs font-medium">{{ triggerLabel() }}</span>
+        <span class="text-muted-foreground cn-map-style-select-trigger-caption">{{ zAriaLabel() }}</span>
+        <span class="cn-map-style-select-trigger-value">{{ triggerLabel() }}</span>
       </span>
       <ng-icon name="lucideChevronsUpDown" size="14" class="text-muted-foreground" aria-hidden="true" />
     </button>
 
     <ng-template #content>
       <z-popover class="max-h-[min(30rem,50dvh)] w-80 gap-0 overflow-hidden p-0">
-        <div z-popover-header class="shrink-0 px-3.5 pt-3 pb-2">
+        <div z-popover-header class="cn-map-style-select-header shrink-0">
           <h4 z-popover-title>{{ zAriaLabel() }}</h4>
           <p z-popover-description class="text-xs">Every map on this page follows your pick.</p>
         </div>
@@ -98,10 +98,10 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
         <div
           role="radiogroup"
           [attr.aria-label]="zAriaLabel()"
-          class="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto p-1.5 pt-0"
+          class="cn-map-style-select-list flex min-h-0 flex-1 flex-col overflow-y-auto"
         >
           @for (group of groups(); track group.provider.id) {
-            <p class="text-muted-foreground px-1.5 pt-2 pb-0.5 text-[11px] font-medium tracking-wide uppercase">
+            <p class="text-muted-foreground cn-map-style-select-group-label">
               {{ group.provider.label }}
             </p>
             @for (preset of group.presets; track preset.id) {
@@ -115,18 +115,18 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
               >
                 <ng-container *ngTemplateOutlet="swatchTpl; context: { $implicit: preset, size: 'default' }" />
                 <span class="flex min-w-0 flex-1 flex-col gap-1">
-                  <span class="flex items-center gap-1.5 text-sm font-medium">
+                  <span class="cn-map-style-select-option-name">
                     {{ preset.label }}
                     @if (preset.id === defaultPresetId) {
-                      <z-badge zType="secondary" class="px-1.5 py-0 text-[10px]">Default</z-badge>
+                      <z-badge zType="secondary" class="cn-map-style-select-badge">Default</z-badge>
                     }
                     @if (preset.theme; as theme) {
-                      <z-badge zType="outline" class="px-1.5 py-0 text-[10px] font-normal">
+                      <z-badge zType="outline" class="cn-map-style-select-badge font-normal">
                         {{ theme === 'light' ? 'Light only' : 'Dark only' }}
                       </z-badge>
                     }
                   </span>
-                  <span class="text-muted-foreground text-xs">{{ detail(preset) }}</span>
+                  <span class="text-muted-foreground cn-map-style-select-option-description">{{ detail(preset) }}</span>
                 </span>
                 <ng-icon
                   name="lucideCheck"
@@ -141,11 +141,11 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
 
         @if (pending(); as preset) {
           <form
-            class="flex shrink-0 flex-col gap-2 border-t p-3"
+            class="cn-map-style-select-form flex shrink-0 flex-col border-t"
             (submit)="applyKey($event, popover)"
             (keydown.escape)="cancel()"
           >
-            <label class="text-xs font-medium" [for]="inputId">{{ providerOf(preset).label }} API key</label>
+            <label class="cn-map-style-select-form-label" [for]="inputId">{{ providerOf(preset).label }} API key</label>
             <div class="flex gap-2">
               <input
                 #keyInput
@@ -161,7 +161,7 @@ const swatchVars = (prefix: 'l' | 'd', palette: ZardMapSwatchPalette): Record<st
               <button z-button zSize="sm" type="submit">Apply</button>
               <button z-button zSize="sm" zType="ghost" type="button" (click)="cancel()">Cancel</button>
             </div>
-            <p class="text-muted-foreground text-xs" [id]="hintId">
+            <p class="text-muted-foreground cn-map-style-select-hint" [id]="hintId">
               {{ preset.label }} needs a key. It is only used to request tiles from {{ providerOf(preset).label }} and
               stays in this browser.
               @if (providerOf(preset).keyUrl; as keyUrl) {

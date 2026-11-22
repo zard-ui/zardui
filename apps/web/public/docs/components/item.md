@@ -17,6 +17,8 @@ npx zard-cli@latest add item
 
 ### Manual
 
+**Add item.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -224,80 +226,52 @@ export class ZardItemFooterComponent {
 }
 ```
 
+**Add item.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
-export const itemGroupVariants = cva(
-  'group/item-group flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2',
-);
+export const itemGroupVariants = cva('flex w-full flex-col gap-4 has-[>[data-slot=item][data-size=sm]]:gap-2.5 has-[>[data-slot=item][data-size=xs]]:gap-2 group/item-group');
 
 export const itemSeparatorVariants = cva('bg-border my-2 block h-px w-full shrink-0');
 
-export const itemVariants = cva(
-  mergeClasses(
-    'group/item flex w-full flex-wrap items-center rounded-lg border text-sm transition-colors duration-100 outline-none',
-    'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
-    '[a]:transition-colors [a]:hover:bg-muted',
-  ),
-  {
-    variants: {
-      zVariant: {
-        default: 'border-transparent',
-        outline: 'border-border',
-        muted: 'border-transparent bg-muted/50',
-      },
-      zSize: {
-        default: 'gap-2.5 px-3 py-2.5',
-        sm: 'gap-2.5 px-3 py-2.5',
-        xs: 'gap-2 px-2.5 py-2 in-data-[slot=dropdown-menu-content]:p-0',
-      },
+export const itemVariants = cva('flex w-full flex-wrap items-center rounded-lg border text-sm transition-colors duration-100 focus-visible:border-ring focus-visible:ring-ring/50 [a]:hover:bg-muted focus-visible:ring-3 [a]:transition-colors group/item outline-none', {
+  variants: {
+    zVariant: {
+      default: 'border-transparent',
+      outline: 'border-border',
+      muted: 'bg-muted/50 border-transparent',
     },
-    defaultVariants: {
-      zVariant: 'default',
-      zSize: 'default',
+    zSize: {
+      default: 'gap-2.5 px-3 py-2.5',
+      sm: 'gap-2.5 px-3 py-2.5',
+      xs: 'gap-2 px-2.5 py-2 in-data-[slot=dropdown-menu-content]:p-0',
     },
   },
-);
+  defaultVariants: {
+    zVariant: 'default',
+    zSize: 'default',
+  },
+});
 
-export const itemMediaVariants = cva(
-  mergeClasses(
-    'flex shrink-0 items-center justify-center gap-2',
-    'group-has-data-[slot=item-description]/item:translate-y-0.5',
-    'group-has-data-[slot=item-description]/item:self-start',
-    '[&_svg]:pointer-events-none',
-  ),
-  {
-    variants: {
-      zVariant: {
-        default: 'bg-transparent',
-        icon: "[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
-        image:
-          'size-10 overflow-hidden rounded-sm group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover',
-      },
-    },
-    defaultVariants: {
-      zVariant: 'default',
+export const itemMediaVariants = cva('flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:translate-y-0.5 group-has-data-[slot=item-description]/item:self-start [&_svg]:pointer-events-none', {
+  variants: {
+    zVariant: {
+      default: 'bg-transparent',
+      icon: "[--ng-icon__size:1rem] [&_svg:not([class*='size-'])]:size-4",
+      image: 'size-10 overflow-hidden rounded-sm group-data-[size=sm]/item:size-8 group-data-[size=xs]/item:size-6 [&_img]:size-full [&_img]:object-cover',
     },
   },
-);
+  defaultVariants: {
+    zVariant: 'default',
+  },
+});
 
-export const itemContentVariants = cva(
-  'flex flex-1 flex-col gap-1 group-data-[size=xs]/item:gap-0 [&+[data-slot=item-content]]:flex-none',
-);
+export const itemContentVariants = cva('flex flex-1 flex-col gap-1 group-data-[size=xs]/item:gap-0 [&+[data-slot=item-content]]:flex-none');
 
-export const itemTitleVariants = cva(
-  'line-clamp-1 flex w-fit items-center gap-2 text-sm/snug font-medium underline-offset-4',
-);
+export const itemTitleVariants = cva('line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-medium underline-offset-4');
 
-export const itemDescriptionVariants = cva(
-  mergeClasses(
-    'line-clamp-2 text-start text-sm/normal font-normal text-muted-foreground',
-    'group-data-[size=xs]/item:text-xs',
-    '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
-  ),
-);
+export const itemDescriptionVariants = cva('text-muted-foreground line-clamp-2 text-start text-sm leading-normal group-data-[size=xs]/item:text-xs [&>a]:underline [&>a]:underline-offset-4');
 
 export const itemActionsVariants = cva('flex items-center gap-2');
 
@@ -310,11 +284,15 @@ export type ZardItemSizeVariants = NonNullable<VariantProps<typeof itemVariants>
 export type ZardItemMediaVariantVariants = NonNullable<VariantProps<typeof itemMediaVariants>['zVariant']>;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './item.component';
 export * from './item.imports';
 export * from './item.variants';
 ```
+
+**Add item.imports.ts**
 
 ```angular-ts
 export {
@@ -373,6 +351,51 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBadgeCheck, lucideChevronRight } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardItemImports } from '@/shared/components/item/item.imports';
+
+@Component({
+  selector: 'z-demo-item-preview',
+  imports: [ZardButtonComponent, NgIcon, ...ZardItemImports],
+  template: `
+    <div class="flex w-full min-w-md flex-col gap-6">
+      <z-item zVariant="outline">
+        <z-item-content>
+          <z-item-title>Basic Item</z-item-title>
+          <z-item-description>A simple item with title and description.</z-item-description>
+        </z-item-content>
+        <z-item-actions>
+          <button type="button" z-button zType="outline" zSize="sm">Action</button>
+        </z-item-actions>
+      </z-item>
+
+      <a z-item href="#" zVariant="outline" zSize="sm">
+        <z-item-media>
+          <ng-icon name="lucideBadgeCheck" size="1.25rem" />
+        </z-item-media>
+        <z-item-content>
+          <z-item-title>Your profile has been verified.</z-item-title>
+        </z-item-content>
+        <z-item-actions>
+          <ng-icon name="lucideChevronRight" size="1rem" />
+        </z-item-actions>
+      </a>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideBadgeCheck, lucideChevronRight })],
+})
+export class ZardDemoItemPreviewComponent {}
+```
 
 ### Variant
 
@@ -537,10 +560,10 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
     <div class="flex w-full min-w-lg flex-col gap-6">
       <z-item zVariant="outline">
         <z-item-media>
-          <z-avatar zSrc="https://github.com/evilrabbit.png" zFallback="ER" class="size-10" />
+          <z-avatar zSrc="https://github.com/mikij.png" zAlt="@mikij" zFallback="ML" class="size-10" />
         </z-item-media>
         <z-item-content>
-          <z-item-title>Evil Rabbit</z-item-title>
+          <z-item-title>Mickey Lazarevic</z-item-title>
           <z-item-description>Last seen 5 months ago</z-item-description>
         </z-item-content>
         <z-item-actions>
@@ -864,7 +887,7 @@ export class ZardDemoItemDropdownComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

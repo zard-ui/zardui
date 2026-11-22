@@ -36,6 +36,18 @@ export const CALENDAR_API: ApiSection[] = [
         default: '[]',
       },
       { name: '[zNumberOfMonths]', description: 'Months shown side by side', type: 'number', default: '1' },
+      {
+        name: '[zShowWeekNumbers]',
+        description: 'Adds a leading column with each week number',
+        type: 'boolean',
+        default: 'false',
+      },
+      {
+        name: '[zFixedWeeks]',
+        description: 'Always render six weeks per month, so the height does not change between months',
+        type: 'boolean',
+        default: 'false',
+      },
       { name: '[zLocale]', description: 'BCP 47 locale for this calendar only', type: 'string', default: '-' },
       {
         name: '[zDayTemplate]',

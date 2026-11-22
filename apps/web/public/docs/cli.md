@@ -21,7 +21,7 @@ npx zard-cli@latest init
 
 The first question is what kind of project you are setting up. Everything after it follows from that answer — which files get configured, and where the components will live.
 
-Terminal
+**Terminal**
 
 ```
 ◇ zard/ui · initialize
@@ -40,7 +40,7 @@ Terminal
 
 Answered questions stay on screen as a transcript, and the paths suggested from there on come from the project you picked:
 
-Terminal
+**Terminal**
 
 ```
    ✔  project type  …  Nx
@@ -57,7 +57,7 @@ Text fields are fully editable: arrows and `Home` / `End` move the caret, `Delet
 
 Once everything is answered, the steps run with live progress. Steps that take a while — installing dependencies, usually — show how long they have been running, so a spinner is never mistaken for a stuck process.
 
-Terminal
+**Terminal**
 
 ```
 ✔  Writing configuration…
@@ -77,6 +77,12 @@ Terminal
    ╰───────────────────────────────────────────────╯
 ```
 
+Starting a new project? Skip creating it by hand: `create` scaffolds an Angular, Nx or Analog app and configures it with a design preset in one command. Design the preset on the [create page](/create) , and see `create` under Commands below.
+
+```
+npx zard-cli@latest create my-app
+```
+
 ### Step 2: Add components
 
 Add one component, several at once, or every available one. Dependencies between components are resolved for you: asking for a component pulls in whatever it needs.
@@ -89,7 +95,7 @@ npx zard-cli add button card dialog
 
 Import the components in your standalone components and start using them in your templates.
 
-app.component.ts
+**src/app/app.ts**
 
 ```
 import { Component } from '@angular/core';
@@ -103,7 +109,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
     <z-button>Click me</z-button>
   `,
 })
-export class AppComponent {}
+export class App {}
 ```
 
 ## Project types
@@ -133,18 +139,26 @@ When a workspace declares more than one compatible project, init asks which one 
 
 Initialize your project and install dependencies.
 
-Terminal
-
 ```
-npx zard-cli init
+npx zard-cli@latest init
 ```
 
 **Options:**
 
 `-y, --yes` — Skip the confirmation prompt
+`--no-interactive` — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For scripts and AI agents
 `-c, --cwd <cwd>` — Working directory, defaults to the current one
 `-t, --type <type>` — Project type: `angular` , `angular-library` , `nx` , `nx-library` or `analog`
 `-p, --project <name>` — Which workspace project to configure, when more than one is compatible
+`--css <path>` — The global stylesheet that receives the theme (in a library, the file init creates)
+`--app-config <path>` — The app.config.ts that receives provideZard(); ignored for libraries
+`--base-color <color>` — Theme base color: `neutral` , `stone` , `zinc` , `gray` , `slate` , `mauve` , `olive` , `mist` or `taupe`
+`--components-alias <alias>` , `--utils-alias <alias>` — Import aliases, defaults to `@/shared/components` and `@/shared/utils`
+`--rtl` — The project reads right to left: records `"rtl": true` and sets `dir="rtl"` on `<html>` in `index.html` . `--no-rtl` is the default
+`--preset <code>` — Apply a design preset (style, base color, theme, fonts, icons, radius, menu). Build one at [zardui.com/create](/create)
+`--pointer` — Use the pointer cursor on buttons. Only with `--preset`
+
+Every question the wizard asks has a flag. In a terminal they fill the answers in advance; headless (CI, pipes) they are the answers.
 
 **What it does:**
 
@@ -164,95 +178,189 @@ Running it again on a configured project asks for confirmation first, and then o
 
 Outside a TTY — CI, pipes — there is nobody to answer the questions, so `--yes` is required and `--type` takes the place of the first one. Without it the workspace decides, which is a guess; pass it when it matters. Init refuses to run headless without `--yes` , because it overwrites your global CSS.
 
-Terminal
+```
+npx zard-cli@latest init --yes --type nx --project web
+```
+
+**With a preset:** `--preset` configures a project that already exists with a whole design in one go — the style, base color, theme and chart colors, fonts, icon library, radius and menu look. Any of the five project types accepts it, libraries included. It writes the same `components.json` and theme tokens as a plain init, plus the font packages with their imports, the icon library's `ng-icons` package and the `preset` key. It cannot be combined with `--base-color` , since the preset already chooses it.
 
 ```
-npx zard-cli init --yes --type nx --project web
+npx zard-cli@latest init --preset Z6F9MtstG --pointer
 ```
+
+A preset code starts with `Z` and is built on the [create page](/create) . The CLI decodes it locally and rejects a malformed code, or one that comes from another tool, before it touches a single file. Components you add afterwards are installed with the preset's icon library; components already in the project keep their current look until you add them again with `--overwrite` .
 
 ### add
 
 Add components to your project, resolving their dependencies.
 
-Terminal
-
 ```
-npx zard-cli add [components...]
+npx zard-cli@latest add [components...]
 ```
 
 **Options:**
 
 `-y, --yes` — Skip the confirmation prompt
+`--no-interactive` — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For scripts and AI agents
 `-o, --overwrite` — Overwrite existing files
 `-c, --cwd <cwd>` — Working directory, defaults to the current one
-`-a, --all` — Add every available component
+`-a, --all` — Add every available component. Blocks are not included; they are added by name
 `-p, --path <path>` — Write the components somewhere other than the configured alias
+`--index-html <path>` — The index.html that receives the dark-mode theme script
 
 **Examples:**
 
 ```
-npx zard-cli add button
+npx zard-cli@latest add button
 ```
 
 Several at once:
 
-Terminal
-
 ```
-npx zard-cli add button card dialog
+npx zard-cli@latest add button card dialog
 ```
 
 Everything:
 
-Terminal
-
 ```
-npx zard-cli add --all
+npx zard-cli@latest add --all
 ```
 
 With no arguments, a searchable list opens — pick with `space` and confirm with `enter` . Headless, add needs the component names or `--all` , since there is no list to pick from.
 
-Terminal
-
 ```
-npx zard-cli add
+npx zard-cli@latest add
 ```
 
-**Dark mode:** adding `dark-mode` also injects the theme script into your `index.html` and registers the initializer, so the chosen theme is applied before the first paint instead of flashing. It asks where the file is, suggesting the right path for your project type — at the root for Analog, under the app for Nx. This step needs an interactive terminal.
-
-Terminal
+**Dark mode:** adding `dark-mode` also injects the theme script into your `index.html` and registers the initializer, so the chosen theme is applied before the first paint instead of flashing. It asks where the file is, suggesting the right path for your project type — at the root for Analog, under the app for Nx. Headless, it uses `--index-html` or that suggested path.
 
 ```
-npx zard-cli add dark-mode
+npx zard-cli@latest add dark-mode
 ```
+
+**Blocks:** a block is a whole screen already composed — a login form, a dashboard — and it installs by name, like a component. It carries the components it uses, so running it on a project that has none of them still leaves you with a block that compiles.
+
+```
+npx zard-cli@latest add dashboard-01
+```
+
+Each block is written to a directory of its own, under the `blocks` alias of `components.json` — `@/shared/blocks` unless you changed it. `--path` moves them elsewhere, still one directory per block, and the components they need follow along.
+
+```
+npx zard-cli@latest add login-01 --path src/app/features/auth
+```
+
+### create
+
+Create a new project with the framework's own generator, already configured with a design preset. It is the one-command alternative to creating the project yourself and then running `init` .
+
+```
+npx zard-cli@latest create [name]
+```
+
+**Options:**
+
+`[name]` — The name of the project and of the directory it is created in: lowercase letters, digits and dashes, starting with a letter
+`--template <template>` — The project to scaffold: `angular` , `nx` or `analog`
+`--preset <code>` — The design preset. Build one at [zardui.com/create](/create)
+`--pointer` — Use the pointer cursor on buttons
+`--rtl` — The project reads right to left. `--no-rtl` is the default
+`--package-manager <manager>` — `npm` , `pnpm` , `yarn` or `bun` . Defaults to the one that ran the CLI, else npm
+`-c, --cwd <cwd>` — The directory the project is created in, defaults to the current one
+`-y, --yes` — Skip confirmations and use the default design when no preset is given
+`--no-interactive` — Never prompt, even in a terminal: every answer comes from the flags and a missing one fails with its name. For scripts and AI agents
+
+**What it does:**
+
+- scaffolds the project: `ng new` for Angular, `create-nx-workspace` plus the Angular application generator for Nx, `create-analog` for Analog — every prompt answered by a flag, with plain CSS styles
+- runs `init --preset` on the new project, as the type that matches the template
+- installs `button` , so there is a component to start from
+
+`create` only creates applications. For a library, or a project that already exists, use `init --preset` .
+
+**Interactive:** with no flags, the command asks for the template first — the cursor starts on the first item, it is never chosen for you — then the name, then the preset. The preset question lists the default design and a curated set; `Custom…` prints the link to the create page so you can design one and paste its code.
+
+```
+npx zard-cli@latest create
+```
+
+Whatever you pass as a flag is not asked again, so a command copied from the create page runs without a single question:
+
+```
+npx zard-cli@latest create my-app --template nx --preset Z6F9MtstG --pointer --rtl --package-manager pnpm
+```
+
+**Non-interactive use:** outside a terminal — CI, pipes — nobody can be asked, so the name and `--template` are always required, and the preset must come from `--preset` or from `--yes` , which accepts the default design. Errors name the flag or the preset that is wrong.
+
+```
+npx zard-cli@latest create my-app --template angular --yes
+```
+
+**Safe by design:** every flag, the preset, the project name and the registry are checked before anything is written. A name that already exists in the target directory is refused — `create` never writes into an existing directory — and an unreachable registry stops it before the scaffold starts, so a failure leaves no half-created project. If configuring fails after the scaffold, the project is kept and the message tells you how to resume with `init --preset` .
+
+**Right to left:** `--rtl` sets `dir="rtl"` on `<html>` and nothing else. `lang` stays `"en"` , because direction does not say which language the content is in — set it yourself to the right one ( `ar` , `he` , `fa` …).
+
+### apply
+
+Apply a design preset to a project that is already initialized, without running init again. This is the command to use on an existing project: init rewrites your global CSS, apply replaces only the regions zard-cli manages. It never prompts and never rewrites a component.
+
+```
+npx zard-cli@latest apply --preset <code> [--only theme|font]
+```
+
+**Options:**
+
+`--preset <code>` — The preset to apply (required)
+`--only <parts>` — Apply only part of it: `theme` or `font` , comma-separated for both. Defaults to all of it
+`--pointer` — Add the pointer cursor rule for buttons to the theme
+`--no-pointer` — Remove it
+`-c, --cwd <cwd>` — Working directory, defaults to the current one
+`-y, --yes` — Accepted for scripts; apply never prompts
+`--no-interactive` — Accepted like on every command; apply never prompts
+
+- **Full preset** (no `--only` ) — theme tokens, fonts, icon library and the `style` , `icons` , `menuColor` , `menuAppearance` , `menuAccent` and `preset` keys of `components.json`
+- **theme** — the base color, theme and chart colors, radius, bold or subtle menu accent and base layer in your stylesheet, and the matching keys in `components.json` . The menu color and appearance (inverted, translucent) are written into the components when they are added, so they belong to the full preset and `--only theme` leaves them alone
+- **font** — the font packages, their imports and `--font-sans` / `--font-heading`
+
+```
+npx zard-cli@latest apply --preset Z6F9MtstG
+npx zard-cli@latest apply --preset Z6F9MtstG --only theme
+npx zard-cli@latest apply --preset Z6F9MtstG --only font
+```
+
+Everything outside the regions zard-cli manages survives byte for byte: your own rules and variables, including your overrides of theme tokens such as `--background` , plus the aliases and every other key of `components.json` . A stylesheet written by an older zard-cli, with no markers, has only its generated theme replaced.
+
+Components already in your project keep their current style, icons and menu look. When the preset changes any of those, a full apply prints the exact `add … --overwrite` command for the components and blocks you have installed (it replaces their files, so commit your own edits first), and the font and icon packages of the previous design that nothing uses anymore, with the command to remove them. `--pointer` and `--no-pointer` belong to the theme, so combining them with `--only font` is refused.
 
 ### Global options
 
 `-v, --version` — Print the version
 `--debug` — Verbose logging, including stack traces on failure. Can also be turned on with the `ZARD_DEBUG` environment variable.
 
-Terminal
-
 ```
-npx zard-cli --version
-npx zard-cli init --debug
+npx zard-cli@latest --version
+npx zard-cli@latest init --debug
 ```
 
 ## Configuration
 
 The CLI stores configuration in `components.json` in your project root. This file is created automatically when you run `npx zard-cli init` , and the [components.json page](/docs/components-json) documents every field.
 
-components.json
+**components.json**
 
 ```
 {
   "$schema": "https://zardui.com/schema.json",
-  "style": "css",
+  "style": "nova",
   "icons": "lucide",
   "rtl": false,
   "projectType": "angular",
   "appConfigFile": "src/app/app.config.ts",
   "packageManager": "npm",
+  "menuColor": "default",
+  "menuAppearance": "solid",
+  "menuAccent": "subtle",
+  "preset": "Z0",
   "tailwind": {
     "css": "src/styles.css",
     "baseColor": "neutral"
@@ -262,7 +370,8 @@ components.json
     "components": "@/shared/components",
     "utils": "@/shared/utils",
     "core": "@/shared/core",
-    "services": "@/shared/services"
+    "services": "@/shared/services",
+    "blocks": "@/shared/blocks"
   }
 }
 ```
@@ -271,7 +380,7 @@ components.json
 
 The CLI maps the import alias for you, in whichever tsconfig your project type actually extends — `tsconfig.base.json` on Nx, `tsconfig.json` elsewhere:
 
-tsconfig.json
+**tsconfig.json**
 
 ```
 {
@@ -287,7 +396,7 @@ No `baseUrl` is written: the option became an error in TypeScript 6, and since 4
 
 This is what lets you import components and utilities through clean paths:
 
-example.component.ts
+**example.component.ts**
 
 ```
 import { ZardButtonComponent } from '@/shared/components/button';
@@ -298,7 +407,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 An optional `registryUrl` points the CLI at a registry other than the official one — for teams publishing their own component set.
 
-components.json
+**components.json**
 
 ```
 {
@@ -316,11 +425,11 @@ The ZardUI team is actively working on an intelligent update system that will au
 
 ### Planned Features
 
-- 🔄Smart detection of component changes Automatically identify which components have updates available
-- 🛡️Preservation of user customizations Keep your custom modifications safe during updates
-- 📊Conflict resolution with clear options Visual diff and merge tools to handle conflicts intelligently
-- 🎯Selective component updates Choose which components to update and which to skip
-- 📝Detailed changelog for each update See exactly what changed in each component version
+- 🔄 Smart detection of component changes Automatically identify which components have updates available
+- 🛡️ Preservation of user customizations Keep your custom modifications safe during updates
+- 📊 Conflict resolution with clear options Visual diff and merge tools to handle conflicts intelligently
+- 🎯 Selective component updates Choose which components to update and which to skip
+- 📝 Detailed changelog for each update See exactly what changed in each component version
 
 ### What to Expect
 

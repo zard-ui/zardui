@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const dataTableVariants = cva('block w-full overflow-hidden rounded-md border');
+export const dataTableVariants = cva('block w-full overflow-hidden cn-data-table');
 
 export const dataTableBodyVariants = cva('transition-opacity', {
   variants: {
@@ -52,11 +52,11 @@ export const dataTableResizeHandleVariants = cva(
   'absolute inset-y-0 end-0 z-1 w-1 cursor-col-resize touch-none bg-border opacity-0 select-none hover:opacity-100 data-resizing:bg-primary data-resizing:opacity-100',
 );
 
-export const dataTableEmptyVariants = cva('h-24 text-center');
+export const dataTableEmptyVariants = cva('cn-data-table-empty text-center');
 
-export const dataTableColumnHeaderVariants = cva('flex items-center gap-2');
+export const dataTableColumnHeaderVariants = cva('cn-data-table-column-header flex items-center');
 
 /** A size container: the controls that fit follow the width the table has, not the viewport's. */
 export const dataTablePaginationVariants = cva('@container block');
 
-export const dataTableViewOptionsVariants = cva('ms-auto hidden h-8 lg:flex');
+export const dataTableViewOptionsVariants = cva('ms-auto hidden cn-data-table-view-options lg:flex');

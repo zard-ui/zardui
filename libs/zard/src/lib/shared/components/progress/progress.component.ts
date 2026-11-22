@@ -10,11 +10,7 @@ import { progressVariants } from './progress.variants';
 @Component({
   selector: 'z-progress',
   template: `
-    <div
-      data-slot="progress-indicator"
-      class="bg-primary size-full flex-1 transition-all"
-      [style.transform]="indicatorTransform()"
-    ></div>
+    <div data-slot="progress-indicator" class="cn-progress-indicator" [style.transform]="indicatorTransform()"></div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

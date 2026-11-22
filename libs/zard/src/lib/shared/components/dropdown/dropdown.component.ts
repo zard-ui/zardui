@@ -245,7 +245,6 @@ export class ZardDropdownMenuComponent implements OnDestroy {
           direction: this.directionality?.value ?? 'ltr',
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
-          minWidth: 200,
           maxHeight: 400,
         });
       } catch (error) {

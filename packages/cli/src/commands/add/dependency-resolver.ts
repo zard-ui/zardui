@@ -1,7 +1,7 @@
 import { existsSync } from 'fs';
 import * as path from 'path';
 
-import { iconPackagesFor } from '../../core/icons/index.js';
+import { iconPackagesFor, symbolFor } from '../../core/icons/index.js';
 import { angularMajorOf } from '../../utils/angular-compat.js';
 import { Config } from '../../utils/config.js';
 import { CliError } from '../../utils/errors.js';
@@ -210,17 +210,20 @@ export async function resolveDependencies(
   options: { all?: boolean; path?: string; overwrite?: boolean },
 ): Promise<ResolvedDependencies> {
   const componentMetas: ComponentMeta[] = [];
+  const unknown: string[] = [];
 
   for (const name of selectedComponents) {
     const meta = await getComponentMeta(name);
     if (meta) {
       componentMetas.push(meta);
+    } else {
+      unknown.push(name);
     }
   }
 
-  if (!componentMetas.length) {
-    logger.error('Selected components not found in registry.');
-    process.exit(1);
+  // One unknown name stops the whole add: installing the rest would hide the typo in a list of what was installed.
+  if (unknown.length) {
+    throw new CliError(`Not found in the registry: ${unknown.join(', ')}.`, 'COMPONENT_NOT_FOUND');
   }
 
   const dependenciesToInstall = new Set<string>();
@@ -277,6 +280,18 @@ function addComponentDependencies(
 
   if (component.icons?.symbols?.length) {
     iconPackagesFor(iconFamily, iconCatalog()).forEach(pkg => dependenciesToInstall.add(pkg));
+
+    // An icon the chosen family has no equivalent for keeps its original import, so the package the
+    // registry files are written in has to be there as well or the component would not compile.
+    const catalog = iconCatalog();
+    const sourceFamily = component.icons.family;
+    const hasGap =
+      (component.icons.tokens ?? []).some(token => symbolFor(token, iconFamily, catalog) === undefined) ||
+      // a symbol the table does not know at all (no token) cannot be translated either
+      component.icons.symbols.length > (component.icons.tokens ?? []).length;
+    if (hasGap && sourceFamily && sourceFamily !== iconFamily) {
+      iconPackagesFor(sourceFamily, catalog).forEach(pkg => dependenciesToInstall.add(pkg));
+    }
   }
 }
 

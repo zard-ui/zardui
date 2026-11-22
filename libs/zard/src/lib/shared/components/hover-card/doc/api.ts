@@ -6,7 +6,12 @@ export const HOVER_CARD_API: ApiSection[] = [
     selector: '[zHoverCard]',
     description: 'Directive that opens rich content on hover or focus.',
     props: [
-      { name: '[zContent]', description: 'Hover card template (required)', type: 'TemplateRef<void>', default: '-' },
+      {
+        name: '[zHoverCard]',
+        description: 'Hover card template (required), bound on the trigger: `[zHoverCard]="content"`',
+        type: 'TemplateRef<void>',
+        default: '-',
+      },
       {
         name: '[zPlacement]',
         description: 'Side of the trigger; `inline-*` flips in RTL',

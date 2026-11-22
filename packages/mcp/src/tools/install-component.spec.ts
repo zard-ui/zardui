@@ -51,7 +51,8 @@ describe('install-component tool (CWE-78 regression)', () => {
     // An argument vector, never a built string — and no shell, which is what
     // makes a `;` in the name just a character.
     expect(args).toContain('button');
-    expect(args.slice(-2)).toEqual(['button', '--yes']);
+    // `--no-interactive`: from a server started in a terminal, a wizard would hang the call.
+    expect(args.slice(-3)).toEqual(['button', '--yes', '--no-interactive']);
     expect(options.shell).toBe(false);
     expect(typeof file).toBe('string');
   });
@@ -91,7 +92,7 @@ describe('install-component tool (CWE-78 regression)', () => {
   it('passes --overwrite only when asked', async () => {
     const tool = registerAndCapture();
     await tool.handler({ name: 'button', cwd: '/tmp', overwrite: true });
-    expect(execFileMock.mock.calls[0][1].slice(-3)).toEqual(['button', '--yes', '--overwrite']);
+    expect(execFileMock.mock.calls[0][1].slice(-4)).toEqual(['button', '--yes', '--no-interactive', '--overwrite']);
   });
 
   it('accepts the names the registry actually uses', async () => {

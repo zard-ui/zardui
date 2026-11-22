@@ -17,6 +17,8 @@ npx zard-cli@latest add table
 
 ### Manual
 
+**Add table.component.ts**
+
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -199,30 +201,29 @@ export class ZardTableFooterComponent {
 }
 ```
 
+**Add table.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const tableVariants = cva(
-  'w-full caption-bottom text-sm [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pe-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pe-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground',
-  {
-    variants: {
-      zType: {
-        default: '',
-        striped: '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-        bordered: 'border border-border',
-      },
-      zSize: {
-        default: '',
-        compact: '[&_td]:py-2 [&_th]:py-2',
-        comfortable: '[&_td]:py-4 [&_th]:py-4',
-      },
+export const tableVariants = cva('w-full caption-bottom text-sm [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:text-foreground [&_caption]:text-muted-foreground [&_caption]:mt-4 [&_caption]:text-sm [&_tbody]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr:last-child]:border-0 [&_td]:p-2 [&_td]:align-middle [&_td]:whitespace-nowrap [&_td:has([role=checkbox])]:pe-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:whitespace-nowrap [&_th:has([role=checkbox])]:pe-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_thead_tr]:border-b', {
+  variants: {
+    zType: {
+      default: '',
+      striped: '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
+      bordered: 'border-border border',
     },
-    defaultVariants: {
-      zType: 'default',
-      zSize: 'default',
+    zSize: {
+      default: '',
+      compact: '[&_td]:py-2 [&_th]:py-2',
+      comfortable: '[&_td]:py-4 [&_th]:py-4',
     },
   },
-);
+  defaultVariants: {
+    zType: 'default',
+    zSize: 'default',
+  },
+});
 
 export const tableHeaderVariants = cva('[&_tr]:border-b', {
   variants: {},
@@ -234,46 +235,41 @@ export const tableBodyVariants = cva('[&_tr:last-child]:border-0', {
   defaultVariants: {},
 });
 
-export const tableRowVariants = cva(
-  'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
-  {
-    variants: {},
-    defaultVariants: {},
-  },
-);
-
-export const tableHeadVariants = cva(
-  'h-10 px-2 text-start align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
-  {
-    variants: {},
-    defaultVariants: {},
-  },
-);
-
-export const tableCellVariants = cva(
-  'p-2 align-middle has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5',
-  {
-    variants: {},
-    defaultVariants: {},
-  },
-);
-
-export const tableCaptionVariants = cva('mt-4 text-sm text-muted-foreground', {
+export const tableRowVariants = cva('border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted', {
   variants: {},
   defaultVariants: {},
 });
 
-export const tableFooterVariants = cva('border-t bg-muted/50 font-medium [&>tr]:last:border-b-0');
+export const tableHeadVariants = cva('text-foreground h-10 px-2 text-start align-middle font-medium whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5', {
+  variants: {},
+  defaultVariants: {},
+});
+
+export const tableCellVariants = cva('p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pe-0 *:[[role=checkbox]]:translate-y-0.5', {
+  variants: {},
+  defaultVariants: {},
+});
+
+export const tableCaptionVariants = cva('text-muted-foreground mt-4 text-sm', {
+  variants: {},
+  defaultVariants: {},
+});
+
+export const tableFooterVariants = cva('bg-muted/50 border-t font-medium [&>tr]:last:border-b-0');
 
 export type ZardTableSizeVariants = NonNullable<VariantProps<typeof tableVariants>['zSize']>;
 export type ZardTableTypeVariants = NonNullable<VariantProps<typeof tableVariants>['zType']>;
 ```
+
+**Add index.ts**
 
 ```angular-ts
 export * from './table.component';
 export * from './table.imports';
 export * from './table.variants';
 ```
+
+**Add table.imports.ts**
 
 ```angular-ts
 import {
@@ -348,6 +344,128 @@ z-table
 ```
 
 ## Examples
+
+### Preview
+
+```angular-ts
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+
+import { ZardTableImports } from '@/shared/components/table/table.imports';
+
+export interface Invoice {
+  id: string;
+  status: string;
+  method: string;
+  amount: number;
+}
+
+@Component({
+  selector: 'z-demo-table-preview',
+  imports: [ZardTableImports],
+  template: `
+    <table z-table>
+      <caption z-table-caption>A list of your recent invoices.</caption>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head scope="col">Invoice</th>
+          <th z-table-head scope="col">Status</th>
+          <th z-table-head scope="col">Method</th>
+          <th z-table-head scope="col" class="text-end">Amount</th>
+        </tr>
+      </thead>
+      <tbody z-table-body>
+        @for (invoice of invoices(); track invoice.id) {
+          <tr z-table-row>
+            <td z-table-cell>
+              <div>{{ invoice.id }}</div>
+            </td>
+            <td z-table-cell>
+              {{ invoice.status }}
+            </td>
+            <td z-table-cell>
+              {{ invoice.method }}
+            </td>
+            <td z-table-cell>
+              <div class="text-end font-medium">{{ formatCurrency(invoice.amount) }}</div>
+            </td>
+          </tr>
+        } @empty {
+          <tr z-table-row>
+            <td z-table-cell [attr.colspan]="4" class="h-24 text-center">No results.</td>
+          </tr>
+        }
+      </tbody>
+      <tfoot z-table-footer>
+        <tr z-table-row>
+          <td z-table-cell colspan="3">Total</td>
+          <td z-table-cell class="text-end">{{ formatCurrency(total()) }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'block w-full overflow-x-auto',
+  },
+})
+export class ZardDemoTablePreviewComponent {
+  readonly invoices = signal<Invoice[]>([
+    {
+      id: 'INV001',
+      status: 'Paid',
+      method: 'Credit Card',
+      amount: 250,
+    },
+    {
+      id: 'INV002',
+      status: 'Pending',
+      method: 'PayPal',
+      amount: 150,
+    },
+    {
+      id: 'INV003',
+      status: 'Unpaid',
+      method: 'Bank Transfer',
+      amount: 350,
+    },
+    {
+      id: 'INV004',
+      status: 'Paid',
+      method: 'Credit Card',
+      amount: 450,
+    },
+    {
+      id: 'INV005',
+      status: 'Paid',
+      method: 'PayPal',
+      amount: 550,
+    },
+    {
+      id: 'INV006',
+      status: 'Pending',
+      method: 'Bank Transfer',
+      amount: 200,
+    },
+    {
+      id: 'INV007',
+      status: 'Unpaid',
+      method: 'Credit Card',
+      amount: 300,
+    },
+  ]);
+
+  readonly total = computed(() =>
+    this.invoices().reduce((sum: number, invoice: { amount: number }) => sum + invoice.amount, 0),
+  );
+
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  }
+}
+```
 
 ### Footer
 
@@ -610,7 +728,7 @@ export class ZardDemoTableSimpleComponent {
 }
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

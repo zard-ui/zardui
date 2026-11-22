@@ -17,6 +17,8 @@ npx zard-cli@latest add card
 
 ### Manual
 
+**Add card.component.ts**
+
 ```angular-ts
 import {
   booleanAttribute,
@@ -192,37 +194,36 @@ export class ZardCardComponent {
 }
 ```
 
+**Add card.variants.ts**
+
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const cardVariants = cva(
-  'group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl',
-  {
-    variants: {
-      zSize: {
-        default: '',
-        sm: '',
-      },
+export const cardVariants = cva('bg-card text-card-foreground ring-foreground/10 flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl py-(--card-spacing) text-sm ring-1 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl group/card', {
+  variants: {
+    zSize: {
+      default: '',
+      sm: '',
     },
   },
-);
+});
 
 export type ZardCardSizeType = NonNullable<VariantProps<typeof cardVariants>['zSize']>;
 
-export const cardHeaderVariants = cva(
-  'group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [&.border-b]:pb-(--card-spacing)',
-);
+export const cardHeaderVariants = cva('grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [&.border-b]:pb-(--card-spacing) group/card-header @container/card-header');
 
-export const cardTitleVariants = cva('text-base/snug font-medium group-data-[size=sm]/card:text-sm');
+export const cardTitleVariants = cva('text-base/snug font-medium group-data-[size=sm]/card:text-sm font-heading block');
 
-export const cardDescriptionVariants = cva('text-sm text-muted-foreground');
+export const cardDescriptionVariants = cva('text-muted-foreground text-sm block');
 
 export const cardActionVariants = cva('col-start-2 row-span-2 row-start-1 self-start justify-self-end');
 
 export const cardContentVariants = cva('px-(--card-spacing)');
 
-export const cardFooterVariants = cva('flex items-center rounded-b-xl bg-muted/50 p-(--card-spacing)');
+export const cardFooterVariants = cva('bg-muted/50 flex items-center rounded-b-xl border-t p-(--card-spacing)');
 ```
+
+**Add card.imports.ts**
 
 ```angular-ts
 import {
@@ -246,6 +247,8 @@ export const ZardCardImports = [
 ] as const;
 ```
 
+**Add index.ts**
+
 ```angular-ts
 export * from './card.component';
 export * from './card.variants';
@@ -265,6 +268,56 @@ import { ZardCardComponent } from '@/shared/components/card/card.component';
 ```
 
 ## Examples
+
+### Preview
+
+A login form composing `z-card-header` / `z-card-content` / `z-card-footer` around `z-field`, `z-field-label` and `input[z-input]`, with a real `z-button` for every action.
+
+```angular-ts
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+
+@Component({
+  selector: 'z-demo-card-preview',
+  imports: [ZardCardImports, ZardButtonComponent, ...ZardFieldImports, ZardInputComponent],
+  template: `
+    <z-card class="w-full md:w-94">
+      <z-card-header>
+        <z-card-title zTitle="Login to your account" />
+        <z-card-description zDescription="Enter your email below to login to your account" />
+        <z-card-action>
+          <a z-button zType="link" href="#">Sign up</a>
+        </z-card-action>
+      </z-card-header>
+      <z-card-content>
+        <div z-field-group>
+          <div z-field>
+            <label z-field-label for="card-login-email">Email</label>
+            <input z-input id="card-login-email" type="email" placeholder="m@example.com" required />
+          </div>
+          <div z-field>
+            <div class="flex items-center">
+              <label z-field-label for="card-login-password">Password</label>
+              <a href="#" class="ms-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
+            </div>
+            <input z-input id="card-login-password" type="password" required />
+          </div>
+        </div>
+      </z-card-content>
+      <z-card-footer class="flex-col gap-2">
+        <z-button class="w-full">Login</z-button>
+        <z-button zType="outline" class="w-full">Login with Google</z-button>
+      </z-card-footer>
+    </z-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoCardPreviewComponent {}
+```
 
 ### Size
 
@@ -498,7 +551,7 @@ import { ZardCardImports } from '@/shared/components/card/card.imports';
 export class ZardDemoCardImageComponent {}
 ```
 
-### Rtl
+### RTL
 
 To enable RTL support in zard/ui, see the [RTL configuration guide](/docs/rtl).
 

@@ -7,6 +7,8 @@ export const AUGUST_2026: ChangelogEntry = {
     monthNumber: 8,
     date: new Date(2026, 7, 1),
     id: '08-2026',
+    slug: '2026-08-input-otp',
+    title: 'Input OTP',
   },
 
   overview:

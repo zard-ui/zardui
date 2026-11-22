@@ -336,7 +336,7 @@ describe('ZardBreadcrumbComponent', () => {
     expect(nav).toHaveClass('w-full', 'text-sm', 'nav-extra');
     expect(item).toHaveClass('inline-flex', 'items-center', 'item-extra');
     expect(link).toHaveClass('transition-colors', 'link-extra');
-    expect(separator).toHaveClass('text-muted-foreground', 'separator-extra');
+    expect(separator).toHaveClass('[&_svg]:size-3.5', 'separator-extra');
     expect(ellipsis).toHaveClass('flex', 'ellipsis-extra');
     expect(page).toHaveClass('font-normal', 'page-extra');
   });

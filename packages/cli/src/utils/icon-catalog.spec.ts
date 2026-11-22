@@ -88,7 +88,7 @@ describe('assertIconFamily', () => {
    */
   it('names the field and lists what is accepted', () => {
     expect(() => assertIconFamily('materia', LOCAL_ICON_CATALOG)).toThrow(
-      'Unknown icon set "materia" in components.json. Available: lucide.',
+      'Unknown icon set "materia" in components.json. Available: hugeicons, lucide, phosphor, remixicon, tabler.',
     );
   });
 });

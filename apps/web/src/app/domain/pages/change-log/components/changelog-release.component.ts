@@ -17,9 +17,9 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { type ChangelogRelease } from '../entries/changelog-entry.interface';
 
 /**
- * The v1 launch banner — a release moment, not another card in the monthly
- * timeline. Rendered by the changelog page above the timeline for whichever
- * entry carries `release` (there is at most one).
+ * A launch banner — the v1 release, the create launch — not another highlight.
+ * Rendered at the start of whichever entry carries `release`, on the changelog
+ * index and on the entry's own page.
  *
  * The clip is shown the way a GIF would be: it starts on its own, loops, and
  * has no player chrome. A muted, inline `<video>` does that at a fraction of a
@@ -39,13 +39,13 @@ import { type ChangelogRelease } from '../entries/changelog-entry.interface';
   selector: 'z-changelog-release',
   imports: [NgIcon, ZardButtonComponent],
   template: `
-    <figure class="flex flex-col gap-6">
+    <figure data-not-typeset class="flex flex-col gap-6">
       <div class="group relative">
         <video
           #clip
           class="bg-muted aspect-video w-full rounded-xl border object-cover"
           [src]="release().video"
-          [attr.aria-label]="'zard/ui v' + release().version + ' release'"
+          [attr.aria-label]="clipName()"
           [muted]="true"
           muted
           loop
@@ -62,7 +62,7 @@ import { type ChangelogRelease } from '../entries/changelog-entry.interface';
           zType="secondary"
           zSize="icon-sm"
           [class]="toggleClasses()"
-          [attr.aria-label]="playing() ? 'Pause the release clip' : 'Play the release clip'"
+          [attr.aria-label]="playing() ? 'Pause the clip' : 'Play the clip'"
           (click)="toggle()"
         >
           <ng-icon [name]="playing() ? 'lucidePause' : 'lucidePlay'" aria-hidden="true" />
@@ -70,7 +70,11 @@ import { type ChangelogRelease } from '../entries/changelog-entry.interface';
       </div>
 
       <figcaption>
-        <h2 class="text-2xl font-semibold tracking-tight sm:text-3xl">{{ release().title }}</h2>
+        @if (headingLevel() === 2) {
+          <h2 class="text-2xl font-semibold tracking-tight">{{ release().title }}</h2>
+        } @else {
+          <h3 class="text-xl font-semibold tracking-tight">{{ release().title }}</h3>
+        }
         <p class="text-muted-foreground mt-3 max-w-2xl text-base text-balance">{{ release().summary }}</p>
       </figcaption>
     </figure>
@@ -80,6 +84,14 @@ import { type ChangelogRelease } from '../entries/changelog-entry.interface';
 })
 export class ChangelogReleaseComponent {
   readonly release = input.required<ChangelogRelease>();
+  /** 2 on the entry's own page, 3 inside an article of the changelog index. */
+  readonly headingLevel = input<2 | 3>(3);
+
+  /** 'zard/ui v1.0.0 release', or the label of a clip that announces no version. */
+  protected readonly clipName = computed(() => {
+    const { label, version } = this.release();
+    return label ?? `zard/ui v${version} release`;
+  });
 
   private readonly clip = viewChild.required<ElementRef<HTMLVideoElement>>('clip');
 

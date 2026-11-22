@@ -122,7 +122,7 @@ test.describe('Context menu component', () => {
     await expect(menus).toHaveCount(2, { timeout: 5000 });
     const subBox = await menus.nth(1).boundingBox();
     expect(subBox!.x + subBox!.width).toBeLessThanOrEqual(menuBox!.x + 8);
-    await expect(submenuTrigger.locator('ng-icon')).toHaveClass(/rtl:rotate-180/);
+    await expect(submenuTrigger.locator('ng-icon')).toHaveCSS('rotate', '180deg');
   });
 
   test('RTL example passes accessibility checks when open', async ({ page }) => {

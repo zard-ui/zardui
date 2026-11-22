@@ -20,9 +20,11 @@ import { FooterComponent } from '@doc/domain/components/footer/footer.component'
 import { HeaderComponent } from '@doc/domain/components/header/header.component';
 import { getHeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
 
+import { isPreviewUrl } from './core/routing/preview-routes';
+
 const LOADING_TIMEOUT = 1000;
-/** Routes that render their content alone, with no header and no footer. */
-const PREVIEW_URL_PREFIXES = ['/blocks/preview/', '/typeset/preview'];
+/** Full-viewport tools that keep the header but have no room, and no use, for a footer. */
+const NO_FOOTER_URL_PREFIXES = ['/create'];
 
 @Component({
   imports: [RouterModule, HeaderComponent, FooterComponent],
@@ -32,11 +34,12 @@ const PREVIEW_URL_PREFIXES = ['/blocks/preview/', '/typeset/preview'];
       <z-header></z-header>
     }
     <router-outlet></router-outlet>
-    @if (!isPreviewRoute()) {
+    @if (!isPreviewRoute() && !hidesFooter()) {
       <z-footer></z-footer>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class]': 'rootClass()' },
 })
 export class AppComponent {
   private readonly destroyRef = inject(DestroyRef);
@@ -47,8 +50,15 @@ export class AppComponent {
 
   private scrollTimeoutId: number | null = null;
   private readonly currentUrl = signal(this.resolveInitialUrl());
-  protected readonly isPreviewRoute = computed(() =>
-    PREVIEW_URL_PREFIXES.some(prefix => this.currentUrl().startsWith(prefix)),
+  protected readonly isPreviewRoute = computed(() => isPreviewUrl(this.currentUrl()));
+
+  protected readonly hidesFooter = computed(() =>
+    NO_FOOTER_URL_PREFIXES.some(prefix => this.currentUrl().split('?')[0] === prefix),
+  );
+
+  /** shadcn's create header is 56px below `lg`, 64px above: only the builder follows it, the docs keep 64px. */
+  protected readonly rootClass = computed(() =>
+    this.currentUrl().split('?')[0] === '/create' ? 'max-lg:[--header-height:--spacing(14)]' : '',
   );
 
   private resolveInitialUrl(): string {
@@ -66,8 +76,11 @@ export class AppComponent {
       .subscribe(e => this.currentUrl.set(e.urlAfterRedirects));
 
     if (isPlatformBrowser(this.platformId)) {
-      injectAnalytics();
-      injectSpeedInsights();
+      // A preview is a frame of a page that already counts the visit.
+      if (!isPreviewUrl(this.currentUrl())) {
+        injectAnalytics();
+        injectSpeedInsights();
+      }
 
       this.destroyRef.onDestroy(() => {
         if (this.scrollTimeoutId !== null) {

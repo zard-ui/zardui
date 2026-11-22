@@ -92,6 +92,59 @@ for (const [itemName, docFiles] of Object.entries(DOCS_FOR)) {
   }
 }
 
+/*
+ * Same files is not enough: a guide that lists every file but shows last month's code still installs a stale core. The
+ * built registry item (`public/r/<item>.json`, run `npm run build:registry` first) holds exactly what init writes, so
+ * each titled block must match it. `--write` rewrites the blocks that drifted.
+ */
+const WRITE = process.argv.includes('--write');
+const FENCE_PATTERN = /^(```\S*\s[^\n]*\btitle="([^"]+)"[^\n]*\n)([\s\S]*?)^```$/gm;
+const normalize = (code: string): string => code.replace(/\r\n/g, '\n').replace(/\s+$/, '');
+
+/** The folder each guide's files live in, inside the item: titles are bare names and `index.ts` exists twice. */
+const FOLDER_OF: Record<string, string> = {
+  'core-directives.md': 'directives/',
+  'core-overlay.md': 'overlay/',
+  'core-i18n.md': 'i18n/',
+  'core-i18n-locales.md': 'i18n/locales/',
+  'core-event-manager.md': 'provider/event-manager-plugins/',
+  'core-provider.md': 'provider/',
+  'core-css.md': 'css/',
+  'core-index.md': '',
+  'helpers.md': '',
+};
+
+for (const [itemName, docFiles] of Object.entries(DOCS_FOR)) {
+  const built = path.join(ROOT, 'apps/web/public/r', `${itemName}.json`);
+  if (!fs.existsSync(built)) {
+    problems.push(`${itemName}: ${path.relative(ROOT, built)} is missing — run npm run build:registry.`);
+    continue;
+  }
+  const shipped: { name: string; content: string }[] = JSON.parse(fs.readFileSync(built, 'utf8')).files;
+
+  for (const docFile of docFiles) {
+    const docPath = path.join(SHARED_SETUP_DIR, docFile);
+    if (!fs.existsSync(docPath)) continue;
+    const before = fs.readFileSync(docPath, 'utf8');
+    const eol = before.includes('\r\n') ? '\r\n' : '\n';
+    const after = before.replace(FENCE_PATTERN, (fence, opening: string, title: string, body: string) => {
+      const name = `${FOLDER_OF[docFile] ?? ''}${title}`;
+      const file = shipped.find(candidate => candidate.name === name);
+      if (!file) {
+        problems.push(`${itemName}: ${docFile} titles "${title}", but the item ships no "${name}".`);
+        return fence;
+      }
+      if (normalize(body) === normalize(file.content)) return fence;
+      if (!WRITE) problems.push(`${itemName}: ${docFile} shows an outdated "${name}" — run with --write to sync it.`);
+      return `${opening}${normalize(file.content).replace(/\n/g, eol)}${eol}\`\`\``;
+    });
+    if (WRITE && after !== before) {
+      fs.writeFileSync(docPath, after);
+      console.log(`↻ synced ${docFile}`);
+    }
+  }
+}
+
 if (problems.length > 0) {
   console.error(`\n✖ install docs are not self-consistent — ${problems.length} problem(s):\n`);
   for (const problem of problems) console.error(`  ${problem}`);

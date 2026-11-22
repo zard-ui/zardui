@@ -13,7 +13,7 @@ Each block lives in `libs/blocks/src/lib/<name>` and is made of three files: the
 
 The generator creates the three files, exports them from `libs/blocks/src/index.ts` and registers the block in `BLOCKS_REGISTRY` . It finishes by printing the manual steps that remain.
 
-Scaffold a block
+**Scaffold a block**
 
 ```
 npm run generate:block
@@ -31,7 +31,7 @@ npx nx generate @zardui/generators:block \
 
 `block.ts` exports a single object typed as `Block` , imported from `@doc/domain/components/block-container/block-container.component` .
 
-libs/blocks/src/lib/login-01/block.ts
+**libs/blocks/src/lib/login-01/block.ts**
 
 ```
 import type { Block } from '@doc/domain/components/block-container/block-container.component';
@@ -67,19 +67,9 @@ export const login01Block: Block = {
 
 `BLOCKS_REGISTRY` is a record keyed by `BlockCategory` , declared in `domain/services/blocks.service.ts` . These keys are fixed:
 
-featured
+`featured`, `sidebar`, `login`, `signup`, `otp`, `calendar`
 
-sidebar
-
-login
-
-signup
-
-otp
-
-calendar
-
-apps/web/src/app/domain/config/blocks-registry.ts
+**apps/web/src/app/domain/config/blocks-registry.ts**
 
 ```
 import { login01Block, signup01Block } from '@blocks';
@@ -130,7 +120,7 @@ Rebuild the registry
 
 Run npm run build:registry so zard-cli and the MCP server can install the new block.
 
-Finish the block
+**Finish the block**
 
 ```
 # 1. Populate files[] from the component sources

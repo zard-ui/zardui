@@ -7,6 +7,8 @@ export const JULY_2025: ChangelogEntry = {
     monthNumber: 7,
     date: new Date(2025, 6, 1),
     id: '07-2025',
+    slug: '2025-07-tabs-accordion',
+    title: 'Tabs, Accordion and Tooltip',
   },
 
   overview:

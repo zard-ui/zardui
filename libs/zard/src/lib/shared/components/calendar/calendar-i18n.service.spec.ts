@@ -10,7 +10,7 @@ import {
   ZardI18nService,
 } from '@/shared/core/i18n';
 
-import { capitalize, ZardCalendarI18nService } from './calendar-i18n.service';
+import { ZardCalendarI18nService } from './calendar-i18n.service';
 
 describe('ZardCalendarI18nService', () => {
   it('should derive default calendar labels and weekStartsOn when unconfigured', () => {
@@ -90,24 +90,6 @@ describe('ZardCalendarI18nService', () => {
     expect(calendarI18n.labels().nextMonth).toBe('Наступний місяць');
   });
 
-  describe('capitalize', () => {
-    it('capitalizes standard strings', () => {
-      expect(capitalize('january')).toBe('January');
-      expect(capitalize('sunday')).toBe('Sunday');
-    });
-
-    it('handles empty strings and falsy values', () => {
-      expect(capitalize('')).toBe('');
-    });
-
-    it('capitalizes strings with locale accents correctly', () => {
-      expect(capitalize('février', 'fr-FR')).toBe('Février');
-      expect(capitalize('août', 'fr-FR')).toBe('Août');
-      expect(capitalize('enero', 'es-ES')).toBe('Enero');
-      expect(capitalize('märz', 'de-DE')).toBe('März');
-    });
-  });
-
   describe('month and weekday localization', () => {
     it('should generate localized short and long month names for default en-US', () => {
       TestBed.configureTestingModule({});
@@ -160,11 +142,11 @@ describe('ZardCalendarI18nService', () => {
       const calendarI18n = TestBed.inject(ZardCalendarI18nService);
 
       expect(calendarI18n.weekStartsOn()).toBe(1);
-      expect(calendarI18n.weekdays()).toEqual(['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']);
-      expect(calendarI18n.longMonths()[0]).toBe('Janvier');
-      expect(calendarI18n.longMonths()[1]).toBe('Février');
-      expect(calendarI18n.longMonths()[7]).toBe('Août');
-      expect(calendarI18n.longMonths()[11]).toBe('Décembre');
+      expect(calendarI18n.weekdays()).toEqual(['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim']);
+      expect(calendarI18n.longMonths()[0]).toBe('janvier');
+      expect(calendarI18n.longMonths()[1]).toBe('février');
+      expect(calendarI18n.longMonths()[7]).toBe('août');
+      expect(calendarI18n.longMonths()[11]).toBe('décembre');
     });
 
     it('should return localized month and weekday names for de-DE', () => {
@@ -185,9 +167,9 @@ describe('ZardCalendarI18nService', () => {
       });
       const calendarI18n = TestBed.inject(ZardCalendarI18nService);
 
-      expect(calendarI18n.longMonths()[0]).toBe('Enero');
-      expect(calendarI18n.longMonths()[3]).toBe('Abril');
-      expect(calendarI18n.longMonths()[11]).toBe('Diciembre');
+      expect(calendarI18n.longMonths()[0]).toBe('enero');
+      expect(calendarI18n.longMonths()[3]).toBe('abril');
+      expect(calendarI18n.longMonths()[11]).toBe('diciembre');
     });
   });
 });
