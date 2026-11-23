@@ -43,7 +43,7 @@ export const NOVEMBER_2026_CREATE: ChangelogEntry = {
     {
       title: 'Restyle with apply',
       description:
-        '`zard-cli apply` swaps the theme and fonts of a project that is already set up, and points the components you add next at the new style and icons. It rewrites only the parts the CLI manages, so your own CSS stays, and `--only theme` or `--only font` narrows it down further. Components already installed keep their look until you add them again with `--overwrite`; apply prints that command for you.',
+        '`zard-cli apply` swaps the theme and fonts of a project that is already set up, and points the components you add next at the new style and icons. It rewrites only the parts the CLI manages, so your own CSS stays, and `--only theme` or `--only font` narrows it down further. Components already installed pick up the new colors and fonts at once, since they read the theme variables; their own style, icons and menu look stay as they were. When a full apply changes those, it prints the `add … --overwrite` command that brings them along.',
       code: 'npx zard-cli@latest apply --preset <code>',
     },
     {

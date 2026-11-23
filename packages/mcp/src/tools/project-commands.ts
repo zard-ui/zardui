@@ -270,7 +270,7 @@ export function registerProjectCommands(server: McpServer): void {
     {
       title: 'Get apply command',
       description:
-        'The zard-cli command that restyles a project already set up with Zard UI: replaces the theme and fonts, keeping every rule of its own, and makes the components added next follow the new style and icons. Components already installed keep their look until they are added again with --overwrite; the command prints that line. Pass a preset code or design choices.',
+        'The zard-cli command that restyles a project already set up with Zard UI: replaces the theme and fonts, keeping every rule of its own, and makes the components added next follow the new style and icons. Components already installed take the new colors and fonts at once, but keep their own style, icons and menu look until added again with --overwrite; when the preset changes those, the command prints that line. Pass a preset code or design choices.',
       inputSchema: {
         preset: presetField,
         design: designSchema.optional(),
