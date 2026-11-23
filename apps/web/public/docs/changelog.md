@@ -23,7 +23,7 @@ Pick one of eight styles, a base color out of seven (Mauve, Olive, Mist and Taup
 
 ### Start a project with create
 
-`zard-cli create` runs the framework’s own generator, applies the preset and installs a button so you can see it working. Run it with no arguments and it asks for the name, the template and the design; paste the command from the create page and it asks nothing. The installation guides now start here.
+`zard-cli create` runs the framework’s own generator, applies the preset and installs a button as the first component. Run it with no arguments and it asks for the name, the template and the design; paste the command from the create page and it asks nothing. The installation guides now start here.
 
 ```
 npx zard-cli@latest create
@@ -31,7 +31,7 @@ npx zard-cli@latest create
 
 ### Bring the design to an existing project
 
-`init` still sets up a project you already have. On its own it installs the default design and asks only for the theme color; pass `--preset` and it uses the one you built instead.
+`init` still sets up a project you already have. On its own it installs the default design and lets you pick the theme color; pass `--preset` and it uses the one you built instead.
 
 ```
 npx zard-cli@latest init --preset <code>
@@ -39,7 +39,7 @@ npx zard-cli@latest init --preset <code>
 
 ### Restyle with apply
 
-`zard-cli apply` swaps the theme, fonts and icons of a project that is already set up. It rewrites only the parts the CLI manages, so your own CSS stays, and `--only theme` or `--only font` narrows it down further.
+`zard-cli apply` swaps the theme and fonts of a project that is already set up, and points the components you add next at the new style and icons. It rewrites only the parts the CLI manages, so your own CSS stays, and `--only theme` or `--only font` narrows it down further. Components already installed keep their look until you add them again with `--overwrite`; apply prints that command for you.
 
 ```
 npx zard-cli@latest apply --preset <code>
