@@ -81,12 +81,12 @@ const COPIED_MS = 2000;
         >
           <z-create-glyph slot="glyph" kind="style" [value]="design().style" />
         </z-create-picker>
-        <div class="relative -mx-4 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
+        <div class="relative -mx-3 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
           <div class="bg-border absolute inset-x-0 top-1/2 h-px"></div>
         </div>
 
         <div
-          class="ring-foreground/10 flex w-36 shrink-0 flex-col justify-between gap-2 rounded-xl p-3 ring-1 md:w-full md:flex-row md:items-center md:rounded-lg md:px-2.5 md:py-2"
+          class="ring-foreground/10 flex w-40 shrink-0 flex-row items-center justify-between gap-2 rounded-xl p-3 ring-1 md:w-full md:rounded-lg md:px-2.5 md:py-2"
           data-testid="custom-theme"
         >
           <label class="flex min-w-0 flex-col" for="create-custom-theme">
@@ -156,7 +156,7 @@ const COPIED_MS = 2000;
             <z-create-glyph slot="glyph" kind="dot" [value]="dot(design().chartColor)" />
           </z-create-picker>
         }
-        <div class="relative -mx-4 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
+        <div class="relative -mx-3 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
           <div class="bg-border absolute inset-x-0 top-1/2 h-px"></div>
         </div>
 
@@ -190,7 +190,7 @@ const COPIED_MS = 2000;
         >
           <z-create-glyph slot="glyph" kind="aa" [value]="fontGlyph()" />
         </z-create-picker>
-        <div class="relative -mx-4 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
+        <div class="relative -mx-3 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
           <div class="bg-border absolute inset-x-0 top-1/2 h-px"></div>
         </div>
 
@@ -220,7 +220,7 @@ const COPIED_MS = 2000;
         >
           <z-create-glyph slot="glyph" kind="radius" />
         </z-create-picker>
-        <div class="relative -mx-4 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
+        <div class="relative -mx-3 -my-2 hidden h-5 shrink-0 md:block" role="presentation">
           <div class="bg-border absolute inset-x-0 top-1/2 h-px"></div>
         </div>
 

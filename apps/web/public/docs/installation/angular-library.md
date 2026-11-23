@@ -31,6 +31,20 @@ npx zard-cli@latest init
 
 You can now start adding components to your project. [Open the components page and select what component you want to install](/docs/components)
 
+### Wire it up in the consuming app
+
+The application that installs this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme with @import "<your-library>/styles.css", and imports the components from the library entry point. CSS does not read tsconfig paths, so the package has to be installed in the app: inside the same workspace, run ng build ui and then npm install ./dist/ui. Export the components from public-api.ts together with the core and utils folders, which they depend on, or the build stops with NG3001. When you copy a component into the library by hand, change its @/ imports to relative paths (the CLI does it for you): the build leaves @/ as it is, and the published package would not resolve it. In the app, always import from the package name: reaching into the library source through @/ makes the app compile those files itself, and Angular rejects their imports arrays with NG3004.
+
+**.postcssrc.json**
+
+```
+{
+  "plugins": {
+    "@tailwindcss/postcss": {}
+  }
+}
+```
+
 ## Manual
 
 ### Create the library

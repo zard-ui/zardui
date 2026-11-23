@@ -31,19 +31,19 @@ export const NOVEMBER_2026_CREATE: ChangelogEntry = {
     {
       title: 'Start a project with create',
       description:
-        '`zard-cli create` runs the framework’s own generator, applies the preset and installs a button so you can see it working. Run it with no arguments and it asks for the name, the template and the design; paste the command from the create page and it asks nothing. The installation guides now start here.',
+        '`zard-cli create` runs the framework’s own generator, applies the preset and installs a button as the first component. Run it with no arguments and it asks for the name, the template and the design; paste the command from the create page and it asks nothing. The installation guides now start here.',
       code: 'npx zard-cli@latest create',
     },
     {
       title: 'Bring the design to an existing project',
       description:
-        '`init` still sets up a project you already have. On its own it installs the default design and asks only for the theme color; pass `--preset` and it uses the one you built instead.',
+        '`init` still sets up a project you already have. On its own it installs the default design and lets you pick the theme color; pass `--preset` and it uses the one you built instead.',
       code: 'npx zard-cli@latest init --preset <code>',
     },
     {
       title: 'Restyle with apply',
       description:
-        '`zard-cli apply` swaps the theme, fonts and icons of a project that is already set up. It rewrites only the parts the CLI manages, so your own CSS stays, and `--only theme` or `--only font` narrows it down further.',
+        '`zard-cli apply` swaps the theme and fonts of a project that is already set up, and points the components you add next at the new style and icons. It rewrites only the parts the CLI manages, so your own CSS stays, and `--only theme` or `--only font` narrows it down further. Components already installed pick up the new colors and fonts at once, since they read the theme variables; their own style, icons and menu look stay as they were. When a full apply changes those, it prints the `add … --overwrite` command that brings them along.',
       code: 'npx zard-cli@latest apply --preset <code>',
     },
     {

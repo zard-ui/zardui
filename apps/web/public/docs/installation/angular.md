@@ -23,7 +23,7 @@ You can now start adding components to your project. [Open the components page a
 
 ### Already have a project?
 
-Run init at its root instead. Pick "Angular" on the first question. It configures zard/ui with the default design and asks only for the theme color.
+Run init at its root instead. Pick "Angular" on the first question. It then asks for the theme color, confirms the files it found (the app config, the global stylesheet, the import aliases) and whether the app reads right to left, and configures zard/ui with the default design. For a design of your own, pass its code from the create page: init --preset <code>.
 
 ```
 npx zard-cli@latest init

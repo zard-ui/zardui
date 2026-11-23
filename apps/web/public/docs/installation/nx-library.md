@@ -21,7 +21,7 @@ npx nx g @nx/angular:library --name=ui --directory=libs/ui
 
 ### Add Zard/ui
 
-Run the cli at the workspace root. Pick "Nx Library" on the first question, then the library that receives the components:
+Run the cli at the workspace root. Pick "Nx Library" on the first question; when the workspace has more than one library, it also asks which one receives the components:
 
 ```
 npx zard-cli@latest init
@@ -30,6 +30,20 @@ npx zard-cli@latest init
 ### That's it
 
 You can now start adding components to your project. [Open the components page and select what component you want to install](/docs/components)
+
+### Wire it up in the consuming app
+
+The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme from the library styles.css with a relative path, such as @import "../../../libs/ui/src/styles.css" in apps/my-app/src/styles.css (CSS does not read the tsconfig path alias), and imports the components from the library entry point (src/index.ts), which has to export them along with the core and utils folders. Always import from the library path alias, such as @acme/ui: reaching into its source through @/ makes the app compile those files itself, and Angular rejects their imports arrays with NG3004.
+
+**.postcssrc.json**
+
+```
+{
+  "plugins": {
+    "@tailwindcss/postcss": {}
+  }
+}
+```
 
 ## Manual
 
@@ -61,13 +75,14 @@ npm install -D tailwindcss tailwindcss-animate
 
 ### Configure path aliases
 
-Add these lines inside compilerOptions on your tsconfig.base.json. If it already has a paths object, add the entry to it instead of a second one. Do not add baseUrl, it is an error from TypeScript 6 on.
+Add these lines inside compilerOptions on your tsconfig.base.json. If it already has a paths object, add the entry to it instead of a second one. Do not add baseUrl, it is an error from TypeScript 6 on. Also set lib to es2022: the workspace starts on es2020, and the components use ES2022 APIs such as Array.prototype.at, so the build stops with TS2339 without it.
 
 **tsconfig.base.json**
 
 ```
 {
   "compilerOptions": {
+    "lib": ["es2022", "dom"],
     "paths": {
       "@/*": ["./libs/ui/src/lib/*"]
     }

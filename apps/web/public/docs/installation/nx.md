@@ -23,7 +23,7 @@ You can now start adding components to your project. [Open the components page a
 
 ### Already have a project?
 
-Run init at its root instead. Pick "Nx" on the first question, then the app that receives the components. It configures zard/ui with the default design and asks only for the theme color.
+Run init at its root instead. Pick "Nx" on the first question; when the workspace has more than one app, it also asks which one receives the components. It then asks for the theme color, confirms the files it found (the app config, the global stylesheet, the import aliases) and whether the app reads right to left, and configures zard/ui with the default design. For a design of your own, pass its code from the create page: init --preset <code>.
 
 ```
 npx zard-cli@latest init
@@ -73,13 +73,14 @@ Create a .postcssrc.json inside the application, at apps/my-app/. The Angular bu
 
 ### Configure path aliases
 
-Add these lines inside compilerOptions on your tsconfig.base.json. If it already has a paths object, add the entry to it instead of a second one. Do not add baseUrl, it is an error from TypeScript 6 on.
+Add these lines inside compilerOptions on your tsconfig.base.json. If it already has a paths object, add the entry to it instead of a second one. Do not add baseUrl, it is an error from TypeScript 6 on. Also set lib to es2022: the workspace starts on es2020, and the components use ES2022 APIs such as Array.prototype.at, so the build stops with TS2339 without it.
 
 **tsconfig.base.json**
 
 ```
 {
   "compilerOptions": {
+    "lib": ["es2022", "dom"],
     "paths": {
       "@/*": ["./apps/my-app/src/app/*"]
     }

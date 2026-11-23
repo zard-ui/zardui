@@ -170,13 +170,22 @@ function appCliSteps(template: string): Step[] {
 
 function existingProject(question: string): Installation['existingProject'] {
   return {
-    subtitle: `Run init at its root instead. ${question} It configures zard/ui with the default design and asks only for the theme color.`,
+    subtitle: `Run init at its root instead. ${question} It then asks for the theme color, confirms the files it found (the app config, the global stylesheet, the import aliases) and whether the app reads right to left, and configures zard/ui with the default design. For a design of your own, pass its code from the create page: init --preset <code>.`,
     codeTabData: SETUP_SHARED_CLI_INIT,
   };
 }
 
-/** The steps of the guided path of a library: create it inside the workspace, run init, then use. */
-function cliSteps(options: { create: CodeBlockData; createSubtitle: string; initSubtitle: string }): Step[] {
+/**
+ * The steps of the guided path of a library: create it inside the workspace, run init, then wire the app that uses it.
+ * init configures the library only: exporting the components and setting up the consuming app stay manual, so the
+ * guided path ends with the same wiring step as the manual one.
+ */
+function cliSteps(options: {
+  create: CodeBlockData;
+  createSubtitle: string;
+  initSubtitle: string;
+  consumingApp: Step;
+}): Step[] {
   return [
     {
       title: 'Create project',
@@ -194,6 +203,7 @@ function cliSteps(options: { create: CodeBlockData; createSubtitle: string; init
       subtitle: 'You can now start adding components to your project.',
       url: COMPONENTS_NOTE,
     },
+    options.consumingApp,
   ];
 }
 
@@ -207,12 +217,19 @@ function stylesStep(path: string, options: { replace?: boolean; block?: CodeBloc
   };
 }
 
-function tsconfigStep(file: string, block: CodeBlockData): Step {
+/**
+ * create-nx-workspace writes `"lib": ["es2020", "dom"]` in tsconfig.base.json, and the components use ES2022 APIs
+ * (`Array.prototype.at`, `Object.hasOwn`): the production build fails with TS2339 until it is raised. init does it.
+ */
+const NX_LIB_NOTE =
+  ' Also set lib to es2022: the workspace starts on es2020, and the components use ES2022 APIs such as Array.prototype.at, so the build stops with TS2339 without it.';
+
+function tsconfigStep(file: string, block: CodeBlockData, note = ''): Step {
   return {
     title: 'Configure path aliases',
     // baseUrl is left out: the option became an error in TypeScript 6, and since
     // 4.1 paths are resolved relative to the tsconfig itself without it.
-    subtitle: `Add these lines inside compilerOptions on your ${file}. If it already has a paths object, add the entry to it instead of a second one. Do not add baseUrl, it is an error from TypeScript 6 on.`,
+    subtitle: `Add these lines inside compilerOptions on your ${file}. If it already has a paths object, add the entry to it instead of a second one. Do not add baseUrl, it is an error from TypeScript 6 on.${note}`,
     codeBlockData: block,
   };
 }
@@ -224,6 +241,22 @@ function providersStep(file: string): Step {
     codeBlockData: SETUP_SHARED_PROVIDERS,
   };
 }
+
+/** What the app using an Angular library needs: init configures the library, not the app. */
+const ANGULAR_LIBRARY_CONSUMING_APP: Step = {
+  title: 'Wire it up in the consuming app',
+  subtitle:
+    'The application that installs this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme with @import "<your-library>/styles.css", and imports the components from the library entry point. CSS does not read tsconfig paths, so the package has to be installed in the app: inside the same workspace, run ng build ui and then npm install ./dist/ui. Export the components from public-api.ts together with the core and utils folders, which they depend on, or the build stops with NG3001. When you copy a component into the library by hand, change its @/ imports to relative paths (the CLI does it for you): the build leaves @/ as it is, and the published package would not resolve it. In the app, always import from the package name: reaching into the library source through @/ makes the app compile those files itself, and Angular rejects their imports arrays with NG3004.',
+  codeBlockData: SETUP_SHARED_POSTCSS,
+};
+
+/** What the app using an Nx library needs: init configures the library, not the app. */
+const NX_LIBRARY_CONSUMING_APP: Step = {
+  title: 'Wire it up in the consuming app',
+  subtitle:
+    'The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme from the library styles.css with a relative path, such as @import "../../../libs/ui/src/styles.css" in apps/my-app/src/styles.css (CSS does not read the tsconfig path alias), and imports the components from the library entry point (src/index.ts), which has to export them along with the core and utils folders. Always import from the library path alias, such as @acme/ui: reaching into its source through @/ makes the app compile those files itself, and Angular rejects their imports arrays with NG3004.',
+  codeBlockData: SETUP_SHARED_POSTCSS,
+};
 
 export const installations: Installation[] = [
   {
@@ -264,7 +297,9 @@ export const installations: Installation[] = [
     title: 'Nx',
     description: 'Install and configure zard/ui for an application inside an Nx workspace.',
     cli: appCliSteps('Nx'),
-    existingProject: existingProject('Pick "Nx" on the first question, then the app that receives the components.'),
+    existingProject: existingProject(
+      'Pick "Nx" on the first question; when the workspace has more than one app, it also asks which one receives the components.',
+    ),
     manual: [
       {
         title: 'Create workspace',
@@ -289,7 +324,7 @@ export const installations: Installation[] = [
           'Create a .postcssrc.json inside the application, at apps/my-app/. The Angular build looks for it from the stylesheet upwards.',
         codeBlockData: SETUP_SHARED_POSTCSS,
       },
-      tsconfigStep('tsconfig.base.json', SETUP_NX_TSCONFIG),
+      tsconfigStep('tsconfig.base.json', SETUP_NX_TSCONFIG, NX_LIB_NOTE),
       ...coreManualSteps('apps/my-app/src/app/shared/core'),
       utilsManualStep('apps/my-app/src/app/shared/utils'),
       stylesStep('apps/my-app/src/styles.css'),
@@ -346,6 +381,7 @@ export const installations: Installation[] = [
       create: SETUP_ANGULAR_LIBRARY_CREATE,
       createSubtitle: 'Inside an existing Angular workspace, generate the library that will ship the components.',
       initSubtitle: 'Run the cli at the workspace root. Pick "Angular Library" on the first question:',
+      consumingApp: ANGULAR_LIBRARY_CONSUMING_APP,
     }),
     manual: [
       {
@@ -382,12 +418,7 @@ export const installations: Installation[] = [
       },
       configStep(SETUP_ANGULAR_LIBRARY_CONFIG),
       FINAL_STEP,
-      {
-        title: 'Wire it up in the consuming app',
-        subtitle:
-          'The application that installs this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme with @import "<your-library>/styles.css", and imports the components from the library entry point. CSS does not read tsconfig paths, so the package has to be installed in the app: inside the same workspace, run ng build ui and then npm install ./dist/ui. Export the components from public-api.ts together with the core and utils folders, which they depend on, or the build stops with NG3001. When you copy a component into the library by hand, change its @/ imports to relative paths (the CLI does it for you): the build leaves @/ as it is, and the published package would not resolve it. In the app, always import from the package name: reaching into the library source through @/ makes the app compile those files itself, and Angular rejects their imports arrays with NG3004.',
-        codeBlockData: SETUP_SHARED_POSTCSS,
-      },
+      ANGULAR_LIBRARY_CONSUMING_APP,
     ],
   },
   {
@@ -398,7 +429,8 @@ export const installations: Installation[] = [
       create: SETUP_NX_LIBRARY_CREATE,
       createSubtitle: 'Inside an existing Nx workspace, generate the library that will hold the components.',
       initSubtitle:
-        'Run the cli at the workspace root. Pick "Nx Library" on the first question, then the library that receives the components:',
+        'Run the cli at the workspace root. Pick "Nx Library" on the first question; when the workspace has more than one library, it also asks which one receives the components:',
+      consumingApp: NX_LIBRARY_CONSUMING_APP,
     }),
     manual: [
       {
@@ -416,18 +448,13 @@ export const installations: Installation[] = [
         subtitle: 'Add the following dev dependencies:',
         codeTabData: SETUP_NX_LIBRARY_DEV_DEPENDENCIES,
       },
-      tsconfigStep('tsconfig.base.json', SETUP_NX_LIBRARY_TSCONFIG),
+      tsconfigStep('tsconfig.base.json', SETUP_NX_LIBRARY_TSCONFIG, NX_LIB_NOTE),
       ...coreManualSteps('libs/ui/src/lib/shared/core'),
       utilsManualStep('libs/ui/src/lib/shared/utils'),
       stylesStep('libs/ui/src/styles.css', { block: SETUP_SHARED_STYLES_LIBRARY }),
       configStep(SETUP_NX_LIBRARY_CONFIG),
       FINAL_STEP,
-      {
-        title: 'Wire it up in the consuming app',
-        subtitle:
-          'The application that imports this library compiles its CSS, so it needs the Tailwind PostCSS pipeline: install it with npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate (the theme loads that plugin) and add this .postcssrc.json at its root. Then it registers provideZard() in its app.config.ts, imports the theme from the library styles.css with a relative path, such as @import "../../../libs/ui/src/styles.css" in apps/my-app/src/styles.css (CSS does not read the tsconfig path alias), and imports the components from the library entry point (src/index.ts), which has to export them along with the core and utils folders. Always import from the library path alias, such as @acme/ui: reaching into its source through @/ makes the app compile those files itself, and Angular rejects their imports arrays with NG3004.',
-        codeBlockData: SETUP_SHARED_POSTCSS,
-      },
+      NX_LIBRARY_CONSUMING_APP,
     ],
   },
 ];

@@ -108,6 +108,17 @@ describe('get-apply-command', () => {
     const { command } = (await call('get-apply-command', { preset: 'Z0', only: 'theme', pointer: false })).data();
     expect(command).toBe('npx zard-cli@latest apply --preset Z0 --only theme --no-pointer --no-interactive');
   });
+
+  // apply leaves installed components as they were: the agent has to run the `add … --overwrite` line it prints.
+  it('says the installed components follow only once added again', async () => {
+    const { notes } = (await call('get-apply-command', { preset: 'Z0' })).data();
+    expect(notes.join(' ')).toContain('--overwrite');
+  });
+
+  it('has nothing to add again when only the theme or the fonts change', async () => {
+    const { notes } = (await call('get-apply-command', { preset: 'Z0', only: 'font' })).data();
+    expect(notes.join(' ')).not.toContain('--overwrite');
+  });
 });
 
 describe('get-add-command', () => {
