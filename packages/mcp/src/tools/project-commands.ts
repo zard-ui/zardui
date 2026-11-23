@@ -270,7 +270,7 @@ export function registerProjectCommands(server: McpServer): void {
     {
       title: 'Get apply command',
       description:
-        'The zard-cli command that restyles a project already set up with Zard UI: replaces the theme, fonts and the style of the installed components, keeping every rule of its own. Pass a preset code or design choices.',
+        'The zard-cli command that restyles a project already set up with Zard UI: replaces the theme and fonts, keeping every rule of its own, and makes the components added next follow the new style and icons. Components already installed keep their look until they are added again with --overwrite; the command prints that line. Pass a preset code or design choices.',
       inputSchema: {
         preset: presetField,
         design: designSchema.optional(),
@@ -290,7 +290,15 @@ export function registerProjectCommands(server: McpServer): void {
         if (pointer !== undefined) parts.push(pointer ? '--pointer' : '--no-pointer');
         parts.push('--no-interactive');
 
-        return commandResult(parts.join(' '), ['Run it at the project root, after init.'], resolved);
+        const notes = ['Run it at the project root, after init.'];
+        // The theme and fonts change at once, the components do not: without this an agent reports the restyle done
+        // while every installed component still has the previous style and icons.
+        if (!only) {
+          notes.push(
+            'Components already installed keep their style, icons and menu look. When the preset changes those, the output ends with an `add … --overwrite` command for them (and an uninstall line for packages nothing uses anymore): run it too, after checking the user has no edits of their own in those files.',
+          );
+        }
+        return commandResult(parts.join(' '), notes, resolved);
       } catch (error) {
         return failure(error);
       }

@@ -16,7 +16,13 @@ function execFileAsync(file: string, args: string[], cwd: string): Promise<{ std
     // (the default) — turning it on would undo all of this at once.
     execFile(file, args, { cwd, timeout: 60_000, shell: false }, (error, stdout, stderr) => {
       if (error) {
-        reject(new Error(`Command failed: ${error.message}\n${stderr}`));
+        // zard-cli prints why it failed (an unknown component, no components.json) on stdout: without it the
+        // message only repeats the command line.
+        const output = [stdout, stderr]
+          .map(part => part.trim())
+          .filter(Boolean)
+          .join('\n');
+        reject(new Error(output ? `${error.message}\n${output}` : error.message));
       } else {
         resolve({ stdout, stderr });
       }

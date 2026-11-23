@@ -121,6 +121,21 @@ describe('install-component tool (CWE-78 regression)', () => {
     expect(execFileMock).not.toHaveBeenCalled();
   });
 
+  // zard-cli explains a failure on stdout; dropping it left the agent with only the command line.
+  it('returns what the CLI printed when it fails', async () => {
+    execFileMock.mockImplementationOnce(
+      (_file: string, _args: string[], _opts: unknown, cb: (e: Error | null, o: string, s: string) => void) => {
+        cb(new Error('Command failed: npx zard-cli add nope'), '✖ Component "nope" not found in the registry.\n', '');
+      },
+    );
+
+    const tool = registerAndCapture();
+    const res = await tool.handler({ name: 'nope', cwd: '/tmp' });
+
+    expect(res.isError).toBe(true);
+    expect(res.content[0].text).toContain('Component "nope" not found');
+  });
+
   it('refuses a working directory that is a file', async () => {
     const { statSync } = jest.requireMock('node:fs') as { statSync: jest.Mock };
     statSync.mockImplementationOnce(() => ({ isDirectory: () => false }));
