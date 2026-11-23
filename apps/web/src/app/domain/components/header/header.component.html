@@ -30,17 +30,21 @@
             <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars() }}</span>
           </a>
         }
-        <z-separator zOrientation="vertical" class="hidden h-4! self-center! lg:block" />
+        <z-separator zOrientation="vertical" class="block h-4! self-center!" />
         <button z-button zType="ghost" zSize="icon" (click)="toggleTheme()">
           <ng-icon name="darkMode" class="size-4.5!" />
           <span class="sr-only">Toggle theme</span>
         </button>
-        <!-- Always there on desktop: the builder's Get Code on /create, a way into it everywhere else. -->
-        <z-separator zOrientation="vertical" class="hidden h-4! self-center! md:block" />
+        <!--
+          The builder's Get Code on /create (desktop only: a phone has no room for the dialog), a way into the builder
+          everywhere else, phones included.
+        -->
         @if (onCreate()) {
+          <z-separator zOrientation="vertical" class="hidden h-4! self-center! md:block" />
           <button z-button class="hidden md:inline-flex" (click)="openGetCode()">Get Code</button>
         } @else {
-          <a z-button class="hidden md:inline-flex" routerLink="/create">
+          <z-separator zOrientation="vertical" class="block h-4! self-center!" />
+          <a z-button routerLink="/create">
             <ng-icon name="lucidePlus" />
             New
           </a>
