@@ -201,6 +201,8 @@ npx zard-cli create my-app --template nx --preset <code> --pointer --rtl --yes  
 # Change the design of an existing project.
 npx zard-cli init --preset <code>                # configure a project with a whole preset (any project type)
 npx zard-cli apply --preset <code> --only theme  # only the theme tokens; --only font for fonts; omit for both
+# A full apply leaves installed components in their old style and icons: it prints the `add … --overwrite`
+# line that brings them along. Run it only with the user's approval, since it replaces their files.
 
 # Initialise a project (full-screen wizard).
 npx zard-cli init
